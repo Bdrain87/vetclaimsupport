@@ -14,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
 import { RatingCalculator } from '@/components/dashboard/RatingCalculator';
 import { ExportButton } from '@/components/dashboard/ExportButton';
+import { FullReportExport } from '@/components/dashboard/FullReportExport';
 import { SuggestedDisabilities } from '@/components/dashboard/SuggestedDisabilities';
 import { ClaimReadinessScore } from '@/components/dashboard/ClaimReadinessScore';
 import { IntentToFileCard } from '@/components/dashboard/IntentToFileCard';
@@ -82,7 +83,10 @@ export default function Dashboard() {
             <p className="text-muted-foreground">Track your VA evidence and documentation</p>
           </div>
         </div>
-        <ExportButton />
+        <div className="flex items-center gap-2">
+          <FullReportExport />
+          <ExportButton />
+        </div>
       </div>
 
       {/* Privacy Badge */}

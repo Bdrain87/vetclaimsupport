@@ -14,7 +14,10 @@ const pageLabels: Record<string, string> = {
   '/sleep': 'Sleep Tracker',
   '/documents': 'Documents',
   '/buddy-contacts': 'Buddy Contacts',
+  '/timeline': 'Timeline',
+  '/checklist': 'Claim Checklist',
   '/reference': 'Reference Guide',
+  '/settings': 'Settings',
   '/privacy': 'Privacy Policy',
   '/terms': 'Terms of Service',
 };

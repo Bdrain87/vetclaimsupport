@@ -10,6 +10,9 @@ import {
   Moon,
   Users,
   BookOpen,
+  Clock,
+  ClipboardCheck,
+  Settings,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -87,12 +90,36 @@ const navItems = [
     iconColor: 'text-cyan-500',
   },
   { 
+    to: '/timeline', 
+    icon: Clock, 
+    label: 'Timeline',
+    description: 'Visual service timeline',
+    gradient: 'from-teal-500/20 to-teal-600/10',
+    iconColor: 'text-teal-500',
+  },
+  { 
+    to: '/checklist', 
+    icon: ClipboardCheck, 
+    label: 'Checklist',
+    description: 'Claim readiness guide',
+    gradient: 'from-lime-500/20 to-lime-600/10',
+    iconColor: 'text-lime-500',
+  },
+  { 
     to: '/reference', 
     icon: BookOpen, 
-    label: 'Reference Guide',
+    label: 'Reference',
     description: 'VA claims resources',
     gradient: 'from-slate-500/20 to-slate-600/10',
     iconColor: 'text-slate-400',
+  },
+  { 
+    to: '/settings', 
+    icon: Settings, 
+    label: 'Settings',
+    description: 'App preferences',
+    gradient: 'from-gray-500/20 to-gray-600/10',
+    iconColor: 'text-gray-400',
   },
 ];
 
@@ -109,7 +136,8 @@ export function MobileNavGrid() {
               'flex flex-col items-start p-4 rounded-xl border border-border/50',
               'bg-gradient-to-br',
               item.gradient,
-              'active:scale-[0.98] transition-all duration-150',
+              'active:scale-[0.96] active:opacity-80 transition-all duration-150 ease-out',
+              'hover:shadow-md hover:border-border',
               'min-h-[100px] touch-target'
             )}
           >
