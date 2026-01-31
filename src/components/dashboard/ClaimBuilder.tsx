@@ -4,14 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { 
   Briefcase, Plus, Trash2, ChevronDown, ChevronUp, 
-  Stethoscope, AlertTriangle, Activity, Users, FileCheck,
-  CheckCircle2, Circle
+  Stethoscope, AlertTriangle, Activity, Users,
 } from 'lucide-react';
+import { EvidenceStrengthIndicator, getStrengthLevel, calculateEvidenceStrength } from './EvidenceStrengthIndicator';
 import type { ClaimCondition } from '@/types/claims';
 
 export function ClaimBuilder() {
@@ -58,34 +57,19 @@ export function ClaimBuilder() {
     updateClaimCondition(conditionId, { [field]: newLinks });
   };
 
-  const getEvidenceScore = (condition: ClaimCondition) => {
-    let score = 0;
-    if (condition.linkedMedicalVisits.length > 0) score += 25;
-    if (condition.linkedExposures.length > 0) score += 25;
-    if (condition.linkedSymptoms.length > 0) score += 25;
-    if (condition.linkedBuddyContacts.length > 0) score += 25;
-    return score;
-  };
-
-  const getScoreColor = (score: number) => {
-    if (score >= 75) return 'text-success';
-    if (score >= 50) return 'text-warning';
-    return 'text-destructive';
-  };
-
   return (
     <Card className="data-card">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-base flex items-center gap-2">
             <Briefcase className="h-5 w-5 text-primary" />
-            Claim Builder
+            Conditions You're Claiming
           </CardTitle>
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
               <Button size="sm" className="gap-1">
                 <Plus className="h-4 w-4" />
-                Add Condition
+                Add
               </Button>
             </DialogTrigger>
             <DialogContent>
@@ -114,7 +98,7 @@ export function ClaimBuilder() {
           </Dialog>
         </div>
         <p className="text-xs text-muted-foreground mt-1">
-          Link your evidence to specific conditions you're claiming
+          Build evidence for each condition to strengthen your claim
         </p>
       </CardHeader>
       <CardContent className="space-y-3">
@@ -127,81 +111,57 @@ export function ClaimBuilder() {
         ) : (
           claimConditions.map((condition) => {
             const isExpanded = expandedCondition === condition.id;
-            const score = getEvidenceScore(condition);
+            const strength = calculateEvidenceStrength(condition, data);
+            const level = getStrengthLevel(strength.score);
             
             return (
-              <div key={condition.id} className="border rounded-lg overflow-hidden">
+              <div 
+                key={condition.id} 
+                className={`border rounded-lg overflow-hidden transition-colors ${level.bgClass} border-opacity-50`}
+              >
+                {/* Collapsed Header */}
                 <div
-                  className="p-3 flex items-center justify-between cursor-pointer hover:bg-muted/30"
+                  className="p-3 cursor-pointer"
                   onClick={() => setExpandedCondition(isExpanded ? null : condition.id)}
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="flex flex-col">
-                      <span className="font-medium">{condition.name}</span>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <span className={getScoreColor(score)}>{score}% evidence linked</span>
-                      </div>
+                  <div className="flex items-start justify-between mb-2">
+                    <h4 className="font-semibold text-foreground">{condition.name}</h4>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteClaimCondition(condition.id);
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                      {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-7 w-7"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        deleteClaimCondition(condition.id);
-                      }}
-                    >
-                      <Trash2 className="h-4 w-4 text-destructive" />
-                    </Button>
-                    {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                  </div>
+                  
+                  {/* Evidence Strength Indicator */}
+                  <EvidenceStrengthIndicator 
+                    condition={condition} 
+                    data={data}
+                    compact={false}
+                  />
                 </div>
 
+                {/* Expanded Content - Link Evidence */}
                 {isExpanded && (
-                  <div className="p-3 border-t bg-muted/10 space-y-4">
-                    {/* Evidence Checklist */}
-                    <div className="grid gap-2 text-sm">
-                      <div className="flex items-center gap-2">
-                        {condition.linkedMedicalVisits.length > 0 ? (
-                          <CheckCircle2 className="h-4 w-4 text-success" />
-                        ) : (
-                          <Circle className="h-4 w-4 text-muted-foreground" />
-                        )}
-                        <span>Medical Visits ({condition.linkedMedicalVisits.length})</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {condition.linkedExposures.length > 0 ? (
-                          <CheckCircle2 className="h-4 w-4 text-success" />
-                        ) : (
-                          <Circle className="h-4 w-4 text-muted-foreground" />
-                        )}
-                        <span>Exposures ({condition.linkedExposures.length})</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {condition.linkedSymptoms.length > 0 ? (
-                          <CheckCircle2 className="h-4 w-4 text-success" />
-                        ) : (
-                          <Circle className="h-4 w-4 text-muted-foreground" />
-                        )}
-                        <span>Symptoms ({condition.linkedSymptoms.length})</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {condition.linkedBuddyContacts.length > 0 ? (
-                          <CheckCircle2 className="h-4 w-4 text-success" />
-                        ) : (
-                          <Circle className="h-4 w-4 text-muted-foreground" />
-                        )}
-                        <span>Buddy Statements ({condition.linkedBuddyContacts.length})</span>
-                      </div>
-                    </div>
+                  <div className="p-3 border-t bg-background/50 space-y-4">
+                    <p className="text-xs font-medium text-muted-foreground">
+                      Link your logged evidence to this condition:
+                    </p>
 
                     {/* Link Medical Visits */}
                     {data.medicalVisits.length > 0 && (
                       <div className="space-y-2">
                         <p className="text-xs font-medium flex items-center gap-1">
-                          <Stethoscope className="h-3 w-3" /> Link Medical Visits
+                          <Stethoscope className="h-3 w-3" /> Medical Visits
                         </p>
                         <div className="space-y-1 max-h-32 overflow-y-auto">
                           {data.medicalVisits.slice(0, 5).map((visit) => (
@@ -223,7 +183,7 @@ export function ClaimBuilder() {
                     {data.exposures.length > 0 && (
                       <div className="space-y-2">
                         <p className="text-xs font-medium flex items-center gap-1">
-                          <AlertTriangle className="h-3 w-3" /> Link Exposures
+                          <AlertTriangle className="h-3 w-3" /> Exposures
                         </p>
                         <div className="space-y-1 max-h-32 overflow-y-auto">
                           {data.exposures.map((exposure) => (
@@ -243,7 +203,7 @@ export function ClaimBuilder() {
                     {data.symptoms.length > 0 && (
                       <div className="space-y-2">
                         <p className="text-xs font-medium flex items-center gap-1">
-                          <Activity className="h-3 w-3" /> Link Symptoms
+                          <Activity className="h-3 w-3" /> Symptoms
                         </p>
                         <div className="space-y-1 max-h-32 overflow-y-auto">
                           {data.symptoms.slice(0, 5).map((symptom) => (
@@ -263,7 +223,7 @@ export function ClaimBuilder() {
                     {data.buddyContacts.length > 0 && (
                       <div className="space-y-2">
                         <p className="text-xs font-medium flex items-center gap-1">
-                          <Users className="h-3 w-3" /> Link Buddy Statements
+                          <Users className="h-3 w-3" /> Buddy Statements
                         </p>
                         <div className="space-y-1 max-h-32 overflow-y-auto">
                           {data.buddyContacts.map((buddy) => (
@@ -277,6 +237,16 @@ export function ClaimBuilder() {
                           ))}
                         </div>
                       </div>
+                    )}
+
+                    {/* Empty State */}
+                    {data.medicalVisits.length === 0 && 
+                     data.exposures.length === 0 && 
+                     data.symptoms.length === 0 && 
+                     data.buddyContacts.length === 0 && (
+                      <p className="text-xs text-muted-foreground text-center py-2">
+                        No evidence logged yet. Use the "What's Missing" links above to start logging.
+                      </p>
                     )}
                   </div>
                 )}
