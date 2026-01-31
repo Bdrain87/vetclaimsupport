@@ -1,6 +1,17 @@
 // PDF Export Utilities for Service Evidence Tracker
 import jsPDF from 'jspdf';
 
+// Duration labels for migraines
+const migraineDurations: Record<string, string> = {
+  '30min': '30 minutes',
+  '1hr': '1 hour',
+  '2hrs': '2 hours',
+  '4hrs': '4 hours',
+  '8hrs': '8 hours',
+  '12hrs': '12 hours',
+  '24hrs+': '24+ hours',
+};
+
 interface PDFExportOptions {
   title: string;
   subtitle?: string;
@@ -886,4 +897,143 @@ export const exportAllEvidence = (data: any) => {
   
   addPDFFooter(doc);
   doc.save('complete-evidence-package.pdf');
+};
+
+// Migraines Export
+export const exportMigraines = (migraines: any[], stats?: { totalLast30Days: number; prostratingLast30Days: number; totalAll: number }) => {
+  if (migraines.length === 0) {
+    alert('No migraine entries to export');
+    return;
+  }
+
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const sorted = [...migraines].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  
+  // Calculate stats if not provided
+  const last30Days = migraines.filter(m => {
+    const date = new Date(m.date);
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    return date >= thirtyDaysAgo;
+  });
+  
+  const calculatedStats = stats || {
+    totalLast30Days: last30Days.length,
+    prostratingLast30Days: last30Days.filter(m => m.severity === 'Prostrating').length,
+    totalAll: migraines.length,
+  };
+  
+  let yPos = addPDFHeader(doc, {
+    title: 'Migraine Log - VA Disability Evidence',
+    subtitle: 'Headache Documentation for VA Claims'
+  });
+  
+  yPos = drawSummaryBox(doc, [
+    { value: calculatedStats.totalLast30Days, label: 'Attacks (30 Days)' },
+    { value: calculatedStats.prostratingLast30Days, label: 'Prostrating (30 Days)' },
+    { value: calculatedStats.totalAll, label: 'Total Logged' }
+  ], yPos);
+  
+  yPos = drawInfoBox(doc, 'VA Rating Information: Migraines are rated under 38 CFR § 4.124a, Diagnostic Code 8100. The VA considers the frequency of "prostrating" attacks (requiring bed rest) when determining ratings. 10% = 1 in 2 months | 30% = once a month | 50% = very frequent with severe economic impact.', yPos);
+  
+  doc.setFontSize(14);
+  doc.setTextColor(...colors.secondary);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`Detailed Migraine Log (${migraines.length} entries)`, 20, yPos);
+  yPos += 10;
+  
+  sorted.forEach((migraine) => {
+    yPos = checkPageBreak(doc, yPos, 50);
+    
+    const startY = yPos;
+    yPos += 5;
+    
+    // Header
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...colors.secondary);
+    doc.text(`${new Date(migraine.date).toLocaleDateString()} at ${migraine.time || 'N/A'}`, 25, yPos);
+    
+    // Severity badge
+    const severity = migraine.severity || 'Moderate';
+    const severityColor = severity === 'Prostrating' ? colors.dangerBg 
+      : severity === 'Severe' ? [254, 215, 170] as [number, number, number]
+      : severity === 'Moderate' ? colors.warningBg : colors.successBg;
+    const severityTextColor = severity === 'Prostrating' ? colors.danger 
+      : severity === 'Severe' ? [156, 66, 33] as [number, number, number]
+      : severity === 'Moderate' ? colors.warning : colors.success;
+    
+    doc.setFillColor(...severityColor);
+    doc.roundedRect(120, yPos - 4, 30, 6, 1, 1, 'F');
+    doc.setFontSize(8);
+    doc.setTextColor(...severityTextColor);
+    doc.text(severity, 135, yPos, { align: 'center' });
+    yPos += 7;
+    
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    
+    // Duration
+    doc.setTextColor(...colors.muted);
+    doc.text('Duration:', 25, yPos);
+    doc.setTextColor(...colors.secondary);
+    doc.text(migraineDurations[migraine.duration] || migraine.duration || 'N/A', 55, yPos);
+    yPos += 5;
+    
+    // Impact
+    doc.setTextColor(...colors.muted);
+    doc.text('Impact:', 25, yPos);
+    doc.setTextColor(...colors.secondary);
+    doc.text(migraine.impact || 'N/A', 55, yPos);
+    yPos += 5;
+    
+    // Symptoms
+    if (migraine.symptoms && migraine.symptoms.length > 0) {
+      doc.setTextColor(...colors.muted);
+      doc.text('Symptoms:', 25, yPos);
+      doc.setTextColor(...colors.secondary);
+      const symptomsText = migraine.symptoms.join(', ');
+      const symptomLines = wrapText(doc, symptomsText, pageWidth - 70);
+      doc.text(symptomLines, 55, yPos);
+      yPos += symptomLines.length * 4 + 2;
+    }
+    
+    // Triggers
+    if (migraine.triggers && migraine.triggers.length > 0) {
+      doc.setTextColor(...colors.muted);
+      doc.text('Triggers:', 25, yPos);
+      doc.setTextColor(...colors.secondary);
+      doc.text(migraine.triggers.join(', '), 55, yPos);
+      yPos += 5;
+    }
+    
+    // Treatment
+    if (migraine.treatment) {
+      doc.setTextColor(...colors.muted);
+      doc.text('Treatment:', 25, yPos);
+      const treatmentLines = wrapText(doc, migraine.treatment, pageWidth - 70);
+      doc.setTextColor(...colors.secondary);
+      doc.text(treatmentLines, 55, yPos);
+      yPos += treatmentLines.length * 4 + 2;
+    }
+    
+    // Notes
+    if (migraine.notes) {
+      doc.setTextColor(...colors.muted);
+      doc.text('Notes:', 25, yPos);
+      const noteLines = wrapText(doc, migraine.notes, pageWidth - 70);
+      doc.setTextColor(...colors.secondary);
+      doc.text(noteLines, 55, yPos);
+      yPos += noteLines.length * 4 + 2;
+    }
+    
+    yPos += 3;
+    doc.setDrawColor(...colors.border);
+    doc.roundedRect(22, startY, pageWidth - 44, yPos - startY, 2, 2, 'S');
+    yPos += 5;
+  });
+  
+  addPDFFooter(doc);
+  doc.save('migraine-log.pdf');
 };

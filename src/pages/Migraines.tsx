@@ -4,6 +4,7 @@ import {
   Brain, Plus, Trash2, Edit, Calendar, Clock, AlertTriangle, 
   Download, Info, TrendingUp, Zap 
 } from 'lucide-react';
+import { exportMigraines } from '@/utils/pdfExport';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -163,131 +164,8 @@ export default function Migraines() {
     }
   };
 
-  const exportToPDF = () => {
-    const migraines = data.migraines || [];
-    if (migraines.length === 0) {
-      alert('No migraine entries to export');
-      return;
-    }
-
-    // Create printable HTML content
-    const sortedMigraines = [...migraines].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
-
-    const content = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Migraine Log - VA Evidence</title>
-        <style>
-          body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
-          h1 { color: #1a365d; border-bottom: 2px solid #1a365d; padding-bottom: 10px; }
-          h2 { color: #2d3748; margin-top: 30px; }
-          .summary { background: #f7fafc; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
-          .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-          .summary-item { text-align: center; }
-          .summary-value { font-size: 32px; font-weight: bold; color: #1a365d; }
-          .summary-label { color: #718096; font-size: 14px; }
-          .entry { border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 20px; page-break-inside: avoid; }
-          .entry-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-          .entry-date { font-weight: bold; font-size: 16px; }
-          .entry-severity { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-          .severity-mild { background: #c6f6d5; color: #22543d; }
-          .severity-moderate { background: #fefcbf; color: #744210; }
-          .severity-severe { background: #fed7aa; color: #9c4221; }
-          .severity-prostrating { background: #fed7d7; color: #9b2c2c; }
-          .entry-row { margin-bottom: 10px; }
-          .entry-label { font-weight: 600; color: #4a5568; }
-          .va-note { background: #ebf8ff; border-left: 4px solid #3182ce; padding: 15px; margin: 30px 0; }
-          .footer { margin-top: 40px; text-align: center; color: #718096; font-size: 12px; border-top: 1px solid #e2e8f0; padding-top: 20px; }
-          @media print { .entry { break-inside: avoid; } }
-        </style>
-      </head>
-      <body>
-        <h1>Migraine Log - VA Disability Evidence</h1>
-        <p>Generated: ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</p>
-        
-        <div class="summary">
-          <h2 style="margin-top: 0;">Summary Statistics</h2>
-          <div class="summary-grid">
-            <div class="summary-item">
-              <div class="summary-value">${stats.totalLast30Days}</div>
-              <div class="summary-label">Attacks (Last 30 Days)</div>
-            </div>
-            <div class="summary-item">
-              <div class="summary-value">${stats.prostratingLast30Days}</div>
-              <div class="summary-label">Prostrating Attacks (Last 30 Days)</div>
-            </div>
-            <div class="summary-item">
-              <div class="summary-value">${stats.totalAll}</div>
-              <div class="summary-label">Total Logged Attacks</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="va-note">
-          <strong>VA Rating Information:</strong> Migraines are rated under 38 CFR § 4.124a, Diagnostic Code 8100.
-          The VA considers the frequency of "prostrating" attacks (requiring bed rest) when determining ratings:
-          <ul>
-            <li><strong>0%</strong> - Less frequent attacks</li>
-            <li><strong>10%</strong> - Prostrating attacks averaging one in 2 months</li>
-            <li><strong>30%</strong> - Prostrating attacks averaging once a month</li>
-            <li><strong>50%</strong> - Very frequent completely prostrating attacks with prolonged periods of severe economic inadaptability</li>
-          </ul>
-        </div>
-
-        <h2>Detailed Migraine Log (${migraines.length} entries)</h2>
-        
-        ${sortedMigraines.map(m => `
-          <div class="entry">
-            <div class="entry-header">
-              <span class="entry-date">${new Date(m.date).toLocaleDateString()} at ${m.time || 'N/A'}</span>
-              <span class="entry-severity severity-${m.severity.toLowerCase()}">${m.severity}</span>
-            </div>
-            <div class="entry-row">
-              <span class="entry-label">Duration:</span> ${durations.find(d => d.value === m.duration)?.label || m.duration}
-            </div>
-            <div class="entry-row">
-              <span class="entry-label">Impact:</span> ${m.impact}
-            </div>
-            ${m.symptoms.length > 0 ? `
-              <div class="entry-row">
-                <span class="entry-label">Symptoms:</span> ${m.symptoms.join(', ')}
-              </div>
-            ` : ''}
-            ${m.triggers.length > 0 ? `
-              <div class="entry-row">
-                <span class="entry-label">Triggers:</span> ${m.triggers.join(', ')}
-              </div>
-            ` : ''}
-            ${m.treatment ? `
-              <div class="entry-row">
-                <span class="entry-label">Treatment:</span> ${m.treatment}
-              </div>
-            ` : ''}
-            ${m.notes ? `
-              <div class="entry-row">
-                <span class="entry-label">Notes:</span> ${m.notes}
-              </div>
-            ` : ''}
-          </div>
-        `).join('')}
-
-        <div class="footer">
-          <p>This log was generated from the Service Evidence Tracker application.</p>
-          <p>Present this document to your VA representative, VSO, or include with your disability claim.</p>
-        </div>
-      </body>
-      </html>
-    `;
-
-    const printWindow = window.open('', '_blank');
-    if (printWindow) {
-      printWindow.document.write(content);
-      printWindow.document.close();
-      printWindow.print();
-    }
+  const handleExportPDF = () => {
+    exportMigraines(data.migraines || [], stats);
   };
 
   return (
@@ -335,7 +213,7 @@ export default function Migraines() {
         </div>
 
         <div className="flex gap-2">
-          <Button variant="outline" onClick={exportToPDF} className="gap-2">
+          <Button variant="outline" onClick={handleExportPDF} className="gap-2">
             <Download className="h-4 w-4" />
             Export PDF
           </Button>
