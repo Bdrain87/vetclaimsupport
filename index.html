@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Service Evidence Tracker</title>
     <meta name="description" content="Track medical visits, exposures, symptoms, and documentation for VA disability claims" />
     <meta name="author" content="Service Evidence Tracker" />
@@ -18,9 +18,15 @@
     <meta name="apple-mobile-web-app-title" content="Evidence Tracker" />
     <link rel="apple-touch-icon" href="/pwa-icons/icon-192x192.png" />
     
+    <!-- iOS Splash Screens -->
+    <link rel="apple-touch-startup-image" href="/pwa-icons/icon-512x512.png" />
+    
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="/pwa-icons/icon-192x192.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/pwa-icons/icon-192x192.png" />
+
+    <!-- Disable format detection for iOS -->
+    <meta name="format-detection" content="telephone=no" />
 
     <!-- Open Graph -->
     <meta property="og:title" content="Service Evidence Tracker" />
@@ -34,7 +40,7 @@
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
   </head>
 
-  <body>
+  <body class="no-overflow-x">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
