@@ -3,7 +3,7 @@ import { Search, ChevronDown, ChevronUp } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { vaDisabilitiesBySystem, allVADisabilities } from '@/data/vaDisabilities';
+import { vaDisabilitiesBySystem, allVADisabilities, totalDisabilitiesCount } from '@/data/vaDisabilities';
 import {
   Select,
   SelectContent,
@@ -95,7 +95,7 @@ export function DisabilitiesTab() {
             </Select>
           </div>
           <p className="text-sm text-muted-foreground mt-3">
-            Showing {filteredDisabilities.length} of {allVADisabilities.length} conditions
+            Showing {filteredDisabilities.length} of {totalDisabilitiesCount} conditions (38 CFR Part 4)
           </p>
         </CardContent>
       </Card>
@@ -127,20 +127,24 @@ export function DisabilitiesTab() {
                 <table className="w-full text-sm">
                   <thead className="bg-muted/50">
                     <tr>
+                      <th className="text-left p-3 font-medium">DC</th>
                       <th className="text-left p-3 font-medium">Condition</th>
-                      <th className="text-left p-3 font-medium hidden sm:table-cell">Description</th>
-                      <th className="text-right p-3 font-medium whitespace-nowrap">Typical Ratings</th>
+                      <th className="text-left p-3 font-medium hidden md:table-cell">Description</th>
+                      <th className="text-right p-3 font-medium whitespace-nowrap">Ratings</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y">
-                    {conditions.map((condition) => (
-                      <tr key={condition.name} className="hover:bg-muted/30">
+                    {conditions.map((condition, idx) => (
+                      <tr key={`${condition.name}-${idx}`} className="hover:bg-muted/30">
+                        <td className="p-3 text-muted-foreground font-mono text-xs">
+                          {condition.diagnosticCode || '—'}
+                        </td>
                         <td className="p-3 font-medium">{condition.name}</td>
-                        <td className="p-3 text-muted-foreground hidden sm:table-cell">
+                        <td className="p-3 text-muted-foreground hidden md:table-cell text-xs">
                           {condition.description}
                         </td>
                         <td className="p-3 text-right">
-                          <Badge variant="outline" className="font-mono">
+                          <Badge variant="outline" className="font-mono text-xs">
                             {condition.typicalRatings}
                           </Badge>
                         </td>
