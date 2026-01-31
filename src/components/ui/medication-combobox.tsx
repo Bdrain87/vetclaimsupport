@@ -1,20 +1,7 @@
 import * as React from 'react';
-import { Check, ChevronsUpDown, Pill } from 'lucide-react';
+import { Check, Pill } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { Input } from '@/components/ui/input';
 import { commonMedications, medicationCategories, type MedicationOption } from '@/data/commonMedications';
 import { Badge } from '@/components/ui/badge';
 
@@ -27,10 +14,13 @@ interface MedicationComboboxProps {
 export function MedicationCombobox({ 
   value, 
   onValueChange, 
-  placeholder = "Search or type medication..." 
+  placeholder = "Type or search medication name..." 
 }: MedicationComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState(value);
+  const [highlightedIndex, setHighlightedIndex] = React.useState(-1);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const listRef = React.useRef<HTMLDivElement>(null);
 
   // Group medications by category
   const groupedMedications = React.useMemo(() => {
@@ -41,44 +31,103 @@ export function MedicationCombobox({
     return groups;
   }, []);
 
-  // Filter based on input
-  const filteredGroups = React.useMemo(() => {
-    if (!inputValue.trim()) return groupedMedications;
-    
-    const lowerInput = inputValue.toLowerCase();
-    const filtered: Record<string, MedicationOption[]> = {};
-    
-    for (const [category, meds] of Object.entries(groupedMedications)) {
-      const matchingMeds = meds.filter(med =>
-        med.name.toLowerCase().includes(lowerInput) ||
-        med.commonlyPrescribedFor.toLowerCase().includes(lowerInput)
-      );
-      if (matchingMeds.length > 0) {
-        filtered[category] = matchingMeds;
-      }
+  // Filter based on input - flatten for easier keyboard navigation
+  const filteredMedications = React.useMemo(() => {
+    if (!inputValue.trim()) {
+      return commonMedications.slice(0, 20); // Show first 20 when empty
     }
     
-    return filtered;
-  }, [inputValue, groupedMedications]);
-
-  const hasResults = Object.values(filteredGroups).some(group => group.length > 0);
+    const lowerInput = inputValue.toLowerCase();
+    return commonMedications.filter(med =>
+      med.name.toLowerCase().includes(lowerInput) ||
+      med.commonlyPrescribedFor.toLowerCase().includes(lowerInput)
+    ).slice(0, 20); // Limit results for performance
+  }, [inputValue]);
 
   const handleSelect = (medication: MedicationOption) => {
     setInputValue(medication.name);
     onValueChange(medication.name, medication.commonlyPrescribedFor);
     setOpen(false);
+    setHighlightedIndex(-1);
   };
 
-  const handleInputChange = (newValue: string) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
     setInputValue(newValue);
-    // Allow custom input
-    onValueChange(newValue);
+    onValueChange(newValue); // Always update with typed value
+    setOpen(true);
+    setHighlightedIndex(-1);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!open) {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        setOpen(true);
+        e.preventDefault();
+      }
+      return;
+    }
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setHighlightedIndex(prev => 
+          prev < filteredMedications.length - 1 ? prev + 1 : prev
+        );
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setHighlightedIndex(prev => prev > 0 ? prev - 1 : -1);
+        break;
+      case 'Enter':
+        e.preventDefault();
+        if (highlightedIndex >= 0 && filteredMedications[highlightedIndex]) {
+          handleSelect(filteredMedications[highlightedIndex]);
+        } else {
+          // Accept custom input
+          setOpen(false);
+        }
+        break;
+      case 'Escape':
+        setOpen(false);
+        setHighlightedIndex(-1);
+        break;
+      case 'Tab':
+        setOpen(false);
+        setHighlightedIndex(-1);
+        break;
+    }
   };
 
   // Sync external value changes
   React.useEffect(() => {
     setInputValue(value);
   }, [value]);
+
+  // Scroll highlighted item into view
+  React.useEffect(() => {
+    if (highlightedIndex >= 0 && listRef.current) {
+      const items = listRef.current.querySelectorAll('[data-medication-item]');
+      items[highlightedIndex]?.scrollIntoView({ block: 'nearest' });
+    }
+  }, [highlightedIndex]);
+
+  // Close on click outside
+  React.useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        inputRef.current && 
+        !inputRef.current.contains(e.target as Node) &&
+        listRef.current &&
+        !listRef.current.contains(e.target as Node)
+      ) {
+        setOpen(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const getCategoryColor = (category: string) => {
     switch (category) {
@@ -99,71 +148,73 @@ export function MedicationCombobox({
   };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-full justify-between font-normal"
+    <div className="relative">
+      <div className="relative">
+        <Pill className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          ref={inputRef}
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+          onFocus={() => setOpen(true)}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder}
+          className="pl-9"
+          autoComplete="off"
+        />
+      </div>
+      
+      {open && (
+        <div 
+          ref={listRef}
+          className="absolute z-50 mt-1 w-full bg-popover border border-border rounded-md shadow-lg max-h-[300px] overflow-y-auto"
         >
-          <span className="flex items-center gap-2 truncate">
-            <Pill className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-            {inputValue || placeholder}
-          </span>
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[400px] p-0 z-50 bg-popover" align="start">
-        <Command shouldFilter={false}>
-          <CommandInput 
-            placeholder="Search medications or type custom..." 
-            value={inputValue}
-            onValueChange={handleInputChange}
-          />
-          <CommandList className="max-h-[300px]">
-            {!hasResults && inputValue.trim() && (
-              <CommandEmpty className="py-4 text-center">
-                <p className="text-sm text-muted-foreground">No matching medications found.</p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Press Enter or click outside to use "{inputValue}"
-                </p>
-              </CommandEmpty>
-            )}
-            
-            {Object.entries(filteredGroups).map(([category, meds]) => (
-              meds.length > 0 && (
-                <CommandGroup key={category} heading={category}>
-                  {meds.map((med) => (
-                    <CommandItem
-                      key={med.name}
-                      value={med.name}
-                      onSelect={() => handleSelect(med)}
-                      className="flex items-start gap-2 py-2"
-                    >
-                      <Check
-                        className={cn(
-                          "h-4 w-4 mt-0.5 flex-shrink-0",
-                          inputValue === med.name ? "opacity-100" : "opacity-0"
-                        )}
-                      />
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium text-sm">{med.name}</div>
-                        <div className="text-xs text-muted-foreground truncate">
-                          {med.commonlyPrescribedFor}
-                        </div>
-                      </div>
-                      <Badge variant="outline" className={cn("text-xs flex-shrink-0", getCategoryColor(category))}>
-                        {category}
-                      </Badge>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              )
-            ))}
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+          {filteredMedications.length === 0 ? (
+            <div className="p-4 text-center">
+              <p className="text-sm font-medium text-foreground">No matching medications</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                "{inputValue}" will be used as a custom medication
+              </p>
+            </div>
+          ) : (
+            <div className="py-1">
+              {inputValue.trim() && !filteredMedications.some(m => m.name.toLowerCase() === inputValue.toLowerCase()) && (
+                <div className="px-3 py-2 text-xs text-muted-foreground border-b border-border bg-muted/30">
+                  💡 Showing suggestions. Press Enter to use "{inputValue}" as custom.
+                </div>
+              )}
+              {filteredMedications.map((med, index) => (
+                <div
+                  key={med.name}
+                  data-medication-item
+                  onClick={() => handleSelect(med)}
+                  className={cn(
+                    "flex items-start gap-2 px-3 py-2 cursor-pointer transition-colors",
+                    highlightedIndex === index ? "bg-accent" : "hover:bg-accent/50",
+                    inputValue === med.name && "bg-accent/30"
+                  )}
+                >
+                  <Check
+                    className={cn(
+                      "h-4 w-4 mt-0.5 flex-shrink-0",
+                      inputValue === med.name ? "opacity-100 text-primary" : "opacity-0"
+                    )}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-sm">{med.name}</div>
+                    <div className="text-xs text-muted-foreground truncate">
+                      {med.commonlyPrescribedFor}
+                    </div>
+                  </div>
+                  <Badge variant="outline" className={cn("text-xs flex-shrink-0", getCategoryColor(med.category))}>
+                    {med.category}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
