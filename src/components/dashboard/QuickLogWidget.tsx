@@ -52,12 +52,6 @@ export function QuickLogWidget() {
     setIsSubmitting(false);
   };
 
-  const getFeelingColor = (value: number) => {
-    if (value <= 3) return 'text-red-400';
-    if (value <= 6) return 'text-amber-400';
-    return 'text-emerald-400';
-  };
-
   const getFeelingLabel = (value: number) => {
     if (value <= 3) return 'Rough';
     if (value <= 6) return 'Okay';
@@ -67,10 +61,8 @@ export function QuickLogWidget() {
   if (loggedToday) {
     const todayLog = data.quickLogs?.find(log => log.date === today);
     return (
-      <div className="flex items-center gap-3 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
-        <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
-          <CheckCircle2 className="h-5 w-5 text-emerald-400" />
-        </div>
+      <div className="flex items-center gap-3 p-4 rounded-2xl bg-secondary border border-border">
+        <CheckCircle2 className="h-5 w-5 text-foreground/70" />
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium text-foreground">Today's Log Complete</p>
           <p className="text-xs text-muted-foreground">
@@ -87,9 +79,7 @@ export function QuickLogWidget() {
       <CardContent className="p-5 space-y-5">
         {/* Header */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center">
-            <Zap className="h-5 w-5 text-primary" />
-          </div>
+          <Zap className="h-5 w-5 text-foreground/70" />
           <div>
             <h3 className="text-base font-semibold text-foreground">Quick Daily Log</h3>
             <p className="text-xs text-muted-foreground">Track your patterns</p>
@@ -100,7 +90,7 @@ export function QuickLogWidget() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <Label className="text-sm text-muted-foreground">How are you feeling?</Label>
-            <span className={cn("text-2xl font-bold number-display", getFeelingColor(feeling))}>
+            <span className="text-2xl font-bold number-display text-foreground">
               {feeling}
             </span>
           </div>
@@ -114,7 +104,7 @@ export function QuickLogWidget() {
           />
           <div className="flex justify-between text-xs text-muted-foreground">
             <span>1</span>
-            <span className={cn("font-medium", getFeelingColor(feeling))}>{getFeelingLabel(feeling)}</span>
+            <span className="font-medium text-foreground">{getFeelingLabel(feeling)}</span>
             <span>10</span>
           </div>
         </div>
@@ -124,9 +114,7 @@ export function QuickLogWidget() {
           {/* Flare-up Toggle */}
           <div className="flex items-center justify-between p-4">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-orange-500/15 flex items-center justify-center">
-                <Flame className="h-4 w-4 text-orange-400" />
-              </div>
+              <Flame className="h-4 w-4 text-foreground/70" />
               <Label htmlFor="flare-up" className="text-sm cursor-pointer">
                 Any flare-ups?
               </Label>
@@ -144,9 +132,7 @@ export function QuickLogWidget() {
               <div className="border-t border-white/[0.04]" />
               <div className="flex items-center justify-between p-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-blue-500/15 flex items-center justify-center">
-                    <Wind className="h-4 w-4 text-blue-400" />
-                  </div>
+                  <Wind className="h-4 w-4 text-foreground/70" />
                   <Label htmlFor="cpap" className="text-sm cursor-pointer">
                     CPAP used?
                   </Label>
