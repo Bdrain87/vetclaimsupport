@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { ClaimsData, MedicalVisit, Exposure, SymptomEntry, Medication, ServiceEntry, BuddyContact, DocumentItem } from '@/types/claims';
+import type { ClaimsData, MedicalVisit, Exposure, SymptomEntry, Medication, ServiceEntry, BuddyContact, DocumentItem, MigraineEntry } from '@/types/claims';
 
 const STORAGE_KEY = 'va-claims-tracker-data';
 
@@ -26,6 +26,7 @@ const getInitialData = (): ClaimsData => {
       serviceHistory: [],
       buddyContacts: [],
       documents: defaultDocuments,
+      migraines: [],
       separationDate: null,
     };
   }
@@ -33,7 +34,12 @@ const getInitialData = (): ClaimsData => {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored) {
     try {
-      return JSON.parse(stored);
+      const parsed = JSON.parse(stored);
+      // Ensure migraines array exists for older data
+      if (!parsed.migraines) {
+        parsed.migraines = [];
+      }
+      return parsed;
     } catch {
       console.error('Failed to parse stored data');
     }
@@ -47,6 +53,7 @@ const getInitialData = (): ClaimsData => {
     serviceHistory: [],
     buddyContacts: [],
     documents: defaultDocuments,
+    migraines: [],
     separationDate: null,
   };
 };
@@ -208,6 +215,28 @@ export function useClaimsData() {
     }));
   }, []);
 
+  // Migraines
+  const addMigraine = useCallback((migraine: Omit<MigraineEntry, 'id'>) => {
+    setData(prev => ({
+      ...prev,
+      migraines: [...prev.migraines, { ...migraine, id: generateId() }],
+    }));
+  }, []);
+
+  const updateMigraine = useCallback((id: string, migraine: Partial<MigraineEntry>) => {
+    setData(prev => ({
+      ...prev,
+      migraines: prev.migraines.map(m => m.id === id ? { ...m, ...migraine } : m),
+    }));
+  }, []);
+
+  const deleteMigraine = useCallback((id: string) => {
+    setData(prev => ({
+      ...prev,
+      migraines: prev.migraines.filter(m => m.id !== id),
+    }));
+  }, []);
+
   return {
     data,
     addMedicalVisit,
@@ -230,5 +259,8 @@ export function useClaimsData() {
     deleteBuddyContact,
     updateDocument,
     setSeparationDate,
+    addMigraine,
+    updateMigraine,
+    deleteMigraine,
   };
 }

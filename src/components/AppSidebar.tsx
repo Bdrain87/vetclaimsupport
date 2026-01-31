@@ -13,6 +13,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ShieldCheck,
+  Brain,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -21,6 +22,7 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/medical-visits', icon: Stethoscope, label: 'Medical Visits' },
+  { to: '/migraines', icon: Brain, label: 'Migraine Tracker' },
   { to: '/exposures', icon: AlertTriangle, label: 'Exposures' },
   { to: '/symptoms', icon: Activity, label: 'Symptoms Journal' },
   { to: '/medications', icon: Pill, label: 'Medications' },
