@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
-import { Users, Plus, Trash2, Edit, Phone, Mail, FileText, CheckCircle, Clock, Send, Download } from 'lucide-react';
+import { Users, Plus, Trash2, Edit, Phone, Mail, FileText, CheckCircle, Clock, Send, Download, Camera } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -9,12 +9,13 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { exportBuddyContacts } from '@/utils/pdfExport';
+import { DocumentUploader } from '@/components/documents/DocumentUploader';
 import type { BuddyContact } from '@/types/claims';
 
 const statementStatuses = ['Not Requested', 'Requested', 'Received', 'Submitted'] as const;
 
 export default function BuddyContacts() {
-  const { data, addBuddyContact, updateBuddyContact, deleteBuddyContact } = useClaims();
+  const { data, addBuddyContact, updateBuddyContact, deleteBuddyContact, addUploadedDocument, deleteUploadedDocument } = useClaims();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState<Omit<BuddyContact, 'id'>>({
@@ -257,6 +258,27 @@ export default function BuddyContacts() {
           ))}
         </div>
       )}
+
+      {/* Uploaded Buddy Statement Documents */}
+      <Card className="data-card">
+        <CardHeader>
+          <CardTitle className="text-base flex items-center gap-2">
+            <Camera className="h-5 w-5 text-buddy" />
+            Scanned Buddy Statements
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <DocumentUploader
+            documents={data.uploadedDocuments}
+            category="buddy-contacts"
+            onAdd={addUploadedDocument}
+            onDelete={deleteUploadedDocument}
+          />
+          <p className="text-xs text-muted-foreground mt-3">
+            Scan or upload signed buddy statements (VA Form 21-10210) here for safekeeping.
+          </p>
+        </CardContent>
+      </Card>
     </div>
   );
 }
