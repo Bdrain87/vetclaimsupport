@@ -341,6 +341,13 @@ export function RatingCalculator() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Disclaimer */}
+        <div className="p-3 bg-muted/50 border border-border rounded-lg">
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            This calculator provides estimates only. Actual VA ratings may differ based on your complete medical record and C&P examination findings.
+          </p>
+        </div>
+
         {/* Add Condition */}
         <div className="space-y-3">
           <div className="flex flex-col sm:flex-row gap-2">

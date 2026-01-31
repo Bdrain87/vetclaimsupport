@@ -58,6 +58,13 @@ export function SecondaryConditionsTab() {
 
   return (
     <div className="space-y-4">
+      {/* Disclaimer */}
+      <div className="p-3 bg-muted/50 border border-border rounded-lg">
+        <p className="text-xs text-muted-foreground leading-relaxed">
+          Secondary conditions must be medically linked to a primary service-connected condition. This list shows commonly recognized connections but is not exhaustive. A medical nexus letter from a qualified provider is typically required.
+        </p>
+      </div>
+
       {/* Explanation */}
       <Card className="data-card border-primary/20 bg-primary/5">
         <CardContent className="pt-4">
