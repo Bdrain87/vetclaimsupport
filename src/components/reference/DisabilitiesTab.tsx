@@ -60,6 +60,13 @@ export function DisabilitiesTab() {
 
   return (
     <div className="space-y-4">
+      {/* Disclaimer */}
+      <div className="p-3 bg-muted/50 border border-border rounded-lg">
+        <p className="text-xs text-muted-foreground leading-relaxed">
+          This list is for informational purposes only. VA disability ratings are determined by the VA based on your specific medical evidence. Inclusion on this list does not guarantee service connection or any particular rating.
+        </p>
+      </div>
+
       {/* Search and Filter */}
       <Card className="data-card">
         <CardContent className="pt-4">
