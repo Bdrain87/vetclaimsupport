@@ -13,6 +13,14 @@ import {
   Circle,
   Trash2,
   Link2,
+  Ear,
+  Brain,
+  Moon,
+  Flame,
+  Eye,
+  Heart,
+  Bone,
+  Wind,
 } from 'lucide-react';
 import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
 import { RatingCalculator } from '@/components/dashboard/RatingCalculator';
@@ -32,10 +40,28 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
+
+// Common VA disability conditions with icons
+const COMMON_CONDITIONS = [
+  { name: 'PTSD', icon: Brain, category: 'Mental Health' },
+  { name: 'Tinnitus', icon: Ear, category: 'Hearing' },
+  { name: 'Hearing Loss', icon: Ear, category: 'Hearing' },
+  { name: 'Sleep Apnea', icon: Moon, category: 'Sleep' },
+  { name: 'Migraines', icon: Brain, category: 'Neurological' },
+  { name: 'Lower Back Pain', icon: Bone, category: 'Musculoskeletal' },
+  { name: 'Knee Condition', icon: Bone, category: 'Musculoskeletal' },
+  { name: 'Burn Pit Exposure', icon: Flame, category: 'Toxic Exposure' },
+  { name: 'Anxiety', icon: Brain, category: 'Mental Health' },
+  { name: 'Depression', icon: Brain, category: 'Mental Health' },
+  { name: 'Neck Pain', icon: Bone, category: 'Musculoskeletal' },
+  { name: 'Shoulder Condition', icon: Bone, category: 'Musculoskeletal' },
+];
 
 export default function Dashboard() {
   const { data, setSeparationDate, addClaimCondition, deleteClaimCondition } = useClaims();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [newConditionName, setNewConditionName] = useState('');
 
@@ -65,6 +91,38 @@ export default function Dashboard() {
     if (condition.linkedBuddyContacts.length > 0) score += 25;
     return score;
   };
+
+  const handleQuickAddCondition = (conditionName: string) => {
+    // Check if already added
+    if (claimConditions.some(c => c.name.toLowerCase() === conditionName.toLowerCase())) {
+      toast({
+        title: 'Already tracking',
+        description: `${conditionName} is already in your conditions list`,
+      });
+      return;
+    }
+    
+    addClaimCondition({
+      name: conditionName,
+      linkedMedicalVisits: [],
+      linkedExposures: [],
+      linkedSymptoms: [],
+      linkedDocuments: [],
+      linkedBuddyContacts: [],
+      notes: '',
+      createdAt: new Date().toISOString(),
+    });
+    
+    toast({
+      title: 'Condition added',
+      description: `${conditionName} added to your claim`,
+    });
+  };
+
+  // Filter out conditions already being tracked
+  const availableConditions = COMMON_CONDITIONS.filter(
+    c => !claimConditions.some(cc => cc.name.toLowerCase() === c.name.toLowerCase())
+  );
 
   const stats = [
     { title: 'Medical', value: data.medicalVisits.length, icon: Stethoscope, href: '/medical-visits' },
@@ -96,6 +154,44 @@ export default function Dashboard() {
           <ExportButton />
         </div>
       </div>
+
+      {/* COMMON CONDITIONS - Quick Add Section */}
+      {availableConditions.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="h-4 w-4 text-primary" />
+            <h2 className="text-sm font-medium text-foreground">Track Service-Connected Disabilities</h2>
+          </div>
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+            {availableConditions.slice(0, 12).map((condition) => {
+              const IconComponent = condition.icon;
+              return (
+                <button
+                  key={condition.name}
+                  onClick={() => handleQuickAddCondition(condition.name)}
+                  className={cn(
+                    "flex flex-col items-center justify-center gap-1.5",
+                    "p-3 rounded-xl",
+                    "bg-white/[0.04] backdrop-blur-sm",
+                    "border border-white/[0.08]",
+                    "transition-all duration-200",
+                    "hover:bg-primary/10 hover:border-primary/30",
+                    "active:scale-95"
+                  )}
+                >
+                  <IconComponent className="h-5 w-5 text-foreground/70" />
+                  <span className="text-[10px] sm:text-xs text-center text-foreground/80 leading-tight">
+                    {condition.name}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          <p className="text-[10px] text-muted-foreground text-center">
+            Tap a condition to start tracking evidence for your VA claim
+          </p>
+        </div>
+      )}
 
       {/* CONDITIONS - THE FOCAL POINT */}
       <div className={cn(
