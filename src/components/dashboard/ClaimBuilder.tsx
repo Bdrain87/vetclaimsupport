@@ -99,6 +99,11 @@ export function ClaimBuilder() {
                     placeholder="e.g., Tinnitus, PTSD, Lower Back Pain"
                     value={newConditionName}
                     onChange={(e) => setNewConditionName(e.target.value)}
+                    onFocus={(e) => {
+                      setTimeout(() => {
+                        e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      }, 300);
+                    }}
                   />
                 </div>
                 <Button onClick={handleAddCondition} className="w-full" disabled={!newConditionName.trim()}>
