@@ -1,10 +1,11 @@
 import { useClaims } from '@/context/ClaimsContext';
-import { FileCheck, Check, Clock, AlertCircle, FileText, Plus, Minus } from 'lucide-react';
+import { FileCheck, Check, Clock, AlertCircle, FileText, Plus, Minus, Download } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { exportDocuments } from '@/utils/pdfExport';
 import type { DocumentItem } from '@/types/claims';
 
 const statuses = ['Not Started', 'In Progress', 'Obtained', 'Submitted'] as const;
@@ -50,14 +51,21 @@ export default function Documents() {
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Header */}
-      <div className="section-header">
-        <div className="section-icon bg-documents/10">
-          <FileCheck className="h-5 w-5 text-documents" />
+      <div className="flex items-center justify-between">
+        <div className="section-header mb-0">
+          <div className="section-icon bg-documents/10">
+            <FileCheck className="h-5 w-5 text-documents" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">Documents Checklist</h1>
+            <p className="text-muted-foreground">Track important documents for your claim</p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">Documents Checklist</h1>
-          <p className="text-muted-foreground">Track important documents for your claim</p>
-        </div>
+        
+        <Button variant="outline" onClick={() => exportDocuments(data.documents)} className="gap-2">
+          <Download className="h-4 w-4" />
+          Export PDF
+        </Button>
       </div>
 
       {/* Progress Summary */}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
-import { Users, Plus, Trash2, Edit, Phone, Mail, FileText, CheckCircle, Clock, Send } from 'lucide-react';
+import { Users, Plus, Trash2, Edit, Phone, Mail, FileText, CheckCircle, Clock, Send, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { exportBuddyContacts } from '@/utils/pdfExport';
 import type { BuddyContact } from '@/types/claims';
 
 const statementStatuses = ['Not Requested', 'Requested', 'Received', 'Submitted'] as const;
@@ -93,13 +94,19 @@ export default function BuddyContacts() {
           </div>
         </div>
 
-        <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
-          <DialogTrigger asChild>
-            <Button className="gap-2">
-              <Plus className="h-4 w-4" />
-              Add Contact
-            </Button>
-          </DialogTrigger>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => exportBuddyContacts(data.buddyContacts)} className="gap-2">
+            <Download className="h-4 w-4" />
+            Export PDF
+          </Button>
+          
+          <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
+            <DialogTrigger asChild>
+              <Button className="gap-2">
+                <Plus className="h-4 w-4" />
+                Add Contact
+              </Button>
+            </DialogTrigger>
           <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{editingId ? 'Edit Contact' : 'Add Buddy Contact'}</DialogTitle>
@@ -184,8 +191,9 @@ export default function BuddyContacts() {
                 </Button>
               </div>
             </form>
-          </DialogContent>
-        </Dialog>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
       {/* Contacts Grid */}
