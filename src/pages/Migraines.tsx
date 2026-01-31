@@ -275,7 +275,7 @@ export default function Migraines() {
         `).join('')}
 
         <div class="footer">
-          <p>This log was generated from the VA Evidence Tracker application.</p>
+          <p>This log was generated from the Service Evidence Tracker application.</p>
           <p>Present this document to your VA representative, VSO, or include with your disability claim.</p>
         </div>
       </body>
