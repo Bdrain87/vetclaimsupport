@@ -316,6 +316,9 @@ export default function Migraines() {
           <p className="text-xs text-muted-foreground mt-3 italic">
             Source: 38 CFR § 4.124a - Schedule of Ratings for Neurological Conditions
           </p>
+          <p className="text-xs text-muted-foreground mt-1 italic">
+            Rating criteria sourced from 38 CFR § 4.124a (current as of 2024). VA criteria may be updated - always verify current standards at VA.gov or with your VSO.
+          </p>
         </AlertDescription>
       </Alert>
 

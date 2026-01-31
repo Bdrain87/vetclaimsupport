@@ -127,7 +127,7 @@ export default function Privacy() {
             <h2 className="text-lg font-semibold text-foreground mb-3">Contact Us</h2>
             <p className="text-muted-foreground">
               If you have questions about this Privacy Policy, please contact us at:{' '}
-              <span className="text-primary font-medium">support@serviceevidencetracker.com</span>
+              <span className="text-primary font-medium">support@serviceevidencetracker.app</span>
             </p>
           </section>
         </CardContent>

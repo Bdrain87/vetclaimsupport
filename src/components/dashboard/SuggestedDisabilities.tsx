@@ -130,10 +130,10 @@ export function SuggestedDisabilities() {
       <CardHeader className="pb-2">
         <CardTitle className="text-lg flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-primary" />
-          Potential Conditions to Research
+          Conditions Worth Exploring
         </CardTitle>
         <p className="text-xs text-muted-foreground mt-1">
-          This tool identifies possible conditions based on your documented data. It is not medical or legal advice. Always consult with a VSO, VA attorney, or healthcare provider.
+          Based on your entries, these are conditions other veterans have researched. This is NOT a diagnosis or medical opinion - it's simply a starting point for your own research. Many factors affect VA claims. Discuss any health concerns with your healthcare provider and claims questions with a VSO or VA-accredited attorney.
         </p>
       </CardHeader>
       <CardContent className="space-y-4">

@@ -61,7 +61,7 @@ export function SecondaryConditionsTab() {
       {/* Disclaimer */}
       <div className="p-3 bg-muted/50 border border-border rounded-lg">
         <p className="text-xs text-muted-foreground leading-relaxed">
-          Secondary conditions must be medically linked to a primary service-connected condition. This list shows commonly recognized connections but is not exhaustive. A medical nexus letter from a qualified provider is typically required.
+          These connections are based on medical literature and common VA claim patterns. They are starting points for research only - not confirmation that you have these conditions. Every case is unique. A qualified medical provider must establish any actual medical connection.
         </p>
       </div>
 
