@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Share2, Copy, CheckCircle2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -45,7 +44,6 @@ export function ShareWithVSO() {
           d.status === 'Obtained' || d.status === 'Submitted'
         ).length,
       },
-      // Only include non-sensitive summary data
       note: 'This is a summary for VSO review. Full details available in the app.',
     };
 
