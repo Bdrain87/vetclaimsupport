@@ -72,7 +72,7 @@ export default function Dashboard() {
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="section-header">
           <div className="section-icon">
             <LayoutDashboard className="h-5 w-5" />
@@ -82,7 +82,9 @@ export default function Dashboard() {
             <p className="text-muted-foreground">Track your VA evidence and documentation</p>
           </div>
         </div>
-        <ExportButton />
+        <div className="w-full sm:w-auto">
+          <ExportButton />
+        </div>
       </div>
 
       {/* Privacy Badge */}

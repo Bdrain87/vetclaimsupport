@@ -314,7 +314,7 @@ export function ExportButton() {
   };
 
   return (
-    <Button onClick={exportPDF} variant="outline" size="sm">
+    <Button onClick={exportPDF} variant="outline" size="sm" className="w-full sm:w-auto">
       <FileDown className="h-4 w-4 mr-2" />
       Export PDF
     </Button>
