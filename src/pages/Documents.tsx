@@ -1,8 +1,10 @@
 import { useClaims } from '@/context/ClaimsContext';
-import { FileCheck, Check, Clock, AlertCircle, FileText } from 'lucide-react';
+import { FileCheck, Check, Clock, AlertCircle, FileText, Plus, Minus } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import type { DocumentItem } from '@/types/claims';
 
 const statuses = ['Not Started', 'In Progress', 'Obtained', 'Submitted'] as const;
@@ -28,6 +30,17 @@ export default function Documents() {
     }
   };
 
+  const handleIncrement = (doc: DocumentItem) => {
+    updateDocument(doc.id, { count: (doc.count || 0) + 1 });
+  };
+
+  const handleDecrement = (doc: DocumentItem) => {
+    if ((doc.count || 0) > 0) {
+      updateDocument(doc.id, { count: (doc.count || 0) - 1 });
+    }
+  };
+
+  const totalDocuments = data.documents.reduce((sum, doc) => sum + (doc.count || 0), 0);
   const progress = {
     completed: data.documents.filter(d => d.status === 'Obtained' || d.status === 'Submitted').length,
     inProgress: data.documents.filter(d => d.status === 'In Progress').length,
@@ -48,7 +61,18 @@ export default function Documents() {
       </div>
 
       {/* Progress Summary */}
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-4">
+        <Card className="data-card border-primary/20 bg-primary/5">
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <FileText className="h-8 w-8 text-primary" />
+              <div>
+                <p className="text-2xl font-bold">{totalDocuments}</p>
+                <p className="text-sm text-muted-foreground">Total Copies</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
         <Card className="data-card border-success/20 bg-success/5">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
@@ -93,12 +117,43 @@ export default function Documents() {
                 <div className="flex items-start gap-3 flex-1">
                   {getStatusIcon(doc.status)}
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-foreground">{doc.name}</h3>
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-medium text-foreground">{doc.name}</h3>
+                      {(doc.count || 0) > 0 && (
+                        <Badge variant="secondary" className="font-mono">
+                          {doc.count} {doc.count === 1 ? 'copy' : 'copies'}
+                        </Badge>
+                      )}
+                    </div>
                     <p className="text-sm text-muted-foreground">{doc.description}</p>
                   </div>
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 lg:items-center">
+                  {/* Count Controls */}
+                  <div className="flex items-center gap-1">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-8 w-8"
+                      onClick={() => handleDecrement(doc)}
+                      disabled={(doc.count || 0) === 0}
+                    >
+                      <Minus className="h-4 w-4" />
+                    </Button>
+                    <div className="w-10 text-center font-mono text-sm">
+                      {doc.count || 0}
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-8 w-8"
+                      onClick={() => handleIncrement(doc)}
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+
                   <Select 
                     value={doc.status} 
                     onValueChange={(value: typeof statuses[number]) => updateDocument(doc.id, { status: value })}
@@ -135,7 +190,8 @@ export default function Documents() {
           <p>• <strong>STRs:</strong> Request from the National Personnel Records Center (NPRC) or your local MTF</p>
           <p>• <strong>DD-214:</strong> If lost, request from eBenefits or NPRC (SF-180 form)</p>
           <p>• <strong>Personnel Records:</strong> Request via vMPF or AFPC</p>
-          <p>• <strong>Buddy Statements:</strong> VA Form 21-10210 - Lay/Witness Statement</p>
+          <p>• <strong>Buddy Statements:</strong> VA Form 21-10210 - Lay/Witness Statement (collect multiple!)</p>
+          <p>• <strong>Nexus Letters:</strong> Get one for each condition you're claiming - consider multiple opinions</p>
         </CardContent>
       </Card>
     </div>

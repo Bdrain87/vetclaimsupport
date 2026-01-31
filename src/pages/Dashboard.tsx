@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
 import { RatingCalculator } from '@/components/dashboard/RatingCalculator';
 import { ExportButton } from '@/components/dashboard/ExportButton';
+import { SuggestedDisabilities } from '@/components/dashboard/SuggestedDisabilities';
 
 export default function Dashboard() {
   const { data, setSeparationDate } = useClaims();
@@ -94,6 +95,9 @@ export default function Dashboard() {
           </div>
         ))}
       </div>
+
+      {/* AI Disability Suggestions */}
+      <SuggestedDisabilities />
 
       {/* BDD Countdown and Calculator */}
       <div className="grid gap-6 lg:grid-cols-2">

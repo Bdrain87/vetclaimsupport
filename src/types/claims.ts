@@ -73,6 +73,7 @@ export interface DocumentItem {
   description: string;
   status: 'Not Started' | 'In Progress' | 'Obtained' | 'Submitted';
   notes: string;
+  count: number;
 }
 
 export interface ClaimsData {
