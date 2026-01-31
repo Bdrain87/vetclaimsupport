@@ -23,7 +23,6 @@ import {
 } from 'lucide-react';
 import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
 import { RatingCalculator } from '@/components/dashboard/RatingCalculator';
-import { ExportButton } from '@/components/dashboard/ExportButton';
 import { SuggestedDisabilities } from '@/components/dashboard/SuggestedDisabilities';
 import { ClaimReadinessScore } from '@/components/dashboard/ClaimReadinessScore';
 import { IntentToFileCard } from '@/components/dashboard/IntentToFileCard';
@@ -31,7 +30,7 @@ import { DashboardInsights } from '@/components/dashboard/DashboardInsights';
 import { MobileNavGrid } from '@/components/dashboard/MobileNavGrid';
 import { QuickLogWidget } from '@/components/dashboard/QuickLogWidget';
 import { EvidenceGapAnalyzer } from '@/components/dashboard/EvidenceGapAnalyzer';
-import { ShareWithVSO } from '@/components/dashboard/ShareWithVSO';
+import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -173,17 +172,8 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-4 animate-fade-in pb-4 overflow-x-hidden max-w-full">
-      {/* Hero Header - Clear Purpose */}
-      <div className="flex items-center justify-between">
-        <div className="min-w-0">
-          <h1 className="text-xl font-bold text-foreground tracking-tight">VA Claim Evidence</h1>
-          <p className="text-xs text-muted-foreground">Build your disability claim</p>
-        </div>
-        <div className="hidden md:flex items-center gap-2 flex-shrink-0">
-          <ShareWithVSO />
-          <ExportButton />
-        </div>
-      </div>
+      {/* Hero Header with Native Share */}
+      <DashboardHeader />
 
       {/* CONDITIONS WORTH EXPLORING - Discovery Section */}
       {availableConditions.length > 0 && (

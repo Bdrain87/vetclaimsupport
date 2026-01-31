@@ -114,7 +114,7 @@ export default function Sleep() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in overflow-x-hidden max-w-full">
       {/* VA Rating Info */}
       <Alert className="border-primary/50 bg-primary/10">
         <Moon className="h-5 w-5 text-primary" />
@@ -135,14 +135,14 @@ export default function Sleep() {
       </Alert>
 
       {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="section-header mb-0">
           <div className="section-icon bg-indigo-500/10">
             <Moon className="h-5 w-5 text-indigo-500" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Sleep Tracker</h1>
-            <p className="text-muted-foreground">Track sleep patterns for VA disability claims</p>
+            <p className="text-muted-foreground text-sm">Track sleep patterns for VA disability claims</p>
           </div>
         </div>
 

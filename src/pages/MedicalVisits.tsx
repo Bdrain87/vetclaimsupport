@@ -77,7 +77,7 @@ export default function MedicalVisits() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in overflow-x-hidden max-w-full">
       {/* Important Tip Alert */}
       <Alert className="border-warning/50 bg-warning/10">
         <AlertTriangle className="h-5 w-5 text-warning" />
@@ -96,19 +96,19 @@ export default function MedicalVisits() {
       </Alert>
 
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="section-header mb-0">
           <div className="section-icon bg-medical/10">
             <Stethoscope className="h-5 w-5 text-medical" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Medical Visits</h1>
-            <p className="text-muted-foreground">Log all medical appointments during service</p>
+            <p className="text-muted-foreground text-sm">Log all medical appointments during service</p>
           </div>
         </div>
 
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => exportMedicalVisits(data.medicalVisits)} className="gap-2">
+        <div className="flex gap-2 flex-shrink-0">
+          <Button variant="outline" onClick={() => exportMedicalVisits(data.medicalVisits)} className="gap-2 hidden sm:flex">
             <Download className="h-4 w-4" />
             Export PDF
           </Button>

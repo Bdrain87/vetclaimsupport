@@ -143,21 +143,21 @@ export default function Exposures() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in overflow-x-hidden max-w-full">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="section-header mb-0">
           <div className="section-icon bg-exposure/10">
             <AlertTriangle className="h-5 w-5 text-exposure" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Exposures</h1>
-            <p className="text-muted-foreground">Document hazardous exposures during service</p>
+            <p className="text-muted-foreground text-sm">Document hazardous exposures during service</p>
           </div>
         </div>
 
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => exportExposures(data.exposures)} className="gap-2">
+        <div className="flex gap-2 flex-shrink-0">
+          <Button variant="outline" onClick={() => exportExposures(data.exposures)} className="gap-2 hidden sm:flex">
             <Download className="h-4 w-4" />
             Export PDF
           </Button>

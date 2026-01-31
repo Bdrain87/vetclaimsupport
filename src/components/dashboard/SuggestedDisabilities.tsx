@@ -130,7 +130,7 @@ export function SuggestedDisabilities() {
       <CardHeader className="pb-2">
         <CardTitle className="text-lg flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-primary" />
-          Conditions Worth Exploring
+          AI Disability Suggestions
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
