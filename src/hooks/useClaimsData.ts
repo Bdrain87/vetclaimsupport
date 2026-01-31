@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { ClaimsData, MedicalVisit, Exposure, SymptomEntry, Medication, ServiceEntry, BuddyContact, DocumentItem, MigraineEntry } from '@/types/claims';
+import type { ClaimsData, MedicalVisit, Exposure, SymptomEntry, Medication, ServiceEntry, BuddyContact, DocumentItem, MigraineEntry, UploadedDocument } from '@/types/claims';
 
 const STORAGE_KEY = 'va-claims-tracker-data';
 
@@ -28,6 +28,7 @@ const getInitialData = (): ClaimsData => {
       documents: defaultDocuments,
       migraines: [],
       separationDate: null,
+      uploadedDocuments: [],
     };
   }
   
@@ -38,6 +39,10 @@ const getInitialData = (): ClaimsData => {
       // Ensure migraines array exists for older data
       if (!parsed.migraines) {
         parsed.migraines = [];
+      }
+      // Ensure uploadedDocuments array exists for older data
+      if (!parsed.uploadedDocuments) {
+        parsed.uploadedDocuments = [];
       }
       return parsed;
     } catch {
@@ -55,6 +60,7 @@ const getInitialData = (): ClaimsData => {
     documents: defaultDocuments,
     migraines: [],
     separationDate: null,
+    uploadedDocuments: [],
   };
 };
 
@@ -237,6 +243,21 @@ export function useClaimsData() {
     }));
   }, []);
 
+  // Uploaded Documents
+  const addUploadedDocument = useCallback((doc: Omit<UploadedDocument, 'id'>) => {
+    setData(prev => ({
+      ...prev,
+      uploadedDocuments: [...prev.uploadedDocuments, { ...doc, id: generateId() }],
+    }));
+  }, []);
+
+  const deleteUploadedDocument = useCallback((id: string) => {
+    setData(prev => ({
+      ...prev,
+      uploadedDocuments: prev.uploadedDocuments.filter(d => d.id !== id),
+    }));
+  }, []);
+
   return {
     data,
     addMedicalVisit,
@@ -262,5 +283,7 @@ export function useClaimsData() {
     addMigraine,
     updateMigraine,
     deleteMigraine,
+    addUploadedDocument,
+    deleteUploadedDocument,
   };
 }

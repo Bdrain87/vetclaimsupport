@@ -1,17 +1,18 @@
 import { useClaims } from '@/context/ClaimsContext';
-import { FileCheck, Check, Clock, AlertCircle, FileText, Plus, Minus, Download } from 'lucide-react';
+import { FileCheck, Check, Clock, AlertCircle, FileText, Plus, Minus, Download, Camera } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { exportDocuments } from '@/utils/pdfExport';
+import { DocumentUploader } from '@/components/documents/DocumentUploader';
 import type { DocumentItem } from '@/types/claims';
 
 const statuses = ['Not Started', 'In Progress', 'Obtained', 'Submitted'] as const;
 
 export default function Documents() {
-  const { data, updateDocument } = useClaims();
+  const { data, updateDocument, addUploadedDocument, deleteUploadedDocument } = useClaims();
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -188,6 +189,24 @@ export default function Documents() {
           </Card>
         ))}
       </div>
+
+      {/* Uploaded Documents Section */}
+      <Card className="data-card">
+        <CardHeader>
+          <CardTitle className="text-base flex items-center gap-2">
+            <Camera className="h-5 w-5 text-primary" />
+            Scanned & Uploaded Documents
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <DocumentUploader
+            documents={data.uploadedDocuments}
+            category="documents"
+            onAdd={addUploadedDocument}
+            onDelete={deleteUploadedDocument}
+          />
+        </CardContent>
+      </Card>
 
       {/* Tips */}
       <Card className="data-card bg-primary/5 border-primary/20">

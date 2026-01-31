@@ -95,6 +95,19 @@ export interface MigraineEntry {
   notes: string;
 }
 
+// Uploaded document file
+export interface UploadedDocument {
+  id: string;
+  title: string;
+  description: string;
+  fileName: string;
+  fileType: string;
+  fileSize: number;
+  dataUrl: string; // Base64 encoded file data
+  uploadedAt: string;
+  category: 'documents' | 'buddy-contacts';
+}
+
 export interface ClaimsData {
   medicalVisits: MedicalVisit[];
   exposures: Exposure[];
@@ -105,4 +118,5 @@ export interface ClaimsData {
   documents: DocumentItem[];
   migraines: MigraineEntry[];
   separationDate: string | null;
+  uploadedDocuments: UploadedDocument[];
 }

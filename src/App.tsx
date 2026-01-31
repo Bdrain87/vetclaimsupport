@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ClaimsProvider } from "./context/ClaimsContext";
 import { AppLayout } from "./components/AppLayout";
+import { LiabilityAcceptanceScreen } from "./components/legal/LiabilityAcceptanceScreen";
 import { OnboardingModal } from "./components/onboarding/OnboardingModal";
 import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
 import Dashboard from "./pages/Dashboard";
@@ -29,9 +30,10 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <OnboardingModal />
-        <PWAInstallPrompt />
         <BrowserRouter>
+          <LiabilityAcceptanceScreen />
+          <OnboardingModal />
+          <PWAInstallPrompt />
           <AppLayout>
             <Routes>
               <Route path="/" element={<Dashboard />} />
