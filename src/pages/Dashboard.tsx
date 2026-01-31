@@ -44,14 +44,15 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="space-y-4 animate-fade-in pb-4 overflow-x-hidden">
-      {/* Header - Compact */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <div className="space-y-4 animate-fade-in pb-4 overflow-x-hidden max-w-full">
+      {/* Header - Title only on mobile, buttons hidden */}
+      <div className="flex items-center justify-between">
         <div className="min-w-0">
           <h1 className="text-2xl font-bold text-foreground tracking-tight">Dashboard</h1>
           <p className="text-xs text-muted-foreground">Track your VA evidence</p>
         </div>
-        <div className="flex items-center gap-2 flex-shrink-0">
+        {/* Buttons hidden on mobile - available in Settings */}
+        <div className="hidden md:flex items-center gap-2 flex-shrink-0">
           <ShareWithVSO />
           <ExportButton />
         </div>

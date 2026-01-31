@@ -376,9 +376,9 @@ export function ExportButton() {
   };
 
   return (
-    <Button onClick={exportPDF} variant="outline" size="sm" className="gap-2">
+    <Button onClick={exportPDF} variant="outline" size="sm" className="gap-2 w-full md:w-auto">
       <FileDown className="h-4 w-4" />
-      <span className="hidden sm:inline">Export PDF</span>
+      Export PDF
     </Button>
   );
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock } from 'lucide-react';
+import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Share2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useTheme } from '@/context/ThemeContext';
 import { useToast } from '@/hooks/use-toast';
+import { ShareWithVSO } from '@/components/dashboard/ShareWithVSO';
+import { ExportButton } from '@/components/dashboard/ExportButton';
 
 const REMINDER_SETTINGS_KEY = 'va-claims-reminder-settings';
 
@@ -273,6 +275,21 @@ export default function Settings() {
               Send Test Notification
             </Button>
           )}
+        </CardContent>
+      </Card>
+
+      {/* Export & Share - Mobile only */}
+      <Card className="md:hidden">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <FileDown className="h-5 w-5" />
+            Export & Share
+          </CardTitle>
+          <CardDescription>Share your evidence with your VSO or export as PDF</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <ShareWithVSO />
+          <ExportButton />
         </CardContent>
       </Card>
 

@@ -92,9 +92,9 @@ export function ShareWithVSO() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
+        <Button variant="outline" size="sm" className="gap-2 w-full md:w-auto">
           <Share2 className="h-4 w-4" />
-          <span className="hidden sm:inline">Share with VSO</span>
+          Share with VSO
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg max-h-[90vh]">
