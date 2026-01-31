@@ -8,112 +8,115 @@
 
 @layer base {
   :root {
-    /* Navy & Slate Professional palette */
-    --background: 220 14% 96%;
-    --foreground: 222 47% 11%;
+    /* Modern Clean Light Theme - Apple/Stripe inspired */
+    --background: 210 20% 98%;
+    --foreground: 220 14% 20%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 220 14% 20%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 220 14% 20%;
 
-    /* Primary - Deep Navy Blue */
-    --primary: 217 71% 28%;
+    /* Primary - Emerald Green (kept as requested) */
+    --primary: 160 84% 39%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Charcoal Slate */
-    --secondary: 220 13% 91%;
-    --secondary-foreground: 222 47% 15%;
+    /* Secondary - Soft cool gray */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 14% 28%;
 
-    --muted: 220 14% 92%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 220 14% 95%;
+    --muted-foreground: 220 10% 50%;
 
-    --accent: 217 40% 93%;
-    --accent-foreground: 217 71% 25%;
+    --accent: 160 30% 95%;
+    --accent-foreground: 160 84% 30%;
 
-    --destructive: 0 65% 45%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Warning - Muted amber */
-    --warning: 38 75% 45%;
+    /* Warning - Modern amber */
+    --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
 
-    /* Success - Dark forest green */
-    --success: 152 55% 33%;
+    /* Success - Matches primary emerald */
+    --success: 160 84% 39%;
     --success-foreground: 0 0% 100%;
 
-    --border: 220 13% 86%;
-    --input: 220 13% 86%;
-    --ring: 217 71% 28%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 160 84% 39%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    /* Sidebar - Deep charcoal navy */
-    --sidebar-background: 222 47% 9%;
-    --sidebar-foreground: 220 14% 70%;
-    --sidebar-primary: 152 45% 45%;
+    /* Sidebar - Premium dark slate */
+    --sidebar-background: 220 20% 10%;
+    --sidebar-foreground: 220 14% 75%;
+    --sidebar-primary: 160 84% 45%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 40% 14%;
+    --sidebar-accent: 220 20% 15%;
     --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 222 30% 16%;
-    --sidebar-ring: 152 45% 45%;
-    --sidebar-muted: 220 9% 50%;
+    --sidebar-border: 220 15% 18%;
+    --sidebar-ring: 160 84% 45%;
+    --sidebar-muted: 220 10% 55%;
 
-    /* Custom section colors - Masculine muted military tones */
-    --medical: 214 52% 25%;
-    --exposure: 218 17% 35%;
-    --symptoms: 155 24% 23%;
-    --medications: 214 35% 37%;
-    --service: 217 50% 30%;
-    --buddy: 218 17% 35%;
-    --documents: 214 40% 32%;
+    /* Section colors - Modern muted tones that complement emerald */
+    --medical: 200 70% 50%;
+    --exposure: 30 80% 55%;
+    --symptoms: 160 60% 40%;
+    --medications: 260 50% 60%;
+    --service: 160 84% 39%;
+    --buddy: 200 60% 55%;
+    --documents: 45 85% 55%;
   }
 
   .dark {
-    --background: 222 47% 7%;
+    /* Modern Dark Theme - True dark with emerald accents */
+    --background: 220 20% 7%;
     --foreground: 220 14% 92%;
 
-    --card: 222 47% 10%;
+    --card: 220 20% 10%;
     --card-foreground: 220 14% 92%;
 
-    --popover: 222 47% 10%;
+    --popover: 220 20% 10%;
     --popover-foreground: 220 14% 92%;
 
-    --primary: 152 45% 45%;
+    /* Primary - Brighter emerald for dark mode */
+    --primary: 160 84% 45%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Deep slate */
-    --secondary: 222 30% 15%;
-    --secondary-foreground: 220 14% 92%;
+    /* Secondary - Elevated dark surface */
+    --secondary: 220 20% 14%;
+    --secondary-foreground: 220 14% 90%;
 
-    --muted: 222 30% 14%;
-    --muted-foreground: 220 14% 60%;
+    --muted: 220 20% 13%;
+    --muted-foreground: 220 14% 55%;
 
-    --accent: 222 30% 18%;
-    --accent-foreground: 220 14% 92%;
+    --accent: 160 40% 15%;
+    --accent-foreground: 160 84% 55%;
 
-    --destructive: 0 55% 42%;
+    --destructive: 0 72% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --warning: 38 65% 45%;
+    --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
 
-    --success: 152 50% 38%;
+    --success: 160 84% 45%;
     --success-foreground: 0 0% 100%;
 
-    --border: 222 30% 18%;
-    --input: 222 30% 18%;
-    --ring: 152 45% 45%;
+    --border: 220 20% 18%;
+    --input: 220 20% 18%;
+    --ring: 160 84% 45%;
 
-    --sidebar-background: 222 47% 6%;
+    /* Sidebar - Deeper dark for premium feel */
+    --sidebar-background: 220 25% 5%;
     --sidebar-foreground: 220 14% 70%;
-    --sidebar-primary: 152 45% 45%;
+    --sidebar-primary: 160 84% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 40% 12%;
+    --sidebar-accent: 220 20% 12%;
     --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 222 30% 14%;
-    --sidebar-ring: 152 45% 45%;
+    --sidebar-border: 220 20% 14%;
+    --sidebar-ring: 160 84% 50%;
   }
 }
 
