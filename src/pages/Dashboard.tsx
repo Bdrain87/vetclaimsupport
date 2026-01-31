@@ -27,10 +27,10 @@ export default function Dashboard() {
   const { data, setSeparationDate } = useClaims();
 
   const stats = [
-    { title: 'Medical', value: data.medicalVisits.length, icon: Stethoscope, color: 'text-blue-400', bgColor: 'bg-blue-500/20', href: '/medical-visits' },
-    { title: 'Exposures', value: data.exposures.length, icon: AlertTriangle, color: 'text-orange-400', bgColor: 'bg-orange-500/20', href: '/exposures' },
-    { title: 'Symptoms', value: data.symptoms.length, icon: Activity, color: 'text-emerald-400', bgColor: 'bg-emerald-500/20', href: '/symptoms' },
-    { title: 'Meds', value: data.medications.length, icon: Pill, color: 'text-violet-400', bgColor: 'bg-violet-500/20', href: '/medications' },
+    { title: 'Medical', value: data.medicalVisits.length, icon: Stethoscope, href: '/medical-visits' },
+    { title: 'Exposures', value: data.exposures.length, icon: AlertTriangle, href: '/exposures' },
+    { title: 'Symptoms', value: data.symptoms.length, icon: Activity, href: '/symptoms' },
+    { title: 'Meds', value: data.medications.length, icon: Pill, href: '/medications' },
   ];
 
   const missingSummaries = data.medicalVisits.filter(v => !v.gotAfterVisitSummary).length;
@@ -73,8 +73,8 @@ export default function Dashboard() {
               "hover:bg-white/[0.06]"
             )}
           >
-            <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center", stat.bgColor)}>
-              <stat.icon className={cn("h-5 w-5", stat.color)} />
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-muted/50">
+              <stat.icon className="h-5 w-5 text-primary" />
             </div>
             <p className="text-xl font-bold text-foreground number-display">{stat.value}</p>
             <p className="text-[10px] text-muted-foreground">{stat.title}</p>
@@ -97,8 +97,8 @@ export default function Dashboard() {
           "border border-white/[0.06]",
           "transition-all duration-300 ease-out"
         )}>
-          <FileWarning className={cn("h-5 w-5", missingSummaries > 0 ? "text-red-400" : "text-emerald-400")} />
-          <span className={cn("text-lg font-bold", missingSummaries > 0 ? "text-red-400" : "text-emerald-400")}>
+          <FileWarning className={cn("h-5 w-5", missingSummaries > 0 ? "text-destructive" : "text-primary")} />
+          <span className={cn("text-lg font-bold", missingSummaries > 0 ? "text-destructive" : "text-foreground")}>
             {data.medicalVisits.length - missingSummaries}/{data.medicalVisits.length}
           </span>
           <span className="text-[9px] text-muted-foreground text-center">Summaries</span>
@@ -110,7 +110,7 @@ export default function Dashboard() {
           "border border-white/[0.06]",
           "transition-all duration-300 ease-out"
         )}>
-          <Activity className="h-5 w-5 text-amber-400" />
+          <Activity className="h-5 w-5 text-primary" />
           <span className="text-lg font-bold">{documentsObtained}/{data.documents.length}</span>
           <span className="text-[9px] text-muted-foreground text-center">Documents</span>
         </div>
@@ -121,7 +121,7 @@ export default function Dashboard() {
           "border border-white/[0.06]",
           "transition-all duration-300 ease-out"
         )}>
-          <ShieldCheck className="h-5 w-5 text-cyan-400" />
+          <ShieldCheck className="h-5 w-5 text-primary" />
           <span className="text-lg font-bold">{buddyStatements}</span>
           <span className="text-[9px] text-muted-foreground text-center">Buddy Stmts</span>
         </div>
