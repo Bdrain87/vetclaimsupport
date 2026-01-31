@@ -171,6 +171,18 @@ export interface ClaimCondition {
   createdAt: string;
 }
 
+// Quick Log Entry for daily tracking
+export interface QuickLogEntry {
+  id: string;
+  date: string;
+  overallFeeling: number; // 1-10
+  hadFlareUp: boolean;
+  flareUpNote: string;
+  cpapUsed?: boolean;
+  painLevel?: number;
+  createdAt: string;
+}
+
 export interface ClaimsData {
   medicalVisits: MedicalVisit[];
   exposures: Exposure[];
@@ -184,5 +196,8 @@ export interface ClaimsData {
   separationDate: string | null;
   uploadedDocuments: UploadedDocument[];
   claimConditions: ClaimCondition[];
+  quickLogs: QuickLogEntry[];
   documentScanDisclaimerShown?: boolean;
+  // Milestones tracking
+  milestonesAchieved?: string[];
 }

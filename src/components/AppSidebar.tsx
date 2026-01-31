@@ -41,6 +41,8 @@ const navItems = [
   // Tools
   { to: '/timeline', icon: Clock, label: 'Timeline' },
   { to: '/checklist', icon: ClipboardCheck, label: 'Claim Checklist' },
+  { to: '/exam-prep', icon: ClipboardCheck, label: 'C&P Exam Prep' },
+  { to: '/claim-tools', icon: FileCheck, label: 'Claim Tools' },
 ];
 
 const secondaryNavItems = [
