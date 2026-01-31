@@ -19,6 +19,7 @@ import { ClaimReadinessScore } from '@/components/dashboard/ClaimReadinessScore'
 import { IntentToFileCard } from '@/components/dashboard/IntentToFileCard';
 import { DashboardInsights } from '@/components/dashboard/DashboardInsights';
 import { ClaimBuilder } from '@/components/dashboard/ClaimBuilder';
+import { MobileNavGrid } from '@/components/dashboard/MobileNavGrid';
 
 export default function Dashboard() {
   const { data, setSeparationDate } = useClaims();
@@ -91,6 +92,9 @@ export default function Dashboard() {
           <span className="font-medium text-foreground">Your Data Stays Private</span> — All information is stored locally on your device. We never collect, store, or share your personal health data.
         </p>
       </div>
+
+      {/* Mobile Navigation Grid - Only visible on mobile */}
+      <MobileNavGrid />
 
       {/* Stats Grid */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
