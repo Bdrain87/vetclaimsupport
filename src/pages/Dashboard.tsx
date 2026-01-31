@@ -12,18 +12,11 @@ import {
   CheckCircle2,
   Circle,
   Trash2,
-  Link2,
-  Ear,
-  Brain,
-  Moon,
-  Flame,
-  Bone,
   ChevronDown,
   Users,
 } from 'lucide-react';
 import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
 import { RatingCalculator } from '@/components/dashboard/RatingCalculator';
-import { SuggestedDisabilities } from '@/components/dashboard/SuggestedDisabilities';
 import { ClaimReadinessScore } from '@/components/dashboard/ClaimReadinessScore';
 import { IntentToFileCard } from '@/components/dashboard/IntentToFileCard';
 import { DashboardInsights } from '@/components/dashboard/DashboardInsights';
@@ -31,6 +24,7 @@ import { MobileNavGrid } from '@/components/dashboard/MobileNavGrid';
 import { QuickLogWidget } from '@/components/dashboard/QuickLogWidget';
 import { EvidenceGapAnalyzer } from '@/components/dashboard/EvidenceGapAnalyzer';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
+import { ConditionsExplorer } from '@/components/dashboard/ConditionsExplorer';
 import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -40,22 +34,6 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
-
-// Common VA disability conditions with icons
-const COMMON_CONDITIONS = [
-  { name: 'PTSD', icon: Brain, category: 'Mental Health' },
-  { name: 'Tinnitus', icon: Ear, category: 'Hearing' },
-  { name: 'Hearing Loss', icon: Ear, category: 'Hearing' },
-  { name: 'Sleep Apnea', icon: Moon, category: 'Sleep' },
-  { name: 'Migraines', icon: Brain, category: 'Neurological' },
-  { name: 'Lower Back Pain', icon: Bone, category: 'Musculoskeletal' },
-  { name: 'Knee Condition', icon: Bone, category: 'Musculoskeletal' },
-  { name: 'Burn Pit Exposure', icon: Flame, category: 'Toxic Exposure' },
-  { name: 'Anxiety', icon: Brain, category: 'Mental Health' },
-  { name: 'Depression', icon: Brain, category: 'Mental Health' },
-  { name: 'Neck Pain', icon: Bone, category: 'Musculoskeletal' },
-  { name: 'Shoulder Condition', icon: Bone, category: 'Musculoskeletal' },
-];
 
 export default function Dashboard() {
   const { data, setSeparationDate, addClaimCondition, deleteClaimCondition, updateClaimCondition } = useClaims();
@@ -148,10 +126,7 @@ export default function Dashboard() {
     updateClaimCondition(conditionId, { [field]: newLinks });
   };
 
-  // Filter out conditions already being tracked
-  const availableConditions = COMMON_CONDITIONS.filter(
-    c => !claimConditions.some(cc => cc.name.toLowerCase() === c.name.toLowerCase())
-  );
+  // Removed COMMON_CONDITIONS logic - now handled by ConditionsExplorer
 
   const stats = [
     { title: 'Medical', value: data.medicalVisits.length, icon: Stethoscope, href: '/medical-visits' },
@@ -175,48 +150,11 @@ export default function Dashboard() {
       {/* Hero Header with Native Share */}
       <DashboardHeader />
 
-      {/* CONDITIONS WORTH EXPLORING - Discovery Section */}
-      {availableConditions.length > 0 && (
-        <div className="space-y-3">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <Target className="h-4 w-4 text-primary" />
-              <h2 className="text-sm font-medium text-foreground">Conditions Worth Exploring</h2>
-            </div>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Many veterans don't realize these service-connected conditions may qualify for VA benefits
-            </p>
-          </div>
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
-            {availableConditions.slice(0, 12).map((condition) => {
-              const IconComponent = condition.icon;
-              return (
-                <button
-                  key={condition.name}
-                  onClick={() => handleQuickAddCondition(condition.name)}
-                  className={cn(
-                    "flex flex-col items-center justify-center gap-1.5",
-                    "p-3 rounded-xl",
-                    "bg-card border border-border shadow-sm",
-                    "transition-all duration-200",
-                    "hover:bg-secondary hover:border-primary/30",
-                    "active:scale-95",
-                    "group"
-                  )}
-                >
-                  <IconComponent className="h-5 w-5 text-foreground group-hover:text-primary transition-colors" />
-                  <span className="text-[10px] sm:text-xs text-center text-foreground leading-tight group-hover:text-primary transition-colors">
-                    {condition.name}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-          <p className="text-[10px] text-muted-foreground text-center italic">
-            Tap any condition to explore and start building your evidence
-          </p>
-        </div>
-      )}
+      {/* CONDITIONS WORTH EXPLORING - Unified Smart Section */}
+      <ConditionsExplorer 
+        claimConditions={claimConditions}
+        onAddCondition={handleQuickAddCondition}
+      />
 
       {/* CONDITIONS - THE FOCAL POINT */}
       <div className={cn(
@@ -595,7 +533,6 @@ export default function Dashboard() {
         <div className="mt-3 space-y-3">
           <DashboardInsights />
           <EvidenceGapAnalyzer />
-          <SuggestedDisabilities />
         </div>
       </details>
     </div>
