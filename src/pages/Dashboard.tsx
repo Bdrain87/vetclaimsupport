@@ -197,7 +197,7 @@ export default function Dashboard() {
               Many veterans don't realize these service-connected conditions may qualify for VA benefits
             </p>
           </div>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
             {availableConditions.slice(0, 12).map((condition) => {
               const IconComponent = condition.icon;
               return (
@@ -207,23 +207,22 @@ export default function Dashboard() {
                   className={cn(
                     "flex flex-col items-center justify-center gap-1.5",
                     "p-3 rounded-xl",
-                    "bg-muted/50 backdrop-blur-sm",
-                    "border border-border",
+                    "bg-card border border-border shadow-sm",
                     "transition-all duration-200",
-                    "hover:bg-primary/10 hover:border-primary/30",
+                    "hover:bg-secondary hover:border-primary/30",
                     "active:scale-95",
                     "group"
                   )}
                 >
-                  <IconComponent className="h-5 w-5 text-foreground/70 group-hover:text-primary transition-colors" />
-                  <span className="text-[10px] sm:text-xs text-center text-foreground/80 leading-tight group-hover:text-foreground transition-colors">
+                  <IconComponent className="h-5 w-5 text-foreground group-hover:text-primary transition-colors" />
+                  <span className="text-[10px] sm:text-xs text-center text-foreground leading-tight group-hover:text-primary transition-colors">
                     {condition.name}
                   </span>
                 </button>
               );
             })}
           </div>
-          <p className="text-[10px] text-muted-foreground/70 text-center italic">
+          <p className="text-[10px] text-muted-foreground text-center italic">
             Tap any condition to explore and start building your evidence
           </p>
         </div>
@@ -232,7 +231,7 @@ export default function Dashboard() {
       {/* CONDITIONS - THE FOCAL POINT */}
       <div className={cn(
         "rounded-2xl overflow-hidden",
-        "bg-gradient-to-br from-primary/10 via-primary/5 to-transparent",
+        "bg-card shadow-sm",
         "border border-primary/20"
       )}>
         <div className="p-4">
@@ -297,7 +296,7 @@ export default function Dashboard() {
                     key={condition.id}
                     className={cn(
                       "rounded-xl overflow-hidden",
-                      "bg-muted/50 backdrop-blur-sm",
+                      "bg-secondary",
                       "border border-border",
                       "transition-all duration-200",
                       isExpanded && "border-primary/30"
@@ -349,21 +348,21 @@ export default function Dashboard() {
                       <div className="px-3 pb-3 space-y-3 border-t border-border">
                         {/* Evidence Categories */}
                         <div className="pt-3 grid grid-cols-2 gap-2 text-xs">
-                          <div className="flex items-center gap-2 p-2 rounded-lg bg-muted/50">
+                          <div className="flex items-center gap-2 p-2 rounded-lg bg-muted">
                             <Stethoscope className="h-4 w-4 text-primary" />
-                            <span>{condition.linkedMedicalVisits.length} Medical</span>
+                            <span className="text-foreground">{condition.linkedMedicalVisits.length} Medical</span>
                           </div>
-                          <div className="flex items-center gap-2 p-2 rounded-lg bg-muted/50">
+                          <div className="flex items-center gap-2 p-2 rounded-lg bg-muted">
                             <Activity className="h-4 w-4 text-success" />
-                            <span>{condition.linkedSymptoms.length} Symptoms</span>
+                            <span className="text-foreground">{condition.linkedSymptoms.length} Symptoms</span>
                           </div>
-                          <div className="flex items-center gap-2 p-2 rounded-lg bg-muted/50">
+                          <div className="flex items-center gap-2 p-2 rounded-lg bg-muted">
                             <AlertTriangle className="h-4 w-4 text-warning" />
-                            <span>{condition.linkedExposures.length} Exposures</span>
+                            <span className="text-foreground">{condition.linkedExposures.length} Exposures</span>
                           </div>
-                          <div className="flex items-center gap-2 p-2 rounded-lg bg-muted/50">
+                          <div className="flex items-center gap-2 p-2 rounded-lg bg-muted">
                             <Users className="h-4 w-4 text-primary" />
-                            <span>{condition.linkedBuddyContacts.length} Buddies</span>
+                            <span className="text-foreground">{condition.linkedBuddyContacts.length} Buddies</span>
                           </div>
                         </div>
 
@@ -516,14 +515,13 @@ export default function Dashboard() {
             className={cn(
               "flex flex-col items-center justify-center gap-1.5",
               "min-h-[88px] p-4 rounded-2xl",
-              "bg-muted/50 backdrop-blur-sm",
-              "border border-border",
+              "bg-card border border-border shadow-sm",
               "transition-all duration-300 ease-out",
-              "active:scale-95 active:bg-muted",
-              "hover:bg-muted"
+              "active:scale-95 active:bg-secondary",
+              "hover:bg-secondary"
             )}
           >
-            <stat.icon className="h-5 w-5 text-foreground/70" />
+            <stat.icon className="h-5 w-5 text-foreground" />
             <p className="text-2xl font-bold text-foreground number-display">{stat.value}</p>
             <p className="text-xs text-muted-foreground">{stat.title}</p>
           </Link>
@@ -543,11 +541,10 @@ export default function Dashboard() {
         <div className={cn(
           "flex flex-col items-center justify-center gap-1.5",
           "min-h-[80px] p-4 rounded-2xl",
-          "bg-muted/50 backdrop-blur-sm",
-          "border border-border",
+          "bg-card border border-border shadow-sm",
           "transition-all duration-300 ease-out"
         )}>
-          <FileWarning className="h-5 w-5 text-foreground/70" />
+          <FileWarning className="h-5 w-5 text-foreground" />
           <span className="text-xl font-bold text-foreground">
             {data.medicalVisits.length - missingSummaries}/{data.medicalVisits.length}
           </span>
@@ -556,23 +553,21 @@ export default function Dashboard() {
         <div className={cn(
           "flex flex-col items-center justify-center gap-1.5",
           "min-h-[80px] p-4 rounded-2xl",
-          "bg-muted/50 backdrop-blur-sm",
-          "border border-border",
+          "bg-card border border-border shadow-sm",
           "transition-all duration-300 ease-out"
         )}>
-          <Activity className="h-5 w-5 text-foreground/70" />
+          <Activity className="h-5 w-5 text-foreground" />
           <span className="text-xl font-bold text-foreground">{documentsObtained}/{data.documents.length}</span>
           <span className="text-xs text-muted-foreground text-center">Documents</span>
         </div>
         <div className={cn(
           "flex flex-col items-center justify-center gap-1.5",
           "min-h-[80px] p-4 rounded-2xl",
-          "bg-muted/50 backdrop-blur-sm",
-          "border border-border",
+          "bg-card border border-border shadow-sm",
           "transition-all duration-300 ease-out",
           "col-span-2 sm:col-span-1"
         )}>
-          <ShieldCheck className="h-5 w-5 text-foreground/70" />
+          <ShieldCheck className="h-5 w-5 text-foreground" />
           <span className="text-xl font-bold text-foreground">{buddyStatements}</span>
           <span className="text-xs text-muted-foreground text-center">Buddy Statements</span>
         </div>
@@ -598,14 +593,13 @@ export default function Dashboard() {
         <summary className={cn(
           "flex items-center justify-between",
           "min-h-[48px] px-4 py-3 rounded-2xl",
-          "bg-muted/50 backdrop-blur-sm",
-          "border border-border",
+          "bg-card border border-border shadow-sm",
           "cursor-pointer list-none",
           "transition-all duration-300 ease-out",
-          "hover:bg-muted",
+          "hover:bg-secondary",
           "active:scale-[0.98]"
         )}>
-          <span className="text-sm font-medium">More Tools</span>
+          <span className="text-sm font-medium text-foreground">More Tools</span>
           <ChevronRight className="h-4 w-4 text-muted-foreground group-open:rotate-90 transition-transform duration-300" />
         </summary>
         <div className="mt-3 space-y-3">

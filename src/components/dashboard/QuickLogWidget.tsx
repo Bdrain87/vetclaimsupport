@@ -61,8 +61,8 @@ export function QuickLogWidget() {
   if (loggedToday) {
     const todayLog = data.quickLogs?.find(log => log.date === today);
     return (
-      <div className="flex items-center gap-3 p-4 rounded-2xl bg-secondary border border-border">
-        <CheckCircle2 className="h-5 w-5 text-foreground/70" />
+      <div className="flex items-center gap-3 p-4 rounded-2xl bg-card border border-border shadow-sm">
+        <CheckCircle2 className="h-5 w-5 text-success" />
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium text-foreground">Today's Log Complete</p>
           <p className="text-xs text-muted-foreground">
@@ -75,11 +75,11 @@ export function QuickLogWidget() {
   }
 
   return (
-    <Card className="data-card overflow-hidden">
+    <Card className="bg-card border border-border shadow-sm overflow-hidden">
       <CardContent className="p-5 space-y-5">
         {/* Header */}
         <div className="flex items-center gap-3">
-          <Zap className="h-5 w-5 text-foreground/70" />
+          <Zap className="h-5 w-5 text-primary" />
           <div>
             <h3 className="text-base font-semibold text-foreground">Quick Daily Log</h3>
             <p className="text-xs text-muted-foreground">Track your patterns</p>
@@ -110,12 +110,12 @@ export function QuickLogWidget() {
         </div>
 
         {/* Toggle Options */}
-        <div className="space-y-2 rounded-xl overflow-hidden bg-muted/50">
+        <div className="space-y-0 rounded-xl overflow-hidden bg-secondary border border-border">
           {/* Flare-up Toggle */}
           <div className="flex items-center justify-between p-4">
             <div className="flex items-center gap-3">
-              <Flame className="h-4 w-4 text-foreground/70" />
-              <Label htmlFor="flare-up" className="text-sm cursor-pointer">
+              <Flame className="h-4 w-4 text-warning" />
+              <Label htmlFor="flare-up" className="text-sm cursor-pointer text-foreground">
                 Any flare-ups?
               </Label>
             </div>
@@ -132,8 +132,8 @@ export function QuickLogWidget() {
               <div className="border-t border-border" />
               <div className="flex items-center justify-between p-4">
                 <div className="flex items-center gap-3">
-                  <Wind className="h-4 w-4 text-foreground/70" />
-                  <Label htmlFor="cpap" className="text-sm cursor-pointer">
+                  <Wind className="h-4 w-4 text-primary" />
+                  <Label htmlFor="cpap" className="text-sm cursor-pointer text-foreground">
                     CPAP used?
                   </Label>
                 </div>

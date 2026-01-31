@@ -44,18 +44,17 @@ export function MobileNavGrid() {
             className={({ isActive }) => cn(
               "flex flex-col items-center justify-center gap-1",
               "min-h-[72px] p-2 rounded-2xl",
-              "bg-muted/50 backdrop-blur-sm",
-              "border border-border",
+              "bg-card border border-border shadow-sm",
               "transition-all duration-300 ease-out",
-              "active:scale-95 active:bg-muted",
-              "hover:bg-muted",
-              isActive && "bg-primary/10 border-primary/20"
+              "active:scale-95 active:bg-secondary",
+              "hover:bg-secondary",
+              isActive && "bg-primary/10 border-primary/30"
             )}
           >
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-muted/50 transition-transform duration-300 ease-out">
-              <item.icon className="h-5 w-5 text-foreground/70" />
+            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-secondary transition-transform duration-300 ease-out">
+              <item.icon className="h-5 w-5 text-foreground" />
             </div>
-            <span className="text-[10px] font-medium text-muted-foreground text-center leading-tight">
+            <span className="text-[10px] font-medium text-foreground text-center leading-tight">
               {item.label}
             </span>
           </NavLink>
