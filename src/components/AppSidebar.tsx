@@ -20,15 +20,20 @@ import { useState } from 'react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
 const navItems = [
+  // Overview
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/medical-visits', icon: Stethoscope, label: 'Medical Visits' },
-  { to: '/migraines', icon: Brain, label: 'Migraine Tracker' },
-  { to: '/exposures', icon: AlertTriangle, label: 'Exposures' },
-  { to: '/symptoms', icon: Activity, label: 'Symptoms Journal' },
-  { to: '/medications', icon: Pill, label: 'Medications' },
+  // Service Info
   { to: '/service-history', icon: Shield, label: 'Service History' },
-  { to: '/buddy-contacts', icon: Users, label: 'Buddy Contacts' },
+  // Health Tracking
+  { to: '/medical-visits', icon: Stethoscope, label: 'Medical Visits' },
+  { to: '/symptoms', icon: Activity, label: 'Symptoms Journal' },
+  { to: '/migraines', icon: Brain, label: 'Migraine Tracker' },
+  { to: '/medications', icon: Pill, label: 'Medications' },
+  { to: '/exposures', icon: AlertTriangle, label: 'Exposures' },
+  // Evidence Building
   { to: '/documents', icon: FileCheck, label: 'Documents' },
+  { to: '/buddy-contacts', icon: Users, label: 'Buddy Contacts' },
+  // Reference
   { to: '/reference', icon: BookOpen, label: 'Reference' },
 ];
 
