@@ -1,10 +1,12 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
+
+// Maximum payload size in bytes (500KB)
+const MAX_PAYLOAD_SIZE = 500 * 1024;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -12,35 +14,46 @@ serve(async (req) => {
   }
 
   try {
-    // Validate authentication
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader?.startsWith('Bearer ')) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401,
+    // Check content length to prevent oversized payloads
+    const contentLength = req.headers.get('content-length');
+    if (contentLength && parseInt(contentLength) > MAX_PAYLOAD_SIZE) {
+      return new Response(JSON.stringify({ error: 'Payload too large. Maximum size is 500KB.' }), {
+        status: 413,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      { global: { headers: { Authorization: authHeader } } }
-    );
-
-    const token = authHeader.replace('Bearer ', '');
-    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
-    if (claimsError || !claimsData?.claims) {
-      console.error('Auth validation failed:', claimsError?.message);
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401,
+    // Parse and validate request body
+    let userData;
+    try {
+      const body = await req.json();
+      userData = body.userData;
+    } catch {
+      return new Response(JSON.stringify({ error: 'Invalid request body' }), {
+        status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    const userId = claimsData.claims.sub;
-    console.log('Authenticated user:', userId);
+    // Validate userData structure
+    if (!userData || typeof userData !== 'object') {
+      return new Response(JSON.stringify({ error: 'Missing or invalid userData' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
-    const { userData } = await req.json();
+    // Validate array limits to prevent abuse
+    const MAX_ITEMS_PER_CATEGORY = 500;
+    const categories = ['medicalVisits', 'exposures', 'symptoms', 'medications', 'serviceHistory'];
+    for (const category of categories) {
+      if (userData[category] && Array.isArray(userData[category]) && userData[category].length > MAX_ITEMS_PER_CATEGORY) {
+        return new Response(JSON.stringify({ error: `Too many items in ${category}. Maximum is ${MAX_ITEMS_PER_CATEGORY}.` }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+    }
     
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
