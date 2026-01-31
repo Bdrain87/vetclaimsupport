@@ -57,15 +57,15 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Stats Grid - 4 columns with glass effect */}
-      <div className="grid grid-cols-4 gap-2">
+      {/* Stats Grid - 2 cols mobile, 4 cols desktop */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {stats.map((stat) => (
           <Link
             key={stat.title}
             to={stat.href}
             className={cn(
-              "flex flex-col items-center justify-center gap-1",
-              "min-h-[80px] p-3 rounded-2xl",
+              "flex flex-col items-center justify-center gap-1.5",
+              "min-h-[88px] p-4 rounded-2xl",
               "bg-white/[0.04] backdrop-blur-sm",
               "border border-white/[0.06]",
               "transition-all duration-300 ease-out",
@@ -73,9 +73,9 @@ export default function Dashboard() {
               "hover:bg-white/[0.06]"
             )}
           >
-            <stat.icon className="h-6 w-6 text-foreground/70" />
-            <p className="text-xl font-bold text-foreground number-display">{stat.value}</p>
-            <p className="text-[10px] text-muted-foreground">{stat.title}</p>
+            <stat.icon className="h-5 w-5 text-foreground/70" />
+            <p className="text-2xl font-bold text-foreground number-display">{stat.value}</p>
+            <p className="text-xs text-muted-foreground">{stat.title}</p>
           </Link>
         ))}
       </div>
