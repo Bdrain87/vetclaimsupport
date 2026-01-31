@@ -85,8 +85,10 @@ export default function Dashboard() {
       {/* Quick Log - Compact inline */}
       <QuickLogWidget />
 
-      {/* Navigation Grid */}
-      <MobileNavGrid />
+      {/* Navigation Grid - Hidden on mobile, use bottom tab bar instead */}
+      <div className="hidden md:block">
+        <MobileNavGrid />
+      </div>
 
       {/* Evidence Status - Horizontal cards */}
       <div className="grid grid-cols-3 gap-2">
