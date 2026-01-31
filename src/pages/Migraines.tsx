@@ -169,7 +169,7 @@ export default function Migraines() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in overflow-x-hidden max-w-full">
       {/* Main Disclaimer */}
       <div className="p-3 bg-muted/50 border border-border rounded-lg">
         <p className="text-xs text-muted-foreground leading-relaxed">
@@ -201,19 +201,19 @@ export default function Migraines() {
       </Alert>
 
       {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="section-header mb-0">
           <div className="section-icon bg-purple-500/10">
             <Brain className="h-5 w-5 text-purple-500" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Migraine Tracker</h1>
-            <p className="text-muted-foreground">Document attacks for VA disability claims</p>
+            <p className="text-muted-foreground text-sm">Document attacks for VA disability claims</p>
           </div>
         </div>
 
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={handleExportPDF} className="gap-2">
+        <div className="flex gap-2 flex-shrink-0">
+          <Button variant="outline" onClick={handleExportPDF} className="gap-2 hidden sm:flex">
             <Download className="h-4 w-4" />
             Export PDF
           </Button>
