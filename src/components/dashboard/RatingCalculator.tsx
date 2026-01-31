@@ -1,11 +1,12 @@
 import { useState, useMemo } from 'react';
-import { Calculator, Plus, Trash2, Info, ChevronDown, ChevronUp } from 'lucide-react';
+import { Calculator, Plus, Trash2, Info, ChevronDown, ChevronUp, AlertTriangle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Select,
   SelectContent,
@@ -79,19 +80,19 @@ const bilateralPairs: Record<string, string> = {
   'left_wrist': 'right_wrist', 'right_wrist': 'left_wrist',
 };
 
-// 2024 VA compensation rates (single veteran, no dependents)
+// 2026 VA compensation rates (single veteran, no dependents)
 const monthlyCompensation: Record<number, number> = {
   0: 0,
-  10: 171.23,
-  20: 338.49,
-  30: 524.31,
-  40: 755.28,
-  50: 1075.16,
-  60: 1361.88,
-  70: 1716.28,
-  80: 1995.01,
-  90: 2241.91,
-  100: 3737.85,
+  10: 175.51,
+  20: 347.14,
+  30: 537.32,
+  40: 773.64,
+  50: 1101.71,
+  60: 1395.07,
+  70: 1759.14,
+  80: 2044.74,
+  90: 2297.14,
+  100: 3937.04,
 };
 
 interface CalculationStep {
@@ -265,7 +266,7 @@ function calculateVACombinedRating(conditions: RatedCondition[]): CalculationRes
     description: `Exact combined: ${exactCombined.toFixed(2)}%`,
   });
   steps.push({
-    description: `Rounded to nearest 10%: ${officialRating}%`,
+    description: `Rounded to nearest 10% (Estimated): ${officialRating}%`,
   });
 
   return {
@@ -442,6 +443,14 @@ export function RatingCalculator() {
         {/* Results */}
         {conditions.length > 0 && (
           <div className="space-y-4 pt-4 border-t">
+            {/* Estimate Disclaimer */}
+            <Alert className="border-warning/50 bg-warning/10">
+              <AlertTriangle className="h-4 w-4 text-warning" />
+              <AlertDescription className="text-sm">
+                <strong>ESTIMATE ONLY</strong> - This calculator shows how VA combined ratings math works. This is NOT an official VA determination. Your actual rating will be decided by the VA based on your medical evidence and C&P examination.
+              </AlertDescription>
+            </Alert>
+
             {/* Rating Summary */}
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center p-4 bg-muted/50 rounded-lg">
@@ -449,7 +458,7 @@ export function RatingCalculator() {
                 <p className="text-2xl font-bold">{result.exactCombined.toFixed(2)}%</p>
               </div>
               <div className="text-center p-4 bg-primary/10 rounded-lg border border-primary/20">
-                <p className="text-sm text-muted-foreground mb-1">Official VA Rating</p>
+                <p className="text-sm text-muted-foreground mb-1">Estimated Rating</p>
                 <p className="text-3xl font-bold text-primary">{result.officialRating}%</p>
               </div>
             </div>
@@ -473,10 +482,13 @@ export function RatingCalculator() {
                 ${estimatedCompensation.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </p>
               <p className="text-xs text-muted-foreground mt-1">
-                Based on 2024 rates for single veteran, no dependents
+                Based on 2026 rates - verify current rates at VA.gov
               </p>
               <p className="text-xs text-muted-foreground">
                 Annual: ${(estimatedCompensation * 12).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1 italic">
+                Rates may vary based on dependents and other factors
               </p>
             </div>
 
