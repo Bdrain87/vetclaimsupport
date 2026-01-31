@@ -15,6 +15,8 @@ import ServiceHistory from "./pages/ServiceHistory";
 import BuddyContacts from "./pages/BuddyContacts";
 import Documents from "./pages/Documents";
 import Reference from "./pages/Reference";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +40,8 @@ const App = () => (
               <Route path="/buddy-contacts" element={<BuddyContacts />} />
               <Route path="/documents" element={<Documents />} />
               <Route path="/reference" element={<Reference />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AppLayout>
