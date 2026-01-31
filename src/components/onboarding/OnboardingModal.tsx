@@ -130,7 +130,7 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
             { num: '3', title: 'Exposures', desc: 'Document hazardous exposures and evidence' },
             { num: '4', title: 'Export', desc: 'Generate PDFs to share with your VSO' },
           ].map((item) => (
-            <div key={item.num} className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.03]">
+            <div key={item.num} className="flex items-start gap-3 p-3 rounded-xl bg-muted/50">
               <div className="h-6 w-6 rounded-lg bg-primary/15 flex items-center justify-center text-xs font-bold text-primary flex-shrink-0">
                 {item.num}
               </div>
@@ -159,7 +159,7 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
           </div>
           <div className="grid grid-cols-2 gap-2 text-center">
             {['No accounts', 'No servers', 'No tracking', 'Your control'].map((item) => (
-              <div key={item} className="p-3 rounded-xl bg-white/[0.03] text-xs text-muted-foreground">
+              <div key={item} className="p-3 rounded-xl bg-muted/50 text-xs text-muted-foreground">
                 ✓ {item}
               </div>
             ))}

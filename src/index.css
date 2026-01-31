@@ -187,10 +187,15 @@
 }
 
 @layer components {
-  /* iOS-style stat cards */
+  /* iOS-style stat cards - Theme aware */
   .stat-card {
-    @apply relative overflow-hidden rounded-2xl border-0 p-5;
-    background: linear-gradient(145deg, hsl(0 0% 9%) 0%, hsl(0 0% 6%) 100%);
+    @apply relative overflow-hidden rounded-2xl border-0 p-5 bg-card;
+    box-shadow: 
+      0 1px 3px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .dark .stat-card {
     box-shadow: 
       0 1px 3px rgba(0, 0, 0, 0.4),
       inset 0 1px 0 rgba(255, 255, 255, 0.05);
@@ -207,10 +212,13 @@
   .stat-card-symptoms::before { background: hsl(var(--symptoms)); }
   .stat-card-medications::before { background: hsl(var(--medications)); }
 
-  /* Premium data cards */
+  /* Premium data cards - Theme aware */
   .data-card {
-    @apply rounded-2xl border-0 overflow-hidden;
-    background: linear-gradient(145deg, hsl(0 0% 9%) 0%, hsl(0 0% 6%) 100%);
+    @apply rounded-2xl border-0 overflow-hidden bg-card;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .dark .data-card {
     box-shadow: 
       0 2px 8px rgba(0, 0, 0, 0.3),
       inset 0 1px 0 rgba(255, 255, 255, 0.04);
@@ -222,8 +230,7 @@
   }
 
   .section-icon {
-    @apply flex h-12 w-12 items-center justify-center rounded-2xl;
-    background: linear-gradient(145deg, hsl(211 100% 50% / 0.2) 0%, hsl(211 100% 50% / 0.1) 100%);
+    @apply flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/20;
     box-shadow: 0 0 20px hsl(211 100% 50% / 0.15);
   }
 
@@ -238,20 +245,29 @@
     color: hsl(0 100% 70%);
   }
 
+  .light .badge-warning {
+    background: hsl(0 100% 60% / 0.1);
+    color: hsl(0 100% 45%);
+  }
+
   .badge-success {
     @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold;
     background: hsl(142 76% 46% / 0.15);
     color: hsl(142 76% 60%);
   }
 
+  .light .badge-success {
+    background: hsl(142 76% 46% / 0.1);
+    color: hsl(142 76% 36%);
+  }
+
   .severity-low { @apply bg-success/15 text-success; }
   .severity-medium { @apply bg-warning/15 text-warning; }
   .severity-high { @apply bg-destructive/15 text-destructive; }
 
-  /* iOS glass morphism */
+  /* iOS glass morphism - Theme aware */
   .glass-card {
-    @apply backdrop-blur-2xl border border-white/10;
-    background: hsl(0 0% 8% / 0.8);
+    @apply backdrop-blur-2xl border border-border bg-card/80;
   }
 
   /* iOS-style navigation item */
@@ -262,7 +278,7 @@
   }
 
   .nav-item:hover {
-    @apply bg-white/5 text-foreground;
+    @apply bg-muted text-foreground;
   }
 
   .nav-item.active {
@@ -274,14 +290,13 @@
     @apply absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r-full bg-primary;
   }
 
-  /* iOS-style input groups */
+  /* iOS-style input groups - Theme aware */
   .ios-input-group {
-    @apply rounded-2xl overflow-hidden;
-    background: hsl(0 0% 10%);
+    @apply rounded-2xl overflow-hidden bg-muted;
   }
 
   .ios-input-group > * + * {
-    @apply border-t border-white/5;
+    @apply border-t border-border;
   }
 
   /* Premium glow effects */
@@ -401,9 +416,9 @@
     @apply bg-gradient-to-r from-primary via-blue-400 to-cyan-400 bg-clip-text text-transparent;
   }
 
-  /* iOS-style dividers */
+  /* iOS-style dividers - Theme aware */
   .divider-subtle {
-    @apply border-t border-white/5;
+    @apply border-t border-border;
   }
 
   /* Number display styling */

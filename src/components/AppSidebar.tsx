@@ -52,13 +52,13 @@ export function AppSidebar() {
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 z-40 h-screen bg-black border-r border-white/[0.06] transition-all duration-300 flex flex-col',
+        'fixed left-0 top-0 z-40 h-screen bg-sidebar-background border-r border-border transition-all duration-300 flex flex-col',
         collapsed ? 'w-16' : 'w-64'
       )}
     >
       {/* Header */}
       <div className={cn(
-        'flex items-center gap-3 px-4 py-5 border-b border-white/[0.06]',
+        'flex items-center gap-3 px-4 py-5 border-b border-border',
         collapsed && 'justify-center px-2'
       )}>
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/20 shadow-[0_0_20px_hsl(211_100%_50%/0.2)]">
@@ -83,7 +83,7 @@ export function AppSidebar() {
                   to={item.to}
                   className={cn(
                     'relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150',
-                    'text-muted-foreground hover:bg-white/5 hover:text-foreground',
+                    'text-muted-foreground hover:bg-muted hover:text-foreground',
                     'min-h-[44px]',
                     isActive && 'bg-primary/10 text-primary',
                     collapsed && 'justify-center px-2'
@@ -102,7 +102,7 @@ export function AppSidebar() {
         </ul>
 
         {/* Secondary Navigation */}
-        <div className="mt-3 pt-3 border-t border-white/[0.06] mx-2">
+        <div className="mt-3 pt-3 border-t border-border mx-2">
           <ul className="space-y-0.5">
             {secondaryNavItems.map((item) => {
               const isActive = location.pathname === item.to;
@@ -112,7 +112,7 @@ export function AppSidebar() {
                     to={item.to}
                     className={cn(
                       'relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150',
-                      'text-muted-foreground hover:bg-white/5 hover:text-foreground',
+                      'text-muted-foreground hover:bg-muted hover:text-foreground',
                       'min-h-[44px]',
                       isActive && 'bg-primary/10 text-primary',
                       collapsed && 'justify-center px-2'
@@ -133,7 +133,7 @@ export function AppSidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-white/[0.06] p-2 space-y-2">
+      <div className="border-t border-border p-2 space-y-2">
         <div className={cn(
           'flex items-center',
           collapsed ? 'justify-center' : 'justify-between px-2'
@@ -148,7 +148,7 @@ export function AppSidebar() {
           size="sm"
           onClick={() => setCollapsed(!collapsed)}
           className={cn(
-            'w-full text-muted-foreground hover:bg-white/5 hover:text-foreground min-h-[44px]',
+            'w-full text-muted-foreground hover:bg-muted hover:text-foreground min-h-[44px]',
             collapsed && 'px-2'
           )}
         >

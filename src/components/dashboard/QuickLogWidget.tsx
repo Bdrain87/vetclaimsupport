@@ -110,7 +110,7 @@ export function QuickLogWidget() {
         </div>
 
         {/* Toggle Options */}
-        <div className="space-y-2 rounded-xl overflow-hidden bg-white/[0.03]">
+        <div className="space-y-2 rounded-xl overflow-hidden bg-muted/50">
           {/* Flare-up Toggle */}
           <div className="flex items-center justify-between p-4">
             <div className="flex items-center gap-3">
@@ -129,7 +129,7 @@ export function QuickLogWidget() {
           {/* CPAP Toggle */}
           {usesCPAP && (
             <>
-              <div className="border-t border-white/[0.04]" />
+              <div className="border-t border-border" />
               <div className="flex items-center justify-between p-4">
                 <div className="flex items-center gap-3">
                   <Wind className="h-4 w-4 text-foreground/70" />

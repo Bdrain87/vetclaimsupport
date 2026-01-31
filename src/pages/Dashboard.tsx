@@ -207,8 +207,8 @@ export default function Dashboard() {
                   className={cn(
                     "flex flex-col items-center justify-center gap-1.5",
                     "p-3 rounded-xl",
-                    "bg-white/[0.04] backdrop-blur-sm",
-                    "border border-white/[0.08]",
+                    "bg-muted/50 backdrop-blur-sm",
+                    "border border-border",
                     "transition-all duration-200",
                     "hover:bg-primary/10 hover:border-primary/30",
                     "active:scale-95",
@@ -297,8 +297,8 @@ export default function Dashboard() {
                     key={condition.id}
                     className={cn(
                       "rounded-xl overflow-hidden",
-                      "bg-white/[0.06] backdrop-blur-sm",
-                      "border border-white/[0.08]",
+                      "bg-muted/50 backdrop-blur-sm",
+                      "border border-border",
                       "transition-all duration-200",
                       isExpanded && "border-primary/30"
                     )}
@@ -310,7 +310,7 @@ export default function Dashboard() {
                         "w-full flex items-center justify-between",
                         "p-3",
                         "transition-all duration-200",
-                        "hover:bg-white/[0.04]",
+                        "hover:bg-muted",
                         "active:scale-[0.99]"
                       )}
                     >
@@ -346,22 +346,22 @@ export default function Dashboard() {
 
                     {/* Expanded Evidence Linking */}
                     {isExpanded && (
-                      <div className="px-3 pb-3 space-y-3 border-t border-white/[0.06]">
+                      <div className="px-3 pb-3 space-y-3 border-t border-border">
                         {/* Evidence Categories */}
                         <div className="pt-3 grid grid-cols-2 gap-2 text-xs">
-                          <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.04]">
+                          <div className="flex items-center gap-2 p-2 rounded-lg bg-muted/50">
                             <Stethoscope className="h-4 w-4 text-primary" />
                             <span>{condition.linkedMedicalVisits.length} Medical</span>
                           </div>
-                          <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.04]">
+                          <div className="flex items-center gap-2 p-2 rounded-lg bg-muted/50">
                             <Activity className="h-4 w-4 text-success" />
                             <span>{condition.linkedSymptoms.length} Symptoms</span>
                           </div>
-                          <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.04]">
+                          <div className="flex items-center gap-2 p-2 rounded-lg bg-muted/50">
                             <AlertTriangle className="h-4 w-4 text-warning" />
                             <span>{condition.linkedExposures.length} Exposures</span>
                           </div>
-                          <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.04]">
+                          <div className="flex items-center gap-2 p-2 rounded-lg bg-muted/50">
                             <Users className="h-4 w-4 text-primary" />
                             <span>{condition.linkedBuddyContacts.length} Buddies</span>
                           </div>
@@ -375,7 +375,7 @@ export default function Dashboard() {
                             </p>
                             <div className="space-y-1 max-h-24 overflow-y-auto">
                               {data.medicalVisits.slice(0, 5).map((visit) => (
-                                <label key={visit.id} className="flex items-center gap-2 text-xs p-1.5 rounded hover:bg-white/[0.04] cursor-pointer">
+                                <label key={visit.id} className="flex items-center gap-2 text-xs p-1.5 rounded hover:bg-muted cursor-pointer">
                                   <Checkbox
                                     checked={condition.linkedMedicalVisits.includes(visit.id)}
                                     onCheckedChange={() => toggleLink(condition.id, 'medicalVisits', visit.id)}
@@ -397,7 +397,7 @@ export default function Dashboard() {
                             </p>
                             <div className="space-y-1 max-h-24 overflow-y-auto">
                               {data.symptoms.slice(0, 5).map((symptom) => (
-                                <label key={symptom.id} className="flex items-center gap-2 text-xs p-1.5 rounded hover:bg-white/[0.04] cursor-pointer">
+                                <label key={symptom.id} className="flex items-center gap-2 text-xs p-1.5 rounded hover:bg-muted cursor-pointer">
                                   <Checkbox
                                     checked={condition.linkedSymptoms.includes(symptom.id)}
                                     onCheckedChange={() => toggleLink(condition.id, 'symptoms', symptom.id)}
@@ -417,7 +417,7 @@ export default function Dashboard() {
                             </p>
                             <div className="space-y-1 max-h-24 overflow-y-auto">
                               {data.exposures.map((exposure) => (
-                                <label key={exposure.id} className="flex items-center gap-2 text-xs p-1.5 rounded hover:bg-white/[0.04] cursor-pointer">
+                                <label key={exposure.id} className="flex items-center gap-2 text-xs p-1.5 rounded hover:bg-muted cursor-pointer">
                                   <Checkbox
                                     checked={condition.linkedExposures.includes(exposure.id)}
                                     onCheckedChange={() => toggleLink(condition.id, 'exposures', exposure.id)}
@@ -437,7 +437,7 @@ export default function Dashboard() {
                             </p>
                             <div className="space-y-1 max-h-24 overflow-y-auto">
                               {data.buddyContacts.map((buddy) => (
-                                <label key={buddy.id} className="flex items-center gap-2 text-xs p-1.5 rounded hover:bg-white/[0.04] cursor-pointer">
+                                <label key={buddy.id} className="flex items-center gap-2 text-xs p-1.5 rounded hover:bg-muted cursor-pointer">
                                   <Checkbox
                                     checked={condition.linkedBuddyContacts.includes(buddy.id)}
                                     onCheckedChange={() => toggleLink(condition.id, 'buddyContacts', buddy.id)}
@@ -460,7 +460,7 @@ export default function Dashboard() {
                         )}
 
                         {/* Actions */}
-                        <div className="flex items-center justify-between pt-2 border-t border-white/[0.06]">
+                        <div className="flex items-center justify-between pt-2 border-t border-border">
                           <Button
                             variant="ghost"
                             size="sm"
@@ -516,11 +516,11 @@ export default function Dashboard() {
             className={cn(
               "flex flex-col items-center justify-center gap-1.5",
               "min-h-[88px] p-4 rounded-2xl",
-              "bg-white/[0.04] backdrop-blur-sm",
-              "border border-white/[0.06]",
+              "bg-muted/50 backdrop-blur-sm",
+              "border border-border",
               "transition-all duration-300 ease-out",
-              "active:scale-95 active:bg-white/[0.08]",
-              "hover:bg-white/[0.06]"
+              "active:scale-95 active:bg-muted",
+              "hover:bg-muted"
             )}
           >
             <stat.icon className="h-5 w-5 text-foreground/70" />
@@ -543,8 +543,8 @@ export default function Dashboard() {
         <div className={cn(
           "flex flex-col items-center justify-center gap-1.5",
           "min-h-[80px] p-4 rounded-2xl",
-          "bg-white/[0.04] backdrop-blur-sm",
-          "border border-white/[0.06]",
+          "bg-muted/50 backdrop-blur-sm",
+          "border border-border",
           "transition-all duration-300 ease-out"
         )}>
           <FileWarning className="h-5 w-5 text-foreground/70" />
@@ -556,8 +556,8 @@ export default function Dashboard() {
         <div className={cn(
           "flex flex-col items-center justify-center gap-1.5",
           "min-h-[80px] p-4 rounded-2xl",
-          "bg-white/[0.04] backdrop-blur-sm",
-          "border border-white/[0.06]",
+          "bg-muted/50 backdrop-blur-sm",
+          "border border-border",
           "transition-all duration-300 ease-out"
         )}>
           <Activity className="h-5 w-5 text-foreground/70" />
@@ -567,8 +567,8 @@ export default function Dashboard() {
         <div className={cn(
           "flex flex-col items-center justify-center gap-1.5",
           "min-h-[80px] p-4 rounded-2xl",
-          "bg-white/[0.04] backdrop-blur-sm",
-          "border border-white/[0.06]",
+          "bg-muted/50 backdrop-blur-sm",
+          "border border-border",
           "transition-all duration-300 ease-out",
           "col-span-2 sm:col-span-1"
         )}>
@@ -598,11 +598,11 @@ export default function Dashboard() {
         <summary className={cn(
           "flex items-center justify-between",
           "min-h-[48px] px-4 py-3 rounded-2xl",
-          "bg-white/[0.04] backdrop-blur-sm",
-          "border border-white/[0.06]",
+          "bg-muted/50 backdrop-blur-sm",
+          "border border-border",
           "cursor-pointer list-none",
           "transition-all duration-300 ease-out",
-          "hover:bg-white/[0.06]",
+          "hover:bg-muted",
           "active:scale-[0.98]"
         )}>
           <span className="text-sm font-medium">More Tools</span>
