@@ -88,42 +88,43 @@ export default function Dashboard() {
         <MobileNavGrid />
       </div>
 
-      {/* Evidence Status - Horizontal cards */}
-      <div className="grid grid-cols-3 gap-2">
+      {/* Evidence Status - 2 cols mobile, 3 cols desktop */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         <div className={cn(
-          "flex flex-col items-center justify-center gap-1",
-          "min-h-[72px] p-3 rounded-2xl",
+          "flex flex-col items-center justify-center gap-1.5",
+          "min-h-[80px] p-4 rounded-2xl",
           "bg-white/[0.04] backdrop-blur-sm",
           "border border-white/[0.06]",
           "transition-all duration-300 ease-out"
         )}>
           <FileWarning className="h-5 w-5 text-foreground/70" />
-          <span className="text-lg font-bold text-foreground">
+          <span className="text-xl font-bold text-foreground">
             {data.medicalVisits.length - missingSummaries}/{data.medicalVisits.length}
           </span>
-          <span className="text-[9px] text-muted-foreground text-center">Summaries</span>
+          <span className="text-xs text-muted-foreground text-center">Summaries</span>
         </div>
         <div className={cn(
-          "flex flex-col items-center justify-center gap-1",
-          "min-h-[72px] p-3 rounded-2xl",
+          "flex flex-col items-center justify-center gap-1.5",
+          "min-h-[80px] p-4 rounded-2xl",
           "bg-white/[0.04] backdrop-blur-sm",
           "border border-white/[0.06]",
           "transition-all duration-300 ease-out"
         )}>
           <Activity className="h-5 w-5 text-foreground/70" />
-          <span className="text-lg font-bold">{documentsObtained}/{data.documents.length}</span>
-          <span className="text-[9px] text-muted-foreground text-center">Documents</span>
+          <span className="text-xl font-bold text-foreground">{documentsObtained}/{data.documents.length}</span>
+          <span className="text-xs text-muted-foreground text-center">Documents</span>
         </div>
         <div className={cn(
-          "flex flex-col items-center justify-center gap-1",
-          "min-h-[72px] p-3 rounded-2xl",
+          "flex flex-col items-center justify-center gap-1.5",
+          "min-h-[80px] p-4 rounded-2xl",
           "bg-white/[0.04] backdrop-blur-sm",
           "border border-white/[0.06]",
-          "transition-all duration-300 ease-out"
+          "transition-all duration-300 ease-out",
+          "col-span-2 sm:col-span-1"
         )}>
           <ShieldCheck className="h-5 w-5 text-foreground/70" />
-          <span className="text-lg font-bold">{buddyStatements}</span>
-          <span className="text-[9px] text-muted-foreground text-center">Buddy Stmts</span>
+          <span className="text-xl font-bold text-foreground">{buddyStatements}</span>
+          <span className="text-xs text-muted-foreground text-center">Buddy Statements</span>
         </div>
       </div>
 
