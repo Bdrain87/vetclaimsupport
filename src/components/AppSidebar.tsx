@@ -1,0 +1,108 @@
+import { NavLink, useLocation } from 'react-router-dom';
+import { cn } from '@/lib/utils';
+import {
+  LayoutDashboard,
+  Stethoscope,
+  AlertTriangle,
+  Activity,
+  Pill,
+  Shield,
+  Users,
+  FileCheck,
+  BookOpen,
+  ChevronLeft,
+  ChevronRight,
+  Plane,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+
+const navItems = [
+  { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/medical-visits', icon: Stethoscope, label: 'Medical Visits' },
+  { to: '/exposures', icon: AlertTriangle, label: 'Exposures' },
+  { to: '/symptoms', icon: Activity, label: 'Symptoms Journal' },
+  { to: '/medications', icon: Pill, label: 'Medications' },
+  { to: '/service-history', icon: Shield, label: 'Service History' },
+  { to: '/buddy-contacts', icon: Users, label: 'Buddy Contacts' },
+  { to: '/documents', icon: FileCheck, label: 'Documents' },
+  { to: '/reference', icon: BookOpen, label: 'Reference' },
+];
+
+export function AppSidebar() {
+  const [collapsed, setCollapsed] = useState(false);
+  const location = useLocation();
+
+  return (
+    <aside
+      className={cn(
+        'fixed left-0 top-0 z-40 h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300 flex flex-col',
+        collapsed ? 'w-16' : 'w-64'
+      )}
+    >
+      {/* Header */}
+      <div className={cn(
+        'flex items-center gap-3 px-4 py-5 border-b border-sidebar-border',
+        collapsed && 'justify-center px-2'
+      )}>
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+          <Plane className="h-5 w-5" />
+        </div>
+        {!collapsed && (
+          <div className="flex flex-col">
+            <span className="font-semibold text-sidebar-accent-foreground text-sm">VA Claims</span>
+            <span className="text-xs text-sidebar-muted">Tracker</span>
+          </div>
+        )}
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 overflow-y-auto py-4 scrollbar-thin">
+        <ul className="space-y-1 px-2">
+          {navItems.map((item) => {
+            const isActive = location.pathname === item.to;
+            return (
+              <li key={item.to}>
+                <NavLink
+                  to={item.to}
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+                    'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+                    isActive && 'bg-sidebar-accent text-sidebar-primary',
+                    collapsed && 'justify-center px-2'
+                  )}
+                  title={collapsed ? item.label : undefined}
+                >
+                  <item.icon className={cn('h-5 w-5 flex-shrink-0', isActive && 'text-sidebar-primary')} />
+                  {!collapsed && <span>{item.label}</span>}
+                </NavLink>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+
+      {/* Collapse Button */}
+      <div className="border-t border-sidebar-border p-2">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setCollapsed(!collapsed)}
+          className={cn(
+            'w-full text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+            collapsed && 'px-2'
+          )}
+        >
+          {collapsed ? (
+            <ChevronRight className="h-4 w-4" />
+          ) : (
+            <>
+              <ChevronLeft className="h-4 w-4 mr-2" />
+              <span>Collapse</span>
+            </>
+          )}
+        </Button>
+      </div>
+    </aside>
+  );
+}
