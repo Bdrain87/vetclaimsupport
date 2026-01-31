@@ -292,6 +292,13 @@ export default function Migraines() {
 
   return (
     <div className="space-y-6 animate-fade-in">
+      {/* Main Disclaimer */}
+      <div className="p-3 bg-muted/50 border border-border rounded-lg">
+        <p className="text-xs text-muted-foreground leading-relaxed">
+          The VA migraine rating criteria shown here are for reference only. Your actual rating will be determined by the VA based on your C&P examination and medical evidence. Track your migraines consistently to build a strong evidence record.
+        </p>
+      </div>
+
       {/* VA Rating Info Alert */}
       <Alert className="border-primary/50 bg-primary/10">
         <Info className="h-5 w-5 text-primary" />
@@ -306,6 +313,9 @@ export default function Migraines() {
             <li>• <strong>30%</strong> — Prostrating attacks averaging once a month</li>
             <li>• <strong>50%</strong> — Very frequent prostrating attacks + severe economic impact</li>
           </ul>
+          <p className="text-xs text-muted-foreground mt-3 italic">
+            Source: 38 CFR § 4.124a - Schedule of Ratings for Neurological Conditions
+          </p>
         </AlertDescription>
       </Alert>
 
