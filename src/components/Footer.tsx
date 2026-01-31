@@ -1,33 +1,38 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import { cn } from '@/lib/utils';
 
 export const Footer = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(
   ({ className, ...props }, ref) => {
     return (
       <footer 
         ref={ref}
-        className={`mt-auto border-t border-border bg-muted/30 py-6 safe-area-bottom ${className || ''}`}
+        className={cn(
+          "mt-auto py-6 safe-area-bottom",
+          "border-t border-white/[0.04]",
+          "bg-gradient-to-t from-black/50 to-transparent",
+          className
+        )}
         {...props}
       >
         <div className="container max-w-7xl mx-auto px-4 md:px-6 lg:px-8 safe-area-x">
-          <p className="text-xs text-muted-foreground text-center leading-relaxed max-w-4xl mx-auto">
-            This app is an organizational tool only. It does not provide medical, legal, or VA claims advice. 
-            Always consult with a healthcare provider, VA-accredited attorney, or Veterans Service Organization (VSO) 
-            before making decisions about your health or benefits.
+          <p className="text-xs text-muted-foreground/70 text-center leading-relaxed max-w-3xl mx-auto">
+            This app is an organizational tool only. Not medical, legal, or VA advice.
+            Consult a healthcare provider, attorney, or VSO before making decisions.
           </p>
-          <div className="flex items-center justify-center gap-4 mt-3">
+          <div className="flex items-center justify-center gap-6 mt-4">
             <Link 
               to="/privacy" 
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors underline-offset-4 hover:underline min-h-[44px] flex items-center"
+              className="text-xs text-muted-foreground hover:text-primary transition-colors min-h-[44px] flex items-center"
             >
-              Privacy Policy
+              Privacy
             </Link>
-            <span className="text-muted-foreground/50">•</span>
+            <div className="w-1 h-1 rounded-full bg-muted-foreground/30" />
             <Link 
               to="/terms" 
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors underline-offset-4 hover:underline min-h-[44px] flex items-center"
+              className="text-xs text-muted-foreground hover:text-primary transition-colors min-h-[44px] flex items-center"
             >
-              Terms of Service
+              Terms
             </Link>
           </div>
         </div>

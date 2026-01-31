@@ -21,6 +21,7 @@ import {
   ChevronLeft,
 } from 'lucide-react';
 import { useClaims } from '@/context/ClaimsContext';
+import { cn } from '@/lib/utils';
 
 const ONBOARDING_KEY = 'hasSeenOnboarding';
 
@@ -63,12 +64,10 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
       localStorage.setItem(ONBOARDING_KEY, 'true');
     }
     
-    // Save separation date if provided
     if (separationDate) {
       saveSeparationDate(new Date(separationDate).toISOString());
     }
     
-    // Save branch to localStorage
     if (branch) {
       localStorage.setItem('militaryBranch', branch);
     }
@@ -100,107 +99,84 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
   };
 
   const steps = [
-    // Welcome
     {
       icon: ShieldCheck,
       iconColor: 'text-primary',
-      iconBg: 'bg-primary/10',
-      title: 'Welcome to Service Evidence Tracker',
+      iconBg: 'bg-primary/15',
+      title: 'Welcome',
+      subtitle: 'Service Evidence Tracker',
       content: (
         <div className="space-y-4 text-center">
-          <p className="text-muted-foreground">
-            This app helps active duty service members and veterans document health issues 
-            during service to build strong evidence for future VA disability claims.
+          <p className="text-muted-foreground text-sm leading-relaxed">
+            Document health issues during service to build strong evidence for VA disability claims.
           </p>
-          <p className="text-muted-foreground">
-            Whether you're preparing for a BDD (Benefits Delivery at Discharge) claim or 
-            documenting conditions for a future claim, we'll help you stay organized.
+          <p className="text-muted-foreground text-sm leading-relaxed">
+            Perfect for BDD claims or documenting conditions for future claims.
           </p>
         </div>
       ),
     },
-    // How it works
     {
       icon: ClipboardList,
-      iconColor: 'text-medical',
-      iconBg: 'bg-medical/10',
-      title: 'Track Everything That Matters',
+      iconColor: 'text-blue-400',
+      iconBg: 'bg-blue-500/15',
+      title: 'Track Everything',
+      subtitle: 'That matters for your claim',
       content: (
-        <div className="space-y-3 text-left">
-          <div className="flex items-start gap-3">
-            <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary flex-shrink-0">1</div>
-            <div>
-              <p className="font-medium text-foreground">Medical Visits</p>
-              <p className="text-sm text-muted-foreground">Log every appointment with dates, providers, and always request after-visit summaries</p>
+        <div className="space-y-3">
+          {[
+            { num: '1', title: 'Medical Visits', desc: 'Log appointments with dates and providers' },
+            { num: '2', title: 'Symptoms', desc: 'Track ongoing issues and medications' },
+            { num: '3', title: 'Exposures', desc: 'Document hazardous exposures and evidence' },
+            { num: '4', title: 'Export', desc: 'Generate PDFs to share with your VSO' },
+          ].map((item) => (
+            <div key={item.num} className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.03]">
+              <div className="h-6 w-6 rounded-lg bg-primary/15 flex items-center justify-center text-xs font-bold text-primary flex-shrink-0">
+                {item.num}
+              </div>
+              <div>
+                <p className="font-medium text-foreground text-sm">{item.title}</p>
+                <p className="text-xs text-muted-foreground">{item.desc}</p>
+              </div>
             </div>
-          </div>
-          <div className="flex items-start gap-3">
-            <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary flex-shrink-0">2</div>
-            <div>
-              <p className="font-medium text-foreground">Symptoms & Medications</p>
-              <p className="text-sm text-muted-foreground">Track ongoing symptoms, migraines, and all medications you're prescribed</p>
-            </div>
-          </div>
-          <div className="flex items-start gap-3">
-            <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary flex-shrink-0">3</div>
-            <div>
-              <p className="font-medium text-foreground">Exposures & Evidence</p>
-              <p className="text-sm text-muted-foreground">Document hazardous exposures and gather buddy statements from fellow service members</p>
-            </div>
-          </div>
-          <div className="flex items-start gap-3">
-            <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary flex-shrink-0">4</div>
-            <div>
-              <p className="font-medium text-foreground">Export Your Records</p>
-              <p className="text-sm text-muted-foreground">Generate PDF reports to share with your VSO or include in your claim</p>
-            </div>
-          </div>
+          ))}
         </div>
       ),
     },
-    // Privacy
     {
       icon: Lock,
-      iconColor: 'text-success',
-      iconBg: 'bg-success/10',
-      title: 'Your Data Stays Private',
+      iconColor: 'text-emerald-400',
+      iconBg: 'bg-emerald-500/15',
+      title: '100% Private',
+      subtitle: 'Your data stays on your device',
       content: (
-        <div className="space-y-4 text-center">
-          <div className="p-4 bg-success/5 border border-success/20 rounded-lg">
-            <p className="font-medium text-foreground mb-2">
-              🔒 100% Local Storage
-            </p>
-            <p className="text-sm text-muted-foreground">
-              All your medical information is stored locally on YOUR device. 
+        <div className="space-y-4">
+          <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-center">
+            <p className="font-medium text-foreground text-sm mb-2">🔒 Local Storage Only</p>
+            <p className="text-xs text-muted-foreground">
               We never collect, transmit, or have access to your personal health data.
             </p>
           </div>
-          <div className="space-y-2 text-sm text-muted-foreground">
-            <p>✓ No accounts required</p>
-            <p>✓ No data sent to servers</p>
-            <p>✓ No tracking or analytics</p>
-            <p>✓ Your information, your control</p>
+          <div className="grid grid-cols-2 gap-2 text-center">
+            {['No accounts', 'No servers', 'No tracking', 'Your control'].map((item) => (
+              <div key={item} className="p-3 rounded-xl bg-white/[0.03] text-xs text-muted-foreground">
+                ✓ {item}
+              </div>
+            ))}
           </div>
-          <p className="text-xs text-muted-foreground italic">
-            Use the Export feature regularly to back up your data.
-          </p>
         </div>
       ),
     },
-    // Get Started
     {
       icon: Rocket,
       iconColor: 'text-primary',
-      iconBg: 'bg-primary/10',
-      title: "Let's Get You Started",
+      iconBg: 'bg-primary/15',
+      title: 'Get Started',
+      subtitle: 'Quick setup (optional)',
       content: (
-        <div className="space-y-5">
-          <p className="text-sm text-muted-foreground text-center">
-            A few quick questions to personalize your experience. You can always change these later.
-          </p>
-          
+        <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="branch">Military Branch</Label>
+            <Label htmlFor="branch" className="text-sm">Military Branch</Label>
             <Select value={branch} onValueChange={setBranch}>
               <SelectTrigger>
                 <SelectValue placeholder="Select your branch" />
@@ -214,16 +190,15 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="sepDate">Estimated Separation Date (for BDD Timer)</Label>
+            <Label htmlFor="sepDate" className="text-sm">Separation Date</Label>
             <Input
               id="sepDate"
               type="date"
               value={separationDate}
               onChange={(e) => setSeparationDate(e.target.value)}
-              placeholder="When do you expect to separate?"
             />
             <p className="text-xs text-muted-foreground">
-              BDD claims can be filed 180-90 days before separation. We'll help you track this window.
+              For BDD timer (file 180-90 days before)
             </p>
           </div>
         </div>
@@ -236,80 +211,73 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="sm:max-w-lg p-0 overflow-hidden" aria-describedby="onboarding-description">
+      <DialogContent className="sm:max-w-md [&>button]:hidden" aria-describedby="onboarding-description">
         <VisuallyHidden.Root>
           <DialogTitle>{currentStepData.title}</DialogTitle>
           <DialogDescription id="onboarding-description">
             Onboarding wizard to help you get started with Service Evidence Tracker
           </DialogDescription>
         </VisuallyHidden.Root>
-        {/* Progress indicator */}
-        <div className="flex gap-1 px-6 pt-6">
-          {steps.map((_, idx) => (
-            <div
-              key={idx}
-              className={`h-1 flex-1 rounded-full transition-colors ${
-                idx <= currentStep ? 'bg-primary' : 'bg-muted'
-              }`}
-            />
-          ))}
-        </div>
 
-        {/* Content */}
-        <div className="px-6 py-6 space-y-6">
+        <div className="p-6 space-y-6">
+          {/* Progress dots */}
+          <div className="flex justify-center gap-2">
+            {steps.map((_, idx) => (
+              <div
+                key={idx}
+                className={cn(
+                  "h-2 rounded-full transition-all duration-300",
+                  idx === currentStep ? "w-6 bg-primary" : "w-2 bg-white/20"
+                )}
+              />
+            ))}
+          </div>
+
           {/* Icon */}
           <div className="flex justify-center">
-            <div className={`h-16 w-16 rounded-full ${currentStepData.iconBg} flex items-center justify-center`}>
-              <currentStepData.icon className={`h-8 w-8 ${currentStepData.iconColor}`} />
+            <div className={cn(
+              "h-16 w-16 rounded-2xl flex items-center justify-center",
+              currentStepData.iconBg
+            )}>
+              <currentStepData.icon className={cn("h-8 w-8", currentStepData.iconColor)} />
             </div>
           </div>
 
           {/* Title */}
-          <h2 className="text-xl font-bold text-center text-foreground">
-            {currentStepData.title}
-          </h2>
+          <div className="text-center">
+            <h2 className="text-xl font-bold text-foreground">{currentStepData.title}</h2>
+            <p className="text-sm text-muted-foreground mt-1">{currentStepData.subtitle}</p>
+          </div>
 
           {/* Content */}
-          <div className="min-h-[200px]">
+          <div className="min-h-[180px]">
             {currentStepData.content}
           </div>
-        </div>
 
-        {/* Footer */}
-        <div className="px-6 pb-6 space-y-4">
-          {/* Don't show again checkbox */}
-          <div className="flex items-center justify-center gap-2">
+          {/* Don't show again */}
+          <label className="flex items-center justify-center gap-2 cursor-pointer">
             <Checkbox
               id="dontShow"
               checked={dontShowAgain}
               onCheckedChange={(checked) => setDontShowAgain(checked as boolean)}
             />
-            <Label htmlFor="dontShow" className="text-sm text-muted-foreground cursor-pointer">
-              Don't show this again
-            </Label>
-          </div>
+            <span className="text-xs text-muted-foreground">Don't show again</span>
+          </label>
 
-          {/* Navigation buttons */}
-          <div className="flex items-center justify-between">
-            <Button
-              variant="ghost"
-              onClick={handleSkip}
-              className="text-muted-foreground"
-            >
+          {/* Navigation */}
+          <div className="flex items-center justify-between gap-2">
+            <Button variant="ghost" onClick={handleSkip} className="text-muted-foreground">
               Skip
             </Button>
             
             <div className="flex gap-2">
               {currentStep > 0 && (
-                <Button variant="outline" onClick={prevStep}>
-                  <ChevronLeft className="h-4 w-4 mr-1" />
-                  Back
+                <Button variant="outline" onClick={prevStep} size="icon">
+                  <ChevronLeft className="h-4 w-4" />
                 </Button>
               )}
               <Button onClick={nextStep}>
-                {isLastStep ? (
-                  'Get Started'
-                ) : (
+                {isLastStep ? 'Get Started' : (
                   <>
                     Next
                     <ChevronRight className="h-4 w-4 ml-1" />

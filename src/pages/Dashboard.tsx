@@ -1,14 +1,12 @@
 import { useClaims } from '@/context/ClaimsContext';
 import { 
-  LayoutDashboard, 
   Stethoscope, 
   AlertTriangle, 
   Activity, 
   Pill,
-  AlertCircle,
-  CheckCircle2,
   FileWarning,
   ShieldCheck,
+  ChevronRight,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
@@ -23,6 +21,8 @@ import { MobileNavGrid } from '@/components/dashboard/MobileNavGrid';
 import { QuickLogWidget } from '@/components/dashboard/QuickLogWidget';
 import { EvidenceGapAnalyzer } from '@/components/dashboard/EvidenceGapAnalyzer';
 import { ShareWithVSO } from '@/components/dashboard/ShareWithVSO';
+import { Link } from 'react-router-dom';
+import { cn } from '@/lib/utils';
 
 export default function Dashboard() {
   const { data, setSeparationDate } = useClaims();
@@ -32,33 +32,33 @@ export default function Dashboard() {
       title: 'Medical Visits',
       value: data.medicalVisits.length,
       icon: Stethoscope,
-      color: 'text-medical',
-      bgColor: 'bg-medical/10',
-      cardClass: 'stat-card-medical',
+      color: 'text-blue-400',
+      bgColor: 'bg-blue-500/15',
+      href: '/medical-visits',
     },
     {
-      title: 'Exposures Logged',
+      title: 'Exposures',
       value: data.exposures.length,
       icon: AlertTriangle,
-      color: 'text-exposure',
-      bgColor: 'bg-exposure/10',
-      cardClass: 'stat-card-exposure',
+      color: 'text-orange-400',
+      bgColor: 'bg-orange-500/15',
+      href: '/exposures',
     },
     {
-      title: 'Symptom Entries',
+      title: 'Symptoms',
       value: data.symptoms.length,
       icon: Activity,
-      color: 'text-symptoms',
-      bgColor: 'bg-symptoms/10',
-      cardClass: 'stat-card-symptoms',
+      color: 'text-emerald-400',
+      bgColor: 'bg-emerald-500/15',
+      href: '/symptoms',
     },
     {
       title: 'Medications',
       value: data.medications.length,
       icon: Pill,
-      color: 'text-medications',
-      bgColor: 'bg-medications/10',
-      cardClass: 'stat-card-medications',
+      color: 'text-violet-400',
+      bgColor: 'bg-violet-500/15',
+      href: '/medications',
     },
   ];
 
@@ -73,59 +73,67 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-6 animate-fade-in pb-8">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="section-header">
-          <div className="section-icon">
-            <LayoutDashboard className="h-5 w-5" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
-            <p className="text-muted-foreground">Track your VA evidence and documentation</p>
-          </div>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">Dashboard</h1>
+          <p className="text-muted-foreground mt-1">Track your VA evidence</p>
         </div>
-        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+        <div className="flex flex-wrap items-center gap-2">
           <ShareWithVSO />
           <ExportButton />
+        </div>
+      </div>
+
+      {/* Privacy Badge - iOS style */}
+      <div className="flex items-center gap-3 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
+        <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
+          <ShieldCheck className="h-5 w-5 text-emerald-400" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium text-foreground">100% Private</p>
+          <p className="text-xs text-muted-foreground">All data stored locally on your device</p>
         </div>
       </div>
 
       {/* Quick Log Widget */}
       <QuickLogWidget />
 
-      {/* Privacy Badge */}
-      <div className="flex items-center gap-3 p-3 bg-success/5 border border-success/20 rounded-lg">
-        <ShieldCheck className="h-5 w-5 text-success flex-shrink-0" />
-        <p className="text-sm text-muted-foreground">
-          <span className="font-medium text-foreground">Your Data Stays Private</span> — All information is stored locally on your device. We never collect, store, or share your personal health data.
-        </p>
-      </div>
-
-      {/* Mobile Navigation Grid - Only visible on mobile */}
+      {/* Mobile Navigation Grid */}
       <MobileNavGrid />
 
-      {/* Stats Grid */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Stats Grid - iOS style cards */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {stats.map((stat) => (
-          <div key={stat.title} className={`stat-card ${stat.cardClass}`}>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">{stat.title}</p>
-                <p className="text-3xl font-bold text-foreground">{stat.value}</p>
+          <Link
+            key={stat.title}
+            to={stat.href}
+            className={cn(
+              "relative p-4 rounded-2xl overflow-hidden",
+              "bg-gradient-to-br from-white/[0.08] to-white/[0.02]",
+              "border border-white/[0.06]",
+              "shadow-[0_2px_8px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.04)]",
+              "active:scale-[0.97] transition-all duration-150",
+              "group"
+            )}
+          >
+            <div className="flex items-center justify-between mb-3">
+              <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center", stat.bgColor)}>
+                <stat.icon className={cn("h-5 w-5", stat.color)} />
               </div>
-              <div className={`${stat.bgColor} rounded-lg p-3`}>
-                <stat.icon className={`h-6 w-6 ${stat.color}`} />
-              </div>
+              <ChevronRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
-          </div>
+            <p className="text-2xl font-bold text-foreground number-display">{stat.value}</p>
+            <p className="text-xs text-muted-foreground mt-1">{stat.title}</p>
+          </Link>
         ))}
       </div>
 
       {/* Intent to File Pro Tip */}
       <IntentToFileCard />
 
-      {/* Dashboard Insights - Actionable Next Steps */}
+      {/* Dashboard Insights */}
       <DashboardInsights />
 
       {/* Claim Readiness Score */}
@@ -141,7 +149,7 @@ export default function Dashboard() {
       <SuggestedDisabilities />
 
       {/* BDD Countdown and Calculator */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2">
         <BDDCountdown 
           separationDate={separationDate} 
           onSeparationDateChange={handleSeparationDateChange} 
@@ -149,96 +157,93 @@ export default function Dashboard() {
         <RatingCalculator />
       </div>
 
-      {/* Status Cards */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {/* Missing Summaries Warning */}
-        <Card className={missingSummaries > 0 ? 'border-destructive/30 bg-destructive/5' : ''}>
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-base">
-              {missingSummaries > 0 ? (
-                <FileWarning className="h-5 w-5 text-destructive" />
-              ) : (
-                <CheckCircle2 className="h-5 w-5 text-success" />
-              )}
-              After-Visit Summaries
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {missingSummaries > 0 ? (
+      {/* Status Cards - iOS grouped style */}
+      <div className="space-y-3">
+        <h2 className="text-sm font-medium text-muted-foreground px-1">Evidence Status</h2>
+        <div className="rounded-2xl overflow-hidden bg-gradient-to-br from-white/[0.06] to-white/[0.02] border border-white/[0.06]">
+          {/* After-Visit Summaries */}
+          <div className="flex items-center justify-between p-4">
+            <div className="flex items-center gap-3">
+              <div className={cn(
+                "w-10 h-10 rounded-xl flex items-center justify-center",
+                missingSummaries > 0 ? "bg-red-500/15" : "bg-emerald-500/15"
+              )}>
+                <FileWarning className={cn(
+                  "h-5 w-5",
+                  missingSummaries > 0 ? "text-red-400" : "text-emerald-400"
+                )} />
+              </div>
               <div>
-                <p className="text-2xl font-bold text-destructive">{missingSummaries} Missing</p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Request copies from your MTF records office
+                <p className="text-sm font-medium text-foreground">After-Visit Summaries</p>
+                <p className="text-xs text-muted-foreground">
+                  {missingSummaries > 0 ? `${missingSummaries} missing` : 'All obtained'}
                 </p>
               </div>
-            ) : (
-              <div>
-                <p className="text-2xl font-bold text-success">All Obtained</p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Great job keeping your records complete!
-                </p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Documents Progress */}
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-base">
-              <AlertCircle className="h-5 w-5 text-documents" />
-              Documents Checklist
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{documentsObtained} / {data.documents.length}</p>
-            <div className="mt-2 h-2 w-full rounded-full bg-muted">
-              <div 
-                className="h-2 rounded-full bg-documents transition-all"
-                style={{ width: `${(documentsObtained / data.documents.length) * 100}%` }}
-              />
             </div>
-            <p className="text-sm text-muted-foreground mt-2">
-              Documents obtained or submitted
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* Buddy Statements */}
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-base">
-              <CheckCircle2 className="h-5 w-5 text-buddy" />
-              Buddy Statements
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{buddyStatements} Received</p>
-            <p className="text-sm text-muted-foreground mt-1">
-              {data.buddyContacts.length} contacts total
-            </p>
-          </CardContent>
-        </Card>
+            <span className={cn(
+              "text-lg font-bold number-display",
+              missingSummaries > 0 ? "text-red-400" : "text-emerald-400"
+            )}>
+              {data.medicalVisits.length - missingSummaries}/{data.medicalVisits.length}
+            </span>
+          </div>
+          
+          <div className="divider-subtle" />
+          
+          {/* Documents */}
+          <div className="flex items-center justify-between p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center">
+                <Activity className="h-5 w-5 text-amber-400" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">Documents</p>
+                <p className="text-xs text-muted-foreground">Obtained or submitted</p>
+              </div>
+            </div>
+            <span className="text-lg font-bold text-foreground number-display">
+              {documentsObtained}/{data.documents.length}
+            </span>
+          </div>
+          
+          <div className="divider-subtle" />
+          
+          {/* Buddy Statements */}
+          <div className="flex items-center justify-between p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-cyan-500/15 flex items-center justify-center">
+                <ShieldCheck className="h-5 w-5 text-cyan-400" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">Buddy Statements</p>
+                <p className="text-xs text-muted-foreground">{data.buddyContacts.length} contacts total</p>
+              </div>
+            </div>
+            <span className="text-lg font-bold text-foreground number-display">
+              {buddyStatements}
+            </span>
+          </div>
+        </div>
       </div>
 
-      {/* Quick Tips */}
+      {/* Quick Tips - iOS style */}
       <Card className="data-card">
-        <CardHeader>
-          <CardTitle className="text-lg">Quick Tips</CardTitle>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base">Quick Tips</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="flex gap-3">
-            <div className="flex-shrink-0 h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">1</div>
-            <p className="text-sm text-muted-foreground">Document everything in real-time. The more contemporaneous your records, the stronger your claim.</p>
-          </div>
-          <div className="flex gap-3">
-            <div className="flex-shrink-0 h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">2</div>
-            <p className="text-sm text-muted-foreground">Always request after-visit summaries from every medical appointment. If refused, document that too.</p>
-          </div>
-          <div className="flex gap-3">
-            <div className="flex-shrink-0 h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">3</div>
-            <p className="text-sm text-muted-foreground">Buddy statements from fellow airmen who witnessed your conditions can significantly strengthen claims.</p>
-          </div>
+        <CardContent className="space-y-4">
+          {[
+            "Document everything in real-time. Contemporaneous records strengthen claims.",
+            "Always request after-visit summaries. If refused, document that too.",
+            "Buddy statements from witnesses can significantly strengthen your claim.",
+          ].map((tip, idx) => (
+            <div key={idx} className="flex gap-3">
+              <div className="flex-shrink-0 h-6 w-6 rounded-lg bg-primary/15 flex items-center justify-center text-xs font-bold text-primary">
+                {idx + 1}
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">{tip}</p>
+            </div>
+          ))}
         </CardContent>
       </Card>
     </div>

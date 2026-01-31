@@ -4,20 +4,40 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
   {
     variants: {
       variant: {
-        default: "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
-        secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-        outline: "text-foreground",
+        default: [
+          "border-0 bg-primary/15 text-primary",
+          "shadow-[inset_0_0_0_1px_hsl(211_100%_50%/0.2)]",
+        ],
+        secondary: [
+          "border-0 bg-white/10 text-foreground",
+          "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)]",
+        ],
+        destructive: [
+          "border-0 bg-destructive/15 text-destructive",
+          "shadow-[inset_0_0_0_1px_hsl(0_100%_60%/0.2)]",
+        ],
+        outline: [
+          "bg-transparent text-foreground",
+          "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.15)]",
+        ],
+        success: [
+          "border-0 bg-success/15 text-success",
+          "shadow-[inset_0_0_0_1px_hsl(142_76%_46%/0.2)]",
+        ],
+        warning: [
+          "border-0 bg-warning/15 text-warning",
+          "shadow-[inset_0_0_0_1px_hsl(35_100%_55%/0.2)]",
+        ],
       },
     },
     defaultVariants: {
       variant: "default",
     },
-  },
+  }
 );
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof badgeVariants> {}

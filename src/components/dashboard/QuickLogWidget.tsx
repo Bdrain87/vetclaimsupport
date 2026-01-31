@@ -1,22 +1,19 @@
 import { useState } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
 import { 
   Zap, 
   CheckCircle2, 
   Flame, 
   Wind,
-  ThumbsUp,
-  ThumbsDown,
-  Meh
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 
 export function QuickLogWidget() {
   const { data, addQuickLog } = useClaims();
@@ -27,11 +24,8 @@ export function QuickLogWidget() {
   const [cpapUsed, setCpapUsed] = useState<boolean | undefined>(undefined);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Check if already logged today
   const today = new Date().toISOString().split('T')[0];
   const loggedToday = data.quickLogs?.some(log => log.date === today);
-
-  // Check if user uses CPAP (has sleep entries with CPAP)
   const usesCPAP = data.sleepEntries?.some(s => s.usesCPAP);
 
   const handleQuickLog = () => {
@@ -51,7 +45,6 @@ export function QuickLogWidget() {
       description: `Feeling: ${feeling}/10${hadFlareUp ? ' • Flare-up noted' : ''}`,
     });
 
-    // Reset form
     setFeeling(5);
     setHadFlareUp(false);
     setFlareUpNote('');
@@ -59,51 +52,57 @@ export function QuickLogWidget() {
     setIsSubmitting(false);
   };
 
-  const getFeelingEmoji = (value: number) => {
-    if (value <= 3) return { icon: ThumbsDown, color: 'text-destructive', label: 'Rough day' };
-    if (value <= 6) return { icon: Meh, color: 'text-warning', label: 'Getting by' };
-    return { icon: ThumbsUp, color: 'text-success', label: 'Good day' };
+  const getFeelingColor = (value: number) => {
+    if (value <= 3) return 'text-red-400';
+    if (value <= 6) return 'text-amber-400';
+    return 'text-emerald-400';
   };
 
-  const feelingInfo = getFeelingEmoji(feeling);
+  const getFeelingLabel = (value: number) => {
+    if (value <= 3) return 'Rough';
+    if (value <= 6) return 'Okay';
+    return 'Good';
+  };
 
   if (loggedToday) {
     const todayLog = data.quickLogs?.find(log => log.date === today);
     return (
-      <Card className="data-card border-success/30 bg-success/5">
-        <CardContent className="py-4">
-          <div className="flex items-center gap-3">
-            <CheckCircle2 className="h-5 w-5 text-success" />
-            <div>
-              <p className="font-medium text-foreground">Today's Log Complete</p>
-              <p className="text-sm text-muted-foreground">
-                Feeling: {todayLog?.overallFeeling}/10
-                {todayLog?.hadFlareUp && ' • Flare-up noted'}
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="flex items-center gap-3 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
+        <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
+          <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium text-foreground">Today's Log Complete</p>
+          <p className="text-xs text-muted-foreground">
+            Feeling: {todayLog?.overallFeeling}/10
+            {todayLog?.hadFlareUp && ' • Flare-up noted'}
+          </p>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card className="data-card">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-base flex items-center gap-2">
-          <Zap className="h-5 w-5 text-primary" />
-          Quick Daily Log
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {/* Overall Feeling Slider */}
-        <div className="space-y-3">
+    <Card className="data-card overflow-hidden">
+      <CardContent className="p-5 space-y-5">
+        {/* Header */}
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center">
+            <Zap className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <h3 className="text-base font-semibold text-foreground">Quick Daily Log</h3>
+            <p className="text-xs text-muted-foreground">Track your patterns</p>
+          </div>
+        </div>
+
+        {/* Feeling Slider */}
+        <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <Label className="text-sm">How are you feeling today?</Label>
-            <Badge variant="outline" className={feelingInfo.color}>
-              <feelingInfo.icon className="h-3 w-3 mr-1" />
-              {feeling}/10
-            </Badge>
+            <Label className="text-sm text-muted-foreground">How are you feeling?</Label>
+            <span className={cn("text-2xl font-bold number-display", getFeelingColor(feeling))}>
+              {feeling}
+            </span>
           </div>
           <Slider
             value={[feeling]}
@@ -114,67 +113,73 @@ export function QuickLogWidget() {
             className="w-full"
           />
           <div className="flex justify-between text-xs text-muted-foreground">
-            <span>Worst</span>
-            <span className={feelingInfo.color}>{feelingInfo.label}</span>
-            <span>Best</span>
+            <span>1</span>
+            <span className={cn("font-medium", getFeelingColor(feeling))}>{getFeelingLabel(feeling)}</span>
+            <span>10</span>
           </div>
         </div>
 
-        {/* Flare-up Toggle */}
-        <div className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
-          <div className="flex items-center gap-2">
-            <Flame className="h-4 w-4 text-orange-500" />
-            <Label htmlFor="flare-up" className="text-sm cursor-pointer">
-              Any flare-ups today?
-            </Label>
+        {/* Toggle Options */}
+        <div className="space-y-2 rounded-xl overflow-hidden bg-white/[0.03]">
+          {/* Flare-up Toggle */}
+          <div className="flex items-center justify-between p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-orange-500/15 flex items-center justify-center">
+                <Flame className="h-4 w-4 text-orange-400" />
+              </div>
+              <Label htmlFor="flare-up" className="text-sm cursor-pointer">
+                Any flare-ups?
+              </Label>
+            </div>
+            <Switch
+              id="flare-up"
+              checked={hadFlareUp}
+              onCheckedChange={setHadFlareUp}
+            />
           </div>
-          <Switch
-            id="flare-up"
-            checked={hadFlareUp}
-            onCheckedChange={setHadFlareUp}
-          />
+
+          {/* CPAP Toggle */}
+          {usesCPAP && (
+            <>
+              <div className="border-t border-white/[0.04]" />
+              <div className="flex items-center justify-between p-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-blue-500/15 flex items-center justify-center">
+                    <Wind className="h-4 w-4 text-blue-400" />
+                  </div>
+                  <Label htmlFor="cpap" className="text-sm cursor-pointer">
+                    CPAP used?
+                  </Label>
+                </div>
+                <Switch
+                  id="cpap"
+                  checked={cpapUsed === true}
+                  onCheckedChange={setCpapUsed}
+                />
+              </div>
+            </>
+          )}
         </div>
 
         {/* Flare-up Note */}
         {hadFlareUp && (
           <Textarea
-            placeholder="Brief note about the flare-up (optional)..."
+            placeholder="Brief note about the flare-up..."
             value={flareUpNote}
             onChange={(e) => setFlareUpNote(e.target.value)}
-            className="h-16 text-sm"
+            className="min-h-[80px]"
           />
         )}
 
-        {/* CPAP Toggle (if applicable) */}
-        {usesCPAP && (
-          <div className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
-            <div className="flex items-center gap-2">
-              <Wind className="h-4 w-4 text-blue-500" />
-              <Label htmlFor="cpap" className="text-sm cursor-pointer">
-                CPAP used last night?
-              </Label>
-            </div>
-            <Switch
-              id="cpap"
-              checked={cpapUsed === true}
-              onCheckedChange={setCpapUsed}
-            />
-          </div>
-        )}
-
-        {/* Submit Button */}
+        {/* Submit */}
         <Button 
           onClick={handleQuickLog} 
-          className="w-full gap-2"
+          className="w-full"
           disabled={isSubmitting}
         >
-          <CheckCircle2 className="h-4 w-4" />
+          <CheckCircle2 className="h-4 w-4 mr-2" />
           Log Today
         </Button>
-
-        <p className="text-xs text-muted-foreground text-center">
-          Quick logs help track patterns for your VA claim
-        </p>
       </CardContent>
     </Card>
   );

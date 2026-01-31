@@ -2,164 +2,140 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Service Evidence Tracker - Apple Dark Mode Design System */
+/* Service Evidence Tracker - Premium Apple iOS Design System */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=SF+Pro+Display:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    /* Apple Dark Mode - iMessage Blue Theme */
-    /* Using dark as default for this app */
-    --background: 240 6% 10%;
+    /* Apple Dark Mode - Premium iOS Design */
+    --background: 0 0% 0%;
     --foreground: 0 0% 98%;
 
-    --card: 240 5% 12%;
+    /* Elevated surfaces - iOS-style layering */
+    --card: 0 0% 7%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 240 5% 14%;
+    --popover: 0 0% 10%;
     --popover-foreground: 0 0% 98%;
 
     /* Primary - iMessage Blue (#007AFF) */
     --primary: 211 100% 50%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Apple dark gray elevated */
-    --secondary: 240 4% 18%;
+    /* Secondary - iOS elevated surface */
+    --secondary: 0 0% 12%;
     --secondary-foreground: 0 0% 90%;
 
-    --muted: 240 4% 16%;
-    --muted-foreground: 240 5% 55%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 55%;
 
-    --accent: 211 60% 20%;
-    --accent-foreground: 211 100% 70%;
+    --accent: 211 100% 50%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 100% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Warning - Apple system orange */
-    --warning: 35 100% 50%;
-    --warning-foreground: 0 0% 100%;
+    /* iOS System Colors */
+    --warning: 35 100% 55%;
+    --warning-foreground: 0 0% 0%;
 
-    /* Success - Apple system green */
-    --success: 142 76% 45%;
+    --success: 142 76% 46%;
     --success-foreground: 0 0% 100%;
 
-    --border: 240 4% 20%;
-    --input: 240 4% 20%;
+    --border: 0 0% 18%;
+    --input: 0 0% 15%;
     --ring: 211 100% 50%;
 
-    --radius: 0.625rem;
+    --radius: 0.875rem;
 
-    /* Sidebar - Deeper Apple dark */
-    --sidebar-background: 240 6% 7%;
-    --sidebar-foreground: 0 0% 75%;
+    /* Sidebar - Pure black iOS style */
+    --sidebar-background: 0 0% 0%;
+    --sidebar-foreground: 0 0% 65%;
     --sidebar-primary: 211 100% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 5% 12%;
+    --sidebar-accent: 0 0% 10%;
     --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 240 4% 14%;
+    --sidebar-border: 0 0% 15%;
     --sidebar-ring: 211 100% 50%;
-    --sidebar-muted: 240 5% 50%;
+    --sidebar-muted: 0 0% 45%;
 
-    /* Section colors - Modernized for dark theme */
+    /* Section colors - Vibrant iOS system colors */
     --medical: 211 100% 50%;
     --exposure: 35 100% 55%;
-    --symptoms: 142 76% 45%;
-    --medications: 280 70% 60%;
-    --service: 211 100% 50%;
-    --buddy: 200 80% 55%;
+    --symptoms: 142 76% 46%;
+    --medications: 280 75% 60%;
+    --service: 160 84% 45%;
+    --buddy: 195 100% 50%;
     --documents: 45 100% 55%;
   }
 
   .dark {
-    /* Dark mode is the same as root for this design */
-    --background: 240 6% 10%;
+    --background: 0 0% 0%;
     --foreground: 0 0% 98%;
-
-    --card: 240 5% 12%;
+    --card: 0 0% 7%;
     --card-foreground: 0 0% 98%;
-
-    --popover: 240 5% 14%;
+    --popover: 0 0% 10%;
     --popover-foreground: 0 0% 98%;
-
     --primary: 211 100% 50%;
     --primary-foreground: 0 0% 100%;
-
-    --secondary: 240 4% 18%;
+    --secondary: 0 0% 12%;
     --secondary-foreground: 0 0% 90%;
-
-    --muted: 240 4% 16%;
-    --muted-foreground: 240 5% 55%;
-
-    --accent: 211 60% 20%;
-    --accent-foreground: 211 100% 70%;
-
-    --destructive: 0 84% 60%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 55%;
+    --accent: 211 100% 50%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 100% 60%;
     --destructive-foreground: 0 0% 100%;
-
-    --warning: 35 100% 50%;
-    --warning-foreground: 0 0% 100%;
-
-    --success: 142 76% 45%;
+    --warning: 35 100% 55%;
+    --warning-foreground: 0 0% 0%;
+    --success: 142 76% 46%;
     --success-foreground: 0 0% 100%;
-
-    --border: 240 4% 20%;
-    --input: 240 4% 20%;
+    --border: 0 0% 18%;
+    --input: 0 0% 15%;
     --ring: 211 100% 50%;
-
-    --sidebar-background: 240 6% 7%;
-    --sidebar-foreground: 0 0% 75%;
+    --sidebar-background: 0 0% 0%;
+    --sidebar-foreground: 0 0% 65%;
     --sidebar-primary: 211 100% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 5% 12%;
+    --sidebar-accent: 0 0% 10%;
     --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 240 4% 14%;
+    --sidebar-border: 0 0% 15%;
     --sidebar-ring: 211 100% 50%;
   }
 
-  /* Light mode - Apple-style light with blue accents */
+  /* Light mode - Clean Apple light */
   .light {
-    --background: 0 0% 98%;
-    --foreground: 240 6% 10%;
-
+    --background: 0 0% 96%;
+    --foreground: 0 0% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 240 6% 10%;
-
+    --card-foreground: 0 0% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 6% 10%;
-
+    --popover-foreground: 0 0% 10%;
     --primary: 211 100% 50%;
     --primary-foreground: 0 0% 100%;
-
-    --secondary: 240 5% 96%;
-    --secondary-foreground: 240 6% 25%;
-
-    --muted: 240 5% 94%;
-    --muted-foreground: 240 4% 46%;
-
-    --accent: 211 60% 95%;
-    --accent-foreground: 211 100% 40%;
-
-    --destructive: 0 84% 60%;
+    --secondary: 0 0% 94%;
+    --secondary-foreground: 0 0% 25%;
+    --muted: 0 0% 92%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 211 100% 50%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 100% 60%;
     --destructive-foreground: 0 0% 100%;
-
     --warning: 35 100% 50%;
-    --warning-foreground: 0 0% 100%;
-
+    --warning-foreground: 0 0% 0%;
     --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
-
-    --border: 240 6% 90%;
-    --input: 240 6% 90%;
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
     --ring: 211 100% 50%;
-
-    --sidebar-background: 240 5% 96%;
-    --sidebar-foreground: 240 6% 25%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 35%;
     --sidebar-primary: 211 100% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 211 60% 95%;
+    --sidebar-accent: 211 100% 96%;
     --sidebar-accent-foreground: 211 100% 40%;
-    --sidebar-border: 240 6% 90%;
+    --sidebar-border: 0 0% 90%;
     --sidebar-ring: 211 100% 50%;
   }
 }
@@ -170,24 +146,27 @@
   }
 
   html {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    font-family: 'SF Pro Display', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground;
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
     overscroll-behavior: none;
+    letter-spacing: -0.01em;
   }
 
   .font-mono {
     font-family: 'SF Mono', 'JetBrains Mono', monospace;
   }
 
-  /* iOS form input fixes */
+  /* iOS form input fixes - prevent zoom */
   input, textarea, select {
     font-size: 16px !important;
   }
@@ -195,95 +174,135 @@
   .scroll-touch {
     -webkit-overflow-scrolling: touch;
   }
+
+  /* Selection color */
+  ::selection {
+    background: hsl(211 100% 50% / 0.3);
+  }
 }
 
 @layer components {
+  /* iOS-style stat cards */
   .stat-card {
-    @apply relative overflow-hidden rounded-xl border bg-card p-6 shadow-sm transition-all duration-200 hover:shadow-md hover:border-primary/30;
+    @apply relative overflow-hidden rounded-2xl border-0 p-5;
+    background: linear-gradient(145deg, hsl(0 0% 9%) 0%, hsl(0 0% 6%) 100%);
+    box-shadow: 
+      0 1px 3px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
   .stat-card::before {
     content: '';
-    @apply absolute left-0 top-0 h-full w-1 bg-primary;
+    @apply absolute left-0 top-0 h-full w-1 rounded-l-2xl;
+    background: hsl(var(--primary));
   }
 
-  .stat-card-medical::before {
-    background-color: hsl(var(--medical));
-  }
+  .stat-card-medical::before { background: hsl(var(--medical)); }
+  .stat-card-exposure::before { background: hsl(var(--exposure)); }
+  .stat-card-symptoms::before { background: hsl(var(--symptoms)); }
+  .stat-card-medications::before { background: hsl(var(--medications)); }
 
-  .stat-card-exposure::before {
-    background-color: hsl(var(--exposure));
-  }
-
-  .stat-card-symptoms::before {
-    background-color: hsl(var(--symptoms));
-  }
-
-  .stat-card-medications::before {
-    background-color: hsl(var(--medications));
-  }
-
+  /* Premium data cards */
   .data-card {
-    @apply rounded-xl border bg-card shadow-sm transition-all duration-200 hover:border-primary/20;
+    @apply rounded-2xl border-0 overflow-hidden;
+    background: linear-gradient(145deg, hsl(0 0% 9%) 0%, hsl(0 0% 6%) 100%);
+    box-shadow: 
+      0 2px 8px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
   }
 
+  /* iOS-style section header */
   .section-header {
-    @apply flex items-center gap-3 mb-6;
+    @apply flex items-center gap-4;
   }
 
   .section-icon {
-    @apply flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15 text-primary;
+    @apply flex h-12 w-12 items-center justify-center rounded-2xl;
+    background: linear-gradient(145deg, hsl(211 100% 50% / 0.2) 0%, hsl(211 100% 50% / 0.1) 100%);
+    box-shadow: 0 0 20px hsl(211 100% 50% / 0.15);
   }
 
+  .section-icon svg {
+    @apply h-6 w-6 text-primary;
+  }
+
+  /* iOS-style badges */
   .badge-warning {
-    @apply inline-flex items-center rounded-lg bg-destructive/15 px-2 py-1 text-xs font-medium text-destructive ring-1 ring-inset ring-destructive/25;
+    @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold;
+    background: hsl(0 100% 60% / 0.15);
+    color: hsl(0 100% 70%);
   }
 
   .badge-success {
-    @apply inline-flex items-center rounded-lg bg-success/15 px-2 py-1 text-xs font-medium text-success ring-1 ring-inset ring-success/25;
+    @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold;
+    background: hsl(142 76% 46% / 0.15);
+    color: hsl(142 76% 60%);
   }
 
-  .severity-low {
-    @apply bg-success/20 text-success;
-  }
+  .severity-low { @apply bg-success/15 text-success; }
+  .severity-medium { @apply bg-warning/15 text-warning; }
+  .severity-high { @apply bg-destructive/15 text-destructive; }
 
-  .severity-medium {
-    @apply bg-warning/20 text-warning;
-  }
-
-  .severity-high {
-    @apply bg-destructive/20 text-destructive;
-  }
-
-  /* Apple-style button glow effect */
-  .btn-glow {
-    @apply relative overflow-hidden;
-  }
-
-  .btn-glow::after {
-    content: '';
-    @apply absolute inset-0 bg-gradient-to-t from-white/0 to-white/10 opacity-0 transition-opacity duration-200;
-  }
-
-  .btn-glow:hover::after {
-    @apply opacity-100;
-  }
-
-  /* Apple-style glass effect for cards */
+  /* iOS glass morphism */
   .glass-card {
-    @apply bg-card/80 backdrop-blur-xl border border-white/10;
+    @apply backdrop-blur-2xl border border-white/10;
+    background: hsl(0 0% 8% / 0.8);
+  }
+
+  /* iOS-style navigation item */
+  .nav-item {
+    @apply relative flex items-center gap-3 rounded-xl px-4 py-3;
+    @apply transition-all duration-200 ease-out;
+    @apply text-muted-foreground;
+  }
+
+  .nav-item:hover {
+    @apply bg-white/5 text-foreground;
+  }
+
+  .nav-item.active {
+    @apply bg-primary/15 text-primary;
+  }
+
+  .nav-item.active::before {
+    content: '';
+    @apply absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r-full bg-primary;
+  }
+
+  /* iOS-style input groups */
+  .ios-input-group {
+    @apply rounded-2xl overflow-hidden;
+    background: hsl(0 0% 10%);
+  }
+
+  .ios-input-group > * + * {
+    @apply border-t border-white/5;
+  }
+
+  /* Premium glow effects */
+  .glow-primary {
+    box-shadow: 0 0 30px hsl(211 100% 50% / 0.3);
+  }
+
+  .glow-success {
+    box-shadow: 0 0 20px hsl(142 76% 46% / 0.25);
+  }
+
+  .glow-warning {
+    box-shadow: 0 0 20px hsl(35 100% 55% / 0.25);
   }
 }
 
 @layer utilities {
+  /* Thin scrollbar */
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: hsl(var(--border)) transparent;
+    scrollbar-color: hsl(0 0% 25%) transparent;
   }
 
   .scrollbar-thin::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 4px;
+    height: 4px;
   }
 
   .scrollbar-thin::-webkit-scrollbar-track {
@@ -291,18 +310,19 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--border));
-    border-radius: 3px;
+    background-color: hsl(0 0% 25%);
+    border-radius: 2px;
   }
 
+  /* iOS-style animations */
   .animate-fade-in {
-    animation: fadeIn 0.3s ease-out;
+    animation: fadeIn 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   @keyframes fadeIn {
     from {
       opacity: 0;
-      transform: translateY(8px);
+      transform: translateY(12px);
     }
     to {
       opacity: 1;
@@ -310,43 +330,45 @@
     }
   }
 
-  /* Press animation for buttons - Apple style */
+  .animate-scale-in {
+    animation: scaleIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* iOS press effect */
   .press-effect {
     @apply transition-all duration-100 ease-out;
   }
 
   .press-effect:active {
-    @apply scale-[0.98] brightness-90;
+    @apply scale-[0.97] brightness-90;
   }
 
-  /* Touch target utilities */
+  /* Touch target (iOS minimum 44px) */
   .touch-target {
     min-height: 44px;
     min-width: 44px;
   }
 
   /* Safe area utilities */
-  .safe-area-top {
-    padding-top: env(safe-area-inset-top);
-  }
-
-  .safe-area-bottom {
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-
-  .safe-area-left {
-    padding-left: env(safe-area-inset-left);
-  }
-
-  .safe-area-right {
-    padding-right: env(safe-area-inset-right);
-  }
-
+  .safe-area-top { padding-top: env(safe-area-inset-top); }
+  .safe-area-bottom { padding-bottom: env(safe-area-inset-bottom); }
+  .safe-area-left { padding-left: env(safe-area-inset-left); }
+  .safe-area-right { padding-right: env(safe-area-inset-right); }
   .safe-area-x {
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
   }
-
   .safe-area-y {
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
@@ -369,8 +391,19 @@
     max-width: 100vw;
   }
 
-  /* Apple-style text gradients */
+  /* Apple text gradient */
   .text-gradient-blue {
-    @apply bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary via-blue-400 to-cyan-400 bg-clip-text text-transparent;
+  }
+
+  /* iOS-style dividers */
+  .divider-subtle {
+    @apply border-t border-white/5;
+  }
+
+  /* Number display styling */
+  .number-display {
+    font-feature-settings: 'tnum' 1;
+    font-variant-numeric: tabular-nums;
   }
 }
