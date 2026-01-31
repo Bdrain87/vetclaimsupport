@@ -44,11 +44,11 @@ export function MobileNavGrid() {
             className={({ isActive }) => cn(
               "flex flex-col items-center justify-center gap-1",
               "min-h-[72px] p-2 rounded-2xl",
-              "bg-white/[0.04] backdrop-blur-sm",
-              "border border-white/[0.06]",
+              "bg-muted/50 backdrop-blur-sm",
+              "border border-border",
               "transition-all duration-300 ease-out",
-              "active:scale-95 active:bg-white/[0.08]",
-              "hover:bg-white/[0.06]",
+              "active:scale-95 active:bg-muted",
+              "hover:bg-muted",
               isActive && "bg-primary/10 border-primary/20"
             )}
           >

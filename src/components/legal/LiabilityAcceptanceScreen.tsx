@@ -60,7 +60,7 @@ export function LiabilityAcceptanceScreen() {
           {/* Checkboxes */}
           <div className="space-y-3">
             <label 
-              className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.03] cursor-pointer transition-colors hover:bg-white/[0.05]"
+              className="flex items-start gap-4 p-4 rounded-xl bg-muted/50 cursor-pointer transition-colors hover:bg-muted"
               htmlFor="liability"
             >
               <Checkbox
@@ -76,7 +76,7 @@ export function LiabilityAcceptanceScreen() {
             </label>
 
             <label 
-              className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.03] cursor-pointer transition-colors hover:bg-white/[0.05]"
+              className="flex items-start gap-4 p-4 rounded-xl bg-muted/50 cursor-pointer transition-colors hover:bg-muted"
               htmlFor="terms"
             >
               <Checkbox

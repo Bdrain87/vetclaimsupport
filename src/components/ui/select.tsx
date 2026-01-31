@@ -26,8 +26,8 @@ const SelectTrigger = React.forwardRef<
     ref={ref}
     className={cn(
       "flex h-12 w-full items-center justify-between rounded-xl px-4 py-3 text-base",
-      "bg-white/[0.06] text-foreground",
-      "ring-1 ring-inset ring-white/10",
+      "bg-muted text-foreground",
+      "ring-1 ring-inset ring-border",
       "placeholder:text-muted-foreground",
       "focus:outline-none focus:ring-2 focus:ring-primary/50",
       "disabled:cursor-not-allowed disabled:opacity-50",
@@ -82,8 +82,8 @@ const SelectContent = React.forwardRef<
       ref={ref}
       className={cn(
         "relative z-50 max-h-96 min-w-[8rem] overflow-hidden",
-        "rounded-xl border border-white/10 bg-[hsl(0_0%_12%)] text-foreground",
-        "shadow-[0_10px_40px_rgba(0,0,0,0.5)]",
+        "rounded-xl border border-border bg-popover text-foreground",
+        "shadow-lg",
         "data-[state=open]:animate-in data-[state=closed]:animate-out",
         "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
         "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
@@ -132,7 +132,7 @@ const SelectItem = React.forwardRef<
       "relative flex w-full cursor-default select-none items-center rounded-lg py-3 pl-8 pr-2 text-sm",
       "outline-none transition-colors duration-100",
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      "focus:bg-white/10 focus:text-foreground",
+      "focus:bg-muted focus:text-foreground",
       className
     )}
     {...props}
@@ -153,7 +153,7 @@ const SelectSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Separator 
     ref={ref} 
-    className={cn("-mx-1 my-1 h-px bg-white/10", className)} 
+    className={cn("-mx-1 my-1 h-px bg-border", className)} 
     {...props} 
   />
 ));

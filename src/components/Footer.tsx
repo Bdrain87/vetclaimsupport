@@ -9,8 +9,8 @@ export const Footer = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLEle
         ref={ref}
         className={cn(
           "mt-auto py-6 safe-area-bottom",
-          "border-t border-white/[0.04]",
-          "bg-gradient-to-t from-black/50 to-transparent",
+          "border-t border-border",
+          "bg-background",
           className
         )}
         {...props}

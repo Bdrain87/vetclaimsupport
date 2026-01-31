@@ -37,8 +37,8 @@ export function MobileHeader() {
   return (
     <header className={cn(
       "md:hidden fixed top-0 left-0 right-0 z-50",
-      "bg-black/80 backdrop-blur-xl",
-      "border-b border-white/[0.06]",
+      "bg-background/80 backdrop-blur-xl",
+      "border-b border-border",
       "safe-area-top"
     )}>
       <div className="flex items-center justify-between px-4 h-12">
@@ -57,7 +57,7 @@ export function MobileHeader() {
                 variant="ghost"
                 size="sm"
                 onClick={handleBack}
-                className="h-9 px-2 text-primary hover:bg-white/5"
+                className="h-9 px-2 text-primary hover:bg-muted"
                 aria-label="Go back to dashboard"
               >
                 <ArrowLeft className="h-5 w-5" />
