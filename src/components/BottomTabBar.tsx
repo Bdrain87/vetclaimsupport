@@ -15,11 +15,11 @@ export function BottomTabBar() {
   return (
     <nav className={cn(
       "md:hidden fixed bottom-0 left-0 right-0 z-50",
-      "bg-black/90 backdrop-blur-xl",
+      "bg-black/80 backdrop-blur-xl",
       "border-t border-white/[0.08]",
       "safe-area-bottom"
     )}>
-      <div className="flex items-center justify-around h-14">
+      <div className="flex items-center justify-around h-16">
         {tabs.map((tab) => {
           const isActive = location.pathname === tab.to;
           return (
@@ -27,12 +27,21 @@ export function BottomTabBar() {
               key={tab.to}
               to={tab.to}
               className={cn(
-                "flex flex-col items-center justify-center gap-0.5 flex-1 h-full",
-                "transition-colors duration-150",
+                "flex flex-col items-center justify-center gap-1",
+                "flex-1 h-full min-w-[64px]",
+                "transition-all duration-300 ease-out",
+                "active:scale-95",
                 isActive ? "text-primary" : "text-muted-foreground"
               )}
             >
-              <tab.icon className={cn("h-5 w-5", isActive && "text-primary")} />
+              <div className={cn(
+                "flex items-center justify-center",
+                "w-11 h-11 rounded-2xl",
+                "transition-all duration-300 ease-out",
+                isActive && "bg-primary/15"
+              )}>
+                <tab.icon className={cn("h-5 w-5 transition-all duration-300", isActive && "text-primary")} />
+              </div>
               <span className="text-[10px] font-medium">{tab.label}</span>
             </NavLink>
           );

@@ -8,7 +8,6 @@ import {
   ShieldCheck,
   ChevronRight,
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
 import { RatingCalculator } from '@/components/dashboard/RatingCalculator';
 import { ExportButton } from '@/components/dashboard/ExportButton';
@@ -28,38 +27,10 @@ export default function Dashboard() {
   const { data, setSeparationDate } = useClaims();
 
   const stats = [
-    {
-      title: 'Medical Visits',
-      value: data.medicalVisits.length,
-      icon: Stethoscope,
-      color: 'text-blue-400',
-      bgColor: 'bg-blue-500/15',
-      href: '/medical-visits',
-    },
-    {
-      title: 'Exposures',
-      value: data.exposures.length,
-      icon: AlertTriangle,
-      color: 'text-orange-400',
-      bgColor: 'bg-orange-500/15',
-      href: '/exposures',
-    },
-    {
-      title: 'Symptoms',
-      value: data.symptoms.length,
-      icon: Activity,
-      color: 'text-emerald-400',
-      bgColor: 'bg-emerald-500/15',
-      href: '/symptoms',
-    },
-    {
-      title: 'Medications',
-      value: data.medications.length,
-      icon: Pill,
-      color: 'text-violet-400',
-      bgColor: 'bg-violet-500/15',
-      href: '/medications',
-    },
+    { title: 'Medical', value: data.medicalVisits.length, icon: Stethoscope, color: 'text-blue-400', bgColor: 'bg-blue-500/20', href: '/medical-visits' },
+    { title: 'Exposures', value: data.exposures.length, icon: AlertTriangle, color: 'text-orange-400', bgColor: 'bg-orange-500/20', href: '/exposures' },
+    { title: 'Symptoms', value: data.symptoms.length, icon: Activity, color: 'text-emerald-400', bgColor: 'bg-emerald-500/20', href: '/symptoms' },
+    { title: 'Meds', value: data.medications.length, icon: Pill, color: 'text-violet-400', bgColor: 'bg-violet-500/20', href: '/medications' },
   ];
 
   const missingSummaries = data.medicalVisits.filter(v => !v.gotAfterVisitSummary).length;
@@ -86,49 +57,83 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Privacy Badge - Compact */}
-      <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-        <ShieldCheck className="h-4 w-4 text-emerald-400 flex-shrink-0" />
-        <p className="text-xs text-muted-foreground">100% Private · All data stored locally</p>
-      </div>
-
-      {/* Stats Grid - Compact 2x2 */}
+      {/* Stats Grid - 4 columns with glass effect */}
       <div className="grid grid-cols-4 gap-2">
         {stats.map((stat) => (
           <Link
             key={stat.title}
             to={stat.href}
             className={cn(
-              "p-3 rounded-xl text-center",
-              "bg-gradient-to-br from-white/[0.06] to-white/[0.02]",
+              "flex flex-col items-center justify-center gap-1",
+              "min-h-[80px] p-3 rounded-2xl",
+              "bg-white/[0.04] backdrop-blur-sm",
               "border border-white/[0.06]",
-              "active:scale-[0.97] transition-all duration-150"
+              "transition-all duration-300 ease-out",
+              "active:scale-95 active:bg-white/[0.08]",
+              "hover:bg-white/[0.06]"
             )}
           >
-            <div className={cn("w-8 h-8 mx-auto rounded-lg flex items-center justify-center mb-1", stat.bgColor)}>
-              <stat.icon className={cn("h-4 w-4", stat.color)} />
+            <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center", stat.bgColor)}>
+              <stat.icon className={cn("h-5 w-5", stat.color)} />
             </div>
-            <p className="text-lg font-bold text-foreground number-display">{stat.value}</p>
-            <p className="text-[10px] text-muted-foreground truncate">{stat.title}</p>
+            <p className="text-xl font-bold text-foreground number-display">{stat.value}</p>
+            <p className="text-[10px] text-muted-foreground">{stat.title}</p>
           </Link>
         ))}
       </div>
 
-      {/* Quick Log - Compact */}
+      {/* Quick Log - Compact inline */}
       <QuickLogWidget />
 
-      {/* Mobile Navigation - Hidden on dashboard now, use bottom tabs */}
-      <div className="hidden">
-        <MobileNavGrid />
+      {/* Navigation Grid */}
+      <MobileNavGrid />
+
+      {/* Evidence Status - Horizontal cards */}
+      <div className="grid grid-cols-3 gap-2">
+        <div className={cn(
+          "flex flex-col items-center justify-center gap-1",
+          "min-h-[72px] p-3 rounded-2xl",
+          "bg-white/[0.04] backdrop-blur-sm",
+          "border border-white/[0.06]",
+          "transition-all duration-300 ease-out"
+        )}>
+          <FileWarning className={cn("h-5 w-5", missingSummaries > 0 ? "text-red-400" : "text-emerald-400")} />
+          <span className={cn("text-lg font-bold", missingSummaries > 0 ? "text-red-400" : "text-emerald-400")}>
+            {data.medicalVisits.length - missingSummaries}/{data.medicalVisits.length}
+          </span>
+          <span className="text-[9px] text-muted-foreground text-center">Summaries</span>
+        </div>
+        <div className={cn(
+          "flex flex-col items-center justify-center gap-1",
+          "min-h-[72px] p-3 rounded-2xl",
+          "bg-white/[0.04] backdrop-blur-sm",
+          "border border-white/[0.06]",
+          "transition-all duration-300 ease-out"
+        )}>
+          <Activity className="h-5 w-5 text-amber-400" />
+          <span className="text-lg font-bold">{documentsObtained}/{data.documents.length}</span>
+          <span className="text-[9px] text-muted-foreground text-center">Documents</span>
+        </div>
+        <div className={cn(
+          "flex flex-col items-center justify-center gap-1",
+          "min-h-[72px] p-3 rounded-2xl",
+          "bg-white/[0.04] backdrop-blur-sm",
+          "border border-white/[0.06]",
+          "transition-all duration-300 ease-out"
+        )}>
+          <ShieldCheck className="h-5 w-5 text-cyan-400" />
+          <span className="text-lg font-bold">{buddyStatements}</span>
+          <span className="text-[9px] text-muted-foreground text-center">Buddy Stmts</span>
+        </div>
       </div>
 
-      {/* Key Cards - Stacked compact */}
+      {/* Key Cards - Compact */}
       <div className="space-y-3">
         <IntentToFileCard />
         <ClaimReadinessScore />
       </div>
 
-      {/* BDD & Calculator - Side by side on tablet+ */}
+      {/* BDD & Calculator */}
       <div className="grid gap-3 lg:grid-cols-2">
         <BDDCountdown 
           separationDate={separationDate} 
@@ -137,11 +142,20 @@ export default function Dashboard() {
         <RatingCalculator />
       </div>
 
-      {/* Collapsible sections for less scrolling */}
+      {/* Collapsible More Tools */}
       <details className="group">
-        <summary className="flex items-center justify-between p-3 rounded-xl bg-white/[0.04] cursor-pointer list-none">
+        <summary className={cn(
+          "flex items-center justify-between",
+          "min-h-[48px] px-4 py-3 rounded-2xl",
+          "bg-white/[0.04] backdrop-blur-sm",
+          "border border-white/[0.06]",
+          "cursor-pointer list-none",
+          "transition-all duration-300 ease-out",
+          "hover:bg-white/[0.06]",
+          "active:scale-[0.98]"
+        )}>
           <span className="text-sm font-medium">More Tools</span>
-          <ChevronRight className="h-4 w-4 text-muted-foreground group-open:rotate-90 transition-transform" />
+          <ChevronRight className="h-4 w-4 text-muted-foreground group-open:rotate-90 transition-transform duration-300" />
         </summary>
         <div className="mt-3 space-y-3">
           <DashboardInsights />
@@ -150,33 +164,6 @@ export default function Dashboard() {
           <SuggestedDisabilities />
         </div>
       </details>
-
-      {/* Evidence Status - Compact */}
-      <div className="rounded-xl overflow-hidden bg-white/[0.04] border border-white/[0.06]">
-        <div className="flex items-center justify-between p-3 border-b border-white/[0.04]">
-          <div className="flex items-center gap-2">
-            <FileWarning className={cn("h-4 w-4", missingSummaries > 0 ? "text-red-400" : "text-emerald-400")} />
-            <span className="text-xs">After-Visit Summaries</span>
-          </div>
-          <span className={cn("text-sm font-bold", missingSummaries > 0 ? "text-red-400" : "text-emerald-400")}>
-            {data.medicalVisits.length - missingSummaries}/{data.medicalVisits.length}
-          </span>
-        </div>
-        <div className="flex items-center justify-between p-3 border-b border-white/[0.04]">
-          <div className="flex items-center gap-2">
-            <Activity className="h-4 w-4 text-amber-400" />
-            <span className="text-xs">Documents</span>
-          </div>
-          <span className="text-sm font-bold">{documentsObtained}/{data.documents.length}</span>
-        </div>
-        <div className="flex items-center justify-between p-3">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="h-4 w-4 text-cyan-400" />
-            <span className="text-xs">Buddy Statements</span>
-          </div>
-          <span className="text-sm font-bold">{buddyStatements}</span>
-        </div>
-      </div>
     </div>
   );
 }
