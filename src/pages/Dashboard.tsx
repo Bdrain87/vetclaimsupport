@@ -73,9 +73,7 @@ export default function Dashboard() {
               "hover:bg-white/[0.06]"
             )}
           >
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-muted/50">
-              <stat.icon className="h-5 w-5 text-foreground/70" />
-            </div>
+            <stat.icon className="h-6 w-6 text-foreground/70" />
             <p className="text-xl font-bold text-foreground number-display">{stat.value}</p>
             <p className="text-[10px] text-muted-foreground">{stat.title}</p>
           </Link>
