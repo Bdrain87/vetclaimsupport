@@ -6,6 +6,7 @@ import { PACTActTab } from '@/components/reference/PACTActTab';
 import { ClaimsGuideTab } from '@/components/reference/ClaimsGuideTab';
 import { CPExamPrepTab } from '@/components/reference/CPExamPrepTab';
 import { BuddyStatementTemplate } from '@/components/reference/BuddyStatementTemplate';
+import { VAFormsTab } from '@/components/reference/VAFormsTab';
 
 export default function Reference() {
   return (
@@ -22,7 +23,7 @@ export default function Reference() {
       </div>
 
       <Tabs defaultValue="disabilities" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2 lg:grid-cols-6 h-auto gap-2 bg-transparent p-0">
+        <TabsList className="grid w-full grid-cols-2 lg:grid-cols-7 h-auto gap-2 bg-transparent p-0">
           <TabsTrigger value="disabilities" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
             VA Disabilities
           </TabsTrigger>
@@ -37,6 +38,9 @@ export default function Reference() {
           </TabsTrigger>
           <TabsTrigger value="cpexam" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
             C&P Exam Prep
+          </TabsTrigger>
+          <TabsTrigger value="vaforms" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            VA Forms
           </TabsTrigger>
           <TabsTrigger value="buddy" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
             Buddy Template
@@ -61,6 +65,10 @@ export default function Reference() {
 
         <TabsContent value="cpexam">
           <CPExamPrepTab />
+        </TabsContent>
+
+        <TabsContent value="vaforms">
+          <VAFormsTab />
         </TabsContent>
 
         <TabsContent value="buddy">

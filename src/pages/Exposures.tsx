@@ -10,9 +10,29 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { exportExposures } from '@/utils/pdfExport';
-import type { Exposure } from '@/types/claims';
+import { BranchExposuresSelector } from '@/components/exposures/BranchExposuresSelector';
+import type { Exposure, ExposureType } from '@/types/claims';
 
-const exposureTypes = ['Burn pit', 'Jet fuel', 'Chemicals', 'Noise', 'Radiation', 'Asbestos', 'Extreme temps'] as const;
+// Extended exposure types including branch-specific ones
+const exposureTypes: ExposureType[] = [
+  'Burn pit', 
+  'Jet fuel', 
+  'Chemicals', 
+  'Noise', 
+  'Radiation', 
+  'Asbestos', 
+  'Extreme temps',
+  'Diesel exhaust',
+  'Depleted uranium',
+  'Sand/dust',
+  'Contaminated water (Camp Lejeune)',
+  'Herbicides',
+  'Paint fumes',
+  'Hydraulic fluid',
+  'PFAS chemicals',
+  'Contaminated water',
+  'Other',
+];
 
 export default function Exposures() {
   const { data, addExposure, updateExposure, deleteExposure } = useClaims();
@@ -66,6 +86,40 @@ export default function Exposures() {
     setIsOpen(true);
   };
 
+  // Handle quick-add from branch selector
+  const handleQuickAddExposure = (exposureName: string) => {
+    // Map common exposure names to our type
+    const typeMapping: Record<string, ExposureType> = {
+      'Burn pits': 'Burn pit',
+      'Diesel exhaust': 'Diesel exhaust',
+      'Depleted uranium': 'Depleted uranium',
+      'Sand/dust': 'Sand/dust',
+      'Contaminated water (Camp Lejeune)': 'Contaminated water (Camp Lejeune)',
+      'Noise': 'Noise',
+      'Herbicides': 'Herbicides',
+      'Asbestos': 'Asbestos',
+      'Jet fuel': 'Jet fuel',
+      'Paint fumes': 'Paint fumes',
+      'Contaminated water': 'Contaminated water',
+      'Radiation': 'Radiation',
+      'Hydraulic fluid': 'Hydraulic fluid',
+      'PFAS chemicals': 'PFAS chemicals',
+    };
+
+    const exposureType = typeMapping[exposureName] || 'Other';
+    
+    setFormData({
+      date: new Date().toISOString().split('T')[0],
+      type: exposureType,
+      duration: '',
+      location: '',
+      details: exposureName !== exposureType ? `${exposureName}` : '',
+      ppeProvided: false,
+      witnesses: '',
+    });
+    setIsOpen(true);
+  };
+
   const getExposureColor = (type: string) => {
     const colors: Record<string, string> = {
       'Burn pit': 'bg-orange-500/10 text-orange-600 ring-orange-500/20',
@@ -75,6 +129,15 @@ export default function Exposures() {
       'Radiation': 'bg-yellow-500/10 text-yellow-600 ring-yellow-500/20',
       'Asbestos': 'bg-gray-500/10 text-gray-600 ring-gray-500/20',
       'Extreme temps': 'bg-cyan-500/10 text-cyan-600 ring-cyan-500/20',
+      'Diesel exhaust': 'bg-stone-500/10 text-stone-600 ring-stone-500/20',
+      'Depleted uranium': 'bg-amber-500/10 text-amber-600 ring-amber-500/20',
+      'Sand/dust': 'bg-yellow-600/10 text-yellow-700 ring-yellow-600/20',
+      'Contaminated water (Camp Lejeune)': 'bg-teal-500/10 text-teal-600 ring-teal-500/20',
+      'Contaminated water': 'bg-teal-500/10 text-teal-600 ring-teal-500/20',
+      'Herbicides': 'bg-green-500/10 text-green-600 ring-green-500/20',
+      'Paint fumes': 'bg-pink-500/10 text-pink-600 ring-pink-500/20',
+      'Hydraulic fluid': 'bg-indigo-500/10 text-indigo-600 ring-indigo-500/20',
+      'PFAS chemicals': 'bg-rose-500/10 text-rose-600 ring-rose-500/20',
     };
     return colors[type] || 'bg-exposure/10 text-exposure ring-exposure/20';
   };
@@ -126,7 +189,7 @@ export default function Exposures() {
                   <Label htmlFor="type">Exposure Type</Label>
                   <Select 
                     value={formData.type} 
-                    onValueChange={(value: typeof exposureTypes[number]) => setFormData({ ...formData, type: value })}
+                    onValueChange={(value: ExposureType) => setFormData({ ...formData, type: value })}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -207,6 +270,9 @@ export default function Exposures() {
           </Dialog>
         </div>
       </div>
+
+      {/* Branch-Specific Exposures Selector */}
+      <BranchExposuresSelector onSelectExposure={handleQuickAddExposure} />
 
       {/* Exposures List */}
       {data.exposures.length === 0 ? (
