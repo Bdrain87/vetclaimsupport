@@ -44,7 +44,7 @@ export function ExportButton() {
   };
 
   const exportAsText = () => {
-    let content = `# VA Claims Tracker Data Export\nExported: ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}\n`;
+    let content = `# VA Evidence Tracker Data Export\nExported: ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}\n`;
 
     // Medical Visits
     content += formatSection('Medical Visits', data.medicalVisits, (v) =>
