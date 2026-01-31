@@ -17,10 +17,9 @@ import {
   Brain,
   Moon,
   Flame,
-  Eye,
-  Heart,
   Bone,
-  Wind,
+  ChevronDown,
+  Users,
 } from 'lucide-react';
 import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
 import { RatingCalculator } from '@/components/dashboard/RatingCalculator';
@@ -39,6 +38,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -59,11 +59,12 @@ const COMMON_CONDITIONS = [
 ];
 
 export default function Dashboard() {
-  const { data, setSeparationDate, addClaimCondition, deleteClaimCondition } = useClaims();
+  const { data, setSeparationDate, addClaimCondition, deleteClaimCondition, updateClaimCondition } = useClaims();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [newConditionName, setNewConditionName] = useState('');
+  const [expandedConditionId, setExpandedConditionId] = useState<string | null>(null);
 
   const claimConditions = data.claimConditions || [];
 
@@ -115,8 +116,37 @@ export default function Dashboard() {
     
     toast({
       title: 'Condition added',
-      description: `${conditionName} added to your claim`,
+      description: `${conditionName} added - tap to link evidence`,
     });
+    
+    // Auto-expand the newly added condition
+    const newId = Date.now().toString(); // This matches how IDs are typically generated
+    setTimeout(() => {
+      const addedCondition = data.claimConditions?.find(c => c.name === conditionName);
+      if (addedCondition) {
+        setExpandedConditionId(addedCondition.id);
+      }
+    }, 100);
+  };
+
+  const toggleLink = (conditionId: string, type: 'medicalVisits' | 'exposures' | 'symptoms' | 'buddyContacts', itemId: string) => {
+    const condition = claimConditions.find(c => c.id === conditionId);
+    if (!condition) return;
+
+    const fieldMap = {
+      medicalVisits: 'linkedMedicalVisits',
+      exposures: 'linkedExposures',
+      symptoms: 'linkedSymptoms',
+      buddyContacts: 'linkedBuddyContacts',
+    } as const;
+
+    const field = fieldMap[type];
+    const currentLinks = condition[field] || [];
+    const newLinks = currentLinks.includes(itemId)
+      ? currentLinks.filter(id => id !== itemId)
+      : [...currentLinks, itemId];
+
+    updateClaimCondition(conditionId, { [field]: newLinks });
   };
 
   // Filter out conditions already being tracked
@@ -254,61 +284,198 @@ export default function Dashboard() {
               {claimConditions.map((condition) => {
                 const score = getEvidenceScore(condition);
                 const scoreColor = score >= 75 ? 'text-success' : score >= 50 ? 'text-warning' : 'text-muted-foreground';
+                const isExpanded = expandedConditionId === condition.id;
                 
                 return (
                   <div
                     key={condition.id}
                     className={cn(
-                      "flex items-center justify-between",
-                      "p-3 rounded-xl",
+                      "rounded-xl overflow-hidden",
                       "bg-white/[0.06] backdrop-blur-sm",
                       "border border-white/[0.08]",
                       "transition-all duration-200",
-                      "active:scale-[0.98]"
+                      isExpanded && "border-primary/30"
                     )}
                   >
-                    <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div className={cn(
-                        "flex items-center justify-center h-9 w-9 rounded-full flex-shrink-0",
-                        score >= 75 ? "bg-success/20" : score >= 50 ? "bg-warning/20" : "bg-muted/30"
-                      )}>
-                        {score >= 75 ? (
-                          <CheckCircle2 className="h-5 w-5 text-success" />
-                        ) : (
-                          <Circle className="h-5 w-5 text-muted-foreground" />
-                        )}
-                      </div>
-                      <div className="min-w-0">
-                        <p className="font-medium text-foreground truncate">{condition.name}</p>
-                        <div className="flex items-center gap-2 text-xs">
-                          <span className={scoreColor}>{score}% evidence</span>
-                          <span className="text-muted-foreground">•</span>
-                          <span className="text-muted-foreground">
-                            {condition.linkedMedicalVisits.length + condition.linkedSymptoms.length + condition.linkedExposures.length + condition.linkedBuddyContacts.length} items linked
-                          </span>
+                    {/* Condition Header - Tappable */}
+                    <button
+                      onClick={() => setExpandedConditionId(isExpanded ? null : condition.id)}
+                      className={cn(
+                        "w-full flex items-center justify-between",
+                        "p-3",
+                        "transition-all duration-200",
+                        "hover:bg-white/[0.04]",
+                        "active:scale-[0.99]"
+                      )}
+                    >
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
+                        <div className={cn(
+                          "flex items-center justify-center h-9 w-9 rounded-full flex-shrink-0",
+                          score >= 75 ? "bg-success/20" : score >= 50 ? "bg-warning/20" : "bg-muted/30"
+                        )}>
+                          {score >= 75 ? (
+                            <CheckCircle2 className="h-5 w-5 text-success" />
+                          ) : (
+                            <Circle className="h-5 w-5 text-muted-foreground" />
+                          )}
+                        </div>
+                        <div className="min-w-0 text-left">
+                          <p className="font-medium text-foreground truncate">{condition.name}</p>
+                          <div className="flex items-center gap-2 text-xs">
+                            <span className={scoreColor}>{score}% evidence</span>
+                            <span className="text-muted-foreground">•</span>
+                            <span className="text-muted-foreground">
+                              {condition.linkedMedicalVisits.length + condition.linkedSymptoms.length + condition.linkedExposures.length + condition.linkedBuddyContacts.length} items
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-1 flex-shrink-0">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-muted-foreground hover:text-primary"
-                        onClick={() => navigate('/checklist')}
-                        title="Link evidence"
-                      >
-                        <Link2 className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                        onClick={() => deleteClaimCondition(condition.id)}
-                        title="Remove condition"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
+                      <div className="flex items-center gap-1 flex-shrink-0">
+                        <ChevronDown className={cn(
+                          "h-4 w-4 text-muted-foreground transition-transform duration-200",
+                          isExpanded && "rotate-180"
+                        )} />
+                      </div>
+                    </button>
+
+                    {/* Expanded Evidence Linking */}
+                    {isExpanded && (
+                      <div className="px-3 pb-3 space-y-3 border-t border-white/[0.06]">
+                        {/* Evidence Categories */}
+                        <div className="pt-3 grid grid-cols-2 gap-2 text-xs">
+                          <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.04]">
+                            <Stethoscope className="h-4 w-4 text-primary" />
+                            <span>{condition.linkedMedicalVisits.length} Medical</span>
+                          </div>
+                          <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.04]">
+                            <Activity className="h-4 w-4 text-success" />
+                            <span>{condition.linkedSymptoms.length} Symptoms</span>
+                          </div>
+                          <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.04]">
+                            <AlertTriangle className="h-4 w-4 text-warning" />
+                            <span>{condition.linkedExposures.length} Exposures</span>
+                          </div>
+                          <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.04]">
+                            <Users className="h-4 w-4 text-primary" />
+                            <span>{condition.linkedBuddyContacts.length} Buddies</span>
+                          </div>
+                        </div>
+
+                        {/* Link Medical Visits */}
+                        {data.medicalVisits.length > 0 && (
+                          <div className="space-y-2">
+                            <p className="text-xs font-medium flex items-center gap-1 text-muted-foreground">
+                              <Stethoscope className="h-3 w-3" /> Link Medical Visits
+                            </p>
+                            <div className="space-y-1 max-h-24 overflow-y-auto">
+                              {data.medicalVisits.slice(0, 5).map((visit) => (
+                                <label key={visit.id} className="flex items-center gap-2 text-xs p-1.5 rounded hover:bg-white/[0.04] cursor-pointer">
+                                  <Checkbox
+                                    checked={condition.linkedMedicalVisits.includes(visit.id)}
+                                    onCheckedChange={() => toggleLink(condition.id, 'medicalVisits', visit.id)}
+                                  />
+                                  <span className="truncate">
+                                    {new Date(visit.date).toLocaleDateString()} - {visit.reason || visit.visitType}
+                                  </span>
+                                </label>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Link Symptoms */}
+                        {data.symptoms.length > 0 && (
+                          <div className="space-y-2">
+                            <p className="text-xs font-medium flex items-center gap-1 text-muted-foreground">
+                              <Activity className="h-3 w-3" /> Link Symptoms
+                            </p>
+                            <div className="space-y-1 max-h-24 overflow-y-auto">
+                              {data.symptoms.slice(0, 5).map((symptom) => (
+                                <label key={symptom.id} className="flex items-center gap-2 text-xs p-1.5 rounded hover:bg-white/[0.04] cursor-pointer">
+                                  <Checkbox
+                                    checked={condition.linkedSymptoms.includes(symptom.id)}
+                                    onCheckedChange={() => toggleLink(condition.id, 'symptoms', symptom.id)}
+                                  />
+                                  <span className="truncate">{symptom.symptom} ({symptom.bodyArea})</span>
+                                </label>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Link Exposures */}
+                        {data.exposures.length > 0 && (
+                          <div className="space-y-2">
+                            <p className="text-xs font-medium flex items-center gap-1 text-muted-foreground">
+                              <AlertTriangle className="h-3 w-3" /> Link Exposures
+                            </p>
+                            <div className="space-y-1 max-h-24 overflow-y-auto">
+                              {data.exposures.map((exposure) => (
+                                <label key={exposure.id} className="flex items-center gap-2 text-xs p-1.5 rounded hover:bg-white/[0.04] cursor-pointer">
+                                  <Checkbox
+                                    checked={condition.linkedExposures.includes(exposure.id)}
+                                    onCheckedChange={() => toggleLink(condition.id, 'exposures', exposure.id)}
+                                  />
+                                  <span className="truncate">{exposure.type} - {exposure.location}</span>
+                                </label>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Link Buddy Contacts */}
+                        {data.buddyContacts.length > 0 && (
+                          <div className="space-y-2">
+                            <p className="text-xs font-medium flex items-center gap-1 text-muted-foreground">
+                              <Users className="h-3 w-3" /> Link Buddy Statements
+                            </p>
+                            <div className="space-y-1 max-h-24 overflow-y-auto">
+                              {data.buddyContacts.map((buddy) => (
+                                <label key={buddy.id} className="flex items-center gap-2 text-xs p-1.5 rounded hover:bg-white/[0.04] cursor-pointer">
+                                  <Checkbox
+                                    checked={condition.linkedBuddyContacts.includes(buddy.id)}
+                                    onCheckedChange={() => toggleLink(condition.id, 'buddyContacts', buddy.id)}
+                                  />
+                                  <span className="truncate">{buddy.name} ({buddy.rank})</span>
+                                </label>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* No evidence prompt */}
+                        {data.medicalVisits.length === 0 && data.symptoms.length === 0 && data.exposures.length === 0 && data.buddyContacts.length === 0 && (
+                          <div className="text-center py-3">
+                            <p className="text-xs text-muted-foreground mb-2">No evidence logged yet</p>
+                            <Button size="sm" variant="outline" onClick={() => navigate('/symptoms')} className="text-xs h-7">
+                              Start Logging Evidence
+                            </Button>
+                          </div>
+                        )}
+
+                        {/* Actions */}
+                        <div className="flex items-center justify-between pt-2 border-t border-white/[0.06]">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-7 text-xs text-destructive hover:text-destructive"
+                            onClick={() => deleteClaimCondition(condition.id)}
+                          >
+                            <Trash2 className="h-3 w-3 mr-1" />
+                            Remove
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-7 text-xs"
+                            onClick={() => navigate('/medical-visits')}
+                          >
+                            <Plus className="h-3 w-3 mr-1" />
+                            Add Evidence
+                          </Button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 );
               })}
