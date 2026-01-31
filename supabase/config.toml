@@ -1,0 +1,4 @@
+project_id = "jkyrmgtaqbdcddlvqtuq"
+
+[functions.analyze-disabilities]
+verify_jwt = false
