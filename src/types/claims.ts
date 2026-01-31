@@ -76,6 +76,25 @@ export interface DocumentItem {
   count: number;
 }
 
+export type MigraineSeverity = 'Mild' | 'Moderate' | 'Severe' | 'Prostrating';
+export type MigraineDuration = '30min' | '1hr' | '2hrs' | '4hrs' | '8hrs' | '12hrs' | '24hrs+';
+export type MigraneTrigger = 'Stress' | 'Lack of sleep' | 'Weather' | 'Food' | 'Bright lights' | 'Loud noise' | 'Physical exertion' | 'Hormonal' | 'Dehydration' | 'Other';
+export type MigraineImpact = 'Continued normal activities' | 'Reduced productivity' | 'Had to rest' | 'Missed work/duty' | 'Went to ER';
+export type MigraineSymptom = 'Aura' | 'Nausea' | 'Vomiting' | 'Light sensitivity' | 'Sound sensitivity' | 'Vision changes' | 'Numbness/tingling' | 'Dizziness';
+
+export interface MigraineEntry {
+  id: string;
+  date: string;
+  time: string;
+  duration: MigraineDuration;
+  severity: MigraineSeverity;
+  symptoms: MigraineSymptom[];
+  triggers: MigraneTrigger[];
+  impact: MigraineImpact;
+  treatment: string;
+  notes: string;
+}
+
 export interface ClaimsData {
   medicalVisits: MedicalVisit[];
   exposures: Exposure[];
@@ -84,5 +103,6 @@ export interface ClaimsData {
   serviceHistory: ServiceEntry[];
   buddyContacts: BuddyContact[];
   documents: DocumentItem[];
+  migraines: MigraineEntry[];
   separationDate: string | null;
 }

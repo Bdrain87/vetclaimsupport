@@ -7,6 +7,7 @@ import { ClaimsProvider } from "./context/ClaimsContext";
 import { AppLayout } from "./components/AppLayout";
 import Dashboard from "./pages/Dashboard";
 import MedicalVisits from "./pages/MedicalVisits";
+import Migraines from "./pages/Migraines";
 import Exposures from "./pages/Exposures";
 import Symptoms from "./pages/Symptoms";
 import Medications from "./pages/Medications";
@@ -29,6 +30,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/medical-visits" element={<MedicalVisits />} />
+              <Route path="/migraines" element={<Migraines />} />
               <Route path="/exposures" element={<Exposures />} />
               <Route path="/symptoms" element={<Symptoms />} />
               <Route path="/medications" element={<Medications />} />
