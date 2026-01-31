@@ -139,7 +139,14 @@ export function DisabilitiesTab() {
                         <td className="p-3 text-muted-foreground font-mono text-xs">
                           {condition.diagnosticCode || '—'}
                         </td>
-                        <td className="p-3 font-medium">{condition.name}</td>
+                        <td className="p-3 font-medium">
+                          {condition.name}
+                          {condition.diagnosticCode && (
+                            <span className="text-muted-foreground font-normal text-xs ml-1">
+                              (DC {condition.diagnosticCode})
+                            </span>
+                          )}
+                        </td>
                         <td className="p-3 text-muted-foreground hidden md:table-cell text-xs">
                           {condition.description}
                         </td>

@@ -28,14 +28,12 @@ const navItems = [
   // Health Tracking
   { to: '/medical-visits', icon: Stethoscope, label: 'Medical Visits' },
   { to: '/medications', icon: Pill, label: 'Medications' },
-  // Evidence Building
-  { to: '/documents', icon: FileCheck, label: 'Documents' },
-  // Health Tracking continued
   { to: '/symptoms', icon: Activity, label: 'Symptoms Journal' },
   { to: '/exposures', icon: AlertTriangle, label: 'Exposures' },
   { to: '/migraines', icon: Brain, label: 'Migraine Tracker' },
   { to: '/sleep', icon: Moon, label: 'Sleep Tracker' },
-  // Evidence Building continued
+  // Evidence Building
+  { to: '/documents', icon: FileCheck, label: 'Documents' },
   { to: '/buddy-contacts', icon: Users, label: 'Buddy Contacts' },
 ];
 
