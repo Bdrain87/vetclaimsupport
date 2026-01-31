@@ -8,10 +8,12 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { 
   Briefcase, Plus, Trash2, ChevronDown, ChevronUp, 
-  Stethoscope, AlertTriangle, Activity, Users,
+  Stethoscope, AlertTriangle, Activity, Users, FileDown,
 } from 'lucide-react';
 import { EvidenceStrengthIndicator, getStrengthLevel, calculateEvidenceStrength } from './EvidenceStrengthIndicator';
 import { RelatedConditions } from './RelatedConditions';
+import { exportConditionEvidence } from '@/utils/pdfExport';
+import { toast } from 'sonner';
 import type { ClaimCondition } from '@/types/claims';
 
 export function ClaimBuilder() {
@@ -56,6 +58,37 @@ export function ClaimBuilder() {
       : [...currentLinks, itemId];
 
     updateClaimCondition(conditionId, { [field]: newLinks });
+  };
+
+  const handleExportEvidence = (condition: ClaimCondition, e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    const strength = calculateEvidenceStrength(condition, data);
+    
+    // Get linked items
+    const linkedSymptoms = data.symptoms.filter(s => condition.linkedSymptoms.includes(s.id));
+    const linkedMedicalVisits = data.medicalVisits.filter(v => condition.linkedMedicalVisits.includes(v.id));
+    const linkedExposures = data.exposures.filter(e => condition.linkedExposures.includes(e.id));
+    const linkedBuddyContacts = data.buddyContacts.filter(b => condition.linkedBuddyContacts.includes(b.id));
+    
+    // Get medications related to this condition
+    const linkedMedications = data.medications.filter(med => 
+      med.prescribedFor.toLowerCase().includes(condition.name.toLowerCase()) ||
+      condition.name.toLowerCase().includes(med.prescribedFor.toLowerCase())
+    );
+    
+    exportConditionEvidence(
+      condition.name,
+      condition.createdAt,
+      strength.score,
+      linkedSymptoms,
+      linkedMedicalVisits,
+      linkedMedications,
+      linkedExposures,
+      linkedBuddyContacts
+    );
+    
+    toast.success(`Evidence package exported for ${condition.name}`);
   };
 
   return (
@@ -127,7 +160,16 @@ export function ClaimBuilder() {
                 >
                   <div className="flex items-start justify-between mb-2">
                     <h4 className="font-semibold text-foreground">{condition.name}</h4>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7"
+                        onClick={(e) => handleExportEvidence(condition, e)}
+                        title="Export Evidence Package"
+                      >
+                        <FileDown className="h-4 w-4 text-primary" />
+                      </Button>
                       <Button
                         variant="ghost"
                         size="icon"
