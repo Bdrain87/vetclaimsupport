@@ -8,6 +8,7 @@ import {
   AlertCircle,
   CheckCircle2,
   FileWarning,
+  ShieldCheck,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
@@ -77,6 +78,14 @@ export default function Dashboard() {
           </div>
         </div>
         <ExportButton />
+      </div>
+
+      {/* Privacy Badge */}
+      <div className="flex items-center gap-3 p-3 bg-success/5 border border-success/20 rounded-lg">
+        <ShieldCheck className="h-5 w-5 text-success flex-shrink-0" />
+        <p className="text-sm text-muted-foreground">
+          <span className="font-medium text-foreground">Your Data Stays Private</span> — All information is stored locally on your device. We never collect, store, or share your personal health data.
+        </p>
       </div>
 
       {/* Stats Grid */}
