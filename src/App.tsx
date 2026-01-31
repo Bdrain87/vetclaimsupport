@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ScrollToTop } from "./components/ScrollToTop";
 import { ClaimsProvider } from "./context/ClaimsContext";
 import { AppLayout } from "./components/AppLayout";
 import { LiabilityAcceptanceScreen } from "./components/legal/LiabilityAcceptanceScreen";
@@ -39,6 +40,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <ScrollToTop />
           <LiabilityAcceptanceScreen />
           <OnboardingModal />
           <PWAInstallPrompt />
