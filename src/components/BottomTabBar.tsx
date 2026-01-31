@@ -36,11 +36,11 @@ export function BottomTabBar() {
             >
               <div className={cn(
                 "flex items-center justify-center",
-                "w-11 h-11 rounded-2xl",
+                "w-10 h-10 rounded-xl",
                 "transition-all duration-300 ease-out",
                 isActive && "bg-primary/15"
               )}>
-                <tab.icon className={cn("h-5 w-5 transition-all duration-300", isActive && "text-primary")} />
+                <tab.icon className="h-5 w-5 transition-all duration-300" />
               </div>
               <span className="text-[10px] font-medium">{tab.label}</span>
             </NavLink>
