@@ -139,10 +139,10 @@ export default function ServiceHistory() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="afsc">AFSC (Job Code)</Label>
+                <Label htmlFor="afsc">AFSC/MOS (Job Code)</Label>
                 <Input 
                   id="afsc" 
-                  placeholder="e.g., 2A3X3 - Tactical Aircraft Maintenance"
+                  placeholder="e.g., 2A3X3 (Air Force) or 11B (Army/Marines)"
                   value={formData.afsc}
                   onChange={(e) => setFormData({ ...formData, afsc: e.target.value })}
                 />
