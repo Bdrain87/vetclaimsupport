@@ -83,4 +83,5 @@ export interface ClaimsData {
   serviceHistory: ServiceEntry[];
   buddyContacts: BuddyContact[];
   documents: DocumentItem[];
+  separationDate: string | null;
 }
