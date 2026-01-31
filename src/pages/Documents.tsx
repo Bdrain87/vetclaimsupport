@@ -1,15 +1,25 @@
 import { useClaims } from '@/context/ClaimsContext';
-import { FileCheck, Check, Clock, AlertCircle, FileText, Plus, Minus, Download, Camera } from 'lucide-react';
+import { FileCheck, Check, Clock, AlertCircle, FileText, Plus, Minus, Download, FolderPlus } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { exportDocuments } from '@/utils/pdfExport';
-import { DocumentUploader } from '@/components/documents/DocumentUploader';
-import type { DocumentItem } from '@/types/claims';
+import { InlineDocumentUploader } from '@/components/documents/InlineDocumentUploader';
+import type { DocumentItem, DocumentTypeId } from '@/types/claims';
 
 const statuses = ['Not Started', 'In Progress', 'Obtained', 'Submitted'] as const;
+
+// Map document names to document type IDs
+const documentTypeMap: Record<string, DocumentTypeId> = {
+  'Service Treatment Records (STRs)': 'str',
+  'DD-214': 'dd214',
+  'Personnel Records': 'personnel',
+  'Medical Records (Post-Service)': 'medical-records',
+  'Nexus Letters': 'nexus',
+  'Buddy Statements': 'buddy-statement',
+};
 
 export default function Documents() {
   const { data, updateDocument, addUploadedDocument, deleteUploadedDocument } = useClaims();
@@ -41,6 +51,16 @@ export default function Documents() {
       updateDocument(doc.id, { count: (doc.count || 0) - 1 });
     }
   };
+
+  const getDocumentTypeId = (docName: string): DocumentTypeId => {
+    return documentTypeMap[docName] || 'other';
+  };
+
+  const getUploadedDocsForType = (docType: DocumentTypeId) => {
+    return data.uploadedDocuments.filter(doc => doc.documentType === docType);
+  };
+
+  const otherDocuments = data.uploadedDocuments.filter(doc => doc.documentType === 'other');
 
   const totalDocuments = data.documents.reduce((sum, doc) => sum + (doc.count || 0), 0);
   const progress = {
@@ -119,94 +139,146 @@ export default function Documents() {
 
       {/* Documents List */}
       <div className="space-y-3">
-        {data.documents.map((doc) => (
-          <Card key={doc.id} className={`data-card border ${getStatusColor(doc.status)}`}>
-            <CardContent className="py-4">
+        {data.documents.map((doc) => {
+          const docTypeId = getDocumentTypeId(doc.name);
+          const uploadedForType = getUploadedDocsForType(docTypeId);
+          
+          return (
+            <Card key={doc.id} className={`data-card border ${getStatusColor(doc.status)}`}>
+              <CardContent className="py-4">
+                <div className="flex flex-col gap-4">
+                  {/* Main row */}
+                  <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+                    <div className="flex items-start gap-3 flex-1">
+                      {getStatusIcon(doc.status)}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h3 className="font-medium text-foreground">{doc.name}</h3>
+                          {(doc.count || 0) > 0 && (
+                            <Badge variant="secondary" className="font-mono">
+                              {doc.count} {doc.count === 1 ? 'copy' : 'copies'}
+                            </Badge>
+                          )}
+                          {uploadedForType.length > 0 && (
+                            <Badge variant="outline" className="text-xs">
+                              {uploadedForType.length} scanned
+                            </Badge>
+                          )}
+                        </div>
+                        <p className="text-sm text-muted-foreground">{doc.description}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-col sm:flex-row gap-3 lg:items-center">
+                      {/* Scan/Import Buttons */}
+                      <InlineDocumentUploader
+                        documents={data.uploadedDocuments}
+                        documentType={docTypeId}
+                        onAdd={addUploadedDocument}
+                        onDelete={deleteUploadedDocument}
+                      />
+
+                      {/* Count Controls */}
+                      <div className="flex items-center gap-1">
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => handleDecrement(doc)}
+                          disabled={(doc.count || 0) === 0}
+                        >
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                        <div className="w-10 text-center font-mono text-sm">
+                          {doc.count || 0}
+                        </div>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => handleIncrement(doc)}
+                        >
+                          <Plus className="h-4 w-4" />
+                        </Button>
+                      </div>
+
+                      <Select 
+                        value={doc.status} 
+                        onValueChange={(value: typeof statuses[number]) => updateDocument(doc.id, { status: value })}
+                      >
+                        <SelectTrigger className="w-[140px]">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {statuses.map((status) => (
+                            <SelectItem key={status} value={status}>{status}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      
+                      <Input 
+                        placeholder="Notes..."
+                        value={doc.notes}
+                        onChange={(e) => updateDocument(doc.id, { notes: e.target.value })}
+                        className="w-full sm:w-[200px]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Thumbnails row - shown inline in InlineDocumentUploader */}
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+
+        {/* Other Documents Row */}
+        <Card className="data-card border border-dashed border-muted-foreground/30">
+          <CardContent className="py-4">
+            <div className="flex flex-col gap-4">
               <div className="flex flex-col lg:flex-row lg:items-center gap-4">
                 <div className="flex items-start gap-3 flex-1">
-                  {getStatusIcon(doc.status)}
+                  <FolderPlus className="h-4 w-4 text-muted-foreground mt-0.5" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-medium text-foreground">{doc.name}</h3>
-                      {(doc.count || 0) > 0 && (
-                        <Badge variant="secondary" className="font-mono">
-                          {doc.count} {doc.count === 1 ? 'copy' : 'copies'}
+                      <h3 className="font-medium text-foreground">Other Documents</h3>
+                      {otherDocuments.length > 0 && (
+                        <Badge variant="outline" className="text-xs">
+                          {otherDocuments.length} uploaded
                         </Badge>
                       )}
                     </div>
-                    <p className="text-sm text-muted-foreground">{doc.description}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Miscellaneous documents (VA letters, awards, certificates, etc.)
+                    </p>
                   </div>
                 </div>
                 
-                <div className="flex flex-col sm:flex-row gap-3 lg:items-center">
-                  {/* Count Controls */}
-                  <div className="flex items-center gap-1">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() => handleDecrement(doc)}
-                      disabled={(doc.count || 0) === 0}
-                    >
-                      <Minus className="h-4 w-4" />
-                    </Button>
-                    <div className="w-10 text-center font-mono text-sm">
-                      {doc.count || 0}
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() => handleIncrement(doc)}
-                    >
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
-
-                  <Select 
-                    value={doc.status} 
-                    onValueChange={(value: typeof statuses[number]) => updateDocument(doc.id, { status: value })}
-                  >
-                    <SelectTrigger className="w-[140px]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {statuses.map((status) => (
-                        <SelectItem key={status} value={status}>{status}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  
-                  <Input 
-                    placeholder="Notes..."
-                    value={doc.notes}
-                    onChange={(e) => updateDocument(doc.id, { notes: e.target.value })}
-                    className="w-full sm:w-[200px]"
+                <div className="flex items-center">
+                  <InlineDocumentUploader
+                    documents={data.uploadedDocuments}
+                    documentType="other"
+                    onAdd={addUploadedDocument}
+                    onDelete={deleteUploadedDocument}
+                    showCustomLabel={true}
                   />
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
 
-      {/* Uploaded Documents Section */}
-      <Card className="data-card">
-        <CardHeader>
-          <CardTitle className="text-base flex items-center gap-2">
-            <Camera className="h-5 w-5 text-primary" />
-            Scanned & Uploaded Documents
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <DocumentUploader
-            documents={data.uploadedDocuments}
-            category="documents"
-            onAdd={addUploadedDocument}
-            onDelete={deleteUploadedDocument}
-          />
-        </CardContent>
-      </Card>
+              {/* Show "other" document thumbnails with labels */}
+              {otherDocuments.length > 0 && (
+                <div className="ml-7 flex flex-wrap gap-3">
+                  {otherDocuments.map((doc) => (
+                    <div key={doc.id} className="flex items-center gap-2 px-2 py-1 bg-muted/50 rounded text-xs">
+                      <span className="font-medium">{doc.customLabel || doc.title}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Tips */}
       <Card className="data-card bg-primary/5 border-primary/20">
