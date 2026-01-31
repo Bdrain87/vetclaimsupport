@@ -80,6 +80,7 @@ export function AppSidebar() {
                   className={cn(
                     'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                     'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+                    'min-h-[44px]', // iOS touch target
                     isActive && 'bg-sidebar-accent text-sidebar-primary',
                     collapsed && 'justify-center px-2'
                   )}
@@ -105,6 +106,7 @@ export function AppSidebar() {
                     className={cn(
                       'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                       'text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+                      'min-h-[44px]', // iOS touch target
                       isActive && 'bg-sidebar-accent text-sidebar-primary',
                       collapsed && 'justify-center px-2'
                     )}
@@ -136,7 +138,7 @@ export function AppSidebar() {
           size="sm"
           onClick={() => setCollapsed(!collapsed)}
           className={cn(
-            'w-full text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+            'w-full text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground min-h-[44px]',
             collapsed && 'px-2'
           )}
         >
