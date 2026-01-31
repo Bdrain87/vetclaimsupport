@@ -185,12 +185,17 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* COMMON CONDITIONS - Quick Add Section */}
+      {/* CONDITIONS WORTH EXPLORING - Discovery Section */}
       {availableConditions.length > 0 && (
         <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="h-4 w-4 text-primary" />
-            <h2 className="text-sm font-medium text-foreground">Track Service-Connected Disabilities</h2>
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <Target className="h-4 w-4 text-primary" />
+              <h2 className="text-sm font-medium text-foreground">Conditions Worth Exploring</h2>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Many veterans don't realize these service-connected conditions may qualify for VA benefits
+            </p>
           </div>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
             {availableConditions.slice(0, 12).map((condition) => {
@@ -206,19 +211,20 @@ export default function Dashboard() {
                     "border border-white/[0.08]",
                     "transition-all duration-200",
                     "hover:bg-primary/10 hover:border-primary/30",
-                    "active:scale-95"
+                    "active:scale-95",
+                    "group"
                   )}
                 >
-                  <IconComponent className="h-5 w-5 text-foreground/70" />
-                  <span className="text-[10px] sm:text-xs text-center text-foreground/80 leading-tight">
+                  <IconComponent className="h-5 w-5 text-foreground/70 group-hover:text-primary transition-colors" />
+                  <span className="text-[10px] sm:text-xs text-center text-foreground/80 leading-tight group-hover:text-foreground transition-colors">
                     {condition.name}
                   </span>
                 </button>
               );
             })}
           </div>
-          <p className="text-[10px] text-muted-foreground text-center">
-            Tap a condition to start tracking evidence for your VA claim
+          <p className="text-[10px] text-muted-foreground/70 text-center italic">
+            Tap any condition to explore and start building your evidence
           </p>
         </div>
       )}
