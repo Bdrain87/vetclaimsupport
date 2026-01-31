@@ -1037,3 +1037,370 @@ export const exportMigraines = (migraines: any[], stats?: { totalLast30Days: num
   addPDFFooter(doc);
   doc.save('migraine-log.pdf');
 };
+
+// Condition-Specific Evidence Package Export
+export const exportConditionEvidence = (
+  conditionName: string,
+  claimDate: string,
+  evidenceScore: number,
+  linkedSymptoms: any[],
+  linkedMedicalVisits: any[],
+  linkedMedications: any[],
+  linkedExposures: any[],
+  linkedBuddyContacts: any[]
+) => {
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  
+  let yPos = addPDFHeader(doc, {
+    title: `Evidence Package: ${conditionName}`,
+    subtitle: 'Condition-Specific Evidence Summary for VA Claims'
+  });
+  
+  // Claim info box
+  doc.setFillColor(...colors.background);
+  doc.roundedRect(20, yPos, pageWidth - 40, 25, 2, 2, 'F');
+  
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...colors.secondary);
+  doc.text('Condition:', 25, yPos + 8);
+  doc.setFont('helvetica', 'normal');
+  doc.text(conditionName, 55, yPos + 8);
+  
+  doc.setFont('helvetica', 'bold');
+  doc.text('Claim Started:', 25, yPos + 16);
+  doc.setFont('helvetica', 'normal');
+  doc.text(new Date(claimDate).toLocaleDateString(), 55, yPos + 16);
+  
+  // Evidence strength badge
+  const strengthColor = evidenceScore >= 75 ? colors.success : evidenceScore >= 50 ? colors.warning : colors.danger;
+  const strengthBg = evidenceScore >= 75 ? colors.successBg : evidenceScore >= 50 ? colors.warningBg : colors.dangerBg;
+  const strengthLabel = evidenceScore >= 75 ? 'Strong' : evidenceScore >= 50 ? 'Building' : 'Needs Work';
+  
+  doc.setFillColor(...strengthBg);
+  doc.roundedRect(130, yPos + 5, 50, 15, 2, 2, 'F');
+  doc.setFontSize(12);
+  doc.setTextColor(...strengthColor);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`${strengthLabel} (${evidenceScore}%)`, 155, yPos + 14, { align: 'center' });
+  
+  yPos += 35;
+  
+  // Summary box
+  yPos = drawSummaryBox(doc, [
+    { value: linkedSymptoms.length, label: 'Symptoms' },
+    { value: linkedMedicalVisits.length, label: 'Medical Visits' },
+    { value: linkedMedications.length, label: 'Medications' },
+    { value: linkedExposures.length, label: 'Exposures' }
+  ], yPos);
+  
+  // Educational disclaimer
+  yPos = drawInfoBox(doc, 'EDUCATIONAL PURPOSES ONLY: This evidence package is for personal organization and VSO consultation. It is not an official VA document. Always consult with an accredited VSO or VA representative before filing claims.', yPos);
+  
+  // Symptoms Section
+  if (linkedSymptoms.length > 0) {
+    yPos = checkPageBreak(doc, yPos, 30);
+    doc.setFontSize(14);
+    doc.setTextColor(...colors.secondary);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Symptoms Documentation (${linkedSymptoms.length})`, 20, yPos);
+    yPos += 10;
+    
+    linkedSymptoms.forEach((symptom) => {
+      yPos = checkPageBreak(doc, yPos, 30);
+      
+      const startY = yPos;
+      yPos += 5;
+      
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...colors.secondary);
+      doc.text(new Date(symptom.date).toLocaleDateString(), 25, yPos);
+      
+      // Severity badge
+      const severity = symptom.severity || 0;
+      const sevColor = severity <= 3 ? colors.successBg : severity <= 6 ? colors.warningBg : colors.dangerBg;
+      const sevText = severity <= 3 ? colors.success : severity <= 6 ? colors.warning : colors.danger;
+      doc.setFillColor(...sevColor);
+      doc.roundedRect(100, yPos - 4, 20, 6, 1, 1, 'F');
+      doc.setFontSize(8);
+      doc.setTextColor(...sevText);
+      doc.text(`${severity}/10`, 110, yPos, { align: 'center' });
+      yPos += 7;
+      
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      
+      if (symptom.symptom) {
+        doc.setTextColor(...colors.muted);
+        doc.text('Symptom:', 25, yPos);
+        doc.setTextColor(...colors.secondary);
+        doc.text(symptom.symptom, 55, yPos);
+        yPos += 5;
+      }
+      
+      if (symptom.bodyArea) {
+        doc.setTextColor(...colors.muted);
+        doc.text('Body Area:', 25, yPos);
+        doc.setTextColor(...colors.secondary);
+        doc.text(symptom.bodyArea, 55, yPos);
+        yPos += 5;
+      }
+      
+      if (symptom.frequency) {
+        doc.setTextColor(...colors.muted);
+        doc.text('Frequency:', 25, yPos);
+        doc.setTextColor(...colors.secondary);
+        doc.text(symptom.frequency, 55, yPos);
+        yPos += 5;
+      }
+      
+      if (symptom.dailyImpact) {
+        doc.setTextColor(...colors.muted);
+        doc.text('Daily Impact:', 25, yPos);
+        const impactLines = wrapText(doc, symptom.dailyImpact, pageWidth - 70);
+        doc.setTextColor(...colors.secondary);
+        doc.text(impactLines, 55, yPos);
+        yPos += impactLines.length * 4 + 2;
+      }
+      
+      yPos += 3;
+      doc.setDrawColor(...colors.border);
+      doc.roundedRect(22, startY, pageWidth - 44, yPos - startY, 2, 2, 'S');
+      yPos += 5;
+    });
+  }
+  
+  // Medical Visits Section
+  if (linkedMedicalVisits.length > 0) {
+    yPos = checkPageBreak(doc, yPos, 30);
+    doc.setFontSize(14);
+    doc.setTextColor(...colors.secondary);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Medical Visits (${linkedMedicalVisits.length})`, 20, yPos);
+    yPos += 10;
+    
+    linkedMedicalVisits.forEach((visit) => {
+      yPos = checkPageBreak(doc, yPos, 35);
+      
+      const startY = yPos;
+      yPos += 5;
+      
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...colors.secondary);
+      doc.text(new Date(visit.date).toLocaleDateString(), 25, yPos);
+      
+      doc.setFillColor(...colors.infoBg);
+      doc.roundedRect(100, yPos - 4, 40, 6, 1, 1, 'F');
+      doc.setFontSize(8);
+      doc.setTextColor(...colors.primary);
+      doc.text(visit.visitType || 'Visit', 120, yPos, { align: 'center' });
+      yPos += 7;
+      
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      
+      const visitFields = [
+        { label: 'Reason', value: visit.reason },
+        { label: 'Location', value: visit.location },
+        { label: 'Provider', value: visit.provider },
+        { label: 'Diagnosis', value: visit.diagnosis },
+        { label: 'Treatment', value: visit.treatment },
+      ];
+      
+      visitFields.forEach(field => {
+        if (field.value) {
+          doc.setTextColor(...colors.muted);
+          doc.text(`${field.label}:`, 25, yPos);
+          const lines = wrapText(doc, field.value, pageWidth - 70);
+          doc.setTextColor(...colors.secondary);
+          doc.text(lines, 55, yPos);
+          yPos += lines.length * 4 + 2;
+        }
+      });
+      
+      yPos += 3;
+      doc.setDrawColor(...colors.border);
+      doc.roundedRect(22, startY, pageWidth - 44, yPos - startY, 2, 2, 'S');
+      yPos += 5;
+    });
+  }
+  
+  // Medications Section
+  if (linkedMedications.length > 0) {
+    yPos = checkPageBreak(doc, yPos, 30);
+    doc.setFontSize(14);
+    doc.setTextColor(...colors.secondary);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Medications (${linkedMedications.length})`, 20, yPos);
+    yPos += 8;
+    
+    // Table header
+    doc.setFillColor(...colors.background);
+    doc.rect(20, yPos - 4, pageWidth - 40, 8, 'F');
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...colors.secondary);
+    doc.text('Medication', 25, yPos);
+    doc.text('Prescribed For', 70, yPos);
+    doc.text('Start Date', 120, yPos);
+    doc.text('Status', 155, yPos);
+    yPos += 8;
+    
+    doc.setFont('helvetica', 'normal');
+    linkedMedications.forEach(med => {
+      yPos = checkPageBreak(doc, yPos, 10);
+      doc.setTextColor(...colors.secondary);
+      doc.text((med.name || '').substring(0, 25), 25, yPos);
+      doc.text((med.prescribedFor || 'N/A').substring(0, 25), 70, yPos);
+      doc.text(med.startDate ? new Date(med.startDate).toLocaleDateString() : 'N/A', 120, yPos);
+      const statusColor = med.stillTaking ? colors.success : colors.muted;
+      doc.setTextColor(...statusColor);
+      doc.text(med.stillTaking ? 'Current' : 'Discontinued', 155, yPos);
+      yPos += 6;
+    });
+    yPos += 5;
+  }
+  
+  // Exposures Section
+  if (linkedExposures.length > 0) {
+    yPos = checkPageBreak(doc, yPos, 30);
+    doc.setFontSize(14);
+    doc.setTextColor(...colors.secondary);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Service-Connected Exposures (${linkedExposures.length})`, 20, yPos);
+    yPos += 10;
+    
+    linkedExposures.forEach((exposure) => {
+      yPos = checkPageBreak(doc, yPos, 25);
+      
+      const startY = yPos;
+      yPos += 5;
+      
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...colors.secondary);
+      doc.text(exposure.type || 'Exposure', 25, yPos);
+      
+      doc.setFillColor(...colors.warningBg);
+      doc.roundedRect(130, yPos - 4, 50, 6, 1, 1, 'F');
+      doc.setFontSize(8);
+      doc.setTextColor(...colors.warning);
+      doc.text(exposure.location || 'N/A', 155, yPos, { align: 'center' });
+      yPos += 7;
+      
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      
+      if (exposure.date) {
+        doc.setTextColor(...colors.muted);
+        doc.text('Date:', 25, yPos);
+        doc.setTextColor(...colors.secondary);
+        doc.text(new Date(exposure.date).toLocaleDateString(), 55, yPos);
+        yPos += 5;
+      }
+      
+      if (exposure.duration) {
+        doc.setTextColor(...colors.muted);
+        doc.text('Duration:', 25, yPos);
+        doc.setTextColor(...colors.secondary);
+        doc.text(exposure.duration, 55, yPos);
+        yPos += 5;
+      }
+      
+      if (exposure.details) {
+        doc.setTextColor(...colors.muted);
+        doc.text('Details:', 25, yPos);
+        const detailLines = wrapText(doc, exposure.details, pageWidth - 70);
+        doc.setTextColor(...colors.secondary);
+        doc.text(detailLines, 55, yPos);
+        yPos += detailLines.length * 4 + 2;
+      }
+      
+      yPos += 3;
+      doc.setDrawColor(...colors.border);
+      doc.roundedRect(22, startY, pageWidth - 44, yPos - startY, 2, 2, 'S');
+      yPos += 5;
+    });
+  }
+  
+  // Buddy Statements Section
+  if (linkedBuddyContacts.length > 0) {
+    yPos = checkPageBreak(doc, yPos, 30);
+    doc.setFontSize(14);
+    doc.setTextColor(...colors.secondary);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Buddy Statements (${linkedBuddyContacts.length})`, 20, yPos);
+    yPos += 10;
+    
+    linkedBuddyContacts.forEach((buddy) => {
+      yPos = checkPageBreak(doc, yPos, 25);
+      
+      const startY = yPos;
+      yPos += 5;
+      
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...colors.secondary);
+      doc.text(`${buddy.name} (${buddy.rank || 'N/A'})`, 25, yPos);
+      yPos += 7;
+      
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      
+      if (buddy.relationship) {
+        doc.setTextColor(...colors.muted);
+        doc.text('Relationship:', 25, yPos);
+        doc.setTextColor(...colors.secondary);
+        doc.text(buddy.relationship, 55, yPos);
+        yPos += 5;
+      }
+      
+      if (buddy.whatTheyWitnessed) {
+        doc.setTextColor(...colors.muted);
+        doc.text('Witnessed:', 25, yPos);
+        const witnessLines = wrapText(doc, buddy.whatTheyWitnessed, pageWidth - 70);
+        doc.setTextColor(...colors.secondary);
+        doc.text(witnessLines, 55, yPos);
+        yPos += witnessLines.length * 4 + 2;
+      }
+      
+      if (buddy.statementStatus) {
+        doc.setTextColor(...colors.muted);
+        doc.text('Status:', 25, yPos);
+        const statusColor = buddy.statementStatus === 'Received' || buddy.statementStatus === 'Submitted' 
+          ? colors.success : colors.warning;
+        doc.setTextColor(...statusColor);
+        doc.text(buddy.statementStatus, 55, yPos);
+        yPos += 5;
+      }
+      
+      yPos += 3;
+      doc.setDrawColor(...colors.border);
+      doc.roundedRect(22, startY, pageWidth - 44, yPos - startY, 2, 2, 'S');
+      yPos += 5;
+    });
+  }
+  
+  // Final disclaimer box
+  yPos = checkPageBreak(doc, yPos, 30);
+  doc.setFillColor(...colors.warningBg);
+  doc.roundedRect(20, yPos, pageWidth - 40, 20, 2, 2, 'F');
+  doc.setFillColor(...colors.warning);
+  doc.rect(20, yPos, 3, 20, 'F');
+  
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...colors.warning);
+  doc.text('IMPORTANT NOTICE', 28, yPos + 6);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(...colors.secondary);
+  const notice = 'This evidence package is for educational and organizational purposes only. It is NOT an official VA document. Consult with an accredited VSO before filing any claims.';
+  const noticeLines = wrapText(doc, notice, pageWidth - 50);
+  doc.text(noticeLines, 28, yPos + 12);
+  
+  addPDFFooter(doc);
+  doc.save(`${conditionName.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}-evidence-package.pdf`);
+};
