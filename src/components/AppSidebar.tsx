@@ -12,7 +12,7 @@ import {
   BookOpen,
   ChevronLeft,
   ChevronRight,
-  Plane,
+  ShieldCheck,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -47,11 +47,11 @@ export function AppSidebar() {
         collapsed && 'justify-center px-2'
       )}>
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-          <Plane className="h-5 w-5" />
+          <ShieldCheck className="h-5 w-5" />
         </div>
         {!collapsed && (
           <div className="flex flex-col">
-            <span className="font-semibold text-sidebar-accent-foreground text-sm">VA Claims</span>
+            <span className="font-semibold text-sidebar-accent-foreground text-sm">VA Evidence</span>
             <span className="text-xs text-sidebar-muted">Tracker</span>
           </div>
         )}

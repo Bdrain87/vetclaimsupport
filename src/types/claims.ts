@@ -1,4 +1,4 @@
-// Types for VA Claims Tracker
+// Types for VA Evidence Tracker
 
 export interface MedicalVisit {
   id: string;

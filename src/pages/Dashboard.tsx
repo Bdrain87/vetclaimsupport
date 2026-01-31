@@ -72,7 +72,7 @@ export default function Dashboard() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
-            <p className="text-muted-foreground">Track your VA claims documentation progress</p>
+            <p className="text-muted-foreground">Track your VA evidence and documentation</p>
           </div>
         </div>
         <ExportButton />
