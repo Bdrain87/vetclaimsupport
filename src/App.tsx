@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ClaimsProvider } from "./context/ClaimsContext";
 import { AppLayout } from "./components/AppLayout";
 import { OnboardingModal } from "./components/onboarding/OnboardingModal";
+import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
 import Dashboard from "./pages/Dashboard";
 import MedicalVisits from "./pages/MedicalVisits";
 import Migraines from "./pages/Migraines";
@@ -29,6 +30,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <OnboardingModal />
+        <PWAInstallPrompt />
         <BrowserRouter>
           <AppLayout>
             <Routes>
