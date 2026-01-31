@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
+import { MedicationCombobox } from '@/components/ui/medication-combobox';
 import type { Medication } from '@/types/claims';
 
 export default function Medications() {
@@ -90,13 +91,21 @@ export default function Medications() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="name">Medication Name</Label>
-                <Input 
-                  id="name" 
-                  placeholder="e.g., Ibuprofen 800mg"
+                <MedicationCombobox
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
+                  onValueChange={(name, prescribedFor) => {
+                    setFormData({ 
+                      ...formData, 
+                      name,
+                      // Auto-fill prescribed for if selecting from list and field is empty
+                      prescribedFor: prescribedFor && !formData.prescribedFor ? prescribedFor : formData.prescribedFor
+                    });
+                  }}
+                  placeholder="Search or type medication name..."
                 />
+                <p className="text-xs text-muted-foreground">
+                  Search common VA/military medications or type a custom name
+                </p>
               </div>
 
               <div className="space-y-2">
