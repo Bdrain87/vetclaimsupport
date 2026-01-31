@@ -114,6 +114,9 @@ export interface MigraineEntry {
   notes: string;
 }
 
+// Document type identifiers for categorizing uploads
+export type DocumentTypeId = 'str' | 'dd214' | 'personnel' | 'medical-records' | 'nexus' | 'buddy-statement' | 'other';
+
 // Uploaded document file
 export interface UploadedDocument {
   id: string;
@@ -125,6 +128,8 @@ export interface UploadedDocument {
   dataUrl: string; // Base64 encoded file data
   uploadedAt: string;
   category: 'documents' | 'buddy-contacts';
+  documentType?: DocumentTypeId; // Which document type this belongs to
+  customLabel?: string; // For "other" documents, user-provided label
 }
 
 export interface ClaimsData {
