@@ -15,6 +15,7 @@ import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
 import { RatingCalculator } from '@/components/dashboard/RatingCalculator';
 import { ExportButton } from '@/components/dashboard/ExportButton';
 import { SuggestedDisabilities } from '@/components/dashboard/SuggestedDisabilities';
+import { ClaimReadinessScore } from '@/components/dashboard/ClaimReadinessScore';
 
 export default function Dashboard() {
   const { data, setSeparationDate } = useClaims();
@@ -104,6 +105,9 @@ export default function Dashboard() {
           </div>
         ))}
       </div>
+
+      {/* Claim Readiness Score */}
+      <ClaimReadinessScore />
 
       {/* AI Disability Suggestions */}
       <SuggestedDisabilities />

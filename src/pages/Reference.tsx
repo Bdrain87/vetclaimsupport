@@ -4,6 +4,8 @@ import { DisabilitiesTab } from '@/components/reference/DisabilitiesTab';
 import { SecondaryConditionsTab } from '@/components/reference/SecondaryConditionsTab';
 import { PACTActTab } from '@/components/reference/PACTActTab';
 import { ClaimsGuideTab } from '@/components/reference/ClaimsGuideTab';
+import { CPExamPrepTab } from '@/components/reference/CPExamPrepTab';
+import { BuddyStatementTemplate } from '@/components/reference/BuddyStatementTemplate';
 
 export default function Reference() {
   return (
@@ -20,7 +22,7 @@ export default function Reference() {
       </div>
 
       <Tabs defaultValue="disabilities" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4 h-auto gap-2 bg-transparent p-0">
+        <TabsList className="grid w-full grid-cols-2 lg:grid-cols-6 h-auto gap-2 bg-transparent p-0">
           <TabsTrigger value="disabilities" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
             VA Disabilities
           </TabsTrigger>
@@ -32,6 +34,12 @@ export default function Reference() {
           </TabsTrigger>
           <TabsTrigger value="guide" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
             Claims Guide
+          </TabsTrigger>
+          <TabsTrigger value="cpexam" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            C&P Exam Prep
+          </TabsTrigger>
+          <TabsTrigger value="buddy" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            Buddy Template
           </TabsTrigger>
         </TabsList>
 
@@ -49,6 +57,14 @@ export default function Reference() {
 
         <TabsContent value="guide">
           <ClaimsGuideTab />
+        </TabsContent>
+
+        <TabsContent value="cpexam">
+          <CPExamPrepTab />
+        </TabsContent>
+
+        <TabsContent value="buddy">
+          <BuddyStatementTemplate />
         </TabsContent>
       </Tabs>
     </div>
