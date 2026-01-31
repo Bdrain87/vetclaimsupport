@@ -26,14 +26,18 @@ const navItems = [
   { to: '/service-history', icon: Shield, label: 'Service History' },
   // Health Tracking
   { to: '/medical-visits', icon: Stethoscope, label: 'Medical Visits' },
-  { to: '/symptoms', icon: Activity, label: 'Symptoms Journal' },
-  { to: '/migraines', icon: Brain, label: 'Migraine Tracker' },
   { to: '/medications', icon: Pill, label: 'Medications' },
-  { to: '/exposures', icon: AlertTriangle, label: 'Exposures' },
   // Evidence Building
   { to: '/documents', icon: FileCheck, label: 'Documents' },
+  // Health Tracking continued
+  { to: '/symptoms', icon: Activity, label: 'Symptoms Journal' },
+  { to: '/exposures', icon: AlertTriangle, label: 'Exposures' },
+  { to: '/migraines', icon: Brain, label: 'Migraine Tracker' },
+  // Evidence Building continued
   { to: '/buddy-contacts', icon: Users, label: 'Buddy Contacts' },
-  // Reference
+];
+
+const secondaryNavItems = [
   { to: '/reference', icon: BookOpen, label: 'Reference' },
 ];
 
@@ -64,7 +68,7 @@ export function AppSidebar() {
         )}
       </div>
 
-      {/* Navigation */}
+      {/* Main Navigation */}
       <nav className="flex-1 overflow-y-auto py-4 scrollbar-thin">
         <ul className="space-y-1 px-2">
           {navItems.map((item) => {
@@ -88,6 +92,32 @@ export function AppSidebar() {
             );
           })}
         </ul>
+
+        {/* Secondary Navigation - Reference */}
+        <div className="mt-4 pt-4 border-t border-sidebar-border mx-2">
+          <ul className="space-y-1">
+            {secondaryNavItems.map((item) => {
+              const isActive = location.pathname === item.to;
+              return (
+                <li key={item.to}>
+                  <NavLink
+                    to={item.to}
+                    className={cn(
+                      'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+                      'text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+                      isActive && 'bg-sidebar-accent text-sidebar-primary',
+                      collapsed && 'justify-center px-2'
+                    )}
+                    title={collapsed ? item.label : undefined}
+                  >
+                    <item.icon className={cn('h-5 w-5 flex-shrink-0', isActive && 'text-sidebar-primary')} />
+                    {!collapsed && <span>{item.label}</span>}
+                  </NavLink>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </nav>
 
       {/* Footer with Theme Toggle and Collapse */}
