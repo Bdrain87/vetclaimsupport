@@ -14,12 +14,20 @@ import {
   Clock,
   ThumbsUp,
   AlertTriangle,
+  FileText,
+  Users,
+  Stethoscope,
+  Pill,
+  Shield,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Checkbox } from '@/components/ui/checkbox';
 import { format, parseISO } from 'date-fns';
+import { Link } from 'react-router-dom';
 
 // C&P Exam question database by condition type
 const examQuestions: Record<string, { question: string; tip: string }[]> = {
@@ -34,27 +42,32 @@ const examQuestions: Record<string, { question: string; tip: string }[]> = {
     { question: 'Can you fully bend your knee?', tip: 'Show actual range of motion, don\'t force it' },
     { question: 'Does your knee give out or feel unstable?', tip: 'Mention any falls or near-falls' },
     { question: 'Do you use any assistive devices?', tip: 'Bring your brace/cane if you use one' },
+    { question: 'How does this affect walking or standing?', tip: 'Describe duration limitations' },
   ],
   'ptsd': [
-    { question: 'What traumatic event(s) occurred during service?', tip: 'Be prepared to discuss stressors' },
+    { question: 'What traumatic event(s) occurred during service?', tip: 'Be prepared to discuss stressors briefly' },
     { question: 'How often do you have nightmares?', tip: 'Reference your sleep logs if available' },
-    { question: 'Do you avoid crowds or certain situations?', tip: 'Give specific examples' },
+    { question: 'Do you avoid crowds or certain situations?', tip: 'Give specific examples of avoidance' },
     { question: 'How does this affect your work and relationships?', tip: 'Describe occupational and social impairment' },
+    { question: 'Do you have thoughts of harming yourself?', tip: 'Be honest - this is critical for proper rating' },
   ],
   'tinnitus': [
     { question: 'When did the ringing start?', tip: 'Connect it to noise exposure in service' },
-    { question: 'Is the ringing constant or intermittent?', tip: 'Constant ringing supports higher rating' },
+    { question: 'Is the ringing constant or intermittent?', tip: 'Constant ringing supports the claim' },
     { question: 'Does it affect your sleep or concentration?', tip: 'Describe functional impact' },
+    { question: 'What noise exposure did you have in service?', tip: 'List weapons, aircraft, machinery' },
   ],
   'migraine': [
     { question: 'How often do you get migraines?', tip: 'Reference your migraine log - monthly count matters' },
-    { question: 'Are any of your migraines prostrating?', tip: 'Prostrating = you must lie down and can\'t function' },
-    { question: 'Do you have to miss work due to migraines?', tip: 'Economic adaptability is key for 50% rating' },
+    { question: 'Are any of your migraines prostrating?', tip: 'Prostrating = you MUST lie down and can\'t function' },
+    { question: 'Do you have to miss work due to migraines?', tip: 'Economic inadaptability is key for 50% rating' },
+    { question: 'What symptoms accompany your migraines?', tip: 'Mention aura, nausea, light/sound sensitivity' },
   ],
   'sleep': [
     { question: 'Do you use a CPAP machine?', tip: 'CPAP use = minimum 50% rating for sleep apnea' },
     { question: 'How many hours of sleep do you get?', tip: 'Reference your sleep logs' },
-    { question: 'Do you experience daytime sleepiness?', tip: 'Describe impact on daily activities' },
+    { question: 'Do you experience daytime sleepiness?', tip: 'Describe impact on daily activities and safety' },
+    { question: 'Does your partner notice you stop breathing?', tip: 'Witnessed apneas support diagnosis' },
   ],
   'default': [
     { question: 'When did this condition first start?', tip: 'Connect onset to your service dates' },
@@ -74,11 +87,45 @@ const generalTips = [
   { icon: Star, tip: 'Mention all conditions being claimed, examiners sometimes miss some', color: 'text-purple-500' },
 ];
 
+const dayOfChecklist = [
+  { item: 'Bring valid photo ID', category: 'essential' },
+  { item: 'Arrive 15 minutes early', category: 'essential' },
+  { item: 'Bring list of all current medications', category: 'essential' },
+  { item: 'Bring any assistive devices you use (brace, cane, etc.)', category: 'evidence' },
+  { item: 'Don\'t wear tight clothing for range of motion tests', category: 'prep' },
+  { item: 'Bring a copy of your claim conditions list', category: 'evidence' },
+  { item: 'Know dates of service and key incidents', category: 'prep' },
+  { item: 'Have emergency contact info ready', category: 'essential' },
+  { item: 'Bring spouse/buddy if they\'ve witnessed symptoms', category: 'evidence' },
+  { item: 'Review your logged symptoms before the exam', category: 'prep' },
+];
+
 export default function ExamPrep() {
   const { data } = useClaims();
   const [expandedConditions, setExpandedConditions] = useState<Set<string>>(new Set());
+  const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
 
   const claimConditions = data.claimConditions || [];
+
+  // Calculate overall evidence summary
+  const evidenceSummary = useMemo(() => {
+    return {
+      conditionCount: claimConditions.length,
+      medicalVisits: data.medicalVisits.length,
+      symptoms: data.symptoms.length,
+      buddyContacts: data.buddyContacts.length,
+      buddyStatementsReceived: data.buddyContacts.filter(b => 
+        b.statementStatus === 'Received' || b.statementStatus === 'Submitted'
+      ).length,
+      medications: data.medications.length,
+      documentsObtained: data.documents.filter(d => 
+        d.status === 'Obtained' || d.status === 'Submitted'
+      ).length,
+      serviceEntries: data.serviceHistory.length,
+      migraines: data.migraines?.length || 0,
+      sleepEntries: data.sleepEntries?.length || 0,
+    };
+  }, [data, claimConditions]);
 
   // Get relevant questions for each condition
   const conditionPrep = useMemo(() => {
@@ -87,18 +134,25 @@ export default function ExamPrep() {
       
       // Match condition to question set
       let questionSet = examQuestions.default;
+      let conditionType = 'general';
       if (name.includes('back') || name.includes('spine') || name.includes('lumbar')) {
         questionSet = examQuestions.back;
-      } else if (name.includes('knee')) {
+        conditionType = 'musculoskeletal';
+      } else if (name.includes('knee') || name.includes('shoulder') || name.includes('hip')) {
         questionSet = examQuestions.knee;
+        conditionType = 'musculoskeletal';
       } else if (name.includes('ptsd') || name.includes('anxiety') || name.includes('depression')) {
         questionSet = examQuestions.ptsd;
+        conditionType = 'mental health';
       } else if (name.includes('tinnitus') || name.includes('hearing')) {
         questionSet = examQuestions.tinnitus;
+        conditionType = 'auditory';
       } else if (name.includes('migraine') || name.includes('headache')) {
         questionSet = examQuestions.migraine;
+        conditionType = 'neurological';
       } else if (name.includes('sleep') || name.includes('apnea')) {
         questionSet = examQuestions.sleep;
+        conditionType = 'sleep';
       }
 
       // Get worst symptom episodes
@@ -114,20 +168,31 @@ export default function ExamPrep() {
       ).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
       // First documented date
-      const firstSymptom = linkedSymptoms.sort((a, b) => 
-        new Date(a.date).getTime() - new Date(b.date).getTime()
-      )[0];
+      const allDates = [
+        ...linkedSymptoms.map(s => s.date),
+        ...linkedVisits.map(v => v.date),
+      ].filter(Boolean).sort();
+      
+      const firstDocumented = allDates[0];
+
+      // Get linked medications
+      const linkedMeds = data.medications.filter(m => 
+        m.prescribedFor?.toLowerCase().includes(name.split(' ')[0])
+      );
 
       return {
         condition,
+        conditionType,
         questions: questionSet,
         worstEpisodes,
         recentVisits: linkedVisits.slice(0, 3),
-        firstDocumented: firstSymptom?.date,
+        firstDocumented,
         symptomCount: linkedSymptoms.length,
         avgSeverity: linkedSymptoms.length > 0 
           ? Math.round(linkedSymptoms.reduce((sum, s) => sum + s.severity, 0) / linkedSymptoms.length)
           : 0,
+        medications: linkedMeds,
+        buddyCount: condition.linkedBuddyContacts.length,
       };
     });
   }, [claimConditions, data]);
@@ -142,6 +207,18 @@ export default function ExamPrep() {
     setExpandedConditions(newSet);
   };
 
+  const toggleChecked = (item: string) => {
+    const newSet = new Set(checkedItems);
+    if (newSet.has(item)) {
+      newSet.delete(item);
+    } else {
+      newSet.add(item);
+    }
+    setCheckedItems(newSet);
+  };
+
+  const checklistProgress = Math.round((checkedItems.size / dayOfChecklist.length) * 100);
+
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Header */}
@@ -154,6 +231,54 @@ export default function ExamPrep() {
           <p className="text-muted-foreground">Prepare for your Compensation & Pension examination</p>
         </div>
       </div>
+
+      {/* Evidence Summary Card */}
+      <Card className="border-primary/30 bg-primary/5">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base flex items-center gap-2">
+            <FileText className="h-5 w-5 text-primary" />
+            Your Evidence Summary
+          </CardTitle>
+          <p className="text-xs text-muted-foreground">
+            Reference these numbers during your exam
+          </p>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="text-center p-3 bg-background rounded-lg">
+              <Shield className="h-5 w-5 mx-auto text-primary mb-1" />
+              <p className="text-2xl font-bold">{evidenceSummary.conditionCount}</p>
+              <p className="text-xs text-muted-foreground">Conditions Claimed</p>
+            </div>
+            <div className="text-center p-3 bg-background rounded-lg">
+              <Stethoscope className="h-5 w-5 mx-auto text-medical mb-1" />
+              <p className="text-2xl font-bold">{evidenceSummary.medicalVisits}</p>
+              <p className="text-xs text-muted-foreground">Medical Visits</p>
+            </div>
+            <div className="text-center p-3 bg-background rounded-lg">
+              <Activity className="h-5 w-5 mx-auto text-symptoms mb-1" />
+              <p className="text-2xl font-bold">{evidenceSummary.symptoms}</p>
+              <p className="text-xs text-muted-foreground">Symptoms Logged</p>
+            </div>
+            <div className="text-center p-3 bg-background rounded-lg">
+              <Users className="h-5 w-5 mx-auto text-buddy mb-1" />
+              <p className="text-2xl font-bold">{evidenceSummary.buddyStatementsReceived}</p>
+              <p className="text-xs text-muted-foreground">Buddy Statements</p>
+            </div>
+          </div>
+          
+          {claimConditions.length > 0 && (
+            <div className="mt-4 p-3 bg-background rounded-lg">
+              <p className="text-sm font-medium mb-2">Conditions You're Claiming:</p>
+              <div className="flex flex-wrap gap-2">
+                {claimConditions.map(c => (
+                  <Badge key={c.id} variant="secondary">{c.name}</Badge>
+                ))}
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Critical Tips */}
       <Card className="border-warning/30 bg-warning/5">
@@ -181,19 +306,22 @@ export default function ExamPrep() {
           <CardContent className="py-12 text-center">
             <Clipboard className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
             <h3 className="font-semibold text-lg mb-2">No Conditions Added</h3>
-            <p className="text-muted-foreground max-w-sm mx-auto">
+            <p className="text-muted-foreground max-w-sm mx-auto mb-4">
               Add conditions to your Claim Builder on the Dashboard to see personalized exam prep for each.
             </p>
+            <Button asChild>
+              <Link to="/">Go to Dashboard</Link>
+            </Button>
           </CardContent>
         </Card>
       ) : (
         <div className="space-y-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
             <MessageSquare className="h-5 w-5 text-primary" />
-            Condition-Specific Prep
+            Condition-Specific Prep ({claimConditions.length} condition{claimConditions.length !== 1 ? 's' : ''})
           </h2>
 
-          {conditionPrep.map(({ condition, questions, worstEpisodes, recentVisits, firstDocumented, symptomCount, avgSeverity }) => (
+          {conditionPrep.map(({ condition, conditionType, questions, worstEpisodes, recentVisits, firstDocumented, symptomCount, avgSeverity, medications, buddyCount }) => (
             <Card key={condition.id}>
               <CardHeader 
                 className="pb-3 cursor-pointer hover:bg-muted/30 transition-colors"
@@ -201,10 +329,15 @@ export default function ExamPrep() {
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle className="text-base">{condition.name}</CardTitle>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Badge variant="outline">
-                        {symptomCount} symptoms logged
+                    <CardTitle className="text-base flex items-center gap-2">
+                      {condition.name}
+                      <Badge variant="outline" className="text-xs">
+                        {conditionType}
+                      </Badge>
+                    </CardTitle>
+                    <div className="flex items-center gap-2 mt-2 flex-wrap">
+                      <Badge variant="secondary" className="text-xs">
+                        {symptomCount} symptom{symptomCount !== 1 ? 's' : ''}
                       </Badge>
                       {avgSeverity > 0 && (
                         <Badge variant="outline" className={
@@ -213,6 +346,11 @@ export default function ExamPrep() {
                           'border-success/50 text-success'
                         }>
                           Avg: {avgSeverity}/10
+                        </Badge>
+                      )}
+                      {buddyCount > 0 && (
+                        <Badge variant="outline" className="text-xs">
+                          {buddyCount} buddy statement{buddyCount !== 1 ? 's' : ''}
                         </Badge>
                       )}
                     </div>
@@ -227,11 +365,27 @@ export default function ExamPrep() {
                 <CardContent className="space-y-4 border-t pt-4">
                   {/* Key Dates */}
                   {firstDocumented && (
-                    <div className="p-3 bg-primary/5 rounded-lg">
+                    <div className="p-3 bg-primary/5 rounded-lg flex items-center gap-2">
+                      <Calendar className="h-4 w-4 text-primary" />
                       <p className="text-sm">
                         <strong>First Documented:</strong>{' '}
                         {format(parseISO(firstDocumented), 'MMMM d, yyyy')}
                       </p>
+                    </div>
+                  )}
+
+                  {/* Medications for this condition */}
+                  {medications.length > 0 && (
+                    <div className="p-3 bg-medications/5 rounded-lg">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Pill className="h-4 w-4 text-medications" />
+                        <p className="text-sm font-medium">Related Medications</p>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {medications.map((med, idx) => (
+                          <Badge key={idx} variant="outline">{med.name}</Badge>
+                        ))}
+                      </div>
                     </div>
                   )}
 
@@ -240,7 +394,7 @@ export default function ExamPrep() {
                     <div>
                       <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
                         <AlertTriangle className="h-4 w-4 text-destructive" />
-                        Worst Episodes to Mention
+                        Worst Episodes to Mention (Your "Bad Days")
                       </h4>
                       <div className="space-y-2">
                         {worstEpisodes.map((episode, idx) => (
@@ -256,7 +410,7 @@ export default function ExamPrep() {
                             </p>
                             {episode.dailyImpact && (
                               <p className="text-xs text-muted-foreground mt-1">
-                                Impact: {episode.dailyImpact}
+                                <strong>Impact:</strong> {episode.dailyImpact}
                               </p>
                             )}
                           </div>
@@ -274,7 +428,7 @@ export default function ExamPrep() {
                     <Accordion type="single" collapsible className="w-full">
                       {questions.map((q, idx) => (
                         <AccordionItem key={idx} value={`q-${idx}`}>
-                          <AccordionTrigger className="text-sm text-left">
+                          <AccordionTrigger className="text-sm text-left py-3">
                             {q.question}
                           </AccordionTrigger>
                           <AccordionContent>
@@ -294,17 +448,21 @@ export default function ExamPrep() {
                   {recentVisits.length > 0 && (
                     <div>
                       <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-medical" />
-                        Recent Relevant Visits
+                        <Stethoscope className="h-4 w-4 text-medical" />
+                        Recent Relevant Visits to Reference
                       </h4>
                       <div className="space-y-2">
                         {recentVisits.map((visit, idx) => (
-                          <div key={idx} className="p-2 bg-medical/5 rounded-lg text-sm">
-                            <span className="font-medium">
-                              {format(parseISO(visit.date), 'MMM d, yyyy')}
-                            </span>
-                            {' - '}
-                            {visit.reason || visit.diagnosis || visit.visitType}
+                          <div key={idx} className="p-3 bg-medical/5 rounded-lg">
+                            <div className="flex items-center justify-between">
+                              <span className="font-medium text-sm">
+                                {format(parseISO(visit.date), 'MMM d, yyyy')}
+                              </span>
+                              <Badge variant="outline">{visit.visitType}</Badge>
+                            </div>
+                            <p className="text-sm text-muted-foreground mt-1">
+                              {visit.reason || visit.diagnosis}
+                            </p>
                           </div>
                         ))}
                       </div>
@@ -320,28 +478,52 @@ export default function ExamPrep() {
       {/* Day-Of Checklist */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base flex items-center gap-2">
-            <CheckCircle2 className="h-5 w-5 text-success" />
-            Day-Of Checklist
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-base flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5 text-success" />
+              Exam Day Checklist
+            </CardTitle>
+            <Badge variant="outline">
+              {checkedItems.size}/{dayOfChecklist.length} complete
+            </Badge>
+          </div>
+          <Progress value={checklistProgress} className="h-2 mt-2" />
         </CardHeader>
         <CardContent>
           <div className="grid gap-2 sm:grid-cols-2">
-            {[
-              'Bring valid photo ID',
-              'Arrive 15 minutes early',
-              'Bring list of all medications',
-              'Bring any assistive devices you use (brace, cane, etc.)',
-              'Don\'t wear tight clothing for range of motion tests',
-              'Bring a copy of your claim conditions list',
-              'Have emergency contact info ready',
-              'Know dates of service and key incidents',
-            ].map((item, idx) => (
-              <div key={idx} className="flex items-center gap-2 p-2">
-                <div className="h-5 w-5 rounded border border-muted-foreground/30 flex-shrink-0" />
-                <span className="text-sm">{item}</span>
+            {dayOfChecklist.map((item, idx) => (
+              <div 
+                key={idx} 
+                className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
+                  checkedItems.has(item.item) ? 'bg-success/10' : 'bg-muted/30 hover:bg-muted/50'
+                }`}
+                onClick={() => toggleChecked(item.item)}
+              >
+                <Checkbox 
+                  checked={checkedItems.has(item.item)}
+                  onCheckedChange={() => toggleChecked(item.item)}
+                />
+                <span className={`text-sm ${checkedItems.has(item.item) ? 'line-through text-muted-foreground' : ''}`}>
+                  {item.item}
+                </span>
               </div>
             ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Final Reminder */}
+      <Card className="border-success/30 bg-success/5">
+        <CardContent className="py-4">
+          <div className="flex items-start gap-3">
+            <Star className="h-5 w-5 text-success flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="font-medium text-foreground">Remember: You Know Your Body Best</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                The examiner has 20-30 minutes with you. You live with these conditions every day. 
+                Be prepared to clearly explain your symptoms, their frequency, and how they impact your life.
+              </p>
+            </div>
           </div>
         </CardContent>
       </Card>
