@@ -6,6 +6,7 @@ import { PACTActTab } from '@/components/reference/PACTActTab';
 import { ClaimsGuideTab } from '@/components/reference/ClaimsGuideTab';
 import { CPExamPrepTab } from '@/components/reference/CPExamPrepTab';
 import { BuddyStatementTemplate } from '@/components/reference/BuddyStatementTemplate';
+import { BuddyStatementTemplates } from '@/components/reference/BuddyStatementTemplates';
 import { VAFormsTab } from '@/components/reference/VAFormsTab';
 import { PersonalStatementTab } from '@/components/reference/PersonalStatementTab';
 
@@ -47,7 +48,7 @@ export default function Reference() {
             Personal Statement
           </TabsTrigger>
           <TabsTrigger value="buddy" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-            Buddy Template
+            Buddy Statements
           </TabsTrigger>
         </TabsList>
 
@@ -79,7 +80,8 @@ export default function Reference() {
           <PersonalStatementTab />
         </TabsContent>
 
-        <TabsContent value="buddy">
+        <TabsContent value="buddy" className="space-y-6">
+          <BuddyStatementTemplates />
           <BuddyStatementTemplate />
         </TabsContent>
       </Tabs>

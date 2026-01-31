@@ -8,6 +8,7 @@ import { AppLayout } from "./components/AppLayout";
 import { LiabilityAcceptanceScreen } from "./components/legal/LiabilityAcceptanceScreen";
 import { OnboardingModal } from "./components/onboarding/OnboardingModal";
 import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
+import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
 import Dashboard from "./pages/Dashboard";
 import MedicalVisits from "./pages/MedicalVisits";
 import Migraines from "./pages/Migraines";
@@ -21,6 +22,9 @@ import Reference from "./pages/Reference";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Sleep from "./pages/Sleep";
+import Settings from "./pages/Settings";
+import Timeline from "./pages/Timeline";
+import ClaimChecklist from "./pages/ClaimChecklist";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +39,7 @@ const App = () => (
           <LiabilityAcceptanceScreen />
           <OnboardingModal />
           <PWAInstallPrompt />
+          <OfflineIndicator />
           <AppLayout>
             <Routes>
               <Route path="/" element={<Dashboard />} />
@@ -48,6 +53,9 @@ const App = () => (
               <Route path="/documents" element={<Documents />} />
               <Route path="/reference" element={<Reference />} />
               <Route path="/sleep" element={<Sleep />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/timeline" element={<Timeline />} />
+              <Route path="/checklist" element={<ClaimChecklist />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="*" element={<NotFound />} />

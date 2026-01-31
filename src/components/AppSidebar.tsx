@@ -15,6 +15,9 @@ import {
   ShieldCheck,
   Brain,
   Moon,
+  Settings,
+  Clock,
+  ClipboardCheck,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -35,10 +38,14 @@ const navItems = [
   // Evidence Building
   { to: '/documents', icon: FileCheck, label: 'Documents' },
   { to: '/buddy-contacts', icon: Users, label: 'Buddy Contacts' },
+  // Tools
+  { to: '/timeline', icon: Clock, label: 'Timeline' },
+  { to: '/checklist', icon: ClipboardCheck, label: 'Claim Checklist' },
 ];
 
 const secondaryNavItems = [
   { to: '/reference', icon: BookOpen, label: 'Reference' },
+  { to: '/settings', icon: Settings, label: 'Settings' },
 ];
 
 export function AppSidebar() {

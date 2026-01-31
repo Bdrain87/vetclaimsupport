@@ -21,7 +21,7 @@ export function AppLayout({ children }: AppLayoutProps) {
       {/* Main Content */}
       <div className="flex-1 md:ml-64 transition-all duration-300 flex flex-col min-h-screen">
         {/* Add top padding on mobile for fixed header */}
-        <main className="flex-1 pt-14 md:pt-0 mobile-scroll">
+        <main className="flex-1 pt-14 md:pt-0 mobile-scroll smooth-scroll">
           <div className="container max-w-7xl mx-auto p-4 md:p-6 lg:p-8 safe-area-x">
             {children}
           </div>

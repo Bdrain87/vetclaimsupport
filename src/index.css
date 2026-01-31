@@ -248,6 +248,15 @@
     }
   }
 
+  /* Press animation for buttons */
+  .press-effect {
+    @apply transition-all duration-150 ease-out;
+  }
+
+  .press-effect:active {
+    @apply scale-[0.97] opacity-80;
+  }
+
   /* Touch target utilities - minimum 44px for iOS */
   .touch-target {
     min-height: 44px;
@@ -287,6 +296,12 @@
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-y: contain;
+  }
+
+  /* Smooth scrolling */
+  .smooth-scroll {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
   }
 
   /* Prevent horizontal overflow on mobile */
