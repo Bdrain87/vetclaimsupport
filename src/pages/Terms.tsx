@@ -151,7 +151,7 @@ export default function Terms() {
           <section>
             <h2 className="text-lg font-semibold text-foreground mb-3">9. Governing Law</h2>
             <p className="text-muted-foreground">
-              These Terms shall be governed by the laws of the United States, without regard to conflict of law provisions.
+              These Terms shall be governed by the laws of the United States and the State of Michigan, without regard to conflict of law provisions.
             </p>
           </section>
 
@@ -160,7 +160,7 @@ export default function Terms() {
             <h2 className="text-lg font-semibold text-foreground mb-3">10. Contact</h2>
             <p className="text-muted-foreground">
               Questions about these Terms? Contact us at:{' '}
-              <span className="text-primary font-medium">support@serviceevidencetracker.com</span>
+              <span className="text-primary font-medium">support@serviceevidencetracker.app</span>
             </p>
           </section>
         </CardContent>

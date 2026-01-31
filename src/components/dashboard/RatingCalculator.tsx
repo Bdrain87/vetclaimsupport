@@ -344,7 +344,7 @@ export function RatingCalculator() {
         {/* Disclaimer */}
         <div className="p-3 bg-muted/50 border border-border rounded-lg">
           <p className="text-xs text-muted-foreground leading-relaxed">
-            This calculator provides estimates only. Actual VA ratings may differ based on your complete medical record and C&P examination findings.
+            This calculator shows how VA combined ratings math works using example scenarios. Your actual VA rating could be significantly different based on your complete medical record, C&P examination findings, and VA adjudicator decisions. Use this only to understand the calculation method, not to predict your rating.
           </p>
         </div>
 
