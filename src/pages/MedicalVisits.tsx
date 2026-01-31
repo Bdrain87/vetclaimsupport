@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
-import { Stethoscope, Plus, Trash2, Edit, Calendar, MapPin, User, FileText } from 'lucide-react';
+import { Stethoscope, Plus, Trash2, Edit, Calendar, MapPin, User, FileText, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import type { MedicalVisit } from '@/types/claims';
 
 const visitTypes = ['Sick Call', 'ER', 'Mental Health', 'PT', 'Dental', 'Specialist'] as const;
@@ -76,6 +77,23 @@ export default function MedicalVisits() {
 
   return (
     <div className="space-y-6 animate-fade-in">
+      {/* Important Tip Alert */}
+      <Alert className="border-warning/50 bg-warning/10">
+        <AlertTriangle className="h-5 w-5 text-warning" />
+        <AlertTitle className="text-warning font-semibold">Important: Protect Your VA Claim</AlertTitle>
+        <AlertDescription className="text-foreground/90 mt-2">
+          <p className="mb-2">
+            <strong>After every appointment</strong>, request and review your After-Visit Summary and medical notes. 
+            Check that the doctor documented <strong>everything</strong> you discussed, including all symptoms, 
+            complaints, and their severity.
+          </p>
+          <p>
+            Errors or omissions in your medical records can hurt your VA claim later. 
+            <strong> If something is missing or incorrect, request a correction immediately</strong> while it's fresh.
+          </p>
+        </AlertDescription>
+      </Alert>
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="section-header mb-0">
