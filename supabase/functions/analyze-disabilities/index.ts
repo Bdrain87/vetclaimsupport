@@ -25,19 +25,26 @@ serve(async (req) => {
     console.log("Medications:", userData.medications?.length || 0);
     console.log("Service history:", userData.serviceHistory?.length || 0);
 
-    const systemPrompt = `You are a VA disability claims expert. Analyze the veteran's documented evidence and suggest VA disabilities they may qualify for based on their medical visits, exposures, symptoms, medications, and service history.
+const systemPrompt = `You are a VA disability claims expert. Analyze the veteran's documented evidence and suggest VA disabilities they may qualify for based on their medical visits, exposures, symptoms, medications, and service history.
 
 For each suggested disability:
 1. Name the specific VA disability condition
 2. Explain WHY this veteran may qualify based on their documented evidence
 3. Rate the evidence strength (Strong, Moderate, or Needs More Evidence)
 4. Suggest what additional evidence might strengthen their claim
+5. List common secondary conditions that are frequently linked to this primary disability
 
 Focus on:
 - Conditions commonly rated by the VA
 - Secondary conditions that may be linked to documented issues
 - PACT Act presumptive conditions if they have qualifying exposures (burn pits, chemicals, etc.)
 - Mental health conditions if symptoms suggest PTSD, depression, or anxiety
+
+For secondary conditions, include conditions that the VA commonly recognizes as being caused or aggravated by the primary condition. For example:
+- PTSD commonly leads to: sleep apnea, depression, anxiety, migraines, hypertension, GERD, erectile dysfunction
+- Tinnitus commonly leads to: headaches, depression, anxiety, sleep disorders
+- Back conditions commonly lead to: radiculopathy, sciatica, erectile dysfunction, depression
+- Knee conditions commonly lead to: hip problems, back problems, gait abnormalities
 
 Be specific about which pieces of the veteran's documented evidence support each suggestion.
 Format your response as a JSON array with the structure specified in the tool.`;
@@ -111,9 +118,23 @@ Based on this evidence, suggest VA disabilities this veteran may qualify for.`;
                           items: { type: "string" },
                           description: "Additional evidence that would strengthen the claim"
                         },
-                        typicalRating: { type: "string", description: "Typical VA rating percentage range" }
+                        typicalRating: { type: "string", description: "Typical VA rating percentage range" },
+                        secondaryConditions: {
+                          type: "array",
+                          items: {
+                            type: "object",
+                            properties: {
+                              condition: { type: "string", description: "Name of the secondary condition" },
+                              connection: { type: "string", description: "How this secondary is connected to the primary" },
+                              typicalRating: { type: "string", description: "Typical VA rating for this secondary" }
+                            },
+                            required: ["condition", "connection", "typicalRating"],
+                            additionalProperties: false
+                          },
+                          description: "Common secondary conditions linked to this primary disability"
+                        }
                       },
-                      required: ["condition", "category", "evidenceStrength", "reasoning", "supportingEvidence", "additionalEvidence", "typicalRating"],
+                      required: ["condition", "category", "evidenceStrength", "reasoning", "supportingEvidence", "additionalEvidence", "typicalRating", "secondaryConditions"],
                       additionalProperties: false
                     }
                   },
