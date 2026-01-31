@@ -53,7 +53,7 @@ export function MobileNavGrid() {
             )}
           >
             <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-muted/50 transition-transform duration-300 ease-out">
-              <item.icon className="h-5 w-5 text-muted-foreground" />
+              <item.icon className="h-5 w-5 text-foreground/70" />
             </div>
             <span className="text-[10px] font-medium text-muted-foreground text-center leading-tight">
               {item.label}

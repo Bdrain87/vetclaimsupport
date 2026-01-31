@@ -74,7 +74,7 @@ export default function Dashboard() {
             )}
           >
             <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-muted/50">
-              <stat.icon className="h-5 w-5 text-primary" />
+              <stat.icon className="h-5 w-5 text-foreground/70" />
             </div>
             <p className="text-xl font-bold text-foreground number-display">{stat.value}</p>
             <p className="text-[10px] text-muted-foreground">{stat.title}</p>
@@ -97,8 +97,8 @@ export default function Dashboard() {
           "border border-white/[0.06]",
           "transition-all duration-300 ease-out"
         )}>
-          <FileWarning className={cn("h-5 w-5", missingSummaries > 0 ? "text-destructive" : "text-primary")} />
-          <span className={cn("text-lg font-bold", missingSummaries > 0 ? "text-destructive" : "text-foreground")}>
+          <FileWarning className="h-5 w-5 text-foreground/70" />
+          <span className="text-lg font-bold text-foreground">
             {data.medicalVisits.length - missingSummaries}/{data.medicalVisits.length}
           </span>
           <span className="text-[9px] text-muted-foreground text-center">Summaries</span>
@@ -110,7 +110,7 @@ export default function Dashboard() {
           "border border-white/[0.06]",
           "transition-all duration-300 ease-out"
         )}>
-          <Activity className="h-5 w-5 text-primary" />
+          <Activity className="h-5 w-5 text-foreground/70" />
           <span className="text-lg font-bold">{documentsObtained}/{data.documents.length}</span>
           <span className="text-[9px] text-muted-foreground text-center">Documents</span>
         </div>
@@ -121,7 +121,7 @@ export default function Dashboard() {
           "border border-white/[0.06]",
           "transition-all duration-300 ease-out"
         )}>
-          <ShieldCheck className="h-5 w-5 text-primary" />
+          <ShieldCheck className="h-5 w-5 text-foreground/70" />
           <span className="text-lg font-bold">{buddyStatements}</span>
           <span className="text-[9px] text-muted-foreground text-center">Buddy Stmts</span>
         </div>
