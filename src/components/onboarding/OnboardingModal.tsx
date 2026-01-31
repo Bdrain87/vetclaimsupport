@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -235,7 +236,13 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="sm:max-w-lg p-0 overflow-hidden">
+      <DialogContent className="sm:max-w-lg p-0 overflow-hidden" aria-describedby="onboarding-description">
+        <VisuallyHidden.Root>
+          <DialogTitle>{currentStepData.title}</DialogTitle>
+          <DialogDescription id="onboarding-description">
+            Onboarding wizard to help you get started with Service Evidence Tracker
+          </DialogDescription>
+        </VisuallyHidden.Root>
         {/* Progress indicator */}
         <div className="flex gap-1 px-6 pt-6">
           {steps.map((_, idx) => (
