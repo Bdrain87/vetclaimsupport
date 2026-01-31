@@ -1,11 +1,17 @@
 import { useState } from 'react';
-import { Sparkles, Loader2, AlertTriangle, CheckCircle2, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { Sparkles, Loader2, AlertTriangle, CheckCircle2, AlertCircle, ChevronDown, ChevronUp, Link2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useClaims } from '@/context/ClaimsContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+
+interface SecondaryCondition {
+  condition: string;
+  connection: string;
+  typicalRating: string;
+}
 
 interface DisabilitySuggestion {
   condition: string;
@@ -15,6 +21,7 @@ interface DisabilitySuggestion {
   supportingEvidence: string[];
   additionalEvidence: string[];
   typicalRating: string;
+  secondaryConditions?: SecondaryCondition[];
 }
 
 interface AnalysisResult {
@@ -250,6 +257,31 @@ export function SuggestedDisabilities() {
                               <li key={i}>• {evidence}</li>
                             ))}
                           </ul>
+                        </div>
+                      )}
+                      
+                      {suggestion.secondaryConditions && suggestion.secondaryConditions.length > 0 && (
+                        <div className="mt-3 p-3 bg-purple-500/5 border border-purple-500/20 rounded-lg">
+                          <p className="text-sm font-medium text-purple-500 mb-2 flex items-center gap-1">
+                            <Link2 className="h-3 w-3" />
+                            Common Secondary Conditions
+                          </p>
+                          <div className="space-y-2">
+                            {suggestion.secondaryConditions.map((secondary, i) => (
+                              <div key={i} className="text-sm border-l-2 border-purple-500/30 pl-3">
+                                <div className="flex items-center justify-between">
+                                  <span className="font-medium text-foreground">{secondary.condition}</span>
+                                  <Badge variant="outline" className="text-xs bg-purple-500/10 text-purple-500 border-purple-500/20">
+                                    {secondary.typicalRating}
+                                  </Badge>
+                                </div>
+                                <p className="text-xs text-muted-foreground mt-0.5">{secondary.connection}</p>
+                              </div>
+                            ))}
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-2 italic">
+                            Secondary conditions can be claimed if caused or aggravated by your primary service-connected disability.
+                          </p>
                         </div>
                       )}
                     </div>
