@@ -127,11 +127,14 @@ export function SuggestedDisabilities() {
 
   return (
     <Card className="data-card">
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-2">
         <CardTitle className="text-lg flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-primary" />
-          AI-Powered Disability Suggestions
+          Potential Conditions to Research
         </CardTitle>
+        <p className="text-xs text-muted-foreground mt-1">
+          This tool identifies possible conditions based on your documented data. It is not medical or legal advice. Always consult with a VSO, VA attorney, or healthcare provider.
+        </p>
       </CardHeader>
       <CardContent className="space-y-4">
         {!hasEnoughData ? (
@@ -187,10 +190,10 @@ export function SuggestedDisabilities() {
               </div>
             )}
 
-            {/* Suggestions */}
+            {/* Conditions to Research */}
             <div className="space-y-3">
               <h4 className="font-medium text-foreground">
-                Suggested Disabilities ({result.suggestions?.length || 0})
+                Conditions to Research ({result.suggestions?.length || 0})
               </h4>
               {result.suggestions?.map((suggestion, idx) => (
                 <div 
