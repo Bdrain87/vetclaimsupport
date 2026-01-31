@@ -5,16 +5,17 @@ import {
   AlertTriangle, 
   Activity, 
   Pill,
-  Clock,
   AlertCircle,
   CheckCircle2,
   FileWarning,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
+import { RatingCalculator } from '@/components/dashboard/RatingCalculator';
+import { ExportButton } from '@/components/dashboard/ExportButton';
 
 export default function Dashboard() {
-  const { data } = useClaims();
+  const { data, setSeparationDate } = useClaims();
 
   const stats = [
     {
@@ -55,28 +56,27 @@ export default function Dashboard() {
   const documentsObtained = data.documents.filter(d => d.status === 'Obtained' || d.status === 'Submitted').length;
   const buddyStatements = data.buddyContacts.filter(b => b.statementStatus === 'Received' || b.statementStatus === 'Submitted').length;
 
+  const separationDate = data.separationDate ? new Date(data.separationDate) : null;
+  
+  const handleSeparationDateChange = (date: Date | null) => {
+    setSeparationDate(date ? date.toISOString() : null);
+  };
+
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Header */}
-      <div className="section-header">
-        <div className="section-icon">
-          <LayoutDashboard className="h-5 w-5" />
+      <div className="flex items-center justify-between">
+        <div className="section-header">
+          <div className="section-icon">
+            <LayoutDashboard className="h-5 w-5" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
+            <p className="text-muted-foreground">Track your VA claims documentation progress</p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
-          <p className="text-muted-foreground">Track your VA claims documentation progress</p>
-        </div>
+        <ExportButton />
       </div>
-
-      {/* BDD Reminder Alert */}
-      <Alert className="border-primary/30 bg-primary/5">
-        <Clock className="h-5 w-5 text-primary" />
-        <AlertTitle className="text-primary font-semibold">BDD Claim Reminder</AlertTitle>
-        <AlertDescription className="text-foreground/80">
-          File your Benefits Delivery at Discharge (BDD) claim <strong>180-90 days before separation</strong>. 
-          This allows the VA to begin processing while you're still on active duty, resulting in faster decisions.
-        </AlertDescription>
-      </Alert>
 
       {/* Stats Grid */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -93,6 +93,15 @@ export default function Dashboard() {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* BDD Countdown and Calculator */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        <BDDCountdown 
+          separationDate={separationDate} 
+          onSeparationDateChange={handleSeparationDateChange} 
+        />
+        <RatingCalculator />
       </div>
 
       {/* Status Cards */}

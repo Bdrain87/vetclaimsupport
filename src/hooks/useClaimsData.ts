@@ -26,6 +26,7 @@ const getInitialData = (): ClaimsData => {
       serviceHistory: [],
       buddyContacts: [],
       documents: defaultDocuments,
+      separationDate: null,
     };
   }
   
@@ -46,6 +47,7 @@ const getInitialData = (): ClaimsData => {
     serviceHistory: [],
     buddyContacts: [],
     documents: defaultDocuments,
+    separationDate: null,
   };
 };
 
@@ -198,6 +200,14 @@ export function useClaimsData() {
     }));
   }, []);
 
+  // Separation Date
+  const setSeparationDate = useCallback((date: string | null) => {
+    setData(prev => ({
+      ...prev,
+      separationDate: date,
+    }));
+  }, []);
+
   return {
     data,
     addMedicalVisit,
@@ -219,5 +229,6 @@ export function useClaimsData() {
     updateBuddyContact,
     deleteBuddyContact,
     updateDocument,
+    setSeparationDate,
   };
 }

@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
@@ -82,8 +83,17 @@ export function AppSidebar() {
         </ul>
       </nav>
 
-      {/* Collapse Button */}
-      <div className="border-t border-sidebar-border p-2">
+      {/* Footer with Theme Toggle and Collapse */}
+      <div className="border-t border-sidebar-border p-2 space-y-2">
+        <div className={cn(
+          'flex items-center',
+          collapsed ? 'justify-center' : 'justify-between px-2'
+        )}>
+          {!collapsed && (
+            <span className="text-xs text-sidebar-muted">Theme</span>
+          )}
+          <ThemeToggle />
+        </div>
         <Button
           variant="ghost"
           size="sm"
