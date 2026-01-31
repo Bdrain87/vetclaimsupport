@@ -11,6 +11,7 @@ import {
   Stethoscope, AlertTriangle, Activity, Users,
 } from 'lucide-react';
 import { EvidenceStrengthIndicator, getStrengthLevel, calculateEvidenceStrength } from './EvidenceStrengthIndicator';
+import { RelatedConditions } from './RelatedConditions';
 import type { ClaimCondition } from '@/types/claims';
 
 export function ClaimBuilder() {
@@ -147,6 +148,12 @@ export function ClaimBuilder() {
                     condition={condition} 
                     data={data}
                     compact={false}
+                  />
+                  
+                  {/* Related Conditions (Anti-Pyramiding Compliant) */}
+                  <RelatedConditions 
+                    conditionName={condition.name}
+                    existingConditionNames={claimConditions.map(c => c.name)}
                   />
                 </div>
 
