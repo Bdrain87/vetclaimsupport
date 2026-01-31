@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
-import { AlertTriangle, Plus, Trash2, Edit, Calendar, MapPin, Shield, Users } from 'lucide-react';
+import { AlertTriangle, Plus, Trash2, Edit, Calendar, MapPin, Shield, Users, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { exportExposures } from '@/utils/pdfExport';
 import type { Exposure } from '@/types/claims';
 
 const exposureTypes = ['Burn pit', 'Jet fuel', 'Chemicals', 'Noise', 'Radiation', 'Asbestos', 'Extreme temps'] as const;
@@ -92,13 +93,19 @@ export default function Exposures() {
           </div>
         </div>
 
-        <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
-          <DialogTrigger asChild>
-            <Button className="gap-2">
-              <Plus className="h-4 w-4" />
-              Add Exposure
-            </Button>
-          </DialogTrigger>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => exportExposures(data.exposures)} className="gap-2">
+            <Download className="h-4 w-4" />
+            Export PDF
+          </Button>
+          
+          <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
+            <DialogTrigger asChild>
+              <Button className="gap-2">
+                <Plus className="h-4 w-4" />
+                Add Exposure
+              </Button>
+            </DialogTrigger>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{editingId ? 'Edit Exposure' : 'Log Exposure'}</DialogTitle>
@@ -196,8 +203,9 @@ export default function Exposures() {
                 </Button>
               </div>
             </form>
-          </DialogContent>
-        </Dialog>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
       {/* Exposures List */}
