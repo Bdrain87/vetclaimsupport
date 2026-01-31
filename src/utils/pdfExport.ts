@@ -1,4 +1,4 @@
-// PDF Export Utilities for VA Evidence Tracker
+// PDF Export Utilities for Service Evidence Tracker
 
 interface PDFExportOptions {
   title: string;
@@ -51,7 +51,7 @@ const createPDFWrapper = (content: string, options: PDFExportOptions) => {
       <p class="header-info">Generated: ${date.toLocaleDateString()} at ${date.toLocaleTimeString()}</p>
       ${content}
       <div class="footer">
-        <p>This document was generated from the VA Evidence Tracker application.</p>
+        <p>This document was generated from the Service Evidence Tracker application.</p>
         <p>Present this document to your VA representative, VSO, or include with your disability claim.</p>
       </div>
     </body>
