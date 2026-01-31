@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ClaimsProvider } from "./context/ClaimsContext";
 import { AppLayout } from "./components/AppLayout";
+import { OnboardingModal } from "./components/onboarding/OnboardingModal";
 import Dashboard from "./pages/Dashboard";
 import MedicalVisits from "./pages/MedicalVisits";
 import Migraines from "./pages/Migraines";
@@ -27,6 +28,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        <OnboardingModal />
         <BrowserRouter>
           <AppLayout>
             <Routes>
