@@ -9,6 +9,7 @@ import { LiabilityAcceptanceScreen } from "./components/legal/LiabilityAcceptanc
 import { OnboardingModal } from "./components/onboarding/OnboardingModal";
 import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
 import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
+import { MilestoneCelebration } from "./components/dashboard/MilestoneCelebration";
 import Dashboard from "./pages/Dashboard";
 import MedicalVisits from "./pages/MedicalVisits";
 import Migraines from "./pages/Migraines";
@@ -25,6 +26,8 @@ import Sleep from "./pages/Sleep";
 import Settings from "./pages/Settings";
 import Timeline from "./pages/Timeline";
 import ClaimChecklist from "./pages/ClaimChecklist";
+import ExamPrep from "./pages/ExamPrep";
+import ClaimTools from "./pages/ClaimTools";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +43,7 @@ const App = () => (
           <OnboardingModal />
           <PWAInstallPrompt />
           <OfflineIndicator />
+          <MilestoneCelebration />
           <AppLayout>
             <Routes>
               <Route path="/" element={<Dashboard />} />
@@ -56,6 +60,8 @@ const App = () => (
               <Route path="/settings" element={<Settings />} />
               <Route path="/timeline" element={<Timeline />} />
               <Route path="/checklist" element={<ClaimChecklist />} />
+              <Route path="/exam-prep" element={<ExamPrep />} />
+              <Route path="/claim-tools" element={<ClaimTools />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="*" element={<NotFound />} />

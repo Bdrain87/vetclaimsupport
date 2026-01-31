@@ -20,6 +20,9 @@ import { IntentToFileCard } from '@/components/dashboard/IntentToFileCard';
 import { DashboardInsights } from '@/components/dashboard/DashboardInsights';
 import { ClaimBuilder } from '@/components/dashboard/ClaimBuilder';
 import { MobileNavGrid } from '@/components/dashboard/MobileNavGrid';
+import { QuickLogWidget } from '@/components/dashboard/QuickLogWidget';
+import { EvidenceGapAnalyzer } from '@/components/dashboard/EvidenceGapAnalyzer';
+import { ShareWithVSO } from '@/components/dashboard/ShareWithVSO';
 
 export default function Dashboard() {
   const { data, setSeparationDate } = useClaims();
@@ -82,10 +85,14 @@ export default function Dashboard() {
             <p className="text-muted-foreground">Track your VA evidence and documentation</p>
           </div>
         </div>
-        <div className="w-full sm:w-auto">
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          <ShareWithVSO />
           <ExportButton />
         </div>
       </div>
+
+      {/* Quick Log Widget */}
+      <QuickLogWidget />
 
       {/* Privacy Badge */}
       <div className="flex items-center gap-3 p-3 bg-success/5 border border-success/20 rounded-lg">
@@ -126,6 +133,9 @@ export default function Dashboard() {
 
       {/* Claim Builder */}
       <ClaimBuilder />
+
+      {/* Evidence Gap Analyzer */}
+      <EvidenceGapAnalyzer />
 
       {/* AI Disability Suggestions */}
       <SuggestedDisabilities />

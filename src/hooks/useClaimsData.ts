@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { ClaimsData, MedicalVisit, Exposure, SymptomEntry, Medication, ServiceEntry, BuddyContact, DocumentItem, MigraineEntry, UploadedDocument, SleepEntry, ClaimCondition } from '@/types/claims';
+import type { ClaimsData, MedicalVisit, Exposure, SymptomEntry, Medication, ServiceEntry, BuddyContact, DocumentItem, MigraineEntry, UploadedDocument, SleepEntry, ClaimCondition, QuickLogEntry } from '@/types/claims';
 
 const STORAGE_KEY = 'va-claims-tracker-data';
 
@@ -31,6 +31,8 @@ const getInitialData = (): ClaimsData => {
       separationDate: null,
       uploadedDocuments: [],
       claimConditions: [],
+      quickLogs: [],
+      milestonesAchieved: [],
     };
   }
   
@@ -38,22 +40,13 @@ const getInitialData = (): ClaimsData => {
   if (stored) {
     try {
       const parsed = JSON.parse(stored);
-      // Ensure migraines array exists for older data
-      if (!parsed.migraines) {
-        parsed.migraines = [];
-      }
-      // Ensure uploadedDocuments array exists for older data
-      if (!parsed.uploadedDocuments) {
-        parsed.uploadedDocuments = [];
-      }
-      // Ensure sleepEntries array exists for older data
-      if (!parsed.sleepEntries) {
-        parsed.sleepEntries = [];
-      }
-      // Ensure claimConditions array exists for older data
-      if (!parsed.claimConditions) {
-        parsed.claimConditions = [];
-      }
+      // Ensure arrays exist for older data
+      if (!parsed.migraines) parsed.migraines = [];
+      if (!parsed.uploadedDocuments) parsed.uploadedDocuments = [];
+      if (!parsed.sleepEntries) parsed.sleepEntries = [];
+      if (!parsed.claimConditions) parsed.claimConditions = [];
+      if (!parsed.quickLogs) parsed.quickLogs = [];
+      if (!parsed.milestonesAchieved) parsed.milestonesAchieved = [];
       return parsed;
     } catch {
       console.error('Failed to parse stored data');
@@ -73,6 +66,8 @@ const getInitialData = (): ClaimsData => {
     separationDate: null,
     uploadedDocuments: [],
     claimConditions: [],
+    quickLogs: [],
+    milestonesAchieved: [],
   };
 };
 
@@ -322,6 +317,29 @@ export function useClaimsData() {
     }));
   }, []);
 
+  // Quick Logs
+  const addQuickLog = useCallback((log: Omit<QuickLogEntry, 'id'>) => {
+    setData(prev => ({
+      ...prev,
+      quickLogs: [...(prev.quickLogs || []), { ...log, id: generateId() }],
+    }));
+  }, []);
+
+  const deleteQuickLog = useCallback((id: string) => {
+    setData(prev => ({
+      ...prev,
+      quickLogs: (prev.quickLogs || []).filter(l => l.id !== id),
+    }));
+  }, []);
+
+  // Milestones
+  const addMilestone = useCallback((milestone: string) => {
+    setData(prev => ({
+      ...prev,
+      milestonesAchieved: [...new Set([...(prev.milestonesAchieved || []), milestone])],
+    }));
+  }, []);
+
   return {
     data,
     addMedicalVisit,
@@ -356,5 +374,8 @@ export function useClaimsData() {
     updateClaimCondition,
     deleteClaimCondition,
     setDocumentScanDisclaimerShown,
+    addQuickLog,
+    deleteQuickLog,
+    addMilestone,
   };
 }
