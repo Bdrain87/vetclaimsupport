@@ -8,8 +8,19 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Slider } from '@/components/ui/slider';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { exportSymptoms } from '@/utils/pdfExport';
-import type { SymptomEntry } from '@/types/claims';
+import type { SymptomEntry, SymptomFrequency } from '@/types/claims';
+
+// Simplified VA-relevant frequency options
+const frequencyOptions: SymptomFrequency[] = [
+  'Constant',
+  'Daily',
+  'Several times per week',
+  'Weekly',
+  'Monthly',
+  'Occasional',
+];
 
 export default function Symptoms() {
   const { data, addSymptom, updateSymptom, deleteSymptom } = useClaims();
@@ -159,12 +170,19 @@ export default function Symptoms() {
 
               <div className="space-y-2">
                 <Label htmlFor="frequency">Frequency</Label>
-                <Input 
-                  id="frequency" 
-                  placeholder="e.g., Constant, several times daily, weekly"
-                  value={formData.frequency}
-                  onChange={(e) => setFormData({ ...formData, frequency: e.target.value })}
-                />
+                <Select 
+                  value={formData.frequency} 
+                  onValueChange={(value) => setFormData({ ...formData, frequency: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select frequency" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {frequencyOptions.map((freq) => (
+                      <SelectItem key={freq} value={freq}>{freq}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">

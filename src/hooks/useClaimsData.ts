@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { ClaimsData, MedicalVisit, Exposure, SymptomEntry, Medication, ServiceEntry, BuddyContact, DocumentItem, MigraineEntry, UploadedDocument } from '@/types/claims';
+import type { ClaimsData, MedicalVisit, Exposure, SymptomEntry, Medication, ServiceEntry, BuddyContact, DocumentItem, MigraineEntry, UploadedDocument, SleepEntry, ClaimCondition } from '@/types/claims';
 
 const STORAGE_KEY = 'va-claims-tracker-data';
 
@@ -27,8 +27,10 @@ const getInitialData = (): ClaimsData => {
       buddyContacts: [],
       documents: defaultDocuments,
       migraines: [],
+      sleepEntries: [],
       separationDate: null,
       uploadedDocuments: [],
+      claimConditions: [],
     };
   }
   
@@ -43,6 +45,14 @@ const getInitialData = (): ClaimsData => {
       // Ensure uploadedDocuments array exists for older data
       if (!parsed.uploadedDocuments) {
         parsed.uploadedDocuments = [];
+      }
+      // Ensure sleepEntries array exists for older data
+      if (!parsed.sleepEntries) {
+        parsed.sleepEntries = [];
+      }
+      // Ensure claimConditions array exists for older data
+      if (!parsed.claimConditions) {
+        parsed.claimConditions = [];
       }
       return parsed;
     } catch {
@@ -59,8 +69,10 @@ const getInitialData = (): ClaimsData => {
     buddyContacts: [],
     documents: defaultDocuments,
     migraines: [],
+    sleepEntries: [],
     separationDate: null,
     uploadedDocuments: [],
+    claimConditions: [],
   };
 };
 
@@ -258,6 +270,58 @@ export function useClaimsData() {
     }));
   }, []);
 
+  // Sleep Entries
+  const addSleepEntry = useCallback((entry: Omit<SleepEntry, 'id'>) => {
+    setData(prev => ({
+      ...prev,
+      sleepEntries: [...(prev.sleepEntries || []), { ...entry, id: generateId() }],
+    }));
+  }, []);
+
+  const updateSleepEntry = useCallback((id: string, entry: Partial<SleepEntry>) => {
+    setData(prev => ({
+      ...prev,
+      sleepEntries: (prev.sleepEntries || []).map(s => s.id === id ? { ...s, ...entry } : s),
+    }));
+  }, []);
+
+  const deleteSleepEntry = useCallback((id: string) => {
+    setData(prev => ({
+      ...prev,
+      sleepEntries: (prev.sleepEntries || []).filter(s => s.id !== id),
+    }));
+  }, []);
+
+  // Claim Conditions
+  const addClaimCondition = useCallback((condition: Omit<ClaimCondition, 'id'>) => {
+    setData(prev => ({
+      ...prev,
+      claimConditions: [...(prev.claimConditions || []), { ...condition, id: generateId() }],
+    }));
+  }, []);
+
+  const updateClaimCondition = useCallback((id: string, condition: Partial<ClaimCondition>) => {
+    setData(prev => ({
+      ...prev,
+      claimConditions: (prev.claimConditions || []).map(c => c.id === id ? { ...c, ...condition } : c),
+    }));
+  }, []);
+
+  const deleteClaimCondition = useCallback((id: string) => {
+    setData(prev => ({
+      ...prev,
+      claimConditions: (prev.claimConditions || []).filter(c => c.id !== id),
+    }));
+  }, []);
+
+  // Document scan disclaimer
+  const setDocumentScanDisclaimerShown = useCallback((shown: boolean) => {
+    setData(prev => ({
+      ...prev,
+      documentScanDisclaimerShown: shown,
+    }));
+  }, []);
+
   return {
     data,
     addMedicalVisit,
@@ -285,5 +349,12 @@ export function useClaimsData() {
     deleteMigraine,
     addUploadedDocument,
     deleteUploadedDocument,
+    addSleepEntry,
+    updateSleepEntry,
+    deleteSleepEntry,
+    addClaimCondition,
+    updateClaimCondition,
+    deleteClaimCondition,
+    setDocumentScanDisclaimerShown,
   };
 }

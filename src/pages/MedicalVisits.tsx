@@ -228,6 +228,19 @@ export default function MedicalVisits() {
               </div>
 
               <div className="space-y-2">
+                <Label htmlFor="relatedCondition">Related Condition (Optional)</Label>
+                <Input 
+                  id="relatedCondition" 
+                  placeholder="e.g., Tinnitus, PTSD, Back Pain"
+                  value={formData.relatedCondition || ''}
+                  onChange={(e) => setFormData({ ...formData, relatedCondition: e.target.value })}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Link this visit to a condition you're claiming
+                </p>
+              </div>
+
+              <div className="space-y-2">
                 <Label htmlFor="notes">Notes</Label>
                 <Textarea 
                   id="notes" 
