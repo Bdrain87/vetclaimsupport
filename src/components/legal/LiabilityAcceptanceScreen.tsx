@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { ShieldAlert } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 
 const LIABILITY_ACCEPTED_KEY = 'liabilityAccepted';
 
@@ -33,7 +34,14 @@ export function LiabilityAcceptanceScreen() {
         className="sm:max-w-lg p-0 overflow-hidden [&>button]:hidden"
         onPointerDownOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={(e) => e.preventDefault()}
+        aria-describedby="liability-description"
       >
+        <VisuallyHidden.Root>
+          <DialogTitle>Liability Acceptance</DialogTitle>
+          <DialogDescription id="liability-description">
+            Please read and acknowledge the terms before using Service Evidence Tracker
+          </DialogDescription>
+        </VisuallyHidden.Root>
         {/* Header */}
         <div className="px-6 pt-6 pb-4 border-b border-border">
           <div className="flex items-center gap-3">

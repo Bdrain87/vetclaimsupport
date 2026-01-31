@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Trophy, Star, Rocket, Target, Medal, Award, PartyPopper } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -122,9 +122,12 @@ export function MilestoneCelebration() {
 
   return (
     <Dialog open={showCelebration} onOpenChange={setShowCelebration}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md" aria-describedby="milestone-description">
         <DialogHeader>
           <DialogTitle className="text-center">🎉 Milestone Achieved!</DialogTitle>
+          <DialogDescription id="milestone-description" className="sr-only">
+            Congratulations on achieving a new milestone in your evidence tracking journey
+          </DialogDescription>
         </DialogHeader>
         <div className="text-center py-6 space-y-4">
           <div className="w-20 h-20 rounded-full bg-gradient-to-br from-success/20 to-primary/20 mx-auto flex items-center justify-center">
