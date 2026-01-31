@@ -14,10 +14,29 @@ export interface MedicalVisit {
   notes: string;
 }
 
+export type ExposureType = 
+  | 'Burn pit' 
+  | 'Jet fuel' 
+  | 'Chemicals' 
+  | 'Noise' 
+  | 'Radiation' 
+  | 'Asbestos' 
+  | 'Extreme temps'
+  | 'Diesel exhaust'
+  | 'Depleted uranium'
+  | 'Sand/dust'
+  | 'Contaminated water (Camp Lejeune)'
+  | 'Herbicides'
+  | 'Paint fumes'
+  | 'Hydraulic fluid'
+  | 'PFAS chemicals'
+  | 'Contaminated water'
+  | 'Other';
+
 export interface Exposure {
   id: string;
   date: string;
-  type: 'Burn pit' | 'Jet fuel' | 'Chemicals' | 'Noise' | 'Radiation' | 'Asbestos' | 'Extreme temps';
+  type: ExposureType;
   duration: string;
   location: string;
   details: string;

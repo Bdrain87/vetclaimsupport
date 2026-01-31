@@ -16,6 +16,7 @@ import { RatingCalculator } from '@/components/dashboard/RatingCalculator';
 import { ExportButton } from '@/components/dashboard/ExportButton';
 import { SuggestedDisabilities } from '@/components/dashboard/SuggestedDisabilities';
 import { ClaimReadinessScore } from '@/components/dashboard/ClaimReadinessScore';
+import { IntentToFileCard } from '@/components/dashboard/IntentToFileCard';
 
 export default function Dashboard() {
   const { data, setSeparationDate } = useClaims();
@@ -105,6 +106,9 @@ export default function Dashboard() {
           </div>
         ))}
       </div>
+
+      {/* Intent to File Pro Tip */}
+      <IntentToFileCard />
 
       {/* Claim Readiness Score */}
       <ClaimReadinessScore />
