@@ -132,11 +132,22 @@ export function SuggestedDisabilities() {
           <Sparkles className="h-5 w-5 text-primary" />
           Conditions Worth Exploring
         </CardTitle>
-        <p className="text-xs text-muted-foreground mt-1">
-          Based on your entries, these are conditions other veterans have researched. This is NOT a diagnosis or medical opinion - it's simply a starting point for your own research. Many factors affect VA claims. Discuss any health concerns with your healthcare provider and claims questions with a VSO or VA-accredited attorney.
-        </p>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Prominent Legal Disclaimer */}
+        <div className="p-3 bg-warning/10 border border-warning/30 rounded-lg">
+          <div className="flex gap-2">
+            <AlertTriangle className="h-5 w-5 text-warning flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-medium text-foreground">Important Disclaimer</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                These suggestions are based on your logged data and common VA-recognized conditions. 
+                They are <strong>NOT medical diagnoses</strong>. Always consult with a healthcare provider 
+                and VSO before filing claims.
+              </p>
+            </div>
+          </div>
+        </div>
         {!hasEnoughData ? (
           <div className="text-center py-6">
             <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-3" />

@@ -12,6 +12,7 @@ export interface MedicalVisit {
   gotAfterVisitSummary: boolean;
   followUp: string;
   notes: string;
+  relatedCondition?: string; // Links to a claimed condition
 }
 
 export type ExposureType = 
@@ -43,6 +44,15 @@ export interface Exposure {
   ppeProvided: boolean;
   witnesses: string;
 }
+
+// Simplified VA-relevant frequency options
+export type SymptomFrequency = 
+  | 'Constant'
+  | 'Daily'
+  | 'Several times per week'
+  | 'Weekly'
+  | 'Monthly'
+  | 'Occasional';
 
 export interface SymptomEntry {
   id: string;
@@ -112,6 +122,22 @@ export interface MigraineEntry {
   impact: MigraineImpact;
   treatment: string;
   notes: string;
+  wasProstrating?: boolean; // Explicit VA metric
+}
+
+// Sleep Tracker types
+export type SleepQuality = 'Very Poor' | 'Poor' | 'Fair' | 'Good' | 'Excellent';
+
+export interface SleepEntry {
+  id: string;
+  date: string;
+  hoursSlept: number;
+  quality: SleepQuality;
+  usesCPAP: boolean;
+  cpapUsedLastNight?: boolean;
+  interruptions: number;
+  nightmares: boolean;
+  notes: string;
 }
 
 // Document type identifiers for categorizing uploads
@@ -132,6 +158,19 @@ export interface UploadedDocument {
   customLabel?: string; // For "other" documents, user-provided label
 }
 
+// Claim Builder types
+export interface ClaimCondition {
+  id: string;
+  name: string;
+  linkedMedicalVisits: string[];
+  linkedExposures: string[];
+  linkedSymptoms: string[];
+  linkedDocuments: string[];
+  linkedBuddyContacts: string[];
+  notes: string;
+  createdAt: string;
+}
+
 export interface ClaimsData {
   medicalVisits: MedicalVisit[];
   exposures: Exposure[];
@@ -141,6 +180,9 @@ export interface ClaimsData {
   buddyContacts: BuddyContact[];
   documents: DocumentItem[];
   migraines: MigraineEntry[];
+  sleepEntries: SleepEntry[];
   separationDate: string | null;
   uploadedDocuments: UploadedDocument[];
+  claimConditions: ClaimCondition[];
+  documentScanDisclaimerShown?: boolean;
 }

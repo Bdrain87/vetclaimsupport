@@ -14,6 +14,7 @@ import {
   ChevronRight,
   ShieldCheck,
   Brain,
+  Moon,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -33,6 +34,7 @@ const navItems = [
   { to: '/symptoms', icon: Activity, label: 'Symptoms Journal' },
   { to: '/exposures', icon: AlertTriangle, label: 'Exposures' },
   { to: '/migraines', icon: Brain, label: 'Migraine Tracker' },
+  { to: '/sleep', icon: Moon, label: 'Sleep Tracker' },
   // Evidence Building continued
   { to: '/buddy-contacts', icon: Users, label: 'Buddy Contacts' },
 ];

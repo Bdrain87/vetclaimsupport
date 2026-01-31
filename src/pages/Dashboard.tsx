@@ -17,6 +17,8 @@ import { ExportButton } from '@/components/dashboard/ExportButton';
 import { SuggestedDisabilities } from '@/components/dashboard/SuggestedDisabilities';
 import { ClaimReadinessScore } from '@/components/dashboard/ClaimReadinessScore';
 import { IntentToFileCard } from '@/components/dashboard/IntentToFileCard';
+import { DashboardInsights } from '@/components/dashboard/DashboardInsights';
+import { ClaimBuilder } from '@/components/dashboard/ClaimBuilder';
 
 export default function Dashboard() {
   const { data, setSeparationDate } = useClaims();
@@ -110,8 +112,14 @@ export default function Dashboard() {
       {/* Intent to File Pro Tip */}
       <IntentToFileCard />
 
+      {/* Dashboard Insights - Actionable Next Steps */}
+      <DashboardInsights />
+
       {/* Claim Readiness Score */}
       <ClaimReadinessScore />
+
+      {/* Claim Builder */}
+      <ClaimBuilder />
 
       {/* AI Disability Suggestions */}
       <SuggestedDisabilities />
