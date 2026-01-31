@@ -1,4 +1,3 @@
-import { forwardRef } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Home, PenSquare, Wrench, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -10,20 +9,16 @@ const tabs = [
   { to: '/settings', icon: Settings, label: 'Settings' },
 ];
 
-export const BottomTabBar = forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>((props, ref) => {
+export function BottomTabBar() {
   const location = useLocation();
 
   return (
-    <nav
-      ref={ref}
-      className={cn(
-        "md:hidden fixed bottom-0 left-0 right-0 z-50",
-        "bg-background/80 backdrop-blur-xl",
-        "border-t border-border",
-        "safe-area-bottom"
-      )}
-      {...props}
-    >
+    <nav className={cn(
+      "md:hidden fixed bottom-0 left-0 right-0 z-50",
+      "bg-background/80 backdrop-blur-xl",
+      "border-t border-border",
+      "safe-area-bottom"
+    )}>
       <div className="flex items-center justify-around h-16">
         {tabs.map((tab) => {
           const isActive = location.pathname === tab.to;
@@ -54,6 +49,4 @@ export const BottomTabBar = forwardRef<HTMLElement, React.HTMLAttributes<HTMLEle
       </div>
     </nav>
   );
-});
-
-BottomTabBar.displayName = 'BottomTabBar';
+}

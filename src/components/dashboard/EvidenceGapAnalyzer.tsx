@@ -1,4 +1,4 @@
-import { useMemo, forwardRef } from 'react';
+import { useMemo } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -35,7 +35,7 @@ interface ConditionAnalysis {
   strengths: string[];
 }
 
-export const EvidenceGapAnalyzer = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((props, ref) => {
+export function EvidenceGapAnalyzer() {
   const { data } = useClaims();
   const claimConditions = data.claimConditions || [];
 
@@ -163,7 +163,7 @@ export const EvidenceGapAnalyzer = forwardRef<HTMLDivElement, React.HTMLAttribut
 
   if (claimConditions.length === 0) {
     return (
-      <Card ref={ref} className="data-card" {...props}>
+      <Card className="data-card">
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
             <Search className="h-5 w-5 text-primary" />
@@ -186,7 +186,7 @@ export const EvidenceGapAnalyzer = forwardRef<HTMLDivElement, React.HTMLAttribut
   }
 
   return (
-    <Card ref={ref} className="data-card" {...props}>
+    <Card className="data-card">
       <CardHeader className="pb-3">
         <CardTitle className="text-base flex items-center gap-2">
           <Search className="h-5 w-5 text-primary" />
@@ -267,6 +267,4 @@ export const EvidenceGapAnalyzer = forwardRef<HTMLDivElement, React.HTMLAttribut
       </CardContent>
     </Card>
   );
-});
-
-EvidenceGapAnalyzer.displayName = 'EvidenceGapAnalyzer';
+}
