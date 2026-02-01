@@ -25,6 +25,7 @@ import { QuickLogWidget } from '@/components/dashboard/QuickLogWidget';
 import { EvidenceGapAnalyzer } from '@/components/dashboard/EvidenceGapAnalyzer';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import { ConditionsExplorer } from '@/components/dashboard/ConditionsExplorer';
+import { SymptomPatterns } from '@/components/dashboard/SymptomPatterns';
 import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -500,6 +501,9 @@ export default function Dashboard() {
           <span className="text-xs text-muted-foreground text-center">Buddy Statements</span>
         </div>
       </div>
+
+      {/* Symptom Patterns */}
+      <SymptomPatterns />
 
       {/* Key Cards - Compact */}
       <div className="space-y-3">
