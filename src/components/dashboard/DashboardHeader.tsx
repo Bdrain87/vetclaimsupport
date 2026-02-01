@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Share, Download, MessageCircle, Mail, FileText } from 'lucide-react';
+import { Share, Download, MessageCircle, Mail, FileText, FileDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -10,12 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useClaims } from '@/context/ClaimsContext';
 import { useToast } from '@/hooks/use-toast';
-import { 
-  exportMedicalVisits, 
-  exportSymptoms, 
-  exportMedications, 
-  exportExposures 
-} from '@/utils/pdfExport';
+import { ExportButton } from './ExportButton';
 
 export function DashboardHeader() {
   const { data } = useClaims();
@@ -71,38 +66,6 @@ export function DashboardHeader() {
     }
   };
 
-  const handleExportPDF = () => {
-    try {
-      // Export the most comprehensive report - medical visits
-      if (data.medicalVisits.length > 0) {
-        exportMedicalVisits(data.medicalVisits);
-      } else if (data.symptoms.length > 0) {
-        exportSymptoms(data.symptoms);
-      } else if (data.exposures.length > 0) {
-        exportExposures(data.exposures);
-      } else if (data.medications.length > 0) {
-        exportMedications(data.medications);
-      } else {
-        toast({
-          title: 'No data to export',
-          description: 'Add some evidence first, then export.',
-          variant: 'destructive',
-        });
-        return;
-      }
-      toast({
-        title: 'PDF Generated',
-        description: 'Your evidence has been exported.',
-      });
-    } catch (error) {
-      toast({
-        title: 'Export failed',
-        description: 'Unable to generate PDF.',
-        variant: 'destructive',
-      });
-    }
-  };
-
   const handleEmailShare = () => {
     const subject = encodeURIComponent('VA Claim Evidence Summary');
     const body = encodeURIComponent(generateShareText());
@@ -128,17 +91,18 @@ export function DashboardHeader() {
           <Share className="h-4 w-4" />
           Share
         </Button>
-        <Button variant="outline" size="sm" onClick={handleExportPDF} className="gap-2">
-          <Download className="h-4 w-4" />
-          Export PDF
-        </Button>
+        <ExportButton />
       </div>
       
-      {/* Mobile: Clean dropdown menu */}
-      <div className="md:hidden">
+      {/* Mobile: Prominent Export + Share dropdown */}
+      <div className="flex md:hidden items-center gap-2">
+        {/* Prominent Export Button */}
+        <ExportButton />
+        
+        {/* Share dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon" className="h-10 w-10">
+            <Button variant="outline" size="icon" className="h-9 w-9">
               <Share className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -155,11 +119,6 @@ export function DashboardHeader() {
             <DropdownMenuItem onClick={handleEmailShare} className="gap-3">
               <Mail className="h-4 w-4" />
               Email
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleExportPDF} className="gap-3">
-              <FileText className="h-4 w-4" />
-              Export PDF
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
