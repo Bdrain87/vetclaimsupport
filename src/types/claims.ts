@@ -190,7 +190,7 @@ export interface SleepEntry {
   lowestOxygenLevel?: number; // Lowest O2 saturation if known
   requiresOxygen?: boolean; // Requires supplemental oxygen
   daytimeSleepiness?: DaytimeSleepiness;
-  wokeGasping?: boolean; // Woke up gasping/choking
+  timesWokeGasping?: number; // Times woke up gasping/choking
   morningHeadache?: boolean; // Woke with headache (common apnea symptom)
   feltRested?: boolean; // Did you feel rested upon waking?
   impactOnWork?: string; // How sleep affected work/activities
