@@ -1,4 +1,4 @@
-import { FileText, Scale, ClipboardList, Stethoscope, Calculator, Users, BookOpen, Gavel, Printer, FileSignature, TrendingUp } from 'lucide-react';
+import { FileText, Scale, ClipboardList, Stethoscope, Calculator, Users, BookOpen, Gavel, Printer, FileSignature, TrendingUp, ShieldAlert } from 'lucide-react';
 import { PersonalStatementGenerator } from '@/components/tools/PersonalStatementGenerator';
 import { DBQRatingReference } from '@/components/tools/DBQRatingReference';
 import { DBQGuidance } from '@/components/tools/DBQGuidance';
@@ -10,6 +10,7 @@ import { BuddyStatementGenerator } from '@/components/tools/BuddyStatementGenera
 import { AppealStrategyAdvisor } from '@/components/tools/AppealStrategyAdvisor';
 import { NexusLetterGenerator } from '@/components/tools/NexusLetterGenerator';
 import { RatingIncreaseAnalyzer } from '@/components/tools/RatingIncreaseAnalyzer';
+import { StressorStatementGenerator } from '@/components/tools/StressorStatementGenerator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSearchParams } from 'react-router-dom';
 
@@ -23,6 +24,7 @@ export default function ClaimTools() {
     if (tabParam === 'exam-prep') return 'exam-prep';
     if (tabParam === 'calculator') return 'calculator';
     if (tabParam === 'buddy') return 'buddy';
+    if (tabParam === 'stressor') return 'stressor';
     if (tabParam === 'dbq-guidance') return 'dbq-guidance';
     if (tabParam === 'dbq-summary') return 'dbq-summary';
     if (tabParam === 'nexus') return 'nexus';
@@ -46,7 +48,7 @@ export default function ClaimTools() {
 
       {/* Tools Tabs */}
       <Tabs defaultValue={getDefaultTab()} className="w-full">
-        <TabsList className="grid w-full grid-cols-5 sm:grid-cols-11">
+        <TabsList className="grid w-full grid-cols-6 sm:grid-cols-12">
           <TabsTrigger value="statement" className="text-xs sm:text-sm">
             <FileText className="h-4 w-4 sm:mr-1" />
             <span className="hidden sm:inline">Statement</span>
@@ -54,6 +56,10 @@ export default function ClaimTools() {
           <TabsTrigger value="buddy" className="text-xs sm:text-sm">
             <Users className="h-4 w-4 sm:mr-1" />
             <span className="hidden sm:inline">Buddy</span>
+          </TabsTrigger>
+          <TabsTrigger value="stressor" className="text-xs sm:text-sm">
+            <ShieldAlert className="h-4 w-4 sm:mr-1" />
+            <span className="hidden sm:inline">Stressor</span>
           </TabsTrigger>
           <TabsTrigger value="nexus" className="text-xs sm:text-sm">
             <FileSignature className="h-4 w-4 sm:mr-1" />
@@ -99,6 +105,10 @@ export default function ClaimTools() {
 
         <TabsContent value="buddy" className="mt-6">
           <BuddyStatementGenerator />
+        </TabsContent>
+
+        <TabsContent value="stressor" className="mt-6">
+          <StressorStatementGenerator />
         </TabsContent>
 
         <TabsContent value="nexus" className="mt-6">
