@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FileDown } from 'lucide-react';
+import { FileDown, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useClaims } from '@/context/ClaimsContext';
 import { useToast } from '@/hooks/use-toast';
@@ -22,7 +22,11 @@ const colors = {
   dangerBg: [254, 215, 215] as [number, number, number],
 };
 
-export function ExportButton() {
+interface ExportButtonProps {
+  variant?: 'default' | 'prominent';
+}
+
+export function ExportButton({ variant = 'default' }: ExportButtonProps) {
   const { data } = useClaims();
   const { toast } = useToast();
   const [modalOpen, setModalOpen] = useState(false);
@@ -581,12 +585,12 @@ export function ExportButton() {
     <>
       <Button 
         onClick={() => setModalOpen(true)} 
-        variant="outline" 
+        variant={variant === 'prominent' ? 'default' : 'outline'}
         size="sm" 
-        className="gap-2 w-full md:w-auto"
+        className="gap-2"
       >
-        <FileDown className="h-4 w-4" />
-        Export PDF
+        <Download className="h-4 w-4" />
+        Export
       </Button>
       
       <ExportCustomizationModal
