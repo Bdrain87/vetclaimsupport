@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
+import { useEvidence } from '@/context/EvidenceContext';
 import { AlertTriangle, Plus, Trash2, Edit, Calendar, MapPin, Shield, Users, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { exportExposures } from '@/utils/pdfExport';
 import { BranchExposuresSelector } from '@/components/exposures/BranchExposuresSelector';
+import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import type { Exposure, ExposureType } from '@/types/claims';
 
 // Extended exposure types including branch-specific ones
@@ -36,6 +38,7 @@ const exposureTypes: ExposureType[] = [
 
 export default function Exposures() {
   const { data, addExposure, updateExposure, deleteExposure } = useClaims();
+  const { documents, setAllDocuments } = useEvidence();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState<Omit<Exposure, 'id'>>({
@@ -258,6 +261,18 @@ export default function Exposures() {
                 />
               </div>
 
+              {/* Evidence Attachments - only show when editing */}
+              {editingId && (
+                <div className="pt-2 border-t border-border">
+                  <EvidenceAttachment
+                    entryType="exposure"
+                    entryId={editingId}
+                    documents={documents}
+                    onDocumentsChange={setAllDocuments}
+                  />
+                </div>
+              )}
+
               </div>
               <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-border">
                 <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
@@ -342,6 +357,12 @@ export default function Exposures() {
                     <p className="text-sm">{exposure.details}</p>
                   </div>
                 )}
+
+                <EvidenceThumbnails
+                  entryType="exposure"
+                  entryId={exposure.id}
+                  documents={documents}
+                />
               </CardContent>
             </Card>
           ))}

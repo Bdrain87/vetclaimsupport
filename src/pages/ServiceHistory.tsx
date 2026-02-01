@@ -277,6 +277,18 @@ export default function ServiceHistory() {
                       <Label htmlFor="hazards">Hazards & Conditions</Label>
                       <Textarea id="hazards" placeholder="Physical demands, environmental hazards, exposure risks..." value={formData.hazards} onChange={(e) => setFormData({ ...formData, hazards: e.target.value })} rows={3} />
                     </div>
+
+                    {/* Evidence Attachments - only show when editing */}
+                    {editingId && (
+                      <div className="pt-2 border-t border-border">
+                        <EvidenceAttachment
+                          entryType="service-entry"
+                          entryId={editingId}
+                          documents={documents}
+                          onDocumentsChange={setAllDocuments}
+                        />
+                      </div>
+                    )}
                   </div>
                   <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-border">
                     <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>Cancel</Button>
@@ -327,6 +339,7 @@ export default function ServiceHistory() {
                         <div><p className="font-medium text-exposure text-xs uppercase tracking-wide mb-1">Hazards</p><p className="text-foreground/80">{entry.hazards}</p></div>
                       </div>
                     )}
+                    <EvidenceThumbnails entryType="service-entry" entryId={entry.id} documents={documents} />
                   </CardContent>
                 </Card>
               ))}
@@ -400,6 +413,18 @@ export default function ServiceHistory() {
                       <Label>Description</Label>
                       <Textarea placeholder="Describe combat operations, duties, and experiences..." value={combatForm.description} onChange={(e) => setCombatForm({ ...combatForm, description: e.target.value })} rows={3} />
                     </div>
+
+                    {/* Evidence Attachments - only show when editing */}
+                    {editingCombatId && (
+                      <div className="pt-2 border-t border-border">
+                        <EvidenceAttachment
+                          entryType="combat"
+                          entryId={editingCombatId}
+                          documents={documents}
+                          onDocumentsChange={setAllDocuments}
+                        />
+                      </div>
+                    )}
                   </div>
                   <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-border">
                     <Button type="button" variant="outline" onClick={() => setIsCombatOpen(false)}>Cancel</Button>
@@ -447,6 +472,7 @@ export default function ServiceHistory() {
                     </div>
                     {entry.awards && <div><p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Awards</p><p className="text-sm">{entry.awards}</p></div>}
                     {entry.description && <p className="text-sm text-muted-foreground">{entry.description}</p>}
+                    <EvidenceThumbnails entryType="combat" entryId={entry.id} documents={documents} />
                   </CardContent>
                 </Card>
               ))}
@@ -505,6 +531,18 @@ export default function ServiceHistory() {
                       <Checkbox checked={eventForm.documented} onCheckedChange={(c) => setEventForm({ ...eventForm, documented: !!c })} />
                       This event was documented in official service records
                     </label>
+
+                    {/* Evidence Attachments - only show when editing */}
+                    {editingEventId && (
+                      <div className="pt-2 border-t border-border">
+                        <EvidenceAttachment
+                          entryType="major-event"
+                          entryId={editingEventId}
+                          documents={documents}
+                          onDocumentsChange={setAllDocuments}
+                        />
+                      </div>
+                    )}
                   </div>
                   <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-border">
                     <Button type="button" variant="outline" onClick={() => setIsEventOpen(false)}>Cancel</Button>
@@ -551,6 +589,7 @@ export default function ServiceHistory() {
                     {entry.description && <p className="text-sm">{entry.description}</p>}
                     {entry.witnesses && <div><p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Witnesses</p><p className="text-sm text-muted-foreground">{entry.witnesses}</p></div>}
                     {entry.documented && <Badge variant="outline" className="bg-success/10 text-success border-success/30">Officially Documented</Badge>}
+                    <EvidenceThumbnails entryType="major-event" entryId={entry.id} documents={documents} />
                   </CardContent>
                 </Card>
               ))}
@@ -616,6 +655,18 @@ export default function ServiceHistory() {
                       <Label>Notes</Label>
                       <Textarea placeholder="Additional details about this deployment" value={deployForm.notes} onChange={(e) => setDeployForm({ ...deployForm, notes: e.target.value })} rows={2} />
                     </div>
+
+                    {/* Evidence Attachments - only show when editing */}
+                    {editingDeployId && (
+                      <div className="pt-2 border-t border-border">
+                        <EvidenceAttachment
+                          entryType="deployment"
+                          entryId={editingDeployId}
+                          documents={documents}
+                          onDocumentsChange={setAllDocuments}
+                        />
+                      </div>
+                    )}
                   </div>
                   <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-border">
                     <Button type="button" variant="outline" onClick={() => setIsDeployOpen(false)}>Cancel</Button>
@@ -667,6 +718,7 @@ export default function ServiceHistory() {
                       </div>
                     )}
                     {entry.notes && <p className="text-sm text-muted-foreground">{entry.notes}</p>}
+                    <EvidenceThumbnails entryType="deployment" entryId={entry.id} documents={documents} />
                   </CardContent>
                 </Card>
               ))}
