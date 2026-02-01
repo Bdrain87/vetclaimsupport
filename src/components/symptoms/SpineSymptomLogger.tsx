@@ -622,9 +622,138 @@ export function SpineSymptomLogger() {
                     />
                     <div>
                       <Label className="font-medium">Had Incapacitating Episode</Label>
-                      <p className="text-xs text-muted-foreground">Required bed rest prescribed by a physician</p>
+                      <p className="text-xs text-muted-foreground">Bed rest prescribed by a physician (VA rating criteria)</p>
                     </div>
                   </div>
+                  
+                  {formData.hadIncapacitatingEpisode && (
+                    <div className="space-y-4 pl-4 pt-2">
+                      <div className="p-3 bg-destructive/5 border border-destructive/20 rounded-lg space-y-4">
+                        <p className="text-xs text-muted-foreground">
+                          <strong>VA Rating for Incapacitating Episodes (past 12 months):</strong><br/>
+                          60% = 6+ weeks | 40% = 4-6 weeks | 20% = 2-4 weeks | 10% = 1-2 weeks
+                        </p>
+                        
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <div className="space-y-2">
+                            <Label>Episode Start Date</Label>
+                            <Input 
+                              type="date" 
+                              value={formData.incapacitatingEpisode?.startDate || ''}
+                              onChange={(e) => setFormData({ 
+                                ...formData, 
+                                incapacitatingEpisode: {
+                                  ...formData.incapacitatingEpisode,
+                                  startDate: e.target.value,
+                                  endDate: formData.incapacitatingEpisode?.endDate || '',
+                                  durationDays: formData.incapacitatingEpisode?.durationDays || 0,
+                                  prescribedByDoctor: formData.incapacitatingEpisode?.prescribedByDoctor ?? true,
+                                  notes: formData.incapacitatingEpisode?.notes || '',
+                                }
+                              })}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label>Episode End Date</Label>
+                            <Input 
+                              type="date" 
+                              value={formData.incapacitatingEpisode?.endDate || ''}
+                              onChange={(e) => setFormData({ 
+                                ...formData, 
+                                incapacitatingEpisode: {
+                                  ...formData.incapacitatingEpisode,
+                                  startDate: formData.incapacitatingEpisode?.startDate || '',
+                                  endDate: e.target.value,
+                                  durationDays: formData.incapacitatingEpisode?.durationDays || 0,
+                                  prescribedByDoctor: formData.incapacitatingEpisode?.prescribedByDoctor ?? true,
+                                  notes: formData.incapacitatingEpisode?.notes || '',
+                                }
+                              })}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <div className="space-y-2">
+                            <Label>Total Days of Bed Rest</Label>
+                            <Input 
+                              type="number" 
+                              placeholder="Number of days"
+                              value={formData.incapacitatingEpisode?.durationDays || ''}
+                              onChange={(e) => setFormData({ 
+                                ...formData, 
+                                incapacitatingEpisode: {
+                                  ...formData.incapacitatingEpisode,
+                                  startDate: formData.incapacitatingEpisode?.startDate || '',
+                                  endDate: formData.incapacitatingEpisode?.endDate || '',
+                                  durationDays: e.target.value ? Number(e.target.value) : 0,
+                                  prescribedByDoctor: formData.incapacitatingEpisode?.prescribedByDoctor ?? true,
+                                  notes: formData.incapacitatingEpisode?.notes || '',
+                                }
+                              })}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label>Prescribing Doctor Name</Label>
+                            <Input 
+                              placeholder="Dr. name who prescribed bed rest"
+                              value={formData.incapacitatingEpisode?.doctorName || ''}
+                              onChange={(e) => setFormData({ 
+                                ...formData, 
+                                incapacitatingEpisode: {
+                                  ...formData.incapacitatingEpisode,
+                                  startDate: formData.incapacitatingEpisode?.startDate || '',
+                                  endDate: formData.incapacitatingEpisode?.endDate || '',
+                                  durationDays: formData.incapacitatingEpisode?.durationDays || 0,
+                                  prescribedByDoctor: true,
+                                  doctorName: e.target.value,
+                                  notes: formData.incapacitatingEpisode?.notes || '',
+                                }
+                              })}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <Checkbox
+                            checked={formData.incapacitatingEpisode?.prescribedByDoctor ?? false}
+                            onCheckedChange={(checked) => setFormData({ 
+                              ...formData, 
+                              incapacitatingEpisode: {
+                                ...formData.incapacitatingEpisode,
+                                startDate: formData.incapacitatingEpisode?.startDate || '',
+                                endDate: formData.incapacitatingEpisode?.endDate || '',
+                                durationDays: formData.incapacitatingEpisode?.durationDays || 0,
+                                prescribedByDoctor: checked === true,
+                                notes: formData.incapacitatingEpisode?.notes || '',
+                              }
+                            })}
+                          />
+                          <Label className="text-sm">Bed rest was prescribed by a physician (required for VA rating)</Label>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label>Episode Notes</Label>
+                          <Textarea 
+                            placeholder="Details about this incapacitating episode..."
+                            value={formData.incapacitatingEpisode?.notes || ''}
+                            onChange={(e) => setFormData({ 
+                              ...formData, 
+                              incapacitatingEpisode: {
+                                ...formData.incapacitatingEpisode,
+                                startDate: formData.incapacitatingEpisode?.startDate || '',
+                                endDate: formData.incapacitatingEpisode?.endDate || '',
+                                durationDays: formData.incapacitatingEpisode?.durationDays || 0,
+                                prescribedByDoctor: formData.incapacitatingEpisode?.prescribedByDoctor ?? true,
+                                notes: e.target.value,
+                              }
+                            })}
+                            rows={2}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Assistive Devices */}
