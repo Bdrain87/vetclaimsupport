@@ -1,8 +1,10 @@
-import { useLocation, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ShieldCheck } from 'lucide-react';
+import { useState } from 'react';
+import { useLocation, useNavigate, NavLink } from 'react-router-dom';
+import { ArrowLeft, ShieldCheck, Menu, X, LayoutDashboard, Activity, Brain, Moon, Pill, Shield, AlertTriangle, Stethoscope, FileArchive, FileCheck, Users, Clock, Wrench, ClipboardCheck, Briefcase, BookOpen, Settings, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { cn } from '@/lib/utils';
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 
 const pageLabels: Record<string, string> = {
   '/': 'Dashboard',
@@ -26,10 +28,31 @@ const pageLabels: Record<string, string> = {
   '/terms': 'Terms',
 };
 
+const navItems = [
+  { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/symptoms', icon: Activity, label: 'Symptoms' },
+  { to: '/migraines', icon: Brain, label: 'Migraines' },
+  { to: '/sleep', icon: Moon, label: 'Sleep' },
+  { to: '/medications', icon: Pill, label: 'Medications' },
+  { to: '/service-history', icon: Shield, label: 'Service History' },
+  { to: '/exposures', icon: AlertTriangle, label: 'Exposures' },
+  { to: '/medical-visits', icon: Stethoscope, label: 'Medical Visits' },
+  { to: '/evidence-library', icon: FileArchive, label: 'Evidence Library' },
+  { to: '/documents', icon: FileCheck, label: 'Documents' },
+  { to: '/buddy-contacts', icon: Users, label: 'Buddy Contacts' },
+  { to: '/timeline', icon: Clock, label: 'Timeline' },
+  { to: '/claim-tools', icon: Wrench, label: 'Claim Tools' },
+  { to: '/checklist', icon: ClipboardCheck, label: 'Checklist' },
+  { to: '/exam-prep', icon: Briefcase, label: 'C&P Exam Prep' },
+  { to: '/reference', icon: BookOpen, label: 'Reference' },
+  { to: '/settings', icon: Settings, label: 'Settings' },
+];
+
 export function MobileHeader() {
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
+  const [open, setOpen] = useState(false);
   
   const pageLabel = pageLabels[location.pathname] || 'Evidence Tracker';
 
@@ -44,44 +67,95 @@ export function MobileHeader() {
       "border-b border-border",
       "safe-area-top"
     )}>
-      <div className="flex items-center justify-between px-4 h-12">
-        {/* Left side */}
-        <div className="flex items-center gap-2 min-w-0 flex-1">
+      <div className="flex items-center justify-between px-3 h-12">
+        {/* Left side - Hamburger Menu */}
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetTrigger asChild>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="h-10 w-10 p-0"
+              aria-label="Open navigation menu"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-[280px] p-0">
+            <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+            <div className="flex flex-col h-full">
+              {/* Sheet Header */}
+              <div className="flex items-center gap-3 p-4 border-b">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/20">
+                  <ShieldCheck className="h-4 w-4 text-primary" />
+                </div>
+                <span className="font-semibold text-foreground text-sm">Evidence Tracker</span>
+              </div>
+              
+              {/* Navigation Items */}
+              <nav className="flex-1 overflow-y-auto py-2">
+                <ul className="space-y-0.5 px-2">
+                  {navItems.map((item) => {
+                    const isActive = location.pathname === item.to;
+                    return (
+                      <li key={item.to}>
+                        <NavLink
+                          to={item.to}
+                          onClick={() => setOpen(false)}
+                          className={cn(
+                            'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm min-h-[44px]',
+                            'text-foreground hover:bg-muted transition-colors',
+                            isActive && 'bg-primary/10 text-primary font-medium'
+                          )}
+                        >
+                          <item.icon className={cn('h-4 w-4 flex-shrink-0', isActive && 'text-primary')} />
+                          <span>{item.label}</span>
+                        </NavLink>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </nav>
+              
+              {/* Theme Toggle */}
+              <div className="border-t p-3 flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Theme</span>
+                <ThemeToggle />
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
+
+        {/* Center - Title */}
+        <div className="flex items-center gap-2">
           {isHome ? (
-            <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/20">
-                <ShieldCheck className="h-4 w-4 text-primary" />
+            <>
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/20">
+                <ShieldCheck className="h-3.5 w-3.5 text-primary" />
               </div>
               <span className="font-semibold text-foreground text-sm">Evidence Tracker</span>
-            </div>
+            </>
           ) : (
-            <div className="flex items-center gap-1">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleBack}
-                className="h-9 px-2 text-primary hover:bg-muted"
-                aria-label="Go back to dashboard"
-              >
-                <ArrowLeft className="h-5 w-5" />
-                <span className="text-sm">Back</span>
-              </Button>
-            </div>
+            <span className="font-semibold text-foreground text-sm truncate max-w-[180px]">
+              {pageLabel}
+            </span>
           )}
         </div>
 
-        {/* Center - Title (only on subpages) */}
-        {!isHome && (
-          <div className="absolute left-1/2 -translate-x-1/2 max-w-[40vw]">
-            <span className="font-semibold text-foreground text-sm truncate block">
-              {pageLabel}
-            </span>
-          </div>
-        )}
-
-        {/* Right side */}
+        {/* Right side - Back or Theme */}
         <div className="flex items-center">
-          <ThemeToggle />
+          {!isHome ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleBack}
+              className="h-10 w-10 p-0"
+              aria-label="Go back to dashboard"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+          ) : (
+            <ThemeToggle />
+          )}
         </div>
       </div>
     </header>

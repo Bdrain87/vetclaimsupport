@@ -195,18 +195,18 @@ export default function EvidenceLibrary() {
         </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
+      {/* Stats Cards - Horizontal scrollable on mobile */}
+      <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-3 lg:grid-cols-7 sm:overflow-visible">
         <Card 
-          className={`data-card cursor-pointer transition-all ${activeCategory === 'all' ? 'ring-2 ring-primary' : ''}`}
+          className={`data-card cursor-pointer transition-all flex-shrink-0 w-[100px] sm:w-auto ${activeCategory === 'all' ? 'ring-2 ring-primary' : ''}`}
           onClick={() => setActiveCategory('all')}
         >
-          <CardContent className="pt-4 pb-3">
-            <div className="flex items-center gap-2">
-              <FolderOpen className="h-5 w-5 text-primary" />
-              <div>
-                <p className="text-lg font-bold">{totalDocuments}</p>
-                <p className="text-xs text-muted-foreground">All Files</p>
+          <CardContent className="p-3">
+            <div className="flex flex-col items-center gap-1 sm:flex-row sm:gap-2">
+              <FolderOpen className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+              <div className="text-center sm:text-left">
+                <p className="text-base sm:text-lg font-bold">{totalDocuments}</p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">All</p>
               </div>
             </div>
           </CardContent>
@@ -214,18 +214,19 @@ export default function EvidenceLibrary() {
         
         {(Object.keys(documentCategoryLabels) as DocumentCategory[]).map(cat => {
           const Icon = categoryIcons[cat];
+          const shortLabel = documentCategoryLabels[cat].split(' ')[0].slice(0, 6);
           return (
             <Card 
               key={cat}
-              className={`data-card cursor-pointer transition-all ${activeCategory === cat ? 'ring-2 ring-primary' : ''}`}
+              className={`data-card cursor-pointer transition-all flex-shrink-0 w-[100px] sm:w-auto ${activeCategory === cat ? 'ring-2 ring-primary' : ''}`}
               onClick={() => setActiveCategory(cat)}
             >
-              <CardContent className="pt-4 pb-3">
-                <div className="flex items-center gap-2">
-                  <Icon className="h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <p className="text-lg font-bold">{categoryCounts[cat]}</p>
-                    <p className="text-xs text-muted-foreground truncate">{documentCategoryLabels[cat].split(' ')[0]}</p>
+              <CardContent className="p-3">
+                <div className="flex flex-col items-center gap-1 sm:flex-row sm:gap-2">
+                  <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
+                  <div className="text-center sm:text-left">
+                    <p className="text-base sm:text-lg font-bold">{categoryCounts[cat]}</p>
+                    <p className="text-[10px] sm:text-xs text-muted-foreground">{shortLabel}</p>
                   </div>
                 </div>
               </CardContent>
@@ -237,29 +238,29 @@ export default function EvidenceLibrary() {
       {/* Missing Documents Alert */}
       {missingDocs.length > 0 && (
         <Card className="border-warning/50 bg-warning/5">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center gap-2 text-warning">
-              <AlertTriangle className="h-5 w-5" />
-              Missing Evidence for Your Conditions
+          <CardHeader className="pb-2 px-3 sm:px-6">
+            <CardTitle className="text-sm sm:text-base flex items-center gap-2 text-warning">
+              <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+              <span className="truncate">Missing Evidence</span>
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
-            {missingDocs.slice(0, 3).map((item, idx) => (
+          <CardContent className="space-y-2 px-3 sm:px-6 pb-3">
+            {missingDocs.slice(0, 2).map((item, idx) => (
               <div key={idx} className="flex flex-col gap-1">
-                <p className="font-medium text-sm">{item.condition}</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {item.docs.slice(0, 3).map((doc, i) => (
+                <p className="font-medium text-xs sm:text-sm truncate">{item.condition}</p>
+                <div className="flex flex-wrap gap-1">
+                  {item.docs.slice(0, 2).map((doc, i) => (
                     <Badge 
                       key={i} 
                       variant={doc.priority === 'critical' ? 'destructive' : 'secondary'}
-                      className="text-xs"
+                      className="text-[10px] sm:text-xs px-1.5 py-0.5"
                     >
-                      {doc.documentType}
+                      {doc.documentType.length > 12 ? doc.documentType.slice(0, 10) + '…' : doc.documentType}
                     </Badge>
                   ))}
-                  {item.docs.length > 3 && (
-                    <Badge variant="outline" className="text-xs">
-                      +{item.docs.length - 3} more
+                  {item.docs.length > 2 && (
+                    <Badge variant="outline" className="text-[10px] sm:text-xs px-1.5 py-0.5">
+                      +{item.docs.length - 2}
                     </Badge>
                   )}
                 </div>
@@ -283,14 +284,14 @@ export default function EvidenceLibrary() {
           </div>
         </div>
 
-        {/* Drop Zone */}
+        {/* Drop Zone - Compact on mobile */}
         <div
           ref={dropZoneRef}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
           className={`
-            border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer
+            border-2 border-dashed rounded-xl p-4 sm:p-6 text-center transition-all cursor-pointer
             ${isDragging 
               ? 'border-primary bg-primary/5' 
               : 'border-muted-foreground/30 hover:border-primary/50'
@@ -298,12 +299,12 @@ export default function EvidenceLibrary() {
           `}
           onClick={() => fileInputRef.current?.click()}
         >
-          <Upload className={`h-10 w-10 mx-auto mb-3 ${isDragging ? 'text-primary' : 'text-muted-foreground'}`} />
-          <p className="font-medium text-foreground">
-            {isDragging ? 'Drop files here' : 'Drag & drop files or click to upload'}
+          <Upload className={`h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-2 ${isDragging ? 'text-primary' : 'text-muted-foreground'}`} />
+          <p className="font-medium text-foreground text-sm sm:text-base">
+            {isDragging ? 'Drop files here' : 'Tap to upload files'}
           </p>
-          <p className="text-sm text-muted-foreground mt-1">
-            PDFs, images, and documents up to 10MB
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+            PDFs, images up to 10MB
           </p>
         </div>
       </div>
@@ -322,13 +323,13 @@ export default function EvidenceLibrary() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid gap-2 sm:gap-3 grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filteredDocuments.map(doc => (
             <Card key={doc.id} className="data-card hover:border-primary/50 transition-colors group">
-              <CardContent className="p-3">
+              <CardContent className="p-2 sm:p-3">
                 {/* Thumbnail/Preview */}
                 <div 
-                  className="relative aspect-[4/3] rounded-lg overflow-hidden bg-muted mb-3 cursor-pointer"
+                  className="relative aspect-[4/3] rounded-lg overflow-hidden bg-muted mb-2 cursor-pointer"
                   onClick={() => setSelectedDoc(doc)}
                 >
                   {doc.thumbnailUrl ? (
@@ -342,45 +343,37 @@ export default function EvidenceLibrary() {
                       {getFileIcon(doc)}
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                    <Button size="icon" variant="secondary" className="h-8 w-8">
-                      <Eye className="h-4 w-4" />
-                    </Button>
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <Eye className="h-5 w-5 text-white" />
                   </div>
                 </div>
 
                 {/* Info */}
-                <div className="space-y-2">
-                  <p className="font-medium text-sm truncate" title={doc.title}>{doc.title}</p>
-                  <div className="flex items-center justify-between">
-                    <Badge variant="outline" className="text-xs">
-                      {documentCategoryLabels[doc.category].split(' ')[0]}
+                <div className="space-y-1">
+                  <p className="font-medium text-xs sm:text-sm truncate" title={doc.title}>{doc.title}</p>
+                  <div className="flex items-center justify-between gap-1">
+                    <Badge variant="outline" className="text-[10px] sm:text-xs px-1.5">
+                      {documentCategoryLabels[doc.category].split(' ')[0].slice(0, 6)}
                     </Badge>
-                    <span className="text-xs text-muted-foreground">{formatFileSize(doc.fileSize)}</span>
+                    <span className="text-[10px] sm:text-xs text-muted-foreground">{formatFileSize(doc.fileSize)}</span>
                   </div>
-                  {doc.linkedEntries.length > 0 && (
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <Link2 className="h-3 w-3" />
-                      <span>Linked to {doc.linkedEntries.length} {doc.linkedEntries.length === 1 ? 'entry' : 'entries'}</span>
-                    </div>
-                  )}
                 </div>
 
-                {/* Actions */}
-                <div className="flex gap-1 mt-3">
+                {/* Actions - Icon only on mobile */}
+                <div className="flex gap-1 mt-2">
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="flex-1 h-8"
+                    className="flex-1 h-8 min-h-[44px] text-xs"
                     onClick={() => setEditingDoc(doc)}
                   >
-                    <Edit className="h-3.5 w-3.5 mr-1" />
-                    Edit
+                    <Edit className="h-3.5 w-3.5 sm:mr-1" />
+                    <span className="hidden sm:inline">Edit</span>
                   </Button>
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="h-8 text-destructive hover:text-destructive"
+                    className="h-8 min-h-[44px] px-2 text-destructive hover:text-destructive"
                     onClick={() => {
                       deleteDocument(doc.id);
                       toast({ title: 'Document Deleted' });
