@@ -28,7 +28,8 @@ const daytimeSleepinessOptions: { value: DaytimeSleepiness; label: string }[] = 
   { value: 'None', label: 'None - Alert all day' },
   { value: 'Mild', label: 'Mild - Occasional drowsiness' },
   { value: 'Moderate', label: 'Moderate - Frequent drowsiness' },
-  { value: 'Severe - falling asleep during activities', label: 'Severe - Falling asleep during activities' },
+  { value: 'Severe', label: 'Severe - Difficulty staying awake' },
+  { value: 'Persistent hypersomnolence', label: 'Persistent hypersomnolence (30% rating)' },
 ];
 
 export default function Sleep() {
@@ -148,7 +149,7 @@ export default function Sleep() {
     const gaspingEpisodes = last30Days.filter(e => e.wokeGasping).length;
     const oxygenDrops = last30Days.filter(e => e.oxygenDesaturation).length;
     const severeSleepiness = last30Days.filter(e => 
-      e.daytimeSleepiness === 'Severe - falling asleep during activities'
+      e.daytimeSleepiness === 'Persistent hypersomnolence'
     ).length;
     const notRested = last30Days.filter(e => e.feltRested === false).length;
 
@@ -173,7 +174,7 @@ export default function Sleep() {
     const hasOxygenTherapy = sleepEntries.some(e => e.requiresOxygen);
     const usesCPAP = sleepEntries.some(e => e.usesCPAP);
     const hasSevereSleepiness = sleepEntries.some(e => 
-      e.daytimeSleepiness === 'Severe - falling asleep during activities'
+      e.daytimeSleepiness === 'Persistent hypersomnolence'
     );
     
     if (hasOxygenTherapy) return { rating: '100%', color: 'text-destructive', note: 'Requires chronic respiratory failure with CO2 retention or cor pulmonale' };
@@ -739,7 +740,7 @@ export default function Sleep() {
                 {entry.daytimeSleepiness && entry.daytimeSleepiness !== 'None' && (
                   <div className="text-sm">
                     <span className="text-muted-foreground">Daytime Sleepiness: </span>
-                    <span className={entry.daytimeSleepiness.includes('Severe') ? 'text-destructive font-medium' : ''}>
+                    <span className={(entry.daytimeSleepiness === 'Severe' || entry.daytimeSleepiness === 'Persistent hypersomnolence') ? 'text-destructive font-medium' : ''}>
                       {entry.daytimeSleepiness}
                     </span>
                   </div>
