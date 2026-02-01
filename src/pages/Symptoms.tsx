@@ -4,7 +4,7 @@ import { useEvidence } from '@/context/EvidenceContext';
 import { 
   Activity, Plus, Trash2, Edit, Calendar, Download, Clock, 
   TrendingUp, Filter, BarChart3, CalendarDays, List,
-  ChevronDown, ChevronUp, Zap, Target
+  ChevronDown, ChevronUp, Zap, Target, Search
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -14,16 +14,13 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { exportSymptoms } from '@/utils/pdfExport';
-import { PTSDSymptomLogger } from '@/components/symptoms/PTSDSymptomLogger';
-import { SpineSymptomLogger } from '@/components/symptoms/SpineSymptomLogger';
 import { VoiceInputButton } from '@/components/ui/voice-input-button';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
-import { format, subDays, startOfDay, parseISO, isWithinInterval } from 'date-fns';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { format, subDays, startOfDay, parseISO } from 'date-fns';
 import type { SymptomEntry, SymptomFrequency } from '@/types/claims';
 
 // Simplified VA-relevant frequency options
@@ -60,8 +57,8 @@ const durationOptions = [
 interface ExtendedSymptomForm {
   date: string;
   timeOfDay: string;
+  conditionTitle: string; // NEW: Required condition/title field
   symptom: string;
-  bodyArea: string;
   severity: number;
   frequency: string;
   trigger: string;
@@ -75,16 +72,17 @@ export default function Symptoms() {
   const { documents, setAllDocuments } = useEvidence();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<'list' | 'timeline' | 'calendar'>('list');
+  const [viewMode, setViewMode] = useState<'list' | 'timeline'>('list');
   const [filterCondition, setFilterCondition] = useState<string>('all');
   const [dateRange, setDateRange] = useState<'7' | '30' | '90' | 'all'>('30');
+  const [searchQuery, setSearchQuery] = useState('');
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
   
   const [formData, setFormData] = useState<ExtendedSymptomForm>({
     date: '',
     timeOfDay: '',
+    conditionTitle: '',
     symptom: '',
-    bodyArea: '',
     severity: 5,
     frequency: '',
     trigger: '',
@@ -93,13 +91,13 @@ export default function Symptoms() {
     notes: '',
   });
 
-  // Get unique body areas/conditions for filtering
+  // Get unique conditions for filtering dropdown
   const uniqueConditions = useMemo(() => {
     const conditions = new Set(data.symptoms.map(s => s.bodyArea).filter(Boolean));
-    return Array.from(conditions);
+    return Array.from(conditions).sort();
   }, [data.symptoms]);
 
-  // Filter symptoms by date range and condition
+  // Filter symptoms by date range, condition, and search query
   const filteredSymptoms = useMemo(() => {
     let symptoms = [...data.symptoms];
     
@@ -113,18 +111,28 @@ export default function Symptoms() {
       });
     }
     
-    // Filter by condition
+    // Filter by condition dropdown
     if (filterCondition !== 'all') {
       symptoms = symptoms.filter(s => s.bodyArea === filterCondition);
     }
     
+    // Filter by search query (searches condition title and symptom description)
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      symptoms = symptoms.filter(s => 
+        s.bodyArea?.toLowerCase().includes(query) ||
+        s.symptom?.toLowerCase().includes(query) ||
+        s.notes?.toLowerCase().includes(query)
+      );
+    }
+    
     return symptoms.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  }, [data.symptoms, dateRange, filterCondition]);
+  }, [data.symptoms, dateRange, filterCondition, searchQuery]);
 
   // Analytics: Severity over time
   const severityTrendData = useMemo(() => {
     const days = dateRange === 'all' ? 90 : parseInt(dateRange);
-    const data: { date: string; avgSeverity: number; count: number }[] = [];
+    const chartData: { date: string; avgSeverity: number; count: number }[] = [];
     
     for (let i = days - 1; i >= 0; i--) {
       const date = subDays(new Date(), i);
@@ -133,32 +141,32 @@ export default function Symptoms() {
       
       if (daySymptoms.length > 0) {
         const avgSeverity = daySymptoms.reduce((acc, s) => acc + s.severity, 0) / daySymptoms.length;
-        data.push({
+        chartData.push({
           date: format(date, 'MMM d'),
           avgSeverity: Math.round(avgSeverity * 10) / 10,
           count: daySymptoms.length
         });
       }
     }
-    return data;
+    return chartData;
   }, [filteredSymptoms, dateRange]);
 
-  // Analytics: Frequency by body area
-  const bodyAreaStats = useMemo(() => {
+  // Analytics: Frequency by condition
+  const conditionStats = useMemo(() => {
     const stats: Record<string, { count: number; avgSeverity: number }> = {};
     
     filteredSymptoms.forEach(s => {
-      const area = s.bodyArea || 'Unspecified';
-      if (!stats[area]) {
-        stats[area] = { count: 0, avgSeverity: 0 };
+      const condition = s.bodyArea || 'Unspecified';
+      if (!stats[condition]) {
+        stats[condition] = { count: 0, avgSeverity: 0 };
       }
-      stats[area].count++;
-      stats[area].avgSeverity += s.severity;
+      stats[condition].count++;
+      stats[condition].avgSeverity += s.severity;
     });
     
     return Object.entries(stats)
-      .map(([area, { count, avgSeverity }]) => ({
-        area,
+      .map(([condition, { count, avgSeverity }]) => ({
+        condition,
         count,
         avgSeverity: Math.round((avgSeverity / count) * 10) / 10
       }))
@@ -181,8 +189,8 @@ export default function Symptoms() {
     setFormData({
       date: '',
       timeOfDay: '',
+      conditionTitle: '',
       symptom: '',
-      bodyArea: '',
       severity: 5,
       frequency: '',
       trigger: '',
@@ -207,7 +215,7 @@ export default function Symptoms() {
     const symptomData = {
       date: formData.date,
       symptom: formData.symptom,
-      bodyArea: formData.bodyArea,
+      bodyArea: formData.conditionTitle, // Store condition title in bodyArea field
       severity: formData.severity,
       frequency: formData.frequency,
       dailyImpact: formData.dailyImpact,
@@ -238,8 +246,8 @@ export default function Symptoms() {
     setFormData({
       date: symptom.date,
       timeOfDay: timeMatch?.[1] || '',
+      conditionTitle: symptom.bodyArea || '',
       symptom: symptom.symptom,
-      bodyArea: symptom.bodyArea,
       severity: symptom.severity,
       frequency: symptom.frequency,
       trigger: triggerMatch?.[1] || '',
@@ -283,7 +291,7 @@ export default function Symptoms() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Symptoms Journal</h1>
-            <p className="text-muted-foreground text-sm">Track symptoms for C&P exam documentation</p>
+            <p className="text-muted-foreground text-sm">Track symptoms for any condition - for C&P exam documentation</p>
           </div>
         </div>
 
@@ -295,563 +303,577 @@ export default function Symptoms() {
         </div>
       </div>
 
-      {/* Tabs for General vs Condition-Specific */}
-      <Tabs defaultValue="general" className="w-full">
-        <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
-          <TabsList className="inline-flex w-auto min-w-full sm:grid sm:w-full sm:grid-cols-3 h-auto">
-            <TabsTrigger value="general" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2">General</TabsTrigger>
-            <TabsTrigger value="spine" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2">
-              <span className="sm:hidden">Spine</span>
-              <span className="hidden sm:inline">Spine (DC 5235-5243)</span>
-            </TabsTrigger>
-            <TabsTrigger value="ptsd" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2">
-              <span className="sm:hidden">PTSD</span>
-              <span className="hidden sm:inline">PTSD (DC 9411)</span>
-            </TabsTrigger>
-          </TabsList>
+      {/* Analytics Dashboard */}
+      {data.symptoms.length > 0 && (
+        <div className="grid gap-4 md:grid-cols-2">
+          {/* Severity Trend Chart */}
+          <Card className="data-card">
+            <CardHeader className="pb-2">
+              <div className="flex items-center gap-2">
+                <TrendingUp className="h-4 w-4 text-primary" />
+                <CardTitle className="text-sm font-medium">Severity Trend</CardTitle>
+              </div>
+              <CardDescription className="text-xs">Average severity over time</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {severityTrendData.length > 0 ? (
+                <ResponsiveContainer width="100%" height={120}>
+                  <LineChart data={severityTrendData}>
+                    <XAxis dataKey="date" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
+                    <YAxis domain={[0, 10]} tick={{ fontSize: 10 }} width={25} />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: 'hsl(var(--card))', 
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: '8px'
+                      }} 
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="avgSeverity" 
+                      stroke="hsl(var(--primary))" 
+                      strokeWidth={2}
+                      dot={{ fill: 'hsl(var(--primary))', strokeWidth: 0, r: 3 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              ) : (
+                <p className="text-sm text-muted-foreground text-center py-8">No data in selected range</p>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Condition Frequency */}
+          <Card className="data-card">
+            <CardHeader className="pb-2">
+              <div className="flex items-center gap-2">
+                <BarChart3 className="h-4 w-4 text-primary" />
+                <CardTitle className="text-sm font-medium">Entries by Condition</CardTitle>
+              </div>
+              <CardDescription className="text-xs">Most logged conditions</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {conditionStats.length > 0 ? (
+                <ResponsiveContainer width="100%" height={120}>
+                  <BarChart data={conditionStats} layout="vertical">
+                    <XAxis type="number" tick={{ fontSize: 10 }} />
+                    <YAxis type="category" dataKey="condition" tick={{ fontSize: 10 }} width={80} />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: 'hsl(var(--card))', 
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: '8px'
+                      }}
+                      formatter={(value: number, name: string) => [
+                        name === 'count' ? `${value} entries` : `Avg: ${value}/10`,
+                        name === 'count' ? 'Frequency' : 'Severity'
+                      ]}
+                    />
+                    <Bar dataKey="count" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              ) : (
+                <p className="text-sm text-muted-foreground text-center py-8">No data available</p>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Search & Filter Controls */}
+      <div className="flex flex-col gap-3">
+        {/* Search Bar */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search by condition name, symptom, or notes..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10"
+          />
         </div>
 
-        <TabsContent value="general" className="mt-4 space-y-6">
-          {/* Analytics Dashboard */}
-          {data.symptoms.length > 0 && (
-            <div className="grid gap-4 md:grid-cols-2">
-              {/* Severity Trend Chart */}
-              <Card className="data-card">
-                <CardHeader className="pb-2">
-                  <div className="flex items-center gap-2">
-                    <TrendingUp className="h-4 w-4 text-primary" />
-                    <CardTitle className="text-sm font-medium">Severity Trend</CardTitle>
-                  </div>
-                  <CardDescription className="text-xs">Average severity over time</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {severityTrendData.length > 0 ? (
-                    <ResponsiveContainer width="100%" height={120}>
-                      <LineChart data={severityTrendData}>
-                        <XAxis dataKey="date" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
-                        <YAxis domain={[0, 10]} tick={{ fontSize: 10 }} width={25} />
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: 'hsl(var(--card))', 
-                            border: '1px solid hsl(var(--border))',
-                            borderRadius: '8px'
-                          }} 
-                        />
-                        <Line 
-                          type="monotone" 
-                          dataKey="avgSeverity" 
-                          stroke="hsl(var(--primary))" 
-                          strokeWidth={2}
-                          dot={{ fill: 'hsl(var(--primary))', strokeWidth: 0, r: 3 }}
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
-                  ) : (
-                    <p className="text-sm text-muted-foreground text-center py-8">No data in selected range</p>
-                  )}
-                </CardContent>
-              </Card>
+        <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
+          <div className="flex flex-wrap gap-2 items-center">
+            {/* Date Range Filter */}
+            <Select value={dateRange} onValueChange={(v: '7' | '30' | '90' | 'all') => setDateRange(v)}>
+              <SelectTrigger className="w-[130px] h-9">
+                <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="7">Last 7 days</SelectItem>
+                <SelectItem value="30">Last 30 days</SelectItem>
+                <SelectItem value="90">Last 90 days</SelectItem>
+                <SelectItem value="all">All time</SelectItem>
+              </SelectContent>
+            </Select>
 
-              {/* Body Area Frequency */}
-              <Card className="data-card">
-                <CardHeader className="pb-2">
-                  <div className="flex items-center gap-2">
-                    <BarChart3 className="h-4 w-4 text-primary" />
-                    <CardTitle className="text-sm font-medium">Symptom Frequency by Area</CardTitle>
-                  </div>
-                  <CardDescription className="text-xs">Most affected body areas</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {bodyAreaStats.length > 0 ? (
-                    <ResponsiveContainer width="100%" height={120}>
-                      <BarChart data={bodyAreaStats} layout="vertical">
-                        <XAxis type="number" tick={{ fontSize: 10 }} />
-                        <YAxis type="category" dataKey="area" tick={{ fontSize: 10 }} width={80} />
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: 'hsl(var(--card))', 
-                            border: '1px solid hsl(var(--border))',
-                            borderRadius: '8px'
-                          }}
-                          formatter={(value: number, name: string) => [
-                            name === 'count' ? `${value} entries` : `Avg: ${value}/10`,
-                            name === 'count' ? 'Frequency' : 'Severity'
-                          ]}
-                        />
-                        <Bar dataKey="count" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  ) : (
-                    <p className="text-sm text-muted-foreground text-center py-8">No data available</p>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-          )}
-
-          {/* Filter & View Controls */}
-          <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
-            <div className="flex flex-wrap gap-2 items-center">
-              {/* Date Range Filter */}
-              <Select value={dateRange} onValueChange={(v: '7' | '30' | '90' | 'all') => setDateRange(v)}>
-                <SelectTrigger className="w-[130px] h-9">
-                  <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
-                  <SelectValue />
+            {/* Condition Filter */}
+            {uniqueConditions.length > 0 && (
+              <Select value={filterCondition} onValueChange={setFilterCondition}>
+                <SelectTrigger className="w-[180px] h-9">
+                  <Filter className="h-4 w-4 mr-2 text-muted-foreground" />
+                  <SelectValue placeholder="Filter by condition" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="7">Last 7 days</SelectItem>
-                  <SelectItem value="30">Last 30 days</SelectItem>
-                  <SelectItem value="90">Last 90 days</SelectItem>
-                  <SelectItem value="all">All time</SelectItem>
+                  <SelectItem value="all">All Conditions</SelectItem>
+                  {uniqueConditions.map(c => (
+                    <SelectItem key={c} value={c}>{c}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
+            )}
 
-              {/* Condition Filter */}
-              {uniqueConditions.length > 0 && (
-                <Select value={filterCondition} onValueChange={setFilterCondition}>
-                  <SelectTrigger className="w-[150px] h-9">
-                    <Filter className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <SelectValue placeholder="Filter by area" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Areas</SelectItem>
-                    {uniqueConditions.map(c => (
-                      <SelectItem key={c} value={c}>{c}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
+            {/* Entry Count Badge */}
+            <Badge variant="secondary" className="h-9 px-3">
+              {filteredSymptoms.length} entries
+            </Badge>
+          </div>
 
-              {/* Entry Count Badge */}
-              <Badge variant="secondary" className="h-9 px-3">
-                {filteredSymptoms.length} entries
-              </Badge>
+          <div className="flex gap-2">
+            {/* View Mode Toggle */}
+            <div className="flex border border-border rounded-lg p-1 bg-muted/50">
+              <Button 
+                variant={viewMode === 'list' ? 'secondary' : 'ghost'} 
+                size="sm" 
+                className="h-7 px-2"
+                onClick={() => setViewMode('list')}
+              >
+                <List className="h-4 w-4" />
+              </Button>
+              <Button 
+                variant={viewMode === 'timeline' ? 'secondary' : 'ghost'} 
+                size="sm" 
+                className="h-7 px-2"
+                onClick={() => setViewMode('timeline')}
+              >
+                <CalendarDays className="h-4 w-4" />
+              </Button>
             </div>
 
-            <div className="flex gap-2">
-              {/* View Mode Toggle */}
-              <div className="flex border border-border rounded-lg p-1 bg-muted/50">
-                <Button 
-                  variant={viewMode === 'list' ? 'secondary' : 'ghost'} 
-                  size="sm" 
-                  className="h-7 px-2"
-                  onClick={() => setViewMode('list')}
-                >
-                  <List className="h-4 w-4" />
+            {/* Add Entry Button */}
+            <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
+              <DialogTrigger asChild>
+                <Button className="gap-2 h-9">
+                  <Plus className="h-4 w-4" />
+                  <span className="hidden sm:inline">Log Symptom</span>
+                  <span className="sm:hidden">Add</span>
                 </Button>
-                <Button 
-                  variant={viewMode === 'timeline' ? 'secondary' : 'ghost'} 
-                  size="sm" 
-                  className="h-7 px-2"
-                  onClick={() => setViewMode('timeline')}
-                >
-                  <CalendarDays className="h-4 w-4" />
-                </Button>
-              </div>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl max-h-[85vh] sm:max-h-[90vh] flex flex-col top-[10%] sm:top-[50%]">
+                <DialogHeader>
+                  <DialogTitle>{editingId ? 'Edit Symptom' : 'Log Symptom'}</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+                  <div className="flex-1 overflow-y-auto space-y-4 pr-2" style={{ scrollPaddingBottom: '350px' }}>
+                    {/* Condition Title - REQUIRED and FIRST */}
+                    <div className="space-y-2">
+                      <Label htmlFor="conditionTitle" className="flex items-center gap-1">
+                        <Target className="h-3 w-3" />
+                        Condition Name *
+                      </Label>
+                      <Input 
+                        id="conditionTitle" 
+                        placeholder="e.g., Tinnitus, Knee Pain, Sleep Apnea, Anxiety, PTSD"
+                        value={formData.conditionTitle}
+                        onChange={(e) => setFormData({ ...formData, conditionTitle: e.target.value })}
+                        required
+                        list="condition-suggestions"
+                        onFocus={(e) => {
+                          setTimeout(() => {
+                            e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                          }, 300);
+                        }}
+                      />
+                      {/* Suggest existing conditions */}
+                      <datalist id="condition-suggestions">
+                        {uniqueConditions.map(c => (
+                          <option key={c} value={c} />
+                        ))}
+                      </datalist>
+                      <p className="text-xs text-muted-foreground">
+                        Enter the name of the condition you're tracking (e.g., the VA disability you're claiming)
+                      </p>
+                    </div>
 
-              {/* Add Entry Button */}
-              <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
-                <DialogTrigger asChild>
-                  <Button className="gap-2 h-9">
-                    <Plus className="h-4 w-4" />
-                    <span className="hidden sm:inline">Log Symptom</span>
-                    <span className="sm:hidden">Add</span>
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-2xl max-h-[85vh] sm:max-h-[90vh] flex flex-col top-[10%] sm:top-[50%]">
-                  <DialogHeader>
-                    <DialogTitle>{editingId ? 'Edit Symptom' : 'Log Symptom'}</DialogTitle>
-                  </DialogHeader>
-                  <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
-                    <div className="flex-1 overflow-y-auto space-y-4 pr-2" style={{ scrollPaddingBottom: '350px' }}>
-                      {/* Date & Time Row */}
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <div className="space-y-2">
-                          <Label htmlFor="date">Date *</Label>
-                          <Input 
-                            id="date" 
-                            type="date" 
-                            value={formData.date}
-                            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                            required
-                            onFocus={(e) => {
-                              setTimeout(() => {
-                                e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                              }, 300);
-                            }}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="timeOfDay">Time of Day</Label>
-                          <Select 
-                            value={formData.timeOfDay} 
-                            onValueChange={(value) => setFormData({ ...formData, timeOfDay: value })}
-                          >
-                            <SelectTrigger>
-                              <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
-                              <SelectValue placeholder="When did it occur?" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {timeOfDayOptions.map((time) => (
-                                <SelectItem key={time} value={time}>{time}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-
-                      {/* Symptom & Body Area */}
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <div className="space-y-2">
-                          <Label htmlFor="symptom">Symptom Description *</Label>
-                          <Input 
-                            id="symptom" 
-                            placeholder="e.g., Sharp pain, numbness, ringing"
-                            value={formData.symptom}
-                            onChange={(e) => setFormData({ ...formData, symptom: e.target.value })}
-                            required
-                            onFocus={(e) => {
-                              setTimeout(() => {
-                                e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                              }, 300);
-                            }}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="bodyArea">Body Area / Condition</Label>
-                          <Input 
-                            id="bodyArea" 
-                            placeholder="e.g., Lower back, knees, ears"
-                            value={formData.bodyArea}
-                            onChange={(e) => setFormData({ ...formData, bodyArea: e.target.value })}
-                            onFocus={(e) => {
-                              setTimeout(() => {
-                                e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                              }, 300);
-                            }}
-                          />
-                        </div>
-                      </div>
-
-                      {/* Severity Slider */}
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <Label>Severity (1-10) *</Label>
-                          <span className={`rounded-md px-2 py-1 text-sm font-medium ${getSeverityColor(formData.severity)}`}>
-                            {formData.severity} - {getSeverityLabel(formData.severity)}
-                          </span>
-                        </div>
-                        <Slider
-                          value={[formData.severity]}
-                          onValueChange={([value]) => setFormData({ ...formData, severity: value })}
-                          min={1}
-                          max={10}
-                          step={1}
-                          className="w-full"
+                    {/* Date & Time Row */}
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="date">Date *</Label>
+                        <Input 
+                          id="date" 
+                          type="date" 
+                          value={formData.date}
+                          onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                          required
+                          onFocus={(e) => {
+                            setTimeout(() => {
+                              e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }, 300);
+                          }}
                         />
                       </div>
-
-                      {/* Trigger & Duration Row */}
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <div className="space-y-2">
-                          <Label htmlFor="trigger" className="flex items-center gap-1">
-                            <Zap className="h-3 w-3" />
-                            What Triggered It?
-                          </Label>
-                          <Input 
-                            id="trigger" 
-                            placeholder="e.g., Physical activity, stress, weather"
-                            value={formData.trigger}
-                            onChange={(e) => setFormData({ ...formData, trigger: e.target.value })}
-                            onFocus={(e) => {
-                              setTimeout(() => {
-                                e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                              }, 300);
-                            }}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="duration" className="flex items-center gap-1">
-                            <Clock className="h-3 w-3" />
-                            How Long Did It Last?
-                          </Label>
-                          <Select 
-                            value={formData.duration} 
-                            onValueChange={(value) => setFormData({ ...formData, duration: value })}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select duration" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {durationOptions.map((dur) => (
-                                <SelectItem key={dur} value={dur}>{dur}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-
-                      {/* Frequency */}
                       <div className="space-y-2">
-                        <Label htmlFor="frequency">How Often Does This Occur?</Label>
+                        <Label htmlFor="timeOfDay">Time of Day</Label>
                         <Select 
-                          value={formData.frequency} 
-                          onValueChange={(value) => setFormData({ ...formData, frequency: value })}
+                          value={formData.timeOfDay} 
+                          onValueChange={(value) => setFormData({ ...formData, timeOfDay: value })}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder="Select frequency" />
+                            <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
+                            <SelectValue placeholder="When did it occur?" />
                           </SelectTrigger>
                           <SelectContent>
-                            {frequencyOptions.map((freq) => (
-                              <SelectItem key={freq} value={freq}>{freq}</SelectItem>
+                            {timeOfDayOptions.map((time) => (
+                              <SelectItem key={time} value={time}>{time}</SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
                       </div>
+                    </div>
 
-                      {/* Impact on Daily Activities */}
+                    {/* Symptom Description */}
+                    <div className="space-y-2">
+                      <Label htmlFor="symptom">Symptom Description *</Label>
+                      <Input 
+                        id="symptom" 
+                        placeholder="e.g., Sharp pain, numbness, ringing, difficulty breathing"
+                        value={formData.symptom}
+                        onChange={(e) => setFormData({ ...formData, symptom: e.target.value })}
+                        required
+                        onFocus={(e) => {
+                          setTimeout(() => {
+                            e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                          }, 300);
+                        }}
+                      />
+                    </div>
+
+                    {/* Severity Slider */}
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <Label>Severity (1-10) *</Label>
+                        <span className={`rounded-md px-2 py-1 text-sm font-medium ${getSeverityColor(formData.severity)}`}>
+                          {formData.severity} - {getSeverityLabel(formData.severity)}
+                        </span>
+                      </div>
+                      <Slider
+                        value={[formData.severity]}
+                        onValueChange={([value]) => setFormData({ ...formData, severity: value })}
+                        min={1}
+                        max={10}
+                        step={1}
+                        className="w-full"
+                      />
+                    </div>
+
+                    {/* Trigger & Duration Row */}
+                    <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
-                        <Label htmlFor="dailyImpact" className="flex items-center gap-1">
-                          <Target className="h-3 w-3" />
-                          Impact on Daily Activities *
+                        <Label htmlFor="trigger" className="flex items-center gap-1">
+                          <Zap className="h-3 w-3" />
+                          What Triggered It?
                         </Label>
-                        <div className="relative">
-                          <Textarea 
-                            id="dailyImpact" 
-                            placeholder="How did this affect your work, sleep, activities? Be specific for C&P exams."
-                            value={formData.dailyImpact}
-                            onChange={(e) => setFormData({ ...formData, dailyImpact: e.target.value })}
-                            rows={3}
-                            className="pr-12"
-                            required
-                            onFocus={(e) => {
-                              setTimeout(() => {
-                                e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                              }, 300);
-                            }}
-                          />
-                          <div className="absolute right-2 top-2">
-                            <VoiceInputButton
-                              onTranscript={(text) => setFormData({ ...formData, dailyImpact: text })}
-                              existingText={formData.dailyImpact}
-                              size="sm"
-                            />
-                          </div>
-                        </div>
+                        <Input 
+                          id="trigger" 
+                          placeholder="e.g., Physical activity, stress, weather"
+                          value={formData.trigger}
+                          onChange={(e) => setFormData({ ...formData, trigger: e.target.value })}
+                          onFocus={(e) => {
+                            setTimeout(() => {
+                              e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }, 300);
+                          }}
+                        />
                       </div>
-
-                      {/* Additional Notes */}
                       <div className="space-y-2">
-                        <Label htmlFor="notes">Additional Notes</Label>
-                        <div className="relative">
-                          <Textarea 
-                            id="notes" 
-                            placeholder="Any other details, what helped, etc."
-                            value={formData.notes}
-                            onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                            className="pr-12"
-                            onFocus={(e) => {
-                              setTimeout(() => {
-                                e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                              }, 300);
-                            }}
+                        <Label htmlFor="duration" className="flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          How Long Did It Last?
+                        </Label>
+                        <Select 
+                          value={formData.duration} 
+                          onValueChange={(value) => setFormData({ ...formData, duration: value })}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select duration" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {durationOptions.map((dur) => (
+                              <SelectItem key={dur} value={dur}>{dur}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    {/* Frequency */}
+                    <div className="space-y-2">
+                      <Label htmlFor="frequency">How Often Does This Occur?</Label>
+                      <Select 
+                        value={formData.frequency} 
+                        onValueChange={(value) => setFormData({ ...formData, frequency: value })}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select frequency" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {frequencyOptions.map((freq) => (
+                            <SelectItem key={freq} value={freq}>{freq}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Impact on Daily Activities */}
+                    <div className="space-y-2">
+                      <Label htmlFor="dailyImpact" className="flex items-center gap-1">
+                        <Target className="h-3 w-3" />
+                        Impact on Daily Activities *
+                      </Label>
+                      <div className="relative">
+                        <Textarea 
+                          id="dailyImpact" 
+                          placeholder="How did this affect your work, sleep, activities? Be specific for C&P exams."
+                          value={formData.dailyImpact}
+                          onChange={(e) => setFormData({ ...formData, dailyImpact: e.target.value })}
+                          rows={3}
+                          className="pr-12"
+                          required
+                          onFocus={(e) => {
+                            setTimeout(() => {
+                              e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }, 300);
+                          }}
+                        />
+                        <div className="absolute right-2 top-2">
+                          <VoiceInputButton
+                            onTranscript={(text) => setFormData({ ...formData, dailyImpact: text })}
+                            existingText={formData.dailyImpact}
+                            size="sm"
                           />
-                          <div className="absolute right-2 top-2">
-                            <VoiceInputButton
-                              onTranscript={(text) => setFormData({ ...formData, notes: text })}
-                              existingText={formData.notes}
-                              size="sm"
-                            />
-                          </div>
                         </div>
                       </div>
+                    </div>
 
-                      {/* Evidence Attachments - only show when editing */}
-                      {editingId && (
-                        <div className="pt-2 border-t border-border">
-                          <EvidenceAttachment
-                            entryType="symptom"
-                            entryId={editingId}
-                            documents={documents}
-                            onDocumentsChange={setAllDocuments}
+                    {/* Additional Notes */}
+                    <div className="space-y-2">
+                      <Label htmlFor="notes">Additional Notes</Label>
+                      <div className="relative">
+                        <Textarea 
+                          id="notes" 
+                          placeholder="Any other details, what helped, etc."
+                          value={formData.notes}
+                          onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                          className="pr-12"
+                          onFocus={(e) => {
+                            setTimeout(() => {
+                              e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }, 300);
+                          }}
+                        />
+                        <div className="absolute right-2 top-2">
+                          <VoiceInputButton
+                            onTranscript={(text) => setFormData({ ...formData, notes: text })}
+                            existingText={formData.notes}
+                            size="sm"
                           />
                         </div>
-                      )}
+                      </div>
                     </div>
-                    <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-border bg-background">
-                      <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
-                        Cancel
-                      </Button>
-                      <Button type="submit">
-                        {editingId ? 'Update' : 'Save'} Entry
-                      </Button>
-                    </div>
-                  </form>
-                </DialogContent>
-              </Dialog>
-            </div>
-          </div>
 
-          {/* Symptoms Display */}
-          {filteredSymptoms.length === 0 ? (
-            <Card className="data-card">
-              <CardContent className="flex flex-col items-center justify-center py-12">
-                <Activity className="h-12 w-12 text-muted-foreground/50 mb-4" />
-                <p className="text-muted-foreground text-center">No symptoms logged yet.</p>
-                <p className="text-sm text-muted-foreground text-center mt-1">Regular journaling strengthens your claim.</p>
-              </CardContent>
-            </Card>
-          ) : viewMode === 'timeline' ? (
-            // Timeline View
-            <div className="space-y-6">
-              {symptomsByDate.map(([date, symptoms]) => (
-                <div key={date} className="relative">
-                  {/* Date Header */}
-                  <div className="sticky top-0 z-10 bg-background/95 backdrop-blur py-2 mb-3">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-primary" />
-                      <span className="font-semibold text-sm">
-                        {format(parseISO(date), 'EEEE, MMMM d, yyyy')}
-                      </span>
-                      <Badge variant="secondary" className="ml-auto">
-                        {symptoms.length} {symptoms.length === 1 ? 'entry' : 'entries'}
-                      </Badge>
-                    </div>
+                    {/* Evidence Attachments - only show when editing */}
+                    {editingId && (
+                      <div className="pt-2 border-t border-border">
+                        <EvidenceAttachment
+                          entryType="symptom"
+                          entryId={editingId}
+                          documents={documents}
+                          onDocumentsChange={setAllDocuments}
+                        />
+                      </div>
+                    )}
                   </div>
-                  
-                  {/* Symptoms for this date */}
-                  <div className="ml-1.5 pl-6 border-l-2 border-muted space-y-3">
-                    {symptoms.map((symptom) => (
-                      <Card key={symptom.id} className="data-card">
-                        <CardContent className="p-4">
-                          <div className="flex items-start justify-between gap-2">
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 flex-wrap">
-                                <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${getSeverityColor(symptom.severity)}`}>
-                                  {symptom.severity}/10
-                                </span>
-                                {symptom.bodyArea && (
-                                  <Badge variant="outline" className="text-xs">{symptom.bodyArea}</Badge>
-                                )}
-                                {symptom.frequency && (
-                                  <span className="text-xs text-muted-foreground">{symptom.frequency}</span>
-                                )}
-                              </div>
-                              <p className="font-medium mt-1">{symptom.symptom}</p>
-                              {symptom.dailyImpact && (
-                                <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{symptom.dailyImpact}</p>
-                              )}
-                            </div>
-                            <div className="flex gap-1">
-                              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleEdit(symptom)}>
-                                <Edit className="h-3.5 w-3.5" />
-                              </Button>
-                              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => deleteSymptom(symptom.id)}>
-                                <Trash2 className="h-3.5 w-3.5 text-destructive" />
-                              </Button>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
+                  <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-border bg-background">
+                    <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
+                      Cancel
+                    </Button>
+                    <Button type="submit">
+                      {editingId ? 'Update' : 'Save'} Entry
+                    </Button>
                   </div>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </div>
+      </div>
+
+      {/* Symptoms Display */}
+      {filteredSymptoms.length === 0 ? (
+        <Card className="data-card">
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <Activity className="h-12 w-12 text-muted-foreground/50 mb-4" />
+            <p className="text-muted-foreground text-center">
+              {searchQuery || filterCondition !== 'all' 
+                ? 'No symptoms match your search/filter.' 
+                : 'No symptoms logged yet.'}
+            </p>
+            <p className="text-sm text-muted-foreground text-center mt-1">
+              {searchQuery || filterCondition !== 'all'
+                ? 'Try adjusting your search or filter.'
+                : 'Regular journaling strengthens your claim.'}
+            </p>
+          </CardContent>
+        </Card>
+      ) : viewMode === 'timeline' ? (
+        // Timeline View
+        <div className="space-y-6">
+          {symptomsByDate.map(([date, symptoms]) => (
+            <div key={date} className="relative">
+              {/* Date Header */}
+              <div className="sticky top-0 z-10 bg-background/95 backdrop-blur py-2 mb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-primary" />
+                  <span className="font-semibold text-sm">
+                    {format(parseISO(date), 'EEEE, MMMM d, yyyy')}
+                  </span>
+                  <Badge variant="secondary" className="ml-auto">
+                    {symptoms.length} {symptoms.length === 1 ? 'entry' : 'entries'}
+                  </Badge>
                 </div>
-              ))}
-            </div>
-          ) : (
-            // List View
-            <div className="grid gap-3">
-              {filteredSymptoms.map((symptom) => (
-                <Collapsible 
-                  key={symptom.id} 
-                  open={expandedCards.has(symptom.id)}
-                  onOpenChange={() => toggleCardExpand(symptom.id)}
-                >
-                  <Card className="data-card">
-                    <CollapsibleTrigger asChild>
-                      <CardHeader className="pb-2 cursor-pointer hover:bg-muted/30 transition-colors">
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap mb-1">
-                              <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${getSeverityColor(symptom.severity)}`}>
-                                {symptom.severity}/10
-                              </span>
-                              {symptom.bodyArea && (
-                                <Badge variant="outline" className="text-xs">{symptom.bodyArea}</Badge>
-                              )}
-                              <span className="text-xs text-muted-foreground flex items-center gap-1">
-                                <Calendar className="h-3 w-3" />
-                                {format(parseISO(symptom.date), 'MMM d, yyyy')}
-                              </span>
-                            </div>
-                            <CardTitle className="text-base">{symptom.symptom}</CardTitle>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            {expandedCards.has(symptom.id) ? (
-                              <ChevronUp className="h-4 w-4 text-muted-foreground" />
-                            ) : (
-                              <ChevronDown className="h-4 w-4 text-muted-foreground" />
+              </div>
+              
+              {/* Symptoms for this date */}
+              <div className="ml-1.5 pl-6 border-l-2 border-muted space-y-3">
+                {symptoms.map((symptom) => (
+                  <Card key={symptom.id} className="data-card">
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap mb-1">
+                            {symptom.bodyArea && (
+                              <Badge variant="default" className="text-xs font-semibold">
+                                {symptom.bodyArea}
+                              </Badge>
+                            )}
+                            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${getSeverityColor(symptom.severity)}`}>
+                              {symptom.severity}/10
+                            </span>
+                            {symptom.frequency && (
+                              <span className="text-xs text-muted-foreground">{symptom.frequency}</span>
                             )}
                           </div>
+                          <p className="font-medium mt-1">{symptom.symptom}</p>
+                          {symptom.dailyImpact && (
+                            <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{symptom.dailyImpact}</p>
+                          )}
                         </div>
-                      </CardHeader>
-                    </CollapsibleTrigger>
-                    
-                    <CollapsibleContent>
-                      <CardContent className="pt-0 space-y-3">
-                        {symptom.frequency && (
-                          <div className="text-sm">
-                            <span className="text-muted-foreground">Frequency:</span>{' '}
-                            <span className="font-medium">{symptom.frequency}</span>
-                          </div>
-                        )}
-                        
-                        {symptom.dailyImpact && (
-                          <div>
-                            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Daily Impact</p>
-                            <p className="text-sm">{symptom.dailyImpact}</p>
-                          </div>
-                        )}
-
-                        {symptom.notes && (
-                          <div className="bg-muted/50 rounded-lg p-3">
-                            <p className="text-sm text-muted-foreground whitespace-pre-line">{symptom.notes}</p>
-                          </div>
-                        )}
-
-                        <EvidenceThumbnails
-                          entryType="symptom"
-                          entryId={symptom.id}
-                          documents={documents}
-                        />
-
-                        <div className="flex justify-end gap-2 pt-2 border-t border-border">
-                          <Button variant="outline" size="sm" onClick={() => handleEdit(symptom)}>
-                            <Edit className="h-3.5 w-3.5 mr-1" />
-                            Edit
+                        <div className="flex gap-1">
+                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleEdit(symptom)}>
+                            <Edit className="h-3.5 w-3.5" />
                           </Button>
-                          <Button variant="outline" size="sm" onClick={() => deleteSymptom(symptom.id)} className="text-destructive hover:text-destructive">
-                            <Trash2 className="h-3.5 w-3.5 mr-1" />
-                            Delete
+                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => deleteSymptom(symptom.id)}>
+                            <Trash2 className="h-3.5 w-3.5 text-destructive" />
                           </Button>
                         </div>
-                      </CardContent>
-                    </CollapsibleContent>
+                      </div>
+                    </CardContent>
                   </Card>
-                </Collapsible>
-              ))}
+                ))}
+              </div>
             </div>
-          )}
-        </TabsContent>
+          ))}
+        </div>
+      ) : (
+        // List View
+        <div className="grid gap-3">
+          {filteredSymptoms.map((symptom) => (
+            <Collapsible 
+              key={symptom.id} 
+              open={expandedCards.has(symptom.id)}
+              onOpenChange={() => toggleCardExpand(symptom.id)}
+            >
+              <Card className="data-card">
+                <CollapsibleTrigger asChild>
+                  <CardHeader className="pb-2 cursor-pointer hover:bg-muted/30 transition-colors">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap mb-1">
+                          {symptom.bodyArea && (
+                            <Badge variant="default" className="text-xs font-semibold">
+                              {symptom.bodyArea}
+                            </Badge>
+                          )}
+                          <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${getSeverityColor(symptom.severity)}`}>
+                            {symptom.severity}/10
+                          </span>
+                          <span className="text-xs text-muted-foreground flex items-center gap-1">
+                            <Calendar className="h-3 w-3" />
+                            {format(parseISO(symptom.date), 'MMM d, yyyy')}
+                          </span>
+                        </div>
+                        <CardTitle className="text-base">{symptom.symptom}</CardTitle>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        {expandedCards.has(symptom.id) ? (
+                          <ChevronUp className="h-4 w-4 text-muted-foreground" />
+                        ) : (
+                          <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                        )}
+                      </div>
+                    </div>
+                  </CardHeader>
+                </CollapsibleTrigger>
+                
+                <CollapsibleContent>
+                  <CardContent className="pt-0 space-y-3">
+                    {symptom.frequency && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                        <span>Frequency: {symptom.frequency}</span>
+                      </div>
+                    )}
+                    
+                    {symptom.dailyImpact && (
+                      <div className="text-sm">
+                        <span className="font-medium">Impact: </span>
+                        <span className="text-muted-foreground">{symptom.dailyImpact}</span>
+                      </div>
+                    )}
+                    
+                    {symptom.notes && (
+                      <div className="text-sm">
+                        <span className="font-medium">Notes: </span>
+                        <span className="text-muted-foreground whitespace-pre-line">{symptom.notes}</span>
+                      </div>
+                    )}
 
-        <TabsContent value="spine" className="mt-4">
-          <SpineSymptomLogger />
-        </TabsContent>
-
-        <TabsContent value="ptsd" className="mt-4">
-          <PTSDSymptomLogger />
-        </TabsContent>
-      </Tabs>
+                    {/* Evidence Thumbnails */}
+                    <EvidenceThumbnails
+                      entryType="symptom"
+                      entryId={symptom.id}
+                      documents={documents}
+                    />
+                    
+                    <div className="flex gap-2 pt-2">
+                      <Button variant="outline" size="sm" onClick={() => handleEdit(symptom)}>
+                        <Edit className="h-3.5 w-3.5 mr-1" />
+                        Edit
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={() => deleteSymptom(symptom.id)}>
+                        <Trash2 className="h-3.5 w-3.5 mr-1 text-destructive" />
+                        Delete
+                      </Button>
+                    </div>
+                  </CardContent>
+                </CollapsibleContent>
+              </Card>
+            </Collapsible>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
