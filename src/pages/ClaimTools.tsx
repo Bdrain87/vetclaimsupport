@@ -1,4 +1,4 @@
-import { FileText, Scale, ClipboardList, Stethoscope, Calculator, Users, BookOpen } from 'lucide-react';
+import { FileText, Scale, ClipboardList, Stethoscope, Calculator, Users, BookOpen, Gavel } from 'lucide-react';
 import { PersonalStatementGenerator } from '@/components/tools/PersonalStatementGenerator';
 import { DBQRatingReference } from '@/components/tools/DBQRatingReference';
 import { DBQGuidance } from '@/components/tools/DBQGuidance';
@@ -6,6 +6,7 @@ import { ConditionSpecificChecklist } from '@/components/tools/ConditionSpecific
 import { CPExamPrepGuide } from '@/components/tools/CPExamPrepGuide';
 import { RatingCalculator } from '@/components/dashboard/RatingCalculator';
 import { BuddyStatementGenerator } from '@/components/tools/BuddyStatementGenerator';
+import { AppealStrategyAdvisor } from '@/components/tools/AppealStrategyAdvisor';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSearchParams } from 'react-router-dom';
 
@@ -20,6 +21,7 @@ export default function ClaimTools() {
     if (tabParam === 'calculator') return 'calculator';
     if (tabParam === 'buddy') return 'buddy';
     if (tabParam === 'dbq-guidance') return 'dbq-guidance';
+    if (tabParam === 'appeal') return 'appeal';
     return 'statement';
   };
 
@@ -38,34 +40,38 @@ export default function ClaimTools() {
 
       {/* Tools Tabs */}
       <Tabs defaultValue={getDefaultTab()} className="w-full">
-        <TabsList className="grid w-full grid-cols-7">
+        <TabsList className="grid w-full grid-cols-4 sm:grid-cols-8">
           <TabsTrigger value="statement" className="text-xs sm:text-sm">
-            <FileText className="h-4 w-4 mr-1 hidden sm:inline" />
-            Statement
+            <FileText className="h-4 w-4 sm:mr-1" />
+            <span className="hidden sm:inline">Statement</span>
           </TabsTrigger>
           <TabsTrigger value="buddy" className="text-xs sm:text-sm">
-            <Users className="h-4 w-4 mr-1 hidden sm:inline" />
-            Buddy
+            <Users className="h-4 w-4 sm:mr-1" />
+            <span className="hidden sm:inline">Buddy</span>
           </TabsTrigger>
           <TabsTrigger value="criteria" className="text-xs sm:text-sm">
-            <Scale className="h-4 w-4 mr-1 hidden sm:inline" />
-            Criteria
+            <Scale className="h-4 w-4 sm:mr-1" />
+            <span className="hidden sm:inline">Criteria</span>
           </TabsTrigger>
           <TabsTrigger value="dbq-guidance" className="text-xs sm:text-sm">
-            <BookOpen className="h-4 w-4 mr-1 hidden sm:inline" />
-            DBQ Guide
+            <BookOpen className="h-4 w-4 sm:mr-1" />
+            <span className="hidden sm:inline">DBQ</span>
           </TabsTrigger>
           <TabsTrigger value="checklist" className="text-xs sm:text-sm">
-            <ClipboardList className="h-4 w-4 mr-1 hidden sm:inline" />
-            Checklists
+            <ClipboardList className="h-4 w-4 sm:mr-1" />
+            <span className="hidden sm:inline">Checklists</span>
           </TabsTrigger>
           <TabsTrigger value="exam-prep" className="text-xs sm:text-sm">
-            <Stethoscope className="h-4 w-4 mr-1 hidden sm:inline" />
-            C&P Prep
+            <Stethoscope className="h-4 w-4 sm:mr-1" />
+            <span className="hidden sm:inline">C&P Prep</span>
           </TabsTrigger>
           <TabsTrigger value="calculator" className="text-xs sm:text-sm">
-            <Calculator className="h-4 w-4 mr-1 hidden sm:inline" />
-            Calculator
+            <Calculator className="h-4 w-4 sm:mr-1" />
+            <span className="hidden sm:inline">Calculator</span>
+          </TabsTrigger>
+          <TabsTrigger value="appeal" className="text-xs sm:text-sm">
+            <Gavel className="h-4 w-4 sm:mr-1" />
+            <span className="hidden sm:inline">Appeals</span>
           </TabsTrigger>
         </TabsList>
 
@@ -95,6 +101,10 @@ export default function ClaimTools() {
 
         <TabsContent value="calculator" className="mt-6">
           <RatingCalculator />
+        </TabsContent>
+
+        <TabsContent value="appeal" className="mt-6">
+          <AppealStrategyAdvisor />
         </TabsContent>
       </Tabs>
     </div>
