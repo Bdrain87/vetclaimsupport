@@ -1,8 +1,9 @@
-import { FileText, Scale, ClipboardList, Stethoscope } from 'lucide-react';
+import { FileText, Scale, ClipboardList, Stethoscope, Calculator } from 'lucide-react';
 import { PersonalStatementGenerator } from '@/components/tools/PersonalStatementGenerator';
 import { DBQRatingReference } from '@/components/tools/DBQRatingReference';
 import { ConditionSpecificChecklist } from '@/components/tools/ConditionSpecificChecklist';
 import { CPExamPrepGuide } from '@/components/tools/CPExamPrepGuide';
+import { RatingCalculator } from '@/components/dashboard/RatingCalculator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSearchParams } from 'react-router-dom';
 
@@ -12,7 +13,7 @@ export default function ClaimTools() {
   const tabParam = searchParams.get('tab');
 
   // Determine default tab based on URL params
-  const defaultTab = tabParam === 'exam-prep' ? 'exam-prep' : 'statement';
+  const defaultTab = tabParam === 'exam-prep' ? 'exam-prep' : tabParam === 'calculator' ? 'calculator' : 'statement';
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -29,7 +30,7 @@ export default function ClaimTools() {
 
       {/* Tools Tabs */}
       <Tabs defaultValue={defaultTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="statement" className="text-xs sm:text-sm">
             <FileText className="h-4 w-4 mr-1 hidden sm:inline" />
             Statement
@@ -45,6 +46,10 @@ export default function ClaimTools() {
           <TabsTrigger value="exam-prep" className="text-xs sm:text-sm">
             <Stethoscope className="h-4 w-4 mr-1 hidden sm:inline" />
             C&P Prep
+          </TabsTrigger>
+          <TabsTrigger value="calculator" className="text-xs sm:text-sm">
+            <Calculator className="h-4 w-4 mr-1 hidden sm:inline" />
+            Calculator
           </TabsTrigger>
         </TabsList>
 
@@ -62,6 +67,10 @@ export default function ClaimTools() {
 
         <TabsContent value="exam-prep" className="mt-6">
           <CPExamPrepGuide initialCondition={conditionParam || undefined} />
+        </TabsContent>
+
+        <TabsContent value="calculator" className="mt-6">
+          <RatingCalculator />
         </TabsContent>
       </Tabs>
     </div>
