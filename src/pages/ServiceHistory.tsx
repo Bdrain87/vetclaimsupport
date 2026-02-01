@@ -180,45 +180,51 @@ export default function ServiceHistory() {
   const deployments = data.deployments || [];
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in overflow-x-hidden max-w-full">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="section-header mb-0">
           <div className="section-icon bg-service/10">
             <Shield className="h-5 w-5 text-service" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Service Record</h1>
-            <p className="text-muted-foreground">Document your military service history</p>
+            <p className="text-muted-foreground text-sm">Document your military service history</p>
           </div>
         </div>
 
-        <Button variant="outline" onClick={() => exportServiceHistory(data.serviceHistory)} className="gap-2">
+        <Button variant="outline" onClick={() => exportServiceHistory(data.serviceHistory)} className="gap-2 hidden sm:flex flex-shrink-0">
           <Download className="h-4 w-4" />
-          <span className="hidden sm:inline">Export PDF</span>
+          Export PDF
         </Button>
       </div>
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4 h-auto">
-          <TabsTrigger value="duty-stations" className="text-xs sm:text-sm py-2">
-            <MapPin className="h-4 w-4 mr-1 hidden sm:inline" />
-            Duty Stations
-          </TabsTrigger>
-          <TabsTrigger value="combat" className="text-xs sm:text-sm py-2">
-            <Sword className="h-4 w-4 mr-1 hidden sm:inline" />
-            Combat
-          </TabsTrigger>
-          <TabsTrigger value="events" className="text-xs sm:text-sm py-2">
-            <Star className="h-4 w-4 mr-1 hidden sm:inline" />
-            Events
-          </TabsTrigger>
-          <TabsTrigger value="deployments" className="text-xs sm:text-sm py-2">
-            <Plane className="h-4 w-4 mr-1 hidden sm:inline" />
-            Deployments
-          </TabsTrigger>
-        </TabsList>
+        <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+          <TabsList className="inline-flex w-auto min-w-full sm:grid sm:w-full sm:grid-cols-4 h-auto gap-1">
+            <TabsTrigger value="duty-stations" className="text-xs sm:text-sm py-2 px-2 sm:px-3 whitespace-nowrap flex-shrink-0">
+              <MapPin className="h-4 w-4 sm:mr-1" />
+              <span className="hidden sm:inline">Duty Stations</span>
+              <span className="sm:hidden">Stations</span>
+            </TabsTrigger>
+            <TabsTrigger value="combat" className="text-xs sm:text-sm py-2 px-2 sm:px-3 whitespace-nowrap flex-shrink-0">
+              <Sword className="h-4 w-4 sm:mr-1" />
+              <span className="hidden sm:inline">Combat</span>
+              <span className="sm:hidden">Combat</span>
+            </TabsTrigger>
+            <TabsTrigger value="events" className="text-xs sm:text-sm py-2 px-2 sm:px-3 whitespace-nowrap flex-shrink-0">
+              <Star className="h-4 w-4 sm:mr-1" />
+              <span className="hidden sm:inline">Events</span>
+              <span className="sm:hidden">Events</span>
+            </TabsTrigger>
+            <TabsTrigger value="deployments" className="text-xs sm:text-sm py-2 px-2 sm:px-3 whitespace-nowrap flex-shrink-0">
+              <Plane className="h-4 w-4 sm:mr-1" />
+              <span className="hidden sm:inline">Deployments</span>
+              <span className="sm:hidden">Deploy</span>
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         {/* DUTY STATIONS TAB */}
         <TabsContent value="duty-stations" className="space-y-4 mt-4">

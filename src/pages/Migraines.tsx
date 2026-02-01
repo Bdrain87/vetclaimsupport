@@ -326,7 +326,7 @@ export default function Migraines() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 pt-2">
+            <div className="grid grid-cols-2 gap-2 pt-2">
               <div className="bg-muted/50 rounded-lg p-3">
                 <p className="text-2xl font-bold text-red-500">{stats.prostratingPerMonth.toFixed(1)}</p>
                 <p className="text-xs text-muted-foreground">Prostrating/Month (avg)</p>

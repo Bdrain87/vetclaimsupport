@@ -114,11 +114,19 @@ export default function Symptoms() {
 
       {/* Tabs for General vs PTSD */}
       <Tabs defaultValue="general" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="general">General</TabsTrigger>
-          <TabsTrigger value="spine">Spine (DC 5235-5243)</TabsTrigger>
-          <TabsTrigger value="ptsd">PTSD (DC 9411)</TabsTrigger>
-        </TabsList>
+        <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+          <TabsList className="inline-flex w-auto min-w-full sm:grid sm:w-full sm:grid-cols-3 h-auto">
+            <TabsTrigger value="general" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2">General</TabsTrigger>
+            <TabsTrigger value="spine" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2">
+              <span className="sm:hidden">Spine</span>
+              <span className="hidden sm:inline">Spine (DC 5235-5243)</span>
+            </TabsTrigger>
+            <TabsTrigger value="ptsd" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2">
+              <span className="sm:hidden">PTSD</span>
+              <span className="hidden sm:inline">PTSD (DC 9411)</span>
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent value="general" className="mt-4 space-y-4">
           {/* Add Entry Button for General */}

@@ -70,27 +70,27 @@ export default function Documents() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in overflow-x-hidden max-w-full">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="section-header mb-0">
           <div className="section-icon bg-documents/10">
             <FileCheck className="h-5 w-5 text-documents" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Documents Checklist</h1>
-            <p className="text-muted-foreground">Track important documents for your claim</p>
+            <p className="text-muted-foreground text-sm">Track important documents for your claim</p>
           </div>
         </div>
         
-        <Button variant="outline" onClick={() => exportDocuments(data.documents)} className="gap-2">
+        <Button variant="outline" onClick={() => exportDocuments(data.documents)} className="gap-2 hidden sm:flex flex-shrink-0">
           <Download className="h-4 w-4" />
           Export PDF
         </Button>
       </div>
 
       {/* Progress Summary */}
-      <div className="grid gap-4 sm:grid-cols-4">
+      <div className="grid gap-3 grid-cols-2 sm:grid-cols-4">
         <Card className="data-card border-primary/20 bg-primary/5">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">

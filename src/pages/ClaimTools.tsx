@@ -56,68 +56,74 @@ export default function ClaimTools() {
       <Tabs defaultValue={getDefaultTab()} className="w-full">
         <div className="space-y-2">
           {/* Row 1: Statement Generators */}
-          <TabsList className="flex flex-wrap h-auto gap-1 bg-muted p-1.5 rounded-lg">
-            <TabsTrigger value="statement" className="text-xs sm:text-sm flex-1 min-w-[70px]">
-              <FileText className="h-4 w-4 sm:mr-1" />
-              <span className="hidden sm:inline">Statement</span>
-            </TabsTrigger>
-            <TabsTrigger value="buddy" className="text-xs sm:text-sm flex-1 min-w-[70px]">
-              <Users className="h-4 w-4 sm:mr-1" />
-              <span className="hidden sm:inline">Buddy</span>
-            </TabsTrigger>
-            <TabsTrigger value="stressor" className="text-xs sm:text-sm flex-1 min-w-[70px]">
-              <ShieldAlert className="h-4 w-4 sm:mr-1" />
-              <span className="hidden sm:inline">Stressor</span>
-            </TabsTrigger>
-            <TabsTrigger value="nexus" className="text-xs sm:text-sm flex-1 min-w-[70px]">
-              <FileSignature className="h-4 w-4 sm:mr-1" />
-              <span className="hidden sm:inline">Nexus</span>
-            </TabsTrigger>
-            <TabsTrigger value="increase" className="text-xs sm:text-sm flex-1 min-w-[70px]">
-              <TrendingUp className="h-4 w-4 sm:mr-1" />
-              <span className="hidden sm:inline">Increase</span>
-            </TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+            <TabsList className="inline-flex w-auto min-w-full h-auto gap-1 bg-muted p-1.5 rounded-lg">
+              <TabsTrigger value="statement" className="text-xs sm:text-sm flex-shrink-0 px-2 sm:px-3 py-1.5">
+                <FileText className="h-4 w-4 sm:mr-1" />
+                <span className="hidden sm:inline">Statement</span>
+              </TabsTrigger>
+              <TabsTrigger value="buddy" className="text-xs sm:text-sm flex-shrink-0 px-2 sm:px-3 py-1.5">
+                <Users className="h-4 w-4 sm:mr-1" />
+                <span className="hidden sm:inline">Buddy</span>
+              </TabsTrigger>
+              <TabsTrigger value="stressor" className="text-xs sm:text-sm flex-shrink-0 px-2 sm:px-3 py-1.5">
+                <ShieldAlert className="h-4 w-4 sm:mr-1" />
+                <span className="hidden sm:inline">Stressor</span>
+              </TabsTrigger>
+              <TabsTrigger value="nexus" className="text-xs sm:text-sm flex-shrink-0 px-2 sm:px-3 py-1.5">
+                <FileSignature className="h-4 w-4 sm:mr-1" />
+                <span className="hidden sm:inline">Nexus</span>
+              </TabsTrigger>
+              <TabsTrigger value="increase" className="text-xs sm:text-sm flex-shrink-0 px-2 sm:px-3 py-1.5">
+                <TrendingUp className="h-4 w-4 sm:mr-1" />
+                <span className="hidden sm:inline">Increase</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
           
           {/* Row 2: Reference & Prep Tools */}
-          <TabsList className="flex flex-wrap h-auto gap-1 bg-muted p-1.5 rounded-lg">
-            <TabsTrigger value="criteria" className="text-xs sm:text-sm flex-1 min-w-[70px]">
-              <Scale className="h-4 w-4 sm:mr-1" />
-              <span className="hidden sm:inline">Criteria</span>
-            </TabsTrigger>
-            <TabsTrigger value="dbq-guidance" className="text-xs sm:text-sm flex-1 min-w-[70px]">
-              <BookOpen className="h-4 w-4 sm:mr-1" />
-              <span className="hidden sm:inline">DBQ</span>
-            </TabsTrigger>
-            <TabsTrigger value="dbq-summary" className="text-xs sm:text-sm flex-1 min-w-[70px]">
-              <Printer className="h-4 w-4 sm:mr-1" />
-              <span className="hidden sm:inline">Dr. Summary</span>
-            </TabsTrigger>
-            <TabsTrigger value="checklist" className="text-xs sm:text-sm flex-1 min-w-[70px]">
-              <ClipboardList className="h-4 w-4 sm:mr-1" />
-              <span className="hidden sm:inline">Checklists</span>
-            </TabsTrigger>
-            <TabsTrigger value="exam-prep" className="text-xs sm:text-sm flex-1 min-w-[70px]">
-              <Stethoscope className="h-4 w-4 sm:mr-1" />
-              <span className="hidden sm:inline">C&P Prep</span>
-            </TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+            <TabsList className="inline-flex w-auto min-w-full h-auto gap-1 bg-muted p-1.5 rounded-lg">
+              <TabsTrigger value="criteria" className="text-xs sm:text-sm flex-shrink-0 px-2 sm:px-3 py-1.5">
+                <Scale className="h-4 w-4 sm:mr-1" />
+                <span className="hidden sm:inline">Criteria</span>
+              </TabsTrigger>
+              <TabsTrigger value="dbq-guidance" className="text-xs sm:text-sm flex-shrink-0 px-2 sm:px-3 py-1.5">
+                <BookOpen className="h-4 w-4 sm:mr-1" />
+                <span className="hidden sm:inline">DBQ</span>
+              </TabsTrigger>
+              <TabsTrigger value="dbq-summary" className="text-xs sm:text-sm flex-shrink-0 px-2 sm:px-3 py-1.5">
+                <Printer className="h-4 w-4 sm:mr-1" />
+                <span className="hidden sm:inline">Dr. Summary</span>
+              </TabsTrigger>
+              <TabsTrigger value="checklist" className="text-xs sm:text-sm flex-shrink-0 px-2 sm:px-3 py-1.5">
+                <ClipboardList className="h-4 w-4 sm:mr-1" />
+                <span className="hidden sm:inline">Checklists</span>
+              </TabsTrigger>
+              <TabsTrigger value="exam-prep" className="text-xs sm:text-sm flex-shrink-0 px-2 sm:px-3 py-1.5">
+                <Stethoscope className="h-4 w-4 sm:mr-1" />
+                <span className="hidden sm:inline">C&P Prep</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
           
           {/* Row 3: Calculators & Appeals */}
-          <TabsList className="flex flex-wrap h-auto gap-1 bg-muted p-1.5 rounded-lg">
-            <TabsTrigger value="calculator" className="text-xs sm:text-sm flex-1 min-w-[70px]">
-              <Calculator className="h-4 w-4 sm:mr-1" />
-              <span className="hidden sm:inline">Calculator</span>
-            </TabsTrigger>
-            <TabsTrigger value="backpay" className="text-xs sm:text-sm flex-1 min-w-[70px]">
-              <DollarSign className="h-4 w-4 sm:mr-1" />
-              <span className="hidden sm:inline">Back Pay</span>
-            </TabsTrigger>
-            <TabsTrigger value="appeal" className="text-xs sm:text-sm flex-1 min-w-[70px]">
-              <Gavel className="h-4 w-4 sm:mr-1" />
-              <span className="hidden sm:inline">Appeals</span>
-            </TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+            <TabsList className="inline-flex w-auto min-w-full h-auto gap-1 bg-muted p-1.5 rounded-lg">
+              <TabsTrigger value="calculator" className="text-xs sm:text-sm flex-shrink-0 px-2 sm:px-3 py-1.5">
+                <Calculator className="h-4 w-4 sm:mr-1" />
+                <span className="hidden sm:inline">Calculator</span>
+              </TabsTrigger>
+              <TabsTrigger value="backpay" className="text-xs sm:text-sm flex-shrink-0 px-2 sm:px-3 py-1.5">
+                <DollarSign className="h-4 w-4 sm:mr-1" />
+                <span className="hidden sm:inline">Back Pay</span>
+              </TabsTrigger>
+              <TabsTrigger value="appeal" className="text-xs sm:text-sm flex-shrink-0 px-2 sm:px-3 py-1.5">
+                <Gavel className="h-4 w-4 sm:mr-1" />
+                <span className="hidden sm:inline">Appeals</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
         </div>
 
         <TabsContent value="statement" className="mt-6">
