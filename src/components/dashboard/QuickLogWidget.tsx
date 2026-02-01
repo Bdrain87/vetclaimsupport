@@ -13,7 +13,7 @@ import {
   Wind,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
+import { VoiceInputButton } from '@/components/ui/voice-input-button';
 
 export function QuickLogWidget() {
   const { data, addQuickLog } = useClaims();
@@ -149,12 +149,21 @@ export function QuickLogWidget() {
 
         {/* Flare-up Note */}
         {hadFlareUp && (
-          <Textarea
-            placeholder="Brief note about the flare-up..."
-            value={flareUpNote}
-            onChange={(e) => setFlareUpNote(e.target.value)}
-            className="min-h-[80px]"
-          />
+          <div className="relative">
+            <Textarea
+              placeholder="Brief note about the flare-up..."
+              value={flareUpNote}
+              onChange={(e) => setFlareUpNote(e.target.value)}
+              className="min-h-[80px] pr-12"
+            />
+            <div className="absolute right-2 top-2">
+              <VoiceInputButton
+                onTranscript={setFlareUpNote}
+                existingText={flareUpNote}
+                size="sm"
+              />
+            </div>
+          </div>
         )}
 
         {/* Submit */}
