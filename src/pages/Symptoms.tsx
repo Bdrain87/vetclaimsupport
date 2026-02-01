@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { exportSymptoms } from '@/utils/pdfExport';
 import { PTSDSymptomLogger } from '@/components/symptoms/PTSDSymptomLogger';
+import { SpineSymptomLogger } from '@/components/symptoms/SpineSymptomLogger';
 import type { SymptomEntry, SymptomFrequency } from '@/types/claims';
 
 // Simplified VA-relevant frequency options
@@ -112,8 +113,9 @@ export default function Symptoms() {
 
       {/* Tabs for General vs PTSD */}
       <Tabs defaultValue="general" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="general">General Symptoms</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="general">General</TabsTrigger>
+          <TabsTrigger value="spine">Spine (DC 5235-5243)</TabsTrigger>
           <TabsTrigger value="ptsd">PTSD (DC 9411)</TabsTrigger>
         </TabsList>
 
@@ -319,6 +321,10 @@ export default function Symptoms() {
               ))}
             </div>
           )}
+        </TabsContent>
+
+        <TabsContent value="spine" className="mt-4">
+          <SpineSymptomLogger />
         </TabsContent>
 
         <TabsContent value="ptsd" className="mt-4">
