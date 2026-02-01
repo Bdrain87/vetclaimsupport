@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { exportSymptoms } from '@/utils/pdfExport';
 import { PTSDSymptomLogger } from '@/components/symptoms/PTSDSymptomLogger';
 import { SpineSymptomLogger } from '@/components/symptoms/SpineSymptomLogger';
+import { VoiceInputButton } from '@/components/ui/voice-input-button';
 import type { SymptomEntry, SymptomFrequency } from '@/types/claims';
 
 // Simplified VA-relevant frequency options
@@ -219,33 +220,53 @@ export default function Symptoms() {
 
                     <div className="space-y-2">
                       <Label htmlFor="dailyImpact">Impact on Daily Life</Label>
-                      <Textarea 
-                        id="dailyImpact" 
-                        placeholder="How does this affect your work, sleep, activities?"
-                        value={formData.dailyImpact}
-                        onChange={(e) => setFormData({ ...formData, dailyImpact: e.target.value })}
-                        rows={3}
-                        onFocus={(e) => {
-                          setTimeout(() => {
-                            e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                          }, 300);
-                        }}
-                      />
+                      <div className="relative">
+                        <Textarea 
+                          id="dailyImpact" 
+                          placeholder="How does this affect your work, sleep, activities?"
+                          value={formData.dailyImpact}
+                          onChange={(e) => setFormData({ ...formData, dailyImpact: e.target.value })}
+                          rows={3}
+                          className="pr-12"
+                          onFocus={(e) => {
+                            setTimeout(() => {
+                              e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }, 300);
+                          }}
+                        />
+                        <div className="absolute right-2 top-2">
+                          <VoiceInputButton
+                            onTranscript={(text) => setFormData({ ...formData, dailyImpact: text })}
+                            existingText={formData.dailyImpact}
+                            size="sm"
+                          />
+                        </div>
+                      </div>
                     </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="notes">Notes</Label>
-                      <Textarea 
-                        id="notes" 
-                        placeholder="Triggers, what helps, additional context..."
-                        value={formData.notes}
-                        onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                        onFocus={(e) => {
-                          setTimeout(() => {
-                            e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                          }, 300);
-                        }}
-                      />
+                      <div className="relative">
+                        <Textarea 
+                          id="notes" 
+                          placeholder="Triggers, what helps, additional context..."
+                          value={formData.notes}
+                          onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                          className="pr-12"
+                          onFocus={(e) => {
+                            setTimeout(() => {
+                              e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }, 300);
+                          }}
+                        />
+                        <div className="absolute right-2 top-2">
+                          <VoiceInputButton
+                            onTranscript={(text) => setFormData({ ...formData, notes: text })}
+                            existingText={formData.notes}
+                            size="sm"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-border bg-background">
