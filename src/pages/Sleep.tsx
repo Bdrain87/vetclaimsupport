@@ -50,6 +50,7 @@ export default function Sleep() {
     oxygenDesaturation: false,
     lowestOxygenLevel: undefined,
     requiresOxygen: false,
+    chronicRespiratoryFailure: false,
     daytimeSleepiness: 'None',
     timesWokeGasping: 0,
     spouseObserved: false,
@@ -74,6 +75,7 @@ export default function Sleep() {
       oxygenDesaturation: false,
       lowestOxygenLevel: undefined,
       requiresOxygen: false,
+      chronicRespiratoryFailure: false,
       daytimeSleepiness: 'None',
       timesWokeGasping: 0,
       spouseObserved: false,
@@ -111,6 +113,7 @@ export default function Sleep() {
       oxygenDesaturation: entry.oxygenDesaturation || false,
       lowestOxygenLevel: entry.lowestOxygenLevel,
       requiresOxygen: entry.requiresOxygen || false,
+      chronicRespiratoryFailure: entry.chronicRespiratoryFailure || false,
       daytimeSleepiness: entry.daytimeSleepiness || 'None',
       timesWokeGasping: entry.timesWokeGasping || 0,
       spouseObserved: entry.spouseObserved || false,
@@ -174,13 +177,13 @@ export default function Sleep() {
   const estimatedRating = useMemo(() => {
     if (sleepEntries.length === 0) return null;
     
-    const hasOxygenTherapy = sleepEntries.some(e => e.requiresOxygen);
+    const hasRespiratoryFailure = sleepEntries.some(e => e.chronicRespiratoryFailure || e.requiresOxygen);
     const usesCPAP = sleepEntries.some(e => e.usesCPAP);
     const hasSevereSleepiness = sleepEntries.some(e => 
       e.daytimeSleepiness === 'Persistent hypersomnolence'
     );
     
-    if (hasOxygenTherapy) return { rating: '100%', color: 'text-destructive', note: 'Requires chronic respiratory failure with CO2 retention or cor pulmonale' };
+    if (hasRespiratoryFailure) return { rating: '100%', color: 'text-destructive', note: 'Chronic respiratory failure with CO₂ retention or cor pulmonale' };
     if (usesCPAP) return { rating: '50%', color: 'text-warning', note: 'Requires use of breathing assistance device such as CPAP' };
     if (hasSevereSleepiness) return { rating: '30%', color: 'text-orange-500', note: 'Persistent daytime hypersomnolence' };
     return { rating: '0%', color: 'text-muted-foreground', note: 'Asymptomatic with documented sleep disorder' };
@@ -376,16 +379,30 @@ export default function Sleep() {
                       </div>
                     )}
 
-                    {/* Supplemental Oxygen */}
-                    <div className="flex items-center justify-between rounded-lg border p-4 border-destructive/30 bg-destructive/5">
-                      <div className="space-y-0.5">
-                        <Label className="text-base">Requires Supplemental Oxygen?</Label>
-                        <p className="text-sm text-muted-foreground">Required for 100% rating</p>
+                    {/* 100% Rating Section */}
+                    <div className="space-y-3 p-3 rounded-lg border-2 border-destructive/50 bg-destructive/5">
+                      <Label className="text-sm font-semibold text-destructive">100% Rating Criteria</Label>
+                      
+                      <div className="flex items-center justify-between rounded-lg border p-3 bg-background/50">
+                        <div className="space-y-0.5">
+                          <Label className="text-sm">Chronic Respiratory Failure?</Label>
+                          <p className="text-xs text-muted-foreground">With CO₂ retention or cor pulmonale</p>
+                        </div>
+                        <Switch 
+                          checked={formData.chronicRespiratoryFailure}
+                          onCheckedChange={(checked) => setFormData({ ...formData, chronicRespiratoryFailure: checked })}
+                        />
                       </div>
-                      <Switch 
-                        checked={formData.requiresOxygen}
-                        onCheckedChange={(checked) => setFormData({ ...formData, requiresOxygen: checked })}
-                      />
+                      
+                      <div className="flex items-center justify-between rounded-lg border p-3 bg-background/50">
+                        <div className="space-y-0.5">
+                          <Label className="text-sm">Requires Supplemental Oxygen?</Label>
+                        </div>
+                        <Switch 
+                          checked={formData.requiresOxygen}
+                          onCheckedChange={(checked) => setFormData({ ...formData, requiresOxygen: checked })}
+                        />
+                      </div>
                     </div>
 
                     {/* Breathing Episodes */}
