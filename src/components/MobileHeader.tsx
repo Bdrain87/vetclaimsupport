@@ -17,6 +17,8 @@ const pageLabels: Record<string, string> = {
   '/buddy-contacts': 'Buddy Contacts',
   '/timeline': 'Timeline',
   '/checklist': 'Checklist',
+  '/claim-tools': 'Claim Tools',
+  '/exam-prep': 'C&P Exam Prep',
   '/reference': 'Reference',
   '/settings': 'Settings',
   '/privacy': 'Privacy',
@@ -69,8 +71,8 @@ export function MobileHeader() {
 
         {/* Center - Title (only on subpages) */}
         {!isHome && (
-          <div className="absolute left-1/2 -translate-x-1/2">
-            <span className="font-semibold text-foreground text-sm">
+          <div className="absolute left-1/2 -translate-x-1/2 max-w-[40vw]">
+            <span className="font-semibold text-foreground text-sm truncate block">
               {pageLabel}
             </span>
           </div>
