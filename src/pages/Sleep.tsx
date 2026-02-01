@@ -51,7 +51,7 @@ export default function Sleep() {
     lowestOxygenLevel: undefined,
     requiresOxygen: false,
     daytimeSleepiness: 'None',
-    wokeGasping: false,
+    timesWokeGasping: 0,
     morningHeadache: false,
     feltRested: false,
     impactOnWork: '',
@@ -74,7 +74,7 @@ export default function Sleep() {
       lowestOxygenLevel: undefined,
       requiresOxygen: false,
       daytimeSleepiness: 'None',
-      wokeGasping: false,
+      timesWokeGasping: 0,
       morningHeadache: false,
       feltRested: false,
       impactOnWork: '',
@@ -110,7 +110,7 @@ export default function Sleep() {
       lowestOxygenLevel: entry.lowestOxygenLevel,
       requiresOxygen: entry.requiresOxygen || false,
       daytimeSleepiness: entry.daytimeSleepiness || 'None',
-      wokeGasping: entry.wokeGasping || false,
+      timesWokeGasping: entry.timesWokeGasping || 0,
       morningHeadache: entry.morningHeadache || false,
       feltRested: entry.feltRested || false,
       impactOnWork: entry.impactOnWork || '',
@@ -146,7 +146,7 @@ export default function Sleep() {
       : null;
 
     // VA-relevant metrics
-    const gaspingEpisodes = last30Days.filter(e => e.wokeGasping).length;
+    const gaspingEpisodes = last30Days.reduce((sum, e) => sum + (e.timesWokeGasping || 0), 0);
     const oxygenDrops = last30Days.filter(e => e.oxygenDesaturation).length;
     const severeSleepiness = last30Days.filter(e => 
       e.daytimeSleepiness === 'Persistent hypersomnolence'
@@ -387,13 +387,16 @@ export default function Sleep() {
 
                     {/* Breathing Episodes */}
                     <div className="grid gap-3 sm:grid-cols-2">
-                      <div className="flex items-center justify-between rounded-lg border p-3">
-                        <div className="space-y-0.5">
-                          <Label className="text-sm">Woke Gasping/Choking?</Label>
-                        </div>
-                        <Switch 
-                          checked={formData.wokeGasping}
-                          onCheckedChange={(checked) => setFormData({ ...formData, wokeGasping: checked })}
+                      <div className="space-y-2">
+                        <Label htmlFor="timesGasping">Times Woke Up Gasping/Choking</Label>
+                        <Input 
+                          id="timesGasping" 
+                          type="number" 
+                          min="0"
+                          max="20"
+                          placeholder="0"
+                          value={formData.timesWokeGasping || 0}
+                          onChange={(e) => setFormData({ ...formData, timesWokeGasping: parseInt(e.target.value) || 0 })}
                         />
                       </div>
                       <div className="flex items-center justify-between rounded-lg border p-3">
@@ -698,9 +701,9 @@ export default function Sleep() {
                       {entry.nightmares && (
                       <Badge variant="destructive" className="text-xs">Nightmares</Badge>
                     )}
-                    {entry.wokeGasping && (
-                      <Badge variant="outline" className="text-xs text-orange-500 border-orange-500/50">Gasping</Badge>
-                    )}
+                      {entry.timesWokeGasping && entry.timesWokeGasping > 0 && (
+                        <Badge variant="outline" className="text-xs text-orange-500 border-orange-500/50">Gasping x{entry.timesWokeGasping}</Badge>
+                      )}
                     {entry.requiresOxygen && (
                       <Badge variant="outline" className="text-xs text-destructive border-destructive/50">O₂ Therapy</Badge>
                     )}
