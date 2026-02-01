@@ -91,11 +91,12 @@ export default function Medications() {
                 Add Medication
               </Button>
             </DialogTrigger>
-          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
+          <DialogContent className="max-w-lg max-h-[90vh] flex flex-col p-0">
+            <DialogHeader className="p-6 pb-0">
               <DialogTitle>{editingId ? 'Edit Medication' : 'Add Medication'}</DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+              <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="name">Medication Name</Label>
                 <MedicationCombobox
@@ -170,7 +171,8 @@ export default function Medications() {
                 />
               </div>
 
-              <div className="flex justify-end gap-3 pt-4">
+              </div>
+              <div className="sticky bottom-0 flex justify-end gap-3 p-6 border-t border-border bg-background">
                 <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
                   Cancel
                 </Button>
