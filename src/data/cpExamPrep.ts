@@ -666,7 +666,7 @@ export const examPrepData: Record<string, ExamPrepData> = {
 export const generalExamTips = {
   whatToExpect: [
     'Arrive 15 minutes early with all required documents',
-    'The examiner is a contracted doctor, not a VA employee',
+    'C&P exams are conducted by VA doctors OR contracted examiners (QTC, VES, LHI) - both are qualified medical professionals',
     'The exam is to document your current condition, not to treat you',
     'Be honest but thorough - don\'t minimize symptoms',
     'The examiner may not have read your entire file',
