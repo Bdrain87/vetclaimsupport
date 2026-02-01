@@ -9,43 +9,24 @@ export interface SecondaryConnection {
 
 export const secondaryConditions: SecondaryConnection[] = [
   // ========================================
-  // PTSD SECONDARIES (Comprehensive)
+  // PTSD SECONDARIES (Anti-Pyramiding Compliant - Different Body Systems Only)
+  // Per 38 CFR 4.14: These conditions affect different body systems than mental health
   // ========================================
-  { primaryCondition: 'PTSD', secondaryCondition: 'Major Depressive Disorder', medicalConnection: 'PTSD causes persistent depressive symptoms through emotional dysregulation, trauma processing difficulties, and neurochemical changes', category: 'Mental Health' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Generalized Anxiety Disorder', medicalConnection: 'Hypervigilance, trauma response, and constant threat perception lead to chronic anxiety', category: 'Mental Health' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Panic Disorder', medicalConnection: 'Trauma triggers and hyperarousal cause recurrent panic attacks', category: 'Mental Health' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Social Anxiety Disorder', medicalConnection: 'Avoidance behaviors and fear of triggering situations lead to social phobia', category: 'Mental Health' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Agoraphobia', medicalConnection: 'Avoidance of places/situations associated with trauma or perceived danger', category: 'Mental Health' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Obsessive-Compulsive Disorder', medicalConnection: 'Anxiety from PTSD can manifest as obsessive thoughts and compulsive behaviors', category: 'Mental Health' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Substance Use Disorder', medicalConnection: 'Self-medication to cope with intrusive thoughts, nightmares, and hyperarousal', category: 'Mental Health' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Alcohol Use Disorder', medicalConnection: 'Alcohol used to numb symptoms, aid sleep, and reduce hypervigilance', category: 'Mental Health' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Insomnia', medicalConnection: 'Hyperarousal, nightmares, and fear of sleep disrupt normal sleep patterns', category: 'Mental Health' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Nightmare Disorder', medicalConnection: 'Trauma-related nightmares are a core PTSD symptom', category: 'Mental Health' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Sleep Apnea', medicalConnection: 'Weight gain from medications/inactivity, stress hormones affect breathing patterns', category: 'Respiratory' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Chronic Fatigue Syndrome', medicalConnection: 'Persistent hyperarousal depletes energy; poor sleep compounds fatigue', category: 'Systemic' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Migraines', medicalConnection: 'Chronic stress, muscle tension, and sleep disruption trigger migraines', category: 'Neurological' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Tension Headaches', medicalConnection: 'Chronic muscle tension from hypervigilance causes headaches', category: 'Neurological' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'GERD', medicalConnection: 'Chronic stress increases stomach acid; many PTSD medications contribute', category: 'Digestive' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'IBS', medicalConnection: 'Gut-brain axis dysfunction from chronic stress and anxiety', category: 'Digestive' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Peptic Ulcer Disease', medicalConnection: 'Stress and NSAID use for associated pain conditions', category: 'Digestive' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Functional Dyspepsia', medicalConnection: 'Stress affects stomach motility and acid production', category: 'Digestive' },
+  { primaryCondition: 'PTSD', secondaryCondition: 'Sleep Apnea', medicalConnection: 'Weight gain from medications/inactivity, stress hormones affect breathing patterns during sleep', category: 'Respiratory' },
+  { primaryCondition: 'PTSD', secondaryCondition: 'Tinnitus', medicalConnection: 'Chronic stress and anxiety can cause or worsen ringing in ears; often co-occurs with combat-related PTSD', category: 'Hearing' },
+  { primaryCondition: 'PTSD', secondaryCondition: 'GERD', medicalConnection: 'Chronic stress increases stomach acid production; many PTSD medications contribute to reflux', category: 'Digestive' },
   { primaryCondition: 'PTSD', secondaryCondition: 'Hypertension', medicalConnection: 'Chronic stress elevates cortisol and adrenaline, raising blood pressure long-term', category: 'Cardiovascular' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Coronary Artery Disease', medicalConnection: 'Chronic stress hormones accelerate atherosclerosis', category: 'Cardiovascular' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Cardiac Arrhythmias', medicalConnection: 'Stress hormones and hyperarousal affect heart rhythm', category: 'Cardiovascular' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Erectile Dysfunction', medicalConnection: 'Psychological impact, SSRIs/medications, reduced blood flow from chronic stress', category: 'Genitourinary' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Female Sexual Dysfunction', medicalConnection: 'Trauma, medications, and psychological factors affect sexual function', category: 'Gynecological' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Bruxism', medicalConnection: 'Stress and anxiety cause jaw clenching and teeth grinding', category: 'Dental' },
+  { primaryCondition: 'PTSD', secondaryCondition: 'Migraines', medicalConnection: 'Chronic stress, muscle tension, and sleep disruption trigger migraine headaches', category: 'Neurological' },
+  { primaryCondition: 'PTSD', secondaryCondition: 'IBS', medicalConnection: 'Gut-brain axis dysfunction from chronic stress affects bowel function', category: 'Digestive' },
+  { primaryCondition: 'PTSD', secondaryCondition: 'Bruxism', medicalConnection: 'Stress and hypervigilance cause jaw clenching and teeth grinding', category: 'Dental' },
   { primaryCondition: 'PTSD', secondaryCondition: 'TMJ Disorder', medicalConnection: 'Chronic jaw clenching from stress damages temporomandibular joint', category: 'Dental' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Fibromyalgia', medicalConnection: 'Central sensitization and chronic stress cause widespread pain', category: 'Musculoskeletal' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Chronic Pain Syndrome', medicalConnection: 'Stress amplifies pain perception; tension causes musculoskeletal pain', category: 'Musculoskeletal' },
+  { primaryCondition: 'PTSD', secondaryCondition: 'Fibromyalgia', medicalConnection: 'Central sensitization and chronic stress cause widespread musculoskeletal pain', category: 'Musculoskeletal' },
+  { primaryCondition: 'PTSD', secondaryCondition: 'Erectile Dysfunction', medicalConnection: 'SSRIs/medications, reduced blood flow from chronic stress affect sexual function', category: 'Genitourinary' },
+  { primaryCondition: 'PTSD', secondaryCondition: 'Chronic Sinusitis', medicalConnection: 'Immune dysfunction and inflammation from chronic stress', category: 'Respiratory' },
+  { primaryCondition: 'PTSD', secondaryCondition: 'Tension Headaches', medicalConnection: 'Chronic muscle tension from hypervigilance causes headaches', category: 'Neurological' },
+  { primaryCondition: 'PTSD', secondaryCondition: 'Coronary Artery Disease', medicalConnection: 'Chronic stress hormones accelerate atherosclerosis', category: 'Cardiovascular' },
   { primaryCondition: 'PTSD', secondaryCondition: 'Obesity', medicalConnection: 'Emotional eating, medication side effects, reduced physical activity', category: 'Endocrine' },
   { primaryCondition: 'PTSD', secondaryCondition: 'Diabetes Type II', medicalConnection: 'Stress hormones affect insulin sensitivity; weight gain from medications', category: 'Endocrine' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Thyroid Disorder', medicalConnection: 'Chronic stress affects hypothalamic-pituitary-thyroid axis', category: 'Endocrine' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Psoriasis', medicalConnection: 'Stress triggers and exacerbates autoimmune skin conditions', category: 'Skin' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Eczema', medicalConnection: 'Stress worsens inflammatory skin conditions', category: 'Skin' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Alopecia', medicalConnection: 'Stress-induced hair loss', category: 'Skin' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Immune Dysfunction', medicalConnection: 'Chronic stress suppresses immune function', category: 'Immune' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Chronic Sinusitis', medicalConnection: 'Immune dysfunction and inflammation from chronic stress', category: 'Respiratory' },
 
   // ========================================
   // TBI SECONDARIES (Comprehensive)
