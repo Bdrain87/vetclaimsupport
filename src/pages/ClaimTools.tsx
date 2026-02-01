@@ -140,10 +140,9 @@ export default function ClaimTools() {
 
   const selectedTool = tools.find(t => t.id === selectedToolId);
 
-  // Handle tool selection
+  // Handle tool selection - just update state, no navigation
   const handleToolSelect = (toolId: string) => {
     setSelectedToolId(toolId);
-    navigate(`/tools?tab=${toolId}`, { replace: true });
   };
 
   // Render the selected tool component
