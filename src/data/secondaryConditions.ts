@@ -312,43 +312,41 @@ export const secondaryConditions: SecondaryConnection[] = [
   { primaryCondition: 'Migraines', secondaryCondition: 'Chronic Pain Syndrome', medicalConnection: 'Central sensitization from chronic migraines', category: 'Neurological' },
 
   // ========================================
-  // DEPRESSION SECONDARIES
+  // DEPRESSION SECONDARIES (Anti-Pyramiding Compliant - Different Body Systems Only)
+  // Per 38 CFR 4.14: These conditions affect different body systems than mental health
   // ========================================
-  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Anxiety Disorder', medicalConnection: 'Depression and anxiety commonly co-occur due to shared neurobiology', category: 'Mental Health' },
-  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Insomnia', medicalConnection: 'Neurotransmitter imbalances disrupt sleep architecture', category: 'Mental Health' },
-  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Hypersomnia', medicalConnection: 'Depression can cause excessive sleeping', category: 'Mental Health' },
-  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Chronic Pain Syndrome', medicalConnection: 'Depression lowers pain threshold and amplifies pain perception', category: 'Neurological' },
-  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Fibromyalgia', medicalConnection: 'Shared pathways of central sensitization', category: 'Musculoskeletal' },
-  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Obesity', medicalConnection: 'Appetite dysregulation and reduced activity', category: 'Endocrine' },
-  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Diabetes Type II', medicalConnection: 'Metabolic changes from depression and lifestyle factors', category: 'Endocrine' },
-  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Erectile Dysfunction', medicalConnection: 'Depression and SSRI medications affect sexual function', category: 'Genitourinary' },
-  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Female Sexual Dysfunction', medicalConnection: 'Depression and medications reduce libido', category: 'Gynecological' },
-  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Migraines', medicalConnection: 'Shared serotonin pathway dysfunction', category: 'Neurological' },
-  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'IBS', medicalConnection: 'Gut-brain axis affected by depression', category: 'Digestive' },
-  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Substance Use Disorder', medicalConnection: 'Self-medication for depressive symptoms', category: 'Mental Health' },
-  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Coronary Artery Disease', medicalConnection: 'Depression increases cardiovascular risk', category: 'Cardiovascular' },
-  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Immune Dysfunction', medicalConnection: 'Depression suppresses immune function', category: 'Immune' },
-  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Cognitive Impairment', medicalConnection: 'Depression affects concentration and memory', category: 'Neurological' },
+  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Sleep Apnea', medicalConnection: 'Weight gain from medications/inactivity and altered sleep patterns affect breathing during sleep', category: 'Respiratory' },
+  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'GERD', medicalConnection: 'Chronic stress and antidepressant medications increase stomach acid production and reflux', category: 'Digestive' },
+  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Hypertension', medicalConnection: 'Chronic stress hormones and reduced physical activity elevate blood pressure long-term', category: 'Cardiovascular' },
+  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Migraines', medicalConnection: 'Shared serotonin pathway dysfunction and chronic stress trigger migraine headaches', category: 'Neurological' },
+  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'IBS', medicalConnection: 'Gut-brain axis dysfunction from chronic depression affects bowel function', category: 'Digestive' },
+  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Fibromyalgia', medicalConnection: 'Shared pathways of central sensitization cause widespread musculoskeletal pain', category: 'Musculoskeletal' },
+  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Obesity', medicalConnection: 'Appetite dysregulation, medication side effects, and reduced physical activity', category: 'Endocrine' },
+  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Diabetes Type II', medicalConnection: 'Metabolic changes from depression, medications, and lifestyle factors affect insulin sensitivity', category: 'Endocrine' },
+  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Erectile Dysfunction', medicalConnection: 'Depression and SSRI medications affect sexual function and blood flow', category: 'Genitourinary' },
+  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Coronary Artery Disease', medicalConnection: 'Depression increases inflammation and cardiovascular risk', category: 'Cardiovascular' },
+  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Tinnitus', medicalConnection: 'Chronic stress and certain antidepressants can cause or worsen ringing in ears', category: 'Hearing' },
+  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'Chronic Fatigue Syndrome', medicalConnection: 'Neurotransmitter imbalances cause persistent fatigue beyond mental symptoms', category: 'Systemic' },
+  { primaryCondition: 'Major Depressive Disorder', secondaryCondition: 'TMJ Disorder', medicalConnection: 'Chronic jaw clenching and bruxism from stress damages temporomandibular joint', category: 'Dental' },
 
   // ========================================
-  // ANXIETY DISORDER SECONDARIES
+  // ANXIETY DISORDER SECONDARIES (Anti-Pyramiding Compliant - Different Body Systems Only)
+  // Per 38 CFR 4.14: These conditions affect different body systems than mental health
   // ========================================
-  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Major Depressive Disorder', medicalConnection: 'Chronic anxiety leads to depression', category: 'Mental Health' },
-  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Panic Disorder', medicalConnection: 'Anxiety can escalate to panic attacks', category: 'Mental Health' },
-  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Insomnia', medicalConnection: 'Worry and hyperarousal prevent sleep', category: 'Mental Health' },
-  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'GERD', medicalConnection: 'Stress increases stomach acid production', category: 'Digestive' },
-  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'IBS', medicalConnection: 'Gut-brain axis dysfunction from chronic anxiety', category: 'Digestive' },
-  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Hypertension', medicalConnection: 'Chronic stress hormones elevate blood pressure', category: 'Cardiovascular' },
-  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Tension Headaches', medicalConnection: 'Chronic muscle tension from anxiety', category: 'Neurological' },
-  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Migraines', medicalConnection: 'Stress is a major migraine trigger', category: 'Neurological' },
-  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'TMJ Disorder', medicalConnection: 'Jaw clenching from stress', category: 'Dental' },
-  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Bruxism', medicalConnection: 'Teeth grinding from anxiety', category: 'Dental' },
-  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Fibromyalgia', medicalConnection: 'Central sensitization from chronic stress', category: 'Musculoskeletal' },
-  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Chronic Pain Syndrome', medicalConnection: 'Anxiety amplifies pain perception', category: 'Neurological' },
-  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Substance Use Disorder', medicalConnection: 'Self-medication for anxiety symptoms', category: 'Mental Health' },
-  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Erectile Dysfunction', medicalConnection: 'Performance anxiety and stress hormones', category: 'Genitourinary' },
-  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Psoriasis', medicalConnection: 'Stress triggers autoimmune flares', category: 'Skin' },
-  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Cardiac Arrhythmias', medicalConnection: 'Anxiety causes heart palpitations and arrhythmias', category: 'Cardiovascular' },
+  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Sleep Apnea', medicalConnection: 'Chronic stress hormones and muscle tension affect breathing patterns during sleep', category: 'Respiratory' },
+  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'GERD', medicalConnection: 'Stress increases stomach acid production causing acid reflux', category: 'Digestive' },
+  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'IBS', medicalConnection: 'Gut-brain axis dysfunction from chronic anxiety affects bowel function', category: 'Digestive' },
+  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Hypertension', medicalConnection: 'Chronic stress hormones elevate blood pressure long-term', category: 'Cardiovascular' },
+  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Tinnitus', medicalConnection: 'Chronic stress and hypervigilance can cause or worsen ringing in ears', category: 'Hearing' },
+  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Tension Headaches', medicalConnection: 'Chronic muscle tension from anxiety causes headaches', category: 'Neurological' },
+  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Migraines', medicalConnection: 'Stress is a major migraine trigger; chronic anxiety increases frequency', category: 'Neurological' },
+  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'TMJ Disorder', medicalConnection: 'Jaw clenching from chronic stress damages temporomandibular joint', category: 'Dental' },
+  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Bruxism', medicalConnection: 'Teeth grinding from anxiety causes dental damage', category: 'Dental' },
+  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Fibromyalgia', medicalConnection: 'Central sensitization from chronic stress causes widespread musculoskeletal pain', category: 'Musculoskeletal' },
+  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Erectile Dysfunction', medicalConnection: 'Performance anxiety, stress hormones, and medications affect sexual function', category: 'Genitourinary' },
+  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Psoriasis', medicalConnection: 'Stress triggers autoimmune skin flares', category: 'Skin' },
+  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Cardiac Arrhythmias', medicalConnection: 'Anxiety causes heart palpitations and chronic arrhythmias', category: 'Cardiovascular' },
+  { primaryCondition: 'Generalized Anxiety Disorder', secondaryCondition: 'Chronic Sinusitis', medicalConnection: 'Immune dysfunction from chronic stress causes sinus inflammation', category: 'Respiratory' },
 
   // ========================================
   // FIBROMYALGIA SECONDARIES
