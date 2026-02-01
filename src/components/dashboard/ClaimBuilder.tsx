@@ -162,13 +162,13 @@ export function ClaimBuilder() {
                     <h4 className="font-semibold text-foreground">{condition.name}</h4>
                     <div className="flex items-center gap-1">
                       <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7"
+                        variant="outline"
+                        size="sm"
+                        className="h-7 px-2 gap-1 text-xs"
                         onClick={(e) => handleExportEvidence(condition, e)}
-                        title="Export Evidence Package"
                       >
-                        <FileDown className="h-4 w-4 text-primary" />
+                        <FileDown className="h-3.5 w-3.5" />
+                        Export
                       </Button>
                       <Button
                         variant="ghost"
