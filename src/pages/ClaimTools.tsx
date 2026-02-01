@@ -1,4 +1,4 @@
-import { FileText, Scale, ClipboardList, Stethoscope, Calculator, Users, BookOpen, Gavel, Printer, FileSignature } from 'lucide-react';
+import { FileText, Scale, ClipboardList, Stethoscope, Calculator, Users, BookOpen, Gavel, Printer, FileSignature, TrendingUp } from 'lucide-react';
 import { PersonalStatementGenerator } from '@/components/tools/PersonalStatementGenerator';
 import { DBQRatingReference } from '@/components/tools/DBQRatingReference';
 import { DBQGuidance } from '@/components/tools/DBQGuidance';
@@ -9,6 +9,7 @@ import { RatingCalculator } from '@/components/dashboard/RatingCalculator';
 import { BuddyStatementGenerator } from '@/components/tools/BuddyStatementGenerator';
 import { AppealStrategyAdvisor } from '@/components/tools/AppealStrategyAdvisor';
 import { NexusLetterGenerator } from '@/components/tools/NexusLetterGenerator';
+import { RatingIncreaseAnalyzer } from '@/components/tools/RatingIncreaseAnalyzer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSearchParams } from 'react-router-dom';
 
@@ -25,6 +26,7 @@ export default function ClaimTools() {
     if (tabParam === 'dbq-guidance') return 'dbq-guidance';
     if (tabParam === 'dbq-summary') return 'dbq-summary';
     if (tabParam === 'nexus') return 'nexus';
+    if (tabParam === 'increase') return 'increase';
     if (tabParam === 'appeal') return 'appeal';
     return 'statement';
   };
@@ -44,7 +46,7 @@ export default function ClaimTools() {
 
       {/* Tools Tabs */}
       <Tabs defaultValue={getDefaultTab()} className="w-full">
-        <TabsList className="grid w-full grid-cols-5 sm:grid-cols-10">
+        <TabsList className="grid w-full grid-cols-5 sm:grid-cols-11">
           <TabsTrigger value="statement" className="text-xs sm:text-sm">
             <FileText className="h-4 w-4 sm:mr-1" />
             <span className="hidden sm:inline">Statement</span>
@@ -56,6 +58,10 @@ export default function ClaimTools() {
           <TabsTrigger value="nexus" className="text-xs sm:text-sm">
             <FileSignature className="h-4 w-4 sm:mr-1" />
             <span className="hidden sm:inline">Nexus</span>
+          </TabsTrigger>
+          <TabsTrigger value="increase" className="text-xs sm:text-sm">
+            <TrendingUp className="h-4 w-4 sm:mr-1" />
+            <span className="hidden sm:inline">Increase</span>
           </TabsTrigger>
           <TabsTrigger value="criteria" className="text-xs sm:text-sm">
             <Scale className="h-4 w-4 sm:mr-1" />
@@ -97,6 +103,10 @@ export default function ClaimTools() {
 
         <TabsContent value="nexus" className="mt-6">
           <NexusLetterGenerator />
+        </TabsContent>
+
+        <TabsContent value="increase" className="mt-6">
+          <RatingIncreaseAnalyzer />
         </TabsContent>
 
         <TabsContent value="criteria" className="mt-6">
