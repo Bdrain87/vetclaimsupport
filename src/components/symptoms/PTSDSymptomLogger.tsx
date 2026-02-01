@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
   Plus, 
   Brain, 
@@ -20,12 +21,21 @@ import {
   Calendar,
   TrendingUp,
   Info,
+  Clock,
 } from 'lucide-react';
-import type { PTSDSymptomEntry } from '@/types/claims';
+import type { PTSDSymptomEntry, PTSDSymptomFrequency, PTSDSymptomWithFrequency } from '@/types/claims';
+
+// Frequency options
+const FREQUENCY_OPTIONS: PTSDSymptomFrequency[] = [
+  'Daily',
+  'Several times/week',
+  'Weekly',
+  'Monthly',
+  'Occasional',
+];
 
 // 38 CFR 4.130 Rating Criteria Symptoms organized by rating level
 const PTSD_SYMPTOM_CATEGORIES = {
-  // 10-30% symptoms
   mild: {
     label: '10-30% Criteria',
     color: 'text-success',
@@ -38,7 +48,6 @@ const PTSD_SYMPTOM_CATEGORIES = {
       { id: 'mild_memory_loss', label: 'Mild memory loss (forgetting names, directions, recent events)' },
     ],
   },
-  // 50% symptoms
   moderate: {
     label: '50% Criteria',
     color: 'text-warning',
@@ -54,7 +63,6 @@ const PTSD_SYMPTOM_CATEGORIES = {
       { id: 'difficulty_relationships', label: 'Difficulty establishing and maintaining effective work and social relationships' },
     ],
   },
-  // 70% symptoms
   severe: {
     label: '70% Criteria',
     color: 'text-orange-500',
@@ -71,7 +79,6 @@ const PTSD_SYMPTOM_CATEGORIES = {
       { id: 'inability_relationships', label: 'Inability to establish and maintain effective relationships' },
     ],
   },
-  // 100% symptoms
   total: {
     label: '100% Criteria',
     color: 'text-destructive',
@@ -88,7 +95,6 @@ const PTSD_SYMPTOM_CATEGORIES = {
   },
 };
 
-// Flatten all symptoms for easy lookup
 const ALL_SYMPTOMS = Object.values(PTSD_SYMPTOM_CATEGORIES).flatMap(cat => cat.symptoms);
 
 interface PTSDSymptomLoggerProps {
@@ -103,6 +109,7 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
   const [formData, setFormData] = useState<Omit<PTSDSymptomEntry, 'id'>>({
     date: new Date().toISOString().split('T')[0],
     selectedSymptoms: [],
+    symptomFrequencies: [],
     overallSeverity: 5,
     occupationalImpairment: '',
     socialImpairment: '',
@@ -114,6 +121,7 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
     setFormData({
       date: new Date().toISOString().split('T')[0],
       selectedSymptoms: [],
+      symptomFrequencies: [],
       overallSeverity: 5,
       occupationalImpairment: '',
       socialImpairment: '',
@@ -128,21 +136,59 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
     if (!open) resetForm();
   };
 
+  const isSymptomSelected = (symptomId: string) => {
+    return formData.symptomFrequencies?.some(sf => sf.symptomId === symptomId) || 
+           formData.selectedSymptoms.includes(symptomId);
+  };
+
+  const getSymptomFrequency = (symptomId: string): PTSDSymptomFrequency | undefined => {
+    return formData.symptomFrequencies?.find(sf => sf.symptomId === symptomId)?.frequency;
+  };
+
   const toggleSymptom = (symptomId: string) => {
+    const currentFrequencies = formData.symptomFrequencies || [];
+    const exists = currentFrequencies.some(sf => sf.symptomId === symptomId);
+    
+    if (exists) {
+      // Remove symptom
+      setFormData(prev => ({
+        ...prev,
+        symptomFrequencies: currentFrequencies.filter(sf => sf.symptomId !== symptomId),
+        selectedSymptoms: prev.selectedSymptoms.filter(id => id !== symptomId),
+      }));
+    } else {
+      // Add symptom with default frequency
+      setFormData(prev => ({
+        ...prev,
+        symptomFrequencies: [...currentFrequencies, { symptomId, frequency: 'Weekly' }],
+        selectedSymptoms: [...prev.selectedSymptoms, symptomId],
+      }));
+    }
+  };
+
+  const updateSymptomFrequency = (symptomId: string, frequency: PTSDSymptomFrequency) => {
+    const currentFrequencies = formData.symptomFrequencies || [];
     setFormData(prev => ({
       ...prev,
-      selectedSymptoms: prev.selectedSymptoms.includes(symptomId)
-        ? prev.selectedSymptoms.filter(id => id !== symptomId)
-        : [...prev.selectedSymptoms, symptomId],
+      symptomFrequencies: currentFrequencies.map(sf => 
+        sf.symptomId === symptomId ? { ...sf, frequency } : sf
+      ),
     }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Ensure selectedSymptoms stays in sync with symptomFrequencies
+    const symptomIds = formData.symptomFrequencies?.map(sf => sf.symptomId) || [];
+    const dataToSave = {
+      ...formData,
+      selectedSymptoms: symptomIds,
+    };
+    
     if (editingId) {
-      updatePTSDSymptom(editingId, formData);
+      updatePTSDSymptom(editingId, dataToSave);
     } else {
-      addPTSDSymptom(formData);
+      addPTSDSymptom(dataToSave);
     }
     setIsOpen(false);
     resetForm();
@@ -150,9 +196,14 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
   };
 
   const handleEdit = (entry: PTSDSymptomEntry) => {
+    // Convert legacy entries to new format
+    const symptomFrequencies: PTSDSymptomWithFrequency[] = entry.symptomFrequencies || 
+      entry.selectedSymptoms.map(id => ({ symptomId: id, frequency: 'Weekly' as PTSDSymptomFrequency }));
+    
     setFormData({
       date: entry.date,
       selectedSymptoms: entry.selectedSymptoms,
+      symptomFrequencies,
       overallSeverity: entry.overallSeverity,
       occupationalImpairment: entry.occupationalImpairment,
       socialImpairment: entry.socialImpairment,
@@ -163,7 +214,6 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
     setIsOpen(true);
   };
 
-  // Calculate estimated rating based on symptoms
   const calculateEstimatedRating = (symptoms: string[]): { rating: string; color: string } => {
     const has100 = symptoms.some(s => 
       PTSD_SYMPTOM_CATEGORIES.total.symptoms.some(ts => ts.id === s)
@@ -192,7 +242,19 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
     return { label: 'Severe', color: 'text-destructive' };
   };
 
+  const getFrequencyBadgeColor = (frequency: PTSDSymptomFrequency) => {
+    switch (frequency) {
+      case 'Daily': return 'bg-destructive/20 text-destructive';
+      case 'Several times/week': return 'bg-orange-500/20 text-orange-500';
+      case 'Weekly': return 'bg-warning/20 text-warning';
+      case 'Monthly': return 'bg-success/20 text-success';
+      case 'Occasional': return 'bg-muted text-muted-foreground';
+      default: return 'bg-muted';
+    }
+  };
+
   const ptsdEntries = data.ptsdSymptoms || [];
+  const selectedCount = formData.symptomFrequencies?.length || 0;
 
   return (
     <div className="space-y-4">
@@ -218,7 +280,7 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
             <Info className="h-5 w-5 text-purple-500 flex-shrink-0 mt-0.5" />
             <div className="text-sm text-muted-foreground">
               <p className="font-medium text-foreground mb-1">VA Rating Criteria Alignment</p>
-              <p>Track symptoms that match VA rating criteria under 38 CFR 4.130. Symptoms are organized by rating level to help document the severity of your condition.</p>
+              <p>Track symptoms with frequency to match VA rating criteria. Higher frequency strengthens your claim documentation.</p>
             </div>
           </div>
         </CardContent>
@@ -315,17 +377,25 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    {/* Symptoms */}
+                    {/* Symptoms with Frequencies */}
                     <div className="flex flex-wrap gap-1.5">
-                      {entry.selectedSymptoms.map(symptomId => {
-                        const symptom = ALL_SYMPTOMS.find(s => s.id === symptomId);
-                        return symptom ? (
-                          <Badge key={symptomId} variant="secondary" className="text-xs">
-                            {symptom.label.length > 30 
-                              ? symptom.label.substring(0, 30) + '...' 
-                              : symptom.label}
+                      {(entry.symptomFrequencies || entry.selectedSymptoms.map(id => ({ symptomId: id, frequency: 'Weekly' as PTSDSymptomFrequency }))).map(sf => {
+                        const symptom = ALL_SYMPTOMS.find(s => s.id === sf.symptomId);
+                        if (!symptom) return null;
+                        return (
+                          <Badge 
+                            key={sf.symptomId} 
+                            variant="secondary" 
+                            className="text-xs flex items-center gap-1"
+                          >
+                            <span className="max-w-[150px] truncate">
+                              {symptom.label.length > 25 ? symptom.label.substring(0, 25) + '...' : symptom.label}
+                            </span>
+                            <span className={`text-[10px] px-1 py-0.5 rounded ${getFrequencyBadgeColor(sf.frequency)}`}>
+                              {sf.frequency}
+                            </span>
                           </Badge>
-                        ) : null;
+                        );
                       })}
                     </div>
 
@@ -375,14 +445,14 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
               {editingId ? 'Edit PTSD Episode' : 'Log PTSD Episode'}
             </DialogTitle>
             <DialogDescription>
-              Select symptoms you experienced based on VA rating criteria (38 CFR 4.130)
+              Select symptoms and set frequency for each (38 CFR 4.130)
             </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
             <ScrollArea className="flex-1 pr-4" style={{ scrollPaddingBottom: '350px' }}>
               <div className="space-y-6 pb-4">
-                {/* Date and Severity */}
+                {/* Date and Trigger */}
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="ptsd-date">Date</Label>
@@ -425,12 +495,12 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
 
                 <Separator />
 
-                {/* Symptom Categories */}
+                {/* Symptom Categories with Frequency */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <Label className="text-base">Symptoms Experienced</Label>
+                    <Label className="text-base">Symptoms & Frequency</Label>
                     <Badge variant="secondary">
-                      {formData.selectedSymptoms.length} selected
+                      {selectedCount} selected
                     </Badge>
                   </div>
 
@@ -441,30 +511,63 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
                         <span className={`font-medium ${category.color}`}>{category.label}</span>
                       </div>
                       <div className="space-y-2">
-                        {category.symptoms.map(symptom => (
-                          <div
-                            key={symptom.id}
-                            className={`flex items-start gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
-                              formData.selectedSymptoms.includes(symptom.id)
-                                ? 'bg-background/80 border border-primary/30'
-                                : 'hover:bg-background/50'
-                            }`}
-                            onClick={() => toggleSymptom(symptom.id)}
-                          >
-                            <Checkbox
-                              id={symptom.id}
-                              checked={formData.selectedSymptoms.includes(symptom.id)}
-                              onCheckedChange={() => toggleSymptom(symptom.id)}
-                              className="mt-0.5 pointer-events-none"
-                            />
-                            <Label
-                              htmlFor={symptom.id}
-                              className="flex-1 cursor-pointer text-sm leading-snug"
+                        {category.symptoms.map(symptom => {
+                          const isSelected = isSymptomSelected(symptom.id);
+                          const currentFreq = getSymptomFrequency(symptom.id);
+                          
+                          return (
+                            <div
+                              key={symptom.id}
+                              className={`rounded-lg transition-colors ${
+                                isSelected
+                                  ? 'bg-background/80 border border-primary/30'
+                                  : 'hover:bg-background/50'
+                              }`}
                             >
-                              {symptom.label}
-                            </Label>
-                          </div>
-                        ))}
+                              <div 
+                                className="flex items-start gap-3 p-2 cursor-pointer"
+                                onClick={() => toggleSymptom(symptom.id)}
+                              >
+                                <Checkbox
+                                  id={symptom.id}
+                                  checked={isSelected}
+                                  onCheckedChange={() => toggleSymptom(symptom.id)}
+                                  className="mt-0.5 pointer-events-none"
+                                />
+                                <Label
+                                  htmlFor={symptom.id}
+                                  className="flex-1 cursor-pointer text-sm leading-snug"
+                                >
+                                  {symptom.label}
+                                </Label>
+                              </div>
+                              
+                              {/* Frequency selector - only show when selected */}
+                              {isSelected && (
+                                <div className="px-2 pb-2 ml-7">
+                                  <div className="flex items-center gap-2">
+                                    <Clock className="h-3 w-3 text-muted-foreground" />
+                                    <Select
+                                      value={currentFreq || 'Weekly'}
+                                      onValueChange={(val) => updateSymptomFrequency(symptom.id, val as PTSDSymptomFrequency)}
+                                    >
+                                      <SelectTrigger className="h-7 text-xs w-[140px]">
+                                        <SelectValue />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        {FREQUENCY_OPTIONS.map(freq => (
+                                          <SelectItem key={freq} value={freq} className="text-xs">
+                                            {freq}
+                                          </SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   ))}
@@ -522,7 +625,7 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
                 </div>
 
                 {/* Estimated Rating Preview */}
-                {formData.selectedSymptoms.length > 0 && (
+                {selectedCount > 0 && (
                   <Card className="border-primary/20 bg-primary/5">
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
@@ -531,7 +634,8 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
                           <span className="font-medium">Estimated Rating Level</span>
                         </div>
                         {(() => {
-                          const { rating, color } = calculateEstimatedRating(formData.selectedSymptoms);
+                          const symptomIds = formData.symptomFrequencies?.map(sf => sf.symptomId) || [];
+                          const { rating, color } = calculateEstimatedRating(symptomIds);
                           return (
                             <Badge className={`${color} text-lg px-3 py-1`}>
                               {rating}
@@ -540,7 +644,7 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
                         })()}
                       </div>
                       <p className="text-xs text-muted-foreground mt-2">
-                        Based on highest-level symptoms selected. Actual rating depends on overall functional impairment.
+                        Based on highest-level symptoms selected. Frequency documentation strengthens evidence.
                       </p>
                     </CardContent>
                   </Card>
@@ -553,7 +657,7 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
               <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={formData.selectedSymptoms.length === 0}>
+              <Button type="submit" disabled={selectedCount === 0}>
                 {editingId ? 'Update' : 'Save'} Entry
               </Button>
             </div>
