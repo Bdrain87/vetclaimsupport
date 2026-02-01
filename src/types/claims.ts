@@ -171,7 +171,7 @@ export interface PTSDSymptomEntry {
 export type SleepApneaSeverity = 'None' | 'Mild' | 'Moderate' | 'Severe';
 
 // Daytime symptoms for Sleep Apnea rating
-export type DaytimeSleepiness = 'None' | 'Mild' | 'Moderate' | 'Severe - falling asleep during activities';
+export type DaytimeSleepiness = 'None' | 'Mild' | 'Moderate' | 'Severe' | 'Persistent hypersomnolence';
 
 export interface SleepEntry {
   id: string;
