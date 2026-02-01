@@ -658,17 +658,21 @@ export function SpineSymptomLogger() {
                   )}
                 </div>
 
-                {/* Flare-ups */}
-                <div className="space-y-3">
+                {/* Flare-ups with DeLuca Factors */}
+                <div className="space-y-3 p-3 border rounded-lg">
                   <div className="flex items-center gap-3">
                     <Switch
                       checked={formData.hadFlareUp}
                       onCheckedChange={(checked) => setFormData({ ...formData, hadFlareUp: checked })}
                     />
-                    <Label>Had flare-up today</Label>
+                    <div>
+                      <Label className="font-medium">Had Flare-up</Label>
+                      <p className="text-xs text-muted-foreground">DeLuca factors: 38 CFR 4.40, 4.45, 4.59</p>
+                    </div>
                   </div>
                   {formData.hadFlareUp && (
-                    <div className="space-y-3 pl-4">
+                    <div className="space-y-4 pl-4 pt-2">
+                      {/* Triggers */}
                       <div className="space-y-2">
                         <Label>Flare-up triggers</Label>
                         <div className="flex flex-wrap gap-2">
@@ -688,6 +692,99 @@ export function SpineSymptomLogger() {
                               {trigger}
                             </Badge>
                           ))}
+                        </div>
+                      </div>
+
+                      {/* Functional Loss During Flares - DeLuca */}
+                      <div className="p-3 bg-warning/5 border border-warning/20 rounded-lg space-y-4">
+                        <p className="text-xs font-medium text-warning">Functional Loss During Flares (Important for Rating)</p>
+                        
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <div className="space-y-2">
+                            <Label>Additional ROM Loss (degrees)</Label>
+                            <Input 
+                              type="number" 
+                              placeholder="e.g., 20 (degrees lost during flare)"
+                              value={formData.flareUpROMReduction ?? ''}
+                              onChange={(e) => setFormData({ 
+                                ...formData, 
+                                flareUpROMReduction: e.target.value ? Number(e.target.value) : undefined 
+                              })}
+                            />
+                            <p className="text-xs text-muted-foreground">How many more degrees of motion do you lose during flares?</p>
+                          </div>
+                          <div className="space-y-2">
+                            <Label>Flare Duration (hours)</Label>
+                            <Input 
+                              type="number" 
+                              placeholder="e.g., 4"
+                              value={formData.flareUpDurationHours ?? ''}
+                              onChange={(e) => setFormData({ 
+                                ...formData, 
+                                flareUpDurationHours: e.target.value ? Number(e.target.value) : undefined 
+                              })}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <Label>Functional Capacity During Flare</Label>
+                            <span className="text-sm font-medium text-warning">
+                              {formData.flareUpFunctionalCapacity ?? 50}%
+                            </span>
+                          </div>
+                          <Slider
+                            value={[formData.flareUpFunctionalCapacity ?? 50]}
+                            onValueChange={([value]) => setFormData({ ...formData, flareUpFunctionalCapacity: value })}
+                            min={0}
+                            max={100}
+                            step={5}
+                          />
+                          <p className="text-xs text-muted-foreground">0% = completely unable to function, 100% = normal function</p>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label>Additional Symptoms During Flares</Label>
+                          <div className="flex flex-wrap gap-2">
+                            <Badge
+                              variant={formData.flareUpWeakness ? 'default' : 'outline'}
+                              className="cursor-pointer"
+                              onClick={() => setFormData({ ...formData, flareUpWeakness: !formData.flareUpWeakness })}
+                            >
+                              Weakness
+                            </Badge>
+                            <Badge
+                              variant={formData.flareUpFatigability ? 'default' : 'outline'}
+                              className="cursor-pointer"
+                              onClick={() => setFormData({ ...formData, flareUpFatigability: !formData.flareUpFatigability })}
+                            >
+                              Fatigability
+                            </Badge>
+                            <Badge
+                              variant={formData.flareUpIncoordination ? 'default' : 'outline'}
+                              className="cursor-pointer"
+                              onClick={() => setFormData({ ...formData, flareUpIncoordination: !formData.flareUpIncoordination })}
+                            >
+                              Incoordination
+                            </Badge>
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <Label>Pain Increase During Flare</Label>
+                            <span className="text-sm font-medium text-destructive">
+                              {formData.flareUpPainIncrease ?? formData.painLevel}/10
+                            </span>
+                          </div>
+                          <Slider
+                            value={[formData.flareUpPainIncrease ?? formData.painLevel]}
+                            onValueChange={([value]) => setFormData({ ...formData, flareUpPainIncrease: value })}
+                            min={1}
+                            max={10}
+                            step={1}
+                          />
                         </div>
                       </div>
                     </div>
