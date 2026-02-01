@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { ClaimsData, MedicalVisit, Exposure, SymptomEntry, Medication, ServiceEntry, BuddyContact, DocumentItem, MigraineEntry, UploadedDocument, SleepEntry, ClaimCondition, QuickLogEntry } from '@/types/claims';
+import type { ClaimsData, MedicalVisit, Exposure, SymptomEntry, Medication, ServiceEntry, BuddyContact, DocumentItem, MigraineEntry, UploadedDocument, SleepEntry, ClaimCondition, QuickLogEntry, Deadline } from '@/types/claims';
 
 const STORAGE_KEY = 'va-claims-tracker-data';
 
@@ -32,6 +32,7 @@ const getInitialData = (): ClaimsData => {
       uploadedDocuments: [],
       claimConditions: [],
       quickLogs: [],
+      deadlines: [],
       milestonesAchieved: [],
     };
   }
@@ -46,6 +47,7 @@ const getInitialData = (): ClaimsData => {
       if (!parsed.sleepEntries) parsed.sleepEntries = [];
       if (!parsed.claimConditions) parsed.claimConditions = [];
       if (!parsed.quickLogs) parsed.quickLogs = [];
+      if (!parsed.deadlines) parsed.deadlines = [];
       if (!parsed.milestonesAchieved) parsed.milestonesAchieved = [];
       return parsed;
     } catch {
@@ -67,6 +69,7 @@ const getInitialData = (): ClaimsData => {
     uploadedDocuments: [],
     claimConditions: [],
     quickLogs: [],
+    deadlines: [],
     milestonesAchieved: [],
   };
 };
@@ -332,6 +335,28 @@ export function useClaimsData() {
     }));
   }, []);
 
+  // Deadlines
+  const addDeadline = useCallback((deadline: Omit<Deadline, 'id'>) => {
+    setData(prev => ({
+      ...prev,
+      deadlines: [...(prev.deadlines || []), { ...deadline, id: generateId() }],
+    }));
+  }, []);
+
+  const updateDeadline = useCallback((id: string, deadline: Partial<Deadline>) => {
+    setData(prev => ({
+      ...prev,
+      deadlines: (prev.deadlines || []).map(d => d.id === id ? { ...d, ...deadline } : d),
+    }));
+  }, []);
+
+  const deleteDeadline = useCallback((id: string) => {
+    setData(prev => ({
+      ...prev,
+      deadlines: (prev.deadlines || []).filter(d => d.id !== id),
+    }));
+  }, []);
+
   // Milestones
   const addMilestone = useCallback((milestone: string) => {
     setData(prev => ({
@@ -376,6 +401,9 @@ export function useClaimsData() {
     setDocumentScanDisclaimerShown,
     addQuickLog,
     deleteQuickLog,
+    addDeadline,
+    updateDeadline,
+    deleteDeadline,
     addMilestone,
   };
 }

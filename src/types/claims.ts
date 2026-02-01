@@ -171,6 +171,25 @@ export interface ClaimCondition {
   createdAt: string;
 }
 
+// Deadline types
+export type DeadlineType = 
+  | 'intent_to_file' 
+  | 'cp_exam' 
+  | 'nod_appeal' 
+  | 'hlr_appeal' 
+  | 'supplemental_claim'
+  | 'custom';
+
+export interface Deadline {
+  id: string;
+  type: DeadlineType;
+  title: string;
+  date: string; // ISO date string
+  notes: string;
+  completed: boolean;
+  createdAt: string;
+}
+
 // Quick Log Entry for daily tracking
 export interface QuickLogEntry {
   id: string;
@@ -197,6 +216,7 @@ export interface ClaimsData {
   uploadedDocuments: UploadedDocument[];
   claimConditions: ClaimCondition[];
   quickLogs: QuickLogEntry[];
+  deadlines: Deadline[];
   documentScanDisclaimerShown?: boolean;
   // Milestones tracking
   milestonesAchieved?: string[];
