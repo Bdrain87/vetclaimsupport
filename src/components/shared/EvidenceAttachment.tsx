@@ -77,7 +77,7 @@ export function EvidenceAttachment({
             linkedAt: new Date().toISOString(),
           }],
           autoSuggestedCategory: suggestedCategory,
-          cloudSyncStatus: 'local-only',
+          storageType: 'localStorage', // All local storage, no cloud
         };
 
         // Generate thumbnail for images

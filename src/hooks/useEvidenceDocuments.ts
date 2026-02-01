@@ -1,7 +1,19 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { EvidenceDocument, DocumentCategory, AttachableEntryType, LinkedEntry } from '@/types/documents';
+import type { EvidenceDocument, DocumentCategory, AttachableEntryType } from '@/types/documents';
+import { 
+  storeFileData, 
+  getFileData, 
+  deleteFileData, 
+  INDEXEDDB_THRESHOLD,
+  isIndexedDBAvailable 
+} from '@/lib/indexedDB';
 
 const STORAGE_KEY = 'va-claims-evidence-documents';
+
+// Document metadata stored in localStorage (without large dataUrl for IndexedDB items)
+interface StoredDocumentMeta extends Omit<EvidenceDocument, 'dataUrl'> {
+  dataUrl: string; // Empty string if stored in IndexedDB
+}
 
 const getInitialData = (): EvidenceDocument[] => {
   if (typeof window === 'undefined') return [];
@@ -19,33 +31,113 @@ const getInitialData = (): EvidenceDocument[] => {
 
 export function useEvidenceDocuments() {
   const [documents, setDocuments] = useState<EvidenceDocument[]>(getInitialData);
+  const [loadingFiles, setLoadingFiles] = useState<Set<string>>(new Set());
 
-  // Persist to localStorage
+  // Persist metadata to localStorage (dataUrl excluded for IndexedDB items)
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(documents));
+    const toStore = documents.map(doc => {
+      if (doc.storageType === 'indexedDB') {
+        // Don't store large dataUrl in localStorage
+        return { ...doc, dataUrl: '' };
+      }
+      return doc;
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(toStore));
   }, [documents]);
 
-  // Add a new document
-  const addDocument = useCallback((doc: Omit<EvidenceDocument, 'id'>) => {
+  // Load IndexedDB data for documents on mount
+  useEffect(() => {
+    const loadIndexedDBData = async () => {
+      const docsNeedingData = documents.filter(
+        doc => doc.storageType === 'indexedDB' && !doc.dataUrl
+      );
+      
+      if (docsNeedingData.length === 0) return;
+      
+      const ids = new Set(docsNeedingData.map(d => d.id));
+      setLoadingFiles(ids);
+      
+      const updates: Record<string, string> = {};
+      
+      for (const doc of docsNeedingData) {
+        const data = await getFileData(doc.id);
+        if (data) {
+          updates[doc.id] = data;
+        }
+      }
+      
+      if (Object.keys(updates).length > 0) {
+        setDocuments(prev => prev.map(doc => 
+          updates[doc.id] ? { ...doc, dataUrl: updates[doc.id] } : doc
+        ));
+      }
+      
+      setLoadingFiles(new Set());
+    };
+    
+    loadIndexedDBData();
+  }, []);
+
+  // Add a new document (100% local storage)
+  const addDocument = useCallback(async (doc: Omit<EvidenceDocument, 'id' | 'storageType'>) => {
+    const id = crypto.randomUUID();
+    const fileSize = doc.dataUrl.length;
+    const useIndexedDB = isIndexedDBAvailable() && fileSize > INDEXEDDB_THRESHOLD;
+    
+    // Store large files in IndexedDB
+    if (useIndexedDB) {
+      await storeFileData(id, doc.dataUrl);
+    }
+    
     const newDoc: EvidenceDocument = {
       ...doc,
-      id: crypto.randomUUID(),
+      id,
+      storageType: useIndexedDB ? 'indexedDB' : 'localStorage',
     };
+    
     setDocuments(prev => [...prev, newDoc]);
-    return newDoc.id;
+    return id;
   }, []);
 
   // Update a document
-  const updateDocument = useCallback((id: string, updates: Partial<EvidenceDocument>) => {
+  const updateDocument = useCallback(async (id: string, updates: Partial<EvidenceDocument>) => {
+    // If updating dataUrl, may need to update storage location
+    if (updates.dataUrl) {
+      const doc = documents.find(d => d.id === id);
+      if (doc) {
+        const newSize = updates.dataUrl.length;
+        const shouldUseIndexedDB = isIndexedDBAvailable() && newSize > INDEXEDDB_THRESHOLD;
+        
+        // Clean up old IndexedDB entry if switching to localStorage
+        if (doc.storageType === 'indexedDB' && !shouldUseIndexedDB) {
+          await deleteFileData(id);
+        }
+        
+        // Store in IndexedDB if large
+        if (shouldUseIndexedDB) {
+          await storeFileData(id, updates.dataUrl);
+        }
+        
+        updates.storageType = shouldUseIndexedDB ? 'indexedDB' : 'localStorage';
+      }
+    }
+    
     setDocuments(prev => prev.map(doc => 
       doc.id === id ? { ...doc, ...updates } : doc
     ));
-  }, []);
+  }, [documents]);
 
   // Delete a document
-  const deleteDocument = useCallback((id: string) => {
-    setDocuments(prev => prev.filter(doc => doc.id !== id));
-  }, []);
+  const deleteDocument = useCallback(async (id: string) => {
+    const doc = documents.find(d => d.id === id);
+    
+    // Clean up IndexedDB if needed
+    if (doc?.storageType === 'indexedDB') {
+      await deleteFileData(id);
+    }
+    
+    setDocuments(prev => prev.filter(d => d.id !== id));
+  }, [documents]);
 
   // Link document to an entry
   const linkToEntry = useCallback((docId: string, entryType: AttachableEntryType, entryId: string) => {
@@ -127,10 +219,15 @@ export function useEvidenceDocuments() {
     return counts;
   }, [documents]);
 
-  // Bulk update documents (for external state sync)
+  // Bulk update documents
   const setAllDocuments = useCallback((docs: EvidenceDocument[]) => {
     setDocuments(docs);
   }, []);
+
+  // Check if a specific file is still loading from IndexedDB
+  const isFileLoading = useCallback((id: string) => {
+    return loadingFiles.has(id);
+  }, [loadingFiles]);
 
   return {
     documents,
@@ -145,5 +242,6 @@ export function useEvidenceDocuments() {
     searchDocuments,
     getCategoryCounts,
     setAllDocuments,
+    isFileLoading,
   };
 }

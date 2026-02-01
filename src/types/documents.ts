@@ -42,13 +42,13 @@ export type AttachableEntryType =
   | 'ptsd-symptom'
   | 'claim-condition';
 
-// A document/evidence file stored locally
+// A document/evidence file stored 100% locally on user's device
 export interface EvidenceDocument {
   id: string;
   fileName: string;
   fileType: string; // MIME type
   fileSize: number;
-  dataUrl: string; // Base64 for local storage
+  dataUrl: string; // Base64 for small files (localStorage)
   thumbnailUrl?: string; // For images/PDFs
   uploadedAt: string;
   category: DocumentCategory;
@@ -60,9 +60,8 @@ export interface EvidenceDocument {
   autoSuggestedCategory?: DocumentCategory;
   // OCR extracted text (if applicable)
   extractedText?: string;
-  // Cloud sync status for hybrid approach
-  cloudSyncStatus?: 'local-only' | 'syncing' | 'synced' | 'sync-failed';
-  cloudUrl?: string;
+  // Storage location indicator (all local, no cloud)
+  storageType: 'localStorage' | 'indexedDB';
 }
 
 export interface LinkedEntry {
