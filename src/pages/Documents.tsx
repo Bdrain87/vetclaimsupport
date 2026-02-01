@@ -1,12 +1,12 @@
 import { useClaims } from '@/context/ClaimsContext';
-import { FileCheck, Check, Clock, AlertCircle, FileText, Plus, Minus, Download, FolderPlus } from 'lucide-react';
+import { FileCheck, Check, Clock, AlertCircle, FileText, Plus, Minus, Download, FolderPlus, Scan } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { exportDocuments } from '@/utils/pdfExport';
-import { InlineDocumentUploader } from '@/components/documents/InlineDocumentUploader';
+import { DocumentScanner } from '@/components/documents/DocumentScanner';
 import type { DocumentItem, DocumentTypeId } from '@/types/claims';
 
 const statuses = ['Not Started', 'In Progress', 'Obtained', 'Submitted'] as const;
@@ -170,8 +170,8 @@ export default function Documents() {
                     </div>
                     
                     <div className="flex flex-col sm:flex-row gap-3 lg:items-center">
-                      {/* Scan/Import Buttons */}
-                      <InlineDocumentUploader
+                      {/* Document Scanner with Local AI OCR */}
+                      <DocumentScanner
                         documents={data.uploadedDocuments}
                         documentType={docTypeId}
                         onAdd={addUploadedDocument}
@@ -255,7 +255,7 @@ export default function Documents() {
                 </div>
                 
                 <div className="flex items-center">
-                  <InlineDocumentUploader
+                  <DocumentScanner
                     documents={data.uploadedDocuments}
                     documentType="other"
                     onAdd={addUploadedDocument}
