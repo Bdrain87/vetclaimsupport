@@ -58,10 +58,20 @@ export function SecondaryConditionsTab() {
 
   return (
     <div className="space-y-4">
-      {/* Disclaimer */}
+      {/* Anti-pyramiding Disclaimer */}
+      <div className="p-3 bg-warning/10 border border-warning/30 rounded-lg">
+        <p className="text-xs text-foreground leading-relaxed font-medium mb-1">
+          ⚠️ Anti-Pyramiding Notice (38 CFR 4.14)
+        </p>
+        <p className="text-xs text-muted-foreground leading-relaxed">
+          The VA cannot rate the same symptoms under multiple conditions. For best results, focus on secondary conditions that affect <span className="font-medium text-foreground">different body systems</span> than your primary. Example: PTSD → Sleep Apnea (respiratory) rather than PTSD → Depression (same mental health symptoms).
+        </p>
+      </div>
+      
+      {/* General Disclaimer */}
       <div className="p-3 bg-muted/50 border border-border rounded-lg">
         <p className="text-xs text-muted-foreground leading-relaxed">
-          These connections are based on medical literature and common VA claim patterns. They are starting points for research only - not confirmation that you have these conditions. Every case is unique. A qualified medical provider must establish any actual medical connection.
+          These connections are based on medical literature and common VA claim patterns. They are starting points for research only - not confirmation that you have these conditions. <span className="font-medium">Consult a VSO before filing.</span>
         </p>
       </div>
 
@@ -79,6 +89,9 @@ export function SecondaryConditionsTab() {
                 service-connected condition. To establish secondary connection, you need a medical
                 nexus statement linking the secondary condition to your primary. These can
                 significantly increase your combined rating.
+              </p>
+              <p className="text-xs text-warning/90 font-medium">
+                💡 Tip: Conditions affecting different body systems are easier to rate separately.
               </p>
             </div>
           </div>
@@ -143,25 +156,41 @@ export function SecondaryConditionsTab() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {connections.map((connection, idx) => (
-              <div
-                key={`${connection.primaryCondition}-${connection.secondaryCondition}-${idx}`}
-                className="rounded-lg border p-3 hover:bg-muted/30 transition-colors"
-              >
-                <div className="flex flex-wrap items-center gap-2 mb-2">
-                  <span className="font-medium text-muted-foreground">{connection.primaryCondition}</span>
-                  <ArrowRight className="h-4 w-4 text-primary" />
-                  <span className="font-medium text-foreground">{connection.secondaryCondition}</span>
-                  <Badge variant="outline" className="ml-auto text-xs">
-                    {connection.category}
-                  </Badge>
+            {connections.map((connection, idx) => {
+              // Check if this crosses body systems (good for anti-pyramiding)
+              const primaryIsMental = connection.primaryCondition.toLowerCase().includes('ptsd') || 
+                                      connection.primaryCondition.toLowerCase().includes('anxiety') ||
+                                      connection.primaryCondition.toLowerCase().includes('depression');
+              const secondaryIsMental = connection.category === 'Mental Health';
+              const crossesBodySystems = primaryIsMental ? !secondaryIsMental : true;
+              
+              return (
+                <div
+                  key={`${connection.primaryCondition}-${connection.secondaryCondition}-${idx}`}
+                  className={`rounded-lg border p-3 hover:bg-muted/30 transition-colors ${
+                    crossesBodySystems ? 'border-green-500/30 bg-green-500/5' : 'border-border'
+                  }`}
+                >
+                  <div className="flex flex-wrap items-center gap-2 mb-2">
+                    <span className="font-medium text-muted-foreground">{connection.primaryCondition}</span>
+                    <ArrowRight className="h-4 w-4 text-primary" />
+                    <span className="font-medium text-foreground">{connection.secondaryCondition}</span>
+                    <Badge variant="outline" className="ml-auto text-xs">
+                      {connection.category}
+                    </Badge>
+                    {crossesBodySystems && (
+                      <Badge variant="secondary" className="text-[10px] bg-green-500/20 text-green-700 dark:text-green-400">
+                        Different System ✓
+                      </Badge>
+                    )}
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    <span className="font-medium text-foreground/80">Medical Connection: </span>
+                    {connection.medicalConnection}
+                  </p>
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  <span className="font-medium text-foreground/80">Medical Connection: </span>
-                  {connection.medicalConnection}
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </CardContent>
         </Card>
       ))}
