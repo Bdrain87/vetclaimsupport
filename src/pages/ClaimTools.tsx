@@ -20,7 +20,7 @@ import { BackPayEstimator } from '@/components/tools/BackPayEstimator';
 import { DisclaimerNotice } from '@/components/shared/DisclaimerNotice';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 // Tool definitions
 interface Tool {
@@ -132,7 +132,6 @@ const tools: Tool[] = [
 
 export default function ClaimTools() {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const conditionParam = searchParams.get('condition');
   const tabParam = searchParams.get('tab');
   
