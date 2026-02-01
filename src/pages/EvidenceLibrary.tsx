@@ -77,7 +77,7 @@ export default function EvidenceLibrary() {
         const dataUrl = e.target?.result as string;
         const suggestedCategory = suggestCategoryFromFilename(file.name);
         
-        const newDoc: Omit<EvidenceDocument, 'id'> = {
+        const newDoc: Omit<EvidenceDocument, 'id' | 'storageType'> = {
           fileName: file.name,
           fileType: file.type,
           fileSize: file.size,
@@ -87,7 +87,6 @@ export default function EvidenceLibrary() {
           title: file.name.replace(/\.[^/.]+$/, ''),
           linkedEntries: [],
           autoSuggestedCategory: suggestedCategory,
-          cloudSyncStatus: 'local-only',
         };
 
         if (file.type.startsWith('image/')) {
@@ -518,9 +517,10 @@ export default function EvidenceLibrary() {
           <div className="flex items-start gap-3">
             <CheckCircle2 className="h-5 w-5 text-success flex-shrink-0 mt-0.5" />
             <div>
-              <p className="font-medium text-sm">Your documents are stored locally</p>
+              <p className="font-medium text-sm">100% Local Storage - Your Data Never Leaves Your Device</p>
               <p className="text-xs text-muted-foreground">
-                All files remain on your device. No documents are uploaded to external servers unless you choose to sync.
+                All documents are stored locally using IndexedDB for large files and localStorage for smaller ones. 
+                No data is ever uploaded to any external server. Your veteran medical information stays completely private.
               </p>
             </div>
           </div>
