@@ -28,6 +28,9 @@ import { ConditionsExplorer } from '@/components/dashboard/ConditionsExplorer';
 import { SymptomPatterns } from '@/components/dashboard/SymptomPatterns';
 import { SymptomInsights } from '@/components/dashboard/SymptomInsights';
 import { DeadlinesReminders } from '@/components/dashboard/DeadlinesReminders';
+import { ClaimsJourneyRoadmap } from '@/components/dashboard/ClaimsJourneyRoadmap';
+import { ContextualGuidance } from '@/components/dashboard/ContextualGuidance';
+import { GuidedActionBanner } from '@/components/dashboard/GuidedActionBanner';
 import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -152,6 +155,15 @@ export default function Dashboard() {
     <div className="space-y-4 animate-fade-in pb-4 overflow-x-hidden max-w-full">
       {/* Hero Header with Native Share */}
       <DashboardHeader />
+
+      {/* GUIDED ACTION BANNER - What to do next */}
+      <GuidedActionBanner />
+
+      {/* CLAIMS JOURNEY ROADMAP - Visual progress */}
+      <ClaimsJourneyRoadmap />
+
+      {/* CONTEXTUAL GUIDANCE - Smart nudges */}
+      <ContextualGuidance />
 
       {/* CONDITIONS WORTH EXPLORING - Unified Smart Section */}
       <ConditionsExplorer 
