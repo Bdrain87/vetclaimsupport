@@ -312,16 +312,33 @@ export default function Sleep() {
                       Sleep Apnea Symptoms (VA DC 6847)
                     </Label>
 
-                    {/* CPAP Section */}
-                    <div className="flex items-center justify-between rounded-lg border p-4">
-                      <div className="space-y-0.5">
-                        <Label className="text-base">Use CPAP Machine?</Label>
-                        <p className="text-sm text-muted-foreground">Required for 50% rating</p>
+                    {/* CPAP Section - CRITICAL for 50% rating */}
+                    <div className={`rounded-lg border-2 p-4 ${formData.usesCPAP ? 'border-success bg-success/10' : 'border-warning bg-warning/10'}`}>
+                      <div className="flex items-center justify-between">
+                        <div className="space-y-1">
+                          <Label className="text-base font-semibold">Do you use a CPAP/breathing device?</Label>
+                          <p className="text-sm font-medium text-warning">⭐ Critical for 50% rating</p>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant={formData.usesCPAP ? "default" : "outline"}
+                            className={formData.usesCPAP ? "bg-success hover:bg-success/90" : ""}
+                            onClick={() => setFormData({ ...formData, usesCPAP: true })}
+                          >
+                            Yes
+                          </Button>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant={!formData.usesCPAP ? "default" : "outline"}
+                            onClick={() => setFormData({ ...formData, usesCPAP: false })}
+                          >
+                            No
+                          </Button>
+                        </div>
                       </div>
-                      <Switch 
-                        checked={formData.usesCPAP}
-                        onCheckedChange={(checked) => setFormData({ ...formData, usesCPAP: checked })}
-                      />
                     </div>
 
                     {formData.usesCPAP && (
