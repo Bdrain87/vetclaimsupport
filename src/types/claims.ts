@@ -194,6 +194,7 @@ export interface SleepEntry {
   morningHeadache?: boolean; // Woke with headache (common apnea symptom)
   feltRested?: boolean; // Did you feel rested upon waking?
   impactOnWork?: string; // How sleep affected work/activities
+  severityRating?: number; // 1-10 severity scale
 }
 
 // Document type identifiers for categorizing uploads

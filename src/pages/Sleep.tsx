@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
 import { Moon, Plus, Trash2, Edit, Calendar, Clock, AlertTriangle, CheckCircle2, TrendingUp, Wind, Activity, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -53,6 +54,7 @@ export default function Sleep() {
     morningHeadache: false,
     feltRested: false,
     impactOnWork: '',
+    severityRating: 5,
   });
 
   const resetForm = () => {
@@ -75,6 +77,7 @@ export default function Sleep() {
       morningHeadache: false,
       feltRested: false,
       impactOnWork: '',
+      severityRating: 5,
     });
     setEditingId(null);
   };
@@ -110,6 +113,7 @@ export default function Sleep() {
       morningHeadache: entry.morningHeadache || false,
       feltRested: entry.feltRested || false,
       impactOnWork: entry.impactOnWork || '',
+      severityRating: entry.severityRating || 5,
     });
     setEditingId(entry.id);
     setIsOpen(true);
@@ -441,6 +445,33 @@ export default function Sleep() {
                         onCheckedChange={(checked) => setFormData({ ...formData, feltRested: checked })}
                       />
                     </div>
+
+                    {/* Severity Rating */}
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <Label>Sleep Issue Severity</Label>
+                        <span className={`text-lg font-bold ${
+                          formData.severityRating && formData.severityRating >= 8 ? 'text-destructive' :
+                          formData.severityRating && formData.severityRating >= 5 ? 'text-warning' :
+                          'text-success'
+                        }`}>
+                          {formData.severityRating}/10
+                        </span>
+                      </div>
+                      <Slider
+                        value={[formData.severityRating || 5]}
+                        onValueChange={(value) => setFormData({ ...formData, severityRating: value[0] })}
+                        min={1}
+                        max={10}
+                        step={1}
+                        className="w-full"
+                      />
+                      <div className="flex justify-between text-xs text-muted-foreground">
+                        <span>Mild</span>
+                        <span>Moderate</span>
+                        <span>Severe</span>
+                      </div>
+                    </div>
                   </div>
 
                   <Separator />
@@ -629,15 +660,24 @@ export default function Sleep() {
             .map((entry) => (
             <Card key={entry.id} className="data-card">
               <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Badge className={getQualityColor(entry.quality)}>
-                      {entry.quality}
-                    </Badge>
-                    <span className="text-sm text-muted-foreground">
-                      {entry.hoursSlept}h
-                    </span>
-                    {entry.nightmares && (
+                  <div className="flex items-start justify-between">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge className={getQualityColor(entry.quality)}>
+                        {entry.quality}
+                      </Badge>
+                      <span className="text-sm text-muted-foreground">
+                        {entry.hoursSlept}h
+                      </span>
+                      {entry.severityRating && (
+                        <Badge variant="outline" className={
+                          entry.severityRating >= 8 ? 'text-destructive border-destructive/50' :
+                          entry.severityRating >= 5 ? 'text-warning border-warning/50' :
+                          'text-success border-success/50'
+                        }>
+                          {entry.severityRating}/10
+                        </Badge>
+                      )}
+                      {entry.nightmares && (
                       <Badge variant="destructive" className="text-xs">Nightmares</Badge>
                     )}
                     {entry.wokeGasping && (
