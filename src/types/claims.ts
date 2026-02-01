@@ -145,11 +145,21 @@ export interface MigraineEntry {
 // Sleep Tracker types
 export type SleepQuality = 'Very Poor' | 'Poor' | 'Fair' | 'Good' | 'Excellent';
 
+// PTSD Symptom frequency options
+export type PTSDSymptomFrequency = 'Daily' | 'Several times/week' | 'Weekly' | 'Monthly' | 'Occasional';
+
+// Individual symptom with frequency
+export interface PTSDSymptomWithFrequency {
+  symptomId: string;
+  frequency: PTSDSymptomFrequency;
+}
+
 // PTSD Symptom Entry for 38 CFR 4.130 tracking
 export interface PTSDSymptomEntry {
   id: string;
   date: string;
-  selectedSymptoms: string[]; // IDs of symptoms from the checklist
+  selectedSymptoms: string[]; // Legacy: IDs of symptoms from the checklist
+  symptomFrequencies?: PTSDSymptomWithFrequency[]; // New: symptoms with frequency
   overallSeverity: number; // 1-10
   occupationalImpairment: string;
   socialImpairment: string;
