@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { ClaimsData, MedicalVisit, Exposure, SymptomEntry, Medication, ServiceEntry, BuddyContact, DocumentItem, MigraineEntry, UploadedDocument, SleepEntry, ClaimCondition, QuickLogEntry, Deadline, PTSDSymptomEntry } from '@/types/claims';
+import type { ClaimsData, MedicalVisit, Exposure, SymptomEntry, Medication, ServiceEntry, BuddyContact, DocumentItem, MigraineEntry, UploadedDocument, SleepEntry, ClaimCondition, QuickLogEntry, Deadline, PTSDSymptomEntry, CombatEntry, MajorEvent, DeploymentEntry } from '@/types/claims';
 
 const STORAGE_KEY = 'va-claims-tracker-data';
 
@@ -24,6 +24,9 @@ const getInitialData = (): ClaimsData => {
       symptoms: [],
       medications: [],
       serviceHistory: [],
+      combatHistory: [],
+      majorEvents: [],
+      deployments: [],
       buddyContacts: [],
       documents: defaultDocuments,
       migraines: [],
@@ -51,6 +54,9 @@ const getInitialData = (): ClaimsData => {
       if (!parsed.quickLogs) parsed.quickLogs = [];
       if (!parsed.deadlines) parsed.deadlines = [];
       if (!parsed.milestonesAchieved) parsed.milestonesAchieved = [];
+      if (!parsed.combatHistory) parsed.combatHistory = [];
+      if (!parsed.majorEvents) parsed.majorEvents = [];
+      if (!parsed.deployments) parsed.deployments = [];
       return parsed;
     } catch {
       console.error('Failed to parse stored data');
@@ -63,6 +69,9 @@ const getInitialData = (): ClaimsData => {
     symptoms: [],
     medications: [],
     serviceHistory: [],
+    combatHistory: [],
+    majorEvents: [],
+    deployments: [],
     buddyContacts: [],
     documents: defaultDocuments,
     migraines: [],
@@ -193,6 +202,72 @@ export function useClaimsData() {
     setData(prev => ({
       ...prev,
       serviceHistory: prev.serviceHistory.filter(s => s.id !== id),
+    }));
+  }, []);
+
+  // Combat History
+  const addCombatEntry = useCallback((entry: Omit<CombatEntry, 'id'>) => {
+    setData(prev => ({
+      ...prev,
+      combatHistory: [...(prev.combatHistory || []), { ...entry, id: generateId() }],
+    }));
+  }, []);
+
+  const updateCombatEntry = useCallback((id: string, entry: Partial<CombatEntry>) => {
+    setData(prev => ({
+      ...prev,
+      combatHistory: (prev.combatHistory || []).map(c => c.id === id ? { ...c, ...entry } : c),
+    }));
+  }, []);
+
+  const deleteCombatEntry = useCallback((id: string) => {
+    setData(prev => ({
+      ...prev,
+      combatHistory: (prev.combatHistory || []).filter(c => c.id !== id),
+    }));
+  }, []);
+
+  // Major Events
+  const addMajorEvent = useCallback((event: Omit<MajorEvent, 'id'>) => {
+    setData(prev => ({
+      ...prev,
+      majorEvents: [...(prev.majorEvents || []), { ...event, id: generateId() }],
+    }));
+  }, []);
+
+  const updateMajorEvent = useCallback((id: string, event: Partial<MajorEvent>) => {
+    setData(prev => ({
+      ...prev,
+      majorEvents: (prev.majorEvents || []).map(e => e.id === id ? { ...e, ...event } : e),
+    }));
+  }, []);
+
+  const deleteMajorEvent = useCallback((id: string) => {
+    setData(prev => ({
+      ...prev,
+      majorEvents: (prev.majorEvents || []).filter(e => e.id !== id),
+    }));
+  }, []);
+
+  // Deployments
+  const addDeployment = useCallback((deployment: Omit<DeploymentEntry, 'id'>) => {
+    setData(prev => ({
+      ...prev,
+      deployments: [...(prev.deployments || []), { ...deployment, id: generateId() }],
+    }));
+  }, []);
+
+  const updateDeployment = useCallback((id: string, deployment: Partial<DeploymentEntry>) => {
+    setData(prev => ({
+      ...prev,
+      deployments: (prev.deployments || []).map(d => d.id === id ? { ...d, ...deployment } : d),
+    }));
+  }, []);
+
+  const deleteDeployment = useCallback((id: string) => {
+    setData(prev => ({
+      ...prev,
+      deployments: (prev.deployments || []).filter(d => d.id !== id),
     }));
   }, []);
 
@@ -407,6 +482,15 @@ export function useClaimsData() {
     addServiceEntry,
     updateServiceEntry,
     deleteServiceEntry,
+    addCombatEntry,
+    updateCombatEntry,
+    deleteCombatEntry,
+    addMajorEvent,
+    updateMajorEvent,
+    deleteMajorEvent,
+    addDeployment,
+    updateDeployment,
+    deleteDeployment,
     addBuddyContact,
     updateBuddyContact,
     deleteBuddyContact,

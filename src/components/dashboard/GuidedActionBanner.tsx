@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import {
   ArrowRight,
@@ -15,6 +15,10 @@ import {
   Sparkles,
 } from 'lucide-react';
 
+interface GuidedActionBannerProps {
+  onOpenAddCondition?: () => void;
+}
+
 interface GuidedAction {
   id: string;
   icon: React.ReactNode;
@@ -24,8 +28,9 @@ interface GuidedAction {
   priority: number;
 }
 
-export function GuidedActionBanner() {
+export function GuidedActionBanner({ onOpenAddCondition }: GuidedActionBannerProps) {
   const { data } = useClaims();
+  const navigate = useNavigate();
 
   const nextAction = useMemo((): GuidedAction | null => {
     const hasConditions = (data.claimConditions?.length || 0) > 0;
@@ -41,7 +46,7 @@ export function GuidedActionBanner() {
         icon: <Target className="h-5 w-5" />,
         label: 'Add Your First Condition',
         description: 'Start by telling us what you\'re claiming',
-        href: '/',
+        href: '#add-condition', // Special href to trigger modal
         priority: 1,
       };
     }
@@ -145,12 +150,23 @@ export function GuidedActionBanner() {
           </p>
         </div>
 
-        <Link to={nextAction.href} className="flex-shrink-0">
-          <Button size="sm" className="gap-1">
+        {nextAction.href === '#add-condition' ? (
+          <Button 
+            size="sm" 
+            className="gap-1 flex-shrink-0"
+            onClick={() => onOpenAddCondition?.()}
+          >
             Go
             <ArrowRight className="h-4 w-4" />
           </Button>
-        </Link>
+        ) : (
+          <Link to={nextAction.href} className="flex-shrink-0">
+            <Button size="sm" className="gap-1">
+              Go
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Link>
+        )}
       </div>
     </div>
   );
