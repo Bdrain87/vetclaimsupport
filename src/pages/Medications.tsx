@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
+import { useEvidence } from '@/context/EvidenceContext';
 import { Pill, Plus, Trash2, Edit, Calendar, AlertCircle, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,10 +11,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { MedicationCombobox } from '@/components/ui/medication-combobox';
 import { exportMedications } from '@/utils/pdfExport';
+import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import type { Medication } from '@/types/claims';
 
 export default function Medications() {
   const { data, addMedication, updateMedication, deleteMedication } = useClaims();
+  const { documents, setAllDocuments } = useEvidence();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState<Omit<Medication, 'id'>>({
@@ -171,6 +174,19 @@ export default function Medications() {
                 />
               </div>
 
+              {/* Evidence Attachments - only show when editing */}
+              {editingId && (
+                <div className="pt-2 border-t border-border">
+                  <EvidenceAttachment
+                    entryType="medication"
+                    entryId={editingId}
+                    documents={documents}
+                    onDocumentsChange={setAllDocuments}
+                    compact={false}
+                  />
+                </div>
+              )}
+
               </div>
               <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-border">
                 <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
@@ -221,6 +237,11 @@ export default function Medications() {
                       <span className="text-xs">{med.sideEffects}</span>
                     </div>
                   )}
+                  <EvidenceThumbnails
+                    entryType="medication"
+                    entryId={med.id}
+                    documents={documents}
+                  />
                 </CardContent>
               </Card>
             ))}
@@ -265,6 +286,11 @@ export default function Medications() {
                       <span className="text-xs">{med.sideEffects}</span>
                     </div>
                   )}
+                  <EvidenceThumbnails
+                    entryType="medication"
+                    entryId={med.id}
+                    documents={documents}
+                  />
                 </CardContent>
               </Card>
             ))}

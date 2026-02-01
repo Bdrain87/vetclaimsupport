@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
+import { useEvidence } from '@/context/EvidenceContext';
 import { Moon, Plus, Trash2, Edit, Calendar, Clock, AlertTriangle, CheckCircle2, TrendingUp, Wind, Activity, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -14,6 +15,7 @@ import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import type { SleepEntry, SleepQuality, DaytimeSleepiness } from '@/types/claims';
 
 const qualities: { value: SleepQuality; label: string }[] = [
@@ -34,6 +36,7 @@ const daytimeSleepinessOptions: { value: DaytimeSleepiness; label: string }[] = 
 
 export default function Sleep() {
   const { data, addSleepEntry, updateSleepEntry, deleteSleepEntry } = useClaims();
+  const { documents, setAllDocuments } = useEvidence();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState<Omit<SleepEntry, 'id'>>({
@@ -573,6 +576,18 @@ export default function Sleep() {
                       }}
                     />
                   </div>
+
+                  {/* Evidence Attachments - only show when editing */}
+                  {editingId && (
+                    <div className="pt-2 border-t border-border">
+                      <EvidenceAttachment
+                        entryType="sleep"
+                        entryId={editingId}
+                        documents={documents}
+                        onDocumentsChange={setAllDocuments}
+                      />
+                    </div>
+                  )}
                 </div>
               </ScrollArea>
 
@@ -795,6 +810,12 @@ export default function Sleep() {
                 {entry.notes && (
                   <p className="text-sm text-muted-foreground bg-muted/50 rounded p-2">{entry.notes}</p>
                 )}
+                
+                <EvidenceThumbnails
+                  entryType="sleep"
+                  entryId={entry.id}
+                  documents={documents}
+                />
               </CardContent>
             </Card>
           ))}

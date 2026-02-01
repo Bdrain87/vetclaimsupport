@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
+import { useEvidence } from '@/context/EvidenceContext';
 import { Activity, Plus, Trash2, Edit, Calendar, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,6 +15,7 @@ import { exportSymptoms } from '@/utils/pdfExport';
 import { PTSDSymptomLogger } from '@/components/symptoms/PTSDSymptomLogger';
 import { SpineSymptomLogger } from '@/components/symptoms/SpineSymptomLogger';
 import { VoiceInputButton } from '@/components/ui/voice-input-button';
+import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import type { SymptomEntry, SymptomFrequency } from '@/types/claims';
 
 // Simplified VA-relevant frequency options
@@ -28,6 +30,7 @@ const frequencyOptions: SymptomFrequency[] = [
 
 export default function Symptoms() {
   const { data, addSymptom, updateSymptom, deleteSymptom } = useClaims();
+  const { documents, setAllDocuments } = useEvidence();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState<Omit<SymptomEntry, 'id'>>({
@@ -276,6 +279,18 @@ export default function Symptoms() {
                         </div>
                       </div>
                     </div>
+
+                    {/* Evidence Attachments - only show when editing */}
+                    {editingId && (
+                      <div className="pt-2 border-t border-border">
+                        <EvidenceAttachment
+                          entryType="symptom"
+                          entryId={editingId}
+                          documents={documents}
+                          onDocumentsChange={setAllDocuments}
+                        />
+                      </div>
+                    )}
                   </div>
                   <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-border bg-background">
                     <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
@@ -345,6 +360,12 @@ export default function Symptoms() {
                         <p className="text-sm text-muted-foreground">{symptom.notes}</p>
                       </div>
                     )}
+
+                    <EvidenceThumbnails
+                      entryType="symptom"
+                      entryId={symptom.id}
+                      documents={documents}
+                    />
                   </CardContent>
                 </Card>
               ))}

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
+import { useEvidence } from '@/context/EvidenceContext';
 import { Shield, Plus, Trash2, Edit, Calendar, MapPin, Briefcase, AlertTriangle, Download, Sword, Star, Plane } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,6 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { exportServiceHistory } from '@/utils/pdfExport';
+import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import type { ServiceEntry, CombatEntry, MajorEvent, DeploymentEntry, MajorEventType } from '@/types/claims';
 
 const COMBAT_ZONE_TYPES = ['Combat Zone', 'Hostile Fire Area', 'Imminent Danger Area', 'Hazardous Duty'] as const;
@@ -25,6 +27,7 @@ export default function ServiceHistory() {
     addMajorEvent, updateMajorEvent, deleteMajorEvent,
     addDeployment, updateDeployment, deleteDeployment,
   } = useClaims();
+  const { documents, setAllDocuments } = useEvidence();
   
   const [activeTab, setActiveTab] = useState('duty-stations');
   
