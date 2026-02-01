@@ -22,6 +22,7 @@ import {
   Heart,
   Briefcase,
   Wrench,
+  FileArchive,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -66,7 +67,8 @@ const navGroups: NavGroup[] = [
     label: 'Evidence & Docs',
     icon: FileCheck,
     items: [
-      { to: '/documents', icon: FileCheck, label: 'Documents' },
+      { to: '/evidence-library', icon: FileArchive, label: 'Evidence Library' },
+      { to: '/documents', icon: FileCheck, label: 'Documents Checklist' },
       { to: '/buddy-contacts', icon: Users, label: 'Buddy Contacts' },
       { to: '/timeline', icon: Clock, label: 'Timeline' },
     ],

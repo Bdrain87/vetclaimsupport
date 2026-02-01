@@ -14,6 +14,7 @@ const pageLabels: Record<string, string> = {
   '/migraines': 'Migraines',
   '/sleep': 'Sleep',
   '/documents': 'Documents',
+  '/evidence-library': 'Evidence Library',
   '/buddy-contacts': 'Buddy Contacts',
   '/timeline': 'Timeline',
   '/checklist': 'Checklist',

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
+import { useEvidence } from '@/context/EvidenceContext';
 import { Stethoscope, Plus, Trash2, Edit, Calendar, MapPin, User, FileText, AlertTriangle, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,12 +12,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { exportMedicalVisits } from '@/utils/pdfExport';
+import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import type { MedicalVisit } from '@/types/claims';
 
 const visitTypes = ['Sick Call', 'ER', 'Mental Health', 'PT', 'Dental', 'Specialist'] as const;
 
 export default function MedicalVisits() {
   const { data, addMedicalVisit, updateMedicalVisit, deleteMedicalVisit } = useClaims();
+  const { documents, setAllDocuments } = useEvidence();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState<Omit<MedicalVisit, 'id'>>({
@@ -251,6 +254,18 @@ export default function MedicalVisits() {
                 />
               </div>
 
+              {/* Evidence Attachments - only show when editing */}
+              {editingId && (
+                <div className="pt-2 border-t border-border">
+                  <EvidenceAttachment
+                    entryType="medical-visit"
+                    entryId={editingId}
+                    documents={documents}
+                    onDocumentsChange={setAllDocuments}
+                  />
+                </div>
+              )}
+
               </div>
               <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-border">
                 <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
@@ -342,6 +357,13 @@ export default function MedicalVisits() {
                     <p>{visit.notes}</p>
                   </div>
                 )}
+
+                {/* Evidence Thumbnails */}
+                <EvidenceThumbnails
+                  entryType="medical-visit"
+                  entryId={visit.id}
+                  documents={documents}
+                />
               </CardContent>
             </Card>
           ))}
