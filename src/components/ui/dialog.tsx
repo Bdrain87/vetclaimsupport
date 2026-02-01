@@ -38,7 +38,12 @@ const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%]",
+        // Desktop: centered positioning
+        "fixed left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%]",
+        // Mobile: position near top to avoid keyboard, desktop: centered
+        "top-[10%] sm:top-[50%] sm:translate-y-[-50%]",
+        // Mobile: allow scrolling within viewport, max-height to account for keyboard
+        "max-h-[85vh] sm:max-h-[90vh] overflow-y-auto",
         "rounded-2xl border border-border bg-card p-0",
         "shadow-lg",
         "duration-200",
