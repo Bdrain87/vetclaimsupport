@@ -19,6 +19,8 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import jsPDF from 'jspdf';
+import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput';
+import { DisclaimerNotice } from '@/components/shared/DisclaimerNotice';
 
 // DBQ Form database for matching conditions
 const dbqFormNumbers: Record<string, { form: string; name: string }> = {
@@ -126,19 +128,26 @@ export function DBQAppointmentSummary() {
       doc.setFont('helvetica', 'normal');
       doc.text('Prepared for DBQ Appointment', pageWidth / 2, 26, { align: 'center' });
       
-      // Condition name
+      // Condition name with diagnostic code
+      const dcInfo = getDiagnosticCodeForCondition(selectedCondition.name);
       doc.setFontSize(14);
       doc.setTextColor(...colors.secondary);
       doc.setFont('helvetica', 'bold');
       doc.text(`Condition: ${selectedCondition.name}`, pageWidth / 2, 36, { align: 'center' });
       
-      yPos = 55;
+      if (dcInfo) {
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`VA Diagnostic Code: DC ${dcInfo.code}`, pageWidth / 2, 42, { align: 'center' });
+      }
+      
+      yPos = dcInfo ? 52 : 48;
 
       // DBQ Form Info Box
       const dbqInfo = getDBQForCondition(selectedCondition.name);
       if (dbqInfo) {
         doc.setFillColor(...colors.highlight);
-        doc.roundedRect(20, yPos, pageWidth - 40, 18, 2, 2, 'F');
+        doc.roundedRect(20, yPos, pageWidth - 40, dcInfo ? 24 : 18, 2, 2, 'F');
         doc.setFontSize(9);
         doc.setTextColor(...colors.warning);
         doc.setFont('helvetica', 'bold');
@@ -146,7 +155,11 @@ export function DBQAppointmentSummary() {
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(...colors.secondary);
         doc.text(`${dbqInfo.form} - ${dbqInfo.name}`, 25, yPos + 14);
-        yPos += 25;
+        if (dcInfo) {
+          doc.setFontSize(8);
+          doc.text(`Rating Criteria: 38 CFR Part 4, DC ${dcInfo.code}`, 25, yPos + 21);
+        }
+        yPos += dcInfo ? 32 : 25;
       }
 
       // Purpose statement
@@ -406,6 +419,8 @@ export function DBQAppointmentSummary() {
               </ul>
             </div>
           </div>
+          
+          <DisclaimerNotice variant="inline" className="mt-4" />
         </CardContent>
       </Card>
 

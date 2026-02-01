@@ -10,6 +10,8 @@ import { Badge } from '@/components/ui/badge';
 import { Copy, Download, FileText, AlertTriangle, Check, Info, Stethoscope } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
+import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput';
+import { DisclaimerNotice } from '@/components/shared/DisclaimerNotice';
 
 export function NexusLetterGenerator() {
   const { data } = useClaims();
@@ -47,6 +49,10 @@ export function NexusLetterGenerator() {
     const serviceStart = serviceDates?.start ? format(new Date(serviceDates.start), 'MMMM yyyy') : '[SERVICE START DATE]';
     const serviceEnd = serviceDates?.end ? format(new Date(serviceDates.end), 'MMMM yyyy') : '[SERVICE END DATE]';
     
+    // Get diagnostic code if available
+    const dcInfo = conditionName ? getDiagnosticCodeForCondition(conditionName) : null;
+    const dcLine = dcInfo ? `\n    VA Diagnostic Code: DC ${dcInfo.code}` : '';
+    
     return `NEXUS LETTER
 
 Date: ${today}
@@ -54,12 +60,13 @@ Date: ${today}
 To Whom It May Concern:
 
 Re: Medical Opinion for ${veteranName || '[VETERAN NAME]'}
-    Condition: ${conditionName || '[CONDITION]'}
+    Condition: ${conditionName || '[CONDITION]'}${dcLine}
 
 I, ${doctorName || '[DOCTOR NAME]'}${doctorCredentials ? `, ${doctorCredentials}` : ''}, am writing to provide my professional medical opinion regarding ${veteranName || '[VETERAN NAME]'}'s ${conditionName || '[CONDITION]'}.
 
 PATIENT HISTORY:
 ${veteranName || 'The veteran'} served in the United States military from ${serviceStart} to ${serviceEnd}. I have reviewed the patient's medical history, service treatment records, and current condition.
+${dcInfo ? `\nRelevant VA Rating: This condition is evaluated under 38 CFR Part 4, Diagnostic Code ${dcInfo.code}.` : ''}
 
 MEDICAL OPINION:
 Based on my review of the available medical evidence, clinical examination, and my professional expertise, it is my opinion that it is AT LEAST AS LIKELY AS NOT (50% probability or greater) that ${veteranName || 'the veteran'}'s current ${conditionName || '[CONDITION]'} is related to, was caused by, or was aggravated by their military service.
@@ -77,7 +84,10 @@ ${doctorName || '[Doctor Name]'}
 ${doctorCredentials || '[Credentials/Specialty]'}
 [License Number]
 [Contact Information]
-[Date]`;
+[Date]
+
+---
+DISCLAIMER: This document is a template only and is not official VA documentation.`;
   };
 
   const handleCopy = () => {
@@ -118,7 +128,7 @@ ${doctorCredentials || '[Credentials/Specialty]'}
             </div>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-3">
           <div className="flex items-start gap-2 p-3 rounded-lg bg-warning/10 border border-warning/20">
             <AlertTriangle className="h-4 w-4 text-warning mt-0.5 flex-shrink-0" />
             <div className="text-sm text-muted-foreground">
@@ -126,6 +136,7 @@ ${doctorCredentials || '[Credentials/Specialty]'}
               <p>This is a <strong>template only</strong>. Your doctor must review, modify as needed, and sign the final letter. The VA requires nexus letters from qualified medical professionals who have examined you.</p>
             </div>
           </div>
+          <DisclaimerNotice variant="inline" />
         </CardContent>
       </Card>
 
