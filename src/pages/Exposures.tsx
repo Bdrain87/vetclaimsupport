@@ -169,12 +169,12 @@ export default function Exposures() {
                 Add Exposure
               </Button>
             </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col p-0">
-            <DialogHeader className="p-6 pb-0">
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
               <DialogTitle>{editingId ? 'Edit Exposure' : 'Log Exposure'}</DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
-              <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+            <form onSubmit={handleSubmit} className="flex flex-col">
+              <div className="max-h-[60vh] overflow-y-auto space-y-4 pr-2">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="date">Date</Label>
@@ -259,7 +259,7 @@ export default function Exposures() {
               </div>
 
               </div>
-              <div className="sticky bottom-0 flex justify-end gap-3 p-6 border-t border-border bg-background">
+              <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-border">
                 <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
                   Cancel
                 </Button>
@@ -268,7 +268,7 @@ export default function Exposures() {
                 </Button>
               </div>
             </form>
-            </DialogContent>
+          </DialogContent>
           </Dialog>
         </div>
       </div>
