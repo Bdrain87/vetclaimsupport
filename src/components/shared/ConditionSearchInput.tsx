@@ -99,9 +99,11 @@ export function ConditionSearchInput({
   }, [focusedIndex]);
 
   // Close dropdown when clicking outside
+  const containerRef = useRef<HTMLDivElement>(null);
+  
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (inputRef.current && !inputRef.current.contains(e.target as Node)) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -110,7 +112,7 @@ export function ConditionSearchInput({
   }, []);
 
   return (
-    <div className={cn("relative", className)}>
+    <div ref={containerRef} className={cn("relative", className)}>
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
         <Input
@@ -136,7 +138,7 @@ export function ConditionSearchInput({
 
       {/* Dropdown Results */}
       {isOpen && filteredConditions.length > 0 && (
-        <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg overflow-hidden">
+        <div className="absolute z-[100] w-full mt-1 bg-popover border border-border rounded-lg shadow-lg overflow-hidden">
           <ScrollArea className="max-h-[280px]">
             <div ref={listRef} className="p-1">
               {filteredConditions.map((condition, index) => (
@@ -186,7 +188,7 @@ export function ConditionSearchInput({
 
       {/* No results message */}
       {isOpen && value.length >= 2 && filteredConditions.length === 0 && (
-        <div className="absolute z-50 w-full mt-1 p-4 bg-popover border border-border rounded-lg shadow-lg">
+        <div className="absolute z-[100] w-full mt-1 p-4 bg-popover border border-border rounded-lg shadow-lg">
           <p className="text-sm text-muted-foreground text-center">
             No matching conditions found. You can still use "{value}" as a custom condition.
           </p>
