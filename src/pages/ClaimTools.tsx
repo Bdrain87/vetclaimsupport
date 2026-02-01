@@ -1,4 +1,4 @@
-import { FileText, Scale, ClipboardList, Stethoscope, Calculator, Users, BookOpen, Gavel, Printer, FileSignature, TrendingUp, ShieldAlert } from 'lucide-react';
+import { FileText, Scale, ClipboardList, Stethoscope, Calculator, Users, BookOpen, Gavel, Printer, FileSignature, TrendingUp, ShieldAlert, DollarSign } from 'lucide-react';
 import { PersonalStatementGenerator } from '@/components/tools/PersonalStatementGenerator';
 import { DBQRatingReference } from '@/components/tools/DBQRatingReference';
 import { DBQGuidance } from '@/components/tools/DBQGuidance';
@@ -11,6 +11,7 @@ import { AppealStrategyAdvisor } from '@/components/tools/AppealStrategyAdvisor'
 import { NexusLetterGenerator } from '@/components/tools/NexusLetterGenerator';
 import { RatingIncreaseAnalyzer } from '@/components/tools/RatingIncreaseAnalyzer';
 import { StressorStatementGenerator } from '@/components/tools/StressorStatementGenerator';
+import { BackPayEstimator } from '@/components/tools/BackPayEstimator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSearchParams } from 'react-router-dom';
 
@@ -23,6 +24,7 @@ export default function ClaimTools() {
   const getDefaultTab = () => {
     if (tabParam === 'exam-prep') return 'exam-prep';
     if (tabParam === 'calculator') return 'calculator';
+    if (tabParam === 'backpay') return 'backpay';
     if (tabParam === 'buddy') return 'buddy';
     if (tabParam === 'stressor') return 'stressor';
     if (tabParam === 'dbq-guidance') return 'dbq-guidance';
@@ -48,7 +50,7 @@ export default function ClaimTools() {
 
       {/* Tools Tabs */}
       <Tabs defaultValue={getDefaultTab()} className="w-full">
-        <TabsList className="grid w-full grid-cols-6 sm:grid-cols-12">
+        <TabsList className="grid w-full grid-cols-7 sm:grid-cols-13">
           <TabsTrigger value="statement" className="text-xs sm:text-sm">
             <FileText className="h-4 w-4 sm:mr-1" />
             <span className="hidden sm:inline">Statement</span>
@@ -92,6 +94,10 @@ export default function ClaimTools() {
           <TabsTrigger value="calculator" className="text-xs sm:text-sm">
             <Calculator className="h-4 w-4 sm:mr-1" />
             <span className="hidden sm:inline">Calculator</span>
+          </TabsTrigger>
+          <TabsTrigger value="backpay" className="text-xs sm:text-sm">
+            <DollarSign className="h-4 w-4 sm:mr-1" />
+            <span className="hidden sm:inline">Back Pay</span>
           </TabsTrigger>
           <TabsTrigger value="appeal" className="text-xs sm:text-sm">
             <Gavel className="h-4 w-4 sm:mr-1" />
@@ -141,6 +147,10 @@ export default function ClaimTools() {
 
         <TabsContent value="calculator" className="mt-6">
           <RatingCalculator />
+        </TabsContent>
+
+        <TabsContent value="backpay" className="mt-6">
+          <BackPayEstimator />
         </TabsContent>
 
         <TabsContent value="appeal" className="mt-6">
