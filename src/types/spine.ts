@@ -87,6 +87,15 @@ export interface SpineSymptomEntry {
   flareUpSeverity?: number;
   flareUpTriggers?: string[];
   
+  // DeLuca Factors - Functional Loss During Flares (38 CFR 4.40, 4.45, 4.59)
+  flareUpROMReduction?: number; // Additional degrees of ROM loss during flares
+  flareUpFunctionalCapacity?: number; // 0-100% functional capacity during flares
+  flareUpPainIncrease?: number; // Pain level increase during flares (1-10)
+  flareUpWeakness?: boolean;
+  flareUpFatigability?: boolean;
+  flareUpIncoordination?: boolean;
+  flareUpDurationHours?: number; // How long flares typically last
+  
   // Additional notes
   notes: string;
 }
