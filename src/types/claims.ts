@@ -111,6 +111,16 @@ export type MigraneTrigger = 'Stress' | 'Lack of sleep' | 'Weather' | 'Food' | '
 export type MigraineImpact = 'Continued normal activities' | 'Reduced productivity' | 'Had to rest' | 'Missed work/duty' | 'Went to ER';
 export type MigraineSymptom = 'Aura' | 'Nausea' | 'Vomiting' | 'Light sensitivity' | 'Sound sensitivity' | 'Vision changes' | 'Numbness/tingling' | 'Dizziness';
 
+// VA Economic Impact for 50% rating documentation
+export type EconomicImpactType = 
+  | 'none'
+  | 'reduced_hours'
+  | 'missed_partial_day'
+  | 'missed_full_day'
+  | 'missed_multiple_days'
+  | 'left_early'
+  | 'called_out';
+
 export interface MigraineEntry {
   id: string;
   date: string;
@@ -122,7 +132,14 @@ export interface MigraineEntry {
   impact: MigraineImpact;
   treatment: string;
   notes: string;
-  wasProstrating?: boolean; // Explicit VA metric
+  // VA-specific fields for rating criteria alignment
+  wasProstrating: boolean; // Explicit VA metric - required bed rest?
+  requiredBedRest: boolean; // Could not function at all?
+  couldNotWork: boolean; // Unable to perform job duties?
+  economicImpact?: EconomicImpactType;
+  hoursLostToMigraine?: number; // Hours of work/productivity lost
+  medicationEffective?: boolean; // Did treatment help?
+  functioningLevel?: number; // 0-100% functioning during attack
 }
 
 // Sleep Tracker types

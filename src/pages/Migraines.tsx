@@ -1,8 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
 import { 
   Brain, Plus, Trash2, Edit, Calendar, Clock, AlertTriangle, 
-  Download, Info, TrendingUp, Zap 
+  Download, Info, TrendingUp, Zap, DollarSign, Target, BedDouble,
+  Briefcase, Activity
 } from 'lucide-react';
 import { exportMigraines } from '@/utils/pdfExport';
 import { Button } from '@/components/ui/button';
@@ -16,9 +17,11 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Slider } from '@/components/ui/slider';
+import { Progress } from '@/components/ui/progress';
 import type { 
   MigraineEntry, MigraineSeverity, MigraineDuration, 
-  MigraneTrigger, MigraineImpact, MigraineSymptom 
+  MigraneTrigger, MigraineImpact, MigraineSymptom, EconomicImpactType
 } from '@/types/claims';
 
 const durations: { value: MigraineDuration; label: string }[] = [
@@ -56,11 +59,38 @@ const impacts: { value: MigraineImpact; label: string }[] = [
   { value: 'Went to ER', label: 'Went to ER' },
 ];
 
+const economicImpacts: { value: EconomicImpactType; label: string; description: string }[] = [
+  { value: 'none', label: 'No work impact', description: 'Did not affect work' },
+  { value: 'reduced_hours', label: 'Reduced hours/productivity', description: 'Worked but less effective' },
+  { value: 'left_early', label: 'Left work early', description: 'Had to leave before shift ended' },
+  { value: 'missed_partial_day', label: 'Missed partial day', description: 'Called in late or left early' },
+  { value: 'missed_full_day', label: 'Missed full day', description: 'Could not work entire day' },
+  { value: 'missed_multiple_days', label: 'Missed multiple days', description: 'Out for 2+ days' },
+  { value: 'called_out', label: 'Called out sick', description: 'Called in unable to work' },
+];
+
+// VA Rating calculation based on 38 CFR 4.124a DC 8100
+function calculateEstimatedRating(prostratingPerMonth: number, hasEconomicImpact: boolean): { rating: number; description: string; confidence: string } {
+  if (prostratingPerMonth >= 2 && hasEconomicImpact) {
+    return { rating: 50, description: 'Very frequent prostrating attacks with severe economic inadaptability', confidence: 'Strong evidence' };
+  }
+  if (prostratingPerMonth >= 1) {
+    return { rating: 30, description: 'Prostrating attacks averaging once a month', confidence: 'Good evidence' };
+  }
+  if (prostratingPerMonth >= 0.5) {
+    return { rating: 10, description: 'Prostrating attacks averaging 1 in 2 months', confidence: 'Moderate evidence' };
+  }
+  return { rating: 0, description: 'Less frequent attacks (below rating threshold)', confidence: 'Continue documenting' };
+}
+
+interface MigraineFormData extends Omit<MigraineEntry, 'id'> {}
+
 export default function Migraines() {
   const { data, addMigraine, updateMigraine, deleteMigraine } = useClaims();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [formData, setFormData] = useState<Omit<MigraineEntry, 'id'>>({
+  const modalContentRef = useRef<HTMLDivElement>(null);
+  const [formData, setFormData] = useState<MigraineFormData>({
     date: '',
     time: '',
     duration: '2hrs',
@@ -70,6 +100,13 @@ export default function Migraines() {
     impact: 'Reduced productivity',
     treatment: '',
     notes: '',
+    wasProstrating: false,
+    requiredBedRest: false,
+    couldNotWork: false,
+    economicImpact: 'none',
+    hoursLostToMigraine: 0,
+    medicationEffective: undefined,
+    functioningLevel: 50,
   });
 
   const resetForm = () => {
@@ -83,16 +120,37 @@ export default function Migraines() {
       impact: 'Reduced productivity',
       treatment: '',
       notes: '',
+      wasProstrating: false,
+      requiredBedRest: false,
+      couldNotWork: false,
+      economicImpact: 'none',
+      hoursLostToMigraine: 0,
+      medicationEffective: undefined,
+      functioningLevel: 50,
     });
     setEditingId(null);
   };
 
+  // Handle input focus for mobile keyboard
+  const handleInputFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLButtonElement>) => {
+    setTimeout(() => {
+      e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Auto-set wasProstrating based on severity selection
+    const finalData = {
+      ...formData,
+      wasProstrating: formData.severity === 'Prostrating' || formData.wasProstrating || formData.requiredBedRest,
+    };
+    
     if (editingId) {
-      updateMigraine(editingId, formData);
+      updateMigraine(editingId, finalData);
     } else {
-      addMigraine(formData);
+      addMigraine(finalData);
     }
     setIsOpen(false);
     resetForm();
@@ -109,6 +167,13 @@ export default function Migraines() {
       impact: entry.impact,
       treatment: entry.treatment,
       notes: entry.notes,
+      wasProstrating: entry.wasProstrating ?? false,
+      requiredBedRest: entry.requiredBedRest ?? false,
+      couldNotWork: entry.couldNotWork ?? false,
+      economicImpact: entry.economicImpact ?? 'none',
+      hoursLostToMigraine: entry.hoursLostToMigraine ?? 0,
+      medicationEffective: entry.medicationEffective,
+      functioningLevel: entry.functioningLevel ?? 50,
     });
     setEditingId(entry.id);
     setIsOpen(true);
@@ -132,9 +197,12 @@ export default function Migraines() {
     }));
   };
 
-  // Statistics
+  // Statistics with VA rating alignment
   const stats = useMemo(() => {
     const migraines = data.migraines || [];
+    const now = new Date();
+    
+    // Last 30 days
     const last30Days = migraines.filter(m => {
       const date = new Date(m.date);
       const thirtyDaysAgo = new Date();
@@ -142,16 +210,47 @@ export default function Migraines() {
       return date >= thirtyDaysAgo;
     });
 
-    const prostratingCount = last30Days.filter(m => m.severity === 'Prostrating').length;
-    const severeOrProstratingCount = last30Days.filter(
-      m => m.severity === 'Severe' || m.severity === 'Prostrating'
+    // Last 90 days for better average
+    const last90Days = migraines.filter(m => {
+      const date = new Date(m.date);
+      const ninetyDaysAgo = new Date();
+      ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+      return date >= ninetyDaysAgo;
+    });
+
+    const prostratingLast30 = last30Days.filter(m => 
+      m.severity === 'Prostrating' || m.wasProstrating || m.requiredBedRest
     ).length;
+    
+    const prostratingLast90 = last90Days.filter(m => 
+      m.severity === 'Prostrating' || m.wasProstrating || m.requiredBedRest
+    ).length;
+
+    // Economic impact count
+    const economicImpactCount = last90Days.filter(m => 
+      m.economicImpact && m.economicImpact !== 'none'
+    ).length;
+
+    // Total hours lost
+    const totalHoursLost = last90Days.reduce((acc, m) => acc + (m.hoursLostToMigraine || 0), 0);
+
+    // Monthly average of prostrating attacks
+    const monthsTracked = Math.max(1, last90Days.length > 0 ? 3 : 1);
+    const prostratingPerMonth = prostratingLast90 / monthsTracked;
+    
+    const hasSignificantEconomicImpact = economicImpactCount >= 3 || totalHoursLost >= 16;
+    const estimatedRating = calculateEstimatedRating(prostratingPerMonth, hasSignificantEconomicImpact);
 
     return {
       totalLast30Days: last30Days.length,
-      prostratingLast30Days: prostratingCount,
-      severeOrProstratingLast30Days: severeOrProstratingCount,
+      prostratingLast30Days: prostratingLast30,
+      prostratingLast90Days: prostratingLast90,
+      prostratingPerMonth,
+      economicImpactCount,
+      totalHoursLost,
       totalAll: migraines.length,
+      estimatedRating,
+      hasSignificantEconomicImpact,
     };
   }, [data.migraines]);
 
@@ -162,6 +261,13 @@ export default function Migraines() {
       case 'Severe': return 'bg-orange-500/10 text-orange-500 border-orange-500/20';
       case 'Prostrating': return 'bg-red-500/10 text-red-500 border-red-500/20';
     }
+  };
+
+  const getRatingColor = (rating: number) => {
+    if (rating >= 50) return 'text-green-500';
+    if (rating >= 30) return 'text-yellow-500';
+    if (rating >= 10) return 'text-orange-500';
+    return 'text-muted-foreground';
   };
 
   const handleExportPDF = () => {
@@ -177,25 +283,88 @@ export default function Migraines() {
         </p>
       </div>
 
+      {/* VA Rating Estimator Card */}
+      {(data.migraines?.length || 0) > 0 && (
+        <Card className="data-card border-2 border-primary/30 bg-gradient-to-br from-primary/5 to-transparent">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Target className="h-5 w-5 text-primary" />
+              Estimated VA Rating (DC 8100)
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className={`text-4xl font-bold ${getRatingColor(stats.estimatedRating.rating)}`}>
+                  {stats.estimatedRating.rating}%
+                </p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {stats.estimatedRating.description}
+                </p>
+              </div>
+              <Badge variant="outline" className="text-xs">
+                {stats.estimatedRating.confidence}
+              </Badge>
+            </div>
+            
+            {/* Rating Threshold Progress */}
+            <div className="space-y-2">
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>0%</span>
+                <span>10%</span>
+                <span>30%</span>
+                <span>50%</span>
+              </div>
+              <div className="relative h-3 bg-muted rounded-full overflow-hidden">
+                <div 
+                  className="absolute h-full bg-gradient-to-r from-orange-500 via-yellow-500 to-green-500 rounded-full transition-all duration-500"
+                  style={{ width: `${Math.min(100, (stats.estimatedRating.rating / 50) * 100)}%` }}
+                />
+                {/* Threshold markers */}
+                <div className="absolute top-0 bottom-0 left-[20%] w-px bg-white/50" />
+                <div className="absolute top-0 bottom-0 left-[60%] w-px bg-white/50" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 pt-2">
+              <div className="bg-muted/50 rounded-lg p-3">
+                <p className="text-2xl font-bold text-red-500">{stats.prostratingPerMonth.toFixed(1)}</p>
+                <p className="text-xs text-muted-foreground">Prostrating/Month (avg)</p>
+              </div>
+              <div className="bg-muted/50 rounded-lg p-3">
+                <p className="text-2xl font-bold text-amber-500">{stats.totalHoursLost}</p>
+                <p className="text-xs text-muted-foreground">Hours Lost (90 days)</p>
+              </div>
+            </div>
+
+            {!stats.hasSignificantEconomicImpact && stats.prostratingPerMonth >= 2 && (
+              <Alert className="border-amber-500/50 bg-amber-500/10">
+                <DollarSign className="h-4 w-4 text-amber-500" />
+                <AlertDescription className="text-xs">
+                  <strong>50% Rating Tip:</strong> Document economic impact (missed work, lost wages) to support the "severe economic inadaptability" criteria required for 50%.
+                </AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
       {/* VA Rating Info Alert */}
       <Alert className="border-primary/50 bg-primary/10">
         <Info className="h-5 w-5 text-primary" />
-        <AlertTitle className="text-primary font-semibold">VA Migraine Rating Criteria</AlertTitle>
+        <AlertTitle className="text-primary font-semibold">VA Migraine Rating Criteria (38 CFR § 4.124a)</AlertTitle>
         <AlertDescription className="text-foreground/90 mt-2">
           <p className="mb-2">
             Migraines are rated based on the frequency of <strong>prostrating</strong> attacks 
             (completely incapacitating, requiring bed rest):
           </p>
           <ul className="text-sm space-y-1 ml-4">
-            <li>• <strong>10%</strong> — Prostrating attacks averaging 1 in 2 months</li>
-            <li>• <strong>30%</strong> — Prostrating attacks averaging once a month</li>
-            <li>• <strong>50%</strong> — Very frequent prostrating attacks + severe economic impact</li>
+            <li>• <strong>10%</strong> — Prostrating attacks averaging 1 in 2 months (~6/year)</li>
+            <li>• <strong>30%</strong> — Prostrating attacks averaging once a month (~12/year)</li>
+            <li>• <strong>50%</strong> — Very frequent prostrating + severe economic impact</li>
           </ul>
           <p className="text-xs text-muted-foreground mt-3 italic">
-            Source: 38 CFR § 4.124a - Schedule of Ratings for Neurological Conditions
-          </p>
-          <p className="text-xs text-muted-foreground mt-1 italic">
-            Rating criteria sourced from 38 CFR § 4.124a (current as of 2024). VA criteria may be updated - always verify current standards at VA.gov or with your VSO.
+            "Prostrating" = so severe you MUST lie down and cannot function. Document this explicitly!
           </p>
         </AlertDescription>
       </Alert>
@@ -225,165 +394,358 @@ export default function Migraines() {
                 Log Attack
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
+            <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col">
+              <DialogHeader className="flex-shrink-0">
                 <DialogTitle>{editingId ? 'Edit Migraine Entry' : 'Log Migraine Attack'}</DialogTitle>
               </DialogHeader>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="date">Date</Label>
-                    <Input 
-                      id="date" 
-                      type="date" 
-                      value={formData.date}
-                      onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                      required
-                    />
+              <div 
+                ref={modalContentRef}
+                className="flex-1 overflow-y-auto px-1 pb-32"
+                style={{ scrollPaddingBottom: '350px' }}
+              >
+                <form id="migraine-form" onSubmit={handleSubmit} className="space-y-5">
+                  {/* Date & Time */}
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="date">Date</Label>
+                      <Input 
+                        id="date" 
+                        type="date" 
+                        value={formData.date}
+                        onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                        onFocus={handleInputFocus}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="time">Time Started</Label>
+                      <Input 
+                        id="time" 
+                        type="time" 
+                        value={formData.time}
+                        onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                        onFocus={handleInputFocus}
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="time">Time Started</Label>
-                    <Input 
-                      id="time" 
-                      type="time" 
-                      value={formData.time}
-                      onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                    />
-                  </div>
-                </div>
 
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="duration">Duration</Label>
-                    <Select 
-                      value={formData.duration} 
-                      onValueChange={(value: MigraineDuration) => setFormData({ ...formData, duration: value })}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {durations.map((d) => (
-                          <SelectItem key={d.value} value={d.value}>{d.label}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                  {/* Duration & Severity */}
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="duration">Duration</Label>
+                      <Select 
+                        value={formData.duration} 
+                        onValueChange={(value: MigraineDuration) => setFormData({ ...formData, duration: value })}
+                      >
+                        <SelectTrigger onFocus={handleInputFocus}>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {durations.map((d) => (
+                            <SelectItem key={d.value} value={d.value}>{d.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="severity" className="flex items-center gap-2">
+                        Severity Level
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Info className="h-4 w-4 text-muted-foreground" />
+                          </TooltipTrigger>
+                          <TooltipContent className="max-w-xs">
+                            <p><strong>Prostrating</strong> is the VA's term for a migraine so severe it requires complete bed rest and you cannot function at all.</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </Label>
+                      <Select 
+                        value={formData.severity} 
+                        onValueChange={(value: MigraineSeverity) => {
+                          const isProstrating = value === 'Prostrating';
+                          setFormData({ 
+                            ...formData, 
+                            severity: value,
+                            wasProstrating: isProstrating || formData.wasProstrating,
+                            requiredBedRest: isProstrating || formData.requiredBedRest,
+                          });
+                        }}
+                      >
+                        <SelectTrigger onFocus={handleInputFocus}>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {severities.map((s) => (
+                            <SelectItem key={s.value} value={s.value}>
+                              <div>
+                                <div className="font-medium">{s.label}</div>
+                                <div className="text-xs text-muted-foreground">{s.description}</div>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="severity" className="flex items-center gap-2">
-                      Severity
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Info className="h-4 w-4 text-muted-foreground" />
-                        </TooltipTrigger>
-                        <TooltipContent className="max-w-xs">
-                          <p><strong>Prostrating</strong> is the VA's term for a migraine so severe it requires complete bed rest and you cannot function at all.</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </Label>
-                    <Select 
-                      value={formData.severity} 
-                      onValueChange={(value: MigraineSeverity) => setFormData({ ...formData, severity: value })}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {severities.map((s) => (
-                          <SelectItem key={s.value} value={s.value}>
-                            <div>
-                              <div className="font-medium">{s.label}</div>
-                              <div className="text-xs text-muted-foreground">{s.description}</div>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
 
-                <div className="space-y-2">
-                  <Label>Symptoms</Label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    {symptoms.map((symptom) => (
-                      <div key={symptom} className="flex items-center space-x-2">
-                        <Checkbox 
-                          id={symptom}
-                          checked={formData.symptoms.includes(symptom)}
-                          onCheckedChange={() => toggleSymptom(symptom)}
-                        />
-                        <Label htmlFor={symptom} className="text-sm font-normal cursor-pointer">
-                          {symptom}
-                        </Label>
+                  {/* VA-CRITICAL: Prostrating Documentation Section */}
+                  <Card className="border-red-500/30 bg-red-500/5">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-semibold flex items-center gap-2 text-red-500">
+                        <BedDouble className="h-4 w-4" />
+                        VA Rating Evidence (Critical for Claims)
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="space-y-3">
+                        <div className="flex items-start space-x-3 p-3 bg-background/50 rounded-lg border border-red-500/20">
+                          <Checkbox 
+                            id="wasProstrating"
+                            checked={formData.wasProstrating}
+                            onCheckedChange={(checked) => setFormData({ 
+                              ...formData, 
+                              wasProstrating: checked as boolean,
+                              requiredBedRest: checked as boolean || formData.requiredBedRest 
+                            })}
+                          />
+                          <div className="space-y-1">
+                            <Label htmlFor="wasProstrating" className="font-medium cursor-pointer text-red-500">
+                              This was a PROSTRATING attack
+                            </Label>
+                            <p className="text-xs text-muted-foreground">
+                              VA Definition: "So severe that you HAD to stop all activity and lie down. Could not perform any tasks."
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-start space-x-3 p-3 bg-background/50 rounded-lg">
+                          <Checkbox 
+                            id="requiredBedRest"
+                            checked={formData.requiredBedRest}
+                            onCheckedChange={(checked) => setFormData({ 
+                              ...formData, 
+                              requiredBedRest: checked as boolean,
+                              wasProstrating: checked as boolean || formData.wasProstrating
+                            })}
+                          />
+                          <div className="space-y-1">
+                            <Label htmlFor="requiredBedRest" className="font-medium cursor-pointer">
+                              Required complete bed rest
+                            </Label>
+                            <p className="text-xs text-muted-foreground">
+                              Could not sit up, watch TV, or do basic tasks
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-start space-x-3 p-3 bg-background/50 rounded-lg">
+                          <Checkbox 
+                            id="couldNotWork"
+                            checked={formData.couldNotWork}
+                            onCheckedChange={(checked) => setFormData({ ...formData, couldNotWork: checked as boolean })}
+                          />
+                          <div className="space-y-1">
+                            <Label htmlFor="couldNotWork" className="font-medium cursor-pointer">
+                              Could not work or perform duties
+                            </Label>
+                            <p className="text-xs text-muted-foreground">
+                              Unable to perform job responsibilities
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                    ))}
-                  </div>
-                </div>
 
-                <div className="space-y-2">
-                  <Label>Triggers (if known)</Label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    {triggers.map((trigger) => (
-                      <div key={trigger} className="flex items-center space-x-2">
-                        <Checkbox 
-                          id={trigger}
-                          checked={formData.triggers.includes(trigger)}
-                          onCheckedChange={() => toggleTrigger(trigger)}
+                      {/* Functioning Level Slider */}
+                      <div className="space-y-3 pt-2">
+                        <div className="flex justify-between items-center">
+                          <Label className="text-sm">Functioning Level During Attack</Label>
+                          <span className="text-sm font-medium text-primary">{formData.functioningLevel}%</span>
+                        </div>
+                        <Slider
+                          value={[formData.functioningLevel || 50]}
+                          onValueChange={([value]) => setFormData({ ...formData, functioningLevel: value })}
+                          max={100}
+                          step={10}
+                          className="w-full"
                         />
-                        <Label htmlFor={trigger} className="text-sm font-normal cursor-pointer">
-                          {trigger}
-                        </Label>
+                        <div className="flex justify-between text-xs text-muted-foreground">
+                          <span>0% (Prostrating)</span>
+                          <span>50%</span>
+                          <span>100% (Normal)</span>
+                        </div>
                       </div>
-                    ))}
-                  </div>
-                </div>
+                    </CardContent>
+                  </Card>
 
-                <div className="space-y-2">
-                  <Label htmlFor="impact">Impact on Activities</Label>
-                  <Select 
-                    value={formData.impact} 
-                    onValueChange={(value: MigraineImpact) => setFormData({ ...formData, impact: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {impacts.map((i) => (
-                        <SelectItem key={i.value} value={i.value}>{i.label}</SelectItem>
+                  {/* Economic Impact Section - Critical for 50% Rating */}
+                  <Card className="border-amber-500/30 bg-amber-500/5">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-semibold flex items-center gap-2 text-amber-600">
+                        <Briefcase className="h-4 w-4" />
+                        Economic Impact (Required for 50% Rating)
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="space-y-2">
+                        <Label>Work/Duty Impact</Label>
+                        <Select 
+                          value={formData.economicImpact || 'none'} 
+                          onValueChange={(value: EconomicImpactType) => setFormData({ ...formData, economicImpact: value })}
+                        >
+                          <SelectTrigger onFocus={handleInputFocus}>
+                            <SelectValue placeholder="Select impact on work" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {economicImpacts.map((e) => (
+                              <SelectItem key={e.value} value={e.value}>
+                                <div>
+                                  <div className="font-medium">{e.label}</div>
+                                  <div className="text-xs text-muted-foreground">{e.description}</div>
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="hoursLost">Hours Lost to Migraine</Label>
+                        <Input 
+                          id="hoursLost" 
+                          type="number" 
+                          min="0"
+                          max="72"
+                          placeholder="Hours of work/productivity lost"
+                          value={formData.hoursLostToMigraine || ''}
+                          onChange={(e) => setFormData({ ...formData, hoursLostToMigraine: parseInt(e.target.value) || 0 })}
+                          onFocus={handleInputFocus}
+                        />
+                        <p className="text-xs text-muted-foreground">
+                          Include time unable to work, care for family, or perform normal activities
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Symptoms */}
+                  <div className="space-y-2">
+                    <Label>Symptoms</Label>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      {symptoms.map((symptom) => (
+                        <div key={symptom} className="flex items-center space-x-2">
+                          <Checkbox 
+                            id={symptom}
+                            checked={formData.symptoms.includes(symptom)}
+                            onCheckedChange={() => toggleSymptom(symptom)}
+                          />
+                          <Label htmlFor={symptom} className="text-sm font-normal cursor-pointer">
+                            {symptom}
+                          </Label>
+                        </div>
                       ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                    </div>
+                  </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="treatment">Treatment Used</Label>
-                  <Input 
-                    id="treatment" 
-                    placeholder="e.g., Sumatriptan, dark room, ice pack..."
-                    value={formData.treatment}
-                    onChange={(e) => setFormData({ ...formData, treatment: e.target.value })}
-                  />
-                </div>
+                  {/* Triggers */}
+                  <div className="space-y-2">
+                    <Label>Triggers (if known)</Label>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      {triggers.map((trigger) => (
+                        <div key={trigger} className="flex items-center space-x-2">
+                          <Checkbox 
+                            id={trigger}
+                            checked={formData.triggers.includes(trigger)}
+                            onCheckedChange={() => toggleTrigger(trigger)}
+                          />
+                          <Label htmlFor={trigger} className="text-sm font-normal cursor-pointer">
+                            {trigger}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="notes">Additional Notes</Label>
-                  <Textarea 
-                    id="notes" 
-                    placeholder="Any additional details about this attack..."
-                    value={formData.notes}
-                    onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                  />
-                </div>
+                  {/* Impact on Activities */}
+                  <div className="space-y-2">
+                    <Label htmlFor="impact">Overall Impact on Activities</Label>
+                    <Select 
+                      value={formData.impact} 
+                      onValueChange={(value: MigraineImpact) => setFormData({ ...formData, impact: value })}
+                    >
+                      <SelectTrigger onFocus={handleInputFocus}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {impacts.map((i) => (
+                          <SelectItem key={i.value} value={i.value}>{i.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-                <div className="flex justify-end gap-3 pt-4">
+                  {/* Treatment & Effectiveness */}
+                  <div className="space-y-3">
+                    <div className="space-y-2">
+                      <Label htmlFor="treatment">Treatment Used</Label>
+                      <Input 
+                        id="treatment" 
+                        placeholder="e.g., Sumatriptan, dark room, ice pack..."
+                        value={formData.treatment}
+                        onChange={(e) => setFormData({ ...formData, treatment: e.target.value })}
+                        onFocus={handleInputFocus}
+                      />
+                    </div>
+                    
+                    {formData.treatment && (
+                      <div className="flex items-center gap-4 p-3 bg-muted/50 rounded-lg">
+                        <Label className="text-sm">Was treatment effective?</Label>
+                        <div className="flex gap-3">
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant={formData.medicationEffective === true ? 'default' : 'outline'}
+                            onClick={() => setFormData({ ...formData, medicationEffective: true })}
+                          >
+                            Yes
+                          </Button>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant={formData.medicationEffective === false ? 'default' : 'outline'}
+                            onClick={() => setFormData({ ...formData, medicationEffective: false })}
+                          >
+                            No
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Notes */}
+                  <div className="space-y-2">
+                    <Label htmlFor="notes">Additional Notes</Label>
+                    <Textarea 
+                      id="notes" 
+                      placeholder="Any additional details about this attack..."
+                      value={formData.notes}
+                      onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                      onFocus={handleInputFocus}
+                    />
+                  </div>
+                </form>
+              </div>
+              
+              {/* Sticky Footer */}
+              <div className="flex-shrink-0 border-t border-border bg-background pt-4 pb-2 px-1 -mx-1">
+                <div className="flex justify-end gap-3">
                   <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
                     Cancel
                   </Button>
-                  <Button type="submit">
+                  <Button type="submit" form="migraine-form">
                     {editingId ? 'Update' : 'Save'} Entry
                   </Button>
                 </div>
-              </form>
+              </div>
             </DialogContent>
           </Dialog>
         </div>
@@ -391,7 +753,7 @@ export default function Migraines() {
 
       {/* Statistics Cards */}
       {(data.migraines?.length || 0) > 0 && (
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Card className="data-card">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
@@ -400,7 +762,7 @@ export default function Migraines() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.totalLast30Days}</p>
-                  <p className="text-sm text-muted-foreground">Attacks (Last 30 Days)</p>
+                  <p className="text-sm text-muted-foreground">Attacks (30 Days)</p>
                 </div>
               </div>
             </CardContent>
@@ -414,7 +776,21 @@ export default function Migraines() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-red-500">{stats.prostratingLast30Days}</p>
-                  <p className="text-sm text-muted-foreground">Prostrating (Last 30 Days)</p>
+                  <p className="text-sm text-muted-foreground">Prostrating (30 Days)</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="data-card border-amber-500/30">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-4">
+                <div className="p-3 rounded-full bg-amber-500/10">
+                  <DollarSign className="h-6 w-6 text-amber-500" />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-amber-500">{stats.economicImpactCount}</p>
+                  <p className="text-sm text-muted-foreground">Work Impact (90 Days)</p>
                 </div>
               </div>
             </CardContent>
@@ -455,20 +831,27 @@ export default function Migraines() {
             <Card key={entry.id} className="data-card">
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3 flex-wrap">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <Badge variant="outline" className={getSeverityColor(entry.severity)}>
                       {entry.severity}
                     </Badge>
                     <Badge variant="outline">
                       {durations.find(d => d.value === entry.duration)?.label}
                     </Badge>
-                    {entry.severity === 'Prostrating' && (
-                      <Badge className="bg-red-500 text-white">
-                        VA Compensable
+                    {(entry.severity === 'Prostrating' || entry.wasProstrating || entry.requiredBedRest) && (
+                      <Badge className="bg-red-500 text-white gap-1">
+                        <BedDouble className="h-3 w-3" />
+                        Prostrating
+                      </Badge>
+                    )}
+                    {entry.economicImpact && entry.economicImpact !== 'none' && (
+                      <Badge variant="outline" className="border-amber-500/50 text-amber-600 gap-1">
+                        <DollarSign className="h-3 w-3" />
+                        Work Impact
                       </Badge>
                     )}
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-1">
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(entry)}>
                       <Edit className="h-4 w-4" />
                     </Button>
@@ -494,7 +877,34 @@ export default function Migraines() {
                     <AlertTriangle className="h-4 w-4" />
                     {entry.impact}
                   </div>
+                  {entry.functioningLevel !== undefined && entry.functioningLevel < 50 && (
+                    <div className="flex items-center gap-2">
+                      <Activity className="h-4 w-4" />
+                      {entry.functioningLevel}% functioning
+                    </div>
+                  )}
                 </div>
+
+                {/* VA Evidence Summary */}
+                {(entry.requiredBedRest || entry.couldNotWork || (entry.hoursLostToMigraine && entry.hoursLostToMigraine > 0)) && (
+                  <div className="flex flex-wrap gap-2 p-2 bg-red-500/5 rounded-lg border border-red-500/20">
+                    {entry.requiredBedRest && (
+                      <span className="text-xs text-red-500 flex items-center gap-1">
+                        <BedDouble className="h-3 w-3" /> Bed rest required
+                      </span>
+                    )}
+                    {entry.couldNotWork && (
+                      <span className="text-xs text-red-500 flex items-center gap-1">
+                        <Briefcase className="h-3 w-3" /> Unable to work
+                      </span>
+                    )}
+                    {entry.hoursLostToMigraine && entry.hoursLostToMigraine > 0 && (
+                      <span className="text-xs text-amber-600 flex items-center gap-1">
+                        <Clock className="h-3 w-3" /> {entry.hoursLostToMigraine}h lost
+                      </span>
+                    )}
+                  </div>
+                )}
 
                 {entry.symptoms.length > 0 && (
                   <div className="flex flex-wrap gap-1">
@@ -514,9 +924,14 @@ export default function Migraines() {
                 )}
 
                 {entry.treatment && (
-                  <div>
+                  <div className="flex items-center gap-2">
                     <span className="text-xs text-muted-foreground">Treatment: </span>
                     <span className="text-sm">{entry.treatment}</span>
+                    {entry.medicationEffective !== undefined && (
+                      <Badge variant="outline" className={entry.medicationEffective ? 'text-green-500 border-green-500/50' : 'text-red-500 border-red-500/50'}>
+                        {entry.medicationEffective ? 'Effective' : 'Not Effective'}
+                      </Badge>
+                    )}
                   </div>
                 )}
 
