@@ -1,5 +1,6 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
+import { useEvidence } from '@/context/EvidenceContext';
 import { 
   Brain, Plus, Trash2, Edit, Calendar, Clock, AlertTriangle, 
   Download, Info, TrendingUp, Zap, DollarSign, Target, BedDouble,
@@ -19,6 +20,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Slider } from '@/components/ui/slider';
 import { Progress } from '@/components/ui/progress';
+import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import type { 
   MigraineEntry, MigraineSeverity, MigraineDuration, 
   MigraneTrigger, MigraineImpact, MigraineSymptom, EconomicImpactType
@@ -87,6 +89,7 @@ interface MigraineFormData extends Omit<MigraineEntry, 'id'> {}
 
 export default function Migraines() {
   const { data, addMigraine, updateMigraine, deleteMigraine } = useClaims();
+  const { documents, setAllDocuments } = useEvidence();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const modalContentRef = useRef<HTMLDivElement>(null);
@@ -732,6 +735,18 @@ export default function Migraines() {
                       onFocus={handleInputFocus}
                     />
                   </div>
+
+                  {/* Evidence Attachments - only show when editing */}
+                  {editingId && (
+                    <div className="pt-2 border-t border-border">
+                      <EvidenceAttachment
+                        entryType="migraine"
+                        entryId={editingId}
+                        documents={documents}
+                        onDocumentsChange={setAllDocuments}
+                      />
+                    </div>
+                  )}
                 </form>
               </div>
               
@@ -940,6 +955,12 @@ export default function Migraines() {
                     {entry.notes}
                   </p>
                 )}
+
+                <EvidenceThumbnails
+                  entryType="migraine"
+                  entryId={entry.id}
+                  documents={documents}
+                />
               </CardContent>
             </Card>
           ))}
