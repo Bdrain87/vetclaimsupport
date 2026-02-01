@@ -95,7 +95,7 @@ export function DisabilitiesTab() {
             </Select>
           </div>
           <p className="text-sm text-muted-foreground mt-3">
-            Showing {filteredDisabilities.length} of {totalDisabilitiesCount} conditions (38 CFR Part 4)
+            Showing {filteredDisabilities.length} of {totalDisabilitiesCount} conditions • Complete 38 CFR Part 4 Schedule
           </p>
         </CardContent>
       </Card>
