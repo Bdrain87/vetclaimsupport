@@ -157,8 +157,16 @@ export function ClaimBuilder() {
                   className="p-3 cursor-pointer"
                   onClick={() => setExpandedCondition(isExpanded ? null : condition.id)}
                 >
-                  <div className="flex items-start justify-between mb-2">
-                    <h4 className="font-semibold text-foreground">{condition.name}</h4>
+                <div className="flex items-start justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-base" aria-label={level.label}>
+                        {strength.score >= 75 ? '🟢' : strength.score >= 50 ? '🟡' : '🔴'}
+                      </span>
+                      <div>
+                        <h4 className="font-semibold text-foreground">{condition.name}</h4>
+                        <span className={`text-xs ${level.textClass}`}>{level.label}</span>
+                      </div>
+                    </div>
                     <div className="flex items-center gap-1">
                       <Button
                         variant="outline"
