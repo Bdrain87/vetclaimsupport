@@ -113,100 +113,101 @@ export default function Symptoms() {
                 Add Entry
               </Button>
             </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
+          <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col p-0">
+            <DialogHeader className="p-6 pb-0">
               <DialogTitle>{editingId ? 'Edit Symptom' : 'Log Symptom'}</DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2">
+            <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+              <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="date">Date</Label>
+                    <Input 
+                      id="date" 
+                      type="date" 
+                      value={formData.date}
+                      onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="bodyArea">Body Area</Label>
+                    <Input 
+                      id="bodyArea" 
+                      placeholder="e.g., Lower back, knees"
+                      value={formData.bodyArea}
+                      onChange={(e) => setFormData({ ...formData, bodyArea: e.target.value })}
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-2">
-                  <Label htmlFor="date">Date</Label>
+                  <Label htmlFor="symptom">Symptom</Label>
                   <Input 
-                    id="date" 
-                    type="date" 
-                    value={formData.date}
-                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                    id="symptom" 
+                    placeholder="e.g., Sharp pain, numbness, ringing"
+                    value={formData.symptom}
+                    onChange={(e) => setFormData({ ...formData, symptom: e.target.value })}
                     required
                   />
                 </div>
+
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label>Severity (1-10)</Label>
+                    <span className={`rounded-md px-2 py-1 text-sm font-medium ${getSeverityColor(formData.severity)}`}>
+                      {formData.severity} - {getSeverityLabel(formData.severity)}
+                    </span>
+                  </div>
+                  <Slider
+                    value={[formData.severity]}
+                    onValueChange={([value]) => setFormData({ ...formData, severity: value })}
+                    min={1}
+                    max={10}
+                    step={1}
+                    className="w-full"
+                  />
+                </div>
+
                 <div className="space-y-2">
-                  <Label htmlFor="bodyArea">Body Area</Label>
-                  <Input 
-                    id="bodyArea" 
-                    placeholder="e.g., Lower back, knees"
-                    value={formData.bodyArea}
-                    onChange={(e) => setFormData({ ...formData, bodyArea: e.target.value })}
+                  <Label htmlFor="frequency">Frequency</Label>
+                  <Select 
+                    value={formData.frequency} 
+                    onValueChange={(value) => setFormData({ ...formData, frequency: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select frequency" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {frequencyOptions.map((freq) => (
+                        <SelectItem key={freq} value={freq}>{freq}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="dailyImpact">Impact on Daily Life</Label>
+                  <Textarea 
+                    id="dailyImpact" 
+                    placeholder="How does this affect your work, sleep, activities?"
+                    value={formData.dailyImpact}
+                    onChange={(e) => setFormData({ ...formData, dailyImpact: e.target.value })}
+                    rows={3}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="notes">Notes</Label>
+                  <Textarea 
+                    id="notes" 
+                    placeholder="Triggers, what helps, additional context..."
+                    value={formData.notes}
+                    onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   />
                 </div>
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="symptom">Symptom</Label>
-                <Input 
-                  id="symptom" 
-                  placeholder="e.g., Sharp pain, numbness, ringing"
-                  value={formData.symptom}
-                  onChange={(e) => setFormData({ ...formData, symptom: e.target.value })}
-                  required
-                />
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <Label>Severity (1-10)</Label>
-                  <span className={`rounded-md px-2 py-1 text-sm font-medium ${getSeverityColor(formData.severity)}`}>
-                    {formData.severity} - {getSeverityLabel(formData.severity)}
-                  </span>
-                </div>
-                <Slider
-                  value={[formData.severity]}
-                  onValueChange={([value]) => setFormData({ ...formData, severity: value })}
-                  min={1}
-                  max={10}
-                  step={1}
-                  className="w-full"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="frequency">Frequency</Label>
-                <Select 
-                  value={formData.frequency} 
-                  onValueChange={(value) => setFormData({ ...formData, frequency: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select frequency" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {frequencyOptions.map((freq) => (
-                      <SelectItem key={freq} value={freq}>{freq}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="dailyImpact">Impact on Daily Life</Label>
-                <Textarea 
-                  id="dailyImpact" 
-                  placeholder="How does this affect your work, sleep, activities?"
-                  value={formData.dailyImpact}
-                  onChange={(e) => setFormData({ ...formData, dailyImpact: e.target.value })}
-                  rows={3}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="notes">Notes</Label>
-                <Textarea 
-                  id="notes" 
-                  placeholder="Triggers, what helps, additional context..."
-                  value={formData.notes}
-                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                />
-              </div>
-
-              <div className="flex justify-end gap-3 pt-4">
+              <div className="sticky bottom-0 flex justify-end gap-3 p-6 border-t border-border bg-background">
                 <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
                   Cancel
                 </Button>
@@ -215,7 +216,7 @@ export default function Symptoms() {
                 </Button>
               </div>
             </form>
-            </DialogContent>
+          </DialogContent>
           </Dialog>
         </div>
       </div>
