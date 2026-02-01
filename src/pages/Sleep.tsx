@@ -206,7 +206,7 @@ export default function Sleep() {
         <Moon className="h-5 w-5 text-primary" />
         <AlertTitle className="text-primary font-semibold">VA Sleep Apnea Ratings (38 CFR 4.97 DC 6847)</AlertTitle>
         <AlertDescription className="text-foreground/90 mt-2">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs mt-2">
+          <div className="grid grid-cols-2 gap-2 text-xs mt-2">
             <div className="bg-background/50 rounded p-2">
               <span className="font-bold text-muted-foreground">0%</span>
               <p>Asymptomatic, documented</p>
