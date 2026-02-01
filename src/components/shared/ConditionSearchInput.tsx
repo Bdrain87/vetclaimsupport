@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { vaDisabilitiesBySystem, type VADisability } from '@/data/vaDisabilities';
 import { cn } from '@/lib/utils';
-import { Search, FileText } from 'lucide-react';
+import { Search, Plus } from 'lucide-react';
 
 interface ConditionSearchInputProps {
   value: string;
@@ -136,51 +136,88 @@ export function ConditionSearchInput({
         />
       </div>
 
-      {/* Dropdown Results */}
+      {/* Dropdown Results - Prominent Card Design */}
       {isOpen && filteredConditions.length > 0 && (
-        <div className="absolute z-[100] w-full mt-1 bg-popover border border-border rounded-lg shadow-lg overflow-hidden">
-          <ScrollArea className="max-h-[280px]">
-            <div ref={listRef} className="p-1">
+        <div className="absolute z-[100] w-full mt-2 bg-card border-2 border-primary/30 rounded-xl shadow-2xl overflow-hidden">
+          {/* Header */}
+          <div className="bg-gradient-to-r from-primary/10 to-primary/5 border-b border-border px-4 py-2.5">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium text-foreground">
+                {filteredConditions.length} VA Condition{filteredConditions.length !== 1 ? 's' : ''} Found
+              </p>
+              <Badge variant="outline" className="text-[10px] bg-background">
+                38 CFR Part 4
+              </Badge>
+            </div>
+          </div>
+          
+          <ScrollArea className="max-h-[340px]">
+            <div ref={listRef} className="p-2 space-y-1.5">
               {filteredConditions.map((condition, index) => (
                 <button
                   key={`${condition.diagnosticCode}-${condition.name}-${index}`}
                   data-condition-item
                   type="button"
                   className={cn(
-                    "w-full text-left p-2.5 rounded-md transition-colors",
-                    "hover:bg-muted",
-                    focusedIndex === index && "bg-muted"
+                    "group w-full text-left flex items-center gap-3 p-3 rounded-lg transition-all duration-150",
+                    "hover:bg-primary/10 hover:border-primary/40",
+                    "border-2 border-transparent",
+                    focusedIndex === index && "bg-primary/10 border-primary/40"
                   )}
                   onClick={() => handleSelectCondition(condition)}
+                  onMouseEnter={() => setFocusedIndex(index)}
                 >
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-foreground truncate">
-                        {condition.name}
-                      </p>
-                      <p className="text-xs text-muted-foreground truncate">
-                        {condition.description}
-                      </p>
+                  {/* DC Code Badge - Prominent */}
+                  {showDiagnosticCode && (
+                    <div className="flex-shrink-0 flex flex-col items-center justify-center w-14 h-14 rounded-lg bg-primary/15 border border-primary/25">
+                      <span className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wide">DC</span>
+                      <span className="text-base font-bold text-primary">{condition.diagnosticCode}</span>
                     </div>
-                    {showDiagnosticCode && (
-                      <Badge variant="outline" className="flex-shrink-0 text-xs font-mono">
-                        <FileText className="h-3 w-3 mr-1" />
-                        DC {condition.diagnosticCode}
-                      </Badge>
-                    )}
+                  )}
+                  
+                  {/* Condition Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h4 className="font-semibold text-sm text-foreground">
+                        {condition.name}
+                      </h4>
+                      {(condition as any).isPACTAct && (
+                        <Badge className="text-[9px] px-1.5 py-0 h-4 bg-success/15 text-success border-success/30 hover:bg-success/20">
+                          PACT Act
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">
+                      {condition.description}
+                    </p>
+                    <p className="text-[10px] text-muted-foreground/70 mt-1">
+                      {condition.typicalRatings} • {condition.system}
+                    </p>
                   </div>
-                  <p className="text-xs text-muted-foreground/70 mt-0.5">
-                    {condition.typicalRatings} • {condition.system}
-                  </p>
+
+                  {/* Add Action Button */}
+                  <div className={cn(
+                    "flex-shrink-0 flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg transition-all",
+                    "bg-primary/10 text-primary border border-primary/20",
+                    "group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary",
+                    focusedIndex === index && "bg-primary text-primary-foreground border-primary"
+                  )}>
+                    <Plus className="h-3.5 w-3.5" />
+                    <span>Add</span>
+                  </div>
                 </button>
               ))}
             </div>
           </ScrollArea>
           
-          {/* Help text */}
-          <div className="p-2 border-t border-border bg-muted/30">
-            <p className="text-xs text-muted-foreground text-center">
-              DC = VA Diagnostic Code (38 CFR Part 4)
+          {/* Footer Help Text */}
+          <div className="px-4 py-2.5 border-t border-border bg-muted/30">
+            <p className="text-[11px] text-muted-foreground text-center">
+              <kbd className="px-1.5 py-0.5 bg-background border border-border rounded text-[10px] mr-1">↑↓</kbd>
+              Navigate
+              <span className="mx-2 text-border">•</span>
+              <kbd className="px-1.5 py-0.5 bg-background border border-border rounded text-[10px] mr-1">Enter</kbd>
+              Select
             </p>
           </div>
         </div>
@@ -188,10 +225,15 @@ export function ConditionSearchInput({
 
       {/* No results message */}
       {isOpen && value.length >= 2 && filteredConditions.length === 0 && (
-        <div className="absolute z-[100] w-full mt-1 p-4 bg-popover border border-border rounded-lg shadow-lg">
-          <p className="text-sm text-muted-foreground text-center">
-            No matching conditions found. You can still use "{value}" as a custom condition.
-          </p>
+        <div className="absolute z-[100] w-full mt-2 p-4 bg-card border-2 border-border rounded-xl shadow-lg">
+          <div className="text-center space-y-2">
+            <p className="text-sm text-muted-foreground">
+              No matching VA conditions found
+            </p>
+            <p className="text-xs text-muted-foreground/70">
+              You can still use "<span className="font-medium text-foreground">{value}</span>" as a custom condition
+            </p>
+          </div>
         </div>
       )}
     </div>
