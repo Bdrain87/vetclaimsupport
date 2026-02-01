@@ -1,7 +1,8 @@
-import { FileText, Scale, ClipboardList, Stethoscope, Calculator, Users, BookOpen, Gavel } from 'lucide-react';
+import { FileText, Scale, ClipboardList, Stethoscope, Calculator, Users, BookOpen, Gavel, Printer } from 'lucide-react';
 import { PersonalStatementGenerator } from '@/components/tools/PersonalStatementGenerator';
 import { DBQRatingReference } from '@/components/tools/DBQRatingReference';
 import { DBQGuidance } from '@/components/tools/DBQGuidance';
+import { DBQAppointmentSummary } from '@/components/tools/DBQAppointmentSummary';
 import { ConditionSpecificChecklist } from '@/components/tools/ConditionSpecificChecklist';
 import { CPExamPrepGuide } from '@/components/tools/CPExamPrepGuide';
 import { RatingCalculator } from '@/components/dashboard/RatingCalculator';
@@ -21,6 +22,7 @@ export default function ClaimTools() {
     if (tabParam === 'calculator') return 'calculator';
     if (tabParam === 'buddy') return 'buddy';
     if (tabParam === 'dbq-guidance') return 'dbq-guidance';
+    if (tabParam === 'dbq-summary') return 'dbq-summary';
     if (tabParam === 'appeal') return 'appeal';
     return 'statement';
   };
@@ -40,7 +42,7 @@ export default function ClaimTools() {
 
       {/* Tools Tabs */}
       <Tabs defaultValue={getDefaultTab()} className="w-full">
-        <TabsList className="grid w-full grid-cols-4 sm:grid-cols-8">
+        <TabsList className="grid w-full grid-cols-5 sm:grid-cols-9">
           <TabsTrigger value="statement" className="text-xs sm:text-sm">
             <FileText className="h-4 w-4 sm:mr-1" />
             <span className="hidden sm:inline">Statement</span>
@@ -56,6 +58,10 @@ export default function ClaimTools() {
           <TabsTrigger value="dbq-guidance" className="text-xs sm:text-sm">
             <BookOpen className="h-4 w-4 sm:mr-1" />
             <span className="hidden sm:inline">DBQ</span>
+          </TabsTrigger>
+          <TabsTrigger value="dbq-summary" className="text-xs sm:text-sm">
+            <Printer className="h-4 w-4 sm:mr-1" />
+            <span className="hidden sm:inline">Dr. Summary</span>
           </TabsTrigger>
           <TabsTrigger value="checklist" className="text-xs sm:text-sm">
             <ClipboardList className="h-4 w-4 sm:mr-1" />
@@ -89,6 +95,10 @@ export default function ClaimTools() {
 
         <TabsContent value="dbq-guidance" className="mt-6">
           <DBQGuidance />
+        </TabsContent>
+
+        <TabsContent value="dbq-summary" className="mt-6">
+          <DBQAppointmentSummary />
         </TabsContent>
 
         <TabsContent value="checklist" className="mt-6">
