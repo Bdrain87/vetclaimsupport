@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
 import { RatingCalculator } from '@/components/dashboard/RatingCalculator';
-import { ClaimReadinessScore } from '@/components/dashboard/ClaimReadinessScore';
+
 import { IntentToFileCard } from '@/components/dashboard/IntentToFileCard';
 import { DashboardInsights } from '@/components/dashboard/DashboardInsights';
 import { MobileNavGrid } from '@/components/dashboard/MobileNavGrid';
@@ -524,11 +524,8 @@ export default function Dashboard() {
       {/* Deadlines & Reminders */}
       <DeadlinesReminders />
 
-      {/* Key Cards - Compact */}
-      <div className="space-y-3">
-        <IntentToFileCard />
-        <ClaimReadinessScore />
-      </div>
+      {/* Intent to File Card */}
+      <IntentToFileCard />
 
       {/* BDD & Calculator */}
       <div className="grid gap-3 lg:grid-cols-2">
