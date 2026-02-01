@@ -1,6 +1,7 @@
-import { FileText, Scale, ClipboardList, Stethoscope, Calculator, Users } from 'lucide-react';
+import { FileText, Scale, ClipboardList, Stethoscope, Calculator, Users, BookOpen } from 'lucide-react';
 import { PersonalStatementGenerator } from '@/components/tools/PersonalStatementGenerator';
 import { DBQRatingReference } from '@/components/tools/DBQRatingReference';
+import { DBQGuidance } from '@/components/tools/DBQGuidance';
 import { ConditionSpecificChecklist } from '@/components/tools/ConditionSpecificChecklist';
 import { CPExamPrepGuide } from '@/components/tools/CPExamPrepGuide';
 import { RatingCalculator } from '@/components/dashboard/RatingCalculator';
@@ -18,6 +19,7 @@ export default function ClaimTools() {
     if (tabParam === 'exam-prep') return 'exam-prep';
     if (tabParam === 'calculator') return 'calculator';
     if (tabParam === 'buddy') return 'buddy';
+    if (tabParam === 'dbq-guidance') return 'dbq-guidance';
     return 'statement';
   };
 
@@ -36,7 +38,7 @@ export default function ClaimTools() {
 
       {/* Tools Tabs */}
       <Tabs defaultValue={getDefaultTab()} className="w-full">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-7">
           <TabsTrigger value="statement" className="text-xs sm:text-sm">
             <FileText className="h-4 w-4 mr-1 hidden sm:inline" />
             Statement
@@ -48,6 +50,10 @@ export default function ClaimTools() {
           <TabsTrigger value="criteria" className="text-xs sm:text-sm">
             <Scale className="h-4 w-4 mr-1 hidden sm:inline" />
             Criteria
+          </TabsTrigger>
+          <TabsTrigger value="dbq-guidance" className="text-xs sm:text-sm">
+            <BookOpen className="h-4 w-4 mr-1 hidden sm:inline" />
+            DBQ Guide
           </TabsTrigger>
           <TabsTrigger value="checklist" className="text-xs sm:text-sm">
             <ClipboardList className="h-4 w-4 mr-1 hidden sm:inline" />
@@ -73,6 +79,10 @@ export default function ClaimTools() {
 
         <TabsContent value="criteria" className="mt-6">
           <DBQRatingReference />
+        </TabsContent>
+
+        <TabsContent value="dbq-guidance" className="mt-6">
+          <DBQGuidance />
         </TabsContent>
 
         <TabsContent value="checklist" className="mt-6">
