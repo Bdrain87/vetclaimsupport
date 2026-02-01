@@ -3,9 +3,10 @@ import { useClaims } from '@/context/ClaimsContext';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { getRelatedConditions } from '@/data/antiPyramidingConditions';
-import { Plus, Link2, AlertTriangle, ChevronDown, FileText, Stethoscope, Users, ClipboardList } from 'lucide-react';
+import { Plus, Link2, AlertTriangle, ChevronDown, ClipboardList, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Link } from 'react-router-dom';
 
 interface RelatedConditionsProps {
   conditionName: string;
@@ -131,9 +132,17 @@ export function RelatedConditions({ conditionName, existingConditionNames }: Rel
 
   return (
     <div className="space-y-2 pt-2 border-t border-border/50">
-      <div className="flex items-center gap-1.5">
-        <Link2 className="h-3 w-3 text-primary" />
-        <span className="text-xs font-medium text-foreground">Commonly Linked Secondary Conditions</span>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1.5">
+          <Link2 className="h-3 w-3 text-primary" />
+          <span className="text-xs font-medium text-foreground">Commonly Linked Secondary Conditions</span>
+        </div>
+        <Link to="/reference?tab=secondary">
+          <Button variant="ghost" size="sm" className="h-6 px-2 text-[10px] gap-1 text-primary hover:text-primary">
+            View All
+            <ArrowRight className="h-3 w-3" />
+          </Button>
+        </Link>
       </div>
       
       <p className="text-[10px] text-muted-foreground">
