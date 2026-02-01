@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { EvidenceStrengthIndicator, getStrengthLevel, calculateEvidenceStrength } from './EvidenceStrengthIndicator';
 import { RelatedConditions } from './RelatedConditions';
+import { EvidenceGapAnalysis } from './EvidenceGapAnalysis';
 import { exportConditionEvidence } from '@/utils/pdfExport';
 import { toast } from 'sonner';
 import type { ClaimCondition } from '@/types/claims';
@@ -197,6 +198,9 @@ export function ClaimBuilder() {
                     conditionName={condition.name}
                     existingConditionNames={claimConditions.map(c => c.name)}
                   />
+                  
+                  {/* Evidence Gap Analysis */}
+                  <EvidenceGapAnalysis condition={condition} data={data} />
                 </div>
 
                 {/* Expanded Content - Link Evidence */}
