@@ -35,8 +35,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { ConditionSearchInput, getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
@@ -197,14 +197,13 @@ export default function Dashboard() {
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label>What condition are you claiming?</Label>
-                    <Input
-                      placeholder="e.g., Tinnitus, PTSD, Sleep Apnea, Back Pain"
+                    <ConditionSearchInput
                       value={newConditionName}
-                      onChange={(e) => setNewConditionName(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && handleAddCondition()}
+                      onChange={setNewConditionName}
+                      placeholder="Type to search VA conditions (e.g., elbow, tinnitus)..."
                     />
                     <p className="text-xs text-muted-foreground">
-                      Add each disability or condition you plan to file with the VA
+                      Search shows VA diagnostic codes. You can also type a custom condition name.
                     </p>
                   </div>
                   <Button onClick={handleAddCondition} className="w-full" disabled={!newConditionName.trim()}>

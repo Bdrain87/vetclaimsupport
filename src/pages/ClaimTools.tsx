@@ -12,6 +12,7 @@ import { NexusLetterGenerator } from '@/components/tools/NexusLetterGenerator';
 import { RatingIncreaseAnalyzer } from '@/components/tools/RatingIncreaseAnalyzer';
 import { StressorStatementGenerator } from '@/components/tools/StressorStatementGenerator';
 import { BackPayEstimator } from '@/components/tools/BackPayEstimator';
+import { DisclaimerNotice } from '@/components/shared/DisclaimerNotice';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSearchParams } from 'react-router-dom';
 
@@ -47,6 +48,9 @@ export default function ClaimTools() {
           <p className="text-muted-foreground">Powerful tools to strengthen your VA claim</p>
         </div>
       </div>
+
+      {/* Educational Disclaimer */}
+      <DisclaimerNotice variant="card" />
 
       {/* Tools Tabs */}
       <Tabs defaultValue={getDefaultTab()} className="w-full">

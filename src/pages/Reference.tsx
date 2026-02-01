@@ -9,6 +9,7 @@ import { BuddyStatementTemplate } from '@/components/reference/BuddyStatementTem
 import { BuddyStatementTemplates } from '@/components/reference/BuddyStatementTemplates';
 import { VAFormsTab } from '@/components/reference/VAFormsTab';
 import { PersonalStatementTab } from '@/components/reference/PersonalStatementTab';
+import { DisclaimerNotice } from '@/components/shared/DisclaimerNotice';
 
 export default function Reference() {
   return (
@@ -23,6 +24,9 @@ export default function Reference() {
           <p className="text-muted-foreground">VA disabilities, claims tips, and resources</p>
         </div>
       </div>
+
+      {/* Educational Disclaimer */}
+      <DisclaimerNotice variant="inline" />
 
       <Tabs defaultValue="disabilities" className="space-y-6">
         <TabsList className="grid w-full grid-cols-2 lg:grid-cols-8 h-auto gap-2 bg-transparent p-0">

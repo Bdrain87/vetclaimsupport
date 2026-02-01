@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -13,6 +12,7 @@ import {
 import { EvidenceStrengthIndicator, getStrengthLevel, calculateEvidenceStrength } from './EvidenceStrengthIndicator';
 import { RelatedConditions } from './RelatedConditions';
 import { EvidenceGapAnalysis } from './EvidenceGapAnalysis';
+import { ConditionSearchInput } from '@/components/shared/ConditionSearchInput';
 import { exportConditionEvidence } from '@/utils/pdfExport';
 import { toast } from 'sonner';
 import type { ClaimCondition } from '@/types/claims';
@@ -114,16 +114,14 @@ export function ClaimBuilder() {
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label>Condition Name</Label>
-                  <Input
-                    placeholder="e.g., Tinnitus, PTSD, Lower Back Pain"
+                  <ConditionSearchInput
                     value={newConditionName}
-                    onChange={(e) => setNewConditionName(e.target.value)}
-                    onFocus={(e) => {
-                      setTimeout(() => {
-                        e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                      }, 300);
-                    }}
+                    onChange={setNewConditionName}
+                    placeholder="Type to search VA conditions..."
                   />
+                  <p className="text-xs text-muted-foreground">
+                    Search shows VA diagnostic codes. You can also type a custom name.
+                  </p>
                 </div>
                 <Button onClick={handleAddCondition} className="w-full" disabled={!newConditionName.trim()}>
                   Add Condition
