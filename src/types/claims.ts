@@ -189,6 +189,7 @@ export interface SleepEntry {
   oxygenDesaturation?: boolean; // Did oxygen levels drop?
   lowestOxygenLevel?: number; // Lowest O2 saturation if known
   requiresOxygen?: boolean; // Requires supplemental oxygen
+  chronicRespiratoryFailure?: boolean; // Chronic respiratory failure (100% rating)
   daytimeSleepiness?: DaytimeSleepiness;
   timesWokeGasping?: number; // Times woke up gasping/choking
   spouseObserved?: boolean; // Spouse/partner witnessed apnea
