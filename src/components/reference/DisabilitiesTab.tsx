@@ -1,9 +1,12 @@
 import { useState, useMemo } from 'react';
-import { Search, ChevronDown, ChevronUp } from 'lucide-react';
+import { Search, ChevronDown, ChevronUp, FileText, ExternalLink } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { vaDisabilitiesBySystem, allVADisabilities, totalDisabilitiesCount } from '@/data/vaDisabilities';
+import { Button } from '@/components/ui/button';
+import { vaDisabilitiesBySystem, allVADisabilities, totalDisabilitiesCount, VADisability } from '@/data/vaDisabilities';
+import { getRequiredFormsForCondition, universalForms, VAForm } from '@/data/vaRequiredForms';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
   Select,
   SelectContent,
@@ -16,6 +19,7 @@ export function DisabilitiesTab() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSystem, setSelectedSystem] = useState<string>('all');
   const [expandedSystems, setExpandedSystems] = useState<Set<string>>(new Set(['Mental Health', 'Spine & Back']));
+  const [expandedConditions, setExpandedConditions] = useState<Set<string>>(new Set());
 
   const filteredDisabilities = useMemo(() => {
     let results = allVADisabilities;
@@ -57,6 +61,19 @@ export function DisabilitiesTab() {
     }
     setExpandedSystems(newExpanded);
   };
+
+  const toggleCondition = (conditionId: string) => {
+    const newExpanded = new Set(expandedConditions);
+    if (newExpanded.has(conditionId)) {
+      newExpanded.delete(conditionId);
+    } else {
+      newExpanded.add(conditionId);
+    }
+    setExpandedConditions(newExpanded);
+  };
+
+  const getConditionId = (condition: VADisability, idx: number) => 
+    `${condition.diagnosticCode}-${condition.name}-${idx}`;
 
   return (
     <div className="space-y-4">
@@ -124,41 +141,89 @@ export function DisabilitiesTab() {
           {expandedSystems.has(system) && (
             <CardContent className="pt-0">
               <div className="border rounded-lg overflow-hidden">
-                <table className="w-full text-sm">
-                  <thead className="bg-muted/50">
-                    <tr>
-                      <th className="text-left p-3 font-medium">DC</th>
-                      <th className="text-left p-3 font-medium">Condition</th>
-                      <th className="text-left p-3 font-medium hidden md:table-cell">Description</th>
-                      <th className="text-right p-3 font-medium whitespace-nowrap">Ratings</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y">
-                    {conditions.map((condition, idx) => (
-                      <tr key={`${condition.name}-${idx}`} className="hover:bg-muted/30">
-                        <td className="p-3 text-muted-foreground font-mono text-xs">
-                          {condition.diagnosticCode || '—'}
-                        </td>
-                        <td className="p-3 font-medium">
-                          {condition.name}
-                          {condition.diagnosticCode && (
-                            <span className="text-muted-foreground font-normal text-xs ml-1">
-                              (DC {condition.diagnosticCode})
-                            </span>
-                          )}
-                        </td>
-                        <td className="p-3 text-muted-foreground hidden md:table-cell text-xs">
-                          {condition.description}
-                        </td>
-                        <td className="p-3 text-right">
-                          <Badge variant="outline" className="font-mono text-xs">
-                            {condition.typicalRatings}
-                          </Badge>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <div className="divide-y">
+                  {conditions.map((condition, idx) => {
+                    const conditionId = getConditionId(condition, idx);
+                    const isExpanded = expandedConditions.has(conditionId);
+                    const requiredForms = getRequiredFormsForCondition(condition.name, condition.diagnosticCode);
+                    
+                    return (
+                      <Collapsible
+                        key={conditionId}
+                        open={isExpanded}
+                        onOpenChange={() => toggleCondition(conditionId)}
+                      >
+                        <CollapsibleTrigger asChild>
+                          <div className="flex items-center justify-between p-3 hover:bg-muted/30 cursor-pointer transition-colors">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="font-medium text-sm">{condition.name}</span>
+                                {condition.diagnosticCode && (
+                                  <Badge variant="outline" className="font-mono text-xs shrink-0">
+                                    DC {condition.diagnosticCode}
+                                  </Badge>
+                                )}
+                              </div>
+                              <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                                {condition.description}
+                              </p>
+                            </div>
+                            <div className="flex items-center gap-2 shrink-0 ml-2">
+                              <Badge variant="secondary" className="font-mono text-xs">
+                                {condition.typicalRatings}
+                              </Badge>
+                              {requiredForms.length > 0 && (
+                                <Badge variant="outline" className="text-xs bg-primary/10 text-primary border-primary/20">
+                                  <FileText className="h-3 w-3 mr-1" />
+                                  {requiredForms.length} form{requiredForms.length > 1 ? 's' : ''}
+                                </Badge>
+                              )}
+                              {isExpanded ? (
+                                <ChevronUp className="h-4 w-4 text-muted-foreground" />
+                              ) : (
+                                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                              )}
+                            </div>
+                          </div>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent>
+                          <div className="px-3 pb-3 pt-1 space-y-3 bg-muted/20 border-t">
+                            {/* Rating Criteria */}
+                            {condition.ratingCriteria && (
+                              <div>
+                                <h4 className="text-xs font-medium text-muted-foreground mb-1">Rating Criteria</h4>
+                                <p className="text-sm">{condition.ratingCriteria}</p>
+                              </div>
+                            )}
+                            
+                            {/* Required Forms */}
+                            {requiredForms.length > 0 && (
+                              <div>
+                                <h4 className="text-xs font-medium text-muted-foreground mb-2 flex items-center gap-1">
+                                  <FileText className="h-3 w-3" />
+                                  Required VA Forms for This Condition
+                                </h4>
+                                <div className="space-y-2">
+                                  {requiredForms.map((form) => (
+                                    <FormCard key={form.formNumber} form={form} />
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                            
+                            {/* Universal Forms Reminder */}
+                            <div className="pt-2 border-t border-border/50">
+                              <p className="text-xs text-muted-foreground">
+                                <strong>Also Required:</strong> VA Form 21-526EZ (Main Application), 
+                                21-4138 (Personal Statement), 21-4142 (Medical Records Release)
+                              </p>
+                            </div>
+                          </div>
+                        </CollapsibleContent>
+                      </Collapsible>
+                    );
+                  })}
+                </div>
               </div>
             </CardContent>
           )}
@@ -171,6 +236,37 @@ export function DisabilitiesTab() {
             <p className="text-muted-foreground">No conditions found matching your search.</p>
           </CardContent>
         </Card>
+      )}
+    </div>
+  );
+}
+
+// Form Card Component
+function FormCard({ form }: { form: VAForm }) {
+  return (
+    <div className="flex items-start gap-3 p-2 bg-background rounded-md border border-border/50">
+      <div className="p-1.5 bg-primary/10 rounded">
+        <FileText className="h-4 w-4 text-primary" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="font-mono text-sm font-medium text-primary">{form.formNumber}</span>
+          <span className="text-sm font-medium">{form.name}</span>
+        </div>
+        <p className="text-xs text-muted-foreground mt-0.5">{form.description}</p>
+      </div>
+      {form.url && (
+        <Button
+          variant="ghost"
+          size="sm"
+          className="shrink-0 h-8 w-8 p-0"
+          onClick={(e) => {
+            e.stopPropagation();
+            window.open(form.url, '_blank');
+          }}
+        >
+          <ExternalLink className="h-4 w-4" />
+        </Button>
       )}
     </div>
   );
