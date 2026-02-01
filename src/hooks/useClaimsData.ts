@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { ClaimsData, MedicalVisit, Exposure, SymptomEntry, Medication, ServiceEntry, BuddyContact, DocumentItem, MigraineEntry, UploadedDocument, SleepEntry, ClaimCondition, QuickLogEntry, Deadline } from '@/types/claims';
+import type { ClaimsData, MedicalVisit, Exposure, SymptomEntry, Medication, ServiceEntry, BuddyContact, DocumentItem, MigraineEntry, UploadedDocument, SleepEntry, ClaimCondition, QuickLogEntry, Deadline, PTSDSymptomEntry } from '@/types/claims';
 
 const STORAGE_KEY = 'va-claims-tracker-data';
 
@@ -28,6 +28,7 @@ const getInitialData = (): ClaimsData => {
       documents: defaultDocuments,
       migraines: [],
       sleepEntries: [],
+      ptsdSymptoms: [],
       separationDate: null,
       uploadedDocuments: [],
       claimConditions: [],
@@ -45,6 +46,7 @@ const getInitialData = (): ClaimsData => {
       if (!parsed.migraines) parsed.migraines = [];
       if (!parsed.uploadedDocuments) parsed.uploadedDocuments = [];
       if (!parsed.sleepEntries) parsed.sleepEntries = [];
+      if (!parsed.ptsdSymptoms) parsed.ptsdSymptoms = [];
       if (!parsed.claimConditions) parsed.claimConditions = [];
       if (!parsed.quickLogs) parsed.quickLogs = [];
       if (!parsed.deadlines) parsed.deadlines = [];
@@ -65,6 +67,7 @@ const getInitialData = (): ClaimsData => {
     documents: defaultDocuments,
     migraines: [],
     sleepEntries: [],
+    ptsdSymptoms: [],
     separationDate: null,
     uploadedDocuments: [],
     claimConditions: [],
@@ -290,6 +293,28 @@ export function useClaimsData() {
     }));
   }, []);
 
+  // PTSD Symptoms
+  const addPTSDSymptom = useCallback((symptom: Omit<PTSDSymptomEntry, 'id'>) => {
+    setData(prev => ({
+      ...prev,
+      ptsdSymptoms: [...(prev.ptsdSymptoms || []), { ...symptom, id: generateId() }],
+    }));
+  }, []);
+
+  const updatePTSDSymptom = useCallback((id: string, symptom: Partial<PTSDSymptomEntry>) => {
+    setData(prev => ({
+      ...prev,
+      ptsdSymptoms: (prev.ptsdSymptoms || []).map(s => s.id === id ? { ...s, ...symptom } : s),
+    }));
+  }, []);
+
+  const deletePTSDSymptom = useCallback((id: string) => {
+    setData(prev => ({
+      ...prev,
+      ptsdSymptoms: (prev.ptsdSymptoms || []).filter(s => s.id !== id),
+    }));
+  }, []);
+
   // Claim Conditions
   const addClaimCondition = useCallback((condition: Omit<ClaimCondition, 'id'>) => {
     setData(prev => ({
@@ -395,6 +420,9 @@ export function useClaimsData() {
     addSleepEntry,
     updateSleepEntry,
     deleteSleepEntry,
+    addPTSDSymptom,
+    updatePTSDSymptom,
+    deletePTSDSymptom,
     addClaimCondition,
     updateClaimCondition,
     deleteClaimCondition,

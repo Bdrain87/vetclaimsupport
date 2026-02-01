@@ -145,6 +145,18 @@ export interface MigraineEntry {
 // Sleep Tracker types
 export type SleepQuality = 'Very Poor' | 'Poor' | 'Fair' | 'Good' | 'Excellent';
 
+// PTSD Symptom Entry for 38 CFR 4.130 tracking
+export interface PTSDSymptomEntry {
+  id: string;
+  date: string;
+  selectedSymptoms: string[]; // IDs of symptoms from the checklist
+  overallSeverity: number; // 1-10
+  occupationalImpairment: string;
+  socialImpairment: string;
+  notes: string;
+  triggeredBy?: string;
+}
+
 export interface SleepEntry {
   id: string;
   date: string;
@@ -229,6 +241,7 @@ export interface ClaimsData {
   documents: DocumentItem[];
   migraines: MigraineEntry[];
   sleepEntries: SleepEntry[];
+  ptsdSymptoms: PTSDSymptomEntry[];
   separationDate: string | null;
   uploadedDocuments: UploadedDocument[];
   claimConditions: ClaimCondition[];
