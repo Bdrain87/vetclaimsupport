@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
-import { Moon, Plus, Trash2, Edit, Calendar, Clock, Download, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { Moon, Plus, Trash2, Edit, Calendar, Clock, AlertTriangle, CheckCircle2, TrendingUp, Wind, Activity, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -11,7 +11,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import type { SleepEntry, SleepQuality } from '@/types/claims';
+import { Separator } from '@/components/ui/separator';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import type { SleepEntry, SleepQuality, DaytimeSleepiness } from '@/types/claims';
 
 const qualities: { value: SleepQuality; label: string }[] = [
   { value: 'Very Poor', label: 'Very Poor' },
@@ -21,31 +23,58 @@ const qualities: { value: SleepQuality; label: string }[] = [
   { value: 'Excellent', label: 'Excellent' },
 ];
 
+const daytimeSleepinessOptions: { value: DaytimeSleepiness; label: string }[] = [
+  { value: 'None', label: 'None - Alert all day' },
+  { value: 'Mild', label: 'Mild - Occasional drowsiness' },
+  { value: 'Moderate', label: 'Moderate - Frequent drowsiness' },
+  { value: 'Severe - falling asleep during activities', label: 'Severe - Falling asleep during activities' },
+];
+
 export default function Sleep() {
   const { data, addSleepEntry, updateSleepEntry, deleteSleepEntry } = useClaims();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState<Omit<SleepEntry, 'id'>>({
-    date: '',
+    date: new Date().toISOString().split('T')[0],
     hoursSlept: 6,
     quality: 'Fair',
     usesCPAP: false,
     cpapUsedLastNight: false,
+    cpapHoursUsed: 0,
     interruptions: 0,
     nightmares: false,
     notes: '',
+    apneaEpisodes: 0,
+    oxygenDesaturation: false,
+    lowestOxygenLevel: undefined,
+    requiresOxygen: false,
+    daytimeSleepiness: 'None',
+    wokeGasping: false,
+    morningHeadache: false,
+    feltRested: false,
+    impactOnWork: '',
   });
 
   const resetForm = () => {
     setFormData({
-      date: '',
+      date: new Date().toISOString().split('T')[0],
       hoursSlept: 6,
       quality: 'Fair',
       usesCPAP: false,
       cpapUsedLastNight: false,
+      cpapHoursUsed: 0,
       interruptions: 0,
       nightmares: false,
       notes: '',
+      apneaEpisodes: 0,
+      oxygenDesaturation: false,
+      lowestOxygenLevel: undefined,
+      requiresOxygen: false,
+      daytimeSleepiness: 'None',
+      wokeGasping: false,
+      morningHeadache: false,
+      feltRested: false,
+      impactOnWork: '',
     });
     setEditingId(null);
   };
@@ -68,9 +97,19 @@ export default function Sleep() {
       quality: entry.quality,
       usesCPAP: entry.usesCPAP,
       cpapUsedLastNight: entry.cpapUsedLastNight || false,
+      cpapHoursUsed: entry.cpapHoursUsed || 0,
       interruptions: entry.interruptions,
       nightmares: entry.nightmares,
       notes: entry.notes,
+      apneaEpisodes: entry.apneaEpisodes || 0,
+      oxygenDesaturation: entry.oxygenDesaturation || false,
+      lowestOxygenLevel: entry.lowestOxygenLevel,
+      requiresOxygen: entry.requiresOxygen || false,
+      daytimeSleepiness: entry.daytimeSleepiness || 'None',
+      wokeGasping: entry.wokeGasping || false,
+      morningHeadache: entry.morningHeadache || false,
+      feltRested: entry.feltRested || false,
+      impactOnWork: entry.impactOnWork || '',
     });
     setEditingId(entry.id);
     setIsOpen(true);
@@ -78,7 +117,7 @@ export default function Sleep() {
 
   const sleepEntries = data.sleepEntries || [];
 
-  // Statistics
+  // Statistics with VA-relevant metrics
   const stats = useMemo(() => {
     const last30Days = sleepEntries.filter(e => {
       const date = new Date(e.date);
@@ -92,15 +131,51 @@ export default function Sleep() {
       : 0;
 
     const nightmaresCount = last30Days.filter(e => e.nightmares).length;
-    const cpapUsage = last30Days.filter(e => e.usesCPAP && e.cpapUsedLastNight).length;
-    const cpapTotal = last30Days.filter(e => e.usesCPAP).length;
+    const cpapNights = last30Days.filter(e => e.usesCPAP);
+    const cpapUsage = cpapNights.filter(e => e.cpapUsedLastNight).length;
+    
+    // Calculate average CPAP hours when used
+    const cpapHoursEntries = last30Days.filter(e => e.cpapUsedLastNight && e.cpapHoursUsed);
+    const avgCpapHours = cpapHoursEntries.length > 0
+      ? (cpapHoursEntries.reduce((sum, e) => sum + (e.cpapHoursUsed || 0), 0) / cpapHoursEntries.length).toFixed(1)
+      : null;
+
+    // VA-relevant metrics
+    const gaspingEpisodes = last30Days.filter(e => e.wokeGasping).length;
+    const oxygenDrops = last30Days.filter(e => e.oxygenDesaturation).length;
+    const severeSleepiness = last30Days.filter(e => 
+      e.daytimeSleepiness === 'Severe - falling asleep during activities'
+    ).length;
+    const notRested = last30Days.filter(e => e.feltRested === false).length;
 
     return {
       avgHours,
       nightmaresLast30Days: nightmaresCount,
-      cpapCompliance: cpapTotal > 0 ? Math.round((cpapUsage / cpapTotal) * 100) : null,
+      cpapCompliance: cpapNights.length > 0 ? Math.round((cpapUsage / cpapNights.length) * 100) : null,
+      avgCpapHours,
       totalEntries: sleepEntries.length,
+      gaspingEpisodes,
+      oxygenDrops,
+      severeSleepiness,
+      notRested,
+      last30DaysCount: last30Days.length,
     };
+  }, [sleepEntries]);
+
+  // Estimate VA rating based on logged data
+  const estimatedRating = useMemo(() => {
+    if (sleepEntries.length === 0) return null;
+    
+    const hasOxygenTherapy = sleepEntries.some(e => e.requiresOxygen);
+    const usesCPAP = sleepEntries.some(e => e.usesCPAP);
+    const hasSevereSleepiness = sleepEntries.some(e => 
+      e.daytimeSleepiness === 'Severe - falling asleep during activities'
+    );
+    
+    if (hasOxygenTherapy) return { rating: '100%', color: 'text-destructive', note: 'Requires chronic respiratory failure with CO2 retention or cor pulmonale' };
+    if (usesCPAP) return { rating: '50%', color: 'text-warning', note: 'Requires use of breathing assistance device such as CPAP' };
+    if (hasSevereSleepiness) return { rating: '30%', color: 'text-orange-500', note: 'Persistent daytime hypersomnolence' };
+    return { rating: '0%', color: 'text-muted-foreground', note: 'Asymptomatic with documented sleep disorder' };
   }, [sleepEntries]);
 
   const getQualityColor = (quality: SleepQuality) => {
@@ -118,19 +193,26 @@ export default function Sleep() {
       {/* VA Rating Info */}
       <Alert className="border-primary/50 bg-primary/10">
         <Moon className="h-5 w-5 text-primary" />
-        <AlertTitle className="text-primary font-semibold">VA Sleep Condition Ratings</AlertTitle>
+        <AlertTitle className="text-primary font-semibold">VA Sleep Apnea Ratings (38 CFR 4.97 DC 6847)</AlertTitle>
         <AlertDescription className="text-foreground/90 mt-2">
-          <p className="mb-2">
-            Sleep conditions like <strong>sleep apnea</strong>, <strong>insomnia</strong>, and <strong>nightmares</strong> (often secondary to PTSD) are rated by the VA:
-          </p>
-          <ul className="text-sm space-y-1 ml-4">
-            <li>• <strong>Sleep Apnea:</strong> 0-100% based on CPAP use and oxygen levels</li>
-            <li>• <strong>Insomnia:</strong> Often rated with mental health conditions</li>
-            <li>• <strong>Nightmares:</strong> Typically rated as part of PTSD (10-100%)</li>
-          </ul>
-          <p className="text-xs text-muted-foreground mt-2 italic">
-            CPAP compliance is important - the VA may check your usage data.
-          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs mt-2">
+            <div className="bg-background/50 rounded p-2">
+              <span className="font-bold text-muted-foreground">0%</span>
+              <p>Asymptomatic, documented</p>
+            </div>
+            <div className="bg-background/50 rounded p-2">
+              <span className="font-bold text-orange-500">30%</span>
+              <p>Persistent daytime sleepiness</p>
+            </div>
+            <div className="bg-background/50 rounded p-2">
+              <span className="font-bold text-warning">50%</span>
+              <p>Requires CPAP machine</p>
+            </div>
+            <div className="bg-background/50 rounded p-2">
+              <span className="font-bold text-destructive">100%</span>
+              <p>Chronic respiratory failure</p>
+            </div>
+          </div>
         </AlertDescription>
       </Alert>
 
@@ -142,7 +224,7 @@ export default function Sleep() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Sleep Tracker</h1>
-            <p className="text-muted-foreground text-sm">Track sleep patterns for VA disability claims</p>
+            <p className="text-muted-foreground text-sm">VA-aligned sleep apnea evidence logging</p>
           </div>
         </div>
 
@@ -153,115 +235,264 @@ export default function Sleep() {
               Log Sleep
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg max-h-[90vh] flex flex-col">
             <DialogHeader>
               <DialogTitle>{editingId ? 'Edit Sleep Entry' : 'Log Sleep'}</DialogTitle>
+              <DialogDescription>Track sleep patterns for VA disability documentation</DialogDescription>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="flex flex-col">
-              <div className="max-h-[60vh] overflow-y-auto space-y-4 pr-2">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="date">Date</Label>
-                  <Input 
-                    id="date" 
-                    type="date" 
-                    value={formData.date}
-                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="hours">Hours Slept</Label>
-                  <Input 
-                    id="hours" 
-                    type="number" 
-                    min="0"
-                    max="24"
-                    step="0.5"
-                    value={formData.hoursSlept}
-                    onChange={(e) => setFormData({ ...formData, hoursSlept: parseFloat(e.target.value) || 0 })}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="quality">Sleep Quality</Label>
-                  <Select 
-                    value={formData.quality} 
-                    onValueChange={(value: SleepQuality) => setFormData({ ...formData, quality: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {qualities.map((q) => (
-                        <SelectItem key={q.value} value={q.value}>{q.label}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="interruptions">Sleep Interruptions</Label>
-                  <Input 
-                    id="interruptions" 
-                    type="number" 
-                    min="0"
-                    value={formData.interruptions}
-                    onChange={(e) => setFormData({ ...formData, interruptions: parseInt(e.target.value) || 0 })}
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between rounded-lg border p-4">
-                <div className="space-y-0.5">
-                  <Label className="text-base">Use CPAP Machine?</Label>
-                  <p className="text-sm text-muted-foreground">For sleep apnea treatment</p>
-                </div>
-                <Switch 
-                  checked={formData.usesCPAP}
-                  onCheckedChange={(checked) => setFormData({ ...formData, usesCPAP: checked })}
-                />
-              </div>
-
-              {formData.usesCPAP && (
-                <div className="flex items-center justify-between rounded-lg border p-4 bg-muted/30">
-                  <div className="space-y-0.5">
-                    <Label className="text-base">Used CPAP Last Night?</Label>
-                    <p className="text-sm text-muted-foreground">Track your compliance</p>
+            <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+              <ScrollArea className="flex-1 pr-4">
+                <div className="space-y-4 pb-4">
+                  {/* Basic Info */}
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="date">Date</Label>
+                      <Input 
+                        id="date" 
+                        type="date" 
+                        value={formData.date}
+                        onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="hours">Hours Slept</Label>
+                      <Input 
+                        id="hours" 
+                        type="number" 
+                        min="0"
+                        max="24"
+                        step="0.5"
+                        value={formData.hoursSlept}
+                        onChange={(e) => setFormData({ ...formData, hoursSlept: parseFloat(e.target.value) || 0 })}
+                        required
+                      />
+                    </div>
                   </div>
-                  <Switch 
-                    checked={formData.cpapUsedLastNight}
-                    onCheckedChange={(checked) => setFormData({ ...formData, cpapUsedLastNight: checked })}
-                  />
+
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="quality">Sleep Quality</Label>
+                      <Select 
+                        value={formData.quality} 
+                        onValueChange={(value: SleepQuality) => setFormData({ ...formData, quality: value })}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {qualities.map((q) => (
+                            <SelectItem key={q.value} value={q.value}>{q.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="interruptions">Sleep Interruptions</Label>
+                      <Input 
+                        id="interruptions" 
+                        type="number" 
+                        min="0"
+                        value={formData.interruptions}
+                        onChange={(e) => setFormData({ ...formData, interruptions: parseInt(e.target.value) || 0 })}
+                      />
+                    </div>
+                  </div>
+
+                  <Separator />
+
+                  {/* Sleep Apnea Specific - VA Rating Fields */}
+                  <div className="space-y-3">
+                    <Label className="text-base font-semibold flex items-center gap-2">
+                      <Wind className="h-4 w-4 text-indigo-500" />
+                      Sleep Apnea Symptoms (VA DC 6847)
+                    </Label>
+
+                    {/* CPAP Section */}
+                    <div className="flex items-center justify-between rounded-lg border p-4">
+                      <div className="space-y-0.5">
+                        <Label className="text-base">Use CPAP Machine?</Label>
+                        <p className="text-sm text-muted-foreground">Required for 50% rating</p>
+                      </div>
+                      <Switch 
+                        checked={formData.usesCPAP}
+                        onCheckedChange={(checked) => setFormData({ ...formData, usesCPAP: checked })}
+                      />
+                    </div>
+
+                    {formData.usesCPAP && (
+                      <div className="ml-4 space-y-3 border-l-2 border-indigo-500/30 pl-4">
+                        <div className="flex items-center justify-between rounded-lg border p-3 bg-muted/30">
+                          <div className="space-y-0.5">
+                            <Label>Used CPAP Last Night?</Label>
+                            <p className="text-xs text-muted-foreground">VA checks compliance</p>
+                          </div>
+                          <Switch 
+                            checked={formData.cpapUsedLastNight}
+                            onCheckedChange={(checked) => setFormData({ ...formData, cpapUsedLastNight: checked })}
+                          />
+                        </div>
+                        {formData.cpapUsedLastNight && (
+                          <div className="space-y-2">
+                            <Label htmlFor="cpapHours">CPAP Hours Used</Label>
+                            <Input 
+                              id="cpapHours" 
+                              type="number" 
+                              min="0"
+                              max="24"
+                              step="0.5"
+                              placeholder="e.g., 6.5"
+                              value={formData.cpapHoursUsed || ''}
+                              onChange={(e) => setFormData({ ...formData, cpapHoursUsed: parseFloat(e.target.value) || 0 })}
+                            />
+                            <p className="text-xs text-muted-foreground">VA typically requires 4+ hours/night</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Supplemental Oxygen */}
+                    <div className="flex items-center justify-between rounded-lg border p-4 border-destructive/30 bg-destructive/5">
+                      <div className="space-y-0.5">
+                        <Label className="text-base">Requires Supplemental Oxygen?</Label>
+                        <p className="text-sm text-muted-foreground">Required for 100% rating</p>
+                      </div>
+                      <Switch 
+                        checked={formData.requiresOxygen}
+                        onCheckedChange={(checked) => setFormData({ ...formData, requiresOxygen: checked })}
+                      />
+                    </div>
+
+                    {/* Breathing Episodes */}
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <div className="flex items-center justify-between rounded-lg border p-3">
+                        <div className="space-y-0.5">
+                          <Label className="text-sm">Woke Gasping/Choking?</Label>
+                        </div>
+                        <Switch 
+                          checked={formData.wokeGasping}
+                          onCheckedChange={(checked) => setFormData({ ...formData, wokeGasping: checked })}
+                        />
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg border p-3">
+                        <div className="space-y-0.5">
+                          <Label className="text-sm">Morning Headache?</Label>
+                        </div>
+                        <Switch 
+                          checked={formData.morningHeadache}
+                          onCheckedChange={(checked) => setFormData({ ...formData, morningHeadache: checked })}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Oxygen Desaturation */}
+                    <div className="flex items-center justify-between rounded-lg border p-3">
+                      <div className="space-y-0.5">
+                        <Label className="text-sm">Oxygen Level Dropped?</Label>
+                        <p className="text-xs text-muted-foreground">If using pulse oximeter</p>
+                      </div>
+                      <Switch 
+                        checked={formData.oxygenDesaturation}
+                        onCheckedChange={(checked) => setFormData({ ...formData, oxygenDesaturation: checked })}
+                      />
+                    </div>
+
+                    {formData.oxygenDesaturation && (
+                      <div className="space-y-2 ml-4">
+                        <Label htmlFor="lowestO2">Lowest Oxygen Level (%)</Label>
+                        <Input 
+                          id="lowestO2" 
+                          type="number" 
+                          min="0"
+                          max="100"
+                          placeholder="e.g., 88"
+                          value={formData.lowestOxygenLevel || ''}
+                          onChange={(e) => setFormData({ ...formData, lowestOxygenLevel: parseInt(e.target.value) || undefined })}
+                        />
+                      </div>
+                    )}
+
+                    {/* Daytime Sleepiness - Key for 30% rating */}
+                    <div className="space-y-2">
+                      <Label htmlFor="sleepiness">Daytime Sleepiness Level</Label>
+                      <Select 
+                        value={formData.daytimeSleepiness || 'None'} 
+                        onValueChange={(value: DaytimeSleepiness) => setFormData({ ...formData, daytimeSleepiness: value })}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {daytimeSleepinessOptions.map((opt) => (
+                            <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <p className="text-xs text-muted-foreground">Persistent sleepiness supports 30% rating</p>
+                    </div>
+
+                    {/* Felt Rested */}
+                    <div className="flex items-center justify-between rounded-lg border p-3">
+                      <div className="space-y-0.5">
+                        <Label className="text-sm">Felt Rested Upon Waking?</Label>
+                      </div>
+                      <Switch 
+                        checked={formData.feltRested}
+                        onCheckedChange={(checked) => setFormData({ ...formData, feltRested: checked })}
+                      />
+                    </div>
+                  </div>
+
+                  <Separator />
+
+                  {/* PTSD-Related */}
+                  <div className="flex items-center justify-between rounded-lg border p-4">
+                    <div className="space-y-0.5">
+                      <Label className="text-base">Nightmares?</Label>
+                      <p className="text-sm text-muted-foreground">Common with PTSD</p>
+                    </div>
+                    <Switch 
+                      checked={formData.nightmares}
+                      onCheckedChange={(checked) => setFormData({ ...formData, nightmares: checked })}
+                    />
+                  </div>
+
+                  {/* Impact */}
+                  <div className="space-y-2">
+                    <Label htmlFor="impactOnWork">Impact on Work/Daily Activities</Label>
+                    <Textarea 
+                      id="impactOnWork" 
+                      placeholder="How did poor sleep affect your day? (e.g., couldn't concentrate, had to rest, missed work)"
+                      value={formData.impactOnWork || ''}
+                      onChange={(e) => setFormData({ ...formData, impactOnWork: e.target.value })}
+                      rows={2}
+                      onFocus={(e) => {
+                        setTimeout(() => {
+                          e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 300);
+                      }}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="notes">Additional Notes</Label>
+                    <Textarea 
+                      id="notes" 
+                      placeholder="Any other details..."
+                      value={formData.notes}
+                      onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                      rows={2}
+                      onFocus={(e) => {
+                        setTimeout(() => {
+                          e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 300);
+                      }}
+                    />
+                  </div>
                 </div>
-              )}
+              </ScrollArea>
 
-              <div className="flex items-center justify-between rounded-lg border p-4">
-                <div className="space-y-0.5">
-                  <Label className="text-base">Nightmares?</Label>
-                  <p className="text-sm text-muted-foreground">Common with PTSD</p>
-                </div>
-                <Switch 
-                  checked={formData.nightmares}
-                  onCheckedChange={(checked) => setFormData({ ...formData, nightmares: checked })}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="notes">Notes</Label>
-                <Textarea 
-                  id="notes" 
-                  placeholder="Additional details about your sleep..."
-                  value={formData.notes}
-                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                  rows={2}
-                />
-              </div>
-
-              </div>
-              <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-border">
+              <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-border bg-background">
                 <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
                   Cancel
                 </Button>
@@ -274,55 +505,113 @@ export default function Sleep() {
         </Dialog>
       </div>
 
+      {/* Estimated Rating Card */}
+      {estimatedRating && sleepEntries.length > 0 && (
+        <Card className="border-indigo-500/30 bg-indigo-500/5">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <TrendingUp className="h-6 w-6 text-indigo-500" />
+                <div>
+                  <p className="font-semibold">Estimated VA Rating</p>
+                  <p className="text-xs text-muted-foreground">{estimatedRating.note}</p>
+                </div>
+              </div>
+              <Badge className={`text-lg px-3 py-1 ${estimatedRating.color}`}>
+                {estimatedRating.rating}
+              </Badge>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Stats */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         <Card className="data-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
               <Clock className="h-8 w-8 text-indigo-500" />
               <div>
                 <p className="text-2xl font-bold">{stats.avgHours}h</p>
-                <p className="text-sm text-muted-foreground">Avg Sleep (30 days)</p>
+                <p className="text-sm text-muted-foreground">Avg Sleep</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="data-card">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-3">
-              <AlertTriangle className="h-8 w-8 text-warning" />
-              <div>
-                <p className="text-2xl font-bold">{stats.nightmaresLast30Days}</p>
-                <p className="text-sm text-muted-foreground">Nightmares (30 days)</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        
         {stats.cpapCompliance !== null && (
           <Card className="data-card">
             <CardContent className="pt-6">
               <div className="flex items-center gap-3">
-                <CheckCircle2 className="h-8 w-8 text-success" />
+                <CheckCircle2 className={`h-8 w-8 ${stats.cpapCompliance >= 70 ? 'text-success' : 'text-warning'}`} />
                 <div>
                   <p className="text-2xl font-bold">{stats.cpapCompliance}%</p>
                   <p className="text-sm text-muted-foreground">CPAP Compliance</p>
+                  {stats.avgCpapHours && (
+                    <p className="text-xs text-muted-foreground">{stats.avgCpapHours}h avg/night</p>
+                  )}
                 </div>
               </div>
             </CardContent>
           </Card>
         )}
+
         <Card className="data-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <Calendar className="h-8 w-8 text-muted-foreground" />
+              <Wind className="h-8 w-8 text-orange-500" />
               <div>
-                <p className="text-2xl font-bold">{stats.totalEntries}</p>
-                <p className="text-sm text-muted-foreground">Total Entries</p>
+                <p className="text-2xl font-bold">{stats.gaspingEpisodes}</p>
+                <p className="text-sm text-muted-foreground">Gasping Episodes</p>
+                <p className="text-xs text-muted-foreground">Last 30 days</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="data-card">
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <Zap className="h-8 w-8 text-warning" />
+              <div>
+                <p className="text-2xl font-bold">{stats.notRested}</p>
+                <p className="text-sm text-muted-foreground">Not Rested</p>
+                <p className="text-xs text-muted-foreground">of {stats.last30DaysCount} nights</p>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
+
+      {/* Additional Stats Row */}
+      {(stats.nightmaresLast30Days > 0 || stats.severeSleepiness > 0 || stats.oxygenDrops > 0) && (
+        <div className="grid gap-4 grid-cols-3">
+          <Card className="data-card">
+            <CardContent className="pt-4 pb-4">
+              <div className="text-center">
+                <p className="text-xl font-bold text-destructive">{stats.nightmaresLast30Days}</p>
+                <p className="text-xs text-muted-foreground">Nightmares (30d)</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="data-card">
+            <CardContent className="pt-4 pb-4">
+              <div className="text-center">
+                <p className="text-xl font-bold text-orange-500">{stats.severeSleepiness}</p>
+                <p className="text-xs text-muted-foreground">Severe Sleepiness</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="data-card">
+            <CardContent className="pt-4 pb-4">
+              <div className="text-center">
+                <p className="text-xl font-bold text-warning">{stats.oxygenDrops}</p>
+                <p className="text-xs text-muted-foreground">O₂ Desaturations</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       {/* Sleep Entries List */}
       {sleepEntries.length === 0 ? (
@@ -341,15 +630,21 @@ export default function Sleep() {
             <Card key={entry.id} className="data-card">
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge className={getQualityColor(entry.quality)}>
                       {entry.quality}
                     </Badge>
                     <span className="text-sm text-muted-foreground">
-                      {entry.hoursSlept} hours
+                      {entry.hoursSlept}h
                     </span>
                     {entry.nightmares && (
                       <Badge variant="destructive" className="text-xs">Nightmares</Badge>
+                    )}
+                    {entry.wokeGasping && (
+                      <Badge variant="outline" className="text-xs text-orange-500 border-orange-500/50">Gasping</Badge>
+                    )}
+                    {entry.requiresOxygen && (
+                      <Badge variant="outline" className="text-xs text-destructive border-destructive/50">O₂ Therapy</Badge>
                     )}
                   </div>
                   <div className="flex gap-2">
@@ -363,20 +658,44 @@ export default function Sleep() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-2">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                   <Calendar className="h-4 w-4" />
                   {new Date(entry.date).toLocaleDateString()}
                   {entry.interruptions > 0 && (
-                    <span className="ml-2">• {entry.interruptions} interruptions</span>
+                    <span>• {entry.interruptions} interruptions</span>
+                  )}
+                  {entry.feltRested === false && (
+                    <Badge variant="outline" className="text-xs">Not Rested</Badge>
                   )}
                 </div>
+                
+                {/* CPAP Info */}
                 {entry.usesCPAP && (
                   <div className="flex items-center gap-2 text-sm">
                     <span className={entry.cpapUsedLastNight ? 'text-success' : 'text-warning'}>
-                      CPAP: {entry.cpapUsedLastNight ? 'Used' : 'Not Used'}
+                      CPAP: {entry.cpapUsedLastNight ? `Used${entry.cpapHoursUsed ? ` (${entry.cpapHoursUsed}h)` : ''}` : 'Not Used'}
                     </span>
                   </div>
                 )}
+
+                {/* Daytime Sleepiness */}
+                {entry.daytimeSleepiness && entry.daytimeSleepiness !== 'None' && (
+                  <div className="text-sm">
+                    <span className="text-muted-foreground">Daytime Sleepiness: </span>
+                    <span className={entry.daytimeSleepiness.includes('Severe') ? 'text-destructive font-medium' : ''}>
+                      {entry.daytimeSleepiness}
+                    </span>
+                  </div>
+                )}
+
+                {/* Impact on Work */}
+                {entry.impactOnWork && (
+                  <div className="text-sm">
+                    <span className="text-muted-foreground">Impact: </span>
+                    <span>{entry.impactOnWork}</span>
+                  </div>
+                )}
+
                 {entry.notes && (
                   <p className="text-sm text-muted-foreground bg-muted/50 rounded p-2">{entry.notes}</p>
                 )}

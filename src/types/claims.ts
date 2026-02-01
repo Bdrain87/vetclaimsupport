@@ -167,6 +167,12 @@ export interface PTSDSymptomEntry {
   triggeredBy?: string;
 }
 
+// Sleep Apnea Severity for VA rating alignment (38 CFR 4.97 DC 6847)
+export type SleepApneaSeverity = 'None' | 'Mild' | 'Moderate' | 'Severe';
+
+// Daytime symptoms for Sleep Apnea rating
+export type DaytimeSleepiness = 'None' | 'Mild' | 'Moderate' | 'Severe - falling asleep during activities';
+
 export interface SleepEntry {
   id: string;
   date: string;
@@ -174,9 +180,20 @@ export interface SleepEntry {
   quality: SleepQuality;
   usesCPAP: boolean;
   cpapUsedLastNight?: boolean;
+  cpapHoursUsed?: number; // Hours CPAP was used (VA checks compliance)
   interruptions: number;
   nightmares: boolean;
   notes: string;
+  // VA Sleep Apnea Rating Fields (DC 6847)
+  apneaEpisodes?: number; // Number of breathing cessation episodes
+  oxygenDesaturation?: boolean; // Did oxygen levels drop?
+  lowestOxygenLevel?: number; // Lowest O2 saturation if known
+  requiresOxygen?: boolean; // Requires supplemental oxygen
+  daytimeSleepiness?: DaytimeSleepiness;
+  wokeGasping?: boolean; // Woke up gasping/choking
+  morningHeadache?: boolean; // Woke with headache (common apnea symptom)
+  feltRested?: boolean; // Did you feel rested upon waking?
+  impactOnWork?: string; // How sleep affected work/activities
 }
 
 // Document type identifiers for categorizing uploads
