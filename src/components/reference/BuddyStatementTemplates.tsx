@@ -215,19 +215,37 @@ export function BuddyStatementTemplates() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-            <FileText className="h-5 w-5 text-primary" />
+    <div className="space-y-4">
+      {/* CRITICAL: Fraud Warning */}
+      <Card className="border-destructive/50 bg-destructive/5">
+        <CardContent className="pt-4">
+          <div className="flex items-start gap-3">
+            <Shield className="h-5 w-5 text-destructive flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="font-semibold text-destructive">Important: These Statements Must Be Written By OTHERS</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Buddy/lay statements must be written by <strong>someone other than the veteran</strong> — fellow 
+                service members, family, friends, or coworkers who personally witnessed the condition. 
+                <strong> Writing your own buddy statement is fraudulent.</strong>
+              </p>
+            </div>
           </div>
-          <div>
-            <CardTitle className="text-lg">Buddy Statement Templates</CardTitle>
-            <CardDescription>Customizable templates for supporting statements</CardDescription>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <FileText className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <CardTitle className="text-lg">Buddy Statement Templates</CardTitle>
+              <CardDescription>Share these with witnesses to create supporting statements</CardDescription>
+            </div>
           </div>
-        </div>
-      </CardHeader>
-      <CardContent>
+        </CardHeader>
+        <CardContent>
         <Tabs value={activeTemplate} onValueChange={(v) => setActiveTemplate(v as TemplateType)}>
           <TabsList className="grid w-full grid-cols-3 mb-6">
             {templates.map(template => (
@@ -290,5 +308,6 @@ export function BuddyStatementTemplates() {
         </div>
       </CardContent>
     </Card>
+    </div>
   );
 }

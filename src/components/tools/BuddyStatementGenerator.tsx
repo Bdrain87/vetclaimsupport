@@ -173,6 +173,26 @@ Contact Information: _________________________
 
   return (
     <div className="space-y-6">
+      {/* CRITICAL: Fraud Warning */}
+      <Card className="border-destructive/50 bg-destructive/5">
+        <CardContent className="pt-4">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="h-5 w-5 text-destructive flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="font-semibold text-destructive">Important: Buddy Statements Must Be Written By OTHERS</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Buddy/lay statements must be written by <strong>someone other than the veteran</strong> — such as 
+                fellow service members, family, friends, or coworkers who personally witnessed the veteran's 
+                condition or its effects. <strong>Writing your own buddy statement is fraudulent</strong> and 
+                could result in denial of your claim and legal consequences.
+              </p>
+              <p className="text-xs text-muted-foreground mt-2">
+                Use this tool to help your witnesses create their statements, or share the template with them.
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
       {/* Smart Assessment Card */}
       <Card className="border-primary/20">
         <CardHeader className="pb-3">

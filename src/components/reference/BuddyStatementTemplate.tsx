@@ -122,19 +122,36 @@ export function BuddyStatementTemplate() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-buddy/10">
-            <Users className="h-5 w-5 text-buddy" />
+    <div className="space-y-4">
+      {/* CRITICAL: Fraud Warning */}
+      <Card className="border-destructive/50 bg-destructive/5">
+        <CardContent className="pt-4">
+          <div className="flex items-start gap-3">
+            <FileText className="h-5 w-5 text-destructive flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="font-semibold text-destructive">Important: Written By OTHERS Only</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                This template is for witnesses (fellow service members, family, friends) to complete — 
+                <strong> not the veteran.</strong> Writing your own buddy statement is fraudulent.
+              </p>
+            </div>
           </div>
-          <div>
-            <CardTitle className="text-lg">Buddy Statement Template</CardTitle>
-            <CardDescription>Download a template for buddy/lay statements to support your claim</CardDescription>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-buddy/10">
+              <Users className="h-5 w-5 text-buddy" />
+            </div>
+            <div>
+              <CardTitle className="text-lg">Buddy Statement Template</CardTitle>
+              <CardDescription>Share this template with witnesses to support your claim</CardDescription>
+            </div>
           </div>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
+        </CardHeader>
+        <CardContent className="space-y-4">
         <div className="p-4 rounded-lg bg-muted/50 border border-border">
           <h4 className="font-medium text-foreground mb-2">What's included in this template:</h4>
           <ul className="space-y-1 text-sm text-muted-foreground">
@@ -180,5 +197,6 @@ export function BuddyStatementTemplate() {
         </div>
       </CardContent>
     </Card>
+    </div>
   );
 }
