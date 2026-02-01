@@ -191,6 +191,7 @@ export interface SleepEntry {
   requiresOxygen?: boolean; // Requires supplemental oxygen
   daytimeSleepiness?: DaytimeSleepiness;
   timesWokeGasping?: number; // Times woke up gasping/choking
+  spouseObserved?: boolean; // Spouse/partner witnessed apnea
   morningHeadache?: boolean; // Woke with headache (common apnea symptom)
   feltRested?: boolean; // Did you feel rested upon waking?
   impactOnWork?: string; // How sleep affected work/activities

@@ -52,6 +52,7 @@ export default function Sleep() {
     requiresOxygen: false,
     daytimeSleepiness: 'None',
     timesWokeGasping: 0,
+    spouseObserved: false,
     morningHeadache: false,
     feltRested: false,
     impactOnWork: '',
@@ -75,6 +76,7 @@ export default function Sleep() {
       requiresOxygen: false,
       daytimeSleepiness: 'None',
       timesWokeGasping: 0,
+      spouseObserved: false,
       morningHeadache: false,
       feltRested: false,
       impactOnWork: '',
@@ -111,6 +113,7 @@ export default function Sleep() {
       requiresOxygen: entry.requiresOxygen || false,
       daytimeSleepiness: entry.daytimeSleepiness || 'None',
       timesWokeGasping: entry.timesWokeGasping || 0,
+      spouseObserved: entry.spouseObserved || false,
       morningHeadache: entry.morningHeadache || false,
       feltRested: entry.feltRested || false,
       impactOnWork: entry.impactOnWork || '',
@@ -407,7 +410,19 @@ export default function Sleep() {
                           checked={formData.morningHeadache}
                           onCheckedChange={(checked) => setFormData({ ...formData, morningHeadache: checked })}
                         />
+                    </div>
+
+                    {/* Spouse/Partner Observed */}
+                    <div className="flex items-center justify-between rounded-lg border p-3 border-purple-500/30 bg-purple-500/5">
+                      <div className="space-y-0.5">
+                        <Label className="text-sm">Spouse/Partner Observed Apnea?</Label>
+                        <p className="text-xs text-muted-foreground">Supports buddy statement</p>
                       </div>
+                      <Switch 
+                        checked={formData.spouseObserved}
+                        onCheckedChange={(checked) => setFormData({ ...formData, spouseObserved: checked })}
+                      />
+                    </div>
                     </div>
 
                     {/* Oxygen Desaturation */}
@@ -703,6 +718,9 @@ export default function Sleep() {
                     )}
                       {entry.timesWokeGasping && entry.timesWokeGasping > 0 && (
                         <Badge variant="outline" className="text-xs text-orange-500 border-orange-500/50">Gasping x{entry.timesWokeGasping}</Badge>
+                      )}
+                      {entry.spouseObserved && (
+                        <Badge variant="outline" className="text-xs text-purple-500 border-purple-500/50">Witnessed</Badge>
                       )}
                     {entry.requiresOxygen && (
                       <Badge variant="outline" className="text-xs text-destructive border-destructive/50">O₂ Therapy</Badge>
