@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { FileDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useClaims } from '@/context/ClaimsContext';
 import { useToast } from '@/hooks/use-toast';
 import jsPDF from 'jspdf';
+import { ExportCustomizationModal, ExportSections } from './ExportCustomizationModal';
 
 // Colors (matching the app's design tokens)
 const colors = {
@@ -23,8 +25,9 @@ const colors = {
 export function ExportButton() {
   const { data } = useClaims();
   const { toast } = useToast();
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const exportPDF = () => {
+  const exportPDF = (sections: ExportSections) => {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     const now = new Date();
@@ -35,7 +38,7 @@ export function ExportButton() {
     doc.setFontSize(18);
     doc.setTextColor(...colors.primary);
     doc.setFont('helvetica', 'bold');
-    doc.text('Service Evidence Tracker - Complete Report', 20, yPos);
+    doc.text('Service Evidence Tracker - Evidence Report', 20, yPos);
     
     // Underline
     doc.setDrawColor(...colors.primary);
@@ -48,35 +51,42 @@ export function ExportButton() {
     doc.setTextColor(...colors.muted);
     doc.setFont('helvetica', 'normal');
     doc.text(`Generated: ${now.toLocaleDateString()} at ${now.toLocaleTimeString()}`, 20, yPos);
-    doc.text('This report contains all documented evidence for VA disability claim purposes.', 20, yPos + 5);
+    doc.text('This report contains selected evidence for VA disability claim purposes.', 20, yPos + 5);
     yPos += 15;
+    
+    // Count selected sections for summary
+    const selectedSections = Object.entries(sections)
+      .filter(([_, selected]) => selected)
+      .map(([key]) => key);
     
     // Summary Box
     doc.setFillColor(...colors.background);
     doc.roundedRect(20, yPos, pageWidth - 40, 40, 2, 2, 'F');
     
     const summaryItems = [
-      { value: data.serviceHistory.length, label: 'Service Entries' },
-      { value: data.medicalVisits.length, label: 'Medical Visits' },
-      { value: data.symptoms.length, label: 'Symptom Entries' },
-      { value: data.exposures.length, label: 'Exposures' },
-      { value: data.medications.length, label: 'Medications' },
-      { value: data.buddyContacts.length, label: 'Buddy Contacts' },
-    ];
+      sections.serviceHistory ? { value: data.serviceHistory.length, label: 'Service Entries' } : null,
+      sections.medicalVisits ? { value: data.medicalVisits.length, label: 'Medical Visits' } : null,
+      sections.symptoms ? { value: data.symptoms.length, label: 'Symptom Entries' } : null,
+      sections.exposures ? { value: data.exposures.length, label: 'Exposures' } : null,
+      sections.medications ? { value: data.medications.length, label: 'Medications' } : null,
+      sections.buddyContacts ? { value: data.buddyContacts.length, label: 'Buddy Contacts' } : null,
+    ].filter(Boolean) as { value: number; label: string }[];
     
-    const boxWidth = (pageWidth - 50) / summaryItems.length;
-    summaryItems.forEach((item, index) => {
-      const x = 25 + (boxWidth * index) + (boxWidth / 2);
-      doc.setFontSize(16);
-      doc.setTextColor(...colors.primary);
-      doc.setFont('helvetica', 'bold');
-      doc.text(String(item.value), x, yPos + 18, { align: 'center' });
-      
-      doc.setFontSize(7);
-      doc.setTextColor(...colors.muted);
-      doc.setFont('helvetica', 'normal');
-      doc.text(item.label, x, yPos + 26, { align: 'center' });
-    });
+    if (summaryItems.length > 0) {
+      const boxWidth = (pageWidth - 50) / Math.min(summaryItems.length, 6);
+      summaryItems.slice(0, 6).forEach((item, index) => {
+        const x = 25 + (boxWidth * index) + (boxWidth / 2);
+        doc.setFontSize(16);
+        doc.setTextColor(...colors.primary);
+        doc.setFont('helvetica', 'bold');
+        doc.text(String(item.value), x, yPos + 18, { align: 'center' });
+        
+        doc.setFontSize(7);
+        doc.setTextColor(...colors.muted);
+        doc.setFont('helvetica', 'normal');
+        doc.text(item.label, x, yPos + 26, { align: 'center' });
+      });
+    }
     yPos += 50;
 
     // Helper to check page break
@@ -89,13 +99,35 @@ export function ExportButton() {
       return yPos;
     };
 
+    // Personal Statement Section
+    if (sections.personalStatement) {
+      yPos = checkPageBreak(50);
+      doc.setFontSize(14);
+      doc.setTextColor(...colors.secondary);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Personal Statement Summary', 20, yPos);
+      yPos += 8;
+      
+      doc.setFillColor(...colors.infoBg);
+      doc.roundedRect(20, yPos - 2, pageWidth - 40, 25, 2, 2, 'F');
+      
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(...colors.secondary);
+      const conditions = data.claimConditions?.length || 0;
+      doc.text(`This evidence package documents ${conditions} claimed condition(s) with supporting`, 25, yPos + 6);
+      doc.text(`medical visits, symptom logs, and lay/buddy statements for VA rating purposes.`, 25, yPos + 12);
+      doc.text(`Separation Date: ${data.separationDate ? new Date(data.separationDate).toLocaleDateString() : 'Not set'}`, 25, yPos + 18);
+      yPos += 35;
+    }
+
     // Service History Section
-    if (data.serviceHistory.length > 0) {
+    if (sections.serviceHistory && data.serviceHistory.length > 0) {
       yPos = checkPageBreak(40);
       doc.setFontSize(14);
       doc.setTextColor(...colors.secondary);
       doc.setFont('helvetica', 'bold');
-      doc.text('Service History', 20, yPos);
+      doc.text('Service History & Combat Dates', 20, yPos);
       yPos += 8;
       
       const sortedHistory = [...data.serviceHistory].sort((a, b) => 
@@ -106,7 +138,7 @@ export function ExportButton() {
         yPos = checkPageBreak(25);
         
         doc.setDrawColor(...colors.border);
-        doc.roundedRect(22, yPos - 2, pageWidth - 44, 20, 1, 1, 'S');
+        doc.roundedRect(22, yPos - 2, pageWidth - 44, 22, 1, 1, 'S');
         
         doc.setFontSize(10);
         doc.setTextColor(...colors.secondary);
@@ -121,16 +153,16 @@ export function ExportButton() {
         
         if (entry.hazards) {
           doc.setTextColor(...colors.danger);
-          doc.text(`⚠ ${entry.hazards.substring(0, 50)}`, 25, yPos + 16);
+          doc.text(`⚠ ${entry.hazards.substring(0, 50)}`, 25, yPos + 17);
         }
         
-        yPos += 25;
+        yPos += 27;
       });
       yPos += 5;
     }
 
     // Medical Visits Section
-    if (data.medicalVisits.length > 0) {
+    if (sections.medicalVisits && data.medicalVisits.length > 0) {
       yPos = checkPageBreak(50);
       doc.setFontSize(14);
       doc.setTextColor(...colors.secondary);
@@ -176,7 +208,7 @@ export function ExportButton() {
     }
 
     // Symptoms Section
-    if (data.symptoms.length > 0) {
+    if (sections.symptoms && data.symptoms.length > 0) {
       yPos = checkPageBreak(50);
       const avgSeverity = (data.symptoms.reduce((sum, s) => sum + s.severity, 0) / data.symptoms.length).toFixed(1);
       
@@ -227,7 +259,7 @@ export function ExportButton() {
     }
 
     // Medications Section
-    if (data.medications.length > 0) {
+    if (sections.medications && data.medications.length > 0) {
       yPos = checkPageBreak(40);
       const currentMeds = data.medications.filter(m => m.stillTaking);
       
@@ -262,8 +294,154 @@ export function ExportButton() {
       yPos += 5;
     }
 
+    // Exposures Section
+    if (sections.exposures && data.exposures.length > 0) {
+      yPos = checkPageBreak(40);
+      
+      doc.setFontSize(14);
+      doc.setTextColor(...colors.secondary);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`Exposures (${data.exposures.length} documented)`, 20, yPos);
+      yPos += 8;
+      
+      data.exposures.forEach(exp => {
+        yPos = checkPageBreak(15);
+        
+        doc.setFillColor(...colors.warningBg);
+        doc.roundedRect(22, yPos - 2, pageWidth - 44, 12, 1, 1, 'F');
+        
+        doc.setFontSize(9);
+        doc.setTextColor(...colors.warning);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`⚠ ${exp.type || 'Exposure'}`, 25, yPos + 4);
+        
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(...colors.secondary);
+        if (exp.location) {
+          doc.text(`Location: ${exp.location}`, 25, yPos + 9);
+        }
+        
+        yPos += 16;
+      });
+      yPos += 5;
+    }
+
+    // Sleep Log Section
+    if (sections.sleepLog && data.sleepEntries && data.sleepEntries.length > 0) {
+      yPos = checkPageBreak(40);
+      const avgHours = (data.sleepEntries.reduce((sum, s) => sum + (s.hoursSlept || 0), 0) / data.sleepEntries.length).toFixed(1);
+      const cpapUsers = data.sleepEntries.filter(s => s.usesCPAP).length;
+      
+      doc.setFontSize(14);
+      doc.setTextColor(...colors.secondary);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`Sleep Log (${data.sleepEntries.length} entries)`, 20, yPos);
+      yPos += 6;
+      
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(...colors.muted);
+      doc.text(`Average Sleep: ${avgHours} hrs | CPAP Used: ${cpapUsers} nights`, 20, yPos);
+      yPos += 8;
+      
+      const recentSleep = [...data.sleepEntries]
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .slice(0, 7);
+      
+      recentSleep.forEach(entry => {
+        yPos = checkPageBreak(8);
+        doc.setTextColor(...colors.secondary);
+        doc.text(`${new Date(entry.date).toLocaleDateString()} - ${entry.hoursSlept || 0} hrs`, 25, yPos);
+        doc.text(`Quality: ${entry.quality || 'N/A'}`, 100, yPos);
+        if (entry.usesCPAP) {
+          doc.setTextColor(...colors.primary);
+          doc.text('CPAP', 150, yPos);
+        }
+        yPos += 6;
+      });
+      yPos += 5;
+    }
+
+    // Migraines Section with Rating Analysis
+    if (sections.migraineLog && data.migraines && data.migraines.length > 0) {
+      yPos = checkPageBreak(60);
+      const prostrating = data.migraines.filter(m => m.wasProstrating || m.severity === 'Prostrating').length;
+      const workImpact = data.migraines.filter(m => m.couldNotWork).length;
+      
+      // Calculate estimated rating
+      const last3Months = data.migraines.filter(m => {
+        const date = new Date(m.date);
+        const threeMonthsAgo = new Date();
+        threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+        return date >= threeMonthsAgo;
+      });
+      const prostratingPer3Mo = last3Months.filter(m => m.wasProstrating || m.severity === 'Prostrating').length;
+      const avgPerMonth = prostratingPer3Mo / 3;
+      
+      let estimatedRating = '0%';
+      if (avgPerMonth >= 4) estimatedRating = '50%';
+      else if (avgPerMonth >= 1) estimatedRating = '30%';
+      else if (prostratingPer3Mo > 0) estimatedRating = '10%';
+      
+      doc.setFontSize(14);
+      doc.setTextColor(...colors.secondary);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`Migraine Log (${data.migraines.length} entries)`, 20, yPos);
+      yPos += 6;
+      
+      // Rating analysis box
+      doc.setFillColor(...colors.infoBg);
+      doc.roundedRect(20, yPos - 2, pageWidth - 40, 20, 2, 2, 'F');
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...colors.primary);
+      doc.text(`VA Rating Estimate: ${estimatedRating} (DC 8100)`, 25, yPos + 5);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(...colors.secondary);
+      doc.text(`Prostrating: ${prostrating} total | Work Impact: ${workImpact} | Avg/Month: ${avgPerMonth.toFixed(1)}`, 25, yPos + 12);
+      yPos += 25;
+      
+      // Table header
+      doc.setFillColor(...colors.background);
+      doc.rect(20, yPos - 3, pageWidth - 40, 8, 'F');
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...colors.secondary);
+      doc.text('Date', 25, yPos + 2);
+      doc.text('Severity', 55, yPos + 2);
+      doc.text('Duration', 95, yPos + 2);
+      doc.text('Prostrating', 130, yPos + 2);
+      doc.text('Work Impact', 160, yPos + 2);
+      yPos += 10;
+      
+      const sortedMigraines = [...data.migraines]
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .slice(0, 10);
+      
+      doc.setFont('helvetica', 'normal');
+      sortedMigraines.forEach(m => {
+        yPos = checkPageBreak(8);
+        doc.setTextColor(...colors.secondary);
+        doc.text(new Date(m.date).toLocaleDateString(), 25, yPos);
+        
+        const severityColor = m.severity === 'Prostrating' ? colors.danger 
+          : m.severity === 'Severe' ? colors.warning : colors.secondary;
+        doc.setTextColor(...severityColor);
+        doc.text(m.severity || '', 55, yPos);
+        
+        doc.setTextColor(...colors.secondary);
+        doc.text(m.duration || '', 95, yPos);
+        doc.setTextColor(...(m.wasProstrating ? colors.danger : colors.muted));
+        doc.text(m.wasProstrating ? 'Yes' : 'No', 130, yPos);
+        doc.setTextColor(...(m.couldNotWork ? colors.danger : colors.muted));
+        doc.text(m.couldNotWork ? 'Yes' : 'No', 160, yPos);
+        yPos += 6;
+      });
+      yPos += 5;
+    }
+
     // Buddy Contacts Section
-    if (data.buddyContacts.length > 0) {
+    if (sections.buddyContacts && data.buddyContacts.length > 0) {
       yPos = checkPageBreak(40);
       
       doc.setFontSize(14);
@@ -296,53 +474,77 @@ export function ExportButton() {
       yPos += 5;
     }
 
-    // Migraines Section
-    if (data.migraines && data.migraines.length > 0) {
-      yPos = checkPageBreak(40);
-      const prostrating = data.migraines.filter(m => m.severity === 'Prostrating').length;
+    // Timeline Section
+    if (sections.timeline) {
+      yPos = checkPageBreak(50);
       
       doc.setFontSize(14);
       doc.setTextColor(...colors.secondary);
       doc.setFont('helvetica', 'bold');
-      doc.text(`Migraine Log (${data.migraines.length} entries)`, 20, yPos);
-      yPos += 6;
-      
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(...colors.muted);
-      doc.text(`Prostrating Episodes: ${prostrating} - key for VA migraine ratings`, 20, yPos);
+      doc.text('Timeline of Key Events', 20, yPos);
       yPos += 8;
       
-      // Table header
-      doc.setFillColor(...colors.background);
-      doc.rect(20, yPos - 3, pageWidth - 40, 8, 'F');
-      doc.setFontSize(8);
-      doc.setFont('helvetica', 'bold');
-      doc.text('Date', 25, yPos + 2);
-      doc.text('Severity', 55, yPos + 2);
-      doc.text('Duration', 95, yPos + 2);
-      doc.text('Impact', 130, yPos + 2);
-      yPos += 10;
+      // Collect and sort all events
+      const events: { date: Date; type: string; description: string }[] = [];
       
-      const sortedMigraines = [...data.migraines]
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-        .slice(0, 10);
+      // Add service history
+      data.serviceHistory.forEach(entry => {
+        events.push({
+          date: new Date(entry.startDate),
+          type: 'Service',
+          description: `Started: ${entry.base || entry.unit || 'Duty Station'}`,
+        });
+        if (entry.endDate) {
+          events.push({
+            date: new Date(entry.endDate),
+            type: 'Service',
+            description: `Ended: ${entry.base || entry.unit || 'Duty Station'}`,
+          });
+        }
+      });
       
-      doc.setFont('helvetica', 'normal');
-      sortedMigraines.forEach(m => {
-        yPos = checkPageBreak(8);
-        doc.setTextColor(...colors.secondary);
-        doc.text(new Date(m.date).toLocaleDateString(), 25, yPos);
+      // Add medical visits
+      data.medicalVisits.slice(0, 5).forEach(visit => {
+        events.push({
+          date: new Date(visit.date),
+          type: 'Medical',
+          description: visit.reason || visit.diagnosis || 'Medical Visit',
+        });
+      });
+      
+      // Add severe symptoms
+      data.symptoms.filter(s => s.severity >= 7).slice(0, 5).forEach(symptom => {
+        events.push({
+          date: new Date(symptom.date),
+          type: 'Symptom',
+          description: `${symptom.symptom} (Severity: ${symptom.severity}/10)`,
+        });
+      });
+      
+      // Sort by date
+      events.sort((a, b) => a.date.getTime() - b.date.getTime());
+      
+      events.slice(0, 15).forEach(event => {
+        yPos = checkPageBreak(10);
         
-        const severityColor = m.severity === 'Prostrating' ? colors.danger 
-          : m.severity === 'Severe' ? colors.warning : colors.secondary;
-        doc.setTextColor(...severityColor);
-        doc.text(m.severity, 55, yPos);
+        const typeColors: Record<string, [number, number, number]> = {
+          Service: colors.primary,
+          Medical: colors.success,
+          Symptom: colors.warning,
+        };
         
+        doc.setFillColor(...(typeColors[event.type] || colors.muted));
+        doc.circle(25, yPos + 1, 2, 'F');
+        
+        doc.setFontSize(8);
+        doc.setTextColor(...colors.muted);
+        doc.text(event.date.toLocaleDateString(), 30, yPos + 2);
+        
+        doc.setFontSize(9);
         doc.setTextColor(...colors.secondary);
-        doc.text(m.duration || '', 95, yPos);
-        doc.text((m.impact || '').substring(0, 25), 130, yPos);
-        yPos += 6;
+        doc.text(`[${event.type}] ${event.description.substring(0, 50)}`, 65, yPos + 2);
+        
+        yPos += 8;
       });
     }
 
@@ -367,18 +569,31 @@ export function ExportButton() {
     const lines = doc.splitTextToSize(disclaimer, pageWidth - 50);
     doc.text(lines, pageWidth / 2, pageHeight - 20, { align: 'center' });
 
-    doc.save('complete-evidence-report.pdf');
+    doc.save('custom-evidence-report.pdf');
 
     toast({
       title: 'PDF Downloaded',
-      description: 'Your complete evidence report has been saved as a PDF.',
+      description: `Your customized evidence report (${selectedSections.length} sections) has been saved.`,
     });
   };
 
   return (
-    <Button onClick={exportPDF} variant="outline" size="sm" className="gap-2 w-full md:w-auto">
-      <FileDown className="h-4 w-4" />
-      Export PDF
-    </Button>
+    <>
+      <Button 
+        onClick={() => setModalOpen(true)} 
+        variant="outline" 
+        size="sm" 
+        className="gap-2 w-full md:w-auto"
+      >
+        <FileDown className="h-4 w-4" />
+        Export PDF
+      </Button>
+      
+      <ExportCustomizationModal
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+        onExport={exportPDF}
+      />
+    </>
   );
 }
