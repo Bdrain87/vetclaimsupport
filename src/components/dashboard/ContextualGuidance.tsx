@@ -38,7 +38,11 @@ interface GuidanceNudge {
   condition: string; // For display purposes
 }
 
-export function ContextualGuidance() {
+interface ContextualGuidanceProps {
+  onOpenAddCondition?: () => void;
+}
+
+export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidanceProps) {
   const { data } = useClaims();
   const [dismissedIds, setDismissedIds] = useState<string[]>([]);
 
@@ -56,7 +60,7 @@ export function ContextualGuidance() {
         icon: <Target className="h-5 w-5" />,
         title: 'Start Building Your Claim',
         message: 'Add the conditions you\'re claiming. This is the foundation of your VA claim - everything else links to your conditions.',
-        action: { label: 'Add Condition', href: '/' },
+        action: { label: 'Add Condition', href: '#add-condition' },
         condition: 'No conditions added',
       });
     }
@@ -352,22 +356,37 @@ export function ContextualGuidance() {
                     {nudge.message}
                   </p>
                   {nudge.action && (
-                    <Link to={nudge.action.href}>
+                    nudge.action.href === '#add-condition' ? (
                       <Button
                         variant="ghost"
                         size="sm"
                         className={cn(
                           "h-7 px-0 mt-2 gap-1",
-                          nudge.type === 'action' && "text-primary hover:text-primary",
-                          nudge.type === 'tip' && "text-blue-500 hover:text-blue-500",
-                          nudge.type === 'warning' && "text-warning hover:text-warning",
-                          nudge.type === 'milestone' && "text-success hover:text-success"
+                          "text-primary hover:text-primary"
                         )}
+                        onClick={() => onOpenAddCondition?.()}
                       >
                         {nudge.action.label}
                         <ArrowRight className="h-3 w-3" />
                       </Button>
-                    </Link>
+                    ) : (
+                      <Link to={nudge.action.href}>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className={cn(
+                            "h-7 px-0 mt-2 gap-1",
+                            nudge.type === 'action' && "text-primary hover:text-primary",
+                            nudge.type === 'tip' && "text-blue-500 hover:text-blue-500",
+                            nudge.type === 'warning' && "text-warning hover:text-warning",
+                            nudge.type === 'milestone' && "text-success hover:text-success"
+                          )}
+                        >
+                          {nudge.action.label}
+                          <ArrowRight className="h-3 w-3" />
+                        </Button>
+                      </Link>
+                    )
                   )}
                 </div>
               </div>

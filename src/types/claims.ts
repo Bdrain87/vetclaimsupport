@@ -75,6 +75,57 @@ export interface Medication {
   stillTaking: boolean;
 }
 
+// Combat Zone Entry for tracking hostile fire, imminent danger pay
+export interface CombatEntry {
+  id: string;
+  startDate: string;
+  endDate: string;
+  location: string; // Combat zone name/country
+  combatZoneType: 'Combat Zone' | 'Hostile Fire Area' | 'Imminent Danger Area' | 'Hazardous Duty';
+  receivedHostileFirePay: boolean;
+  receivedImmDangerPay: boolean;
+  directCombat: boolean;
+  description: string;
+  awards?: string; // Combat-related awards (CAB, CIB, Purple Heart, etc.)
+}
+
+// Major Event for tracking significant incidents during service
+export type MajorEventType = 
+  | 'Injury' 
+  | 'Accident' 
+  | 'Assault/MST' 
+  | 'Award/Decoration'
+  | 'TBI Event'
+  | 'Traumatic Event'
+  | 'Line of Duty Investigation'
+  | 'Other';
+
+export interface MajorEvent {
+  id: string;
+  date: string;
+  type: MajorEventType;
+  title: string;
+  location: string;
+  description: string;
+  documented: boolean; // Was this documented in service records?
+  witnesses: string;
+  linkedConditions?: string[]; // Conditions this event relates to
+}
+
+// Deployment Entry (separate from duty stations)
+export interface DeploymentEntry {
+  id: string;
+  startDate: string;
+  endDate: string;
+  operationName: string; // e.g., OEF, OIF, OND
+  location: string;
+  unit: string;
+  role: string;
+  combatDeployment: boolean;
+  hazardsEncountered: string;
+  notes: string;
+}
+
 export interface ServiceEntry {
   id: string;
   startDate: string;
@@ -267,6 +318,9 @@ export interface ClaimsData {
   symptoms: SymptomEntry[];
   medications: Medication[];
   serviceHistory: ServiceEntry[];
+  combatHistory: CombatEntry[];
+  majorEvents: MajorEvent[];
+  deployments: DeploymentEntry[];
   buddyContacts: BuddyContact[];
   documents: DocumentItem[];
   migraines: MigraineEntry[];

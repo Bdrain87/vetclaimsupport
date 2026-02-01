@@ -157,13 +157,13 @@ export default function Dashboard() {
       <DashboardHeader />
 
       {/* GUIDED ACTION BANNER - What to do next */}
-      <GuidedActionBanner />
+      <GuidedActionBanner onOpenAddCondition={() => setIsAddOpen(true)} />
 
       {/* CLAIMS JOURNEY ROADMAP - Visual progress */}
       <ClaimsJourneyRoadmap />
 
       {/* CONTEXTUAL GUIDANCE - Smart nudges */}
-      <ContextualGuidance />
+      <ContextualGuidance onOpenAddCondition={() => setIsAddOpen(true)} />
 
       {/* CONDITIONS WORTH EXPLORING - Unified Smart Section */}
       <ConditionsExplorer 
