@@ -284,16 +284,16 @@ export default function MedicalVisits() {
       {/* Visits List */}
       {data.medicalVisits.length === 0 ? (
         <Card className="data-card">
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <Stethoscope className="h-12 w-12 text-muted-foreground/50 mb-4" />
-            <p className="text-muted-foreground text-center">No medical visits logged yet.</p>
-            <p className="text-sm text-muted-foreground text-center mt-1">Click "Add Visit" to start tracking.</p>
+          <CardContent className="empty-state">
+            <Stethoscope className="empty-state-icon" />
+            <p className="empty-state-title">No medical visits logged yet</p>
+            <p className="empty-state-description">Document all medical appointments during service. Each visit can be linked to a claimed condition.</p>
           </CardContent>
         </Card>
       ) : (
         <div className="grid gap-4">
-          {data.medicalVisits.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((visit) => (
-            <Card key={visit.id} className="data-card">
+          {data.medicalVisits.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((visit, index) => (
+            <Card key={visit.id} className="data-card group hover:border-primary/30 transition-all duration-300 animate-fade-in" style={{ animationDelay: `${index * 0.03}s` }}>
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">

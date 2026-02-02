@@ -301,16 +301,16 @@ export default function ServiceHistory() {
 
           {data.serviceHistory.length === 0 ? (
             <Card className="data-card">
-              <CardContent className="flex flex-col items-center justify-center py-12">
-                <MapPin className="h-12 w-12 text-muted-foreground/50 mb-4" />
-                <p className="text-muted-foreground text-center">No duty stations logged yet.</p>
-                <p className="text-sm text-muted-foreground text-center mt-1">Document each duty station and assignment.</p>
+              <CardContent className="empty-state">
+                <MapPin className="empty-state-icon" />
+                <p className="empty-state-title">No duty stations logged yet</p>
+                <p className="empty-state-description">Document each duty station and assignment during your military service.</p>
               </CardContent>
             </Card>
           ) : (
             <div className="space-y-4">
-              {data.serviceHistory.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime()).map((entry) => (
-                <Card key={entry.id} className="data-card">
+              {data.serviceHistory.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime()).map((entry, index) => (
+                <Card key={entry.id} className="data-card group hover:border-primary/30 transition-all duration-300 animate-fade-in" style={{ animationDelay: `${index * 0.05}s` }}>
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">

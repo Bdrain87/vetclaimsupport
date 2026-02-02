@@ -120,24 +120,29 @@ export function MobileNavGrid() {
             
             <CollapsibleContent className="pt-2">
               <div className="grid grid-cols-4 gap-2">
-                {group.items.map((item) => (
+                {group.items.map((item, index) => (
                   <NavLink
                     key={item.to}
                     to={item.to}
                     className={({ isActive }) => cn(
-                      "flex flex-col items-center justify-center gap-1",
-                      "min-h-[72px] p-2 rounded-2xl",
-                      "bg-card border border-border shadow-sm",
-                      "transition-all duration-300 ease-out",
-                      "active:scale-95 active:bg-secondary",
-                      "hover:bg-secondary",
-                      isActive && "bg-primary/10 border-primary/30"
+                      "flex flex-col items-center justify-center gap-1.5",
+                      "min-h-[80px] p-3 rounded-2xl",
+                      "bg-card border border-border/50",
+                      "transition-all duration-300",
+                      "hover:border-primary/30 hover:bg-primary/5 hover:translate-y-[-2px]",
+                      "active:scale-[0.97]",
+                      "animate-fade-in",
+                      isActive && "bg-primary/10 border-primary/30 shadow-[0_0_16px_hsl(var(--primary)/0.15)]"
                     )}
+                    style={{ animationDelay: `${index * 0.05}s` }}
                   >
-                    <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-secondary transition-transform duration-300 ease-out">
+                    <div className={cn(
+                      "flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-300",
+                      "bg-muted/50 group-hover:bg-primary/10"
+                    )}>
                       <item.icon className="h-5 w-5 text-foreground" />
                     </div>
-                    <span className="text-[10px] font-medium text-foreground text-center leading-tight">
+                    <span className="text-[11px] font-medium text-foreground text-center leading-tight">
                       {item.label}
                     </span>
                   </NavLink>

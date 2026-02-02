@@ -458,24 +458,26 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Evidence Stats - 2x2 on mobile */}
+      {/* Evidence Stats - Premium glassmorphism cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {stats.map((stat) => (
+        {stats.map((stat, index) => (
           <Link
             key={stat.title}
             to={stat.href}
             className={cn(
-              "flex flex-col items-center justify-center gap-1.5",
-              "min-h-[88px] p-4 rounded-2xl",
-              "bg-card border border-border shadow-sm",
-              "transition-all duration-300 ease-out",
-              "active:scale-95 active:bg-secondary",
-              "hover:bg-secondary"
+              "stat-card group animate-fade-in",
+              "flex flex-col items-center justify-center gap-2",
+              "min-h-[100px] p-4",
+              "hover:border-primary/30 hover:translate-y-[-2px]",
+              "active:scale-[0.98]"
             )}
+            style={{ animationDelay: `${index * 0.05}s` }}
           >
-            <stat.icon className="h-5 w-5 text-foreground" />
-            <p className="text-2xl font-bold text-foreground number-display">{stat.value}</p>
-            <p className="text-xs text-muted-foreground">{stat.title}</p>
+            <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
+              <stat.icon className="h-5 w-5 text-primary" />
+            </div>
+            <p className="text-3xl font-bold text-foreground number-display number-animate">{stat.value}</p>
+            <p className="text-xs font-medium text-muted-foreground">{stat.title}</p>
           </Link>
         ))}
       </div>
@@ -488,40 +490,42 @@ export default function Dashboard() {
         <MobileNavGrid />
       </div>
 
-      {/* Evidence Status - 2x2 mobile, 3 cols desktop */}
+      {/* Evidence Status - Premium info cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         <div className={cn(
-          "flex flex-col items-center justify-center gap-1.5",
-          "min-h-[80px] p-4 rounded-2xl",
-          "bg-card border border-border shadow-sm",
-          "transition-all duration-300 ease-out"
-        )}>
-          <FileWarning className="h-5 w-5 text-foreground" />
-          <span className="text-xl font-bold text-foreground">
+          "info-card group",
+          "flex flex-col items-center justify-center gap-2",
+          "min-h-[90px] animate-fade-in"
+        )} style={{ animationDelay: '0.1s' }}>
+          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-warning/10 group-hover:bg-warning/20 transition-colors">
+            <FileWarning className="h-5 w-5 text-warning" />
+          </div>
+          <span className="text-2xl font-bold text-foreground number-display">
             {data.medicalVisits.length - missingSummaries}/{data.medicalVisits.length}
           </span>
-          <span className="text-xs text-muted-foreground text-center">Summaries</span>
+          <span className="text-xs font-medium text-muted-foreground text-center">Summaries</span>
         </div>
         <div className={cn(
-          "flex flex-col items-center justify-center gap-1.5",
-          "min-h-[80px] p-4 rounded-2xl",
-          "bg-card border border-border shadow-sm",
-          "transition-all duration-300 ease-out"
-        )}>
-          <Activity className="h-5 w-5 text-foreground" />
-          <span className="text-xl font-bold text-foreground">{documentsObtained}/{data.documents.length}</span>
-          <span className="text-xs text-muted-foreground text-center">Documents</span>
+          "info-card group",
+          "flex flex-col items-center justify-center gap-2",
+          "min-h-[90px] animate-fade-in"
+        )} style={{ animationDelay: '0.15s' }}>
+          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
+            <Activity className="h-5 w-5 text-primary" />
+          </div>
+          <span className="text-2xl font-bold text-foreground number-display">{documentsObtained}/{data.documents.length}</span>
+          <span className="text-xs font-medium text-muted-foreground text-center">Documents</span>
         </div>
         <div className={cn(
-          "flex flex-col items-center justify-center gap-1.5",
-          "min-h-[80px] p-4 rounded-2xl",
-          "bg-card border border-border shadow-sm",
-          "transition-all duration-300 ease-out",
-          "col-span-2 sm:col-span-1"
-        )}>
-          <ShieldCheck className="h-5 w-5 text-foreground" />
-          <span className="text-xl font-bold text-foreground">{buddyStatements}</span>
-          <span className="text-xs text-muted-foreground text-center">Buddy Statements</span>
+          "info-card group",
+          "flex flex-col items-center justify-center gap-2",
+          "min-h-[90px] col-span-2 sm:col-span-1 animate-fade-in"
+        )} style={{ animationDelay: '0.2s' }}>
+          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-success/10 group-hover:bg-success/20 transition-colors">
+            <ShieldCheck className="h-5 w-5 text-success" />
+          </div>
+          <span className="text-2xl font-bold text-foreground number-display">{buddyStatements}</span>
+          <span className="text-xs font-medium text-muted-foreground text-center">Buddy Statements</span>
         </div>
       </div>
 

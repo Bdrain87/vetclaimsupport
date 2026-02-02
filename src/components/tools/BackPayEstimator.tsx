@@ -315,16 +315,16 @@ export function BackPayEstimator() {
             </p>
           </div>
 
-          {/* Back Pay Estimate - The Big Number */}
-          <div className="result-card-success text-center py-8">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-success/20 mb-4">
-              <DollarSign className="h-4 w-4 text-success" />
-              <span className="text-sm font-semibold text-success">Estimated Back Pay</span>
+          {/* Back Pay Estimate - The Big Number with vivid gradient */}
+          <div className="gradient-card-success text-center py-8">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 mb-4">
+              <DollarSign className="h-4 w-4" />
+              <span className="text-sm font-semibold">Estimated Back Pay</span>
             </div>
-            <p className="text-5xl sm:text-6xl font-bold result-number-success number-animate">
+            <p className="text-5xl sm:text-6xl font-bold tracking-tight number-animate" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>
               {formatCurrency(calculation.estimatedBackPay)}
             </p>
-            <p className="text-sm text-muted-foreground mt-4 max-w-xs mx-auto">
+            <p className="text-sm mt-4 max-w-xs mx-auto opacity-90">
               Based on <strong>{calculation.monthsOfBackPay} month{calculation.monthsOfBackPay !== 1 ? 's' : ''}</strong> × <strong>{formatCurrency(calculation.monthlyDifference)}</strong> difference
             </p>
           </div>
