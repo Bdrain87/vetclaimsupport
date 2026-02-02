@@ -8,6 +8,7 @@ export interface VADisability {
   description: string;
   ratingCriteria?: string;
   requiredFormKeys?: string[]; // Keys to match against vaRequiredForms
+  bodySystem?: string; // Added when flattened for search
 }
 
 export interface BodySystem {
@@ -1127,3 +1128,14 @@ export const vaDisabilitiesBySystem: BodySystem[] = [
     ]
   },
 ];
+
+// Flatten all conditions into a single array for search/filter
+export const allVADisabilities: VADisability[] = vaDisabilitiesBySystem.flatMap(
+  (system) => system.conditions.map(condition => ({
+    ...condition,
+    bodySystem: system.name
+  }))
+);
+
+// Total count of all conditions
+export const totalDisabilitiesCount = allVADisabilities.length;
