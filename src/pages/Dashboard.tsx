@@ -33,6 +33,7 @@ import { DeadlinesReminders } from '@/components/dashboard/DeadlinesReminders';
 import { ClaimsJourneyRoadmap } from '@/components/dashboard/ClaimsJourneyRoadmap';
 import { ContextualGuidance } from '@/components/dashboard/ContextualGuidance';
 import { GuidedActionBanner } from '@/components/dashboard/GuidedActionBanner';
+import { PremiumStatsGrid } from '@/components/dashboard/PremiumStatsGrid';
 import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -154,17 +155,20 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="space-y-4 animate-fade-in pb-8 md:pb-4 overflow-x-hidden max-w-full">
+    <div className="space-y-5 animate-fade-in pb-8 md:pb-4 overflow-x-hidden max-w-full">
       {/* Hero Header with Native Share */}
       <DashboardHeader />
 
       {/* Veteran-Built Badge */}
       <div className="flex justify-center">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
-          <Shield className="h-3.5 w-3.5 text-primary" />
-          <span className="text-xs font-medium text-primary/90">Built by a 100% Disabled Veteran</span>
+        <div className="premium-badge-primary gap-1.5">
+          <Shield className="h-3.5 w-3.5" />
+          <span>Built by a 100% Disabled Veteran</span>
         </div>
       </div>
+
+      {/* PREMIUM STATS GRID - Key metrics at a glance */}
+      <PremiumStatsGrid />
 
       {/* GUIDED ACTION BANNER - What to do next */}
       <GuidedActionBanner onOpenAddCondition={() => setIsAddOpen(true)} />
@@ -181,23 +185,29 @@ export default function Dashboard() {
         onAddCondition={handleQuickAddCondition}
       />
 
-      {/* CONDITIONS - THE FOCAL POINT */}
+      {/* CONDITIONS - THE FOCAL POINT - Premium Styling */}
       <div className={cn(
         "rounded-2xl overflow-hidden",
-        "bg-card shadow-sm",
-        "border border-primary/20"
-      )}>
+        "bg-card",
+        "border border-border",
+        "shadow-lg"
+      )} style={{ boxShadow: '0 8px 32px rgba(0, 0, 0, 0.25)' }}>
         <div className="p-4">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <Target className="h-5 w-5 text-primary" />
-              <h2 className="font-semibold text-foreground">Conditions You're Claiming</h2>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 shadow-[0_0_20px_rgba(59,130,246,0.2)]">
+                <Target className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h2 className="font-bold text-lg text-foreground tracking-tight">Conditions You're Claiming</h2>
+                <p className="text-xs text-muted-foreground">{claimConditions.length} condition{claimConditions.length !== 1 ? 's' : ''} tracked</p>
+              </div>
             </div>
           <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
               <DialogTrigger asChild>
-                <Button size="sm" className="gap-1 h-10 min-h-[44px] px-3">
+                <Button size="sm" className="gap-1.5 h-10 min-h-[44px] px-4 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-[0_4px_16px_rgba(59,130,246,0.3)]">
                   <Plus className="h-4 w-4" />
-                  <span className="hidden sm:inline">Add</span>
+                  <span className="hidden sm:inline font-semibold">Add</span>
                 </Button>
               </DialogTrigger>
               <DialogContent>
@@ -216,7 +226,7 @@ export default function Dashboard() {
                       Search shows VA diagnostic codes. You can also type a custom condition name.
                     </p>
                   </div>
-                  <Button onClick={handleAddCondition} className="w-full" disabled={!newConditionName.trim()}>
+                  <Button onClick={handleAddCondition} className="w-full bg-gradient-to-r from-primary to-primary/90" disabled={!newConditionName.trim()}>
                     Add Condition
                   </Button>
                 </div>
@@ -225,13 +235,15 @@ export default function Dashboard() {
           </div>
 
           {claimConditions.length === 0 ? (
-            <div className="text-center py-6">
-              <Target className="h-10 w-10 text-primary/40 mx-auto mb-3" />
-              <p className="text-sm font-medium text-foreground mb-1">No conditions added yet</p>
-              <p className="text-xs text-muted-foreground mb-4 max-w-[280px] mx-auto">
+            <div className="text-center py-10 px-4">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.2)]">
+                <Target className="h-8 w-8 text-primary" />
+              </div>
+              <p className="text-lg font-semibold text-foreground mb-2">No conditions added yet</p>
+              <p className="text-sm text-muted-foreground mb-6 max-w-[320px] mx-auto">
                 Start by adding the disabilities or conditions you're claiming. Then track evidence for each one.
               </p>
-              <Button onClick={() => setIsAddOpen(true)} size="sm" className="gap-1">
+              <Button onClick={() => setIsAddOpen(true)} className="gap-2 bg-gradient-to-r from-primary to-primary/90 shadow-[0_4px_16px_rgba(59,130,246,0.3)]">
                 <Plus className="h-4 w-4" />
                 Add Your First Condition
               </Button>

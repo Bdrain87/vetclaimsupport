@@ -279,23 +279,42 @@ export default function Migraines() {
 
   return (
     <div className="space-y-6 animate-fade-in overflow-x-hidden max-w-full">
+      {/* Premium Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-purple-500/20 to-purple-500/5 shadow-[0_0_24px_rgba(168,85,247,0.2)]">
+            <Brain className="h-6 w-6 text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">Migraine Tracker</h1>
+            <p className="text-muted-foreground text-sm">Aligned with VA rating criteria DC 8100</p>
+          </div>
+        </div>
+        <Button onClick={handleExportPDF} variant="outline" className="gap-2 border-border/50 hover:bg-muted">
+          <Download className="h-4 w-4" />
+          Export PDF
+        </Button>
+      </div>
+
       {/* Main Disclaimer */}
-      <div className="p-3 bg-muted/50 border border-border rounded-lg">
+      <div className="p-4 bg-muted/50 border border-border rounded-xl">
         <p className="text-xs text-muted-foreground leading-relaxed">
           The VA migraine rating criteria shown here are for reference only. Your actual rating will be determined by the VA based on your C&P examination and medical evidence. Track your migraines consistently to build a strong evidence record.
         </p>
       </div>
 
-      {/* VA Rating Estimator Card */}
+      {/* VA Rating Estimator Card - Premium Design */}
       {(data.migraines?.length || 0) > 0 && (
-        <Card className="data-card border-2 border-primary/30 bg-gradient-to-br from-primary/5 to-transparent">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <Target className="h-5 w-5 text-primary" />
-              Estimated VA Rating (DC 8100)
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <div className="rounded-2xl bg-card border border-border overflow-hidden shadow-lg" style={{ boxShadow: '0 8px 32px rgba(0, 0, 0, 0.25)' }}>
+          <div className="p-4 border-b border-border/50 bg-gradient-to-r from-primary/10 via-transparent to-transparent">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5">
+                <Target className="h-5 w-5 text-primary" />
+              </div>
+              <h3 className="text-lg font-bold text-foreground tracking-tight">Estimated VA Rating (DC 8100)</h3>
+            </div>
+          </div>
+          <CardContent className="p-5 space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className={`text-4xl font-bold ${getRatingColor(stats.estimatedRating.rating)}`}>
@@ -349,7 +368,7 @@ export default function Migraines() {
               </Alert>
             )}
           </CardContent>
-        </Card>
+        </div>
       )}
 
       {/* VA Rating Info Alert */}
