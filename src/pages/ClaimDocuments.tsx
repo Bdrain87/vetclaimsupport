@@ -204,35 +204,41 @@ export default function ClaimDocuments() {
           </div>
         </div>
 
-        <div className="flex gap-2">
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*,.pdf,.doc,.docx"
-            onChange={(e) => handleFileSelect(e.target.files)}
-            className="hidden"
-          />
-          <input
-            ref={cameraInputRef}
-            type="file"
-            accept="image/*"
-            capture="environment"
-            onChange={(e) => handleFileSelect(e.target.files)}
-            className="hidden"
-          />
-          <Button
-            variant="outline"
-            onClick={() => cameraInputRef.current?.click()}
-            className="gap-2"
-          >
-            <Camera className="h-4 w-4" />
-            <span className="hidden sm:inline">Camera</span>
-          </Button>
-          <Button onClick={() => fileInputRef.current?.click()} className="gap-2">
-            <Upload className="h-4 w-4" />
-            Upload
-          </Button>
-        </div>
+        {/* Hidden file inputs */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*,.pdf,.doc,.docx"
+          onChange={(e) => handleFileSelect(e.target.files)}
+          className="hidden"
+        />
+        <input
+          ref={cameraInputRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          onChange={(e) => handleFileSelect(e.target.files)}
+          className="hidden"
+        />
+      </div>
+
+      {/* Mobile-Optimized Upload Buttons */}
+      <div className="grid grid-cols-2 gap-3 sm:flex sm:gap-2">
+        <Button
+          onClick={() => cameraInputRef.current?.click()}
+          className="h-14 sm:h-10 gap-2 text-base sm:text-sm font-semibold bg-primary hover:bg-primary/90"
+        >
+          <Camera className="h-6 w-6 sm:h-4 sm:w-4" />
+          Take Photo
+        </Button>
+        <Button 
+          variant="outline"
+          onClick={() => fileInputRef.current?.click()} 
+          className="h-14 sm:h-10 gap-2 text-base sm:text-sm font-semibold"
+        >
+          <Upload className="h-6 w-6 sm:h-4 sm:w-4" />
+          Upload File
+        </Button>
       </div>
 
       {/* Stats */}
@@ -441,26 +447,62 @@ export default function ClaimDocuments() {
             <DialogTitle>Add Document Details</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
+            {/* Enhanced Photo/File Preview */}
             {uploadForm.pendingFile && (
-              <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
-                {getFileIcon(uploadForm.pendingFile.fileType)}
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm truncate">
-                    {uploadForm.pendingFile.fileName}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {formatFileSize(uploadForm.pendingFile.fileSize)}
-                  </p>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() =>
-                    setUploadForm((prev) => ({ ...prev, pendingFile: null }))
-                  }
-                >
-                  <X className="h-4 w-4" />
-                </Button>
+              <div className="p-3 bg-muted rounded-lg border border-border">
+                {uploadForm.pendingFile.fileType.startsWith('image/') ? (
+                  <div className="space-y-3">
+                    <div className="relative aspect-video rounded-lg overflow-hidden bg-background">
+                      <img
+                        src={uploadForm.pendingFile.dataUrl}
+                        alt="Preview"
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-sm truncate">
+                          {uploadForm.pendingFile.fileName}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {formatFileSize(uploadForm.pendingFile.fileSize)}
+                        </p>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-10 w-10 min-h-[44px] min-w-[44px] p-0"
+                        onClick={() =>
+                          setUploadForm((prev) => ({ ...prev, pendingFile: null }))
+                        }
+                      >
+                        <X className="h-5 w-5" />
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-3">
+                    {getFileIcon(uploadForm.pendingFile.fileType)}
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm truncate">
+                        {uploadForm.pendingFile.fileName}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {formatFileSize(uploadForm.pendingFile.fileSize)}
+                      </p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-10 w-10 min-h-[44px] min-w-[44px] p-0"
+                      onClick={() =>
+                        setUploadForm((prev) => ({ ...prev, pendingFile: null }))
+                      }
+                    >
+                      <X className="h-5 w-5" />
+                    </Button>
+                  </div>
+                )}
               </div>
             )}
 
