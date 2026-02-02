@@ -68,6 +68,7 @@ const navGroups: NavGroup[] = [
     label: 'Evidence & Docs',
     icon: FileCheck,
     items: [
+      { to: '/evidence-docs', icon: FolderOpen, label: 'Evidence & Docs' },
       { to: '/claim-documents', icon: FolderOpen, label: 'Claim Documents' },
       { to: '/evidence-library', icon: FileArchive, label: 'Evidence Library' },
       { to: '/documents', icon: FileCheck, label: 'Documents Checklist' },
