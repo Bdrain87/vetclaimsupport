@@ -40,6 +40,7 @@ const commonRatings = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
 export function BackPayEstimator() {
   const { data } = useClaims();
+  const [currentRating, setCurrentRating] = useState<string>('0');
   const [expectedRating, setExpectedRating] = useState<string>('');
   const [effectiveDateType, setEffectiveDateType] = useState<'itf' | 'custom'>('itf');
   const [customDate, setCustomDate] = useState('');
@@ -54,8 +55,12 @@ export function BackPayEstimator() {
   const calculation = useMemo(() => {
     if (!expectedRating) return null;
 
-    const rating = parseInt(expectedRating);
-    const monthlyAmount = monthlyCompensation[rating] || 0;
+    const currentRatingNum = parseInt(currentRating) || 0;
+    const projectedRating = parseInt(expectedRating);
+    
+    const currentMonthly = monthlyCompensation[currentRatingNum] || 0;
+    const projectedMonthly = monthlyCompensation[projectedRating] || 0;
+    const monthlyDifference = projectedMonthly - currentMonthly;
     
     // Determine effective date
     let effectiveDate: Date | null = null;
@@ -74,25 +79,32 @@ export function BackPayEstimator() {
     if (monthsOfBackPay <= 0) {
       return {
         effectiveDate,
-        monthlyAmount,
+        currentRating: currentRatingNum,
+        currentMonthly,
+        projectedRating,
+        projectedMonthly,
+        monthlyDifference,
         monthsOfBackPay: 0,
         estimatedBackPay: 0,
-        yearlyAmount: monthlyAmount * 12,
-        rating,
+        yearlyDifference: monthlyDifference * 12,
       };
     }
 
-    const estimatedBackPay = monthlyAmount * monthsOfBackPay;
+    // Back pay is based on the DIFFERENCE (what they should have been getting vs what they got)
+    const estimatedBackPay = monthlyDifference * monthsOfBackPay;
 
     return {
       effectiveDate,
-      monthlyAmount,
+      currentRating: currentRatingNum,
+      currentMonthly,
+      projectedRating,
+      projectedMonthly,
+      monthlyDifference,
       monthsOfBackPay,
       estimatedBackPay,
-      yearlyAmount: monthlyAmount * 12,
-      rating,
+      yearlyDifference: monthlyDifference * 12,
     };
-  }, [expectedRating, effectiveDateType, itfDate, customDate]);
+  }, [currentRating, expectedRating, effectiveDateType, itfDate, customDate]);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -135,25 +147,53 @@ export function BackPayEstimator() {
           <CardTitle className="text-base">Calculate Estimate</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Expected Rating */}
+          {/* Current Rating */}
           <div className="space-y-2">
             <Label className="flex items-center gap-2">
-              Expected Combined Rating
+              Current VA Rating
               <Tooltip>
                 <TooltipTrigger>
                   <Info className="h-3.5 w-3.5 text-muted-foreground" />
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p className="max-w-xs">Use the Rating Calculator to estimate your combined rating based on your conditions.</p>
+                  <p className="max-w-xs">Your current combined VA disability rating. Select 0% if you have no service-connected rating yet.</p>
+                </TooltipContent>
+              </Tooltip>
+            </Label>
+            <Select value={currentRating} onValueChange={setCurrentRating}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select current rating" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="0">0% - No current rating</SelectItem>
+                {commonRatings.map((r) => (
+                  <SelectItem key={r} value={r.toString()}>
+                    {r}% - {formatCurrency(monthlyCompensation[r])}/month
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Expected Rating */}
+          <div className="space-y-2">
+            <Label className="flex items-center gap-2">
+              Projected Combined Rating
+              <Tooltip>
+                <TooltipTrigger>
+                  <Info className="h-3.5 w-3.5 text-muted-foreground" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="max-w-xs">Your expected combined rating after adding new conditions. Use the Rating Calculator to estimate this.</p>
                 </TooltipContent>
               </Tooltip>
             </Label>
             <Select value={expectedRating} onValueChange={setExpectedRating}>
               <SelectTrigger>
-                <SelectValue placeholder="Select expected rating" />
+                <SelectValue placeholder="Select projected rating" />
               </SelectTrigger>
               <SelectContent>
-                {commonRatings.map((r) => (
+                {commonRatings.filter(r => r > parseInt(currentRating || '0')).map((r) => (
                   <SelectItem key={r} value={r.toString()}>
                     {r}% - {formatCurrency(monthlyCompensation[r])}/month
                   </SelectItem>
@@ -230,18 +270,45 @@ export function BackPayEstimator() {
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-success" />
-              Estimated Back Pay
+              Compensation Comparison
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {/* Main Result */}
+            {/* Current vs Projected Comparison */}
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="p-4 rounded-lg bg-muted/50 border">
+                <p className="text-xs text-muted-foreground mb-1">Current Monthly ({calculation.currentRating}%)</p>
+                <p className="text-xl font-semibold text-foreground">
+                  {formatCurrency(calculation.currentMonthly)}
+                </p>
+              </div>
+              <div className="p-4 rounded-lg bg-primary/10 border border-primary/20">
+                <p className="text-xs text-muted-foreground mb-1">Projected Monthly ({calculation.projectedRating}%)</p>
+                <p className="text-xl font-semibold text-primary">
+                  {formatCurrency(calculation.projectedMonthly)}
+                </p>
+              </div>
+            </div>
+
+            {/* Monthly Difference Highlight */}
+            <div className="text-center p-4 bg-success/10 rounded-xl border border-success/20">
+              <p className="text-sm text-muted-foreground mb-1">Monthly Increase</p>
+              <p className="text-3xl font-bold text-success">
+                +{formatCurrency(calculation.monthlyDifference)}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                +{formatCurrency(calculation.yearlyDifference)}/year
+              </p>
+            </div>
+
+            {/* Back Pay Estimate */}
             <div className="text-center p-6 bg-background rounded-xl border">
-              <p className="text-sm text-muted-foreground mb-2">Estimated Retroactive Payment</p>
+              <p className="text-sm text-muted-foreground mb-2">Estimated Back Pay</p>
               <p className="text-4xl font-bold text-success">
                 {formatCurrency(calculation.estimatedBackPay)}
               </p>
               <p className="text-sm text-muted-foreground mt-2">
-                Based on {calculation.monthsOfBackPay} month{calculation.monthsOfBackPay !== 1 ? 's' : ''} at {calculation.rating}%
+                Based on {calculation.monthsOfBackPay} month{calculation.monthsOfBackPay !== 1 ? 's' : ''} × {formatCurrency(calculation.monthlyDifference)} difference
               </p>
             </div>
 
@@ -257,18 +324,6 @@ export function BackPayEstimator() {
                 <p className="text-xs text-muted-foreground mb-1">Months of Back Pay</p>
                 <p className="text-lg font-semibold">
                   {calculation.monthsOfBackPay} month{calculation.monthsOfBackPay !== 1 ? 's' : ''}
-                </p>
-              </div>
-              <div className="p-4 rounded-lg bg-muted/50 border">
-                <p className="text-xs text-muted-foreground mb-1">Monthly Amount ({calculation.rating}%)</p>
-                <p className="text-lg font-semibold">
-                  {formatCurrency(calculation.monthlyAmount)}
-                </p>
-              </div>
-              <div className="p-4 rounded-lg bg-muted/50 border">
-                <p className="text-xs text-muted-foreground mb-1">Annual Compensation</p>
-                <p className="text-lg font-semibold">
-                  {formatCurrency(calculation.yearlyAmount)}
                 </p>
               </div>
             </div>
