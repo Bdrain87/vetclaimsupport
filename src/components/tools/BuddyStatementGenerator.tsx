@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FileText, Download, Copy, Users, CheckCircle2, AlertTriangle, HelpCircle, ChevronDown } from 'lucide-react';
+import { FileText, Download, Copy, Users, CheckCircle2, AlertTriangle, HelpCircle, ChevronDown, Share2, MessageSquare } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -28,6 +28,13 @@ interface FormData {
   statement: string;
 }
 
+interface WitnessTemplateData {
+  veteranName: string;
+  conditionName: string;
+  serviceDates: string;
+  witnessType: string;
+}
+
 interface AssessmentState {
   hasRecordsDocumented: 'yes' | 'no' | 'unsure' | null;
   hasNexusLetter: 'yes' | 'no' | 'unsure' | null;
@@ -44,7 +51,14 @@ export function BuddyStatementGenerator() {
     hasRecordsDocumented: null,
     hasNexusLetter: null,
   });
+  const [witnessTemplate, setWitnessTemplate] = useState<WitnessTemplateData>({
+    veteranName: '',
+    conditionName: '',
+    serviceDates: '',
+    witnessType: 'service-member',
+  });
   const [showGuidance, setShowGuidance] = useState(false);
+  const [showWitnessTemplate, setShowWitnessTemplate] = useState(false);
   const { toast } = useToast();
 
   // Determine if buddy letters are needed based on assessment
@@ -169,6 +183,111 @@ Contact Information: _________________________
       timePeriod: '',
       statement: '',
     });
+  };
+
+  // Generate shareable witness template (first-person, for the witness to fill out)
+  const generateWitnessTemplate = () => {
+    const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    const witnessTypeLabel = witnessTemplate.witnessType === 'service-member' 
+      ? 'fellow service member' 
+      : witnessTemplate.witnessType === 'family' 
+        ? 'family member' 
+        : 'friend/acquaintance';
+    
+    return `📝 BUDDY STATEMENT REQUEST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Hi! ${witnessTemplate.veteranName || '[Veteran Name]'} is filing a VA disability claim for ${witnessTemplate.conditionName || '[Condition]'} and needs your help as a witness.
+
+You can handwrite or type your statement. Please use the template below.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 STATEMENT TEMPLATE (First Person)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BUDDY/LAY STATEMENT
+
+My name is [YOUR FULL NAME] and I am a ${witnessTypeLabel} of ${witnessTemplate.veteranName || '[Veteran Name]'}.
+
+I have known ${witnessTemplate.veteranName || '[Veteran Name]'} since [MONTH/YEAR YOU MET].
+
+${witnessTemplate.witnessType === 'service-member' ? `We served together at [UNIT/BASE NAME] from [START DATE] to [END DATE].
+
+During our service together, I personally witnessed the following:
+• [Describe specific incidents, injuries, or exposures you witnessed]
+• [Include dates and locations if you remember them]
+• [Describe any symptoms you observed]
+
+` : ''}I have personally observed ${witnessTemplate.veteranName || '[Veteran Name]'}'s ${witnessTemplate.conditionName || '[Condition]'} affect their daily life in the following ways:
+
+• [Describe specific symptoms you have witnessed - pain, difficulty walking, mood changes, sleep issues, etc.]
+• [Describe how often you observe these symptoms]
+• [Describe specific activities they can no longer do or struggle with]
+• [Describe any changes you've noticed over time]
+
+For example, on [SPECIFIC DATE OR TIME PERIOD], I observed [SPECIFIC INCIDENT OR BEHAVIOR].
+
+${witnessTemplate.serviceDates ? `${witnessTemplate.veteranName || 'The veteran'} served from ${witnessTemplate.serviceDates}.` : ''}
+
+I certify that the statements above are true and correct to the best of my knowledge and belief. I understand that making false statements is punishable by law.
+
+Signature: _________________________
+Printed Name: _________________________
+Date: ${today}
+Phone/Email: _________________________
+Address: _________________________
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ TIPS FOR YOUR STATEMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Be specific - include dates, times, and locations when possible
+• Describe what YOU personally saw, not what you were told
+• Focus on observable symptoms and behaviors
+• Explain how the condition affects daily activities
+• Don't make medical diagnoses - just describe what you witnessed
+• Sign and date your statement
+• Include your contact information
+
+Thank you for taking the time to help! Your statement could make a real difference.`;
+  };
+
+  const copyWitnessTemplate = async () => {
+    const text = generateWitnessTemplate();
+    try {
+      await navigator.clipboard.writeText(text);
+      toast({
+        title: 'Copied to Clipboard!',
+        description: 'Template is ready to paste in a text message or email.',
+      });
+    } catch {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      toast({
+        title: 'Copied!',
+        description: 'Template copied to clipboard.',
+      });
+    }
+  };
+
+  const shareWitnessTemplate = async () => {
+    const text = generateWitnessTemplate();
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Buddy Statement Request',
+          text: text,
+        });
+      } catch {
+        copyWitnessTemplate();
+      }
+    } else {
+      copyWitnessTemplate();
+    }
   };
 
   return (
@@ -331,6 +450,111 @@ Contact Information: _________________________
               </div>
             </CollapsibleContent>
           </Collapsible>
+        </CardContent>
+      </Card>
+
+      {/* Share Template with Witness Card */}
+      <Card className="border-blue-500/30 bg-blue-500/5">
+        <CardHeader className="pb-3">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
+              <MessageSquare className="h-5 w-5 text-blue-600" />
+            </div>
+            <div>
+              <CardTitle className="text-lg">Share Template with Witness</CardTitle>
+              <CardDescription>Send a first-person template they can handwrite or type</CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Fill in your info below, then copy and send the template to your witness via text or email. 
+            They can handwrite or type their statement using the template.
+          </p>
+          
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="veteranName">Your Name (Veteran)</Label>
+              <Input
+                id="veteranName"
+                placeholder="Your full name"
+                value={witnessTemplate.veteranName}
+                onChange={(e) => setWitnessTemplate(prev => ({ ...prev, veteranName: e.target.value }))}
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="conditionName">Condition Name</Label>
+              <Input
+                id="conditionName"
+                placeholder="e.g., PTSD, Lower Back Pain"
+                value={witnessTemplate.conditionName}
+                onChange={(e) => setWitnessTemplate(prev => ({ ...prev, conditionName: e.target.value }))}
+              />
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="serviceDates">Your Service Dates (Optional)</Label>
+              <Input
+                id="serviceDates"
+                placeholder="e.g., June 2010 - August 2018"
+                value={witnessTemplate.serviceDates}
+                onChange={(e) => setWitnessTemplate(prev => ({ ...prev, serviceDates: e.target.value }))}
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="witnessType">Witness Type</Label>
+              <Select
+                value={witnessTemplate.witnessType}
+                onValueChange={(value) => setWitnessTemplate(prev => ({ ...prev, witnessType: value }))}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="service-member">Fellow Service Member</SelectItem>
+                  <SelectItem value="family">Family Member</SelectItem>
+                  <SelectItem value="friend">Friend/Acquaintance</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Preview Toggle */}
+          <Collapsible open={showWitnessTemplate} onOpenChange={setShowWitnessTemplate}>
+            <CollapsibleTrigger asChild>
+              <Button variant="ghost" className="w-full justify-between px-3 py-2 h-auto bg-muted/50 hover:bg-muted">
+                <span className="text-sm font-medium">Preview Template</span>
+                <ChevronDown className={`h-4 w-4 transition-transform ${showWitnessTemplate ? 'rotate-180' : ''}`} />
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-3">
+              <div className="p-4 bg-background border rounded-lg max-h-64 overflow-y-auto">
+                <pre className="text-xs whitespace-pre-wrap font-mono text-muted-foreground">
+                  {generateWitnessTemplate()}
+                </pre>
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
+
+          {/* Action Buttons */}
+          <div className="flex gap-3">
+            <Button onClick={copyWitnessTemplate} className="flex-1">
+              <Copy className="h-4 w-4 mr-2" />
+              Copy Template to Send
+            </Button>
+            <Button onClick={shareWitnessTemplate} variant="outline">
+              <Share2 className="h-4 w-4 mr-2" />
+              Share
+            </Button>
+          </div>
+
+          <p className="text-xs text-muted-foreground text-center">
+            📱 Paste into any text message or email app to send to your witness
+          </p>
         </CardContent>
       </Card>
 
