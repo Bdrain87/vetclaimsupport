@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Calendar, Clock, MapPin, Bell, FileText, Plus, Trash2, Edit2, Check, AlertCircle, BookOpen, CalendarPlus, ChevronDown, Briefcase, Eye } from 'lucide-react';
+import { Calendar, Clock, MapPin, Bell, FileText, Plus, Trash2, Edit2, Check, AlertCircle, BookOpen, CalendarPlus, ChevronDown, Briefcase, Eye, Copy, Share2 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -213,6 +213,87 @@ export function CPExamScheduler({ onSelectTool }: CPExamSchedulerProps) {
     URL.revokeObjectURL(url);
     
     toast.success('Calendar file downloaded');
+  };
+
+  // Generate shareable exam prep text
+  const generateExamPrepText = (exam: ScheduledExam) => {
+    const examDate = format(exam.date, 'EEEE, MMMM d, yyyy');
+    
+    return `🩺 C&P EXAM REMINDER
+━━━━━━━━━━━━━━━━━━━━
+
+📋 Condition: ${exam.condition}
+📅 Date: ${examDate}
+🕐 Time: ${exam.time}
+${exam.location ? `📍 Location: ${exam.location}` : ''}
+${exam.examiner ? `👤 Examiner: ${exam.examiner}` : ''}
+
+━━━━━━━━━━━━━━━━━━━━
+📦 WHAT TO BRING
+━━━━━━━━━━━━━━━━━━━━
+✅ Valid photo ID (driver's license or military ID)
+✅ VA appointment letter or confirmation
+✅ List of all current medications
+✅ Medical records and buddy statements
+✅ Service treatment records if available
+✅ Notes about your worst symptom days
+
+━━━━━━━━━━━━━━━━━━━━
+👁️ WHAT TO EXPECT
+━━━━━━━━━━━━━━━━━━━━
+• Exam typically lasts 30-60 minutes
+• Examiner will review your medical history
+• Physical examination and range of motion tests
+• Questions about symptom frequency and severity
+• How condition affects daily life and work
+• Describe your WORST days, not average days
+
+━━━━━━━━━━━━━━━━━━━━
+⚠️ CRITICAL REMINDERS
+━━━━━━━━━━━━━━━━━━━━
+❌ Never say "I'm fine" or minimize symptoms
+✅ Be honest but focus on limitations, not abilities
+✅ Mention specific incidents and dates if possible
+✅ Don't exaggerate, but don't downplay either
+✅ Arrive 15-30 minutes early
+
+Good luck! 🍀`;
+  };
+
+  const copyExamPrep = async (exam: ScheduledExam) => {
+    const text = generateExamPrepText(exam);
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success('Copied to clipboard! Ready to paste in text or email.');
+    } catch {
+      // Fallback for older browsers
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      toast.success('Copied to clipboard!');
+    }
+  };
+
+  const shareExamPrep = async (exam: ScheduledExam) => {
+    const text = generateExamPrepText(exam);
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `C&P Exam - ${exam.condition}`,
+          text: text,
+        });
+      } catch (err) {
+        // User cancelled or share failed, fall back to copy
+        copyExamPrep(exam);
+      }
+    } else {
+      // No native share, just copy
+      copyExamPrep(exam);
+    }
   };
 
   const handleEdit = (exam: ScheduledExam) => {
@@ -528,6 +609,28 @@ export function CPExamScheduler({ onSelectTool }: CPExamSchedulerProps) {
                               <li>Don't exaggerate, but don't downplay either</li>
                               <li>Arrive 15-30 minutes early</li>
                             </ul>
+                          </div>
+
+                          {/* Copy/Share Buttons */}
+                          <div className="flex gap-2 pt-2">
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              className="flex-1"
+                              onClick={() => copyExamPrep(exam)}
+                            >
+                              <Copy className="h-4 w-4 mr-2" />
+                              Copy Tips
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              className="flex-1"
+                              onClick={() => shareExamPrep(exam)}
+                            >
+                              <Share2 className="h-4 w-4 mr-2" />
+                              Share
+                            </Button>
                           </div>
                         </CollapsibleContent>
                       </Collapsible>
