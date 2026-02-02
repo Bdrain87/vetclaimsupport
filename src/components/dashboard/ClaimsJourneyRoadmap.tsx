@@ -157,27 +157,27 @@ export function ClaimsJourneyRoadmap() {
   const overallProgress = Math.round(phases.reduce((sum, p) => sum + p.progress, 0) / phases.length);
 
   return (
-    <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-background overflow-hidden">
-      <CardHeader className="pb-3">
+    <Card className="border-0 bg-card overflow-hidden shadow-lg" style={{ boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)' }}>
+      <CardHeader className="pb-3 bg-gradient-to-r from-primary/10 via-transparent to-transparent">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-lg bg-primary/10">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 shadow-[0_0_20px_rgba(59,130,246,0.2)]">
               <MapPin className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <CardTitle className="text-base">Your Claims Journey</CardTitle>
-              <p className="text-xs text-muted-foreground">{overallProgress}% complete</p>
+              <CardTitle className="text-lg font-bold tracking-tight">Your Claims Journey</CardTitle>
+              <p className="text-sm text-muted-foreground">{overallProgress}% complete</p>
             </div>
           </div>
-          <Badge variant="outline" className="text-primary border-primary/30">
+          <div className="premium-badge-primary">
             Phase {currentPhase.number}
-          </Badge>
+          </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {/* Visual Progress Bar */}
-        <div className="relative">
-          <div className="flex items-center justify-between mb-2">
+      <CardContent className="space-y-5 pt-2">
+        {/* Visual Progress Bar - Premium Style */}
+        <div className="relative py-2">
+          <div className="flex items-center justify-between mb-3">
             {phases.map((phase, idx) => (
               <div
                 key={phase.id}
@@ -188,9 +188,9 @@ export function ClaimsJourneyRoadmap() {
               >
                 <div
                   className={cn(
-                    "flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all",
-                    phase.status === 'completed' && "bg-success border-success text-success-foreground",
-                    phase.status === 'current' && "bg-primary border-primary text-primary-foreground",
+                    "flex items-center justify-center w-11 h-11 rounded-full border-2 transition-all duration-300",
+                    phase.status === 'completed' && "bg-gradient-to-br from-[#22c55e] to-[#16a34a] border-transparent text-white shadow-[0_4px_16px_rgba(34,197,94,0.4)]",
+                    phase.status === 'current' && "bg-gradient-to-br from-[#3b82f6] to-[#2563eb] border-transparent text-white shadow-[0_4px_16px_rgba(59,130,246,0.4)] animate-pulse",
                     phase.status === 'upcoming' && "bg-muted border-border text-muted-foreground"
                   )}
                 >
@@ -201,18 +201,19 @@ export function ClaimsJourneyRoadmap() {
                   )}
                 </div>
                 <span className={cn(
-                  "text-[10px] mt-1 text-center max-w-[60px]",
-                  phase.status === 'current' ? "text-primary font-medium" : "text-muted-foreground"
+                  "text-[11px] mt-1.5 text-center max-w-[65px] font-medium",
+                  phase.status === 'current' ? "text-primary" : 
+                  phase.status === 'completed' ? "text-success" : "text-muted-foreground"
                 )}>
                   {phase.title}
                 </span>
               </div>
             ))}
           </div>
-          {/* Connecting line */}
-          <div className="absolute top-5 left-5 right-5 h-0.5 bg-border -z-0">
+          {/* Connecting line - Premium gradient */}
+          <div className="absolute top-[26px] left-6 right-6 h-1 bg-border rounded-full -z-0 overflow-hidden">
             <div 
-              className="h-full bg-primary transition-all duration-500"
+              className="h-full bg-gradient-to-r from-[#22c55e] via-[#3b82f6] to-[#3b82f6] transition-all duration-700 ease-out rounded-full"
               style={{ width: `${overallProgress}%` }}
             />
           </div>

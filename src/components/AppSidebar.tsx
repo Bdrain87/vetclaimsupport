@@ -149,16 +149,16 @@ export function AppSidebar() {
               'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
               'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground hover:translate-x-1',
               'min-h-[44px]',
-              location.pathname === '/' && 'bg-primary/10 text-primary',
+              location.pathname === '/' && 'bg-gradient-to-r from-primary/15 to-primary/5 text-primary border border-primary/20',
               collapsed && 'justify-center px-2 hover:translate-x-0'
             )}
             title={collapsed ? 'Dashboard' : undefined}
           >
             {location.pathname === '/' && (
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]" />
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-7 bg-gradient-to-b from-primary to-primary/60 rounded-r-full shadow-[0_0_12px_rgba(59,130,246,0.5)]" />
             )}
-            <LayoutDashboard className={cn('h-5 w-5 flex-shrink-0 transition-transform duration-200', location.pathname === '/' && 'text-primary')} />
-            {!collapsed && <span>Dashboard</span>}
+            <LayoutDashboard className={cn('h-5 w-5 flex-shrink-0 transition-transform duration-200', location.pathname === '/' && 'text-primary drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]')} />
+            {!collapsed && <span className="font-semibold">Dashboard</span>}
           </NavLink>
         </div>
 
@@ -225,10 +225,10 @@ export function AppSidebar() {
                               'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground',
                               'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
                               'hover:translate-x-1',
-                              isItemActive && 'bg-primary/10 text-primary font-medium'
+                              isItemActive && 'bg-gradient-to-r from-primary/15 to-transparent text-primary font-medium border-l-2 border-primary'
                             )}
                           >
-                            <item.icon className={cn('h-4 w-4 flex-shrink-0 transition-transform duration-200', isItemActive && 'text-primary')} />
+                            <item.icon className={cn('h-4 w-4 flex-shrink-0 transition-transform duration-200', isItemActive && 'text-primary drop-shadow-[0_0_6px_rgba(59,130,246,0.4)]')} />
                             <span>{item.label}</span>
                           </NavLink>
                         </li>

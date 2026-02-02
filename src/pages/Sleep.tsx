@@ -204,51 +204,57 @@ export default function Sleep() {
 
   return (
     <div className="space-y-6 animate-fade-in overflow-x-hidden max-w-full">
-      {/* VA Rating Info */}
-      <Alert className="border-primary/50 bg-primary/10">
-        <Moon className="h-5 w-5 text-primary" />
-        <AlertTitle className="text-primary font-semibold">VA Sleep Apnea Ratings (38 CFR 4.97 DC 6847)</AlertTitle>
-        <AlertDescription className="text-foreground/90 mt-2">
-          <div className="grid grid-cols-2 gap-2 text-xs mt-2">
-            <div className="bg-background/50 rounded p-2">
-              <span className="font-bold text-muted-foreground">0%</span>
-              <p>Asymptomatic, documented</p>
-            </div>
-            <div className="bg-background/50 rounded p-2">
-              <span className="font-bold text-orange-500">30%</span>
-              <p>Persistent daytime sleepiness</p>
-            </div>
-            <div className="bg-background/50 rounded p-2">
-              <span className="font-bold text-warning">50%</span>
-              <p>Requires CPAP machine</p>
-            </div>
-            <div className="bg-background/50 rounded p-2">
-              <span className="font-bold text-destructive">100%</span>
-              <p>Chronic respiratory failure</p>
-            </div>
-          </div>
-        </AlertDescription>
-      </Alert>
-
-      {/* Header */}
+      {/* Premium Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="section-header mb-0">
-          <div className="section-icon bg-indigo-500/10">
-            <Moon className="h-5 w-5 text-indigo-500" />
+        <div className="flex items-center gap-4">
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-indigo-500/5 shadow-[0_0_24px_rgba(99,102,241,0.2)]">
+            <Moon className="h-6 w-6 text-indigo-400 drop-shadow-[0_0_8px_rgba(99,102,241,0.5)]" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Sleep Tracker</h1>
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">Sleep Tracker</h1>
             <p className="text-muted-foreground text-sm">VA-aligned sleep apnea evidence logging</p>
           </div>
         </div>
+      </div>
 
-        <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
-          <DialogTrigger asChild>
-            <Button className="gap-2">
-              <Plus className="h-4 w-4" />
-              Log Sleep
-            </Button>
-          </DialogTrigger>
+      {/* VA Rating Info - Premium Card */}
+      <div className="rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/30 p-5 shadow-lg" style={{ boxShadow: '0 4px 24px rgba(59, 130, 246, 0.15)' }}>
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-2 rounded-xl bg-primary/20">
+            <Moon className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <h3 className="font-bold text-foreground">VA Sleep Apnea Ratings</h3>
+            <p className="text-xs text-muted-foreground">38 CFR 4.97 DC 6847</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-3 text-xs">
+          <div className="bg-background/60 rounded-xl p-3 border border-border/50">
+            <span className="font-bold text-muted-foreground text-lg">0%</span>
+            <p className="text-muted-foreground mt-1">Asymptomatic, documented</p>
+          </div>
+          <div className="bg-background/60 rounded-xl p-3 border border-orange-500/30">
+            <span className="font-bold text-orange-400 text-lg">30%</span>
+            <p className="text-muted-foreground mt-1">Persistent daytime sleepiness</p>
+          </div>
+          <div className="bg-background/60 rounded-xl p-3 border border-warning/30">
+            <span className="font-bold text-warning text-lg">50%</span>
+            <p className="text-muted-foreground mt-1">Requires CPAP machine</p>
+          </div>
+          <div className="bg-background/60 rounded-xl p-3 border border-destructive/30">
+            <span className="font-bold text-destructive text-lg">100%</span>
+            <p className="text-muted-foreground mt-1">Chronic respiratory failure</p>
+          </div>
+      </div>
+
+      {/* Add Log Button */}
+      <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
+        <DialogTrigger asChild>
+          <Button className="gap-2 bg-gradient-to-r from-primary to-primary/90 shadow-[0_4px_16px_rgba(59,130,246,0.3)]">
+            <Plus className="h-4 w-4" />
+            Log Sleep
+          </Button>
+        </DialogTrigger>
           <DialogContent className="max-w-lg max-h-[90vh] flex flex-col">
             <DialogHeader>
               <DialogTitle>{editingId ? 'Edit Sleep Entry' : 'Log Sleep'}</DialogTitle>

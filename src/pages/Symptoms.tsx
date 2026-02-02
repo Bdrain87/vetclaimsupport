@@ -288,41 +288,43 @@ export default function Symptoms() {
 
   return (
     <div className="space-y-6 animate-fade-in overflow-x-hidden max-w-full">
-      {/* Header */}
+      {/* Header - Premium Styling */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="section-header mb-0">
-          <div className="section-icon bg-symptoms/10">
-            <Activity className="h-5 w-5 text-symptoms" />
+        <div className="flex items-center gap-4">
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-success/20 to-success/5 shadow-[0_0_24px_rgba(34,197,94,0.2)]">
+            <Activity className="h-6 w-6 text-success drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Symptoms Journal</h1>
-            <p className="text-muted-foreground text-sm">Track symptoms for any condition - for C&P exam documentation</p>
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">Symptoms Journal</h1>
+            <p className="text-muted-foreground text-sm">Track symptoms for any condition — for C&P exam documentation</p>
           </div>
         </div>
 
         <div className="flex gap-2 flex-shrink-0">
-          <Button variant="outline" onClick={() => exportSymptoms(data.symptoms)} className="gap-2 hidden sm:flex">
+          <Button variant="outline" onClick={() => exportSymptoms(data.symptoms)} className="gap-2 hidden sm:flex border-border/50 hover:bg-muted">
             <Download className="h-4 w-4" />
             Export PDF
           </Button>
         </div>
       </div>
 
-      {/* Analytics Dashboard */}
+      {/* Analytics Dashboard - Premium Cards */}
       {data.symptoms.length > 0 && (
         <div className="grid gap-4 md:grid-cols-2">
           {/* Severity Trend Chart */}
-          <Card className="data-card group hover:border-primary/20 transition-all duration-300">
-            <CardHeader className="pb-2">
-              <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                  <TrendingUp className="h-4 w-4 text-primary" />
+          <div className="rounded-2xl bg-card border border-border overflow-hidden shadow-lg" style={{ boxShadow: '0 8px 32px rgba(0, 0, 0, 0.25)' }}>
+            <div className="p-4 border-b border-border/50 bg-gradient-to-r from-primary/5 via-transparent to-transparent">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5">
+                  <TrendingUp className="h-5 w-5 text-primary" />
                 </div>
-                <CardTitle className="text-sm font-semibold">Severity Trend</CardTitle>
+                <div>
+                  <h3 className="text-sm font-bold text-foreground">Severity Trend</h3>
+                  <p className="text-xs text-muted-foreground">Average severity over time</p>
+                </div>
               </div>
-              <CardDescription className="text-xs">Average severity over time</CardDescription>
-            </CardHeader>
-            <CardContent>
+            </div>
+            <div className="p-4">
               {severityTrendData.length > 0 ? (
                 <ResponsiveContainer width="100%" height={120}>
                   <LineChart data={severityTrendData}>
@@ -333,37 +335,39 @@ export default function Symptoms() {
                         backgroundColor: 'hsl(var(--card))', 
                         border: '1px solid hsl(var(--border))',
                         borderRadius: '12px',
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                        boxShadow: '0 8px 24px rgba(0,0,0,0.3)'
                       }} 
                     />
                     <Line 
                       type="monotone" 
                       dataKey="avgSeverity" 
-                      stroke="hsl(var(--primary))" 
-                      strokeWidth={2.5}
-                      dot={{ fill: 'hsl(var(--primary))', strokeWidth: 0, r: 4 }}
-                      activeDot={{ r: 6, fill: 'hsl(var(--primary))', stroke: 'hsl(var(--background))', strokeWidth: 2 }}
+                      stroke="#3b82f6" 
+                      strokeWidth={3}
+                      dot={{ fill: '#3b82f6', strokeWidth: 0, r: 4 }}
+                      activeDot={{ r: 6, fill: '#3b82f6', stroke: 'hsl(var(--background))', strokeWidth: 2 }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
               ) : (
                 <p className="text-sm text-muted-foreground text-center py-8">No data in selected range</p>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Condition Frequency */}
-          <Card className="data-card group hover:border-primary/20 transition-all duration-300">
-            <CardHeader className="pb-2">
-              <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                  <BarChart3 className="h-4 w-4 text-primary" />
+          <div className="rounded-2xl bg-card border border-border overflow-hidden shadow-lg" style={{ boxShadow: '0 8px 32px rgba(0, 0, 0, 0.25)' }}>
+            <div className="p-4 border-b border-border/50 bg-gradient-to-r from-success/5 via-transparent to-transparent">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-gradient-to-br from-success/20 to-success/5">
+                  <BarChart3 className="h-5 w-5 text-success" />
                 </div>
-                <CardTitle className="text-sm font-semibold">Entries by Condition</CardTitle>
+                <div>
+                  <h3 className="text-sm font-bold text-foreground">Entries by Condition</h3>
+                  <p className="text-xs text-muted-foreground">Most logged conditions</p>
+                </div>
               </div>
-              <CardDescription className="text-xs">Most logged conditions</CardDescription>
-            </CardHeader>
-            <CardContent>
+            </div>
+            <div className="p-4">
               {conditionStats.length > 0 ? (
                 <ResponsiveContainer width="100%" height={120}>
                   <BarChart data={conditionStats} layout="vertical">
@@ -374,21 +378,21 @@ export default function Symptoms() {
                         backgroundColor: 'hsl(var(--card))', 
                         border: '1px solid hsl(var(--border))',
                         borderRadius: '12px',
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                        boxShadow: '0 8px 24px rgba(0,0,0,0.3)'
                       }}
                       formatter={(value: number, name: string) => [
                         name === 'count' ? `${value} entries` : `Avg: ${value}/10`,
                         name === 'count' ? 'Frequency' : 'Severity'
                       ]}
                     />
-                    <Bar dataKey="count" fill="hsl(var(--primary))" radius={[0, 6, 6, 0]} />
+                    <Bar dataKey="count" fill="#22c55e" radius={[0, 6, 6, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
                 <p className="text-sm text-muted-foreground text-center py-8">No data available</p>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       )}
 
