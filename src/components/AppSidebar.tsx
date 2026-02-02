@@ -111,23 +111,29 @@ export function AppSidebar() {
     <aside
       className={cn(
         'fixed left-0 top-0 z-40 h-screen border-r flex flex-col',
-        'bg-sidebar-background border-sidebar-border',
+        'border-sidebar-border',
         'transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]',
+        // Premium gradient background
+        'bg-gradient-to-b from-sidebar-background via-sidebar-background to-[hsl(220_20%_5%)]',
         collapsed ? 'w-16' : 'w-64'
       )}
+      style={{
+        boxShadow: 'inset -1px 0 0 hsl(var(--border) / 0.3), 4px 0 24px -4px hsl(0 0% 0% / 0.3)'
+      }}
     >
-      {/* Header */}
+      {/* Header with subtle gradient */}
       <div className={cn(
-        'flex items-center gap-3 px-4 py-5 border-b border-sidebar-border transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
+        'flex items-center gap-3 px-4 py-5 border-b border-sidebar-border/50 transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
+        'bg-gradient-to-r from-transparent via-primary/[0.02] to-transparent',
         collapsed && 'justify-center px-2'
       )}>
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/20 shadow-[0_0_20px_hsl(211_100%_50%/0.2)] transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-105">
-          <ShieldCheck className="h-5 w-5 text-primary" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary/25 to-primary/10 shadow-[0_0_24px_hsl(217_91%_60%/0.25)] transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-105 hover:shadow-[0_0_32px_hsl(217_91%_60%/0.35)]">
+          <ShieldCheck className="h-5 w-5 text-primary drop-shadow-[0_0_8px_hsl(217_91%_60%/0.5)]" />
         </div>
         {!collapsed && (
           <div className="flex flex-col animate-fade-in">
             <span className="font-semibold text-foreground text-sm tracking-tight">Vet Claim</span>
-            <span className="text-xs text-sidebar-muted">Support</span>
+            <span className="text-xs text-sidebar-muted font-medium">Support</span>
           </div>
         )}
       </div>
