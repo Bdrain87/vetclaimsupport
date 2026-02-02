@@ -1,4 +1,4 @@
-import { ShieldCheck, Star, CheckCircle2, Smartphone } from 'lucide-react';
+import { ShieldCheck, CheckCircle2, Smartphone, Lock, Wifi, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function AppStoreLandingPage() {
@@ -23,18 +23,17 @@ export function AppStoreLandingPage() {
           Vet Claim Support
         </h1>
         
-        <p className="text-lg sm:text-xl text-slate-400 mb-8 max-w-lg animate-fade-in">
-          The #1 app for tracking and organizing your VA disability claim evidence
+        <p className="text-lg sm:text-xl text-slate-400 mb-4 max-w-lg animate-fade-in">
+          Track and organize your VA disability claim evidence with confidence
         </p>
 
-        {/* Rating Stars */}
-        <div className="flex items-center gap-2 mb-8 animate-fade-in">
-          <div className="flex">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <Star key={star} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-            ))}
-          </div>
-          <span className="text-slate-400 text-sm">4.9 • 2K+ Ratings</span>
+        {/* Coming Soon Badge */}
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary mb-8 animate-fade-in">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+          </span>
+          <span className="text-sm font-medium">Coming Soon to the App Store</span>
         </div>
 
         {/* App Store Button */}
@@ -53,9 +52,9 @@ export function AppStoreLandingPage() {
         {/* Features Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl animate-fade-in">
           {[
-            { icon: CheckCircle2, title: 'Track Everything', desc: 'Medical visits, symptoms, medications & more' },
-            { icon: ShieldCheck, title: 'Build Your Claim', desc: 'Organize evidence for each condition' },
-            { icon: Smartphone, title: 'Private & Secure', desc: 'All data stays on your device' },
+            { icon: Lock, title: 'Privacy-First', desc: 'Your data stays on your device, always secure and private' },
+            { icon: Wifi, title: 'Offline-Ready', desc: 'Full functionality without internet connection' },
+            { icon: Heart, title: 'Built for Veterans', desc: 'Designed by those who understand the claims process' },
           ].map((feature) => (
             <div key={feature.title} className="flex flex-col items-center p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
               <feature.icon className="h-8 w-8 text-primary mb-3" />
