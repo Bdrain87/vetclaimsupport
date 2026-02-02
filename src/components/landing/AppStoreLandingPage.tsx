@@ -1,5 +1,6 @@
-import { ShieldCheck, CheckCircle2, Smartphone, Lock, Wifi, Heart } from 'lucide-react';
+import { ShieldCheck, Lock, Wifi, Heart, Medal, Flag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 export function AppStoreLandingPage() {
   const appStoreUrl = 'https://apps.apple.com/app/vet-claim-support'; // Replace with actual App Store URL
@@ -7,9 +8,9 @@ export function AppStoreLandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex flex-col">
       {/* Hero Section */}
-      <div className="flex-1 flex flex-col items-center justify-center px-6 py-16 text-center">
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 text-center">
         {/* Logo */}
-        <div className="mb-8 animate-fade-in">
+        <div className="mb-6 animate-fade-in">
           <div className="relative">
             <div className="absolute inset-0 bg-primary/30 blur-3xl rounded-full scale-150" />
             <div className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30 shadow-2xl shadow-primary/20">
@@ -28,7 +29,7 @@ export function AppStoreLandingPage() {
         </p>
 
         {/* Coming Soon Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary mb-8 animate-fade-in">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary mb-6 animate-fade-in">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
@@ -36,8 +37,44 @@ export function AppStoreLandingPage() {
           <span className="text-sm font-medium">Coming Soon to the App Store</span>
         </div>
 
+        {/* Introductory Pricing Section */}
+        <div className="mb-8 animate-fade-in">
+          <div className="relative inline-block">
+            {/* Save 50% Badge */}
+            <div className="absolute -top-3 -right-3 z-10">
+              <Badge className="bg-gradient-to-r from-emerald-500 to-green-600 text-white border-0 shadow-lg shadow-emerald-500/30 text-xs font-bold px-2 py-1">
+                SAVE 50%
+              </Badge>
+            </div>
+            
+            <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/10 rounded-2xl px-8 py-6">
+              {/* Launch Price */}
+              <div className="flex items-baseline justify-center gap-1 mb-1">
+                <span className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-primary via-blue-400 to-primary bg-clip-text text-transparent">
+                  $4.99
+                </span>
+              </div>
+              
+              {/* Regular Price Strikethrough */}
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <span className="text-slate-500 line-through text-lg">$9.99</span>
+                <span className="text-slate-400 text-sm">regular price</span>
+              </div>
+              
+              {/* Urgency Message */}
+              <div className="flex items-center justify-center gap-2 text-amber-400">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
+                </span>
+                <span className="text-sm font-medium">Limited Time Launch Offer</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* App Store Button */}
-        <a href={appStoreUrl} target="_blank" rel="noopener noreferrer" className="mb-12">
+        <a href={appStoreUrl} target="_blank" rel="noopener noreferrer" className="mb-8">
           <Button
             size="lg"
             className="h-16 px-8 text-lg font-semibold bg-white hover:bg-slate-100 text-black rounded-2xl gap-3 shadow-xl shadow-white/10 transition-all hover:scale-105"
@@ -48,6 +85,28 @@ export function AppStoreLandingPage() {
             Download on the App Store
           </Button>
         </a>
+
+        {/* Built by Veteran Badge */}
+        <div className="mb-10 animate-fade-in">
+          <div className="inline-flex flex-col items-center gap-3 px-6 py-4 rounded-2xl bg-gradient-to-br from-amber-900/20 to-amber-950/10 border border-amber-700/30">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center h-10 w-10 rounded-full bg-amber-600/20 border border-amber-600/30">
+                <Medal className="h-5 w-5 text-amber-500" />
+              </div>
+              <div className="text-left">
+                <p className="text-amber-100 font-semibold text-sm sm:text-base">
+                  Proudly Built by a 100% Disabled Veteran
+                </p>
+                <p className="text-amber-200/60 text-xs sm:text-sm">
+                  Made by veterans, for veterans
+                </p>
+              </div>
+              <div className="flex items-center justify-center h-10 w-10 rounded-full bg-amber-600/20 border border-amber-600/30">
+                <Flag className="h-5 w-5 text-amber-500" />
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Features Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl animate-fade-in">
