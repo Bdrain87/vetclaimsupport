@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocation, useNavigate, NavLink } from 'react-router-dom';
-import { ArrowLeft, ShieldCheck, Menu, X, LayoutDashboard, Activity, Brain, Moon, Pill, Shield, AlertTriangle, Stethoscope, FileArchive, FileCheck, Users, Clock, Wrench, ClipboardCheck, Briefcase, BookOpen, Settings, Heart } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, Menu, X, LayoutDashboard, Activity, Brain, Moon, Pill, Shield, AlertTriangle, Stethoscope, FileArchive, FileCheck, Users, Clock, Wrench, ClipboardCheck, Briefcase, BookOpen, Settings, Heart, FolderOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { cn } from '@/lib/utils';
@@ -16,6 +16,7 @@ const pageLabels: Record<string, string> = {
   '/migraines': 'Migraines',
   '/sleep': 'Sleep',
   '/documents': 'Documents',
+  '/claim-documents': 'Claim Documents',
   '/evidence-library': 'Evidence Library',
   '/buddy-contacts': 'Buddy Contacts',
   '/timeline': 'Timeline',
@@ -37,8 +38,9 @@ const navItems = [
   { to: '/service-history', icon: Shield, label: 'Service History' },
   { to: '/exposures', icon: AlertTriangle, label: 'Exposures' },
   { to: '/medical-visits', icon: Stethoscope, label: 'Medical Visits' },
+  { to: '/claim-documents', icon: FolderOpen, label: 'Claim Documents' },
   { to: '/evidence-library', icon: FileArchive, label: 'Evidence Library' },
-  { to: '/documents', icon: FileCheck, label: 'Documents' },
+  { to: '/documents', icon: FileCheck, label: 'Documents Checklist' },
   { to: '/buddy-contacts', icon: Users, label: 'Buddy Contacts' },
   { to: '/timeline', icon: Clock, label: 'Timeline' },
   { to: '/claim-tools', icon: Wrench, label: 'Claim Tools' },
