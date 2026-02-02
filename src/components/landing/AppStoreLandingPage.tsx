@@ -1,4 +1,4 @@
-import { ShieldCheck, Lock, Wifi, Medal, Flag, Activity, FileText, FolderOpen, MapPin, Moon, Pill, Upload, Users, Clock, ClipboardCheck, History, Database, Heart, BookOpen } from 'lucide-react';
+import { ShieldCheck, Lock, Wifi, Medal, Flag, Activity, FileText, FolderOpen, MapPin, Moon, Pill, Upload, Users, Clock, ClipboardCheck, History, Database, Heart, BookOpen, Stethoscope, ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
@@ -158,6 +158,58 @@ export function AppStoreLandingPage() {
         {/* Comprehensive Feature Showcase */}
         <div className="w-full max-w-5xl animate-fade-in">
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-8 text-center">Everything You Need</h2>
+          
+          {/* Symptom Checker Feature Highlight */}
+          <div className="mb-8 relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500/20 via-teal-500/15 to-cyan-500/20 border border-emerald-500/30 p-6 sm:p-8">
+            {/* Decorative elements */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-emerald-400/20 to-transparent rounded-full blur-2xl" />
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-teal-400/20 to-transparent rounded-full blur-xl" />
+            
+            <div className="relative flex flex-col lg:flex-row items-center gap-6">
+              {/* Icon */}
+              <div className="flex-shrink-0">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-emerald-400/30 blur-xl rounded-full scale-150" />
+                  <div className="relative flex items-center justify-center h-20 w-20 rounded-2xl bg-gradient-to-br from-emerald-500/30 to-teal-500/20 border border-emerald-400/40 shadow-lg shadow-emerald-500/20">
+                    <Stethoscope className="h-10 w-10 text-emerald-400" />
+                  </div>
+                </div>
+              </div>
+              
+              {/* Content */}
+              <div className="flex-1 text-center lg:text-left">
+                <div className="flex items-center justify-center lg:justify-start gap-2 mb-2">
+                  <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-400/30 text-xs font-semibold">
+                    <Sparkles className="h-3 w-3 mr-1" />
+                    NEW FEATURE
+                  </Badge>
+                </div>
+                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3">
+                  Symptom Checker
+                </h3>
+                <p className="text-slate-300 text-base sm:text-lg mb-4 max-w-2xl">
+                  Enter your symptoms and discover potential <span className="text-emerald-400 font-semibold">VA-ratable conditions</span> you may qualify for. 
+                  Our smart analyzer also suggests <span className="text-teal-400 font-semibold">secondary conditions</span> that could increase your combined rating.
+                </p>
+                
+                {/* Feature bullets */}
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3">
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
+                    <ArrowRight className="h-3.5 w-3.5 text-emerald-400" />
+                    <span className="text-sm text-slate-300">Match symptoms to conditions</span>
+                  </div>
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
+                    <ArrowRight className="h-3.5 w-3.5 text-teal-400" />
+                    <span className="text-sm text-slate-300">Find secondary connections</span>
+                  </div>
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
+                    <ArrowRight className="h-3.5 w-3.5 text-cyan-400" />
+                    <span className="text-sm text-slate-300">Maximize your rating</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           
           {/* Feature Categories Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
