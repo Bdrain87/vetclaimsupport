@@ -245,7 +245,7 @@ export default function EvidenceDocs() {
           <div>
             <h1 className="text-xl sm:text-2xl font-bold text-foreground">Evidence & Documents</h1>
             <p className="text-muted-foreground text-sm">
-              Upload, categorize, and manage your VA claim evidence
+              Upload, categorize, and manage your claim evidence
             </p>
           </div>
         </div>

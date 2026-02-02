@@ -10,7 +10,7 @@ export default function Privacy() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Privacy Policy</h1>
-          <p className="text-muted-foreground">Service Evidence Tracker</p>
+          <p className="text-muted-foreground">Vet Claim Support</p>
         </div>
       </div>
 
@@ -22,7 +22,7 @@ export default function Privacy() {
           <section>
             <h2 className="text-lg font-semibold text-foreground mb-3">1. Summary</h2>
             <p className="text-muted-foreground">
-              Service Evidence Tracker is designed so your claim-related information stays on your device. 
+              Vet Claim Support is designed so your claim-related information stays on your device. 
               We do not collect, store, or sell your personal data.
             </p>
           </section>

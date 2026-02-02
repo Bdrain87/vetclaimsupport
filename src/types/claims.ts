@@ -1,4 +1,4 @@
-// Types for Service Evidence Tracker
+// Types for Vet Claim Support
 
 export interface MedicalVisit {
   id: string;
