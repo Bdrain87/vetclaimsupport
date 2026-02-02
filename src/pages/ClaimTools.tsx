@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { 
   FileText, Scale, ClipboardList, Stethoscope, Calculator, Users, 
   BookOpen, Gavel, Printer, FileSignature, TrendingUp, ShieldAlert, 
-  DollarSign, Wrench, Link2, Target, CalendarClock
+  DollarSign, Wrench, Link2, Target
 } from 'lucide-react';
 import { PersonalStatementGenerator } from '@/components/tools/PersonalStatementGenerator';
 import { DBQRatingReference } from '@/components/tools/DBQRatingReference';
@@ -20,7 +20,6 @@ import { NexusLetterGenerator } from '@/components/tools/NexusLetterGenerator';
 import { RatingIncreaseAnalyzer } from '@/components/tools/RatingIncreaseAnalyzer';
 import { StressorStatementGenerator } from '@/components/tools/StressorStatementGenerator';
 import { BackPayEstimator } from '@/components/tools/BackPayEstimator';
-import { CPExamScheduler } from '@/components/tools/CPExamScheduler';
 import { DisclaimerNotice } from '@/components/shared/DisclaimerNotice';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -79,13 +78,6 @@ const tools: Tool[] = [
     name: 'C&P Exam Prep Guide',
     icon: Stethoscope,
     description: 'Interactive exam prep with practice answer writing. Includes first-person templates, specific date guidance, and your logged symptom data.',
-    category: 'Exam Prep',
-  },
-  {
-    id: 'exam-scheduler',
-    name: 'C&P Exam Scheduler',
-    icon: CalendarClock,
-    description: 'Schedule and track your C&P exam appointments. Set reminders, add location details, and never miss an important exam date.',
     category: 'Exam Prep',
   },
   {
@@ -177,8 +169,6 @@ export default function ClaimTools() {
         return <DBQAppointmentSummary />;
       case 'exam-prep':
         return <EnhancedCPExamPrepGuide />;
-      case 'exam-scheduler':
-        return <CPExamScheduler onSelectTool={handleToolSelect} />;
       case 'secondary-suggester':
         return <SmartSecondaryConditionsSuggester />;
       case 'criteria':

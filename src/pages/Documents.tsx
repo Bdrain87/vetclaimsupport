@@ -183,22 +183,22 @@ export default function Documents() {
                         <Button
                           variant="outline"
                           size="icon"
-                          className="h-8 w-8"
+                          className="h-12 w-12 min-h-[48px] min-w-[48px]"
                           onClick={() => handleDecrement(doc)}
                           disabled={(doc.count || 0) === 0}
                         >
-                          <Minus className="h-4 w-4" />
+                          <Minus className="h-5 w-5" />
                         </Button>
-                        <div className="w-10 text-center font-mono text-sm">
+                        <div className="w-12 text-center font-mono text-base">
                           {doc.count || 0}
                         </div>
                         <Button
                           variant="outline"
                           size="icon"
-                          className="h-8 w-8"
+                          className="h-12 w-12 min-h-[48px] min-w-[48px]"
                           onClick={() => handleIncrement(doc)}
                         >
-                          <Plus className="h-4 w-4" />
+                          <Plus className="h-5 w-5" />
                         </Button>
                       </div>
 
@@ -206,12 +206,12 @@ export default function Documents() {
                         value={doc.status} 
                         onValueChange={(value: typeof statuses[number]) => updateDocument(doc.id, { status: value })}
                       >
-                        <SelectTrigger className="w-[140px]">
+                        <SelectTrigger className="w-[140px] h-12 min-h-[48px]">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
                           {statuses.map((status) => (
-                            <SelectItem key={status} value={status}>{status}</SelectItem>
+                            <SelectItem key={status} value={status} className="min-h-[44px]">{status}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -220,7 +220,7 @@ export default function Documents() {
                         placeholder="Notes..."
                         value={doc.notes}
                         onChange={(e) => updateDocument(doc.id, { notes: e.target.value })}
-                        className="w-full sm:w-[200px]"
+                        className="w-full sm:w-[200px] h-12 min-h-[48px]"
                       />
                     </div>
                   </div>
