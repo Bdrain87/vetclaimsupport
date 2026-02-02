@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { 
   FileText, Scale, ClipboardList, Stethoscope, Calculator, Users, 
   BookOpen, Gavel, Printer, FileSignature, TrendingUp, ShieldAlert, 
-  DollarSign, Wrench
+  DollarSign, Wrench, Link2, Target
 } from 'lucide-react';
 import { PersonalStatementGenerator } from '@/components/tools/PersonalStatementGenerator';
 import { DBQRatingReference } from '@/components/tools/DBQRatingReference';
@@ -10,6 +10,9 @@ import { DBQGuidance } from '@/components/tools/DBQGuidance';
 import { DBQAppointmentSummary } from '@/components/tools/DBQAppointmentSummary';
 import { ConditionSpecificChecklist } from '@/components/tools/ConditionSpecificChecklist';
 import { CPExamPrepGuide } from '@/components/tools/CPExamPrepGuide';
+import { EnhancedCPExamPrepGuide } from '@/components/tools/EnhancedCPExamPrepGuide';
+import { EnhancedEvidenceChecklist } from '@/components/tools/EnhancedEvidenceChecklist';
+import { SmartSecondaryConditionsSuggester } from '@/components/tools/SmartSecondaryConditionsSuggester';
 import { RatingCalculator } from '@/components/dashboard/RatingCalculator';
 import { BuddyStatementGenerator } from '@/components/tools/BuddyStatementGenerator';
 import { AppealStrategyAdvisor } from '@/components/tools/AppealStrategyAdvisor';
@@ -74,8 +77,15 @@ const tools: Tool[] = [
     id: 'exam-prep',
     name: 'C&P Exam Prep Guide',
     icon: Stethoscope,
-    description: 'Condition-specific preparation guide for your Compensation & Pension exam, including what to expect, what to bring, and how to describe symptoms.',
+    description: 'Interactive exam prep with practice answer writing. Includes first-person templates, specific date guidance, and your logged symptom data.',
     category: 'Exam Prep',
+  },
+  {
+    id: 'secondary-suggester',
+    name: 'Secondary Conditions Suggester',
+    icon: Link2,
+    description: 'Smart suggestions for secondary conditions based on your claimed conditions. Includes first-person statement templates and action steps.',
+    category: 'Claim Strategy',
   },
   {
     id: 'criteria',
@@ -94,8 +104,8 @@ const tools: Tool[] = [
   {
     id: 'checklist',
     name: 'Evidence Checklist',
-    icon: ClipboardList,
-    description: 'Get a customized checklist of evidence and documentation needed for your specific claimed condition.',
+    icon: Target,
+    description: 'Interactive checklist showing what evidence you have vs. what\'s missing. Includes first-person writing tips and statement templates.',
     category: 'Reference',
   },
   {
@@ -158,13 +168,15 @@ export default function ClaimTools() {
       case 'dbq-summary':
         return <DBQAppointmentSummary />;
       case 'exam-prep':
-        return <CPExamPrepGuide initialCondition={conditionParam || undefined} />;
+        return <EnhancedCPExamPrepGuide />;
+      case 'secondary-suggester':
+        return <SmartSecondaryConditionsSuggester />;
       case 'criteria':
         return <DBQRatingReference />;
       case 'dbq-guidance':
         return <DBQGuidance />;
       case 'checklist':
-        return <ConditionSpecificChecklist />;
+        return <EnhancedEvidenceChecklist />;
       case 'increase':
         return <RatingIncreaseAnalyzer />;
       case 'appeal':
