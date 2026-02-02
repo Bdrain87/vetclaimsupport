@@ -69,14 +69,14 @@ export function MobileHeader() {
       "border-b border-border",
       "safe-area-top"
     )}>
-      <div className="flex items-center justify-between px-3 h-12">
+      <div className="flex items-center justify-between px-3 h-14">
         {/* Left side - Hamburger Menu */}
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
             <Button 
               variant="ghost" 
               size="sm" 
-              className="h-10 w-10 p-0"
+              className="h-12 w-12 min-h-[48px] min-w-[48px] p-0"
               aria-label="Open navigation menu"
             >
               <Menu className="h-5 w-5" />
@@ -150,7 +150,7 @@ export function MobileHeader() {
               variant="ghost"
               size="sm"
               onClick={handleBack}
-              className="h-10 w-10 p-0"
+              className="h-12 w-12 min-h-[48px] min-w-[48px] p-0"
               aria-label="Go back to dashboard"
             >
               <ArrowLeft className="h-5 w-5" />

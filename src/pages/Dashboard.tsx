@@ -183,9 +183,9 @@ export default function Dashboard() {
               <Target className="h-5 w-5 text-primary" />
               <h2 className="font-semibold text-foreground">Conditions You're Claiming</h2>
             </div>
-            <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
+          <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
               <DialogTrigger asChild>
-                <Button size="sm" className="gap-1 h-8">
+                <Button size="sm" className="gap-1 h-10 min-h-[44px] px-3">
                   <Plus className="h-4 w-4" />
                   <span className="hidden sm:inline">Add</span>
                 </Button>
@@ -394,18 +394,18 @@ export default function Dashboard() {
                         {data.medicalVisits.length === 0 && data.symptoms.length === 0 && data.exposures.length === 0 && data.buddyContacts.length === 0 && (
                           <div className="text-center py-3">
                             <p className="text-xs text-muted-foreground mb-2">No evidence logged yet</p>
-                            <Button size="sm" variant="outline" onClick={() => navigate('/symptoms')} className="text-xs h-7">
+                            <Button size="sm" variant="outline" onClick={() => navigate('/symptoms')} className="text-xs h-10 min-h-[44px]">
                               Start Logging Evidence
                             </Button>
                           </div>
                         )}
 
                         {/* Actions */}
-                        <div className="flex items-center justify-between pt-2 border-t border-border">
+                        <div className="flex items-center justify-between pt-2 border-t border-border gap-2">
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="h-7 text-xs text-destructive hover:text-destructive"
+                            className="h-10 min-h-[44px] text-xs text-destructive hover:text-destructive px-3"
                             onClick={() => deleteClaimCondition(condition.id)}
                           >
                             <Trash2 className="h-3 w-3 mr-1" />
@@ -414,7 +414,7 @@ export default function Dashboard() {
                           <Button
                             variant="outline"
                             size="sm"
-                            className="h-7 text-xs"
+                            className="h-10 min-h-[44px] text-xs px-3"
                             onClick={() => navigate('/medical-visits')}
                           >
                             <Plus className="h-3 w-3 mr-1" />
