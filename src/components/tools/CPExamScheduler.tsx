@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Calendar, Clock, MapPin, Bell, FileText, Plus, Trash2, Edit2, Check, AlertCircle, BookOpen } from 'lucide-react';
+import { Calendar, Clock, MapPin, Bell, FileText, Plus, Trash2, Edit2, Check, AlertCircle, BookOpen, CalendarPlus } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -124,6 +124,94 @@ export function CPExamScheduler({ onSelectTool }: CPExamSchedulerProps) {
     }
     
     resetForm();
+  };
+
+  // Generate ICS file for calendar export
+  const generateICSFile = (exam: ScheduledExam) => {
+    // Parse the time string to get hours and minutes
+    const timeMatch = exam.time.match(/(\d+):(\d+)\s*(AM|PM)/i);
+    if (!timeMatch) return;
+    
+    let hours = parseInt(timeMatch[1]);
+    const minutes = parseInt(timeMatch[2]);
+    const period = timeMatch[3].toUpperCase();
+    
+    if (period === 'PM' && hours !== 12) hours += 12;
+    if (period === 'AM' && hours === 12) hours = 0;
+    
+    // Create start date with time
+    const startDate = new Date(exam.date);
+    startDate.setHours(hours, minutes, 0, 0);
+    
+    // End date is 2 hours after start (typical C&P exam duration)
+    const endDate = new Date(startDate);
+    endDate.setHours(endDate.getHours() + 2);
+    
+    // Format dates for ICS (YYYYMMDDTHHMMSS format)
+    const formatICSDate = (date: Date) => {
+      const pad = (n: number) => n.toString().padStart(2, '0');
+      return `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}T${pad(date.getHours())}${pad(date.getMinutes())}00`;
+    };
+    
+    const uid = `cp-exam-${exam.id}@va-claims-tracker`;
+    const dtstamp = formatICSDate(new Date());
+    const dtstart = formatICSDate(startDate);
+    const dtend = formatICSDate(endDate);
+    
+    // Build description
+    const descriptionParts = [
+      `C&P Exam for: ${exam.condition}`,
+      exam.examiner ? `Examiner: ${exam.examiner}` : '',
+      '',
+      'IMPORTANT REMINDERS:',
+      '• Arrive 15-30 minutes early with ID',
+      '• Bring all medical records and buddy statements',
+      '• Describe your WORST days, not your best',
+      '• Never say "I\'m fine" or minimize symptoms',
+      '',
+      exam.notes ? `Notes: ${exam.notes}` : ''
+    ].filter(Boolean).join('\\n');
+    
+    const icsContent = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//VA Claims Tracker//C&P Exam//EN',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      'BEGIN:VEVENT',
+      `UID:${uid}`,
+      `DTSTAMP:${dtstamp}`,
+      `DTSTART:${dtstart}`,
+      `DTEND:${dtend}`,
+      `SUMMARY:C&P Exam - ${exam.condition}`,
+      `DESCRIPTION:${descriptionParts}`,
+      exam.location ? `LOCATION:${exam.location.replace(/,/g, '\\,')}` : '',
+      'BEGIN:VALARM',
+      'TRIGGER:-P1D',
+      'ACTION:DISPLAY',
+      'DESCRIPTION:C&P Exam Tomorrow',
+      'END:VALARM',
+      'BEGIN:VALARM',
+      'TRIGGER:-PT2H',
+      'ACTION:DISPLAY',
+      'DESCRIPTION:C&P Exam in 2 hours',
+      'END:VALARM',
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].filter(Boolean).join('\r\n');
+    
+    // Create and download file
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `CP-Exam-${exam.condition.replace(/\s+/g, '-')}-${format(exam.date, 'yyyy-MM-dd')}.ics`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    toast.success('Calendar file downloaded');
   };
 
   const handleEdit = (exam: ScheduledExam) => {
@@ -382,18 +470,30 @@ export function CPExamScheduler({ onSelectTool }: CPExamSchedulerProps) {
                         </p>
                       )}
 
-                      {/* Prepare for Exam Button */}
-                      {onSelectTool && (
+                      {/* Action Buttons Row */}
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {/* Add to Calendar */}
                         <Button 
                           size="sm" 
-                          variant="outline" 
-                          className="mt-3 w-full sm:w-auto"
-                          onClick={() => onSelectTool('exam-prep')}
+                          variant="outline"
+                          onClick={() => generateICSFile(exam)}
                         >
-                          <BookOpen className="h-4 w-4 mr-2" />
-                          Prepare for {exam.condition} Exam
+                          <CalendarPlus className="h-4 w-4 mr-2" />
+                          Add to Calendar
                         </Button>
-                      )}
+
+                        {/* Prepare for Exam */}
+                        {onSelectTool && (
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => onSelectTool('exam-prep')}
+                          >
+                            <BookOpen className="h-4 w-4 mr-2" />
+                            Prepare
+                          </Button>
+                        )}
+                      </div>
                     </div>
 
                     <div className="flex flex-col gap-1">
