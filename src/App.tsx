@@ -33,6 +33,7 @@ import Timeline from "./pages/Timeline";
 import ClaimChecklist from "./pages/ClaimChecklist";
 import ExamPrep from "./pages/ExamPrep";
 import ClaimTools from "./pages/ClaimTools";
+import EvidenceDocs from "./pages/EvidenceDocs";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -64,6 +65,7 @@ const App = () => (
                   <Route path="/buddy-contacts" element={<BuddyContacts />} />
                   <Route path="/documents" element={<Documents />} />
                   <Route path="/claim-documents" element={<ClaimDocuments />} />
+                  <Route path="/evidence-docs" element={<EvidenceDocs />} />
                   <Route path="/evidence-library" element={<EvidenceLibrary />} />
                   <Route path="/reference" element={<Reference />} />
                   <Route path="/sleep" element={<Sleep />} />

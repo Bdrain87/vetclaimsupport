@@ -59,6 +59,7 @@ const navGroups: NavGroup[] = [
     label: 'Evidence & Docs',
     icon: FileCheck,
     items: [
+      { to: '/evidence-docs', icon: FileCheck, label: 'Evidence' },
       { to: '/documents', icon: FileCheck, label: 'Docs' },
       { to: '/buddy-contacts', icon: Users, label: 'Buddies' },
       { to: '/timeline', icon: Clock, label: 'Timeline' },
