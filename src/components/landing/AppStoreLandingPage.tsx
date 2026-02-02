@@ -93,7 +93,7 @@ export function AppStoreLandingPage() {
               <div className="flex items-center justify-center h-10 w-10 rounded-full bg-amber-600/20 border border-amber-600/30">
                 <Medal className="h-5 w-5 text-amber-500" />
               </div>
-              <div className="text-left">
+              <div className="text-center">
                 <p className="text-amber-100 font-semibold text-sm sm:text-base">
                   Proudly Built by a 100% Disabled Veteran
                 </p>
