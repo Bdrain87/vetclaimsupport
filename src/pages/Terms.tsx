@@ -12,7 +12,7 @@ export default function Terms() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Terms of Use</h1>
-          <p className="text-muted-foreground">Service Evidence Tracker</p>
+          <p className="text-muted-foreground">Vet Claim Support</p>
         </div>
       </div>
 
@@ -24,7 +24,7 @@ export default function Terms() {
           <section>
             <h2 className="text-lg font-semibold text-foreground mb-3">1. Agreement</h2>
             <p className="text-muted-foreground">
-              By using Service Evidence Tracker, you agree to these Terms.
+              By using Vet Claim Support, you agree to these Terms.
             </p>
           </section>
 

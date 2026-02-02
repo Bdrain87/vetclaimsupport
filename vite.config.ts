@@ -20,8 +20,8 @@ export default defineConfig(({ mode }) => ({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "robots.txt", "pwa-icons/*.png"],
       manifest: {
-        name: "Service Evidence Tracker",
-        short_name: "Evidence Tracker",
+        name: "Vet Claim Support",
+        short_name: "Vet Claim Support",
         description: "Track medical visits, exposures, symptoms, and documentation for VA disability claims",
         theme_color: "#0f172a",
         background_color: "#0f172a",

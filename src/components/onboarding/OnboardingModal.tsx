@@ -104,7 +104,7 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
       iconColor: 'text-primary',
       iconBg: 'bg-primary/15',
       title: 'Welcome',
-      subtitle: 'Service Evidence Tracker',
+      subtitle: 'Vet Claim Support',
       content: (
         <div className="space-y-4 text-center">
           <p className="text-muted-foreground text-sm leading-relaxed">
@@ -215,7 +215,7 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
         <VisuallyHidden.Root>
           <DialogTitle>{currentStepData.title}</DialogTitle>
           <DialogDescription id="onboarding-description">
-            Onboarding wizard to help you get started with Service Evidence Tracker
+            Onboarding wizard to help you get started with Vet Claim Support
           </DialogDescription>
         </VisuallyHidden.Root>
 

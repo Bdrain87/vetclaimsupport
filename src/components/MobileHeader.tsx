@@ -58,7 +58,7 @@ export function MobileHeader() {
   const isHome = location.pathname === '/';
   const [open, setOpen] = useState(false);
   
-  const pageLabel = pageLabels[location.pathname] || 'Evidence Tracker';
+  const pageLabel = pageLabels[location.pathname] || 'Vet Claim Support';
 
   const handleBack = () => {
     navigate('/');
@@ -92,7 +92,7 @@ export function MobileHeader() {
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/20">
                   <ShieldCheck className="h-4 w-4 text-primary" />
                 </div>
-                <span className="font-semibold text-foreground text-sm">Evidence Tracker</span>
+                <span className="font-semibold text-foreground text-sm">Vet Claim Support</span>
               </div>
               
               {/* Navigation Items */}
@@ -136,7 +136,7 @@ export function MobileHeader() {
               <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/20">
                 <ShieldCheck className="h-3.5 w-3.5 text-primary" />
               </div>
-              <span className="font-semibold text-foreground text-sm">Evidence Tracker</span>
+              <span className="font-semibold text-foreground text-sm">Vet Claim Support</span>
             </>
           ) : (
             <span className="font-semibold text-foreground text-sm truncate max-w-[180px]">
