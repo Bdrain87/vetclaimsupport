@@ -173,11 +173,11 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
       title: 'Get Started',
       subtitle: 'Quick setup (optional)',
       content: (
-        <div className="space-y-4">
-          <div className="space-y-2">
+        <div className="space-y-3 w-full">
+          <div className="space-y-2 w-full">
             <Label htmlFor="branch" className="text-sm">Military Branch</Label>
             <Select value={branch} onValueChange={setBranch}>
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select your branch" />
               </SelectTrigger>
               <SelectContent>
@@ -188,13 +188,14 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
             </Select>
           </div>
           
-          <div className="space-y-2">
+          <div className="space-y-2 w-full">
             <Label htmlFor="sepDate" className="text-sm">Separation Date</Label>
             <Input
               id="sepDate"
               type="date"
               value={separationDate}
               onChange={(e) => setSeparationDate(e.target.value)}
+              className="w-full"
             />
             <p className="text-xs text-muted-foreground">
               For BDD timer (file 180-90 days before)
@@ -210,7 +211,7 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="sm:max-w-md [&>button]:hidden" aria-describedby="onboarding-description">
+      <DialogContent className="sm:max-w-md max-w-[calc(100vw-2rem)] mx-auto [&>button]:hidden overflow-hidden" aria-describedby="onboarding-description">
         <VisuallyHidden.Root>
           <DialogTitle>{currentStepData.title}</DialogTitle>
           <DialogDescription id="onboarding-description">
@@ -218,7 +219,7 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
           </DialogDescription>
         </VisuallyHidden.Root>
 
-        <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+        <div className="p-4 sm:p-6 space-y-3 sm:space-y-4 w-full overflow-hidden">
           {/* Progress dots */}
           <div className="flex justify-center gap-1.5">
             {steps.map((_, idx) => (
@@ -249,7 +250,7 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
           </div>
 
           {/* Content */}
-          <div>
+          <div className="w-full overflow-hidden">
             {currentStepData.content}
           </div>
 
