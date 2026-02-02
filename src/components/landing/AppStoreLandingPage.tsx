@@ -1,6 +1,39 @@
-import { ShieldCheck, Lock, Wifi, Medal, Flag, Activity, FileText, FolderOpen, MapPin } from 'lucide-react';
+import { ShieldCheck, Lock, Wifi, Medal, Flag, Activity, FileText, FolderOpen, MapPin, Moon, Pill, Upload, Users, Clock, ClipboardCheck, History, Database, Heart, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+
+const featureCategories = [
+  {
+    title: 'Health Tracking',
+    icon: Heart,
+    items: [
+      { icon: Activity, name: 'Symptom Journal' },
+      { icon: Heart, name: 'Migraine Log' },
+      { icon: Moon, name: 'Sleep Tracker' },
+      { icon: Pill, name: 'Medication Log' },
+    ]
+  },
+  {
+    title: 'Evidence Building',
+    icon: FolderOpen,
+    items: [
+      { icon: Upload, name: 'Document Upload' },
+      { icon: FolderOpen, name: 'Evidence Library' },
+      { icon: Users, name: 'Buddy Statements' },
+      { icon: Clock, name: 'Timeline Builder' },
+    ]
+  },
+  {
+    title: 'Claim Tools',
+    icon: ClipboardCheck,
+    items: [
+      { icon: ClipboardCheck, name: 'C&P Exam Prep' },
+      { icon: FileText, name: 'Documents Checklist' },
+      { icon: History, name: 'Service History' },
+      { icon: MapPin, name: '4-Phase Progress' },
+    ]
+  },
+];
 
 export function AppStoreLandingPage() {
   const appStoreUrl = 'https://apps.apple.com/app/vet-claim-support'; // Replace with actual App Store URL
@@ -109,7 +142,7 @@ export function AppStoreLandingPage() {
         </div>
 
         {/* Features Grid - Privacy & Offline */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl animate-fade-in mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl animate-fade-in mb-12">
           {[
             { icon: Lock, title: 'Privacy-First', desc: 'Your data stays on your device, always secure and private' },
             { icon: Wifi, title: 'Offline-Ready', desc: 'Full functionality without internet connection' },
@@ -122,24 +155,64 @@ export function AppStoreLandingPage() {
           ))}
         </div>
 
-        {/* What's Inside Section */}
-        <div className="w-full max-w-3xl animate-fade-in">
-          <h2 className="text-xl sm:text-2xl font-bold text-white mb-6 text-center">What's Inside</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {[
-              { icon: Activity, title: 'Symptom Journal', desc: 'Track daily symptoms' },
-              { icon: FileText, title: 'Service History', desc: 'Document assignments & duties' },
-              { icon: FolderOpen, title: 'Evidence Tracker', desc: 'Organize medical records' },
-              { icon: MapPin, title: 'Claims Progress', desc: '4-phase journey tracker' },
-            ].map((tool) => (
-              <div key={tool.title} className="flex flex-col items-center p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors">
-                <div className="p-3 rounded-xl bg-primary/10 border border-primary/20 mb-3">
-                  <tool.icon className="h-6 w-6 text-primary" />
+        {/* Comprehensive Feature Showcase */}
+        <div className="w-full max-w-5xl animate-fade-in">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-8 text-center">Everything You Need</h2>
+          
+          {/* Feature Categories Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            {featureCategories.map((category) => (
+              <div key={category.title} className="rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm p-5">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 rounded-xl bg-primary/10 border border-primary/20">
+                    <category.icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-white">{category.title}</h3>
                 </div>
-                <h3 className="font-semibold text-white text-sm text-center mb-1">{tool.title}</h3>
-                <p className="text-xs text-slate-400 text-center">{tool.desc}</p>
+                <div className="space-y-2">
+                  {category.items.map((item) => (
+                    <div key={item.name} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors">
+                      <item.icon className="h-4 w-4 text-slate-400" />
+                      <span className="text-sm text-slate-300">{item.name}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
+          </div>
+
+          {/* Reference Database Highlight */}
+          <div className="rounded-2xl bg-gradient-to-br from-primary/20 via-primary/10 to-transparent border border-primary/30 p-6 sm:p-8">
+            <div className="flex flex-col sm:flex-row items-center gap-6">
+              <div className="flex items-center justify-center h-20 w-20 rounded-2xl bg-primary/20 border border-primary/30 shrink-0">
+                <Database className="h-10 w-10 text-primary" />
+              </div>
+              <div className="text-center sm:text-left flex-1">
+                <div className="flex items-baseline justify-center sm:justify-start gap-2 mb-2">
+                  <span className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-primary via-blue-400 to-primary bg-clip-text text-transparent">
+                    941
+                  </span>
+                  <span className="text-xl sm:text-2xl font-semibold text-white">VA Conditions</span>
+                </div>
+                <p className="text-slate-400 mb-3">
+                  Complete 38 CFR Part 4 reference database at your fingertips
+                </p>
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                  <Badge variant="outline" className="bg-white/5 border-white/20 text-slate-300">
+                    <BookOpen className="h-3 w-3 mr-1" />
+                    Rating Criteria
+                  </Badge>
+                  <Badge variant="outline" className="bg-white/5 border-white/20 text-slate-300">
+                    <FileText className="h-3 w-3 mr-1" />
+                    Diagnostic Codes
+                  </Badge>
+                  <Badge variant="outline" className="bg-white/5 border-white/20 text-slate-300">
+                    <ClipboardCheck className="h-3 w-3 mr-1" />
+                    Required Forms
+                  </Badge>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
