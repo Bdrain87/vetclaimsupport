@@ -14,6 +14,7 @@ import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
 import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
 import { MilestoneCelebration } from "./components/dashboard/MilestoneCelebration";
 import EvidenceLibrary from "./pages/EvidenceLibrary";
+import ClaimDocuments from "./pages/ClaimDocuments";
 import Dashboard from "./pages/Dashboard";
 import MedicalVisits from "./pages/MedicalVisits";
 import Migraines from "./pages/Migraines";
@@ -62,6 +63,7 @@ const App = () => (
                   <Route path="/service-history" element={<ServiceHistory />} />
                   <Route path="/buddy-contacts" element={<BuddyContacts />} />
                   <Route path="/documents" element={<Documents />} />
+                  <Route path="/claim-documents" element={<ClaimDocuments />} />
                   <Route path="/evidence-library" element={<EvidenceLibrary />} />
                   <Route path="/reference" element={<Reference />} />
                   <Route path="/sleep" element={<Sleep />} />

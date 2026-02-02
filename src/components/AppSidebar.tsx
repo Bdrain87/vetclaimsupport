@@ -23,6 +23,7 @@ import {
   Briefcase,
   Wrench,
   FileArchive,
+  FolderOpen,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -67,6 +68,7 @@ const navGroups: NavGroup[] = [
     label: 'Evidence & Docs',
     icon: FileCheck,
     items: [
+      { to: '/claim-documents', icon: FolderOpen, label: 'Claim Documents' },
       { to: '/evidence-library', icon: FileArchive, label: 'Evidence Library' },
       { to: '/documents', icon: FileCheck, label: 'Documents Checklist' },
       { to: '/buddy-contacts', icon: Users, label: 'Buddy Contacts' },
