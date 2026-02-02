@@ -13,6 +13,7 @@ import { OnboardingModal } from "./components/onboarding/OnboardingModal";
 import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
 import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
 import { MilestoneCelebration } from "./components/dashboard/MilestoneCelebration";
+import { WebGateWrapper } from "./components/landing/WebGateWrapper";
 import EvidenceLibrary from "./pages/EvidenceLibrary";
 import ClaimDocuments from "./pages/ClaimDocuments";
 import Dashboard from "./pages/Dashboard";
@@ -41,48 +42,50 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
-      <ClaimsProvider>
-        <EvidenceProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <ScrollToTop />
-              <LiabilityAcceptanceScreen />
-              <OnboardingModal />
-              <PWAInstallPrompt />
-              <OfflineIndicator />
-              <MilestoneCelebration />
-              <AppLayout>
-                <Routes>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/medical-visits" element={<MedicalVisits />} />
-                  <Route path="/migraines" element={<Migraines />} />
-                  <Route path="/exposures" element={<Exposures />} />
-                  <Route path="/symptoms" element={<Symptoms />} />
-                  <Route path="/medications" element={<Medications />} />
-                  <Route path="/service-history" element={<ServiceHistory />} />
-                  <Route path="/buddy-contacts" element={<BuddyContacts />} />
-                  <Route path="/documents" element={<Documents />} />
-                  <Route path="/claim-documents" element={<ClaimDocuments />} />
-                  <Route path="/evidence-docs" element={<EvidenceDocs />} />
-                  <Route path="/evidence-library" element={<EvidenceLibrary />} />
-                  <Route path="/reference" element={<Reference />} />
-                  <Route path="/sleep" element={<Sleep />} />
-                  <Route path="/settings" element={<Settings />} />
-                  <Route path="/timeline" element={<Timeline />} />
-                  <Route path="/checklist" element={<ClaimChecklist />} />
-                  <Route path="/exam-prep" element={<ExamPrep />} />
-                  <Route path="/claim-tools" element={<ClaimTools />} />
-                  <Route path="/privacy" element={<Privacy />} />
-                  <Route path="/terms" element={<Terms />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </AppLayout>
-            </BrowserRouter>
-          </TooltipProvider>
-        </EvidenceProvider>
-      </ClaimsProvider>
+      <WebGateWrapper>
+        <ClaimsProvider>
+          <EvidenceProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <ScrollToTop />
+                <LiabilityAcceptanceScreen />
+                <OnboardingModal />
+                <PWAInstallPrompt />
+                <OfflineIndicator />
+                <MilestoneCelebration />
+                <AppLayout>
+                  <Routes>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/medical-visits" element={<MedicalVisits />} />
+                    <Route path="/migraines" element={<Migraines />} />
+                    <Route path="/exposures" element={<Exposures />} />
+                    <Route path="/symptoms" element={<Symptoms />} />
+                    <Route path="/medications" element={<Medications />} />
+                    <Route path="/service-history" element={<ServiceHistory />} />
+                    <Route path="/buddy-contacts" element={<BuddyContacts />} />
+                    <Route path="/documents" element={<Documents />} />
+                    <Route path="/claim-documents" element={<ClaimDocuments />} />
+                    <Route path="/evidence-docs" element={<EvidenceDocs />} />
+                    <Route path="/evidence-library" element={<EvidenceLibrary />} />
+                    <Route path="/reference" element={<Reference />} />
+                    <Route path="/sleep" element={<Sleep />} />
+                    <Route path="/settings" element={<Settings />} />
+                    <Route path="/timeline" element={<Timeline />} />
+                    <Route path="/checklist" element={<ClaimChecklist />} />
+                    <Route path="/exam-prep" element={<ExamPrep />} />
+                    <Route path="/claim-tools" element={<ClaimTools />} />
+                    <Route path="/privacy" element={<Privacy />} />
+                    <Route path="/terms" element={<Terms />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </AppLayout>
+              </BrowserRouter>
+            </TooltipProvider>
+          </EvidenceProvider>
+        </ClaimsProvider>
+      </WebGateWrapper>
     </ThemeProvider>
   </QueryClientProvider>
 );
