@@ -204,31 +204,36 @@ export default function Symptoms() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Combine extra fields into notes for backwards compatibility
-    const combinedNotes = [
-      formData.timeOfDay && `Time: ${formData.timeOfDay}`,
-      formData.trigger && `Trigger: ${formData.trigger}`,
-      formData.duration && `Duration: ${formData.duration}`,
-      formData.notes
-    ].filter(Boolean).join('\n');
-    
-    const symptomData = {
-      date: formData.date,
-      symptom: formData.symptom,
-      bodyArea: formData.conditionTitle, // Store condition title in bodyArea field
-      severity: formData.severity,
-      frequency: formData.frequency,
-      dailyImpact: formData.dailyImpact,
-      notes: combinedNotes,
-    };
-    
-    if (editingId) {
-      updateSymptom(editingId, symptomData);
-    } else {
-      addSymptom(symptomData);
+    try {
+      // Combine extra fields into notes for backwards compatibility
+      const combinedNotes = [
+        formData.timeOfDay && `Time: ${formData.timeOfDay}`,
+        formData.trigger && `Trigger: ${formData.trigger}`,
+        formData.duration && `Duration: ${formData.duration}`,
+        formData.notes
+      ].filter(Boolean).join('\n');
+      
+      const symptomData = {
+        date: formData.date,
+        symptom: formData.symptom,
+        bodyArea: formData.conditionTitle, // Store condition title in bodyArea field
+        severity: formData.severity,
+        frequency: formData.frequency,
+        dailyImpact: formData.dailyImpact,
+        notes: combinedNotes,
+      };
+      
+      if (editingId) {
+        updateSymptom(editingId, symptomData);
+      } else {
+        addSymptom(symptomData);
+      }
+      
+      setIsOpen(false);
+      resetForm();
+    } catch (error) {
+      console.error('Error saving symptom:', error);
     }
-    setIsOpen(false);
-    resetForm();
   };
 
   const handleEdit = (symptom: SymptomEntry) => {
@@ -393,11 +398,11 @@ export default function Symptoms() {
           />
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
+        <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
           <div className="flex flex-wrap gap-2 items-center">
             {/* Date Range Filter */}
             <Select value={dateRange} onValueChange={(v: '7' | '30' | '90' | 'all') => setDateRange(v)}>
-              <SelectTrigger className="w-[130px] h-9">
+              <SelectTrigger className="w-[130px] h-12 min-h-[48px]">
                 <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
                 <SelectValue />
               </SelectTrigger>
@@ -412,9 +417,9 @@ export default function Symptoms() {
             {/* Condition Filter */}
             {uniqueConditions.length > 0 && (
               <Select value={filterCondition} onValueChange={setFilterCondition}>
-                <SelectTrigger className="w-[180px] h-9">
+                <SelectTrigger className="w-[160px] h-12 min-h-[48px]">
                   <Filter className="h-4 w-4 mr-2 text-muted-foreground" />
-                  <SelectValue placeholder="Filter by condition" />
+                  <SelectValue placeholder="Filter" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Conditions</SelectItem>
@@ -426,18 +431,18 @@ export default function Symptoms() {
             )}
 
             {/* Entry Count Badge */}
-            <Badge variant="secondary" className="h-9 px-3">
+            <Badge variant="secondary" className="h-10 px-3">
               {filteredSymptoms.length} entries
             </Badge>
           </div>
 
           <div className="flex gap-2">
             {/* View Mode Toggle */}
-            <div className="flex border border-border rounded-lg p-1 bg-muted/50">
+            <div className="flex border border-border rounded-xl p-1 bg-muted/50">
               <Button 
                 variant={viewMode === 'list' ? 'secondary' : 'ghost'} 
                 size="sm" 
-                className="h-7 px-2"
+                className="h-10 w-10 min-h-[40px] min-w-[40px] p-0"
                 onClick={() => setViewMode('list')}
               >
                 <List className="h-4 w-4" />
@@ -445,7 +450,7 @@ export default function Symptoms() {
               <Button 
                 variant={viewMode === 'timeline' ? 'secondary' : 'ghost'} 
                 size="sm" 
-                className="h-7 px-2"
+                className="h-10 w-10 min-h-[40px] min-w-[40px] p-0"
                 onClick={() => setViewMode('timeline')}
               >
                 <CalendarDays className="h-4 w-4" />
@@ -455,18 +460,18 @@ export default function Symptoms() {
             {/* Add Entry Button */}
             <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
               <DialogTrigger asChild>
-                <Button className="gap-2 h-9">
+                <Button className="gap-2 h-12 min-h-[48px] px-4">
                   <Plus className="h-4 w-4" />
                   <span className="hidden sm:inline">Log Symptom</span>
                   <span className="sm:hidden">Add</span>
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-2xl max-h-[85vh] sm:max-h-[90vh] flex flex-col top-[10%] sm:top-[50%]">
-                <DialogHeader>
+              <DialogContent className="max-w-2xl max-h-[85vh] sm:max-h-[90vh] flex flex-col">
+                <DialogHeader className="p-6 pb-4">
                   <DialogTitle>{editingId ? 'Edit Symptom' : 'Log Symptom'}</DialogTitle>
                 </DialogHeader>
-                <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
-                  <div className="flex-1 overflow-y-auto space-y-4 pr-2" style={{ scrollPaddingBottom: '350px' }}>
+                <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+                  <div className="flex-1 overflow-y-auto space-y-4 px-6 pb-4" style={{ scrollPaddingBottom: '350px' }}>
                     {/* Condition Title - REQUIRED and FIRST */}
                     <div className="space-y-2">
                       <Label htmlFor="conditionTitle" className="flex items-center gap-1">
@@ -695,11 +700,11 @@ export default function Symptoms() {
                       </div>
                     )}
                   </div>
-                  <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-border bg-background">
-                    <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
+                  <div className="flex justify-end gap-3 p-6 pt-4 border-t border-border bg-card sticky bottom-0">
+                    <Button type="button" variant="outline" onClick={() => setIsOpen(false)} className="h-12 min-h-[48px] px-6">
                       Cancel
                     </Button>
-                    <Button type="submit">
+                    <Button type="submit" className="h-12 min-h-[48px] px-6">
                       {editingId ? 'Update' : 'Save'} Entry
                     </Button>
                   </div>
@@ -771,11 +776,11 @@ export default function Symptoms() {
                           )}
                         </div>
                         <div className="flex gap-1">
-                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleEdit(symptom)}>
-                            <Edit className="h-3.5 w-3.5" />
+                          <Button variant="ghost" size="icon" className="h-10 w-10 min-h-[44px] min-w-[44px]" onClick={() => handleEdit(symptom)}>
+                            <Edit className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => deleteSymptom(symptom.id)}>
-                            <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                          <Button variant="ghost" size="icon" className="h-10 w-10 min-h-[44px] min-w-[44px]" onClick={() => deleteSymptom(symptom.id)}>
+                            <Trash2 className="h-4 w-4 text-destructive" />
                           </Button>
                         </div>
                       </div>
@@ -858,12 +863,12 @@ export default function Symptoms() {
                     />
                     
                     <div className="flex gap-2 pt-2">
-                      <Button variant="outline" size="sm" onClick={() => handleEdit(symptom)}>
-                        <Edit className="h-3.5 w-3.5 mr-1" />
+                      <Button variant="outline" size="sm" onClick={() => handleEdit(symptom)} className="h-10 min-h-[44px]">
+                        <Edit className="h-4 w-4 mr-1" />
                         Edit
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => deleteSymptom(symptom.id)}>
-                        <Trash2 className="h-3.5 w-3.5 mr-1 text-destructive" />
+                      <Button variant="outline" size="sm" onClick={() => deleteSymptom(symptom.id)} className="h-10 min-h-[44px]">
+                        <Trash2 className="h-4 w-4 mr-1 text-destructive" />
                         Delete
                       </Button>
                     </div>

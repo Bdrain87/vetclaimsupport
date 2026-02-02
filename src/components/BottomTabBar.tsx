@@ -19,7 +19,7 @@ export function BottomTabBar() {
       "border-t border-border",
       "safe-area-bottom"
     )}>
-      <div className="flex items-center justify-around h-16">
+      <div className="flex items-center justify-around h-20 px-2">
         {tabs.map((tab) => {
           const isActive = location.pathname === tab.to;
           return (
@@ -28,7 +28,7 @@ export function BottomTabBar() {
               to={tab.to}
               className={cn(
                 "flex flex-col items-center justify-center gap-1",
-                "flex-1 h-full min-w-[64px]",
+                "flex-1 h-full min-w-[64px] min-h-[48px]",
                 "transition-all duration-300 ease-out",
                 "active:scale-95",
                 isActive ? "text-primary" : "text-muted-foreground"
@@ -36,7 +36,7 @@ export function BottomTabBar() {
             >
               <div className={cn(
                 "flex items-center justify-center",
-                "w-10 h-10 rounded-xl",
+                "w-12 h-12 min-w-[48px] min-h-[48px] rounded-xl",
                 "transition-all duration-300 ease-out",
                 isActive && "bg-primary/15"
               )}>

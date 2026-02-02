@@ -118,17 +118,17 @@ export default function MedicalVisits() {
           
           <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
             <DialogTrigger asChild>
-              <Button className="gap-2">
+              <Button className="gap-2 h-12 min-h-[48px]">
                 <Plus className="h-4 w-4" />
                 Add Visit
               </Button>
             </DialogTrigger>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
+          <DialogContent className="max-w-2xl max-h-[85vh] sm:max-h-[90vh] flex flex-col">
+            <DialogHeader className="p-6 pb-4">
               <DialogTitle>{editingId ? 'Edit Medical Visit' : 'Log Medical Visit'}</DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="flex flex-col">
-              <div className="max-h-[60vh] overflow-y-auto space-y-4 pr-2">
+            <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+              <div className="flex-1 overflow-y-auto space-y-4 px-6 pb-4">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="date">Date</Label>
@@ -267,11 +267,11 @@ export default function MedicalVisits() {
               )}
 
               </div>
-              <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-border">
-                <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
+              <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-border bg-card sticky bottom-0 p-6 -mx-6 -mb-6 rounded-b-2xl">
+                <Button type="button" variant="outline" onClick={() => setIsOpen(false)} className="h-12 min-h-[48px] px-6">
                   Cancel
                 </Button>
-                <Button type="submit">
+                <Button type="submit" className="h-12 min-h-[48px] px-6">
                   {editingId ? 'Update' : 'Save'} Visit
                 </Button>
               </div>
@@ -307,10 +307,10 @@ export default function MedicalVisits() {
                     )}
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="ghost" size="icon" onClick={() => handleEdit(visit)}>
+                    <Button variant="ghost" size="icon" onClick={() => handleEdit(visit)} className="h-10 w-10 min-h-[44px] min-w-[44px]">
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => deleteMedicalVisit(visit.id)}>
+                    <Button variant="ghost" size="icon" onClick={() => deleteMedicalVisit(visit.id)} className="h-10 w-10 min-h-[44px] min-w-[44px]">
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>

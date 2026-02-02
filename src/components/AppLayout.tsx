@@ -21,8 +21,8 @@ export function AppLayout({ children }: AppLayoutProps) {
       
       {/* Main Content */}
       <div className="flex-1 md:ml-64 transition-all duration-300 flex flex-col h-screen md:min-h-screen overflow-hidden max-w-[100vw]">
-        {/* Add top padding on mobile for fixed header, bottom for tab bar (h-16 + safe area) */}
-        <main className="flex-1 pt-14 pb-28 md:pt-0 md:pb-0 overflow-y-auto overflow-x-hidden -webkit-overflow-scrolling-touch">
+        {/* Add top padding on mobile for fixed header (h-14), bottom for tab bar (h-20 + safe area) */}
+        <main className="flex-1 pt-14 pb-32 md:pt-0 md:pb-0 overflow-y-auto overflow-x-hidden -webkit-overflow-scrolling-touch">
           <div className="container max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-4 md:py-6 lg:py-8 safe-area-x">
             {children}
           </div>
