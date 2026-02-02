@@ -433,7 +433,46 @@
     @apply opacity-100;
   }
 
-  /* Success result card - for positive money/rating results */
+  /* Success gradient card - vivid green gradient for money/positive results */
+  .gradient-card-success {
+    @apply relative overflow-hidden rounded-2xl p-6;
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    box-shadow: 
+      0 8px 32px rgba(34, 197, 94, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .gradient-card-success * {
+    color: white !important;
+  }
+
+  /* Primary gradient card - vivid blue gradient for info results */
+  .gradient-card-primary {
+    @apply relative overflow-hidden rounded-2xl p-6;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    box-shadow: 
+      0 8px 32px rgba(59, 130, 246, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .gradient-card-primary * {
+    color: white !important;
+  }
+
+  /* Warning gradient card */
+  .gradient-card-warning {
+    @apply relative overflow-hidden rounded-2xl p-6;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    box-shadow: 
+      0 8px 32px rgba(245, 158, 11, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .gradient-card-warning * {
+    color: white !important;
+  }
+
+  /* Success result card - subtle green background */
   .result-card-success {
     @apply relative overflow-hidden rounded-2xl border p-6;
     border-color: hsl(142 76% 46% / 0.3);
@@ -454,7 +493,7 @@
       inset 0 1px 0 hsl(142 76% 46% / 0.15);
   }
 
-  /* Primary result card - for primary/info results */
+  /* Primary result card - subtle blue background */
   .result-card-primary {
     @apply relative overflow-hidden rounded-2xl border p-6;
     border-color: hsl(211 100% 50% / 0.3);
@@ -478,9 +517,15 @@
   /* Big number display for results */
   .result-number {
     @apply font-bold tracking-tight;
+    font-size: 3rem;
+    line-height: 1;
     font-feature-settings: 'tnum' 1;
     font-variant-numeric: tabular-nums;
     text-shadow: 0 2px 4px hsl(0 0% 0% / 0.1);
+  }
+
+  .result-number-xl {
+    font-size: 3.5rem;
   }
 
   .result-number-success {
@@ -495,13 +540,14 @@
 
   /* Comparison table rows */
   .comparison-row {
-    @apply flex items-center justify-between py-3 px-4 rounded-xl;
+    @apply flex items-center justify-between py-4 px-5 rounded-xl;
     @apply border border-border bg-muted/30;
     @apply transition-all duration-200;
   }
 
   .comparison-row:hover {
     @apply bg-muted/50 border-primary/20;
+    transform: translateX(2px);
   }
 
   .comparison-row + .comparison-row {
@@ -510,9 +556,9 @@
 
   /* Calculator header with icon */
   .calculator-header {
-    @apply flex items-center gap-4 p-4 rounded-2xl;
+    @apply flex items-center gap-4 p-5 rounded-2xl;
     background: linear-gradient(135deg, 
-      hsl(var(--primary) / 0.1) 0%, 
+      hsl(var(--primary) / 0.12) 0%, 
       hsl(var(--primary) / 0.05) 100%);
     border: 1px solid hsl(var(--primary) / 0.2);
   }
@@ -520,15 +566,16 @@
   .calculator-icon {
     @apply flex items-center justify-center rounded-xl p-3;
     background: linear-gradient(135deg, 
-      hsl(var(--primary) / 0.2) 0%, 
-      hsl(var(--primary) / 0.1) 100%);
+      hsl(var(--primary) / 0.25) 0%, 
+      hsl(var(--primary) / 0.15) 100%);
     box-shadow: 
-      0 0 20px hsl(var(--primary) / 0.2),
-      inset 0 1px 0 hsl(255 255 255 / 0.1);
+      0 0 24px hsl(var(--primary) / 0.25),
+      inset 0 1px 0 hsl(255 255 255 / 0.15);
   }
 
   .calculator-icon svg {
-    @apply h-6 w-6 text-primary;
+    @apply h-7 w-7 text-primary;
+    filter: drop-shadow(0 0 8px hsl(var(--primary) / 0.4));
   }
 
   /* Premium data table */
@@ -537,17 +584,17 @@
   }
 
   .data-table-header {
-    @apply p-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider;
+    @apply p-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider;
     @apply bg-muted/50 border-b border-border;
   }
 
   .data-table-row {
-    @apply p-3 text-sm border-b border-border last:border-0;
-    @apply transition-colors duration-150;
+    @apply p-4 text-sm border-b border-border last:border-0;
+    @apply transition-all duration-200;
   }
 
   .data-table-row:hover {
-    @apply bg-muted/30;
+    @apply bg-muted/40;
   }
 
   /* Animated result reveal */
@@ -558,7 +605,7 @@
   @keyframes resultReveal {
     0% {
       opacity: 0;
-      transform: translateY(12px) scale(0.98);
+      transform: translateY(16px) scale(0.96);
     }
     100% {
       opacity: 1;
@@ -568,20 +615,41 @@
 
   /* Number count animation */
   .number-animate {
-    animation: numberPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation: numberPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   }
 
   @keyframes numberPop {
     0% {
-      transform: scale(0.8);
+      transform: scale(0.7);
       opacity: 0;
     }
     60% {
-      transform: scale(1.05);
+      transform: scale(1.08);
     }
     100% {
       transform: scale(1);
       opacity: 1;
+    }
+  }
+
+  /* Shimmer loading animation */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--muted)) 0%,
+      hsl(var(--muted) / 0.5) 50%,
+      hsl(var(--muted)) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
     }
   }
 
@@ -591,11 +659,12 @@
   }
 
   .step-dot {
-    @apply w-2 h-2 rounded-full transition-all duration-300;
+    @apply w-2.5 h-2.5 rounded-full transition-all duration-300;
   }
 
   .step-dot.active {
-    @apply w-8 bg-primary;
+    @apply w-10 bg-primary;
+    box-shadow: 0 0 12px hsl(var(--primary) / 0.5);
   }
 
   .step-dot.complete {
@@ -608,10 +677,10 @@
 
   /* Next step CTA card */
   .next-step-card {
-    @apply relative overflow-hidden rounded-2xl p-5 border;
+    @apply relative overflow-hidden rounded-2xl p-6 border;
     border-color: hsl(var(--primary) / 0.3);
     background: linear-gradient(135deg, 
-      hsl(var(--primary) / 0.08) 0%, 
+      hsl(var(--primary) / 0.1) 0%, 
       transparent 60%);
   }
 
@@ -621,6 +690,72 @@
     background: linear-gradient(90deg, 
       hsl(var(--primary)) 0%, 
       hsl(var(--primary) / 0.5) 100%);
+  }
+
+  /* Premium info card */
+  .info-card {
+    @apply rounded-2xl p-5 border;
+    border-color: hsl(var(--border) / 0.6);
+    background: linear-gradient(145deg, 
+      hsl(var(--card)) 0%, 
+      hsl(var(--muted) / 0.3) 100%);
+  }
+
+  /* Premium list item */
+  .premium-list-item {
+    @apply flex items-center justify-between p-4 rounded-xl;
+    @apply border border-border/50 bg-card;
+    @apply transition-all duration-200 cursor-pointer;
+  }
+
+  .premium-list-item:hover {
+    @apply border-primary/30 bg-primary/5;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px hsl(0 0% 0% / 0.1);
+  }
+
+  .dark .premium-list-item:hover {
+    box-shadow: 0 4px 16px hsl(0 0% 0% / 0.3);
+  }
+
+  /* Floating action button style */
+  .fab {
+    @apply fixed bottom-24 right-4 z-40;
+    @apply h-14 w-14 rounded-full;
+    @apply bg-primary text-primary-foreground;
+    @apply shadow-lg;
+    box-shadow: 
+      0 4px 20px hsl(var(--primary) / 0.4),
+      0 0 0 4px hsl(var(--primary) / 0.1);
+    transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .fab:hover {
+    transform: scale(1.05);
+    box-shadow: 
+      0 6px 24px hsl(var(--primary) / 0.5),
+      0 0 0 6px hsl(var(--primary) / 0.15);
+  }
+
+  .fab:active {
+    transform: scale(0.95);
+  }
+
+  /* Empty state styling */
+  .empty-state {
+    @apply flex flex-col items-center justify-center py-16 px-6 text-center;
+  }
+
+  .empty-state-icon {
+    @apply h-16 w-16 text-muted-foreground/30 mb-4;
+  }
+
+  .empty-state-title {
+    @apply text-lg font-semibold text-foreground mb-2;
+  }
+
+  .empty-state-description {
+    @apply text-sm text-muted-foreground max-w-sm;
   }
 }
 

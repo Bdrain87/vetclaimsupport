@@ -201,14 +201,14 @@ export default function ClaimTools() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Header */}
-      <div className="section-header">
-        <div className="section-icon">
-          <Wrench className="h-5 w-5" />
+      {/* Premium Header */}
+      <div className="calculator-header">
+        <div className="calculator-icon">
+          <Wrench className="h-6 w-6" />
         </div>
-        <div>
+        <div className="flex-1">
           <h1 className="text-2xl font-bold text-foreground">Claim Tools</h1>
-          <p className="text-muted-foreground">Select a tool to strengthen your VA claim</p>
+          <p className="text-muted-foreground text-sm">Select a tool to strengthen your VA claim</p>
         </div>
       </div>
 
@@ -282,10 +282,10 @@ export default function ClaimTools() {
       {/* Empty State */}
       {!selectedToolId && (
         <Card className="data-card">
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <Wrench className="h-12 w-12 text-muted-foreground/50 mb-4" />
-            <p className="text-muted-foreground text-center">Select a tool from the dropdown above to get started.</p>
-            <p className="text-sm text-muted-foreground text-center mt-1">Each tool helps with a different part of your claim.</p>
+          <CardContent className="empty-state">
+            <Wrench className="empty-state-icon" />
+            <p className="empty-state-title">Select a tool to get started</p>
+            <p className="empty-state-description">Choose from document generators, calculators, prep guides, and more to strengthen your VA claim.</p>
           </CardContent>
         </Card>
       )}

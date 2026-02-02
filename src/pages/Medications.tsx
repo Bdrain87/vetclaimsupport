@@ -205,14 +205,21 @@ export default function Medications() {
       {/* Current Medications */}
       {currentMeds.length > 0 && (
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold text-foreground">Current Medications</h2>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
+            <h2 className="text-lg font-semibold text-foreground">Current Medications</h2>
+            <span className="text-xs text-muted-foreground">({currentMeds.length})</span>
+          </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {currentMeds.map((med) => (
-              <Card key={med.id} className="data-card">
+            {currentMeds.map((med, index) => (
+              <Card key={med.id} className="data-card group hover:border-primary/30 transition-all duration-300 animate-fade-in" style={{ animationDelay: `${index * 0.05}s` }}>
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
-                    <span className="badge-success">Active</span>
-                    <div className="flex gap-1">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-success/15 text-success border border-success/20">
+                      <span className="w-1.5 h-1.5 rounded-full bg-success" />
+                      Active
+                    </span>
+                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                       <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleEdit(med)}>
                         <Edit className="h-4 w-4" />
                       </Button>
@@ -221,18 +228,18 @@ export default function Medications() {
                       </Button>
                     </div>
                   </div>
-                  <CardTitle className="text-base mt-2">{med.name}</CardTitle>
+                  <CardTitle className="text-base mt-2 group-hover:text-primary transition-colors">{med.name}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm">
                   {med.prescribedFor && (
-                    <p className="text-muted-foreground">For: {med.prescribedFor}</p>
+                    <p className="text-muted-foreground">For: <span className="text-foreground">{med.prescribedFor}</span></p>
                   )}
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Calendar className="h-4 w-4" />
                     Since {new Date(med.startDate).toLocaleDateString()}
                   </div>
                   {med.sideEffects && (
-                    <div className="flex items-start gap-2 text-destructive/80 bg-destructive/5 rounded p-2 mt-2">
+                    <div className="flex items-start gap-2 text-destructive/80 bg-destructive/5 border border-destructive/10 rounded-xl p-3 mt-2">
                       <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
                       <span className="text-xs">{med.sideEffects}</span>
                     </div>
@@ -301,10 +308,10 @@ export default function Medications() {
       {/* Empty State */}
       {data.medications.length === 0 && (
         <Card className="data-card">
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <Pill className="h-12 w-12 text-muted-foreground/50 mb-4" />
-            <p className="text-muted-foreground text-center">No medications logged yet.</p>
-            <p className="text-sm text-muted-foreground text-center mt-1">Track all prescriptions during service.</p>
+          <CardContent className="empty-state">
+            <Pill className="empty-state-icon" />
+            <p className="empty-state-title">No medications logged yet</p>
+            <p className="empty-state-description">Track all prescriptions during service to build a complete medical history for your VA claim.</p>
           </CardContent>
         </Card>
       )}

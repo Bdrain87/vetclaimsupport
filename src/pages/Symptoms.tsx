@@ -312,11 +312,13 @@ export default function Symptoms() {
       {data.symptoms.length > 0 && (
         <div className="grid gap-4 md:grid-cols-2">
           {/* Severity Trend Chart */}
-          <Card className="data-card">
+          <Card className="data-card group hover:border-primary/20 transition-all duration-300">
             <CardHeader className="pb-2">
               <div className="flex items-center gap-2">
-                <TrendingUp className="h-4 w-4 text-primary" />
-                <CardTitle className="text-sm font-medium">Severity Trend</CardTitle>
+                <div className="p-1.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                  <TrendingUp className="h-4 w-4 text-primary" />
+                </div>
+                <CardTitle className="text-sm font-semibold">Severity Trend</CardTitle>
               </div>
               <CardDescription className="text-xs">Average severity over time</CardDescription>
             </CardHeader>
@@ -324,21 +326,23 @@ export default function Symptoms() {
               {severityTrendData.length > 0 ? (
                 <ResponsiveContainer width="100%" height={120}>
                   <LineChart data={severityTrendData}>
-                    <XAxis dataKey="date" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
-                    <YAxis domain={[0, 10]} tick={{ fontSize: 10 }} width={25} />
+                    <XAxis dataKey="date" tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} interval="preserveStartEnd" />
+                    <YAxis domain={[0, 10]} tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} width={25} />
                     <Tooltip 
                       contentStyle={{ 
                         backgroundColor: 'hsl(var(--card))', 
                         border: '1px solid hsl(var(--border))',
-                        borderRadius: '8px'
+                        borderRadius: '12px',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
                       }} 
                     />
                     <Line 
                       type="monotone" 
                       dataKey="avgSeverity" 
                       stroke="hsl(var(--primary))" 
-                      strokeWidth={2}
-                      dot={{ fill: 'hsl(var(--primary))', strokeWidth: 0, r: 3 }}
+                      strokeWidth={2.5}
+                      dot={{ fill: 'hsl(var(--primary))', strokeWidth: 0, r: 4 }}
+                      activeDot={{ r: 6, fill: 'hsl(var(--primary))', stroke: 'hsl(var(--background))', strokeWidth: 2 }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -349,11 +353,13 @@ export default function Symptoms() {
           </Card>
 
           {/* Condition Frequency */}
-          <Card className="data-card">
+          <Card className="data-card group hover:border-primary/20 transition-all duration-300">
             <CardHeader className="pb-2">
               <div className="flex items-center gap-2">
-                <BarChart3 className="h-4 w-4 text-primary" />
-                <CardTitle className="text-sm font-medium">Entries by Condition</CardTitle>
+                <div className="p-1.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                  <BarChart3 className="h-4 w-4 text-primary" />
+                </div>
+                <CardTitle className="text-sm font-semibold">Entries by Condition</CardTitle>
               </div>
               <CardDescription className="text-xs">Most logged conditions</CardDescription>
             </CardHeader>
@@ -361,20 +367,21 @@ export default function Symptoms() {
               {conditionStats.length > 0 ? (
                 <ResponsiveContainer width="100%" height={120}>
                   <BarChart data={conditionStats} layout="vertical">
-                    <XAxis type="number" tick={{ fontSize: 10 }} />
-                    <YAxis type="category" dataKey="condition" tick={{ fontSize: 10 }} width={80} />
+                    <XAxis type="number" tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} />
+                    <YAxis type="category" dataKey="condition" tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} width={80} />
                     <Tooltip 
                       contentStyle={{ 
                         backgroundColor: 'hsl(var(--card))', 
                         border: '1px solid hsl(var(--border))',
-                        borderRadius: '8px'
+                        borderRadius: '12px',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
                       }}
                       formatter={(value: number, name: string) => [
                         name === 'count' ? `${value} entries` : `Avg: ${value}/10`,
                         name === 'count' ? 'Frequency' : 'Severity'
                       ]}
                     />
-                    <Bar dataKey="count" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} />
+                    <Bar dataKey="count" fill="hsl(var(--primary))" radius={[0, 6, 6, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
