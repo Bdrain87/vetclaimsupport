@@ -178,7 +178,7 @@ export default function ClaimTools() {
       case 'exam-prep':
         return <EnhancedCPExamPrepGuide />;
       case 'exam-scheduler':
-        return <CPExamScheduler />;
+        return <CPExamScheduler onSelectTool={handleToolSelect} />;
       case 'secondary-suggester':
         return <SmartSecondaryConditionsSuggester />;
       case 'criteria':

@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Calendar, Clock, MapPin, Bell, FileText, Plus, Trash2, Edit2, Check, AlertCircle } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
+import { Calendar, Clock, MapPin, Bell, FileText, Plus, Trash2, Edit2, Check, AlertCircle, BookOpen } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -43,7 +44,11 @@ const EXAMINER_TYPES = [
   'Other Contract Examiner'
 ];
 
-export function CPExamScheduler() {
+interface CPExamSchedulerProps {
+  onSelectTool?: (toolId: string) => void;
+}
+
+export function CPExamScheduler({ onSelectTool }: CPExamSchedulerProps) {
   const { data } = useClaims();
   const [exams, setExams] = useState<ScheduledExam[]>(() => {
     const saved = localStorage.getItem('scheduled-cp-exams');
@@ -375,6 +380,19 @@ export function CPExamScheduler() {
                           <FileText className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
                           {exam.notes}
                         </p>
+                      )}
+
+                      {/* Prepare for Exam Button */}
+                      {onSelectTool && (
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="mt-3 w-full sm:w-auto"
+                          onClick={() => onSelectTool('exam-prep')}
+                        >
+                          <BookOpen className="h-4 w-4 mr-2" />
+                          Prepare for {exam.condition} Exam
+                        </Button>
                       )}
                     </div>
 
