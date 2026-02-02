@@ -14,6 +14,7 @@ import {
   Trash2,
   ChevronDown,
   Users,
+  Shield,
 } from 'lucide-react';
 import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
 import { EnhancedRatingCalculator } from '@/components/dashboard/EnhancedRatingCalculator';
@@ -156,6 +157,14 @@ export default function Dashboard() {
     <div className="space-y-4 animate-fade-in pb-8 md:pb-4 overflow-x-hidden max-w-full">
       {/* Hero Header with Native Share */}
       <DashboardHeader />
+
+      {/* Veteran-Built Badge */}
+      <div className="flex justify-center">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
+          <Shield className="h-3.5 w-3.5 text-primary" />
+          <span className="text-xs font-medium text-primary/90">Built by a 100% Disabled Veteran</span>
+        </div>
+      </div>
 
       {/* GUIDED ACTION BANNER - What to do next */}
       <GuidedActionBanner onOpenAddCondition={() => setIsAddOpen(true)} />
