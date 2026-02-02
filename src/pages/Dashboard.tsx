@@ -16,7 +16,8 @@ import {
   Users,
 } from 'lucide-react';
 import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
-import { RatingCalculator } from '@/components/dashboard/RatingCalculator';
+import { EnhancedRatingCalculator } from '@/components/dashboard/EnhancedRatingCalculator';
+import { ApprovedConditionsSection } from '@/components/dashboard/ApprovedConditionsSection';
 
 import { IntentToFileCard } from '@/components/dashboard/IntentToFileCard';
 import { DashboardInsights } from '@/components/dashboard/DashboardInsights';
@@ -527,13 +528,16 @@ export default function Dashboard() {
       {/* Intent to File Card */}
       <IntentToFileCard />
 
+      {/* My Approved Conditions */}
+      <ApprovedConditionsSection />
+
       {/* BDD & Calculator */}
       <div className="grid gap-3 lg:grid-cols-2">
         <BDDCountdown 
           separationDate={separationDate} 
           onSeparationDateChange={handleSeparationDateChange} 
         />
-        <RatingCalculator />
+        <EnhancedRatingCalculator />
       </div>
 
       {/* Collapsible More Tools */}

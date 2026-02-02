@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { ClaimsData, MedicalVisit, Exposure, SymptomEntry, Medication, ServiceEntry, BuddyContact, DocumentItem, MigraineEntry, UploadedDocument, SleepEntry, ClaimCondition, QuickLogEntry, Deadline, PTSDSymptomEntry, CombatEntry, MajorEvent, DeploymentEntry } from '@/types/claims';
+import type { ClaimsData, MedicalVisit, Exposure, SymptomEntry, Medication, ServiceEntry, BuddyContact, DocumentItem, MigraineEntry, UploadedDocument, SleepEntry, ClaimCondition, QuickLogEntry, Deadline, PTSDSymptomEntry, CombatEntry, MajorEvent, DeploymentEntry, ApprovedCondition } from '@/types/claims';
 
 const STORAGE_KEY = 'va-claims-tracker-data';
 
@@ -38,6 +38,7 @@ const getInitialData = (): ClaimsData => {
       quickLogs: [],
       deadlines: [],
       milestonesAchieved: [],
+      approvedConditions: [],
     };
   }
   
@@ -57,6 +58,7 @@ const getInitialData = (): ClaimsData => {
       if (!parsed.combatHistory) parsed.combatHistory = [];
       if (!parsed.majorEvents) parsed.majorEvents = [];
       if (!parsed.deployments) parsed.deployments = [];
+      if (!parsed.approvedConditions) parsed.approvedConditions = [];
       return parsed;
     } catch {
       console.error('Failed to parse stored data');
@@ -83,6 +85,7 @@ const getInitialData = (): ClaimsData => {
     quickLogs: [],
     deadlines: [],
     milestonesAchieved: [],
+    approvedConditions: [],
   };
 };
 
@@ -465,6 +468,28 @@ export function useClaimsData() {
     }));
   }, []);
 
+  // Approved Conditions
+  const addApprovedCondition = useCallback((condition: Omit<ApprovedCondition, 'id'>) => {
+    setData(prev => ({
+      ...prev,
+      approvedConditions: [...(prev.approvedConditions || []), { ...condition, id: generateId() }],
+    }));
+  }, []);
+
+  const updateApprovedCondition = useCallback((id: string, condition: Partial<ApprovedCondition>) => {
+    setData(prev => ({
+      ...prev,
+      approvedConditions: (prev.approvedConditions || []).map(c => c.id === id ? { ...c, ...condition } : c),
+    }));
+  }, []);
+
+  const deleteApprovedCondition = useCallback((id: string) => {
+    setData(prev => ({
+      ...prev,
+      approvedConditions: (prev.approvedConditions || []).filter(c => c.id !== id),
+    }));
+  }, []);
+
   return {
     data,
     addMedicalVisit,
@@ -517,5 +542,8 @@ export function useClaimsData() {
     updateDeadline,
     deleteDeadline,
     addMilestone,
+    addApprovedCondition,
+    updateApprovedCondition,
+    deleteApprovedCondition,
   };
 }
