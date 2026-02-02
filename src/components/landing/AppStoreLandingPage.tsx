@@ -1,4 +1,4 @@
-import { ShieldCheck, Lock, Wifi, Heart, Medal, Flag } from 'lucide-react';
+import { ShieldCheck, Lock, Wifi, Medal, Flag, Activity, FileText, FolderOpen, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
@@ -108,12 +108,11 @@ export function AppStoreLandingPage() {
           </div>
         </div>
 
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl animate-fade-in">
+        {/* Features Grid - Privacy & Offline */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl animate-fade-in mb-10">
           {[
             { icon: Lock, title: 'Privacy-First', desc: 'Your data stays on your device, always secure and private' },
             { icon: Wifi, title: 'Offline-Ready', desc: 'Full functionality without internet connection' },
-            { icon: Heart, title: 'Built for Veterans', desc: 'Designed by those who understand the claims process' },
           ].map((feature) => (
             <div key={feature.title} className="flex flex-col items-center p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
               <feature.icon className="h-8 w-8 text-primary mb-3" />
@@ -121,6 +120,27 @@ export function AppStoreLandingPage() {
               <p className="text-sm text-slate-400 text-center">{feature.desc}</p>
             </div>
           ))}
+        </div>
+
+        {/* What's Inside Section */}
+        <div className="w-full max-w-3xl animate-fade-in">
+          <h2 className="text-xl sm:text-2xl font-bold text-white mb-6 text-center">What's Inside</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {[
+              { icon: Activity, title: 'Symptom Journal', desc: 'Track daily symptoms' },
+              { icon: FileText, title: 'Service History', desc: 'Document assignments & duties' },
+              { icon: FolderOpen, title: 'Evidence Tracker', desc: 'Organize medical records' },
+              { icon: MapPin, title: 'Claims Progress', desc: '4-phase journey tracker' },
+            ].map((tool) => (
+              <div key={tool.title} className="flex flex-col items-center p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors">
+                <div className="p-3 rounded-xl bg-primary/10 border border-primary/20 mb-3">
+                  <tool.icon className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="font-semibold text-white text-sm text-center mb-1">{tool.title}</h3>
+                <p className="text-xs text-slate-400 text-center">{tool.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
