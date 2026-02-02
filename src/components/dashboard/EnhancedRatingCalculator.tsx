@@ -19,7 +19,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Calculator, Plus, Trash2, Info, AlertTriangle, TrendingUp, Award, ArrowRight, DollarSign } from 'lucide-react';
+import { Calculator, Plus, Trash2, Info, AlertTriangle, TrendingUp, Award, ArrowRight, DollarSign, Sparkles } from 'lucide-react';
 import { format, differenceInMonths, parseISO, addDays } from 'date-fns';
 
 // 2026 VA compensation rates (single veteran, no dependents)
@@ -204,35 +204,47 @@ export function EnhancedRatingCalculator() {
   const hasApprovedConditions = approvedConditions.length > 0;
 
   return (
-    <Card className="data-card">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg flex items-center gap-2">
-          <Calculator className="h-5 w-5 text-primary" />
-          VA Combined Rating Calculator
-          <Tooltip>
-            <TooltipTrigger>
-              <Info className="h-4 w-4 text-muted-foreground" />
-            </TooltipTrigger>
-            <TooltipContent className="max-w-xs">
-              <p className="mb-2">
-                <strong>VA Math:</strong> Each disability is applied to what's "left" of 100%, not simple addition.
-              </p>
-              <p>
-                <strong>Bilateral Factor:</strong> If you have disabilities affecting both paired extremities, VA adds 10% to that combined rating.
-              </p>
-            </TooltipContent>
-          </Tooltip>
-        </CardTitle>
-        <CardDescription>
-          {hasApprovedConditions 
-            ? "See how adding new conditions affects your rating"
-            : "Calculate what your combined rating could be"
-          }
-        </CardDescription>
+    <Card className="overflow-hidden border-0 shadow-lg bg-gradient-to-b from-card to-card/95">
+      {/* Premium Header */}
+      <CardHeader className="pb-4 border-b border-border bg-gradient-to-r from-primary/5 to-transparent">
+        <div className="flex items-center gap-4">
+          <div className="calculator-icon">
+            <Calculator className="h-6 w-6" />
+          </div>
+          <div className="flex-1">
+            <CardTitle className="text-lg flex items-center gap-2">
+              VA Combined Rating Calculator
+              <Tooltip>
+                <TooltipTrigger>
+                  <Info className="h-4 w-4 text-muted-foreground" />
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs">
+                  <p className="mb-2">
+                    <strong>VA Math:</strong> Each disability is applied to what's "left" of 100%, not simple addition.
+                  </p>
+                  <p>
+                    <strong>Bilateral Factor:</strong> If you have disabilities affecting both paired extremities, VA adds 10% to that combined rating.
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </CardTitle>
+            <CardDescription className="mt-0.5">
+              {hasApprovedConditions 
+                ? "See how adding new conditions affects your rating"
+                : "Calculate what your combined rating could be"
+              }
+            </CardDescription>
+          </div>
+          <Badge variant="secondary" className="hidden sm:flex gap-1 items-center">
+            <Sparkles className="h-3 w-3" />
+            2026 Rates
+          </Badge>
+        </div>
       </CardHeader>
-      <CardContent className="space-y-4">
+
+      <CardContent className="space-y-5 pt-5">
         {/* Disclaimer */}
-        <div className="p-3 bg-muted/50 border border-border rounded-lg">
+        <div className="p-3 bg-muted/50 border border-border rounded-xl">
           <p className="text-xs text-muted-foreground leading-relaxed">
             This calculator shows how VA combined ratings math works. Your actual VA rating will be determined by the VA based on your complete medical record and C&P examination findings.
           </p>
@@ -240,39 +252,45 @@ export function EnhancedRatingCalculator() {
 
         {/* Current Approved Conditions */}
         {hasApprovedConditions && (
-          <div className="p-4 rounded-xl bg-success/5 border border-success/20">
+          <div className="result-card-success animate-fade-in">
             <div className="flex items-center gap-2 mb-3">
-              <Award className="h-4 w-4 text-success" />
-              <span className="text-sm font-medium">Your Current Rating</span>
+              <Award className="h-5 w-5 text-success" />
+              <span className="text-sm font-semibold">Your Current Rating</span>
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-3xl font-bold text-success">{currentResult.official}%</p>
-                <p className="text-xs text-muted-foreground">{formatCurrency(currentMonthly)}/mo</p>
+                <p className="text-4xl font-bold result-number-success number-animate">{currentResult.official}%</p>
+                <p className="text-sm text-muted-foreground mt-1">{formatCurrency(currentMonthly)}/mo</p>
               </div>
-              <div className="text-right text-xs text-muted-foreground">
-                {approvedConditions.length} approved condition{approvedConditions.length !== 1 ? 's' : ''}
+              <div className="text-right">
+                <Badge variant="outline" className="bg-success/10 border-success/30 text-success">
+                  {approvedConditions.length} approved condition{approvedConditions.length !== 1 ? 's' : ''}
+                </Badge>
               </div>
             </div>
           </div>
         )}
 
         {/* Add New Conditions */}
-        <div className="space-y-3">
-          <p className="text-sm font-medium flex items-center gap-2">
-            <Plus className="h-4 w-4 text-primary" />
-            {hasApprovedConditions ? "Add Projected New Conditions" : "Add Conditions to Calculate"}
-          </p>
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 rounded-lg bg-primary/10">
+              <Plus className="h-4 w-4 text-primary" />
+            </div>
+            <p className="text-sm font-semibold">
+              {hasApprovedConditions ? "Add Projected New Conditions" : "Add Conditions to Calculate"}
+            </p>
+          </div>
           
-          <div className="flex flex-col sm:flex-row gap-2">
+          <div className="flex flex-col sm:flex-row gap-3">
             <Input
-              placeholder="Condition name"
+              placeholder="Condition name (e.g., PTSD, Tinnitus)"
               value={newConditionName}
               onChange={(e) => setNewConditionName(e.target.value)}
               className="flex-1"
             />
             <Select value={newConditionRating} onValueChange={setNewConditionRating}>
-              <SelectTrigger className="w-full sm:w-[120px]">
+              <SelectTrigger className="w-full sm:w-[140px]">
                 <SelectValue placeholder="Rating %" />
               </SelectTrigger>
               <SelectContent>
@@ -285,7 +303,7 @@ export function EnhancedRatingCalculator() {
             </Select>
           </div>
           
-          <div className="flex flex-col sm:flex-row gap-2">
+          <div className="flex flex-col sm:flex-row gap-3">
             <Select value={newConditionBodyPart} onValueChange={(v) => setNewConditionBodyPart(v as BodyPart)}>
               <SelectTrigger className="flex-1">
                 <SelectValue placeholder="Body part (for bilateral)" />
@@ -298,7 +316,11 @@ export function EnhancedRatingCalculator() {
                 ))}
               </SelectContent>
             </Select>
-            <Button onClick={addNewCondition} disabled={!newConditionName || !newConditionRating} className="gap-2">
+            <Button 
+              onClick={addNewCondition} 
+              disabled={!newConditionName || !newConditionRating} 
+              className="gap-2 min-w-[100px]"
+            >
               <Plus className="h-4 w-4" />
               Add
             </Button>
@@ -307,28 +329,29 @@ export function EnhancedRatingCalculator() {
 
         {/* New Conditions List */}
         {newConditions.length > 0 && (
-          <div className="space-y-2">
-            <p className="text-xs text-muted-foreground">New conditions to calculate:</p>
-            {newConditions.map((condition) => (
+          <div className="space-y-2 animate-fade-in">
+            <p className="text-xs text-muted-foreground font-medium">New conditions to calculate:</p>
+            {newConditions.map((condition, index) => (
               <div
                 key={condition.id}
-                className="flex items-center justify-between p-3 border rounded-lg bg-primary/5 border-primary/20"
+                className="flex items-center justify-between p-4 border rounded-xl bg-primary/5 border-primary/20 transition-all duration-200 hover:border-primary/40"
+                style={{ animationDelay: `${index * 50}ms` }}
               >
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <span className="font-medium text-sm">{condition.name}</span>
                   <span className="text-xs text-muted-foreground ml-2">
                     ({bodyPartOptions.find(bp => bp.value === condition.bodyPart)?.label})
                   </span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Badge variant="outline" className="font-mono px-2">
+                <div className="flex items-center gap-3">
+                  <Badge className="font-mono px-3 bg-primary/20 text-primary border-0">
                     {condition.rating}%
                   </Badge>
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => removeNewCondition(condition.id)}
-                    className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                    className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -340,8 +363,8 @@ export function EnhancedRatingCalculator() {
 
         {/* Projected Result */}
         {(newConditions.length > 0 || !hasApprovedConditions) && (
-          <div className="space-y-4 pt-4 border-t">
-            <Alert className="border-warning/50 bg-warning/10">
+          <div className="space-y-4 pt-4 border-t border-border result-reveal">
+            <Alert className="border-warning/40 bg-gradient-to-br from-warning/10 to-transparent">
               <AlertTriangle className="h-4 w-4 text-warning" />
               <AlertDescription className="text-sm">
                 <strong>ESTIMATE ONLY</strong> - This is NOT an official VA determination.
@@ -351,42 +374,47 @@ export function EnhancedRatingCalculator() {
             {hasApprovedConditions ? (
               /* Comparison View */
               <div className="space-y-4">
-                <div className="grid grid-cols-3 gap-2 items-center">
-                  <div className="text-center p-3 bg-muted/50 rounded-lg">
+                {/* Rating Comparison */}
+                <div className="grid grid-cols-[1fr,auto,1fr] gap-3 items-center">
+                  <div className="text-center p-4 bg-muted/50 rounded-xl border border-border">
                     <p className="text-xs text-muted-foreground mb-1">Current</p>
-                    <p className="text-2xl font-bold">{currentResult.official}%</p>
+                    <p className="text-3xl font-bold number-display">{currentResult.official}%</p>
                   </div>
                   <div className="flex justify-center">
-                    <ArrowRight className="h-6 w-6 text-primary" />
+                    <div className="p-2 rounded-full bg-primary/10">
+                      <ArrowRight className="h-5 w-5 text-primary" />
+                    </div>
                   </div>
-                  <div className="text-center p-3 bg-primary/10 rounded-lg border border-primary/20">
+                  <div className="result-card-primary text-center">
                     <p className="text-xs text-muted-foreground mb-1">Projected</p>
-                    <p className="text-2xl font-bold text-primary">{projectedResult.official}%</p>
+                    <p className="text-3xl font-bold result-number-primary number-animate">{projectedResult.official}%</p>
                   </div>
                 </div>
 
                 {monthlyIncrease > 0 && (
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="p-4 rounded-xl bg-success/10 border border-success/20 text-center">
+                    <div className="result-card-success text-center">
                       <p className="text-xs text-muted-foreground mb-1">Monthly Increase</p>
-                      <p className="text-xl font-bold text-success">+{formatCurrency(monthlyIncrease)}</p>
+                      <p className="text-2xl font-bold result-number-success number-animate">+{formatCurrency(monthlyIncrease)}</p>
                     </div>
-                    <div className="p-4 rounded-xl bg-success/10 border border-success/20 text-center">
+                    <div className="result-card-success text-center">
                       <p className="text-xs text-muted-foreground mb-1">Yearly Increase</p>
-                      <p className="text-xl font-bold text-success">+{formatCurrency(monthlyIncrease * 12)}</p>
+                      <p className="text-2xl font-bold result-number-success number-animate">+{formatCurrency(monthlyIncrease * 12)}</p>
                     </div>
                   </div>
                 )}
 
                 {/* Back Pay Estimate */}
                 {estimatedBackPay > 0 && itfDate && (
-                  <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
-                    <div className="flex items-center gap-2 mb-2">
-                      <DollarSign className="h-4 w-4 text-primary" />
-                      <span className="text-sm font-medium">Potential Back Pay</span>
+                  <div className="result-card-primary">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="p-1.5 rounded-lg bg-primary/20">
+                        <DollarSign className="h-4 w-4 text-primary" />
+                      </div>
+                      <span className="text-sm font-semibold">Potential Back Pay</span>
                     </div>
-                    <p className="text-2xl font-bold text-primary">{formatCurrency(estimatedBackPay)}</p>
-                    <p className="text-xs text-muted-foreground mt-1">
+                    <p className="text-3xl font-bold result-number-primary number-animate">{formatCurrency(estimatedBackPay)}</p>
+                    <p className="text-xs text-muted-foreground mt-2">
                       Based on {backPayMonths} months from ITF date ({format(parseISO(itfDate), 'MMM d, yyyy')})
                     </p>
                   </div>
@@ -395,47 +423,53 @@ export function EnhancedRatingCalculator() {
             ) : (
               /* New Calculation View */
               <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-4 bg-muted/50 rounded-lg">
+                <div className="text-center p-5 bg-muted/50 rounded-xl border border-border">
                   <p className="text-sm text-muted-foreground mb-1">Exact Combined</p>
-                  <p className="text-2xl font-bold">{projectedResult.exact.toFixed(2)}%</p>
+                  <p className="text-2xl font-bold number-display">{projectedResult.exact.toFixed(2)}%</p>
                 </div>
-                <div className="text-center p-4 bg-primary/10 rounded-lg border border-primary/20">
+                <div className="result-card-primary text-center">
                   <p className="text-sm text-muted-foreground mb-1">Estimated Rating</p>
-                  <p className="text-3xl font-bold text-primary">{projectedResult.official}%</p>
+                  <p className="text-4xl font-bold result-number-primary number-animate">{projectedResult.official}%</p>
                 </div>
               </div>
             )}
 
             {/* Compensation Info */}
-            <div className="p-4 rounded-lg bg-muted/50 border">
-              <p className="text-sm font-medium mb-2">Monthly Compensation (2026 rates)</p>
-              <div className="flex justify-between items-center">
-                <span className="text-muted-foreground">At {projectedResult.official}%:</span>
-                <span className="font-bold text-lg">{formatCurrency(monthlyCompensation[projectedResult.official] || 0)}/mo</span>
-              </div>
+            <div className="comparison-row">
+              <span className="text-muted-foreground">Monthly Compensation at {projectedResult.official}%:</span>
+              <span className="font-bold text-lg">{formatCurrency(monthlyCompensation[projectedResult.official] || 0)}/mo</span>
             </div>
           </div>
         )}
 
         {/* Empty State */}
         {newConditions.length === 0 && !hasApprovedConditions && (
-          <div className="text-center py-6 text-muted-foreground">
-            <Calculator className="h-10 w-10 mx-auto mb-3 opacity-40" />
+          <div className="text-center py-10 text-muted-foreground">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-muted/50 mb-4">
+              <Calculator className="h-8 w-8 opacity-40" />
+            </div>
             <p className="text-sm">Add conditions above to calculate your combined rating</p>
           </div>
         )}
 
         {/* Reference Table */}
-        <div className="pt-4 border-t">
-          <p className="text-sm font-medium mb-3">2026 Compensation Reference</p>
-          <div className="grid grid-cols-5 gap-2 text-xs">
-            {[10, 30, 50, 70, 100].map((rating) => (
+        <div className="pt-5 border-t border-border">
+          <p className="text-sm font-semibold mb-3">2026 Compensation Reference</p>
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+            {[10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map((rating, index) => (
               <div
                 key={rating}
-                className="p-2 rounded-lg border bg-muted/30 text-center"
+                className={`p-3 rounded-xl border text-center transition-all duration-200 hover:scale-[1.02] cursor-default ${
+                  projectedResult.official === rating
+                    ? 'result-card-primary border-primary/30'
+                    : 'bg-muted/30 border-border hover:border-primary/20'
+                }`}
+                style={{ animationDelay: `${index * 30}ms` }}
               >
-                <p className="font-semibold">{rating}%</p>
-                <p className="text-muted-foreground">{formatCurrency(monthlyCompensation[rating])}</p>
+                <p className="text-sm font-bold">{rating}%</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {formatCurrency(monthlyCompensation[rating])}/mo
+                </p>
               </div>
             ))}
           </div>
