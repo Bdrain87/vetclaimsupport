@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Calendar, Clock, MapPin, Bell, FileText, Plus, Trash2, Edit2, Check, AlertCircle, BookOpen, CalendarPlus } from 'lucide-react';
+import { Calendar, Clock, MapPin, Bell, FileText, Plus, Trash2, Edit2, Check, AlertCircle, BookOpen, CalendarPlus, ChevronDown, Briefcase, Eye } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { format, differenceInDays, isBefore, isToday } from 'date-fns';
@@ -469,6 +470,67 @@ export function CPExamScheduler({ onSelectTool }: CPExamSchedulerProps) {
                           {exam.notes}
                         </p>
                       )}
+
+                      {/* Preparation Tips - Collapsible */}
+                      <Collapsible className="mt-3">
+                        <CollapsibleTrigger asChild>
+                          <Button variant="ghost" size="sm" className="w-full justify-between px-3 py-2 h-auto bg-muted/50 hover:bg-muted">
+                            <span className="flex items-center gap-2 text-sm font-medium">
+                              <AlertCircle className="h-4 w-4 text-primary" />
+                              Exam Prep Tips
+                            </span>
+                            <ChevronDown className="h-4 w-4 transition-transform duration-200 [[data-state=open]>&]:rotate-180" />
+                          </Button>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent className="mt-2 space-y-3">
+                          {/* What to Bring */}
+                          <div className="p-3 bg-blue-500/5 border border-blue-500/20 rounded-lg">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Briefcase className="h-4 w-4 text-blue-600" />
+                              <span className="text-sm font-medium text-blue-600">What to Bring</span>
+                            </div>
+                            <ul className="text-xs text-muted-foreground space-y-1 ml-6 list-disc">
+                              <li>Valid photo ID (driver's license or military ID)</li>
+                              <li>VA appointment letter or confirmation</li>
+                              <li>List of all current medications</li>
+                              <li>Medical records and buddy statements</li>
+                              <li>Service treatment records if available</li>
+                              <li>Notes about your worst symptom days</li>
+                            </ul>
+                          </div>
+
+                          {/* What to Expect */}
+                          <div className="p-3 bg-amber-500/5 border border-amber-500/20 rounded-lg">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Eye className="h-4 w-4 text-amber-600" />
+                              <span className="text-sm font-medium text-amber-600">What to Expect</span>
+                            </div>
+                            <ul className="text-xs text-muted-foreground space-y-1 ml-6 list-disc">
+                              <li>Exam typically lasts 30-60 minutes</li>
+                              <li>Examiner will review your medical history</li>
+                              <li>Physical examination and range of motion tests</li>
+                              <li>Questions about symptom frequency and severity</li>
+                              <li>How condition affects daily life and work</li>
+                              <li><strong>Describe your WORST days</strong>, not average days</li>
+                            </ul>
+                          </div>
+
+                          {/* Key Reminders */}
+                          <div className="p-3 bg-red-500/5 border border-red-500/20 rounded-lg">
+                            <div className="flex items-center gap-2 mb-2">
+                              <AlertCircle className="h-4 w-4 text-red-600" />
+                              <span className="text-sm font-medium text-red-600">Critical Reminders</span>
+                            </div>
+                            <ul className="text-xs text-muted-foreground space-y-1 ml-6 list-disc">
+                              <li><strong>Never say "I'm fine"</strong> or minimize symptoms</li>
+                              <li>Be honest but focus on limitations, not abilities</li>
+                              <li>Mention specific incidents and dates if possible</li>
+                              <li>Don't exaggerate, but don't downplay either</li>
+                              <li>Arrive 15-30 minutes early</li>
+                            </ul>
+                          </div>
+                        </CollapsibleContent>
+                      </Collapsible>
 
                       {/* Action Buttons Row */}
                       <div className="flex flex-wrap gap-2 mt-3">
