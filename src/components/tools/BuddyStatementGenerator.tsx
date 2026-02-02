@@ -199,35 +199,61 @@ Contact Information: _________________________
 
 Hi! ${witnessTemplate.veteranName || '[Veteran Name]'} is filing a VA disability claim for ${witnessTemplate.conditionName || '[Condition]'} and needs your help as a witness.
 
-You can handwrite or type your statement. Please use the template below.
+You can HANDWRITE or TYPE your statement - both are accepted by the VA!
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 STATEMENT TEMPLATE (First Person)
+⚠️ IMPORTANT INSTRUCTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✍️ Write in FIRST PERSON ("I saw...", "I witnessed...")
+📅 Include SPECIFIC DATES when possible (month/year at minimum)
+🔍 Be SPECIFIC - describe exactly what you observed
+📍 Include LOCATIONS where events occurred
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+❓ QUESTIONS TO ANSWER IN YOUR STATEMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. What is your relationship to ${witnessTemplate.veteranName || 'the veteran'}?
+2. How long have you known them? (Include dates)
+3. What symptoms or behaviors have you personally witnessed?
+4. WHEN did you observe these? (Be as specific as possible with dates)
+5. WHERE did this happen? (Location, setting)
+6. How has this affected their daily life, work, or relationships?
+7. How have things changed over time?
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 STATEMENT TEMPLATE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 BUDDY/LAY STATEMENT
 
 My name is [YOUR FULL NAME] and I am a ${witnessTypeLabel} of ${witnessTemplate.veteranName || '[Veteran Name]'}.
 
-I have known ${witnessTemplate.veteranName || '[Veteran Name]'} since [MONTH/YEAR YOU MET].
+I have known ${witnessTemplate.veteranName || '[Veteran Name]'} since [MONTH AND YEAR - e.g., "March 2015"].
 
-${witnessTemplate.witnessType === 'service-member' ? `We served together at [UNIT/BASE NAME] from [START DATE] to [END DATE].
+${witnessTemplate.witnessType === 'service-member' ? `We served together at [UNIT/BASE NAME] from [START MONTH/YEAR] to [END MONTH/YEAR].
 
 During our service together, I personally witnessed the following:
-• [Describe specific incidents, injuries, or exposures you witnessed]
-• [Include dates and locations if you remember them]
-• [Describe any symptoms you observed]
+• On [DATE], at [LOCATION], I saw [DESCRIBE SPECIFIC INCIDENT]
+• I observed [SPECIFIC SYMPTOMS] occurring [HOW OFTEN]
+• [DESCRIBE ANY INJURIES OR EXPOSURES YOU WITNESSED]
 
 ` : ''}I have personally observed ${witnessTemplate.veteranName || '[Veteran Name]'}'s ${witnessTemplate.conditionName || '[Condition]'} affect their daily life in the following ways:
 
-• [Describe specific symptoms you have witnessed - pain, difficulty walking, mood changes, sleep issues, etc.]
-• [Describe how often you observe these symptoms]
-• [Describe specific activities they can no longer do or struggle with]
-• [Describe any changes you've noticed over time]
+WHAT I OBSERVED:
+• I have witnessed [DESCRIBE SPECIFIC SYMPTOMS - pain, difficulty walking, mood changes, nightmares, etc.]
+• These symptoms occur [HOW OFTEN - daily, weekly, during certain situations]
 
-For example, on [SPECIFIC DATE OR TIME PERIOD], I observed [SPECIFIC INCIDENT OR BEHAVIOR].
+SPECIFIC EXAMPLES (include dates):
+• On [DATE/TIME PERIOD], I observed [WHAT HAPPENED - be specific]
+• In [MONTH/YEAR], I noticed [SPECIFIC CHANGE OR INCIDENT]
+• During [EVENT/VISIT], they were unable to [SPECIFIC ACTIVITY]
 
-${witnessTemplate.serviceDates ? `${witnessTemplate.veteranName || 'The veteran'} served from ${witnessTemplate.serviceDates}.` : ''}
+IMPACT ON DAILY LIFE:
+• They can no longer [ACTIVITIES THEY USED TO DO]
+• I have seen them struggle with [DAILY TASKS]
+• Their [WORK/RELATIONSHIPS/SLEEP] has been affected by [HOW]
+
+${witnessTemplate.serviceDates ? `${witnessTemplate.veteranName || 'The veteran'} served in the military from ${witnessTemplate.serviceDates}.` : ''}
 
 I certify that the statements above are true and correct to the best of my knowledge and belief. I understand that making false statements is punishable by law.
 
@@ -238,17 +264,17 @@ Phone/Email: _________________________
 Address: _________________________
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ TIPS FOR YOUR STATEMENT
+✅ TIPS FOR A STRONG STATEMENT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Be specific - include dates, times, and locations when possible
-• Describe what YOU personally saw, not what you were told
-• Focus on observable symptoms and behaviors
-• Explain how the condition affects daily activities
-• Don't make medical diagnoses - just describe what you witnessed
-• Sign and date your statement
-• Include your contact information
+✍️ FIRST PERSON: Write "I saw him limping" not "He limps"
+📅 DATES MATTER: "In June 2022" is better than "a while ago"  
+🔍 BE SPECIFIC: "He couldn't lift his arm above his shoulder" is better than "he had arm problems"
+👁️ PERSONAL OBSERVATION: Only describe what YOU witnessed, not what you were told
+❌ NO DIAGNOSES: Don't say "He has PTSD" - instead say "I witnessed him having nightmares and panic attacks"
+📝 SIGN & DATE: Your signature and the date are required
+📞 CONTACT INFO: Include your phone/email so VA can verify if needed
 
-Thank you for taking the time to help! Your statement could make a real difference.`;
+Thank you for taking the time to help! Your statement could make a real difference in ${witnessTemplate.veteranName || 'their'}'s claim.`;
   };
 
   const copyWitnessTemplate = async () => {
