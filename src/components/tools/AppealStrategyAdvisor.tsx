@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -6,7 +6,28 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Progress } from '@/components/ui/progress';
-import { AlertTriangle, Scale, FileSearch, TrendingUp, Clock, CheckCircle2, XCircle, ArrowRight, Lightbulb, Target, FileText } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { createWorker, OEM } from 'tesseract.js';
+import { 
+  AlertTriangle, 
+  Scale, 
+  FileSearch, 
+  TrendingUp, 
+  Clock, 
+  CheckCircle2, 
+  XCircle, 
+  ArrowRight, 
+  Lightbulb, 
+  Target, 
+  FileText,
+  Camera,
+  Upload,
+  Loader2,
+  Lock,
+  Copy,
+  Scan,
+  X
+} from 'lucide-react';
 
 // Common VA denial reason codes and explanations
 const denialReasonCodes: Record<string, { title: string; explanation: string; commonFix: string }> = {
@@ -180,6 +201,98 @@ export function AppealStrategyAdvisor() {
   const [denialNotes, setDenialNotes] = useState('');
   const [recommendedPath, setRecommendedPath] = useState<'hlr' | 'supplemental' | 'board' | null>(null);
   const [showRecommendation, setShowRecommendation] = useState(false);
+  
+  // Photo/OCR state
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanProgress, setScanProgress] = useState(0);
+  const [extractedText, setExtractedText] = useState('');
+  
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
+
+  // Handle file/photo selection
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 10 * 1024 * 1024) {
+      toast({
+        title: 'File Too Large',
+        description: 'Maximum file size is 10MB',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = reader.result as string;
+      setUploadedImage(dataUrl);
+      // Auto-run OCR
+      performLocalOCR(dataUrl);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // 100% LOCAL OCR - runs entirely in browser using Tesseract.js
+  const performLocalOCR = useCallback(async (imageDataUrl: string) => {
+    setIsScanning(true);
+    setScanProgress(0);
+    setExtractedText('');
+
+    try {
+      const worker = await createWorker('eng', OEM.LSTM_ONLY, {
+        logger: (m) => {
+          if (m.status === 'recognizing text') {
+            setScanProgress(Math.round(m.progress * 100));
+          }
+        },
+      });
+
+      const { data } = await worker.recognize(imageDataUrl);
+      
+      await worker.terminate();
+
+      setExtractedText(data.text);
+      // Also append to the notes textarea
+      if (data.text.trim()) {
+        setDenialNotes(prev => prev ? `${prev}\n\n--- Extracted from letter ---\n${data.text}` : data.text);
+      }
+
+      toast({
+        title: 'Text Extracted',
+        description: `Extracted with ${Math.round(data.confidence)}% confidence`,
+      });
+    } catch (error) {
+      console.error('OCR Error:', error);
+      toast({
+        title: 'OCR Failed',
+        description: 'Could not extract text. You can still type it manually.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsScanning(false);
+    }
+  }, [toast]);
+
+  const clearUploadedImage = () => {
+    setUploadedImage(null);
+    setExtractedText('');
+    if (cameraInputRef.current) cameraInputRef.current.value = '';
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const copyExtractedText = async () => {
+    if (!extractedText) return;
+    try {
+      await navigator.clipboard.writeText(extractedText);
+      toast({ title: 'Copied!', description: 'Text copied to clipboard' });
+    } catch {
+      toast({ title: 'Copy Failed', variant: 'destructive' });
+    }
+  };
 
   const analyzeAndRecommend = () => {
     if (!selectedDenialReason) return;
@@ -273,10 +386,134 @@ export function AppealStrategyAdvisor() {
             </Card>
           )}
 
+          {/* Photo Upload Section */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium">Upload Denial Letter (Optional)</label>
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <Lock className="h-3 w-3" />
+                <span>100% private</span>
+              </div>
+            </div>
+            
+            {/* Hidden file inputs */}
+            <input
+              ref={cameraInputRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              className="hidden"
+              onChange={handleFileSelect}
+            />
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*,.pdf"
+              className="hidden"
+              onChange={handleFileSelect}
+            />
+
+            {!uploadedImage ? (
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => cameraInputRef.current?.click()}
+                  className="flex-1 h-12 gap-2"
+                >
+                  <Camera className="h-4 w-4" />
+                  Take Photo
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex-1 h-12 gap-2"
+                >
+                  <Upload className="h-4 w-4" />
+                  Upload Image
+                </Button>
+              </div>
+            ) : (
+              <Card className="border-primary/20 bg-primary/5 p-3">
+                <div className="space-y-3">
+                  {/* Image Preview */}
+                  <div className="relative">
+                    <img 
+                      src={uploadedImage} 
+                      alt="Denial letter" 
+                      className="w-full max-h-48 object-contain rounded-lg border bg-muted/50"
+                    />
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-2 right-2 h-8 w-8"
+                      onClick={clearUploadedImage}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+
+                  {/* OCR Status */}
+                  {isScanning && (
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Extracting text from letter...
+                      </div>
+                      <Progress value={scanProgress} className="h-2" />
+                      <p className="text-xs text-muted-foreground text-right">
+                        {scanProgress}% complete
+                      </p>
+                    </div>
+                  )}
+
+                  {!isScanning && extractedText && (
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <Badge variant="secondary" className="gap-1 bg-success/20 text-success">
+                          <CheckCircle2 className="h-3 w-3" />
+                          Text Extracted
+                        </Badge>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={copyExtractedText}
+                          className="h-7 gap-1 text-xs"
+                        >
+                          <Copy className="h-3 w-3" />
+                          Copy
+                        </Button>
+                      </div>
+                      <div className="max-h-24 overflow-y-auto rounded bg-muted/50 p-2 text-xs font-mono whitespace-pre-wrap">
+                        {extractedText.substring(0, 500)}{extractedText.length > 500 ? '...' : ''}
+                      </div>
+                    </div>
+                  )}
+
+                  {!isScanning && !extractedText && (
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => uploadedImage && performLocalOCR(uploadedImage)}
+                      className="w-full gap-2"
+                    >
+                      <Scan className="h-4 w-4" />
+                      Extract Text
+                    </Button>
+                  )}
+
+                  <p className="text-xs text-muted-foreground flex items-center gap-1">
+                    <Lock className="h-3 w-3" />
+                    All processing happens on your device - nothing is uploaded
+                  </p>
+                </div>
+              </Card>
+            )}
+          </div>
+
           <div>
             <label className="text-sm font-medium mb-2 block">Additional Notes About Your Decision (Optional)</label>
             <Textarea
-              placeholder="Paste specific language from your decision letter or note any details..."
+              placeholder="Paste or type specific language from your decision letter, or it will be extracted from your photo above..."
               value={denialNotes}
               onChange={(e) => setDenialNotes(e.target.value)}
               className="min-h-[100px]"
