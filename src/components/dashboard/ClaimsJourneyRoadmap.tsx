@@ -190,7 +190,7 @@ export function ClaimsJourneyRoadmap() {
                   className={cn(
                     "flex items-center justify-center w-11 h-11 rounded-full border-2 transition-all duration-300",
                     phase.status === 'completed' && "bg-gradient-to-br from-[#22c55e] to-[#16a34a] border-transparent text-white shadow-[0_4px_16px_rgba(34,197,94,0.4)]",
-                    phase.status === 'current' && "bg-gradient-to-br from-[#3b82f6] to-[#2563eb] border-transparent text-white shadow-[0_4px_16px_rgba(59,130,246,0.4)] animate-pulse",
+                    phase.status === 'current' && "bg-gradient-to-br from-[#3b82f6] to-[#2563eb] border-transparent text-white shadow-[0_4px_16px_rgba(59,130,246,0.4)] animate-[pulse_4s_cubic-bezier(0.4,0,0.6,1)_infinite]",
                     phase.status === 'upcoming' && "bg-muted border-border text-muted-foreground"
                   )}
                 >
