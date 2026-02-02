@@ -171,29 +171,25 @@ export function RatingIncreaseAnalyzer() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <Card className="border-primary/20 bg-primary/5">
-        <CardHeader className="pb-3">
-          <div className="flex items-start gap-3">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <TrendingUp className="h-5 w-5 text-primary" />
-            </div>
-            <div>
-              <CardTitle className="text-lg">Rating Increase Analyzer</CardTitle>
-              <CardDescription>
-                Compare your current rating to higher tiers and see what evidence you need
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-      </Card>
+      {/* Premium Header */}
+      <div className="calculator-header">
+        <div className="calculator-icon">
+          <TrendingUp className="h-6 w-6" />
+        </div>
+        <div className="flex-1">
+          <h2 className="text-xl font-semibold text-foreground">Rating Increase Analyzer</h2>
+          <p className="text-sm text-muted-foreground mt-0.5">
+            Compare your current rating to higher tiers and see what evidence you need
+          </p>
+        </div>
+      </div>
 
       {/* Condition & Rating Selection */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Select Condition & Current Rating</CardTitle>
+      <Card className="overflow-hidden">
+        <CardHeader className="pb-4 border-b border-border bg-muted/30">
+          <CardTitle className="text-base font-semibold">Select Condition & Current Rating</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 pt-5">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label>Condition</Label>
@@ -289,28 +285,30 @@ export function RatingIncreaseAnalyzer() {
       {ratingAnalysis && (
         <div className="grid gap-4 lg:grid-cols-2">
           {/* Current Rating */}
-          <Card className="border-muted">
-            <CardHeader className="pb-3">
+          <Card className="border-muted overflow-hidden">
+            <CardHeader className="pb-3 border-b border-border bg-muted/30">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-base">Current Rating</CardTitle>
-                <Badge variant="secondary" className="text-lg font-bold px-3">
+                <CardTitle className="text-base font-semibold">Current Rating</CardTitle>
+                <Badge variant="secondary" className="text-lg font-bold px-4 py-1">
                   {currentRating}%
                 </Badge>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-4">
               {ratingAnalysis.current ? (
-                <div className="space-y-3">
-                  <p className="text-sm text-muted-foreground">
+                <div className="space-y-4">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
                     {ratingAnalysis.current.criteria}
                   </p>
-                  <div className="space-y-1">
-                    <p className="text-xs font-medium text-muted-foreground">Key Evidence at this level:</p>
-                    <ul className="space-y-1">
+                  <div className="space-y-2">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Key Evidence at this level:</p>
+                    <ul className="space-y-2">
                       {ratingAnalysis.current.keyEvidence.map((ev, i) => (
-                        <li key={i} className="text-xs flex items-start gap-1.5">
-                          <CheckCircle2 className="h-3 w-3 text-success mt-0.5 flex-shrink-0" />
-                          {ev}
+                        <li key={i} className="comparison-row text-xs py-2">
+                          <div className="flex items-center gap-2">
+                            <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0" />
+                            <span>{ev}</span>
+                          </div>
                         </li>
                       ))}
                     </ul>
@@ -324,28 +322,31 @@ export function RatingIncreaseAnalyzer() {
 
           {/* Next Rating Level */}
           {ratingAnalysis.next ? (
-            <Card className="border-primary/30 bg-primary/5">
-              <CardHeader className="pb-3">
+            <Card className="border-primary/30 overflow-hidden bg-gradient-to-br from-primary/5 to-transparent">
+              <CardHeader className="pb-3 border-b border-primary/20 bg-primary/5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <CardTitle className="text-base">Next Level</CardTitle>
+                    <CardTitle className="text-base font-semibold">Next Level</CardTitle>
                     <ArrowRight className="h-4 w-4 text-primary" />
                   </div>
-                  <Badge className="text-lg font-bold px-3 bg-primary">
+                  <Badge className="text-lg font-bold px-4 py-1 bg-primary">
                     {ratingAnalysis.next.percentage}%
                   </Badge>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm">
+              <CardContent className="space-y-4 pt-4">
+                <p className="text-sm leading-relaxed">
                   {ratingAnalysis.next.criteria}
                 </p>
 
                 {/* Evidence Checklist */}
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <p className="text-xs font-medium">Evidence Requirements:</p>
-                    <Badge variant={readinessForIncrease >= 75 ? "default" : readinessForIncrease >= 50 ? "secondary" : "outline"} className="text-xs">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Evidence Requirements:</p>
+                    <Badge 
+                      variant={readinessForIncrease >= 75 ? "default" : readinessForIncrease >= 50 ? "secondary" : "outline"} 
+                      className={`text-xs ${readinessForIncrease >= 75 ? 'bg-success' : ''}`}
+                    >
                       {readinessForIncrease}% Ready
                     </Badge>
                   </div>
@@ -353,18 +354,25 @@ export function RatingIncreaseAnalyzer() {
                   
                   <ul className="space-y-2 mt-3">
                     {evidenceCheckForNextLevel.map((check, i) => (
-                      <li key={i} className={`p-2 rounded-lg border ${check.met ? 'bg-success/10 border-success/30' : 'bg-muted/50 border-border'}`}>
-                        <div className="flex items-start gap-2">
+                      <li 
+                        key={i} 
+                        className={`p-3 rounded-xl border transition-all duration-200 ${
+                          check.met 
+                            ? 'result-card-success border-success/30' 
+                            : 'bg-muted/30 border-border hover:border-primary/20'
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
                           {check.met ? (
-                            <CheckCircle2 className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
+                            <CheckCircle2 className="h-5 w-5 text-success mt-0.5 flex-shrink-0" />
                           ) : (
-                            <Circle className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                            <Circle className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
                           )}
                           <div className="min-w-0">
-                            <p className={`text-xs font-medium ${check.met ? 'text-success' : 'text-foreground'}`}>
+                            <p className={`text-sm font-medium ${check.met ? 'text-success' : 'text-foreground'}`}>
                               {check.requirement}
                             </p>
-                            <p className="text-[10px] text-muted-foreground">{check.hint}</p>
+                            <p className="text-xs text-muted-foreground mt-0.5">{check.hint}</p>
                           </div>
                         </div>
                       </li>
@@ -374,11 +382,11 @@ export function RatingIncreaseAnalyzer() {
               </CardContent>
             </Card>
           ) : (
-            <Card className="border-success/30 bg-success/5">
+            <Card className="result-card-success overflow-hidden">
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2">
                   <CheckCircle2 className="h-5 w-5 text-success" />
-                  Maximum Rating
+                  Maximum Rating Achieved
                 </CardTitle>
               </CardHeader>
               <CardContent>

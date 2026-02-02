@@ -18,7 +18,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { DollarSign, Calendar, Info, AlertTriangle, TrendingUp, FileText } from 'lucide-react';
+import { DollarSign, Calendar, Info, AlertTriangle, TrendingUp, FileText, ArrowRight, Sparkles } from 'lucide-react';
 import { format, differenceInMonths, parseISO, addDays } from 'date-fns';
 
 // 2026 VA compensation rates (single veteran, no dependents)
@@ -116,40 +116,46 @@ export function BackPayEstimator() {
 
   return (
     <div className="space-y-6">
-      {/* Header Card */}
-      <Card className="border-primary/20 bg-primary/5">
-        <CardHeader className="pb-3">
+      {/* Premium Header Card */}
+      <div className="calculator-header">
+        <div className="calculator-icon">
+          <DollarSign className="h-6 w-6" />
+        </div>
+        <div className="flex-1">
+          <h2 className="text-xl font-semibold text-foreground">Back Pay Estimator</h2>
+          <p className="text-sm text-muted-foreground mt-0.5">
+            Estimate potential retroactive compensation from your effective date
+          </p>
+        </div>
+        <Badge variant="secondary" className="hidden sm:flex gap-1 items-center">
+          <Sparkles className="h-3 w-3" />
+          2026 Rates
+        </Badge>
+      </div>
+
+      {/* Info Card */}
+      <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+        <CardContent className="pt-4 pb-4">
           <div className="flex items-start gap-3">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <DollarSign className="h-5 w-5 text-primary" />
+            <div className="p-2 rounded-lg bg-primary/10 flex-shrink-0">
+              <Info className="h-4 w-4 text-primary" />
             </div>
-            <div>
-              <CardTitle className="text-lg">Back Pay Estimator</CardTitle>
-              <CardDescription>
-                Estimate potential retroactive compensation from your effective date
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-start gap-2 p-3 rounded-lg bg-muted/50 border">
-            <Info className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
             <div className="text-sm text-muted-foreground">
-              <p>Your <strong>effective date</strong> is typically your Intent to File (ITF) date or claim submission date. Back pay covers the period from your effective date to your decision date.</p>
+              <p>Your <strong className="text-foreground">effective date</strong> is typically your Intent to File (ITF) date or claim submission date. Back pay covers the period from your effective date to your decision date.</p>
             </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Input Form */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base">Calculate Estimate</CardTitle>
+      <Card className="overflow-hidden">
+        <CardHeader className="pb-4 border-b border-border bg-muted/30">
+          <CardTitle className="text-base font-semibold">Calculate Your Estimate</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-5 pt-5">
           {/* Current Rating */}
           <div className="space-y-2">
-            <Label className="flex items-center gap-2">
+            <Label className="flex items-center gap-2 text-sm font-medium">
               Current VA Rating
               <Tooltip>
                 <TooltipTrigger>
@@ -177,7 +183,7 @@ export function BackPayEstimator() {
 
           {/* Expected Rating */}
           <div className="space-y-2">
-            <Label className="flex items-center gap-2">
+            <Label className="flex items-center gap-2 text-sm font-medium">
               Projected Combined Rating
               <Tooltip>
                 <TooltipTrigger>
@@ -203,17 +209,19 @@ export function BackPayEstimator() {
           </div>
 
           {/* Effective Date Type */}
-          <div className="space-y-2">
-            <Label>Effective Date Source</Label>
-            <div className="grid grid-cols-2 gap-2">
+          <div className="space-y-3">
+            <Label className="text-sm font-medium">Effective Date Source</Label>
+            <div className="grid grid-cols-2 gap-3">
               <Button
                 type="button"
                 variant={effectiveDateType === 'itf' ? 'default' : 'outline'}
                 onClick={() => setEffectiveDateType('itf')}
-                className="justify-start gap-2"
+                className="h-auto py-3 px-4 justify-start gap-3 transition-all duration-200"
                 disabled={!itfDate}
               >
-                <FileText className="h-4 w-4" />
+                <div className="p-1.5 rounded-lg bg-white/10 dark:bg-black/20">
+                  <FileText className="h-4 w-4" />
+                </div>
                 <div className="text-left">
                   <p className="text-sm font-medium">Intent to File</p>
                   {itfDate ? (
@@ -227,9 +235,11 @@ export function BackPayEstimator() {
                 type="button"
                 variant={effectiveDateType === 'custom' ? 'default' : 'outline'}
                 onClick={() => setEffectiveDateType('custom')}
-                className="justify-start gap-2"
+                className="h-auto py-3 px-4 justify-start gap-3 transition-all duration-200"
               >
-                <Calendar className="h-4 w-4" />
+                <div className="p-1.5 rounded-lg bg-white/10 dark:bg-black/20">
+                  <Calendar className="h-4 w-4" />
+                </div>
                 <div className="text-left">
                   <p className="text-sm font-medium">Custom Date</p>
                   <p className="text-xs opacity-70">Enter manually</p>
@@ -240,8 +250,8 @@ export function BackPayEstimator() {
 
           {/* Custom Date Input */}
           {effectiveDateType === 'custom' && (
-            <div className="space-y-2">
-              <Label htmlFor="customDate">Claim/ITF Filing Date</Label>
+            <div className="space-y-2 animate-fade-in">
+              <Label htmlFor="customDate" className="text-sm font-medium">Claim/ITF Filing Date</Label>
               <Input
                 id="customDate"
                 type="date"
@@ -266,105 +276,118 @@ export function BackPayEstimator() {
 
       {/* Results */}
       {calculation && (
-        <Card className="border-success/30 bg-success/5">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-success" />
-              Compensation Comparison
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {/* Current vs Projected Comparison */}
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="p-4 rounded-lg bg-muted/50 border">
-                <p className="text-xs text-muted-foreground mb-1">Current Monthly ({calculation.currentRating}%)</p>
-                <p className="text-xl font-semibold text-foreground">
-                  {formatCurrency(calculation.currentMonthly)}
-                </p>
+        <div className="space-y-4 result-reveal">
+          {/* Comparison Cards */}
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="comparison-row">
+              <div>
+                <p className="text-xs text-muted-foreground mb-0.5">Current Monthly</p>
+                <p className="text-sm font-medium">{calculation.currentRating}% Rating</p>
               </div>
-              <div className="p-4 rounded-lg bg-primary/10 border border-primary/20">
-                <p className="text-xs text-muted-foreground mb-1">Projected Monthly ({calculation.projectedRating}%)</p>
-                <p className="text-xl font-semibold text-primary">
+              <p className="text-xl font-bold number-display">
+                {formatCurrency(calculation.currentMonthly)}
+              </p>
+            </div>
+            <div className="result-card-primary">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-muted-foreground mb-0.5">Projected Monthly</p>
+                  <p className="text-sm font-medium">{calculation.projectedRating}% Rating</p>
+                </div>
+                <p className="text-xl font-bold result-number-primary number-display number-animate">
                   {formatCurrency(calculation.projectedMonthly)}
                 </p>
               </div>
             </div>
+          </div>
 
-            {/* Monthly Difference Highlight */}
-            <div className="text-center p-4 bg-success/10 rounded-xl border border-success/20">
-              <p className="text-sm text-muted-foreground mb-1">Monthly Increase</p>
-              <p className="text-3xl font-bold text-success">
-                +{formatCurrency(calculation.monthlyDifference)}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                +{formatCurrency(calculation.yearlyDifference)}/year
-              </p>
+          {/* Monthly Increase Highlight */}
+          <div className="result-card-success text-center">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <TrendingUp className="h-5 w-5 text-success" />
+              <p className="text-sm font-medium text-muted-foreground">Monthly Increase</p>
             </div>
+            <p className="text-4xl font-bold result-number-success number-animate">
+              +{formatCurrency(calculation.monthlyDifference)}
+            </p>
+            <p className="text-sm text-muted-foreground mt-2">
+              +{formatCurrency(calculation.yearlyDifference)}/year
+            </p>
+          </div>
 
-            {/* Back Pay Estimate */}
-            <div className="text-center p-6 bg-background rounded-xl border">
-              <p className="text-sm text-muted-foreground mb-2">Estimated Back Pay</p>
-              <p className="text-4xl font-bold text-success">
-                {formatCurrency(calculation.estimatedBackPay)}
-              </p>
-              <p className="text-sm text-muted-foreground mt-2">
-                Based on {calculation.monthsOfBackPay} month{calculation.monthsOfBackPay !== 1 ? 's' : ''} × {formatCurrency(calculation.monthlyDifference)} difference
-              </p>
+          {/* Back Pay Estimate - The Big Number */}
+          <div className="result-card-success text-center py-8">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-success/20 mb-4">
+              <DollarSign className="h-4 w-4 text-success" />
+              <span className="text-sm font-semibold text-success">Estimated Back Pay</span>
             </div>
+            <p className="text-5xl sm:text-6xl font-bold result-number-success number-animate">
+              {formatCurrency(calculation.estimatedBackPay)}
+            </p>
+            <p className="text-sm text-muted-foreground mt-4 max-w-xs mx-auto">
+              Based on <strong>{calculation.monthsOfBackPay} month{calculation.monthsOfBackPay !== 1 ? 's' : ''}</strong> × <strong>{formatCurrency(calculation.monthlyDifference)}</strong> difference
+            </p>
+          </div>
 
-            {/* Breakdown */}
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="p-4 rounded-lg bg-muted/50 border">
-                <p className="text-xs text-muted-foreground mb-1">Effective Date</p>
-                <p className="text-lg font-semibold">
-                  {format(calculation.effectiveDate, 'MMM d, yyyy')}
-                </p>
+          {/* Date Breakdown */}
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="comparison-row">
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">Effective Date</span>
               </div>
-              <div className="p-4 rounded-lg bg-muted/50 border">
-                <p className="text-xs text-muted-foreground mb-1">Months of Back Pay</p>
-                <p className="text-lg font-semibold">
-                  {calculation.monthsOfBackPay} month{calculation.monthsOfBackPay !== 1 ? 's' : ''}
-                </p>
-              </div>
+              <p className="text-sm font-semibold">
+                {format(calculation.effectiveDate, 'MMM d, yyyy')}
+              </p>
             </div>
+            <div className="comparison-row">
+              <div className="flex items-center gap-2">
+                <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">Months of Back Pay</span>
+              </div>
+              <p className="text-sm font-semibold">
+                {calculation.monthsOfBackPay} month{calculation.monthsOfBackPay !== 1 ? 's' : ''}
+              </p>
+            </div>
+          </div>
 
-            {/* Disclaimer */}
-            <Alert className="border-warning/50 bg-warning/10">
-              <AlertTriangle className="h-4 w-4 text-warning" />
-              <AlertDescription className="text-sm">
-                <strong>ESTIMATE ONLY</strong> - Actual back pay depends on your final VA rating, official effective date, and any deductions. This uses 2026 single veteran rates without dependents. Your situation may differ.
-              </AlertDescription>
-            </Alert>
-          </CardContent>
-        </Card>
+          {/* Disclaimer */}
+          <Alert className="border-warning/40 bg-gradient-to-br from-warning/10 to-transparent">
+            <AlertTriangle className="h-4 w-4 text-warning" />
+            <AlertDescription className="text-sm">
+              <strong>ESTIMATE ONLY</strong> - Actual back pay depends on your final VA rating, official effective date, and any deductions. This uses 2026 single veteran rates without dependents. Your situation may differ.
+            </AlertDescription>
+          </Alert>
+        </div>
       )}
 
       {/* Compensation Table Reference */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base">2026 Compensation Rates</CardTitle>
+      <Card className="overflow-hidden">
+        <CardHeader className="pb-3 border-b border-border bg-muted/30">
+          <CardTitle className="text-base font-semibold">2026 Compensation Rates</CardTitle>
           <CardDescription>Single veteran, no dependents</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-4">
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-            {commonRatings.map((rating) => (
+            {commonRatings.map((rating, index) => (
               <div
                 key={rating}
-                className={`p-3 rounded-lg border text-center ${
+                className={`p-3 rounded-xl border text-center transition-all duration-200 hover:scale-[1.02] ${
                   expectedRating === rating.toString()
-                    ? 'bg-primary/10 border-primary'
-                    : 'bg-muted/30'
+                    ? 'result-card-primary border-primary/30'
+                    : 'bg-muted/30 border-border hover:border-primary/20'
                 }`}
+                style={{ animationDelay: `${index * 50}ms` }}
               >
-                <p className="text-sm font-semibold">{rating}%</p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm font-bold">{rating}%</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
                   {formatCurrency(monthlyCompensation[rating])}/mo
                 </p>
               </div>
             ))}
           </div>
-          <p className="text-xs text-muted-foreground mt-3 text-center">
-            Rates increase with dependents. Visit <a href="https://www.va.gov/disability/compensation-rates/" target="_blank" rel="noopener noreferrer" className="text-primary underline">VA.gov</a> for full rate tables.
+          <p className="text-xs text-muted-foreground mt-4 text-center">
+            Rates increase with dependents. Visit <a href="https://www.va.gov/disability/compensation-rates/" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:no-underline">VA.gov</a> for full rate tables.
           </p>
         </CardContent>
       </Card>
