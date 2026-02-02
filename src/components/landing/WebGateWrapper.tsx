@@ -42,9 +42,11 @@ export function WebGateWrapper({ children }: WebGateWrapperProps) {
     // Show gate if:
     // - On production domain AND
     // - NOT running as PWA
+    // - OR if URL has ?preview-landing query param (for testing)
     const isProductionDomain = productionDomains.some(domain => hostname === domain);
+    const hasPreviewParam = new URLSearchParams(window.location.search).has('preview-landing');
     
-    if (isProductionDomain && !isPWA) {
+    if ((isProductionDomain && !isPWA) || hasPreviewParam) {
       setShouldShowGate(true);
     }
 
