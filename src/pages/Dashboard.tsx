@@ -152,7 +152,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="space-y-4 animate-fade-in pb-4 overflow-x-hidden max-w-full">
+    <div className="space-y-4 animate-fade-in pb-8 md:pb-4 overflow-x-hidden max-w-full">
       {/* Hero Header with Native Share */}
       <DashboardHeader />
 
