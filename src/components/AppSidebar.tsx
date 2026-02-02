@@ -126,8 +126,8 @@ export function AppSidebar() {
         </div>
         {!collapsed && (
           <div className="flex flex-col animate-fade-in">
-            <span className="font-semibold text-foreground text-sm tracking-tight">Service Evidence</span>
-            <span className="text-xs text-sidebar-muted">Tracker</span>
+            <span className="font-semibold text-foreground text-sm tracking-tight">Vet Claim</span>
+            <span className="text-xs text-sidebar-muted">Support</span>
           </div>
         )}
       </div>

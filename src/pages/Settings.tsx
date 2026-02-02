@@ -84,7 +84,7 @@ export default function Settings() {
           description: 'You will receive reminders to log your symptoms.',
         });
         // Show a test notification
-        new Notification('Evidence Tracker', {
+        new Notification('Vet Claim Support', {
           body: 'Reminder notifications are now enabled!',
           icon: '/pwa-icons/icon-192x192.png',
         });
@@ -109,7 +109,7 @@ export default function Settings() {
 
   const testNotification = () => {
     if (notificationPermission === 'granted') {
-      new Notification('Evidence Tracker Reminder', {
+      new Notification('Vet Claim Support Reminder', {
         body: 'Don\'t forget to log your symptoms today!',
         icon: '/pwa-icons/icon-192x192.png',
         tag: 'test-reminder',

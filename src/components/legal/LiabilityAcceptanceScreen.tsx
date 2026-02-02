@@ -39,7 +39,7 @@ export function LiabilityAcceptanceScreen() {
         <VisuallyHidden.Root>
           <DialogTitle>Liability Acceptance</DialogTitle>
           <DialogDescription id="liability-description">
-            Please read and acknowledge the terms before using Service Evidence Tracker
+            Please read and acknowledge the terms before using Vet Claim Support
           </DialogDescription>
         </VisuallyHidden.Root>
 
