@@ -14,6 +14,7 @@ import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
 import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
 import { MilestoneCelebration } from "./components/dashboard/MilestoneCelebration";
 import { WebGateWrapper } from "./components/landing/WebGateWrapper";
+import { AppStoreLandingPage } from "./components/landing/AppStoreLandingPage";
 import EvidenceLibrary from "./pages/EvidenceLibrary";
 import ClaimDocuments from "./pages/ClaimDocuments";
 import Dashboard from "./pages/Dashboard";
@@ -78,6 +79,8 @@ const App = () => (
                     <Route path="/claim-tools" element={<ClaimTools />} />
                     <Route path="/privacy" element={<Privacy />} />
                     <Route path="/terms" element={<Terms />} />
+                    <Route path="/landing-preview" element={<AppStoreLandingPage />} />
+                    <Route path="*" element={<NotFound />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </AppLayout>
