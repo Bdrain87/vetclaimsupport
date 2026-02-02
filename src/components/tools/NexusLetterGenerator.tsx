@@ -322,12 +322,6 @@ DISCLAIMER: This document is a template only and is not official VA documentatio
                 The final letter should be on official practice letterhead with license number and contact info.
               </p>
             </div>
-            <div className="p-3 rounded-lg border bg-muted/30">
-              <p className="text-sm font-medium mb-1">Expect a Fee</p>
-              <p className="text-xs text-muted-foreground">
-                Most doctors charge $100-$500 for nexus letters. It's typically not covered by insurance.
-              </p>
-            </div>
           </div>
         </CardContent>
       </Card>
