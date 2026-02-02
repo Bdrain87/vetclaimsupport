@@ -123,20 +123,19 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
       title: 'Track Everything',
       subtitle: 'That matters for your claim',
       content: (
-        <div className="space-y-3">
+        <div className="space-y-1.5">
           {[
-            { num: '1', title: 'Medical Visits', desc: 'Log appointments with dates and providers' },
-            { num: '2', title: 'Symptoms', desc: 'Track ongoing issues and medications' },
-            { num: '3', title: 'Exposures', desc: 'Document hazardous exposures and evidence' },
-            { num: '4', title: 'Export', desc: 'Generate PDFs to share with your VSO' },
+            { num: '1', title: 'Medical Visits', desc: 'Log appointments & providers' },
+            { num: '2', title: 'Symptoms', desc: 'Track issues & medications' },
+            { num: '3', title: 'Exposures', desc: 'Document hazardous exposures' },
+            { num: '4', title: 'Export', desc: 'Generate PDFs for your VSO' },
           ].map((item) => (
-            <div key={item.num} className="flex items-start gap-3 p-3 rounded-xl bg-muted/50">
-              <div className="h-6 w-6 rounded-lg bg-primary/15 flex items-center justify-center text-xs font-bold text-primary flex-shrink-0">
+            <div key={item.num} className="flex items-center gap-2.5 p-2 rounded-lg bg-muted/50">
+              <div className="h-5 w-5 rounded-md bg-primary/15 flex items-center justify-center text-[10px] font-bold text-primary flex-shrink-0">
                 {item.num}
               </div>
-              <div>
-                <p className="font-medium text-foreground text-sm">{item.title}</p>
-                <p className="text-xs text-muted-foreground">{item.desc}</p>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-foreground text-xs">{item.title} <span className="font-normal text-muted-foreground">– {item.desc}</span></p>
               </div>
             </div>
           ))}
@@ -150,16 +149,16 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
       title: '100% Private',
       subtitle: 'Your data stays on your device',
       content: (
-        <div className="space-y-4">
-          <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-center">
-            <p className="font-medium text-foreground text-sm mb-2">🔒 Local Storage Only</p>
-            <p className="text-xs text-muted-foreground">
-              We never collect, transmit, or have access to your personal health data.
+        <div className="space-y-2.5">
+          <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-center">
+            <p className="font-medium text-foreground text-xs mb-1">🔒 Local Storage Only</p>
+            <p className="text-[11px] text-muted-foreground leading-snug">
+              We never collect or transmit your personal health data.
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-2 text-center">
+          <div className="grid grid-cols-2 gap-1.5 text-center">
             {['No accounts', 'No servers', 'No tracking', 'Your control'].map((item) => (
-              <div key={item} className="p-3 rounded-xl bg-muted/50 text-xs text-muted-foreground">
+              <div key={item} className="py-2 px-2 rounded-lg bg-muted/50 text-[11px] text-muted-foreground">
                 ✓ {item}
               </div>
             ))}
@@ -250,7 +249,7 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
           </div>
 
           {/* Content */}
-          <div className="min-h-[140px] sm:min-h-[160px]">
+          <div>
             {currentStepData.content}
           </div>
 
