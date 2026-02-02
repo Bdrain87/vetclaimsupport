@@ -98,7 +98,7 @@ export function AppStoreLandingPage() {
                   Proudly Built by a 100% Disabled Veteran
                 </p>
                 <p className="text-amber-200/60 text-xs sm:text-sm">
-                  Made by veterans, for veterans
+                  Made by veterans for our service members and fellow veterans
                 </p>
               </div>
               <div className="flex items-center justify-center h-10 w-10 rounded-full bg-amber-600/20 border border-amber-600/30">
