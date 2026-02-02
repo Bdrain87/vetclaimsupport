@@ -11,156 +11,148 @@ export default function Terms() {
           <FileText className="h-5 w-5" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Terms of Service</h1>
-          <p className="text-muted-foreground">Last Updated: January 31, 2026</p>
+          <h1 className="text-2xl font-bold text-foreground">Terms of Use</h1>
+          <p className="text-muted-foreground">Service Evidence Tracker</p>
         </div>
       </div>
 
       <Card className="data-card">
         <CardContent className="pt-6 space-y-8">
+          <p className="text-sm text-muted-foreground">Effective date: February 2026</p>
+
           {/* Section 1 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">1. Acceptance of Terms</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">1. Agreement</h2>
             <p className="text-muted-foreground">
-              By accessing or using Service Evidence Tracker ("the App"), you agree to be bound by these Terms of Service. 
-              If you do not agree, do not use this App.
+              By using Service Evidence Tracker, you agree to these Terms.
             </p>
           </section>
 
           {/* Section 2 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">2. Description of Service</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">2. Eligibility</h2>
             <p className="text-muted-foreground">
-              Service Evidence Tracker is a personal organizational tool designed to help users document and track 
-              health-related information. The App stores all data locally on your device.
+              You must be at least 18 years old to use the App.
             </p>
           </section>
 
-          {/* Section 3 - Important Notice */}
+          {/* Section 3 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">3. NOT MEDICAL OR LEGAL ADVICE</h2>
-            <Alert className="border-destructive/50 bg-destructive/10 mb-4">
-              <AlertTriangle className="h-4 w-4 text-destructive" />
+            <h2 className="text-lg font-semibold text-foreground mb-3">3. Educational Tool Only</h2>
+            <Alert className="border-warning/50 bg-warning/10 mb-4">
+              <AlertTriangle className="h-4 w-4 text-warning" />
               <AlertDescription className="text-foreground">
-                <strong>IMPORTANT:</strong> This App does NOT provide medical advice, legal advice, or VA claims assistance.
+                The App provides organizational tools and educational content. It does not provide legal, medical, or VA advice.
               </AlertDescription>
             </Alert>
-            <ul className="space-y-2 text-muted-foreground">
-              <li className="flex items-start gap-2">
-                <span className="text-destructive">•</span>
-                Information about VA disabilities, ratings, and secondary conditions is for educational reference only
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-destructive">•</span>
-                The App does not diagnose conditions or recommend treatments
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-destructive">•</span>
-                Rating calculations are estimates only and may differ from actual VA determinations
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-destructive">•</span>
-                Always consult qualified healthcare providers for medical decisions
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-destructive">•</span>
-                Always consult VA-accredited attorneys, claims agents, or Veterans Service Organizations (VSOs) for claims assistance
-              </li>
-            </ul>
+            <p className="text-muted-foreground">
+              You are responsible for your decisions and outcomes.
+            </p>
           </section>
 
           {/* Section 4 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">4. No Warranty</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">4. Not Affiliated With the VA</h2>
             <p className="text-muted-foreground">
-              <strong className="text-foreground">THE APP IS PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND.</strong> We do not 
-              guarantee the accuracy, completeness, or usefulness of any information in the App. VA policies, rating criteria, 
-              and regulations may change without notice.
+              The App is not affiliated with, endorsed by, or sponsored by the U.S. Department of Veterans Affairs.
             </p>
           </section>
 
           {/* Section 5 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">5. Limitation of Liability</h2>
-            <p className="text-muted-foreground mb-3">
-              <strong className="text-foreground">TO THE MAXIMUM EXTENT PERMITTED BY LAW</strong>, we shall not be liable for any 
-              indirect, incidental, special, consequential, or punitive damages, including but not limited to:
+            <h2 className="text-lg font-semibold text-foreground mb-3">5. Local Storage and User Responsibility</h2>
+            <p className="text-muted-foreground">
+              Your data stays on your device. You are responsible for safeguarding your device, browser profile, 
+              and exported files. If you clear browser data, you may lose data.
             </p>
-            <ul className="space-y-2 text-muted-foreground">
-              <li className="flex items-start gap-2">
-                <span className="text-primary">•</span>
-                Loss of benefits or claims denials
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-primary">•</span>
-                Decisions made based on App information
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-primary">•</span>
-                Data loss due to device issues
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-primary">•</span>
-                Any errors in disability or rating information
-              </li>
-            </ul>
           </section>
 
           {/* Section 6 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">6. User Responsibilities</h2>
-            <p className="text-muted-foreground mb-3">You are responsible for:</p>
-            <ul className="space-y-2 text-muted-foreground">
-              <li className="flex items-start gap-2">
-                <span className="text-primary">•</span>
-                The accuracy of information you enter
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-primary">•</span>
-                Backing up your data using the Export feature
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-primary">•</span>
-                Verifying all information with official sources before making decisions
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-primary">•</span>
-                Maintaining the security of your device
-              </li>
-            </ul>
+            <h2 className="text-lg font-semibold text-foreground mb-3">6. Exports and Sharing</h2>
+            <p className="text-muted-foreground">
+              If you export to PDF or copy text, you control where it is saved or shared.
+            </p>
           </section>
 
           {/* Section 7 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">7. Intellectual Property</h2>
-            <p className="text-muted-foreground">
-              The App and its original content are protected by copyright and other intellectual property laws. 
-              VA disability information is derived from publicly available federal regulations.
-            </p>
+            <h2 className="text-lg font-semibold text-foreground mb-3">7. Acceptable Use</h2>
+            <p className="text-muted-foreground mb-3">You agree not to:</p>
+            <ul className="space-y-2 text-muted-foreground">
+              <li className="flex items-start gap-2">
+                <span className="text-primary">•</span>
+                Use the App for unlawful purposes
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary">•</span>
+                Attempt to reverse engineer or exploit the App
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary">•</span>
+                Upload malicious files
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary">•</span>
+                Misrepresent the App as legal/medical advice or VA-affiliated
+              </li>
+            </ul>
           </section>
 
           {/* Section 8 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">8. Changes to Terms</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">8. Intellectual Property</h2>
             <p className="text-muted-foreground">
-              We may modify these Terms at any time. Continued use after changes constitutes acceptance of the new Terms.
+              The App's code, UI, content templates, and educational materials are owned by the App owner.
             </p>
           </section>
 
           {/* Section 9 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">9. Governing Law</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">9. Disclaimer of Warranties</h2>
             <p className="text-muted-foreground">
-              These Terms shall be governed by the laws of the United States and the State of Michigan, without regard to conflict of law provisions.
+              <strong className="text-foreground">The App is provided "as is" without warranties of any kind.</strong>
             </p>
           </section>
 
           {/* Section 10 */}
-          <section className="pb-2">
-            <h2 className="text-lg font-semibold text-foreground mb-3">10. Contact</h2>
+          <section>
+            <h2 className="text-lg font-semibold text-foreground mb-3">10. Limitation of Liability</h2>
             <p className="text-muted-foreground">
-              Questions about these Terms? Contact us at:{' '}
-              <span className="text-primary font-medium">support@serviceevidencetracker.app</span>
+              To the maximum extent permitted by law, we are not liable for indirect, incidental, special, 
+              consequential, or punitive damages, lost data, lost profits, or claim outcomes.
+            </p>
+          </section>
+
+          {/* Section 11 */}
+          <section>
+            <h2 className="text-lg font-semibold text-foreground mb-3">11. Indemnification</h2>
+            <p className="text-muted-foreground">
+              You agree to indemnify and hold harmless the App owner from claims arising out of your misuse of the App.
+            </p>
+          </section>
+
+          {/* Section 12 */}
+          <section>
+            <h2 className="text-lg font-semibold text-foreground mb-3">12. Changes</h2>
+            <p className="text-muted-foreground">
+              We may update the App and these Terms. Continued use means you accept the updated Terms.
+            </p>
+          </section>
+
+          {/* Section 13 */}
+          <section>
+            <h2 className="text-lg font-semibold text-foreground mb-3">13. Governing Law</h2>
+            <p className="text-muted-foreground">
+              These Terms are governed by the laws of the State of Michigan, without regard to conflict of laws principles.
+            </p>
+          </section>
+
+          {/* Section 14 */}
+          <section className="pb-2">
+            <h2 className="text-lg font-semibold text-foreground mb-3">14. Contact</h2>
+            <p className="text-muted-foreground">
+              For questions, visit our website.
             </p>
           </section>
         </CardContent>

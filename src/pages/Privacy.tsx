@@ -10,124 +10,113 @@ export default function Privacy() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Privacy Policy</h1>
-          <p className="text-muted-foreground">Last Updated: January 31, 2026</p>
+          <p className="text-muted-foreground">Service Evidence Tracker</p>
         </div>
       </div>
 
       <Card className="data-card">
         <CardContent className="pt-6 space-y-8">
-          {/* Commitment Section */}
+          <p className="text-sm text-muted-foreground">Effective date: February 2026</p>
+
+          {/* Section 1 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">Our Commitment to Your Privacy</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">1. Summary</h2>
             <p className="text-muted-foreground">
-              Service Evidence Tracker ("we," "our," or "the App") is committed to protecting your privacy. 
-              This policy explains how we handle your information.
+              Service Evidence Tracker is designed so your claim-related information stays on your device. 
+              We do not collect, store, or sell your personal data.
             </p>
           </section>
 
-          {/* Data Collection Section */}
+          {/* Section 2 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">Data Collection</h2>
-            <p className="text-muted-foreground mb-4">
-              <strong className="text-foreground">We do not collect any personal data.</strong> All information you enter into 
-              Service Evidence Tracker is stored locally on your device only. We have no servers, no databases, 
-              and no way to access your information.
-            </p>
-            
-            <h3 className="text-base font-medium text-foreground mb-2">What This Means</h3>
-            <ul className="space-y-2 text-muted-foreground">
-              <li className="flex items-start gap-2">
-                <span className="text-success mt-1">✓</span>
-                Your medical visits, symptoms, medications, and other entries never leave your device
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-success mt-1">✓</span>
-                We cannot see, access, or retrieve your data
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-success mt-1">✓</span>
-                We do not sell, share, or transmit any user information
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-success mt-1">✓</span>
-                We do not use analytics or tracking tools
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-success mt-1">✓</span>
-                We do not use cookies or similar technologies
-              </li>
-            </ul>
-          </section>
-
-          {/* Data Storage Section */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">Data Storage</h2>
-            <p className="text-muted-foreground mb-3">
-              All data is stored in your device's local storage. This means:
-            </p>
-            <ul className="space-y-2 text-muted-foreground">
-              <li className="flex items-start gap-2">
-                <span className="text-primary">•</span>
-                Your data remains on your device unless you manually export it
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-primary">•</span>
-                Clearing your browser data or uninstalling the app will delete your stored information
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-primary">•</span>
-                We recommend using the Export feature regularly to back up your records
-              </li>
-            </ul>
-          </section>
-
-          {/* Data Security Section */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">Data Security</h2>
-            <p className="text-muted-foreground mb-3">
-              Because your data never leaves your device, security depends on your device's security measures. 
-              We recommend:
-            </p>
-            <ul className="space-y-2 text-muted-foreground">
-              <li className="flex items-start gap-2">
-                <span className="text-primary">•</span>
-                Using a strong device passcode
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-primary">•</span>
-                Keeping your device software updated
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-primary">•</span>
-                Being cautious about who has physical access to your device
-              </li>
-            </ul>
-          </section>
-
-          {/* Children's Privacy Section */}
-          <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">Children's Privacy</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">2. Information We Collect</h2>
             <p className="text-muted-foreground">
-              This App is intended for adults (18+) managing their own health records for benefits purposes. 
-              We do not knowingly provide services to children under 18.
+              <strong className="text-foreground">None.</strong> We do not collect names, emails, phone numbers, 
+              health data, device identifiers, usage analytics, or uploaded documents.
             </p>
           </section>
 
-          {/* Changes Section */}
+          {/* Section 3 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">Changes to This Policy</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">3. Information Stored on Your Device</h2>
             <p className="text-muted-foreground">
-              We may update this Privacy Policy from time to time. We will notify users of any material changes 
-              by updating the "Last Updated" date.
+              The App stores your entries and documents locally in your browser storage (IndexedDB). 
+              This data is accessible to anyone who has access to your device and browser profile.
             </p>
           </section>
 
-          {/* Contact Section */}
+          {/* Section 4 */}
+          <section>
+            <h2 className="text-lg font-semibold text-foreground mb-3">4. Network Requests</h2>
+            <p className="text-muted-foreground">
+              The App's code and static files are delivered from hosting so the site can load. 
+              We do not transmit your app data, logs, documents, or entries to our servers.
+            </p>
+          </section>
+
+          {/* Section 5 */}
+          <section>
+            <h2 className="text-lg font-semibold text-foreground mb-3">5. Cookies and Tracking</h2>
+            <p className="text-muted-foreground">
+              We do not use tracking cookies or advertising pixels.
+            </p>
+          </section>
+
+          {/* Section 6 */}
+          <section>
+            <h2 className="text-lg font-semibold text-foreground mb-3">6. Third-Party Services</h2>
+            <p className="text-muted-foreground">
+              We do not embed analytics, ads, trackers, or third-party SDKs that collect user data.
+            </p>
+          </section>
+
+          {/* Section 7 */}
+          <section>
+            <h2 className="text-lg font-semibold text-foreground mb-3">7. Data Retention</h2>
+            <p className="text-muted-foreground">
+              Because we do not collect your data, we do not retain it on our servers. 
+              Your local data remains on your device until you delete it.
+            </p>
+          </section>
+
+          {/* Section 8 */}
+          <section>
+            <h2 className="text-lg font-semibold text-foreground mb-3">8. Your Choices</h2>
+            <p className="text-muted-foreground">
+              You can delete your data by clearing your browser data for the site. 
+              You control all exports, printing, and sharing.
+            </p>
+          </section>
+
+          {/* Section 9 */}
+          <section>
+            <h2 className="text-lg font-semibold text-foreground mb-3">9. Security</h2>
+            <p className="text-muted-foreground">
+              You are responsible for device security, passcodes, OS updates, and secure storage of exported files.
+            </p>
+          </section>
+
+          {/* Section 10 */}
+          <section>
+            <h2 className="text-lg font-semibold text-foreground mb-3">10. Children's Privacy</h2>
+            <p className="text-muted-foreground">
+              The App is not intended for children under 13.
+            </p>
+          </section>
+
+          {/* Section 11 */}
+          <section>
+            <h2 className="text-lg font-semibold text-foreground mb-3">11. Changes</h2>
+            <p className="text-muted-foreground">
+              We may update this Privacy Policy. The effective date will be updated when changes are made.
+            </p>
+          </section>
+
+          {/* Section 12 */}
           <section className="pb-2">
-            <h2 className="text-lg font-semibold text-foreground mb-3">Contact Us</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">12. Contact</h2>
             <p className="text-muted-foreground">
-              If you have questions about this Privacy Policy, please contact us at:{' '}
-              <span className="text-primary font-medium">support@serviceevidencetracker.app</span>
+              For questions, visit our website.
             </p>
           </section>
         </CardContent>
