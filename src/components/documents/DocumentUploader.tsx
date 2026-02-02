@@ -97,41 +97,39 @@ export function DocumentUploader({ documents, category, onAdd, onDelete }: Docum
 
   return (
     <div className="space-y-4">
-      {/* Upload Buttons */}
-      <div className="flex gap-2">
-        <input
-          ref={cameraInputRef}
-          type="file"
-          accept="image/*"
-          capture="environment"
-          className="hidden"
-          onChange={(e) => handleFileSelect(e, 'camera')}
-        />
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*,.pdf"
-          className="hidden"
-          onChange={(e) => handleFileSelect(e, 'file')}
-        />
-        
+      {/* Hidden file inputs */}
+      <input
+        ref={cameraInputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        className="hidden"
+        onChange={(e) => handleFileSelect(e, 'camera')}
+      />
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*,.pdf"
+        className="hidden"
+        onChange={(e) => handleFileSelect(e, 'file')}
+      />
+
+      {/* Mobile-Optimized Upload Buttons - 48px min touch targets */}
+      <div className="grid grid-cols-2 gap-3">
         <Button
-          variant="outline"
-          size="sm"
           onClick={() => cameraInputRef.current?.click()}
-          className="gap-2"
+          className="h-12 min-h-[48px] gap-2 text-sm font-semibold"
         >
-          <Camera className="h-4 w-4" />
-          Scan Document
+          <Camera className="h-5 w-5" />
+          Take Photo
         </Button>
         
         <Button
           variant="outline"
-          size="sm"
           onClick={() => fileInputRef.current?.click()}
-          className="gap-2"
+          className="h-12 min-h-[48px] gap-2 text-sm font-semibold"
         >
-          <Upload className="h-4 w-4" />
+          <Upload className="h-5 w-5" />
           Import File
         </Button>
       </div>
