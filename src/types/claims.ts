@@ -334,4 +334,29 @@ export interface ClaimsData {
   documentScanDisclaimerShown?: boolean;
   // Milestones tracking
   milestonesAchieved?: string[];
+  // VA Approved Conditions
+  approvedConditions?: ApprovedCondition[];
+}
+
+// VA Approved Condition - already service-connected with rating
+export type BodyPart = 
+  | 'left_arm' | 'right_arm' 
+  | 'left_leg' | 'right_leg' 
+  | 'left_hand' | 'right_hand'
+  | 'left_foot' | 'right_foot'
+  | 'left_knee' | 'right_knee'
+  | 'left_hip' | 'right_hip'
+  | 'left_shoulder' | 'right_shoulder'
+  | 'left_elbow' | 'right_elbow'
+  | 'left_ankle' | 'right_ankle'
+  | 'left_wrist' | 'right_wrist'
+  | 'other';
+
+export interface ApprovedCondition {
+  id: string;
+  name: string;
+  rating: number; // 0-100 in increments of 10
+  effectiveDate: string; // ISO date string
+  bodyPart: BodyPart;
+  createdAt: string;
 }
