@@ -219,15 +219,15 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
           </DialogDescription>
         </VisuallyHidden.Root>
 
-        <div className="p-6 space-y-6">
+        <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
           {/* Progress dots */}
-          <div className="flex justify-center gap-2">
+          <div className="flex justify-center gap-1.5">
             {steps.map((_, idx) => (
               <div
                 key={idx}
                 className={cn(
-                  "h-2 rounded-full transition-all duration-300",
-                  idx === currentStep ? "w-6 bg-primary" : "w-2 bg-white/20"
+                  "h-1.5 rounded-full transition-all duration-300",
+                  idx === currentStep ? "w-5 bg-primary" : "w-1.5 bg-white/20"
                 )}
               />
             ))}
@@ -236,26 +236,26 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
           {/* Icon */}
           <div className="flex justify-center">
             <div className={cn(
-              "h-16 w-16 rounded-2xl flex items-center justify-center",
+              "h-12 w-12 sm:h-14 sm:w-14 rounded-xl flex items-center justify-center",
               currentStepData.iconBg
             )}>
-              <currentStepData.icon className={cn("h-8 w-8", currentStepData.iconColor)} />
+              <currentStepData.icon className={cn("h-6 w-6 sm:h-7 sm:w-7", currentStepData.iconColor)} />
             </div>
           </div>
 
           {/* Title */}
           <div className="text-center">
-            <h2 className="text-xl font-bold text-foreground">{currentStepData.title}</h2>
-            <p className="text-sm text-muted-foreground mt-1">{currentStepData.subtitle}</p>
+            <h2 className="text-lg sm:text-xl font-bold text-foreground">{currentStepData.title}</h2>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">{currentStepData.subtitle}</p>
           </div>
 
           {/* Content */}
-          <div className="min-h-[180px]">
+          <div className="min-h-[140px] sm:min-h-[160px]">
             {currentStepData.content}
           </div>
 
           {/* Don't show again */}
-          <label className="flex items-center justify-center gap-2 cursor-pointer">
+          <label className="flex items-center justify-center gap-2 cursor-pointer py-1">
             <Checkbox
               id="dontShow"
               checked={dontShowAgain}
@@ -266,17 +266,17 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
 
           {/* Navigation */}
           <div className="flex items-center justify-between gap-2">
-            <Button variant="ghost" onClick={handleSkip} className="text-muted-foreground">
+            <Button variant="ghost" onClick={handleSkip} className="text-muted-foreground h-10">
               Skip
             </Button>
             
             <div className="flex gap-2">
               {currentStep > 0 && (
-                <Button variant="outline" onClick={prevStep} size="icon">
+                <Button variant="outline" onClick={prevStep} size="icon" className="h-10 w-10">
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
               )}
-              <Button onClick={nextStep}>
+              <Button onClick={nextStep} className="h-10">
                 {isLastStep ? 'Get Started' : (
                   <>
                     Next
