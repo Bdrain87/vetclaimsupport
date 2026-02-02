@@ -20,7 +20,7 @@ export function BottomTabBar() {
       "safe-area-bottom"
     )}>
       <div className="flex items-center justify-around h-20 px-2">
-        {tabs.map((tab) => {
+        {tabs.map((tab, index) => {
           const isActive = location.pathname === tab.to;
           return (
             <NavLink
@@ -29,20 +29,27 @@ export function BottomTabBar() {
               className={cn(
                 "flex flex-col items-center justify-center gap-1",
                 "flex-1 h-full min-w-[64px] min-h-[48px]",
-                "transition-all duration-300 ease-out",
+                "transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]",
                 "active:scale-95",
                 isActive ? "text-primary" : "text-muted-foreground"
               )}
+              style={{ animationDelay: `${index * 50}ms` }}
             >
               <div className={cn(
                 "flex items-center justify-center",
                 "w-12 h-12 min-w-[48px] min-h-[48px] rounded-xl",
-                "transition-all duration-300 ease-out",
-                isActive && "bg-primary/15"
+                "transition-all duration-250 ease-[cubic-bezier(0.32,0.72,0,1)]",
+                isActive && "bg-primary/15 scale-110"
               )}>
-                <tab.icon className="h-5 w-5 transition-all duration-300" />
+                <tab.icon className={cn(
+                  "h-5 w-5 transition-all duration-200",
+                  isActive && "scale-105"
+                )} />
               </div>
-              <span className="text-[10px] font-medium">{tab.label}</span>
+              <span className={cn(
+                "text-[10px] font-medium transition-all duration-200",
+                isActive && "font-semibold"
+              )}>{tab.label}</span>
             </NavLink>
           );
         })}

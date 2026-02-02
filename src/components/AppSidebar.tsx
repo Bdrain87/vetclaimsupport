@@ -110,21 +110,22 @@ export function AppSidebar() {
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 z-40 h-screen border-r transition-all duration-300 flex flex-col',
+        'fixed left-0 top-0 z-40 h-screen border-r flex flex-col',
         'bg-sidebar-background border-sidebar-border',
+        'transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]',
         collapsed ? 'w-16' : 'w-64'
       )}
     >
       {/* Header */}
       <div className={cn(
-        'flex items-center gap-3 px-4 py-5 border-b border-sidebar-border',
+        'flex items-center gap-3 px-4 py-5 border-b border-sidebar-border transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
         collapsed && 'justify-center px-2'
       )}>
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/20 shadow-[0_0_20px_hsl(211_100%_50%/0.2)]">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/20 shadow-[0_0_20px_hsl(211_100%_50%/0.2)] transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-105">
           <ShieldCheck className="h-5 w-5 text-primary" />
         </div>
         {!collapsed && (
-          <div className="flex flex-col">
+          <div className="flex flex-col animate-fade-in">
             <span className="font-semibold text-foreground text-sm tracking-tight">Service Evidence</span>
             <span className="text-xs text-sidebar-muted">Tracker</span>
           </div>
@@ -138,18 +139,19 @@ export function AppSidebar() {
           <NavLink
             to="/"
             className={cn(
-              'relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150',
-              'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground',
+              'relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium',
+              'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
+              'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground hover:translate-x-1',
               'min-h-[44px]',
               location.pathname === '/' && 'bg-primary/10 text-primary',
-              collapsed && 'justify-center px-2'
+              collapsed && 'justify-center px-2 hover:translate-x-0'
             )}
             title={collapsed ? 'Dashboard' : undefined}
           >
             {location.pathname === '/' && (
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full" />
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]" />
             )}
-            <LayoutDashboard className={cn('h-5 w-5 flex-shrink-0', location.pathname === '/' && 'text-primary')} />
+            <LayoutDashboard className={cn('h-5 w-5 flex-shrink-0 transition-transform duration-200', location.pathname === '/' && 'text-primary')} />
             {!collapsed && <span>Dashboard</span>}
           </NavLink>
         </div>
@@ -169,12 +171,13 @@ export function AppSidebar() {
                   className={cn(
                     'flex items-center justify-center rounded-xl px-2 py-2.5 min-h-[44px]',
                     'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground',
-                    'transition-all duration-150',
+                    'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
+                    'hover:scale-105',
                     isActive && 'bg-primary/10 text-primary'
                   )}
                   title={group.label}
                 >
-                  <group.icon className={cn('h-5 w-5', isActive && 'text-primary')} />
+                  <group.icon className={cn('h-5 w-5 transition-transform duration-200', isActive && 'text-primary')} />
                 </NavLink>
               );
             }
@@ -189,35 +192,37 @@ export function AppSidebar() {
                   <div className={cn(
                     'flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium',
                     'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground',
-                    'transition-all duration-150 min-h-[44px]',
+                    'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] min-h-[44px]',
+                    'hover:translate-x-1',
                     isActive && 'text-primary'
                   )}>
                     <div className="flex items-center gap-3">
-                      <group.icon className={cn('h-5 w-5 flex-shrink-0', isActive && 'text-primary')} />
+                      <group.icon className={cn('h-5 w-5 flex-shrink-0 transition-transform duration-200', isActive && 'text-primary')} />
                       <span>{group.label}</span>
                     </div>
                     <ChevronDown className={cn(
-                      'h-4 w-4 transition-transform duration-200',
+                      'h-4 w-4 transition-transform duration-250 ease-[cubic-bezier(0.32,0.72,0,1)]',
                       isOpen && 'rotate-180'
                     )} />
                   </div>
                 </CollapsibleTrigger>
-                <CollapsibleContent className="pt-1">
+                <CollapsibleContent className="pt-1 animate-accordion-down data-[state=closed]:animate-accordion-up">
                   <ul className="space-y-0.5 pl-4 border-l border-sidebar-border ml-5">
-                    {group.items.map((item) => {
+                    {group.items.map((item, index) => {
                       const isItemActive = location.pathname === item.to;
                       return (
-                        <li key={item.to}>
+                        <li key={item.to} style={{ animationDelay: `${index * 50}ms` }} className="animate-fade-in">
                           <NavLink
                             to={item.to}
                             className={cn(
                               'flex items-center gap-3 rounded-lg px-3 py-2 text-sm',
                               'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground',
-                              'transition-all duration-150',
+                              'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
+                              'hover:translate-x-1',
                               isItemActive && 'bg-primary/10 text-primary font-medium'
                             )}
                           >
-                            <item.icon className={cn('h-4 w-4 flex-shrink-0', isItemActive && 'text-primary')} />
+                            <item.icon className={cn('h-4 w-4 flex-shrink-0 transition-transform duration-200', isItemActive && 'text-primary')} />
                             <span>{item.label}</span>
                           </NavLink>
                         </li>
@@ -240,18 +245,19 @@ export function AppSidebar() {
                   <NavLink
                     to={item.to}
                     className={cn(
-                      'relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150',
-                      'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground',
+                      'relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium',
+                      'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
+                      'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground hover:translate-x-1',
                       'min-h-[44px]',
                       isActive && 'bg-primary/10 text-primary',
-                      collapsed && 'justify-center px-2'
+                      collapsed && 'justify-center px-2 hover:translate-x-0 hover:scale-105'
                     )}
                     title={collapsed ? item.label : undefined}
                   >
                     {isActive && (
-                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full" />
+                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full transition-all duration-200" />
                     )}
-                    <item.icon className={cn('h-5 w-5 flex-shrink-0', isActive && 'text-primary')} />
+                    <item.icon className={cn('h-5 w-5 flex-shrink-0 transition-transform duration-200', isActive && 'text-primary')} />
                     {!collapsed && <span>{item.label}</span>}
                   </NavLink>
                 </li>

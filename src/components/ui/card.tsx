@@ -9,7 +9,8 @@ const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
       className={cn(
         "rounded-2xl border border-border bg-card text-card-foreground",
         "shadow-sm",
-        "transition-all duration-200",
+        "transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]",
+        "animate-fade-in-scale",
         className
       )}
       {...props}
