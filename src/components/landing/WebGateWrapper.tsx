@@ -45,7 +45,11 @@ export function WebGateWrapper({ children }: WebGateWrapperProps) {
     const isProductionDomain = productionDomains.some(domain => hostname === domain);
     const hasPreviewParam = new URLSearchParams(window.location.search).has('preview-landing');
 
-    if ((isProductionDomain && !isPWA) || hasPreviewParam) {
+    // Always allow access to legal pages (privacy, terms)
+    const pathname = window.location.pathname.toLowerCase();
+    const isLegalPage = pathname === '/privacy' || pathname === '/terms';
+
+    if (((isProductionDomain && !isPWA) || hasPreviewParam) && !isLegalPage) {
       setShouldShowGate(true);
     }
 
