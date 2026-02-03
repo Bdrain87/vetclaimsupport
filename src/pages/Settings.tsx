@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, ExternalLink } from 'lucide-react';
+import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -317,23 +316,6 @@ export default function Settings() {
         </CardContent>
       </Card>
 
-      {/* Preview Landing Page - Dev Only */}
-      <Card className="border-dashed border-primary/30">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-primary">
-            <ExternalLink className="h-5 w-5" />
-            Preview Landing Page
-          </CardTitle>
-          <CardDescription>Test the App Store landing page design</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Link to="/landing-preview">
-            <Button variant="outline" className="w-full">
-              View App Store Landing Page →
-            </Button>
-          </Link>
-        </CardContent>
-      </Card>
     </div>
   );
 }

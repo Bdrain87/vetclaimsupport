@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { ClaimsProvider } from "./context/ClaimsContext";
@@ -112,6 +112,15 @@ const App = () => (
                       <Route path="/health-log" element={<HealthLog />} />
                       <Route path="/docs" element={<DocumentsHub />} />
                       <Route path="/landing-preview" element={<AppStoreLandingPage />} />
+
+                      {/* Redirects from old pages to unified pages */}
+                      <Route path="/symptom-journal" element={<Navigate to="/health-log" replace />} />
+                      <Route path="/medication-log" element={<Navigate to="/health-log" replace />} />
+                      <Route path="/sleep-tracker" element={<Navigate to="/health-log" replace />} />
+                      <Route path="/migraine-log" element={<Navigate to="/health-log" replace />} />
+                      <Route path="/documents-checklist" element={<Navigate to="/docs" replace />} />
+                      <Route path="/claim-docs" element={<Navigate to="/docs" replace />} />
+
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </AppLayout>

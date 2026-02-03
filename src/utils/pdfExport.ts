@@ -1404,3 +1404,169 @@ export const exportConditionEvidence = (
   addPDFFooter(doc);
   doc.save(`${conditionName.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}-evidence-package.pdf`);
 };
+
+// Sleep Log Export
+export const exportSleepLog = (entries: any[]) => {
+  if (entries.length === 0) {
+    alert('No sleep entries to export');
+    return;
+  }
+
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const sorted = [...entries].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  // Calculate stats
+  const last30Days = entries.filter(e => {
+    const date = new Date(e.date);
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    return date >= thirtyDaysAgo;
+  });
+
+  const avgHours = last30Days.length > 0
+    ? (last30Days.reduce((sum, e) => sum + e.hoursSlept, 0) / last30Days.length).toFixed(1)
+    : '0';
+  const cpapNights = last30Days.filter(e => e.usesCPAP);
+  const cpapUsed = cpapNights.filter(e => e.cpapUsedLastNight).length;
+  const cpapCompliance = cpapNights.length > 0 ? Math.round((cpapUsed / cpapNights.length) * 100) : null;
+  const nightmaresCount = last30Days.filter(e => e.nightmares).length;
+
+  let yPos = addPDFHeader(doc, {
+    title: 'Sleep Log - VA Disability Evidence',
+    subtitle: 'Sleep Apnea Documentation for VA Claims'
+  });
+
+  const summaryItems = [
+    { value: `${avgHours}h`, label: 'Avg Sleep (30d)' },
+    { value: cpapCompliance !== null ? `${cpapCompliance}%` : 'N/A', label: 'CPAP Compliance' },
+    { value: nightmaresCount, label: 'Nightmares (30d)' },
+    { value: entries.length, label: 'Total Entries' }
+  ];
+
+  yPos = drawSummaryBox(doc, summaryItems, yPos);
+
+  yPos = drawInfoBox(doc, 'VA Rating Information: Sleep Apnea is rated under 38 CFR § 4.97, DC 6847. 0% = Asymptomatic with documented disorder | 30% = Persistent daytime hypersomnolence | 50% = Requires breathing assistance device (CPAP) | 100% = Chronic respiratory failure with CO₂ retention or cor pulmonale.', yPos);
+
+  doc.setFontSize(14);
+  doc.setTextColor(...colors.secondary);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`Detailed Sleep Log (${entries.length} entries)`, 20, yPos);
+  yPos += 10;
+
+  sorted.forEach((entry) => {
+    yPos = checkPageBreak(doc, yPos, 50);
+
+    const startY = yPos;
+    yPos += 5;
+
+    // Header
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...colors.secondary);
+    doc.text(new Date(entry.date).toLocaleDateString(), 25, yPos);
+
+    // Quality badge
+    const quality = entry.quality || 'Fair';
+    const qualityColor = quality === 'Excellent' || quality === 'Good' ? colors.successBg
+      : quality === 'Fair' ? colors.warningBg : colors.dangerBg;
+    const qualityTextColor = quality === 'Excellent' || quality === 'Good' ? colors.success
+      : quality === 'Fair' ? colors.warning : colors.danger;
+
+    doc.setFillColor(...qualityColor);
+    doc.roundedRect(100, yPos - 4, 25, 6, 1, 1, 'F');
+    doc.setFontSize(8);
+    doc.setTextColor(...qualityTextColor);
+    doc.text(quality, 112.5, yPos, { align: 'center' });
+
+    // Hours badge
+    doc.setFillColor(...colors.infoBg);
+    doc.roundedRect(130, yPos - 4, 20, 6, 1, 1, 'F');
+    doc.setTextColor(...colors.primary);
+    doc.text(`${entry.hoursSlept}h`, 140, yPos, { align: 'center' });
+    yPos += 7;
+
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+
+    // CPAP Info
+    if (entry.usesCPAP) {
+      doc.setTextColor(...colors.muted);
+      doc.text('CPAP:', 25, yPos);
+      const cpapText = entry.cpapUsedLastNight
+        ? `Used${entry.cpapHoursUsed ? ` (${entry.cpapHoursUsed}h)` : ''}`
+        : 'Not Used';
+      doc.setTextColor(...(entry.cpapUsedLastNight ? colors.success : colors.danger));
+      doc.text(cpapText, 50, yPos);
+      yPos += 5;
+    }
+
+    // Interruptions
+    if (entry.interruptions > 0) {
+      doc.setTextColor(...colors.muted);
+      doc.text('Interruptions:', 25, yPos);
+      doc.setTextColor(...colors.secondary);
+      doc.text(String(entry.interruptions), 60, yPos);
+      yPos += 5;
+    }
+
+    // Daytime Sleepiness
+    if (entry.daytimeSleepiness && entry.daytimeSleepiness !== 'None') {
+      doc.setTextColor(...colors.muted);
+      doc.text('Daytime Sleepiness:', 25, yPos);
+      const sleepinessColor = entry.daytimeSleepiness === 'Severe' || entry.daytimeSleepiness === 'Persistent hypersomnolence'
+        ? colors.danger : colors.secondary;
+      doc.setTextColor(...sleepinessColor);
+      doc.text(entry.daytimeSleepiness, 70, yPos);
+      yPos += 5;
+    }
+
+    // Gasping episodes
+    if (entry.timesWokeGasping > 0) {
+      doc.setTextColor(...colors.muted);
+      doc.text('Woke Gasping:', 25, yPos);
+      doc.setTextColor(...colors.danger);
+      doc.text(`${entry.timesWokeGasping} times`, 60, yPos);
+      yPos += 5;
+    }
+
+    // Nightmares (PTSD related)
+    if (entry.nightmares) {
+      doc.setFillColor(...colors.dangerBg);
+      doc.roundedRect(25, yPos - 2, 30, 6, 1, 1, 'F');
+      doc.setFontSize(7);
+      doc.setTextColor(...colors.danger);
+      doc.text('NIGHTMARES', 40, yPos + 2, { align: 'center' });
+      doc.setFontSize(9);
+      yPos += 8;
+    }
+
+    // Impact on work
+    if (entry.impactOnWork) {
+      doc.setTextColor(...colors.muted);
+      doc.text('Impact:', 25, yPos);
+      const impactLines = wrapText(doc, entry.impactOnWork, pageWidth - 65);
+      doc.setTextColor(...colors.secondary);
+      doc.text(impactLines, 50, yPos);
+      yPos += impactLines.length * 4 + 2;
+    }
+
+    // Notes
+    if (entry.notes) {
+      doc.setTextColor(...colors.muted);
+      doc.text('Notes:', 25, yPos);
+      const noteLines = wrapText(doc, entry.notes, pageWidth - 65);
+      doc.setTextColor(...colors.secondary);
+      doc.text(noteLines, 50, yPos);
+      yPos += noteLines.length * 4 + 2;
+    }
+
+    yPos += 3;
+    doc.setDrawColor(...colors.border);
+    doc.roundedRect(22, startY, pageWidth - 44, yPos - startY, 2, 2, 'S');
+    yPos += 5;
+  });
+
+  addPDFFooter(doc);
+  doc.save('sleep-log.pdf');
+};

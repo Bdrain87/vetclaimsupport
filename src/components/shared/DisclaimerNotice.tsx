@@ -27,7 +27,7 @@ export function DisclaimerNotice({ variant = 'inline', className }: DisclaimerNo
         <div className="flex items-start gap-2">
           <AlertTriangle className="h-4 w-4 text-warning mt-0.5 flex-shrink-0" />
           <div className="text-xs text-muted-foreground">
-            <p className="font-medium text-foreground mb-1">Educational Tool Only</p>
+            <p className="font-medium text-foreground mb-1">Educational Tools Only</p>
             <p>
               This information is for educational purposes only and is not medical, legal, or VA advice. 
               Consult a healthcare provider, attorney, or accredited VSO before making decisions about your claim.

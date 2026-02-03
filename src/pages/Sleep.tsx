@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
 import { useEvidence } from '@/context/EvidenceContext';
-import { Moon, Plus, Trash2, Edit, Calendar, Clock, AlertTriangle, CheckCircle2, TrendingUp, Wind, Activity, Zap } from 'lucide-react';
+import { Moon, Plus, Trash2, Edit, Calendar, Clock, AlertTriangle, CheckCircle2, TrendingUp, Wind, Activity, Zap, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,6 +17,7 @@ import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import type { SleepEntry, SleepQuality, DaytimeSleepiness } from '@/types/claims';
+import { exportSleepLog } from '@/utils/pdfExport';
 
 const qualities: { value: SleepQuality; label: string }[] = [
   { value: 'Very Poor', label: 'Very Poor' },
@@ -215,6 +216,15 @@ export default function Sleep() {
             <p className="text-muted-foreground text-sm">VA-aligned sleep apnea evidence logging</p>
           </div>
         </div>
+        <Button
+          variant="outline"
+          onClick={() => exportSleepLog(sleepEntries)}
+          className="gap-2 hidden sm:flex flex-shrink-0"
+          disabled={sleepEntries.length === 0}
+        >
+          <Download className="h-4 w-4" />
+          Export PDF
+        </Button>
       </div>
 
       {/* VA Rating Info - Premium Card */}
