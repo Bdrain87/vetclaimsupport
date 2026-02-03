@@ -4,8 +4,6 @@ import {
   LayoutDashboard,
   Stethoscope,
   AlertTriangle,
-  Activity,
-  Pill,
   Shield,
   Users,
   FileCheck,
@@ -15,14 +13,12 @@ import {
   ChevronDown,
   ShieldCheck,
   Brain,
-  Moon,
   Settings,
   Clock,
   ClipboardCheck,
   Heart,
   Briefcase,
   Wrench,
-  FileArchive,
   FolderOpen,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -49,10 +45,8 @@ const navGroups: NavGroup[] = [
     icon: Heart,
     defaultOpen: true,
     items: [
-      { to: '/symptoms', icon: Activity, label: 'Symptoms' },
+      { to: '/health-log', icon: Heart, label: 'Health Log' },
       { to: '/migraines', icon: Brain, label: 'Migraines' },
-      { to: '/sleep', icon: Moon, label: 'Sleep' },
-      { to: '/medications', icon: Pill, label: 'Medications' },
     ],
   },
   {
@@ -68,10 +62,7 @@ const navGroups: NavGroup[] = [
     label: 'Evidence & Docs',
     icon: FileCheck,
     items: [
-      { to: '/evidence-docs', icon: FolderOpen, label: 'Evidence & Docs' },
-      { to: '/claim-documents', icon: FolderOpen, label: 'Claim Documents' },
-      { to: '/evidence-library', icon: FileArchive, label: 'Evidence Library' },
-      { to: '/documents', icon: FileCheck, label: 'Documents Checklist' },
+      { to: '/docs', icon: FolderOpen, label: 'Documents Hub' },
       { to: '/buddy-statements', icon: Users, label: 'Buddy Statements' },
       { to: '/timeline', icon: Clock, label: 'Timeline' },
     ],
