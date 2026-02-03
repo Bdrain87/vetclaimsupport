@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { ClaimsProvider } from "./context/ClaimsContext";
 import { EvidenceProvider } from "./context/EvidenceContext";
@@ -41,56 +42,57 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider>
-      <WebGateWrapper>
-        <ClaimsProvider>
-          <EvidenceProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
-                <ScrollToTop />
-                <LiabilityAcceptanceScreen />
-                <OnboardingModal />
-                <PWAInstallPrompt />
-                <OfflineIndicator />
-                <MilestoneCelebration />
-                <AppLayout>
-                  <Routes>
-                    <Route path="/" element={<Dashboard />} />
-                    <Route path="/medical-visits" element={<MedicalVisits />} />
-                    <Route path="/migraines" element={<Migraines />} />
-                    <Route path="/exposures" element={<Exposures />} />
-                    <Route path="/symptoms" element={<Symptoms />} />
-                    <Route path="/medications" element={<Medications />} />
-                    <Route path="/service-history" element={<ServiceHistory />} />
-                    <Route path="/buddy-contacts" element={<BuddyContacts />} />
-                    <Route path="/documents" element={<Documents />} />
-                    <Route path="/claim-documents" element={<ClaimDocuments />} />
-                    <Route path="/evidence-docs" element={<EvidenceDocs />} />
-                    <Route path="/evidence-library" element={<EvidenceLibrary />} />
-                    <Route path="/reference" element={<Reference />} />
-                    <Route path="/sleep" element={<Sleep />} />
-                    <Route path="/settings" element={<Settings />} />
-                    <Route path="/timeline" element={<Timeline />} />
-                    <Route path="/checklist" element={<ClaimChecklist />} />
-                    <Route path="/exam-prep" element={<ExamPrep />} />
-                    <Route path="/claim-tools" element={<ClaimTools />} />
-                    <Route path="/privacy" element={<Privacy />} />
-                    <Route path="/terms" element={<Terms />} />
-                    <Route path="/landing-preview" element={<AppStoreLandingPage />} />
-                    <Route path="*" element={<NotFound />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </AppLayout>
-              </BrowserRouter>
-            </TooltipProvider>
-          </EvidenceProvider>
-        </ClaimsProvider>
-      </WebGateWrapper>
-    </ThemeProvider>
-  </QueryClientProvider>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <WebGateWrapper>
+          <ClaimsProvider>
+            <EvidenceProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Sonner />
+                <BrowserRouter>
+                  <ScrollToTop />
+                  <LiabilityAcceptanceScreen />
+                  <OnboardingModal />
+                  <PWAInstallPrompt />
+                  <OfflineIndicator />
+                  <MilestoneCelebration />
+                  <AppLayout>
+                    <Routes>
+                      <Route path="/" element={<Dashboard />} />
+                      <Route path="/medical-visits" element={<MedicalVisits />} />
+                      <Route path="/migraines" element={<Migraines />} />
+                      <Route path="/exposures" element={<Exposures />} />
+                      <Route path="/symptoms" element={<Symptoms />} />
+                      <Route path="/medications" element={<Medications />} />
+                      <Route path="/service-history" element={<ServiceHistory />} />
+                      <Route path="/buddy-contacts" element={<BuddyContacts />} />
+                      <Route path="/documents" element={<Documents />} />
+                      <Route path="/claim-documents" element={<ClaimDocuments />} />
+                      <Route path="/evidence-docs" element={<EvidenceDocs />} />
+                      <Route path="/evidence-library" element={<EvidenceLibrary />} />
+                      <Route path="/reference" element={<Reference />} />
+                      <Route path="/sleep" element={<Sleep />} />
+                      <Route path="/settings" element={<Settings />} />
+                      <Route path="/timeline" element={<Timeline />} />
+                      <Route path="/checklist" element={<ClaimChecklist />} />
+                      <Route path="/exam-prep" element={<ExamPrep />} />
+                      <Route path="/claim-tools" element={<ClaimTools />} />
+                      <Route path="/privacy" element={<Privacy />} />
+                      <Route path="/terms" element={<Terms />} />
+                      <Route path="/landing-preview" element={<AppStoreLandingPage />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </AppLayout>
+                </BrowserRouter>
+              </TooltipProvider>
+            </EvidenceProvider>
+          </ClaimsProvider>
+        </WebGateWrapper>
+      </ThemeProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;

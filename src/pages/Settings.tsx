@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Share2, ExternalLink } from 'lucide-react';
+import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, ExternalLink } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -10,6 +10,7 @@ import { useTheme } from '@/context/ThemeContext';
 import { useToast } from '@/hooks/use-toast';
 import { ShareWithVSO } from '@/components/dashboard/ShareWithVSO';
 import { ExportButton } from '@/components/dashboard/ExportButton';
+import { DataBackup } from '@/components/settings/DataBackup';
 
 const REMINDER_SETTINGS_KEY = 'va-claims-reminder-settings';
 
@@ -293,6 +294,9 @@ export default function Settings() {
           <ExportButton />
         </CardContent>
       </Card>
+
+      {/* Data Backup */}
+      <DataBackup />
 
       {/* Data Info */}
       <Card>
