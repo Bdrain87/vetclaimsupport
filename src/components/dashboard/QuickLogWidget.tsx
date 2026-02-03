@@ -61,11 +61,11 @@ export function QuickLogWidget() {
   if (loggedToday) {
     const todayLog = data.quickLogs?.find(log => log.date === today);
     return (
-      <div className="flex items-center gap-3 p-4 rounded-2xl bg-white dark:bg-gray-900 border border-border shadow-sm">
+      <div className="flex items-center gap-3 p-4 rounded-2xl bg-card border border-border shadow-sm">
         <CheckCircle2 className="h-5 w-5 text-success" />
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-gray-900 dark:text-white">Today's Log Complete</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+          <p className="text-sm font-medium text-foreground">Today's Log Complete</p>
+          <p className="text-xs text-muted-foreground">
             Feeling: {todayLog?.overallFeeling}/10
             {todayLog?.hadFlareUp && ' • Flare-up noted'}
           </p>
@@ -75,22 +75,22 @@ export function QuickLogWidget() {
   }
 
   return (
-    <Card className="bg-white dark:bg-gray-900 border border-border shadow-sm overflow-hidden">
+    <Card className="bg-card border border-border shadow-sm overflow-hidden">
       <CardContent className="p-5 space-y-5">
         {/* Header */}
         <div className="flex items-center gap-3">
           <Zap className="h-5 w-5 text-primary" />
           <div>
-            <h3 className="text-base font-semibold text-gray-900 dark:text-white">Quick Daily Log</h3>
-            <p className="text-xs text-gray-500 dark:text-gray-400">Track your patterns</p>
+            <h3 className="text-base font-semibold text-foreground">Quick Daily Log</h3>
+            <p className="text-xs text-muted-foreground">Track your patterns</p>
           </div>
         </div>
 
         {/* Feeling Slider */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <Label className="text-sm text-gray-500 dark:text-gray-400">How are you feeling?</Label>
-            <span className="text-2xl font-bold number-display text-gray-900 dark:text-white">
+            <Label className="text-sm text-muted-foreground">How are you feeling?</Label>
+            <span className="text-2xl font-bold number-display text-foreground">
               {feeling}
             </span>
           </div>
@@ -102,20 +102,20 @@ export function QuickLogWidget() {
             step={1}
             className="w-full"
           />
-          <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
+          <div className="flex justify-between text-xs text-muted-foreground">
             <span>1</span>
-            <span className="font-medium text-gray-900 dark:text-white">{getFeelingLabel(feeling)}</span>
+            <span className="font-medium text-foreground">{getFeelingLabel(feeling)}</span>
             <span>10</span>
           </div>
         </div>
 
         {/* Toggle Options */}
-        <div className="space-y-0 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 border border-border">
+        <div className="space-y-0 rounded-xl overflow-hidden bg-muted/50 border border-border">
           {/* Flare-up Toggle */}
-          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800">
+          <div className="flex items-center justify-between p-4 bg-muted/30">
             <div className="flex items-center gap-3">
               <Flame className="h-4 w-4 text-warning" />
-              <Label htmlFor="flare-up" className="text-sm cursor-pointer text-gray-900 dark:text-white">
+              <Label htmlFor="flare-up" className="text-sm cursor-pointer text-foreground">
                 Any flare-ups?
               </Label>
             </div>
@@ -130,10 +130,10 @@ export function QuickLogWidget() {
           {usesCPAP && (
             <>
               <div className="border-t border-border" />
-              <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800">
+              <div className="flex items-center justify-between p-4 bg-muted/30">
                 <div className="flex items-center gap-3">
                   <Wind className="h-4 w-4 text-primary" />
-                  <Label htmlFor="cpap" className="text-sm cursor-pointer text-gray-900 dark:text-white">
+                  <Label htmlFor="cpap" className="text-sm cursor-pointer text-foreground">
                     CPAP used?
                   </Label>
                 </div>

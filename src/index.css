@@ -1337,6 +1337,22 @@
   opacity: 1;
 }
 
+/* Slow pulse animation for landing page */
+.animate-slow-pulse {
+  animation: slowPulse 3s ease-in-out infinite;
+}
+
+@keyframes slowPulse {
+  0%, 100% {
+    opacity: 0.75;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.5);
+  }
+}
+
 /* ========================================
    PRINT STYLES
    ======================================== */

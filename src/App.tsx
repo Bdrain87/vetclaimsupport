@@ -50,6 +50,8 @@ import ClaimStrategyWizard from "./pages/ClaimStrategyWizard";
 import BilateralCalculator from "./pages/BilateralCalculator";
 import HelpCenter from "./pages/HelpCenter";
 import ClaimJourney from "./pages/ClaimJourney";
+import HealthLog from "./pages/HealthLog";
+import DocumentsHub from "./pages/DocumentsHub";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -107,6 +109,8 @@ const App = () => (
                       <Route path="/calculator" element={<BilateralCalculator />} />
                       <Route path="/help" element={<HelpCenter />} />
                       <Route path="/journey" element={<ClaimJourney />} />
+                      <Route path="/health-log" element={<HealthLog />} />
+                      <Route path="/docs" element={<DocumentsHub />} />
                       <Route path="/landing-preview" element={<AppStoreLandingPage />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>

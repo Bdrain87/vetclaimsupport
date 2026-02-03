@@ -180,7 +180,8 @@ export interface MigraineEntry {
   severity: MigraineSeverity;
   symptoms: MigraineSymptom[];
   triggers: MigraneTrigger[];
-  impact: MigraineImpact;
+  impact: MigraineImpact; // Legacy: single value for backwards compatibility
+  impacts?: MigraineImpact[]; // New: multi-select impacts
   treatment: string;
   notes: string;
   // VA-specific fields for rating criteria alignment

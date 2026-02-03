@@ -40,6 +40,7 @@ const navGroups: NavGroup[] = [
     icon: Heart,
     defaultOpen: true,
     items: [
+      { to: '/health-log', icon: Heart, label: 'Health Log' },
       { to: '/symptoms', icon: Activity, label: 'Symptoms' },
       { to: '/migraines', icon: Brain, label: 'Migraines' },
       { to: '/sleep', icon: Moon, label: 'Sleep' },
@@ -59,8 +60,8 @@ const navGroups: NavGroup[] = [
     label: 'Evidence & Docs',
     icon: FileCheck,
     items: [
+      { to: '/docs', icon: FileCheck, label: 'Documents' },
       { to: '/evidence-docs', icon: FileCheck, label: 'Evidence' },
-      { to: '/documents', icon: FileCheck, label: 'Docs' },
       { to: '/buddy-contacts', icon: Users, label: 'Buddies' },
       { to: '/timeline', icon: Clock, label: 'Timeline' },
     ],

@@ -159,6 +159,9 @@ export default function Dashboard() {
       {/* Hero Header with Native Share */}
       <DashboardHeader />
 
+      {/* Intent to File Pro Tip - Most Important First */}
+      <IntentToFileCard />
+
       {/* Veteran-Built Badge */}
       <div className="flex justify-center">
         <div className="premium-badge-primary gap-1.5">
@@ -549,9 +552,6 @@ export default function Dashboard() {
 
       {/* Deadlines & Reminders */}
       <DeadlinesReminders />
-
-      {/* Intent to File Card */}
-      <IntentToFileCard />
 
       {/* My Approved Conditions */}
       <ApprovedConditionsSection />
