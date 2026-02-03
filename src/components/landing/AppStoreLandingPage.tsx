@@ -1,4 +1,4 @@
-import { ShieldCheck, Lock, Wifi, Medal, Flag, Activity, FileText, FolderOpen, MapPin, Moon, Pill, Upload, Users, Clock, ClipboardCheck, History, Database, Heart, BookOpen, Stethoscope, ArrowRight, Sparkles } from 'lucide-react';
+import { ShieldCheck, Lock, Medal, Flag, Activity, FileText, FolderOpen, MapPin, Moon, Pill, Upload, Users, Clock, ClipboardCheck, History, Database, Heart, BookOpen, Stethoscope, ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
@@ -141,11 +141,11 @@ export function AppStoreLandingPage() {
           </div>
         </div>
 
-        {/* Features Grid - Privacy & Offline */}
+        {/* Features Grid - Privacy & AI */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl animate-fade-in mb-12">
           {[
             { icon: Lock, title: 'Privacy-First', desc: 'Your data stays on your device, always secure and private' },
-            { icon: Wifi, title: 'Offline-Ready', desc: 'Full functionality without internet connection' },
+            { icon: Sparkles, title: 'AI-Powered', desc: 'Smart analysis helps identify conditions and strengthen your claim' },
           ].map((feature) => (
             <div key={feature.title} className="flex flex-col items-center p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
               <feature.icon className="h-8 w-8 text-primary mb-3" />
