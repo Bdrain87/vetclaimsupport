@@ -6,7 +6,7 @@ import {
   AlertTriangle,
   Shield,
   Users,
-  FileCheck,
+  FileText,
   BookOpen,
   ChevronLeft,
   ChevronRight,
@@ -17,9 +17,12 @@ import {
   Clock,
   ClipboardCheck,
   Heart,
-  Briefcase,
   Wrench,
-  FolderOpen,
+  Calculator,
+  Search,
+  Wand2,
+  Route,
+  HelpCircle,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -39,9 +42,10 @@ interface NavGroup {
   defaultOpen?: boolean;
 }
 
+// Grouped navigation items
 const navGroups: NavGroup[] = [
   {
-    label: 'Health Logs',
+    label: 'Health',
     icon: Heart,
     defaultOpen: true,
     items: [
@@ -50,35 +54,44 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
-    label: 'Service Record',
+    label: 'Service History',
     icon: Shield,
     items: [
-      { to: '/service-history', icon: Shield, label: 'Service History' },
-      { to: '/exposures', icon: AlertTriangle, label: 'Exposures' },
+      { to: '/service-history', icon: Shield, label: 'Service Record' },
       { to: '/medical-visits', icon: Stethoscope, label: 'Medical Visits' },
-    ],
-  },
-  {
-    label: 'Evidence & Docs',
-    icon: FileCheck,
-    items: [
-      { to: '/docs', icon: FolderOpen, label: 'Documents Hub' },
-      { to: '/buddy-statements', icon: Users, label: 'Buddy Statements' },
+      { to: '/exposures', icon: AlertTriangle, label: 'Exposures' },
       { to: '/timeline', icon: Clock, label: 'Timeline' },
     ],
   },
   {
-    label: 'Claim Tools',
+    label: 'Claims',
+    icon: ClipboardCheck,
+    items: [
+      { to: '/journey', icon: Route, label: 'Journey' },
+      { to: '/buddy-statements', icon: Users, label: 'Buddy Statements' },
+      { to: '/checklist', icon: ClipboardCheck, label: 'Checklist' },
+    ],
+  },
+  {
+    label: 'Tools',
     icon: Wrench,
     items: [
-      { to: '/claim-tools', icon: Wrench, label: 'All Tools' },
-      { to: '/checklist', icon: ClipboardCheck, label: 'Checklist' },
-      { to: '/exam-prep', icon: Briefcase, label: 'C&P Exam Prep' },
+      { to: '/calculator', icon: Calculator, label: 'Calculator' },
+      { to: '/claim-strategy', icon: Wand2, label: 'Strategy Wizard' },
+      { to: '/secondary-finder', icon: Search, label: 'Secondary Finder' },
+      { to: '/cp-exam-prep', icon: ClipboardCheck, label: 'C&P Exam Prep' },
     ],
   },
 ];
 
+// Single-link navigation items (no submenu)
+const singleNavItems: NavItem[] = [
+  { to: '/docs', icon: FileText, label: 'Documents' },
+];
+
+// Bottom navigation items
 const secondaryNavItems: NavItem[] = [
+  { to: '/help', icon: HelpCircle, label: 'Help' },
   { to: '/reference', icon: BookOpen, label: 'Reference' },
   { to: '/settings', icon: Settings, label: 'Settings' },
 ];
@@ -151,6 +164,32 @@ export function AppSidebar() {
             <LayoutDashboard className={cn('h-5 w-5 flex-shrink-0 transition-transform duration-200', location.pathname === '/' && 'text-primary drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]')} />
             {!collapsed && <span className="font-semibold">Dashboard</span>}
           </NavLink>
+
+          {/* Single-link navigation items (no submenu) */}
+          {singleNavItems.map((item) => {
+            const isActive = location.pathname === item.to;
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={cn(
+                  'relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium mt-1',
+                  'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
+                  'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground hover:translate-x-1',
+                  'min-h-[44px]',
+                  isActive && 'bg-gradient-to-r from-primary/15 to-primary/5 text-primary border border-primary/20',
+                  collapsed && 'justify-center px-2 hover:translate-x-0'
+                )}
+                title={collapsed ? item.label : undefined}
+              >
+                {isActive && (
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-7 bg-gradient-to-b from-primary to-primary/60 rounded-r-full shadow-[0_0_12px_rgba(59,130,246,0.5)]" />
+                )}
+                <item.icon className={cn('h-5 w-5 flex-shrink-0 transition-transform duration-200', isActive && 'text-primary drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]')} />
+                {!collapsed && <span className="font-semibold">{item.label}</span>}
+              </NavLink>
+            );
+          })}
         </div>
 
         {/* Grouped Navigation */}
