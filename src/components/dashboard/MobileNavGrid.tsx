@@ -25,6 +25,8 @@ import {
   Files,
   Moon,
   Sun,
+  FileSignature,
+  ClipboardList,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/context/ThemeContext';
@@ -52,6 +54,8 @@ const drawerSections = [
     items: [
       { title: 'Rating Calculator', path: '/calculator', icon: Calculator },
       { title: 'Secondary Finder', path: '/secondary-finder', icon: Search },
+      { title: 'Nexus Letter Generator', path: '/nexus-letter', icon: FileSignature },
+      { title: 'DBQ Prep Sheet', path: '/dbq-prep', icon: ClipboardList },
       { title: 'Strategy Wizard', path: '/claim-strategy', icon: Wand2 },
       { title: 'C&P Exam Prep', path: '/cp-exam-prep', icon: ClipboardCheck },
     ],

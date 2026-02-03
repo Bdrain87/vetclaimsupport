@@ -26,6 +26,8 @@ import {
   Star,
   Files,
   Activity,
+  FileSignature,
+  ClipboardList,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -57,6 +59,8 @@ const premiumToolsGroup: NavGroup = {
   items: [
     { to: '/calculator', icon: Calculator, label: 'Rating Calculator' },
     { to: '/secondary-finder', icon: Search, label: 'Secondary Finder' },
+    { to: '/nexus-letter', icon: FileSignature, label: 'Nexus Letter Generator' },
+    { to: '/dbq-prep', icon: ClipboardList, label: 'DBQ Prep Sheet' },
     { to: '/claim-strategy', icon: Wand2, label: 'Strategy Wizard' },
     { to: '/cp-exam-prep', icon: ClipboardCheck, label: 'C&P Exam Prep' },
   ],
