@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -28,8 +30,9 @@ import { Separator } from '@/components/ui/separator';
 import {
   Calculator, Plus, Trash2, Info, HelpCircle, ChevronDown, ChevronRight,
   Save, Upload, FileDown, AlertTriangle, ArrowRight, Sparkles, Users,
-  Copy, Check, RefreshCw
+  Copy, Check, RefreshCw, Heart, GraduationCap, UserPlus
 } from 'lucide-react';
+import { calculateCompensation, DependentsInfo, vaCompensationRates2024 } from '@/data/vaCompensationRates';
 
 // 2026 VA compensation rates (single veteran, no dependents)
 const monthlyCompensation: Record<number, number> = {
@@ -288,7 +291,20 @@ export default function BilateralCalculator() {
   const [copied, setCopied] = useState(false);
   const [showExplainer, setShowExplainer] = useState(false);
 
+  // Dependents state
+  const [dependents, setDependents] = useState<DependentsInfo>({
+    hasSpouse: false,
+    childrenUnder18: 0,
+    childrenInSchool: 0,
+    dependentParents: 0,
+  });
+
   const result = useMemo(() => calculateWithBilateral(conditions), [conditions]);
+
+  // Calculate compensation with dependents
+  const compensation = useMemo(() => {
+    return calculateCompensation(result.officialRating, dependents);
+  }, [result.officialRating, dependents]);
 
   const addCondition = useCallback(() => {
     if (!newName || !newRating) return;
@@ -750,6 +766,110 @@ Conditions: ${conditions.map(c => `${c.name} (${c.rating}%)`).join(', ')}`;
           </CardContent>
         </Card>
 
+        {/* Dependents Section - Only show when rating >= 30% */}
+        {result.officialRating >= 30 && (
+          <Card className="border-0 shadow-lg">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Users className="h-5 w-5 text-primary" />
+                Dependents
+              </CardTitle>
+              <CardDescription>
+                Add dependents to calculate additional compensation (30%+ rating required)
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Spouse Toggle */}
+              <div className="flex items-center justify-between p-3 rounded-xl bg-muted/30">
+                <div className="flex items-center gap-3">
+                  <Heart className="h-5 w-5 text-rose-500" />
+                  <div>
+                    <Label htmlFor="spouse" className="font-medium">Spouse</Label>
+                    <p className="text-xs text-muted-foreground">+${vaCompensationRates2024.spouse[result.officialRating]?.toFixed(2) || 0}/mo</p>
+                  </div>
+                </div>
+                <Switch
+                  id="spouse"
+                  checked={dependents.hasSpouse}
+                  onCheckedChange={(checked) => setDependents(prev => ({ ...prev, hasSpouse: checked }))}
+                />
+              </div>
+
+              {/* Children Under 18 */}
+              <div className="flex items-center justify-between p-3 rounded-xl bg-muted/30">
+                <div className="flex items-center gap-3">
+                  <UserPlus className="h-5 w-5 text-blue-500" />
+                  <div>
+                    <Label className="font-medium">Children Under 18</Label>
+                    <p className="text-xs text-muted-foreground">+${vaCompensationRates2024.childUnder18[result.officialRating]?.toFixed(2) || 0}/mo each</p>
+                  </div>
+                </div>
+                <Select
+                  value={dependents.childrenUnder18.toString()}
+                  onValueChange={(val) => setDependents(prev => ({ ...prev, childrenUnder18: parseInt(val) }))}
+                >
+                  <SelectTrigger className="w-20">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
+                      <SelectItem key={n} value={n.toString()}>{n}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Children 18-23 in School */}
+              <div className="flex items-center justify-between p-3 rounded-xl bg-muted/30">
+                <div className="flex items-center gap-3">
+                  <GraduationCap className="h-5 w-5 text-violet-500" />
+                  <div>
+                    <Label className="font-medium">Children 18-23 in School</Label>
+                    <p className="text-xs text-muted-foreground">+${vaCompensationRates2024.childSchool[result.officialRating]?.toFixed(2) || 0}/mo each</p>
+                  </div>
+                </div>
+                <Select
+                  value={dependents.childrenInSchool.toString()}
+                  onValueChange={(val) => setDependents(prev => ({ ...prev, childrenInSchool: parseInt(val) }))}
+                >
+                  <SelectTrigger className="w-20">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[0, 1, 2, 3, 4, 5].map(n => (
+                      <SelectItem key={n} value={n.toString()}>{n}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Dependent Parents */}
+              <div className="flex items-center justify-between p-3 rounded-xl bg-muted/30">
+                <div className="flex items-center gap-3">
+                  <Users className="h-5 w-5 text-amber-500" />
+                  <div>
+                    <Label className="font-medium">Dependent Parents</Label>
+                    <p className="text-xs text-muted-foreground">+${vaCompensationRates2024.dependentParent[result.officialRating]?.toFixed(2) || 0}/mo each</p>
+                  </div>
+                </div>
+                <Select
+                  value={dependents.dependentParents.toString()}
+                  onValueChange={(val) => setDependents(prev => ({ ...prev, dependentParents: parseInt(val) }))}
+                >
+                  <SelectTrigger className="w-20">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[0, 1, 2].map(n => (
+                      <SelectItem key={n} value={n.toString()}>{n}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Results Section */}
         <div className="space-y-6">
           {/* Main Result */}
@@ -777,18 +897,76 @@ Conditions: ${conditions.map(c => `${c.name} (${c.rating}%)`).join(', ')}`;
                 <div className="flex-1" />
                 <div className="text-right">
                   <p className="text-2xl font-bold text-green-600 dark:text-green-500">
-                    {formatCurrency(result.monthlyCompensation)}
+                    {formatCurrency(compensation.totalMonthly)}
                   </p>
-                  <p className="text-xs text-muted-foreground">per month (2026)</p>
+                  <p className="text-xs text-muted-foreground">per month (2024)</p>
                 </div>
               </div>
             </div>
 
-            <CardContent className="pt-4">
+            <CardContent className="pt-4 space-y-4">
+              {/* Compensation Breakdown - show when dependents or rating 30%+ */}
+              {result.officialRating >= 30 && (
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-muted-foreground">Compensation Breakdown</p>
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between text-sm">
+                      <span>Base Rate ({result.officialRating}%)</span>
+                      <span className="font-medium">{formatCurrency(compensation.baseRate)}</span>
+                    </div>
+                    {compensation.spouseAddition > 0 && (
+                      <div className="flex justify-between text-sm text-rose-600 dark:text-rose-400">
+                        <span className="flex items-center gap-1.5">
+                          <Heart className="h-3.5 w-3.5" />
+                          Spouse
+                        </span>
+                        <span>+{formatCurrency(compensation.spouseAddition)}</span>
+                      </div>
+                    )}
+                    {compensation.childrenAddition > 0 && (
+                      <div className="flex justify-between text-sm text-blue-600 dark:text-blue-400">
+                        <span className="flex items-center gap-1.5">
+                          <UserPlus className="h-3.5 w-3.5" />
+                          Children Under 18 ({dependents.childrenUnder18})
+                        </span>
+                        <span>+{formatCurrency(compensation.childrenAddition)}</span>
+                      </div>
+                    )}
+                    {compensation.schoolChildrenAddition > 0 && (
+                      <div className="flex justify-between text-sm text-violet-600 dark:text-violet-400">
+                        <span className="flex items-center gap-1.5">
+                          <GraduationCap className="h-3.5 w-3.5" />
+                          Children in School ({dependents.childrenInSchool})
+                        </span>
+                        <span>+{formatCurrency(compensation.schoolChildrenAddition)}</span>
+                      </div>
+                    )}
+                    {compensation.parentsAddition > 0 && (
+                      <div className="flex justify-between text-sm text-amber-600 dark:text-amber-400">
+                        <span className="flex items-center gap-1.5">
+                          <Users className="h-3.5 w-3.5" />
+                          Dependent Parents ({dependents.dependentParents})
+                        </span>
+                        <span>+{formatCurrency(compensation.parentsAddition)}</span>
+                      </div>
+                    )}
+                    {(compensation.spouseAddition > 0 || compensation.childrenAddition > 0 || compensation.schoolChildrenAddition > 0 || compensation.parentsAddition > 0) && (
+                      <>
+                        <Separator className="my-2" />
+                        <div className="flex justify-between text-sm font-bold">
+                          <span>Total Monthly</span>
+                          <span className="text-green-600 dark:text-green-500">{formatCurrency(compensation.totalMonthly)}</span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-3 rounded-xl bg-muted/50 text-center">
                   <p className="text-sm text-muted-foreground">Yearly</p>
-                  <p className="text-lg font-bold">{formatCurrency(result.yearlyCompensation)}</p>
+                  <p className="text-lg font-bold">{formatCurrency(compensation.totalYearly)}</p>
                 </div>
                 <div className="p-3 rounded-xl bg-muted/50 text-center">
                   <p className="text-sm text-muted-foreground">Conditions</p>
