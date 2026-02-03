@@ -41,6 +41,9 @@ import FAQ from "./pages/FAQ";
 import Glossary from "./pages/Glossary";
 import VAForms from "./pages/VAForms";
 import UserGuide from "./pages/UserGuide";
+import ConditionsByConflict from "./pages/ConditionsByConflict";
+import BuddyStatementGenerator from "./pages/BuddyStatementGenerator";
+import ConditionGuide from "./pages/ConditionGuide";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -89,6 +92,9 @@ const App = () => (
                       <Route path="/glossary" element={<Glossary />} />
                       <Route path="/va-forms" element={<VAForms />} />
                       <Route path="/user-guide" element={<UserGuide />} />
+                      <Route path="/conditions-by-conflict" element={<ConditionsByConflict />} />
+                      <Route path="/buddy-statement-generator" element={<BuddyStatementGenerator />} />
+                      <Route path="/condition-guide" element={<ConditionGuide />} />
                       <Route path="/landing-preview" element={<AppStoreLandingPage />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
