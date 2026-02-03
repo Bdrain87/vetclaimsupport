@@ -144,7 +144,7 @@ export function AppStoreLandingPage() {
         {/* Features Grid - Privacy & AI */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl animate-fade-in mb-12">
           {[
-            { icon: Lock, title: 'Privacy-First', desc: 'Your data stays on your device, always secure and private' },
+            { icon: Lock, title: 'Privacy-First', desc: 'No account required. No tracking. You control your data.' },
             { icon: Sparkles, title: 'AI-Powered', desc: 'Smart analysis helps identify conditions and strengthen your claim' },
           ].map((feature) => (
             <div key={feature.title} className="flex flex-col items-center p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
