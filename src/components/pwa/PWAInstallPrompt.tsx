@@ -7,7 +7,7 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
-export function PWAInstallPrompt() {
+export function PWAInstallPrompt() 
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
@@ -82,8 +82,7 @@ export function PWAInstallPrompt() {
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-foreground text-sm">Install App</h3>
             <p className="text-xs text-muted-foreground mt-1">
-              Add Vet Claim Support to your home screen for quick access and offline use.
-            </p>
+              Add Vet Claim Support to your home screen for quick access and AI-powered assistance.            </p>
           </div>
           <button
             onClick={handleDismiss}
