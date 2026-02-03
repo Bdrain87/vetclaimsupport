@@ -16,8 +16,9 @@ export default defineConfig(({ mode }) => ({
     react(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.ico", "robots.txt", "pwa-icons/*.png"],
+      includeAssets: ["favicon.ico", "robots.txt", "pwa-icons/*.svg", "pwa-icons/*.jpg", "screenshots/*.svg"],
       manifest: {
+        id: "/",
         name: "Vet Claim Support",
         short_name: "VetClaim",
         description: "Track medical visits, exposures, symptoms, and documentation for VA disability claims",
@@ -27,19 +28,48 @@ export default defineConfig(({ mode }) => ({
         orientation: "portrait",
         scope: "/",
         start_url: "/",
+        categories: ["medical", "health", "productivity"],
         icons: [
           {
-            src: "/pwa-icons/icon-192x192.png",
+            src: "/pwa-icons/icon-192x192.svg",
             sizes: "192x192",
-            type: "image/png",
-            purpose: "any maskable",
+            type: "image/svg+xml",
+            purpose: "any",
           },
           {
-            src: "/pwa-icons/icon-512x512.png",
+            src: "/pwa-icons/icon-512x512.svg",
             sizes: "512x512",
-            type: "image/png",
-            purpose: "any maskable",
+            type: "image/svg+xml",
+            purpose: "any",
           },
+          {
+            src: "/pwa-icons/icon-192x192.jpg",
+            sizes: "192x192",
+            type: "image/jpeg",
+            purpose: "maskable",
+          },
+          {
+            src: "/pwa-icons/icon-512x512.jpg",
+            sizes: "512x512",
+            type: "image/jpeg",
+            purpose: "maskable",
+          },
+        ],
+        screenshots: [
+          {
+            src: "/screenshots/screenshot-narrow.svg",
+            sizes: "540x720",
+            type: "image/svg+xml",
+            form_factor: "narrow",
+            label: "VA Rating Calculator"
+          },
+          {
+            src: "/screenshots/screenshot-wide.svg",
+            sizes: "1280x720",
+            type: "image/svg+xml",
+            form_factor: "wide",
+            label: "Dashboard Overview"
+          }
         ]
       },
       workbox: {
