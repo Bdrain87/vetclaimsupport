@@ -1,5 +1,30 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 
+// SpeechRecognition types (not in standard DOM types)
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string;
+}
+
+interface SpeechRecognitionResultItem {
+  transcript: string;
+  confidence: number;
+}
+
+interface SpeechRecognitionResult {
+  isFinal: boolean;
+  [index: number]: SpeechRecognitionResultItem;
+}
+
+interface SpeechRecognitionResultList {
+  length: number;
+  [index: number]: SpeechRecognitionResult;
+}
+
+interface SpeechRecognitionEventCustom extends Event {
+  resultIndex: number;
+  results: SpeechRecognitionResultList;
+}
+
 interface UseVoiceInputOptions {
   onResult?: (transcript: string) => void;
   onInterimResult?: (transcript: string) => void;
@@ -52,7 +77,7 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}): UseVoiceInput
       setIsListening(false);
     };
 
-    recognition.onerror = (event) => {
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
       setIsListening(false);
       switch (event.error) {
         case 'no-speech':
@@ -69,7 +94,7 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}): UseVoiceInput
       }
     };
 
-    recognition.onresult = (event) => {
+    recognition.onresult = (event: SpeechRecognitionEventCustom) => {
       let finalTranscript = '';
       let interim = '';
 

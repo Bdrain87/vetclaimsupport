@@ -30,7 +30,7 @@ export function DisabilitiesTab() {
         (d) =>
           d.name.toLowerCase().includes(lower) ||
           d.description.toLowerCase().includes(lower) ||
-          d.bodySystem.toLowerCase().includes(lower)
+          (d.bodySystem?.toLowerCase().includes(lower) ?? false)
       );
     }
 
@@ -44,10 +44,11 @@ export function DisabilitiesTab() {
   const groupedResults = useMemo(() => {
     const groups: Record<string, typeof filteredDisabilities> = {};
     filteredDisabilities.forEach((d) => {
-      if (!groups[d.bodySystem]) {
-        groups[d.bodySystem] = [];
+      const system = d.bodySystem ?? 'Other';
+      if (!groups[system]) {
+        groups[system] = [];
       }
-      groups[d.bodySystem].push(d);
+      groups[system].push(d);
     });
     return groups;
   }, [filteredDisabilities]);

@@ -44,7 +44,7 @@ const ptsdRequirements: EvidenceRequirement[] = [
     check: (condition, data) => {
       // Check for symptoms/notes that indicate stressor documentation
       const hasDetailedSymptoms = condition.linkedSymptoms.length > 0;
-      const hasNotes = condition.notes && condition.notes.length > 50;
+      const hasNotes = Boolean(condition.notes && condition.notes.length > 50);
       return { met: hasDetailedSymptoms || hasNotes };
     },
   },
