@@ -231,7 +231,6 @@ export function getQueueStatus(): {
 // Set up online/offline listeners
 export function setupNetworkListeners(): () => void {
   const handleOnline = () => {
-    console.log('Back online - processing queue...');
     processQueue();
   };
 
