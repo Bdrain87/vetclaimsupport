@@ -158,7 +158,7 @@ export function EvidenceAttachment({
                 onClick={() => setPreviewDoc(doc)}
               >
                 {doc.thumbnailUrl ? (
-                  <img src={doc.thumbnailUrl} alt="" className="w-full h-full object-cover" />
+                  <img src={doc.thumbnailUrl} alt={doc.title || 'Document thumbnail'} className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-muted">
                     {getFileIcon(doc)}
@@ -375,7 +375,7 @@ export function EvidenceThumbnails({ entryType, entryId, documents }: EvidenceTh
             className="w-6 h-6 rounded border border-border overflow-hidden"
           >
             {doc.thumbnailUrl ? (
-              <img src={doc.thumbnailUrl} alt="" className="w-full h-full object-cover" />
+              <img src={doc.thumbnailUrl} alt={doc.title || 'Document thumbnail'} className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-muted">
                 {getFileIcon(doc)}

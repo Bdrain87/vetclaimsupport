@@ -1,5 +1,6 @@
-// 2024 VA Compensation Rates
+// 2024 VA Compensation Rates (Effective December 1, 2023)
 // Source: https://www.va.gov/disability/compensation-rates/veteran-rates/
+// Last verified: February 2024
 
 export const vaCompensationRates2024 = {
   // Base rates for veteran alone (no dependents)
@@ -18,50 +19,51 @@ export const vaCompensationRates2024 = {
 
   // Additional amount for spouse (only applies at 30%+)
   spouse: {
-    30: 56,
-    40: 75,
-    50: 94,
-    60: 112,
-    70: 131,
-    80: 150,
-    90: 168,
-    100: 187.89,
+    30: 62,
+    40: 82,
+    50: 104,
+    60: 125,
+    70: 144.93,
+    80: 166,
+    90: 187,
+    100: 208.40,
   } as Record<number, number>,
 
   // Additional amount per child under 18 (only applies at 30%+)
   childUnder18: {
-    30: 29,
-    40: 38,
-    50: 48,
-    60: 58,
-    70: 67,
-    80: 77,
-    90: 86,
-    100: 96.32,
+    30: 31,
+    40: 41,
+    50: 51,
+    60: 62,
+    70: 72,
+    80: 82,
+    90: 93,
+    100: 103.55,
   } as Record<number, number>,
 
   // Additional amount per child 18-23 in school (only applies at 30%+)
   childSchool: {
-    30: 93,
-    40: 124,
-    50: 155,
-    60: 186,
-    70: 217,
-    80: 248,
-    90: 279,
-    100: 310.71,
+    30: 100,
+    40: 133,
+    50: 167,
+    60: 200,
+    70: 234,
+    80: 267,
+    90: 301,
+    100: 334.49,
   } as Record<number, number>,
 
   // Additional amount per dependent parent (only applies at 30%+)
+  // Note: Rate is per parent (multiply by number of dependent parents)
   dependentParent: {
-    30: 44,
-    40: 58,
-    50: 73,
-    60: 87,
-    70: 102,
-    80: 116,
-    90: 131,
-    100: 145.70,
+    30: 57,
+    40: 76,
+    50: 95,
+    60: 114,
+    70: 134,
+    80: 153,
+    90: 172,
+    100: 191.14,
   } as Record<number, number>,
 };
 

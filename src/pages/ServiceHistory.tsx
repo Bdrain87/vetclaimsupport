@@ -352,7 +352,7 @@ export default function ServiceHistory() {
                               {selectedHazards.filter(h => !suggestedHazards.includes(h)).map(h => (
                                 <Badge key={h} variant="secondary" className="gap-1">
                                   {h}
-                                  <button type="button" onClick={() => toggleHazard(h)} className="ml-1 hover:text-destructive">×</button>
+                                  <button type="button" onClick={() => toggleHazard(h)} className="ml-1 hover:text-destructive" aria-label={`Remove ${h}`}>×</button>
                                 </Badge>
                               ))}
                             </div>
