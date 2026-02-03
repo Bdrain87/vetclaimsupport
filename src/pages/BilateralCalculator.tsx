@@ -34,10 +34,10 @@ import {
 } from 'lucide-react';
 import { calculateCompensation, DependentsInfo, vaCompensationRates2024 } from '@/data/vaCompensationRates';
 
-// 2026 VA compensation rates (single veteran, no dependents)
+// Use 2024 VA compensation rates from data file (single veteran, no dependents)
 const monthlyCompensation: Record<number, number> = {
-  0: 0, 10: 175.51, 20: 347.14, 30: 537.32, 40: 773.64,
-  50: 1101.71, 60: 1395.07, 70: 1759.14, 80: 2044.74, 90: 2297.14, 100: 3937.04,
+  0: 0,
+  ...vaCompensationRates2024.base,
 };
 
 const commonRatings = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
@@ -439,7 +439,7 @@ export default function BilateralCalculator() {
           `).join('')}
 
           <div class="compensation">
-            <h2 style="margin-top: 0;">2026 Compensation (Single Veteran)</h2>
+            <h2 style="margin-top: 0;">2024 Compensation (Single Veteran)</h2>
             <p><strong>Monthly:</strong> $${result.monthlyCompensation.toLocaleString()}</p>
             <p><strong>Yearly:</strong> $${result.yearlyCompensation.toLocaleString()}</p>
           </div>
@@ -1023,7 +1023,7 @@ Conditions: ${conditions.map(c => `${c.name} (${c.rating}%)`).join(', ')}`;
           {/* Compensation Reference */}
           <Card className="border-0 shadow-lg">
             <CardHeader className="pb-3">
-              <CardTitle className="text-lg">2026 Compensation Reference</CardTitle>
+              <CardTitle className="text-lg">2024 Compensation Reference</CardTitle>
               <CardDescription>Single veteran, no dependents</CardDescription>
             </CardHeader>
             <CardContent>

@@ -676,7 +676,7 @@ export const secondaryConditions: SecondaryConnection[] = [
   { primaryCondition: 'Carpal Tunnel Syndrome', secondaryCondition: 'Shoulder Pain', medicalConnection: 'Altered arm use patterns', category: 'Musculoskeletal' },
   { primaryCondition: 'Tennis Elbow (Lateral Epicondylitis)', secondaryCondition: 'Wrist Condition', medicalConnection: 'Gripping compensation affects wrist', category: 'Musculoskeletal' },
   { primaryCondition: 'Tennis Elbow (Lateral Epicondylitis)', secondaryCondition: 'Shoulder Condition', medicalConnection: 'Altered arm mechanics', category: 'Musculoskeletal' },
-  { primaryCondition: 'Golfers Elbow (Medial Epicondylitis)', secondaryCondition: 'Cubital Tunnel Syndrome', medicalConnection: 'Inflammation near ulnar nerve', category: 'Neurological' },
+  { primaryCondition: "Golfer's Elbow (Medial Epicondylitis)", secondaryCondition: 'Cubital Tunnel Syndrome', medicalConnection: 'Inflammation near ulnar nerve', category: 'Neurological' },
 
   // ========================================
   // SCAR TISSUE SECONDARIES
@@ -969,11 +969,11 @@ export const secondaryConditions: SecondaryConnection[] = [
   { primaryCondition: 'IBS', secondaryCondition: 'Depression', medicalConnection: 'Chronic symptoms affect quality of life', category: 'Mental Health' },
   { primaryCondition: 'IBS', secondaryCondition: 'Fibromyalgia', medicalConnection: 'Central sensitization syndromes overlap', category: 'Musculoskeletal' },
   { primaryCondition: 'IBS', secondaryCondition: 'Chronic Fatigue', medicalConnection: 'GI dysfunction affects nutrient absorption and energy', category: 'Systemic' },
-  { primaryCondition: 'Crohns Disease', secondaryCondition: 'Fistulas', medicalConnection: 'Transmural inflammation creates abnormal connections', category: 'Digestive' },
-  { primaryCondition: 'Crohns Disease', secondaryCondition: 'Kidney Stones', medicalConnection: 'Oxalate absorption increases with fat malabsorption', category: 'Renal' },
-  { primaryCondition: 'Crohns Disease', secondaryCondition: 'Anemia', medicalConnection: 'Blood loss and nutrient malabsorption', category: 'Hematologic' },
-  { primaryCondition: 'Crohns Disease', secondaryCondition: 'Arthritis', medicalConnection: 'Extraintestinal manifestation of IBD', category: 'Musculoskeletal' },
-  { primaryCondition: 'Crohns Disease', secondaryCondition: 'Osteoporosis', medicalConnection: 'Malabsorption and steroid use', category: 'Musculoskeletal' },
+  { primaryCondition: "Crohn's Disease", secondaryCondition: 'Fistulas', medicalConnection: 'Transmural inflammation creates abnormal connections', category: 'Digestive' },
+  { primaryCondition: "Crohn's Disease", secondaryCondition: 'Kidney Stones', medicalConnection: 'Oxalate absorption increases with fat malabsorption', category: 'Renal' },
+  { primaryCondition: "Crohn's Disease", secondaryCondition: 'Anemia', medicalConnection: 'Blood loss and nutrient malabsorption', category: 'Hematologic' },
+  { primaryCondition: "Crohn's Disease", secondaryCondition: 'Arthritis', medicalConnection: 'Extraintestinal manifestation of IBD', category: 'Musculoskeletal' },
+  { primaryCondition: "Crohn's Disease", secondaryCondition: 'Osteoporosis', medicalConnection: 'Malabsorption and steroid use', category: 'Musculoskeletal' },
   { primaryCondition: 'Ulcerative Colitis', secondaryCondition: 'Primary Sclerosing Cholangitis', medicalConnection: 'Associated hepatobiliary condition', category: 'Digestive' },
   { primaryCondition: 'Ulcerative Colitis', secondaryCondition: 'Anemia', medicalConnection: 'Chronic blood loss', category: 'Hematologic' },
   { primaryCondition: 'Ulcerative Colitis', secondaryCondition: 'Arthritis', medicalConnection: 'Extraintestinal manifestation', category: 'Musculoskeletal' },

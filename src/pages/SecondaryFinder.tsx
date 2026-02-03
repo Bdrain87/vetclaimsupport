@@ -21,7 +21,7 @@ import { Button } from '@/components/ui/button';
 import { secondaryConditions, SecondaryConnection } from '@/data/secondaryConditions';
 import { vaDisabilitiesBySystem } from '@/data/vaDisabilities';
 
-// Get ALL conditions from vaDisabilities (990+)
+// Get ALL conditions from vaDisabilities (780+)
 const getAllConditions = (): string[] => {
   const conditions = new Set<string>();
   vaDisabilitiesBySystem.forEach(system => {
@@ -205,13 +205,13 @@ export default function SecondaryFinder() {
           {selectedPrimary && (
             <Badge variant="secondary" className="gap-1">
               Primary: {selectedPrimary}
-              <button onClick={() => setSelectedPrimary(null)} className="ml-1 hover:text-destructive">×</button>
+              <button onClick={() => setSelectedPrimary(null)} className="ml-1 hover:text-destructive" aria-label="Clear primary filter">×</button>
             </Badge>
           )}
           {selectedCategory && (
             <Badge variant="secondary" className="gap-1">
               Category: {selectedCategory}
-              <button onClick={() => setSelectedCategory(null)} className="ml-1 hover:text-destructive">×</button>
+              <button onClick={() => setSelectedCategory(null)} className="ml-1 hover:text-destructive" aria-label="Clear category filter">×</button>
             </Badge>
           )}
         </div>

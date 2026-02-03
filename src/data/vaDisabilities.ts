@@ -1,5 +1,5 @@
 // Complete VA Schedule for Rating Disabilities (38 CFR Part 4)
-// All diagnostic codes with rating criteria - 990+ conditions
+// All diagnostic codes with rating criteria - 780+ conditions across 39 body systems
 
 export interface VADisability {
   name: string;

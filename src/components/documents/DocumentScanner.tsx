@@ -281,6 +281,7 @@ export function DocumentScanner({
                   onDelete(doc.id);
                 }}
                 className="absolute -top-1 -right-1 h-4 w-4 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                aria-label="Delete document"
               >
                 <X className="h-2.5 w-2.5" />
               </button>
