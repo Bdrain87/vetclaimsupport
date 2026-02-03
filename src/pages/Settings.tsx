@@ -302,13 +302,17 @@ export default function Settings() {
       <Card>
         <CardHeader>
           <CardTitle>Data Privacy</CardTitle>
-          <CardDescription>Your data is stored locally</CardDescription>
+          <CardDescription>Your data stays on your device</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            All your data is stored locally on your device using browser storage. 
-            We never collect, transmit, or store your personal health information on our servers.
-            Your data stays private and under your control.
+            Your personal documents and health data are stored locally on your device using browser storage (IndexedDB and localStorage). We never collect or store your personal health information on our servers.
+          </p>
+          <p className="text-sm text-muted-foreground">
+            <strong className="text-foreground">AI Features:</strong> When you use AI-powered features (like the symptom checker), only the specific information you're analyzing is processed — never stored on external servers. You control what gets analyzed.
+          </p>
+          <p className="text-sm text-muted-foreground">
+            No accounts required. No tracking. Your data, your control.
           </p>
         </CardContent>
       </Card>

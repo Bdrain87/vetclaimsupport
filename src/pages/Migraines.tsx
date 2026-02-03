@@ -85,7 +85,9 @@ function calculateEstimatedRating(prostratingPerMonth: number, hasEconomicImpact
   return { rating: 0, description: 'Less frequent attacks (below rating threshold)', confidence: 'Continue documenting' };
 }
 
-interface MigraineFormData extends Omit<MigraineEntry, 'id'> {}
+interface MigraineFormData extends Omit<MigraineEntry, 'id'> {
+  impacts: MigraineImpact[];
+}
 
 export default function Migraines() {
   const { data, addMigraine, updateMigraine, deleteMigraine } = useClaims();
@@ -101,6 +103,7 @@ export default function Migraines() {
     symptoms: [],
     triggers: [],
     impact: 'Reduced productivity',
+    impacts: [],
     treatment: '',
     notes: '',
     wasProstrating: false,
@@ -121,6 +124,7 @@ export default function Migraines() {
       symptoms: [],
       triggers: [],
       impact: 'Reduced productivity',
+      impacts: [],
       treatment: '',
       notes: '',
       wasProstrating: false,
@@ -143,13 +147,17 @@ export default function Migraines() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Auto-set wasProstrating based on severity selection
+    // Set first impact for backwards compatibility, store all in impacts array
+    const primaryImpact = formData.impacts.length > 0 ? formData.impacts[0] : formData.impact;
     const finalData = {
       ...formData,
+      impact: primaryImpact,
+      impacts: formData.impacts,
       wasProstrating: formData.severity === 'Prostrating' || formData.wasProstrating || formData.requiredBedRest,
     };
-    
+
     if (editingId) {
       updateMigraine(editingId, finalData);
     } else {
@@ -160,6 +168,8 @@ export default function Migraines() {
   };
 
   const handleEdit = (entry: MigraineEntry) => {
+    // Load impacts array or fall back to legacy single impact
+    const loadedImpacts = entry.impacts?.length ? entry.impacts : (entry.impact ? [entry.impact] : []);
     setFormData({
       date: entry.date,
       time: entry.time,
@@ -168,6 +178,7 @@ export default function Migraines() {
       symptoms: entry.symptoms,
       triggers: entry.triggers,
       impact: entry.impact,
+      impacts: loadedImpacts,
       treatment: entry.treatment,
       notes: entry.notes,
       wasProstrating: entry.wasProstrating ?? false,
@@ -197,6 +208,15 @@ export default function Migraines() {
       triggers: prev.triggers.includes(trigger)
         ? prev.triggers.filter(t => t !== trigger)
         : [...prev.triggers, trigger],
+    }));
+  };
+
+  const toggleImpact = (impact: MigraineImpact) => {
+    setFormData(prev => ({
+      ...prev,
+      impacts: prev.impacts.includes(impact)
+        ? prev.impacts.filter(i => i !== impact)
+        : [...prev.impacts, impact],
     }));
   };
 
@@ -687,22 +707,24 @@ export default function Migraines() {
                     </div>
                   </div>
 
-                  {/* Impact on Activities */}
+                  {/* Impact on Activities - Multi-select */}
                   <div className="space-y-2">
-                    <Label htmlFor="impact">Overall Impact on Activities</Label>
-                    <Select 
-                      value={formData.impact} 
-                      onValueChange={(value: MigraineImpact) => setFormData({ ...formData, impact: value })}
-                    >
-                      <SelectTrigger onFocus={handleInputFocus}>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {impacts.map((i) => (
-                          <SelectItem key={i.value} value={i.value}>{i.label}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <Label>Overall Impact on Activities</Label>
+                    <p className="text-xs text-muted-foreground">Select all that apply</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {impacts.map((impactOption) => (
+                        <div key={impactOption.value} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={`impact-${impactOption.value}`}
+                            checked={formData.impacts.includes(impactOption.value)}
+                            onCheckedChange={() => toggleImpact(impactOption.value)}
+                          />
+                          <Label htmlFor={`impact-${impactOption.value}`} className="text-sm font-normal cursor-pointer">
+                            {impactOption.label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
                   {/* Treatment & Effectiveness */}
@@ -909,7 +931,7 @@ export default function Migraines() {
                   )}
                   <div className="flex items-center gap-2">
                     <AlertTriangle className="h-4 w-4" />
-                    {entry.impact}
+                    {entry.impacts?.length ? entry.impacts.join(', ') : entry.impact}
                   </div>
                   {entry.functioningLevel !== undefined && entry.functioningLevel < 50 && (
                     <div className="flex items-center gap-2">

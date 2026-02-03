@@ -1,0 +1,212 @@
+import * as React from 'react';
+import { cn } from '@/lib/utils';
+
+interface ProgressRingProps extends React.HTMLAttributes<HTMLDivElement> {
+  value: number; // 0-100
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  strokeWidth?: number;
+  variant?: 'default' | 'primary' | 'success' | 'warning' | 'danger';
+  showValue?: boolean;
+  label?: string;
+  animate?: boolean;
+  children?: React.ReactNode;
+}
+
+const ProgressRing = React.forwardRef<HTMLDivElement, ProgressRingProps>(
+  (
+    {
+      className,
+      value,
+      size = 'md',
+      strokeWidth,
+      variant = 'primary',
+      showValue = true,
+      label,
+      animate = true,
+      children,
+      ...props
+    },
+    ref
+  ) => {
+    const [animatedValue, setAnimatedValue] = React.useState(0);
+
+    // Size configurations
+    const sizeConfig = {
+      sm: { dimension: 64, stroke: 4, fontSize: 'text-sm', labelSize: 'text-[10px]' },
+      md: { dimension: 96, stroke: 6, fontSize: 'text-xl', labelSize: 'text-xs' },
+      lg: { dimension: 128, stroke: 8, fontSize: 'text-2xl', labelSize: 'text-sm' },
+      xl: { dimension: 160, stroke: 10, fontSize: 'text-3xl', labelSize: 'text-base' },
+    };
+
+    const config = sizeConfig[size];
+    const actualStrokeWidth = strokeWidth ?? config.stroke;
+    const radius = (config.dimension - actualStrokeWidth) / 2;
+    const circumference = radius * 2 * Math.PI;
+    const clampedValue = Math.min(100, Math.max(0, value));
+
+    // Animate value
+    React.useEffect(() => {
+      if (!animate) {
+        setAnimatedValue(clampedValue);
+        return;
+      }
+
+      let startTime: number | null = null;
+      let animationFrame: number;
+      const duration = 1000;
+      const startValue = animatedValue;
+
+      const animateValue = (timestamp: number) => {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+
+        // Ease out cubic
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const current = startValue + (clampedValue - startValue) * easeOut;
+
+        setAnimatedValue(current);
+
+        if (progress < 1) {
+          animationFrame = requestAnimationFrame(animateValue);
+        }
+      };
+
+      animationFrame = requestAnimationFrame(animateValue);
+
+      return () => cancelAnimationFrame(animationFrame);
+    }, [clampedValue, animate]);
+
+    const offset = circumference - (animatedValue / 100) * circumference;
+
+    // Color variants
+    const variantStyles = {
+      default: {
+        track: 'stroke-muted',
+        progress: 'stroke-foreground',
+        text: 'text-foreground',
+      },
+      primary: {
+        track: 'stroke-primary/20',
+        progress: 'stroke-primary',
+        text: 'text-primary',
+      },
+      success: {
+        track: 'stroke-green-500/20',
+        progress: 'stroke-green-500',
+        text: 'text-green-600 dark:text-green-500',
+      },
+      warning: {
+        track: 'stroke-amber-500/20',
+        progress: 'stroke-amber-500',
+        text: 'text-amber-600 dark:text-amber-500',
+      },
+      danger: {
+        track: 'stroke-red-500/20',
+        progress: 'stroke-red-500',
+        text: 'text-red-600 dark:text-red-500',
+      },
+    };
+
+    const styles = variantStyles[variant];
+
+    return (
+      <div
+        ref={ref}
+        className={cn('relative inline-flex items-center justify-center', className)}
+        style={{ width: config.dimension, height: config.dimension }}
+        {...props}
+      >
+        <svg
+          className="transform -rotate-90"
+          width={config.dimension}
+          height={config.dimension}
+        >
+          {/* Background track */}
+          <circle
+            className={cn('transition-all duration-300', styles.track)}
+            strokeWidth={actualStrokeWidth}
+            fill="none"
+            r={radius}
+            cx={config.dimension / 2}
+            cy={config.dimension / 2}
+          />
+          {/* Progress arc */}
+          <circle
+            className={cn(
+              'transition-all duration-300 ease-out',
+              styles.progress
+            )}
+            strokeWidth={actualStrokeWidth}
+            strokeLinecap="round"
+            fill="none"
+            r={radius}
+            cx={config.dimension / 2}
+            cy={config.dimension / 2}
+            style={{
+              strokeDasharray: circumference,
+              strokeDashoffset: offset,
+            }}
+          />
+        </svg>
+
+        {/* Center content */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          {children ? (
+            children
+          ) : showValue ? (
+            <>
+              <span
+                className={cn(
+                  'font-bold tabular-nums',
+                  config.fontSize,
+                  styles.text
+                )}
+              >
+                {Math.round(animatedValue)}%
+              </span>
+              {label && (
+                <span
+                  className={cn(
+                    'text-muted-foreground font-medium mt-0.5',
+                    config.labelSize
+                  )}
+                >
+                  {label}
+                </span>
+              )}
+            </>
+          ) : null}
+        </div>
+      </div>
+    );
+  }
+);
+ProgressRing.displayName = 'ProgressRing';
+
+// Progress Ring with Icon Center
+interface ProgressRingIconProps extends Omit<ProgressRingProps, 'children' | 'showValue'> {
+  icon: React.ReactNode;
+}
+
+const ProgressRingIcon = React.forwardRef<HTMLDivElement, ProgressRingIconProps>(
+  ({ icon, variant = 'primary', ...props }, ref) => {
+    const variantStyles = {
+      default: 'text-foreground',
+      primary: 'text-primary',
+      success: 'text-green-600 dark:text-green-500',
+      warning: 'text-amber-600 dark:text-amber-500',
+      danger: 'text-red-600 dark:text-red-500',
+    };
+
+    return (
+      <ProgressRing ref={ref} variant={variant} showValue={false} {...props}>
+        <div className={cn('flex items-center justify-center', variantStyles[variant])}>
+          {icon}
+        </div>
+      </ProgressRing>
+    );
+  }
+);
+ProgressRingIcon.displayName = 'ProgressRingIcon';
+
+export { ProgressRing, ProgressRingIcon };

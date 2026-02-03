@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { ClaimsData, MedicalVisit, Exposure, SymptomEntry, Medication, ServiceEntry, BuddyContact, DocumentItem, MigraineEntry, UploadedDocument, SleepEntry, ClaimCondition, QuickLogEntry, Deadline, PTSDSymptomEntry, CombatEntry, MajorEvent, DeploymentEntry, ApprovedCondition } from '@/types/claims';
+import type { ClaimsData, MedicalVisit, Exposure, SymptomEntry, Medication, ServiceEntry, BuddyContact, DocumentItem, MigraineEntry, UploadedDocument, SleepEntry, ClaimCondition, QuickLogEntry, Deadline, PTSDSymptomEntry, CombatEntry, MajorEvent, DeploymentEntry, ApprovedCondition, JourneyProgress } from '@/types/claims';
 
 const STORAGE_KEY = 'va-claims-tracker-data';
 
@@ -59,6 +59,7 @@ const getInitialData = (): ClaimsData => {
       if (!parsed.majorEvents) parsed.majorEvents = [];
       if (!parsed.deployments) parsed.deployments = [];
       if (!parsed.approvedConditions) parsed.approvedConditions = [];
+      if (!parsed.journeyProgress) parsed.journeyProgress = { currentPhase: 0, completedChecklist: {} };
       return parsed;
     } catch {
       console.error('Failed to parse stored data');

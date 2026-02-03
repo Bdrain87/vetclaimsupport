@@ -1104,6 +1104,256 @@
 }
 
 /* ========================================
+   PREMIUM ANIMATIONS
+   ======================================== */
+
+/* Success checkmark draw animation */
+.animate-success-circle {
+  animation: drawCircle 0.6s ease-out forwards;
+}
+
+.animate-success-check {
+  animation: drawCheck 0.4s ease-out 0.4s forwards;
+}
+
+.animate-success-check-fast {
+  animation: drawCheck 0.3s ease-out 0.1s forwards;
+}
+
+.animate-success-glow {
+  animation: successGlow 1s ease-out forwards;
+}
+
+@keyframes drawCircle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes drawCheck {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes successGlow {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+}
+
+/* Particle burst animation */
+.animate-particle {
+  animation: particleBurst 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes particleBurst {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1);
+    opacity: 0;
+  }
+}
+
+/* Shimmer loading effect */
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 0%,
+    hsl(var(--muted) / 0.5) 50%,
+    hsl(var(--muted)) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmerSlide 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmerSlide {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Count up number animation */
+.number-count-up {
+  animation: countUp 0.3s ease-out;
+}
+
+@keyframes countUp {
+  from {
+    opacity: 0.5;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Button micro-interactions */
+.btn-premium {
+  @apply transition-all duration-200;
+  transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.btn-premium:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px hsl(var(--primary) / 0.25);
+}
+
+.btn-premium:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Card hover effects */
+.card-premium {
+  @apply transition-all duration-300;
+  transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.card-premium:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 4px 6px -1px hsl(var(--foreground) / 0.05),
+    0 10px 20px -2px hsl(var(--foreground) / 0.08);
+}
+
+/* Focus ring animation */
+.focus-ring-animated:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px hsl(var(--background)),
+    0 0 0 4px hsl(var(--primary));
+  animation: focusRing 0.2s ease-out;
+}
+
+@keyframes focusRing {
+  from {
+    box-shadow:
+      0 0 0 2px hsl(var(--background)),
+      0 0 0 2px hsl(var(--primary) / 0);
+  }
+  to {
+    box-shadow:
+      0 0 0 2px hsl(var(--background)),
+      0 0 0 4px hsl(var(--primary));
+  }
+}
+
+/* Subtle bounce for interactive elements */
+.bounce-subtle {
+  animation: bounceSoft 0.4s ease-out;
+}
+
+@keyframes bounceSoft {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Progress bar smooth fill */
+.progress-fill {
+  transition: width 0.6s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Tooltip fade */
+.tooltip-premium {
+  animation: tooltipFade 0.15s ease-out;
+}
+
+@keyframes tooltipFade {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Stagger children animation helper */
+.stagger-children > * {
+  animation: fadeInUp 0.4s ease-out backwards;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 50ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 100ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 150ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 200ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 250ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 300ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 350ms; }
+
+/* Glassmorphism effect */
+.glass {
+  background: hsl(var(--card) / 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid hsl(var(--border) / 0.3);
+}
+
+/* Gradient border on hover */
+.gradient-border-hover {
+  position: relative;
+}
+
+.gradient-border-hover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.3));
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.gradient-border-hover:hover::before {
+  opacity: 1;
+}
+
+/* Slow pulse animation for landing page */
+.animate-slow-pulse {
+  animation: slowPulse 3s ease-in-out infinite;
+}
+
+@keyframes slowPulse {
+  0%, 100% {
+    opacity: 0.75;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.5);
+  }
+}
+
+/* ========================================
    PRINT STYLES
    ======================================== */
 @media print {

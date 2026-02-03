@@ -47,6 +47,11 @@ import ConditionGuide from "./pages/ConditionGuide";
 import SecondaryFinder from "./pages/SecondaryFinder";
 import CPExamPrepEnhanced from "./pages/CPExamPrepEnhanced";
 import ClaimStrategyWizard from "./pages/ClaimStrategyWizard";
+import BilateralCalculator from "./pages/BilateralCalculator";
+import HelpCenter from "./pages/HelpCenter";
+import ClaimJourney from "./pages/ClaimJourney";
+import HealthLog from "./pages/HealthLog";
+import DocumentsHub from "./pages/DocumentsHub";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -101,6 +106,11 @@ const App = () => (
                       <Route path="/secondary-finder" element={<SecondaryFinder />} />
                       <Route path="/cp-exam-prep" element={<CPExamPrepEnhanced />} />
                       <Route path="/claim-strategy" element={<ClaimStrategyWizard />} />
+                      <Route path="/calculator" element={<BilateralCalculator />} />
+                      <Route path="/help" element={<HelpCenter />} />
+                      <Route path="/journey" element={<ClaimJourney />} />
+                      <Route path="/health-log" element={<HealthLog />} />
+                      <Route path="/docs" element={<DocumentsHub />} />
                       <Route path="/landing-preview" element={<AppStoreLandingPage />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
