@@ -133,6 +133,13 @@ export function AppStoreLandingPage() {
                   <div className="absolute inset-0 rounded-3xl bg-gradient-to-t from-transparent via-transparent to-white/5" />
 
                   <div className="relative">
+                    {/* Launch Special Badge */}
+                    <div className="flex justify-center mb-3">
+                      <Badge className="bg-gradient-to-r from-primary/80 to-blue-500/80 text-white border-0 shadow-lg shadow-primary/20 text-xs font-bold px-4 py-1.5 animate-pulse">
+                        🚀 LIMITED TIME LAUNCH PRICE
+                      </Badge>
+                    </div>
+
                     {/* Launch Price */}
                     <div className="flex items-baseline justify-center gap-1 mb-2">
                       <span className="text-2xl text-slate-400 font-medium">$</span>
@@ -214,10 +221,10 @@ export function AppStoreLandingPage() {
                 </div>
                 <div className="flex-1">
                   <h3 className="text-xl sm:text-2xl font-bold text-amber-100 mb-2">
-                    Proudly Built by a 100% Disabled Veteran
+                    Built by a Veteran, For Those Who Serve
                   </h3>
                   <p className="text-amber-200/70 text-base sm:text-lg">
-                    Created by someone who has been through the claims process—for veterans, by a veteran.
+                    Created by someone who has been through the claims process—for veterans, service members, and their families.
                   </p>
                 </div>
               </div>
