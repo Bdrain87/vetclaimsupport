@@ -69,15 +69,27 @@ export default function Terms() {
 
           {/* Section 6 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">6. Exports and Sharing</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">6. AI-Powered Features</h2>
             <p className="text-muted-foreground">
-              If you export to PDF or copy text, you control where it is saved or shared.
+              The App includes optional AI-powered document analysis features using Google's Gemini API.
+              AI-generated suggestions are for informational purposes only and may contain errors or inaccuracies.
+              You are responsible for reviewing and verifying any AI output before use. We make no guarantees
+              about the accuracy, completeness, or suitability of AI-generated content. Use of AI features is
+              subject to Google's Terms of Service.
             </p>
           </section>
 
           {/* Section 7 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">7. Acceptable Use</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">7. Exports and Sharing</h2>
+            <p className="text-muted-foreground">
+              If you export to PDF or copy text, you control where it is saved or shared.
+            </p>
+          </section>
+
+          {/* Section 8 */}
+          <section>
+            <h2 className="text-lg font-semibold text-foreground mb-3">8. Acceptable Use</h2>
             <p className="text-muted-foreground mb-3">You agree not to:</p>
             <ul className="space-y-2 text-muted-foreground">
               <li className="flex items-start gap-2">
@@ -99,58 +111,58 @@ export default function Terms() {
             </ul>
           </section>
 
-          {/* Section 8 */}
+          {/* Section 9 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">8. Intellectual Property</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">9. Intellectual Property</h2>
             <p className="text-muted-foreground">
               The App's code, UI, content templates, and educational materials are owned by the App owner.
             </p>
           </section>
 
-          {/* Section 9 */}
+          {/* Section 10 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">9. Disclaimer of Warranties</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">10. Disclaimer of Warranties</h2>
             <p className="text-muted-foreground">
               <strong className="text-foreground">The App is provided "as is" without warranties of any kind.</strong>
             </p>
           </section>
 
-          {/* Section 10 */}
+          {/* Section 11 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">10. Limitation of Liability</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">11. Limitation of Liability</h2>
             <p className="text-muted-foreground">
               To the maximum extent permitted by law, we are not liable for indirect, incidental, special, 
               consequential, or punitive damages, lost data, lost profits, or claim outcomes.
             </p>
           </section>
 
-          {/* Section 11 */}
+          {/* Section 12 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">11. Indemnification</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">12. Indemnification</h2>
             <p className="text-muted-foreground">
               You agree to indemnify and hold harmless the App owner from claims arising out of your misuse of the App.
             </p>
           </section>
 
-          {/* Section 12 */}
+          {/* Section 13 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">12. Changes</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">13. Changes</h2>
             <p className="text-muted-foreground">
               We may update the App and these Terms. Continued use means you accept the updated Terms.
             </p>
           </section>
 
-          {/* Section 13 */}
+          {/* Section 14 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">13. Governing Law</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">14. Governing Law</h2>
             <p className="text-muted-foreground">
               These Terms are governed by the laws of the State of Michigan, without regard to conflict of laws principles.
             </p>
           </section>
 
-          {/* Section 14 */}
+          {/* Section 15 */}
           <section className="pb-2">
-            <h2 className="text-lg font-semibold text-foreground mb-3">14. Contact</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">15. Contact</h2>
             <p className="text-muted-foreground">
               For questions, visit our website.
             </p>
