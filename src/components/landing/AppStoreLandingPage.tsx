@@ -167,7 +167,7 @@ export function AppStoreLandingPage() {
                       </div>
                       <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20">
                         <CheckCircle2 className="h-4 w-4 text-violet-400" />
-                        <span className="text-sm text-violet-300 font-medium">Works Offline</span>
+                        <span className="text-sm text-violet-300 font-medium">No Account Required</span>
                       </div>
                     </div>
                   </div>
