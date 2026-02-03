@@ -1,68 +1,258 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
+import { useState } from 'react';
 import {
   Home,
-  Heart,
-  FileText,
-  Shield,
-  Calculator,
   Wrench,
-  Route,
-  Clock,
+  Plus,
+  FileText,
+  Menu,
+  X,
+  Heart,
+  Shield,
+  Users,
+  HelpCircle,
   Settings,
+  Calculator,
+  Search,
+  Wand2,
+  ClipboardCheck,
+  Activity,
+  Brain,
+  AlertTriangle,
+  Clock,
+  Stethoscope,
+  Route,
+  Files,
+  Moon,
+  Sun,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useTheme } from '@/context/ThemeContext';
 
 interface NavItem {
-  to: string;
+  title: string;
+  path: string | null;
   icon: React.ElementType;
-  label: string;
+  primary?: boolean;
+  opensDrawer?: boolean;
 }
 
-// Simple flat navigation - NO DUPLICATES
-const mobileNavItems: NavItem[] = [
-  { to: '/', icon: Home, label: 'Dashboard' },
-  { to: '/health-log', icon: Heart, label: 'Health Log' },
-  { to: '/docs', icon: FileText, label: 'Documents' },
-  { to: '/service-history', icon: Shield, label: 'Service' },
-  { to: '/calculator', icon: Calculator, label: 'Calculator' },
-  { to: '/claim-tools', icon: Wrench, label: 'Tools' },
-  { to: '/journey', icon: Route, label: 'Journey' },
-  { to: '/timeline', icon: Clock, label: 'Timeline' },
-  { to: '/settings', icon: Settings, label: 'Settings' },
+const bottomNavItems: NavItem[] = [
+  { title: 'Home', path: '/', icon: Home },
+  { title: 'Tools', path: '/calculator', icon: Wrench },
+  { title: 'Add', path: '/health-log', icon: Plus, primary: true },
+  { title: 'Claim', path: '/journey', icon: FileText },
+  { title: 'Menu', path: null, icon: Menu, opensDrawer: true },
+];
+
+// Drawer menu items
+const drawerSections = [
+  {
+    title: 'Premium Tools',
+    items: [
+      { title: 'Rating Calculator', path: '/calculator', icon: Calculator },
+      { title: 'Secondary Finder', path: '/secondary-finder', icon: Search },
+      { title: 'Strategy Wizard', path: '/claim-strategy', icon: Wand2 },
+      { title: 'C&P Exam Prep', path: '/cp-exam-prep', icon: ClipboardCheck },
+    ],
+  },
+  {
+    title: 'My Claim',
+    items: [
+      { title: 'Journey', path: '/journey', icon: Route },
+      { title: 'Documents', path: '/docs', icon: Files },
+      { title: 'Checklist', path: '/checklist', icon: ClipboardCheck },
+    ],
+  },
+  {
+    title: 'Service History',
+    items: [
+      { title: 'Service Record', path: '/service-history', icon: Shield },
+      { title: 'Medical Visits', path: '/medical-visits', icon: Stethoscope },
+      { title: 'Exposures', path: '/exposures', icon: AlertTriangle },
+      { title: 'Timeline', path: '/timeline', icon: Clock },
+    ],
+  },
+  {
+    title: 'Health Tracking',
+    items: [
+      { title: 'Daily Log', path: '/health-log', icon: Activity },
+      { title: 'Migraines', path: '/migraines', icon: Brain },
+    ],
+  },
+];
+
+const drawerSingleItems = [
+  { title: 'Buddy Statements', path: '/buddy-statements', icon: Users },
+  { title: 'Help Center', path: '/help', icon: HelpCircle },
+  { title: 'Settings', path: '/settings', icon: Settings },
 ];
 
 export function MobileNavGrid() {
+  const location = useLocation();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
+
+  const isActive = (path: string | null) => {
+    if (!path) return false;
+    if (path === '/') return location.pathname === '/';
+    return location.pathname === path || location.pathname.startsWith(path + '/');
+  };
+
   return (
-    <div className="md:hidden">
-      <div className="grid grid-cols-3 gap-3">
-        {mobileNavItems.map((item, index) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            className={({ isActive }) => cn(
-              "flex flex-col items-center justify-center gap-2",
-              "min-h-[90px] p-3 rounded-2xl",
-              "bg-card border border-border/50",
-              "transition-all duration-300",
-              "hover:border-primary/30 hover:bg-primary/5 hover:translate-y-[-2px]",
-              "active:scale-[0.97]",
-              "animate-fade-in",
-              isActive && "bg-primary/10 border-primary/30 shadow-[0_0_16px_hsl(var(--primary)/0.15)]"
-            )}
-            style={{ animationDelay: `${index * 0.03}s` }}
-          >
-            <div className={cn(
-              "flex items-center justify-center w-12 h-12 rounded-xl transition-all duration-300",
-              "bg-muted/50"
-            )}>
-              <item.icon className="h-6 w-6 text-foreground" />
+    <>
+      {/* Bottom Navigation Bar */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-lg border-t border-border md:hidden z-50 safe-area-pb">
+        <div className="flex items-center justify-around h-16 px-2">
+          {bottomNavItems.map((item) => (
+            item.opensDrawer ? (
+              <button
+                key={item.title}
+                onClick={() => setDrawerOpen(true)}
+                className="flex flex-col items-center justify-center w-16 h-full text-muted-foreground"
+              >
+                <item.icon className="w-5 h-5" />
+                <span className="text-[10px] mt-1 font-medium">{item.title}</span>
+              </button>
+            ) : item.primary ? (
+              <NavLink
+                key={item.title}
+                to={item.path!}
+                className="flex items-center justify-center w-14 h-14 -mt-5 bg-primary rounded-full text-primary-foreground shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all duration-200 hover:scale-105 active:scale-95"
+              >
+                <item.icon className="w-6 h-6" />
+              </NavLink>
+            ) : (
+              <NavLink
+                key={item.title}
+                to={item.path!}
+                className={cn(
+                  'flex flex-col items-center justify-center w-16 h-full transition-colors',
+                  isActive(item.path)
+                    ? 'text-primary'
+                    : 'text-muted-foreground'
+                )}
+              >
+                <item.icon className={cn('w-5 h-5', isActive(item.path) && 'drop-shadow-[0_0_6px_rgba(59,130,246,0.5)]')} />
+                <span className="text-[10px] mt-1 font-medium">{item.title}</span>
+              </NavLink>
+            )
+          ))}
+        </div>
+      </nav>
+
+      {/* Mobile Menu Drawer */}
+      {drawerOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 md:hidden"
+            onClick={() => setDrawerOpen(false)}
+          />
+
+          {/* Drawer */}
+          <div className="fixed right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-card border-l border-border z-50 md:hidden overflow-y-auto animate-slide-in-right">
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b border-border sticky top-0 bg-card/95 backdrop-blur-lg">
+              <span className="font-semibold">Menu</span>
+              <button
+                onClick={() => setDrawerOpen(false)}
+                className="p-2 hover:bg-accent rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
-            <span className="text-xs font-medium text-foreground text-center leading-tight">
-              {item.label}
-            </span>
-          </NavLink>
-        ))}
-      </div>
-    </div>
+
+            {/* Sections */}
+            <div className="p-3 space-y-4">
+              {drawerSections.map((section) => (
+                <div key={section.title}>
+                  <div className="px-3 py-1 text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                    {section.title}
+                  </div>
+                  <div className="mt-1 space-y-0.5">
+                    {section.items.map((item) => (
+                      <NavLink
+                        key={item.path}
+                        to={item.path}
+                        onClick={() => setDrawerOpen(false)}
+                        className={cn(
+                          'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors',
+                          isActive(item.path)
+                            ? 'bg-primary/10 text-primary font-medium'
+                            : 'hover:bg-accent'
+                        )}
+                      >
+                        <item.icon className="w-4 h-4" />
+                        <span>{item.title}</span>
+                      </NavLink>
+                    ))}
+                  </div>
+                </div>
+              ))}
+
+              {/* Divider */}
+              <div className="border-t border-border" />
+
+              {/* Single Items */}
+              <div className="space-y-0.5">
+                {drawerSingleItems.map((item) => (
+                  <NavLink
+                    key={item.path}
+                    to={item.path}
+                    onClick={() => setDrawerOpen(false)}
+                    className={cn(
+                      'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors',
+                      isActive(item.path)
+                        ? 'bg-primary/10 text-primary font-medium'
+                        : 'hover:bg-accent'
+                    )}
+                  >
+                    <item.icon className="w-4 h-4" />
+                    <span>{item.title}</span>
+                  </NavLink>
+                ))}
+              </div>
+
+              {/* Theme Toggle */}
+              <div className="border-t border-border pt-3">
+                <button
+                  onClick={toggleTheme}
+                  className="flex items-center justify-between w-full px-3 py-2.5 rounded-lg hover:bg-accent transition-colors"
+                >
+                  <span className="text-sm">Theme</span>
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <span className="text-xs">{theme === 'dark' ? 'Dark' : 'Light'}</span>
+                    {theme === 'dark' ? (
+                      <Moon className="w-4 h-4" />
+                    ) : (
+                      <Sun className="w-4 h-4" />
+                    )}
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Add padding to bottom of page for bottom nav */}
+      <style>{`
+        @keyframes slide-in-right {
+          from {
+            transform: translateX(100%);
+          }
+          to {
+            transform: translateX(0);
+          }
+        }
+        .animate-slide-in-right {
+          animation: slide-in-right 0.2s ease-out;
+        }
+        .safe-area-pb {
+          padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+      `}</style>
+    </>
   );
 }
