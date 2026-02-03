@@ -6,7 +6,7 @@ import {
   AlertTriangle,
   Shield,
   Users,
-  FileCheck,
+  FileText,
   BookOpen,
   ChevronLeft,
   ChevronRight,
@@ -17,9 +17,15 @@ import {
   Clock,
   ClipboardCheck,
   Heart,
-  Briefcase,
   Wrench,
-  FolderOpen,
+  Calculator,
+  Search,
+  Wand2,
+  Route,
+  HelpCircle,
+  Star,
+  Files,
+  Activity,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -37,65 +43,167 @@ interface NavGroup {
   icon: React.ElementType;
   items: NavItem[];
   defaultOpen?: boolean;
+  premium?: boolean;
+  alwaysOpen?: boolean;
 }
 
+// TOOLS FIRST - This is the product's value proposition
+const premiumToolsGroup: NavGroup = {
+  label: 'Claim Tools',
+  icon: Wrench,
+  premium: true,
+  alwaysOpen: true,
+  defaultOpen: true,
+  items: [
+    { to: '/calculator', icon: Calculator, label: 'Rating Calculator' },
+    { to: '/secondary-finder', icon: Search, label: 'Secondary Finder' },
+    { to: '/claim-strategy', icon: Wand2, label: 'Strategy Wizard' },
+    { to: '/cp-exam-prep', icon: ClipboardCheck, label: 'C&P Exam Prep' },
+  ],
+};
+
+// Regular navigation groups
 const navGroups: NavGroup[] = [
   {
-    label: 'Health Logs',
-    icon: Heart,
+    label: 'My Claim',
+    icon: FileText,
     defaultOpen: true,
     items: [
-      { to: '/health-log', icon: Heart, label: 'Health Log' },
-      { to: '/migraines', icon: Brain, label: 'Migraines' },
+      { to: '/journey', icon: Route, label: 'Journey' },
+      { to: '/docs', icon: Files, label: 'Documents' },
+      { to: '/checklist', icon: ClipboardCheck, label: 'Checklist' },
     ],
   },
   {
-    label: 'Service Record',
+    label: 'Service History',
     icon: Shield,
+    defaultOpen: false,
     items: [
-      { to: '/service-history', icon: Shield, label: 'Service History' },
-      { to: '/exposures', icon: AlertTriangle, label: 'Exposures' },
+      { to: '/service-history', icon: Shield, label: 'Service Record' },
       { to: '/medical-visits', icon: Stethoscope, label: 'Medical Visits' },
-    ],
-  },
-  {
-    label: 'Evidence & Docs',
-    icon: FileCheck,
-    items: [
-      { to: '/docs', icon: FolderOpen, label: 'Documents Hub' },
-      { to: '/buddy-statements', icon: Users, label: 'Buddy Statements' },
+      { to: '/exposures', icon: AlertTriangle, label: 'Exposures' },
       { to: '/timeline', icon: Clock, label: 'Timeline' },
     ],
   },
   {
-    label: 'Claim Tools',
-    icon: Wrench,
+    label: 'Health Tracking',
+    icon: Heart,
+    defaultOpen: false,
     items: [
-      { to: '/claim-tools', icon: Wrench, label: 'All Tools' },
-      { to: '/checklist', icon: ClipboardCheck, label: 'Checklist' },
-      { to: '/exam-prep', icon: Briefcase, label: 'C&P Exam Prep' },
+      { to: '/health-log', icon: Activity, label: 'Daily Log' },
+      { to: '/migraines', icon: Brain, label: 'Migraines' },
     ],
   },
 ];
 
+// Single link items
+const singleNavItems: NavItem[] = [
+  { to: '/buddy-statements', icon: Users, label: 'Buddy Statements' },
+];
+
+// Bottom navigation items
 const secondaryNavItems: NavItem[] = [
-  { to: '/reference', icon: BookOpen, label: 'Reference' },
+  { to: '/help', icon: HelpCircle, label: 'Help Center' },
   { to: '/settings', icon: Settings, label: 'Settings' },
 ];
 
 export function AppSidebar() {
   const [collapsed, setCollapsed] = useState(false);
-  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(
-    navGroups.reduce((acc, group) => ({ ...acc, [group.label]: group.defaultOpen ?? false }), {})
-  );
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
+    const initial: Record<string, boolean> = { [premiumToolsGroup.label]: true };
+    navGroups.forEach(group => {
+      initial[group.label] = group.defaultOpen ?? false;
+    });
+    return initial;
+  });
   const location = useLocation();
 
-  const toggleGroup = (label: string) => {
+  const toggleGroup = (label: string, alwaysOpen?: boolean) => {
+    if (alwaysOpen) return; // Don't allow closing premium tools
     setOpenGroups(prev => ({ ...prev, [label]: !prev[label] }));
   };
 
   const isGroupActive = (group: NavGroup) => {
     return group.items.some(item => location.pathname === item.to);
+  };
+
+  const renderNavGroup = (group: NavGroup, isPremium = false) => {
+    const isActive = isGroupActive(group);
+    const isOpen = openGroups[group.label];
+
+    if (collapsed) {
+      return (
+        <NavLink
+          key={group.label}
+          to={group.items[0].to}
+          className={cn(
+            'flex items-center justify-center rounded-xl px-2 py-2.5 min-h-[44px]',
+            'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground',
+            'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
+            'hover:scale-105',
+            isActive && 'bg-primary/10 text-primary',
+            isPremium && 'text-primary'
+          )}
+          title={group.label}
+        >
+          <group.icon className={cn('h-5 w-5 transition-transform duration-200', (isActive || isPremium) && 'text-primary')} />
+        </NavLink>
+      );
+    }
+
+    return (
+      <Collapsible
+        key={group.label}
+        open={isOpen}
+        onOpenChange={() => toggleGroup(group.label, group.alwaysOpen)}
+      >
+        <CollapsibleTrigger className="w-full">
+          <div className={cn(
+            'flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium',
+            'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground',
+            'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] min-h-[44px]',
+            'hover:translate-x-1',
+            isActive && 'text-primary',
+            isPremium && 'text-primary font-semibold'
+          )}>
+            <div className="flex items-center gap-3">
+              <group.icon className={cn('h-5 w-5 flex-shrink-0 transition-transform duration-200', (isActive || isPremium) && 'text-primary')} />
+              <span>{group.label}</span>
+            </div>
+            {!group.alwaysOpen && (
+              <ChevronDown className={cn(
+                'h-4 w-4 transition-transform duration-250 ease-[cubic-bezier(0.32,0.72,0,1)]',
+                isOpen && 'rotate-180'
+              )} />
+            )}
+          </div>
+        </CollapsibleTrigger>
+        <CollapsibleContent className="pt-1 animate-accordion-down data-[state=closed]:animate-accordion-up">
+          <ul className="space-y-0.5 pl-4 border-l border-sidebar-border ml-5">
+            {group.items.map((item, index) => {
+              const isItemActive = location.pathname === item.to;
+              return (
+                <li key={item.to} style={{ animationDelay: `${index * 50}ms` }} className="animate-fade-in">
+                  <NavLink
+                    to={item.to}
+                    className={cn(
+                      'flex items-center gap-3 rounded-lg px-3 py-2 text-sm',
+                      'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground',
+                      'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
+                      'hover:translate-x-1',
+                      isItemActive && 'bg-gradient-to-r from-primary/15 to-transparent text-primary font-medium border-l-2 border-primary'
+                    )}
+                  >
+                    <item.icon className={cn('h-4 w-4 flex-shrink-0 transition-transform duration-200', isItemActive && 'text-primary drop-shadow-[0_0_6px_rgba(59,130,246,0.4)]')} />
+                    <span>{item.label}</span>
+                  </NavLink>
+                </li>
+              );
+            })}
+          </ul>
+        </CollapsibleContent>
+      </Collapsible>
+    );
   };
 
   return (
@@ -104,7 +212,6 @@ export function AppSidebar() {
         'fixed left-0 top-0 z-40 h-screen border-r flex flex-col',
         'border-sidebar-border',
         'transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]',
-        // Premium gradient background
         'bg-gradient-to-b from-sidebar-background via-sidebar-background to-[hsl(220_20%_5%)]',
         collapsed ? 'w-16' : 'w-64'
       )}
@@ -112,7 +219,7 @@ export function AppSidebar() {
         boxShadow: 'inset -1px 0 0 hsl(var(--border) / 0.3), 4px 0 24px -4px hsl(0 0% 0% / 0.3)'
       }}
     >
-      {/* Header with subtle gradient */}
+      {/* Header */}
       <div className={cn(
         'flex items-center gap-3 px-4 py-5 border-b border-sidebar-border/50 transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
         'bg-gradient-to-r from-transparent via-primary/[0.02] to-transparent',
@@ -131,8 +238,8 @@ export function AppSidebar() {
 
       {/* Main Navigation */}
       <nav className="flex-1 overflow-y-auto py-3 scrollbar-thin">
-        {/* Dashboard - Always visible at top */}
-        <div className="px-2 mb-2">
+        {/* Dashboard */}
+        <div className="px-2 mb-3">
           <NavLink
             to="/"
             className={cn(
@@ -153,81 +260,49 @@ export function AppSidebar() {
           </NavLink>
         </div>
 
-        {/* Grouped Navigation */}
+        {/* PREMIUM TOOLS SECTION - Always at top, always expanded */}
+        <div className={cn(
+          'mx-2 mb-3 rounded-xl border border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-2',
+          collapsed && 'border-none bg-transparent p-0'
+        )}>
+          {!collapsed && (
+            <div className="flex items-center gap-1.5 px-3 py-1.5 mb-1">
+              <Star className="w-3.5 h-3.5 text-primary fill-primary" />
+              <span className="text-xs font-bold text-primary uppercase tracking-wider">Premium Tools</span>
+            </div>
+          )}
+          {renderNavGroup(premiumToolsGroup, true)}
+        </div>
+
+        {/* Regular Navigation Groups */}
         <div className="space-y-1 px-2">
-          {navGroups.map((group) => {
-            const isActive = isGroupActive(group);
-            const isOpen = openGroups[group.label];
+          {navGroups.map((group) => renderNavGroup(group))}
+        </div>
 
-            if (collapsed) {
-              // When collapsed, show only group icon that links to first item
-              return (
-                <NavLink
-                  key={group.label}
-                  to={group.items[0].to}
-                  className={cn(
-                    'flex items-center justify-center rounded-xl px-2 py-2.5 min-h-[44px]',
-                    'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground',
-                    'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
-                    'hover:scale-105',
-                    isActive && 'bg-primary/10 text-primary'
-                  )}
-                  title={group.label}
-                >
-                  <group.icon className={cn('h-5 w-5 transition-transform duration-200', isActive && 'text-primary')} />
-                </NavLink>
-              );
-            }
-
+        {/* Single Link Items */}
+        <div className="mt-2 px-2 space-y-1">
+          {singleNavItems.map((item) => {
+            const isActive = location.pathname === item.to;
             return (
-              <Collapsible
-                key={group.label}
-                open={isOpen}
-                onOpenChange={() => toggleGroup(group.label)}
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={cn(
+                  'relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium',
+                  'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
+                  'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground hover:translate-x-1',
+                  'min-h-[44px]',
+                  isActive && 'bg-gradient-to-r from-primary/15 to-primary/5 text-primary border border-primary/20',
+                  collapsed && 'justify-center px-2 hover:translate-x-0'
+                )}
+                title={collapsed ? item.label : undefined}
               >
-                <CollapsibleTrigger className="w-full">
-                  <div className={cn(
-                    'flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium',
-                    'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground',
-                    'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] min-h-[44px]',
-                    'hover:translate-x-1',
-                    isActive && 'text-primary'
-                  )}>
-                    <div className="flex items-center gap-3">
-                      <group.icon className={cn('h-5 w-5 flex-shrink-0 transition-transform duration-200', isActive && 'text-primary')} />
-                      <span>{group.label}</span>
-                    </div>
-                    <ChevronDown className={cn(
-                      'h-4 w-4 transition-transform duration-250 ease-[cubic-bezier(0.32,0.72,0,1)]',
-                      isOpen && 'rotate-180'
-                    )} />
-                  </div>
-                </CollapsibleTrigger>
-                <CollapsibleContent className="pt-1 animate-accordion-down data-[state=closed]:animate-accordion-up">
-                  <ul className="space-y-0.5 pl-4 border-l border-sidebar-border ml-5">
-                    {group.items.map((item, index) => {
-                      const isItemActive = location.pathname === item.to;
-                      return (
-                        <li key={item.to} style={{ animationDelay: `${index * 50}ms` }} className="animate-fade-in">
-                          <NavLink
-                            to={item.to}
-                            className={cn(
-                              'flex items-center gap-3 rounded-lg px-3 py-2 text-sm',
-                              'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground',
-                              'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
-                              'hover:translate-x-1',
-                              isItemActive && 'bg-gradient-to-r from-primary/15 to-transparent text-primary font-medium border-l-2 border-primary'
-                            )}
-                          >
-                            <item.icon className={cn('h-4 w-4 flex-shrink-0 transition-transform duration-200', isItemActive && 'text-primary drop-shadow-[0_0_6px_rgba(59,130,246,0.4)]')} />
-                            <span>{item.label}</span>
-                          </NavLink>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </CollapsibleContent>
-              </Collapsible>
+                {isActive && (
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-7 bg-gradient-to-b from-primary to-primary/60 rounded-r-full shadow-[0_0_12px_rgba(59,130,246,0.5)]" />
+                )}
+                <item.icon className={cn('h-5 w-5 flex-shrink-0 transition-transform duration-200', isActive && 'text-primary drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]')} />
+                {!collapsed && <span>{item.label}</span>}
+              </NavLink>
             );
           })}
         </div>
