@@ -44,6 +44,9 @@ import UserGuide from "./pages/UserGuide";
 import ConditionsByConflict from "./pages/ConditionsByConflict";
 import BuddyStatementGenerator from "./pages/BuddyStatementGenerator";
 import ConditionGuide from "./pages/ConditionGuide";
+import SecondaryFinder from "./pages/SecondaryFinder";
+import CPExamPrepEnhanced from "./pages/CPExamPrepEnhanced";
+import ClaimStrategyWizard from "./pages/ClaimStrategyWizard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -95,6 +98,9 @@ const App = () => (
                       <Route path="/conditions-by-conflict" element={<ConditionsByConflict />} />
                       <Route path="/buddy-statement-generator" element={<BuddyStatementGenerator />} />
                       <Route path="/condition-guide" element={<ConditionGuide />} />
+                      <Route path="/secondary-finder" element={<SecondaryFinder />} />
+                      <Route path="/cp-exam-prep" element={<CPExamPrepEnhanced />} />
+                      <Route path="/claim-strategy" element={<ClaimStrategyWizard />} />
                       <Route path="/landing-preview" element={<AppStoreLandingPage />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
