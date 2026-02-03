@@ -72,7 +72,7 @@ const navGroups: NavGroup[] = [
       { to: '/claim-documents', icon: FolderOpen, label: 'Claim Documents' },
       { to: '/evidence-library', icon: FileArchive, label: 'Evidence Library' },
       { to: '/documents', icon: FileCheck, label: 'Documents Checklist' },
-      { to: '/buddy-contacts', icon: Users, label: 'Buddy Contacts' },
+      { to: '/buddy-statements', icon: Users, label: 'Buddy Statements' },
       { to: '/timeline', icon: Clock, label: 'Timeline' },
     ],
   },

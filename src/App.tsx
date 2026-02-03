@@ -25,7 +25,7 @@ import Exposures from "./pages/Exposures";
 import Symptoms from "./pages/Symptoms";
 import Medications from "./pages/Medications";
 import ServiceHistory from "./pages/ServiceHistory";
-import BuddyContacts from "./pages/BuddyContacts";
+import BuddyStatements from "./pages/BuddyStatements";
 import Documents from "./pages/Documents";
 import Reference from "./pages/Reference";
 import Privacy from "./pages/Privacy";
@@ -42,7 +42,7 @@ import Glossary from "./pages/Glossary";
 import VAForms from "./pages/VAForms";
 import UserGuide from "./pages/UserGuide";
 import ConditionsByConflict from "./pages/ConditionsByConflict";
-import BuddyStatementGenerator from "./pages/BuddyStatementGenerator";
+// BuddyStatementGenerator is now consolidated into BuddyStatements
 import ConditionGuide from "./pages/ConditionGuide";
 import SecondaryFinder from "./pages/SecondaryFinder";
 import CPExamPrepEnhanced from "./pages/CPExamPrepEnhanced";
@@ -82,7 +82,7 @@ const App = () => (
                       <Route path="/symptoms" element={<Symptoms />} />
                       <Route path="/medications" element={<Medications />} />
                       <Route path="/service-history" element={<ServiceHistory />} />
-                      <Route path="/buddy-contacts" element={<BuddyContacts />} />
+                      <Route path="/buddy-statements" element={<BuddyStatements />} />
                       <Route path="/documents" element={<Documents />} />
                       <Route path="/claim-documents" element={<ClaimDocuments />} />
                       <Route path="/evidence-docs" element={<EvidenceDocs />} />
@@ -101,7 +101,9 @@ const App = () => (
                       <Route path="/va-forms" element={<VAForms />} />
                       <Route path="/user-guide" element={<UserGuide />} />
                       <Route path="/conditions-by-conflict" element={<ConditionsByConflict />} />
-                      <Route path="/buddy-statement-generator" element={<BuddyStatementGenerator />} />
+                      {/* Redirects from old buddy pages to unified page */}
+                      <Route path="/buddy-contacts" element={<Navigate to="/buddy-statements" replace />} />
+                      <Route path="/buddy-statement-generator" element={<Navigate to="/buddy-statements" replace />} />
                       <Route path="/condition-guide" element={<ConditionGuide />} />
                       <Route path="/secondary-finder" element={<SecondaryFinder />} />
                       <Route path="/cp-exam-prep" element={<CPExamPrepEnhanced />} />
