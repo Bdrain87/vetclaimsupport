@@ -336,6 +336,15 @@ export interface ClaimsData {
   milestonesAchieved?: string[];
   // VA Approved Conditions
   approvedConditions?: ApprovedCondition[];
+  // Claim Journey Progress
+  journeyProgress?: JourneyProgress;
+}
+
+// Claim Journey Progress Tracking
+export interface JourneyProgress {
+  currentPhase: number;
+  completedChecklist: Record<string, boolean>;
+  phaseCompletedDates?: Record<string, string>;
 }
 
 // VA Approved Condition - already service-connected with rating

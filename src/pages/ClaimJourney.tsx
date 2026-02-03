@@ -1,0 +1,640 @@
+import { useState, useMemo, useCallback, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useClaims } from '@/context/ClaimsContext';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { ProgressRing } from '@/components/ui/progress-ring';
+import { StatCard, StatsGrid } from '@/components/ui/stat-card';
+import { SuccessOverlay } from '@/components/ui/success-animation';
+import { cn } from '@/lib/utils';
+import {
+  Flag, FileText, Send, Stethoscope, Award, ChevronRight, Check,
+  Lock, Calendar, AlertCircle, Clock, ArrowRight, Sparkles,
+  FileCheck, Users, ClipboardList, Shield, CheckCircle, XCircle,
+  HelpCircle, ExternalLink, PartyPopper, Target
+} from 'lucide-react';
+import confetti from 'canvas-confetti';
+
+// Journey phases configuration
+interface JourneyPhase {
+  id: string;
+  title: string;
+  shortTitle: string;
+  icon: React.ReactNode;
+  description: string;
+  tips: string[];
+  checklist: { id: string; label: string; description?: string }[];
+  resources?: { label: string; link: string }[];
+}
+
+const journeyPhases: JourneyPhase[] = [
+  {
+    id: 'intent',
+    title: 'Intent to File',
+    shortTitle: 'Intent',
+    icon: <Flag className="h-5 w-5" />,
+    description: 'Protect your effective date by filing an Intent to File (ITF) with the VA. This gives you one year to gather evidence while preserving your start date for benefits.',
+    tips: [
+      'File ITF even if you\'re not ready to submit your full claim',
+      'Your effective date determines when back pay starts',
+      'You have 1 year from ITF to submit your full claim',
+      'ITF can be filed online, by phone, or through a VSO',
+    ],
+    checklist: [
+      { id: 'itf-filed', label: 'Intent to File submitted', description: 'File via VA.gov, phone, or VSO' },
+      { id: 'itf-date', label: 'ITF date recorded', description: 'Save your confirmation number' },
+      { id: 'itf-deadline', label: 'Deadline marked on calendar', description: 'Must submit claim within 1 year' },
+    ],
+    resources: [
+      { label: 'File Intent to File', link: 'https://www.va.gov/disability/how-to-file-claim/' },
+      { label: 'What is ITF?', link: 'https://www.va.gov/resources/what-is-an-intent-to-file/' },
+    ],
+  },
+  {
+    id: 'evidence',
+    title: 'Gather Evidence',
+    shortTitle: 'Evidence',
+    icon: <FileText className="h-5 w-5" />,
+    description: 'Build the strongest possible case by gathering medical records, service records, buddy statements, and other supporting documentation.',
+    tips: [
+      'Request your complete STRs from the National Personnel Records Center',
+      'Get current diagnosis and nexus letters from your doctor',
+      'Buddy statements can fill gaps in official records',
+      'Document how conditions affect your daily life',
+    ],
+    checklist: [
+      { id: 'str-requested', label: 'Service Treatment Records requested', description: 'From NPRC or VA' },
+      { id: 'med-records', label: 'Current medical records gathered', description: 'Recent diagnoses and treatment' },
+      { id: 'nexus-letter', label: 'Nexus letter obtained', description: 'Links condition to service' },
+      { id: 'buddy-statements', label: 'Buddy statements collected', description: 'Witness accounts of condition' },
+      { id: 'personal-statement', label: 'Personal statement written', description: 'Your account of events and impact' },
+      { id: 'dbq-completed', label: 'DBQ completed (if using private doctor)', description: 'Disability Benefits Questionnaire' },
+    ],
+    resources: [
+      { label: 'Request Military Records', link: 'https://www.archives.gov/veterans/military-service-records' },
+      { label: 'Download DBQ Forms', link: 'https://www.va.gov/find-forms/?q=dbq' },
+    ],
+  },
+  {
+    id: 'submit',
+    title: 'Submit Claim',
+    shortTitle: 'Submit',
+    icon: <Send className="h-5 w-5" />,
+    description: 'Submit your fully developed claim with all evidence attached. Choose the right claim type and ensure everything is properly organized.',
+    tips: [
+      'Consider submitting as a Fully Developed Claim (FDC) for faster processing',
+      'Double-check all forms are completely filled out',
+      'Organize evidence by condition with a cover letter',
+      'Keep copies of everything you submit',
+    ],
+    checklist: [
+      { id: 'va21-526ez', label: 'VA Form 21-526EZ completed', description: 'Main disability claim form' },
+      { id: 'evidence-attached', label: 'All evidence attached', description: 'Medical records, statements, etc.' },
+      { id: 'claim-type', label: 'Claim type selected', description: 'FDC or Standard Claim' },
+      { id: 'claim-submitted', label: 'Claim submitted', description: 'Via VA.gov or mail' },
+      { id: 'confirmation', label: 'Confirmation number saved', description: 'Track your claim status' },
+    ],
+    resources: [
+      { label: 'Submit Claim Online', link: 'https://www.va.gov/disability/file-disability-claim-form-21-526ez/' },
+      { label: 'Track Claim Status', link: 'https://www.va.gov/claim-or-appeal-status/' },
+    ],
+  },
+  {
+    id: 'exam',
+    title: 'C&P Exam',
+    shortTitle: 'C&P Exam',
+    icon: <Stethoscope className="h-5 w-5" />,
+    description: 'Attend your Compensation & Pension examination. The examiner will evaluate your conditions and their severity for the VA rating decision.',
+    tips: [
+      'Describe your worst days, not average days',
+      'Bring a list of all conditions and symptoms',
+      'Don\'t minimize your symptoms or try to tough it out',
+      'Note any flare-ups, limitations, and how conditions affect work/life',
+    ],
+    checklist: [
+      { id: 'exam-scheduled', label: 'C&P exam scheduled', description: 'Check mail and phone regularly' },
+      { id: 'prep-notes', label: 'Preparation notes ready', description: 'Symptoms, flare-ups, limitations' },
+      { id: 'docs-gathered', label: 'Documents gathered to bring', description: 'ID, medical records, list of conditions' },
+      { id: 'exam-attended', label: 'Exam attended', description: 'Be thorough and honest' },
+      { id: 'exam-notes', label: 'Post-exam notes written', description: 'Document what happened at exam' },
+    ],
+    resources: [
+      { label: 'C&P Exam Prep Guide', link: '/cp-exam-prep' },
+      { label: 'What to Expect', link: 'https://www.va.gov/disability/va-claim-exam/' },
+    ],
+  },
+  {
+    id: 'decision',
+    title: 'Decision',
+    shortTitle: 'Decision',
+    icon: <Award className="h-5 w-5" />,
+    description: 'Receive your rating decision and understand your options. Whether approved, partially approved, or denied, know your next steps.',
+    tips: [
+      'Review your decision letter carefully',
+      'Check for errors in the VA\'s reasoning',
+      'You have 1 year to appeal any decision',
+      'Consider consulting a VSO or attorney for appeals',
+    ],
+    checklist: [
+      { id: 'decision-received', label: 'Decision letter received', description: 'Review thoroughly' },
+      { id: 'rating-understood', label: 'Rating understood', description: 'Know what each percentage means' },
+      { id: 'effective-date', label: 'Effective date confirmed', description: 'When benefits start' },
+      { id: 'appeal-deadline', label: 'Appeal deadline noted', description: '1 year from decision date' },
+    ],
+    resources: [
+      { label: 'Understanding Your Decision', link: 'https://www.va.gov/disability/about-disability-ratings/' },
+      { label: 'Appeal Options', link: 'https://www.va.gov/decision-reviews/' },
+    ],
+  },
+];
+
+export default function ClaimJourney() {
+  const { data, updateData } = useClaims();
+  const [currentPhaseIndex, setCurrentPhaseIndex] = useState(0);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [completedPhaseId, setCompletedPhaseId] = useState<string | null>(null);
+  const [selectedPhase, setSelectedPhase] = useState<JourneyPhase | null>(null);
+
+  // Get journey progress from stored data
+  const journeyProgress = data.journeyProgress || {
+    currentPhase: 0,
+    completedChecklist: {},
+    phaseCompletedDates: {},
+  };
+
+  // Calculate phase completion percentages
+  const phaseProgress = useMemo(() => {
+    return journeyPhases.map(phase => {
+      const checkedItems = phase.checklist.filter(
+        item => journeyProgress.completedChecklist[item.id]
+      ).length;
+      return Math.round((checkedItems / phase.checklist.length) * 100);
+    });
+  }, [journeyProgress.completedChecklist]);
+
+  // Overall progress
+  const overallProgress = useMemo(() => {
+    const totalItems = journeyPhases.reduce((sum, phase) => sum + phase.checklist.length, 0);
+    const completedItems = Object.values(journeyProgress.completedChecklist).filter(Boolean).length;
+    return Math.round((completedItems / totalItems) * 100);
+  }, [journeyProgress.completedChecklist]);
+
+  // Check for phase completion
+  useEffect(() => {
+    journeyPhases.forEach((phase, index) => {
+      const isComplete = phase.checklist.every(
+        item => journeyProgress.completedChecklist[item.id]
+      );
+      const wasNotComplete = !journeyProgress.phaseCompletedDates?.[phase.id];
+
+      if (isComplete && wasNotComplete && index === journeyProgress.currentPhase) {
+        // Phase just completed
+        setCompletedPhaseId(phase.id);
+        setShowCelebration(true);
+
+        // Trigger confetti
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#22c55e', '#3b82f6', '#f59e0b', '#ec4899'],
+        });
+
+        // Update progress
+        const newProgress = {
+          ...journeyProgress,
+          currentPhase: Math.min(index + 1, journeyPhases.length - 1),
+          phaseCompletedDates: {
+            ...journeyProgress.phaseCompletedDates,
+            [phase.id]: new Date().toISOString(),
+          },
+        };
+        updateData({ journeyProgress: newProgress });
+      }
+    });
+  }, [journeyProgress.completedChecklist]);
+
+  const handleChecklistChange = useCallback((itemId: string, checked: boolean) => {
+    const newChecklist = {
+      ...journeyProgress.completedChecklist,
+      [itemId]: checked,
+    };
+    updateData({
+      journeyProgress: {
+        ...journeyProgress,
+        completedChecklist: newChecklist,
+      },
+    });
+  }, [journeyProgress, updateData]);
+
+  const getPhaseStatus = (index: number) => {
+    if (phaseProgress[index] === 100) return 'completed';
+    if (index === journeyProgress.currentPhase) return 'current';
+    if (index < journeyProgress.currentPhase) return 'completed';
+    return 'locked';
+  };
+
+  const currentPhase = journeyPhases[journeyProgress.currentPhase];
+
+  return (
+    <div className="container max-w-5xl mx-auto py-8 px-4 space-y-8 animate-fade-in">
+      {/* Celebration Overlay */}
+      <SuccessOverlay
+        show={showCelebration}
+        message="Phase Complete!"
+        subMessage={`You've completed the ${completedPhaseId ? journeyPhases.find(p => p.id === completedPhaseId)?.title : ''} phase`}
+        size="lg"
+        variant="celebration"
+        onDismiss={() => setShowCelebration(false)}
+        autoHide
+        autoHideDelay={4000}
+      />
+
+      {/* Header */}
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-lg">
+            <Target className="h-6 w-6" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold">Claim Journey</h1>
+            <p className="text-muted-foreground">Your path to VA disability benefits</p>
+          </div>
+        </div>
+        <ProgressRing value={overallProgress} size="md" variant="primary" label="Overall" />
+      </div>
+
+      {/* Phase Timeline */}
+      <Card className="border-0 shadow-lg overflow-hidden">
+        <div className="p-6 bg-gradient-to-r from-primary/5 via-transparent to-primary/5">
+          <div className="flex items-center justify-between overflow-x-auto pb-2">
+            {journeyPhases.map((phase, index) => {
+              const status = getPhaseStatus(index);
+              const isLast = index === journeyPhases.length - 1;
+
+              return (
+                <div
+                  key={phase.id}
+                  className={cn(
+                    'flex items-center',
+                    !isLast && 'flex-1'
+                  )}
+                >
+                  {/* Phase Circle */}
+                  <button
+                    onClick={() => setSelectedPhase(phase)}
+                    className={cn(
+                      'relative flex flex-col items-center transition-all duration-300',
+                      status !== 'locked' && 'cursor-pointer hover:scale-105',
+                      status === 'locked' && 'cursor-not-allowed opacity-60'
+                    )}
+                  >
+                    <div
+                      className={cn(
+                        'w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300',
+                        status === 'completed' && 'bg-green-500 text-white shadow-lg shadow-green-500/30',
+                        status === 'current' && 'bg-primary text-primary-foreground shadow-lg shadow-primary/30 ring-4 ring-primary/20',
+                        status === 'locked' && 'bg-muted text-muted-foreground'
+                      )}
+                    >
+                      {status === 'completed' ? (
+                        <Check className="h-6 w-6" />
+                      ) : status === 'locked' ? (
+                        <Lock className="h-5 w-5" />
+                      ) : (
+                        phase.icon
+                      )}
+                    </div>
+                    <span
+                      className={cn(
+                        'mt-2 text-xs font-medium text-center max-w-[80px]',
+                        status === 'completed' && 'text-green-600 dark:text-green-500',
+                        status === 'current' && 'text-primary',
+                        status === 'locked' && 'text-muted-foreground'
+                      )}
+                    >
+                      {phase.shortTitle}
+                    </span>
+                    {status !== 'locked' && (
+                      <span className="text-[10px] text-muted-foreground mt-0.5">
+                        {phaseProgress[index]}%
+                      </span>
+                    )}
+                  </button>
+
+                  {/* Connector Line */}
+                  {!isLast && (
+                    <div className="flex-1 mx-2 h-1 rounded-full bg-muted relative overflow-hidden">
+                      <div
+                        className={cn(
+                          'absolute inset-y-0 left-0 rounded-full transition-all duration-500',
+                          status === 'completed' ? 'bg-green-500' : 'bg-primary/30'
+                        )}
+                        style={{
+                          width: status === 'completed' ? '100%' : status === 'current' ? `${phaseProgress[index]}%` : '0%',
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </Card>
+
+      {/* Stats Grid */}
+      <StatsGrid columns={4}>
+        <StatCard
+          label="Current Phase"
+          value={journeyProgress.currentPhase + 1}
+          suffix={` of ${journeyPhases.length}`}
+          variant="primary"
+          icon={<Flag className="h-5 w-5" />}
+        />
+        <StatCard
+          label="Items Complete"
+          value={Object.values(journeyProgress.completedChecklist).filter(Boolean).length}
+          suffix={` / ${journeyPhases.reduce((sum, p) => sum + p.checklist.length, 0)}`}
+          variant="success"
+          icon={<CheckCircle className="h-5 w-5" />}
+        />
+        <StatCard
+          label="Phases Done"
+          value={journeyPhases.filter((_, i) => getPhaseStatus(i) === 'completed').length}
+          variant="default"
+          icon={<Award className="h-5 w-5" />}
+        />
+        <StatCard
+          label="Overall Progress"
+          value={overallProgress}
+          suffix="%"
+          variant="primary"
+          icon={<Target className="h-5 w-5" />}
+        />
+      </StatsGrid>
+
+      {/* Current Phase Detail */}
+      <Card className="border-0 shadow-lg">
+        <CardHeader className="border-b border-border/50 bg-gradient-to-r from-primary/5 to-transparent">
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-xl bg-primary/10 text-primary">
+              {currentPhase.icon}
+            </div>
+            <div className="flex-1">
+              <Badge variant="secondary" className="mb-1">Current Phase</Badge>
+              <CardTitle>{currentPhase.title}</CardTitle>
+              <CardDescription>{currentPhase.description}</CardDescription>
+            </div>
+            <ProgressRing
+              value={phaseProgress[journeyProgress.currentPhase]}
+              size="md"
+              variant={phaseProgress[journeyProgress.currentPhase] === 100 ? 'success' : 'primary'}
+            />
+          </div>
+        </CardHeader>
+        <CardContent className="p-6 space-y-6">
+          {/* Tips */}
+          <div>
+            <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-amber-500" />
+              Tips for Success
+            </h3>
+            <div className="grid sm:grid-cols-2 gap-2">
+              {currentPhase.tips.map((tip, i) => (
+                <div key={i} className="flex items-start gap-2 p-3 rounded-xl bg-amber-500/5 border border-amber-500/20">
+                  <CheckCircle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                  <span className="text-sm text-muted-foreground">{tip}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Checklist */}
+          <div>
+            <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
+              <ClipboardList className="h-4 w-4 text-primary" />
+              Phase Checklist
+            </h3>
+            <div className="space-y-2">
+              {currentPhase.checklist.map((item) => {
+                const isChecked = journeyProgress.completedChecklist[item.id];
+                return (
+                  <div
+                    key={item.id}
+                    className={cn(
+                      'flex items-start gap-4 p-4 rounded-xl border transition-all duration-300',
+                      isChecked
+                        ? 'bg-green-500/5 border-green-500/30'
+                        : 'bg-card border-border/50 hover:border-primary/30'
+                    )}
+                  >
+                    <Checkbox
+                      id={item.id}
+                      checked={isChecked}
+                      onCheckedChange={(checked) => handleChecklistChange(item.id, !!checked)}
+                      className="mt-0.5"
+                    />
+                    <div className="flex-1">
+                      <label
+                        htmlFor={item.id}
+                        className={cn(
+                          'font-medium cursor-pointer',
+                          isChecked && 'line-through text-muted-foreground'
+                        )}
+                      >
+                        {item.label}
+                      </label>
+                      {item.description && (
+                        <p className="text-sm text-muted-foreground mt-0.5">{item.description}</p>
+                      )}
+                    </div>
+                    {isChecked && (
+                      <Check className="h-5 w-5 text-green-600 flex-shrink-0" />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Resources */}
+          {currentPhase.resources && (
+            <div>
+              <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                <ExternalLink className="h-4 w-4 text-primary" />
+                Helpful Resources
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {currentPhase.resources.map((resource, i) => (
+                  <a
+                    key={i}
+                    href={resource.link}
+                    target={resource.link.startsWith('http') ? '_blank' : undefined}
+                    rel={resource.link.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-muted/50 hover:bg-muted text-sm font-medium transition-colors"
+                  >
+                    {resource.label}
+                    {resource.link.startsWith('http') && (
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    )}
+                    {resource.link.startsWith('/') && (
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    )}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* All Phases Overview */}
+      <div className="space-y-4">
+        <h2 className="text-lg font-semibold">All Phases</h2>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {journeyPhases.map((phase, index) => {
+            const status = getPhaseStatus(index);
+            return (
+              <button
+                key={phase.id}
+                onClick={() => status !== 'locked' && setSelectedPhase(phase)}
+                disabled={status === 'locked'}
+                className={cn(
+                  'text-left p-4 rounded-2xl border transition-all duration-300',
+                  status === 'completed' && 'bg-green-500/5 border-green-500/30 hover:border-green-500/50',
+                  status === 'current' && 'bg-primary/5 border-primary/30 hover:border-primary/50 ring-2 ring-primary/20',
+                  status === 'locked' && 'bg-muted/30 border-border/30 opacity-60 cursor-not-allowed'
+                )}
+              >
+                <div className="flex items-start gap-3">
+                  <div
+                    className={cn(
+                      'p-2 rounded-lg',
+                      status === 'completed' && 'bg-green-500/20 text-green-600',
+                      status === 'current' && 'bg-primary/20 text-primary',
+                      status === 'locked' && 'bg-muted text-muted-foreground'
+                    )}
+                  >
+                    {status === 'completed' ? <Check className="h-4 w-4" /> : phase.icon}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-sm">{phase.title}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                      {phase.description}
+                    </p>
+                    <div className="mt-2">
+                      <Progress value={phaseProgress[index]} className="h-1.5" />
+                      <p className="text-[10px] text-muted-foreground mt-1">
+                        {phaseProgress[index]}% complete
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Phase Detail Dialog */}
+      <Dialog open={!!selectedPhase} onOpenChange={() => setSelectedPhase(null)}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          {selectedPhase && (
+            <>
+              <DialogHeader>
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
+                    {selectedPhase.icon}
+                  </div>
+                  <div>
+                    <DialogTitle>{selectedPhase.title}</DialogTitle>
+                    <DialogDescription>{selectedPhase.description}</DialogDescription>
+                  </div>
+                </div>
+              </DialogHeader>
+              <div className="space-y-6 py-4">
+                {/* Checklist */}
+                <div>
+                  <h4 className="text-sm font-semibold mb-3">Checklist</h4>
+                  <div className="space-y-2">
+                    {selectedPhase.checklist.map((item) => {
+                      const isChecked = journeyProgress.completedChecklist[item.id];
+                      return (
+                        <div
+                          key={item.id}
+                          className={cn(
+                            'flex items-start gap-3 p-3 rounded-xl border',
+                            isChecked ? 'bg-green-500/5 border-green-500/30' : 'bg-muted/30'
+                          )}
+                        >
+                          <Checkbox
+                            id={`dialog-${item.id}`}
+                            checked={isChecked}
+                            onCheckedChange={(checked) => handleChecklistChange(item.id, !!checked)}
+                          />
+                          <div>
+                            <label htmlFor={`dialog-${item.id}`} className="font-medium text-sm cursor-pointer">
+                              {item.label}
+                            </label>
+                            {item.description && (
+                              <p className="text-xs text-muted-foreground">{item.description}</p>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Tips */}
+                <div>
+                  <h4 className="text-sm font-semibold mb-3">Tips</h4>
+                  <ul className="space-y-2">
+                    {selectedPhase.tips.map((tip, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                        <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                        {tip}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Resources */}
+                {selectedPhase.resources && (
+                  <div>
+                    <h4 className="text-sm font-semibold mb-3">Resources</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedPhase.resources.map((resource, i) => (
+                        <a
+                          key={i}
+                          href={resource.link}
+                          target={resource.link.startsWith('http') ? '_blank' : undefined}
+                          rel={resource.link.startsWith('http') ? 'noopener noreferrer' : undefined}
+                          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 text-primary text-sm font-medium hover:bg-primary/20 transition-colors"
+                        >
+                          {resource.label}
+                          <ExternalLink className="h-3 w-3" />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}

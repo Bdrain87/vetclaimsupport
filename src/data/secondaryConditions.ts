@@ -687,6 +687,344 @@ export const secondaryConditions: SecondaryConnection[] = [
   { primaryCondition: 'Burn Scars', secondaryCondition: 'Skin Cancer', medicalConnection: 'Chronic wounds increase cancer risk', category: 'Skin' },
   { primaryCondition: 'Burn Scars', secondaryCondition: 'Joint Contracture', medicalConnection: 'Severe scars limit joint mobility', category: 'Musculoskeletal' },
   { primaryCondition: 'Burn Scars', secondaryCondition: 'Peripheral Neuropathy', medicalConnection: 'Nerve damage from burns', category: 'Neurological' },
+
+  // ========================================
+  // MUSCULOSKELETAL COMPENSATION CHAINS
+  // Per 38 CFR 4.71a: Altered gait and biomechanics cause compensatory conditions
+  // ========================================
+  // Left Knee Compensation Chain
+  { primaryCondition: 'Left Knee Condition', secondaryCondition: 'Right Knee Condition', medicalConnection: 'Favoring injured knee places compensatory stress on opposite knee', category: 'Musculoskeletal' },
+  { primaryCondition: 'Left Knee Condition', secondaryCondition: 'Left Hip Condition', medicalConnection: 'Altered gait mechanics transfer stress to ipsilateral hip', category: 'Musculoskeletal' },
+  { primaryCondition: 'Left Knee Condition', secondaryCondition: 'Right Hip Condition', medicalConnection: 'Weight shifting to avoid pain stresses contralateral hip', category: 'Musculoskeletal' },
+  { primaryCondition: 'Left Knee Condition', secondaryCondition: 'Lumbar Spine Condition', medicalConnection: 'Antalgic gait causes spinal misalignment and disc stress', category: 'Musculoskeletal' },
+  { primaryCondition: 'Left Knee Condition', secondaryCondition: 'Left Ankle Condition', medicalConnection: 'Compensatory foot positioning stresses ankle joint', category: 'Musculoskeletal' },
+  { primaryCondition: 'Left Knee Condition', secondaryCondition: 'Sciatica', medicalConnection: 'Altered gait causes lumbar nerve impingement', category: 'Neurological' },
+
+  // Right Knee Compensation Chain
+  { primaryCondition: 'Right Knee Condition', secondaryCondition: 'Left Knee Condition', medicalConnection: 'Favoring injured knee places compensatory stress on opposite knee', category: 'Musculoskeletal' },
+  { primaryCondition: 'Right Knee Condition', secondaryCondition: 'Right Hip Condition', medicalConnection: 'Altered gait mechanics transfer stress to ipsilateral hip', category: 'Musculoskeletal' },
+  { primaryCondition: 'Right Knee Condition', secondaryCondition: 'Left Hip Condition', medicalConnection: 'Weight shifting to avoid pain stresses contralateral hip', category: 'Musculoskeletal' },
+  { primaryCondition: 'Right Knee Condition', secondaryCondition: 'Lumbar Spine Condition', medicalConnection: 'Antalgic gait causes spinal misalignment and disc stress', category: 'Musculoskeletal' },
+  { primaryCondition: 'Right Knee Condition', secondaryCondition: 'Right Ankle Condition', medicalConnection: 'Compensatory foot positioning stresses ankle joint', category: 'Musculoskeletal' },
+  { primaryCondition: 'Right Knee Condition', secondaryCondition: 'Sciatica', medicalConnection: 'Altered gait causes lumbar nerve impingement', category: 'Neurological' },
+
+  // Hip Compensation Chains
+  { primaryCondition: 'Left Hip Condition', secondaryCondition: 'Right Hip Condition', medicalConnection: 'Compensatory weight bearing stresses opposite hip', category: 'Musculoskeletal' },
+  { primaryCondition: 'Left Hip Condition', secondaryCondition: 'Lumbar Degenerative Disc Disease', medicalConnection: 'Altered pelvic tilt accelerates spinal degeneration', category: 'Musculoskeletal' },
+  { primaryCondition: 'Left Hip Condition', secondaryCondition: 'Sacroiliac Joint Dysfunction', medicalConnection: 'Hip dysfunction transfers stress to SI joint', category: 'Musculoskeletal' },
+  { primaryCondition: 'Left Hip Condition', secondaryCondition: 'Left Knee Osteoarthritis', medicalConnection: 'Abnormal gait pattern accelerates knee degeneration', category: 'Musculoskeletal' },
+  { primaryCondition: 'Right Hip Condition', secondaryCondition: 'Left Hip Condition', medicalConnection: 'Compensatory weight bearing stresses opposite hip', category: 'Musculoskeletal' },
+  { primaryCondition: 'Right Hip Condition', secondaryCondition: 'Lumbar Degenerative Disc Disease', medicalConnection: 'Altered pelvic tilt accelerates spinal degeneration', category: 'Musculoskeletal' },
+  { primaryCondition: 'Right Hip Condition', secondaryCondition: 'Sacroiliac Joint Dysfunction', medicalConnection: 'Hip dysfunction transfers stress to SI joint', category: 'Musculoskeletal' },
+  { primaryCondition: 'Right Hip Condition', secondaryCondition: 'Right Knee Osteoarthritis', medicalConnection: 'Abnormal gait pattern accelerates knee degeneration', category: 'Musculoskeletal' },
+
+  // Ankle/Foot Compensation Chains
+  { primaryCondition: 'Left Ankle Condition', secondaryCondition: 'Left Knee Condition', medicalConnection: 'Altered foot strike transfers stress up kinetic chain', category: 'Musculoskeletal' },
+  { primaryCondition: 'Left Ankle Condition', secondaryCondition: 'Right Ankle Condition', medicalConnection: 'Compensatory gait stresses opposite ankle', category: 'Musculoskeletal' },
+  { primaryCondition: 'Left Ankle Condition', secondaryCondition: 'Plantar Fasciitis', medicalConnection: 'Altered foot mechanics stress plantar fascia', category: 'Musculoskeletal' },
+  { primaryCondition: 'Right Ankle Condition', secondaryCondition: 'Right Knee Condition', medicalConnection: 'Altered foot strike transfers stress up kinetic chain', category: 'Musculoskeletal' },
+  { primaryCondition: 'Right Ankle Condition', secondaryCondition: 'Left Ankle Condition', medicalConnection: 'Compensatory gait stresses opposite ankle', category: 'Musculoskeletal' },
+  { primaryCondition: 'Right Ankle Condition', secondaryCondition: 'Plantar Fasciitis', medicalConnection: 'Altered foot mechanics stress plantar fascia', category: 'Musculoskeletal' },
+  { primaryCondition: 'Flat Feet (Pes Planus)', secondaryCondition: 'Plantar Fasciitis', medicalConnection: 'Loss of arch support strains plantar fascia', category: 'Musculoskeletal' },
+  { primaryCondition: 'Flat Feet (Pes Planus)', secondaryCondition: 'Knee Pain', medicalConnection: 'Poor foot alignment causes knee stress', category: 'Musculoskeletal' },
+  { primaryCondition: 'Flat Feet (Pes Planus)', secondaryCondition: 'Shin Splints', medicalConnection: 'Overpronation stresses tibial muscles', category: 'Musculoskeletal' },
+  { primaryCondition: 'Flat Feet (Pes Planus)', secondaryCondition: 'Hip Pain', medicalConnection: 'Biomechanical chain dysfunction', category: 'Musculoskeletal' },
+  { primaryCondition: 'Flat Feet (Pes Planus)', secondaryCondition: 'Lower Back Pain', medicalConnection: 'Pelvic tilt from poor foot alignment', category: 'Musculoskeletal' },
+  { primaryCondition: 'Plantar Fasciitis', secondaryCondition: 'Heel Spurs', medicalConnection: 'Chronic inflammation causes bone spur formation', category: 'Musculoskeletal' },
+  { primaryCondition: 'Plantar Fasciitis', secondaryCondition: 'Achilles Tendonitis', medicalConnection: 'Calf tightness contributes to both conditions', category: 'Musculoskeletal' },
+  { primaryCondition: 'Plantar Fasciitis', secondaryCondition: 'Knee Pain', medicalConnection: 'Altered gait from foot pain stresses knee', category: 'Musculoskeletal' },
+
+  // Shoulder Compensation Chains
+  { primaryCondition: 'Left Shoulder Condition', secondaryCondition: 'Right Shoulder Condition', medicalConnection: 'Overuse of uninjured arm causes strain', category: 'Musculoskeletal' },
+  { primaryCondition: 'Left Shoulder Condition', secondaryCondition: 'Cervical Spine Condition', medicalConnection: 'Compensatory posture stresses cervical spine', category: 'Musculoskeletal' },
+  { primaryCondition: 'Left Shoulder Condition', secondaryCondition: 'Thoracic Outlet Syndrome', medicalConnection: 'Altered shoulder mechanics compress neurovascular bundle', category: 'Neurological' },
+  { primaryCondition: 'Right Shoulder Condition', secondaryCondition: 'Left Shoulder Condition', medicalConnection: 'Overuse of uninjured arm causes strain', category: 'Musculoskeletal' },
+  { primaryCondition: 'Right Shoulder Condition', secondaryCondition: 'Cervical Spine Condition', medicalConnection: 'Compensatory posture stresses cervical spine', category: 'Musculoskeletal' },
+  { primaryCondition: 'Right Shoulder Condition', secondaryCondition: 'Thoracic Outlet Syndrome', medicalConnection: 'Altered shoulder mechanics compress neurovascular bundle', category: 'Neurological' },
+
+  // ========================================
+  // SLEEP APNEA COMPREHENSIVE CHAINS
+  // ========================================
+  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Cognitive Impairment', medicalConnection: 'Chronic hypoxia and sleep fragmentation impair brain function', category: 'Neurological' },
+  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Memory Loss', medicalConnection: 'Disrupted sleep prevents memory consolidation', category: 'Neurological' },
+  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Diabetes Type II', medicalConnection: 'Sleep disruption causes insulin resistance and metabolic dysfunction', category: 'Endocrine' },
+  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Atrial Fibrillation', medicalConnection: 'Repeated oxygen desaturation stresses cardiac conduction system', category: 'Cardiovascular' },
+  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Heart Failure', medicalConnection: 'Chronic strain from repeated hypoxia damages heart muscle', category: 'Cardiovascular' },
+  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Stroke', medicalConnection: 'Increased risk from blood pressure fluctuations and clotting', category: 'Cardiovascular' },
+  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Pulmonary Hypertension', medicalConnection: 'Chronic hypoxia increases pulmonary vascular resistance', category: 'Respiratory' },
+  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Erectile Dysfunction', medicalConnection: 'Reduced oxygen and testosterone levels affect function', category: 'Genitourinary' },
+  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Low Testosterone', medicalConnection: 'Sleep disruption reduces testosterone production', category: 'Endocrine' },
+  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Morning Headaches', medicalConnection: 'CO2 retention during sleep causes vascular headaches', category: 'Neurological' },
+  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Gastroesophageal Reflux', medicalConnection: 'Negative intrathoracic pressure draws stomach acid up', category: 'Digestive' },
+  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Nocturia', medicalConnection: 'Increased atrial natriuretic peptide from chest pressure changes', category: 'Genitourinary' },
+  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Chronic Fatigue', medicalConnection: 'Non-restorative sleep causes persistent exhaustion', category: 'Systemic' },
+  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Weight Gain', medicalConnection: 'Hormonal changes and fatigue reduce activity and increase appetite', category: 'Endocrine' },
+  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Glaucoma', medicalConnection: 'Repeated hypoxia damages optic nerve', category: 'Eyes' },
+
+  // ========================================
+  // MEDICATION SIDE EFFECTS AS SECONDARIES
+  // ========================================
+  // NSAID Side Effects
+  { primaryCondition: 'Chronic NSAID Use', secondaryCondition: 'GERD', medicalConnection: 'NSAIDs reduce protective stomach mucus leading to acid reflux', category: 'Digestive' },
+  { primaryCondition: 'Chronic NSAID Use', secondaryCondition: 'Peptic Ulcer Disease', medicalConnection: 'NSAIDs inhibit prostaglandins needed for stomach lining protection', category: 'Digestive' },
+  { primaryCondition: 'Chronic NSAID Use', secondaryCondition: 'Chronic Kidney Disease', medicalConnection: 'NSAIDs reduce kidney blood flow causing progressive damage', category: 'Renal' },
+  { primaryCondition: 'Chronic NSAID Use', secondaryCondition: 'Hypertension', medicalConnection: 'NSAIDs cause sodium retention and vasoconstriction', category: 'Cardiovascular' },
+  { primaryCondition: 'Chronic NSAID Use', secondaryCondition: 'GI Bleeding', medicalConnection: 'Mucosal damage leads to hemorrhage', category: 'Digestive' },
+  { primaryCondition: 'Chronic NSAID Use', secondaryCondition: 'Liver Damage', medicalConnection: 'Hepatotoxicity from chronic use', category: 'Digestive' },
+
+  // Psychiatric Medication Side Effects
+  { primaryCondition: 'Chronic Psychiatric Medication Use', secondaryCondition: 'Weight Gain', medicalConnection: 'Many psychiatric medications cause metabolic changes and appetite increase', category: 'Endocrine' },
+  { primaryCondition: 'Chronic Psychiatric Medication Use', secondaryCondition: 'Diabetes Type II', medicalConnection: 'Antipsychotics and some antidepressants cause insulin resistance', category: 'Endocrine' },
+  { primaryCondition: 'Chronic Psychiatric Medication Use', secondaryCondition: 'Metabolic Syndrome', medicalConnection: 'Psychiatric medications affect lipids, glucose, and weight', category: 'Endocrine' },
+  { primaryCondition: 'Chronic Psychiatric Medication Use', secondaryCondition: 'Hyperlipidemia', medicalConnection: 'Antipsychotics increase triglycerides and LDL', category: 'Cardiovascular' },
+  { primaryCondition: 'Chronic Psychiatric Medication Use', secondaryCondition: 'Sexual Dysfunction', medicalConnection: 'SSRIs and other psychiatric meds affect sexual function', category: 'Genitourinary' },
+  { primaryCondition: 'Chronic Psychiatric Medication Use', secondaryCondition: 'Tardive Dyskinesia', medicalConnection: 'Long-term antipsychotic use causes involuntary movements', category: 'Neurological' },
+  { primaryCondition: 'Chronic Psychiatric Medication Use', secondaryCondition: 'QT Prolongation', medicalConnection: 'Many psychiatric meds affect cardiac rhythm', category: 'Cardiovascular' },
+
+  // Opioid Side Effects
+  { primaryCondition: 'Chronic Opioid Use', secondaryCondition: 'Chronic Constipation', medicalConnection: 'Opioids slow GI motility causing severe constipation', category: 'Digestive' },
+  { primaryCondition: 'Chronic Opioid Use', secondaryCondition: 'Low Testosterone', medicalConnection: 'Opioid-induced androgen deficiency is well-documented', category: 'Endocrine' },
+  { primaryCondition: 'Chronic Opioid Use', secondaryCondition: 'Sleep Apnea', medicalConnection: 'Opioids suppress respiratory drive during sleep', category: 'Respiratory' },
+  { primaryCondition: 'Chronic Opioid Use', secondaryCondition: 'Hyperalgesia', medicalConnection: 'Paradoxical increased pain sensitivity from chronic use', category: 'Neurological' },
+  { primaryCondition: 'Chronic Opioid Use', secondaryCondition: 'Depression', medicalConnection: 'Hormonal and neurochemical changes affect mood', category: 'Mental Health' },
+  { primaryCondition: 'Chronic Opioid Use', secondaryCondition: 'Osteoporosis', medicalConnection: 'Hormonal disruption reduces bone density', category: 'Musculoskeletal' },
+  { primaryCondition: 'Chronic Opioid Use', secondaryCondition: 'Erectile Dysfunction', medicalConnection: 'Testosterone suppression and vascular effects', category: 'Genitourinary' },
+
+  // Steroid Side Effects
+  { primaryCondition: 'Chronic Corticosteroid Use', secondaryCondition: 'Osteoporosis', medicalConnection: 'Steroids inhibit bone formation and calcium absorption', category: 'Musculoskeletal' },
+  { primaryCondition: 'Chronic Corticosteroid Use', secondaryCondition: 'Diabetes Type II', medicalConnection: 'Steroids increase blood glucose and insulin resistance', category: 'Endocrine' },
+  { primaryCondition: 'Chronic Corticosteroid Use', secondaryCondition: 'Cataracts', medicalConnection: 'Steroids cause posterior subcapsular cataracts', category: 'Eyes' },
+  { primaryCondition: 'Chronic Corticosteroid Use', secondaryCondition: 'Glaucoma', medicalConnection: 'Steroid-induced intraocular pressure elevation', category: 'Eyes' },
+  { primaryCondition: 'Chronic Corticosteroid Use', secondaryCondition: 'Avascular Necrosis', medicalConnection: 'Steroids damage blood supply to bones', category: 'Musculoskeletal' },
+  { primaryCondition: 'Chronic Corticosteroid Use', secondaryCondition: 'Adrenal Insufficiency', medicalConnection: 'Long-term use suppresses adrenal function', category: 'Endocrine' },
+  { primaryCondition: 'Chronic Corticosteroid Use', secondaryCondition: 'Skin Thinning', medicalConnection: 'Steroids break down collagen in skin', category: 'Skin' },
+  { primaryCondition: 'Chronic Corticosteroid Use', secondaryCondition: 'Hypertension', medicalConnection: 'Steroids cause fluid retention and vascular changes', category: 'Cardiovascular' },
+  { primaryCondition: 'Chronic Corticosteroid Use', secondaryCondition: 'Weight Gain', medicalConnection: 'Increased appetite and fat redistribution', category: 'Endocrine' },
+  { primaryCondition: 'Chronic Corticosteroid Use', secondaryCondition: 'Muscle Weakness', medicalConnection: 'Steroid myopathy from protein catabolism', category: 'Musculoskeletal' },
+
+  // ========================================
+  // DIABETES COMPREHENSIVE COMPLICATIONS
+  // ========================================
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Gastroparesis', medicalConnection: 'Diabetic autonomic neuropathy damages stomach nerve control', category: 'Digestive' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Diabetic Retinopathy', medicalConnection: 'Microvascular damage to retinal blood vessels', category: 'Eyes' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Diabetic Macular Edema', medicalConnection: 'Fluid leakage from damaged retinal vessels', category: 'Eyes' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Cataracts', medicalConnection: 'High glucose causes lens protein damage', category: 'Eyes' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Glaucoma', medicalConnection: 'Increased eye pressure from diabetes', category: 'Eyes' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Diabetic Nephropathy', medicalConnection: 'Microvascular damage to kidney filtration units', category: 'Renal' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Chronic Kidney Disease', medicalConnection: 'Progressive kidney damage from hyperglycemia', category: 'Renal' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Peripheral Neuropathy', medicalConnection: 'High glucose damages nerve fibers', category: 'Neurological' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Autonomic Neuropathy', medicalConnection: 'Nerve damage affects automatic body functions', category: 'Neurological' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Hearing Loss', medicalConnection: 'Microvascular damage to inner ear', category: 'Ears' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Erectile Dysfunction', medicalConnection: 'Vascular and nerve damage affects function', category: 'Genitourinary' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Bladder Dysfunction', medicalConnection: 'Autonomic neuropathy affects bladder control', category: 'Genitourinary' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Coronary Artery Disease', medicalConnection: 'Accelerated atherosclerosis from metabolic dysfunction', category: 'Cardiovascular' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Peripheral Artery Disease', medicalConnection: 'Vascular damage to extremity blood vessels', category: 'Cardiovascular' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Diabetic Foot Ulcers', medicalConnection: 'Neuropathy and poor circulation cause non-healing wounds', category: 'Skin' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Skin Infections', medicalConnection: 'High glucose impairs immune function and wound healing', category: 'Skin' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Frozen Shoulder', medicalConnection: 'Glycation of collagen causes joint stiffness', category: 'Musculoskeletal' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Carpal Tunnel Syndrome', medicalConnection: 'Neuropathy and tissue glycation compress median nerve', category: 'Neurological' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Depression', medicalConnection: 'Chronic disease burden and biological changes', category: 'Mental Health' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Cognitive Decline', medicalConnection: 'Vascular damage and glucose toxicity affect brain', category: 'Neurological' },
+
+  // ========================================
+  // SPINE CONDITION CHAINS
+  // ========================================
+  // Cervical Spine
+  { primaryCondition: 'Cervical Degenerative Disc Disease', secondaryCondition: 'Cervical Radiculopathy', medicalConnection: 'Disc degeneration compresses nerve roots', category: 'Neurological' },
+  { primaryCondition: 'Cervical Degenerative Disc Disease', secondaryCondition: 'Cervical Myelopathy', medicalConnection: 'Spinal cord compression from disc narrowing', category: 'Neurological' },
+  { primaryCondition: 'Cervical Degenerative Disc Disease', secondaryCondition: 'Tension Headaches', medicalConnection: 'Neck muscle compensation causes headaches', category: 'Neurological' },
+  { primaryCondition: 'Cervical Degenerative Disc Disease', secondaryCondition: 'Thoracic Spine Condition', medicalConnection: 'Compensatory stress on adjacent spine segments', category: 'Musculoskeletal' },
+  { primaryCondition: 'Cervical Degenerative Disc Disease', secondaryCondition: 'Shoulder Pain', medicalConnection: 'Referred pain and compensatory posture', category: 'Musculoskeletal' },
+  { primaryCondition: 'Cervical Stenosis', secondaryCondition: 'Hand Weakness', medicalConnection: 'Spinal cord compression affects motor control', category: 'Neurological' },
+  { primaryCondition: 'Cervical Stenosis', secondaryCondition: 'Balance Problems', medicalConnection: 'Myelopathy affects coordination', category: 'Neurological' },
+  { primaryCondition: 'Cervical Stenosis', secondaryCondition: 'Bladder Dysfunction', medicalConnection: 'Severe myelopathy affects autonomic function', category: 'Genitourinary' },
+
+  // Thoracic Spine
+  { primaryCondition: 'Thoracic Spine Condition', secondaryCondition: 'Intercostal Neuralgia', medicalConnection: 'Thoracic nerve irritation causes rib pain', category: 'Neurological' },
+  { primaryCondition: 'Thoracic Spine Condition', secondaryCondition: 'Lumbar Spine Condition', medicalConnection: 'Compensatory stress on lower spine', category: 'Musculoskeletal' },
+  { primaryCondition: 'Thoracic Spine Condition', secondaryCondition: 'Postural Kyphosis', medicalConnection: 'Pain avoidance causes spinal curvature', category: 'Musculoskeletal' },
+
+  // Lumbar Spine
+  { primaryCondition: 'Lumbar Degenerative Disc Disease', secondaryCondition: 'Sciatica', medicalConnection: 'Disc material compresses sciatic nerve roots', category: 'Neurological' },
+  { primaryCondition: 'Lumbar Degenerative Disc Disease', secondaryCondition: 'Lumbar Radiculopathy', medicalConnection: 'Nerve root compression from disc changes', category: 'Neurological' },
+  { primaryCondition: 'Lumbar Degenerative Disc Disease', secondaryCondition: 'Spinal Stenosis', medicalConnection: 'Progressive narrowing of spinal canal', category: 'Musculoskeletal' },
+  { primaryCondition: 'Lumbar Degenerative Disc Disease', secondaryCondition: 'Hip Bursitis', medicalConnection: 'Altered gait from back pain stresses hip', category: 'Musculoskeletal' },
+  { primaryCondition: 'Lumbar Degenerative Disc Disease', secondaryCondition: 'Sacroiliac Joint Dysfunction', medicalConnection: 'Spinal instability stresses SI joint', category: 'Musculoskeletal' },
+  { primaryCondition: 'Lumbar Degenerative Disc Disease', secondaryCondition: 'Piriformis Syndrome', medicalConnection: 'Compensatory muscle tension compresses sciatic nerve', category: 'Neurological' },
+  { primaryCondition: 'Lumbar Stenosis', secondaryCondition: 'Neurogenic Claudication', medicalConnection: 'Nerve compression causes leg pain with walking', category: 'Neurological' },
+  { primaryCondition: 'Lumbar Stenosis', secondaryCondition: 'Foot Drop', medicalConnection: 'Severe nerve compression affects foot control', category: 'Neurological' },
+  { primaryCondition: 'Lumbar Stenosis', secondaryCondition: 'Bowel/Bladder Dysfunction', medicalConnection: 'Cauda equina involvement affects function', category: 'Neurological' },
+  { primaryCondition: 'Spondylolisthesis', secondaryCondition: 'Chronic Low Back Pain', medicalConnection: 'Vertebral slippage causes persistent pain', category: 'Musculoskeletal' },
+  { primaryCondition: 'Spondylolisthesis', secondaryCondition: 'Radiculopathy', medicalConnection: 'Nerve compression from vertebral misalignment', category: 'Neurological' },
+  { primaryCondition: 'Spondylolisthesis', secondaryCondition: 'Hamstring Tightness', medicalConnection: 'Pelvic compensation causes muscle tension', category: 'Musculoskeletal' },
+
+  // ========================================
+  // CARDIOVASCULAR CHAINS
+  // ========================================
+  { primaryCondition: 'Hypertension', secondaryCondition: 'Left Ventricular Hypertrophy', medicalConnection: 'Heart muscle thickens from pumping against high pressure', category: 'Cardiovascular' },
+  { primaryCondition: 'Hypertension', secondaryCondition: 'Heart Failure', medicalConnection: 'Chronic strain weakens heart muscle', category: 'Cardiovascular' },
+  { primaryCondition: 'Hypertension', secondaryCondition: 'Atrial Fibrillation', medicalConnection: 'Elevated pressure causes atrial remodeling', category: 'Cardiovascular' },
+  { primaryCondition: 'Hypertension', secondaryCondition: 'Chronic Kidney Disease', medicalConnection: 'High pressure damages kidney blood vessels', category: 'Renal' },
+  { primaryCondition: 'Hypertension', secondaryCondition: 'Retinopathy', medicalConnection: 'High pressure damages retinal blood vessels', category: 'Eyes' },
+  { primaryCondition: 'Hypertension', secondaryCondition: 'Stroke', medicalConnection: 'Vessel damage and increased clot risk', category: 'Cardiovascular' },
+  { primaryCondition: 'Hypertension', secondaryCondition: 'Peripheral Artery Disease', medicalConnection: 'Accelerated atherosclerosis', category: 'Cardiovascular' },
+  { primaryCondition: 'Hypertension', secondaryCondition: 'Erectile Dysfunction', medicalConnection: 'Vascular damage affects blood flow', category: 'Genitourinary' },
+  { primaryCondition: 'Hypertension', secondaryCondition: 'Vascular Dementia', medicalConnection: 'Chronic cerebrovascular damage', category: 'Neurological' },
+  { primaryCondition: 'Coronary Artery Disease', secondaryCondition: 'Heart Failure', medicalConnection: 'Reduced blood supply weakens heart muscle', category: 'Cardiovascular' },
+  { primaryCondition: 'Coronary Artery Disease', secondaryCondition: 'Arrhythmia', medicalConnection: 'Ischemia affects electrical conduction', category: 'Cardiovascular' },
+  { primaryCondition: 'Coronary Artery Disease', secondaryCondition: 'Depression', medicalConnection: 'Chronic illness and mortality awareness', category: 'Mental Health' },
+  { primaryCondition: 'Coronary Artery Disease', secondaryCondition: 'Anxiety', medicalConnection: 'Fear of cardiac events', category: 'Mental Health' },
+  { primaryCondition: 'Heart Failure', secondaryCondition: 'Chronic Kidney Disease', medicalConnection: 'Cardiorenal syndrome from reduced kidney perfusion', category: 'Renal' },
+  { primaryCondition: 'Heart Failure', secondaryCondition: 'Sleep Apnea', medicalConnection: 'Fluid shifts and respiratory changes', category: 'Respiratory' },
+  { primaryCondition: 'Heart Failure', secondaryCondition: 'Cardiac Cachexia', medicalConnection: 'Metabolic changes cause muscle wasting', category: 'Systemic' },
+  { primaryCondition: 'Heart Failure', secondaryCondition: 'Depression', medicalConnection: 'Chronic illness burden and functional decline', category: 'Mental Health' },
+  { primaryCondition: 'Atrial Fibrillation', secondaryCondition: 'Stroke', medicalConnection: 'Irregular heartbeat allows clot formation', category: 'Cardiovascular' },
+  { primaryCondition: 'Atrial Fibrillation', secondaryCondition: 'Heart Failure', medicalConnection: 'Irregular rhythm reduces pump efficiency', category: 'Cardiovascular' },
+  { primaryCondition: 'Atrial Fibrillation', secondaryCondition: 'Cognitive Impairment', medicalConnection: 'Microemboli and reduced cerebral perfusion', category: 'Neurological' },
+  { primaryCondition: 'Atrial Fibrillation', secondaryCondition: 'Anxiety', medicalConnection: 'Palpitations and stroke fear', category: 'Mental Health' },
+
+  // ========================================
+  // RESPIRATORY CHAINS
+  // ========================================
+  { primaryCondition: 'COPD', secondaryCondition: 'Cor Pulmonale', medicalConnection: 'Right heart failure from pulmonary hypertension', category: 'Cardiovascular' },
+  { primaryCondition: 'COPD', secondaryCondition: 'Pulmonary Hypertension', medicalConnection: 'Chronic hypoxia increases pulmonary pressure', category: 'Cardiovascular' },
+  { primaryCondition: 'COPD', secondaryCondition: 'Depression', medicalConnection: 'Chronic illness burden and activity limitation', category: 'Mental Health' },
+  { primaryCondition: 'COPD', secondaryCondition: 'Anxiety', medicalConnection: 'Dyspnea triggers panic and anxiety', category: 'Mental Health' },
+  { primaryCondition: 'COPD', secondaryCondition: 'Osteoporosis', medicalConnection: 'Chronic inflammation and steroid use', category: 'Musculoskeletal' },
+  { primaryCondition: 'COPD', secondaryCondition: 'Muscle Wasting', medicalConnection: 'Systemic inflammation causes sarcopenia', category: 'Musculoskeletal' },
+  { primaryCondition: 'COPD', secondaryCondition: 'Weight Loss', medicalConnection: 'Increased work of breathing burns calories', category: 'Systemic' },
+  { primaryCondition: 'COPD', secondaryCondition: 'Sleep Disorders', medicalConnection: 'Nocturnal hypoxia and breathing difficulty', category: 'Respiratory' },
+  { primaryCondition: 'COPD', secondaryCondition: 'Cognitive Impairment', medicalConnection: 'Chronic hypoxia affects brain function', category: 'Neurological' },
+  { primaryCondition: 'Asthma', secondaryCondition: 'GERD', medicalConnection: 'Respiratory mechanics affect lower esophageal sphincter', category: 'Digestive' },
+  { primaryCondition: 'Asthma', secondaryCondition: 'Anxiety', medicalConnection: 'Fear of asthma attacks', category: 'Mental Health' },
+  { primaryCondition: 'Asthma', secondaryCondition: 'Sinusitis', medicalConnection: 'Unified airway inflammation', category: 'Respiratory' },
+  { primaryCondition: 'Asthma', secondaryCondition: 'Vocal Cord Dysfunction', medicalConnection: 'Irritant exposure affects vocal cords', category: 'Respiratory' },
+  { primaryCondition: 'Asthma', secondaryCondition: 'Sleep Disorders', medicalConnection: 'Nocturnal symptoms disrupt sleep', category: 'Respiratory' },
+  { primaryCondition: 'Pulmonary Fibrosis', secondaryCondition: 'Pulmonary Hypertension', medicalConnection: 'Fibrotic changes increase vascular resistance', category: 'Cardiovascular' },
+  { primaryCondition: 'Pulmonary Fibrosis', secondaryCondition: 'Cor Pulmonale', medicalConnection: 'Right heart strain from lung disease', category: 'Cardiovascular' },
+  { primaryCondition: 'Pulmonary Fibrosis', secondaryCondition: 'Depression', medicalConnection: 'Progressive disease with poor prognosis', category: 'Mental Health' },
+  { primaryCondition: 'Pulmonary Fibrosis', secondaryCondition: 'GERD', medicalConnection: 'Microaspiration contributes to fibrosis', category: 'Digestive' },
+
+  // ========================================
+  // ADDITIONAL PTSD SECONDARIES
+  // ========================================
+  { primaryCondition: 'PTSD', secondaryCondition: 'Chronic Fatigue Syndrome', medicalConnection: 'HPA axis dysfunction and chronic stress deplete energy systems', category: 'Systemic' },
+  { primaryCondition: 'PTSD', secondaryCondition: 'Autoimmune Disorders', medicalConnection: 'Chronic stress dysregulates immune function', category: 'Systemic' },
+  { primaryCondition: 'PTSD', secondaryCondition: 'Chronic Pain Syndrome', medicalConnection: 'Central sensitization from chronic stress', category: 'Neurological' },
+  { primaryCondition: 'PTSD', secondaryCondition: 'Somatic Symptom Disorder', medicalConnection: 'Psychological distress manifests as physical symptoms', category: 'Mental Health' },
+  { primaryCondition: 'PTSD', secondaryCondition: 'Skin Conditions (Psoriasis, Eczema)', medicalConnection: 'Stress hormones trigger inflammatory skin conditions', category: 'Skin' },
+  { primaryCondition: 'PTSD', secondaryCondition: 'Hair Loss (Alopecia)', medicalConnection: 'Chronic stress triggers telogen effluvium', category: 'Skin' },
+  { primaryCondition: 'PTSD', secondaryCondition: 'Peripheral Neuropathy', medicalConnection: 'Stress and metabolic changes damage peripheral nerves', category: 'Neurological' },
+  { primaryCondition: 'PTSD', secondaryCondition: 'Vertigo', medicalConnection: 'Anxiety and hypervigilance affect vestibular function', category: 'Neurological' },
+  { primaryCondition: 'PTSD', secondaryCondition: 'Chronic Sinusitis', medicalConnection: 'Immune dysfunction from chronic stress', category: 'Respiratory' },
+  { primaryCondition: 'PTSD', secondaryCondition: 'Interstitial Cystitis', medicalConnection: 'Stress-related bladder inflammation', category: 'Genitourinary' },
+
+  // ========================================
+  // HEARING LOSS CHAINS
+  // ========================================
+  { primaryCondition: 'Hearing Loss', secondaryCondition: 'Tinnitus', medicalConnection: 'Auditory system damage causes phantom sounds', category: 'Ears' },
+  { primaryCondition: 'Hearing Loss', secondaryCondition: 'Depression', medicalConnection: 'Social isolation and communication difficulty', category: 'Mental Health' },
+  { primaryCondition: 'Hearing Loss', secondaryCondition: 'Cognitive Decline', medicalConnection: 'Reduced auditory stimulation affects brain', category: 'Neurological' },
+  { primaryCondition: 'Hearing Loss', secondaryCondition: 'Social Anxiety', medicalConnection: 'Difficulty in social situations', category: 'Mental Health' },
+  { primaryCondition: 'Hearing Loss', secondaryCondition: 'Balance Problems', medicalConnection: 'Inner ear damage affects vestibular system', category: 'Neurological' },
+  { primaryCondition: 'Tinnitus', secondaryCondition: 'Sleep Disorders', medicalConnection: 'Constant noise interferes with sleep', category: 'Mental Health' },
+  { primaryCondition: 'Tinnitus', secondaryCondition: 'Anxiety', medicalConnection: 'Chronic noise causes psychological distress', category: 'Mental Health' },
+  { primaryCondition: 'Tinnitus', secondaryCondition: 'Depression', medicalConnection: 'Persistent symptoms affect quality of life', category: 'Mental Health' },
+  { primaryCondition: 'Tinnitus', secondaryCondition: 'Concentration Problems', medicalConnection: 'Constant sound interferes with focus', category: 'Neurological' },
+  { primaryCondition: 'Menieres Disease', secondaryCondition: 'Hearing Loss', medicalConnection: 'Progressive inner ear damage', category: 'Ears' },
+  { primaryCondition: 'Menieres Disease', secondaryCondition: 'Tinnitus', medicalConnection: 'Inner ear dysfunction causes phantom sounds', category: 'Ears' },
+  { primaryCondition: 'Menieres Disease', secondaryCondition: 'Anxiety', medicalConnection: 'Unpredictable vertigo attacks cause fear', category: 'Mental Health' },
+  { primaryCondition: 'Menieres Disease', secondaryCondition: 'Depression', medicalConnection: 'Chronic illness and lifestyle limitations', category: 'Mental Health' },
+
+  // ========================================
+  // AUTOIMMUNE AND INFLAMMATORY CHAINS
+  // ========================================
+  { primaryCondition: 'Rheumatoid Arthritis', secondaryCondition: 'Sjogrens Syndrome', medicalConnection: 'Overlapping autoimmune conditions', category: 'Autoimmune' },
+  { primaryCondition: 'Rheumatoid Arthritis', secondaryCondition: 'Carpal Tunnel Syndrome', medicalConnection: 'Joint inflammation compresses median nerve', category: 'Neurological' },
+  { primaryCondition: 'Rheumatoid Arthritis', secondaryCondition: 'Interstitial Lung Disease', medicalConnection: 'Systemic inflammation affects lungs', category: 'Respiratory' },
+  { primaryCondition: 'Rheumatoid Arthritis', secondaryCondition: 'Cervical Myelopathy', medicalConnection: 'Atlantoaxial instability from joint damage', category: 'Neurological' },
+  { primaryCondition: 'Rheumatoid Arthritis', secondaryCondition: 'Peripheral Neuropathy', medicalConnection: 'Vasculitis damages peripheral nerves', category: 'Neurological' },
+  { primaryCondition: 'Rheumatoid Arthritis', secondaryCondition: 'Depression', medicalConnection: 'Chronic pain and disability', category: 'Mental Health' },
+  { primaryCondition: 'Lupus (SLE)', secondaryCondition: 'Lupus Nephritis', medicalConnection: 'Autoimmune attack on kidneys', category: 'Renal' },
+  { primaryCondition: 'Lupus (SLE)', secondaryCondition: 'Antiphospholipid Syndrome', medicalConnection: 'Associated autoantibody syndrome', category: 'Cardiovascular' },
+  { primaryCondition: 'Lupus (SLE)', secondaryCondition: 'Pericarditis', medicalConnection: 'Inflammation of heart lining', category: 'Cardiovascular' },
+  { primaryCondition: 'Lupus (SLE)', secondaryCondition: 'Raynauds Phenomenon', medicalConnection: 'Vascular involvement common in lupus', category: 'Cardiovascular' },
+  { primaryCondition: 'Lupus (SLE)', secondaryCondition: 'Cognitive Dysfunction', medicalConnection: 'CNS lupus affects brain function', category: 'Neurological' },
+  { primaryCondition: 'Psoriasis', secondaryCondition: 'Psoriatic Arthritis', medicalConnection: 'Skin and joint inflammation share pathology', category: 'Musculoskeletal' },
+  { primaryCondition: 'Psoriasis', secondaryCondition: 'Depression', medicalConnection: 'Visible skin disease affects self-esteem', category: 'Mental Health' },
+  { primaryCondition: 'Psoriasis', secondaryCondition: 'Metabolic Syndrome', medicalConnection: 'Systemic inflammation affects metabolism', category: 'Endocrine' },
+  { primaryCondition: 'Psoriasis', secondaryCondition: 'Cardiovascular Disease', medicalConnection: 'Chronic inflammation accelerates atherosclerosis', category: 'Cardiovascular' },
+
+  // ========================================
+  // DIGESTIVE SYSTEM CHAINS
+  // ========================================
+  { primaryCondition: 'GERD', secondaryCondition: 'Barretts Esophagus', medicalConnection: 'Chronic acid exposure causes cellular changes', category: 'Digestive' },
+  { primaryCondition: 'GERD', secondaryCondition: 'Esophageal Stricture', medicalConnection: 'Scarring from chronic inflammation', category: 'Digestive' },
+  { primaryCondition: 'GERD', secondaryCondition: 'Chronic Cough', medicalConnection: 'Acid irritation triggers cough reflex', category: 'Respiratory' },
+  { primaryCondition: 'GERD', secondaryCondition: 'Laryngitis', medicalConnection: 'Acid damages vocal cords', category: 'Respiratory' },
+  { primaryCondition: 'GERD', secondaryCondition: 'Dental Erosion', medicalConnection: 'Acid damages tooth enamel', category: 'Dental' },
+  { primaryCondition: 'GERD', secondaryCondition: 'Asthma', medicalConnection: 'Microaspiration triggers bronchospasm', category: 'Respiratory' },
+  { primaryCondition: 'GERD', secondaryCondition: 'Sleep Disorders', medicalConnection: 'Nocturnal reflux disrupts sleep', category: 'Mental Health' },
+  { primaryCondition: 'IBS', secondaryCondition: 'Anxiety', medicalConnection: 'Gut-brain axis dysfunction', category: 'Mental Health' },
+  { primaryCondition: 'IBS', secondaryCondition: 'Depression', medicalConnection: 'Chronic symptoms affect quality of life', category: 'Mental Health' },
+  { primaryCondition: 'IBS', secondaryCondition: 'Fibromyalgia', medicalConnection: 'Central sensitization syndromes overlap', category: 'Musculoskeletal' },
+  { primaryCondition: 'IBS', secondaryCondition: 'Chronic Fatigue', medicalConnection: 'GI dysfunction affects nutrient absorption and energy', category: 'Systemic' },
+  { primaryCondition: 'Crohns Disease', secondaryCondition: 'Fistulas', medicalConnection: 'Transmural inflammation creates abnormal connections', category: 'Digestive' },
+  { primaryCondition: 'Crohns Disease', secondaryCondition: 'Kidney Stones', medicalConnection: 'Oxalate absorption increases with fat malabsorption', category: 'Renal' },
+  { primaryCondition: 'Crohns Disease', secondaryCondition: 'Anemia', medicalConnection: 'Blood loss and nutrient malabsorption', category: 'Hematologic' },
+  { primaryCondition: 'Crohns Disease', secondaryCondition: 'Arthritis', medicalConnection: 'Extraintestinal manifestation of IBD', category: 'Musculoskeletal' },
+  { primaryCondition: 'Crohns Disease', secondaryCondition: 'Osteoporosis', medicalConnection: 'Malabsorption and steroid use', category: 'Musculoskeletal' },
+  { primaryCondition: 'Ulcerative Colitis', secondaryCondition: 'Primary Sclerosing Cholangitis', medicalConnection: 'Associated hepatobiliary condition', category: 'Digestive' },
+  { primaryCondition: 'Ulcerative Colitis', secondaryCondition: 'Anemia', medicalConnection: 'Chronic blood loss', category: 'Hematologic' },
+  { primaryCondition: 'Ulcerative Colitis', secondaryCondition: 'Arthritis', medicalConnection: 'Extraintestinal manifestation', category: 'Musculoskeletal' },
+  { primaryCondition: 'Hepatitis C', secondaryCondition: 'Cirrhosis', medicalConnection: 'Chronic viral infection causes liver scarring', category: 'Digestive' },
+  { primaryCondition: 'Hepatitis C', secondaryCondition: 'Cryoglobulinemia', medicalConnection: 'Immune complex disorder from chronic infection', category: 'Systemic' },
+  { primaryCondition: 'Hepatitis C', secondaryCondition: 'Peripheral Neuropathy', medicalConnection: 'Immune-mediated nerve damage', category: 'Neurological' },
+  { primaryCondition: 'Hepatitis C', secondaryCondition: 'Diabetes Type II', medicalConnection: 'Viral effect on insulin signaling', category: 'Endocrine' },
+
+  // ========================================
+  // GULF WAR / BURN PIT / TOXIC EXPOSURE
+  // ========================================
+  { primaryCondition: 'Burn Pit Exposure', secondaryCondition: 'Chronic Bronchitis', medicalConnection: 'Inhalation of toxic smoke irritates airways', category: 'Respiratory' },
+  { primaryCondition: 'Burn Pit Exposure', secondaryCondition: 'Asthma', medicalConnection: 'Airway inflammation from toxic exposure', category: 'Respiratory' },
+  { primaryCondition: 'Burn Pit Exposure', secondaryCondition: 'COPD', medicalConnection: 'Chronic lung damage from toxic inhalation', category: 'Respiratory' },
+  { primaryCondition: 'Burn Pit Exposure', secondaryCondition: 'Pulmonary Fibrosis', medicalConnection: 'Scarring from toxic particle inhalation', category: 'Respiratory' },
+  { primaryCondition: 'Burn Pit Exposure', secondaryCondition: 'Sinusitis', medicalConnection: 'Upper airway inflammation from smoke', category: 'Respiratory' },
+  { primaryCondition: 'Burn Pit Exposure', secondaryCondition: 'Rhinitis', medicalConnection: 'Nasal inflammation from toxic exposure', category: 'Respiratory' },
+  { primaryCondition: 'Burn Pit Exposure', secondaryCondition: 'Skin Conditions', medicalConnection: 'Toxic exposure causes dermatological issues', category: 'Skin' },
+  { primaryCondition: 'Burn Pit Exposure', secondaryCondition: 'Headaches', medicalConnection: 'Toxic exposure and sinus inflammation', category: 'Neurological' },
+  { primaryCondition: 'Burn Pit Exposure', secondaryCondition: 'Fatigue', medicalConnection: 'Systemic effects of toxic exposure', category: 'Systemic' },
+  { primaryCondition: 'Gulf War Syndrome', secondaryCondition: 'Chronic Fatigue', medicalConnection: 'Hallmark symptom of Gulf War illness', category: 'Systemic' },
+  { primaryCondition: 'Gulf War Syndrome', secondaryCondition: 'Fibromyalgia', medicalConnection: 'Central sensitization from toxic exposures', category: 'Musculoskeletal' },
+  { primaryCondition: 'Gulf War Syndrome', secondaryCondition: 'IBS', medicalConnection: 'GI dysfunction common in Gulf War veterans', category: 'Digestive' },
+  { primaryCondition: 'Gulf War Syndrome', secondaryCondition: 'Cognitive Impairment', medicalConnection: 'Neurological effects of toxic exposure', category: 'Neurological' },
+  { primaryCondition: 'Gulf War Syndrome', secondaryCondition: 'Joint Pain', medicalConnection: 'Widespread musculoskeletal symptoms', category: 'Musculoskeletal' },
+  { primaryCondition: 'Gulf War Syndrome', secondaryCondition: 'Skin Conditions', medicalConnection: 'Dermatological manifestations', category: 'Skin' },
+  { primaryCondition: 'Agent Orange Exposure', secondaryCondition: 'Diabetes Type II', medicalConnection: 'Presumptive condition for Agent Orange exposure', category: 'Endocrine' },
+  { primaryCondition: 'Agent Orange Exposure', secondaryCondition: 'Ischemic Heart Disease', medicalConnection: 'Presumptive condition for Agent Orange exposure', category: 'Cardiovascular' },
+  { primaryCondition: 'Agent Orange Exposure', secondaryCondition: 'Parkinson Disease', medicalConnection: 'Presumptive condition for Agent Orange exposure', category: 'Neurological' },
+  { primaryCondition: 'Agent Orange Exposure', secondaryCondition: 'Peripheral Neuropathy', medicalConnection: 'Neurotoxic effects of dioxin exposure', category: 'Neurological' },
+  { primaryCondition: 'Agent Orange Exposure', secondaryCondition: 'Chloracne', medicalConnection: 'Skin manifestation of dioxin exposure', category: 'Skin' },
+  { primaryCondition: 'Agent Orange Exposure', secondaryCondition: 'Porphyria Cutanea Tarda', medicalConnection: 'Liver disorder from herbicide exposure', category: 'Digestive' },
+  { primaryCondition: 'Camp Lejeune Water Contamination', secondaryCondition: 'Bladder Cancer', medicalConnection: 'Exposure to contaminated water supply', category: 'Genitourinary' },
+  { primaryCondition: 'Camp Lejeune Water Contamination', secondaryCondition: 'Kidney Cancer', medicalConnection: 'Exposure to contaminated water supply', category: 'Renal' },
+  { primaryCondition: 'Camp Lejeune Water Contamination', secondaryCondition: 'Liver Disease', medicalConnection: 'Toxic exposure from contaminated water', category: 'Digestive' },
+  { primaryCondition: 'Camp Lejeune Water Contamination', secondaryCondition: "Parkinson's Disease", medicalConnection: 'Neurotoxic effects of water contaminants', category: 'Neurological' },
+  { primaryCondition: 'Camp Lejeune Water Contamination', secondaryCondition: 'Leukemia', medicalConnection: 'Benzene exposure from contaminated water', category: 'Hematologic' },
+
+  // ========================================
+  // OBESITY AND METABOLIC CHAINS
+  // ========================================
+  { primaryCondition: 'Obesity', secondaryCondition: 'Sleep Apnea', medicalConnection: 'Excess weight causes airway obstruction', category: 'Respiratory' },
+  { primaryCondition: 'Obesity', secondaryCondition: 'Diabetes Type II', medicalConnection: 'Insulin resistance from excess body fat', category: 'Endocrine' },
+  { primaryCondition: 'Obesity', secondaryCondition: 'Hypertension', medicalConnection: 'Increased cardiovascular demand', category: 'Cardiovascular' },
+  { primaryCondition: 'Obesity', secondaryCondition: 'Osteoarthritis', medicalConnection: 'Excess weight accelerates joint wear', category: 'Musculoskeletal' },
+  { primaryCondition: 'Obesity', secondaryCondition: 'GERD', medicalConnection: 'Abdominal pressure increases reflux', category: 'Digestive' },
+  { primaryCondition: 'Obesity', secondaryCondition: 'Fatty Liver Disease', medicalConnection: 'Fat accumulation in liver', category: 'Digestive' },
+  { primaryCondition: 'Obesity', secondaryCondition: 'Depression', medicalConnection: 'Social stigma and health burden', category: 'Mental Health' },
+  { primaryCondition: 'Obesity', secondaryCondition: 'Plantar Fasciitis', medicalConnection: 'Excess weight stresses foot arch', category: 'Musculoskeletal' },
+  { primaryCondition: 'Obesity', secondaryCondition: 'Lower Back Pain', medicalConnection: 'Abdominal weight strains spine', category: 'Musculoskeletal' },
+  { primaryCondition: 'Obesity', secondaryCondition: 'Venous Insufficiency', medicalConnection: 'Increased pressure on leg veins', category: 'Cardiovascular' },
 ];
 
 // Extract unique categories for filtering
