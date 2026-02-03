@@ -1102,3 +1102,199 @@
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   }
 }
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+@media print {
+  /* Reset colors for print */
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --primary: 217 91% 40%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 40%;
+    --border: 0 0% 85%;
+  }
+
+  /* Basic print setup */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  html, body {
+    background: white !important;
+    color: black !important;
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+
+  /* Page setup */
+  @page {
+    margin: 0.75in;
+    size: letter portrait;
+  }
+
+  /* Hide non-essential elements */
+  .no-print,
+  nav,
+  aside,
+  button:not(.print-btn),
+  .fab,
+  .pwa-install-prompt,
+  .offline-indicator,
+  .toast,
+  [role="navigation"],
+  [data-sidebar],
+  .sidebar,
+  header:has(nav),
+  footer:has(nav) {
+    display: none !important;
+  }
+
+  /* Show only main content */
+  main {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Card styles for print */
+  .card, .data-card, .stat-card, .glass-card {
+    background: white !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+
+  /* Typography adjustments */
+  h1 { font-size: 18pt; margin-bottom: 0.5rem; }
+  h2 { font-size: 16pt; margin-bottom: 0.5rem; }
+  h3 { font-size: 14pt; margin-bottom: 0.5rem; }
+  h4 { font-size: 12pt; margin-bottom: 0.5rem; }
+
+  p, li, td, th {
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+
+  /* Links */
+  a {
+    color: black !important;
+    text-decoration: underline;
+  }
+
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #666;
+  }
+
+  /* Tables */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    page-break-inside: avoid;
+  }
+
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+
+  th {
+    background: #f0f0f0 !important;
+    font-weight: 600;
+  }
+
+  /* Badges for print */
+  .badge, [class*="badge"] {
+    background: transparent !important;
+    border: 1px solid currentColor !important;
+    padding: 2px 8px;
+  }
+
+  /* Ensure images print */
+  img {
+    max-width: 100%;
+    page-break-inside: avoid;
+  }
+
+  /* Page break utilities */
+  .page-break-before { page-break-before: always; }
+  .page-break-after { page-break-after: always; }
+  .page-break-avoid { page-break-inside: avoid; }
+
+  /* Print-specific visible elements */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Hide screen-only elements */
+  .screen-only {
+    display: none !important;
+  }
+
+  /* Timeline for print */
+  .timeline-item {
+    page-break-inside: avoid;
+    border-left: 2px solid #ccc;
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Form elements (hide interactive parts) */
+  input, select, textarea {
+    border: 1px solid #ccc !important;
+    background: white !important;
+  }
+
+  /* Stat cards simplified */
+  .stat-card::before,
+  .premium-stat-card::before {
+    display: none;
+  }
+
+  /* Gradient cards - show as solid */
+  .gradient-card-success,
+  .gradient-card-primary,
+  .gradient-card-warning,
+  .gradient-stat-success,
+  .gradient-stat-primary,
+  .gradient-stat-warning {
+    background: white !important;
+    border: 2px solid currentColor !important;
+    box-shadow: none !important;
+  }
+
+  .gradient-card-success *,
+  .gradient-card-primary *,
+  .gradient-card-warning * {
+    color: black !important;
+  }
+
+  /* Result numbers stay visible */
+  .result-number {
+    font-size: 24pt;
+  }
+
+  /* Print header/footer (if browser supports) */
+  .print-header {
+    position: running(header);
+    font-size: 9pt;
+    color: #666;
+  }
+
+  .print-footer {
+    position: running(footer);
+    font-size: 9pt;
+    color: #666;
+    text-align: center;
+  }
+}

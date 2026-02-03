@@ -1,6 +1,7 @@
 import { ShieldCheck, Lock, Medal, Flag, Activity, FileText, FolderOpen, MapPin, Moon, Pill, Upload, Users, Clock, ClipboardCheck, History, Database, Heart, BookOpen, Stethoscope, ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { totalDisabilitiesCount } from '@/data/vaDisabilities';
 
 const featureCategories = [
   {
@@ -242,7 +243,7 @@ export function AppStoreLandingPage() {
               <div className="text-center sm:text-left flex-1">
                 <div className="flex items-baseline justify-center sm:justify-start gap-2 mb-2">
                   <span className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-primary via-blue-400 to-primary bg-clip-text text-transparent">
-                    941
+                    {totalDisabilitiesCount}
                   </span>
                   <span className="text-xl sm:text-2xl font-semibold text-white">VA Conditions</span>
                 </div>
