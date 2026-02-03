@@ -40,9 +40,10 @@ export default defineConfig(({ mode }) => ({
             type: "image/png",
             purpose: "any maskable",
           },
-        ],
+        ]
       },
       workbox: {
+                maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5 MiB
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
