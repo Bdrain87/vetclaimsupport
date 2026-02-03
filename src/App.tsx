@@ -41,6 +41,8 @@ import ExamPrep from "./pages/ExamPrep";
 import CPExamPrepEnhanced from "./pages/CPExamPrepEnhanced";
 import ClaimStrategyWizard from "./pages/ClaimStrategyWizard";
 import SecondaryFinder from "./pages/SecondaryFinder";
+import NexusLetterGenerator from "./pages/NexusLetterGenerator";
+import DBQPrepSheet from "./pages/DBQPrepSheet";
 import BilateralCalculator from "./pages/BilateralCalculator";
 import ConditionGuide from "./pages/ConditionGuide";
 import ClaimJourney from "./pages/ClaimJourney";
@@ -107,6 +109,8 @@ const App = () => (
                       <Route path="/cp-exam-prep" element={<CPExamPrepEnhanced />} />
                       <Route path="/claim-strategy" element={<ClaimStrategyWizard />} />
                       <Route path="/secondary-finder" element={<SecondaryFinder />} />
+                      <Route path="/nexus-letter" element={<NexusLetterGenerator />} />
+                      <Route path="/dbq-prep" element={<DBQPrepSheet />} />
                       <Route path="/calculator" element={<BilateralCalculator />} />
                       <Route path="/condition-guide" element={<ConditionGuide />} />
                       <Route path="/journey" element={<ClaimJourney />} />

@@ -1,33 +1,43 @@
 import { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Search,
   Link2,
   ChevronRight,
   FileText,
   AlertCircle,
-  CheckCircle2,
   Star,
   Info,
   TrendingUp,
   ArrowRight,
+  FileSignature,
+  Database,
+  Sparkles,
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { secondaryConditions, SecondaryConnection } from '@/data/secondaryConditions';
+import { vaDisabilitiesBySystem } from '@/data/vaDisabilities';
 
-interface GroupedSecondary {
-  condition: string;
-  connections: Array<{
-    primary: string;
-    medicalConnection: string;
-    category: string;
-  }>;
-}
+// Get ALL conditions from vaDisabilities (990+)
+const getAllConditions = (): string[] => {
+  const conditions = new Set<string>();
+  vaDisabilitiesBySystem.forEach(system => {
+    system.conditions.forEach(condition => {
+      conditions.add(condition.name);
+    });
+  });
+  return [...conditions].sort();
+};
 
-// Group by primary condition for better UI
+// Get primaries that have secondary connections
+const getPrimariesWithConnections = (): Set<string> => {
+  return new Set(secondaryConditions.map(c => c.primaryCondition));
+};
+
+// Group by primary condition
 function groupByPrimary(conditions: SecondaryConnection[]): Record<string, SecondaryConnection[]> {
   const groups: Record<string, SecondaryConnection[]> = {};
   conditions.forEach(c => {
@@ -39,17 +49,12 @@ function groupByPrimary(conditions: SecondaryConnection[]): Record<string, Secon
   return groups;
 }
 
-// Get unique primary conditions
-function getUniquePrimaries(conditions: SecondaryConnection[]): string[] {
-  return [...new Set(conditions.map(c => c.primaryCondition))].sort();
-}
-
 // Get unique categories
 function getUniqueCategories(conditions: SecondaryConnection[]): string[] {
   return [...new Set(conditions.map(c => c.category))].sort();
 }
 
-// Popular secondary claims (most commonly claimed)
+// Popular secondary claims
 const popularSecondaries = [
   'Sleep Apnea',
   'Migraines',
@@ -65,12 +70,30 @@ export default function SecondaryFinder() {
   const [selectedPrimary, setSelectedPrimary] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [showAllConditions, setShowAllConditions] = useState(false);
 
-  const primaries = useMemo(() => getUniquePrimaries(secondaryConditions), []);
+  // ALL conditions from VA database
+  const allConditions = useMemo(() => getAllConditions(), []);
+  const primariesWithConnections = useMemo(() => getPrimariesWithConnections(), []);
   const categories = useMemo(() => getUniqueCategories(secondaryConditions), []);
   const groupedConditions = useMemo(() => groupByPrimary(secondaryConditions), []);
 
-  // Filter conditions based on selection
+  // Get display list based on mode
+  const displayConditions = useMemo(() => {
+    if (showAllConditions) {
+      return allConditions;
+    }
+    return [...primariesWithConnections].sort();
+  }, [allConditions, primariesWithConnections, showAllConditions]);
+
+  // Filter displayed conditions by search
+  const filteredDisplayConditions = useMemo(() => {
+    if (!searchQuery.trim()) return displayConditions;
+    const query = searchQuery.toLowerCase();
+    return displayConditions.filter(c => c.toLowerCase().includes(query));
+  }, [displayConditions, searchQuery]);
+
+  // Filter secondary conditions based on selection
   const filteredConditions = useMemo(() => {
     let filtered = secondaryConditions;
 
@@ -82,18 +105,8 @@ export default function SecondaryFinder() {
       filtered = filtered.filter(c => c.category === selectedCategory);
     }
 
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        c =>
-          c.secondaryCondition.toLowerCase().includes(query) ||
-          c.primaryCondition.toLowerCase().includes(query) ||
-          c.medicalConnection.toLowerCase().includes(query)
-      );
-    }
-
     return filtered;
-  }, [selectedPrimary, selectedCategory, searchQuery]);
+  }, [selectedPrimary, selectedCategory]);
 
   // Get secondaries for selected primary
   const selectedPrimarySecondaries = selectedPrimary ? groupedConditions[selectedPrimary] || [] : [];
@@ -120,16 +133,22 @@ export default function SecondaryFinder() {
       </div>
 
       {/* Stats Bar */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-primary">{primaries.length}</div>
-            <div className="text-xs text-muted-foreground">Primary Conditions</div>
+            <div className="text-2xl font-bold text-primary">{allConditions.length}+</div>
+            <div className="text-xs text-muted-foreground">Total Conditions</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-success">{secondaryConditions.length}</div>
+            <div className="text-2xl font-bold text-success">{primariesWithConnections.size}</div>
+            <div className="text-xs text-muted-foreground">With Secondary Data</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-foreground">{secondaryConditions.length}</div>
             <div className="text-xs text-muted-foreground">Secondary Connections</div>
           </CardContent>
         </Card>
@@ -141,11 +160,38 @@ export default function SecondaryFinder() {
         </Card>
       </div>
 
+      {/* Toggle All Conditions */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Button
+            variant={!showAllConditions ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setShowAllConditions(false)}
+          >
+            <Database className="h-4 w-4 mr-2" />
+            With Secondary Data ({primariesWithConnections.size})
+          </Button>
+          <Button
+            variant={showAllConditions ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setShowAllConditions(true)}
+          >
+            <Sparkles className="h-4 w-4 mr-2" />
+            All Conditions ({allConditions.length}+)
+          </Button>
+        </div>
+        {(selectedPrimary || selectedCategory || searchQuery) && (
+          <Button variant="ghost" size="sm" onClick={handleClearFilters}>
+            Clear filters
+          </Button>
+        )}
+      </div>
+
       {/* Search */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Search conditions..."
+          placeholder="Search all conditions..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="pl-9"
@@ -153,7 +199,7 @@ export default function SecondaryFinder() {
       </div>
 
       {/* Filter Pills */}
-      {(selectedPrimary || selectedCategory || searchQuery) && (
+      {(selectedPrimary || selectedCategory) && (
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-sm text-muted-foreground">Filters:</span>
           {selectedPrimary && (
@@ -168,42 +214,54 @@ export default function SecondaryFinder() {
               <button onClick={() => setSelectedCategory(null)} className="ml-1 hover:text-destructive">×</button>
             </Badge>
           )}
-          {searchQuery && (
-            <Badge variant="secondary" className="gap-1">
-              Search: {searchQuery}
-              <button onClick={() => setSearchQuery('')} className="ml-1 hover:text-destructive">×</button>
-            </Badge>
-          )}
-          <Button variant="ghost" size="sm" onClick={handleClearFilters}>
-            Clear all
-          </Button>
         </div>
       )}
 
       {/* Main Content */}
       <div className="grid lg:grid-cols-3 gap-6">
-        {/* Primary Conditions List */}
+        {/* Conditions List */}
         <div className="lg:col-span-1 space-y-4">
-          <h2 className="font-semibold text-foreground">Select Primary Condition</h2>
+          <h2 className="font-semibold text-foreground">
+            Select Primary Condition
+            <span className="text-muted-foreground font-normal ml-2">
+              ({filteredDisplayConditions.length} shown)
+            </span>
+          </h2>
           <div className="space-y-2 max-h-[600px] overflow-y-auto pr-2">
-            {primaries.map((primary) => {
-              const count = groupedConditions[primary]?.length || 0;
-              const isSelected = selectedPrimary === primary;
+            {filteredDisplayConditions.map((condition) => {
+              const hasData = primariesWithConnections.has(condition);
+              const count = groupedConditions[condition]?.length || 0;
+              const isSelected = selectedPrimary === condition;
               return (
                 <button
-                  key={primary}
-                  onClick={() => setSelectedPrimary(isSelected ? null : primary)}
+                  key={condition}
+                  onClick={() => {
+                    if (hasData) {
+                      setSelectedPrimary(isSelected ? null : condition);
+                    }
+                  }}
+                  disabled={!hasData}
                   className={`w-full text-left p-3 rounded-lg border transition-all ${
                     isSelected
                       ? 'bg-primary/10 border-primary/50 text-foreground'
-                      : 'bg-card border-border hover:bg-muted/50'
+                      : hasData
+                      ? 'bg-card border-border hover:bg-muted/50 cursor-pointer'
+                      : 'bg-muted/30 border-border/50 opacity-60 cursor-not-allowed'
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-medium text-sm">{primary}</span>
-                    <Badge variant="secondary" className="text-xs">
-                      {count}
-                    </Badge>
+                    <span className={`font-medium text-sm ${!hasData && 'text-muted-foreground'}`}>
+                      {condition}
+                    </span>
+                    {hasData ? (
+                      <Badge variant="secondary" className="text-xs bg-success/15 text-success">
+                        {count} secondaries
+                      </Badge>
+                    ) : (
+                      <Badge variant="outline" className="text-xs text-muted-foreground">
+                        No data yet
+                      </Badge>
+                    )}
                   </div>
                 </button>
               );
@@ -215,13 +273,21 @@ export default function SecondaryFinder() {
         <div className="lg:col-span-2 space-y-4">
           {selectedPrimary ? (
             <>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between flex-wrap gap-2">
                 <h2 className="font-semibold text-foreground">
                   Secondary Conditions for {selectedPrimary}
                 </h2>
-                <Badge className="bg-success/15 text-success border-success/30">
-                  {selectedPrimarySecondaries.length} found
-                </Badge>
+                <div className="flex items-center gap-2">
+                  <Badge className="bg-success/15 text-success border-success/30">
+                    {selectedPrimarySecondaries.length} found
+                  </Badge>
+                  <Link to={`/nexus-letter?primary=${encodeURIComponent(selectedPrimary)}`}>
+                    <Button size="sm" className="gap-2">
+                      <FileSignature className="h-4 w-4" />
+                      Generate Nexus Letter
+                    </Button>
+                  </Link>
+                </div>
               </div>
 
               {/* Category Filter */}
@@ -252,7 +318,7 @@ export default function SecondaryFinder() {
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
+                          <div className="flex items-center gap-2 mb-2 flex-wrap">
                             <h3 className="font-semibold text-foreground">
                               {condition.secondaryCondition}
                             </h3>
@@ -274,6 +340,12 @@ export default function SecondaryFinder() {
                             <span>Claimed as secondary to: <strong>{condition.primaryCondition}</strong></span>
                           </div>
                         </div>
+                        <Link to={`/nexus-letter?primary=${encodeURIComponent(condition.primaryCondition)}&secondary=${encodeURIComponent(condition.secondaryCondition)}`}>
+                          <Button variant="outline" size="sm" className="gap-1 shrink-0">
+                            <FileSignature className="h-3 w-3" />
+                            Nexus
+                          </Button>
+                        </Link>
                       </div>
                     </CardContent>
                   </Card>
@@ -339,11 +411,11 @@ export default function SecondaryFinder() {
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="font-bold text-primary">3.</span>
-                      <span>Note the medical connection and gather evidence to support it</span>
+                      <span>Click "Generate Nexus Letter" to create a letter template for your doctor</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="font-bold text-primary">4.</span>
-                      <span>Get a nexus letter from a doctor connecting the conditions</span>
+                      <span>Get the nexus letter signed by a medical professional</span>
                     </li>
                   </ol>
                 </CardContent>
