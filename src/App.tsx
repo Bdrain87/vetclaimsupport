@@ -37,6 +37,10 @@ import ClaimChecklist from "./pages/ClaimChecklist";
 import ExamPrep from "./pages/ExamPrep";
 import ClaimTools from "./pages/ClaimTools";
 import EvidenceDocs from "./pages/EvidenceDocs";
+import FAQ from "./pages/FAQ";
+import Glossary from "./pages/Glossary";
+import VAForms from "./pages/VAForms";
+import UserGuide from "./pages/UserGuide";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -81,6 +85,10 @@ const App = () => (
                       <Route path="/claim-tools" element={<ClaimTools />} />
                       <Route path="/privacy" element={<Privacy />} />
                       <Route path="/terms" element={<Terms />} />
+                      <Route path="/faq" element={<FAQ />} />
+                      <Route path="/glossary" element={<Glossary />} />
+                      <Route path="/va-forms" element={<VAForms />} />
+                      <Route path="/user-guide" element={<UserGuide />} />
                       <Route path="/landing-preview" element={<AppStoreLandingPage />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
