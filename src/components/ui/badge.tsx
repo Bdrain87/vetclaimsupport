@@ -13,8 +13,8 @@ const badgeVariants = cva(
           "shadow-[inset_0_0_0_1px_hsl(211_100%_50%/0.2)]",
         ],
         secondary: [
-          "border-0 bg-white/10 text-foreground",
-          "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)]",
+          "border-0 bg-black/10 dark:bg-white/10 text-foreground",
+          "shadow-[inset_0_0_0_1px_rgba(0,0,0,0.1)] dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)]",
         ],
         destructive: [
           "border-0 bg-destructive/15 text-destructive",
@@ -22,7 +22,7 @@ const badgeVariants = cva(
         ],
         outline: [
           "bg-transparent text-foreground",
-          "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.15)]",
+          "shadow-[inset_0_0_0_1px_rgba(0,0,0,0.15)] dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.15)]",
         ],
         success: [
           "border-0 bg-success/15 text-success",

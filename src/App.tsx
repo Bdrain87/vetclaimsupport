@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { ClaimsProvider } from "./context/ClaimsContext";
@@ -25,7 +25,7 @@ import Exposures from "./pages/Exposures";
 import Symptoms from "./pages/Symptoms";
 import Medications from "./pages/Medications";
 import ServiceHistory from "./pages/ServiceHistory";
-import BuddyContacts from "./pages/BuddyContacts";
+import BuddyStatements from "./pages/BuddyStatements";
 import Documents from "./pages/Documents";
 import Reference from "./pages/Reference";
 import Privacy from "./pages/Privacy";
@@ -42,11 +42,16 @@ import Glossary from "./pages/Glossary";
 import VAForms from "./pages/VAForms";
 import UserGuide from "./pages/UserGuide";
 import ConditionsByConflict from "./pages/ConditionsByConflict";
-import BuddyStatementGenerator from "./pages/BuddyStatementGenerator";
+// BuddyStatementGenerator is now consolidated into BuddyStatements
 import ConditionGuide from "./pages/ConditionGuide";
 import SecondaryFinder from "./pages/SecondaryFinder";
 import CPExamPrepEnhanced from "./pages/CPExamPrepEnhanced";
 import ClaimStrategyWizard from "./pages/ClaimStrategyWizard";
+import BilateralCalculator from "./pages/BilateralCalculator";
+import HelpCenter from "./pages/HelpCenter";
+import ClaimJourney from "./pages/ClaimJourney";
+import HealthLog from "./pages/HealthLog";
+import DocumentsHub from "./pages/DocumentsHub";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -77,7 +82,7 @@ const App = () => (
                       <Route path="/symptoms" element={<Symptoms />} />
                       <Route path="/medications" element={<Medications />} />
                       <Route path="/service-history" element={<ServiceHistory />} />
-                      <Route path="/buddy-contacts" element={<BuddyContacts />} />
+                      <Route path="/buddy-statements" element={<BuddyStatements />} />
                       <Route path="/documents" element={<Documents />} />
                       <Route path="/claim-documents" element={<ClaimDocuments />} />
                       <Route path="/evidence-docs" element={<EvidenceDocs />} />
@@ -96,12 +101,28 @@ const App = () => (
                       <Route path="/va-forms" element={<VAForms />} />
                       <Route path="/user-guide" element={<UserGuide />} />
                       <Route path="/conditions-by-conflict" element={<ConditionsByConflict />} />
-                      <Route path="/buddy-statement-generator" element={<BuddyStatementGenerator />} />
+                      {/* Redirects from old buddy pages to unified page */}
+                      <Route path="/buddy-contacts" element={<Navigate to="/buddy-statements" replace />} />
+                      <Route path="/buddy-statement-generator" element={<Navigate to="/buddy-statements" replace />} />
                       <Route path="/condition-guide" element={<ConditionGuide />} />
                       <Route path="/secondary-finder" element={<SecondaryFinder />} />
                       <Route path="/cp-exam-prep" element={<CPExamPrepEnhanced />} />
                       <Route path="/claim-strategy" element={<ClaimStrategyWizard />} />
+                      <Route path="/calculator" element={<BilateralCalculator />} />
+                      <Route path="/help" element={<HelpCenter />} />
+                      <Route path="/journey" element={<ClaimJourney />} />
+                      <Route path="/health-log" element={<HealthLog />} />
+                      <Route path="/docs" element={<DocumentsHub />} />
                       <Route path="/landing-preview" element={<AppStoreLandingPage />} />
+
+                      {/* Redirects from old pages to unified pages */}
+                      <Route path="/symptom-journal" element={<Navigate to="/health-log" replace />} />
+                      <Route path="/medication-log" element={<Navigate to="/health-log" replace />} />
+                      <Route path="/sleep-tracker" element={<Navigate to="/health-log" replace />} />
+                      <Route path="/migraine-log" element={<Navigate to="/health-log" replace />} />
+                      <Route path="/documents-checklist" element={<Navigate to="/docs" replace />} />
+                      <Route path="/claim-docs" element={<Navigate to="/docs" replace />} />
+
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </AppLayout>

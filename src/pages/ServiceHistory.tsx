@@ -14,6 +14,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { exportServiceHistory } from '@/utils/pdfExport';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
+import { MOSCombobox } from '@/components/ui/mos-combobox';
+import { AwardsCombobox } from '@/components/ui/awards-combobox';
 import type { ServiceEntry, CombatEntry, MajorEvent, DeploymentEntry, MajorEventType } from '@/types/claims';
 
 const COMBAT_ZONE_TYPES = ['Combat Zone', 'Hostile Fire Area', 'Imminent Danger Area', 'Hazardous Duty'] as const;
@@ -43,6 +45,9 @@ export default function ServiceHistory() {
     duties: '',
     hazards: '',
   });
+  const [suggestedHazards, setSuggestedHazards] = useState<string[]>([]);
+  const [selectedHazards, setSelectedHazards] = useState<string[]>([]);
+  const [customHazard, setCustomHazard] = useState('');
 
   // Combat form state
   const [isCombatOpen, setIsCombatOpen] = useState(false);
@@ -91,6 +96,48 @@ export default function ServiceHistory() {
   const resetForm = () => {
     setFormData({ startDate: '', endDate: '', base: '', unit: '', afsc: '', duties: '', hazards: '' });
     setEditingId(null);
+    setSuggestedHazards([]);
+    setSelectedHazards([]);
+    setCustomHazard('');
+  };
+
+  // Handle MOS selection and hazards
+  const handleMOSSelect = (code: string) => {
+    setFormData({ ...formData, afsc: code });
+  };
+
+  const handleHazardsSuggested = (hazards: string[]) => {
+    setSuggestedHazards(hazards);
+    setSelectedHazards(hazards); // Pre-check all suggested hazards
+  };
+
+  const toggleHazard = (hazard: string) => {
+    setSelectedHazards(prev =>
+      prev.includes(hazard)
+        ? prev.filter(h => h !== hazard)
+        : [...prev, hazard]
+    );
+  };
+
+  const addCustomHazard = () => {
+    if (customHazard.trim() && !selectedHazards.includes(customHazard.trim())) {
+      setSelectedHazards([...selectedHazards, customHazard.trim()]);
+      setCustomHazard('');
+    }
+  };
+
+  // Combine selected hazards into the form data on submit
+  const handleSubmitWithHazards = (e: React.FormEvent) => {
+    e.preventDefault();
+    const combinedHazards = selectedHazards.join(', ');
+    const finalData = { ...formData, hazards: combinedHazards || formData.hazards };
+    if (editingId) {
+      updateServiceEntry(editingId, finalData);
+    } else {
+      addServiceEntry(finalData);
+    }
+    setIsOpen(false);
+    resetForm();
   };
 
   const resetCombatForm = () => {
@@ -108,17 +155,8 @@ export default function ServiceHistory() {
     setEditingDeployId(null);
   };
 
-  // Submit handlers
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (editingId) {
-      updateServiceEntry(editingId, formData);
-    } else {
-      addServiceEntry(formData);
-    }
-    setIsOpen(false);
-    resetForm();
-  };
+  // Submit handlers - use handleSubmitWithHazards for duty stations
+  const handleSubmit = handleSubmitWithHazards;
 
   const handleCombatSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -266,16 +304,69 @@ export default function ServiceHistory() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="afsc">AFSC/MOS (Job Code)</Label>
-                      <Input id="afsc" placeholder="e.g., 2A3X3 (Air Force) or 11B (Army/Marines)" value={formData.afsc} onChange={(e) => setFormData({ ...formData, afsc: e.target.value })} />
+                      <Label>AFSC/MOS (Job Code)</Label>
+                      <MOSCombobox
+                        value={formData.afsc}
+                        onValueChange={handleMOSSelect}
+                        onHazardsSuggested={handleHazardsSuggested}
+                        placeholder="Type code (e.g., 11B) or job title..."
+                      />
+                      <p className="text-xs text-muted-foreground">Search Army MOS, Air Force AFSC, Navy Rating, or Marine MOS</p>
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="duties">Duties & Responsibilities</Label>
                       <Textarea id="duties" placeholder="Describe your primary duties..." value={formData.duties} onChange={(e) => setFormData({ ...formData, duties: e.target.value })} rows={3} />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="hazards">Hazards & Conditions</Label>
-                      <Textarea id="hazards" placeholder="Physical demands, environmental hazards, exposure risks..." value={formData.hazards} onChange={(e) => setFormData({ ...formData, hazards: e.target.value })} rows={3} />
+                      <Label>Hazards & Conditions</Label>
+                      {suggestedHazards.length > 0 ? (
+                        <div className="space-y-3">
+                          <p className="text-xs text-muted-foreground">
+                            Common hazards for this job code (uncheck if not applicable):
+                          </p>
+                          <div className="grid gap-2 sm:grid-cols-2">
+                            {suggestedHazards.map((hazard) => (
+                              <label key={hazard} className="flex items-center gap-2 text-sm cursor-pointer">
+                                <Checkbox
+                                  checked={selectedHazards.includes(hazard)}
+                                  onCheckedChange={() => toggleHazard(hazard)}
+                                />
+                                <span className="text-foreground">{hazard}</span>
+                              </label>
+                            ))}
+                          </div>
+                          <div className="flex gap-2 mt-2">
+                            <Input
+                              placeholder="Add custom hazard..."
+                              value={customHazard}
+                              onChange={(e) => setCustomHazard(e.target.value)}
+                              onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addCustomHazard())}
+                              className="flex-1"
+                            />
+                            <Button type="button" variant="outline" size="sm" onClick={addCustomHazard}>
+                              Add
+                            </Button>
+                          </div>
+                          {selectedHazards.filter(h => !suggestedHazards.includes(h)).length > 0 && (
+                            <div className="flex flex-wrap gap-1 mt-2">
+                              {selectedHazards.filter(h => !suggestedHazards.includes(h)).map(h => (
+                                <Badge key={h} variant="secondary" className="gap-1">
+                                  {h}
+                                  <button type="button" onClick={() => toggleHazard(h)} className="ml-1 hover:text-destructive">×</button>
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <Textarea
+                          id="hazards"
+                          placeholder="Physical demands, environmental hazards, exposure risks... (or select a job code above for suggestions)"
+                          value={formData.hazards}
+                          onChange={(e) => setFormData({ ...formData, hazards: e.target.value })}
+                          rows={3}
+                        />
+                      )}
                     </div>
 
                     {/* Evidence Attachments - only show when editing */}
@@ -407,7 +498,12 @@ export default function ServiceHistory() {
                     </div>
                     <div className="space-y-2">
                       <Label>Combat-Related Awards</Label>
-                      <Input placeholder="e.g., CAB, CIB, Purple Heart, Bronze Star" value={combatForm.awards || ''} onChange={(e) => setCombatForm({ ...combatForm, awards: e.target.value })} />
+                      <AwardsCombobox
+                        value={combatForm.awards || ''}
+                        onValueChange={(value) => setCombatForm({ ...combatForm, awards: value })}
+                        placeholder="Type award name (e.g., CAB, Purple Heart)..."
+                      />
+                      <p className="text-xs text-muted-foreground">Search and select multiple awards, or type custom entries</p>
                     </div>
                     <div className="space-y-2">
                       <Label>Description</Label>

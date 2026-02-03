@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, ExternalLink } from 'lucide-react';
+import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -302,34 +301,21 @@ export default function Settings() {
       <Card>
         <CardHeader>
           <CardTitle>Data Privacy</CardTitle>
-          <CardDescription>Your data is stored locally</CardDescription>
+          <CardDescription>Your data stays on your device</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            All your data is stored locally on your device using browser storage. 
-            We never collect, transmit, or store your personal health information on our servers.
-            Your data stays private and under your control.
+            Your personal documents and health data are stored locally on your device using browser storage (IndexedDB and localStorage). We never collect or store your personal health information on our servers.
+          </p>
+          <p className="text-sm text-muted-foreground">
+            <strong className="text-foreground">AI Features:</strong> When you use AI-powered features (like the symptom checker), only the specific information you're analyzing is processed — never stored on external servers. You control what gets analyzed.
+          </p>
+          <p className="text-sm text-muted-foreground">
+            No accounts required. No tracking. Your data, your control.
           </p>
         </CardContent>
       </Card>
 
-      {/* Preview Landing Page - Dev Only */}
-      <Card className="border-dashed border-primary/30">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-primary">
-            <ExternalLink className="h-5 w-5" />
-            Preview Landing Page
-          </CardTitle>
-          <CardDescription>Test the App Store landing page design</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Link to="/landing-preview">
-            <Button variant="outline" className="w-full">
-              View App Store Landing Page →
-            </Button>
-          </Link>
-        </CardContent>
-      </Card>
     </div>
   );
 }

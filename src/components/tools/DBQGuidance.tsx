@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -12,7 +12,11 @@ import {
   Stethoscope,
   Info,
   ClipboardList,
+  Download,
+  Printer,
+  HelpCircle,
 } from 'lucide-react';
+import jsPDF from 'jspdf';
 
 interface DBQFormInfo {
   formNumber: string;
@@ -22,6 +26,7 @@ interface DBQFormInfo {
   strongDBQTips: string[];
   weakDBQWarnings: string[];
   doctorInstructions: string[];
+  doctorQuestions: string[];
 }
 
 const dbqFormDatabase: Record<string, DBQFormInfo> = {
@@ -57,6 +62,14 @@ const dbqFormDatabase: Record<string, DBQFormInfo> = {
       'Provide nexus statement linking PTSD to service stressor',
       'Include impact on employment and relationships',
     ],
+    doctorQuestions: [
+      'How often do you have nightmares or flashbacks?',
+      'Do you avoid places, people, or situations that remind you of your trauma?',
+      'How has this affected your relationships with family and friends?',
+      'Are you able to maintain employment? If not, why?',
+      'Do you have trouble concentrating or feel constantly on edge?',
+      'Have you had any thoughts of harming yourself or others?',
+    ],
   },
   'back': {
     formNumber: '21-0960M-14',
@@ -91,6 +104,14 @@ const dbqFormDatabase: Record<string, DBQFormInfo> = {
       'Test and document radiculopathy in BOTH legs',
       'Perform 3 repetitions and note any change in ROM',
     ],
+    doctorQuestions: [
+      'Where exactly is your pain located and does it radiate?',
+      'What activities make your pain worse?',
+      'How often do you have flare-ups and what triggers them?',
+      'Do you have numbness, tingling, or weakness in your legs?',
+      'How does your back pain affect your ability to work?',
+      'Have you ever been prescribed bed rest for your back?',
+    ],
   },
   'knee': {
     formNumber: '21-0960M-9',
@@ -124,6 +145,14 @@ const dbqFormDatabase: Record<string, DBQFormInfo> = {
       'Document ability to squat, kneel, climb stairs',
       'Record painful motion starting point',
     ],
+    doctorQuestions: [
+      'Does your knee give way, lock up, or feel unstable?',
+      'Can you squat, kneel, or climb stairs?',
+      'Do you use a knee brace or cane?',
+      'How far can you walk before the pain becomes severe?',
+      'Have you had any knee surgeries or meniscus tears?',
+      'How does your knee condition affect your daily activities?',
+    ],
   },
   'hearing': {
     formNumber: '21-0960N-1',
@@ -152,6 +181,14 @@ const dbqFormDatabase: Record<string, DBQFormInfo> = {
       'Must use Maryland CNC word list for speech discrimination',
       'Test all frequencies: 500, 1000, 2000, 3000, 4000 Hz',
       'Document tinnitus pitch, loudness, and pattern',
+    ],
+    doctorQuestions: [
+      'Do you have difficulty understanding speech in noisy environments?',
+      'Do you need the TV or radio louder than others?',
+      'Were you exposed to loud noises during military service?',
+      'Did you wear hearing protection during noise exposure?',
+      'Have you noticed your hearing getting progressively worse?',
+      'Does your hearing loss affect your ability to communicate at work?',
     ],
   },
   'sleep_apnea': {
@@ -182,6 +219,14 @@ const dbqFormDatabase: Record<string, DBQFormInfo> = {
       'Note AHI score and oxygen desaturation levels',
       'Describe functional impact of daytime sleepiness',
     ],
+    doctorQuestions: [
+      'Do you use a CPAP machine every night?',
+      'How many hours per night do you use the CPAP?',
+      'Do you still feel tired during the day despite using CPAP?',
+      'Have you ever fallen asleep while driving or at work?',
+      'Do you wake up choking or gasping for air?',
+      'Has anyone witnessed you stop breathing during sleep?',
+    ],
   },
   'tinnitus': {
     formNumber: '21-0960N-1',
@@ -210,6 +255,14 @@ const dbqFormDatabase: Record<string, DBQFormInfo> = {
       'Note the character (ringing, buzzing, etc.)',
       'Connect to noise exposure if applicable',
       'Describe impact on sleep and concentration',
+    ],
+    doctorQuestions: [
+      'Is the ringing constant or does it come and go?',
+      'Which ear(s) are affected?',
+      'Does the ringing affect your ability to concentrate?',
+      'Does the tinnitus interfere with your sleep?',
+      'What noise exposure did you have during military service?',
+      'Have you noticed the tinnitus getting louder over time?',
     ],
   },
   'migraine': {
@@ -244,6 +297,14 @@ const dbqFormDatabase: Record<string, DBQFormInfo> = {
       'Ask about and document missed work days',
       'Note all associated symptoms (aura, nausea, light/sound sensitivity)',
     ],
+    doctorQuestions: [
+      'How many migraines do you have per month?',
+      'How long does each migraine typically last?',
+      'Do you have to lie down in a dark room during migraines?',
+      'Do you experience nausea, vomiting, or sensitivity to light/sound?',
+      'How many days of work have you missed due to migraines?',
+      'Do you see an aura or have warning signs before migraines?',
+    ],
   },
   'shoulder': {
     formNumber: '21-0960M-12',
@@ -276,6 +337,14 @@ const dbqFormDatabase: Record<string, DBQFormInfo> = {
       'Document where pain begins during movement',
       'Examine BOTH shoulders for comparison',
       'Note impact on reaching, lifting, carrying',
+    ],
+    doctorQuestions: [
+      'Which is your dominant arm (left or right)?',
+      'Can you raise your arm above your head?',
+      'Do you have pain when reaching behind your back?',
+      'Does your shoulder dislocate or feel unstable?',
+      'Can you lift objects or carry groceries?',
+      'How does your shoulder condition affect your work?',
     ],
   },
 };
@@ -329,6 +398,185 @@ export function DBQGuidance() {
   const conditionsWithoutDBQ = useMemo(() => {
     return claimConditions.filter(condition => !getDBQTypeForCondition(condition.name));
   }, [claimConditions]);
+
+  const handlePrint = useCallback(() => {
+    window.print();
+  }, []);
+
+  const handleExportPDF = useCallback(() => {
+    if (conditionsWithDBQ.length === 0) {
+      alert('No conditions with DBQ guidance to export');
+      return;
+    }
+
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+
+    // Colors
+    const colors = {
+      primary: [26, 54, 93] as [number, number, number],
+      secondary: [45, 55, 72] as [number, number, number],
+      muted: [113, 128, 150] as [number, number, number],
+      success: [34, 84, 61] as [number, number, number],
+      danger: [155, 44, 44] as [number, number, number],
+      border: [226, 232, 240] as [number, number, number],
+      background: [247, 250, 252] as [number, number, number],
+    };
+
+    let yPos = 20;
+
+    // Title
+    doc.setFontSize(20);
+    doc.setTextColor(...colors.primary);
+    doc.setFont('helvetica', 'bold');
+    doc.text('DBQ Guidance Summary', 20, yPos);
+    doc.setDrawColor(...colors.primary);
+    doc.setLineWidth(0.5);
+    doc.line(20, yPos + 3, pageWidth - 20, yPos + 3);
+    yPos += 15;
+
+    // Subtitle
+    doc.setFontSize(11);
+    doc.setTextColor(...colors.muted);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Disability Benefits Questionnaire Guidance for VA Claims', 20, yPos);
+    yPos += 6;
+    doc.setFontSize(9);
+    doc.text(`Generated: ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}`, 20, yPos);
+    yPos += 15;
+
+    // Helper to check page break
+    const checkPageBreak = (needed: number): void => {
+      if (yPos + needed > pageHeight - 45) {
+        doc.addPage();
+        yPos = 20;
+      }
+    };
+
+    // Process each condition
+    conditionsWithDBQ.forEach(({ condition, dbqInfo }) => {
+      if (!dbqInfo) return;
+
+      checkPageBreak(80);
+
+      // Condition header
+      doc.setFillColor(...colors.background);
+      doc.roundedRect(20, yPos, pageWidth - 40, 12, 2, 2, 'F');
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...colors.secondary);
+      doc.text(`${condition.name} - Form ${dbqInfo.formNumber}`, 25, yPos + 8);
+      yPos += 18;
+
+      // Form name
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(...colors.muted);
+      doc.text(dbqInfo.formName, 25, yPos);
+      yPos += 8;
+
+      // Key Sections
+      checkPageBreak(40);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...colors.primary);
+      doc.text('Key Sections Doctor Must Complete:', 25, yPos);
+      yPos += 6;
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(...colors.secondary);
+      dbqInfo.keySections.forEach(section => {
+        checkPageBreak(6);
+        doc.text(`• ${section}`, 30, yPos);
+        yPos += 5;
+      });
+      yPos += 5;
+
+      // Strong DBQ Tips
+      checkPageBreak(40);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...colors.success);
+      doc.text('What Makes a STRONG DBQ:', 25, yPos);
+      yPos += 6;
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(...colors.secondary);
+      dbqInfo.strongDBQTips.forEach(tip => {
+        checkPageBreak(6);
+        doc.text(`✓ ${tip}`, 30, yPos);
+        yPos += 5;
+      });
+      yPos += 5;
+
+      // Weak DBQ Warnings
+      checkPageBreak(40);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...colors.danger);
+      doc.text('What Makes a WEAK DBQ (Avoid):', 25, yPos);
+      yPos += 6;
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(...colors.secondary);
+      dbqInfo.weakDBQWarnings.forEach(warning => {
+        checkPageBreak(6);
+        doc.text(`✗ ${warning}`, 30, yPos);
+        yPos += 5;
+      });
+      yPos += 5;
+
+      // Doctor Instructions
+      checkPageBreak(40);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...colors.primary);
+      doc.text('Instructions for Your Doctor:', 25, yPos);
+      yPos += 6;
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(...colors.secondary);
+      dbqInfo.doctorInstructions.forEach((instruction, idx) => {
+        checkPageBreak(6);
+        doc.text(`${idx + 1}. ${instruction}`, 30, yPos);
+        yPos += 5;
+      });
+      yPos += 5;
+
+      // Questions Your Doctor May Ask
+      checkPageBreak(40);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...colors.muted);
+      doc.text('Questions Your Doctor May Ask:', 25, yPos);
+      yPos += 6;
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(...colors.secondary);
+      dbqInfo.doctorQuestions.forEach(question => {
+        checkPageBreak(6);
+        doc.text(`? ${question}`, 30, yPos);
+        yPos += 5;
+      });
+      yPos += 10;
+    });
+
+    // Footer disclaimer
+    doc.setDrawColor(...colors.border);
+    doc.setLineWidth(0.3);
+    doc.line(20, pageHeight - 35, pageWidth - 20, pageHeight - 35);
+    doc.setFontSize(8);
+    doc.setTextColor(...colors.muted);
+    doc.setFont('helvetica', 'bold');
+    doc.text('DISCLAIMER', pageWidth / 2, pageHeight - 28, { align: 'center' });
+    doc.setFont('helvetica', 'normal');
+    const disclaimer = 'This document is for educational purposes only. It is not medical, legal, or VA advice. Consult with a healthcare provider, attorney, or accredited VSO before making decisions about your claim.';
+    const lines = doc.splitTextToSize(disclaimer, pageWidth - 40);
+    doc.text(lines, pageWidth / 2, pageHeight - 22, { align: 'center' });
+
+    doc.save('dbq-guidance.pdf');
+  }, [conditionsWithDBQ]);
 
   if (claimConditions.length === 0) {
     return (
@@ -403,6 +651,27 @@ export function DBQGuidance() {
             <ExternalLink className="h-4 w-4 mr-2" />
             View All VA DBQ Forms
           </Button>
+
+          {conditionsWithDBQ.length > 0 && (
+            <div className="flex gap-2 mt-3">
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={handleExportPDF}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Export PDF
+              </Button>
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={handlePrint}
+              >
+                <Printer className="h-4 w-4 mr-2" />
+                Print
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -519,6 +788,36 @@ export function DBQGuidance() {
                               </li>
                             ))}
                           </ul>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    {/* Questions Your Doctor May Ask */}
+                    <AccordionItem value="questions" className="border rounded-lg px-3 border-muted/50">
+                      <AccordionTrigger className="text-sm py-3">
+                        <span className="flex items-center gap-2">
+                          <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                          Questions Your Doctor May Ask
+                        </span>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="pb-3 space-y-3">
+                          <p className="text-xs text-muted-foreground">
+                            Be prepared to answer these types of questions during your DBQ exam.
+                            Think about your answers beforehand to provide accurate information:
+                          </p>
+                          <ul className="space-y-2">
+                            {dbqInfo!.doctorQuestions.map((question, idx) => (
+                              <li key={idx} className="flex items-start gap-2 text-sm">
+                                <span className="text-muted-foreground font-medium">?</span>
+                                <span className="text-foreground">{question}</span>
+                              </li>
+                            ))}
+                          </ul>
+                          <p className="text-xs text-muted-foreground italic pt-2 border-t border-border">
+                            Note: These questions are informational to help you prepare. Your doctor
+                            may ask additional or different questions based on your specific condition.
+                          </p>
                         </div>
                       </AccordionContent>
                     </AccordionItem>

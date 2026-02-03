@@ -38,7 +38,7 @@ export default function Terms() {
 
           {/* Section 3 */}
           <section>
-            <h2 className="text-lg font-semibold text-foreground mb-3">3. Educational Tool Only</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-3">3. Educational Tools Only</h2>
             <Alert className="border-warning/50 bg-warning/10 mb-4">
               <AlertTriangle className="h-4 w-4 text-warning" />
               <AlertDescription className="text-foreground">

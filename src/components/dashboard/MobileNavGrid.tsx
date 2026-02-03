@@ -3,12 +3,9 @@ import { useState } from 'react';
 import {
   Shield,
   Stethoscope,
-  Pill,
   FileCheck,
-  Activity,
   AlertTriangle,
   Brain,
-  Moon,
   Users,
   Clock,
   ClipboardCheck,
@@ -40,10 +37,8 @@ const navGroups: NavGroup[] = [
     icon: Heart,
     defaultOpen: true,
     items: [
-      { to: '/symptoms', icon: Activity, label: 'Symptoms' },
+      { to: '/health-log', icon: Heart, label: 'Health Log' },
       { to: '/migraines', icon: Brain, label: 'Migraines' },
-      { to: '/sleep', icon: Moon, label: 'Sleep' },
-      { to: '/medications', icon: Pill, label: 'Meds' },
     ],
   },
   {
@@ -59,9 +54,8 @@ const navGroups: NavGroup[] = [
     label: 'Evidence & Docs',
     icon: FileCheck,
     items: [
-      { to: '/evidence-docs', icon: FileCheck, label: 'Evidence' },
-      { to: '/documents', icon: FileCheck, label: 'Docs' },
-      { to: '/buddy-contacts', icon: Users, label: 'Buddies' },
+      { to: '/docs', icon: FileCheck, label: 'Documents' },
+      { to: '/buddy-statements', icon: Users, label: 'Buddies' },
       { to: '/timeline', icon: Clock, label: 'Timeline' },
     ],
   },
