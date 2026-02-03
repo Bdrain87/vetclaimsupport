@@ -257,19 +257,19 @@ export function RatingIncreaseAnalyzer() {
                     {evidenceCounts.buddies} Buddies
                   </Badge>
                 )}
-                {evidenceCounts.migraines > 0 && (
+                {(evidenceCounts.migraines ?? 0) > 0 && (
                   <Badge variant="outline" className="text-xs">
                     <Activity className="h-3 w-3 mr-1" />
                     {evidenceCounts.migraines} Migraines
                   </Badge>
                 )}
-                {evidenceCounts.ptsd > 0 && (
+                {(evidenceCounts.ptsd ?? 0) > 0 && (
                   <Badge variant="outline" className="text-xs">
                     <Activity className="h-3 w-3 mr-1" />
                     {evidenceCounts.ptsd} PTSD Logs
                   </Badge>
                 )}
-                {evidenceCounts.sleep > 0 && (
+                {(evidenceCounts.sleep ?? 0) > 0 && (
                   <Badge variant="outline" className="text-xs">
                     <Activity className="h-3 w-3 mr-1" />
                     {evidenceCounts.sleep} Sleep Logs
