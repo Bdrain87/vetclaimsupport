@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,11 +19,24 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import {
   Calculator, Plus, Trash2, Info, ChevronDown, ChevronUp,
   Users, Heart, GraduationCap, UserPlus, DollarSign, AlertTriangle,
-  Save, RotateCcw, Sparkles
+  RotateCcw, Sparkles, Link2, Check
 } from 'lucide-react';
 import { vaCompensationRates2024 } from '@/data/vaCompensationRates';
+import { useUserConditions } from '@/context/UserConditionsContext';
+import {
+  vaConditions,
+  searchConditions,
+  getConditionById,
+  type VACondition,
+} from '@/data/vaConditions';
+import { SecondaryConditionSuggestions } from '@/components/SecondaryConditionSuggestions';
 
 // Storage key for localStorage persistence
 const STORAGE_KEY = 'vet-claim-unified-calculator';
@@ -86,6 +99,8 @@ interface RatedCondition {
   name: string;
   rating: number;
   bodyPart: string;
+  conditionId?: string; // Link to vaConditions database
+  abbreviation?: string; // Display abbreviation
 }
 
 // Dependent types
@@ -319,6 +334,16 @@ function saveState(state: CalculatorState): void {
 }
 
 export function UnifiedRatingCalculator() {
+  // User conditions context
+  const {
+    conditions: userConditions,
+    addCondition: addUserCondition,
+    removeCondition: removeUserCondition,
+    updateCondition: updateUserCondition,
+    hasCondition,
+    getConditionDetails,
+  } = useUserConditions();
+
   // Load initial state from localStorage
   const [conditions, setConditions] = useState<RatedCondition[]>(() => loadState().conditions);
   const [dependents, setDependents] = useState<Dependent[]>(() => loadState().dependents);
@@ -328,6 +353,12 @@ export function UnifiedRatingCalculator() {
   const [newConditionRating, setNewConditionRating] = useState('');
   const [newConditionBodyPart, setNewConditionBodyPart] = useState('other');
 
+  // Autocomplete state
+  const [showAutocomplete, setShowAutocomplete] = useState(false);
+  const [autocompleteResults, setAutocompleteResults] = useState<VACondition[]>([]);
+  const [selectedConditionId, setSelectedConditionId] = useState<string | null>(null);
+  const autocompleteRef = useRef<HTMLDivElement>(null);
+
   // Form state for new dependent
   const [newDependentType, setNewDependentType] = useState<DependentType>('spouse');
   const [newDependentName, setNewDependentName] = useState('');
@@ -335,11 +366,64 @@ export function UnifiedRatingCalculator() {
   // UI state
   const [showDependents, setShowDependents] = useState(true);
   const [showBreakdown, setShowBreakdown] = useState(true);
+  const [syncedWithContext, setSyncedWithContext] = useState(false);
+
+  // Auto-populate from user conditions context on mount
+  useEffect(() => {
+    if (!syncedWithContext && userConditions.length > 0) {
+      const contextConditions: RatedCondition[] = userConditions.map(uc => {
+        const details = getConditionDetails(uc);
+        return {
+          id: uc.id,
+          name: details?.name || uc.conditionId,
+          rating: uc.rating || 0,
+          bodyPart: uc.bodyPart || 'other',
+          conditionId: uc.conditionId,
+          abbreviation: details?.abbreviation,
+        };
+      });
+
+      // Merge with existing conditions, avoiding duplicates
+      setConditions(prev => {
+        const existingIds = new Set(prev.map(c => c.conditionId).filter(Boolean));
+        const newConditions = contextConditions.filter(c => c.conditionId && !existingIds.has(c.conditionId));
+        if (newConditions.length > 0) {
+          return [...prev, ...newConditions];
+        }
+        return prev;
+      });
+      setSyncedWithContext(true);
+    }
+  }, [userConditions, syncedWithContext, getConditionDetails]);
 
   // Save to localStorage when state changes
   useEffect(() => {
     saveState({ conditions, dependents, lastUpdated: Date.now() });
   }, [conditions, dependents]);
+
+  // Update autocomplete results when typing
+  useEffect(() => {
+    if (newConditionName.trim().length >= 2) {
+      const existingConditionIds = conditions.map(c => c.conditionId).filter(Boolean) as string[];
+      const results = searchConditions(newConditionName, existingConditionIds);
+      setAutocompleteResults(results.slice(0, 8));
+      setShowAutocomplete(results.length > 0);
+    } else {
+      setAutocompleteResults([]);
+      setShowAutocomplete(false);
+    }
+  }, [newConditionName, conditions]);
+
+  // Close autocomplete when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (autocompleteRef.current && !autocompleteRef.current.contains(event.target as Node)) {
+        setShowAutocomplete(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Calculate results
   const result = useMemo(() => calculateWithBilateral(conditions), [conditions]);
@@ -362,6 +446,13 @@ export function UnifiedRatingCalculator() {
     });
   }, [conditions]);
 
+  // Handle autocomplete selection
+  const handleAutocompleteSelect = useCallback((condition: VACondition) => {
+    setNewConditionName(condition.abbreviation);
+    setSelectedConditionId(condition.id);
+    setShowAutocomplete(false);
+  }, []);
+
   // Add condition
   const addCondition = useCallback(() => {
     if (!newConditionName.trim() || !newConditionRating) return;
@@ -369,25 +460,64 @@ export function UnifiedRatingCalculator() {
     const rating = parseInt(newConditionRating);
     if (isNaN(rating) || rating < 0 || rating > 100) return;
 
-    setConditions(prev => [
-      ...prev,
-      {
-        id: crypto.randomUUID(),
-        name: newConditionName.trim(),
+    // Get condition details if selected from autocomplete
+    const conditionDetails = selectedConditionId ? getConditionById(selectedConditionId) : null;
+
+    const newCondition: RatedCondition = {
+      id: crypto.randomUUID(),
+      name: conditionDetails?.name || newConditionName.trim(),
+      rating,
+      bodyPart: newConditionBodyPart,
+      conditionId: conditionDetails?.id,
+      abbreviation: conditionDetails?.abbreviation,
+    };
+
+    setConditions(prev => [...prev, newCondition]);
+
+    // Also add to user conditions context for app-wide sync
+    if (conditionDetails) {
+      addUserCondition(conditionDetails.id, {
         rating,
-        bodyPart: newConditionBodyPart,
-      },
-    ]);
+        bodyPart: newConditionBodyPart !== 'other' ? newConditionBodyPart : undefined,
+      });
+    }
 
     setNewConditionName('');
     setNewConditionRating('');
     setNewConditionBodyPart('other');
-  }, [newConditionName, newConditionRating, newConditionBodyPart]);
+    setSelectedConditionId(null);
+  }, [newConditionName, newConditionRating, newConditionBodyPart, selectedConditionId, addUserCondition]);
 
   // Remove condition
   const removeCondition = useCallback((id: string) => {
+    const conditionToRemove = conditions.find(c => c.id === id);
     setConditions(prev => prev.filter(c => c.id !== id));
-  }, []);
+
+    // Also remove from user conditions context if it was linked
+    if (conditionToRemove?.conditionId) {
+      // Find the user condition with this conditionId
+      const userCondition = userConditions.find(uc => uc.conditionId === conditionToRemove.conditionId);
+      if (userCondition) {
+        removeUserCondition(userCondition.id);
+      }
+    }
+  }, [conditions, userConditions, removeUserCondition]);
+
+  // Update condition rating
+  const updateConditionRating = useCallback((id: string, rating: number) => {
+    setConditions(prev => prev.map(c =>
+      c.id === id ? { ...c, rating } : c
+    ));
+
+    // Also update in user conditions context
+    const condition = conditions.find(c => c.id === id);
+    if (condition?.conditionId) {
+      const userCondition = userConditions.find(uc => uc.conditionId === condition.conditionId);
+      if (userCondition) {
+        updateUserCondition(userCondition.id, { rating });
+      }
+    }
+  }, [conditions, userConditions, updateUserCondition]);
 
   // Add dependent
   const addDependent = useCallback(() => {
@@ -467,15 +597,79 @@ export function UnifiedRatingCalculator() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <div className="space-y-2">
+                <div className="space-y-2 relative" ref={autocompleteRef}>
                   <Label htmlFor="condition-name">Condition Name</Label>
                   <Input
                     id="condition-name"
-                    placeholder="e.g., PTSD, Tinnitus, Knee Strain"
+                    placeholder="Type to search (e.g., PTSD, Tinnitus)"
                     value={newConditionName}
-                    onChange={(e) => setNewConditionName(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && addCondition()}
+                    onChange={(e) => {
+                      setNewConditionName(e.target.value);
+                      setSelectedConditionId(null);
+                    }}
+                    onFocus={() => {
+                      if (autocompleteResults.length > 0) setShowAutocomplete(true);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        if (showAutocomplete && autocompleteResults.length > 0) {
+                          handleAutocompleteSelect(autocompleteResults[0]);
+                        } else {
+                          addCondition();
+                        }
+                      } else if (e.key === 'Escape') {
+                        setShowAutocomplete(false);
+                      }
+                    }}
+                    className={selectedConditionId ? 'border-green-500' : ''}
                   />
+                  {selectedConditionId && (
+                    <Badge className="absolute right-2 top-8 bg-green-500 text-white text-xs">
+                      <Check className="h-3 w-3 mr-1" />
+                      Linked
+                    </Badge>
+                  )}
+
+                  {/* Autocomplete Dropdown */}
+                  {showAutocomplete && autocompleteResults.length > 0 && (
+                    <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg overflow-hidden">
+                      <div className="max-h-[280px] overflow-y-auto">
+                        {autocompleteResults.map(condition => {
+                          const isAlreadyAdded = conditions.some(c => c.conditionId === condition.id);
+                          return (
+                            <button
+                              key={condition.id}
+                              type="button"
+                              disabled={isAlreadyAdded}
+                              onClick={() => handleAutocompleteSelect(condition)}
+                              className={`w-full text-left px-3 py-2 hover:bg-muted/50 border-b border-border/50 last:border-0 transition-colors ${
+                                isAlreadyAdded ? 'opacity-50 cursor-not-allowed' : ''
+                              }`}
+                            >
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <span className="font-medium">{condition.abbreviation}</span>
+                                  <span className="text-muted-foreground text-sm ml-2">
+                                    {condition.name !== condition.abbreviation && condition.name}
+                                  </span>
+                                </div>
+                                {isAlreadyAdded ? (
+                                  <Badge variant="secondary" className="text-xs">Added</Badge>
+                                ) : condition.typicalRatings ? (
+                                  <span className="text-xs text-blue-600">{condition.typicalRatings}</span>
+                                ) : null}
+                              </div>
+                              {condition.diagnosticCode && (
+                                <p className="text-xs text-muted-foreground mt-0.5">
+                                  DC {condition.diagnosticCode}
+                                </p>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -531,8 +725,14 @@ export function UnifiedRatingCalculator() {
             <Card>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg">
+                  <CardTitle className="text-lg flex items-center gap-2">
                     Your Conditions ({conditions.length})
+                    {conditions.some(c => c.conditionId) && (
+                      <Badge variant="outline" className="text-xs font-normal border-green-500/50 text-green-600">
+                        <Link2 className="h-3 w-3 mr-1" />
+                        Synced
+                      </Badge>
+                    )}
                   </CardTitle>
                   <Button variant="ghost" size="sm" onClick={resetAll} className="text-muted-foreground">
                     <RotateCcw className="h-4 w-4 mr-1" />
@@ -544,6 +744,8 @@ export function UnifiedRatingCalculator() {
                 {conditions.map(condition => {
                   const isBilateral = isConditionBilateral(condition);
                   const bodyPartLabel = bodyPartOptions.find(o => o.value === condition.bodyPart)?.label || 'Other';
+                  const displayName = condition.abbreviation || condition.name;
+                  const fullName = condition.name;
 
                   return (
                     <div
@@ -556,7 +758,16 @@ export function UnifiedRatingCalculator() {
                     >
                       <div className="flex items-center gap-3">
                         <div className="flex flex-col">
-                          <span className="font-medium">{condition.name}</span>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <span className="font-medium cursor-default">{displayName}</span>
+                            </TooltipTrigger>
+                            {displayName !== fullName && (
+                              <TooltipContent>
+                                <p>{fullName}</p>
+                              </TooltipContent>
+                            )}
+                          </Tooltip>
                           <span className="text-xs text-muted-foreground">{bodyPartLabel}</span>
                         </div>
                         {isBilateral && (
@@ -564,11 +775,26 @@ export function UnifiedRatingCalculator() {
                             Bilateral
                           </Badge>
                         )}
+                        {condition.conditionId && (
+                          <Badge variant="outline" className="border-green-500/50 text-green-600 text-xs">
+                            <Link2 className="h-3 w-3" />
+                          </Badge>
+                        )}
                       </div>
                       <div className="flex items-center gap-2">
-                        <Badge variant="secondary" className="font-mono">
-                          {condition.rating}%
-                        </Badge>
+                        <Select
+                          value={condition.rating.toString()}
+                          onValueChange={(value) => updateConditionRating(condition.id, parseInt(value))}
+                        >
+                          <SelectTrigger className="w-20 h-8">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {commonRatings.map(r => (
+                              <SelectItem key={r} value={r.toString()}>{r}%</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <Button
                           variant="ghost"
                           size="icon"
@@ -583,6 +809,16 @@ export function UnifiedRatingCalculator() {
                 })}
               </CardContent>
             </Card>
+          )}
+
+          {/* Secondary Condition Suggestions - shows after first condition */}
+          {conditions.some(c => c.conditionId) && (
+            <SecondaryConditionSuggestions
+              conditionIds={conditions.map(c => c.conditionId).filter(Boolean) as string[]}
+              maxSuggestions={6}
+              collapsible={true}
+              defaultCollapsed={false}
+            />
           )}
 
           {/* Dependents Section */}
