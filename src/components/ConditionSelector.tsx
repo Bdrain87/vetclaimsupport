@@ -15,6 +15,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
 import {
   vaConditions,
@@ -278,38 +283,47 @@ export function SelectedConditionsDisplay({
         if (!details) return null;
 
         return (
-          <Badge
-            key={userCondition.id}
-            variant="secondary"
-            className={cn(
-              'flex items-center gap-1.5 pr-1',
-              compact ? 'text-xs py-0.5' : 'text-sm py-1',
-              showStatus && statusColors[userCondition.claimStatus]
-            )}
-          >
-            <span className="font-medium">{details.abbreviation}</span>
-            {userCondition.bodyPart && (
-              <span className="text-muted-foreground">
-                ({userCondition.bodyPart})
-              </span>
-            )}
-            {showRating && userCondition.rating !== undefined && (
-              <span className="text-muted-foreground">
-                {userCondition.rating}%
-              </span>
-            )}
-            {!userCondition.isPrimary && (
-              <span className="text-xs text-muted-foreground">(2nd)</span>
-            )}
-            <button
-              type="button"
-              onClick={() => handleRemove(userCondition.id)}
-              className="ml-1 rounded-full p-0.5 hover:bg-muted-foreground/20"
-            >
-              <X className="h-3 w-3" />
-              <span className="sr-only">Remove {details.name}</span>
-            </button>
-          </Badge>
+          <Tooltip key={userCondition.id}>
+            <TooltipTrigger asChild>
+              <Badge
+                variant="secondary"
+                className={cn(
+                  'flex items-center gap-1.5 pr-1 cursor-default',
+                  compact ? 'text-xs py-0.5' : 'text-sm py-1',
+                  showStatus && statusColors[userCondition.claimStatus]
+                )}
+              >
+                <span className="font-medium">{details.abbreviation}</span>
+                {userCondition.bodyPart && (
+                  <span className="text-muted-foreground">
+                    ({userCondition.bodyPart})
+                  </span>
+                )}
+                {showRating && userCondition.rating !== undefined && (
+                  <span className="text-muted-foreground">
+                    {userCondition.rating}%
+                  </span>
+                )}
+                {!userCondition.isPrimary && (
+                  <span className="text-xs text-muted-foreground">(2nd)</span>
+                )}
+                <button
+                  type="button"
+                  onClick={() => handleRemove(userCondition.id)}
+                  className="ml-1 rounded-full p-0.5 hover:bg-muted-foreground/20"
+                >
+                  <X className="h-3 w-3" />
+                  <span className="sr-only">Remove {details.name}</span>
+                </button>
+              </Badge>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="font-medium">{details.name}</p>
+              {details.diagnosticCode && (
+                <p className="text-xs text-muted-foreground">DC {details.diagnosticCode}</p>
+              )}
+            </TooltipContent>
+          </Tooltip>
         );
       })}
     </div>
