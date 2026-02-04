@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { searchMilitaryJobs, formatMOSDisplay, getHazardsForMOS, type MilitaryJobCode } from '@/data/militaryMOS';
+import { saveMOS, getSavedMOS } from '@/utils/veteranProfile';
 
 interface MOSComboboxProps {
   value: string;
@@ -11,6 +12,7 @@ interface MOSComboboxProps {
   onHazardsSuggested?: (hazards: string[]) => void;
   placeholder?: string;
   branch?: 'Army' | 'Air Force' | 'Navy' | 'Marines' | 'Coast Guard';
+  persistToStorage?: boolean;
 }
 
 export function MOSCombobox({
@@ -18,13 +20,25 @@ export function MOSCombobox({
   onValueChange,
   onHazardsSuggested,
   placeholder = "Type MOS/AFSC code or job title...",
-  branch
+  branch,
+  persistToStorage = true
 }: MOSComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState(value);
   const [highlightedIndex, setHighlightedIndex] = React.useState(-1);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const listRef = React.useRef<HTMLDivElement>(null);
+
+  // Load saved MOS on mount if no value provided
+  React.useEffect(() => {
+    if (!value && persistToStorage) {
+      const saved = getSavedMOS();
+      if (saved.mos) {
+        setInputValue(saved.mos);
+        onValueChange(saved.mos);
+      }
+    }
+  }, []);
 
   // Filter based on input
   const filteredJobs = React.useMemo(() => {
@@ -35,6 +49,11 @@ export function MOSCombobox({
     const displayValue = formatMOSDisplay(job);
     setInputValue(job.code);
     onValueChange(job.code, job);
+
+    // Save to localStorage for persistence across pages
+    if (persistToStorage) {
+      saveMOS(job.code, job.branch);
+    }
 
     // Suggest hazards if callback provided
     if (onHazardsSuggested && job.commonHazards) {
@@ -147,7 +166,7 @@ export function MOSCombobox({
       {open && filteredJobs.length > 0 && (
         <div
           ref={listRef}
-          className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg max-h-64 overflow-y-auto"
+          className="absolute z-[9999] w-full mt-1 bg-popover border border-border rounded-lg shadow-lg max-h-[400px] min-h-[200px] overflow-y-auto"
         >
           {filteredJobs.map((job, index) => (
             <div
