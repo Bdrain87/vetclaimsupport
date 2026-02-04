@@ -8,6 +8,7 @@ import { ScrollToTop } from "./components/ScrollToTop";
 import { ClaimsProvider } from "./context/ClaimsContext";
 import { EvidenceProvider } from "./context/EvidenceContext";
 import { ThemeProvider } from "./context/ThemeContext";
+import { UserConditionsProvider } from "./context/UserConditionsContext";
 import { AppLayout } from "./components/AppLayout";
 import { LiabilityAcceptanceScreen } from "./components/legal/LiabilityAcceptanceScreen";
 import { OnboardingModal } from "./components/onboarding/OnboardingModal";
@@ -69,6 +70,7 @@ const App = () => (
         <WebGateWrapper>
           <ClaimsProvider>
             <EvidenceProvider>
+              <UserConditionsProvider>
               <TooltipProvider>
                 <Toaster />
                 <Sonner />
@@ -160,6 +162,7 @@ const App = () => (
                   </AppLayout>
                 </BrowserRouter>
               </TooltipProvider>
+              </UserConditionsProvider>
             </EvidenceProvider>
           </ClaimsProvider>
         </WebGateWrapper>
