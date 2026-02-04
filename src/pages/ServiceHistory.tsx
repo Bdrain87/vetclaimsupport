@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useClaims } from '@/context/ClaimsContext';
 import { useEvidence } from '@/context/EvidenceContext';
 import { Shield, Plus, Trash2, Edit, Calendar, MapPin, Briefcase, AlertTriangle, Download, Sword, Star, Plane } from 'lucide-react';
+import { getSavedServiceDates, saveServiceDates } from '@/utils/veteranProfile';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -48,6 +49,25 @@ export default function ServiceHistory() {
   const [suggestedHazards, setSuggestedHazards] = useState<string[]>([]);
   const [selectedHazards, setSelectedHazards] = useState<string[]>([]);
   const [customHazard, setCustomHazard] = useState('');
+
+  // Load saved service dates on mount
+  useEffect(() => {
+    const savedDates = getSavedServiceDates();
+    if (savedDates.startDate || savedDates.endDate) {
+      setFormData(prev => ({
+        ...prev,
+        startDate: prev.startDate || savedDates.startDate,
+        endDate: prev.endDate || savedDates.endDate,
+      }));
+    }
+  }, []);
+
+  // Save service dates to localStorage when form data changes
+  useEffect(() => {
+    if (formData.startDate || formData.endDate) {
+      saveServiceDates(formData.startDate, formData.endDate);
+    }
+  }, [formData.startDate, formData.endDate]);
 
   // Combat form state
   const [isCombatOpen, setIsCombatOpen] = useState(false);
