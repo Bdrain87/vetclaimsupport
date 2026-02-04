@@ -25,9 +25,9 @@ export interface AuditEntry {
 const STORAGE_KEY = 'vet-claim-audit-log';
 const MAX_ENTRIES = 500; // Limit log size
 
-// Generate unique ID
+// Generate unique ID using cryptographically secure random
 function generateId(): string {
-  return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+  return crypto.randomUUID();
 }
 
 // Get all audit entries

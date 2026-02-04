@@ -100,7 +100,7 @@ export function ConditionSpecificChecklist() {
   // Calculate readiness score
   const calculateReadiness = (checklist: ConditionChecklist, status: EvidenceStatus): number => {
     let score = 0;
-    let maxScore = 100;
+    const maxScore = 100;
 
     // Medical documentation (30 points)
     if (status.hasMedicalVisits) score += 30;
