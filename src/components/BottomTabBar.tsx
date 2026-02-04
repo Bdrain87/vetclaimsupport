@@ -1,16 +1,25 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home, PenSquare, Wrench, Settings } from 'lucide-react';
+import { Home, Activity, Calculator, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+// Quick-access tabs for mobile - matches key routes from desktop sidebar
 const tabs = [
   { to: '/', icon: Home, label: 'Home' },
-  { to: '/symptoms', icon: PenSquare, label: 'Log' },
-  { to: '/claim-tools', icon: Wrench, label: 'Tools' },
+  { to: '/health-log', icon: Activity, label: 'Log' },
+  { to: '/calculator', icon: Calculator, label: 'Calculator' },
   { to: '/settings', icon: Settings, label: 'Settings' },
 ];
 
 export function BottomTabBar() {
   const location = useLocation();
+
+  // Check if current path matches tab or is a child route
+  const isTabActive = (tabPath: string) => {
+    if (tabPath === '/') {
+      return location.pathname === '/';
+    }
+    return location.pathname === tabPath || location.pathname.startsWith(tabPath + '/');
+  };
 
   return (
     <nav className={cn(
@@ -21,7 +30,7 @@ export function BottomTabBar() {
     )}>
       <div className="flex items-center justify-around h-20 px-2">
         {tabs.map((tab, index) => {
-          const isActive = location.pathname === tab.to;
+          const isActive = isTabActive(tab.to);
           return (
             <NavLink
               key={tab.to}

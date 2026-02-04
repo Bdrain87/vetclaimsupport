@@ -34,6 +34,21 @@ import {
 } from 'lucide-react';
 import { calculateCompensation, DependentsInfo, vaCompensationRates2024 } from '@/data/vaCompensationRates';
 
+/**
+ * Escape HTML special characters to prevent XSS attacks
+ */
+function escapeHtml(str: string): string {
+  const htmlEscapes: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;',
+    '/': '&#x2F;',
+  };
+  return str.replace(/[&<>"'/]/g, (char) => htmlEscapes[char]);
+}
+
 // Use 2024 VA compensation rates from data file (single veteran, no dependents)
 const monthlyCompensation: Record<number, number> = {
   0: 0,
@@ -417,8 +432,8 @@ export default function BilateralCalculator() {
           ${conditions.map(c => {
             const isBilateral = result.bilateralConditions.some(bc => bc.id === c.id);
             return `<div class="condition ${isBilateral ? 'bilateral' : ''}">
-              <span>${c.name}</span>
-              <span><strong>${c.rating}%</strong> - ${bodyPartOptions.find(o => o.value === c.bodyPart)?.label || 'Other'}${isBilateral ? ' (Bilateral)' : ''}</span>
+              <span>${escapeHtml(c.name)}</span>
+              <span><strong>${c.rating}%</strong> - ${escapeHtml(bodyPartOptions.find(o => o.value === c.bodyPart)?.label || 'Other')}${isBilateral ? ' (Bilateral)' : ''}</span>
             </div>`;
           }).join('')}
 
@@ -432,9 +447,9 @@ export default function BilateralCalculator() {
           <h2>Calculation Steps</h2>
           ${result.steps.map(step => `
             <div class="step">
-              <strong>${step.description}</strong>
-              ${step.formula ? `<div class="step-formula">${step.formula}</div>` : ''}
-              <p>${step.result}</p>
+              <strong>${escapeHtml(step.description)}</strong>
+              ${step.formula ? `<div class="step-formula">${escapeHtml(step.formula)}</div>` : ''}
+              <p>${escapeHtml(step.result)}</p>
             </div>
           `).join('')}
 

@@ -14,6 +14,23 @@ interface ReportData {
   metadata?: Record<string, string>;
 }
 
+/**
+ * Escape HTML special characters to prevent XSS attacks
+ * @param str - The string to escape
+ * @returns Escaped string safe for HTML insertion
+ */
+function escapeHtml(str: string): string {
+  const htmlEscapes: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;',
+    '/': '&#x2F;',
+  };
+  return str.replace(/[&<>"'/]/g, (char) => htmlEscapes[char]);
+}
+
 // Generate HTML content for the report
 function generateReportHTML(data: ReportData): string {
   const formatDate = (date: Date) =>
@@ -27,8 +44,8 @@ function generateReportHTML(data: ReportData): string {
     .map(
       (section) => `
     <div class="section">
-      <h2>${section.title}</h2>
-      ${section.content.map((item) => `<p>${item}</p>`).join('')}
+      <h2>${escapeHtml(section.title)}</h2>
+      ${section.content.map((item) => `<p>${escapeHtml(item)}</p>`).join('')}
     </div>
   `
     )
@@ -38,7 +55,7 @@ function generateReportHTML(data: ReportData): string {
     ? `
     <div class="metadata">
       ${Object.entries(data.metadata)
-        .map(([key, value]) => `<p><strong>${key}:</strong> ${value}</p>`)
+        .map(([key, value]) => `<p><strong>${escapeHtml(key)}:</strong> ${escapeHtml(value)}</p>`)
         .join('')}
     </div>
   `
