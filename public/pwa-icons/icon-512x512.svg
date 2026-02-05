@@ -1,8 +1,31 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="64" fill="#1e40af"/>
-  <path d="M256 64c-77.32 0-140 62.68-140 140 0 54.6 31.2 102 76.72 125.6L256 416l63.28-86.4c45.52-23.6 76.72-71 76.72-125.6 0-77.32-62.68-140-140-140zm0 44c23.76 0 43 19.24 43 43s-19.24 43-43 43-43-19.24-43-43 19.24-43 43-43zm64 192H192v-22c0-21.6 43.2-33.6 64-33.6s64 12 64 33.6v22z" fill="#60a5fa"/>
-  <circle cx="256" cy="168" r="32" fill="#dbeafe"/>
-  <path d="M200 288c0-14.4 28.8-21.6 56-21.6s56 7.2 56 21.6v10H200v-10z" fill="#dbeafe"/>
-  <path d="M152 184l-24-24m208 24l24-24M256 108V64" stroke="#93c5fd" stroke-width="8" stroke-linecap="round"/>
-  <circle cx="256" cy="256" r="180" fill="none" stroke="#3b82f6" stroke-width="4" stroke-dasharray="20 10"/>
+  <!-- Background for maskable icon support -->
+  <rect width="512" height="512" fill="#14192b"/>
+
+  <!-- Shield body - navy -->
+  <path
+    d="M256 48L80 112V224C80 319.12 153.12 404.64 256 432C358.88 404.64 432 319.12 432 224V112L256 48Z"
+    fill="#1e2844"
+    stroke="#C9A227"
+    stroke-width="8"
+  />
+
+  <!-- Inner shield highlight -->
+  <path
+    d="M256 80L112 136V224C112 303.04 174.24 376.72 256 400C337.76 376.72 400 303.04 400 224V136L256 80Z"
+    fill="#1e2844"
+    stroke="#C9A227"
+    stroke-width="3"
+    stroke-opacity="0.5"
+  />
+
+  <!-- Checkmark - green -->
+  <path
+    d="M192 256L240 304L320 208"
+    stroke="#10B981"
+    stroke-width="24"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
 </svg>
