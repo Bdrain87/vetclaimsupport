@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown } from 'lucide-react';
+import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Scale, Shield, FileText, AlertTriangle, ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { ShareWithVSO } from '@/components/dashboard/ShareWithVSO';
 import { ExportButton } from '@/components/dashboard/ExportButton';
 import { DataBackup } from '@/components/settings/DataBackup';
+import { Link } from 'react-router-dom';
 
 const REMINDER_SETTINGS_KEY = 'va-claims-reminder-settings';
 
@@ -296,6 +297,51 @@ export default function Settings() {
 
       {/* Data Backup */}
       <DataBackup />
+
+      {/* Legal Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Scale className="h-5 w-5" />
+            Legal
+          </CardTitle>
+          <CardDescription>Privacy policy, terms of service, and disclaimers</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <Link
+            to="/privacy"
+            className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <Shield className="h-5 w-5 text-primary" />
+              <span className="font-medium text-foreground">Privacy Policy</span>
+            </div>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+          </Link>
+
+          <Link
+            to="/terms"
+            className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <FileText className="h-5 w-5 text-primary" />
+              <span className="font-medium text-foreground">Terms of Service</span>
+            </div>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+          </Link>
+
+          <Link
+            to="/disclaimer"
+            className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <AlertTriangle className="h-5 w-5 text-warning" />
+              <span className="font-medium text-foreground">Disclaimer</span>
+            </div>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+          </Link>
+        </CardContent>
+      </Card>
 
       {/* Data Info */}
       <Card>

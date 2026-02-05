@@ -1,0 +1,300 @@
+/* Landing Page Design System - Apple/Meta Level Quality */
+:root {
+  /* Primary palette */
+  --landing-primary: #0A1628;
+  --landing-secondary: #1E3A5F;
+  --landing-accent: #C9A227;
+  --landing-success: #10B981;
+
+  /* Neutrals */
+  --landing-white: #FFFFFF;
+  --landing-gray-50: #F9FAFB;
+  --landing-gray-100: #F3F4F6;
+  --landing-gray-200: #E5E7EB;
+  --landing-gray-300: #D1D5DB;
+  --landing-gray-400: #9CA3AF;
+  --landing-gray-500: #6B7280;
+  --landing-gray-600: #4B5563;
+  --landing-gray-700: #374151;
+  --landing-gray-800: #1F2937;
+  --landing-gray-900: #111827;
+
+  /* Typography */
+  --font-display: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --text-display: clamp(2.5rem, 5vw, 4rem);
+  --text-title: clamp(2rem, 4vw, 3rem);
+  --text-subtitle: clamp(1.125rem, 2vw, 1.5rem);
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+
+  /* Spacing */
+  --space-section: clamp(80px, 10vw, 120px);
+  --space-element: clamp(32px, 5vw, 48px);
+  --space-component: clamp(16px, 3vw, 24px);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 40px rgba(16, 185, 129, 0.15);
+
+  /* Border radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+}
+
+/* Base landing page styles */
+.landing-page {
+  font-family: var(--font-display);
+  background: var(--landing-white);
+  color: var(--landing-gray-800);
+  overflow-x: hidden;
+}
+
+/* Hero gradient background */
+.hero-gradient {
+  background: linear-gradient(180deg, var(--landing-primary) 0%, var(--landing-secondary) 100%);
+}
+
+/* Section base styles */
+.landing-section {
+  padding: var(--space-section) var(--space-component);
+}
+
+.landing-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 32px);
+}
+
+/* Typography utilities */
+.text-display {
+  font-size: var(--text-display);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.text-title {
+  font-size: var(--text-title);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.text-subtitle {
+  font-size: var(--text-subtitle);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Button styles */
+.landing-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 32px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--landing-white);
+  background: var(--landing-success);
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+
+.landing-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl), 0 0 60px rgba(16, 185, 129, 0.25);
+}
+
+.landing-btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Card styles */
+.landing-card {
+  background: var(--landing-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.landing-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+}
+
+/* Stat card styles */
+.stat-card {
+  background: var(--landing-white);
+  border-radius: var(--radius-lg);
+  padding: var(--space-component);
+  text-align: center;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--landing-gray-100);
+}
+
+.stat-value {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 700;
+  color: var(--landing-primary);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: var(--text-small);
+  color: var(--landing-gray-600);
+  margin-top: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Testimonial card */
+.testimonial-card {
+  background: var(--landing-white);
+  border-radius: var(--radius-xl);
+  padding: var(--space-element);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--landing-gray-100);
+}
+
+/* Comparison table styles */
+.comparison-column {
+  border-radius: var(--radius-xl);
+  padding: var(--space-element);
+}
+
+.comparison-them {
+  background: var(--landing-gray-50);
+  border: 1px solid var(--landing-gray-200);
+}
+
+.comparison-us {
+  background: linear-gradient(180deg, var(--landing-primary) 0%, var(--landing-secondary) 100%);
+  color: var(--landing-white);
+  box-shadow: var(--shadow-xl);
+}
+
+/* Trust bar */
+.trust-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-component);
+  padding: var(--space-component) 0;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--text-small);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Animation keyframes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Animation utilities */
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.6s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Staggered animation delays */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  .landing-section {
+    padding: calc(var(--space-section) * 0.75) var(--space-component);
+  }
+
+  .stat-card {
+    padding: calc(var(--space-component) * 0.75);
+  }
+}
+
+/* Scroll snap for sections */
+.landing-page {
+  scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+.landing-btn-primary:focus-visible {
+  outline: 3px solid var(--landing-success);
+  outline-offset: 3px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up,
+  .animate-fade-in,
+  .animate-scale-in,
+  .animate-float {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
