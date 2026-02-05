@@ -8,21 +8,20 @@ export const generateVSOReport = (veteranName: string, activeClaims: any[], logs
   content += `GENERATED: ${timestamp}\n`;
   content += `====================================================\n\n`;
 
-  content += `I. ACTIVE SERVICE CONNECTIONS & INTENT TO FILE\n`;
+  content += `I. ACTIVE SERVICE CONNECTIONS\n`;
   activeClaims.forEach(claim => {
-    // FIX: Using VA_CONDITIONS instead of the undefined 'Conditions'
-    const conditionDetail = VA_CONDITIONS.find(c => c.id === claim.id);
+    // Audit Fix: Changed 'Conditions' to 'VA_CONDITIONS'
+    const detail = VA_CONDITIONS.find(c => c.id === claim.id);
     content += `- ${claim.name} (${claim.rating || 'Pending'}%)\n`;
-    content += `  Diagnostic Code: ${conditionDetail?.diagnosticCode || 'Unknown'}\n`;
-    content += `  Secondary Paths: ${conditionDetail?.possibleSecondaries?.join(', ') || 'None identified'}\n`;
+    content += `  Diagnostic Code: ${detail?.diagnosticCode || 'Unknown'}\n`;
+    content += `  Secondary Potential: ${detail?.possibleSecondaries?.join(', ') || 'None'}\n`;
   });
 
-  content += `\nII. CLINICAL SYMPTOM LOG (VA-SPEAK TRANSLATED)\n`;
-  content += `----------------------------------------------------\n`;
+  content += `\nII. SYMPTOM LOGS\n`;
   logs.forEach(log => {
     content += `[${log.date}] ${log.translatedText || log.rawText}\n`;
   });
 
   const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-  saveAs(blob, `${veteranName.replace(/\s+/g, '_')}_Evidence_Packet.txt`);
+  saveAs(blob, `${veteranName.replace(/\s+/g, '_')}_Evidence.txt`);
 };
