@@ -3,7 +3,17 @@ import { motion } from 'framer-motion';
 import { LaunchSpecialCard } from '@/components/LaunchSpecialCard';
 import { BodyMap } from '@/components/BodyMap';
 import { RatingCard } from '@/components/RatingCard';
+import { PayoutDisplay } from '@/components/dashboard/PayoutDisplay';
 import { ShieldCheck, Cpu, Database, ChevronRight } from 'lucide-react';
+
+// Demo claims for the landing page preview
+const demoClaims = [
+  { id: 'ptsd', rating: 70 },
+  { id: 'tinnitus', rating: 10 },
+  { id: 'lumbosacral-strain', rating: 20 },
+  { id: 'knee-left', rating: 10 },
+  { id: 'knee-right', rating: 10 },
+];
 
 export const PlatinumLanding = () => {
   return (
@@ -68,14 +78,14 @@ export const PlatinumLanding = () => {
       </section>
 
       {/* Rating Preview Section */}
-      <section className="py-20 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-8">
-        <RatingCard ratings={[10, 20]} bilateral={[]} />
-        <div className="p-10 glass-card flex flex-col justify-center">
-          <h3 className="text-2xl font-black italic text-white uppercase tracking-tighter">Forecast Engine</h3>
-          <p className="text-white/40 text-sm mt-4 leading-relaxed">
-            Our Platinum engine uses 38 CFR § 4.25 compliant math to forecast your combined rating,
-            accounting for the 10% Bilateral Factor automatically.
-          </p>
+      <section className="py-20 px-6 max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <RatingCard claims={demoClaims} />
+          </div>
+          <div className="lg:col-span-1">
+            <PayoutDisplay rating={90} />
+          </div>
         </div>
       </section>
 
