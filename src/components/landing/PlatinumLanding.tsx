@@ -1,6 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { LaunchSpecialCard } from '@/components/LaunchSpecialCard';
+import { BodyMap } from '@/components/BodyMap';
+import { RatingCard } from '@/components/RatingCard';
 import { ShieldCheck, Cpu, Database, ChevronRight } from 'lucide-react';
 
 export const PlatinumLanding = () => {
@@ -58,6 +60,23 @@ export const PlatinumLanding = () => {
             <p className="text-white/40 text-sm leading-relaxed font-medium">{pillar.text}</p>
           </div>
         ))}
+      </section>
+
+      {/* Visual Discovery Section */}
+      <section id="discovery" className="py-20 px-6 max-w-7xl mx-auto">
+        <BodyMap />
+      </section>
+
+      {/* Rating Preview Section */}
+      <section className="py-20 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-8">
+        <RatingCard ratings={[10, 20]} bilateral={[]} />
+        <div className="p-10 glass-card flex flex-col justify-center">
+          <h3 className="text-2xl font-black italic text-white uppercase tracking-tighter">Forecast Engine</h3>
+          <p className="text-white/40 text-sm mt-4 leading-relaxed">
+            Our Platinum engine uses 38 CFR § 4.25 compliant math to forecast your combined rating,
+            accounting for the 10% Bilateral Factor automatically.
+          </p>
+        </div>
       </section>
 
       {/* Pricing Section */}
