@@ -30,6 +30,8 @@ export interface VACondition {
   typicalRatings?: string;
   description?: string;
   commonSecondaries: string[]; // IDs of common secondary conditions
+  possibleSecondaries?: string[]; // Display-friendly secondary condition names
+  nexusTip?: string; // Guidance for establishing service connection nexus
   keywords: string[]; // Additional search terms
 }
 
@@ -309,6 +311,8 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10%',
     description: 'Ringing or buzzing in the ears',
     commonSecondaries: ['hearing-loss', 'depression', 'anxiety', 'sleep-apnea', 'migraines'],
+    possibleSecondaries: ['Migraines', 'Anxiety', 'Depression', 'Sleep Apnea'],
+    nexusTip: 'Evidence must show how constant auditory distress triggers secondary symptoms.',
     keywords: ['ringing ears', 'buzzing', 'ear ringing'],
   },
   {
@@ -416,6 +420,8 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-40%',
     description: 'Strain or sprain of lower back muscles/ligaments',
     commonSecondaries: ['lumbar-ddd', 'radiculopathy', 'sciatica'],
+    possibleSecondaries: ['Sciatica', 'Radiculopathy', 'Depression', 'ED'],
+    nexusTip: 'Focus on nerve compression (radiculopathy) resulting from spinal instability.',
     keywords: ['back strain', 'lower back pain', 'muscle strain'],
   },
   {
