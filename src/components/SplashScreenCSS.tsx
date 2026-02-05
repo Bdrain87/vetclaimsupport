@@ -65,7 +65,7 @@ export function SplashScreenCSS({
 
         {/* App Name */}
         <h1 className="splash-title">
-          Vet Claim Support
+          Service Evidence Tracker
         </h1>
 
         {/* Tagline */}

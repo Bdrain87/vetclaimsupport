@@ -145,7 +145,7 @@ export function MobileHeader() {
     return initial;
   });
 
-  const pageLabel = pageLabels[location.pathname] || 'Vet Claim Support';
+  const pageLabel = pageLabels[location.pathname] || 'Service Evidence Tracker';
 
   const handleBack = () => {
     navigate('/');
@@ -362,7 +362,7 @@ export function MobileHeader() {
               <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/20">
                 <ShieldCheck className="h-3.5 w-3.5 text-primary" />
               </div>
-              <span className="font-semibold text-foreground text-sm">Vet Claim Support</span>
+              <span className="font-semibold text-foreground text-sm">Service Evidence Tracker</span>
             </>
           ) : (
             <span className="font-semibold text-foreground text-sm truncate max-w-[180px]">

@@ -1,7 +1,7 @@
 {
-  "name": "Vet Claim Support",
-  "short_name": "VetClaim",
-  "description": "AI-powered tools to track medical visits, exposures, symptoms, and documentation for VA disability claims",
+  "name": "Service Evidence Tracker",
+  "short_name": "ServiceEvidence",
+  "description": "Platinum-tier veteran disability claims evidence tracker with AI-powered C&P exam prep and Zero-Knowledge privacy",
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#14192b",

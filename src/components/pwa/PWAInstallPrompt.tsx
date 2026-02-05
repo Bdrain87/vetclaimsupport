@@ -82,7 +82,7 @@ export function PWAInstallPrompt() {
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-foreground text-sm">Install App</h3>
             <p className="text-xs text-muted-foreground mt-1">
-              Add Vet Claim Support to your home screen for quick access and AI-powered assistance.            </p>
+              Add Service Evidence Tracker to your home screen for quick access and AI-powered assistance.            </p>
           </div>
           <button
             onClick={handleDismiss}

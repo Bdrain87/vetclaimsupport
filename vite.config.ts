@@ -19,9 +19,9 @@ export default defineConfig(({ mode }) => ({
       includeAssets: ["favicon.ico", "robots.txt", "pwa-icons/*.png", "pwa-icons/*.svg", "pwa-icons/*.jpg", "screenshots/*.svg"],
       manifest: {
         id: "/",
-        name: "Vet Claim Support",
-        short_name: "VetClaim",
-        description: "Track medical visits, exposures, symptoms, and documentation for VA disability claims",
+        name: "Service Evidence Tracker",
+        short_name: "ServiceEvidence",
+        description: "Platinum-tier veteran disability claims evidence tracker with AI-powered C&P exam prep and Zero-Knowledge privacy",
         theme_color: "#14192b",
         background_color: "#14192b",
         display: "standalone",
