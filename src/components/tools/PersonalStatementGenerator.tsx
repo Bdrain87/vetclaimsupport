@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { format, parseISO } from 'date-fns';
+import { exportPersonalStatement } from '@/utils/pdfExport';
 
 export function PersonalStatementGenerator() {
   const { data } = useClaims();
@@ -154,19 +155,14 @@ _______________________________
 
   const handleDownload = () => {
     const content = customEdits || generateStatement.full;
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `personal-statement-${selectedCondition || 'claim'}-${new Date().toISOString().split('T')[0]}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
+    const condition = selectedCondition
+      ? claimConditions.find(c => c.id === selectedCondition)
+      : claimConditions[0];
+    exportPersonalStatement(content, condition?.name);
+
     toast({
       title: 'Statement Downloaded',
-      description: 'Your personal statement has been saved',
+      description: 'Your personal statement has been saved as PDF',
     });
   };
 

@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput';
 import { DisclaimerNotice } from '@/components/shared/DisclaimerNotice';
+import { exportNexusLetterTemplate } from '@/utils/pdfExport';
 
 export function NexusLetterGenerator() {
   const { data } = useClaims();
@@ -99,16 +100,8 @@ DISCLAIMER: This document is a template only and is not official VA documentatio
 
   const handleDownload = () => {
     const letter = generateLetter();
-    const blob = new Blob([letter], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `nexus-letter-template-${conditionName?.replace(/\s+/g, '-').toLowerCase() || 'condition'}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    toast.success('Letter template downloaded');
+    exportNexusLetterTemplate(letter, conditionName);
+    toast.success('Letter template downloaded as PDF');
   };
 
   return (

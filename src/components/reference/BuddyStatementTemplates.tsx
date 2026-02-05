@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
+import { exportBuddyStatementTemplate } from '@/utils/pdfExport';
 
 // Template types
 type TemplateType = 'witness' | 'symptoms' | 'character';
@@ -182,19 +183,11 @@ export function BuddyStatementTemplates() {
 
   const downloadTemplate = () => {
     const content = currentTemplate.generateContent(currentValues);
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `Buddy_Statement_${currentTemplate.title.replace(/\s+/g, '_')}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    exportBuddyStatementTemplate(content, currentTemplate.title);
 
     toast({
       title: 'Template Downloaded',
-      description: 'The statement template has been saved.',
+      description: 'The statement template has been saved as PDF.',
     });
   };
 

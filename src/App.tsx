@@ -58,6 +58,11 @@ import Glossary from "./pages/Glossary";
 import VAForms from "./pages/VAForms";
 import UserGuide from "./pages/UserGuide";
 import ConditionsByConflict from "./pages/ConditionsByConflict";
+import VAResources from "./pages/VAResources";
+
+// Conditions Management
+import Conditions from "./pages/Conditions";
+import ConditionDetail from "./pages/ConditionDetail";
 
 // Legal
 import Privacy from "./pages/Privacy";
@@ -143,8 +148,13 @@ const App = () => {
                       <Route path="/condition-guide" element={<ConditionGuide />} />
                       <Route path="/journey" element={<ClaimJourney />} />
 
+                      {/* Conditions Management */}
+                      <Route path="/conditions" element={<Conditions />} />
+                      <Route path="/conditions/:id" element={<ConditionDetail />} />
+
                       {/* Reference & Help */}
                       <Route path="/reference" element={<Reference />} />
+                      <Route path="/va-resources" element={<VAResources />} />
                       <Route path="/help" element={<HelpCenter />} />
                       <Route path="/faq" element={<FAQ />} />
                       <Route path="/glossary" element={<Glossary />} />
@@ -174,11 +184,15 @@ const App = () => {
 
                       {/* Documents redirects */}
                       <Route path="/documents" element={<Navigate to="/docs" replace />} />
+                      <Route path="/evidence" element={<Navigate to="/docs" replace />} />
                       <Route path="/claim-documents" element={<Navigate to="/docs" replace />} />
                       <Route path="/evidence-docs" element={<Navigate to="/docs" replace />} />
                       <Route path="/evidence-library" element={<Navigate to="/docs" replace />} />
                       <Route path="/documents-checklist" element={<Navigate to="/docs" replace />} />
                       <Route path="/claim-docs" element={<Navigate to="/docs" replace />} />
+
+                      {/* Journal redirects */}
+                      <Route path="/journal" element={<Navigate to="/health-log" replace />} />
 
                       {/* Buddy Statements redirects */}
                       <Route path="/buddy-contacts" element={<Navigate to="/buddy-statements" replace />} />

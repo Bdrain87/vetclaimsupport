@@ -12,6 +12,7 @@ import { Copy, Download, AlertTriangle, Check, MapPin, Calendar, FileText, Plus,
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
+import { exportStressorStatement } from '@/utils/pdfExport';
 
 interface StressorEvent {
   id: string;
@@ -137,16 +138,8 @@ Date`;
 
   const handleDownload = () => {
     const statement = generateStatement();
-    const blob = new Blob([statement], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'stressor-statement.txt';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    toast.success('Statement downloaded');
+    exportStressorStatement(statement);
+    toast.success('Statement downloaded as PDF');
   };
 
   return (
