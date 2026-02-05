@@ -173,7 +173,7 @@ export const vaConditions: VACondition[] = [
     category: 'neurological',
     diagnosticCode: '8100',
     typicalRatings: '0-50%',
-    description: 'Recurring severe headaches with other symptoms',
+    description: 'Evaluated based on the frequency of prostrating attacks over the last 6 months. Rating criteria per 38 CFR § 4.124a.',
     commonSecondaries: ['depression', 'anxiety', 'insomnia'],
     keywords: ['headache', 'head pain', 'headaches'],
   },
