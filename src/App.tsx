@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -17,6 +18,7 @@ import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
 import { MilestoneCelebration } from "./components/dashboard/MilestoneCelebration";
 import { WebGateWrapper } from "./components/landing/WebGateWrapper";
 import { AppStoreLandingPage } from "./components/landing/AppStoreLandingPage";
+import { SplashScreen, useSplashScreen } from "./components/SplashScreen";
 
 // Core pages
 import Dashboard from "./pages/Dashboard";
@@ -68,24 +70,43 @@ import { ScreenshotGuide } from "./components/admin/ScreenshotGuide";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <ErrorBoundary>
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <WebGateWrapper>
-          <ClaimsProvider>
-            <EvidenceProvider>
-              <UserConditionsProvider>
-              <TooltipProvider>
-                <Toaster />
-                <Sonner />
-                <BrowserRouter>
-                  <ScrollToTop />
-                  <LiabilityAcceptanceScreen />
-                  <OnboardingModal />
-                  <PWAInstallPrompt />
-                  <OfflineIndicator />
-                  <MilestoneCelebration />
+const App = () => {
+  const { isLoading, handleSplashComplete, markAppReady } = useSplashScreen(1500);
+
+  // Mark app as ready once component mounts
+  useEffect(() => {
+    // Small delay to ensure all providers are initialized
+    const timer = setTimeout(() => {
+      markAppReady();
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [markAppReady]);
+
+  return (
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>
+          {/* Splash Screen - shows during initial load */}
+          {isLoading && (
+            <SplashScreen
+              onComplete={handleSplashComplete}
+              minimumDuration={1500}
+            />
+          )}
+          <WebGateWrapper>
+            <ClaimsProvider>
+              <EvidenceProvider>
+                <UserConditionsProvider>
+                <TooltipProvider>
+                  <Toaster />
+                  <Sonner />
+                  <BrowserRouter>
+                    <ScrollToTop />
+                    <LiabilityAcceptanceScreen />
+                    <OnboardingModal />
+                    <PWAInstallPrompt />
+                    <OfflineIndicator />
+                    <MilestoneCelebration />
                   <AppLayout>
                     <Routes>
                       {/* Core */}
@@ -177,6 +198,7 @@ const App = () => (
       </ThemeProvider>
     </QueryClientProvider>
   </ErrorBoundary>
-);
+  );
+};
 
 export default App;
