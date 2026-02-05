@@ -25,8 +25,8 @@ export interface VACondition {
   id: string;
   name: string; // Full official name
   abbreviation: string; // Short display name (e.g., "PTSD")
-  category: ConditionCategory;
-  diagnosticCode?: string;
+  category: string;
+  diagnosticCode: string;
   typicalRatings?: string;
   description?: string;
   commonSecondaries: string[]; // IDs of common secondary conditions
@@ -1102,7 +1102,7 @@ export function getConditionById(id: string): VACondition | undefined {
 /**
  * Get conditions by category
  */
-export function getConditionsByCategory(category: ConditionCategory): VACondition[] {
+export function getConditionsByCategory(category: string): VACondition[] {
   return vaConditions.filter(c => c.category === category);
 }
 
