@@ -60,6 +60,7 @@ import ConditionsByConflict from "./pages/ConditionsByConflict";
 // Legal
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
+import Disclaimer from "./pages/Disclaimer";
 
 const queryClient = new QueryClient();
 
@@ -129,6 +130,7 @@ const App = () => (
                       {/* Legal */}
                       <Route path="/privacy" element={<Privacy />} />
                       <Route path="/terms" element={<Terms />} />
+                      <Route path="/disclaimer" element={<Disclaimer />} />
 
                       {/* Landing preview */}
                       <Route path="/landing-preview" element={<AppStoreLandingPage />} />
