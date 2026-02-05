@@ -115,6 +115,13 @@ export default {
         '18': '4.5rem',
         '22': '5.5rem',
       },
+      backdropBlur: {
+        'xl': '20px',
+        '2xl': '40px',
+      },
+      backgroundImage: {
+        'glass-gradient': 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%)',
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0", opacity: "0" },
