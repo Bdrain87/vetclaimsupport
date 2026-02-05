@@ -1,51 +1,87 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { vaConditions } from '@/data/vaConditions';
+import React, { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { VA_CONDITIONS } from '@/data/vaConditions';
+import { AlertCircle, Activity } from 'lucide-react';
 
 export const BodyMap = () => {
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selectedZone, setSelectedZone] = useState<string | null>(null);
+
+  // Memoizing the lookup to prevent re-render lag with 785 items
+  const relatedConditions = useMemo(() => {
+    if (!selectedZone) return [];
+    return VA_CONDITIONS.filter(c => c.category?.toLowerCase() === selectedZone.toLowerCase());
+  }, [selectedZone]);
 
   return (
-    <div className="grid lg:grid-cols-2 gap-10 glass-card p-10">
-      <div className="bg-navy-950/50 rounded-[2.5rem] p-8 border border-white/5 relative group">
-        <svg viewBox="0 0 200 500" className="h-[500px] mx-auto drop-shadow-[0_0_20px_rgba(200,166,40,0.1)]">
-          {/* Head - Tinnitus/Migraines */}
+    <div className="grid lg:grid-cols-2 gap-12 glass-card p-10 border-white/5">
+      {/* Interactive SVG Body */}
+      <div className="relative bg-navy-950/40 rounded-[3rem] p-8 border border-white/5">
+        <svg viewBox="0 0 200 500" className="h-[550px] mx-auto overflow-visible">
+          {/* Head & Neck Zone */}
           <circle
-            cx="100" cy="50" r="22"
-            role="button"
-            aria-label="Tinnitus and Head Conditions"
+            cx="100" cy="60" r="35"
+            role="button" aria-label="Head and Neck"
             tabIndex={0}
-            onClick={() => setSelected('tinnitus')}
-            onKeyDown={(e) => e.key === 'Enter' && setSelected('tinnitus')}
-            className={`cursor-pointer outline-none focus:ring-2 focus:ring-[#C8A628] ${
-              selected === 'tinnitus' ? 'fill-[#C8A628]' : 'fill-white/10'
-            }`}
+            onClick={() => setSelectedZone('ear')}
+            onKeyDown={(e) => e.key === 'Enter' && setSelectedZone('ear')}
+            className={`cursor-pointer outline-none focus:ring-2 focus:ring-[#C8A628] transition-all duration-500 ${selectedZone === 'ear' ? 'fill-[#C8A628] drop-shadow-[0_0_15px_#C8A628]' : 'fill-white/10 hover:fill-white/20'}`}
           />
-          {/* Spine - Back Strain */}
+          {/* Spine & Back Zone */}
           <rect
-            x="85" y="100" width="30" height="180" rx="15"
-            onClick={() => setSelected('lumbosacral-strain')}
-            className={`cursor-pointer transition-all duration-700 ${selected === 'lumbosacral-strain' ? 'fill-[#C8A628] drop-shadow-[0_0_10px_#C8A628]' : 'fill-white/10 hover:fill-white/20'}`}
+            x="85" y="110" width="30" height="200" rx="15"
+            role="button" aria-label="Spine and Back"
+            tabIndex={0}
+            onClick={() => setSelectedZone('musculoskeletal')}
+            onKeyDown={(e) => e.key === 'Enter' && setSelectedZone('musculoskeletal')}
+            className={`cursor-pointer outline-none focus:ring-2 focus:ring-[#C8A628] transition-all duration-500 ${selectedZone === 'musculoskeletal' ? 'fill-[#C8A628] drop-shadow-[0_0_15px_#C8A628]' : 'fill-white/10 hover:fill-white/20'}`}
           />
         </svg>
       </div>
 
-      <div className="flex flex-col justify-center">
-        <h2 className="text-4xl font-black italic text-white mb-6 uppercase tracking-tighter">Nexus <span className="text-[#C8A628]">Discovery</span></h2>
-        {selected ? (
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
-            <div className="p-6 bg-[#C8A628]/10 border border-[#C8A628]/30 rounded-3xl">
-              <h4 className="text-[#C8A628] font-black text-xs uppercase tracking-[0.3em] mb-4">Common Secondaries</h4>
-              <div className="flex flex-wrap gap-2">
-                {vaConditions.find(c => c.id === selected)?.possibleSecondaries?.map(s => (
-                  <span key={s} className="px-4 py-2 bg-[#C8A628] text-navy-950 rounded-xl font-black text-[10px] uppercase">{s}</span>
-                ))}
+      {/* Discovery Feed */}
+      <div className="flex flex-col">
+        <div className="mb-8">
+          <h2 className="text-4xl font-black italic text-white uppercase tracking-tighter">Nexus <span className="text-[#C8A628]">Discovery</span></h2>
+          <p className="text-white/40 text-xs font-bold uppercase tracking-widest mt-2">Interactive 38 CFR Mapping</p>
+        </div>
+
+        <div className="flex-1 space-y-4 overflow-y-auto max-h-[450px] pr-4 custom-scrollbar">
+          <AnimatePresence mode="wait">
+            {selectedZone ? (
+              relatedConditions.map((condition, i) => (
+                <motion.div
+                  key={condition.id}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  className="p-5 bg-white/5 border border-white/10 rounded-2xl hover:border-[#C8A628]/40 transition-all group"
+                >
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h4 className="text-white font-black text-sm uppercase tracking-tight">{condition.name}</h4>
+                      <p className="text-[#C8A628] text-[10px] font-mono mt-1">DC: {condition.diagnosticCode}</p>
+                    </div>
+                    <Activity size={16} className="text-white/20 group-hover:text-[#C8A628] transition-colors" />
+                  </div>
+                  {condition.possibleSecondaries && (
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {condition.possibleSecondaries.map(s => (
+                        <span key={s} className="px-2 py-1 bg-[#C8A628]/10 text-[#C8A628] rounded-md text-[9px] font-black uppercase tracking-tighter border border-[#C8A628]/20">
+                          + {s}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </motion.div>
+              ))
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full text-center opacity-20">
+                <AlertCircle size={48} className="mb-4" />
+                <p className="text-sm font-bold uppercase tracking-[0.2em]">Select a Body Zone<br/>to begin discovery</p>
               </div>
-            </div>
-          </motion.div>
-        ) : (
-          <p className="text-white/20 font-bold uppercase tracking-widest text-sm italic">Select a primary rating on the map to unlock secondary nexus pathways.</p>
-        )}
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );

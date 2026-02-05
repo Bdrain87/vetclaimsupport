@@ -1082,6 +1082,9 @@ export const vaConditions: VACondition[] = [
   },
 ];
 
+/** Canonical uppercase alias — used by exportEvidence & BodyMap */
+export const VA_CONDITIONS = vaConditions;
+
 // ============================================
 // UTILITY FUNCTIONS
 // ============================================

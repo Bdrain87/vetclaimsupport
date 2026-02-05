@@ -1,7 +1,19 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { LaunchSpecialCard } from '@/components/LaunchSpecialCard';
+import { BodyMap } from '@/components/BodyMap';
+import { RatingCard } from '@/components/RatingCard';
+import { PayoutDisplay } from '@/components/dashboard/PayoutDisplay';
 import { ShieldCheck, Cpu, Database, ChevronRight } from 'lucide-react';
+
+// Demo claims for the landing page preview
+const demoClaims = [
+  { id: 'ptsd', rating: 70 },
+  { id: 'tinnitus', rating: 10 },
+  { id: 'lumbosacral-strain', rating: 20 },
+  { id: 'knee-left', rating: 10 },
+  { id: 'knee-right', rating: 10 },
+];
 
 export const PlatinumLanding = () => {
   return (
@@ -58,6 +70,23 @@ export const PlatinumLanding = () => {
             <p className="text-white/40 text-sm leading-relaxed font-medium">{pillar.text}</p>
           </div>
         ))}
+      </section>
+
+      {/* Visual Discovery Section */}
+      <section id="discovery" className="py-20 px-6 max-w-7xl mx-auto">
+        <BodyMap />
+      </section>
+
+      {/* Rating Preview Section */}
+      <section className="py-20 px-6 max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <RatingCard claims={demoClaims} />
+          </div>
+          <div className="lg:col-span-1">
+            <PayoutDisplay rating={90} />
+          </div>
+        </div>
       </section>
 
       {/* Pricing Section */}

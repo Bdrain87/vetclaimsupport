@@ -1,215 +1,29 @@
-import { useEffect } from "react";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { ErrorBoundary } from "./components/ErrorBoundary";
-import { ScrollToTop } from "./components/ScrollToTop";
-import { ClaimsProvider } from "./context/ClaimsContext";
-import { EvidenceProvider } from "./context/EvidenceContext";
-import { ThemeProvider } from "./context/ThemeContext";
-import { UserConditionsProvider } from "./context/UserConditionsContext";
-import { AppLayout } from "./components/AppLayout";
-import { LiabilityAcceptanceScreen } from "./components/legal/LiabilityAcceptanceScreen";
-import { OnboardingModal } from "./components/onboarding/OnboardingModal";
-import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
-import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
-import { MilestoneCelebration } from "./components/dashboard/MilestoneCelebration";
-import { WebGateWrapper } from "./components/landing/WebGateWrapper";
-import { AppStoreLandingPage } from "./components/landing/AppStoreLandingPage";
-import { SplashScreen, useSplashScreen } from "./components/SplashScreen";
+import React from 'react';
+import { Navbar } from './components/layout/Navbar';
+import { Landing } from './pages/Landing';
+import { Toaster } from 'sonner';
 
-// Core pages
-import Dashboard from "./pages/Dashboard";
-import Settings from "./pages/Settings";
-import NotFound from "./pages/NotFound";
-
-// Unified pages (NO DUPLICATES)
-import HealthLog from "./pages/HealthLog";
-import DocumentsHub from "./pages/DocumentsHub";
-import BuddyStatements from "./pages/BuddyStatements";
-
-// Service & Medical
-import ServiceHistory from "./pages/ServiceHistory";
-import MedicalVisits from "./pages/MedicalVisits";
-import Exposures from "./pages/Exposures";
-import Migraines from "./pages/Migraines";
-import Timeline from "./pages/Timeline";
-
-// Claim Tools
-import ClaimTools from "./pages/ClaimTools";
-import ClaimChecklist from "./pages/ClaimChecklist";
-import ExamPrep from "./pages/ExamPrep";
-import CPExamPrepEnhanced from "./pages/CPExamPrepEnhanced";
-import ClaimStrategyWizard from "./pages/ClaimStrategyWizard";
-import SecondaryFinder from "./pages/SecondaryFinder";
-import NexusLetterGenerator from "./pages/NexusLetterGenerator";
-import DBQPrepSheet from "./pages/DBQPrepSheet";
-import BilateralCalculator from "./pages/BilateralCalculator";
-import ConditionGuide from "./pages/ConditionGuide";
-import ClaimJourney from "./pages/ClaimJourney";
-
-// Reference & Help
-import Reference from "./pages/Reference";
-import HelpCenter from "./pages/HelpCenter";
-import FAQ from "./pages/FAQ";
-import Glossary from "./pages/Glossary";
-import VAForms from "./pages/VAForms";
-import UserGuide from "./pages/UserGuide";
-import ConditionsByConflict from "./pages/ConditionsByConflict";
-import VAResources from "./pages/VAResources";
-
-// Legal
-import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
-import Disclaimer from "./pages/Disclaimer";
-
-// Admin/Preview
-import AppStorePreview from "./pages/AppStorePreview";
-import { ScreenshotGuide } from "./components/admin/ScreenshotGuide";
-
-const queryClient = new QueryClient();
-
-const App = () => {
-  const { isLoading, handleSplashComplete, markAppReady } = useSplashScreen(1500);
-
-  // Mark app as ready once component mounts
-  useEffect(() => {
-    // Small delay to ensure all providers are initialized
-    const timer = setTimeout(() => {
-      markAppReady();
-    }, 100);
-    return () => clearTimeout(timer);
-  }, [markAppReady]);
-
+function App() {
   return (
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider>
-          {/* Splash Screen - shows during initial load */}
-          {isLoading && (
-            <SplashScreen
-              onComplete={handleSplashComplete}
-              minimumDuration={1500}
-            />
-          )}
-          <WebGateWrapper>
-            <ClaimsProvider>
-              <EvidenceProvider>
-                <UserConditionsProvider>
-                <TooltipProvider>
-                  <Toaster />
-                  <Sonner />
-                  <BrowserRouter>
-                    <ScrollToTop />
-                    <LiabilityAcceptanceScreen />
-                    <OnboardingModal />
-                    <PWAInstallPrompt />
-                    <OfflineIndicator />
-                    <MilestoneCelebration />
-                  <AppLayout>
-                    <Routes>
-                      {/* Core */}
-                      <Route path="/" element={<Dashboard />} />
-                      <Route path="/dashboard" element={<Navigate to="/" replace />} />
-                      <Route path="/settings" element={<Settings />} />
+    <div className="min-h-screen bg-[#102039] font-sans selection:bg-[#C8A628]/30 overflow-x-hidden">
+      {/* Global Notifications for Vault Unlocks/Errors */}
+      <Toaster position="top-center" richColors />
 
-                      {/* Unified Health Log - ONE page for all health tracking */}
-                      <Route path="/health-log" element={<HealthLog />} />
-                      <Route path="/migraines" element={<Migraines />} />
+      {/* Navigation */}
+      <Navbar />
 
-                      {/* Unified Documents - ONE page for all documents */}
-                      <Route path="/docs" element={<DocumentsHub />} />
+      {/* Main View - Setting Landing as the default */}
+      <main className="relative z-10">
+        <Landing />
+      </main>
 
-                      {/* Unified Buddy Statements - ONE page */}
-                      <Route path="/buddy-statements" element={<BuddyStatements />} />
-
-                      {/* Service & Medical */}
-                      <Route path="/service-history" element={<ServiceHistory />} />
-                      <Route path="/medical-visits" element={<MedicalVisits />} />
-                      <Route path="/exposures" element={<Exposures />} />
-                      <Route path="/timeline" element={<Timeline />} />
-
-                      {/* Claim Tools */}
-                      <Route path="/claim-tools" element={<ClaimTools />} />
-                      <Route path="/checklist" element={<ClaimChecklist />} />
-                      <Route path="/exam-prep" element={<ExamPrep />} />
-                      <Route path="/cp-exam-prep" element={<CPExamPrepEnhanced />} />
-                      <Route path="/claim-strategy" element={<ClaimStrategyWizard />} />
-                      <Route path="/secondary-finder" element={<SecondaryFinder />} />
-                      <Route path="/nexus-letter" element={<NexusLetterGenerator />} />
-                      <Route path="/dbq-prep" element={<DBQPrepSheet />} />
-                      <Route path="/calculator" element={<BilateralCalculator />} />
-                      <Route path="/condition-guide" element={<ConditionGuide />} />
-                      <Route path="/journey" element={<ClaimJourney />} />
-
-                      {/* Conditions Management */}
-                      <Route path="/conditions" element={<Conditions />} />
-                      <Route path="/conditions/:id" element={<ConditionDetail />} />
-
-                      {/* Reference & Help */}
-                      <Route path="/reference" element={<Reference />} />
-                      <Route path="/va-resources" element={<VAResources />} />
-                      <Route path="/help" element={<HelpCenter />} />
-                      <Route path="/faq" element={<FAQ />} />
-                      <Route path="/glossary" element={<Glossary />} />
-                      <Route path="/va-forms" element={<VAForms />} />
-                      <Route path="/user-guide" element={<UserGuide />} />
-                      <Route path="/conditions-by-conflict" element={<ConditionsByConflict />} />
-                      <Route path="/va-resources" element={<VAResources />} />
-
-                      {/* Legal */}
-                      <Route path="/privacy" element={<Privacy />} />
-                      <Route path="/terms" element={<Terms />} />
-                      <Route path="/disclaimer" element={<Disclaimer />} />
-
-                      {/* Landing & Admin preview */}
-                      <Route path="/landing-preview" element={<AppStoreLandingPage />} />
-                      <Route path="/app-store-preview" element={<AppStorePreview />} />
-                      <Route path="/screenshot-guide" element={<ScreenshotGuide />} />
-
-                      {/* REDIRECTS - Old URLs to unified pages */}
-                      {/* Health Log redirects */}
-                      <Route path="/symptoms" element={<Navigate to="/health-log" replace />} />
-                      <Route path="/medications" element={<Navigate to="/health-log" replace />} />
-                      <Route path="/sleep" element={<Navigate to="/health-log" replace />} />
-                      <Route path="/symptom-journal" element={<Navigate to="/health-log" replace />} />
-                      <Route path="/medication-log" element={<Navigate to="/health-log" replace />} />
-                      <Route path="/sleep-tracker" element={<Navigate to="/health-log" replace />} />
-                      <Route path="/migraine-log" element={<Navigate to="/health-log" replace />} />
-
-                      {/* Documents redirects */}
-                      <Route path="/documents" element={<Navigate to="/docs" replace />} />
-                      <Route path="/evidence" element={<Navigate to="/docs" replace />} />
-                      <Route path="/claim-documents" element={<Navigate to="/docs" replace />} />
-                      <Route path="/evidence-docs" element={<Navigate to="/docs" replace />} />
-                      <Route path="/evidence-library" element={<Navigate to="/docs" replace />} />
-                      <Route path="/documents-checklist" element={<Navigate to="/docs" replace />} />
-                      <Route path="/claim-docs" element={<Navigate to="/docs" replace />} />
-
-                      {/* Journal redirects */}
-                      <Route path="/journal" element={<Navigate to="/health-log" replace />} />
-
-                      {/* Buddy Statements redirects */}
-                      <Route path="/buddy-contacts" element={<Navigate to="/buddy-statements" replace />} />
-                      <Route path="/buddy-statement-generator" element={<Navigate to="/buddy-statements" replace />} />
-                      <Route path="/buddy-statement-tool" element={<Navigate to="/buddy-statements" replace />} />
-
-                      {/* 404 */}
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </AppLayout>
-                </BrowserRouter>
-              </TooltipProvider>
-              </UserConditionsProvider>
-            </EvidenceProvider>
-          </ClaimsProvider>
-        </WebGateWrapper>
-      </ThemeProvider>
-    </QueryClientProvider>
-  </ErrorBoundary>
+      {/* Background Ambient Glow to prevent 'Flat' look */}
+      <div className="fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden -z-10">
+        <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-[#C8A628]/5 blur-[120px] rounded-full" />
+        <div className="absolute bottom-[10%] right-[10%] w-[30%] h-[30%] bg-[#C8A628]/5 blur-[100px] rounded-full" />
+      </div>
+    </div>
   );
-};
+}
 
 export default App;
