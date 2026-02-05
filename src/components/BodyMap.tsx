@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { vaConditions } from '@/data/vaConditions';
+import { VA_CONDITIONS } from '@/data/vaConditions';
 
 export const BodyMap = () => {
   const [selected, setSelected] = useState<string | null>(null);
@@ -37,7 +37,7 @@ export const BodyMap = () => {
             <div className="p-6 bg-[#C8A628]/10 border border-[#C8A628]/30 rounded-3xl">
               <h4 className="text-[#C8A628] font-black text-xs uppercase tracking-[0.3em] mb-4">Common Secondaries</h4>
               <div className="flex flex-wrap gap-2">
-                {vaConditions.find(c => c.id === selected)?.possibleSecondaries?.map(s => (
+                {VA_CONDITIONS.find(c => c.id === selected)?.possibleSecondaries?.map(s => (
                   <span key={s} className="px-4 py-2 bg-[#C8A628] text-navy-950 rounded-xl font-black text-[10px] uppercase">{s}</span>
                 ))}
               </div>

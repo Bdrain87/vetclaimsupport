@@ -1,5 +1,5 @@
 import { saveAs } from 'file-saver';
-import { vaConditions } from '@/data/vaConditions';
+import { VA_CONDITIONS } from '../data/vaConditions';
 
 export const generateVSOReport = (veteranName: string, activeClaims: any[], logs: any[]) => {
   const timestamp = new Date().toLocaleDateString();
@@ -12,7 +12,7 @@ export const generateVSOReport = (veteranName: string, activeClaims: any[], logs
 
   content += `I. ACTIVE SERVICE CONNECTIONS\n`;
   activeClaims.forEach(claim => {
-    const detail = vaConditions.find(c => c.id === claim.id);
+    const detail = VA_CONDITIONS.find(c => c.id === claim.id);
     content += `- ${claim.name} (${claim.rating || 'Pending'}%)\n`;
     content += `  Diagnostic Code: ${detail?.diagnosticCode || 'Unknown'}\n`;
     content += `  Secondary Potential: ${detail?.possibleSecondaries?.join(', ') || 'None'}\n`;

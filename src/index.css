@@ -9,18 +9,26 @@
 @tailwind components;
 @tailwind utilities;
 
-/* iOS Safe Area Insets — Notch & Home Indicator Protection */
-html {
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+/* Platinum Root — prevent white flash */
+:root {
+  color-scheme: dark;
 }
 
 body {
-  min-height: 100dvh;
-}
-
-#root {
+  margin: 0;
+  padding: 0;
+  background-color: #102039;
+  color: white;
+  -webkit-font-smoothing: antialiased;
+  padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
 }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); }
+::-webkit-scrollbar-thumb { background: rgba(200, 166, 40, 0.2); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(200, 166, 40, 0.4); }
 
 /* Service Evidence Tracker - Premium Dark Mode Design System */
 
