@@ -112,6 +112,7 @@ const navGroups: NavGroup[] = [
 // Single link items
 const singleNavItems: NavItem[] = [
   { to: '/buddy-statements', icon: Users, label: 'Buddy Statements' },
+  { to: '/va-resources', icon: BookOpen, label: 'VA Resources' },
 ];
 
 // Bottom navigation items
