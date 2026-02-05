@@ -62,6 +62,10 @@ import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Disclaimer from "./pages/Disclaimer";
 
+// Admin/Preview
+import AppStorePreview from "./pages/AppStorePreview";
+import { ScreenshotGuide } from "./components/admin/ScreenshotGuide";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -132,8 +136,10 @@ const App = () => (
                       <Route path="/terms" element={<Terms />} />
                       <Route path="/disclaimer" element={<Disclaimer />} />
 
-                      {/* Landing preview */}
+                      {/* Landing & Admin preview */}
                       <Route path="/landing-preview" element={<AppStoreLandingPage />} />
+                      <Route path="/app-store-preview" element={<AppStorePreview />} />
+                      <Route path="/screenshot-guide" element={<ScreenshotGuide />} />
 
                       {/* REDIRECTS - Old URLs to unified pages */}
                       {/* Health Log redirects */}

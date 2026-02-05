@@ -6,29 +6,29 @@ import { Shield, Clock, Briefcase, Heart } from 'lucide-react';
 const audiences = [
   {
     title: 'Active Duty',
-    description: 'Getting out soon? Start building your evidence package now. Document everything while you still have access to military medical.',
-    tagline: 'Start building your case today',
+    description: 'Getting out in 6 months? Start documenting now. Build your evidence package while you still have access to military medical records.',
+    tagline: 'Start documenting now for when you separate',
     icon: Shield,
     gradient: 'from-blue-500 to-indigo-500'
   },
   {
     title: 'BDD Filers',
-    description: '180 days to file before separation. Don\'t miss this window. Get organized, file on time, and receive benefits from Day 1.',
-    tagline: 'File before you separate, get paid Day 1',
+    description: '180-90 days before separation is your window. Get organized, file your claim before discharge, and receive compensation from Day 1.',
+    tagline: 'File before discharge, get paid Day 1',
     icon: Clock,
     gradient: 'from-emerald-500 to-teal-500'
   },
   {
     title: 'Recently Separated',
-    description: 'Just got out? Denied or underrated? Learn exactly what the VA needs to see and prepare a winning supplemental claim.',
-    tagline: 'Know exactly what the VA needs before you file',
+    description: 'Just got out? Denied or underrated? Now you\'ll understand why. Learn exactly what the VA needs and prepare a winning supplemental claim.',
+    tagline: 'Denied or underrated? Now you\'ll know why',
     icon: Briefcase,
     gradient: 'from-amber-500 to-orange-500'
   },
   {
     title: 'Long-Time Veterans',
-    description: 'Years since you served? Conditions getting worse? It\'s never too late to file or increase your rating. Your service earned this.',
-    tagline: 'It\'s never too late. Your service earned this.',
+    description: 'Been out for 20 years? Knees getting worse? Secondary conditions can dramatically increase your rating. Your service earned this.',
+    tagline: 'It\'s never too late. Secondary conditions exist.',
     icon: Heart,
     gradient: 'from-rose-500 to-pink-500'
   }
