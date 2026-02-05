@@ -1,623 +1,362 @@
-import { useState, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
-import {
-  ExternalLink, Search, BookOpen, FileText, Shield, ChevronDown, ChevronRight,
-  MapPin, Calendar, AlertTriangle, CheckCircle2, Info, Building2, Scale, Heart
-} from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ExternalLink, FileText, Shield, BookOpen } from 'lucide-react';
+import PACTActChecker from '@/components/tools/PACTActChecker';
 
-// Import data
-import { vaOfficialResources, type VAResource } from '@/data/vaResources/index';
-import { getAllDBQReferences, type DBQReference } from '@/data/vaResources/dbqReference';
-import {
-  burnPitPresumptives,
-  agentOrangePresumptives,
-  pactActLocations,
-  checkPACTActEligibility,
-  type PresumptiveCondition,
-  type EligibleLocation,
-} from '@/data/vaResources/pactAct';
-
-// Official Links Tab Component
-function OfficialLinksTab() {
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const filteredResources = useMemo(() => {
-    if (!searchQuery.trim()) return vaOfficialResources;
-    const query = searchQuery.toLowerCase();
-    return vaOfficialResources.filter(r =>
-      r.name.toLowerCase().includes(query) ||
-      r.description.toLowerCase().includes(query)
-    );
-  }, [searchQuery]);
-
-  const groupedResources = useMemo(() => {
-    const groups: Record<string, VAResource[]> = {
-      reference: [],
-      search: [],
-      forms: [],
-      benefits: [],
-      tools: [],
-    };
-    filteredResources.forEach(r => {
-      if (groups[r.category]) {
-        groups[r.category].push(r);
-      }
-    });
-    return groups;
-  }, [filteredResources]);
-
-  const categoryLabels: Record<string, { label: string; icon: React.ReactNode }> = {
-    reference: { label: 'Reference Materials', icon: <BookOpen className="h-5 w-5" /> },
-    search: { label: 'Search Tools', icon: <Search className="h-5 w-5" /> },
-    forms: { label: 'Forms & DBQs', icon: <FileText className="h-5 w-5" /> },
-    benefits: { label: 'Benefits Information', icon: <Heart className="h-5 w-5" /> },
-    tools: { label: 'VA Tools', icon: <Building2 className="h-5 w-5" /> },
-  };
-
-  return (
-    <div className="space-y-6">
-      {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder="Search resources..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-10"
-        />
-      </div>
-
-      {/* Resource Groups */}
-      {Object.entries(groupedResources).map(([category, resources]) => {
-        if (resources.length === 0) return null;
-        const { label, icon } = categoryLabels[category];
-
-        return (
-          <div key={category}>
-            <div className="flex items-center gap-2 mb-3">
-              <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                {icon}
-              </div>
-              <h3 className="font-semibold">{label}</h3>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {resources.map(resource => (
-                <a
-                  key={resource.id}
-                  href={resource.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block p-4 rounded-xl border border-border bg-card hover:border-primary/50 hover:bg-primary/5 transition-all"
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <h4 className="font-medium group-hover:text-primary transition-colors">
-                        {resource.name}
-                      </h4>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {resource.description}
-                      </p>
-                    </div>
-                    <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 mt-1" />
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-        );
-      })}
-
-      {/* Legal Footer */}
-      <Alert className="bg-muted/50">
-        <Info className="h-4 w-4" />
-        <AlertDescription className="text-xs text-muted-foreground">
-          All links go to official VA.gov and government websites. Information is public domain.
-          This app is not affiliated with the U.S. Department of Veterans Affairs.
-        </AlertDescription>
-      </Alert>
-    </div>
-  );
+interface VAResource {
+  title: string;
+  description: string;
+  url: string;
+  category: string;
 }
 
-// DBQ Guide Tab Component
-function DBQGuideTab() {
-  const [expandedDBQ, setExpandedDBQ] = useState<string | null>(null);
-  const dbqReferences = getAllDBQReferences();
+const vaOfficialResources: VAResource[] = [
+  {
+    title: 'VASRD - eCFR',
+    description: 'Official VA Schedule for Rating Disabilities',
+    url: 'https://www.ecfr.gov/current/title-38/chapter-I/part-4',
+    category: 'regulations'
+  },
+  {
+    title: 'VASRD - Cornell Law',
+    description: 'Alternative VASRD reference',
+    url: 'https://www.law.cornell.edu/cfr/text/38/part-4',
+    category: 'regulations'
+  },
+  {
+    title: 'BVA Decisions Search',
+    description: 'Search Board of Veterans Appeals decisions',
+    url: 'https://www.index.va.gov/search/va/bva.jsp',
+    category: 'decisions'
+  },
+  {
+    title: 'Public DBQ Forms',
+    description: 'Disability Benefits Questionnaire forms',
+    url: 'https://www.va.gov/find-forms/?q=dbq',
+    category: 'forms'
+  },
+  {
+    title: '2026 Compensation Rates',
+    description: 'Current VA disability compensation rates',
+    url: 'https://www.va.gov/disability/compensation-rates/',
+    category: 'rates'
+  },
+  {
+    title: 'PACT Act Information',
+    description: 'Toxic exposure presumptive conditions',
+    url: 'https://www.va.gov/resources/the-pact-act-and-your-va-benefits/',
+    category: 'pact'
+  },
+  {
+    title: 'M21-1 Adjudication Manual',
+    description: 'VA claims processing procedures',
+    url: 'https://www.knowva.ebenefits.va.gov/system/templates/selfservice/va_ssnew/help/customer/locale/en-US/portal/554400000001018',
+    category: 'manual'
+  },
+  {
+    title: 'VA Facility Locator',
+    description: 'Find VA hospitals and clinics',
+    url: 'https://www.va.gov/find-locations/',
+    category: 'facilities'
+  },
+  {
+    title: 'Claim Status Checker',
+    description: 'Check your VA claim status',
+    url: 'https://www.va.gov/claim-or-appeal-status/',
+    category: 'status'
+  }
+];
 
-  return (
-    <div className="space-y-4">
-      <p className="text-sm text-muted-foreground">
-        Disability Benefit Questionnaires (DBQs) are the forms examiners use to evaluate your conditions.
-        Understanding what they ask helps you prepare.
-      </p>
-
-      {dbqReferences.map(dbq => (
-        <Collapsible
-          key={dbq.id}
-          open={expandedDBQ === dbq.id}
-          onOpenChange={(open) => setExpandedDBQ(open ? dbq.id : null)}
-        >
-          <Card className={expandedDBQ === dbq.id ? 'border-primary/50' : ''}>
-            <CollapsibleTrigger className="w-full">
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10">
-                      <FileText className="h-5 w-5 text-primary" />
-                    </div>
-                    <div className="text-left">
-                      <CardTitle className="text-base">{dbq.name}</CardTitle>
-                      <CardDescription className="text-xs">
-                        Form {dbq.formNumber} | DC {dbq.diagnosticCodes.join(', ')}
-                      </CardDescription>
-                    </div>
-                  </div>
-                  {expandedDBQ === dbq.id ? (
-                    <ChevronDown className="h-5 w-5 text-muted-foreground" />
-                  ) : (
-                    <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                  )}
-                </div>
-              </CardHeader>
-            </CollapsibleTrigger>
-
-            <CollapsibleContent>
-              <CardContent className="pt-0 space-y-4">
-                {/* Conditions Covered */}
-                <div>
-                  <h4 className="text-sm font-medium mb-2">Conditions Covered</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {dbq.conditionsCovered.map((condition, idx) => (
-                      <Badge key={idx} variant="secondary" className="text-xs">
-                        {condition}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-
-                <Separator />
-
-                {/* Key Questions */}
-                <div>
-                  <h4 className="text-sm font-medium mb-3">Key Questions Asked</h4>
-                  <div className="space-y-3">
-                    {dbq.keyQuestions.map((q, idx) => (
-                      <div key={idx} className="p-3 rounded-lg bg-muted/50">
-                        <p className="font-medium text-sm">{q.question}</p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Why it matters: {q.whyItMatters}
-                        </p>
-                        {q.tips && q.tips.length > 0 && (
-                          <ul className="mt-2 space-y-1">
-                            {q.tips.map((tip, tipIdx) => (
-                              <li key={tipIdx} className="text-xs text-primary flex items-start gap-1">
-                                <CheckCircle2 className="h-3 w-3 mt-0.5 flex-shrink-0" />
-                                {tip}
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <Separator />
-
-                {/* What Determines Rating */}
-                <div>
-                  <h4 className="text-sm font-medium mb-2">What Determines Your Rating</h4>
-                  <ul className="space-y-1">
-                    {dbq.whatDeterminesRating.map((item, idx) => (
-                      <li key={idx} className="text-sm flex items-start gap-2">
-                        <Scale className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <Separator />
-
-                {/* Common Mistakes */}
-                <div>
-                  <h4 className="text-sm font-medium mb-2 text-destructive">Common Mistakes to Avoid</h4>
-                  <ul className="space-y-1">
-                    {dbq.commonMistakes.map((mistake, idx) => (
-                      <li key={idx} className="text-sm flex items-start gap-2 text-muted-foreground">
-                        <AlertTriangle className="h-4 w-4 text-destructive mt-0.5 flex-shrink-0" />
-                        {mistake}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Prep Tips */}
-                <Alert className="bg-green-500/10 border-green-500/30">
-                  <CheckCircle2 className="h-4 w-4 text-green-600" />
-                  <AlertDescription>
-                    <span className="font-medium text-green-700 dark:text-green-400">Preparation Tips:</span>
-                    <ul className="mt-2 space-y-1">
-                      {dbq.prepTips.map((tip, idx) => (
-                        <li key={idx} className="text-sm text-green-700 dark:text-green-400">
-                          {tip}
-                        </li>
-                      ))}
-                    </ul>
-                  </AlertDescription>
-                </Alert>
-              </CardContent>
-            </CollapsibleContent>
-          </Card>
-        </Collapsible>
-      ))}
-    </div>
-  );
-}
-
-// PACT Act Tab Component
-function PACTActTab() {
-  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [eligibilityResult, setEligibilityResult] = useState<ReturnType<typeof checkPACTActEligibility> | null>(null);
-  const [activeSection, setActiveSection] = useState<'burn-pit' | 'agent-orange' | 'checker'>('burn-pit');
-
-  const handleCheckEligibility = () => {
-    if (selectedLocations.length === 0 || !startDate || !endDate) return;
-    const result = checkPACTActEligibility(
-      selectedLocations,
-      new Date(startDate),
-      new Date(endDate)
-    );
-    setEligibilityResult(result);
-  };
-
-  const handleLocationToggle = (locationId: string) => {
-    setSelectedLocations(prev =>
-      prev.includes(locationId)
-        ? prev.filter(l => l !== locationId)
-        : [...prev, locationId]
-    );
-    setEligibilityResult(null);
-  };
-
-  const renderConditionsList = (conditions: PresumptiveCondition[], title: string) => (
-    <div>
-      <h4 className="font-medium mb-3">{title}</h4>
-      <div className="grid gap-2 sm:grid-cols-2">
-        {conditions.map(condition => (
-          <div
-            key={condition.id}
-            className="p-3 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors"
-          >
-            <div className="flex items-start justify-between gap-2">
-              <div>
-                <p className="font-medium text-sm">{condition.name}</p>
-                <p className="text-xs text-muted-foreground mt-1">{condition.description}</p>
-              </div>
-              {condition.addedDate && (
-                <Badge variant="outline" className="text-xs whitespace-nowrap">
-                  Added {new Date(condition.addedDate).getFullYear()}
-                </Badge>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="space-y-6">
-      {/* Section Tabs */}
-      <div className="flex flex-wrap gap-2">
-        <Button
-          variant={activeSection === 'burn-pit' ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => setActiveSection('burn-pit')}
-        >
-          Burn Pit Conditions ({burnPitPresumptives.length})
-        </Button>
-        <Button
-          variant={activeSection === 'agent-orange' ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => setActiveSection('agent-orange')}
-        >
-          Agent Orange ({agentOrangePresumptives.length})
-        </Button>
-        <Button
-          variant={activeSection === 'checker' ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => setActiveSection('checker')}
-        >
-          <CheckCircle2 className="h-4 w-4 mr-1" />
-          Check Eligibility
-        </Button>
-      </div>
-
-      {/* Burn Pit Section */}
-      {activeSection === 'burn-pit' && (
-        <div className="space-y-4">
-          <Alert className="bg-amber-500/10 border-amber-500/30">
-            <Shield className="h-4 w-4 text-amber-600" />
-            <AlertDescription className="text-amber-700 dark:text-amber-300">
-              The PACT Act added {burnPitPresumptives.length} conditions as presumptive for veterans who served
-              in covered locations. If you have one of these conditions, the VA will presume it was caused by service.
-            </AlertDescription>
-          </Alert>
-
-          {renderConditionsList(
-            burnPitPresumptives.filter(c => !c.name.toLowerCase().includes('cancer')),
-            'Respiratory Conditions'
-          )}
-          <Separator />
-          {renderConditionsList(
-            burnPitPresumptives.filter(c => c.name.toLowerCase().includes('cancer')),
-            'Cancers'
-          )}
-        </div>
-      )}
-
-      {/* Agent Orange Section */}
-      {activeSection === 'agent-orange' && (
-        <div className="space-y-4">
-          <Alert className="bg-green-500/10 border-green-500/30">
-            <Shield className="h-4 w-4 text-green-600" />
-            <AlertDescription className="text-green-700 dark:text-green-300">
-              Veterans who served in Vietnam, Thailand (at specific bases), Korea (DMZ), and other locations
-              between 1962-1975 may be eligible for Agent Orange presumptive conditions.
-            </AlertDescription>
-          </Alert>
-
-          {renderConditionsList(agentOrangePresumptives, 'Agent Orange Presumptive Conditions')}
-        </div>
-      )}
-
-      {/* Eligibility Checker Section */}
-      {activeSection === 'checker' && (
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <MapPin className="h-5 w-5" />
-                PACT Act Eligibility Checker
-              </CardTitle>
-              <CardDescription>
-                Select your service locations and dates to check if you qualify for presumptive conditions.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Service Dates */}
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="start-date">Service Start Date</Label>
-                  <Input
-                    id="start-date"
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => {
-                      setStartDate(e.target.value);
-                      setEligibilityResult(null);
-                    }}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="end-date">Service End Date</Label>
-                  <Input
-                    id="end-date"
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => {
-                      setEndDate(e.target.value);
-                      setEligibilityResult(null);
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* Location Selection */}
-              <div className="space-y-3">
-                <Label>Service Locations (select all that apply)</Label>
-
-                {/* Burn Pit Locations */}
-                <div>
-                  <p className="text-sm text-muted-foreground mb-2">Middle East / Africa (Burn Pits)</p>
-                  <div className="flex flex-wrap gap-2">
-                    {pactActLocations
-                      .filter(l => l.exposureType === 'burn-pit')
-                      .map(location => (
-                        <Button
-                          key={location.id}
-                          variant={selectedLocations.includes(location.id) ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={() => handleLocationToggle(location.id)}
-                        >
-                          {location.name}
-                        </Button>
-                      ))}
-                  </div>
-                </div>
-
-                {/* Agent Orange Locations */}
-                <div>
-                  <p className="text-sm text-muted-foreground mb-2">Southeast Asia (Agent Orange)</p>
-                  <div className="flex flex-wrap gap-2">
-                    {pactActLocations
-                      .filter(l => l.exposureType === 'agent-orange')
-                      .map(location => (
-                        <Button
-                          key={location.id}
-                          variant={selectedLocations.includes(location.id) ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={() => handleLocationToggle(location.id)}
-                        >
-                          {location.name}
-                        </Button>
-                      ))}
-                  </div>
-                </div>
-              </div>
-
-              <Button
-                onClick={handleCheckEligibility}
-                disabled={selectedLocations.length === 0 || !startDate || !endDate}
-                className="w-full"
-              >
-                <CheckCircle2 className="h-4 w-4 mr-2" />
-                Check My Eligibility
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Results */}
-          {eligibilityResult && (
-            <Card className={eligibilityResult.isEligible ? 'border-green-500/50 bg-green-500/5' : 'border-destructive/50 bg-destructive/5'}>
-              <CardHeader>
-                <CardTitle className={`text-lg flex items-center gap-2 ${eligibilityResult.isEligible ? 'text-green-600' : 'text-destructive'}`}>
-                  {eligibilityResult.isEligible ? (
-                    <>
-                      <CheckCircle2 className="h-5 w-5" />
-                      You May Be Eligible!
-                    </>
-                  ) : (
-                    <>
-                      <AlertTriangle className="h-5 w-5" />
-                      No Matches Found
-                    </>
-                  )}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {eligibilityResult.isEligible ? (
-                  <>
-                    <div>
-                      <h4 className="font-medium mb-2">Matched Locations</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {eligibilityResult.matchedLocations.map(loc => (
-                          <Badge key={loc.id} className="bg-green-500">
-                            <MapPin className="h-3 w-3 mr-1" />
-                            {loc.name}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4 className="font-medium mb-2">Exposure Types</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {eligibilityResult.exposureTypes.map(type => (
-                          <Badge key={type} variant="outline">
-                            {type === 'burn-pit' ? 'Burn Pit Exposure' : 'Agent Orange Exposure'}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4 className="font-medium mb-2">
-                        Presumptive Conditions You Qualify For ({eligibilityResult.eligibleConditions.length})
-                      </h4>
-                      <div className="grid gap-2 sm:grid-cols-2 max-h-64 overflow-y-auto">
-                        {eligibilityResult.eligibleConditions.map(condition => (
-                          <div key={condition.id} className="p-2 rounded bg-green-500/10 text-sm">
-                            {condition.name}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <Alert className="bg-primary/10 border-primary/30">
-                      <Info className="h-4 w-4" />
-                      <AlertDescription>
-                        <strong>Next Step:</strong> File your claim as soon as possible.
-                        The VA cannot grant an effective date earlier than your filing date,
-                        so filing now maximizes your potential back pay.
-                      </AlertDescription>
-                    </Alert>
-                  </>
-                ) : (
-                  <p className="text-muted-foreground">
-                    Your service dates and locations did not match our database of covered areas.
-                    However, you may still be eligible through individual claims. Consult with a
-                    VSO or VA for personalized guidance.
-                  </p>
-                )}
-              </CardContent>
-            </Card>
-          )}
-        </div>
-      )}
-
-      {/* Legal Footer */}
-      <Alert className="bg-muted/50">
-        <Info className="h-4 w-4" />
-        <AlertDescription className="text-xs text-muted-foreground">
-          Information sourced from Public Law 117-168 (PACT Act) and VA.gov.
-          This tool provides general information only and does not constitute legal advice.
-          Consult with a VA-accredited representative for personalized guidance.
-        </AlertDescription>
-      </Alert>
-    </div>
-  );
-}
-
-// Main VA Resources Page
 export default function VAResources() {
+  const [activeTab, setActiveTab] = useState('links');
+
   return (
-    <div className="container max-w-4xl mx-auto py-6 px-4 space-y-6">
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="p-2 rounded-xl bg-primary/10">
-          <BookOpen className="h-6 w-6 text-primary" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold">VA Resources</h1>
-          <p className="text-muted-foreground text-sm">
-            Official links, DBQ guides, and PACT Act information
-          </p>
-        </div>
+    <div className="max-w-6xl mx-auto">
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-foreground mb-2">VA Resources</h1>
+        <p className="text-muted-foreground">
+          Official VA resources, DBQ guides, and PACT Act information
+        </p>
       </div>
 
-      {/* Tabs */}
-      <Tabs defaultValue="official-links" className="w-full">
-        <TabsList className="w-full grid grid-cols-3">
-          <TabsTrigger value="official-links" className="text-xs sm:text-sm">
-            <ExternalLink className="h-4 w-4 mr-1 hidden sm:inline" />
-            Official Links
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-3 mb-6">
+          <TabsTrigger value="links" className="flex items-center gap-2">
+            <ExternalLink className="w-4 h-4" />
+            <span className="hidden sm:inline">Official Links</span>
+            <span className="sm:hidden">Links</span>
           </TabsTrigger>
-          <TabsTrigger value="dbq-guide" className="text-xs sm:text-sm">
-            <FileText className="h-4 w-4 mr-1 hidden sm:inline" />
-            DBQ Guide
+          <TabsTrigger value="dbq" className="flex items-center gap-2">
+            <FileText className="w-4 h-4" />
+            <span className="hidden sm:inline">DBQ Guide</span>
+            <span className="sm:hidden">DBQ</span>
           </TabsTrigger>
-          <TabsTrigger value="pact-act" className="text-xs sm:text-sm">
-            <Shield className="h-4 w-4 mr-1 hidden sm:inline" />
-            PACT Act
+          <TabsTrigger value="pact" className="flex items-center gap-2">
+            <Shield className="w-4 h-4" />
+            <span className="hidden sm:inline">PACT Act</span>
+            <span className="sm:hidden">PACT</span>
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="official-links" className="mt-6">
-          <OfficialLinksTab />
+        {/* Official Links Tab */}
+        <TabsContent value="links">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {vaOfficialResources.map((resource, index) => (
+              <Card key={index} className="hover:border-primary/50 transition-colors">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg flex items-center justify-between">
+                    {resource.title}
+                    <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="mb-3">
+                    {resource.description}
+                  </CardDescription>
+                  <a
+                    href={resource.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:text-primary/80 text-sm font-medium"
+                  >
+                    Visit Resource →
+                  </a>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <div className="mt-6 p-4 bg-muted/30 rounded-lg border border-border">
+            <p className="text-xs text-muted-foreground">
+              All resources link to official U.S. government websites.
+              Information is public domain and provided for educational purposes.
+            </p>
+          </div>
         </TabsContent>
 
-        <TabsContent value="dbq-guide" className="mt-6">
-          <DBQGuideTab />
+        {/* DBQ Guide Tab */}
+        <TabsContent value="dbq">
+          <div className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BookOpen className="w-5 h-5 text-primary" />
+                  DBQ Quick Reference
+                </CardTitle>
+                <CardDescription>
+                  Key information for common Disability Benefits Questionnaires
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-4 md:grid-cols-2">
+                  {/* PTSD DBQ */}
+                  <div className="p-4 bg-muted/30 rounded-lg border border-border">
+                    <h3 className="font-semibold text-foreground mb-2">PTSD (21-0960P-3)</h3>
+                    <p className="text-sm text-muted-foreground mb-2">Mental Health Assessment</p>
+                    <div className="text-xs text-muted-foreground">
+                      <p className="font-medium text-foreground">Key Questions:</p>
+                      <ul className="list-disc list-inside mt-1 space-y-1">
+                        <li>Stressor verification</li>
+                        <li>Symptom frequency and severity</li>
+                        <li>Occupational impairment level</li>
+                        <li>Social functioning impact</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Back/Spine DBQ */}
+                  <div className="p-4 bg-muted/30 rounded-lg border border-border">
+                    <h3 className="font-semibold text-foreground mb-2">Back/Spine (21-0960M-14)</h3>
+                    <p className="text-sm text-muted-foreground mb-2">Thoracolumbar Spine</p>
+                    <div className="text-xs text-muted-foreground">
+                      <p className="font-medium text-foreground">Key Measurements:</p>
+                      <ul className="list-disc list-inside mt-1 space-y-1">
+                        <li>Range of motion (flexion, extension)</li>
+                        <li>Pain on movement</li>
+                        <li>Flare-up frequency</li>
+                        <li>Incapacitating episodes</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Sleep Apnea DBQ */}
+                  <div className="p-4 bg-muted/30 rounded-lg border border-border">
+                    <h3 className="font-semibold text-foreground mb-2">Sleep Apnea (21-0960C-8)</h3>
+                    <p className="text-sm text-muted-foreground mb-2">Sleep Study Required</p>
+                    <div className="text-xs text-muted-foreground">
+                      <p className="font-medium text-foreground">Rating Criteria:</p>
+                      <ul className="list-disc list-inside mt-1 space-y-1">
+                        <li>100%: Chronic respiratory failure</li>
+                        <li>50%: Requires CPAP</li>
+                        <li>30%: Persistent daytime hypersomnolence</li>
+                        <li>0%: Asymptomatic with treatment</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Migraines DBQ */}
+                  <div className="p-4 bg-muted/30 rounded-lg border border-border">
+                    <h3 className="font-semibold text-foreground mb-2">Migraines (21-0960I-6)</h3>
+                    <p className="text-sm text-muted-foreground mb-2">Headache Assessment</p>
+                    <div className="text-xs text-muted-foreground">
+                      <p className="font-medium text-foreground">Rating Criteria:</p>
+                      <ul className="list-disc list-inside mt-1 space-y-1">
+                        <li>50%: Very frequent, completely prostrating</li>
+                        <li>30%: Prostrating attacks monthly</li>
+                        <li>10%: Prostrating attacks 1 in 2 months</li>
+                        <li>0%: Less frequent attacks</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Tinnitus DBQ */}
+                  <div className="p-4 bg-muted/30 rounded-lg border border-border">
+                    <h3 className="font-semibold text-foreground mb-2">Tinnitus (21-0960N-2)</h3>
+                    <p className="text-sm text-muted-foreground mb-2">Hearing Assessment</p>
+                    <div className="text-xs text-muted-foreground">
+                      <p className="font-medium text-foreground">Key Points:</p>
+                      <ul className="list-disc list-inside mt-1 space-y-1">
+                        <li>Maximum rating: 10%</li>
+                        <li>Must be recurrent</li>
+                        <li>Document impact on concentration</li>
+                        <li>Often secondary to hearing loss</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Knee DBQ */}
+                  <div className="p-4 bg-muted/30 rounded-lg border border-border">
+                    <h3 className="font-semibold text-foreground mb-2">Knee (21-0960M-9)</h3>
+                    <p className="text-sm text-muted-foreground mb-2">Joint Assessment</p>
+                    <div className="text-xs text-muted-foreground">
+                      <p className="font-medium text-foreground">Key Measurements:</p>
+                      <ul className="list-disc list-inside mt-1 space-y-1">
+                        <li>Flexion range of motion</li>
+                        <li>Extension limitation</li>
+                        <li>Instability testing</li>
+                        <li>Meniscal conditions</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
 
-        <TabsContent value="pact-act" className="mt-6">
-          <PACTActTab />
+        {/* PACT Act Tab */}
+        <TabsContent value="pact">
+          <div className="space-y-6">
+            {/* PACT Act Checker Component */}
+            <PACTActChecker />
+
+            {/* Presumptive Conditions List */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-success" />
+                  Presumptive Conditions
+                </CardTitle>
+                <CardDescription>
+                  Conditions presumed service-connected under the PACT Act
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-4 md:grid-cols-2">
+                  {/* Burn Pit Conditions */}
+                  <div className="p-4 bg-muted/30 rounded-lg border border-border">
+                    <h3 className="font-semibold text-warning mb-3">
+                      Burn Pit / Toxic Exposure (23+ Conditions)
+                    </h3>
+                    <ul className="text-sm text-muted-foreground space-y-1">
+                      <li>Asthma (diagnosed during/after service)</li>
+                      <li>Rhinitis</li>
+                      <li>Sinusitis (including rhinosinusitis)</li>
+                      <li>Pulmonary fibrosis</li>
+                      <li>Constrictive bronchiolitis</li>
+                      <li>COPD</li>
+                      <li>Pleural disease</li>
+                      <li>Lung cancer</li>
+                      <li>Head/neck cancers</li>
+                      <li>Respiratory cancers</li>
+                      <li>Gastrointestinal cancers</li>
+                      <li>Reproductive cancers</li>
+                      <li>Lymphoma</li>
+                      <li>Kidney cancer</li>
+                      <li>Brain cancer</li>
+                      <li>Melanoma</li>
+                      <li>Pancreatic cancer</li>
+                      <li>And more...</li>
+                    </ul>
+                  </div>
+
+                  {/* Agent Orange Conditions */}
+                  <div className="p-4 bg-muted/30 rounded-lg border border-border">
+                    <h3 className="font-semibold text-orange-500 mb-3">
+                      Agent Orange (Vietnam, Thailand, Korea)
+                    </h3>
+                    <ul className="text-sm text-muted-foreground space-y-1">
+                      <li>AL Amyloidosis</li>
+                      <li>Bladder cancer</li>
+                      <li>Chronic B-cell leukemias</li>
+                      <li>Chloracne</li>
+                      <li>Diabetes mellitus type 2</li>
+                      <li>Hodgkin's disease</li>
+                      <li>Hypothyroidism</li>
+                      <li>Ischemic heart disease</li>
+                      <li>Multiple myeloma</li>
+                      <li>Non-Hodgkin's lymphoma</li>
+                      <li>Parkinson's disease</li>
+                      <li>Peripheral neuropathy</li>
+                      <li>Porphyria cutanea tarda</li>
+                      <li>Prostate cancer</li>
+                      <li>Respiratory cancers</li>
+                      <li>Soft tissue sarcomas</li>
+                      <li>And more...</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="mt-4 p-3 bg-success/10 border border-success/30 rounded-lg">
+                  <p className="text-sm text-success">
+                    <strong>Important:</strong> If you served in a qualifying location during the specified dates
+                    and have one of these conditions, you may be eligible for presumptive service connection
+                    without needing to prove a direct link to your service.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Eligible Locations */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Eligible Service Locations</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3 text-sm">
+                  <div className="p-2 bg-muted/30 rounded border border-border">Afghanistan (2001-present)</div>
+                  <div className="p-2 bg-muted/30 rounded border border-border">Iraq (2003-present)</div>
+                  <div className="p-2 bg-muted/30 rounded border border-border">Kuwait (1990-present)</div>
+                  <div className="p-2 bg-muted/30 rounded border border-border">Saudi Arabia (1990-present)</div>
+                  <div className="p-2 bg-muted/30 rounded border border-border">Bahrain (1990-present)</div>
+                  <div className="p-2 bg-muted/30 rounded border border-border">Qatar (1990-present)</div>
+                  <div className="p-2 bg-muted/30 rounded border border-border">UAE (1990-present)</div>
+                  <div className="p-2 bg-muted/30 rounded border border-border">Oman (1990-present)</div>
+                  <div className="p-2 bg-muted/30 rounded border border-border">Djibouti (2001-present)</div>
+                  <div className="p-2 bg-muted/30 rounded border border-border">Egypt (1990-present)</div>
+                  <div className="p-2 bg-muted/30 rounded border border-border">Jordan (1990-present)</div>
+                  <div className="p-2 bg-muted/30 rounded border border-border">Lebanon (1990-present)</div>
+                  <div className="p-2 bg-muted/30 rounded border border-border">Syria (1990-present)</div>
+                  <div className="p-2 bg-muted/30 rounded border border-border">Yemen (1990-present)</div>
+                  <div className="p-2 bg-muted/30 rounded border border-border">Somalia (1990-present)</div>
+                  <div className="p-2 bg-muted/30 rounded border border-border">Uzbekistan (2001-present)</div>
+                  <div className="p-2 bg-muted/30 rounded border border-border">Vietnam (1962-1975)</div>
+                  <div className="p-2 bg-muted/30 rounded border border-border">Thailand (1962-1976)</div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
       </Tabs>
     </div>

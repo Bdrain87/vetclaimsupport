@@ -9,7 +9,7 @@ export function CTASection() {
   const appStoreUrl = 'https://apps.apple.com/app/vet-claim-support';
 
   return (
-    <section ref={ref} className="py-24 sm:py-32 bg-gradient-to-b from-[#14192b] via-[#1a2236] to-[#1e2844] relative overflow-hidden">
+    <section ref={ref} className="py-24 sm:py-32 bg-gradient-to-b from-[#14192b] via-[#192136] to-[#1e2844] relative overflow-hidden">
       {/* Ambient effects */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[150px]" />
       <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[#C9A227]/10 rounded-full blur-[120px]" />

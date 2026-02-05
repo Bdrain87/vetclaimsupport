@@ -145,7 +145,7 @@
 .stat-value {
   font-size: clamp(2.5rem, 5vw, 3.5rem);
   font-weight: 700;
-  color: var(--landing-primary);
+  color: #14192b;
   line-height: 1;
 }
 

@@ -21,7 +21,7 @@ export function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#14192b] via-[#1a2236] to-[#1e2844]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#14192b] via-[#192136] to-[#1e2844]" />
 
       {/* Subtle pattern overlay */}
       <div className="absolute inset-0 opacity-[0.03]" style={{

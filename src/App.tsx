@@ -60,10 +60,6 @@ import UserGuide from "./pages/UserGuide";
 import ConditionsByConflict from "./pages/ConditionsByConflict";
 import VAResources from "./pages/VAResources";
 
-// Conditions Management
-import Conditions from "./pages/Conditions";
-import ConditionDetail from "./pages/ConditionDetail";
-
 // Legal
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
@@ -161,6 +157,7 @@ const App = () => {
                       <Route path="/va-forms" element={<VAForms />} />
                       <Route path="/user-guide" element={<UserGuide />} />
                       <Route path="/conditions-by-conflict" element={<ConditionsByConflict />} />
+                      <Route path="/va-resources" element={<VAResources />} />
 
                       {/* Legal */}
                       <Route path="/privacy" element={<Privacy />} />

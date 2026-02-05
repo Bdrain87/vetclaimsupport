@@ -1,29 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
-  <!-- Background for maskable icon support -->
-  <rect width="512" height="512" fill="#14192b"/>
+  <!-- Background -->
+  <rect width="512" height="512" rx="64" fill="#14192b"/>
 
-  <!-- Shield body - navy -->
+  <!-- Shield body -->
   <path
-    d="M256 48L80 112V224C80 319.12 153.12 404.64 256 432C358.88 404.64 432 319.12 432 224V112L256 48Z"
+    d="M256 64L64 128V256C64 384.24 139.36 498.56 256 512C372.64 498.56 448 384.24 448 256V128L256 64Z"
     fill="#1e2844"
     stroke="#C9A227"
-    stroke-width="8"
+    stroke-width="12"
   />
 
-  <!-- Inner shield highlight -->
+  <!-- Checkmark -->
   <path
-    d="M256 80L112 136V224C112 303.04 174.24 376.72 256 400C337.76 376.72 400 303.04 400 224V136L256 80Z"
-    fill="#1e2844"
-    stroke="#C9A227"
-    stroke-width="3"
-    stroke-opacity="0.5"
-  />
-
-  <!-- Checkmark - green -->
-  <path
-    d="M192 256L240 304L320 208"
+    d="M192 272L232 312L328 216"
     stroke="#10B981"
-    stroke-width="24"
+    stroke-width="28"
     stroke-linecap="round"
     stroke-linejoin="round"
     fill="none"
