@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { exportBuddyContacts } from '@/utils/pdfExport';
+import { exportBuddyContacts, exportBuddyStatement } from '@/utils/pdfExport';
 import { DocumentUploader } from '@/components/documents/DocumentUploader';
 import { useToast } from '@/hooks/use-toast';
 import type { BuddyContact } from '@/types/claims';
@@ -188,18 +188,10 @@ Date: ${today}`;
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const downloadAsText = () => {
+  const downloadAsPDF = () => {
     const statement = generateStatement();
-    const blob = new Blob([statement], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `buddy-statement-${statementData.witnessName.replace(/\s+/g, '-').toLowerCase() || 'draft'}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    toast({ title: 'Downloaded', description: 'Statement saved as text file.' });
+    exportBuddyStatement(statement, statementData.witnessName);
+    toast({ title: 'Downloaded', description: 'Statement saved as PDF.' });
   };
 
   const renderStep = () => {
@@ -379,9 +371,9 @@ Date: ${today}`;
                 {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                 {copied ? 'Copied!' : 'Copy to Clipboard'}
               </Button>
-              <Button variant="outline" onClick={downloadAsText} className="flex-1 gap-2">
+              <Button variant="outline" onClick={downloadAsPDF} className="flex-1 gap-2">
                 <Download className="h-4 w-4" />
-                Download as Text
+                Download PDF
               </Button>
             </div>
           </div>

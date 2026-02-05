@@ -30,6 +30,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { exportClaimStrategy } from '@/utils/pdfExport';
 
 interface ServiceInfo {
   branch: string;
@@ -378,17 +379,8 @@ Consult with an accredited Veterans Service Officer (VSO) or VA-accredited
 attorney for official guidance on your specific claim.
     `.trim();
 
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `claim-strategy-${new Date().toISOString().split('T')[0]}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-
-    toast({ title: 'Strategy downloaded', description: 'Check your downloads folder.' });
+    exportClaimStrategy(content);
+    toast({ title: 'Strategy downloaded as PDF', description: 'Check your downloads folder.' });
   };
 
   const renderStep = () => {

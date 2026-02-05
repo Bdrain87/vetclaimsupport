@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download, FileText, Users } from 'lucide-react';
+import { exportBuddyStatementTemplate } from '@/utils/pdfExport';
 
 const templateContent = `BUDDY/LAY STATEMENT
 In Support of VA Disability Claim
@@ -109,16 +110,8 @@ NOTE: This statement may be submitted with the veteran's VA disability claim.
 `;
 
 export function BuddyStatementTemplate() {
-  const handleDownloadText = () => {
-    const blob = new Blob([templateContent], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'Buddy_Statement_Template.txt';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  const handleDownloadPDF = () => {
+    exportBuddyStatementTemplate(templateContent, 'General Template');
   };
 
   return (
@@ -183,9 +176,9 @@ export function BuddyStatementTemplate() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3">
-          <Button onClick={handleDownloadText} className="flex-1">
+          <Button onClick={handleDownloadPDF} className="flex-1">
             <Download className="h-4 w-4 mr-2" />
-            Download Template (.txt)
+            Download Template (PDF)
           </Button>
         </div>
 

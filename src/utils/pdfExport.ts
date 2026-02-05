@@ -1571,3 +1571,214 @@ export const exportSleepLog = (entries: any[]) => {
   addPDFFooter(doc);
   doc.save('sleep-log.pdf');
 };
+
+// Buddy Statement Export (Generated Statement)
+export const exportBuddyStatement = (statementText: string, witnessName: string) => {
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+
+  let yPos = addPDFHeader(doc, {
+    title: 'Buddy/Lay Statement',
+    subtitle: 'Witness Statement in Support of VA Disability Claim'
+  });
+
+  yPos = drawInfoBox(doc, 'This document should be reviewed, printed, signed, and dated by the witness. The signed statement can then be submitted with VA Form 21-10210 (Lay/Witness Statement).', yPos);
+
+  // Statement content
+  doc.setFontSize(10);
+  doc.setTextColor(...colors.secondary);
+  doc.setFont('helvetica', 'normal');
+
+  const lines = doc.splitTextToSize(statementText, pageWidth - 40);
+
+  lines.forEach((line: string) => {
+    yPos = checkPageBreak(doc, yPos, 8);
+    doc.text(line, 20, yPos);
+    yPos += 5;
+  });
+
+  // Signature block
+  yPos = checkPageBreak(doc, yPos, 40);
+  yPos += 10;
+
+  doc.setDrawColor(...colors.border);
+  doc.line(20, yPos, 100, yPos);
+  yPos += 5;
+  doc.setFontSize(9);
+  doc.setTextColor(...colors.muted);
+  doc.text('Signature', 20, yPos);
+
+  yPos += 15;
+  doc.line(20, yPos, 100, yPos);
+  yPos += 5;
+  doc.text('Printed Name', 20, yPos);
+
+  yPos += 15;
+  doc.line(20, yPos, 80, yPos);
+  yPos += 5;
+  doc.text('Date', 20, yPos);
+
+  addPDFFooter(doc);
+  doc.save(`buddy-statement-${witnessName.replace(/\s+/g, '-').toLowerCase() || 'draft'}.pdf`);
+};
+
+// Stressor Statement Export (PTSD)
+export const exportStressorStatement = (statementText: string) => {
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+
+  let yPos = addPDFHeader(doc, {
+    title: 'Stressor Statement',
+    subtitle: 'PTSD Stressor Documentation for VA Claims'
+  });
+
+  yPos = drawInfoBox(doc, 'This statement documents traumatic events for PTSD claims. Print, sign, and date before submitting. Keep a copy for your records.', yPos);
+
+  doc.setFontSize(10);
+  doc.setTextColor(...colors.secondary);
+  doc.setFont('helvetica', 'normal');
+
+  const lines = doc.splitTextToSize(statementText, pageWidth - 40);
+
+  lines.forEach((line: string) => {
+    yPos = checkPageBreak(doc, yPos, 8);
+    doc.text(line, 20, yPos);
+    yPos += 5;
+  });
+
+  addPDFFooter(doc);
+  doc.save('stressor-statement.pdf');
+};
+
+// Personal Statement Export
+export const exportPersonalStatement = (statementText: string, conditionName?: string) => {
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+
+  let yPos = addPDFHeader(doc, {
+    title: 'Personal Statement',
+    subtitle: conditionName ? `Statement in Support of Claim: ${conditionName}` : 'Statement in Support of VA Disability Claim'
+  });
+
+  yPos = drawInfoBox(doc, 'This personal statement describes how your condition affects daily life. Print, sign, and date before submitting to the VA.', yPos);
+
+  doc.setFontSize(10);
+  doc.setTextColor(...colors.secondary);
+  doc.setFont('helvetica', 'normal');
+
+  const lines = doc.splitTextToSize(statementText, pageWidth - 40);
+
+  lines.forEach((line: string) => {
+    yPos = checkPageBreak(doc, yPos, 8);
+    doc.text(line, 20, yPos);
+    yPos += 5;
+  });
+
+  addPDFFooter(doc);
+  doc.save(`personal-statement-${conditionName?.replace(/\s+/g, '-').toLowerCase() || 'claim'}.pdf`);
+};
+
+// Nexus Letter Template Export
+export const exportNexusLetterTemplate = (statementText: string, conditionName?: string) => {
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+
+  let yPos = addPDFHeader(doc, {
+    title: 'Nexus Letter Template',
+    subtitle: conditionName ? `Medical Opinion Template: ${conditionName}` : 'Medical Opinion Template for VA Claims'
+  });
+
+  yPos = drawInfoBox(doc, 'IMPORTANT: This is a TEMPLATE only. A licensed medical professional must review, customize, and sign this letter on their letterhead for it to be valid for VA claims.', yPos);
+
+  doc.setFontSize(10);
+  doc.setTextColor(...colors.secondary);
+  doc.setFont('helvetica', 'normal');
+
+  const lines = doc.splitTextToSize(statementText, pageWidth - 40);
+
+  lines.forEach((line: string) => {
+    yPos = checkPageBreak(doc, yPos, 8);
+    doc.text(line, 20, yPos);
+    yPos += 5;
+  });
+
+  addPDFFooter(doc);
+  doc.save(`nexus-letter-template-${conditionName?.replace(/\s+/g, '-').toLowerCase() || 'condition'}.pdf`);
+};
+
+// Claim Strategy Export
+export const exportClaimStrategy = (statementText: string) => {
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+
+  let yPos = addPDFHeader(doc, {
+    title: 'Claim Strategy Plan',
+    subtitle: 'Personalized VA Disability Claim Strategy'
+  });
+
+  yPos = drawInfoBox(doc, 'This strategy plan is for personal planning purposes only. Consult with an accredited VSO before filing your claims.', yPos);
+
+  doc.setFontSize(10);
+  doc.setTextColor(...colors.secondary);
+  doc.setFont('helvetica', 'normal');
+
+  const lines = doc.splitTextToSize(statementText, pageWidth - 40);
+
+  lines.forEach((line: string) => {
+    yPos = checkPageBreak(doc, yPos, 8);
+    doc.text(line, 20, yPos);
+    yPos += 5;
+  });
+
+  addPDFFooter(doc);
+  doc.save(`claim-strategy-${new Date().toISOString().split('T')[0]}.pdf`);
+};
+
+// Buddy Statement Template Export
+export const exportBuddyStatementTemplate = (templateText: string, templateTitle?: string) => {
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+
+  let yPos = addPDFHeader(doc, {
+    title: 'Buddy Statement Template',
+    subtitle: templateTitle || 'Witness Statement Template for VA Claims'
+  });
+
+  yPos = drawInfoBox(doc, 'This is a template for buddy/lay statements. The witness should fill in the specific details, print, sign, and date before submission.', yPos);
+
+  doc.setFontSize(10);
+  doc.setTextColor(...colors.secondary);
+  doc.setFont('helvetica', 'normal');
+
+  const lines = doc.splitTextToSize(templateText, pageWidth - 40);
+
+  lines.forEach((line: string) => {
+    yPos = checkPageBreak(doc, yPos, 8);
+    doc.text(line, 20, yPos);
+    yPos += 5;
+  });
+
+  // Signature block
+  yPos = checkPageBreak(doc, yPos, 40);
+  yPos += 10;
+
+  doc.setDrawColor(...colors.border);
+  doc.line(20, yPos, 100, yPos);
+  yPos += 5;
+  doc.setFontSize(9);
+  doc.setTextColor(...colors.muted);
+  doc.text('Signature', 20, yPos);
+
+  yPos += 15;
+  doc.line(20, yPos, 100, yPos);
+  yPos += 5;
+  doc.text('Printed Name', 20, yPos);
+
+  yPos += 15;
+  doc.line(20, yPos, 80, yPos);
+  yPos += 5;
+  doc.text('Date', 20, yPos);
+
+  addPDFFooter(doc);
+  doc.save(`buddy-statement-template-${templateTitle?.replace(/\s+/g, '-').toLowerCase() || 'general'}.pdf`);
+};
