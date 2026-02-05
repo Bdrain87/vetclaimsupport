@@ -33,7 +33,7 @@ export function ComparisonSection() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#0A1628] mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#14192b] mb-4">
             What You'd Pay Elsewhere
           </h2>
           <p className="text-lg sm:text-xl text-gray-500 max-w-2xl mx-auto">
@@ -74,7 +74,7 @@ export function ComparisonSection() {
 
           {/* Us column */}
           <motion.div
-            className="relative bg-gradient-to-b from-[#0A1628] to-[#1E3A5F] rounded-2xl p-8 text-white shadow-xl"
+            className="relative bg-gradient-to-b from-[#14192b] to-[#1e2844] rounded-2xl p-8 text-white shadow-xl"
             initial={{ opacity: 0, x: 30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.1 }}
@@ -114,7 +114,7 @@ export function ComparisonSection() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <p className="text-2xl sm:text-3xl font-bold text-[#0A1628]">
+          <p className="text-2xl sm:text-3xl font-bold text-[#14192b]">
             $4.99 — That's it. Forever.
           </p>
         </motion.div>

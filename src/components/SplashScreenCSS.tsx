@@ -47,7 +47,7 @@ export function SplashScreenCSS({
             {/* Shield */}
             <path
               d="M40 4L8 16V36C8 54.78 21.42 72.12 40 76C58.58 72.12 72 54.78 72 36V16L40 4Z"
-              fill="#1E3A5F"
+              fill="#1e2844"
               stroke="#C9A227"
               strokeWidth="2"
             />

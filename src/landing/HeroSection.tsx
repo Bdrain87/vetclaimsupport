@@ -21,7 +21,7 @@ export function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0A1628] via-[#122744] to-[#1E3A5F]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#14192b] via-[#192136] to-[#1e2844]" />
 
       {/* Subtle pattern overlay */}
       <div className="absolute inset-0 opacity-[0.03]" style={{
@@ -100,7 +100,7 @@ export function HeroSection() {
               {/* Phone notch */}
               <div className="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full" />
               {/* Screen content placeholder */}
-              <div className="absolute inset-4 top-10 bg-gradient-to-b from-[#0A1628] to-[#1E3A5F] rounded-2xl flex items-center justify-center">
+              <div className="absolute inset-4 top-10 bg-gradient-to-b from-[#14192b] to-[#1e2844] rounded-2xl flex items-center justify-center">
                 <div className="text-center p-4">
                   <Shield className="w-12 h-12 text-white/20 mx-auto mb-4" />
                   <p className="text-white/30 text-sm">App Preview</p>
