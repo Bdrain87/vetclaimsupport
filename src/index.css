@@ -9,6 +9,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* iOS Safe Area Insets — Notch & Home Indicator Protection */
+html {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+body {
+  min-height: 100dvh;
+}
+
+#root {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
 /* Service Evidence Tracker - Premium Dark Mode Design System */
 
 @layer base {
