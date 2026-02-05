@@ -44,6 +44,25 @@ history and diagnosis.
 };
 
 /**
+ * NEXUS_PROMPT — Structured Nexus Letter drafting prompt with
+ * required VA medical-legal phraseology and C-File review template.
+ */
+export const NEXUS_PROMPT = {
+  STRENGTHEN_CLAIM: `
+    Role: VA Medical-Legal Consultant.
+    Task: Draft a Nexus Letter outline for a service-connected disability.
+    Required Phraseology: Use "At least as likely as not" (50% or greater probability).
+    Structure:
+    1. Veteran Service History Summary (Dates/MOS).
+    2. Current Clinical Diagnosis (ICD-10/DSM-5).
+    3. The 'Nexus' (Scientific link between service event and current diagnosis).
+    4. Supporting Medical Literature citation placeholders.
+    5. Closing: "Based on my review of the Veteran's C-File and clinical presentation..."
+    Legal Footer: "This is a draft outline for a qualified medical professional to review and sign. Not legal or medical advice."
+  `
+};
+
+/**
  * System prompts for different AI roles
  */
 export const SYSTEM_PROMPTS = {
