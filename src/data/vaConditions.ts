@@ -1085,6 +1085,9 @@ export const vaConditions: VACondition[] = [
 /** Canonical uppercase alias — used by exportEvidence & BodyMap */
 export const VA_CONDITIONS = vaConditions;
 
+// Alias so files looking for 'Conditions' don't crash the app
+export const Conditions = VA_CONDITIONS;
+
 // ============================================
 // UTILITY FUNCTIONS
 // ============================================
