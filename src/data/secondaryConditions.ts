@@ -7,6 +7,56 @@ export interface SecondaryConnection {
   category: string;
 }
 
+export interface ConditionSecondaryProfile {
+  id: string;
+  possibleSecondaries: string[];
+  nexusTip: string;
+}
+
+// Quick-lookup profiles with possible secondaries and nexus tips
+export const conditionProfiles: ConditionSecondaryProfile[] = [
+  {
+    id: 'tinnitus',
+    possibleSecondaries: ['migraines', 'anxiety', 'depression', 'insomnia', 'hearing-loss'],
+    nexusTip: 'Highlight the nexus between service-connected auditory distress and psychological impact.',
+  },
+  {
+    id: 'lumbosacral-strain',
+    possibleSecondaries: ['sciatica', 'radiculopathy', 'depression', 'erectile-dysfunction'],
+    nexusTip: 'Focus on nerve compression (radiculopathy) secondary to spinal strain.',
+  },
+  {
+    id: 'ptsd',
+    possibleSecondaries: ['sleep-apnea', 'tinnitus', 'gerd', 'hypertension', 'migraines', 'ibs', 'bruxism', 'tmj', 'fibromyalgia', 'erectile-dysfunction'],
+    nexusTip: 'Emphasize the chronic stress response and its multi-system physiological effects per established medical literature.',
+  },
+  {
+    id: 'knee-condition',
+    possibleSecondaries: ['contralateral-knee', 'hip-condition', 'lumbar-spine', 'ankle-condition', 'sciatica'],
+    nexusTip: 'Document altered gait pattern (antalgic gait) as the biomechanical link to compensatory conditions.',
+  },
+  {
+    id: 'sleep-apnea',
+    possibleSecondaries: ['hypertension', 'cognitive-impairment', 'diabetes', 'heart-failure', 'erectile-dysfunction', 'depression'],
+    nexusTip: 'Focus on chronic intermittent hypoxia and its systemic cardiovascular and metabolic consequences.',
+  },
+  {
+    id: 'migraines',
+    possibleSecondaries: ['depression', 'anxiety', 'insomnia', 'cognitive-impairment'],
+    nexusTip: 'Document prostrating frequency and occupational impairment per DC 8100 criteria.',
+  },
+  {
+    id: 'diabetes-type-ii',
+    possibleSecondaries: ['peripheral-neuropathy', 'retinopathy', 'nephropathy', 'erectile-dysfunction', 'coronary-artery-disease', 'hearing-loss'],
+    nexusTip: 'Microvascular damage is the primary mechanism — document each affected organ system separately.',
+  },
+  {
+    id: 'hearing-loss',
+    possibleSecondaries: ['tinnitus', 'depression', 'cognitive-decline', 'social-anxiety', 'balance-problems'],
+    nexusTip: 'Establish the audiometric baseline from service and show progressive decline linked to military noise exposure.',
+  },
+];
+
 export const secondaryConditions: SecondaryConnection[] = [
   // ========================================
   // PTSD SECONDARIES (Anti-Pyramiding Compliant - Different Body Systems Only)

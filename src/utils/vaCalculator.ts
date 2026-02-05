@@ -219,6 +219,41 @@ export function simpleVAMath(ratings: number[]): number {
 }
 
 /**
+ * VA Rating Logic with 2026 Rates & Bilateral Factor
+ * Enhanced calculation that accepts pre-identified bilateral ratings
+ */
+export function calculatePlatinumRating(ratings: number[], bilateralPairRatings: number[]): number {
+  // 1. Calculate the Bilateral Factor (The 'Bilateral Bump')
+  let bilateralValue = 0;
+  if (bilateralPairRatings.length > 0) {
+    // Combine bilateral ratings using VA Math formula: 1 - (1-a)(1-b)...
+    const combined = bilateralPairRatings.reduce((acc, r) => acc * (1 - r / 100), 1);
+    const baseBilateral = (1 - combined) * 100;
+
+    // Add the 10% Bilateral Factor bump per 38 CFR
+    bilateralValue = baseBilateral + (baseBilateral * 0.1);
+  }
+
+  // 2. Combine with all other ratings
+  const allRatings = bilateralValue > 0 ? [...ratings, bilateralValue] : ratings;
+
+  // Sort descending for accurate VA combined math
+  const sorted = [...allRatings].sort((a, b) => b - a);
+
+  let currentEfficiency = 100;
+  let combinedRating = 0;
+
+  sorted.forEach(rating => {
+    const value = (rating * currentEfficiency) / 100;
+    combinedRating += value;
+    currentEfficiency -= value;
+  });
+
+  // 3. Final Rounding to the nearest 10%
+  return Math.round(combinedRating / 10) * 10;
+}
+
+/**
  * Format a rating for display
  */
 export function formatRating(rating: number): string {

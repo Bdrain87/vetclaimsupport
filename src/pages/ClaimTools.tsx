@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { 
-  FileText, Scale, ClipboardList, Stethoscope, Calculator, Users, 
-  BookOpen, Gavel, Printer, FileSignature, TrendingUp, ShieldAlert, 
-  DollarSign, Wrench, Link2, Target
+import {
+  FileText, Scale, ClipboardList, Stethoscope, Calculator, Users,
+  BookOpen, Gavel, Printer, FileSignature, TrendingUp, ShieldAlert,
+  DollarSign, Wrench, Link2, Target, Languages, MessageSquare
 } from 'lucide-react';
 import { PersonalStatementGenerator } from '@/components/tools/PersonalStatementGenerator';
 import { DBQRatingReference } from '@/components/tools/DBQRatingReference';
@@ -20,6 +20,8 @@ import { NexusLetterGenerator } from '@/components/tools/NexusLetterGenerator';
 import { RatingIncreaseAnalyzer } from '@/components/tools/RatingIncreaseAnalyzer';
 import { StressorStatementGenerator } from '@/components/tools/StressorStatementGenerator';
 import { BackPayEstimator } from '@/components/tools/BackPayEstimator';
+import { MockExamSimulator } from '@/components/tools/MockExamSimulator';
+import { VASpeakTranslator } from '@/components/tools/VASpeakTranslator';
 import { DisclaimerNotice } from '@/components/shared/DisclaimerNotice';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -79,6 +81,20 @@ const tools: Tool[] = [
     icon: Stethoscope,
     description: 'Interactive exam prep with practice answer writing. Includes first-person templates, specific date guidance, and your logged symptom data.',
     category: 'Exam Prep',
+  },
+  {
+    id: 'mock-exam',
+    name: 'Mock C&P Exam Simulator',
+    icon: MessageSquare,
+    description: 'Simulate a real C&P exam with a virtual examiner who asks one question at a time. Get real-time feedback on vague answers and learn how to articulate symptoms using 38 CFR criteria.',
+    category: 'Exam Prep',
+  },
+  {
+    id: 'va-speak',
+    name: 'VA-Speak Translator',
+    icon: Languages,
+    description: 'Translate plain English symptom descriptions into professional VA clinical terminology for stronger VA Form 21-4138 statements. Uses official 38 CFR nomenclature.',
+    category: 'Documents',
   },
   {
     id: 'secondary-suggester',
@@ -185,6 +201,10 @@ export default function ClaimTools() {
         return <RatingCalculator />;
       case 'backpay':
         return <BackPayEstimator />;
+      case 'mock-exam':
+        return <MockExamSimulator />;
+      case 'va-speak':
+        return <VASpeakTranslator />;
       default:
         return null;
     }
