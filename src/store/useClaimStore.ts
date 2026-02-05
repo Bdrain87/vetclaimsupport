@@ -1,25 +1,34 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-interface ClaimState {
-  isPro: boolean;
-  biometricUnlocked: boolean;
-  activeExaminerChat: any[];
-  currentNexusSelection: string | null;
-  setNexus: (id: string) => void;
-  togglePro: (status: boolean) => void;
+interface ClaimEntry {
+  id: string;
+  name: string;
+  rating: number;
+  isBilateral: boolean;
 }
 
-export const useClaimStore = create<ClaimState>()(
+interface UserState {
+  isPro: boolean;
+  claims: ClaimEntry[];
+  logs: any[];
+  addClaim: (claim: ClaimEntry) => void;
+  removeClaim: (id: string) => void;
+  togglePro: (val: boolean) => void;
+}
+
+export const useClaimStore = create<UserState>()(
   persist(
     (set) => ({
       isPro: false,
-      biometricUnlocked: false,
-      activeExaminerChat: [],
-      currentNexusSelection: null,
-      setNexus: (id) => set({ currentNexusSelection: id }),
-      togglePro: (status) => set({ isPro: status }),
+      claims: [],
+      logs: [],
+      addClaim: (claim) => set((state) => ({ claims: [...state.claims, claim] })),
+      removeClaim: (id) => set((state) => ({ claims: state.claims.filter(c => c.id !== id) })),
+      togglePro: (val) => set({ isPro: val }),
     }),
-    { name: 'platinum-vault-storage' }
+    {
+      name: 'vet-evidence-vault',
+    }
   )
 );
