@@ -1,44 +1,44 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { VA_CONDITIONS } from '@/data/vaConditions';
 
 export const BodyMap = () => {
   const [selected, setSelected] = useState<string | null>(null);
 
-  const nexusMap: Record<string, string[]> = {
-    "tinnitus": ["Migraines", "Anxiety", "Sleep Apnea"],
-    "back": ["Sciatica", "Radiculopathy", "Depression"],
-    "ptsd": ["GERD", "Hypertension", "Sleep Apnea"]
-  };
-
   return (
-    <div className="grid lg:grid-cols-2 gap-8 glass-card p-10">
-      <div className="flex justify-center bg-black/20 rounded-3xl p-6">
-        <svg viewBox="0 0 200 500" className="h-[450px] w-auto">
-          <circle
-            cx="100" cy="50" r="25"
+    <div className="grid lg:grid-cols-2 gap-10 glass-card p-10">
+      <div className="bg-navy-950/50 rounded-[2.5rem] p-8 border border-white/5 relative group">
+        <svg viewBox="0 0 200 500" className="h-[500px] mx-auto drop-shadow-[0_0_20px_rgba(200,166,40,0.1)]">
+          {/* Head - Tinnitus/Migraines */}
+          <path
+            d="M100 20 C120 20 135 35 135 55 C135 75 120 90 100 90 C80 90 65 75 65 55 C65 35 80 20 100 20"
             onClick={() => setSelected('tinnitus')}
-            className={`cursor-pointer transition-all ${selected === 'tinnitus' ? 'fill-[#C8A628] filter blur-[2px]' : 'fill-white/10'}`}
+            className={`cursor-pointer transition-all duration-700 ${selected === 'tinnitus' ? 'fill-[#C8A628] drop-shadow-[0_0_10px_#C8A628]' : 'fill-white/10 hover:fill-white/20'}`}
           />
+          {/* Spine - Back Strain */}
           <rect
-            x="85" y="120" width="30" height="150" rx="15"
-            onClick={() => setSelected('back')}
-            className={`cursor-pointer transition-all ${selected === 'back' ? 'fill-[#C8A628] filter blur-[2px]' : 'fill-white/10'}`}
+            x="85" y="100" width="30" height="180" rx="15"
+            onClick={() => setSelected('lumbosacral-strain')}
+            className={`cursor-pointer transition-all duration-700 ${selected === 'lumbosacral-strain' ? 'fill-[#C8A628] drop-shadow-[0_0_10px_#C8A628]' : 'fill-white/10 hover:fill-white/20'}`}
           />
         </svg>
       </div>
+
       <div className="flex flex-col justify-center">
-        <h3 className="text-3xl font-black italic mb-4">NEXUS DISCOVERY</h3>
+        <h2 className="text-4xl font-black italic text-white mb-6 uppercase tracking-tighter">Nexus <span className="text-[#C8A628]">Discovery</span></h2>
         {selected ? (
-          <div className="space-y-4">
-            <p className="text-white/40 uppercase text-[10px] font-black tracking-widest">Secondary Paths Found</p>
-            {nexusMap[selected]?.map(s => (
-              <div key={s} className="p-4 bg-[#C8A628]/10 border border-[#C8A628]/30 rounded-2xl text-[#C8A628] font-bold">
-                + {s}
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
+            <div className="p-6 bg-[#C8A628]/10 border border-[#C8A628]/30 rounded-3xl">
+              <h4 className="text-[#C8A628] font-black text-xs uppercase tracking-[0.3em] mb-4">Common Secondaries</h4>
+              <div className="flex flex-wrap gap-2">
+                {VA_CONDITIONS.find(c => c.id === selected)?.possibleSecondaries?.map(s => (
+                  <span key={s} className="px-4 py-2 bg-[#C8A628] text-navy-950 rounded-xl font-black text-[10px] uppercase">{s}</span>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          </motion.div>
         ) : (
-          <p className="text-white/20 italic">Select a primary rating to reveal secondary connections.</p>
+          <p className="text-white/20 font-bold uppercase tracking-widest text-sm italic">Select a primary rating on the map to unlock secondary nexus pathways.</p>
         )}
       </div>
     </div>
