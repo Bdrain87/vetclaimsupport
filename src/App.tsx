@@ -58,6 +58,7 @@ import Glossary from "./pages/Glossary";
 import VAForms from "./pages/VAForms";
 import UserGuide from "./pages/UserGuide";
 import ConditionsByConflict from "./pages/ConditionsByConflict";
+import VAResources from "./pages/VAResources";
 
 // Legal
 import Privacy from "./pages/Privacy";
@@ -151,6 +152,7 @@ const App = () => {
                       <Route path="/va-forms" element={<VAForms />} />
                       <Route path="/user-guide" element={<UserGuide />} />
                       <Route path="/conditions-by-conflict" element={<ConditionsByConflict />} />
+                      <Route path="/va-resources" element={<VAResources />} />
 
                       {/* Legal */}
                       <Route path="/privacy" element={<Privacy />} />
