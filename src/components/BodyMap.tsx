@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { VA_CONDITIONS } from '@/data/vaConditions';
+import { vaConditions } from '@/data/vaConditions';
 
 export const BodyMap = () => {
   const [selected, setSelected] = useState<string | null>(null);
@@ -10,10 +10,16 @@ export const BodyMap = () => {
       <div className="bg-navy-950/50 rounded-[2.5rem] p-8 border border-white/5 relative group">
         <svg viewBox="0 0 200 500" className="h-[500px] mx-auto drop-shadow-[0_0_20px_rgba(200,166,40,0.1)]">
           {/* Head - Tinnitus/Migraines */}
-          <path
-            d="M100 20 C120 20 135 35 135 55 C135 75 120 90 100 90 C80 90 65 75 65 55 C65 35 80 20 100 20"
+          <circle
+            cx="100" cy="50" r="22"
+            role="button"
+            aria-label="Tinnitus and Head Conditions"
+            tabIndex={0}
             onClick={() => setSelected('tinnitus')}
-            className={`cursor-pointer transition-all duration-700 ${selected === 'tinnitus' ? 'fill-[#C8A628] drop-shadow-[0_0_10px_#C8A628]' : 'fill-white/10 hover:fill-white/20'}`}
+            onKeyDown={(e) => e.key === 'Enter' && setSelected('tinnitus')}
+            className={`cursor-pointer outline-none focus:ring-2 focus:ring-[#C8A628] ${
+              selected === 'tinnitus' ? 'fill-[#C8A628]' : 'fill-white/10'
+            }`}
           />
           {/* Spine - Back Strain */}
           <rect
@@ -31,7 +37,7 @@ export const BodyMap = () => {
             <div className="p-6 bg-[#C8A628]/10 border border-[#C8A628]/30 rounded-3xl">
               <h4 className="text-[#C8A628] font-black text-xs uppercase tracking-[0.3em] mb-4">Common Secondaries</h4>
               <div className="flex flex-wrap gap-2">
-                {VA_CONDITIONS.find(c => c.id === selected)?.possibleSecondaries?.map(s => (
+                {vaConditions.find(c => c.id === selected)?.possibleSecondaries?.map(s => (
                   <span key={s} className="px-4 py-2 bg-[#C8A628] text-navy-950 rounded-xl font-black text-[10px] uppercase">{s}</span>
                 ))}
               </div>

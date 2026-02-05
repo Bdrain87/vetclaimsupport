@@ -9,7 +9,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Vet Claim Support - Premium Dark Mode Design System */
+/* Service Evidence Tracker - Premium Dark Mode Design System */
 
 @layer base {
   :root {
@@ -1762,7 +1762,7 @@
 }
 
     /* ============================================
-       MOBILE LAYOUT FIX - Vet Claim Support v2.0.0
+       MOBILE LAYOUT FIX - Service Evidence Tracker v2.0.0
        ============================================ */
 
     /* Prevent horizontal overflow */

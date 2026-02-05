@@ -340,7 +340,7 @@ export function DBQAppointmentSummary() {
       yPos += 15;
       doc.setFontSize(8);
       doc.text(`Generated: ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}`, 20, yPos);
-      doc.text('Vet Claim Support', pageWidth - 20, yPos, { align: 'right' });
+      doc.text('Service Evidence Tracker', pageWidth - 20, yPos, { align: 'right' });
 
       // Save PDF
       doc.save(`DBQ-Summary-${selectedCondition.name.replace(/\s+/g, '-')}.pdf`);

@@ -34,6 +34,7 @@ import { ClaimsJourneyRoadmap } from '@/components/dashboard/ClaimsJourneyRoadma
 import { ContextualGuidance } from '@/components/dashboard/ContextualGuidance';
 import { GuidedActionBanner } from '@/components/dashboard/GuidedActionBanner';
 import { PremiumStatsGrid } from '@/components/dashboard/PremiumStatsGrid';
+import { DBQHelp } from '@/components/tools/DBQHelp';
 import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -582,6 +583,7 @@ export default function Dashboard() {
         <div className="mt-3 space-y-3">
           <DashboardInsights />
           <EvidenceGapAnalyzer />
+          <DBQHelp />
         </div>
       </details>
     </div>

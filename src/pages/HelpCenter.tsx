@@ -30,7 +30,7 @@ interface FAQItem {
 }
 
 const faqData: FAQItem[] = [
-  { id: 'faq-1', category: 'app', question: 'How do I get started with Vet Claim Support?', answer: 'Start by adding your service history and separation date in Settings. Then begin logging your symptoms, medical visits, and any exposures you experienced during service. The app will guide you through building your evidence.' },
+  { id: 'faq-1', category: 'app', question: 'How do I get started with Service Evidence Tracker?', answer: 'Start by adding your service history and separation date in Settings. Then begin logging your symptoms, medical visits, and any exposures you experienced during service. The app will guide you through building your evidence.' },
   { id: 'faq-2', category: 'app', question: 'Is my data backed up anywhere?', answer: 'All data is stored locally on your device. We recommend using the Export Backup feature in Settings regularly to create a JSON backup file you can save to cloud storage or another device.' },
   { id: 'faq-3', category: 'app', question: 'Can I use this app on multiple devices?', answer: "Yes, but data doesn't sync automatically. Use the Export Backup feature to create a backup on one device, then use Restore from Backup on another device to transfer your data." },
   { id: 'faq-4', category: 'app', question: 'How do I export my data for my VSO?', answer: 'Use the Export PDF feature on the Dashboard. You can customize which sections to include and generate a professional PDF summary of your evidence.' },
@@ -79,7 +79,7 @@ const guideSections: GuideSection[] = [
     id: 'getting-started',
     title: 'Getting Started',
     icon: <BookOpen className="h-5 w-5" />,
-    description: 'Learn the basics of using Vet Claim Support',
+    description: 'Learn the basics of using Service Evidence Tracker',
     steps: [
       { title: 'Accept the Terms', content: "When you first open the app, you'll see a liability acceptance screen. Read and accept to continue. This app is an educational tool - always consult with a VSO for official advice.", tip: 'The app works entirely offline after initial load. Your data never leaves your device.' },
       { title: 'Complete the Onboarding', content: 'The onboarding wizard helps you set up your profile. You can add your service dates, primary conditions, and customize the app to your needs.', tip: 'You can always change these settings later in the Settings page.' },
@@ -393,7 +393,7 @@ export default function HelpCenter() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-primary" />
-                  Welcome to Vet Claim Support
+                  Welcome to Service Evidence Tracker
                 </CardTitle>
                 <CardDescription>
                   Your complete toolkit for building a strong VA disability claim

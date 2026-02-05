@@ -11,7 +11,7 @@ export default function Terms() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Terms of Service</h1>
-          <p className="text-muted-foreground">Vet Claim Support</p>
+          <p className="text-muted-foreground">Service Evidence Tracker</p>
         </div>
       </div>
 
@@ -26,7 +26,7 @@ export default function Terms() {
               Agreement to Terms
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              By downloading, installing, or using Vet Claim Support ("the App"),
+              By downloading, installing, or using Service Evidence Tracker ("the App"),
               you agree to be bound by these Terms of Service ("Terms"). If you do
               not agree to these Terms, do not use the App.
             </p>
@@ -38,7 +38,7 @@ export default function Terms() {
               <BookOpen className="h-5 w-5 text-primary" />
               Description of Service
             </h2>
-            <p className="text-muted-foreground mb-3">Vet Claim Support is a mobile application that provides:</p>
+            <p className="text-muted-foreground mb-3">Service Evidence Tracker is a mobile application that provides:</p>
             <ul className="space-y-2 text-muted-foreground">
               <li className="flex items-start gap-2">
                 <span className="text-primary mt-1.5">•</span>
@@ -236,7 +236,7 @@ export default function Terms() {
             </h2>
             <p className="text-muted-foreground mb-3">
               The App, including all content, features, and functionality, is owned
-              by Vet Claim Support and protected by copyright, trademark, and other
+              by Service Evidence Tracker and protected by copyright, trademark, and other
               intellectual property laws.
             </p>
             <p className="text-muted-foreground mb-2">You may not:</p>

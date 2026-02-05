@@ -13,7 +13,7 @@ const faqData: FAQItem[] = [
   // App Usage
   {
     category: 'app',
-    question: 'How do I get started with Vet Claim Support?',
+    question: 'How do I get started with Service Evidence Tracker?',
     answer: 'Start by adding your service history and separation date in Settings. Then begin logging your symptoms, medical visits, and any exposures you experienced during service. The app will guide you through building your evidence.',
   },
   {
