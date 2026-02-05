@@ -28,6 +28,9 @@ import {
   Activity,
   FileSignature,
   ClipboardList,
+  Calendar,
+  Moon,
+  Pill,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -94,8 +97,14 @@ const navGroups: NavGroup[] = [
     icon: Heart,
     defaultOpen: false,
     items: [
-      { to: '/health-log', icon: Activity, label: 'Daily Log' },
-      { to: '/migraines', icon: Brain, label: 'Migraines' },
+      { to: '/health/daily-log', icon: Calendar, label: 'Daily Log' },
+      { to: '/health/symptoms', icon: FileText, label: 'Symptoms Journal' },
+      { to: '/health/migraines', icon: Brain, label: 'Migraines' },
+      { to: '/health/sleep', icon: Moon, label: 'Sleep Tracking' },
+      { to: '/health/pain', icon: Activity, label: 'Pain Levels' },
+      { to: '/health/mental', icon: Heart, label: 'Mental Health' },
+      { to: '/health/medications', icon: Pill, label: 'Medications' },
+      { to: '/health/flareups', icon: AlertTriangle, label: 'Flare-Ups' },
     ],
   },
 ];

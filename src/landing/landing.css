@@ -1,8 +1,8 @@
 /* Landing Page Design System - Apple/Meta Level Quality */
 :root {
   /* Primary palette */
-  --landing-primary: #0A1628;
-  --landing-secondary: #1E3A5F;
+  --landing-primary: #14192b;
+  --landing-secondary: #1e2844;
   --landing-accent: #C9A227;
   --landing-success: #10B981;
 
@@ -145,7 +145,7 @@
 .stat-value {
   font-size: clamp(2.5rem, 5vw, 3.5rem);
   font-weight: 700;
-  color: var(--landing-primary);
+  color: #14192b;
   line-height: 1;
 }
 

@@ -28,7 +28,7 @@ export function SplashScreen({
         <motion.div
           className="fixed inset-0 z-[9999] flex items-center justify-center"
           style={{
-            background: 'linear-gradient(135deg, #0A1628 0%, #1E3A5F 100%)'
+            background: 'linear-gradient(135deg, #14192b 0%, #1e2844 100%)'
           }}
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -95,7 +95,7 @@ function AnimatedLogo() {
       {/* Shield outline */}
       <motion.path
         d="M40 4L8 16V36C8 54.78 21.42 72.12 40 76C58.58 72.12 72 54.78 72 36V16L40 4Z"
-        fill="#1E3A5F"
+        fill="#1e2844"
         stroke="#C9A227"
         strokeWidth="2"
         initial={{ pathLength: 0, opacity: 0 }}
