@@ -51,7 +51,7 @@ export function LiabilityAcceptanceScreen() {
         <VisuallyHidden.Root>
           <DialogTitle>Liability Acceptance</DialogTitle>
           <DialogDescription id="liability-description">
-            Please read and acknowledge the terms before using Service Evidence Tracker
+            Please read and acknowledge the terms before using Vet Claim Support
           </DialogDescription>
         </VisuallyHidden.Root>
 
@@ -78,7 +78,7 @@ export function LiabilityAcceptanceScreen() {
             <div>
               <h3 className="font-semibold text-foreground mb-2">Educational Tool Only</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Service Evidence Tracker is designed to help you understand and prepare
+                Vet Claim Support is designed to help you understand and prepare
                 for the VA disability claims process. This app provides
                 educational information and organizational tools.
               </p>

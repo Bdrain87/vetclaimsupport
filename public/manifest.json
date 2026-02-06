@@ -1,7 +1,7 @@
 {
-  "name": "Service Evidence Tracker",
-  "short_name": "ServiceEvidence",
-  "description": "Platinum-tier veteran disability claims evidence tracker with AI-powered C&P exam prep and Zero-Knowledge privacy",
+  "name": "Vet Claim Support",
+  "short_name": "VetClaim",
+  "description": "Elite 38 CFR Evidence Mapping & Rating Forecast",
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#14192b",

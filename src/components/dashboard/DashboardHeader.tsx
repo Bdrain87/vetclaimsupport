@@ -23,12 +23,12 @@ export function DashboardHeader() {
     const exposureCount = data.exposures.length;
     const symptomCount = data.symptoms.length;
     
-    return `Service Evidence Tracker Summary\n\n` +
+    return `Vet Claim Support Summary\n\n` +
       `Conditions: ${conditionCount}\n` +
       `Medical Visits: ${medicalCount}\n` +
       `Exposures: ${exposureCount}\n` +
       `Symptoms: ${symptomCount}\n\n` +
-      `Generated with Service Evidence Tracker`;
+      `Generated with Vet Claim Support`;
   };
 
   const handleNativeShare = async () => {
@@ -37,7 +37,7 @@ export function DashboardHeader() {
     try {
       if (navigator.share) {
         await navigator.share({
-          title: 'Service Evidence Tracker Summary',
+          title: 'Vet Claim Support Summary',
           text: generateShareText(),
         });
         toast({
@@ -67,7 +67,7 @@ export function DashboardHeader() {
   };
 
   const handleEmailShare = () => {
-    const subject = encodeURIComponent('Service Evidence Tracker Summary');
+    const subject = encodeURIComponent('Vet Claim Support Summary');
     const body = encodeURIComponent(generateShareText());
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
   };
@@ -81,7 +81,7 @@ export function DashboardHeader() {
   return (
     <div className="flex items-center justify-between">
       <div className="min-w-0">
-        <h1 className="text-xl font-bold text-foreground tracking-tight">Service Evidence Tracker</h1>
+        <h1 className="text-xl font-bold text-foreground tracking-tight">Vet Claim Support</h1>
         <p className="text-xs text-muted-foreground">Build your disability claim</p>
       </div>
       

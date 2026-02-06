@@ -86,7 +86,7 @@ export function ComparisonSection() {
 
             <div className="text-center mb-8">
               <span className="text-sm font-medium text-white/60 uppercase tracking-wider">
-                Service Evidence Tracker
+                Vet Claim Support
               </span>
               <div className="mt-4 text-4xl sm:text-5xl font-bold text-white">
                 $4.99

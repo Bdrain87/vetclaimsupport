@@ -120,7 +120,7 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
   const steps = [
     // Step 0: Welcome
     {
-      title: 'Welcome to Service Evidence Tracker',
+      title: 'Welcome to Vet Claim Support',
       subtitle: 'Built to help you get the rating you earned',
       content: (
         <div className="space-y-6 text-center">
@@ -263,7 +263,7 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
         <VisuallyHidden.Root>
           <DialogTitle>{currentStepData.title}</DialogTitle>
           <DialogDescription id="onboarding-description">
-            Onboarding wizard to help you get started with Service Evidence Tracker
+            Onboarding wizard to help you get started with Vet Claim Support
           </DialogDescription>
         </VisuallyHidden.Root>
 

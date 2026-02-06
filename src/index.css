@@ -30,7 +30,7 @@ body {
 ::-webkit-scrollbar-thumb { background: rgba(200, 166, 40, 0.2); border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(200, 166, 40, 0.4); }
 
-/* Service Evidence Tracker - Premium Dark Mode Design System */
+/* Vet Claim Support - Premium Dark Mode Design System */
 
 @layer base {
   :root {
@@ -1783,7 +1783,7 @@ body {
 }
 
     /* ============================================
-       MOBILE LAYOUT FIX - Service Evidence Tracker v2.0.0
+       MOBILE LAYOUT FIX - Vet Claim Support v2.0.0
        ============================================ */
 
     /* Prevent horizontal overflow */
