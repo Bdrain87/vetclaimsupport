@@ -37,7 +37,7 @@ interface ConditionAnalysis {
 
 export function EvidenceGapAnalyzer() {
   const { data } = useClaims();
-  const claimConditions = data.claimConditions || [];
+  const claimConditions = useMemo(() => data.claimConditions ?? [], [data.claimConditions]);
 
   const analyses = useMemo((): ConditionAnalysis[] => {
     return claimConditions.map(condition => {

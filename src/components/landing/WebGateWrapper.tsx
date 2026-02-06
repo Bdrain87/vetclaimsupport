@@ -21,7 +21,7 @@ export function WebGateWrapper({ children }: WebGateWrapperProps) {
   useEffect(() => {
     // Check if running as PWA (installed app)
     const isPWA = window.matchMedia('(display-mode: standalone)').matches
-      || (window.navigator as any).standalone === true;
+      || (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
 
     // Check the hostname
     const hostname = window.location.hostname.toLowerCase();

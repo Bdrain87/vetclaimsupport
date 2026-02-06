@@ -166,11 +166,11 @@ export default function ClaimJourney() {
   const [selectedPhase, setSelectedPhase] = useState<JourneyPhase | null>(null);
 
   // Get journey progress from stored data
-  const journeyProgress = data.journeyProgress || {
+  const journeyProgress = useMemo(() => data.journeyProgress || {
     currentPhase: 0,
     completedChecklist: {},
     phaseCompletedDates: {},
-  };
+  }, [data.journeyProgress]);
 
   // Calculate phase completion percentages
   const phaseProgress = useMemo(() => {
@@ -222,6 +222,7 @@ export default function ClaimJourney() {
         updateData({ journeyProgress: newProgress });
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- Intentionally fires only on checklist changes. Adding `journeyProgress` would cause an extra re-fire after updateData modifies it; `updateData` stability from context is not guaranteed.
   }, [journeyProgress.completedChecklist]);
 
   const handleChecklistChange = useCallback((itemId: string, checked: boolean) => {

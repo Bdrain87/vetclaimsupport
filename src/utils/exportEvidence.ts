@@ -1,7 +1,8 @@
 import { saveAs } from 'file-saver';
 import { VA_CONDITIONS } from '../data/vaConditions';
+import type { ClaimCondition, QuickLogEntry } from '@/types/claims';
 
-export const generateVSOReport = (veteranName: string, activeClaims: any[], logs: any[]) => {
+export const generateVSOReport = (veteranName: string, activeClaims: ClaimCondition[], logs: QuickLogEntry[]) => {
   const timestamp = new Date().toLocaleDateString();
 
   let content = `VETERAN EVIDENCE PACKET (EDUCATIONAL SUMMARY)\n`;

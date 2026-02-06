@@ -437,7 +437,7 @@ export const COVERED_LOCATIONS: CoveredLocation[] = [
  */
 export function getConditionsByExposure(exposureType: string): PACTCondition[] {
   return PACT_ACT_CONDITIONS.filter(c =>
-    c.presumptiveFor.includes(exposureType as any)
+    c.presumptiveFor.includes(exposureType as PACTCondition['presumptiveFor'][number])
   );
 }
 

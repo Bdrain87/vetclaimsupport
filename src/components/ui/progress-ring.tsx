@@ -74,6 +74,7 @@ const ProgressRing = React.forwardRef<HTMLDivElement, ProgressRingProps>(
       animationFrame = requestAnimationFrame(animateValue);
 
       return () => cancelAnimationFrame(animationFrame);
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- `animatedValue` is intentionally excluded: it is read only as the starting point for animation. Adding it would cause an infinite loop since the effect calls setAnimatedValue on each animation frame.
     }, [clampedValue, animate]);
 
     const offset = circumference - (animatedValue / 100) * circumference;

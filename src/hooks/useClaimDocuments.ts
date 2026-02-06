@@ -72,6 +72,7 @@ export function useClaimDocuments() {
     };
 
     loadIndexedDBData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- Intentionally mount-only: this effect reads `documents` to hydrate IndexedDB data then calls setDocuments; adding `documents` would cause an infinite loop.
   }, []);
 
   // Add a new document

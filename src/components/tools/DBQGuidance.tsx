@@ -383,7 +383,7 @@ function getDBQTypeForCondition(conditionName: string): string | null {
 
 export function DBQGuidance() {
   const { data } = useClaims();
-  const claimConditions = data.claimConditions || [];
+  const claimConditions = useMemo(() => data.claimConditions ?? [], [data.claimConditions]);
 
   const conditionsWithDBQ = useMemo(() => {
     return claimConditions.map(condition => ({

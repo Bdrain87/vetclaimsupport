@@ -181,7 +181,7 @@ export function ConditionSearchInput({
                       <h4 className="font-semibold text-sm text-foreground">
                         {condition.name}
                       </h4>
-                      {(condition as any).isPACTAct && (
+                      {(condition as Record<string, unknown>).isPACTAct && (
                         <Badge className="text-[9px] px-1.5 py-0 h-4 bg-success/15 text-success border-success/30 hover:bg-success/20">
                           PACT Act
                         </Badge>

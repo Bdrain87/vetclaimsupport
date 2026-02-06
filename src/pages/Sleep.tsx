@@ -130,7 +130,7 @@ export default function Sleep() {
     setIsOpen(true);
   };
 
-  const sleepEntries = data.sleepEntries || [];
+  const sleepEntries = useMemo(() => data.sleepEntries ?? [], [data.sleepEntries]);
 
   // Statistics with VA-relevant metrics
   const stats = useMemo(() => {

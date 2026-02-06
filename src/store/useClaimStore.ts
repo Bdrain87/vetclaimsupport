@@ -11,7 +11,7 @@ interface ClaimEntry {
 interface UserState {
   isPro: boolean;
   claims: ClaimEntry[];
-  logs: any[];
+  logs: string[];
   addClaim: (claim: ClaimEntry) => void;
   removeClaim: (id: string) => void;
   togglePro: (val: boolean) => void;

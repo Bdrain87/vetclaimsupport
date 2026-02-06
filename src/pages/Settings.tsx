@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Scale, Shield, FileText, AlertTriangle, ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
@@ -47,16 +47,7 @@ export default function Settings() {
     }
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem(REMINDER_SETTINGS_KEY, JSON.stringify(reminderSettings));
-    
-    // Schedule notifications if enabled
-    if (reminderSettings.enabled && notificationPermission === 'granted') {
-      scheduleReminder();
-    }
-  }, [reminderSettings, notificationPermission]);
-
-  const scheduleReminder = () => {
+  const scheduleReminder = useCallback(() => {
     // Clear any existing scheduled notifications
     if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
       navigator.serviceWorker.controller.postMessage({
@@ -64,7 +55,16 @@ export default function Settings() {
         settings: reminderSettings,
       });
     }
-  };
+  }, [reminderSettings]);
+
+  useEffect(() => {
+    localStorage.setItem(REMINDER_SETTINGS_KEY, JSON.stringify(reminderSettings));
+
+    // Schedule notifications if enabled
+    if (reminderSettings.enabled && notificationPermission === 'granted') {
+      scheduleReminder();
+    }
+  }, [reminderSettings, notificationPermission, scheduleReminder]);
 
   const requestNotificationPermission = async () => {
     if (!('Notification' in window)) {

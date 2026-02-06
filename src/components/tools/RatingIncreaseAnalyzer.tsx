@@ -15,7 +15,7 @@ export function RatingIncreaseAnalyzer() {
   const [selectedCondition, setSelectedCondition] = useState('');
   const [currentRating, setCurrentRating] = useState<string>('');
 
-  const claimedConditions = data.claimConditions || [];
+  const claimedConditions = useMemo(() => data.claimConditions ?? [], [data.claimConditions]);
 
   // Get the condition's rating criteria
   const conditionData = useMemo(() => {

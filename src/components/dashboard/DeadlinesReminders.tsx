@@ -126,7 +126,7 @@ export function DeadlinesReminders() {
   });
   const [datePickerOpen, setDatePickerOpen] = useState(false);
 
-  const deadlines = data.deadlines || [];
+  const deadlines = useMemo(() => data.deadlines ?? [], [data.deadlines]);
 
   const sortedDeadlines = useMemo(() => {
     return [...deadlines]

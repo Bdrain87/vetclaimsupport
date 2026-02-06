@@ -128,7 +128,7 @@ function calculateCombinedRating(conditions: RatedCondition[]): { exact: number;
 
 export function EnhancedRatingCalculator() {
   const { data } = useClaims();
-  const approvedConditions = data.approvedConditions || [];
+  const approvedConditions = useMemo(() => data.approvedConditions ?? [], [data.approvedConditions]);
   
   const [newConditions, setNewConditions] = useState<RatedCondition[]>([]);
   const [newConditionName, setNewConditionName] = useState('');

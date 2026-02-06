@@ -143,7 +143,7 @@ export function ApprovedConditionsSection({ onNavigateToCalculator }: ApprovedCo
     bodyPart: 'other' as BodyPart,
   });
 
-  const approvedConditions = data.approvedConditions || [];
+  const approvedConditions = useMemo(() => data.approvedConditions ?? [], [data.approvedConditions]);
 
   const { exact, official } = useMemo(() => 
     calculateCombinedRating(approvedConditions), 

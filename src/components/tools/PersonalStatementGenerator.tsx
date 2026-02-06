@@ -26,7 +26,7 @@ export function PersonalStatementGenerator() {
   const [customEdits, setCustomEdits] = useState('');
   const [selectedCondition, setSelectedCondition] = useState<string | null>(null);
 
-  const claimConditions = data.claimConditions || [];
+  const claimConditions = useMemo(() => data.claimConditions ?? [], [data.claimConditions]);
 
   // Generate statement content
   const generateStatement = useMemo(() => {

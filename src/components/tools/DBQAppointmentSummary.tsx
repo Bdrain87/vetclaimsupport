@@ -61,7 +61,7 @@ const colors = {
 
 export function DBQAppointmentSummary() {
   const { data } = useClaims();
-  const claimConditions = data.claimConditions || [];
+  const claimConditions = useMemo(() => data.claimConditions ?? [], [data.claimConditions]);
   
   const [selectedConditionId, setSelectedConditionId] = useState<string>('');
   const [includeSymptoms, setIncludeSymptoms] = useState(true);

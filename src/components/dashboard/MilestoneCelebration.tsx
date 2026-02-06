@@ -4,13 +4,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from '@/components/ui/button';
 import { Trophy, Star, Rocket, Target, Medal, Award, PartyPopper } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import type { ClaimsData, BuddyContact, QuickLogEntry } from '@/types/claims';
 
 interface Milestone {
   id: string;
   title: string;
   description: string;
   icon: typeof Trophy;
-  condition: (data: any) => boolean;
+  condition: (data: ClaimsData) => boolean;
   celebrationMessage: string;
 }
 
@@ -60,7 +61,7 @@ const milestones: Milestone[] = [
     title: 'Statement Received!',
     description: 'You received a buddy statement',
     icon: Award,
-    condition: (data) => data.buddyContacts.some((b: any) => b.statementStatus === 'Received' || b.statementStatus === 'Submitted'),
+    condition: (data) => data.buddyContacts.some((b: BuddyContact) => b.statementStatus === 'Received' || b.statementStatus === 'Submitted'),
     celebrationMessage: 'Amazing! Buddy statements significantly strengthen claims.',
   },
   {
@@ -78,7 +79,7 @@ const milestones: Milestone[] = [
     icon: Star,
     condition: (data) => {
       const logs = data.quickLogs || [];
-      const uniqueDays = new Set(logs.map((l: any) => l.date)).size;
+      const uniqueDays = new Set(logs.map((l: QuickLogEntry) => l.date)).size;
       return uniqueDays >= 7;
     },
     celebrationMessage: 'Consistency pays off! Keep up the great work.',

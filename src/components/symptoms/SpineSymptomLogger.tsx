@@ -15,6 +15,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ChevronDown } from 'lucide-react';
 import type { SpineSymptomEntry, SpineRegion, MuscleSpasm, Guarding, RadiculopathySeverity, RadiculopathySide } from '@/types/spine';
+import type { SymptomEntry } from '@/types/claims';
 import { NORMAL_ROM, SPINE_RATING_CRITERIA } from '@/types/spine';
 
 const painTypes = ['Sharp', 'Dull', 'Burning', 'Aching', 'Radiating', 'Throbbing', 'Stabbing'];
@@ -65,7 +66,7 @@ export function SpineSymptomLogger() {
     s.bodyArea?.toLowerCase().includes('cervical') ||
     s.bodyArea?.toLowerCase().includes('lumbar') ||
     s.bodyArea?.toLowerCase().includes('thoracic') ||
-    (s as any).region // Has spine-specific data
+    'region' in s && s.region // Has spine-specific data
   );
 
   const resetForm = () => {
@@ -148,7 +149,7 @@ export function SpineSymptomLogger() {
     resetForm();
   };
 
-  const handleEdit = (symptom: any) => {
+  const handleEdit = (symptom: SymptomEntry) => {
     try {
       const spineData = JSON.parse(symptom.notes);
       setFormData(spineData);
@@ -159,7 +160,7 @@ export function SpineSymptomLogger() {
     }
   };
 
-  const parseSpineData = (symptom: any): SpineSymptomEntry | null => {
+  const parseSpineData = (symptom: SymptomEntry): SpineSymptomEntry | null => {
     try {
       return JSON.parse(symptom.notes);
     } catch {

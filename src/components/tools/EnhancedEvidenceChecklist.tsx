@@ -48,7 +48,7 @@ interface ConditionEvidence {
 
 export function EnhancedEvidenceChecklist() {
   const { data } = useClaims();
-  const claimConditions = data.claimConditions || [];
+  const claimConditions = useMemo(() => data.claimConditions ?? [], [data.claimConditions]);
   const [expandedCondition, setExpandedCondition] = useState<string | null>(
     claimConditions[0]?.id || null
   );

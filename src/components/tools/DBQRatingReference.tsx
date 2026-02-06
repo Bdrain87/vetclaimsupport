@@ -17,7 +17,7 @@ import { getDBQCondition } from '@/data/dbqCriteria';
 
 export function DBQRatingReference() {
   const { data } = useClaims();
-  const claimConditions = data.claimConditions || [];
+  const claimConditions = useMemo(() => data.claimConditions ?? [], [data.claimConditions]);
 
   const conditionsWithCriteria = useMemo(() => {
     return claimConditions.map(condition => ({
