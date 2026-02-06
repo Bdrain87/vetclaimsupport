@@ -478,8 +478,8 @@ export const PlatinumLanding = () => {
         >
           <ToolCard
             icon={<Crosshair size={28} />}
-            title="Service Role Profiler"
-            desc="Your military role may be associated with conditions you haven't considered. We map your service role to every known service-connected condition."
+            title="Service Job Profiler"
+            desc="Your military service may be connected to conditions you haven't considered. We map your military job code to every known service-connected condition."
           />
           <ToolCard
             icon={<Shield size={28} />}
@@ -524,7 +524,7 @@ export const PlatinumLanding = () => {
         <div className="max-w-7xl mx-auto">
           <SectionHeader
             gold="Your Daily Evidence Machine"
-            sub="Organized evidence strengthens your case. Don't walk in empty-handed."
+            sub="Veterans with organized evidence are better prepared. Don't walk into your exam empty-handed."
           />
 
           <motion.div
