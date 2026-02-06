@@ -219,7 +219,7 @@ export const PlatinumLanding = () => {
               <span className="text-white/50 line-through text-xl">$19.99</span>
               <span className="text-5xl sm:text-6xl font-black" style={goldGradientStyle}>$4.99</span>
             </div>
-            <p className="text-white/60 text-sm mb-6 text-center">Founder's Launch Price — Limited Time</p>
+            <p className="text-white/60 text-sm mb-6 text-center">Limited Time Launch Price</p>
 
             <Link
               to="/dashboard"
@@ -401,7 +401,7 @@ export const PlatinumLanding = () => {
                 BEST VALUE
               </div>
               <p className="text-white/70 text-sm mb-2 mt-1">Vet Claim Support</p>
-              <p className="font-bold text-xl mb-3" style={goldGradientStyle}>$4.99 Founder's Price</p>
+              <p className="font-bold text-xl mb-3" style={goldGradientStyle}>$4.99 Launch Price</p>
               <GreenCheck size={8} />
             </motion.div>
           </motion.div>
@@ -611,7 +611,7 @@ export const PlatinumLanding = () => {
             <p className="text-white/60 text-3xl sm:text-4xl md:text-5xl font-bold line-through mb-2">$19.99</p>
             <p className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black leading-none mb-4" style={goldGradientStyle}>$4.99</p>
             <p className="text-white uppercase text-sm font-bold tracking-widest mb-10 sm:mb-12">
-              Founder's Launch Price — Limited Time
+              Limited Time Launch Price
             </p>
           </motion.div>
 
@@ -625,7 +625,7 @@ export const PlatinumLanding = () => {
             {[
               { text: 'Claim shark: $4,000–$6,000', bad: true },
               { text: 'VA attorney: 20–33% of your back pay', bad: true },
-              { text: 'Vet Claim Support: $4.99 Founder\'s Price', bad: false },
+              { text: 'Vet Claim Support: $4.99 Launch Price', bad: false },
             ].map((item, i) => (
               <motion.div
                 key={i}

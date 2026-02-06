@@ -49,11 +49,24 @@ export const PlatinumNavbar = () => {
         <div className="max-w-7xl mx-auto bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
           {/* Left: logo + desktop nav */}
           <div className="flex items-center gap-4 lg:gap-8 min-w-0">
-            <Link to="/" className="flex items-center gap-2 group shrink-0">
-              <div className="h-8 w-8 bg-[#C8A628] rounded-lg flex items-center justify-center font-black text-[#102039] italic transition-transform group-hover:rotate-12">V</div>
-              <span className="text-white font-black italic tracking-tighter uppercase relative hidden md:block">
-                Vet Claim Support
-              </span>
+            <Link to="/" className="flex items-center group shrink-0">
+              {/* Premium VCS Emblem */}
+              <div className="relative flex items-center justify-center w-10 h-10">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#C8A628] via-[#E8D05A] to-[#C8A628] opacity-20 blur-sm group-hover:opacity-30 transition-opacity duration-300" />
+                <div className="relative w-9 h-9 rounded-full bg-gradient-to-br from-[#E8D05A] via-[#C8A628] to-[#9A7B1A] flex items-center justify-center shadow-lg shadow-[#C8A628]/20 ring-1 ring-[#E8D05A]/30 group-hover:shadow-[#C8A628]/30 transition-shadow duration-300">
+                  <div className="absolute inset-[2px] rounded-full bg-gradient-to-br from-[#C8A628]/0 via-transparent to-[#000000]/20" />
+                  <span className="relative text-[#102039] font-black text-lg tracking-tight select-none">V</span>
+                </div>
+              </div>
+              {/* Brand text */}
+              <div className="hidden sm:flex flex-col ml-3">
+                <span className="text-white font-bold text-sm tracking-[0.15em] leading-tight uppercase group-hover:text-white/90 transition-colors duration-300">
+                  Vet Claim Support
+                </span>
+                <span className="hidden lg:block text-[#C8A628]/60 text-[10px] tracking-[0.2em] font-medium uppercase">
+                  Claim Preparation Tools
+                </span>
+              </div>
             </Link>
 
             {/* Desktop nav links */}
@@ -87,7 +100,7 @@ export const PlatinumNavbar = () => {
                 <p className="text-[11px] font-bold text-[#C8A628] uppercase leading-none mt-1">Platinum Member</p>
               </div>
               <div className="h-10 w-10 rounded-full bg-white/10 border border-white/10 overflow-hidden">
-                <div className="w-full h-full flex items-center justify-center bg-[#C8A628]/20 text-[#C8A628] font-black italic">{initial}</div>
+                <div className="w-full h-full flex items-center justify-center bg-[#C8A628]/20 text-[#C8A628] font-bold">{initial}</div>
               </div>
             </div>
 
@@ -120,7 +133,7 @@ export const PlatinumNavbar = () => {
       >
         {/* Drawer header */}
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-white/10">
-          <span className="text-white font-black italic uppercase text-sm">Menu</span>
+          <span className="text-white font-bold uppercase text-sm tracking-[0.15em]">Menu</span>
           <button
             onClick={() => setDrawerOpen(false)}
             className="min-h-[44px] min-w-[44px] flex items-center justify-center text-white/60 hover:text-white transition-colors"
@@ -150,7 +163,7 @@ export const PlatinumNavbar = () => {
           <div className="sm:hidden mt-6 pt-6 border-t border-white/10 px-4">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-full bg-white/10 border border-white/10 overflow-hidden shrink-0">
-                <div className="w-full h-full flex items-center justify-center bg-[#C8A628]/20 text-[#C8A628] font-black italic">{initial}</div>
+                <div className="w-full h-full flex items-center justify-center bg-[#C8A628]/20 text-[#C8A628] font-bold">{initial}</div>
               </div>
               <div>
                 <p className="text-xs font-black text-white uppercase leading-none">{displayName}</p>
