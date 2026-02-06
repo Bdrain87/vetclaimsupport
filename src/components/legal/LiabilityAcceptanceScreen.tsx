@@ -34,7 +34,11 @@ export function LiabilityAcceptanceScreen() {
   };
 
   const handleContinue = () => {
-    localStorage.setItem(LIABILITY_ACCEPTED_KEY, 'true');
+    try {
+      localStorage.setItem(LIABILITY_ACCEPTED_KEY, 'true');
+    } catch {
+      // Storage full or unavailable
+    }
     setIsOpen(false);
   };
 

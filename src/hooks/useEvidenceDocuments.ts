@@ -42,7 +42,11 @@ export function useEvidenceDocuments() {
       }
       return doc;
     });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(toStore));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(toStore));
+    } catch {
+      // Storage full or unavailable
+    }
   }, [documents]);
 
   // Load IndexedDB data for documents on mount

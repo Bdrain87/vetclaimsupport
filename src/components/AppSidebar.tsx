@@ -76,9 +76,9 @@ const navGroups: NavGroup[] = [
     icon: FileText,
     defaultOpen: true,
     items: [
-      { to: '/journey', icon: Route, label: 'Journey' },
-      { to: '/docs', icon: Files, label: 'Documents' },
-      { to: '/checklist', icon: ClipboardCheck, label: 'Checklist' },
+      { to: '/claim-journey', icon: Route, label: 'Journey' },
+      { to: '/documents', icon: Files, label: 'Documents' },
+      { to: '/claim-checklist', icon: ClipboardCheck, label: 'Checklist' },
     ],
   },
   {
@@ -97,14 +97,11 @@ const navGroups: NavGroup[] = [
     icon: Heart,
     defaultOpen: false,
     items: [
-      { to: '/health/daily-log', icon: Calendar, label: 'Daily Log' },
-      { to: '/health/symptoms', icon: FileText, label: 'Symptoms Journal' },
-      { to: '/health/migraines', icon: Brain, label: 'Migraines' },
-      { to: '/health/sleep', icon: Moon, label: 'Sleep Tracking' },
-      { to: '/health/pain', icon: Activity, label: 'Pain Levels' },
-      { to: '/health/mental', icon: Heart, label: 'Mental Health' },
-      { to: '/health/medications', icon: Pill, label: 'Medications' },
-      { to: '/health/flareups', icon: AlertTriangle, label: 'Flare-Ups' },
+      { to: '/health-log', icon: Calendar, label: 'Daily Log' },
+      { to: '/symptoms', icon: FileText, label: 'Symptoms Journal' },
+      { to: '/migraines', icon: Brain, label: 'Migraines' },
+      { to: '/sleep', icon: Moon, label: 'Sleep Tracking' },
+      { to: '/medications', icon: Pill, label: 'Medications' },
     ],
   },
 ];

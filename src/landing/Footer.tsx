@@ -56,11 +56,6 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href="/contact" className="text-sm text-white/60 hover:text-white transition-colors">
-                  Contact Us
-                </a>
-              </li>
-              <li>
                 <a href="/help" className="text-sm text-white/60 hover:text-white transition-colors">
                   Help Center
                 </a>
@@ -71,17 +66,17 @@ export function Footer() {
           {/* Resources */}
           <div>
             <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
-              Resources
+              Resources & Guides
             </h4>
             <ul className="space-y-3">
               <li>
-                <a href="/blog" className="text-sm text-white/60 hover:text-white transition-colors">
-                  Blog
+                <a href="/va-resources" className="text-sm text-white/60 hover:text-white transition-colors">
+                  VA Resources
                 </a>
               </li>
               <li>
-                <a href="/guides" className="text-sm text-white/60 hover:text-white transition-colors">
-                  Guides
+                <a href="/user-guide" className="text-sm text-white/60 hover:text-white transition-colors">
+                  User Guide
                 </a>
               </li>
               <li>

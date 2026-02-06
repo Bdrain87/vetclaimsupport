@@ -63,9 +63,9 @@ const drawerSections = [
   {
     title: 'My Claim',
     items: [
-      { title: 'Journey', path: '/journey', icon: Route },
-      { title: 'Documents', path: '/docs', icon: Files },
-      { title: 'Checklist', path: '/checklist', icon: ClipboardCheck },
+      { title: 'Journey', path: '/claim-journey', icon: Route },
+      { title: 'Documents', path: '/documents', icon: Files },
+      { title: 'Checklist', path: '/claim-checklist', icon: ClipboardCheck },
     ],
   },
   {

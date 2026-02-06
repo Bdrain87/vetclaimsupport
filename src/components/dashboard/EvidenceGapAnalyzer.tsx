@@ -115,7 +115,7 @@ export function EvidenceGapAnalyzer() {
         description: hasBuddy
           ? 'Third-party witness strengthens your claim'
           : 'A buddy statement from someone who witnessed your condition is powerful evidence',
-        link: '/buddy-contacts',
+        link: '/buddy-statements',
         icon: Users,
         isMet: hasBuddy,
       });

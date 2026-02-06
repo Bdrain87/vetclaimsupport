@@ -27,7 +27,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       root.classList.add('light');
     }
 
-    localStorage.setItem(THEME_KEY, theme);
+    try {
+      localStorage.setItem(THEME_KEY, theme);
+    } catch {
+      // Storage full or unavailable
+    }
   }, [theme]);
 
   const toggleTheme = useCallback(() => {

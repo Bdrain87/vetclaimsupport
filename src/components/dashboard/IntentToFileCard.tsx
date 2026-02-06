@@ -34,8 +34,12 @@ export function IntentToFileCard() {
   }, []);
 
   const handleDismiss = () => {
-    localStorage.setItem(DISMISSED_KEY, 'true');
-    localStorage.setItem(DISMISSED_AT_KEY, Date.now().toString());
+    try {
+      localStorage.setItem(DISMISSED_KEY, 'true');
+      localStorage.setItem(DISMISSED_AT_KEY, Date.now().toString());
+    } catch {
+      // Storage full or unavailable
+    }
     setIsDismissed(true);
   };
 

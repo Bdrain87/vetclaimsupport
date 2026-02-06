@@ -90,7 +90,7 @@ export function GuidedActionBanner({ onOpenAddCondition }: GuidedActionBannerPro
         icon: <Users className="h-5 w-5" />,
         label: 'Add Witness Contacts',
         description: 'Get buddy statements to support your claim',
-        href: '/buddy-contacts',
+        href: '/buddy-statements',
         priority: 5,
       };
     }

@@ -447,7 +447,7 @@ export function RatingIncreaseAnalyzer() {
                 </Link>
               </Button>
               <Button variant="outline" size="sm" asChild>
-                <Link to="/buddy-contacts">
+                <Link to="/buddy-statements">
                   <Users className="h-4 w-4 mr-2" />
                   Add Buddy Statement
                 </Link>

@@ -67,7 +67,7 @@ export function EvidenceStrengthIndicator({ condition, data, compact = false }: 
       label: 'Add buddy statement',
       shortLabel: 'Buddy Statement',
       icon: Users,
-      link: '/buddy-contacts',
+      link: '/buddy-statements',
       hasEvidence: strength.hasBuddyStatements,
       count: condition.linkedBuddyContacts.length,
     },

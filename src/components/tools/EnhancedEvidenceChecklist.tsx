@@ -146,7 +146,7 @@ export function EnhancedEvidenceChecklist() {
         required: false,
         completed: hasBuddy,
         count: linkedBuddies,
-        link: '/buddy-contacts',
+        link: '/buddy-statements',
         firstPersonTip: `Ask your buddy to write: "I served with [NAME] at [LOCATION] from [DATE] to [DATE]. I personally witnessed [SPECIFIC INCIDENT/SYMPTOMS]. I observed that [NAME] [SPECIFIC OBSERVATIONS]."`,
       });
 

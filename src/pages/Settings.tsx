@@ -58,7 +58,11 @@ export default function Settings() {
   }, [reminderSettings]);
 
   useEffect(() => {
-    localStorage.setItem(REMINDER_SETTINGS_KEY, JSON.stringify(reminderSettings));
+    try {
+      localStorage.setItem(REMINDER_SETTINGS_KEY, JSON.stringify(reminderSettings));
+    } catch {
+      // Storage full or unavailable
+    }
 
     // Schedule notifications if enabled
     if (reminderSettings.enabled && notificationPermission === 'granted') {
@@ -228,7 +232,7 @@ export default function Settings() {
               }
               disabled={!reminderSettings.enabled}
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full" aria-label="Reminder frequency">
                 <SelectValue placeholder="Select frequency" />
               </SelectTrigger>
               <SelectContent>
@@ -251,7 +255,7 @@ export default function Settings() {
               }
               disabled={!reminderSettings.enabled}
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full" aria-label="Reminder time">
                 <SelectValue placeholder="Select time" />
               </SelectTrigger>
               <SelectContent>

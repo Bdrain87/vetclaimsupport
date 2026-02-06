@@ -64,7 +64,7 @@ export function ClaimsJourneyRoadmap() {
       { label: 'Track symptoms regularly', completed: data.symptoms.length >= 3, href: '/symptoms' },
       { label: 'Log medications', completed: hasMedications, href: '/medications' },
       { label: 'Add conditions to claim', completed: hasConditions, href: '/' },
-      { label: 'Add buddy contacts', completed: hasBuddyContacts, href: '/buddy-contacts' },
+      { label: 'Add buddy contacts', completed: hasBuddyContacts, href: '/buddy-statements' },
     ];
     const phase2Progress = Math.round((phase2Tasks.filter(t => t.completed).length / phase2Tasks.length) * 100);
 
@@ -78,7 +78,7 @@ export function ClaimsJourneyRoadmap() {
     
     const phase3Tasks = [
       { label: 'Gather key documents', completed: documentsObtained >= 3, href: '/documents' },
-      { label: 'Obtain buddy statements', completed: hasBuddyStatements, href: '/buddy-contacts' },
+      { label: 'Obtain buddy statements', completed: hasBuddyStatements, href: '/buddy-statements' },
       { label: 'Upload supporting docs', completed: hasUploadedDocs, href: '/documents' },
       { label: 'Link evidence to conditions', completed: hasLinkedEvidence, href: '/' },
     ];
@@ -97,7 +97,7 @@ export function ClaimsJourneyRoadmap() {
     const phase4Tasks = [
       { label: 'File Intent to File', completed: hasItf, href: '/' },
       { label: 'Reach 50%+ evidence per condition', completed: conditionsWithStrongEvidence >= 1, href: '/' },
-      { label: 'Review claim checklist', completed: false, href: '/checklist' },
+      { label: 'Review claim checklist', completed: false, href: '/claim-checklist' },
       { label: 'Prepare for C&P exam', completed: false, href: '/exam-prep' },
     ];
     const phase4Progress = Math.round((phase4Tasks.filter(t => t.completed).length / phase4Tasks.length) * 100);

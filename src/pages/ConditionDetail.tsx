@@ -395,7 +395,7 @@ export default function ConditionDetail() {
                 </div>
               ))}
 
-              <Button variant="outline" className="w-full mt-4" onClick={() => navigate('/docs')}>
+              <Button variant="outline" className="w-full mt-4" onClick={() => navigate('/documents')}>
                 <FileText className="h-4 w-4 mr-2" />
                 Go to Documents Hub
               </Button>

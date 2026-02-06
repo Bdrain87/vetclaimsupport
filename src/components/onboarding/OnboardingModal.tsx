@@ -64,14 +64,18 @@ export function OnboardingModal({ forceShow = false, onComplete }: OnboardingMod
   }, [forceShow]);
 
   const handleComplete = () => {
-    localStorage.setItem(ONBOARDING_KEY, 'true');
+    try {
+      localStorage.setItem(ONBOARDING_KEY, 'true');
 
-    // Save profile if provided
-    if (profile.branch) {
-      localStorage.setItem('militaryBranch', profile.branch);
-    }
-    if (profile.serviceStart) {
-      localStorage.setItem('serviceStart', profile.serviceStart);
+      // Save profile if provided
+      if (profile.branch) {
+        localStorage.setItem('militaryBranch', profile.branch);
+      }
+      if (profile.serviceStart) {
+        localStorage.setItem('serviceStart', profile.serviceStart);
+      }
+    } catch {
+      // Storage full or unavailable
     }
     if (profile.serviceEnd) {
       saveSeparationDate(new Date(profile.serviceEnd + '-01').toISOString());

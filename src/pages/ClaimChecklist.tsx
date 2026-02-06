@@ -254,7 +254,7 @@ export default function ClaimChecklist() {
           : data.buddyContacts.length < 2
             ? 'Add at least one more contact. Multiple witnesses strengthen your claim.'
             : 'Good network of witnesses identified.',
-        link: '/buddy-contacts',
+        link: '/buddy-statements',
         linkText: 'Add Contact',
         priority: 'medium',
       },
@@ -276,7 +276,7 @@ export default function ClaimChecklist() {
             : metrics.buddyStatementsReceived < data.buddyContacts.length
               ? `${data.buddyContacts.length - metrics.buddyStatementsReceived} statement(s) pending. Follow up with your contacts.`
               : 'All statements collected! These provide valuable third-party evidence.',
-        link: '/buddy-contacts',
+        link: '/buddy-statements',
         linkText: 'Track Status',
         priority: 'high',
       },

@@ -197,6 +197,7 @@ export function DataBackup() {
               accept=".json"
               onChange={handleFileSelect}
               className="hidden"
+              aria-label="Select backup file to restore"
             />
           </div>
         </CardContent>

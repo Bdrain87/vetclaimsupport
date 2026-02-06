@@ -38,7 +38,11 @@ export function CPExamPrepTab() {
   });
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(checklist));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(checklist));
+    } catch {
+      // Storage full or unavailable
+    }
   }, [checklist]);
 
   const handleCheck = (id: string, checked: boolean) => {

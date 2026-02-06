@@ -369,7 +369,7 @@ export default function Conditions() {
           />
         </div>
         <Select value={bodySystemFilter} onValueChange={setBodySystemFilter}>
-          <SelectTrigger className="w-full sm:w-48">
+          <SelectTrigger className="w-full sm:w-48" aria-label="Filter by body system">
             <Filter className="h-4 w-4 mr-2" />
             <SelectValue />
           </SelectTrigger>
