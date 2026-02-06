@@ -686,8 +686,8 @@ export const PlatinumLanding = () => {
                 <div className="w-10 h-10 rounded-full bg-[#C8A628]/20 border border-[#C8A628]/40 flex items-center justify-center text-[#C8A628] font-bold text-sm">
                   BD
                 </div>
-                <p className="text-white/70 font-bold italic">
-                  — The Founder, <span className="text-[#C8A628] italic">Vet Claim Support</span>
+                <p className="text-white/70 font-bold">
+                  — Blake Drain, <span className="text-[#C8A628]">Vet Claim Support</span>
                 </p>
               </div>
             </div>
