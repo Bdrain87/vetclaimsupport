@@ -32,7 +32,7 @@ const features = [
   },
   {
     title: 'Discover Secondary Conditions',
-    description: 'Find hidden connections between your conditions. Over 700 secondary condition relationships to maximize your rating.',
+    description: 'Find hidden connections between your conditions. 800+ conditions with 775+ secondary connections to maximize your rating.',
     icon: Link2,
     gradient: 'from-amber-500 to-orange-500'
   },

@@ -225,7 +225,7 @@ export const PlatinumLanding = () => {
               <span className="text-white/50 line-through text-xl">$19.99</span>
               <span className="text-5xl sm:text-6xl font-black" style={goldGradientStyle}>$4.99</span>
             </div>
-            <p className="text-white/60 text-sm mb-6 text-center">Launch Price — Limited Time</p>
+            <p className="text-white/60 text-sm mb-6 text-center">Limited Time Launch Price</p>
 
             <Link
               to="/dashboard"
@@ -265,7 +265,7 @@ export const PlatinumLanding = () => {
         >
           {[
             { icon: <Award size={24} />, text: 'Built by a 100% Disabled Veteran' },
-            { icon: <ClipboardList size={24} />, text: `${secondaryCount}+ Secondary Conditions Mapped` },
+            { icon: <ClipboardList size={24} />, text: '800+ VA Conditions Covered' },
             { icon: <Scale size={24} />, text: '38 CFR Part 4 Intelligence Built In' },
           ].map((item, i) => (
             <motion.div key={i} variants={cardVariant} className="flex items-center gap-3 text-center md:text-left">
@@ -438,7 +438,7 @@ export const PlatinumLanding = () => {
           <ToolCard
             icon={<Brain size={28} />}
             title="Secondary Conditions Engine"
-            desc="778+ medically documented connections between conditions. One missed secondary could be worth $400/month for life."
+            desc="800+ conditions with 775+ medically documented secondary connections. One missed link could be worth $400/month for life."
           />
           <ToolCard
             icon={<MapPin size={28} />}
@@ -617,7 +617,7 @@ export const PlatinumLanding = () => {
             <p className="text-white/60 text-3xl sm:text-4xl md:text-5xl font-bold line-through mb-2">$19.99</p>
             <p className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black leading-none mb-4" style={goldGradientStyle}>$4.99</p>
             <p className="text-white uppercase text-sm font-bold tracking-widest mb-10 sm:mb-12">
-              Launch Price — Limited Time
+              Limited Time Launch Price
             </p>
           </motion.div>
 
@@ -688,14 +688,9 @@ export const PlatinumLanding = () => {
                 isn't a corporation. It's a weapon — built by a veteran, for veterans.
               </p>
 
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#C8A628]/20 border border-[#C8A628]/40 flex items-center justify-center text-[#C8A628] font-bold text-sm">
-                  BD
-                </div>
-                <p className="text-white/70 font-bold italic">
-                  — The Founder, <span className="text-[#C8A628] italic">Vet Claim Support</span>
-                </p>
-              </div>
+              <p className="text-white/50 font-bold text-sm mt-2">
+                — A 100% Service-Connected Disabled Veteran
+              </p>
             </div>
           </motion.div>
         </div>
