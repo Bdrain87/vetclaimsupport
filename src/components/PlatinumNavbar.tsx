@@ -7,9 +7,9 @@ export const PlatinumNavbar = () => {
       <div className="max-w-7xl mx-auto glass-card flex items-center justify-between px-6 py-4 border-white/5">
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-2 group cursor-pointer">
-            <div className="h-8 w-8 bg-[#C8A628] rounded-lg flex items-center justify-center font-black text-[#102039] italic transition-transform group-hover:rotate-12">S</div>
+            <div className="h-8 w-8 bg-[#C8A628] rounded-lg flex items-center justify-center font-black text-[#102039] italic transition-transform group-hover:rotate-12">V</div>
             <span className="text-white font-black italic tracking-tighter uppercase relative hidden md:block">
-              Service Evidence
+              Vet Claim Support
               <span className="absolute -bottom-4 left-0 text-[8px] text-[#C8A628] opacity-0 group-hover:opacity-100 transition-opacity font-mono">
                 v2.0 // Protected by CatJuan
               </span>
