@@ -2,6 +2,9 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/layout/Navbar';
 import { ClaimsProvider } from './context/ClaimsContext';
+import { ThemeProvider } from './context/ThemeContext';
+import { UserConditionsProvider } from './context/UserConditionsContext';
+import { TooltipProvider } from './components/ui/tooltip';
 import { ErrorBoundary } from './components/ErrorBoundary';
 
 // Lazy-loaded route components for code splitting
@@ -66,12 +69,15 @@ function PageWrapper({ children }: { children: React.ReactNode }) {
 function App() {
   return (
     <ErrorBoundary>
-      <ClaimsProvider>
-        <BrowserRouter>
-          <div className="min-h-[100dvh] bg-[#102039] text-white overflow-x-hidden break-words">
-            <Navbar />
-            <Suspense fallback={<LoadingFallback />}>
-              <Routes>
+      <ThemeProvider>
+        <ClaimsProvider>
+          <UserConditionsProvider>
+            <TooltipProvider>
+              <BrowserRouter>
+                <div className="min-h-[100dvh] bg-[#102039] text-white overflow-x-hidden break-words">
+                  <Navbar />
+                  <Suspense fallback={<LoadingFallback />}>
+                    <Routes>
                 {/* Landing — hero goes behind navbar, no top padding */}
                 <Route path="/" element={<Landing />} />
 
@@ -115,11 +121,14 @@ function App() {
                 <Route path="/privacy" element={<PageWrapper><Privacy /></PageWrapper>} />
                 <Route path="/disclaimer" element={<PageWrapper><Disclaimer /></PageWrapper>} />
                 <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
-              </Routes>
-            </Suspense>
-          </div>
-        </BrowserRouter>
-      </ClaimsProvider>
+                    </Routes>
+                  </Suspense>
+                </div>
+              </BrowserRouter>
+            </TooltipProvider>
+          </UserConditionsProvider>
+        </ClaimsProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 }
