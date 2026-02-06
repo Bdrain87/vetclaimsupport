@@ -323,6 +323,7 @@ export default function Sleep() {
                         id="interruptions" 
                         type="number" 
                         min="0"
+                        max="30"
                         value={formData.interruptions}
                         onChange={(e) => setFormData({ ...formData, interruptions: parseInt(e.target.value) || 0 })}
                       />
@@ -776,10 +777,10 @@ export default function Sleep() {
                     )}
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="ghost" size="icon" onClick={() => handleEdit(entry)}>
+                    <Button variant="ghost" size="icon" onClick={() => handleEdit(entry)} aria-label="Edit sleep entry">
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => deleteSleepEntry(entry.id)}>
+                    <Button variant="ghost" size="icon" onClick={() => deleteSleepEntry(entry.id)} aria-label="Delete sleep entry">
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>

@@ -57,7 +57,7 @@ const premiumToolsGroup: NavGroup = {
   alwaysOpen: true,
   defaultOpen: true,
   items: [
-    { to: '/calculator', icon: Calculator, label: 'Rating Calculator' },
+    { to: '/claim-tools', icon: Calculator, label: 'Rating Calculator' },
     { to: '/secondary-finder', icon: Search, label: 'Secondary Finder' },
     { to: '/nexus-letter', icon: FileSignature, label: 'Nexus Letter Generator' },
     { to: '/dbq-prep', icon: ClipboardList, label: 'DBQ Prep Sheet' },
@@ -110,7 +110,7 @@ const secondaryNavItems: NavItem[] = [
 
 const pageLabels: Record<string, string> = {
   '/': 'Dashboard',
-  '/calculator': 'Rating Calculator',
+  '/claim-tools': 'Rating Calculator',
   '/secondary-finder': 'Secondary Finder',
   '/nexus-letter': 'Nexus Letter Generator',
   '/dbq-prep': 'DBQ Prep Sheet',

@@ -317,10 +317,10 @@ export default function Exposures() {
                     )}
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => handleEdit(exposure)}>
+                    <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => handleEdit(exposure)} aria-label="Edit exposure">
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => deleteExposure(exposure.id)}>
+                    <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => deleteExposure(exposure.id)} aria-label="Delete exposure">
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>

@@ -28,7 +28,7 @@ const SCREENSHOTS = [
     id: 1,
     caption: 'Know your combined VA rating instantly',
     description: 'Calculator showing combined rating with monthly compensation',
-    page: '/calculator',
+    page: '/claim-tools',
     icon: Calculator,
     keyElements: ['Rating percentage display', 'Monthly pay calculation', 'Bilateral factor indicator'],
     tips: 'Show a realistic rating (e.g., 70% or 80%) with multiple conditions listed'

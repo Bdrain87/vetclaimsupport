@@ -13,7 +13,7 @@ export const EquipmentTracker = () => {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h3 className="text-2xl font-black italic text-white uppercase tracking-tighter">DME Evidence Log</h3>
-          <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest mt-1">VA-Issued Medical Equipment</p>
+          <p className="text-white/50 text-[10px] font-bold uppercase tracking-widest mt-1">VA-Issued Medical Equipment</p>
         </div>
         <Package className="text-[#C8A628]" size={28} />
       </div>
@@ -33,7 +33,7 @@ export const EquipmentTracker = () => {
               </div>
               <div>
                 <p className="text-white font-bold text-sm">{item.name}</p>
-                <p className="text-white/30 text-[10px] font-mono">{item.id}</p>
+                <p className="text-white/50 text-[10px] font-mono">{item.id}</p>
               </div>
             </div>
             <div className="text-right">

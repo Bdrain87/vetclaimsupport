@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   Stethoscope,
   CheckCircle2,
@@ -84,7 +84,20 @@ const dontsList = [
 export default function CPExamPrepEnhanced() {
   const [selectedCondition, setSelectedCondition] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
+  const [checkedItems, setCheckedItems] = useState<Set<string>>(() => {
+    try {
+      const saved = localStorage.getItem('cp-exam-checklist');
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('cp-exam-checklist', JSON.stringify([...checkedItems]));
+    } catch { /* storage full */ }
+  }, [checkedItems]);
 
   const allConditions = useMemo(() => {
     return examCategories.flatMap(cat =>

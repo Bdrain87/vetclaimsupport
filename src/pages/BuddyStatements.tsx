@@ -536,10 +536,10 @@ Date: ${today}`;
                         </span>
                       </div>
                       <div className="flex gap-1">
-                        <Button variant="ghost" size="icon" className="h-8 w-8 min-h-[44px] min-w-[44px]" onClick={() => handleEdit(contact)}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 min-h-[44px] min-w-[44px]" onClick={() => handleEdit(contact)} aria-label="Edit contact">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 min-h-[44px] min-w-[44px]" onClick={() => deleteBuddyContact(contact.id)}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 min-h-[44px] min-w-[44px]" onClick={() => deleteBuddyContact(contact.id)} aria-label="Delete contact">
                           <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>
                       </div>

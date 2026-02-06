@@ -26,11 +26,11 @@ export const PactActModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
                 </div>
                 <div>
                   <h2 className="text-3xl font-black italic uppercase tracking-tighter">PACT Act Discovery</h2>
-                  <p className="text-white/40 text-xs font-bold uppercase tracking-widest">Presumptive Exposure Mapping</p>
+                  <p className="text-white/50 text-xs font-bold uppercase tracking-widest">Presumptive Exposure Mapping</p>
                 </div>
               </div>
               <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full transition-colors">
-                <X className="text-white/40" />
+                <X className="text-white/50" />
               </button>
             </div>
 
@@ -42,7 +42,7 @@ export const PactActModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
                       <MapPin className="text-[#C8A628] shrink-0" size={18} />
                       <div>
                         <h3 className="text-lg font-bold text-white uppercase tracking-tight">{region.region}</h3>
-                        <p className="text-xs text-white/40 mt-1 leading-relaxed">{region.description}</p>
+                        <p className="text-xs text-white/50 mt-1 leading-relaxed">{region.description}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-navy-950 h-fit border border-white/5">
