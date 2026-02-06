@@ -33,6 +33,8 @@ export interface VACondition {
   possibleSecondaries?: string[]; // Display-friendly secondary condition names
   nexusTip?: string; // Guidance for establishing service connection nexus
   keywords: string[]; // Additional search terms
+  misspellings?: string[]; // Common misspellings for search matching
+  bodySystem?: string; // Body system affected (e.g., "Spine", "Mental Health", "Knee")
 }
 
 // Category labels for display
@@ -72,7 +74,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '0-100%',
     description: 'Mental health condition triggered by experiencing or witnessing traumatic events',
     commonSecondaries: ['depression', 'anxiety', 'sleep-apnea', 'migraines', 'substance-abuse', 'erectile-dysfunction'],
-    keywords: ['trauma', 'nightmares', 'flashbacks', 'combat', 'mst', 'military sexual trauma'],
+    keywords: ['trauma', 'nightmares', 'flashbacks', 'combat', 'mst', 'military sexual trauma', 'anxiety', 'hypervigilance', 'stressor', 'mental health', 'combat stress', 'TBI related', 'panic attacks', 'startle response'],
+    misspellings: ['post traumatic', 'post-traumatic', 'pstd', 'ptds', 'p.t.s.d'],
+    bodySystem: 'Mental Health',
   },
   {
     id: 'depression',
@@ -83,7 +87,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '0-100%',
     description: 'Persistent feelings of sadness and loss of interest',
     commonSecondaries: ['anxiety', 'sleep-apnea', 'substance-abuse', 'erectile-dysfunction'],
-    keywords: ['sad', 'hopeless', 'mood', 'depressed'],
+    keywords: ['sad', 'hopeless', 'mood', 'depressed', 'mental health', 'suicidal', 'low mood', 'crying', 'worthless', 'no motivation', 'MDD', 'major depression', 'clinical depression'],
+    misspellings: ['depresion', 'deppression', 'depresssion', 'depresed'],
+    bodySystem: 'Mental Health',
   },
   {
     id: 'anxiety',
@@ -94,7 +100,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '0-100%',
     description: 'Excessive worry and anxiety about various aspects of life',
     commonSecondaries: ['depression', 'sleep-apnea', 'migraines', 'hypertension'],
-    keywords: ['worry', 'panic', 'nervous', 'fear'],
+    keywords: ['worry', 'panic', 'nervous', 'fear', 'GAD', 'mental health', 'panic attacks', 'panic disorder', 'anxious', 'restless', 'racing thoughts', 'chest tightness', 'social anxiety'],
+    misspellings: ['anxeity', 'anxity', 'anixety', 'anxeiety', 'anxioty'],
+    bodySystem: 'Mental Health',
   },
   {
     id: 'bipolar',
@@ -105,7 +113,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '0-100%',
     description: 'Mood disorder with episodes of mania and depression',
     commonSecondaries: ['depression', 'anxiety', 'substance-abuse', 'sleep-apnea'],
-    keywords: ['manic', 'mood swings', 'mania'],
+    keywords: ['manic', 'mood swings', 'mania', 'mental health', 'bipolar disorder', 'manic depression', 'hypomania', 'bipolar I', 'bipolar II', 'mood disorder', 'cycling moods'],
+    misspellings: ['bi-polar', 'bi polar', 'bipolor', 'bipoler'],
+    bodySystem: 'Mental Health',
   },
   {
     id: 'schizophrenia',
@@ -116,7 +126,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '30-100%',
     description: 'Severe mental disorder affecting thoughts, feelings, and behavior',
     commonSecondaries: ['depression', 'anxiety', 'substance-abuse'],
-    keywords: ['psychosis', 'hallucinations', 'delusions'],
+    keywords: ['psychosis', 'hallucinations', 'delusions', 'mental health', 'voices', 'paranoia', 'thought disorder', 'psychotic', 'schizoaffective', 'disorganized thinking'],
+    misspellings: ['schizophernia', 'skizofrenia', 'schitzophrenia', 'shizophrenia'],
+    bodySystem: 'Mental Health',
   },
   {
     id: 'substance-abuse',
@@ -127,7 +139,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '0-100%',
     description: 'Alcohol or drug addiction secondary to service-connected condition',
     commonSecondaries: ['depression', 'anxiety', 'ptsd'],
-    keywords: ['alcohol', 'drug', 'addiction', 'alcoholism'],
+    keywords: ['alcohol', 'drug', 'addiction', 'alcoholism', 'drinking', 'substance use', 'dependence', 'withdrawal', 'rehab', 'recovery', 'self medicating', 'opioid'],
+    misspellings: ['substence', 'substanse', 'alchohol', 'alchoholism'],
+    bodySystem: 'Mental Health',
   },
   {
     id: 'adjustment-disorder',
@@ -138,7 +152,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '0-70%',
     description: 'Stress-related condition in response to life changes',
     commonSecondaries: ['depression', 'anxiety'],
-    keywords: ['stress', 'coping', 'transition'],
+    keywords: ['stress', 'coping', 'transition', 'mental health', 'life change', 'difficulty adjusting', 'emotional distress', 'stressor', 'military transition', 'separation'],
+    misspellings: ['ajustment', 'adjustement', 'adjustment disoder'],
+    bodySystem: 'Mental Health',
   },
   {
     id: 'insomnia',
@@ -149,7 +165,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '0-30%',
     description: 'Chronic difficulty falling or staying asleep',
     commonSecondaries: ['depression', 'anxiety', 'sleep-apnea'],
-    keywords: ['sleep', 'sleepless', 'cant sleep'],
+    keywords: ['sleep', 'sleepless', 'cant sleep', 'sleep problems', 'waking up', 'sleep disorder', 'sleep disturbance', 'no sleep', 'tired', 'fatigue', 'restless sleep', 'nighttime waking'],
+    misspellings: ['insomina', 'insomania', 'insomia', 'insomnia'],
+    bodySystem: 'Mental Health',
   },
 
   // ============================================
@@ -164,7 +182,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '0-100%',
     description: 'Brain injury from external force or trauma',
     commonSecondaries: ['migraines', 'ptsd', 'depression', 'tinnitus', 'vertigo', 'cognitive-disorder'],
-    keywords: ['head injury', 'concussion', 'brain damage', 'blast'],
+    keywords: ['head injury', 'concussion', 'brain damage', 'blast', 'brain injury', 'head trauma', 'traumatic brain', 'blast exposure', 'IED', 'explosion', 'skull fracture', 'closed head injury', 'mTBI'],
+    misspellings: ['tbi', 'tramatic brain', 'traumtic brain', 'concusion'],
+    bodySystem: 'Brain',
   },
   {
     id: 'migraines',
@@ -175,7 +195,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '0-50%',
     description: 'Evaluated based on the frequency of prostrating attacks over the last 6 months. Rating criteria per 38 CFR § 4.124a.',
     commonSecondaries: ['depression', 'anxiety', 'insomnia'],
-    keywords: ['headache', 'head pain', 'headaches'],
+    keywords: ['headache', 'head pain', 'headaches', 'migraine', 'aura', 'prostrating', 'light sensitivity', 'photophobia', 'nausea', 'cluster headache', 'tension headache', 'chronic headaches', 'severe headache'],
+    misspellings: ['migranes', 'migrains', 'migrane', 'migriane', 'magraine'],
+    bodySystem: 'Brain',
   },
   {
     id: 'peripheral-neuropathy',
@@ -186,7 +208,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-80%',
     description: 'Nerve damage causing numbness, tingling, or pain in extremities',
     commonSecondaries: ['diabetes', 'radiculopathy'],
-    keywords: ['nerve damage', 'numbness', 'tingling', 'burning'],
+    keywords: ['nerve damage', 'numbness', 'tingling', 'burning', 'neuropathy', 'nerve pain', 'pins and needles', 'feet numbness', 'hands numbness', 'diabetic neuropathy', 'extremity pain', 'loss of sensation'],
+    misspellings: ['nuropathy', 'nueropathy', 'nuerapathy', 'periferal neuropathy', 'periphral'],
+    bodySystem: 'Nerve',
   },
   {
     id: 'radiculopathy',
@@ -197,7 +221,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-60%',
     description: 'Pinched nerve causing pain radiating from spine',
     commonSecondaries: ['lumbar-ddd', 'cervical-ddd', 'sciatica'],
-    keywords: ['pinched nerve', 'radiating pain', 'shooting pain'],
+    keywords: ['pinched nerve', 'radiating pain', 'shooting pain', 'nerve root', 'cervical radiculopathy', 'lumbar radiculopathy', 'arm pain', 'leg pain', 'nerve compression', 'spine nerve', 'numbness down leg', 'numbness down arm'],
+    misspellings: ['radiculapathy', 'radiclopathy', 'radiculopthy', 'ridiculopathy'],
+    bodySystem: 'Spine',
   },
   {
     id: 'sciatica',
@@ -208,7 +234,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-60%',
     description: 'Pain along the sciatic nerve from lower back to legs',
     commonSecondaries: ['lumbar-ddd', 'radiculopathy'],
-    keywords: ['leg pain', 'sciatic nerve', 'shooting leg pain'],
+    keywords: ['leg pain', 'sciatic nerve', 'shooting leg pain', 'lower back to leg', 'buttock pain', 'hip pain radiating', 'nerve pain leg', 'sciatic', 'back leg pain', 'piriformis'],
+    misspellings: ['siatica', 'scatica', 'sciatika', 'cyatica', 'syatica'],
+    bodySystem: 'Spine',
   },
   {
     id: 'carpal-tunnel',
@@ -219,7 +247,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-70%',
     description: 'Compression of median nerve in wrist',
     commonSecondaries: ['peripheral-neuropathy'],
-    keywords: ['wrist pain', 'hand numbness', 'hand tingling'],
+    keywords: ['wrist pain', 'hand numbness', 'hand tingling', 'carpal tunnel', 'median nerve', 'wrist numbness', 'grip weakness', 'hand weakness', 'finger tingling', 'typing injury', 'repetitive strain', 'wrist brace'],
+    misspellings: ['carpel tunnel', 'carple tunnel', 'carpal tunel', 'carpul tunnel'],
+    bodySystem: 'Wrist',
   },
   {
     id: 'vertigo',
@@ -230,7 +260,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Dizziness and balance problems',
     commonSecondaries: ['tinnitus', 'hearing-loss', 'menieres'],
-    keywords: ['dizziness', 'balance', 'spinning'],
+    keywords: ['dizziness', 'balance', 'spinning', 'vestibular', 'dizzy', 'unsteady', 'lightheaded', 'room spinning', 'balance problems', 'BPPV', 'positional vertigo', 'falling'],
+    misspellings: ['vertago', 'vertgio', 'virtigo', 'vertio'],
+    bodySystem: 'Ear',
   },
   {
     id: 'menieres',
@@ -241,7 +273,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '30-100%',
     description: 'Inner ear disorder causing vertigo, tinnitus, and hearing loss',
     commonSecondaries: ['tinnitus', 'hearing-loss', 'vertigo'],
-    keywords: ['inner ear', 'balance', 'dizziness'],
+    keywords: ['inner ear', 'balance', 'dizziness', 'ear fullness', 'hearing fluctuation', 'ear pressure', 'vertigo attacks', 'nausea dizziness', 'endolymphatic', 'episodic vertigo'],
+    misspellings: ['menieres', 'meniers', 'meneires', 'menieers', 'meniears'],
+    bodySystem: 'Ear',
   },
   {
     id: 'cognitive-disorder',
@@ -252,7 +286,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '0-100%',
     description: 'Impairment of cognitive function including memory, concentration',
     commonSecondaries: ['tbi', 'depression', 'ptsd'],
-    keywords: ['memory loss', 'concentration', 'thinking problems'],
+    keywords: ['memory loss', 'concentration', 'thinking problems', 'brain fog', 'confusion', 'forgetful', 'cognitive impairment', 'trouble focusing', 'mental clarity', 'processing speed', 'attention deficit'],
+    misspellings: ['cognative', 'congitive', 'cognetive'],
+    bodySystem: 'Brain',
   },
   {
     id: 'epilepsy',
@@ -263,7 +299,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Seizure disorder',
     commonSecondaries: ['tbi', 'depression', 'anxiety'],
-    keywords: ['seizures', 'convulsions'],
+    keywords: ['seizures', 'convulsions', 'seizure disorder', 'epileptic', 'fits', 'grand mal', 'petit mal', 'absence seizure', 'tonic-clonic', 'anti-seizure medication', 'aura seizure'],
+    misspellings: ['epilepsey', 'epilipsy', 'epilespy', 'epilepsi', 'epilepcy'],
+    bodySystem: 'Brain',
   },
   {
     id: 'parkinsons',
@@ -274,7 +312,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '30-100%',
     description: 'Progressive nervous system disorder affecting movement',
     commonSecondaries: ['depression', 'cognitive-disorder', 'sleep-apnea'],
-    keywords: ['tremor', 'shaking', 'movement disorder'],
+    keywords: ['tremor', 'shaking', 'movement disorder', 'rigidity', 'bradykinesia', 'slow movement', 'balance problems', 'stiffness', 'resting tremor', 'dopamine', 'shuffling gait'],
+    misspellings: ['parkinsons', 'parkinson', 'parkenson', 'parkinsen', 'parkinsins'],
+    bodySystem: 'Brain',
   },
   {
     id: 'als',
@@ -285,7 +325,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '100%',
     description: 'Progressive neurodegenerative disease (presumptive for all veterans)',
     commonSecondaries: ['depression', 'respiratory-failure'],
-    keywords: ['lou gehrigs', 'motor neuron'],
+    keywords: ['lou gehrigs', 'motor neuron', 'amyotrophic', 'muscle wasting', 'progressive weakness', 'motor neuron disease', 'muscle atrophy', 'difficulty swallowing', 'fasciculations', 'neurodegenerative'],
+    misspellings: ['lou gehrigs', 'lou gehrig', 'amiotrophic', 'amyotrofic'],
+    bodySystem: 'Brain',
   },
   {
     id: 'ms',
@@ -296,7 +338,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '30-100%',
     description: 'Autoimmune disease affecting the central nervous system',
     commonSecondaries: ['depression', 'fatigue', 'cognitive-disorder'],
-    keywords: ['autoimmune', 'myelin'],
+    keywords: ['autoimmune', 'myelin', 'multiple sclerosis', 'demyelinating', 'CNS', 'central nervous system', 'relapsing remitting', 'progressive MS', 'lesions', 'optic neuritis', 'spasticity'],
+    misspellings: ['mulitple sclerosis', 'mutiple sclerosis', 'multiple sclerousis'],
+    bodySystem: 'Brain',
   },
 
   // ============================================
@@ -313,7 +357,9 @@ export const vaConditions: VACondition[] = [
     commonSecondaries: ['hearing-loss', 'depression', 'anxiety', 'sleep-apnea', 'migraines'],
     possibleSecondaries: ['Migraines', 'Anxiety', 'Depression', 'Sleep Apnea'],
     nexusTip: 'Evidence must show how constant auditory distress triggers secondary symptoms.',
-    keywords: ['ringing ears', 'buzzing', 'ear ringing'],
+    keywords: ['ringing', 'ringing ears', 'ears ringing', 'buzzing', 'hissing', 'ear noise', 'hearing', 'ear damage', 'noise exposure', 'auditory', 'ear ringing', 'whooshing'],
+    misspellings: ['tinitis', 'tinitus', 'tinnitis', 'tinnius', 'tinitius', 'tinnitus'],
+    bodySystem: 'Ear',
   },
   {
     id: 'hearing-loss',
@@ -324,7 +370,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '0-100%',
     description: 'Partial or complete loss of hearing',
     commonSecondaries: ['tinnitus', 'vertigo', 'depression'],
-    keywords: ['deaf', 'cant hear', 'hard of hearing'],
+    keywords: ['deaf', 'cant hear', 'hard of hearing', 'hearing impairment', 'hearing aid', 'hearing aids', 'sensorineural', 'noise induced', 'audiogram', 'hearing test', 'difficulty hearing', 'bilateral hearing'],
+    misspellings: ['hearing lose', 'hearring loss', 'hereing loss', 'hering loss'],
+    bodySystem: 'Ear',
   },
 
   // ============================================
@@ -339,7 +387,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Decreased visual acuity or field of vision',
     commonSecondaries: ['depression', 'migraines'],
-    keywords: ['blind', 'cant see', 'eyesight'],
+    keywords: ['blind', 'cant see', 'eyesight', 'vision problems', 'visual acuity', 'blurry vision', 'vision impairment', 'eye condition', 'low vision', 'field of vision', 'legally blind'],
+    misspellings: ['vision lose', 'vison loss', 'visoin loss'],
+    bodySystem: 'Eye',
   },
   {
     id: 'macular-degeneration',
@@ -350,7 +400,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Progressive damage to the macula affecting central vision',
     commonSecondaries: ['depression', 'vision-loss'],
-    keywords: ['amd', 'central vision'],
+    keywords: ['amd', 'central vision', 'macular', 'eye disease', 'retina', 'wet AMD', 'dry AMD', 'age related', 'central vision loss', 'drusen', 'retinal degeneration'],
+    misspellings: ['macular degenration', 'macualr degeneration', 'macular degenaration'],
+    bodySystem: 'Eye',
   },
   {
     id: 'glaucoma',
@@ -361,7 +413,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Increased eye pressure damaging optic nerve',
     commonSecondaries: ['vision-loss', 'migraines'],
-    keywords: ['eye pressure', 'optic nerve'],
+    keywords: ['eye pressure', 'optic nerve', 'intraocular pressure', 'IOP', 'eye drops', 'tunnel vision', 'peripheral vision loss', 'open angle', 'closed angle', 'eye disease'],
+    misspellings: ['gluacoma', 'glucoma', 'glaucma', 'glaucaoma'],
+    bodySystem: 'Eye',
   },
   {
     id: 'cataracts',
@@ -372,7 +426,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-30%',
     description: 'Clouding of the eye lens',
     commonSecondaries: ['vision-loss'],
-    keywords: ['cloudy vision', 'lens'],
+    keywords: ['cloudy vision', 'lens', 'cataract', 'eye surgery', 'blurry vision', 'hazy vision', 'lens replacement', 'IOL', 'eye clouding', 'dim vision'],
+    misspellings: ['cataracts', 'cateracts', 'cataracs', 'catarats'],
+    bodySystem: 'Eye',
   },
   {
     id: 'dry-eye',
@@ -383,7 +439,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-30%',
     description: 'Insufficient tear production causing eye discomfort',
     commonSecondaries: ['vision-loss'],
-    keywords: ['burning eyes', 'eye irritation'],
+    keywords: ['burning eyes', 'eye irritation', 'dry eyes', 'tear production', 'gritty eyes', 'eye drops', 'watery eyes', 'eye fatigue', 'eye strain', 'keratoconjunctivitis sicca'],
+    misspellings: ['dry eyes', 'dry eye syndrom', 'dri eye'],
+    bodySystem: 'Eye',
   },
 
   // ============================================
@@ -398,7 +456,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-60%',
     description: 'Disc deterioration in the lower back',
     commonSecondaries: ['radiculopathy', 'sciatica', 'lumbar-strain', 'erectile-dysfunction'],
-    keywords: ['lower back', 'back pain', 'disc disease', 'lumbosacral'],
+    keywords: ['lower back', 'back pain', 'disc disease', 'lumbosacral', 'degenerative disc', 'DDD', 'lumbar spine', 'spinal degeneration', 'disc bulge', 'disc herniation', 'low back', 'spine deterioration', 'L4 L5', 'L5 S1'],
+    misspellings: ['lumbar ddd', 'degenerative disk', 'degeneratve disc', 'lumber DDD'],
+    bodySystem: 'Spine',
   },
   {
     id: 'cervical-ddd',
@@ -409,7 +469,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-60%',
     description: 'Disc deterioration in the neck',
     commonSecondaries: ['radiculopathy', 'cervical-strain', 'migraines'],
-    keywords: ['neck', 'neck pain', 'cervical spine'],
+    keywords: ['neck', 'neck pain', 'cervical spine', 'neck disc', 'cervical degeneration', 'DDD', 'neck stiffness', 'C-spine', 'neck deterioration', 'disc bulge neck', 'C5 C6', 'C6 C7', 'neck arthritis'],
+    misspellings: ['cervical ddd', 'cervicle DDD', 'cervical degenerative disk', 'cervicol'],
+    bodySystem: 'Spine',
   },
   {
     id: 'lumbar-strain',
@@ -422,7 +484,9 @@ export const vaConditions: VACondition[] = [
     commonSecondaries: ['lumbar-ddd', 'radiculopathy', 'sciatica'],
     possibleSecondaries: ['Sciatica', 'Radiculopathy', 'Depression', 'ED'],
     nexusTip: 'Focus on nerve compression (radiculopathy) resulting from spinal instability.',
-    keywords: ['back strain', 'lower back pain', 'muscle strain'],
+    keywords: ['back', 'back pain', 'lower back', 'lumbar', 'spine', 'spinal', 'back injury', 'herniated disc', 'degenerative disc', 'DDD', 'sciatica', 'back strain', 'lumbago'],
+    misspellings: ['lumber strain', 'lumbosacral', 'lumbar strane', 'lumbosacrel'],
+    bodySystem: 'Spine',
   },
   {
     id: 'cervical-strain',
@@ -433,7 +497,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-30%',
     description: 'Strain or sprain of neck muscles/ligaments',
     commonSecondaries: ['cervical-ddd', 'migraines', 'radiculopathy'],
-    keywords: ['neck strain', 'neck pain', 'whiplash'],
+    keywords: ['neck strain', 'neck pain', 'whiplash', 'neck injury', 'stiff neck', 'neck sprain', 'cervical spine', 'neck muscle', 'neck stiffness', 'neck spasm', 'cervical sprain'],
+    misspellings: ['cervical strane', 'cervicle strain', 'cervical stain', 'cervicol strain'],
+    bodySystem: 'Spine',
   },
   {
     id: 'herniated-disc-lumbar',
@@ -444,7 +510,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-60%',
     description: 'Ruptured disc in the lower back',
     commonSecondaries: ['radiculopathy', 'sciatica', 'lumbar-ddd'],
-    keywords: ['bulging disc', 'slipped disc', 'ruptured disc'],
+    keywords: ['bulging disc', 'slipped disc', 'ruptured disc', 'herniated disc', 'disc herniation', 'back disc', 'lumbar herniation', 'disc protrusion', 'disc extrusion', 'lower back disc', 'protruding disc'],
+    misspellings: ['herniated disk', 'herniated dis', 'hernated disc', 'herniaed disc', 'herniated disc lumber'],
+    bodySystem: 'Spine',
   },
   {
     id: 'herniated-disc-cervical',
@@ -455,7 +523,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-60%',
     description: 'Ruptured disc in the neck',
     commonSecondaries: ['radiculopathy', 'cervical-ddd', 'migraines'],
-    keywords: ['neck disc', 'bulging disc neck'],
+    keywords: ['neck disc', 'bulging disc neck', 'herniated disc', 'cervical herniation', 'neck disc bulge', 'slipped disc neck', 'ruptured disc neck', 'disc protrusion cervical', 'cervical disc', 'neck disc herniation'],
+    misspellings: ['herniated disk cervical', 'hernated disc cervical', 'cervicle herniated disc'],
+    bodySystem: 'Spine',
   },
   {
     id: 'spinal-stenosis',
@@ -466,7 +536,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Narrowing of spinal canal',
     commonSecondaries: ['radiculopathy', 'sciatica', 'lumbar-ddd'],
-    keywords: ['narrow spine', 'spinal canal'],
+    keywords: ['narrow spine', 'spinal canal', 'stenosis', 'spinal narrowing', 'foraminal stenosis', 'central stenosis', 'nerve compression spine', 'back surgery', 'laminectomy', 'walking difficulty back', 'spinal cord compression'],
+    misspellings: ['spinal stenois', 'spinal stenosos', 'spinal stinosis', 'spinol stenosis'],
+    bodySystem: 'Spine',
   },
   {
     id: 'scoliosis',
@@ -477,7 +549,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Lateral curvature of the spine',
     commonSecondaries: ['lumbar-strain', 'lumbar-ddd'],
-    keywords: ['curved spine', 'spine curvature'],
+    keywords: ['curved spine', 'spine curvature', 'crooked spine', 'spinal curve', 'back deformity', 'uneven shoulders', 'spinal misalignment', 'lateral curvature', 'thoracic curve'],
+    misspellings: ['skoliosis', 'scoliousis', 'scolioisis', 'scolosis'],
+    bodySystem: 'Spine',
   },
 
   // ============================================
@@ -492,7 +566,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-40%',
     description: 'Shoulder pain and limited motion',
     commonSecondaries: ['rotator-cuff', 'cervical-strain'],
-    keywords: ['shoulder pain', 'shoulder impingement'],
+    keywords: ['shoulder pain', 'shoulder impingement', 'shoulder injury', 'frozen shoulder', 'shoulder stiffness', 'arm pain', 'shoulder range of motion', 'shoulder bursitis', 'shoulder tendinitis', 'adhesive capsulitis', 'shoulder ROM'],
+    misspellings: ['sholder', 'soulder', 'shoulder strane', 'shouldar'],
+    bodySystem: 'Shoulder',
   },
   {
     id: 'rotator-cuff',
@@ -503,7 +579,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '20-40%',
     description: 'Damage to shoulder rotator cuff tendons',
     commonSecondaries: ['shoulder-strain', 'depression'],
-    keywords: ['shoulder tear', 'torn rotator cuff', 'shoulder tendon'],
+    keywords: ['shoulder tear', 'torn rotator cuff', 'shoulder tendon', 'rotator cuff tear', 'shoulder surgery', 'cuff injury', 'shoulder weakness', 'overhead pain', 'supraspinatus', 'infraspinatus', 'shoulder repair'],
+    misspellings: ['rotatorcuff', 'rotater cuff', 'rotator cuf', 'rotator cup', 'rotater cup'],
+    bodySystem: 'Shoulder',
   },
   {
     id: 'tennis-elbow',
@@ -514,7 +592,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-20%',
     description: 'Inflammation of elbow tendons',
     commonSecondaries: ['carpal-tunnel'],
-    keywords: ['elbow pain', 'forearm pain'],
+    keywords: ['elbow pain', 'forearm pain', 'lateral epicondylitis', 'elbow tendinitis', 'outer elbow', 'grip pain', 'elbow inflammation', 'elbow injury', 'arm pain lifting', 'elbow tenderness'],
+    misspellings: ['tennis elbo', 'tenis elbow', 'lateral epicondilitis', 'epicondylitis'],
+    bodySystem: 'Elbow',
   },
   {
     id: 'golfers-elbow',
@@ -525,7 +605,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-20%',
     description: 'Inflammation of inner elbow tendons',
     commonSecondaries: ['carpal-tunnel'],
-    keywords: ['elbow pain', 'inner elbow'],
+    keywords: ['elbow pain', 'inner elbow', 'medial epicondylitis', 'elbow tendinitis', 'inside elbow', 'forearm pain', 'elbow inflammation', 'grip weakness', 'wrist flexion pain'],
+    misspellings: ['golfers elbo', 'golfer elbow', 'medial epicondilitis'],
+    bodySystem: 'Elbow',
   },
 
   // ============================================
@@ -540,7 +622,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-30%',
     description: 'Knee pain, instability, or limited motion',
     commonSecondaries: ['knee-arthritis', 'lumbar-strain'],
-    keywords: ['knee pain', 'knee instability', 'knee injury'],
+    keywords: ['knee pain', 'knee instability', 'knee injury', 'knee problems', 'knee gave out', 'knee swelling', 'knee locking', 'knee buckling', 'knee weakness', 'patella', 'knee ROM', 'bilateral knee'],
+    misspellings: ['nee pain', 'knee strane', 'knee condtion', 'kneee'],
+    bodySystem: 'Knee',
   },
   {
     id: 'knee-arthritis',
@@ -551,7 +635,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-60%',
     description: 'Degenerative joint disease of the knee',
     commonSecondaries: ['knee-strain', 'gait-abnormality'],
-    keywords: ['knee degeneration', 'knee joint'],
+    keywords: ['knee degeneration', 'knee joint', 'knee arthritis', 'DJD knee', 'bone on bone knee', 'knee replacement', 'TKR', 'total knee replacement', 'knee osteoarthritis', 'knee cartilage loss', 'degenerative knee', 'knee grinding'],
+    misspellings: ['knee artheritis', 'knee arthritus', 'knee arthiritis', 'osteoarthitis'],
+    bodySystem: 'Knee',
   },
   {
     id: 'acl-tear',
@@ -562,7 +648,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-30%',
     description: 'Anterior cruciate ligament tear',
     commonSecondaries: ['knee-strain', 'knee-arthritis'],
-    keywords: ['ligament tear', 'knee ligament'],
+    keywords: ['ligament tear', 'knee ligament', 'ACL', 'anterior cruciate', 'knee surgery', 'ACL reconstruction', 'knee gave out', 'knee instability', 'torn ACL', 'knee buckling', 'sports injury knee'],
+    misspellings: ['acl tare', 'ACL teer', 'anterior cruciate ligment', 'anterier cruciate'],
+    bodySystem: 'Knee',
   },
   {
     id: 'meniscus-tear',
@@ -573,7 +661,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-20%',
     description: 'Torn cartilage in the knee',
     commonSecondaries: ['knee-strain', 'knee-arthritis'],
-    keywords: ['knee cartilage', 'torn meniscus'],
+    keywords: ['knee cartilage', 'torn meniscus', 'meniscal tear', 'knee locking', 'knee clicking', 'knee surgery', 'arthroscopy', 'knee popping', 'cartilage damage knee', 'medial meniscus', 'lateral meniscus'],
+    misspellings: ['meniscus tare', 'miniscus tear', 'meniskus', 'meniscas tear', 'menisus'],
+    bodySystem: 'Knee',
   },
   {
     id: 'hip-strain',
@@ -584,7 +674,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-40%',
     description: 'Hip pain and limited motion',
     commonSecondaries: ['hip-arthritis', 'lumbar-strain', 'gait-abnormality'],
-    keywords: ['hip pain', 'hip bursitis'],
+    keywords: ['hip pain', 'hip bursitis', 'hip injury', 'hip problems', 'groin pain', 'hip stiffness', 'hip ROM', 'trochanteric bursitis', 'hip inflammation', 'hip flexor', 'bilateral hip', 'hip snapping'],
+    misspellings: ['hip strane', 'hip bersitis', 'hip bursistis', 'hip condtion'],
+    bodySystem: 'Hip',
   },
   {
     id: 'hip-arthritis',
@@ -595,7 +687,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-90%',
     description: 'Degenerative joint disease of the hip',
     commonSecondaries: ['hip-strain', 'gait-abnormality', 'lumbar-strain'],
-    keywords: ['hip degeneration', 'hip joint'],
+    keywords: ['hip degeneration', 'hip joint', 'hip arthritis', 'DJD hip', 'hip replacement', 'THR', 'total hip replacement', 'bone on bone hip', 'hip osteoarthritis', 'hip grinding', 'degenerative hip'],
+    misspellings: ['hip artheritis', 'hip arthritus', 'hip arthiritis', 'hip osteoarthitis'],
+    bodySystem: 'Hip',
   },
   {
     id: 'ankle-strain',
@@ -606,7 +700,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-20%',
     description: 'Ankle pain and instability',
     commonSecondaries: ['plantar-fasciitis', 'gait-abnormality'],
-    keywords: ['ankle pain', 'ankle sprain', 'ankle instability'],
+    keywords: ['ankle pain', 'ankle sprain', 'ankle instability', 'ankle injury', 'twisted ankle', 'ankle swelling', 'ankle weakness', 'chronic ankle sprain', 'ankle ROM', 'lateral ankle', 'ankle giving out'],
+    misspellings: ['ankel', 'ankle strane', 'ancle', 'ankle condtion'],
+    bodySystem: 'Ankle',
   },
   {
     id: 'plantar-fasciitis',
@@ -617,7 +713,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-30%',
     description: 'Inflammation of foot tissue causing heel pain',
     commonSecondaries: ['flat-feet', 'gait-abnormality'],
-    keywords: ['heel pain', 'foot pain', 'heel spur'],
+    keywords: ['heel pain', 'foot pain', 'heel spur', 'plantar fascia', 'morning heel pain', 'foot inflammation', 'bottom of foot', 'arch pain', 'heel tenderness', 'foot soreness', 'walking pain foot', 'bilateral plantar fasciitis'],
+    misspellings: ['plantar fasciitis', 'plantar fascitis', 'planter fasciitis', 'plantar faciitis', 'plantar fashiitis', 'planter fashitis'],
+    bodySystem: 'Foot',
   },
   {
     id: 'flat-feet',
@@ -628,7 +726,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-50%',
     description: 'Collapsed arches of the feet',
     commonSecondaries: ['plantar-fasciitis', 'knee-strain', 'lumbar-strain'],
-    keywords: ['fallen arches', 'flat foot'],
+    keywords: ['fallen arches', 'flat foot', 'pes planus', 'no arch', 'foot arch', 'overpronation', 'flat feet pain', 'arch collapse', 'foot support', 'orthotics', 'bilateral flat feet'],
+    misspellings: ['flat feat', 'pes planus', 'pes plaines', 'plat feet'],
+    bodySystem: 'Foot',
   },
   {
     id: 'gait-abnormality',
@@ -639,7 +739,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-30%',
     description: 'Abnormal walking pattern due to other conditions',
     commonSecondaries: ['lumbar-strain', 'hip-strain', 'knee-strain'],
-    keywords: ['walking problems', 'limp', 'limping'],
+    keywords: ['walking problems', 'limp', 'limping', 'gait', 'abnormal walk', 'difficulty walking', 'uneven gait', 'antalgic gait', 'favoring leg', 'compensating walk', 'walking aid', 'cane use'],
+    misspellings: ['gate abnormality', 'gait abnormalty', 'gait abnormolity'],
+    bodySystem: 'Lower Extremity',
   },
 
   // ============================================
@@ -654,7 +756,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-40%',
     description: 'Chronic widespread musculoskeletal pain',
     commonSecondaries: ['depression', 'anxiety', 'sleep-apnea', 'migraines', 'chronic-fatigue'],
-    keywords: ['widespread pain', 'muscle pain', 'tender points'],
+    keywords: ['widespread pain', 'muscle pain', 'tender points', 'fibro', 'chronic pain', 'body aches', 'fatigue', 'trigger points', 'pain all over', 'joint pain', 'muscle tenderness', 'fibromyalgia flare'],
+    misspellings: ['fibromialgia', 'fibromyalga', 'fibromyagia', 'firbomyalgia', 'fibromialga'],
+    bodySystem: 'Whole Body',
   },
   {
     id: 'chronic-fatigue',
@@ -665,7 +769,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Extreme fatigue not relieved by rest',
     commonSecondaries: ['depression', 'fibromyalgia', 'sleep-apnea'],
-    keywords: ['extreme tiredness', 'exhaustion'],
+    keywords: ['extreme tiredness', 'exhaustion', 'CFS', 'ME', 'myalgic encephalomyelitis', 'chronic tiredness', 'always tired', 'no energy', 'fatigue syndrome', 'post-exertional malaise', 'unrefreshing sleep'],
+    misspellings: ['chronic fatique', 'cronic fatigue', 'chronic fatigue syndrom', 'chronic fatiuge'],
+    bodySystem: 'Whole Body',
   },
   {
     id: 'rheumatoid-arthritis',
@@ -676,7 +782,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '20-100%',
     description: 'Autoimmune inflammatory arthritis',
     commonSecondaries: ['depression', 'fatigue'],
-    keywords: ['autoimmune arthritis', 'joint inflammation'],
+    keywords: ['autoimmune arthritis', 'joint inflammation', 'RA', 'rheumatoid', 'swollen joints', 'morning stiffness', 'joint deformity', 'inflammatory arthritis', 'autoimmune joint', 'symmetrical arthritis', 'joint erosion'],
+    misspellings: ['rheumatoid arthritus', 'rumatoid arthritis', 'rhumatoid arthritis', 'rheumatoid artheritis'],
+    bodySystem: 'Whole Body',
   },
 
   // ============================================
@@ -691,7 +799,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '0-100%',
     description: 'Breathing repeatedly stops during sleep',
     commonSecondaries: ['depression', 'hypertension', 'erectile-dysfunction', 'migraines', 'gerd'],
-    keywords: ['snoring', 'cpap', 'breathing stops', 'osa'],
+    keywords: ['snoring', 'cpap', 'breathing stops', 'osa', 'sleep study', 'apnea', 'stop breathing', 'sleep test', 'CPAP machine', 'choking at night', 'gasping', 'obstructive sleep', 'daytime sleepiness', 'oxygen desaturation'],
+    misspellings: ['sleep apena', 'sleep apnea', 'sleep apnia', 'sleep apena', 'sleep apneia'],
+    bodySystem: 'Respiratory',
   },
   {
     id: 'asthma',
@@ -702,7 +812,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Chronic airway inflammation causing breathing difficulty',
     commonSecondaries: ['sinusitis', 'gerd', 'anxiety'],
-    keywords: ['breathing difficulty', 'wheezing', 'inhaler'],
+    keywords: ['breathing difficulty', 'wheezing', 'inhaler', 'bronchial', 'shortness of breath', 'asthma attack', 'bronchospasm', 'airway inflammation', 'breathing treatment', 'albuterol', 'rescue inhaler', 'reactive airway'],
+    misspellings: ['asma', 'athsma', 'asthema', 'asthama', 'astma'],
+    bodySystem: 'Respiratory',
   },
   {
     id: 'copd',
@@ -713,7 +825,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Progressive lung disease causing airflow limitation',
     commonSecondaries: ['depression', 'anxiety', 'sleep-apnea'],
-    keywords: ['emphysema', 'chronic bronchitis', 'lung disease'],
+    keywords: ['emphysema', 'chronic bronchitis', 'lung disease', 'COPD', 'breathing problems', 'pulmonary disease', 'lung damage', 'oxygen therapy', 'FEV1', 'pulmonary function', 'shortness of breath', 'chronic cough'],
+    misspellings: ['copd', 'COPD', 'cronic obstructive', 'chronic obstructive pulminary'],
+    bodySystem: 'Respiratory',
   },
   {
     id: 'sinusitis',
@@ -724,7 +838,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '0-50%',
     description: 'Chronic inflammation of the sinuses',
     commonSecondaries: ['asthma', 'migraines', 'rhinitis'],
-    keywords: ['sinus infection', 'sinus problems', 'congestion'],
+    keywords: ['sinus infection', 'sinus problems', 'congestion', 'sinus pain', 'sinus pressure', 'facial pain', 'nasal congestion', 'sinus drainage', 'sinus headache', 'chronic sinus', 'post nasal drip', 'deviated septum'],
+    misspellings: ['sinusitus', 'sinusitous', 'sinusitis', 'sinusites', 'sinisitis'],
+    bodySystem: 'Respiratory',
   },
   {
     id: 'rhinitis',
@@ -735,7 +851,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-30%',
     description: 'Nasal inflammation from allergies',
     commonSecondaries: ['sinusitis', 'asthma', 'sleep-apnea'],
-    keywords: ['allergies', 'runny nose', 'hay fever', 'nasal congestion'],
+    keywords: ['allergies', 'runny nose', 'hay fever', 'nasal congestion', 'sneezing', 'nasal inflammation', 'stuffy nose', 'allergy', 'nasal drip', 'post nasal drip', 'nasal polyps', 'allergic nose'],
+    misspellings: ['rhinitus', 'rhinites', 'rhinittis', 'rhenitis', 'rinitis'],
+    bodySystem: 'Respiratory',
   },
   {
     id: 'respiratory-failure',
@@ -746,7 +864,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '60-100%',
     description: 'Inability of lungs to provide adequate oxygen',
     commonSecondaries: ['depression'],
-    keywords: ['breathing failure', 'oxygen dependent'],
+    keywords: ['breathing failure', 'oxygen dependent', 'lung failure', 'ventilator', 'oxygen tank', 'respiratory distress', 'cant breathe', 'supplemental oxygen', 'respiratory insufficiency'],
+    misspellings: ['respitory failure', 'respiratory failur', 'respiritory failure'],
+    bodySystem: 'Respiratory',
   },
 
   // ============================================
@@ -761,7 +881,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-60%',
     description: 'Chronically elevated blood pressure',
     commonSecondaries: ['heart-disease', 'kidney-disease', 'erectile-dysfunction', 'stroke'],
-    keywords: ['blood pressure', 'hbp'],
+    keywords: ['blood pressure', 'hbp', 'high blood pressure', 'hypertension', 'BP', 'elevated blood pressure', 'systolic', 'diastolic', 'blood pressure medication', 'HTN', 'chronic high BP'],
+    misspellings: ['hypertention', 'hypertenshion', 'hypertension', 'hypertenion', 'hipertension'],
+    bodySystem: 'Heart',
   },
   {
     id: 'heart-disease',
@@ -772,7 +894,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Narrowing of heart arteries',
     commonSecondaries: ['hypertension', 'erectile-dysfunction', 'depression'],
-    keywords: ['cad', 'heart condition', 'coronary'],
+    keywords: ['cad', 'heart condition', 'coronary', 'heart attack', 'chest pain', 'angina', 'heart surgery', 'bypass', 'stent', 'cardiac', 'ischemic heart', 'blocked arteries', 'MI', 'myocardial infarction'],
+    misspellings: ['heart desease', 'heart diease', 'coronery artery', 'corenary'],
+    bodySystem: 'Heart',
   },
   {
     id: 'heart-arrhythmia',
@@ -783,7 +907,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Irregular heartbeat',
     commonSecondaries: ['anxiety', 'heart-disease'],
-    keywords: ['irregular heartbeat', 'afib', 'atrial fibrillation'],
+    keywords: ['irregular heartbeat', 'afib', 'atrial fibrillation', 'heart rhythm', 'palpitations', 'heart flutter', 'rapid heartbeat', 'tachycardia', 'bradycardia', 'heart racing', 'skipped beats', 'pacemaker'],
+    misspellings: ['arrhythmia', 'arythmia', 'arrythmia', 'arrhithmia', 'cardiac arythmia'],
+    bodySystem: 'Heart',
   },
   {
     id: 'stroke',
@@ -794,7 +920,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Brain damage from interrupted blood supply',
     commonSecondaries: ['depression', 'cognitive-disorder', 'hypertension'],
-    keywords: ['cva', 'brain attack'],
+    keywords: ['cva', 'brain attack', 'stroke', 'TIA', 'transient ischemic', 'mini stroke', 'cerebral', 'paralysis', 'speech difficulty', 'hemiplegia', 'blood clot brain', 'brain bleed'],
+    misspellings: ['stoke', 'stroek', 'cerebrovascular accedent'],
+    bodySystem: 'Brain',
   },
   {
     id: 'peripheral-vascular',
@@ -805,7 +933,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '20-100%',
     description: 'Reduced blood flow to limbs',
     commonSecondaries: ['hypertension', 'diabetes', 'heart-disease'],
-    keywords: ['circulation problems', 'claudication', 'pad'],
+    keywords: ['circulation problems', 'claudication', 'pad', 'peripheral artery', 'poor circulation', 'leg circulation', 'vascular disease', 'blood flow', 'cold feet', 'numbness legs', 'intermittent claudication'],
+    misspellings: ['periferal vascular', 'peripheral vasculer', 'peripheral vasular'],
+    bodySystem: 'Heart',
   },
 
   // ============================================
@@ -820,7 +950,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-60%',
     description: 'Chronic acid reflux causing heartburn',
     commonSecondaries: ['sleep-apnea', 'asthma', 'hiatal-hernia', 'barretts'],
-    keywords: ['acid reflux', 'heartburn', 'reflux'],
+    keywords: ['acid reflux', 'heartburn', 'reflux', 'GERD', 'stomach acid', 'esophagus', 'burning chest', 'acid regurgitation', 'indigestion', 'gastric reflux', 'reflux disease', 'esophageal'],
+    misspellings: ['gurd', 'gerds', 'gastroesophageal reflux', 'gastroesophagial'],
+    bodySystem: 'Digestive',
   },
   {
     id: 'ibs',
@@ -831,7 +963,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '0-30%',
     description: 'Chronic intestinal disorder with pain and bowel changes',
     commonSecondaries: ['anxiety', 'depression', 'gerd'],
-    keywords: ['bowel problems', 'stomach pain', 'diarrhea', 'constipation'],
+    keywords: ['bowel problems', 'stomach pain', 'diarrhea', 'constipation', 'IBS', 'irritable bowel', 'abdominal pain', 'bloating', 'gas', 'cramping', 'bowel changes', 'intestinal problems', 'gut issues'],
+    misspellings: ['iritable bowel', 'irritible bowel', 'irritable bowle', 'irratable bowel'],
+    bodySystem: 'Digestive',
   },
   {
     id: 'hiatal-hernia',
@@ -842,7 +976,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-60%',
     description: 'Stomach pushes through diaphragm',
     commonSecondaries: ['gerd', 'sleep-apnea'],
-    keywords: ['hernia', 'stomach hernia'],
+    keywords: ['hernia', 'stomach hernia', 'hiatal', 'diaphragm hernia', 'chest pain eating', 'difficulty swallowing', 'acid reflux', 'stomach protrusion', 'paraesophageal hernia'],
+    misspellings: ['hiatal herna', 'hiatal hurnia', 'hiatel hernia', 'hiatial hernia'],
+    bodySystem: 'Digestive',
   },
   {
     id: 'barretts',
@@ -853,7 +989,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-30%',
     description: 'Precancerous changes from chronic GERD',
     commonSecondaries: ['gerd'],
-    keywords: ['esophagus damage'],
+    keywords: ['esophagus damage', 'barrett esophagus', 'precancerous esophagus', 'esophageal changes', 'GERD complication', 'acid damage esophagus', 'metaplasia', 'esophageal cancer risk'],
+    misspellings: ['barretts', 'barrets', 'baretts', 'barrett', 'barretes'],
+    bodySystem: 'Digestive',
   },
   {
     id: 'crohns',
@@ -864,7 +1002,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Inflammatory bowel disease',
     commonSecondaries: ['depression', 'anxiety', 'arthritis'],
-    keywords: ['ibd', 'inflammatory bowel', 'intestinal'],
+    keywords: ['ibd', 'inflammatory bowel', 'intestinal', 'crohns disease', 'bowel inflammation', 'GI tract', 'flare ups', 'abdominal pain', 'bloody stool', 'weight loss', 'chronic diarrhea', 'fistula'],
+    misspellings: ['crohns', 'chrons', 'crohn', 'chronns', 'crowns disease'],
+    bodySystem: 'Digestive',
   },
   {
     id: 'ulcerative-colitis',
@@ -875,7 +1015,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Inflammatory bowel disease affecting colon',
     commonSecondaries: ['depression', 'anxiety'],
-    keywords: ['ibd', 'colon inflammation'],
+    keywords: ['ibd', 'colon inflammation', 'ulcerative', 'colitis', 'bloody diarrhea', 'colon disease', 'rectal bleeding', 'bowel urgency', 'GI tract', 'large intestine', 'inflammatory bowel'],
+    misspellings: ['ulcerative colitis', 'ulcerative colitus', 'ulcerive colitis', 'uclerative colitis', 'ulcerative collitis'],
+    bodySystem: 'Digestive',
   },
   {
     id: 'liver-disease',
@@ -886,7 +1028,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Progressive liver damage',
     commonSecondaries: ['depression', 'fatigue'],
-    keywords: ['cirrhosis', 'hepatic'],
+    keywords: ['cirrhosis', 'hepatic', 'liver damage', 'liver failure', 'hepatitis', 'fatty liver', 'liver fibrosis', 'jaundice', 'liver function', 'liver enzymes', 'NAFLD', 'alcoholic liver'],
+    misspellings: ['liver desease', 'liver diease', 'cirrosis', 'chirrosis'],
+    bodySystem: 'Digestive',
   },
 
   // ============================================
@@ -901,7 +1045,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Chronic metabolic disorder affecting blood sugar',
     commonSecondaries: ['peripheral-neuropathy', 'hypertension', 'erectile-dysfunction', 'kidney-disease', 'vision-loss'],
-    keywords: ['type 2 diabetes', 'blood sugar', 'diabetic'],
+    keywords: ['type 2 diabetes', 'blood sugar', 'diabetic', 'insulin', 'diabetes mellitus', 'A1C', 'glucose', 'high blood sugar', 'insulin resistance', 'metformin', 'type II diabetes', 'DM2', 'sugar diabetes'],
+    misspellings: ['diabeties', 'diabetis', 'diabeetes', 'diebetes', 'diabites'],
+    bodySystem: 'Endocrine',
   },
   {
     id: 'hypothyroidism',
@@ -912,7 +1058,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Underactive thyroid gland',
     commonSecondaries: ['depression', 'fatigue', 'weight-gain'],
-    keywords: ['low thyroid', 'underactive thyroid'],
+    keywords: ['low thyroid', 'underactive thyroid', 'thyroid', 'hypothyroid', 'TSH', 'levothyroxine', 'synthroid', 'hashimotos', 'thyroid gland', 'weight gain thyroid', 'cold intolerance', 'thyroid hormone'],
+    misspellings: ['hypothyroidism', 'hypothyroidisim', 'hypothyriodism', 'hypothyrodism', 'hypothyroidsim'],
+    bodySystem: 'Endocrine',
   },
   {
     id: 'hyperthyroidism',
@@ -923,7 +1071,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Overactive thyroid gland',
     commonSecondaries: ['anxiety', 'heart-arrhythmia'],
-    keywords: ['overactive thyroid', 'graves disease'],
+    keywords: ['overactive thyroid', 'graves disease', 'thyroid', 'hyperthyroid', 'TSH', 'thyrotoxicosis', 'weight loss thyroid', 'rapid heartbeat thyroid', 'thyroid storm', 'heat intolerance'],
+    misspellings: ['hyperthyroidisim', 'hyperthyriodism', 'hyperthyrodism', 'hyperthoroidism'],
+    bodySystem: 'Endocrine',
   },
 
   // ============================================
@@ -938,7 +1088,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '0-20%',
     description: 'Inability to maintain erection (secondary to medications or other conditions)',
     commonSecondaries: ['depression'],
-    keywords: ['impotence', 'sexual dysfunction'],
+    keywords: ['impotence', 'sexual dysfunction', 'ED', 'erectile', 'erection problems', 'sexual problems', 'performance issues', 'SMC', 'special monthly compensation', 'loss of use', 'medication side effect'],
+    misspellings: ['erectile disfunction', 'erectal dysfunction', 'erectile dysfuntion', 'erictile dysfunction'],
+    bodySystem: 'Genitourinary',
   },
   {
     id: 'kidney-disease',
@@ -949,7 +1101,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '0-100%',
     description: 'Progressive loss of kidney function',
     commonSecondaries: ['hypertension', 'diabetes', 'depression'],
-    keywords: ['renal failure', 'kidney failure'],
+    keywords: ['renal failure', 'kidney failure', 'CKD', 'kidney disease', 'renal disease', 'dialysis', 'kidney function', 'GFR', 'creatinine', 'kidney damage', 'end stage renal', 'kidney transplant'],
+    misspellings: ['kidney desease', 'kidney diease', 'kidny disease', 'renal faliure'],
+    bodySystem: 'Genitourinary',
   },
   {
     id: 'prostate-condition',
@@ -960,7 +1114,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '0-60%',
     description: 'Enlarged prostate or prostate problems',
     commonSecondaries: ['erectile-dysfunction', 'urinary-incontinence'],
-    keywords: ['bph', 'enlarged prostate', 'prostatitis'],
+    keywords: ['bph', 'enlarged prostate', 'prostatitis', 'prostate problems', 'frequent urination', 'prostate enlargement', 'benign prostatic', 'PSA', 'prostate cancer', 'difficulty urinating', 'weak stream', 'nocturia'],
+    misspellings: ['prostate condtion', 'prostrate', 'prostate condision', 'prosate'],
+    bodySystem: 'Genitourinary',
   },
   {
     id: 'urinary-incontinence',
@@ -971,7 +1127,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '20-60%',
     description: 'Loss of bladder control',
     commonSecondaries: ['prostate-condition', 'depression'],
-    keywords: ['bladder problems', 'leakage'],
+    keywords: ['bladder problems', 'leakage', 'bladder control', 'urinary leakage', 'incontinence', 'urine leakage', 'overactive bladder', 'stress incontinence', 'urge incontinence', 'absorbent pads', 'voiding dysfunction'],
+    misspellings: ['incontinance', 'incontinence', 'urinary incontinance', 'incotinence', 'incontenance'],
+    bodySystem: 'Genitourinary',
   },
 
   // ============================================
@@ -986,7 +1144,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '0-60%',
     description: 'Chronic inflammatory skin condition',
     commonSecondaries: ['depression', 'anxiety', 'sleep-apnea'],
-    keywords: ['dermatitis', 'skin rash', 'itchy skin'],
+    keywords: ['dermatitis', 'skin rash', 'itchy skin', 'eczema', 'atopic dermatitis', 'skin inflammation', 'dry skin', 'skin irritation', 'rash', 'flaky skin', 'skin condition', 'topical steroids', 'contact dermatitis'],
+    misspellings: ['exzema', 'excema', 'eczma', 'ecsema', 'eczima'],
+    bodySystem: 'Skin',
   },
   {
     id: 'psoriasis',
@@ -997,7 +1157,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '0-60%',
     description: 'Autoimmune skin condition with scaly patches',
     commonSecondaries: ['psoriatic-arthritis', 'depression'],
-    keywords: ['skin scales', 'plaque psoriasis'],
+    keywords: ['skin scales', 'plaque psoriasis', 'psoriasis', 'scaly skin', 'silvery scales', 'skin patches', 'autoimmune skin', 'scalp psoriasis', 'inverse psoriasis', 'guttate', 'skin plaques', 'biologics'],
+    misspellings: ['psoriasis', 'psoriases', 'psorisis', 'psoriaus', 'psoriosis', 'sorisis'],
+    bodySystem: 'Skin',
   },
   {
     id: 'psoriatic-arthritis',
@@ -1008,7 +1170,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '20-100%',
     description: 'Arthritis associated with psoriasis',
     commonSecondaries: ['psoriasis', 'depression'],
-    keywords: ['joint psoriasis'],
+    keywords: ['joint psoriasis', 'psoriatic arthritis', 'psoriasis joints', 'joint pain skin', 'autoimmune arthritis', 'dactylitis', 'sausage fingers', 'enthesitis', 'psoriasis and joint pain'],
+    misspellings: ['psoriatic arthritus', 'psoriatic arthiritis', 'psoriatric arthritis'],
+    bodySystem: 'Skin',
   },
   {
     id: 'acne',
@@ -1019,7 +1183,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '0-30%',
     description: 'Severe acne, often from chemical exposure',
     commonSecondaries: ['depression'],
-    keywords: ['skin condition', 'cysts'],
+    keywords: ['skin condition', 'cysts', 'chloracne', 'acne vulgaris', 'cystic acne', 'severe acne', 'skin breakout', 'pimples', 'agent orange acne', 'chemical acne', 'dioxin exposure'],
+    misspellings: ['chloracne', 'chloracnee', 'cloracne'],
+    bodySystem: 'Skin',
   },
   {
     id: 'scars',
@@ -1030,7 +1196,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-80%',
     description: 'Disfiguring scars from injury or burns',
     commonSecondaries: ['depression', 'ptsd'],
-    keywords: ['disfigurement', 'burn scars'],
+    keywords: ['disfigurement', 'burn scars', 'scarring', 'scar tissue', 'keloid', 'surgical scars', 'facial scars', 'burn injury', 'skin grafts', 'hypertrophic scar', 'painful scars', 'unstable scars'],
+    misspellings: ['scares', 'scars', 'scarrs'],
+    bodySystem: 'Skin',
   },
 
   // ============================================
@@ -1045,7 +1213,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Respiratory and other conditions from burn pit exposure (PACT Act)',
     commonSecondaries: ['asthma', 'copd', 'sinusitis', 'cancer'],
-    keywords: ['toxic exposure', 'pact act', 'iraq', 'afghanistan'],
+    keywords: ['toxic exposure', 'pact act', 'iraq', 'afghanistan', 'burn pit', 'airborne hazards', 'open burn pit', 'toxic smoke', 'deployment exposure', 'AHOBPR', 'airborne hazards registry', 'constrictive bronchiolitis', 'lung damage deployment'],
+    misspellings: ['burn pit', 'burnpit', 'burn pits', 'burn pit exposer', 'brun pit'],
+    bodySystem: 'Respiratory',
   },
   {
     id: 'agent-orange',
@@ -1056,7 +1226,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: 'Various',
     description: 'Conditions from herbicide exposure in Vietnam era',
     commonSecondaries: ['diabetes', 'cancer', 'peripheral-neuropathy', 'parkinsons'],
-    keywords: ['herbicide', 'vietnam', 'dioxin'],
+    keywords: ['herbicide', 'vietnam', 'dioxin', 'agent orange', 'herbicide exposure', 'presumptive', 'Vietnam veteran', 'toxic herbicide', 'defoliant', 'blue water navy', 'Thailand bases', 'C-123', 'rainbow herbicides'],
+    misspellings: ['agent oragne', 'agent ornage', 'agent orage', 'agant orange'],
+    bodySystem: 'Whole Body',
   },
   {
     id: 'gulf-war-syndrome',
@@ -1067,7 +1239,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '10-100%',
     description: 'Medically unexplained chronic multi-symptom illness',
     commonSecondaries: ['chronic-fatigue', 'fibromyalgia', 'ibs', 'migraines'],
-    keywords: ['gulf war illness', 'undiagnosed illness'],
+    keywords: ['gulf war illness', 'undiagnosed illness', 'gulf war', 'southwest asia', 'persian gulf', 'multi-symptom illness', 'chronic multi-symptom', 'unexplained illness', 'presumptive gulf war', 'desert storm', 'desert shield', 'OIF OEF'],
+    misspellings: ['gulf war syndrom', 'gulf war syndome', 'gulf war sindrome', 'gulf war syndrone'],
+    bodySystem: 'Whole Body',
   },
   {
     id: 'cancer',
@@ -1078,7 +1252,9 @@ export const vaConditions: VACondition[] = [
     typicalRatings: '100% during treatment',
     description: 'Malignant neoplasms - rated 100% during active treatment',
     commonSecondaries: ['depression', 'anxiety', 'fatigue'],
-    keywords: ['malignant', 'tumor', 'chemotherapy'],
+    keywords: ['malignant', 'tumor', 'chemotherapy', 'cancer', 'neoplasm', 'radiation therapy', 'oncology', 'carcinoma', 'lymphoma', 'leukemia', 'metastatic', 'remission', 'biopsy', 'staging'],
+    misspellings: ['cancer', 'canser', 'cancir', 'cnacer'],
+    bodySystem: 'Whole Body',
   },
 ];
 
@@ -1107,7 +1283,7 @@ export function getConditionsByCategory(category: string): VACondition[] {
 }
 
 /**
- * Search conditions by text (matches abbreviation, name, keywords)
+ * Search conditions by text (matches abbreviation, name, keywords, misspellings)
  */
 export function searchConditions(query: string, excludeIds: string[] = []): VACondition[] {
   if (!query.trim()) return [];
@@ -1125,6 +1301,7 @@ export function searchConditions(query: string, excludeIds: string[] = []): VACo
         condition.name,
         condition.description || '',
         ...condition.keywords,
+        ...(condition.misspellings || []),
       ].join(' ').toLowerCase();
 
       // Match all search terms

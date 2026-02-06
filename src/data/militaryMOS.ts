@@ -4,7 +4,8 @@
 export interface MilitaryJobCode {
   code: string;
   title: string;
-  branch: 'Army' | 'Air Force' | 'Navy' | 'Marines' | 'Coast Guard';
+  branch: 'Army' | 'Air Force' | 'Navy' | 'Marines' | 'Coast Guard' | 'Space Force';
+  keywords?: string[];
   category: string;
   commonHazards?: string[];
 }
@@ -346,6 +347,39 @@ export const militaryJobCodes: MilitaryJobCode[] = [
   { code: '8412', title: 'Career Recruiter', branch: 'Marines', category: 'Recruiting', commonHazards: ['Extended travel', 'High stress'] },
   { code: '8541', title: 'Scout Sniper', branch: 'Marines', category: 'Infantry', commonHazards: ['Combat exposure', 'Long-range operations', 'Physical demands'] },
   { code: '8654', title: 'Reconnaissance Marine (MARSOC)', branch: 'Marines', category: 'Special Operations', commonHazards: ['Combat exposure', 'Physical demands', 'Special operations stress'] },
+
+  // ============ COAST GUARD RATINGS ============
+  { code: 'AET', title: 'Aviation Electrical Technician', branch: 'Coast Guard', category: 'Aviation', keywords: ['aviation', 'electrician', 'aircraft', 'helicopter'], commonHazards: ['Aircraft electrical', 'Flight line hazards'] },
+  { code: 'AMT', title: 'Aviation Maintenance Technician', branch: 'Coast Guard', category: 'Aviation', keywords: ['aviation', 'mechanic', 'aircraft', 'helicopter'], commonHazards: ['Aircraft maintenance', 'Fuel exposure', 'Noise'] },
+  { code: 'AST', title: 'Aviation Survival Technician', branch: 'Coast Guard', category: 'Aviation', keywords: ['rescue', 'swimmer', 'SAR', 'search and rescue', 'pararescue'], commonHazards: ['Water rescue', 'Helicopter operations', 'Physical demands'] },
+  { code: 'BM', title: 'Boatswain\'s Mate', branch: 'Coast Guard', category: 'Deck', keywords: ['boats', 'deck', 'seamanship', 'vessel', 'cutter', 'boarding'], commonHazards: ['Maritime operations', 'Heavy weather', 'Physical demands'] },
+  { code: 'CS', title: 'Culinary Specialist', branch: 'Coast Guard', category: 'Administration', keywords: ['cook', 'food', 'galley', 'culinary', 'mess'], commonHazards: ['Kitchen burns', 'Repetitive motion'] },
+  { code: 'DC', title: 'Damage Controlman', branch: 'Coast Guard', category: 'Engineering', keywords: ['firefighting', 'damage control', 'welding', 'repair'], commonHazards: ['Fire fighting', 'Hazardous materials', 'Welding fumes'] },
+  { code: 'EM', title: 'Electrician\'s Mate', branch: 'Coast Guard', category: 'Engineering', keywords: ['electrician', 'power', 'electrical', 'wiring'], commonHazards: ['Electrical shock', 'Confined spaces'] },
+  { code: 'ET', title: 'Electronics Technician', branch: 'Coast Guard', category: 'Engineering', keywords: ['electronics', 'radar', 'communications', 'tech'], commonHazards: ['Electronic equipment', 'Soldering fumes'] },
+  { code: 'FS', title: 'Food Service Specialist', branch: 'Coast Guard', category: 'Administration', keywords: ['food', 'cook', 'galley', 'dining'], commonHazards: ['Kitchen hazards', 'Burns'] },
+  { code: 'GM', title: 'Gunner\'s Mate', branch: 'Coast Guard', category: 'Weapons', keywords: ['weapons', 'guns', 'ammunition', 'ordnance', 'armory'], commonHazards: ['Weapons handling', 'Noise exposure', 'Ammunition'] },
+  { code: 'HS', title: 'Health Services Technician', branch: 'Coast Guard', category: 'Medical', keywords: ['medic', 'medical', 'health', 'corpsman', 'doc'], commonHazards: ['Bloodborne pathogens', 'Medical waste'] },
+  { code: 'IS', title: 'Intelligence Specialist', branch: 'Coast Guard', category: 'Intelligence', keywords: ['intelligence', 'analyst', 'intel'], commonHazards: ['Extended screen time', 'Stress'] },
+  { code: 'IT', title: 'Information Systems Technician', branch: 'Coast Guard', category: 'Communications', keywords: ['computers', 'IT', 'network', 'cyber', 'tech'], commonHazards: ['Extended screen time', 'Electronic equipment'] },
+  { code: 'IV', title: 'Investigator', branch: 'Coast Guard', category: 'Law Enforcement', keywords: ['investigation', 'law enforcement', 'CGIS', 'detective'], commonHazards: ['Stress', 'Hazardous situations'] },
+  { code: 'ME', title: 'Maritime Enforcement Specialist', branch: 'Coast Guard', category: 'Law Enforcement', keywords: ['law enforcement', 'police', 'boarding', 'patrol', 'LEO'], commonHazards: ['Law enforcement risks', 'Boarding operations', 'Combat stress'] },
+  { code: 'MK', title: 'Machinery Technician', branch: 'Coast Guard', category: 'Engineering', keywords: ['mechanic', 'engines', 'machinery', 'diesel', 'turbine'], commonHazards: ['Machinery hazards', 'Fuel exposure', 'Noise'] },
+  { code: 'MST', title: 'Marine Science Technician', branch: 'Coast Guard', category: 'Science', keywords: ['environmental', 'science', 'pollution', 'marine'], commonHazards: ['Chemical exposure', 'Field conditions'] },
+  { code: 'OS', title: 'Operations Specialist', branch: 'Coast Guard', category: 'Operations', keywords: ['operations', 'radar', 'communications', 'watchstander'], commonHazards: ['Extended screen time', 'Shift work'] },
+  { code: 'PA', title: 'Public Affairs Specialist', branch: 'Coast Guard', category: 'Communications', keywords: ['public affairs', 'media', 'journalism', 'photographer'], commonHazards: ['Field conditions', 'Travel'] },
+  { code: 'SK', title: 'Storekeeper', branch: 'Coast Guard', category: 'Supply', keywords: ['supply', 'logistics', 'inventory', 'warehouse'], commonHazards: ['Warehouse hazards', 'Heavy lifting'] },
+  { code: 'YN', title: 'Yeoman', branch: 'Coast Guard', category: 'Administration', keywords: ['admin', 'clerical', 'office', 'personnel', 'paperwork'], commonHazards: ['Sedentary work', 'Extended computer use'] },
+
+  // ============ SPACE FORCE ============
+  { code: '5S0X1', title: 'Space Systems Operations', branch: 'Space Force', category: 'Space Operations', keywords: ['space', 'satellite', 'orbital', 'launch', 'GPS'], commonHazards: ['Extended screen time', 'Shift work', 'Sedentary'] },
+  { code: '1C6X1', title: 'Space Systems Operations Specialist', branch: 'Space Force', category: 'Space Operations', keywords: ['space', 'satellite', 'mission control', 'tracking'], commonHazards: ['Extended screen time', 'Shift work'] },
+  { code: '1N', title: 'Intelligence Analyst', branch: 'Space Force', category: 'Intelligence', keywords: ['intelligence', 'analyst', 'intel', 'space intel'], commonHazards: ['Extended screen time', 'Stress'] },
+  { code: '3D0X2', title: 'Cyber Systems Operations', branch: 'Space Force', category: 'Cyber', keywords: ['cyber', 'network', 'IT', 'computer', 'systems'], commonHazards: ['Extended screen time', 'Sedentary'] },
+  { code: '1B4X1', title: 'Cyber Warfare Operations', branch: 'Space Force', category: 'Cyber', keywords: ['cyber', 'warfare', 'hacking', 'security', 'offense'], commonHazards: ['Extended screen time', 'High stress'] },
+  { code: '5C0X1', title: 'Command and Control Battle Management', branch: 'Space Force', category: 'Operations', keywords: ['command', 'control', 'battle management', 'C2'], commonHazards: ['High stress', 'Shift work'] },
+  { code: '3F1X1', title: 'Services', branch: 'Space Force', category: 'Support', keywords: ['services', 'fitness', 'recreation', 'food'], commonHazards: ['Physical demands'] },
+  { code: '1A9X1', title: 'Special Missions Aviator', branch: 'Space Force', category: 'Operations', keywords: ['aviation', 'special missions', 'crew'], commonHazards: ['Flight hazards', 'Altitude'] },
 ];
 
 export function searchMilitaryJobs(query: string, branch?: string): MilitaryJobCode[] {
@@ -357,7 +391,8 @@ export function searchMilitaryJobs(query: string, branch?: string): MilitaryJobC
     const matchesQuery = !query.trim() ||
       job.code.toLowerCase().includes(lowerQuery) ||
       job.title.toLowerCase().includes(lowerQuery) ||
-      job.category.toLowerCase().includes(lowerQuery);
+      job.category.toLowerCase().includes(lowerQuery) ||
+      job.keywords?.some(kw => kw.toLowerCase().includes(lowerQuery));
     return matchesBranch && matchesQuery;
   }).slice(0, 50);
 }

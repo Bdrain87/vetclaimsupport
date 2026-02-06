@@ -1,15 +1,13 @@
-import { useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
-  FileText, Scale, ClipboardList, Stethoscope, Calculator, Users,
-  BookOpen, Gavel, Printer, FileSignature, TrendingUp, ShieldAlert,
-  DollarSign, Wrench, Link2, Target, Languages, MessageSquare
+  FileText, Scale, Stethoscope, Calculator, Users,
+  BookOpen, Gavel, FileSignature, TrendingUp, ShieldAlert,
+  DollarSign, Link2, Target, Languages, MessageSquare, Wrench,
 } from 'lucide-react';
 import { PersonalStatementGenerator } from '@/components/tools/PersonalStatementGenerator';
 import { DBQRatingReference } from '@/components/tools/DBQRatingReference';
 import { DBQGuidance } from '@/components/tools/DBQGuidance';
 import { DBQAppointmentSummary } from '@/components/tools/DBQAppointmentSummary';
-import { ConditionSpecificChecklist } from '@/components/tools/ConditionSpecificChecklist';
-import { CPExamPrepGuide } from '@/components/tools/CPExamPrepGuide';
 import { EnhancedCPExamPrepGuide } from '@/components/tools/EnhancedCPExamPrepGuide';
 import { EnhancedEvidenceChecklist } from '@/components/tools/EnhancedEvidenceChecklist';
 import { SmartSecondaryConditionsSuggester } from '@/components/tools/SmartSecondaryConditionsSuggester';
@@ -23,11 +21,8 @@ import { BackPayEstimator } from '@/components/tools/BackPayEstimator';
 import { MockExamSimulator } from '@/components/tools/MockExamSimulator';
 import { VASpeakTranslator } from '@/components/tools/VASpeakTranslator';
 import { DisclaimerNotice } from '@/components/shared/DisclaimerNotice';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
 
-// Tool definitions
 interface Tool {
   id: string;
   name: string;
@@ -37,278 +32,116 @@ interface Tool {
 }
 
 const tools: Tool[] = [
-  // Document Generators
-  {
-    id: 'statement',
-    name: 'Personal Statement',
-    icon: FileText,
-    description: 'Create a compelling personal statement that explains your condition, its impact on your daily life, and its connection to your military service. Required for most VA claims.',
-    category: 'Documents',
-  },
-  {
-    id: 'buddy',
-    name: 'Buddy Statement',
-    icon: Users,
-    description: 'Generate a template for fellow service members, family, or friends to document what they witnessed about your condition or incidents. Strong supporting evidence.',
-    category: 'Documents',
-  },
-  {
-    id: 'stressor',
-    name: 'Stressor Statement (PTSD)',
-    icon: ShieldAlert,
-    description: 'Create a detailed stressor statement for PTSD claims describing traumatic events, including when, where, and who was involved. Required for PTSD claims (VA Form 21-0781).',
-    category: 'Documents',
-  },
-  {
-    id: 'nexus',
-    name: 'Nexus Letter Request',
-    icon: FileSignature,
-    description: 'Generate a template to request a nexus letter from your doctor, explaining what information they need to establish service connection. Critical medical evidence.',
-    category: 'Documents',
-  },
-  {
-    id: 'dbq-summary',
-    name: 'DBQ Appointment Summary',
-    icon: Printer,
-    description: 'Create a printable summary of your symptoms and history to bring to DBQ appointments, helping your doctor document everything accurately.',
-    category: 'Documents',
-  },
-  
-  // Prep & Reference
-  {
-    id: 'exam-prep',
-    name: 'C&P Exam Prep Guide',
-    icon: Stethoscope,
-    description: 'Interactive exam prep with practice answer writing. Includes first-person templates, specific date guidance, and your logged symptom data.',
-    category: 'Exam Prep',
-  },
-  {
-    id: 'mock-exam',
-    name: 'Mock C&P Exam Simulator',
-    icon: MessageSquare,
-    description: 'Simulate a real C&P exam with a virtual examiner who asks one question at a time. Get real-time feedback on vague answers and learn how to articulate symptoms using 38 CFR criteria.',
-    category: 'Exam Prep',
-  },
-  {
-    id: 'va-speak',
-    name: 'VA-Speak Translator',
-    icon: Languages,
-    description: 'Translate plain English symptom descriptions into professional VA clinical terminology for stronger VA Form 21-4138 statements. Uses official 38 CFR nomenclature.',
-    category: 'Documents',
-  },
-  {
-    id: 'secondary-suggester',
-    name: 'Secondary Conditions Suggester',
-    icon: Link2,
-    description: 'Smart suggestions for secondary conditions based on your claimed conditions. Includes first-person statement templates and action steps.',
-    category: 'Claim Strategy',
-  },
-  {
-    id: 'criteria',
-    name: 'VA Rating Criteria',
-    icon: Scale,
-    description: 'Look up the specific criteria the VA uses to assign disability ratings for your condition, based on 38 CFR Part 4.',
-    category: 'Reference',
-  },
-  {
-    id: 'dbq-guidance',
-    name: 'DBQ Form Guidance',
-    icon: BookOpen,
-    description: 'Find the correct DBQ form for your condition and understand what measurements and findings your doctor needs to document.',
-    category: 'Reference',
-  },
-  {
-    id: 'checklist',
-    name: 'Evidence Checklist',
-    icon: Target,
-    description: 'Interactive checklist showing what evidence you have vs. what\'s missing. Includes first-person writing tips and statement templates.',
-    category: 'Reference',
-  },
-  {
-    id: 'increase',
-    name: 'Rating Increase Analyzer',
-    icon: TrendingUp,
-    description: 'Analyze your current rating and identify what additional evidence could support a higher rating for worsening conditions.',
-    category: 'Reference',
-  },
-  {
-    id: 'appeal',
-    name: 'Appeal Strategy Advisor',
-    icon: Gavel,
-    description: 'Get guidance on appeal options if your claim was denied, including Higher Level Review, Supplemental Claims, and Board Appeals.',
-    category: 'Appeals',
-  },
-  
-  // Calculators
-  {
-    id: 'calculator',
-    name: 'VA Rating Calculator',
-    icon: Calculator,
-    description: 'Calculate your combined VA disability rating using "VA Math" and estimate monthly compensation based on current rates.',
-    category: 'Calculators',
-  },
-  {
-    id: 'backpay',
-    name: 'Back Pay Estimator',
-    icon: DollarSign,
-    description: 'Estimate potential back pay based on your effective date and rating, including retroactive compensation calculations.',
-    category: 'Calculators',
-  },
+  { id: 'calculator', name: 'VA Rating Calculator', icon: Calculator, description: 'Calculate your combined VA disability rating using VA Math', category: 'Calculators' },
+  { id: 'secondary-suggester', name: 'Secondary Finder', icon: Link2, description: 'Find linked conditions to strengthen your claim', category: 'Claim Strategy' },
+  { id: 'statement', name: 'Personal Statement', icon: FileText, description: 'Generate a compelling personal statement for your claim', category: 'Documents' },
+  { id: 'stressor', name: 'Stressor Statement', icon: ShieldAlert, description: 'Create a PTSD stressor statement (VA Form 21-0781)', category: 'Documents' },
+  { id: 'nexus', name: 'Nexus Letter Request', icon: FileSignature, description: 'Request a nexus letter template for your doctor', category: 'Documents' },
+  { id: 'dbq-summary', name: 'DBQ Summary', icon: Stethoscope, description: 'Generate a printable DBQ appointment summary', category: 'Documents' },
+  { id: 'buddy', name: 'Buddy Statement', icon: Users, description: 'Generate a buddy statement template for witnesses', category: 'Documents' },
+  { id: 'va-speak', name: 'VA-Speak Translator', icon: Languages, description: 'Translate plain English into VA clinical terminology', category: 'Documents' },
+  { id: 'exam-prep', name: 'C&P Exam Prep', icon: Stethoscope, description: 'Prepare for your C&P exam with practice questions', category: 'Exam Prep' },
+  { id: 'mock-exam', name: 'Mock C&P Exam', icon: MessageSquare, description: 'Simulate a real C&P exam with a virtual examiner', category: 'Exam Prep' },
+  { id: 'criteria', name: 'VA Rating Criteria', icon: Scale, description: 'Look up 38 CFR Part 4 rating criteria for your condition', category: 'Reference' },
+  { id: 'dbq-guidance', name: 'DBQ Form Guidance', icon: BookOpen, description: 'Find the correct DBQ form and required findings', category: 'Reference' },
+  { id: 'checklist', name: 'Evidence Checklist', icon: Target, description: 'Track what evidence you have vs. what you need', category: 'Reference' },
+  { id: 'increase', name: 'Rating Increase', icon: TrendingUp, description: 'Analyze what evidence supports a higher rating', category: 'Reference' },
+  { id: 'appeal', name: 'Appeal Strategy', icon: Gavel, description: 'Get guidance on HLR, Supplemental, and Board appeals', category: 'Appeals' },
+  { id: 'backpay', name: 'Back Pay Estimator', icon: DollarSign, description: 'Estimate retroactive compensation based on your dates', category: 'Calculators' },
 ];
+
+const renderTool = (id: string) => {
+  switch (id) {
+    case 'statement': return <PersonalStatementGenerator />;
+    case 'buddy': return <BuddyStatementGenerator />;
+    case 'stressor': return <StressorStatementGenerator />;
+    case 'nexus': return <NexusLetterGenerator />;
+    case 'dbq-summary': return <DBQAppointmentSummary />;
+    case 'exam-prep': return <EnhancedCPExamPrepGuide />;
+    case 'secondary-suggester': return <SmartSecondaryConditionsSuggester />;
+    case 'criteria': return <DBQRatingReference />;
+    case 'dbq-guidance': return <DBQGuidance />;
+    case 'checklist': return <EnhancedEvidenceChecklist />;
+    case 'increase': return <RatingIncreaseAnalyzer />;
+    case 'appeal': return <AppealStrategyAdvisor />;
+    case 'calculator': return <RatingCalculator />;
+    case 'backpay': return <BackPayEstimator />;
+    case 'mock-exam': return <MockExamSimulator />;
+    case 'va-speak': return <VASpeakTranslator />;
+    default: return null;
+  }
+};
 
 export default function ClaimTools() {
   const [searchParams] = useSearchParams();
-  const conditionParam = searchParams.get('condition');
   const tabParam = searchParams.get('tab');
-  
   const [selectedToolId, setSelectedToolId] = useState<string>(tabParam || '');
 
   const selectedTool = tools.find(t => t.id === selectedToolId);
 
-  // Handle tool selection - just update state, no navigation
-  const handleToolSelect = (toolId: string) => {
-    setSelectedToolId(toolId);
-  };
+  if (selectedTool) {
+    return (
+      <div className="container max-w-4xl mx-auto py-6 px-4 space-y-6">
+        <button
+          onClick={() => setSelectedToolId('')}
+          className="flex items-center gap-2 text-sm text-white/50 hover:text-white transition-colors mb-2"
+        >
+          <span>&larr;</span> Back to all tools
+        </button>
 
-  // Render the selected tool component
-  const renderTool = () => {
-    switch (selectedToolId) {
-      case 'statement':
-        return <PersonalStatementGenerator />;
-      case 'buddy':
-        return <BuddyStatementGenerator />;
-      case 'stressor':
-        return <StressorStatementGenerator />;
-      case 'nexus':
-        return <NexusLetterGenerator />;
-      case 'dbq-summary':
-        return <DBQAppointmentSummary />;
-      case 'exam-prep':
-        return <EnhancedCPExamPrepGuide />;
-      case 'secondary-suggester':
-        return <SmartSecondaryConditionsSuggester />;
-      case 'criteria':
-        return <DBQRatingReference />;
-      case 'dbq-guidance':
-        return <DBQGuidance />;
-      case 'checklist':
-        return <EnhancedEvidenceChecklist />;
-      case 'increase':
-        return <RatingIncreaseAnalyzer />;
-      case 'appeal':
-        return <AppealStrategyAdvisor />;
-      case 'calculator':
-        return <RatingCalculator />;
-      case 'backpay':
-        return <BackPayEstimator />;
-      case 'mock-exam':
-        return <MockExamSimulator />;
-      case 'va-speak':
-        return <VASpeakTranslator />;
-      default:
-        return null;
-    }
-  };
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-12 h-12 rounded-xl bg-[#C8A628]/10 border border-[#C8A628]/20 flex items-center justify-center">
+            <selectedTool.icon className="h-6 w-6 text-[#C8A628]" />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold text-white">{selectedTool.name}</h1>
+            <p className="text-white/50 text-sm">{selectedTool.description}</p>
+          </div>
+        </div>
 
-  // Group tools by category for the dropdown
-  const groupedTools = tools.reduce((acc, tool) => {
-    if (!acc[tool.category]) {
-      acc[tool.category] = [];
-    }
-    acc[tool.category].push(tool);
-    return acc;
-  }, {} as Record<string, Tool[]>);
+        {renderTool(selectedToolId)}
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      {/* Premium Header */}
-      <div className="calculator-header">
-        <div className="calculator-icon">
-          <Wrench className="h-6 w-6" />
+    <div className="container max-w-5xl mx-auto py-6 px-4 space-y-6">
+      {/* Header */}
+      <div className="flex items-center gap-3">
+        <div className="w-12 h-12 rounded-xl bg-[#C8A628]/10 border border-[#C8A628]/20 flex items-center justify-center">
+          <Wrench className="h-6 w-6 text-[#C8A628]" />
         </div>
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold text-foreground">Claim Tools</h1>
-          <p className="text-muted-foreground text-sm">Select a tool to strengthen your VA claim</p>
+        <div>
+          <h1 className="text-2xl font-bold text-white">Claim Tools</h1>
+          <p className="text-white/50 text-sm">Choose a tool to strengthen your VA claim</p>
         </div>
       </div>
 
-      {/* Educational Disclaimer */}
       <DisclaimerNotice variant="card" />
 
-      {/* Tool Selector Dropdown */}
-      <Card className="data-card">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base">Select a Tool</CardTitle>
-          <CardDescription>Choose from document generators, prep guides, calculators, and more</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Select value={selectedToolId} onValueChange={handleToolSelect}>
-            <SelectTrigger className="w-full h-12 text-base">
-              <SelectValue placeholder="Choose a tool..." />
-            </SelectTrigger>
-            <SelectContent className="bg-popover border border-border z-50 max-h-[400px]">
-              {Object.entries(groupedTools).map(([category, categoryTools]) => (
-                <div key={category}>
-                  <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider bg-muted/50">
-                    {category}
-                  </div>
-                  {categoryTools.map((tool) => (
-                    <SelectItem 
-                      key={tool.id} 
-                      value={tool.id}
-                      className="py-3 cursor-pointer"
-                    >
-                      <div className="flex items-center gap-3">
-                        <tool.icon className="h-4 w-4 text-primary flex-shrink-0" />
-                        <span>{tool.name}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </div>
-              ))}
-            </SelectContent>
-          </Select>
-        </CardContent>
-      </Card>
-
-      {/* Selected Tool Description & Interface */}
-      {selectedTool && (
-        <div className="space-y-4">
-          {/* Tool Description */}
-          <Card className="data-card border-primary/30">
-            <CardHeader className="pb-3">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-primary/10">
-                  <selectedTool.icon className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <CardTitle className="text-lg">{selectedTool.name}</CardTitle>
-                  <CardDescription className="text-xs uppercase tracking-wide">{selectedTool.category}</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <p className="text-sm text-muted-foreground">{selectedTool.description}</p>
-            </CardContent>
-          </Card>
-
-          {/* Tool Interface */}
-          <div className="mt-6">
-            {renderTool()}
-          </div>
-        </div>
-      )}
-
-      {/* Empty State */}
-      {!selectedToolId && (
-        <Card className="data-card">
-          <CardContent className="empty-state">
-            <Wrench className="empty-state-icon" />
-            <p className="empty-state-title">Select a tool to get started</p>
-            <p className="empty-state-description">Choose from document generators, calculators, prep guides, and more to strengthen your VA claim.</p>
-          </CardContent>
-        </Card>
-      )}
+      {/* Tool Card Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {tools.map((tool) => (
+          <button
+            key={tool.id}
+            onClick={() => setSelectedToolId(tool.id)}
+            className="group text-left p-5 rounded-2xl bg-white/[0.04] border border-white/[0.08] hover:border-[#C8A628]/30 hover:bg-white/[0.07] transition-all duration-200 hover:shadow-lg hover:shadow-[#C8A628]/5"
+          >
+            <div className="w-11 h-11 rounded-xl bg-[#C8A628]/10 border border-[#C8A628]/20 flex items-center justify-center mb-4 group-hover:bg-[#C8A628]/20 transition-colors">
+              <tool.icon className="h-5 w-5 text-[#C8A628]" />
+            </div>
+            <h3 className="text-sm font-bold text-white mb-1.5 group-hover:text-[#C8A628] transition-colors">
+              {tool.name}
+            </h3>
+            <p className="text-xs text-white/50 leading-relaxed line-clamp-2">
+              {tool.description}
+            </p>
+            <span className="inline-block mt-3 text-[10px] font-semibold uppercase tracking-wider text-white/30">
+              {tool.category}
+            </span>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

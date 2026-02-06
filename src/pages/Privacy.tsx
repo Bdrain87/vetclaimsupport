@@ -33,7 +33,7 @@ export default function Privacy() {
         <p className="text-white/40 text-sm font-bold uppercase tracking-widest">
           Vet Claim Support | Platinum
         </p>
-        <p className="text-white/20 text-xs mt-2">Effective: February 2026</p>
+        <p className="text-white/40 text-xs mt-2">Effective: February 2026</p>
       </div>
 
       {/* Policy Sections */}
@@ -74,7 +74,7 @@ export default function Privacy() {
       <div className="text-center pb-12">
         <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/5">
           <Shield className="text-[#C8A628]" size={16} />
-          <p className="text-[10px] text-white/30 font-black uppercase tracking-[0.2em]">
+          <p className="text-[10px] text-white/50 font-black uppercase tracking-[0.2em]">
             Built for Veterans. Your data never leaves your device.
           </p>
         </div>

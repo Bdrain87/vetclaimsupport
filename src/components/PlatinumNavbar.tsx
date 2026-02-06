@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Bell, Search } from 'lucide-react';
 import { useLocation, Link } from 'react-router-dom';
+import { useProfileStore } from '@/store/useProfileStore';
 
 const NAV_ITEMS = [
   { label: 'Dashboard', href: '/dashboard' },
@@ -17,6 +18,13 @@ export const PlatinumNavbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const location = useLocation();
 
+  const { firstName } = useProfileStore();
+  const displayName = firstName || 'Veteran';
+  const initial = displayName[0]?.toUpperCase() || 'V';
+
+  const isLandingPage = location.pathname === '/' || location.pathname === '/landing';
+  const isOnboarding = location.pathname === '/onboarding';
+
   // Close drawer on route change
   useEffect(() => {
     setDrawerOpen(false);
@@ -32,9 +40,12 @@ export const PlatinumNavbar = () => {
     return () => { document.body.style.overflow = ''; };
   }, [drawerOpen]);
 
+  // Hide nav entirely on onboarding
+  if (isOnboarding) return null;
+
   return (
     <>
-      <nav className="fixed top-0 left-0 w-full z-[100] px-3 sm:px-6 py-3 sm:py-4">
+      <nav className={`${isLandingPage ? 'fixed top-0 left-0' : 'relative'} w-full z-[100] px-3 sm:px-6 py-3 sm:py-4`}>
         <div className="max-w-7xl mx-auto bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
           {/* Left: logo + desktop nav */}
           <div className="flex items-center gap-4 lg:gap-8 min-w-0">
@@ -52,7 +63,7 @@ export const PlatinumNavbar = () => {
                   key={item.label}
                   to={item.href}
                   className={`text-xs font-black uppercase tracking-widest transition-colors min-h-[44px] flex items-center ${
-                    location.pathname === item.href ? 'text-[#C8A628]' : 'text-white/40 hover:text-[#C8A628]'
+                    location.pathname === item.href ? 'text-[#C8A628] font-semibold' : 'text-white/70 hover:text-white'
                   }`}
                 >
                   {item.label}
@@ -63,20 +74,20 @@ export const PlatinumNavbar = () => {
 
           {/* Right: actions */}
           <div className="flex items-center gap-2 sm:gap-4 shrink-0">
-            <button className="min-h-[44px] min-w-[44px] flex items-center justify-center text-white/40 hover:text-white transition-colors" aria-label="Search">
+            <button className="min-h-[44px] min-w-[44px] flex items-center justify-center text-white/50 hover:text-white transition-colors" aria-label="Search">
               <Search size={20} />
             </button>
-            <button className="relative min-h-[44px] min-w-[44px] flex items-center justify-center text-white/40 hover:text-white transition-colors" aria-label="Notifications">
+            <button className="relative min-h-[44px] min-w-[44px] flex items-center justify-center text-white/50 hover:text-white transition-colors" aria-label="Notifications">
               <Bell size={20} />
               <span className="absolute top-2 right-2 h-2 w-2 bg-[#C8A628] rounded-full border-2 border-[#102039]" />
             </button>
             <div className="hidden sm:flex items-center gap-3 pl-2">
               <div className="text-right">
-                <p className="text-[10px] font-black text-white uppercase leading-none">Blake Drain</p>
+                <p className="text-[10px] font-black text-white uppercase leading-none">{displayName}</p>
                 <p className="text-[11px] font-bold text-[#C8A628] uppercase leading-none mt-1">Platinum Member</p>
               </div>
               <div className="h-10 w-10 rounded-full bg-white/10 border border-white/10 overflow-hidden">
-                <div className="w-full h-full flex items-center justify-center bg-[#C8A628]/20 text-[#C8A628] font-black italic">B</div>
+                <div className="w-full h-full flex items-center justify-center bg-[#C8A628]/20 text-[#C8A628] font-black italic">{initial}</div>
               </div>
             </div>
 
@@ -139,10 +150,10 @@ export const PlatinumNavbar = () => {
           <div className="sm:hidden mt-6 pt-6 border-t border-white/10 px-4">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-full bg-white/10 border border-white/10 overflow-hidden shrink-0">
-                <div className="w-full h-full flex items-center justify-center bg-[#C8A628]/20 text-[#C8A628] font-black italic">B</div>
+                <div className="w-full h-full flex items-center justify-center bg-[#C8A628]/20 text-[#C8A628] font-black italic">{initial}</div>
               </div>
               <div>
-                <p className="text-xs font-black text-white uppercase leading-none">Blake Drain</p>
+                <p className="text-xs font-black text-white uppercase leading-none">{displayName}</p>
                 <p className="text-[10px] font-bold text-[#C8A628] uppercase leading-none mt-1">Platinum Member</p>
               </div>
             </div>
