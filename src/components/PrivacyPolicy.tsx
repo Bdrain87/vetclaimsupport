@@ -1,7 +1,7 @@
 import { Shield } from 'lucide-react';
 
 const POLICIES = [
-  { title: "We Do Not Collect Your Data", text: "Service Evidence Tracker is built on a Local-First architecture. Your medical logs, symptoms, and personal claim details never leave your device." },
+  { title: "We Do Not Collect Your Data", text: "Vet Claim Support is built on a Local-First architecture. Your medical logs, symptoms, and personal claim details never leave your device." },
   { title: "Hardware-Level Security", text: "All sensitive evidence is protected by your device's native biometric hardware (FaceID, TouchID, or Passcode)." },
   { title: "No Cloud, No Liability", text: "Your data is stored exclusively in your browser's secure local storage (IndexedDB). You own your data. You control your data." },
   { title: "Data Deletion", text: "If you clear your browser cache without exporting, your data will be permanently lost. We cannot recover it because we never had it." },

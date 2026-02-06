@@ -26,7 +26,7 @@ import { cn } from '@/lib/utils';
 
 // App Store listing content
 const APP_STORE_CONTENT = {
-  name: 'Service Evidence Tracker',
+  name: 'Vet Claim Support',
   subtitle: 'Win Your VA Disability Claim',
   promotionalText: 'New: PACT Act presumptive conditions database. Know if your condition qualifies for easier approval. Built by veterans, for veterans.',
   keywords: 'VA,disability,claim,veteran,military,rating,C&P,exam,PTSD,benefits,secondary,nexus,DBQ,compensation',
@@ -34,7 +34,7 @@ const APP_STORE_CONTENT = {
 
 Every year, thousands of veterans are underrated or denied because they didn't know what the VA was looking for. Claim consultants charge $10,000+ for information that should be free.
 
-Service Evidence Tracker puts that power in your hands.
+Vet Claim Support puts that power in your hands.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

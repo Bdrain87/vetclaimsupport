@@ -519,7 +519,7 @@ export function AppStoreLandingPage() {
             </div>
             <div className="mt-8 pt-8 border-t border-white/5 text-center">
               <p className="text-xs text-slate-600">
-                © {new Date().getFullYear()} Service Evidence Tracker. Built with care for those who served.
+                © {new Date().getFullYear()} Vet Claim Support. Built with care for those who served.
               </p>
             </div>
           </div>

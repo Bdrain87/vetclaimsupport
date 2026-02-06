@@ -11,7 +11,7 @@ export default function Disclaimer() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Important Disclaimer</h1>
-          <p className="text-muted-foreground">Service Evidence Tracker</p>
+          <p className="text-muted-foreground">Vet Claim Support</p>
         </div>
       </div>
 
@@ -27,7 +27,7 @@ export default function Disclaimer() {
                 This App Is For Educational Purposes Only
               </h2>
               <p className="text-muted-foreground leading-relaxed">
-                Service Evidence Tracker is designed to help you understand and organize
+                Vet Claim Support is designed to help you understand and organize
                 information related to VA disability claims. <strong className="text-foreground">It is not a
                 substitute for professional legal or medical advice.</strong>
               </p>
@@ -42,7 +42,7 @@ export default function Disclaimer() {
           <Alert className="border-primary/30 bg-primary/10 mb-6">
             <AlertTriangle className="h-4 w-4 text-primary" />
             <AlertDescription className="text-foreground leading-relaxed">
-              Service Evidence Tracker is an educational tool designed to help veterans understand and navigate the VA disability claims process. This app does not provide legal advice, medical advice, or representation before the Department of Veterans Affairs.
+              Vet Claim Support is an educational tool designed to help veterans understand and navigate the VA disability claims process. This app does not provide legal advice, medical advice, or representation before the Department of Veterans Affairs.
               <br /><br />
               We are not attorneys, accredited claims agents, or affiliated with the U.S. Department of Veterans Affairs in any way.
               <br /><br />

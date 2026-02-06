@@ -23,7 +23,7 @@ export const generateVSOReport = (veteranName: string, activeClaims: any[], logs
     content += `[${log.date}] ${log.translatedText || log.rawText}\n`;
   });
 
-  content += `\n[LEGAL NOTICE]: This packet was generated using the Service Evidence Tracker \n`;
+  content += `\n[LEGAL NOTICE]: This packet was generated using the Vet Claim Support \n`;
   content += `to assist the veteran in organizing personal clinical observations. \n`;
   content += `The 'VA-Speak' translations are based on 38 CFR Part 4 nomenclature.`;
 

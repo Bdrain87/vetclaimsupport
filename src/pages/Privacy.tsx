@@ -31,7 +31,7 @@ export default function Privacy() {
           Zero-Knowledge <span className="text-[#C8A628]">Privacy Policy</span>
         </h1>
         <p className="text-white/40 text-sm font-bold uppercase tracking-widest">
-          Service Evidence Tracker | Platinum
+          Vet Claim Support | Platinum
         </p>
         <p className="text-white/20 text-xs mt-2">Effective: February 2026</p>
       </div>
@@ -39,7 +39,7 @@ export default function Privacy() {
       {/* Policy Sections */}
       <div className="glass-card premium-border p-8 space-y-6">
         <PolicySection icon={Eye} number={1} title="We Do Not Collect Your Data">
-          Service Evidence Tracker is built on a <strong className="text-[#C8A628]">"Local-First" architecture</strong>.
+          Vet Claim Support is built on a <strong className="text-[#C8A628]">"Local-First" architecture</strong>.
           Unlike traditional apps, we do not maintain a central database. Your medical logs,
           symptoms, and personal claim details never leave your device.
         </PolicySection>

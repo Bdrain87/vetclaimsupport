@@ -6,7 +6,7 @@ const initiateBiometricHandshake = async () => {
     const options: CredentialRequestOptions = {
       publicKey: {
         challenge,
-        rp: { name: "Service Evidence Tracker" },
+        rp: { name: "Vet Claim Support" },
         user: {
           id: new Uint8Array(16),
           name: "user",

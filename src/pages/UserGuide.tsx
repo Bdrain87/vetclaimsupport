@@ -33,7 +33,7 @@ const guideSections: GuideSection[] = [
     id: 'getting-started',
     title: 'Getting Started',
     icon: <BookOpen className="h-5 w-5" />,
-    description: 'Learn the basics of using Service Evidence Tracker',
+    description: 'Learn the basics of using Vet Claim Support',
     steps: [
       {
         title: 'Accept the Terms',
@@ -249,7 +249,7 @@ export default function UserGuide() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">User Guide</h1>
-          <p className="text-muted-foreground">Learn how to use Service Evidence Tracker effectively</p>
+          <p className="text-muted-foreground">Learn how to use Vet Claim Support effectively</p>
         </div>
       </div>
 

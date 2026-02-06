@@ -13,7 +13,7 @@ export function Footer() {
               <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
                 <Shield className="w-5 h-5 text-white" />
               </div>
-              <span className="text-lg font-semibold text-white">Service Evidence Tracker</span>
+              <span className="text-lg font-semibold text-white">Vet Claim Support</span>
             </div>
             <p className="text-sm text-white/50 leading-relaxed">
               Professional-grade VA claim preparation. Built by veterans, for veterans.
@@ -102,7 +102,7 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-white/5">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-xs text-white/40 text-center md:text-left">
-              © {currentYear} Service Evidence Tracker. All rights reserved.
+              © {currentYear} Vet Claim Support. All rights reserved.
             </p>
             <p className="text-xs text-white/40 text-center md:text-right max-w-lg">
               Not affiliated with or endorsed by the U.S. Department of Veterans Affairs.
