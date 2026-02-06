@@ -1,63 +1,64 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home, Activity, Calculator, Settings } from 'lucide-react';
+import { LayoutDashboard, FileHeart, Activity, Wrench, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-// Quick-access tabs for mobile - matches key routes from desktop sidebar
 const tabs = [
-  { to: '/', icon: Home, label: 'Home' },
+  { to: '/dashboard', icon: LayoutDashboard, label: 'Home' },
+  { to: '/conditions', icon: FileHeart, label: 'Claims' },
   { to: '/health-log', icon: Activity, label: 'Log' },
-  { to: '/claim-tools', icon: Calculator, label: 'Tools' },
-  { to: '/settings', icon: Settings, label: 'Settings' },
+  { to: '/claim-tools', icon: Wrench, label: 'Tools' },
+  { to: '/settings', icon: Settings, label: 'More' },
 ];
 
 export function BottomTabBar() {
   const location = useLocation();
 
-  // Check if current path matches tab or is a child route
   const isTabActive = (tabPath: string) => {
-    if (tabPath === '/') {
-      return location.pathname === '/';
+    if (tabPath === '/dashboard') {
+      return location.pathname === '/dashboard';
     }
     return location.pathname === tabPath || location.pathname.startsWith(tabPath + '/');
   };
 
+  // Hide on landing page and onboarding
+  if (location.pathname === '/' || location.pathname === '/landing' || location.pathname === '/onboarding') {
+    return null;
+  }
+
   return (
     <nav className={cn(
-      "md:hidden fixed bottom-0 left-0 right-0 z-50",
-      "bg-background/80 backdrop-blur-xl",
-      "border-t border-border",
-      "safe-area-bottom"
+      'sm:hidden fixed bottom-0 left-0 right-0 z-50',
     )}>
-      <div className="flex items-center justify-around h-20 px-2">
-        {tabs.map((tab, index) => {
+      {/* Glass background */}
+      <div className="absolute inset-0 bg-[#102039]/90 backdrop-blur-xl border-t border-white/[0.06]" />
+
+      <div className="relative flex items-center justify-around h-16 px-2" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+        {tabs.map((tab) => {
           const isActive = isTabActive(tab.to);
           return (
             <NavLink
               key={tab.to}
               to={tab.to}
               className={cn(
-                "flex flex-col items-center justify-center gap-1",
-                "flex-1 h-full min-w-[64px] min-h-[48px]",
-                "transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]",
-                "active:scale-95",
-                isActive ? "text-primary" : "text-muted-foreground"
+                'flex flex-col items-center justify-center gap-0.5',
+                'flex-1 h-full min-w-[56px] min-h-[48px]',
+                'transition-all duration-200',
+                'active:scale-95',
               )}
-              style={{ animationDelay: `${index * 50}ms` }}
             >
-              <div className={cn(
-                "flex items-center justify-center",
-                "w-12 h-12 min-w-[48px] min-h-[48px] rounded-xl",
-                "transition-all duration-250 ease-[cubic-bezier(0.32,0.72,0,1)]",
-                isActive && "bg-primary/15 scale-110"
-              )}>
+              <div className="relative">
                 <tab.icon className={cn(
-                  "h-5 w-5 transition-all duration-200",
-                  isActive && "scale-105"
+                  'h-5 w-5 transition-colors duration-200',
+                  isActive ? 'text-white' : 'text-white/40'
                 )} />
+                {/* Gold dot indicator */}
+                {isActive && (
+                  <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-[#C8A628]" />
+                )}
               </div>
               <span className={cn(
-                "text-[10px] font-medium transition-all duration-200",
-                isActive && "font-semibold"
+                'text-[10px] mt-1 transition-colors duration-200',
+                isActive ? 'text-white font-medium' : 'text-white/40 font-normal'
               )}>{tab.label}</span>
             </NavLink>
           );

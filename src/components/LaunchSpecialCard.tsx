@@ -12,7 +12,7 @@ export const LaunchSpecialCard = () => {
         </div>
       )}
       <h2 className="text-6xl font-black text-white italic">{price}</h2>
-      <p className="text-[#C8A628] font-bold uppercase tracking-widest mt-2">Founder's License</p>
+      <p className="text-[#C8A628] font-bold uppercase tracking-widest mt-2">Launch Price</p>
       <button className="w-full mt-8 py-4 bg-[#C8A628] text-navy-950 font-black rounded-2xl">Unlock Platinum Suite</button>
     </div>
   );

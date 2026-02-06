@@ -26,7 +26,7 @@ export function LaunchSpecialCard() {
 
       <h2 className="text-5xl font-black text-white italic">{price}</h2>
       <p className="text-gold-500 font-bold tracking-tighter uppercase mt-2">
-        One-Time Founder&apos;s License
+        One-Time Launch License
       </p>
 
       {isLaunchWindow && daysRemaining > 0 && (
