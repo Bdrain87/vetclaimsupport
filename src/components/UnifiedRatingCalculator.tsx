@@ -232,8 +232,8 @@ function calculateWithBilateral(conditions: RatedCondition[]): {
   // Final combination
   const finalExact = combineRatings(allRatingsForFinal);
 
-  // Round DOWN to nearest 10%
-  const officialRating = Math.floor(finalExact / 10) * 10;
+  // Round to nearest 10% per 38 CFR § 4.25
+  const officialRating = Math.round(finalExact / 10) * 10;
 
   return {
     exactCombined: finalExact,

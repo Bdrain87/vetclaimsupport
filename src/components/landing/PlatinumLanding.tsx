@@ -138,7 +138,7 @@ export const PlatinumLanding = () => {
           >
             Get Started — $4.99
           </a>
-          <p className="mt-4 text-white/50 text-sm">Limited Time Founder's Launch Price</p>
+          <p className="mt-4 text-white/60 text-sm">Limited Time Founder's Launch Price</p>
         </motion.div>
 
         {/* scroll indicator */}
@@ -149,7 +149,7 @@ export const PlatinumLanding = () => {
           className="absolute bottom-10"
         >
           <motion.div animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}>
-            <ChevronDown className="text-white/30" size={28} />
+            <ChevronDown className="text-white/50" size={28} aria-hidden="true" />
           </motion.div>
         </motion.div>
       </section>
@@ -283,7 +283,7 @@ export const PlatinumLanding = () => {
                     : 'bg-[#C8A628]/10 border-[#C8A628]/30'
                 }`}
               >
-                <p className="text-white/50 text-sm mb-2">{item.label}</p>
+                <p className="text-white/70 text-sm mb-2">{item.label}</p>
                 <p className={`font-bold text-lg ${item.bad ? 'text-white' : 'text-[#C8A628]'}`}>{item.price}</p>
                 <span className="text-xl mt-2 block">{item.bad ? '❌' : '✅'}</span>
               </motion.div>
@@ -490,7 +490,7 @@ export const PlatinumLanding = () => {
 
         <div className="relative max-w-3xl mx-auto text-center">
           <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
-            <p className="text-white/40 text-4xl sm:text-5xl font-bold line-through mb-2">$19.99</p>
+            <p className="text-white/60 text-4xl sm:text-5xl font-bold line-through mb-2">$19.99</p>
             <p className="text-[#C8A628] text-7xl sm:text-8xl md:text-9xl font-black leading-none mb-4">$4.99</p>
             <p className="text-white uppercase text-sm font-bold tracking-widest mb-12">
               Founder's Launch Price — Limited Time
@@ -572,7 +572,7 @@ export const PlatinumLanding = () => {
               isn't a corporation. It's a weapon — built by a veteran, for veterans.
             </p>
 
-            <p className="text-white/50 font-bold italic">
+            <p className="text-white/70 font-bold italic">
               — The Founder, <span className="text-[#C8A628] italic">Vet Claim Support</span>
             </p>
           </motion.div>
@@ -582,7 +582,7 @@ export const PlatinumLanding = () => {
       {/* ═══════════════ SECTION 11: FOOTER ═══════════════ */}
       <footer className="py-16 px-6 border-t border-white/5 bg-black/30">
         <div className="max-w-4xl mx-auto">
-          <div className="space-y-4 text-white/40 text-xs leading-relaxed mb-10">
+          <div className="space-y-4 text-white/60 text-xs leading-relaxed mb-10">
             <p>
               Vet Claim Support is not affiliated with, endorsed by, or sponsored by the U.S. Department
               of Veterans Affairs or any government agency.
@@ -610,13 +610,13 @@ export const PlatinumLanding = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-8 border-t border-white/5">
-            <div className="flex items-center gap-6 text-white/40 text-xs">
+            <div className="flex items-center gap-6 text-white/60 text-xs">
               <a href="/#" className="hover:text-white transition-colors">Terms of Service</a>
               <a href="/#" className="hover:text-white transition-colors">Privacy Policy</a>
               <a href="/#" className="hover:text-white transition-colors">Contact</a>
             </div>
-            <p className="text-white/30 text-xs">
-              &copy; 2025 <span className="italic">Vet Claim Support</span>. All rights reserved.
+            <p className="text-white/60 text-xs">
+              &copy; {new Date().getFullYear()} <span className="italic">Vet Claim Support</span>. All rights reserved.
             </p>
           </div>
         </div>

@@ -1,28 +1,61 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { AI_CONFIG } from '@/lib/ai-prompts';
 
 export const useGemini = (persona: keyof typeof AI_CONFIG) => {
   const [isLoading, setIsLoading] = useState(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
-  const generate = async (input: string) => {
+  const generate = useCallback(async (input: string): Promise<string | null> => {
+    // Cancel any in-flight request
+    abortControllerRef.current?.abort();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     setIsLoading(true);
     try {
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${import.meta.env.VITE_GEMINI_API_KEY}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{ text: `${AI_CONFIG[persona]}\n\nInput: ${input}` }]
-          }]
-        })
-      });
+      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+      if (!apiKey) {
+        throw new Error('Gemini API key is not configured');
+      }
+
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: controller.signal,
+          body: JSON.stringify({
+            contents: [{
+              parts: [{ text: `${AI_CONFIG[persona]}\n\nInput: ${input}` }]
+            }]
+          })
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error(`Gemini API error: ${res.status} ${res.statusText}`);
+      }
 
       const data = await res.json();
-      return data.candidates[0].content.parts[0].text;
+      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!text) {
+        throw new Error('Unexpected response format from Gemini API');
+      }
+      return text;
+    } catch (error: unknown) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return null;
+      }
+      console.error('[useGemini]', error);
+      return null;
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [persona]);
 
-  return { generate, isLoading };
+  const cancel = useCallback(() => {
+    abortControllerRef.current?.abort();
+  }, []);
+
+  return { generate, isLoading, cancel };
 };

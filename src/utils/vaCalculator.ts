@@ -109,7 +109,7 @@ export function calculateVARating(ratings: RatingEntry[]): CalculationResult {
       const disability = (withFactor / 100) * efficiency;
       efficiency -= disability;
     }
-    combinedRating = 100 - efficiency + bilateralFactor;
+    combinedRating = 100 - efficiency;
   }
 
   const roundedRating = Math.round(combinedRating / 10) * 10;

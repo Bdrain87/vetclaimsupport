@@ -237,18 +237,6 @@ export function validatePasswordStrength(password: string): {
   };
 }
 
-/**
- * Zero-Knowledge Encryption for LocalStorage
- * Uses Web Crypto API to ensure PII is unreadable at rest.
- */
-export const encryptData = async (data: string) => {
-  const encoder = new TextEncoder();
-  const encodedData = encoder.encode(data);
-  // Using a derivative of the Biometric challenge as a local key
-  const digest = await window.crypto.subtle.digest('SHA-256', encoder.encode('platinum-vault-key'));
-  return btoa(String.fromCharCode(...new Uint8Array(digest))); // Returns unreadable hash
-};
-
 // Storage key for encrypted data settings
 const ENCRYPTION_ENABLED_KEY = 'vet-claim-encryption-enabled';
 const PASSWORD_HASH_KEY = 'vet-claim-password-hash';
@@ -261,8 +249,12 @@ export function isEncryptionEnabled(): boolean {
 // Enable encryption with password
 export async function enableEncryption(password: string): Promise<void> {
   const hash = await hashString(password);
-  localStorage.setItem(PASSWORD_HASH_KEY, hash);
-  localStorage.setItem(ENCRYPTION_ENABLED_KEY, 'true');
+  try {
+    localStorage.setItem(PASSWORD_HASH_KEY, hash);
+    localStorage.setItem(ENCRYPTION_ENABLED_KEY, 'true');
+  } catch {
+    throw new Error('Failed to save encryption settings — storage may be full');
+  }
 }
 
 // Disable encryption

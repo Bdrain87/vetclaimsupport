@@ -24,11 +24,11 @@ export const PlatinumNavbar = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          <button className="p-2 text-white/40 hover:text-white transition-colors">
+          <button className="p-2 text-white/40 hover:text-white transition-colors" aria-label="Search">
             <Search size={20} />
           </button>
           <div className="h-4 w-[1px] bg-white/10" />
-          <button className="relative p-2 text-white/40 hover:text-white transition-colors">
+          <button className="relative p-2 text-white/40 hover:text-white transition-colors" aria-label="Notifications">
             <Bell size={20} />
             <span className="absolute top-2 right-2 h-2 w-2 bg-[#C8A628] rounded-full border-2 border-[#102039]" />
           </button>

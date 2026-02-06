@@ -136,8 +136,8 @@ export function BDDCountdown({ separationDate, onSeparationDateChange }: BDDCoun
                   <div>
                     <p className="font-medium text-destructive">BDD window has closed</p>
                     <p className="text-sm text-foreground/80">
-                      You're now within 90 days of separation. You must wait until after your 
-                      separation date to file a standard VA disability claim.
+                      You're now within 90 days of separation. The BDD filing window has passed,
+                      but you can still file a standard VA disability claim before or after separation.
                     </p>
                   </div>
                 </div>
