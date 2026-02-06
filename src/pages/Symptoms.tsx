@@ -450,19 +450,21 @@ export default function Symptoms() {
           <div className="flex gap-2">
             {/* View Mode Toggle */}
             <div className="flex border border-border rounded-xl p-1 bg-muted/50">
-              <Button 
-                variant={viewMode === 'list' ? 'secondary' : 'ghost'} 
-                size="sm" 
+              <Button
+                variant={viewMode === 'list' ? 'secondary' : 'ghost'}
+                size="sm"
                 className="h-10 w-10 min-h-[44px] min-w-[44px] p-0"
                 onClick={() => setViewMode('list')}
+                aria-label="List view"
               >
                 <List className="h-4 w-4" />
               </Button>
-              <Button 
-                variant={viewMode === 'timeline' ? 'secondary' : 'ghost'} 
-                size="sm" 
+              <Button
+                variant={viewMode === 'timeline' ? 'secondary' : 'ghost'}
+                size="sm"
                 className="h-10 w-10 min-h-[44px] min-w-[44px] p-0"
                 onClick={() => setViewMode('timeline')}
+                aria-label="Timeline view"
               >
                 <CalendarDays className="h-4 w-4" />
               </Button>
@@ -787,10 +789,10 @@ export default function Symptoms() {
                           )}
                         </div>
                         <div className="flex gap-1">
-                          <Button variant="ghost" size="icon" className="h-10 w-10 min-h-[44px] min-w-[44px]" onClick={() => handleEdit(symptom)}>
+                          <Button variant="ghost" size="icon" className="h-10 w-10 min-h-[44px] min-w-[44px]" onClick={() => handleEdit(symptom)} aria-label="Edit symptom">
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon" className="h-10 w-10 min-h-[44px] min-w-[44px]" onClick={() => deleteSymptom(symptom.id)}>
+                          <Button variant="ghost" size="icon" className="h-10 w-10 min-h-[44px] min-w-[44px]" onClick={() => deleteSymptom(symptom.id)} aria-label="Delete symptom">
                             <Trash2 className="h-4 w-4 text-destructive" />
                           </Button>
                         </div>

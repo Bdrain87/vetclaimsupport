@@ -429,8 +429,8 @@ export default function ServiceHistory() {
                         {new Date(entry.startDate).toLocaleDateString()} - {entry.endDate ? new Date(entry.endDate).toLocaleDateString() : 'Present'}
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => handleEdit(entry)}><Edit className="h-4 w-4" /></Button>
-                        <Button variant="ghost" size="icon" onClick={() => deleteServiceEntry(entry.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                        <Button variant="ghost" size="icon" onClick={() => handleEdit(entry)} aria-label="Edit duty station"><Edit className="h-4 w-4" /></Button>
+                        <Button variant="ghost" size="icon" onClick={() => deleteServiceEntry(entry.id)} aria-label="Delete duty station"><Trash2 className="h-4 w-4 text-destructive" /></Button>
                       </div>
                     </div>
                     <CardTitle className="text-lg mt-2 flex items-center gap-2">
@@ -570,8 +570,8 @@ export default function ServiceHistory() {
                         {new Date(entry.startDate).toLocaleDateString()} - {entry.endDate ? new Date(entry.endDate).toLocaleDateString() : 'Present'}
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => handleEditCombat(entry)}><Edit className="h-4 w-4" /></Button>
-                        <Button variant="ghost" size="icon" onClick={() => deleteCombatEntry(entry.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                        <Button variant="ghost" size="icon" onClick={() => handleEditCombat(entry)} aria-label="Edit combat entry"><Edit className="h-4 w-4" /></Button>
+                        <Button variant="ghost" size="icon" onClick={() => deleteCombatEntry(entry.id)} aria-label="Delete combat entry"><Trash2 className="h-4 w-4 text-destructive" /></Button>
                       </div>
                     </div>
                     <CardTitle className="text-lg mt-2 flex items-center gap-2">
@@ -691,8 +691,8 @@ export default function ServiceHistory() {
                         </Badge>
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => handleEditEvent(entry)}><Edit className="h-4 w-4" /></Button>
-                        <Button variant="ghost" size="icon" onClick={() => deleteMajorEvent(entry.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                        <Button variant="ghost" size="icon" onClick={() => handleEditEvent(entry)} aria-label="Edit event"><Edit className="h-4 w-4" /></Button>
+                        <Button variant="ghost" size="icon" onClick={() => deleteMajorEvent(entry.id)} aria-label="Delete event"><Trash2 className="h-4 w-4 text-destructive" /></Button>
                       </div>
                     </div>
                     <CardTitle className="text-lg mt-2 flex items-center gap-2">
@@ -812,8 +812,8 @@ export default function ServiceHistory() {
                         {new Date(entry.startDate).toLocaleDateString()} - {entry.endDate ? new Date(entry.endDate).toLocaleDateString() : 'Present'}
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => handleEditDeploy(entry)}><Edit className="h-4 w-4" /></Button>
-                        <Button variant="ghost" size="icon" onClick={() => deleteDeployment(entry.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                        <Button variant="ghost" size="icon" onClick={() => handleEditDeploy(entry)} aria-label="Edit deployment"><Edit className="h-4 w-4" /></Button>
+                        <Button variant="ghost" size="icon" onClick={() => deleteDeployment(entry.id)} aria-label="Delete deployment"><Trash2 className="h-4 w-4 text-destructive" /></Button>
                       </div>
                     </div>
                     <CardTitle className="text-lg mt-2 flex items-center gap-2">

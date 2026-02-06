@@ -14,7 +14,7 @@ const NotFound = () => {
   const quickLinks = [
     { path: '/', label: 'Dashboard', icon: Home },
     { path: '/health-log', label: 'Health Log', icon: FileText },
-    { path: '/calculator', label: 'Calculator', icon: Calculator },
+    { path: '/claim-tools', label: 'Claim Tools', icon: Calculator },
     { path: '/help', label: 'Help Center', icon: HelpCircle },
   ];
 

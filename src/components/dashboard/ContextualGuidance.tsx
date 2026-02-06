@@ -348,6 +348,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
                       size="sm"
                       className="h-6 w-6 p-0 text-muted-foreground hover:text-foreground"
                       onClick={() => handleDismiss(nudge.id)}
+                      aria-label="Dismiss tip"
                     >
                       <X className="h-3 w-3" />
                     </Button>

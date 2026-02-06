@@ -307,10 +307,10 @@ export default function MedicalVisits() {
                     )}
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="ghost" size="icon" onClick={() => handleEdit(visit)} className="h-10 w-10 min-h-[44px] min-w-[44px]">
+                    <Button variant="ghost" size="icon" onClick={() => handleEdit(visit)} className="h-10 w-10 min-h-[44px] min-w-[44px]" aria-label="Edit visit">
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => deleteMedicalVisit(visit.id)} className="h-10 w-10 min-h-[44px] min-w-[44px]">
+                    <Button variant="ghost" size="icon" onClick={() => deleteMedicalVisit(visit.id)} className="h-10 w-10 min-h-[44px] min-w-[44px]" aria-label="Delete visit">
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>

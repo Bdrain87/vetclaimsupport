@@ -51,7 +51,7 @@ export const PlatinumNavbar = () => {
                 <Link
                   key={item.label}
                   to={item.href}
-                  className={`text-[10px] font-black uppercase tracking-widest transition-colors min-h-[44px] flex items-center ${
+                  className={`text-xs font-black uppercase tracking-widest transition-colors min-h-[44px] flex items-center ${
                     location.pathname === item.href ? 'text-[#C8A628]' : 'text-white/40 hover:text-[#C8A628]'
                   }`}
                 >
@@ -73,7 +73,7 @@ export const PlatinumNavbar = () => {
             <div className="hidden sm:flex items-center gap-3 pl-2">
               <div className="text-right">
                 <p className="text-[10px] font-black text-white uppercase leading-none">Blake Drain</p>
-                <p className="text-[9px] font-bold text-[#C8A628] uppercase leading-none mt-1">Platinum Member</p>
+                <p className="text-[11px] font-bold text-[#C8A628] uppercase leading-none mt-1">Platinum Member</p>
               </div>
               <div className="h-10 w-10 rounded-full bg-white/10 border border-white/10 overflow-hidden">
                 <div className="w-full h-full flex items-center justify-center bg-[#C8A628]/20 text-[#C8A628] font-black italic">B</div>

@@ -115,7 +115,7 @@ Thank you for your service. We're committed to helping you get the rating you ea
 };
 
 const SCREENSHOTS = [
-  { id: 1, caption: 'Know your combined VA rating instantly', description: 'Calculator showing combined rating with monthly compensation', page: '/calculator' },
+  { id: 1, caption: 'Know your combined VA rating instantly', description: 'Calculator showing combined rating with monthly compensation', page: '/claim-tools' },
   { id: 2, caption: 'Track every service-connected condition', description: 'Conditions list with ratings and secondary connections', page: '/' },
   { id: 3, caption: 'Dominate your C&P exam', description: 'Exam Companion document with condition-specific prep', page: '/cp-exam-prep' },
   { id: 4, caption: 'Discover conditions you didn\'t know about', description: 'Secondary condition suggestions', page: '/secondary-finder' },

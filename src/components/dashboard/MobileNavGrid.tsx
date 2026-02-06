@@ -41,9 +41,9 @@ interface NavItem {
 
 const bottomNavItems: NavItem[] = [
   { title: 'Home', path: '/', icon: Home },
-  { title: 'Tools', path: '/calculator', icon: Wrench },
+  { title: 'Tools', path: '/claim-tools', icon: Wrench },
   { title: 'Add', path: '/health-log', icon: Plus, primary: true },
-  { title: 'Claim', path: '/journey', icon: FileText },
+  { title: 'Claim', path: '/claim-journey', icon: FileText },
   { title: 'Menu', path: null, icon: Menu, opensDrawer: true },
 ];
 
@@ -52,7 +52,7 @@ const drawerSections = [
   {
     title: 'Premium Tools',
     items: [
-      { title: 'Rating Calculator', path: '/calculator', icon: Calculator },
+      { title: 'Rating Calculator', path: '/claim-tools', icon: Calculator },
       { title: 'Secondary Finder', path: '/secondary-finder', icon: Search },
       { title: 'Nexus Letter Generator', path: '/nexus-letter', icon: FileSignature },
       { title: 'DBQ Prep Sheet', path: '/dbq-prep', icon: ClipboardList },

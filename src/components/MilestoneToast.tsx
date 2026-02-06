@@ -19,7 +19,7 @@ export function MilestoneToast({ milestone, onClose, autoClose = 5000 }: Milesto
 
   return (
     <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 animate-slide-up">
-      <div className="bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-2xl shadow-2xl shadow-amber-500/30 p-4 pr-12 flex items-center gap-4 min-w-[300px] max-w-[400px]">
+      <div className="bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-2xl shadow-2xl shadow-amber-500/30 p-4 pr-12 flex items-center gap-4 min-w-0 w-[calc(100vw-2rem)] sm:min-w-[300px] sm:max-w-[400px]">
         {/* Confetti background effect */}
         <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
           <div className="absolute -top-1 -left-1 text-2xl animate-bounce" style={{ animationDelay: '0ms' }}>✨</div>

@@ -638,7 +638,7 @@ export default function DocumentsHub() {
               </SelectContent>
             </Select>
             {filterDocType !== 'all' && (
-              <Button variant="ghost" size="icon" onClick={() => setFilterDocType('all')}>
+              <Button variant="ghost" size="icon" onClick={() => setFilterDocType('all')} aria-label="Clear filter">
                 <X className="h-4 w-4" />
               </Button>
             )}
