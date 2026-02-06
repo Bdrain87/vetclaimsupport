@@ -24,7 +24,7 @@ export const runDiagnostics = () => {
   results.branding = true; // Placeholder for CSS variable check
 
   console.table({
-    "SYSTEM": "SERVICE EVIDENCE TRACKER",
+    "SYSTEM": "VET CLAIM SUPPORT",
     "VA_MATH_INTEGRITY": results.vaMath ? "PASSED" : "FAILED",
     "AI_PROMPT_INTEGRITY": results.aiConfig ? "PASSED" : "FAILED",
     "DEBRANDING_STATUS": "COMPLETE"
