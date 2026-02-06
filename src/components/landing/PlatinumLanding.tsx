@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import {
   ChevronDown,
@@ -91,10 +92,10 @@ export const PlatinumLanding = () => {
   const heroScale = useTransform(scrollYProgress, [0, 0.15], [1, 1.05]);
 
   return (
-    <div className="min-h-screen bg-[#102039] selection:bg-[#C8A628]/30 overflow-x-hidden">
+    <div className="min-h-[100dvh] bg-[#102039] selection:bg-[#C8A628]/30 overflow-x-hidden max-w-full">
 
       {/* ═══════════════ SECTION 1: HERO ═══════════════ */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden">
+      <section className="relative min-h-[100dvh] flex flex-col items-center justify-center text-center px-4 sm:px-6 overflow-hidden">
         {/* radial bg glow */}
         <motion.div
           style={{ scale: heroScale }}
@@ -108,7 +109,7 @@ export const PlatinumLanding = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
-          className="relative text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black uppercase text-white tracking-tight leading-[1.05] max-w-5xl"
+          className="relative text-3xl sm:text-5xl md:text-6xl lg:text-8xl font-black uppercase text-white tracking-tight leading-[1.08] max-w-5xl"
         >
           YOUR CLAIM.{' '}
           <span className="text-[#C8A628]">YOUR EVIDENCE.</span>{' '}
@@ -119,7 +120,7 @@ export const PlatinumLanding = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15, duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
-          className="relative mt-8 text-white/70 text-base sm:text-lg md:text-xl max-w-[600px] leading-relaxed"
+          className="relative mt-6 sm:mt-8 text-white/70 text-base sm:text-lg md:text-xl max-w-[600px] leading-relaxed px-2"
         >
           Whether you're still in uniform, just got your DD-214, or haven't touched your claim
           in 30 years — this is the tool the VA doesn't want you to have.
@@ -131,13 +132,13 @@ export const PlatinumLanding = () => {
           transition={{ delay: 0.3, duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
           className="relative mt-10"
         >
-          <a
-            href="/dashboard"
-            className="inline-block bg-[#C8A628] text-black font-bold text-lg px-10 py-5 rounded-xl transition-all duration-200 hover:shadow-[0_0_30px_rgba(200,166,40,0.4)] hover:scale-[1.02] active:scale-[0.98]"
+          <Link
+            to="/dashboard"
+            className="inline-block w-full sm:w-auto bg-[#C8A628] text-black font-bold text-lg px-8 sm:px-10 py-4 sm:py-5 rounded-xl transition-all duration-200 hover:shadow-[0_0_30px_rgba(200,166,40,0.4)] hover:scale-[1.02] active:scale-[0.98] min-h-[48px] text-center"
             style={{ textShadow: '1px 1px 0 rgba(0,0,0,1)' }}
           >
             Get Started — $4.99
-          </a>
+          </Link>
           <p className="mt-4 text-white/60 text-sm">Limited Time Founder's Launch Price</p>
         </motion.div>
 
@@ -155,13 +156,13 @@ export const PlatinumLanding = () => {
       </section>
 
       {/* ═══════════════ SECTION 2: TRUST BAR ═══════════════ */}
-      <section className="py-16 px-6">
+      <section className="py-12 sm:py-16 px-4 sm:px-6">
         <motion.div
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
-          className="max-w-5xl mx-auto bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl p-8 sm:p-10 flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16"
+          className="max-w-5xl mx-auto bg-white/[0.03] backdrop-blur-md sm:backdrop-blur-xl border border-white/10 rounded-2xl p-5 sm:p-8 md:p-10 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-16"
         >
           {[
             { emoji: '🎖️', text: 'Built by a 100% Disabled Veteran' },
@@ -177,7 +178,7 @@ export const PlatinumLanding = () => {
       </section>
 
       {/* ═══════════════ SECTION 3: AUDIENCE LANES ═══════════════ */}
-      <section className="py-20 sm:py-28 px-6 max-w-7xl mx-auto">
+      <section className="py-14 sm:py-20 md:py-28 px-4 sm:px-6 max-w-7xl mx-auto">
         <SectionHeader gold="Where Are You in Your Journey?" />
 
         <motion.div
@@ -196,9 +197,9 @@ export const PlatinumLanding = () => {
               a check waiting. Most service members don't know this exists. The ones who do? They build
               their case before they take off the uniform.
             </p>
-            <a href="/claim-tools" className="inline-flex items-center text-[#C8A628] font-bold text-sm hover:underline">
+            <Link to="/claim-tools" className="inline-flex items-center text-[#C8A628] font-bold text-base min-h-[44px] hover:underline active:opacity-80">
               Start Your BDD Claim <span className="ml-1">→</span>
-            </a>
+            </Link>
           </GlassCard>
 
           {/* Card 2 — Just Got Out */}
@@ -210,9 +211,9 @@ export const PlatinumLanding = () => {
               gets harder to prove later. Stop Googling symptoms at 2 AM. Start building your case
               with the tools the pros use.
             </p>
-            <a href="/dashboard" className="inline-flex items-center text-[#C8A628] font-bold text-sm hover:underline">
+            <Link to="/dashboard" className="inline-flex items-center text-[#C8A628] font-bold text-base min-h-[44px] hover:underline active:opacity-80">
               Organize Your Evidence <span className="ml-1">→</span>
-            </a>
+            </Link>
           </GlassCard>
 
           {/* Card 3 — Been Out for Years */}
@@ -224,15 +225,15 @@ export const PlatinumLanding = () => {
               millions. It doesn't matter if you served in Vietnam, Desert Storm, Iraq, or Afghanistan —
               if it's service-connected, it's owed. It's never too late.
             </p>
-            <a href="/conditions" className="inline-flex items-center text-[#C8A628] font-bold text-sm hover:underline">
+            <Link to="/conditions" className="inline-flex items-center text-[#C8A628] font-bold text-base min-h-[44px] hover:underline active:opacity-80">
               See What You Qualify For <span className="ml-1">→</span>
-            </a>
+            </Link>
           </GlassCard>
         </motion.div>
       </section>
 
       {/* ═══════════════ SECTION 4: THE PROBLEM ═══════════════ */}
-      <section className="py-20 sm:py-28 px-6 bg-black/30">
+      <section className="py-14 sm:py-20 md:py-28 px-4 sm:px-6 bg-black/30">
         <div className="max-w-4xl mx-auto text-center">
           <motion.h2
             variants={fadeUp}
@@ -293,7 +294,7 @@ export const PlatinumLanding = () => {
       </section>
 
       {/* ═══════════════ SECTION 5: THE ARSENAL ═══════════════ */}
-      <section className="py-20 sm:py-28 px-6 max-w-7xl mx-auto">
+      <section className="py-14 sm:py-20 md:py-28 px-4 sm:px-6 max-w-7xl mx-auto">
         <SectionHeader gold="The Arsenal" sub="Every tool you need to understand, build, and win your claim." />
 
         <motion.div
@@ -347,7 +348,7 @@ export const PlatinumLanding = () => {
       </section>
 
       {/* ═══════════════ SECTION 6: DAILY EVIDENCE MACHINE ═══════════════ */}
-      <section className="py-20 sm:py-28 px-6 max-w-7xl mx-auto">
+      <section className="py-14 sm:py-20 md:py-28 px-4 sm:px-6 max-w-7xl mx-auto">
         <SectionHeader
           gold="Your Daily Evidence Machine"
           sub="The VA doesn't deny veterans with organized evidence. They deny veterans who walk in empty-handed."
@@ -389,7 +390,7 @@ export const PlatinumLanding = () => {
       </section>
 
       {/* ═══════════════ SECTION 7: BATTLE PREP ═══════════════ */}
-      <section className="py-20 sm:py-28 px-6 max-w-7xl mx-auto">
+      <section className="py-14 sm:py-20 md:py-28 px-4 sm:px-6 max-w-7xl mx-auto">
         <SectionHeader
           gold="Battle Prep"
           sub="You wouldn't walk into a job interview unprepared. Don't walk into the exam that decides your financial future with nothing."
@@ -436,7 +437,7 @@ export const PlatinumLanding = () => {
       </section>
 
       {/* ═══════════════ SECTION 8: PRIVACY ═══════════════ */}
-      <section className="py-20 sm:py-28 px-6 bg-black/40">
+      <section className="py-14 sm:py-20 md:py-28 px-4 sm:px-6 bg-black/40">
         <div className="max-w-3xl mx-auto text-center">
           <motion.h2
             variants={fadeUp}
@@ -482,7 +483,7 @@ export const PlatinumLanding = () => {
       </section>
 
       {/* ═══════════════ SECTION 9: PRICING ═══════════════ */}
-      <section className="relative py-24 sm:py-32 px-6 overflow-hidden">
+      <section className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 overflow-hidden">
         {/* gold glow behind price */}
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#C8A628]/[0.04] blur-3xl" />
@@ -490,8 +491,8 @@ export const PlatinumLanding = () => {
 
         <div className="relative max-w-3xl mx-auto text-center">
           <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
-            <p className="text-white/60 text-4xl sm:text-5xl font-bold line-through mb-2">$19.99</p>
-            <p className="text-[#C8A628] text-7xl sm:text-8xl md:text-9xl font-black leading-none mb-4">$4.99</p>
+            <p className="text-white/60 text-3xl sm:text-4xl md:text-5xl font-bold line-through mb-2">$19.99</p>
+            <p className="text-[#C8A628] text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black leading-none mb-4">$4.99</p>
             <p className="text-white uppercase text-sm font-bold tracking-widest mb-12">
               Founder's Launch Price — Limited Time
             </p>
@@ -537,27 +538,27 @@ export const PlatinumLanding = () => {
             viewport={{ once: true, amount: 0.3 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
-            <a
-              href="/dashboard"
-              className="inline-flex items-center gap-3 bg-[#C8A628] text-black font-bold text-base px-8 py-4 rounded-xl transition-all duration-200 hover:shadow-[0_0_30px_rgba(200,166,40,0.4)] hover:scale-[1.02] active:scale-[0.98]"
+            <Link
+              to="/dashboard"
+              className="inline-flex items-center justify-center gap-3 w-full sm:w-auto bg-[#C8A628] text-black font-bold text-base px-8 py-4 rounded-xl transition-all duration-200 hover:shadow-[0_0_30px_rgba(200,166,40,0.4)] hover:scale-[1.02] active:scale-[0.98] min-h-[48px]"
               style={{ textShadow: '1px 1px 0 rgba(0,0,0,1)' }}
             >
               <Apple size={22} />
               Download on the App Store
-            </a>
-            <a
-              href="/dashboard"
-              className="inline-flex items-center gap-3 border border-white/20 text-white font-bold text-base px-8 py-4 rounded-xl transition-all duration-200 hover:bg-white/5 hover:scale-[1.02] active:scale-[0.98]"
+            </Link>
+            <Link
+              to="/dashboard"
+              className="inline-flex items-center justify-center gap-3 w-full sm:w-auto border border-white/20 text-white font-bold text-base px-8 py-4 rounded-xl transition-all duration-200 hover:bg-white/5 hover:scale-[1.02] active:scale-[0.98] min-h-[48px]"
             >
               <Play size={22} />
               Download on Google Play
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>
 
       {/* ═══════════════ SECTION 10: FOUNDER STORY ═══════════════ */}
-      <section className="py-20 sm:py-28 px-6">
+      <section className="py-14 sm:py-20 md:py-28 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
           <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-wide text-[#C8A628] leading-tight mb-10">
@@ -580,7 +581,7 @@ export const PlatinumLanding = () => {
       </section>
 
       {/* ═══════════════ SECTION 11: FOOTER ═══════════════ */}
-      <footer className="py-16 px-6 border-t border-white/5 bg-black/30">
+      <footer className="py-10 sm:py-16 px-4 sm:px-6 border-t border-white/5 bg-black/30">
         <div className="max-w-4xl mx-auto">
           <div className="space-y-4 text-white/60 text-xs leading-relaxed mb-10">
             <p>
@@ -611,9 +612,9 @@ export const PlatinumLanding = () => {
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-8 border-t border-white/5">
             <div className="flex items-center gap-6 text-white/60 text-xs">
-              <a href="/terms" className="hover:text-white transition-colors">Terms of Service</a>
-              <a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="/help" className="hover:text-white transition-colors">Contact</a>
+              <Link to="/terms" className="hover:text-white transition-colors min-h-[44px] inline-flex items-center">Terms of Service</Link>
+              <Link to="/privacy" className="hover:text-white transition-colors min-h-[44px] inline-flex items-center">Privacy Policy</Link>
+              <Link to="/help" className="hover:text-white transition-colors min-h-[44px] inline-flex items-center">Contact</Link>
             </div>
             <p className="text-white/60 text-xs">
               &copy; {new Date().getFullYear()} <span className="italic">Vet Claim Support</span>. All rights reserved.

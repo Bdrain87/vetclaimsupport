@@ -181,7 +181,7 @@ export function MobileNavGrid() {
                         to={item.path}
                         onClick={() => setDrawerOpen(false)}
                         className={cn(
-                          'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors',
+                          'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors min-h-[44px]',
                           isActive(item.path)
                             ? 'bg-primary/10 text-primary font-medium'
                             : 'hover:bg-accent'
@@ -206,7 +206,7 @@ export function MobileNavGrid() {
                     to={item.path}
                     onClick={() => setDrawerOpen(false)}
                     className={cn(
-                      'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors',
+                      'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors min-h-[44px]',
                       isActive(item.path)
                         ? 'bg-primary/10 text-primary font-medium'
                         : 'hover:bg-accent'

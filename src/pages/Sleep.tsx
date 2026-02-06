@@ -350,7 +350,7 @@ export default function Sleep() {
                             type="button"
                             size="sm"
                             variant={formData.usesCPAP ? "default" : "outline"}
-                            className={formData.usesCPAP ? "bg-success hover:bg-success/90" : ""}
+                            className={formData.usesCPAP ? "bg-success hover:bg-success/90 min-h-[44px]" : "min-h-[44px]"}
                             onClick={() => setFormData({ ...formData, usesCPAP: true })}
                           >
                             Yes
@@ -359,6 +359,7 @@ export default function Sleep() {
                             type="button"
                             size="sm"
                             variant={!formData.usesCPAP ? "default" : "outline"}
+                            className="min-h-[44px]"
                             onClick={() => setFormData({ ...formData, usesCPAP: false })}
                           >
                             No

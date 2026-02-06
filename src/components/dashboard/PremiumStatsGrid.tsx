@@ -74,7 +74,7 @@ export function PremiumStatsGrid() {
   const totalEvidence = data.symptoms.length + data.medicalVisits.length + data.documents.filter(d => d.status === 'Obtained').length;
 
   return (
-    <div className="gridgrid-cols-2 lg:grid-cols-4 gap-3">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
       {/* Evidence Score - Primary Gradient */}
       <Link to="/" className="group">
         <div className={cn(
