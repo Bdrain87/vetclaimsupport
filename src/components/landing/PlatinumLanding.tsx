@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { LaunchSpecialCard } from '@/components/LaunchSpecialCard';
 import { BodyMap } from '@/components/BodyMap';
@@ -16,6 +17,8 @@ const demoClaims = [
 ];
 
 export const PlatinumLanding = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-[#102039] selection:bg-[#C8A628]/30 overflow-x-hidden">
       {/* Hero Section */}
@@ -46,10 +49,19 @@ export const PlatinumLanding = () => {
           initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
           className="flex flex-col md:flex-row items-center justify-center gap-6"
         >
-          <button className="gold-button px-10 py-5 text-lg w-full md:w-auto flex items-center justify-center gap-3">
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="gold-button px-10 py-5 text-lg w-full md:w-auto flex items-center justify-center gap-3"
+          >
             START YOUR TRACKER <ChevronRight size={20} />
           </button>
-          <button className="px-10 py-5 bg-white/5 text-white font-bold rounded-2xl border border-white/10 hover:bg-white/10 transition-all w-full md:w-auto">
+          <button
+            onClick={() => {
+              const el = document.getElementById('discovery');
+              el?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="px-10 py-5 bg-white/5 text-white font-bold rounded-2xl border border-white/10 hover:bg-white/10 transition-all w-full md:w-auto"
+          >
             VIEW DEMO
           </button>
         </motion.div>
