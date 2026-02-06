@@ -17,8 +17,13 @@ export const PlatinumNavbar = () => {
           </div>
 
           <div className="hidden lg:flex items-center gap-6">
-            {['Dashboard', 'Evidence Vault', 'Discovery', 'Calculator'].map(item => (
-              <a key={item} href="#" className="text-white/40 text-[10px] font-black uppercase tracking-widest hover:text-[#C8A628] transition-colors">{item}</a>
+            {[
+              { label: 'Dashboard', href: '/dashboard' },
+              { label: 'Evidence Vault', href: '/documents' },
+              { label: 'Discovery', href: '/conditions' },
+              { label: 'Calculator', href: '/bilateral-calculator' },
+            ].map(item => (
+              <a key={item.label} href={item.href} className="text-white/40 text-[10px] font-black uppercase tracking-widest hover:text-[#C8A628] transition-colors">{item.label}</a>
             ))}
           </div>
         </div>

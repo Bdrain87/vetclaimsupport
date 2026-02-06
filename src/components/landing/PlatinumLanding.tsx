@@ -132,7 +132,7 @@ export const PlatinumLanding = () => {
           className="relative mt-10"
         >
           <a
-            href="/#"
+            href="/dashboard"
             className="inline-block bg-[#C8A628] text-black font-bold text-lg px-10 py-5 rounded-xl transition-all duration-200 hover:shadow-[0_0_30px_rgba(200,166,40,0.4)] hover:scale-[1.02] active:scale-[0.98]"
             style={{ textShadow: '1px 1px 0 rgba(0,0,0,1)' }}
           >
@@ -196,7 +196,7 @@ export const PlatinumLanding = () => {
               a check waiting. Most service members don't know this exists. The ones who do? They build
               their case before they take off the uniform.
             </p>
-            <a href="/#" className="inline-flex items-center text-[#C8A628] font-bold text-sm hover:underline">
+            <a href="/claim-tools" className="inline-flex items-center text-[#C8A628] font-bold text-sm hover:underline">
               Start Your BDD Claim <span className="ml-1">→</span>
             </a>
           </GlassCard>
@@ -210,7 +210,7 @@ export const PlatinumLanding = () => {
               gets harder to prove later. Stop Googling symptoms at 2 AM. Start building your case
               with the tools the pros use.
             </p>
-            <a href="/#" className="inline-flex items-center text-[#C8A628] font-bold text-sm hover:underline">
+            <a href="/dashboard" className="inline-flex items-center text-[#C8A628] font-bold text-sm hover:underline">
               Organize Your Evidence <span className="ml-1">→</span>
             </a>
           </GlassCard>
@@ -224,7 +224,7 @@ export const PlatinumLanding = () => {
               millions. It doesn't matter if you served in Vietnam, Desert Storm, Iraq, or Afghanistan —
               if it's service-connected, it's owed. It's never too late.
             </p>
-            <a href="/#" className="inline-flex items-center text-[#C8A628] font-bold text-sm hover:underline">
+            <a href="/conditions" className="inline-flex items-center text-[#C8A628] font-bold text-sm hover:underline">
               See What You Qualify For <span className="ml-1">→</span>
             </a>
           </GlassCard>
@@ -538,7 +538,7 @@ export const PlatinumLanding = () => {
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <a
-              href="/#"
+              href="/dashboard"
               className="inline-flex items-center gap-3 bg-[#C8A628] text-black font-bold text-base px-8 py-4 rounded-xl transition-all duration-200 hover:shadow-[0_0_30px_rgba(200,166,40,0.4)] hover:scale-[1.02] active:scale-[0.98]"
               style={{ textShadow: '1px 1px 0 rgba(0,0,0,1)' }}
             >
@@ -546,7 +546,7 @@ export const PlatinumLanding = () => {
               Download on the App Store
             </a>
             <a
-              href="/#"
+              href="/dashboard"
               className="inline-flex items-center gap-3 border border-white/20 text-white font-bold text-base px-8 py-4 rounded-xl transition-all duration-200 hover:bg-white/5 hover:scale-[1.02] active:scale-[0.98]"
             >
               <Play size={22} />
@@ -611,9 +611,9 @@ export const PlatinumLanding = () => {
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-8 border-t border-white/5">
             <div className="flex items-center gap-6 text-white/60 text-xs">
-              <a href="/#" className="hover:text-white transition-colors">Terms of Service</a>
-              <a href="/#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="/#" className="hover:text-white transition-colors">Contact</a>
+              <a href="/terms" className="hover:text-white transition-colors">Terms of Service</a>
+              <a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a>
+              <a href="/help" className="hover:text-white transition-colors">Contact</a>
             </div>
             <p className="text-white/60 text-xs">
               &copy; {new Date().getFullYear()} <span className="italic">Vet Claim Support</span>. All rights reserved.
