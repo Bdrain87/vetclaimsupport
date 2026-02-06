@@ -8,10 +8,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { AlertTriangle, Trash2, LogOut, RefreshCw, Shield } from 'lucide-react';
+import { AlertTriangle, Trash2, RefreshCw, Shield } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-export type ConfirmDialogVariant = 'default' | 'destructive' | 'warning';
+import type { ConfirmDialogVariant } from './confirm-dialog.hooks';
 
 interface ConfirmDialogProps {
   open: boolean;
@@ -114,46 +113,4 @@ export function ConfirmDialog({
       </AlertDialogContent>
     </AlertDialog>
   );
-}
-
-// Pre-configured confirm dialogs for common actions
-export function useConfirmDialog() {
-  const confirmDelete = (
-    itemName: string,
-    onConfirm: () => void
-  ): ConfirmDialogProps => ({
-    open: true,
-    onOpenChange: () => {},
-    title: `Delete ${itemName}?`,
-    description: `This action cannot be undone. This will permanently delete the ${itemName.toLowerCase()}.`,
-    confirmText: 'Delete',
-    variant: 'destructive',
-    onConfirm,
-    icon: <Trash2 className="h-6 w-6 text-destructive" />,
-  });
-
-  const confirmLogout = (onConfirm: () => void): ConfirmDialogProps => ({
-    open: true,
-    onOpenChange: () => {},
-    title: 'Sign out?',
-    description: 'You will need to sign in again to access your data.',
-    confirmText: 'Sign Out',
-    variant: 'warning',
-    onConfirm,
-    icon: <LogOut className="h-6 w-6 text-warning" />,
-  });
-
-  const confirmClearData = (onConfirm: () => void): ConfirmDialogProps => ({
-    open: true,
-    onOpenChange: () => {},
-    title: 'Clear all data?',
-    description:
-      'This will permanently delete all your tracked data, documents, and settings. This action cannot be undone. Consider exporting your data first.',
-    confirmText: 'Clear All Data',
-    variant: 'destructive',
-    onConfirm,
-    icon: <Trash2 className="h-6 w-6 text-destructive" />,
-  });
-
-  return { confirmDelete, confirmLogout, confirmClearData };
 }

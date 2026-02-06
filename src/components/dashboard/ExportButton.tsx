@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FileDown, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { useToast } from '@/hooks/use-toast';
 import jsPDF from 'jspdf';
 import { ExportCustomizationModal, ExportSections } from './ExportCustomizationModal';

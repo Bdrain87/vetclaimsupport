@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
-import { useEvidence } from '@/context/EvidenceContext';
+import { useClaims } from '@/hooks/useClaims';
+import { useEvidence } from '@/hooks/useEvidence';
 import { 
   Activity, Plus, Trash2, Edit, Calendar, Download, Clock, 
   TrendingUp, Filter, BarChart3, CalendarDays, List,

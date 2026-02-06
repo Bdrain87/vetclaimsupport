@@ -29,7 +29,7 @@ import {
   RotateCcw, Sparkles, Link2, Check
 } from 'lucide-react';
 import { vaCompensationRates2024 } from '@/data/vaCompensationRates';
-import { useUserConditions } from '@/context/UserConditionsContext';
+import { useUserConditions } from '@/hooks/useUserConditions';
 import {
   vaConditions,
   searchConditions,

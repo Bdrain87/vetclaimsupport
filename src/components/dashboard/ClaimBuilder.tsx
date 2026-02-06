@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -9,7 +9,8 @@ import {
   Briefcase, Plus, Trash2, ChevronDown, ChevronUp, 
   Stethoscope, AlertTriangle, Activity, Users, FileDown,
 } from 'lucide-react';
-import { EvidenceStrengthIndicator, getStrengthLevel, calculateEvidenceStrength } from './EvidenceStrengthIndicator';
+import { EvidenceStrengthIndicator } from './EvidenceStrengthIndicator';
+import { getStrengthLevel, calculateEvidenceStrength } from './EvidenceStrengthIndicator.utils';
 import { RelatedConditions } from './RelatedConditions';
 import { EvidenceGapAnalysis } from './EvidenceGapAnalysis';
 import { ConditionSearchInput } from '@/components/shared/ConditionSearchInput';

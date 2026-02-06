@@ -27,7 +27,7 @@ import {
   Activity, Link2, FileText, Trash2, Edit, Filter
 } from 'lucide-react';
 
-import { useUserConditions } from '@/context/UserConditionsContext';
+import { useUserConditions } from '@/hooks/useUserConditions';
 import {
   vaConditions,
   searchConditions,

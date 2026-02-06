@@ -30,7 +30,7 @@ import {
   type VACondition,
   type ConditionCategory,
 } from '@/data/vaConditions';
-import { useUserConditions, type UserCondition } from '@/context/UserConditionsContext';
+import { useUserConditions, type UserCondition } from '@/hooks/useUserConditions';
 
 interface ConditionSelectorProps {
   // Mode: 'add' adds to global context, 'select' just returns the selection
@@ -380,5 +380,3 @@ export function QuickAddConditions({
     </div>
   );
 }
-
-export { vaConditions, type VACondition } from '@/data/vaConditions';

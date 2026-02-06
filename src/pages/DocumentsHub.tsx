@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useMemo } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { useClaimDocuments } from '@/hooks/useClaimDocuments';
 import {
   FolderOpen,

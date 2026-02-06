@@ -11,7 +11,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { examPrepData, examCategories, generalExamTips } from '@/data/cpExamPrep';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 
 interface CPExamPrepGuideProps {
   initialCondition?: string;

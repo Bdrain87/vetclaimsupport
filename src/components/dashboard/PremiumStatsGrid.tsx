@@ -1,4 +1,4 @@
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import {

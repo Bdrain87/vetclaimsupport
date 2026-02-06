@@ -1,4 +1,4 @@
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertTriangle, Clock, FileText, Lightbulb, Link2, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';

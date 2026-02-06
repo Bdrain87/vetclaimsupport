@@ -1,4 +1,4 @@
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { 
   Stethoscope, 
   AlertTriangle, 
@@ -40,7 +40,8 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { ConditionSearchInput, getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput';
+import { ConditionSearchInput } from '@/components/shared/ConditionSearchInput';
+import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput.utils';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';

@@ -28,7 +28,7 @@ import {
   CheckSquare,
   Square,
 } from 'lucide-react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import type { ClaimsData, SymptomEntry } from '@/types/claims';
 
 export interface ExportSections {

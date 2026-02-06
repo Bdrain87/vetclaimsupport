@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -19,7 +19,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import jsPDF from 'jspdf';
-import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput';
+import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput.utils';
 import { DisclaimerNotice } from '@/components/shared/DisclaimerNotice';
 
 // DBQ Form database for matching conditions

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { Plus, Trash2, Edit, Calendar, ArrowDownUp, AlertTriangle, Zap, Activity } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

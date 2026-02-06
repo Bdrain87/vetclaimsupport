@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
-import { useEvidence } from '@/context/EvidenceContext';
+import { useClaims } from '@/hooks/useClaims';
+import { useEvidence } from '@/hooks/useEvidence';
 import {
   Heart, Activity, Brain, Moon, Pill, Plus, Download,
   Calendar, Clock, Zap, Target, TrendingUp, ChevronRight,

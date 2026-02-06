@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Copy, Download, FileText, AlertTriangle, Check, Info, Stethoscope } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
-import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput';
+import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput.utils';
 import { DisclaimerNotice } from '@/components/shared/DisclaimerNotice';
 import { exportNexusLetterTemplate } from '@/utils/pdfExport';
 

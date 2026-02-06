@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { 
   Clipboard, 
   AlertCircle, 

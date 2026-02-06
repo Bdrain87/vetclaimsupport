@@ -28,7 +28,7 @@ import {
   AlertTriangle, Info, ExternalLink, Trash2, Edit, BookOpen
 } from 'lucide-react';
 
-import { useUserConditions } from '@/context/UserConditionsContext';
+import { useUserConditions } from '@/hooks/useUserConditions';
 import { getConditionById, type VACondition } from '@/data/vaConditions';
 import { getRatingCriteriaByCondition, type RatingCriteria } from '@/data/vaResources/ratingCriteria';
 import { getDBQByCondition, type DBQReference } from '@/data/vaResources/dbqReference';

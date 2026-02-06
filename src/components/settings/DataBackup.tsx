@@ -13,7 +13,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { getAllFileIds, getFileData } from '@/lib/indexedDB';
 
 const STORAGE_KEY = 'va-claims-tracker-data';

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Trophy, Star, Rocket, Target, Medal, Award, PartyPopper } from 'lucide-react';

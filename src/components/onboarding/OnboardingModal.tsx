@@ -18,7 +18,7 @@ import {
   Search,
   Lock,
 } from 'lucide-react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 
