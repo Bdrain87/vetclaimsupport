@@ -259,7 +259,7 @@ export const PlatinumLanding = () => {
         >
           {[
             { icon: <Award size={24} />, text: 'Built by a 100% Disabled Veteran' },
-            { icon: <ClipboardList size={24} />, text: '778+ Secondary Conditions Mapped' },
+            { icon: <ClipboardList size={24} />, text: '800+ VA Conditions Covered' },
             { icon: <Scale size={24} />, text: '38 CFR Part 4 Intelligence Built In' },
           ].map((item, i) => (
             <motion.div key={i} variants={cardVariant} className="flex items-center gap-3 text-center md:text-left">
@@ -432,7 +432,7 @@ export const PlatinumLanding = () => {
           <ToolCard
             icon={<Brain size={28} />}
             title="Secondary Conditions Engine"
-            desc="778+ medically documented connections between conditions. One missed secondary could be worth $400/month for life."
+            desc="800+ conditions with 775+ medically documented secondary connections. One missed link could be worth $400/month for life."
           />
           <ToolCard
             icon={<MapPin size={28} />}
