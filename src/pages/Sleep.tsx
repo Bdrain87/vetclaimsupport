@@ -1,7 +1,9 @@
 import { useState, useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
+import { useUserConditions } from '@/hooks/useUserConditions';
 import { useEvidence } from '@/hooks/useEvidence';
-import { Moon, Plus, Trash2, Edit, Calendar, Clock, AlertTriangle, CheckCircle2, TrendingUp, Wind, Activity, Zap, Download } from 'lucide-react';
+import { getConditionById } from '@/data/vaConditions';
+import { Moon, Plus, Trash2, Edit, Calendar, Clock, AlertTriangle, CheckCircle2, TrendingUp, Wind, Activity, Zap, Download, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -37,9 +39,29 @@ const daytimeSleepinessOptions: { value: DaytimeSleepiness; label: string }[] = 
 
 export default function Sleep() {
   const { data, addSleepEntry, updateSleepEntry, deleteSleepEntry } = useClaims();
+  const { conditions: userConditions } = useUserConditions();
   const { documents, setAllDocuments } = useEvidence();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [selectedConditionTags, setSelectedConditionTags] = useState<string[]>([]);
+
+  const claimConditions = data.claimConditions || [];
+  const allConditionNames = useMemo(() => {
+    const names = new Set<string>();
+    claimConditions.forEach(c => names.add(c.name));
+    userConditions.forEach(uc => {
+      const details = getConditionById(uc.conditionId);
+      if (details?.name) names.add(details.name);
+    });
+    return Array.from(names).sort();
+  }, [claimConditions, userConditions]);
+
+  const toggleConditionTag = (name: string) => {
+    setSelectedConditionTags(prev =>
+      prev.includes(name) ? prev.filter(t => t !== name) : [...prev, name]
+    );
+  };
+
   const [formData, setFormData] = useState<Omit<SleepEntry, 'id'>>({
     date: new Date().toISOString().split('T')[0],
     hoursSlept: 6,
@@ -88,15 +110,20 @@ export default function Sleep() {
       impactOnWork: '',
       severityRating: 5,
     });
+    setSelectedConditionTags([]);
     setEditingId(null);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const submitData = {
+      ...formData,
+      conditionTags: selectedConditionTags.length > 0 ? selectedConditionTags : undefined,
+    };
     if (editingId) {
-      updateSleepEntry(editingId, formData);
+      updateSleepEntry(editingId, submitData);
     } else {
-      addSleepEntry(formData);
+      addSleepEntry(submitData);
     }
     setIsOpen(false);
     resetForm();
@@ -126,6 +153,7 @@ export default function Sleep() {
       impactOnWork: entry.impactOnWork || '',
       severityRating: entry.severityRating || 5,
     });
+    setSelectedConditionTags(entry.conditionTags || []);
     setEditingId(entry.id);
     setIsOpen(true);
   };
@@ -594,6 +622,32 @@ export default function Sleep() {
                       }}
                     />
                   </div>
+
+                  {/* Condition Tags */}
+                  {allConditionNames.length > 0 && (
+                    <div className="space-y-2">
+                      <Label className="text-xs text-muted-foreground uppercase tracking-wider flex items-center gap-1">
+                        <Tag className="h-3 w-3" />
+                        Tag to Conditions (optional)
+                      </Label>
+                      <div className="flex flex-wrap gap-2">
+                        {allConditionNames.map(name => (
+                          <button
+                            key={name}
+                            type="button"
+                            onClick={() => toggleConditionTag(name)}
+                            className={
+                              selectedConditionTags.includes(name)
+                                ? 'px-3 py-1.5 rounded-full text-xs font-medium border bg-primary/20 border-primary/50 text-primary transition-colors'
+                                : 'px-3 py-1.5 rounded-full text-xs font-medium border bg-muted border-border text-muted-foreground hover:border-primary/30 transition-colors'
+                            }
+                          >
+                            {name}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Evidence Attachments - only show when editing */}
                   {editingId && (

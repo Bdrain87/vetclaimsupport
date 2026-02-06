@@ -1,10 +1,12 @@
 import { useState, useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
+import { useUserConditions } from '@/hooks/useUserConditions';
 import { useEvidence } from '@/hooks/useEvidence';
+import { getConditionById } from '@/data/vaConditions';
 import {
   Heart, Activity, Brain, Moon, Pill, Plus, Download,
   Calendar, Clock, Zap, Target, TrendingUp, ChevronRight,
-  AlertCircle, Sparkles, BarChart3
+  AlertCircle, Sparkles, BarChart3, Filter
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -80,49 +82,71 @@ const tabConfig = [
 
 export default function HealthLog() {
   const { data } = useClaims();
+  const { conditions: userConditions } = useUserConditions();
   const [activeTab, setActiveTab] = useState('overview');
+  const [conditionFilter, setConditionFilter] = useState<string | null>(null);
 
-  // Calculate statistics
+  // Build combined condition names for filter
+  const allConditionNames = useMemo(() => {
+    const names = new Set<string>();
+    (data.claimConditions || []).forEach(c => names.add(c.name));
+    userConditions.forEach(uc => {
+      const details = getConditionById(uc.conditionId);
+      if (details?.name) names.add(details.name);
+    });
+    return Array.from(names).sort();
+  }, [data.claimConditions, userConditions]);
+
+  // Calculate statistics (respects condition filter)
   const stats = useMemo(() => {
     const now = new Date();
     const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
+    // Apply condition filter to entries that have conditionTags
+    const matchesFilter = (tags?: string[]) => {
+      if (!conditionFilter) return true;
+      return tags?.includes(conditionFilter) ?? false;
+    };
+
     // Symptoms stats
-    const recentSymptoms = (data.symptoms || []).filter(s => new Date(s.date) >= thirtyDaysAgo);
+    const allSymptoms = (data.symptoms || []).filter(s => matchesFilter(s.conditionTags));
+    const recentSymptoms = allSymptoms.filter(s => new Date(s.date) >= thirtyDaysAgo);
     const avgSeverity = recentSymptoms.length > 0
       ? (recentSymptoms.reduce((sum, s) => sum + s.severity, 0) / recentSymptoms.length).toFixed(1)
       : 0;
 
     // Migraine stats
-    const recentMigraines = (data.migraines || []).filter(m => new Date(m.date) >= thirtyDaysAgo);
+    const allMigraines = (data.migraines || []).filter(m => matchesFilter(m.conditionTags));
+    const recentMigraines = allMigraines.filter(m => new Date(m.date) >= thirtyDaysAgo);
     const prostratingCount = recentMigraines.filter(m =>
       m.severity === 'Prostrating' || m.wasProstrating || m.requiredBedRest
     ).length;
 
     // Sleep stats
-    const recentSleep = (data.sleepEntries || []).filter(s => new Date(s.date) >= thirtyDaysAgo);
+    const allSleep = (data.sleepEntries || []).filter(s => matchesFilter(s.conditionTags));
+    const recentSleep = allSleep.filter(s => new Date(s.date) >= thirtyDaysAgo);
     const avgHours = recentSleep.length > 0
       ? (recentSleep.reduce((sum, s) => sum + s.hoursSlept, 0) / recentSleep.length).toFixed(1)
       : 0;
     const cpapNights = recentSleep.filter(s => s.usesCPAP && s.cpapUsedLastNight).length;
 
-    // Medications
+    // Medications (no condition tags, always show all)
     const currentMeds = (data.medications || []).filter(m => m.stillTaking).length;
     const medWithSideEffects = (data.medications || []).filter(m => m.stillTaking && m.sideEffects).length;
 
     return {
       symptoms: {
-        total: data.symptoms?.length || 0,
+        total: allSymptoms.length,
         recent: recentSymptoms.length,
         avgSeverity,
       },
       migraines: {
-        total: data.migraines?.length || 0,
+        total: allMigraines.length,
         recent: recentMigraines.length,
         prostrating: prostratingCount,
       },
       sleep: {
-        total: data.sleepEntries?.length || 0,
+        total: allSleep.length,
         recent: recentSleep.length,
         avgHours,
         cpapNights,
@@ -133,7 +157,7 @@ export default function HealthLog() {
         withSideEffects: medWithSideEffects,
       },
     };
-  }, [data]);
+  }, [data, conditionFilter]);
 
   // Navigate to specific log tab
   const handleQuickLog = (type: QuickLogType) => {
@@ -193,6 +217,41 @@ export default function HealthLog() {
 
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-6 mt-0">
+          {/* Condition Filter Bar */}
+          {allConditionNames.length > 0 && (
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Filter className="h-4 w-4" />
+                <span className="font-medium">Filter by Condition</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => setConditionFilter(null)}
+                  className={
+                    conditionFilter === null
+                      ? 'px-3 py-1.5 rounded-full text-xs font-medium border bg-primary/20 border-primary/50 text-primary transition-colors'
+                      : 'px-3 py-1.5 rounded-full text-xs font-medium border bg-muted border-border text-muted-foreground hover:border-primary/30 transition-colors'
+                  }
+                >
+                  All
+                </button>
+                {allConditionNames.map(name => (
+                  <button
+                    key={name}
+                    onClick={() => setConditionFilter(name)}
+                    className={
+                      conditionFilter === name
+                        ? 'px-3 py-1.5 rounded-full text-xs font-medium border bg-primary/20 border-primary/50 text-primary transition-colors'
+                        : 'px-3 py-1.5 rounded-full text-xs font-medium border bg-muted border-border text-muted-foreground hover:border-primary/30 transition-colors'
+                    }
+                  >
+                    {name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Quick Log Actions */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">

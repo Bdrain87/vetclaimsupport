@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/layout/Navbar';
+import { BottomTabBar } from './components/BottomTabBar';
 import { ClaimsProvider } from './context/ClaimsContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { UserConditionsProvider } from './context/UserConditionsContext';
@@ -51,6 +52,8 @@ const Privacy = lazy(() => import('./pages/Privacy'));
 const Disclaimer = lazy(() => import('./pages/Disclaimer'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const Onboarding = lazy(() => import('./pages/Onboarding'));
+const FormGuide = lazy(() => import('./pages/FormGuide'));
+const BuildPacket = lazy(() => import('./pages/BuildPacket'));
 
 function LoadingFallback() {
   return (
@@ -71,7 +74,7 @@ function App() {
           <UserConditionsProvider>
             <TooltipProvider>
               <BrowserRouter>
-                <div className="min-h-[100dvh] bg-[#102039] text-white overflow-x-hidden break-words">
+                <div className="min-h-[100dvh] bg-[#102039] text-white overflow-x-hidden break-words pb-16 sm:pb-0">
                   <Navbar />
                   <Suspense fallback={<LoadingFallback />}>
                     <Routes>
@@ -120,9 +123,12 @@ function App() {
                       <Route path="/terms" element={<Terms />} />
                       <Route path="/privacy" element={<Privacy />} />
                       <Route path="/disclaimer" element={<Disclaimer />} />
+                      <Route path="/form-guide" element={<FormGuide />} />
+                      <Route path="/build-packet" element={<BuildPacket />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </Suspense>
+                  <BottomTabBar />
                 </div>
               </BrowserRouter>
             </TooltipProvider>

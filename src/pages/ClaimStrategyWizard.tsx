@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import {
   Wand2,
   ChevronRight,
@@ -31,6 +31,8 @@ import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { exportClaimStrategy } from '@/utils/pdfExport';
+import { useClaims } from '@/hooks/useClaims';
+import { useProfileStore, BRANCH_LABELS } from '@/store/useProfileStore';
 
 interface ServiceInfo {
   branch: string;
@@ -137,8 +139,50 @@ const combatZones = [
 const branches = ['Army', 'Navy', 'Air Force', 'Marine Corps', 'Coast Guard', 'Space Force'];
 
 export default function ClaimStrategyWizard() {
+  const { data: claimsData } = useClaims();
+  const profile = useProfileStore();
+  const branchLabel = profile.branch ? BRANCH_LABELS[profile.branch] : '';
+
+  // Pre-populate from stored data
+  const prePopulated = useMemo<WizardData>(() => {
+    const conditionNames = (claimsData.claimConditions || []).map(c => c.name);
+    const deploymentLocations = (claimsData.deployments || []).map(d => d.location).filter(Boolean);
+    const hasBuddy = (claimsData.buddyContacts || []).length > 0;
+    const hasUploaded = (claimsData.uploadedDocuments || []).length > 0;
+    const hasMedVisits = (claimsData.medicalVisits || []).length > 0;
+
+    return {
+      serviceInfo: {
+        branch: branchLabel || initialData.serviceInfo.branch,
+        startDate: profile.serviceDates?.start || initialData.serviceInfo.startDate,
+        endDate: profile.serviceDates?.end || initialData.serviceInfo.endDate,
+        deployments: deploymentLocations.join(', ') || initialData.serviceInfo.deployments,
+        combatZones: (claimsData.combatHistory || []).map(c => c.location).filter(Boolean),
+        mos: profile.mosTitle || profile.mosCode || initialData.serviceInfo.mos,
+      },
+      healthConditions: {
+        conditions: conditionNames.length > 0 ? conditionNames : initialData.healthConditions.conditions,
+        customConditions: initialData.healthConditions.customConditions,
+        primaryConcern: conditionNames[0] || initialData.healthConditions.primaryConcern,
+      },
+      existingRatings: {
+        hasExisting: (claimsData.approvedConditions || []).length > 0,
+        currentRating: initialData.existingRatings.currentRating,
+        ratedConditions: (claimsData.approvedConditions || []).map(c => `${c.name} (${c.rating}%)`).join(', '),
+      },
+      evidence: {
+        hasMedicalRecords: hasMedVisits,
+        hasServiceRecords: hasUploaded,
+        hasBuddyStatements: hasBuddy,
+        hasNexusLetter: false,
+        hasPrivateMedical: hasMedVisits,
+        evidenceNotes: initialData.evidence.evidenceNotes,
+      },
+    };
+  }, [claimsData, profile, branchLabel]);
+
   const [currentStep, setCurrentStep] = useState(1);
-  const [data, setData] = useState<WizardData>(initialData);
+  const [data, setData] = useState<WizardData>(prePopulated);
   const [isGenerating, setIsGenerating] = useState(false);
   const [strategy, setStrategy] = useState<StrategyResult | null>(null);
   const [error, setError] = useState<string | null>(null);

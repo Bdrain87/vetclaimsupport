@@ -2,8 +2,9 @@ import { useState, useMemo, useCallback } from 'react';
 import { Link2, Plus, Check, FileSignature, Search, ArrowRight } from 'lucide-react';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import { useUserConditions } from '@/hooks/useUserConditions';
+import { useClaims } from '@/hooks/useClaims';
 import { secondaryConditions, type SecondaryConnection } from '@/data/secondaryConditions';
-import { vaConditions, type VACondition, getConditionById } from '@/data/vaConditions';
+import { vaConditions, type VACondition, getConditionById, searchConditions } from '@/data/vaConditions';
 import { Link } from 'react-router-dom';
 
 // Connection strength heuristic based on data
@@ -27,16 +28,28 @@ const strengthConfig = {
 export default function SecondaryFinder() {
   const [selectedPrimary, setSelectedPrimary] = useState<string | null>(null);
   const { conditions: userConditions, addCondition, hasCondition } = useUserConditions();
+  const { data: claimsData } = useClaims();
 
-  // Get user's claimed conditions as display chips
+  // Get user's claimed conditions from BOTH state systems (unified view)
   const claimedConditions = useMemo(() => {
-    return userConditions
+    // From UserConditions context (structured with conditionId)
+    const fromUserConditions = userConditions
       .map(uc => {
         const details = getConditionById(uc.conditionId);
         return details ? { id: uc.conditionId, name: details.abbreviation || details.name, fullName: details.name } : null;
       })
       .filter(Boolean) as { id: string; name: string; fullName: string }[];
-  }, [userConditions]);
+
+    // From ClaimsContext (may have conditions not in UserConditions)
+    const fromClaimsContext = (claimsData.claimConditions || [])
+      .filter(cc => !fromUserConditions.some(uc => uc.fullName.toLowerCase() === cc.name.toLowerCase()))
+      .map(cc => {
+        const match = searchConditions(cc.name)?.[0];
+        return { id: match?.id || cc.id, name: match?.abbreviation || cc.name, fullName: match?.name || cc.name };
+      });
+
+    return [...fromUserConditions, ...fromClaimsContext];
+  }, [userConditions, claimsData.claimConditions]);
 
   // Map user condition names to primary condition names in secondary data
   const findSecondariesForPrimary = useCallback((primaryName: string): (SecondaryConnection & { strength: 'strong' | 'moderate' | 'possible' })[] => {

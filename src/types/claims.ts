@@ -63,6 +63,7 @@ export interface SymptomEntry {
   frequency: string;
   dailyImpact: string;
   notes: string;
+  conditionTags?: string[];
 }
 
 export interface Medication {
@@ -192,6 +193,7 @@ export interface MigraineEntry {
   hoursLostToMigraine?: number; // Hours of work/productivity lost
   medicationEffective?: boolean; // Did treatment help?
   functioningLevel?: number; // 0-100% functioning during attack
+  conditionTags?: string[];
 }
 
 // Sleep Tracker types
@@ -249,6 +251,7 @@ export interface SleepEntry {
   feltRested?: boolean; // Did you feel rested upon waking?
   impactOnWork?: string; // How sleep affected work/activities
   severityRating?: number; // 1-10 severity scale
+  conditionTags?: string[];
 }
 
 // Document type identifiers for categorizing uploads
@@ -311,6 +314,7 @@ export interface QuickLogEntry {
   cpapUsed?: boolean;
   painLevel?: number;
   createdAt: string;
+  conditionTags?: string[];
 }
 
 export interface ClaimsData {

@@ -25,6 +25,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { vaDisabilitiesBySystem } from '@/data/vaDisabilities';
 import { secondaryConditions } from '@/data/secondaryConditions';
 import { cn } from '@/lib/utils';
+import { useClaims } from '@/hooks/useClaims';
+import { useProfileStore, BRANCH_LABELS } from '@/store/useProfileStore';
 
 // Get all conditions for autocomplete
 const getAllConditions = (): string[] => {
@@ -71,21 +73,55 @@ const STEPS = [
 export default function NexusLetterGenerator() {
   const [searchParams] = useSearchParams();
   const printRef = useRef<HTMLDivElement>(null);
+  const { data } = useClaims();
+  const profile = useProfileStore();
+
+  // Build symptom summary from health logs for pre-population
+  const buildSymptomSummary = () => {
+    const recentSymptoms = data.symptoms.slice(-10);
+    if (recentSymptoms.length === 0) return '';
+    return recentSymptoms
+      .map(s => `${s.symptom} (${s.bodyArea}, severity ${s.severity}/10${s.frequency ? `, ${s.frequency}` : ''})`)
+      .join('; ');
+  };
+
+  const buildImpactSummary = () => {
+    const recentLogs = data.symptoms.slice(-5);
+    return recentLogs
+      .filter(s => s.dailyImpact)
+      .map(s => s.dailyImpact)
+      .join('; ');
+  };
+
+  const branchLabel = profile.branch ? BRANCH_LABELS[profile.branch] : '';
+  const fullName = `${profile.firstName} ${profile.lastName}`.trim();
 
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<NexusFormData>({
     primaryCondition: searchParams.get('primary') || '',
     secondaryCondition: searchParams.get('secondary') || '',
     connectionType: 'secondary',
-    veteranName: '',
-    serviceStartDate: '',
-    serviceEndDate: '',
-    branchOfService: '',
+    veteranName: fullName,
+    serviceStartDate: profile.serviceDates?.start || '',
+    serviceEndDate: profile.serviceDates?.end || '',
+    branchOfService: branchLabel,
     diagnosisDate: '',
     treatingPhysician: '',
-    currentSymptoms: '',
-    impactOnLife: '',
+    currentSymptoms: buildSymptomSummary(),
+    impactOnLife: buildImpactSummary(),
   });
+
+  // Track which fields were auto-filled
+  const autoFilledFields = useMemo(() => {
+    const fields: Record<string, string> = {};
+    if (fullName) fields.veteranName = 'your profile';
+    if (branchLabel) fields.branchOfService = 'your profile';
+    if (profile.serviceDates?.start) fields.serviceStartDate = 'your profile';
+    if (profile.serviceDates?.end) fields.serviceEndDate = 'your profile';
+    if (data.symptoms.length > 0) fields.currentSymptoms = 'your Health Log';
+    if (data.symptoms.some(s => s.dailyImpact)) fields.impactOnLife = 'your Health Log';
+    return fields;
+  }, [fullName, branchLabel, profile.serviceDates, data.symptoms]);
   const [primarySearch, setPrimarySearch] = useState(formData.primaryCondition);
   const [secondarySearch, setSecondarySearch] = useState(formData.secondaryCondition);
   const [showPrimaryDropdown, setShowPrimaryDropdown] = useState(false);

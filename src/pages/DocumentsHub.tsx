@@ -1,6 +1,8 @@
 import { useState, useRef, useCallback, useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
+import { useUserConditions } from '@/hooks/useUserConditions';
 import { useClaimDocuments } from '@/hooks/useClaimDocuments';
+import { getConditionById } from '@/data/vaConditions';
 import {
   FolderOpen,
   Upload,
@@ -136,6 +138,7 @@ const statementTemplates = [
 
 export default function DocumentsHub() {
   const { data, updateDocument, addUploadedDocument, deleteUploadedDocument } = useClaims();
+  const { conditions: userConditions } = useUserConditions();
   const {
     documents: claimDocuments,
     addDocument,
@@ -164,16 +167,17 @@ export default function DocumentsHub() {
     pendingFile: null as { dataUrl: string; fileName: string; fileType: string; fileSize: number } | null,
   });
 
-  // Get conditions from claims context
+  // Get conditions from all sources (ClaimsContext + UserConditions)
   const allConditions = useMemo(() => {
-    const conditionsFromSymptoms = Array.from(
-      new Set(data.symptoms.map((s) => s.bodyArea).filter(Boolean))
-    );
-    const conditionsFromClaims = data.claimConditions.map((c) => c.name);
-    return Array.from(
-      new Set([...conditionsFromSymptoms, ...conditionsFromClaims])
-    ).sort();
-  }, [data.symptoms, data.claimConditions]);
+    const names = new Set<string>();
+    data.symptoms.forEach(s => { if (s.bodyArea) names.add(s.bodyArea); });
+    data.claimConditions.forEach(c => names.add(c.name));
+    userConditions.forEach(uc => {
+      const details = getConditionById(uc.conditionId);
+      if (details?.name) names.add(details.name);
+    });
+    return Array.from(names).sort();
+  }, [data.symptoms, data.claimConditions, userConditions]);
 
   // Filter documents
   const filteredDocuments = useMemo(() => {
