@@ -15,6 +15,7 @@ import {
   Shield,
   Search,
   AlertTriangle,
+  Star,
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -24,6 +25,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { examCategories, examPrepData } from '@/data/cpExamPrep';
+import { useClaims } from '@/hooks/useClaims';
+import { useUserConditions } from '@/hooks/useUserConditions';
 
 interface ChecklistItem {
   id: string;
@@ -82,6 +85,30 @@ const dontsList = [
 ];
 
 export default function CPExamPrepEnhanced() {
+  const { data: claimsData } = useClaims();
+  const { conditions: userConditions, getConditionDetails } = useUserConditions();
+
+  // Get user's claimed condition names for highlighting
+  const userConditionNames = useMemo(() => {
+    const names = new Set<string>();
+    // From ClaimsContext
+    (claimsData.claimConditions || []).forEach(c => names.add(c.name.toLowerCase()));
+    // From UserConditions
+    userConditions.forEach(uc => {
+      const details = getConditionDetails(uc);
+      if (details) {
+        names.add(details.name.toLowerCase());
+        names.add(details.abbreviation.toLowerCase());
+      }
+    });
+    return names;
+  }, [claimsData.claimConditions, userConditions, getConditionDetails]);
+
+  const isUserCondition = (conditionName: string) => {
+    const lower = conditionName.toLowerCase();
+    return Array.from(userConditionNames).some(name => lower.includes(name) || name.includes(lower));
+  };
+
   const [selectedCondition, setSelectedCondition] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [checkedItems, setCheckedItems] = useState<Set<string>>(() => {
@@ -101,16 +128,19 @@ export default function CPExamPrepEnhanced() {
 
   const allConditions = useMemo(() => {
     return examCategories.flatMap(cat =>
-      cat.conditions.map(cond => ({ condition: cond, category: cat.name }))
+      cat.conditions.map(cond => ({ condition: cond, category: cat.name, isUserClaimed: isUserCondition(cond) }))
     );
-  }, []);
+  }, [userConditionNames]);
 
   const filteredConditions = useMemo(() => {
-    if (!searchQuery.trim()) return allConditions;
-    const query = searchQuery.toLowerCase();
-    return allConditions.filter(
-      c => c.condition.toLowerCase().includes(query) || c.category.toLowerCase().includes(query)
-    );
+    const base = !searchQuery.trim()
+      ? allConditions
+      : allConditions.filter(c =>
+          c.condition.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          c.category.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    // Sort user's conditions to top
+    return [...base].sort((a, b) => (b.isUserClaimed ? 1 : 0) - (a.isUserClaimed ? 1 : 0));
   }, [allConditions, searchQuery]);
 
   const selectedPrepData = selectedCondition ? examPrepData[selectedCondition] : null;

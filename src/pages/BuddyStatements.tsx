@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
+import { useProfileStore } from '@/store/useProfileStore';
 import { Users, Plus, Trash2, Edit, Phone, Mail, FileText, CheckCircle, Clock, Send, Download, Camera, Copy, Check, ChevronRight, ChevronLeft, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -56,8 +57,14 @@ const steps = [
 
 export default function BuddyStatements() {
   const { data, addBuddyContact, updateBuddyContact, deleteBuddyContact, addUploadedDocument, deleteUploadedDocument } = useClaims();
+  const profile = useProfileStore();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('contacts');
+
+  // Build condition-aware description for pre-fill
+  const conditionSummary = useMemo(() => {
+    return (data.claimConditions || []).map(c => c.name).join(', ');
+  }, [data.claimConditions]);
 
   // Contacts form state
   const [isOpen, setIsOpen] = useState(false);
@@ -71,9 +78,16 @@ export default function BuddyStatements() {
     statementStatus: 'Not Requested',
   });
 
+  // Pre-populate statement with veteran name and conditions
+  const fullName = `${profile.firstName} ${profile.lastName}`.trim();
+
   // Statement generator state
   const [currentStep, setCurrentStep] = useState(1);
-  const [statementData, setStatementData] = useState<StatementData>(initialStatementData);
+  const [statementData, setStatementData] = useState<StatementData>({
+    ...initialStatementData,
+    veteranName: fullName,
+    conditionWitnessed: conditionSummary,
+  });
   const [copied, setCopied] = useState(false);
 
   // Contacts functions

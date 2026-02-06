@@ -25,11 +25,14 @@ import {
 } from '@/components/ui/dialog';
 import {
   ChevronLeft, Scale, FileText, Link2, Stethoscope, CheckCircle2,
-  AlertTriangle, Info, ExternalLink, Trash2, Edit, BookOpen
+  AlertTriangle, Info, ExternalLink, Trash2, Edit, BookOpen,
+  Activity, TrendingUp, Clock, Brain, Moon, Zap, ArrowRight
 } from 'lucide-react';
 
+import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { getConditionById, type VACondition } from '@/data/vaConditions';
+import { ClaimIntelligence } from '@/services/claimIntelligence';
 import { getRatingCriteriaByCondition, type RatingCriteria } from '@/data/vaResources/ratingCriteria';
 import { getDBQByCondition, type DBQReference } from '@/data/vaResources/dbqReference';
 
@@ -39,6 +42,7 @@ const commonRatings = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 export default function ConditionDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { data } = useClaims();
   const {
     conditions: userConditions,
     updateCondition,
@@ -83,6 +87,43 @@ export default function ConditionDetail() {
       .replace(/hearing loss|tinnitus/i, 'hearing-tinnitus');
     return getDBQByCondition(key);
   }, [conditionDetails]);
+
+  // Intelligence: condition readiness
+  const conditionReadiness = useMemo(() => {
+    if (!conditionDetails) return null;
+    return ClaimIntelligence.getConditionReadiness(conditionDetails.name, data);
+  }, [conditionDetails, data]);
+
+  // Intelligence: symptom frequency
+  const frequencyReport = useMemo(() => {
+    if (!conditionDetails) return null;
+    return ClaimIntelligence.getSymptomFrequency(conditionDetails.name, data, 90);
+  }, [conditionDetails, data]);
+
+  // Related health log entries (tagged to this condition)
+  const relatedLogs = useMemo(() => {
+    if (!conditionDetails) return [];
+    const name = conditionDetails.name;
+    const logs: { type: string; date: string; label: string; severity?: number }[] = [];
+
+    (data.symptoms || []).forEach(s => {
+      if (s.conditionTags?.includes(name) || s.bodyArea?.toLowerCase().includes(name.toLowerCase())) {
+        logs.push({ type: 'symptom', date: s.date, label: s.symptom, severity: s.severity });
+      }
+    });
+    (data.sleepEntries || []).forEach(s => {
+      if (s.conditionTags?.includes(name)) {
+        logs.push({ type: 'sleep', date: s.date, label: `${s.hoursSlept}h - ${s.quality}` });
+      }
+    });
+    (data.migraines || []).forEach(m => {
+      if (m.conditionTags?.includes(name)) {
+        logs.push({ type: 'migraine', date: m.date, label: `${m.severity} - ${m.duration}` });
+      }
+    });
+
+    return logs.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 10);
+  }, [conditionDetails, data]);
 
   // Local state for editing
   const [editRating, setEditRating] = useState<string>(
@@ -217,6 +258,170 @@ export default function ConditionDetail() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Intelligence: Readiness & Frequency */}
+      {conditionReadiness && (
+        <div className="grid gap-4 sm:grid-cols-2">
+          {/* Readiness Score */}
+          <Card className="border-primary/30">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-primary" />
+                Claim Readiness
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex items-center gap-4">
+                <div className="relative h-16 w-16">
+                  <svg viewBox="0 0 36 36" className="h-16 w-16 -rotate-90">
+                    <circle cx="18" cy="18" r="15.5" fill="none" stroke="hsl(var(--muted))" strokeWidth="3" />
+                    <circle
+                      cx="18" cy="18" r="15.5" fill="none"
+                      stroke="hsl(var(--primary))"
+                      strokeWidth="3"
+                      strokeDasharray={`${conditionReadiness.overallScore * 0.975} 97.5`}
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  <span className="absolute inset-0 flex items-center justify-center text-lg font-bold">
+                    {conditionReadiness.overallScore}%
+                  </span>
+                </div>
+                <div className="flex-1 space-y-1 text-xs">
+                  <div className="flex justify-between"><span className="text-muted-foreground">Medical</span><span>{conditionReadiness.components.medicalEvidence}%</span></div>
+                  <div className="flex justify-between"><span className="text-muted-foreground">Service Link</span><span>{conditionReadiness.components.serviceConnection}%</span></div>
+                  <div className="flex justify-between"><span className="text-muted-foreground">Severity</span><span>{conditionReadiness.components.currentSeverity}%</span></div>
+                  <div className="flex justify-between"><span className="text-muted-foreground">Statements</span><span>{conditionReadiness.components.statements}%</span></div>
+                  <div className="flex justify-between"><span className="text-muted-foreground">Exam Prep</span><span>{conditionReadiness.components.examPrep}%</span></div>
+                </div>
+              </div>
+              {conditionReadiness.tips.length > 0 && (
+                <div className="space-y-1 pt-2 border-t border-border">
+                  {conditionReadiness.tips.slice(0, 3).map((tip, i) => (
+                    <p key={i} className="text-xs text-muted-foreground flex items-start gap-1.5">
+                      <Zap className="h-3 w-3 text-primary mt-0.5 flex-shrink-0" />
+                      {tip}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Frequency & Trend */}
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Activity className="h-5 w-5 text-primary" />
+                Log Activity (90 Days)
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {frequencyReport && frequencyReport.totalEntries > 0 ? (
+                <>
+                  <div className="grid grid-cols-3 gap-3 text-center">
+                    <div className="bg-muted/50 rounded-lg p-2">
+                      <p className="text-xl font-bold">{frequencyReport.totalEntries}</p>
+                      <p className="text-xs text-muted-foreground">Entries</p>
+                    </div>
+                    <div className="bg-muted/50 rounded-lg p-2">
+                      <p className="text-xl font-bold">{frequencyReport.averageSeverity.toFixed(1)}</p>
+                      <p className="text-xs text-muted-foreground">Avg Severity</p>
+                    </div>
+                    <div className="bg-muted/50 rounded-lg p-2">
+                      <p className={`text-xl font-bold ${
+                        frequencyReport.trend === 'worsening' ? 'text-destructive' :
+                        frequencyReport.trend === 'improving' ? 'text-green-500' :
+                        'text-muted-foreground'
+                      }`}>
+                        {frequencyReport.trend === 'worsening' ? '↑' :
+                         frequencyReport.trend === 'improving' ? '↓' : '→'}
+                      </p>
+                      <p className="text-xs text-muted-foreground capitalize">{frequencyReport.trend.replace('-', ' ')}</p>
+                    </div>
+                  </div>
+                  {Object.keys(frequencyReport.symptomCounts).length > 0 && (
+                    <div className="space-y-1">
+                      <p className="text-xs font-medium text-muted-foreground">Top Symptoms</p>
+                      <div className="flex flex-wrap gap-1">
+                        {Object.entries(frequencyReport.symptomCounts)
+                          .sort(([, a], [, b]) => b - a)
+                          .slice(0, 5)
+                          .map(([symptom, count]) => (
+                            <Badge key={symptom} variant="secondary" className="text-xs">
+                              {symptom} ({count})
+                            </Badge>
+                          ))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="text-center py-4">
+                  <Activity className="h-8 w-8 text-muted-foreground/30 mx-auto mb-2" />
+                  <p className="text-sm text-muted-foreground">No tagged logs yet</p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="mt-2"
+                    onClick={() => navigate('/symptoms')}
+                  >
+                    <Activity className="h-3 w-3 mr-1" />
+                    Log Symptoms
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Quick Actions */}
+      <div className="flex flex-wrap gap-2">
+        <Button variant="outline" size="sm" onClick={() => navigate('/symptoms')}>
+          <Activity className="h-3 w-3 mr-1" /> Log Symptom
+        </Button>
+        <Button variant="outline" size="sm" onClick={() => navigate('/secondary-finder')}>
+          <Link2 className="h-3 w-3 mr-1" /> Find Secondaries
+        </Button>
+        <Button variant="outline" size="sm" onClick={() => navigate('/nexus-letter')}>
+          <FileText className="h-3 w-3 mr-1" /> Nexus Letter
+        </Button>
+        <Button variant="outline" size="sm" onClick={() => navigate('/exam-prep')}>
+          <Stethoscope className="h-3 w-3 mr-1" /> Exam Prep
+        </Button>
+      </div>
+
+      {/* Related Health Logs */}
+      {relatedLogs.length > 0 && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Clock className="h-5 w-5 text-primary" />
+              Recent Related Logs
+            </CardTitle>
+            <CardDescription>Entries tagged to {conditionDetails?.abbreviation || conditionDetails?.name}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {relatedLogs.map((log, i) => (
+                <div key={`${log.type}-${log.date}-${i}`} className="flex items-center gap-3 p-2.5 rounded-lg bg-muted/50">
+                  {log.type === 'symptom' && <Activity className="h-4 w-4 text-emerald-400 flex-shrink-0" />}
+                  {log.type === 'sleep' && <Moon className="h-4 w-4 text-indigo-400 flex-shrink-0" />}
+                  {log.type === 'migraine' && <Brain className="h-4 w-4 text-purple-400 flex-shrink-0" />}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium truncate">{log.label}</p>
+                    <p className="text-xs text-muted-foreground">{new Date(log.date).toLocaleDateString()}</p>
+                  </div>
+                  {log.severity !== undefined && (
+                    <Badge variant="outline" className="text-xs">{log.severity}/10</Badge>
+                  )}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Tabs */}
       <Tabs defaultValue="criteria" className="space-y-4">

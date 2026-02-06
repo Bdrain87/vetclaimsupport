@@ -31,6 +31,12 @@ import {
   Check,
   X,
 } from 'lucide-react';
+import { secondaryConditions } from '@/data/secondaryConditions';
+import { vaConditions } from '@/data/vaConditions';
+
+/* ─── dynamic counts from data files ─── */
+const secondaryCount = Math.floor(secondaryConditions.length / 10) * 10;
+const conditionCount = Math.floor(vaConditions.length / 10) * 10;
 
 /* ─── animation helpers ─── */
 const fadeUp = {

@@ -1,8 +1,11 @@
 import { useClaims } from '@/hooks/useClaims';
-import { 
-  Stethoscope, 
-  AlertTriangle, 
-  Activity, 
+import { useUserConditions } from '@/hooks/useUserConditions';
+import { useProfileStore } from '@/store/useProfileStore';
+import { ClaimIntelligence } from '@/services/claimIntelligence';
+import {
+  Stethoscope,
+  AlertTriangle,
+  Activity,
   Pill,
   FileWarning,
   ShieldCheck,
@@ -15,7 +18,13 @@ import {
   ChevronDown,
   Users,
   Shield,
+  Zap,
+  Lightbulb,
+  TrendingUp,
+  X,
 } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { vcsSpring } from '@/constants/animations';
 import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
 import { EnhancedRatingCalculator } from '@/components/dashboard/EnhancedRatingCalculator';
 import { ApprovedConditionsSection } from '@/components/dashboard/ApprovedConditionsSection';
@@ -43,18 +52,98 @@ import { Label } from '@/components/ui/label';
 import { ConditionSearchInput } from '@/components/shared/ConditionSearchInput';
 import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput.utils';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { useMilestones } from '@/hooks/useMilestones';
+import { MilestoneToast } from '@/components/MilestoneToast';
 
 export default function Dashboard() {
   const { data, setSeparationDate, addClaimCondition, deleteClaimCondition, updateClaimCondition } = useClaims();
+  const { conditions: userConditions } = useUserConditions();
+  const profile = useProfileStore();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [newConditionName, setNewConditionName] = useState('');
   const [expandedConditionId, setExpandedConditionId] = useState<string | null>(null);
+  const [dismissedRecs, setDismissedRecs] = useState<Set<string>>(new Set());
+  const [dismissedInsights, setDismissedInsights] = useState<Set<number>>(new Set());
 
   const claimConditions = data.claimConditions || [];
+
+  // Intelligence Engine computations
+  const readiness = useMemo(
+    () => ClaimIntelligence.getOverallReadiness(userConditions, data, profile),
+    [userConditions, data, profile]
+  );
+
+  const nextSteps = useMemo(
+    () => ClaimIntelligence.getNextSteps(profile, userConditions, data),
+    [profile, userConditions, data]
+  );
+
+  const recommendations = useMemo(
+    () => ClaimIntelligence.getRecommendations(profile, userConditions, data)
+      .filter(r => !dismissedRecs.has(r.conditionId)),
+    [profile, userConditions, data, dismissedRecs]
+  );
+
+  const logInsights = useMemo(
+    () => ClaimIntelligence.getLogInsights(data)
+      .filter((_, i) => !dismissedInsights.has(i)),
+    [data, dismissedInsights]
+  );
+
+  // Log streak calculation
+  const logStreak = useMemo(() => {
+    const allDates = new Set<string>();
+    [...data.symptoms, ...data.quickLogs].forEach(entry => {
+      const d = 'date' in entry ? entry.date : ('createdAt' in entry ? entry.createdAt : '');
+      if (d) allDates.add(new Date(d).toDateString());
+    });
+    [...data.sleepEntries, ...data.migraines].forEach(entry => {
+      if (entry.date) allDates.add(new Date(entry.date).toDateString());
+    });
+    let streak = 0;
+    const today = new Date();
+    for (let i = 0; i < 365; i++) {
+      const checkDate = new Date(today);
+      checkDate.setDate(today.getDate() - i);
+      if (allDates.has(checkDate.toDateString())) {
+        streak++;
+      } else if (i > 0) break;
+    }
+    return streak;
+  }, [data.symptoms, data.quickLogs, data.sleepEntries, data.migraines]);
+
+  // Milestones tracking
+  const { updateProgress, recentlyUnlocked, clearRecentlyUnlocked } = useMilestones();
+
+  useEffect(() => {
+    const symptomCount = data.symptoms?.length || 0;
+    const documentCount = data.documents?.length || 0;
+    const buddyCount = data.buddyContacts?.length || 0;
+
+    if (symptomCount > 0) updateProgress('first-symptom', 1);
+    if (symptomCount >= 10) updateProgress('symptoms-10', symptomCount);
+    if (symptomCount >= 50) updateProgress('symptoms-50', symptomCount);
+    if (documentCount > 0) updateProgress('first-document', 1);
+    if (documentCount >= 5) updateProgress('documents-5', documentCount);
+    if (documentCount >= 20) updateProgress('documents-20', documentCount);
+    if (buddyCount > 0) updateProgress('first-buddy', 1);
+    if (buddyCount >= 3) updateProgress('buddies-3', buddyCount);
+    if (logStreak >= 7) updateProgress('symptom-streak-7', logStreak);
+    if (logStreak >= 30) updateProgress('symptom-streak-30', logStreak);
+
+    // All sections milestone
+    const hasSymptoms = symptomCount > 0;
+    const hasSleep = (data.sleepEntries?.length || 0) > 0;
+    const hasMigraines = (data.migraines?.length || 0) > 0;
+    const hasMeds = (data.medications?.length || 0) > 0;
+    if (hasSymptoms && hasSleep && hasMigraines && hasMeds) {
+      updateProgress('all-sections', 1);
+    }
+  }, [data, logStreak, updateProgress]);
 
   const handleAddCondition = () => {
     if (!newConditionName.trim()) return;
@@ -174,6 +263,192 @@ export default function Dashboard() {
 
       {/* PREMIUM STATS GRID - Key metrics at a glance */}
       <PremiumStatsGrid />
+
+      {/* CLAIM READINESS + KEY METRICS - Intelligence driven */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {/* Readiness Ring */}
+        <div className={cn("stat-card flex flex-col items-center justify-center gap-1 min-h-[110px] p-3")}>
+          <div className="relative w-16 h-16">
+            <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+              <circle cx="18" cy="18" r="15" fill="none" stroke="currentColor" className="text-white/[0.06]" strokeWidth="2.5" />
+              <motion.circle
+                cx="18" cy="18" r="15" fill="none" stroke="#C8A628" strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeDasharray={`${readiness}, 100`}
+                initial={{ strokeDasharray: "0, 100" }}
+                animate={{ strokeDasharray: `${readiness}, 100` }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
+              />
+            </svg>
+            <span className="absolute inset-0 flex items-center justify-center text-foreground font-bold text-sm">
+              {readiness}%
+            </span>
+          </div>
+          <p className="text-[10px] font-medium text-muted-foreground">Readiness</p>
+        </div>
+
+        {/* Conditions Count */}
+        <Link to="/conditions" className={cn("stat-card flex flex-col items-center justify-center gap-1 min-h-[110px] p-3 hover:border-primary/30")}>
+          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10">
+            <Target className="h-5 w-5 text-primary" />
+          </div>
+          <p className="text-2xl font-bold text-foreground">{claimConditions.length}</p>
+          <p className="text-[10px] font-medium text-muted-foreground">
+            Conditions{recommendations.length > 0 ? ` · ${recommendations.length} to explore` : ''}
+          </p>
+        </Link>
+
+        {/* Evidence Items */}
+        <Link to="/documents" className={cn("stat-card flex flex-col items-center justify-center gap-1 min-h-[110px] p-3 hover:border-primary/30")}>
+          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10">
+            <ShieldCheck className="h-5 w-5 text-primary" />
+          </div>
+          <p className="text-2xl font-bold text-foreground">
+            {data.medicalVisits.length + data.documents.length + data.buddyContacts.length}
+          </p>
+          <p className="text-[10px] font-medium text-muted-foreground">Evidence Items</p>
+        </Link>
+
+        {/* Log Streak */}
+        <Link to="/health-log" className={cn("stat-card flex flex-col items-center justify-center gap-1 min-h-[110px] p-3 hover:border-primary/30")}>
+          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#C8A628]/10">
+            <Zap className="h-5 w-5 text-[#C8A628]" />
+          </div>
+          <p className="text-2xl font-bold text-foreground">{logStreak}</p>
+          <p className="text-[10px] font-medium text-muted-foreground">
+            Day{logStreak !== 1 ? 's' : ''} Streak
+          </p>
+        </Link>
+      </div>
+
+      {/* YOUR NEXT STEPS - Intelligence powered */}
+      {nextSteps.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={vcsSpring}
+          className={cn("rounded-2xl bg-card border border-border p-4 shadow-sm")}
+        >
+          <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
+            <Zap className="w-4 h-4 text-[#C8A628]" />
+            Your Next Steps
+          </h3>
+          <div className="space-y-2.5">
+            {nextSteps.slice(0, 4).map((step, i) => (
+              <motion.div
+                key={step.id}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ ...vcsSpring, delay: i * 0.05 }}
+                className="flex items-start gap-3"
+              >
+                <span className={cn(
+                  "flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold mt-0.5",
+                  step.priority === 'urgent' ? 'bg-[#C8A628]/20 text-[#C8A628]' : 'bg-muted text-muted-foreground'
+                )}>{i + 1}</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-foreground">{step.title}</p>
+                  {step.description && (
+                    <p className="text-xs text-muted-foreground mt-0.5">{step.description}</p>
+                  )}
+                </div>
+                {step.actionRoute && (
+                  <Link to={step.actionRoute} className="text-[#C8A628] text-xs hover:text-[#E8D05A] shrink-0 mt-0.5">
+                    Go →
+                  </Link>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
+      {/* CONDITIONS TO EXPLORE - Intelligence powered recommendations */}
+      {recommendations.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ ...vcsSpring, delay: 0.1 }}
+          className={cn("rounded-2xl bg-card border border-border p-4 shadow-sm")}
+        >
+          <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
+            <Lightbulb className="w-4 h-4 text-[#C8A628]" />
+            Conditions to Explore
+          </h3>
+          <div className="space-y-2">
+            {recommendations.slice(0, 3).map((rec, i) => (
+              <motion.div
+                key={rec.conditionId + i}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ ...vcsSpring, delay: i * 0.05 }}
+                className="flex items-center justify-between p-3 rounded-xl bg-secondary border border-border"
+              >
+                <div className="min-w-0 flex-1 mr-3">
+                  <p className="text-sm font-medium text-foreground truncate">{rec.conditionName}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{rec.reason}</p>
+                  <span className={cn(
+                    "inline-block text-[10px] mt-1 px-1.5 py-0.5 rounded-full",
+                    rec.strength === 'strong' ? 'bg-[#C8A628]/15 text-[#C8A628]' :
+                    rec.strength === 'moderate' ? 'bg-muted text-muted-foreground' : 'bg-muted text-muted-foreground/60'
+                  )}>
+                    {rec.strength} connection
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button
+                    onClick={() => setDismissedRecs(prev => new Set(prev).add(rec.conditionId))}
+                    className="text-muted-foreground hover:text-foreground p-1"
+                    aria-label="Dismiss"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="text-[#C8A628] hover:text-[#E8D05A] text-xs h-8 px-2"
+                    onClick={() => handleQuickAddCondition(rec.conditionName)}
+                  >
+                    Add →
+                  </Button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
+      {/* INSIGHTS FROM YOUR LOGS - Intelligence powered */}
+      {logInsights.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ ...vcsSpring, delay: 0.15 }}
+          className={cn("rounded-2xl bg-card border border-border p-4 shadow-sm")}
+        >
+          <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
+            <TrendingUp className="w-4 h-4 text-[#C8A628]" />
+            Insights from Your Logs
+          </h3>
+          <div className="space-y-2">
+            {logInsights.slice(0, 3).map((insight, i) => (
+              <div
+                key={i}
+                className="flex items-start gap-3 p-3 rounded-xl bg-secondary border-l-2 border-[#C8A628]/30"
+              >
+                <p className="text-xs text-muted-foreground flex-1">{insight.message}</p>
+                <button
+                  onClick={() => setDismissedInsights(prev => new Set(prev).add(i))}
+                  className="text-muted-foreground hover:text-foreground p-0.5 shrink-0"
+                  aria-label="Dismiss insight"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      )}
 
       {/* GUIDED ACTION BANNER - What to do next */}
       <GuidedActionBanner onOpenAddCondition={() => setIsAddOpen(true)} />
@@ -587,6 +862,14 @@ export default function Dashboard() {
           <DBQHelp />
         </div>
       </details>
+
+      {/* Milestone Toast */}
+      {recentlyUnlocked && (
+        <MilestoneToast
+          milestone={recentlyUnlocked}
+          onClose={clearRecentlyUnlocked}
+        />
+      )}
     </div>
   );
 }
