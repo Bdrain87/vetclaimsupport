@@ -38,7 +38,7 @@ export const EquipmentTracker = () => {
             </div>
             <div className="text-right">
               <p className="text-[#C8A628] text-[10px] font-black uppercase tracking-widest">{item.connection} Nexus</p>
-              <p className="text-white/20 text-[9px] uppercase font-bold">Evidence Verified</p>
+              <p className="text-white/50 text-[9px] uppercase font-bold">Evidence Verified</p>
             </div>
           </motion.div>
         ))}

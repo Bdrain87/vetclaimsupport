@@ -21,7 +21,7 @@ export const PayoutDisplay = ({ rating }: { rating: number }) => {
       <div className="space-y-2">
         <div className="text-5xl font-black text-white italic tracking-tighter">
           ${monthlyPayout.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-          <span className="text-sm text-white/30 ml-2 not-italic">/ mo</span>
+          <span className="text-sm text-white/50 ml-2 not-italic">/ mo</span>
         </div>
         <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs">
           <TrendingUp size={14} />

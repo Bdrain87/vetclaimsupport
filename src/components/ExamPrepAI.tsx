@@ -59,7 +59,7 @@ export const ExamPrepAI = () => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-          className="w-full bg-navy-900/50 border border-white/10 rounded-xl p-4 pr-12 text-white placeholder:text-white/20 outline-none focus:border-[#C8A628]/50 transition-all"
+          className="w-full bg-navy-900/50 border border-white/10 rounded-xl p-4 pr-12 text-white placeholder:text-white/30 outline-none focus:border-[#C8A628]/50 transition-all"
           placeholder="Type your response..."
         />
         <button

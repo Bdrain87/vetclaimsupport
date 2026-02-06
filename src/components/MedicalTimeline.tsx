@@ -37,7 +37,7 @@ export const MedicalTimeline = () => {
           isLast
         />
       </div>
-      <button className="w-full mt-4 flex items-center justify-center gap-2 text-[10px] font-black text-white/20 uppercase hover:text-[#C8A628] transition-colors">
+      <button className="w-full mt-4 flex items-center justify-center gap-2 text-[10px] font-black text-white/50 uppercase hover:text-[#C8A628] transition-colors">
         View Full History <ChevronRight size={14} />
       </button>
     </div>

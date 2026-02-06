@@ -50,6 +50,7 @@ const Terms = lazy(() => import('./pages/Terms'));
 const Privacy = lazy(() => import('./pages/Privacy'));
 const Disclaimer = lazy(() => import('./pages/Disclaimer'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const Onboarding = lazy(() => import('./pages/Onboarding'));
 
 function LoadingFallback() {
   return (
@@ -60,10 +61,6 @@ function LoadingFallback() {
       </div>
     </div>
   );
-}
-
-function PageWrapper({ children }: { children: React.ReactNode }) {
-  return <div className="pt-[72px] sm:pt-[80px]">{children}</div>;
 }
 
 function App() {
@@ -78,49 +75,52 @@ function App() {
                   <Navbar />
                   <Suspense fallback={<LoadingFallback />}>
                     <Routes>
-                {/* Landing — hero goes behind navbar, no top padding */}
-                <Route path="/" element={<Landing />} />
+                      {/* Landing — hero goes behind fixed navbar */}
+                      <Route path="/" element={<Landing />} />
 
-                {/* All other routes — padded below fixed navbar */}
-                <Route path="/dashboard" element={<PageWrapper><Dashboard /></PageWrapper>} />
-                <Route path="/conditions" element={<PageWrapper><Conditions /></PageWrapper>} />
-                <Route path="/conditions/:id" element={<PageWrapper><ConditionDetail /></PageWrapper>} />
-                <Route path="/condition-guide" element={<PageWrapper><ConditionGuide /></PageWrapper>} />
-                <Route path="/conditions-by-conflict" element={<PageWrapper><ConditionsByConflict /></PageWrapper>} />
-                <Route path="/secondary-finder" element={<PageWrapper><SecondaryFinder /></PageWrapper>} />
-                <Route path="/bilateral-calculator" element={<PageWrapper><BilateralCalculator /></PageWrapper>} />
-                <Route path="/claim-checklist" element={<PageWrapper><ClaimChecklist /></PageWrapper>} />
-                <Route path="/claim-journey" element={<PageWrapper><ClaimJourney /></PageWrapper>} />
-                <Route path="/claim-strategy" element={<PageWrapper><ClaimStrategyWizard /></PageWrapper>} />
-                <Route path="/claim-tools" element={<PageWrapper><ClaimTools /></PageWrapper>} />
-                <Route path="/timeline" element={<PageWrapper><Timeline /></PageWrapper>} />
-                <Route path="/health-log" element={<PageWrapper><HealthLog /></PageWrapper>} />
-                <Route path="/symptoms" element={<PageWrapper><Symptoms /></PageWrapper>} />
-                <Route path="/sleep" element={<PageWrapper><Sleep /></PageWrapper>} />
-                <Route path="/medications" element={<PageWrapper><Medications /></PageWrapper>} />
-                <Route path="/migraines" element={<PageWrapper><Migraines /></PageWrapper>} />
-                <Route path="/medical-visits" element={<PageWrapper><MedicalVisits /></PageWrapper>} />
-                <Route path="/exposures" element={<PageWrapper><Exposures /></PageWrapper>} />
-                <Route path="/buddy-statements" element={<PageWrapper><BuddyStatements /></PageWrapper>} />
-                <Route path="/nexus-letter" element={<PageWrapper><NexusLetterGenerator /></PageWrapper>} />
-                <Route path="/documents" element={<PageWrapper><DocumentsHub /></PageWrapper>} />
-                <Route path="/exam-prep" element={<PageWrapper><ExamPrep /></PageWrapper>} />
-                <Route path="/cp-exam-prep" element={<PageWrapper><CPExamPrepEnhanced /></PageWrapper>} />
-                <Route path="/dbq-prep" element={<PageWrapper><DBQPrepSheet /></PageWrapper>} />
-                <Route path="/va-forms" element={<PageWrapper><VAForms /></PageWrapper>} />
-                <Route path="/va-resources" element={<PageWrapper><VAResources /></PageWrapper>} />
-                <Route path="/service-history" element={<PageWrapper><ServiceHistory /></PageWrapper>} />
-                <Route path="/reference" element={<PageWrapper><Reference /></PageWrapper>} />
-                <Route path="/glossary" element={<PageWrapper><Glossary /></PageWrapper>} />
-                <Route path="/settings" element={<PageWrapper><Settings /></PageWrapper>} />
-                <Route path="/faq" element={<PageWrapper><FAQ /></PageWrapper>} />
-                <Route path="/help" element={<PageWrapper><HelpCenter /></PageWrapper>} />
-                <Route path="/user-guide" element={<PageWrapper><UserGuide /></PageWrapper>} />
-                <Route path="/app-preview" element={<PageWrapper><AppStorePreview /></PageWrapper>} />
-                <Route path="/terms" element={<PageWrapper><Terms /></PageWrapper>} />
-                <Route path="/privacy" element={<PageWrapper><Privacy /></PageWrapper>} />
-                <Route path="/disclaimer" element={<PageWrapper><Disclaimer /></PageWrapper>} />
-                <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
+                      {/* Onboarding — no navbar needed, fullscreen */}
+                      <Route path="/onboarding" element={<Onboarding />} />
+
+                      {/* All inner pages — navbar is relative, no padding needed */}
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/conditions" element={<Conditions />} />
+                      <Route path="/conditions/:id" element={<ConditionDetail />} />
+                      <Route path="/condition-guide" element={<ConditionGuide />} />
+                      <Route path="/conditions-by-conflict" element={<ConditionsByConflict />} />
+                      <Route path="/secondary-finder" element={<SecondaryFinder />} />
+                      <Route path="/bilateral-calculator" element={<BilateralCalculator />} />
+                      <Route path="/claim-checklist" element={<ClaimChecklist />} />
+                      <Route path="/claim-journey" element={<ClaimJourney />} />
+                      <Route path="/claim-strategy" element={<ClaimStrategyWizard />} />
+                      <Route path="/claim-tools" element={<ClaimTools />} />
+                      <Route path="/timeline" element={<Timeline />} />
+                      <Route path="/health-log" element={<HealthLog />} />
+                      <Route path="/symptoms" element={<Symptoms />} />
+                      <Route path="/sleep" element={<Sleep />} />
+                      <Route path="/medications" element={<Medications />} />
+                      <Route path="/migraines" element={<Migraines />} />
+                      <Route path="/medical-visits" element={<MedicalVisits />} />
+                      <Route path="/exposures" element={<Exposures />} />
+                      <Route path="/buddy-statements" element={<BuddyStatements />} />
+                      <Route path="/nexus-letter" element={<NexusLetterGenerator />} />
+                      <Route path="/documents" element={<DocumentsHub />} />
+                      <Route path="/exam-prep" element={<ExamPrep />} />
+                      <Route path="/cp-exam-prep" element={<CPExamPrepEnhanced />} />
+                      <Route path="/dbq-prep" element={<DBQPrepSheet />} />
+                      <Route path="/va-forms" element={<VAForms />} />
+                      <Route path="/va-resources" element={<VAResources />} />
+                      <Route path="/service-history" element={<ServiceHistory />} />
+                      <Route path="/reference" element={<Reference />} />
+                      <Route path="/glossary" element={<Glossary />} />
+                      <Route path="/settings" element={<Settings />} />
+                      <Route path="/faq" element={<FAQ />} />
+                      <Route path="/help" element={<HelpCenter />} />
+                      <Route path="/user-guide" element={<UserGuide />} />
+                      <Route path="/app-preview" element={<AppStorePreview />} />
+                      <Route path="/terms" element={<Terms />} />
+                      <Route path="/privacy" element={<Privacy />} />
+                      <Route path="/disclaimer" element={<Disclaimer />} />
+                      <Route path="*" element={<NotFound />} />
                     </Routes>
                   </Suspense>
                 </div>

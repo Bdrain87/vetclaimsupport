@@ -1,6 +1,6 @@
-import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -24,14 +24,12 @@ import {
 import { Label } from '@/components/ui/label';
 import {
   Search, Plus, ChevronRight, AlertCircle, ClipboardList,
-  Activity, Link2, FileText, Trash2, Edit, Filter
+  Activity, Link2, Trash2, Edit, Filter
 } from 'lucide-react';
 
 import { useUserConditions } from '@/hooks/useUserConditions';
+import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import {
-  vaConditions,
-  searchConditions,
-  getConditionById,
   type VACondition,
 } from '@/data/vaConditions';
 
@@ -162,18 +160,8 @@ export default function Conditions() {
   const [showAddDialog, setShowAddDialog] = useState(false);
 
   // Add condition form state
-  const [newConditionSearch, setNewConditionSearch] = useState('');
   const [selectedCondition, setSelectedCondition] = useState<VACondition | null>(null);
   const [newRating, setNewRating] = useState('');
-  const [showAutocomplete, setShowAutocomplete] = useState(false);
-  const autocompleteRef = useRef<HTMLDivElement>(null);
-
-  // Autocomplete results
-  const autocompleteResults = useMemo(() => {
-    if (newConditionSearch.trim().length < 2) return [];
-    const existingIds = userConditions.map(c => c.conditionId);
-    return searchConditions(newConditionSearch, existingIds).slice(0, 8);
-  }, [newConditionSearch, userConditions]);
 
   // Filtered user conditions
   const filteredConditions = useMemo(() => {
@@ -201,17 +189,6 @@ export default function Conditions() {
     });
   }, [userConditions, searchQuery, bodySystemFilter, getConditionDetails]);
 
-  // Close autocomplete on outside click
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (autocompleteRef.current && !autocompleteRef.current.contains(event.target as Node)) {
-        setShowAutocomplete(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   // Handle add condition
   const handleAddCondition = useCallback(() => {
     if (!selectedCondition) return;
@@ -221,18 +198,10 @@ export default function Conditions() {
     });
 
     // Reset form
-    setNewConditionSearch('');
     setSelectedCondition(null);
     setNewRating('');
     setShowAddDialog(false);
   }, [selectedCondition, newRating, addCondition]);
-
-  // Handle autocomplete selection
-  const handleSelectCondition = (condition: VACondition) => {
-    setSelectedCondition(condition);
-    setNewConditionSearch(condition.abbreviation || condition.name);
-    setShowAutocomplete(false);
-  };
 
   // Handle view/edit condition
   const handleViewCondition = (conditionId: string) => {
@@ -277,50 +246,14 @@ export default function Conditions() {
 
             <div className="space-y-4 py-4">
               {/* Condition Search with Autocomplete */}
-              <div className="space-y-2 relative" ref={autocompleteRef}>
-                <Label htmlFor="condition-search">Condition Name</Label>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="condition-search"
-                    placeholder="Search conditions (e.g., PTSD, Tinnitus)"
-                    value={newConditionSearch}
-                    onChange={(e) => {
-                      setNewConditionSearch(e.target.value);
-                      setSelectedCondition(null);
-                      setShowAutocomplete(e.target.value.length >= 2);
-                    }}
-                    onFocus={() => {
-                      if (newConditionSearch.length >= 2) setShowAutocomplete(true);
-                    }}
-                    className={`pl-10 ${selectedCondition ? 'border-green-500' : ''}`}
-                  />
-                </div>
-
-                {/* Autocomplete Dropdown */}
-                {showAutocomplete && autocompleteResults.length > 0 && (
-                  <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg overflow-hidden">
-                    <div className="max-h-64 overflow-y-auto">
-                      {autocompleteResults.map(condition => (
-                        <button
-                          key={condition.id}
-                          type="button"
-                          onClick={() => handleSelectCondition(condition)}
-                          className="w-full text-left px-3 py-2 hover:bg-muted/50 border-b border-border/50 last:border-0 transition-colors"
-                        >
-                          <div className="font-medium">{condition.abbreviation}</div>
-                          {condition.name !== condition.abbreviation && (
-                            <div className="text-xs text-muted-foreground">{condition.name}</div>
-                          )}
-                          {condition.diagnosticCode && (
-                            <div className="text-xs text-primary mt-0.5">DC {condition.diagnosticCode}</div>
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
+              <div className="space-y-2">
+                <Label>Condition Name</Label>
+                <ConditionAutocomplete
+                  onSelect={(condition) => setSelectedCondition(condition)}
+                  placeholder="Search conditions (e.g., PTSD, Tinnitus)"
+                  excludeIds={userConditions.map(c => c.conditionId)}
+                  autoFocus
+                />
                 {selectedCondition && (
                   <Badge className="mt-1 bg-green-500">
                     Selected: {selectedCondition.abbreviation}

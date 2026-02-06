@@ -61,7 +61,7 @@ export const BodyMap = () => {
                       <h4 className="text-white font-black text-sm uppercase tracking-tight">{condition.name}</h4>
                       <p className="text-[#C8A628] text-[10px] font-mono mt-1">DC: {condition.diagnosticCode}</p>
                     </div>
-                    <Activity size={16} className="text-white/20 group-hover:text-[#C8A628] transition-colors" />
+                    <Activity size={16} className="text-white/40 group-hover:text-[#C8A628] transition-colors" />
                   </div>
                   {condition.possibleSecondaries && (
                     <div className="mt-4 flex flex-wrap gap-2">
@@ -75,7 +75,7 @@ export const BodyMap = () => {
                 </motion.div>
               ))
             ) : (
-              <div className="flex flex-col items-center justify-center h-full text-center opacity-20">
+              <div className="flex flex-col items-center justify-center h-full text-center opacity-50">
                 <AlertCircle size={48} className="mb-4" />
                 <p className="text-sm font-bold uppercase tracking-[0.2em]">Select a Body Zone<br/>to begin discovery</p>
               </div>
