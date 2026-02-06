@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { ApprovedCondition, BodyPart } from '@/types/claims';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -128,7 +128,7 @@ function calculateCombinedRating(conditions: RatedCondition[]): { exact: number;
 
 export function EnhancedRatingCalculator() {
   const { data } = useClaims();
-  const approvedConditions = data.approvedConditions || [];
+  const approvedConditions = useMemo(() => data.approvedConditions ?? [], [data.approvedConditions]);
   
   const [newConditions, setNewConditions] = useState<RatedCondition[]>([]);
   const [newConditionName, setNewConditionName] = useState('');

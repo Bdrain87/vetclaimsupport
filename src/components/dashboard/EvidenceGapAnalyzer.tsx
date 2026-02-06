@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
@@ -37,7 +37,7 @@ interface ConditionAnalysis {
 
 export function EvidenceGapAnalyzer() {
   const { data } = useClaims();
-  const claimConditions = data.claimConditions || [];
+  const claimConditions = useMemo(() => data.claimConditions ?? [], [data.claimConditions]);
 
   const analyses = useMemo((): ConditionAnalysis[] => {
     return claimConditions.map(condition => {
@@ -115,7 +115,7 @@ export function EvidenceGapAnalyzer() {
         description: hasBuddy
           ? 'Third-party witness strengthens your claim'
           : 'A buddy statement from someone who witnessed your condition is powerful evidence',
-        link: '/buddy-contacts',
+        link: '/buddy-statements',
         icon: Users,
         isMet: hasBuddy,
       });

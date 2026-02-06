@@ -60,7 +60,11 @@ function getQueueState(): QueueState {
 
 // Save queue state to storage
 function saveQueueState(state: QueueState): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    // Storage full or unavailable
+  }
 }
 
 // Check if online

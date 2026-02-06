@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -90,7 +90,7 @@ export function GuidedActionBanner({ onOpenAddCondition }: GuidedActionBannerPro
         icon: <Users className="h-5 w-5" />,
         label: 'Add Witness Contacts',
         description: 'Get buddy statements to support your claim',
-        href: '/buddy-contacts',
+        href: '/buddy-statements',
         priority: 5,
       };
     }

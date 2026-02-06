@@ -7,7 +7,7 @@ const tabs = [
   { path: '/', icon: Home, label: 'Home' },
   { path: '/health-log', icon: FileText, label: 'Conditions' },
   { path: '/symptoms', icon: BookOpen, label: 'Journal' },
-  { path: '/docs', icon: FolderOpen, label: 'Evidence' },
+  { path: '/documents', icon: FolderOpen, label: 'Evidence' },
   { path: '/exam-prep', icon: Calendar, label: 'Exam Day' },
 ];
 

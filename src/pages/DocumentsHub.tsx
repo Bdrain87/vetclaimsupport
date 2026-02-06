@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useMemo } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { useClaimDocuments } from '@/hooks/useClaimDocuments';
 import {
   FolderOpen,
@@ -365,7 +365,7 @@ export default function DocumentsHub() {
         <div className="relative">
           <div className="absolute inset-0 bg-gradient-to-r from-muted/50 via-muted/30 to-muted/50 rounded-2xl" />
 
-          <TabsList className="relative w-full h-auto p-1.5 bg-transparent grid grid-cols-4 gap-1">
+          <TabsList className="relative w-full h-auto p-1.5 bg-transparent grid grid-cols-2 sm:grid-cols-4 gap-1">
             {tabConfig.map((tab) => (
               <TabsTrigger
                 key={tab.value}

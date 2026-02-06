@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
-import { useEvidence } from '@/context/EvidenceContext';
+import { useClaims } from '@/hooks/useClaims';
+import { useEvidence } from '@/hooks/useEvidence';
 import { Shield, Plus, Trash2, Edit, Calendar, MapPin, Briefcase, AlertTriangle, Download, Sword, Star, Plane } from 'lucide-react';
 import { getSavedServiceDates, saveServiceDates } from '@/utils/veteranProfile';
 import { Button } from '@/components/ui/button';
@@ -263,7 +263,7 @@ export default function ServiceHistory() {
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
-          <TabsList className="inline-flex w-auto min-w-full sm:grid sm:w-full sm:grid-cols-4 h-auto gap-1">
+          <TabsList className="flex flex-wrap w-full sm:grid sm:w-full sm:grid-cols-4 h-auto gap-1">
             <TabsTrigger value="duty-stations" className="text-xs sm:text-sm py-2 px-2 sm:px-3 whitespace-nowrap flex-shrink-0">
               <MapPin className="h-4 w-4 sm:mr-1" />
               <span className="hidden sm:inline">Duty Stations</span>

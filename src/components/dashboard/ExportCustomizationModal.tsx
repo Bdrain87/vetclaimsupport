@@ -28,7 +28,8 @@ import {
   CheckSquare,
   Square,
 } from 'lucide-react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
+import type { ClaimsData, SymptomEntry } from '@/types/claims';
 
 export interface ExportSections {
   personalStatement: boolean;
@@ -53,8 +54,8 @@ interface SectionConfig {
   key: keyof ExportSections;
   label: string;
   icon: React.ReactNode;
-  getCount: (data: any) => number;
-  getWordEstimate: (data: any) => number;
+  getCount: (data: ClaimsData) => number;
+  getWordEstimate: (data: ClaimsData) => number;
 }
 
 const sectionConfigs: SectionConfig[] = [
@@ -129,14 +130,14 @@ const sectionConfigs: SectionConfig[] = [
       const events = 
         (data.serviceHistory?.length || 0) +
         (data.medicalVisits?.length || 0) +
-        (data.symptoms?.filter((s: any) => s.severity >= 7)?.length || 0);
+        (data.symptoms?.filter((s: SymptomEntry) => s.severity >= 7)?.length || 0);
       return events;
     },
     getWordEstimate: (data) => {
-      const events = 
+      const events =
         (data.serviceHistory?.length || 0) +
         (data.medicalVisits?.length || 0) +
-        (data.symptoms?.filter((s: any) => s.severity >= 7)?.length || 0);
+        (data.symptoms?.filter((s: SymptomEntry) => s.severity >= 7)?.length || 0);
       return events * 15;
     },
   },

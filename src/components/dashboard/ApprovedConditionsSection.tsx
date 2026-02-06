@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { ApprovedCondition, BodyPart } from '@/types/claims';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -143,7 +143,7 @@ export function ApprovedConditionsSection({ onNavigateToCalculator }: ApprovedCo
     bodyPart: 'other' as BodyPart,
   });
 
-  const approvedConditions = data.approvedConditions || [];
+  const approvedConditions = useMemo(() => data.approvedConditions ?? [], [data.approvedConditions]);
 
   const { exact, official } = useMemo(() => 
     calculateCombinedRating(approvedConditions), 

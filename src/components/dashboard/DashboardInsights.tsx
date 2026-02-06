@@ -1,4 +1,4 @@
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertTriangle, Clock, FileText, Lightbulb, Link2, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -75,14 +75,14 @@ export function DashboardInsights() {
       insights.push({
         icon: <Clock className="h-5 w-5 text-warning" />,
         message: `${pending} buddy statement${pending > 1 ? 's are' : ' is'} pending. Follow up with your contacts.`,
-        action: { label: 'View Contacts', to: '/buddy-contacts' },
+        action: { label: 'View Contacts', to: '/buddy-statements' },
         type: 'warning',
       });
     } else if (notRequested > 0) {
       insights.push({
         icon: <Lightbulb className="h-5 w-5 text-primary" />,
         message: `You have ${notRequested} buddy contact${notRequested > 1 ? 's' : ''} who haven't been asked for statements yet.`,
-        action: { label: 'Request Statements', to: '/buddy-contacts' },
+        action: { label: 'Request Statements', to: '/buddy-statements' },
         type: 'info',
       });
     }

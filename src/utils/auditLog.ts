@@ -66,7 +66,11 @@ export function logAuditEntry(
     log.splice(MAX_ENTRIES);
   }
 
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(log));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(log));
+  } catch {
+    // Storage full or unavailable
+  }
 
   return entry;
 }

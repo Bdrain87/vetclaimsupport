@@ -245,7 +245,7 @@ export async function analyzeDisabilities(
 
       // Wait before retrying
       const delay = getRetryDelay(attempt);
-      console.log(`Retrying in ${delay}ms (attempt ${attempt + 1}/${maxRetries})...`);
+      if (import.meta.env.DEV) console.log(`Retrying in ${delay}ms (attempt ${attempt + 1}/${maxRetries})...`);
       await sleep(delay);
     }
   }
@@ -345,7 +345,7 @@ export async function generateClaimStrategy(
       }
 
       const delay = getRetryDelay(attempt);
-      console.log(`Retrying in ${delay}ms (attempt ${attempt + 1}/${maxRetries})...`);
+      if (import.meta.env.DEV) console.log(`Retrying in ${delay}ms (attempt ${attempt + 1}/${maxRetries})...`);
       await sleep(delay);
     }
   }

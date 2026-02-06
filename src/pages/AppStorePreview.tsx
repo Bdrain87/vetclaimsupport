@@ -120,7 +120,7 @@ const SCREENSHOTS = [
   { id: 3, caption: 'Dominate your C&P exam', description: 'Exam Companion document with condition-specific prep', page: '/cp-exam-prep' },
   { id: 4, caption: 'Discover conditions you didn\'t know about', description: 'Secondary condition suggestions', page: '/secondary-finder' },
   { id: 5, caption: 'Document your worst days', description: 'Journal entry with symptom tracking', page: '/health-log' },
-  { id: 6, caption: 'Organize your evidence package', description: 'Evidence checklist with completion status', page: '/docs' },
+  { id: 6, caption: 'Organize your evidence package', description: 'Evidence checklist with completion status', page: '/documents' },
   { id: 7, caption: 'See exactly what examiners look for', description: 'DBQ information showing rating criteria', page: '/dbq-prep' },
   { id: 8, caption: 'Know what each rating requires', description: 'PTSD or back condition rating criteria breakdown', page: '/condition-guide' },
 ];

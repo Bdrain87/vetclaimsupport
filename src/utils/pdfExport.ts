@@ -1,5 +1,6 @@
 // PDF Export Utilities for Vet Claim Support
 import jsPDF from 'jspdf';
+import type { ServiceEntry, MedicalVisit, SymptomEntry, Medication, Exposure, DocumentItem, BuddyContact, ClaimsData, ClaimCondition, MigraineEntry, SleepEntry } from '@/types/claims';
 
 // Duration labels for migraines
 const migraineDurations: Record<string, string> = {
@@ -157,7 +158,7 @@ const wrapText = (doc: jsPDF, text: string, maxWidth: number): string[] => {
 };
 
 // Service History Export
-export const exportServiceHistory = (entries: any[]) => {
+export const exportServiceHistory = (entries: ServiceEntry[]) => {
   if (entries.length === 0) {
     alert('No service history entries to export');
     return;
@@ -257,7 +258,7 @@ export const exportServiceHistory = (entries: any[]) => {
 };
 
 // Medical Visits Export
-export const exportMedicalVisits = (visits: any[]) => {
+export const exportMedicalVisits = (visits: MedicalVisit[]) => {
   if (visits.length === 0) {
     alert('No medical visits to export');
     return;
@@ -350,7 +351,7 @@ export const exportMedicalVisits = (visits: any[]) => {
 };
 
 // Symptoms Journal Export
-export const exportSymptoms = (symptoms: any[]) => {
+export const exportSymptoms = (symptoms: SymptomEntry[]) => {
   if (symptoms.length === 0) {
     alert('No symptoms to export');
     return;
@@ -438,7 +439,7 @@ export const exportSymptoms = (symptoms: any[]) => {
 };
 
 // Medications Export
-export const exportMedications = (medications: any[]) => {
+export const exportMedications = (medications: Medication[]) => {
   if (medications.length === 0) {
     alert('No medications to export');
     return;
@@ -533,7 +534,7 @@ export const exportMedications = (medications: any[]) => {
 };
 
 // Exposures Export
-export const exportExposures = (exposures: any[]) => {
+export const exportExposures = (exposures: Exposure[]) => {
   if (exposures.length === 0) {
     alert('No exposures to export');
     return;
@@ -629,7 +630,7 @@ export const exportExposures = (exposures: any[]) => {
 };
 
 // Documents Checklist Export
-export const exportDocuments = (documents: any[]) => {
+export const exportDocuments = (documents: DocumentItem[]) => {
   if (documents.length === 0) {
     alert('No documents to export');
     return;
@@ -703,7 +704,7 @@ export const exportDocuments = (documents: any[]) => {
 };
 
 // Buddy Contacts Export
-export const exportBuddyContacts = (contacts: any[]) => {
+export const exportBuddyContacts = (contacts: BuddyContact[]) => {
   if (contacts.length === 0) {
     alert('No buddy contacts to export');
     return;
@@ -807,7 +808,7 @@ export const exportBuddyContacts = (contacts: any[]) => {
 };
 
 // Comprehensive Evidence Export
-export const exportAllEvidence = (data: any) => {
+export const exportAllEvidence = (data: ClaimsData) => {
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
   
@@ -850,7 +851,7 @@ export const exportAllEvidence = (data: any) => {
     doc.text('Conditions Being Claimed', 20, yPos);
     yPos += 8;
     
-    data.claimConditions.forEach((condition: any) => {
+    data.claimConditions.forEach((condition: ClaimCondition) => {
       yPos = checkPageBreak(doc, yPos, 15);
       doc.setFontSize(10);
       doc.setFont('helvetica', 'bold');
@@ -901,7 +902,7 @@ export const exportAllEvidence = (data: any) => {
 };
 
 // Migraines Export
-export const exportMigraines = (migraines: any[], stats?: { totalLast30Days: number; prostratingLast30Days: number; totalAll: number }) => {
+export const exportMigraines = (migraines: MigraineEntry[], stats?: { totalLast30Days: number; prostratingLast30Days: number; totalAll: number }) => {
   if (migraines.length === 0) {
     alert('No migraine entries to export');
     return;
@@ -1044,11 +1045,11 @@ export const exportConditionEvidence = (
   conditionName: string,
   claimDate: string,
   evidenceScore: number,
-  linkedSymptoms: any[],
-  linkedMedicalVisits: any[],
-  linkedMedications: any[],
-  linkedExposures: any[],
-  linkedBuddyContacts: any[]
+  linkedSymptoms: SymptomEntry[],
+  linkedMedicalVisits: MedicalVisit[],
+  linkedMedications: Medication[],
+  linkedExposures: Exposure[],
+  linkedBuddyContacts: BuddyContact[]
 ) => {
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -1407,7 +1408,7 @@ export const exportConditionEvidence = (
 };
 
 // Sleep Log Export
-export const exportSleepLog = (entries: any[]) => {
+export const exportSleepLog = (entries: SleepEntry[]) => {
   if (entries.length === 0) {
     alert('No sleep entries to export');
     return;

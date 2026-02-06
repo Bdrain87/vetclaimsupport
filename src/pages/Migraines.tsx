@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
-import { useEvidence } from '@/context/EvidenceContext';
+import { useClaims } from '@/hooks/useClaims';
+import { useEvidence } from '@/hooks/useEvidence';
 import { 
   Brain, Plus, Trash2, Edit, Calendar, Clock, AlertTriangle, 
   Download, Info, TrendingUp, Zap, DollarSign, Target, BedDouble,

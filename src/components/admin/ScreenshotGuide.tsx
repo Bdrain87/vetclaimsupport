@@ -73,7 +73,7 @@ const SCREENSHOTS = [
     id: 6,
     caption: 'Organize your evidence package',
     description: 'Evidence checklist with completion status',
-    page: '/docs',
+    page: '/documents',
     icon: FolderOpen,
     keyElements: ['Document categories', 'Completion indicators', 'Missing items highlighted'],
     tips: 'Show some items complete, some pending, some missing'

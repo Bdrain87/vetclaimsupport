@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { 
   Clipboard, 
   AlertCircle, 
@@ -105,7 +105,7 @@ export default function ExamPrep() {
   const [expandedConditions, setExpandedConditions] = useState<Set<string>>(new Set());
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
 
-  const claimConditions = data.claimConditions || [];
+  const claimConditions = useMemo(() => data.claimConditions ?? [], [data.claimConditions]);
 
   // Calculate overall evidence summary
   const evidenceSummary = useMemo(() => {

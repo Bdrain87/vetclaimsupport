@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
-import { useEvidence } from '@/context/EvidenceContext';
+import { useClaims } from '@/hooks/useClaims';
+import { useEvidence } from '@/hooks/useEvidence';
 import { 
   Activity, Plus, Trash2, Edit, Calendar, Download, Clock, 
   TrendingUp, Filter, BarChart3, CalendarDays, List,
@@ -310,7 +310,7 @@ export default function Symptoms() {
 
       {/* Analytics Dashboard - Premium Cards */}
       {data.symptoms.length > 0 && (
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2">
           {/* Severity Trend Chart */}
           <div className="rounded-2xl bg-card border border-border overflow-hidden shadow-lg" style={{ boxShadow: '0 8px 32px rgba(0, 0, 0, 0.25)' }}>
             <div className="p-4 border-b border-border/50 bg-gradient-to-r from-primary/5 via-transparent to-transparent">
@@ -413,7 +413,7 @@ export default function Symptoms() {
           <div className="flex flex-wrap gap-2 items-center">
             {/* Date Range Filter */}
             <Select value={dateRange} onValueChange={(v: '7' | '30' | '90' | 'all') => setDateRange(v)}>
-              <SelectTrigger className="w-[130px] h-12 min-h-[48px]">
+              <SelectTrigger className="w-full sm:w-[130px] h-12 min-h-[48px]">
                 <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
                 <SelectValue />
               </SelectTrigger>
@@ -428,7 +428,7 @@ export default function Symptoms() {
             {/* Condition Filter */}
             {uniqueConditions.length > 0 && (
               <Select value={filterCondition} onValueChange={setFilterCondition}>
-                <SelectTrigger className="w-[160px] h-12 min-h-[48px]">
+                <SelectTrigger className="w-full sm:w-[160px] h-12 min-h-[48px]">
                   <Filter className="h-4 w-4 mr-2 text-muted-foreground" />
                   <SelectValue placeholder="Filter" />
                 </SelectTrigger>
@@ -453,7 +453,7 @@ export default function Symptoms() {
               <Button 
                 variant={viewMode === 'list' ? 'secondary' : 'ghost'} 
                 size="sm" 
-                className="h-10 w-10 min-h-[40px] min-w-[40px] p-0"
+                className="h-10 w-10 min-h-[44px] min-w-[44px] p-0"
                 onClick={() => setViewMode('list')}
               >
                 <List className="h-4 w-4" />
@@ -461,7 +461,7 @@ export default function Symptoms() {
               <Button 
                 variant={viewMode === 'timeline' ? 'secondary' : 'ghost'} 
                 size="sm" 
-                className="h-10 w-10 min-h-[40px] min-w-[40px] p-0"
+                className="h-10 w-10 min-h-[44px] min-w-[44px] p-0"
                 onClick={() => setViewMode('timeline')}
               >
                 <CalendarDays className="h-4 w-4" />

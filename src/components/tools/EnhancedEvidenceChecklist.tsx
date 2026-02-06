@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -48,7 +48,7 @@ interface ConditionEvidence {
 
 export function EnhancedEvidenceChecklist() {
   const { data } = useClaims();
-  const claimConditions = data.claimConditions || [];
+  const claimConditions = useMemo(() => data.claimConditions ?? [], [data.claimConditions]);
   const [expandedCondition, setExpandedCondition] = useState<string | null>(
     claimConditions[0]?.id || null
   );
@@ -146,7 +146,7 @@ export function EnhancedEvidenceChecklist() {
         required: false,
         completed: hasBuddy,
         count: linkedBuddies,
-        link: '/buddy-contacts',
+        link: '/buddy-statements',
         firstPersonTip: `Ask your buddy to write: "I served with [NAME] at [LOCATION] from [DATE] to [DATE]. I personally witnessed [SPECIFIC INCIDENT/SYMPTOMS]. I observed that [NAME] [SPECIFIC OBSERVATIONS]."`,
       });
 

@@ -27,7 +27,7 @@ import {
   Activity, Link2, FileText, Trash2, Edit, Filter
 } from 'lucide-react';
 
-import { useUserConditions } from '@/context/UserConditionsContext';
+import { useUserConditions } from '@/hooks/useUserConditions';
 import {
   vaConditions,
   searchConditions,
@@ -369,7 +369,7 @@ export default function Conditions() {
           />
         </div>
         <Select value={bodySystemFilter} onValueChange={setBodySystemFilter}>
-          <SelectTrigger className="w-full sm:w-48">
+          <SelectTrigger className="w-full sm:w-48" aria-label="Filter by body system">
             <Filter className="h-4 w-4 mr-2" />
             <SelectValue />
           </SelectTrigger>
@@ -446,7 +446,7 @@ export default function Conditions() {
       {userConditions.length > 0 && (
         <Card className="bg-muted/50">
           <CardContent className="py-4">
-            <div className="grid grid-cols-3 gap-4 text-center">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
               <div>
                 <div className="text-2xl font-bold text-primary">
                   {userConditions.length}

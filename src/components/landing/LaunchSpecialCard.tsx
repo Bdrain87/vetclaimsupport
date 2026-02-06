@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
-export function LaunchSpecialCard() {
-  const LAUNCH_DATE = new Date('2026-02-05T00:00:00');
+const LAUNCH_DATE = new Date('2026-02-05T00:00:00');
 
+export function LaunchSpecialCard() {
   const { isLaunchWindow, daysRemaining, price } = useMemo(() => {
     const now = new Date();
     const diffDays = Math.ceil(

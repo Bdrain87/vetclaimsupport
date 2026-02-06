@@ -58,7 +58,11 @@ export function useFirstRun(): UseFirstRunReturn {
   }, []);
 
   const handleDisclaimerAccept = useCallback(() => {
-    localStorage.setItem(STORAGE_KEYS.DISCLAIMER_ACCEPTED, 'true');
+    try {
+      localStorage.setItem(STORAGE_KEYS.DISCLAIMER_ACCEPTED, 'true');
+    } catch {
+      // Storage full or unavailable
+    }
     setShowDisclaimer(false);
 
     const onboardingCompleted = localStorage.getItem(STORAGE_KEYS.ONBOARDING_COMPLETED) === 'true';
@@ -70,13 +74,21 @@ export function useFirstRun(): UseFirstRunReturn {
   }, []);
 
   const handleOnboardingComplete = useCallback(() => {
-    localStorage.setItem(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
+    try {
+      localStorage.setItem(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
+    } catch {
+      // Storage full or unavailable
+    }
     setShowOnboarding(false);
     setIsReady(true);
   }, []);
 
   const handleOnboardingSkip = useCallback(() => {
-    localStorage.setItem(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
+    try {
+      localStorage.setItem(STORAGE_KEYS.ONBOARDING_COMPLETED, 'true');
+    } catch {
+      // Storage full or unavailable
+    }
     setShowOnboarding(false);
     setIsReady(true);
   }, []);

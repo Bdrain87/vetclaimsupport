@@ -38,6 +38,7 @@ export function MOSCombobox({
         onValueChange(saved.mos);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only: restores saved MOS value
   }, []);
 
   // Filter based on input

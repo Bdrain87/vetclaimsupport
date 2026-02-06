@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Scale, Shield, FileText, AlertTriangle, ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useTheme } from '@/context/ThemeContext';
+import { useTheme } from '@/hooks/useTheme';
 import { useToast } from '@/hooks/use-toast';
 import { ShareWithVSO } from '@/components/dashboard/ShareWithVSO';
 import { ExportButton } from '@/components/dashboard/ExportButton';
@@ -47,16 +47,7 @@ export default function Settings() {
     }
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem(REMINDER_SETTINGS_KEY, JSON.stringify(reminderSettings));
-    
-    // Schedule notifications if enabled
-    if (reminderSettings.enabled && notificationPermission === 'granted') {
-      scheduleReminder();
-    }
-  }, [reminderSettings, notificationPermission]);
-
-  const scheduleReminder = () => {
+  const scheduleReminder = useCallback(() => {
     // Clear any existing scheduled notifications
     if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
       navigator.serviceWorker.controller.postMessage({
@@ -64,7 +55,20 @@ export default function Settings() {
         settings: reminderSettings,
       });
     }
-  };
+  }, [reminderSettings]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(REMINDER_SETTINGS_KEY, JSON.stringify(reminderSettings));
+    } catch {
+      // Storage full or unavailable
+    }
+
+    // Schedule notifications if enabled
+    if (reminderSettings.enabled && notificationPermission === 'granted') {
+      scheduleReminder();
+    }
+  }, [reminderSettings, notificationPermission, scheduleReminder]);
 
   const requestNotificationPermission = async () => {
     if (!('Notification' in window)) {
@@ -228,7 +232,7 @@ export default function Settings() {
               }
               disabled={!reminderSettings.enabled}
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full" aria-label="Reminder frequency">
                 <SelectValue placeholder="Select frequency" />
               </SelectTrigger>
               <SelectContent>
@@ -251,7 +255,7 @@ export default function Settings() {
               }
               disabled={!reminderSettings.enabled}
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full" aria-label="Reminder time">
                 <SelectValue placeholder="Select time" />
               </SelectTrigger>
               <SelectContent>

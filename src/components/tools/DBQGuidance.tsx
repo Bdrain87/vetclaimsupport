@@ -1,5 +1,5 @@
 import { useMemo, useCallback } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -383,7 +383,7 @@ function getDBQTypeForCondition(conditionName: string): string | null {
 
 export function DBQGuidance() {
   const { data } = useClaims();
-  const claimConditions = data.claimConditions || [];
+  const claimConditions = useMemo(() => data.claimConditions ?? [], [data.claimConditions]);
 
   const conditionsWithDBQ = useMemo(() => {
     return claimConditions.map(condition => ({

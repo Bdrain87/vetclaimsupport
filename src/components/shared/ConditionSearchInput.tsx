@@ -181,7 +181,7 @@ export function ConditionSearchInput({
                       <h4 className="font-semibold text-sm text-foreground">
                         {condition.name}
                       </h4>
-                      {(condition as any).isPACTAct && (
+                      {(condition as Record<string, unknown>).isPACTAct && (
                         <Badge className="text-[9px] px-1.5 py-0 h-4 bg-success/15 text-success border-success/30 hover:bg-success/20">
                           PACT Act
                         </Badge>
@@ -240,26 +240,3 @@ export function ConditionSearchInput({
   );
 }
 
-// Helper to get diagnostic code for a condition name
-export function getDiagnosticCodeForCondition(conditionName: string): { code: string; name: string } | null {
-  const lower = conditionName.toLowerCase();
-  
-  for (const system of vaDisabilitiesBySystem) {
-    for (const condition of system.conditions) {
-      if (condition.name.toLowerCase() === lower) {
-        return { code: condition.diagnosticCode, name: condition.name };
-      }
-    }
-  }
-  
-  // Fuzzy match
-  for (const system of vaDisabilitiesBySystem) {
-    for (const condition of system.conditions) {
-      if (condition.name.toLowerCase().includes(lower) || lower.includes(condition.name.toLowerCase())) {
-        return { code: condition.diagnosticCode, name: condition.name };
-      }
-    }
-  }
-  
-  return null;
-}

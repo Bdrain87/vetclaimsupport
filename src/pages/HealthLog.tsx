@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
-import { useEvidence } from '@/context/EvidenceContext';
+import { useClaims } from '@/hooks/useClaims';
+import { useEvidence } from '@/hooks/useEvidence';
 import {
   Heart, Activity, Brain, Moon, Pill, Plus, Download,
   Calendar, Clock, Zap, Target, TrendingUp, ChevronRight,
@@ -200,7 +200,7 @@ export default function HealthLog() {
               <h2 className="text-lg font-semibold">Quick Log</h2>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {quickLogOptions.map((option) => (
                 <button
                   key={option.type}
@@ -244,7 +244,7 @@ export default function HealthLog() {
               <h2 className="text-lg font-semibold">30-Day Summary</h2>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Symptoms Card */}
               <Card
                 className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-emerald-500/30"

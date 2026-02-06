@@ -218,10 +218,14 @@ export function useMilestones() {
 
   // Save to localStorage whenever milestones change
   useEffect(() => {
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({ milestones: state.milestones })
-    );
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ milestones: state.milestones })
+      );
+    } catch {
+      // Storage full or unavailable
+    }
   }, [state.milestones]);
 
   // Update progress for a milestone

@@ -1,4 +1,4 @@
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { Card, CardContent } from '@/components/ui/card';
 import { Activity } from 'lucide-react';
 import { useMemo } from 'react';

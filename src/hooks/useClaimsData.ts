@@ -94,7 +94,11 @@ export function useClaimsData() {
   const [data, setData] = useState<ClaimsData>(getInitialData);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch {
+      console.error('[useClaimsData] Failed to persist data — storage may be full');
+    }
   }, [data]);
 
   const generateId = () => crypto.randomUUID();

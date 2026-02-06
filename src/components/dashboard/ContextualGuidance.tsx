@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -195,7 +195,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
         icon: <Users className="h-5 w-5" />,
         title: 'Add Witness Contacts',
         message: 'Fellow service members who witnessed your condition can provide powerful supporting statements.',
-        action: { label: 'Add Buddy Contacts', href: '/buddy-contacts' },
+        action: { label: 'Add Buddy Contacts', href: '/buddy-statements' },
         condition: 'No buddy contacts',
       });
     }
@@ -210,7 +210,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
         icon: <Users className="h-5 w-5" />,
         title: 'Request Buddy Statements',
         message: `You have ${unrequestedBuddies} contact${unrequestedBuddies > 1 ? 's' : ''} who could provide statements. Use the Buddy Statement Generator in Tools.`,
-        action: { label: 'View Contacts', href: '/buddy-contacts' },
+        action: { label: 'View Contacts', href: '/buddy-statements' },
         condition: 'Pending buddy requests',
       });
     }
@@ -231,7 +231,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
           icon: <Clock className="h-5 w-5" />,
           title: 'You\'re in the BDD Window!',
           message: `Only ${daysUntilSep} days until separation. Filing now means faster processing and potential back pay from day 1.`,
-          action: { label: 'View Checklist', href: '/checklist' },
+          action: { label: 'View Checklist', href: '/claim-checklist' },
           condition: 'BDD window active',
         });
       } else if (daysUntilSep > 0 && daysUntilSep <= 90) {
@@ -242,7 +242,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
           icon: <AlertTriangle className="h-5 w-5" />,
           title: 'BDD Window Closing Soon',
           message: `Only ${daysUntilSep} days left to file before separation. After this, you'll need to file a standard claim.`,
-          action: { label: 'Start Filing', href: '/checklist' },
+          action: { label: 'Start Filing', href: '/claim-checklist' },
           condition: 'BDD window closing',
         });
       }

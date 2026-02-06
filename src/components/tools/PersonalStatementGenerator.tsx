@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -26,7 +26,7 @@ export function PersonalStatementGenerator() {
   const [customEdits, setCustomEdits] = useState('');
   const [selectedCondition, setSelectedCondition] = useState<string | null>(null);
 
-  const claimConditions = data.claimConditions || [];
+  const claimConditions = useMemo(() => data.claimConditions ?? [], [data.claimConditions]);
 
   // Generate statement content
   const generateStatement = useMemo(() => {

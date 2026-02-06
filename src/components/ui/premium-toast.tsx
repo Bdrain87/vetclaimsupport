@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
+import { ToastContext } from './premium-toast-context';
 
 type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -13,36 +14,6 @@ interface Toast {
   action?: {
     label: string;
     onClick: () => void;
-  };
-}
-
-interface ToastContextType {
-  toasts: Toast[];
-  addToast: (toast: Omit<Toast, 'id'>) => string;
-  removeToast: (id: string) => void;
-  clearToasts: () => void;
-}
-
-const ToastContext = React.createContext<ToastContextType | null>(null);
-
-export function usePremiumToast() {
-  const context = React.useContext(ToastContext);
-  if (!context) {
-    throw new Error('usePremiumToast must be used within a PremiumToastProvider');
-  }
-
-  return {
-    toast: (toast: Omit<Toast, 'id'>) => context.addToast(toast),
-    success: (title: string, description?: string) =>
-      context.addToast({ type: 'success', title, description }),
-    error: (title: string, description?: string) =>
-      context.addToast({ type: 'error', title, description }),
-    warning: (title: string, description?: string) =>
-      context.addToast({ type: 'warning', title, description }),
-    info: (title: string, description?: string) =>
-      context.addToast({ type: 'info', title, description }),
-    dismiss: context.removeToast,
-    clearAll: context.clearToasts,
   };
 }
 

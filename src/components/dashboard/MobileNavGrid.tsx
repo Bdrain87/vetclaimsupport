@@ -29,7 +29,7 @@ import {
   ClipboardList,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useTheme } from '@/context/ThemeContext';
+import { useTheme } from '@/hooks/useTheme';
 
 interface NavItem {
   title: string;
@@ -63,9 +63,9 @@ const drawerSections = [
   {
     title: 'My Claim',
     items: [
-      { title: 'Journey', path: '/journey', icon: Route },
-      { title: 'Documents', path: '/docs', icon: Files },
-      { title: 'Checklist', path: '/checklist', icon: ClipboardCheck },
+      { title: 'Journey', path: '/claim-journey', icon: Route },
+      { title: 'Documents', path: '/documents', icon: Files },
+      { title: 'Checklist', path: '/claim-checklist', icon: ClipboardCheck },
     ],
   },
   {
@@ -181,7 +181,7 @@ export function MobileNavGrid() {
                         to={item.path}
                         onClick={() => setDrawerOpen(false)}
                         className={cn(
-                          'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors',
+                          'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors min-h-[44px]',
                           isActive(item.path)
                             ? 'bg-primary/10 text-primary font-medium'
                             : 'hover:bg-accent'
@@ -206,7 +206,7 @@ export function MobileNavGrid() {
                     to={item.path}
                     onClick={() => setDrawerOpen(false)}
                     className={cn(
-                      'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors',
+                      'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors min-h-[44px]',
                       isActive(item.path)
                         ? 'bg-primary/10 text-primary font-medium'
                         : 'hover:bg-accent'

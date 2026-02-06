@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
-import { useEvidence } from '@/context/EvidenceContext';
+import { useClaims } from '@/hooks/useClaims';
+import { useEvidence } from '@/hooks/useEvidence';
 import { Moon, Plus, Trash2, Edit, Calendar, Clock, AlertTriangle, CheckCircle2, TrendingUp, Wind, Activity, Zap, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -130,7 +130,7 @@ export default function Sleep() {
     setIsOpen(true);
   };
 
-  const sleepEntries = data.sleepEntries || [];
+  const sleepEntries = useMemo(() => data.sleepEntries ?? [], [data.sleepEntries]);
 
   // Statistics with VA-relevant metrics
   const stats = useMemo(() => {
@@ -350,7 +350,7 @@ export default function Sleep() {
                             type="button"
                             size="sm"
                             variant={formData.usesCPAP ? "default" : "outline"}
-                            className={formData.usesCPAP ? "bg-success hover:bg-success/90" : ""}
+                            className={formData.usesCPAP ? "bg-success hover:bg-success/90 min-h-[44px]" : "min-h-[44px]"}
                             onClick={() => setFormData({ ...formData, usesCPAP: true })}
                           >
                             Yes
@@ -359,6 +359,7 @@ export default function Sleep() {
                             type="button"
                             size="sm"
                             variant={!formData.usesCPAP ? "default" : "outline"}
+                            className="min-h-[44px]"
                             onClick={() => setFormData({ ...formData, usesCPAP: false })}
                           >
                             No

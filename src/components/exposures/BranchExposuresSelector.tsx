@@ -30,7 +30,11 @@ export function BranchExposuresSelector({ onSelectExposure }: BranchExposuresSel
 
   const handleBranchChange = (branch: MilitaryBranch) => {
     setSelectedBranch(branch);
-    localStorage.setItem('militaryBranch', branch);
+    try {
+      localStorage.setItem('militaryBranch', branch);
+    } catch {
+      // Storage full or unavailable
+    }
   };
 
   const exposures = selectedBranch ? branchExposures[selectedBranch] : [];

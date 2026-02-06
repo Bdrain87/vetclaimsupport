@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -15,7 +15,7 @@ export function RatingIncreaseAnalyzer() {
   const [selectedCondition, setSelectedCondition] = useState('');
   const [currentRating, setCurrentRating] = useState<string>('');
 
-  const claimedConditions = data.claimConditions || [];
+  const claimedConditions = useMemo(() => data.claimConditions ?? [], [data.claimConditions]);
 
   // Get the condition's rating criteria
   const conditionData = useMemo(() => {
@@ -447,7 +447,7 @@ export function RatingIncreaseAnalyzer() {
                 </Link>
               </Button>
               <Button variant="outline" size="sm" asChild>
-                <Link to="/buddy-contacts">
+                <Link to="/buddy-statements">
                   <Users className="h-4 w-4 mr-2" />
                   Add Buddy Statement
                 </Link>

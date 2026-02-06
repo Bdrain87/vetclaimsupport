@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useCallback, useMemo, useState } from 'react';
+import { useClaims } from '@/hooks/useClaims';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -40,13 +40,13 @@ interface EvidenceStatus {
 
 export function ConditionSpecificChecklist() {
   const { data } = useClaims();
-  const claimConditions = data.claimConditions || [];
+  const claimConditions = useMemo(() => data.claimConditions ?? [], [data.claimConditions]);
   const [expandedCondition, setExpandedCondition] = useState<string | null>(
     claimConditions[0]?.id || null
   );
 
   // Calculate evidence status for a condition
-  const getEvidenceStatus = (conditionId: string): EvidenceStatus => {
+  const getEvidenceStatus = useCallback((conditionId: string): EvidenceStatus => {
     const condition = claimConditions.find(c => c.id === conditionId);
     if (!condition) {
       return {
@@ -95,7 +95,7 @@ export function ConditionSpecificChecklist() {
       hasMigraineLog: migraineCount >= 5,
       migraineCount,
     };
-  };
+  }, [claimConditions, data]);
 
   // Calculate readiness score
   const calculateReadiness = (checklist: ConditionChecklist, status: EvidenceStatus): number => {
@@ -143,7 +143,7 @@ export function ConditionSpecificChecklist() {
         };
       })
       .filter(c => c.checklist !== null);
-  }, [claimConditions, data]);
+  }, [claimConditions, getEvidenceStatus]);
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-success';

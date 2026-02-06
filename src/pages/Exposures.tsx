@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
-import { useEvidence } from '@/context/EvidenceContext';
+import { useClaims } from '@/hooks/useClaims';
+import { useEvidence } from '@/hooks/useEvidence';
 import { AlertTriangle, Plus, Trash2, Edit, Calendar, MapPin, Shield, Users, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -317,10 +317,10 @@ export default function Exposures() {
                     )}
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="ghost" size="icon" onClick={() => handleEdit(exposure)}>
+                    <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => handleEdit(exposure)}>
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => deleteExposure(exposure.id)}>
+                    <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => deleteExposure(exposure.id)}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>

@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -36,10 +36,10 @@ export function SmartSecondaryConditionsSuggester() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showAll, setShowAll] = useState(false);
 
-  const claimedConditions = data.claimConditions?.map(c => c.name.toLowerCase()) || [];
-  const userSymptoms = data.symptoms?.map(s => s.symptom.toLowerCase()) || [];
-  const userMedications = data.medications?.map(m => m.name.toLowerCase()) || [];
-  const userMedicalVisits = data.medicalVisits || [];
+  const claimedConditions = useMemo(() => data.claimConditions?.map(c => c.name.toLowerCase()) ?? [], [data.claimConditions]);
+  const userSymptoms = useMemo(() => data.symptoms?.map(s => s.symptom.toLowerCase()) ?? [], [data.symptoms]);
+  const userMedications = useMemo(() => data.medications?.map(m => m.name.toLowerCase()) ?? [], [data.medications]);
+  const userMedicalVisits = useMemo(() => data.medicalVisits ?? [], [data.medicalVisits]);
 
   // Get the earliest service date for narrative
   const earliestServiceDate = useMemo(() => {
@@ -342,7 +342,7 @@ export function SmartSecondaryConditionsSuggester() {
 function generateActionableSteps(
   secondary: SecondaryConnection, 
   primaryCondition: string,
-  medicalVisits: any[]
+  medicalVisits: { date: string; provider?: string; notes?: string }[]
 ): string[] {
   const steps: string[] = [];
   

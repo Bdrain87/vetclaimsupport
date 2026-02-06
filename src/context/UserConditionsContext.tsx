@@ -1,46 +1,8 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import { VACondition, vaConditions, getConditionById } from '@/data/vaConditions';
-
-export interface UserCondition {
-  id: string;
-  conditionId: string; // Reference to VACondition.id
-  rating?: number;
-  serviceConnected: boolean;
-  claimStatus: 'pending' | 'approved' | 'denied' | 'appeal';
-  isPrimary: boolean;
-  linkedPrimaryId?: string; // For secondary conditions
-  notes?: string;
-  dateAdded: string;
-  bodyPart?: string; // For bilateral detection (e.g., "left knee", "right knee")
-}
-
-interface UserConditionsContextType {
-  // State
-  conditions: UserCondition[];
-
-  // Actions
-  addCondition: (conditionId: string, options?: Partial<UserCondition>) => UserCondition | null;
-  removeCondition: (id: string) => void;
-  updateCondition: (id: string, updates: Partial<UserCondition>) => void;
-  clearAllConditions: () => void;
-
-  // Queries
-  hasCondition: (conditionId: string) => boolean;
-  getCondition: (id: string) => UserCondition | undefined;
-  getConditionsByStatus: (status: UserCondition['claimStatus']) => UserCondition[];
-  getPrimaryConditions: () => UserCondition[];
-  getSecondaryConditions: (primaryId?: string) => UserCondition[];
-  getConditionDetails: (userCondition: UserCondition) => VACondition | undefined;
-
-  // Computed values
-  totalRating: number;
-  approvedConditionsCount: number;
-  pendingConditionsCount: number;
-}
+import { useState, useEffect, useCallback, ReactNode } from 'react';
+import { getConditionById } from '@/data/vaConditions';
+import { UserCondition, UserConditionsContext, UserConditionsContextType } from './user-conditions-context';
 
 const STORAGE_KEY = 'user-va-conditions';
-
-const UserConditionsContext = createContext<UserConditionsContextType | undefined>(undefined);
 
 function calculateCombinedRating(conditions: UserCondition[]): number {
   const approvedRatings = conditions
@@ -165,7 +127,7 @@ export function UserConditionsProvider({ children }: { children: ReactNode }) {
     return conditions.filter(c => !c.isPrimary);
   }, [conditions]);
 
-  const getConditionDetails = useCallback((userCondition: UserCondition): VACondition | undefined => {
+  const getConditionDetails = useCallback((userCondition: UserCondition) => {
     return getConditionById(userCondition.conditionId);
   }, []);
 
@@ -196,14 +158,3 @@ export function UserConditionsProvider({ children }: { children: ReactNode }) {
     </UserConditionsContext.Provider>
   );
 }
-
-export function useUserConditions(): UserConditionsContextType {
-  const context = useContext(UserConditionsContext);
-  if (context === undefined) {
-    throw new Error('useUserConditions must be used within a UserConditionsProvider');
-  }
-  return context;
-}
-
-// Export the vaConditions array for components that need access to the full database
-export { vaConditions, getConditionById, type VACondition } from '@/data/vaConditions';

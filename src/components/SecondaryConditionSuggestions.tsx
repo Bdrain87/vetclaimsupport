@@ -15,7 +15,7 @@ import {
   getSecondaryConditions,
   type VACondition,
 } from '@/data/vaConditions';
-import { useUserConditions } from '@/context/UserConditionsContext';
+import { useUserConditions } from '@/hooks/useUserConditions';
 
 interface SecondaryConditionSuggestionsProps {
   /** Maximum number of suggestions to show */

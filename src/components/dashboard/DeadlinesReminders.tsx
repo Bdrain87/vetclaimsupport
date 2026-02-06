@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { useClaims } from '@/context/ClaimsContext';
+import { useClaims } from '@/hooks/useClaims';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -126,7 +126,7 @@ export function DeadlinesReminders() {
   });
   const [datePickerOpen, setDatePickerOpen] = useState(false);
 
-  const deadlines = data.deadlines || [];
+  const deadlines = useMemo(() => data.deadlines ?? [], [data.deadlines]);
 
   const sortedDeadlines = useMemo(() => {
     return [...deadlines]
