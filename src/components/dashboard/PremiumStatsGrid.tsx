@@ -9,16 +9,17 @@ import {
   FileText,
   Calendar,
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export function PremiumStatsGrid() {
   const { data } = useClaims();
-  
+
   const claimConditions = data.claimConditions || [];
-  
+
   // Calculate overall evidence score
   const calculateOverallScore = () => {
     if (claimConditions.length === 0) return 0;
-    
+
     const totalScore = claimConditions.reduce((sum, condition) => {
       let score = 0;
       if (condition.linkedMedicalVisits.length > 0) score += 25;
@@ -27,7 +28,7 @@ export function PremiumStatsGrid() {
       if (condition.linkedBuddyContacts.length > 0) score += 25;
       return sum + score;
     }, 0);
-    
+
     return Math.round(totalScore / claimConditions.length);
   };
 
@@ -35,26 +36,26 @@ export function PremiumStatsGrid() {
   const calculatePhaseProgress = () => {
     let completedTasks = 0;
     const totalTasks = 16; // 4 phases × 4 tasks
-    
+
     // Phase 1
     if (data.serviceHistory.length > 0) completedTasks++;
     if (data.medicalVisits.length > 0) completedTasks++;
     if (data.exposures.length > 0) completedTasks++;
     if (data.separationDate) completedTasks++;
-    
+
     // Phase 2
     if (data.symptoms.length >= 3) completedTasks++;
     if (data.medications.length > 0) completedTasks++;
     if (claimConditions.length > 0) completedTasks++;
     if (data.buddyContacts.length > 0) completedTasks++;
-    
+
     // Phase 3
     const docsObtained = data.documents.filter(d => d.status === 'Obtained' || d.status === 'Submitted').length;
     if (docsObtained >= 3) completedTasks++;
     if (data.buddyContacts.some(b => b.statementStatus === 'Received')) completedTasks++;
     if ((data.uploadedDocuments?.length || 0) > 0) completedTasks++;
     if (claimConditions.some(c => c.linkedMedicalVisits.length > 0 || c.linkedSymptoms.length > 0)) completedTasks++;
-    
+
     return Math.round((completedTasks / totalTasks) * 100);
   };
 
@@ -73,66 +74,76 @@ export function PremiumStatsGrid() {
   const daysUntilSep = getDaysUntilSeparation();
   const totalEvidence = data.symptoms.length + data.medicalVisits.length + data.documents.filter(d => d.status === 'Obtained').length;
 
+  const glassCard = "bg-white/[0.04] backdrop-blur-sm border border-white/[0.06] rounded-2xl p-4 transition-all duration-300 ease-out";
+
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-      {/* Evidence Score - Primary Gradient */}
+      {/* Evidence Score - Glass Card with Gold Readiness Ring */}
       <Link to="/" className="group">
         <div className={cn(
-          "gradient-stat-primary",
-          "transition-all duration-300 ease-out",
-          "hover:scale-[1.02] hover:shadow-[0_12px_40px_rgba(59,130,246,0.4)]"
+          glassCard,
+          "hover:scale-[1.02] hover:shadow-[0_12px_40px_rgba(200,166,40,0.2)] hover:border-[#C8A628]/30"
         )}>
-          <div className="flex items-start justify-between mb-2">
-            <div className="p-2 rounded-xl bg-white/20">
-              <Target className="h-5 w-5 text-white" />
+          <div className="flex items-center justify-center mb-2">
+            <div className="relative w-16 h-16">
+              <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+                <circle cx="18" cy="18" r="15" fill="none" stroke="currentColor" className="text-white/[0.06]" strokeWidth="2.5" />
+                <motion.circle
+                  cx="18" cy="18" r="15" fill="none" stroke="#C8A628" strokeWidth="2.5"
+                  strokeLinecap="round"
+                  initial={{ strokeDasharray: "0, 100" }}
+                  animate={{ strokeDasharray: `${overallScore}, 100` }}
+                  transition={{ duration: 1.5, ease: "easeOut" }}
+                />
+              </svg>
+              <span className="absolute inset-0 flex items-center justify-center text-white font-bold text-sm">
+                {overallScore}%
+              </span>
             </div>
-            <TrendingUp className="h-4 w-4 text-white/70" />
           </div>
-          <div className="stat-value text-white">
-            {overallScore}%
-          </div>
-          <div className="stat-label text-white/70 mt-1">
-            Evidence Score
+          <div className="text-center">
+            <div className="text-[10px] font-medium text-white/50 mt-1">
+              Evidence Score
+            </div>
           </div>
         </div>
       </Link>
 
-      {/* Phase Completion - Success Gradient */}
+      {/* Phase Completion - Glass Card */}
       <Link to="/" className="group">
         <div className={cn(
-          "gradient-stat-success",
-          "transition-all duration-300 ease-out",
-          "hover:scale-[1.02] hover:shadow-[0_12px_40px_rgba(34,197,94,0.4)]"
+          glassCard,
+          "hover:scale-[1.02] hover:shadow-[0_12px_40px_rgba(200,166,40,0.2)] hover:border-[#C8A628]/30"
         )}>
           <div className="flex items-start justify-between mb-2">
-            <div className="p-2 rounded-xl bg-white/20">
-              <CheckCircle2 className="h-5 w-5 text-white" />
+            <div className="p-2 rounded-xl bg-[#C8A628]/10 border border-[#C8A628]/20">
+              <CheckCircle2 className="h-5 w-5 text-[#C8A628]" />
             </div>
           </div>
-          <div className="stat-value text-white">
+          <div className="text-2xl font-bold text-white">
             {phaseProgress}%
           </div>
-          <div className="stat-label text-white/70 mt-1">
+          <div className="text-[10px] font-medium text-white/50 mt-1">
             Journey Complete
           </div>
         </div>
       </Link>
 
-      {/* Conditions Tracked - Dark Premium Card */}
+      {/* Conditions Tracked - Glass Card */}
       <Link to="/" className="group">
         <div className={cn(
-          "premium-stat-card",
-          "hover:border-primary/30"
+          glassCard,
+          "hover:scale-[1.02] hover:shadow-[0_12px_40px_rgba(200,166,40,0.15)] hover:border-[#C8A628]/20"
         )}>
           <div className="flex items-start justify-between mb-2">
-            <div className="p-2 rounded-xl bg-primary/10">
-              <FileText className="h-5 w-5 text-primary" />
+            <div className="p-2 rounded-xl bg-[#C8A628]/10 border border-[#C8A628]/20">
+              <FileText className="h-5 w-5 text-[#C8A628]" />
             </div>
           </div>
-          <div className="stat-value text-foreground">
+          <div className="text-2xl font-bold text-white">
             {claimConditions.length}
           </div>
-          <div className="stat-label text-muted-foreground mt-1">
+          <div className="text-[10px] font-medium text-white/50 mt-1">
             Conditions
           </div>
         </div>
@@ -141,36 +152,36 @@ export function PremiumStatsGrid() {
       {/* Evidence Items or Days to Separation */}
       {daysUntilSep ? (
         <div className={cn(
-          "gradient-stat-warning",
-          "transition-all duration-300 ease-out"
+          glassCard,
+          "border-[#C8A628]/20"
         )}>
           <div className="flex items-start justify-between mb-2">
-            <div className="p-2 rounded-xl bg-white/20">
-              <Calendar className="h-5 w-5 text-white" />
+            <div className="p-2 rounded-xl bg-[#C8A628]/10 border border-[#C8A628]/20">
+              <Calendar className="h-5 w-5 text-[#C8A628]" />
             </div>
           </div>
-          <div className="stat-value text-white">
+          <div className="text-2xl font-bold text-white">
             {daysUntilSep}
           </div>
-          <div className="stat-label text-white/70 mt-1">
+          <div className="text-[10px] font-medium text-white/50 mt-1">
             Days to Sep
           </div>
         </div>
       ) : (
         <Link to="/symptoms" className="group">
           <div className={cn(
-            "premium-stat-card",
-            "hover:border-success/30"
+            glassCard,
+            "hover:scale-[1.02] hover:shadow-[0_12px_40px_rgba(200,166,40,0.15)] hover:border-[#C8A628]/20"
           )}>
             <div className="flex items-start justify-between mb-2">
-              <div className="p-2 rounded-xl bg-success/10">
-                <Activity className="h-5 w-5 text-success" />
+              <div className="p-2 rounded-xl bg-[#C8A628]/10 border border-[#C8A628]/20">
+                <Activity className="h-5 w-5 text-[#C8A628]" />
               </div>
             </div>
-            <div className="stat-value text-foreground">
+            <div className="text-2xl font-bold text-white">
               {totalEvidence}
             </div>
-            <div className="stat-label text-muted-foreground mt-1">
+            <div className="text-[10px] font-medium text-white/50 mt-1">
               Evidence Items
             </div>
           </div>
