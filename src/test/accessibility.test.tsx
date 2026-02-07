@@ -8,9 +8,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { ClaimsProvider } from '@/context/ClaimsContext';
 import { ThemeProvider } from '@/context/ThemeContext';
-import { UserConditionsProvider } from '@/context/UserConditionsContext';
 import { axe } from 'vitest-axe';
 import React, { Suspense } from 'react';
 
@@ -20,17 +18,13 @@ vi.spyOn(console, 'warn').mockImplementation(() => {});
 
 function TestShell({ children }: { children: React.ReactNode }) {
   return (
-    <ClaimsProvider>
-      <ThemeProvider>
-        <UserConditionsProvider>
-          <MemoryRouter>
-            <Suspense fallback={<div>Loading...</div>}>
-              {children}
-            </Suspense>
-          </MemoryRouter>
-        </UserConditionsProvider>
-      </ThemeProvider>
-    </ClaimsProvider>
+    <ThemeProvider>
+      <MemoryRouter>
+        <Suspense fallback={<div>Loading...</div>}>
+          {children}
+        </Suspense>
+      </MemoryRouter>
+    </ThemeProvider>
   );
 }
 

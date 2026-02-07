@@ -11,9 +11,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
-import { ClaimsProvider } from '@/context/ClaimsContext';
-import { UserConditionsProvider } from '@/context/UserConditionsContext';
-import { EvidenceProvider } from '@/context/EvidenceContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import React, { Suspense } from 'react';
@@ -81,17 +78,11 @@ function TestWrapper({
   return (
     <ThemeProvider>
       <TooltipProvider>
-        <ClaimsProvider>
-          <UserConditionsProvider>
-            <EvidenceProvider>
-              <MemoryRouter initialEntries={initialEntries}>
-                <Suspense fallback={<div>Loading...</div>}>
-                  {children}
-                </Suspense>
-              </MemoryRouter>
-            </EvidenceProvider>
-          </UserConditionsProvider>
-        </ClaimsProvider>
+        <MemoryRouter initialEntries={initialEntries}>
+          <Suspense fallback={<div>Loading...</div>}>
+            {children}
+          </Suspense>
+        </MemoryRouter>
       </TooltipProvider>
     </ThemeProvider>
   );

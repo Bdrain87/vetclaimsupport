@@ -1,170 +1,66 @@
-import { useState, useEffect, useCallback } from 'react';
-import type { ClaimDocument, ClaimDocumentType } from '@/types/claimDocuments';
-import {
-  storeFileData,
-  getFileData,
-  deleteFileData,
-  INDEXEDDB_THRESHOLD,
-  isIndexedDBAvailable,
-} from '@/lib/indexedDB';
+import { useCallback, useEffect, useRef } from 'react';
+import useAppStore from '@/store/useAppStore';
+import type { ClaimDocumentType } from '@/types/claimDocuments';
 
-const STORAGE_KEY = 'va-claim-documents';
-
-const getInitialData = (): ClaimDocument[] => {
-  if (typeof window === 'undefined') return [];
-
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored) {
-    try {
-      return JSON.parse(stored);
-    } catch {
-      console.error('Failed to parse claim documents');
-    }
-  }
-  return [];
-};
-
+/**
+ * Adapter hook — returns the same shape as the old useClaimDocuments.
+ * DocumentsHub.tsx continues to work unchanged.
+ */
 export function useClaimDocuments() {
-  const [documents, setDocuments] = useState<ClaimDocument[]>(getInitialData);
-  const [loadingFiles, setLoadingFiles] = useState<Set<string>>(new Set());
+  const store = useAppStore();
+  const hydratedRef = useRef(false);
 
-  // Persist metadata to localStorage
+  // Hydrate IndexedDB data once on mount
   useEffect(() => {
-    const toStore = documents.map((doc) => {
-      if (doc.storageType === 'indexedDB') {
-        return { ...doc, dataUrl: '' };
-      }
-      return doc;
-    });
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(toStore));
-    } catch {
-      // Storage full or unavailable
+    if (!hydratedRef.current) {
+      hydratedRef.current = true;
+      store._hydrateClaimDocuments();
     }
-  }, [documents]);
-
-  // Load IndexedDB data on mount
-  useEffect(() => {
-    const loadIndexedDBData = async () => {
-      const docsNeedingData = documents.filter(
-        (doc) => doc.storageType === 'indexedDB' && !doc.dataUrl
-      );
-
-      if (docsNeedingData.length === 0) return;
-
-      const ids = new Set(docsNeedingData.map((d) => d.id));
-      setLoadingFiles(ids);
-
-      const updates: Record<string, string> = {};
-
-      for (const doc of docsNeedingData) {
-        const data = await getFileData(doc.id);
-        if (data) {
-          updates[doc.id] = data;
-        }
-      }
-
-      if (Object.keys(updates).length > 0) {
-        setDocuments((prev) =>
-          prev.map((doc) =>
-            updates[doc.id] ? { ...doc, dataUrl: updates[doc.id] } : doc
-          )
-        );
-      }
-
-      setLoadingFiles(new Set());
-    };
-
-    loadIndexedDBData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- Intentionally mount-only: this effect reads `documents` to hydrate IndexedDB data then calls setDocuments; adding `documents` would cause an infinite loop.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Add a new document
-  const addDocument = useCallback(
-    async (doc: Omit<ClaimDocument, 'id' | 'storageType'>) => {
-      const id = crypto.randomUUID();
-      const fileSize = doc.dataUrl.length;
-      const useIndexedDB = isIndexedDBAvailable() && fileSize > INDEXEDDB_THRESHOLD;
-
-      if (useIndexedDB) {
-        await storeFileData(id, doc.dataUrl);
-      }
-
-      const newDoc: ClaimDocument = {
-        ...doc,
-        id,
-        storageType: useIndexedDB ? 'indexedDB' : 'localStorage',
-      };
-
-      setDocuments((prev) => [...prev, newDoc]);
-      return id;
-    },
-    []
-  );
-
-  // Delete a document
-  const deleteDocument = useCallback(
-    async (id: string) => {
-      const doc = documents.find((d) => d.id === id);
-
-      if (doc?.storageType === 'indexedDB') {
-        await deleteFileData(id);
-      }
-
-      setDocuments((prev) => prev.filter((d) => d.id !== id));
-    },
-    [documents]
-  );
-
-  // Get unique conditions from documents
   const getUniqueConditions = useCallback(() => {
-    const conditions = new Set(documents.map((d) => d.condition).filter(Boolean));
+    const conditions = new Set(store.claimDocuments.map((d) => d.condition).filter(Boolean));
     return Array.from(conditions).sort();
-  }, [documents]);
+  }, [store.claimDocuments]);
 
-  // Get documents by condition
   const getDocumentsByCondition = useCallback(
     (condition: string) => {
-      return documents.filter((doc) => doc.condition === condition);
+      return store.claimDocuments.filter((doc) => doc.condition === condition);
     },
-    [documents]
+    [store.claimDocuments],
   );
 
-  // Get documents by type
   const getDocumentsByType = useCallback(
     (docType: ClaimDocumentType) => {
-      return documents.filter((doc) => doc.documentType === docType);
+      return store.claimDocuments.filter((doc) => doc.documentType === docType);
     },
-    [documents]
+    [store.claimDocuments],
   );
 
-  // Search documents
   const searchDocuments = useCallback(
     (query: string) => {
       const lower = query.toLowerCase();
-      return documents.filter(
+      return store.claimDocuments.filter(
         (doc) =>
           doc.condition.toLowerCase().includes(lower) ||
           doc.title?.toLowerCase().includes(lower) ||
           doc.notes?.toLowerCase().includes(lower) ||
-          doc.fileName.toLowerCase().includes(lower)
+          doc.fileName.toLowerCase().includes(lower),
       );
     },
-    [documents]
+    [store.claimDocuments],
   );
 
-  // Check if file is loading
   const isFileLoading = useCallback(
-    (id: string) => {
-      return loadingFiles.has(id);
-    },
-    [loadingFiles]
+    (id: string) => store._claimDocLoading.has(id),
+    [store._claimDocLoading],
   );
 
   return {
-    documents,
-    addDocument,
-    deleteDocument,
+    documents: store.claimDocuments,
+    addDocument: store.addClaimDocument,
+    deleteDocument: store.deleteClaimDocument,
     getUniqueConditions,
     getDocumentsByCondition,
     getDocumentsByType,
