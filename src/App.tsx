@@ -7,6 +7,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { UserConditionsProvider } from './context/UserConditionsContext';
 import { TooltipProvider } from './components/ui/tooltip';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { EvidenceProvider } from './context/EvidenceContext';
 
 // Lazy-loaded route components for code splitting
 const Landing = lazy(() =>
@@ -54,6 +55,7 @@ const NotFound = lazy(() => import('./pages/NotFound'));
 const Onboarding = lazy(() => import('./pages/Onboarding'));
 const FormGuide = lazy(() => import('./pages/FormGuide'));
 const BuildPacket = lazy(() => import('./pages/BuildPacket'));
+const Combination = lazy(() => import('./components/UnifiedRatingCalculator'));
 
 function LoadingFallback() {
   return (
@@ -74,6 +76,7 @@ function App() {
           <UserConditionsProvider>
             <TooltipProvider>
               <BrowserRouter>
+                <EvidenceProvider>
                 <div className="min-h-[100dvh] bg-[#102039] text-white overflow-x-hidden break-words pb-16 sm:pb-0">
                   <Navbar />
                   <Suspense fallback={<LoadingFallback />}>
@@ -125,11 +128,14 @@ function App() {
                       <Route path="/disclaimer" element={<Disclaimer />} />
                       <Route path="/form-guide" element={<FormGuide />} />
                       <Route path="/build-packet" element={<BuildPacket />} />
+                      <Route path="/tools" element={<ClaimTools />} />
+                      <Route path="/calculator" element={<Combination />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </Suspense>
                   <BottomTabBar />
                 </div>
+                </EvidenceProvider>
               </BrowserRouter>
             </TooltipProvider>
           </UserConditionsProvider>

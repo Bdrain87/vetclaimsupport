@@ -353,7 +353,7 @@ export const PlatinumLanding = () => {
             className="text-white/70 text-base sm:text-lg leading-relaxed max-w-[700px] mx-auto space-y-6 mb-10"
           >
             <p>
-              Claim sharks charge $4,000 to $6,000 — or take 5x your monthly back pay — for work you
+              Claim sharks can charge $4,000 to $6,000 — or take 5x your monthly back pay — for work you
               can do yourself. Cookie-cutter nexus letters get denied. "Consultants" with no medical or
               legal credentials tell you what to file. And the VA? They count on you walking into your
               C&amp;P exam with nothing.
@@ -427,8 +427,8 @@ export const PlatinumLanding = () => {
         >
           <ToolCard
             icon={<Crosshair size={28} />}
-            title="MOS Profiler"
-            desc="Your military job already qualifies you for conditions you haven't claimed. We map your MOS to every known service-connected condition."
+            title="Service Job Profiler"
+            desc="Your military service may be connected to conditions you haven't claimed. We map your military job code to every known service-connected condition."
           />
           <ToolCard
             icon={<Shield size={28} />}
@@ -473,7 +473,7 @@ export const PlatinumLanding = () => {
         <div className="max-w-7xl mx-auto">
           <SectionHeader
             gold="Your Daily Evidence Machine"
-            sub="The VA doesn't deny veterans with organized evidence. They deny veterans who walk in empty-handed."
+            sub="Veterans with organized evidence are better prepared. Don't walk into your exam empty-handed."
           />
 
           <motion.div
@@ -641,6 +641,7 @@ export const PlatinumLanding = () => {
                     ? 'bg-white/[0.02] border-white/[0.06]'
                     : 'bg-[#C8A628]/10 border-[#C8A628]/30'
                 }`}
+                style={item.bad ? { boxShadow: '0 0 12px rgba(239, 68, 68, 0.15), 0 0 4px rgba(239, 68, 68, 0.1)' } : undefined}
               >
                 <span className={`text-sm sm:text-base ${item.bad ? 'text-white/70' : 'text-white font-semibold'}`}>{item.text}</span>
                 <span className="ml-4">{item.bad ? <RedX /> : <GreenCheck size={8} />}</span>
@@ -684,8 +685,8 @@ export const PlatinumLanding = () => {
                 I'm a 100% service-connected disabled veteran. I went through the claims process myself —
                 the confusion, the denials, the C&amp;P exams, the sharks who wanted thousands of dollars to
                 do what I could do with the right tools. I built <em className="text-white italic">Vet Claim Support</em>{' '}
-                because no veteran should have to pay a predator to organize what's already theirs. This
-                isn't a corporation. It's a weapon — built by a veteran, for veterans.
+                because no service member or veteran should have to pay a predator to organize what's already theirs. This
+                isn't a corporation. It's a weapon — built by a veteran, for service members and veterans.
               </p>
 
               <p className="text-white/50 font-bold text-sm mt-2">

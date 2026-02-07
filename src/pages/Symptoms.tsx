@@ -317,8 +317,8 @@ export default function Symptoms() {
       {/* Header - Premium Styling */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-success/20 to-success/5 shadow-[0_0_24px_rgba(34,197,94,0.2)]">
-            <Activity className="h-6 w-6 text-success drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-[#C8A628]/20 to-[#C8A628]/5 shadow-[0_0_24px_rgba(200,166,40,0.2)]">
+            <Activity className="h-6 w-6 text-[#C8A628] drop-shadow-[0_0_8px_rgba(200,166,40,0.5)]" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground tracking-tight">Symptoms Journal</h1>
@@ -339,10 +339,10 @@ export default function Symptoms() {
         <div className="grid gap-4 sm:grid-cols-2">
           {/* Severity Trend Chart */}
           <div className="rounded-2xl bg-card border border-border overflow-hidden shadow-lg" style={{ boxShadow: '0 8px 32px rgba(0, 0, 0, 0.25)' }}>
-            <div className="p-4 border-b border-border/50 bg-gradient-to-r from-primary/5 via-transparent to-transparent">
+            <div className="p-4 border-b border-border/50 bg-gradient-to-r from-[#C8A628]/5 via-transparent to-transparent">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5">
-                  <TrendingUp className="h-5 w-5 text-primary" />
+                <div className="p-2 rounded-xl bg-gradient-to-br from-[#C8A628]/20 to-[#C8A628]/5">
+                  <TrendingUp className="h-5 w-5 text-[#C8A628]" />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-foreground">Severity Trend</h3>
@@ -364,13 +364,13 @@ export default function Symptoms() {
                         boxShadow: '0 8px 24px rgba(0,0,0,0.3)'
                       }} 
                     />
-                    <Line 
-                      type="monotone" 
-                      dataKey="avgSeverity" 
-                      stroke="#3b82f6" 
+                    <Line
+                      type="monotone"
+                      dataKey="avgSeverity"
+                      stroke="#C8A628"
                       strokeWidth={3}
-                      dot={{ fill: '#3b82f6', strokeWidth: 0, r: 4 }}
-                      activeDot={{ r: 6, fill: '#3b82f6', stroke: 'hsl(var(--background))', strokeWidth: 2 }}
+                      dot={{ fill: '#C8A628', strokeWidth: 0, r: 4 }}
+                      activeDot={{ r: 6, fill: '#C8A628', stroke: 'hsl(var(--background))', strokeWidth: 2 }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -382,10 +382,10 @@ export default function Symptoms() {
 
           {/* Condition Frequency */}
           <div className="rounded-2xl bg-card border border-border overflow-hidden shadow-lg" style={{ boxShadow: '0 8px 32px rgba(0, 0, 0, 0.25)' }}>
-            <div className="p-4 border-b border-border/50 bg-gradient-to-r from-success/5 via-transparent to-transparent">
+            <div className="p-4 border-b border-border/50 bg-gradient-to-r from-[#C8A628]/5 via-transparent to-transparent">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-gradient-to-br from-success/20 to-success/5">
-                  <BarChart3 className="h-5 w-5 text-success" />
+                <div className="p-2 rounded-xl bg-gradient-to-br from-[#C8A628]/20 to-[#C8A628]/5">
+                  <BarChart3 className="h-5 w-5 text-[#C8A628]" />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-foreground">Entries by Condition</h3>
@@ -411,7 +411,7 @@ export default function Symptoms() {
                         name === 'count' ? 'Frequency' : 'Severity'
                       ]}
                     />
-                    <Bar dataKey="count" fill="#22c55e" radius={[0, 6, 6, 0]} />
+                    <Bar dataKey="count" fill="#C8A628" radius={[0, 6, 6, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               ) : (

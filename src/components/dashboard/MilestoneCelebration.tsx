@@ -108,7 +108,7 @@ export function MilestoneCelebration() {
             particleCount: 100,
             spread: 70,
             origin: { y: 0.6 },
-            colors: ['#10b981', '#22c55e', '#4ade80', '#86efac'],
+            colors: ['#C8A628', '#E8D48B', '#D4B632', '#F0E6A0'],
           });
         }, 200);
         
@@ -125,7 +125,7 @@ export function MilestoneCelebration() {
     <Dialog open={showCelebration} onOpenChange={setShowCelebration}>
       <DialogContent className="sm:max-w-md" aria-describedby="milestone-description">
         <DialogHeader>
-          <DialogTitle className="text-center">🎉 Milestone Achieved!</DialogTitle>
+          <DialogTitle className="text-center flex items-center justify-center gap-2"><Trophy className="h-5 w-5 text-[#C8A628]" /> Milestone Achieved!</DialogTitle>
           <DialogDescription id="milestone-description" className="sr-only">
             Congratulations on achieving a new milestone in your evidence tracking journey
           </DialogDescription>

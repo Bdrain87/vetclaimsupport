@@ -326,8 +326,8 @@ export default function Migraines() {
       {/* Premium Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-purple-500/20 to-purple-500/5 shadow-[0_0_24px_rgba(168,85,247,0.2)]">
-            <Brain className="h-6 w-6 text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]" />
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-[#C8A628]/20 to-[#C8A628]/5 shadow-[0_0_24px_rgba(200,166,40,0.2)]">
+            <Brain className="h-6 w-6 text-[#C8A628] drop-shadow-[0_0_8px_rgba(200,166,40,0.5)]" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground tracking-tight">Migraine Tracker</h1>
@@ -383,7 +383,7 @@ export default function Migraines() {
               </div>
               <div className="relative h-3 bg-muted rounded-full overflow-hidden">
                 <div 
-                  className="absolute h-full bg-gradient-to-r from-orange-500 via-yellow-500 to-green-500 rounded-full transition-all duration-500"
+                  className="absolute h-full bg-gradient-to-r from-[#C8A628]/60 via-[#C8A628] to-[#E8D48B] rounded-full transition-all duration-500"
                   style={{ width: `${Math.min(100, (stats.estimatedRating.rating / 50) * 100)}%` }}
                 />
                 {/* Threshold markers */}
@@ -438,8 +438,8 @@ export default function Migraines() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="section-header mb-0">
-          <div className="section-icon bg-purple-500/10">
-            <Brain className="h-5 w-5 text-purple-500" />
+          <div className="section-icon bg-[#C8A628]/10">
+            <Brain className="h-5 w-5 text-[#C8A628]" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Migraine Tracker</h1>
@@ -863,8 +863,8 @@ export default function Migraines() {
           <Card className="data-card">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-full bg-purple-500/10">
-                  <TrendingUp className="h-6 w-6 text-purple-500" />
+                <div className="p-3 rounded-full bg-[#C8A628]/10">
+                  <TrendingUp className="h-6 w-6 text-[#C8A628]" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.totalLast30Days}</p>
