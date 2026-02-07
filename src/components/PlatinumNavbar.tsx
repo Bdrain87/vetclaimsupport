@@ -39,8 +39,8 @@ function NavLinkItem({ to, children }: { to: string; children: React.ReactNode }
       )}
       <div className="absolute inset-0 rounded-lg bg-white/0 group-hover:bg-white/[0.04] transition-colors duration-200" />
       <span className={cn(
-        'relative text-sm font-medium transition-colors duration-200',
-        isActive ? 'text-white' : 'text-white/50 group-hover:text-white/80'
+        'relative text-sm transition-colors duration-200',
+        isActive ? 'text-[#C8A628] font-semibold' : 'text-white/50 font-medium group-hover:text-white/80'
       )}>
         {children}
       </span>
@@ -87,10 +87,10 @@ export const PlatinumNavbar = () => {
 
   return (
     <>
-      {/* Desktop & Tablet Nav */}
+      {/* Desktop Nav (lg and up) */}
       <nav className={cn(
         isLandingPage ? 'fixed top-0 left-0' : 'relative',
-        'w-full z-[100] hidden sm:block'
+        'w-full z-[100] hidden lg:block'
       )}>
         <div className={cn(
           'transition-all duration-300',
@@ -180,9 +180,9 @@ export const PlatinumNavbar = () => {
       {/* Mobile top bar - minimal, pairs with bottom tab bar */}
       <nav className={cn(
         isLandingPage ? 'fixed top-0 left-0' : 'relative',
-        'w-full z-[100] sm:hidden'
+        'w-full z-[100] lg:hidden'
       )}>
-        <div className="px-3 py-2">
+        <div className="px-3 py-2" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
           <div className="relative">
             <div className="absolute inset-0 bg-[#102039]/70 backdrop-blur-xl border border-white/[0.06] rounded-xl" />
             <div className="relative flex items-center justify-between px-3 h-12">
