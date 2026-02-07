@@ -373,15 +373,7 @@ export const PlatinumLanding = () => {
             {/* Competitor: Claim Shark */}
             <motion.div
               variants={cardVariant}
-              animate={{
-                boxShadow: [
-                  '0 0 15px rgba(239, 68, 68, 0.2), 0 0 30px rgba(239, 68, 68, 0.1)',
-                  '0 0 22px rgba(239, 68, 68, 0.35), 0 0 45px rgba(239, 68, 68, 0.15)',
-                  '0 0 15px rgba(239, 68, 68, 0.2), 0 0 30px rgba(239, 68, 68, 0.1)',
-                ],
-              }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-              className="rounded-2xl p-6 border-2 border-red-500 text-center bg-white/[0.02]"
+              className="rounded-2xl p-6 border text-center bg-white/[0.02] border-white/[0.06] opacity-80"
             >
               <p className="text-white/50 text-sm mb-2">Claim Shark</p>
               <p className="font-bold text-lg text-white mb-3">$4,000–$6,000</p>
@@ -391,15 +383,7 @@ export const PlatinumLanding = () => {
             {/* Competitor: VA Attorney */}
             <motion.div
               variants={cardVariant}
-              animate={{
-                boxShadow: [
-                  '0 0 15px rgba(239, 68, 68, 0.2), 0 0 30px rgba(239, 68, 68, 0.1)',
-                  '0 0 22px rgba(239, 68, 68, 0.35), 0 0 45px rgba(239, 68, 68, 0.15)',
-                  '0 0 15px rgba(239, 68, 68, 0.2), 0 0 30px rgba(239, 68, 68, 0.1)',
-                ],
-              }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-              className="rounded-2xl p-6 border-2 border-red-500 text-center bg-white/[0.02]"
+              className="rounded-2xl p-6 border text-center bg-white/[0.02] border-white/[0.06] opacity-80"
             >
               <p className="text-white/50 text-sm mb-2">VA Attorney</p>
               <p className="font-bold text-lg text-white mb-3">20–33% of your back pay</p>
@@ -432,7 +416,7 @@ export const PlatinumLanding = () => {
 
       {/* ═══════════════ SECTION 5: THE ARSENAL ═══════════════ */}
       <section className="py-10 sm:py-12 md:py-20 px-4 sm:px-6 max-w-7xl mx-auto">
-        <SectionHeader gold="The Arsenal" sub="Every tool you need to understand, build, and support your claim." />
+        <SectionHeader gold="The Arsenal" sub="Every tool you need to understand, build, and win your claim." />
 
         <motion.div
           variants={staggerContainer}
@@ -449,7 +433,7 @@ export const PlatinumLanding = () => {
           <ToolCard
             icon={<Shield size={28} />}
             title="Primary Conditions Builder"
-            desc="Select your conditions. We pull the 38 CFR rating criteria, show you what the VA is scoring, and tell you exactly what evidence you need."
+            desc="Select your conditions. We pull the 38 CFR rating criteria, show you what the VA is scoring, and tell you exactly what evidence you need to win."
           />
           <ToolCard
             icon={<Brain size={28} />}
@@ -469,7 +453,7 @@ export const PlatinumLanding = () => {
           <ToolCard
             icon={<Search size={28} />}
             title="Nexus Discovery"
-            desc="Find the medical and scientific evidence that connects your conditions to your service. The nexus is where claims are strengthened or weakened."
+            desc="Find the medical and scientific evidence that connects your conditions to your service. The nexus is where claims are won or lost."
           />
           <ToolCard
             icon={<FileText size={28} />}
@@ -507,7 +491,7 @@ export const PlatinumLanding = () => {
             <ToolCard
               icon={<Flame size={28} />}
               title="Flare-Up Journal"
-              desc="When it spikes, capture it in real time. Timestamp. Severity. What you couldn't do. This is exactly what C&P examiners ask about — and what service members can never remember."
+              desc="When it spikes, capture it in real time. Timestamp. Severity. What you couldn't do. This is exactly what C&P examiners ask about — and what veterans can never remember."
             />
             <ToolCard
               icon={<Moon size={28} />}
@@ -654,7 +638,7 @@ export const PlatinumLanding = () => {
                 variants={cardVariant}
                 className={`flex items-center justify-between px-5 sm:px-6 py-3 sm:py-4 rounded-xl border ${
                   item.bad
-                    ? 'bg-white/[0.02] border-red-500/60'
+                    ? 'bg-white/[0.02] border-white/[0.06]'
                     : 'bg-[#C8A628]/10 border-[#C8A628]/30'
                 }`}
                 style={item.bad ? { boxShadow: '0 0 12px rgba(239, 68, 68, 0.15), 0 0 4px rgba(239, 68, 68, 0.1)' } : undefined}
@@ -706,7 +690,7 @@ export const PlatinumLanding = () => {
               </p>
 
               <p className="text-white/50 font-bold text-sm mt-2">
-                — Blake — Vet Claim Support
+                — A 100% Service-Connected Disabled Veteran
               </p>
             </div>
           </motion.div>
