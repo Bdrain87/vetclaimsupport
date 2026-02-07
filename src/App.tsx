@@ -1,5 +1,6 @@
-import React, { Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React, { Suspense, lazy, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Navbar } from './components/layout/Navbar';
 import { BottomTabBar } from './components/BottomTabBar';
 import { ClaimsProvider } from './context/ClaimsContext';
@@ -8,6 +9,7 @@ import { UserConditionsProvider } from './context/UserConditionsContext';
 import { TooltipProvider } from './components/ui/tooltip';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { EvidenceProvider } from './context/EvidenceContext';
+import { useProfileStore } from './store/useProfileStore';
 
 // Lazy-loaded route components for code splitting
 const Landing = lazy(() =>
@@ -60,11 +62,139 @@ const Combination = lazy(() => import('./components/UnifiedRatingCalculator'));
 function LoadingFallback() {
   return (
     <div className="min-h-[100dvh] flex items-center justify-center bg-[#102039]">
-      <div className="flex flex-col items-center gap-4">
-        <div className="h-10 w-10 border-2 border-[#C8A628] border-t-transparent rounded-full animate-spin" />
-        <p className="text-white/60 text-base font-medium">Loading...</p>
-      </div>
+      <motion.div
+        className="flex flex-col items-center gap-6"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+      >
+        {/* Gold V Logo */}
+        <div className="relative">
+          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#C8A628] to-[#B8960F] flex items-center justify-center shadow-lg shadow-[#C8A628]/20">
+            <span className="text-[#102039] text-4xl font-bold">V</span>
+          </div>
+          {/* Subtle pulse ring */}
+          <motion.div
+            className="absolute inset-0 rounded-2xl border-2 border-[#C8A628]/30"
+            animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0, 0.5] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        </div>
+
+        {/* Brand text */}
+        <div className="text-center">
+          <h1 className="text-white text-lg font-semibold tracking-wide">VCS</h1>
+          <p className="text-white/40 text-xs mt-1">Claim Preparation Tools</p>
+        </div>
+
+        {/* Loading bar */}
+        <div className="w-32 h-0.5 bg-white/10 rounded-full overflow-hidden">
+          <motion.div
+            className="h-full bg-[#C8A628] rounded-full"
+            animate={{ x: ['-100%', '100%'] }}
+            transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        </div>
+      </motion.div>
     </div>
+  );
+}
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
+function useFirstTimeRedirect() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const hasOnboarded = useProfileStore((s) => s.hasCompletedOnboarding);
+
+  useEffect(() => {
+    const isOnboardingPage = location.pathname === '/onboarding';
+    const isLandingPage = location.pathname === '/';
+    const isLegalPage = ['/terms', '/privacy', '/disclaimer'].includes(location.pathname);
+
+    if (!hasOnboarded && !isOnboardingPage && !isLandingPage && !isLegalPage) {
+      navigate('/onboarding', { replace: true });
+    }
+  }, [location.pathname, navigate, hasOnboarded]);
+}
+
+function AnimatedRoutes() {
+  const location = useLocation();
+
+  useFirstTimeRedirect();
+
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={location.pathname}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.15 }}
+      >
+        <Suspense fallback={<LoadingFallback />}>
+          <Routes location={location}>
+            {/* Landing — hero goes behind fixed navbar */}
+            <Route path="/" element={<Landing />} />
+
+            {/* Onboarding — no navbar needed, fullscreen */}
+            <Route path="/onboarding" element={<Onboarding />} />
+
+            {/* All inner pages — navbar is relative, no padding needed */}
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/conditions" element={<Conditions />} />
+            <Route path="/conditions/:id" element={<ConditionDetail />} />
+            <Route path="/condition-guide" element={<ConditionGuide />} />
+            <Route path="/conditions-by-conflict" element={<ConditionsByConflict />} />
+            <Route path="/secondary-finder" element={<SecondaryFinder />} />
+            <Route path="/bilateral-calculator" element={<BilateralCalculator />} />
+            <Route path="/claim-checklist" element={<ClaimChecklist />} />
+            <Route path="/claim-journey" element={<ClaimJourney />} />
+            <Route path="/claim-strategy" element={<ClaimStrategyWizard />} />
+            <Route path="/claim-tools" element={<ClaimTools />} />
+            <Route path="/timeline" element={<Timeline />} />
+            <Route path="/health-log" element={<HealthLog />} />
+            <Route path="/symptoms" element={<Symptoms />} />
+            <Route path="/sleep" element={<Sleep />} />
+            <Route path="/medications" element={<Medications />} />
+            <Route path="/migraines" element={<Migraines />} />
+            <Route path="/medical-visits" element={<MedicalVisits />} />
+            <Route path="/exposures" element={<Exposures />} />
+            <Route path="/buddy-statements" element={<BuddyStatements />} />
+            <Route path="/nexus-letter" element={<NexusLetterGenerator />} />
+            <Route path="/documents" element={<DocumentsHub />} />
+            <Route path="/exam-prep" element={<ExamPrep />} />
+            <Route path="/cp-exam-prep" element={<CPExamPrepEnhanced />} />
+            <Route path="/dbq-prep" element={<DBQPrepSheet />} />
+            <Route path="/va-forms" element={<VAForms />} />
+            <Route path="/va-resources" element={<VAResources />} />
+            <Route path="/service-history" element={<ServiceHistory />} />
+            <Route path="/reference" element={<Reference />} />
+            <Route path="/glossary" element={<Glossary />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/help" element={<HelpCenter />} />
+            <Route path="/user-guide" element={<UserGuide />} />
+            <Route path="/app-preview" element={<AppStorePreview />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/disclaimer" element={<Disclaimer />} />
+            <Route path="/form-guide" element={<FormGuide />} />
+            <Route path="/build-packet" element={<BuildPacket />} />
+            <Route path="/tools" element={<ClaimTools />} />
+            <Route path="/calculator" element={<Combination />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </motion.div>
+    </AnimatePresence>
   );
 }
 
@@ -77,62 +207,10 @@ function App() {
             <TooltipProvider>
               <BrowserRouter>
                 <EvidenceProvider>
-                <div className="min-h-[100dvh] bg-[#102039] text-white overflow-x-hidden break-words pb-16 sm:pb-0">
+                <ScrollToTop />
+                <div className="min-h-[100dvh] bg-[#102039] text-white overflow-x-hidden break-words pb-20 lg:pb-0">
                   <Navbar />
-                  <Suspense fallback={<LoadingFallback />}>
-                    <Routes>
-                      {/* Landing — hero goes behind fixed navbar */}
-                      <Route path="/" element={<Landing />} />
-
-                      {/* Onboarding — no navbar needed, fullscreen */}
-                      <Route path="/onboarding" element={<Onboarding />} />
-
-                      {/* All inner pages — navbar is relative, no padding needed */}
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/conditions" element={<Conditions />} />
-                      <Route path="/conditions/:id" element={<ConditionDetail />} />
-                      <Route path="/condition-guide" element={<ConditionGuide />} />
-                      <Route path="/conditions-by-conflict" element={<ConditionsByConflict />} />
-                      <Route path="/secondary-finder" element={<SecondaryFinder />} />
-                      <Route path="/bilateral-calculator" element={<BilateralCalculator />} />
-                      <Route path="/claim-checklist" element={<ClaimChecklist />} />
-                      <Route path="/claim-journey" element={<ClaimJourney />} />
-                      <Route path="/claim-strategy" element={<ClaimStrategyWizard />} />
-                      <Route path="/claim-tools" element={<ClaimTools />} />
-                      <Route path="/timeline" element={<Timeline />} />
-                      <Route path="/health-log" element={<HealthLog />} />
-                      <Route path="/symptoms" element={<Symptoms />} />
-                      <Route path="/sleep" element={<Sleep />} />
-                      <Route path="/medications" element={<Medications />} />
-                      <Route path="/migraines" element={<Migraines />} />
-                      <Route path="/medical-visits" element={<MedicalVisits />} />
-                      <Route path="/exposures" element={<Exposures />} />
-                      <Route path="/buddy-statements" element={<BuddyStatements />} />
-                      <Route path="/nexus-letter" element={<NexusLetterGenerator />} />
-                      <Route path="/documents" element={<DocumentsHub />} />
-                      <Route path="/exam-prep" element={<ExamPrep />} />
-                      <Route path="/cp-exam-prep" element={<CPExamPrepEnhanced />} />
-                      <Route path="/dbq-prep" element={<DBQPrepSheet />} />
-                      <Route path="/va-forms" element={<VAForms />} />
-                      <Route path="/va-resources" element={<VAResources />} />
-                      <Route path="/service-history" element={<ServiceHistory />} />
-                      <Route path="/reference" element={<Reference />} />
-                      <Route path="/glossary" element={<Glossary />} />
-                      <Route path="/settings" element={<Settings />} />
-                      <Route path="/faq" element={<FAQ />} />
-                      <Route path="/help" element={<HelpCenter />} />
-                      <Route path="/user-guide" element={<UserGuide />} />
-                      <Route path="/app-preview" element={<AppStorePreview />} />
-                      <Route path="/terms" element={<Terms />} />
-                      <Route path="/privacy" element={<Privacy />} />
-                      <Route path="/disclaimer" element={<Disclaimer />} />
-                      <Route path="/form-guide" element={<FormGuide />} />
-                      <Route path="/build-packet" element={<BuildPacket />} />
-                      <Route path="/tools" element={<ClaimTools />} />
-                      <Route path="/calculator" element={<Combination />} />
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </Suspense>
+                  <AnimatedRoutes />
                   <BottomTabBar />
                 </div>
                 </EvidenceProvider>

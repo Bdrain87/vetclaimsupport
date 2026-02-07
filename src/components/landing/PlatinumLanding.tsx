@@ -132,7 +132,7 @@ function GoldIconCircle({ children }: { children: React.ReactNode }) {
 /* ─── Apple App Store badge (standard black/white) ─── */
 function AppStoreBadge() {
   return (
-    <Link to="/dashboard" className="inline-flex items-center gap-2.5 bg-black border border-white/20 rounded-xl px-5 py-2.5 hover:bg-white/10 transition-colors min-h-[48px]">
+    <Link to="/dashboard" data-store-url="https://apps.apple.com/app/vet-claim-support/PLACEHOLDER" className="inline-flex items-center gap-2.5 bg-black border border-white/20 rounded-xl px-5 py-2.5 hover:bg-white/10 transition-colors min-h-[48px]">
       <svg viewBox="0 0 384 512" width="20" height="24" fill="white" aria-hidden="true">
         <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
       </svg>
@@ -147,7 +147,7 @@ function AppStoreBadge() {
 /* ─── Google Play badge (standard black/white) ─── */
 function GooglePlayBadge() {
   return (
-    <Link to="/dashboard" className="inline-flex items-center gap-2.5 bg-black border border-white/20 rounded-xl px-5 py-2.5 hover:bg-white/10 transition-colors min-h-[48px]">
+    <Link to="/dashboard" data-store-url="https://play.google.com/store/apps/details?id=com.vetclaimsupport.app" className="inline-flex items-center gap-2.5 bg-black border border-white/20 rounded-xl px-5 py-2.5 hover:bg-white/10 transition-colors min-h-[48px]">
       <svg viewBox="0 0 512 512" width="22" height="24" fill="none" aria-hidden="true">
         <path d="M48 59.5v393a28.1 28.1 0 0 0 16.4 25.6l225.7-225.5L64.4 27.1A28.6 28.6 0 0 0 48 59.5z" fill="#4285F4"/>
         <path d="M290.1 252.6l62.8-62.8L99.6 57.4a28 28 0 0 0-35.2-30.3l225.7 225.5z" fill="#34A853"/>
@@ -171,6 +171,13 @@ export const PlatinumLanding = () => {
 
   return (
     <div className="min-h-[100dvh] bg-[#102039] selection:bg-[#C8A628]/30 overflow-x-hidden max-w-full">
+      {/* Red glow animation for competitor pricing cards */}
+      <style>{`
+        @keyframes redGlow {
+          0%, 100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.6), 0 0 40px rgba(239, 68, 68, 0.3); }
+          50% { box-shadow: 0 0 30px rgba(239, 68, 68, 0.8), 0 0 50px rgba(239, 68, 68, 0.4); }
+        }
+      `}</style>
 
       {/* ═══════════════ SECTION 1: HERO ═══════════════ */}
       <section className="relative flex flex-col items-center justify-center text-center px-4 sm:px-6 overflow-hidden pt-24 pb-12 sm:pt-32 sm:pb-16 sm:min-h-[100dvh]">
@@ -373,7 +380,12 @@ export const PlatinumLanding = () => {
             {/* Competitor: Claim Shark */}
             <motion.div
               variants={cardVariant}
-              className="rounded-2xl p-6 border text-center bg-white/[0.02] border-white/[0.06] opacity-80"
+              className="rounded-2xl p-6 text-center bg-white/[0.02]"
+              style={{
+                border: '2px solid #ef4444',
+                animation: 'redGlow 2s ease-in-out infinite',
+                borderRadius: '16px',
+              }}
             >
               <p className="text-white/50 text-sm mb-2">Claim Shark</p>
               <p className="font-bold text-lg text-white mb-3">$4,000–$6,000</p>
@@ -383,7 +395,12 @@ export const PlatinumLanding = () => {
             {/* Competitor: VA Attorney */}
             <motion.div
               variants={cardVariant}
-              className="rounded-2xl p-6 border text-center bg-white/[0.02] border-white/[0.06] opacity-80"
+              className="rounded-2xl p-6 text-center bg-white/[0.02]"
+              style={{
+                border: '2px solid #ef4444',
+                animation: 'redGlow 2s ease-in-out infinite',
+                borderRadius: '16px',
+              }}
             >
               <p className="text-white/50 text-sm mb-2">VA Attorney</p>
               <p className="font-bold text-lg text-white mb-3">20–33% of your back pay</p>
@@ -416,7 +433,7 @@ export const PlatinumLanding = () => {
 
       {/* ═══════════════ SECTION 5: THE ARSENAL ═══════════════ */}
       <section className="py-10 sm:py-12 md:py-20 px-4 sm:px-6 max-w-7xl mx-auto">
-        <SectionHeader gold="The Arsenal" sub="Every tool you need to understand, build, and win your claim." />
+        <SectionHeader gold="The Arsenal" sub="Every tool you need to understand, build, and support your claim." />
 
         <motion.div
           variants={staggerContainer}
@@ -428,12 +445,12 @@ export const PlatinumLanding = () => {
           <ToolCard
             icon={<Crosshair size={28} />}
             title="Service Job Profiler"
-            desc="Your military service may be connected to conditions you haven't claimed. We map your military job code to every known service-connected condition."
+            desc="Your military service may be connected to conditions you haven't considered. We map your military job code to every known service-connected condition."
           />
           <ToolCard
             icon={<Shield size={28} />}
             title="Primary Conditions Builder"
-            desc="Select your conditions. We pull the 38 CFR rating criteria, show you what the VA is scoring, and tell you exactly what evidence you need to win."
+            desc="Select your conditions. We pull the 38 CFR rating criteria, show you what the VA is scoring, and tell you exactly what evidence you need."
           />
           <ToolCard
             icon={<Brain size={28} />}
@@ -621,34 +638,6 @@ export const PlatinumLanding = () => {
             </p>
           </motion.div>
 
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            className="space-y-3 sm:space-y-4 max-w-md mx-auto mb-10 sm:mb-12"
-          >
-            {[
-              { text: 'Claim shark: $4,000–$6,000', bad: true },
-              { text: 'VA attorney: 20–33% of your back pay', bad: true },
-              { text: 'Vet Claim Support: $4.99 Launch Price', bad: false },
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                variants={cardVariant}
-                className={`flex items-center justify-between px-5 sm:px-6 py-3 sm:py-4 rounded-xl border ${
-                  item.bad
-                    ? 'bg-white/[0.02] border-white/[0.06]'
-                    : 'bg-[#C8A628]/10 border-[#C8A628]/30'
-                }`}
-                style={item.bad ? { boxShadow: '0 0 12px rgba(239, 68, 68, 0.15), 0 0 4px rgba(239, 68, 68, 0.1)' } : undefined}
-              >
-                <span className={`text-sm sm:text-base ${item.bad ? 'text-white/70' : 'text-white font-semibold'}`}>{item.text}</span>
-                <span className="ml-4">{item.bad ? <RedX /> : <GreenCheck size={8} />}</span>
-              </motion.div>
-            ))}
-          </motion.div>
-
           <motion.p
             variants={fadeUp}
             initial="hidden"
@@ -690,7 +679,7 @@ export const PlatinumLanding = () => {
               </p>
 
               <p className="text-white/50 font-bold text-sm mt-2">
-                — A 100% Service-Connected Disabled Veteran
+                — Blake, Vet Claim Support
               </p>
             </div>
           </motion.div>

@@ -10,7 +10,8 @@ import { useToast } from '@/hooks/use-toast';
 import { ShareWithVSO } from '@/components/dashboard/ShareWithVSO';
 import { ExportButton } from '@/components/dashboard/ExportButton';
 import { DataBackup } from '@/components/settings/DataBackup';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useProfileStore } from '@/store/useProfileStore';
 
 const REMINDER_SETTINGS_KEY = 'va-claims-reminder-settings';
 
@@ -38,6 +39,8 @@ const getInitialReminderSettings = (): ReminderSettings => {
 export default function Settings() {
   const { theme, toggleTheme } = useTheme();
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const resetProfile = useProfileStore((s) => s.resetProfile);
   const [reminderSettings, setReminderSettings] = useState<ReminderSettings>(getInitialReminderSettings);
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default');
 
@@ -365,6 +368,19 @@ export default function Settings() {
           </p>
         </CardContent>
       </Card>
+
+      {/* Reset Onboarding */}
+      <div className="flex justify-center pt-2 pb-4">
+        <button
+          onClick={() => {
+            resetProfile();
+            navigate('/onboarding');
+          }}
+          className="text-white/60 hover:text-white text-sm underline"
+        >
+          Reset Onboarding
+        </button>
+      </div>
 
     </div>
   );
