@@ -57,6 +57,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
-| Version | Date | Description |
-|---------|------|-------------|
-| 1.0.0 | 2026-02-03 | Initial release |
+| Version | Date       | Description           |
+|---------|------------|-----------------------|
+| 1.0.0   | 2026-02-03 | Initial release       |
