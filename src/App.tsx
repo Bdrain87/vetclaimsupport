@@ -3,13 +3,14 @@ import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-ro
 import { motion, AnimatePresence } from 'framer-motion';
 import { Navbar } from './components/layout/Navbar';
 import { BottomTabBar } from './components/BottomTabBar';
-import { ClaimsProvider } from './context/ClaimsContext';
 import { ThemeProvider } from './context/ThemeContext';
-import { UserConditionsProvider } from './context/UserConditionsContext';
 import { TooltipProvider } from './components/ui/tooltip';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { EvidenceProvider } from './context/EvidenceContext';
 import { useProfileStore } from './store/useProfileStore';
+import { migrateOldDataToAppStore } from './utils/migrateData';
+
+// Run migration before React renders (synchronous, runs once)
+migrateOldDataToAppStore();
 
 // Lazy-loaded route components for code splitting
 const Landing = lazy(() =>
@@ -202,22 +203,16 @@ function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider>
-        <ClaimsProvider>
-          <UserConditionsProvider>
-            <TooltipProvider>
-              <BrowserRouter>
-                <EvidenceProvider>
-                <ScrollToTop />
-                <div className="min-h-[100dvh] bg-[#102039] text-white overflow-x-hidden break-words pb-20 lg:pb-0">
-                  <Navbar />
-                  <AnimatedRoutes />
-                  <BottomTabBar />
-                </div>
-                </EvidenceProvider>
-              </BrowserRouter>
-            </TooltipProvider>
-          </UserConditionsProvider>
-        </ClaimsProvider>
+        <TooltipProvider>
+          <BrowserRouter>
+            <ScrollToTop />
+            <div className="min-h-[100dvh] bg-[#102039] text-white overflow-x-hidden break-words pb-20 lg:pb-0">
+              <Navbar />
+              <AnimatedRoutes />
+              <BottomTabBar />
+            </div>
+          </BrowserRouter>
+        </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );

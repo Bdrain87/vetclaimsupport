@@ -14,7 +14,7 @@ import type { VAForm } from '@/data/vaRequiredForms';
 import { militaryJobCodes } from '@/data/militaryMOS';
 import type { MilitaryJobCode } from '@/data/militaryMOS';
 import type { ClaimsData, ClaimCondition } from '@/types/claims';
-import type { UserCondition } from '@/context/user-conditions-context';
+import type { UserCondition } from '@/store/useAppStore';
 import type { UserProfile, Branch } from '@/store/useProfileStore';
 
 // ---------------------------------------------------------------------------
