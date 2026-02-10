@@ -84,6 +84,9 @@ interface AppState {
   journeyProgress: JourneyProgress;
   dutyStations: DutyStation[];
 
+  // --- Form Guide Drafts ---
+  formDrafts: Record<string, Record<string, string> & { lastModified: string }>;
+
   // --- User Conditions (from UserConditionsContext) ---
   userConditions: UserCondition[];
 
@@ -199,6 +202,13 @@ interface AppState {
   addDutyStation: (station: Omit<DutyStation, 'id'>) => void;
   removeDutyStation: (id: string) => void;
 
+  // Form Guide Drafts
+  setFormDraft: (formId: string, fieldId: string, value: string) => void;
+  clearFormDraft: (formId: string) => void;
+
+  // Dashboard Quick Log (convenience)
+  addDashboardQuickLog: (pain: number, mood: 'good' | 'okay' | 'bad') => void;
+
   // ========== USER CONDITIONS METHODS ==========
 
   addUserCondition: (condition: UserCondition) => void;
@@ -258,6 +268,9 @@ const initialState = {
   approvedConditions: [] as ApprovedCondition[],
   journeyProgress: { currentPhase: 0, completedChecklist: {} } as JourneyProgress,
   dutyStations: [] as DutyStation[],
+
+  // Form Guide Drafts
+  formDrafts: {} as Record<string, Record<string, string> & { lastModified: string }>,
 
   // User conditions
   userConditions: [] as UserCondition[],
@@ -490,6 +503,36 @@ const useAppStore = create<AppState>()(
         dutyStations: (s.dutyStations || []).filter((d) => d.id !== id),
       })),
 
+      // Form Guide Drafts
+      setFormDraft: (formId, fieldId, value) => set((s) => ({
+        formDrafts: {
+          ...s.formDrafts,
+          [formId]: {
+            ...(s.formDrafts[formId] || {}),
+            [fieldId]: value,
+            lastModified: new Date().toISOString(),
+          },
+        },
+      })),
+      clearFormDraft: (formId) => set((s) => {
+        const { [formId]: _, ...rest } = s.formDrafts;
+        return { formDrafts: rest };
+      }),
+
+      // Dashboard Quick Log (convenience)
+      addDashboardQuickLog: (pain, mood) => set((s) => ({
+        quickLogs: [...(s.quickLogs || []), {
+          id: generateId(),
+          date: new Date().toISOString(),
+          overallFeeling: pain,
+          hadFlareUp: false,
+          flareUpNote: '',
+          painLevel: pain,
+          mood,
+          createdAt: new Date().toISOString(),
+        }],
+      })),
+
       // ========== USER CONDITIONS METHODS ==========
 
       addUserCondition: (condition) => set((s) => ({
@@ -705,7 +748,14 @@ const useAppStore = create<AppState>()(
     }),
     {
       name: 'vcs-app-data',
-      version: 1,
+      version: 2,
+      migrate: (persistedState: unknown, version: number) => {
+        const state = persistedState as Record<string, unknown>;
+        if (version < 2) {
+          return { ...state, formDrafts: {} };
+        }
+        return state;
+      },
       partialize: (state) => {
         // Strip non-serializable fields and large dataUrl from IndexedDB docs
         const { _evidenceLoading, _claimDocLoading, ...rest } = state;

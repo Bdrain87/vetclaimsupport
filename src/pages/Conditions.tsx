@@ -208,7 +208,7 @@ export default function Conditions() {
 
   // Handle view/edit condition
   const handleViewCondition = (conditionId: string) => {
-    navigate(`/conditions/${conditionId}`);
+    navigate(`/claims/${conditionId}`);
   };
 
   // Handle remove condition

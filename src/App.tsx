@@ -41,6 +41,7 @@ const HelpCenter = lazy(() => import('./pages/HelpCenter'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const Onboarding = lazy(() => import('./pages/Onboarding'));
 const FormGuide = lazy(() => import('./pages/FormGuide'));
+const FormGuideDetail = lazy(() => import('./pages/FormGuideDetail'));
 const BuildPacket = lazy(() => import('./pages/BuildPacket'));
 const Combination = lazy(() => import('./components/UnifiedRatingCalculator'));
 const ClaimJourney = lazy(() => import('./pages/ClaimJourney'));
@@ -168,6 +169,7 @@ function AnimatedRoutes() {
             <Route path="/prep/nexus-letter" element={<NexusLetterGenerator />} />
             <Route path="/prep/stressor" element={<PlaceholderPage title="Stressor Statement — Coming in Phase 6" />} />
             <Route path="/prep/form-guide" element={<FormGuide />} />
+            <Route path="/prep/form-guide/:formId" element={<FormGuideDetail />} />
             <Route path="/prep/dbq" element={<DBQPrepSheet />} />
             <Route path="/prep/va-speak" element={<PlaceholderPage title="VA-Speak Translator — Coming in Phase 6" />} />
             <Route path="/prep/back-pay" element={<PlaceholderPage title="Back Pay Estimator — Coming in Phase 6" />} />
@@ -196,6 +198,7 @@ function AnimatedRoutes() {
             {/* === REDIRECTS FROM OLD ROUTES === */}
             <Route path="/dashboard" element={<Navigate to="/" replace />} />
             <Route path="/conditions" element={<Navigate to="/claims" replace />} />
+            <Route path="/conditions/:id" element={<Navigate to="/claims" replace />} />
             <Route path="/calculator" element={<Navigate to="/claims/calculator" replace />} />
             <Route path="/secondary-finder" element={<Navigate to="/claims/secondary-finder" replace />} />
             <Route path="/nexus-letter" element={<Navigate to="/prep/nexus-letter" replace />} />
