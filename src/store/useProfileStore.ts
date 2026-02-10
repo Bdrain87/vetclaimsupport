@@ -33,6 +33,9 @@ export interface UserProfile {
   intentToFileFiled?: boolean;
   intentToFileDate?: string;
   separationDate?: string;
+  entitlement: 'preview' | 'lifetime';
+  vaultPasscodeSet: boolean;
+  lastSyncedAt: string | null;
 }
 
 interface ProfileState extends UserProfile {
@@ -44,6 +47,9 @@ interface ProfileState extends UserProfile {
   setClaimType: (type: 'initial' | 'increase' | 'supplemental') => void;
   setIntentToFile: (filed: boolean, date?: string) => void;
   setSeparationDate: (date: string) => void;
+  setEntitlement: (entitlement: 'preview' | 'lifetime') => void;
+  setVaultPasscodeSet: (set: boolean) => void;
+  setLastSyncedAt: (date: string | null) => void;
   completeOnboarding: () => void;
   resetProfile: () => void;
 }
@@ -62,6 +68,9 @@ export const useProfileStore = create<ProfileState>()(
       intentToFileFiled: undefined,
       intentToFileDate: undefined,
       separationDate: undefined,
+      entitlement: 'preview',
+      vaultPasscodeSet: false,
+      lastSyncedAt: null,
 
       setFirstName: (name) => set({ firstName: name }),
       setLastName: (name) => set({ lastName: name }),
@@ -71,6 +80,9 @@ export const useProfileStore = create<ProfileState>()(
       setClaimType: (type) => set({ claimType: type }),
       setIntentToFile: (filed, date) => set({ intentToFileFiled: filed, intentToFileDate: date }),
       setSeparationDate: (date) => set({ separationDate: date }),
+      setEntitlement: (entitlement) => set({ entitlement }),
+      setVaultPasscodeSet: (val) => set({ vaultPasscodeSet: val }),
+      setLastSyncedAt: (date) => set({ lastSyncedAt: date }),
       completeOnboarding: () => set({ hasCompletedOnboarding: true }),
       resetProfile: () => set({
         firstName: '',
@@ -84,11 +96,14 @@ export const useProfileStore = create<ProfileState>()(
         intentToFileFiled: undefined,
         intentToFileDate: undefined,
         separationDate: undefined,
+        entitlement: 'preview',
+        vaultPasscodeSet: false,
+        lastSyncedAt: null,
       }),
     }),
     {
       name: 'vet-user-profile',
-      version: 2,
+      version: 3,
       migrate: (persistedState: unknown, version: number) => {
         const state = persistedState as Record<string, unknown>;
         if (version < 2) {
@@ -99,6 +114,17 @@ export const useProfileStore = create<ProfileState>()(
             intentToFileFiled: state.intentToFileFiled || undefined,
             intentToFileDate: state.intentToFileDate || undefined,
             separationDate: state.separationDate || undefined,
+            entitlement: 'preview',
+            vaultPasscodeSet: false,
+            lastSyncedAt: null,
+          };
+        }
+        if (version < 3) {
+          return {
+            ...state,
+            entitlement: state.entitlement || 'preview',
+            vaultPasscodeSet: state.vaultPasscodeSet ?? false,
+            lastSyncedAt: state.lastSyncedAt ?? null,
           };
         }
         return state as ProfileState;

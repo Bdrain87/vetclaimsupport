@@ -60,6 +60,13 @@ const FormGuide = lazy(() => import('./pages/FormGuide'));
 const BuildPacket = lazy(() => import('./pages/BuildPacket'));
 const Combination = lazy(() => import('./components/UnifiedRatingCalculator'));
 
+// Account & Legal pages
+const DeleteAccountPage = lazy(() => import('./pages/account/DeleteAccountPage'));
+const ExportDataPage = lazy(() => import('./pages/account/ExportDataPage'));
+const PrivacyPolicyPage = lazy(() => import('./pages/legal/PrivacyPolicyPage'));
+const TermsOfServicePage = lazy(() => import('./pages/legal/TermsOfServicePage'));
+const DisclaimerPage = lazy(() => import('./pages/legal/DisclaimerPage'));
+
 function LoadingFallback() {
   return (
     <div className="min-h-[100dvh] flex items-center justify-center bg-[#102039]">
@@ -119,7 +126,7 @@ function useFirstTimeRedirect() {
   useEffect(() => {
     const isOnboardingPage = location.pathname === '/onboarding';
     const isLandingPage = location.pathname === '/';
-    const isLegalPage = ['/terms', '/privacy', '/disclaimer'].includes(location.pathname);
+    const isLegalPage = ['/terms', '/privacy', '/disclaimer', '/profile/privacy', '/profile/terms', '/profile/disclaimer'].includes(location.pathname);
 
     if (!hasOnboarded && !isOnboardingPage && !isLandingPage && !isLegalPage) {
       navigate('/onboarding', { replace: true });
@@ -191,6 +198,16 @@ function AnimatedRoutes() {
             <Route path="/build-packet" element={<BuildPacket />} />
             <Route path="/tools" element={<ClaimTools />} />
             <Route path="/calculator" element={<Combination />} />
+
+            {/* Account management routes */}
+            <Route path="/profile/delete-account" element={<DeleteAccountPage />} />
+            <Route path="/profile/export-data" element={<ExportDataPage />} />
+
+            {/* Legal routes (profile-prefixed) */}
+            <Route path="/profile/privacy" element={<PrivacyPolicyPage />} />
+            <Route path="/profile/terms" element={<TermsOfServicePage />} />
+            <Route path="/profile/disclaimer" element={<DisclaimerPage />} />
+
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

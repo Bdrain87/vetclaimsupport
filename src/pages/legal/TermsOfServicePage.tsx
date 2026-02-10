@@ -1,0 +1,127 @@
+import { FileText, ChevronLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
+export default function TermsOfServicePage() {
+  const navigate = useNavigate();
+
+  return (
+    <div className="max-w-3xl mx-auto space-y-6 animate-fade-in px-4 py-8">
+      {/* Back button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="flex items-center gap-1 text-white/50 hover:text-white text-sm transition-colors"
+      >
+        <ChevronLeft className="h-4 w-4" />
+        Back
+      </button>
+
+      {/* Header */}
+      <div className="flex items-start gap-4">
+        <div className="p-3 rounded-xl bg-[#C8A628]/10 shrink-0">
+          <FileText className="h-6 w-6 text-[#C8A628]" />
+        </div>
+        <div>
+          <h1 className="text-2xl font-bold text-white">Terms of Service</h1>
+          <p className="text-white/40 text-sm mt-1">Vet Claim Support &mdash; Effective February 2026</p>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="space-y-8 text-sm leading-relaxed">
+
+        {/* Service Description */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-white">1. Service Description</h2>
+          <p className="text-white/60">
+            Vet Claim Support ("the Service") is an organizational tool designed to help veterans prepare and organize information related to VA disability claims. The Service provides educational resources, evidence organization features, health logging tools, rating calculators, and VA form drafting assistance.
+          </p>
+        </section>
+
+        {/* Lifetime Access */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-white">2. Lifetime Access</h2>
+          <p className="text-white/60">
+            "Lifetime" access means access for the lifetime of the app as offered, not the user&apos;s lifetime. This means that access continues for as long as Vet Claim Support continues to operate and provide the Service. If the Service is discontinued, we will provide reasonable notice and data export options.
+          </p>
+        </section>
+
+        {/* VA Form Guide */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-white">3. VA Form Guide</h2>
+          <p className="text-white/60">
+            The VA Form Guide provides educational explanations of VA form fields and drafting assistance based on information you enter. It does not provide legal representation, does not submit forms to the VA, and does not communicate with the VA on your behalf. All form drafts are for your review and reference only. You are solely responsible for any forms you submit to the VA.
+          </p>
+        </section>
+
+        {/* No Professional Advice */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-white">4. No Professional Advice</h2>
+          <div className="rounded-xl bg-amber-500/5 border border-amber-500/20 p-4">
+            <p className="text-white/70">
+              <strong className="text-white">The Service, including the VA Form Guide and any AI-generated draft text, is not legal advice, medical advice, or an accredited representative service.</strong> We are not attorneys, medical professionals, or VA-accredited claims agents. Using the Service does not create any professional-client relationship.
+            </p>
+          </div>
+        </section>
+
+        {/* User Responsibilities */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-white">5. User Responsibilities</h2>
+          <p className="text-white/60">
+            <strong className="text-white">You are responsible for the accuracy of all information you enter and submit to any government agency.</strong> By using the Service, you agree to:
+          </p>
+          <ul className="space-y-1.5 text-white/60">
+            <li className="flex items-start gap-2"><span className="text-[#C8A628] mt-0.5">&#x2022;</span>Provide truthful and accurate information</li>
+            <li className="flex items-start gap-2"><span className="text-[#C8A628] mt-0.5">&#x2022;</span>Review and verify all information before submitting to the VA</li>
+            <li className="flex items-start gap-2"><span className="text-[#C8A628] mt-0.5">&#x2022;</span>Consult with accredited professionals when appropriate</li>
+            <li className="flex items-start gap-2"><span className="text-[#C8A628] mt-0.5">&#x2022;</span>Verify current VA form versions and requirements before submission</li>
+            <li className="flex items-start gap-2"><span className="text-[#C8A628] mt-0.5">&#x2022;</span>Not use the Service for fraudulent purposes</li>
+          </ul>
+        </section>
+
+        {/* Limitation of Liability */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-white">6. Limitation of Liability</h2>
+          <p className="text-white/60">
+            TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE SERVICE IS PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED. WE ARE NOT LIABLE FOR:
+          </p>
+          <ul className="space-y-1.5 text-white/60">
+            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2022;</span>Any damages arising from your use of the Service</li>
+            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2022;</span>VA claim decisions, ratings, or outcomes</li>
+            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2022;</span>Loss of data (you are encouraged to export backups regularly)</li>
+            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2022;</span>Errors or omissions in AI-generated draft content</li>
+          </ul>
+          <p className="text-white/60">
+            Our total liability shall not exceed the amount you paid for the Service.
+          </p>
+        </section>
+
+        {/* No Guarantees */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-white">7. No Guarantee of Outcomes</h2>
+          <p className="text-white/60">
+            We do not guarantee any specific claim outcomes, ratings, or approvals. VA claim decisions are made solely by the Department of Veterans Affairs based on their evaluation of submitted evidence and applicable law. The Service is an organizational and educational tool only.
+          </p>
+        </section>
+
+        {/* Modifications */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-white">8. Modifications to Terms</h2>
+          <p className="text-white/60">
+            We reserve the right to modify these Terms at any time. Material changes will be communicated through the app or via email. Continued use of the Service after modifications constitutes acceptance of the updated Terms.
+          </p>
+        </section>
+
+        {/* Contact */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-white">9. Contact</h2>
+          <p className="text-white/60">
+            For questions about these Terms, contact us at:{' '}
+            <a href="mailto:blakedrain@gmail.com" className="text-[#C8A628] hover:underline">
+              blakedrain@gmail.com
+            </a>
+          </p>
+        </section>
+      </div>
+    </div>
+  );
+}

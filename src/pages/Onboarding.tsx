@@ -241,9 +241,19 @@ export default function Onboarding() {
                     Let&apos;s personalize your experience in under 2 minutes.
                   </p>
                 </div>
+                {/* Legal Notice */}
+                <div className="rounded-xl border border-[#243447] p-4 text-left space-y-2">
+                  <p className="text-white/70 text-xs leading-relaxed">
+                    <strong className="text-white/90">Not affiliated with the U.S. Department of Veterans Affairs (VA).</strong>
+                  </p>
+                  <p className="text-white/70 text-xs leading-relaxed">
+                    <strong className="text-white/90">Not legal advice. Not medical advice.</strong> This app is an organizational tool only.
+                  </p>
+                </div>
+
                 <div className="flex items-center justify-center gap-2 p-3 rounded-xl bg-emerald-400/10 border border-emerald-400/20">
                   <Shield className="h-4 w-4 text-emerald-400" />
-                  <span className="text-xs text-emerald-400 font-medium">100% Private — Your data never leaves your device</span>
+                  <span className="text-xs text-emerald-400 font-medium">Your data is encrypted in transit and at rest. You control your data, including export and deletion.</span>
                 </div>
               </div>
             )}
