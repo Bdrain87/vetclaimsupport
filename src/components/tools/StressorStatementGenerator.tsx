@@ -9,11 +9,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Copy, Download, AlertTriangle, Check, MapPin, Calendar, FileText, Plus, Trash2, Info } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Copy, Download, AlertTriangle, Check, MapPin, Calendar, FileText, Plus, Trash2, Info, Sparkles, Loader2, Heart } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { exportStressorStatement } from '@/utils/pdfExport';
+import { useAIGenerate } from '@/hooks/useAIGenerate';
+import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 
 interface StressorEvent {
   id: string;
@@ -34,6 +37,9 @@ export function StressorStatementGenerator() {
   const [events, setEvents] = useState<StressorEvent[]>([]);
   const [veteranName, setVeteranName] = useState(fullName);
   const [copied, setCopied] = useState(false);
+  const { generate: aiGenerate, isLoading: aiLoading, error: aiError } = useAIGenerate('VA_SPEAK_TRANSLATOR');
+  const [aiStructured, setAiStructured] = useState<Record<string, string>>({});
+  const [aiSafetyBlocked, setAiSafetyBlocked] = useState<Record<string, boolean>>({});
 
   // Get service history for auto-population
   const serviceHistory = data.serviceHistory || [];
@@ -130,6 +136,40 @@ _________________________________
 Date`;
 
     return statement;
+  };
+
+  const handleAIStructure = async (eventId: string) => {
+    const event = events.find(e => e.id === eventId);
+    if (!event || !event.what.trim()) return;
+
+    setAiSafetyBlocked(prev => ({ ...prev, [eventId]: false }));
+
+    const prompt = `Help structure a VA stressor statement for a PTSD claim. The veteran has provided raw details below.
+
+IMPORTANT: Preserve the veteran's own words and voice. Do NOT rewrite their experience. Only organize their input into the VA's required What/When/Where format with clear structure.
+
+Veteran's raw description:
+${event.what}
+
+${event.details ? `Additional details: ${event.details}` : ''}
+${event.where ? `Location: ${event.where}` : ''}
+${event.when || event.whenApproximate ? `Timeframe: ${event.when || event.whenApproximate}` : ''}
+
+Please organize this into a structured stressor statement format:
+1. WHAT HAPPENED (preserve veteran's words, improve clarity)
+2. WHEN (specific dates or timeframes)
+3. WHERE (locations, units)
+4. IMPACT (how this affected them)
+
+Keep the veteran's voice. Do not add fabricated details.`;
+
+    const result = await aiGenerate(prompt);
+    if (result) {
+      setAiStructured(prev => ({ ...prev, [eventId]: result }));
+    } else {
+      // Check if it was a safety filter block
+      setAiSafetyBlocked(prev => ({ ...prev, [eventId]: true }));
+    }
   };
 
   const handleCopy = () => {
@@ -395,6 +435,55 @@ Date`;
                         onChange={(e) => updateEvent(event.id, { witnesses: e.target.value })}
                         rows={2}
                       />
+                    </div>
+
+                    {/* AI Structure Assistance */}
+                    <div className="space-y-3 pt-2 border-t">
+                      <div className="flex items-start gap-2 p-3 rounded-lg bg-muted/30">
+                        <Heart className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                        <p className="text-xs text-muted-foreground">
+                          Take breaks if you need to. Your wellbeing matters more than any claim.
+                        </p>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleAIStructure(event.id)}
+                        disabled={!event.what.trim() || aiLoading}
+                        className="w-full border-primary/30 text-primary hover:bg-primary/5"
+                      >
+                        {aiLoading ? (
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        ) : (
+                          <Sparkles className="h-4 w-4 mr-2" />
+                        )}
+                        {aiLoading ? 'Structuring...' : 'Help Me Structure This'}
+                      </Button>
+
+                      {aiSafetyBlocked[event.id] && (
+                        <Alert className="border-blue-500/30 bg-blue-500/5">
+                          <Info className="h-4 w-4 text-blue-500" />
+                          <AlertDescription className="text-sm">
+                            Our AI was unable to process this content. You can continue writing your statement manually, and it will be just as valid. Consider working with a VSO for additional support.
+                          </AlertDescription>
+                        </Alert>
+                      )}
+
+                      {aiError && !aiLoading && !aiSafetyBlocked[event.id] && (
+                        <Alert className="border-warning/30 bg-warning/5">
+                          <AlertTriangle className="h-4 w-4 text-warning" />
+                          <AlertDescription className="text-sm">{aiError}</AlertDescription>
+                        </Alert>
+                      )}
+
+                      {aiStructured[event.id] && (
+                        <div className="space-y-2">
+                          <AIDisclaimer variant="banner" />
+                          <div className="p-4 rounded-lg bg-primary/5 border border-primary/20 text-sm whitespace-pre-wrap max-h-[250px] overflow-y-auto">
+                            {aiStructured[event.id]}
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     <Button

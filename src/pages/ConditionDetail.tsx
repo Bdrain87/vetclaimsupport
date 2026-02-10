@@ -26,8 +26,10 @@ import {
 import {
   ChevronLeft, Scale, FileText, Link2, Stethoscope, CheckCircle2,
   AlertTriangle, Info, ExternalLink, Trash2, Edit, BookOpen,
-  Activity, TrendingUp, Clock, Brain, Moon, Zap, ArrowRight
+  Activity, TrendingUp, Clock, Brain, Moon, Zap, ArrowRight,
+  Sparkles, Loader2, ChevronDown,
 } from 'lucide-react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
@@ -35,6 +37,9 @@ import { getConditionById, type VACondition } from '@/data/vaConditions';
 import { ClaimIntelligence } from '@/services/claimIntelligence';
 import { getRatingCriteriaByCondition, type RatingCriteria } from '@/data/vaResources/ratingCriteria';
 import { getDBQByCondition, type DBQReference } from '@/data/vaResources/dbqReference';
+import { useAIGenerate } from '@/hooks/useAIGenerate';
+import { useProfileStore } from '@/store/useProfileStore';
+import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 
 // Common ratings for selector
 const commonRatings = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
@@ -125,6 +130,12 @@ export default function ConditionDetail() {
     return logs.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 10);
   }, [conditionDetails, data]);
 
+  // AI state
+  const profile = useProfileStore();
+  const { generate: aiGenerate, isLoading: aiLoading, error: aiError } = useAIGenerate('VA_SPEAK_TRANSLATOR');
+  const [aiInsights, setAiInsights] = useState<string | null>(null);
+  const [aiInsightsOpen, setAiInsightsOpen] = useState(false);
+
   // Local state for editing
   const [editRating, setEditRating] = useState<string>(
     userCondition?.rating?.toString() || ''
@@ -163,6 +174,47 @@ export default function ConditionDetail() {
   const handleDelete = () => {
     removeCondition(userCondition.id);
     navigate('/claims');
+  };
+
+  const handleGenerateAIInsights = async () => {
+    if (!conditionDetails) return;
+
+    const symptomNames = (data.symptoms || []).map(s => s.symptom);
+    const medicationNames = (data.medications || []).map(m => m.name);
+    const hasNexus = (data.uploadedDocuments || []).some(d =>
+      d.name?.toLowerCase().includes('nexus')
+    );
+    const hasBuddyStatements = (data.buddyContacts || []).length > 0;
+
+    const prompt = `Analyze a veteran's claim for ${conditionDetails.name} and provide strategic insights.
+
+CONDITION: ${conditionDetails.name}
+${conditionDetails.diagnosticCode ? `DIAGNOSTIC CODE: DC ${conditionDetails.diagnosticCode}` : ''}
+CURRENT RATING: ${userCondition?.rating !== undefined ? `${userCondition.rating}%` : 'Not yet rated'}
+
+EVIDENCE AVAILABLE:
+- Medical visits logged: ${(data.medicalVisits || []).length}
+- Symptoms logged: ${symptomNames.length > 0 ? symptomNames.slice(0, 5).join(', ') : 'None'}
+- Medications: ${medicationNames.length > 0 ? medicationNames.slice(0, 5).join(', ') : 'None'}
+- Nexus letter: ${hasNexus ? 'Yes' : 'No'}
+- Buddy statements: ${hasBuddyStatements ? 'Yes' : 'No'}
+- Service history entries: ${(data.serviceHistory || []).length}
+
+${conditionReadiness ? `READINESS SCORE: ${conditionReadiness.overallScore}%
+- Medical Evidence: ${conditionReadiness.components.medicalEvidence}%
+- Service Connection: ${conditionReadiness.components.serviceConnection}%
+- Current Severity: ${conditionReadiness.components.currentSeverity}%` : ''}
+
+Provide:
+1. STRENGTH ASSESSMENT: What's strong in this claim, what's weak
+2. EVIDENCE GAPS: Specific evidence that's missing
+3. SUGGESTED NEXT STEPS: Prioritized actions to strengthen the claim
+4. KEY RATING CRITERIA: What the veteran should focus on documenting for this specific condition
+
+Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
+
+    const result = await aiGenerate(prompt);
+    if (result) setAiInsights(result);
   };
 
   // Evidence completion percentage
@@ -391,6 +443,76 @@ export default function ConditionDetail() {
           <Stethoscope className="h-3 w-3 mr-1" /> Exam Prep
         </Button>
       </div>
+
+      {/* AI Claim Insights */}
+      <Collapsible open={aiInsightsOpen} onOpenChange={setAiInsightsOpen}>
+        <Card className="border-primary/20">
+          <CollapsibleTrigger asChild>
+            <CardHeader className="cursor-pointer hover:bg-muted/30 transition-colors">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-primary" />
+                  AI Claim Insights
+                </CardTitle>
+                <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${aiInsightsOpen ? 'rotate-180' : ''}`} />
+              </div>
+            </CardHeader>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <CardContent className="space-y-4 pt-0">
+              {!aiInsights ? (
+                <div className="space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    Get AI-powered analysis of your claim strength, evidence gaps, and suggested next steps.
+                  </p>
+                  <Button
+                    onClick={handleGenerateAIInsights}
+                    disabled={aiLoading}
+                    className="w-full"
+                    variant="outline"
+                  >
+                    {aiLoading ? (
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    ) : (
+                      <Sparkles className="h-4 w-4 mr-2" />
+                    )}
+                    {aiLoading ? 'Analyzing...' : 'Generate Analysis'}
+                  </Button>
+                  {aiError && !aiLoading && (
+                    <Alert className="border-warning/30 bg-warning/5">
+                      <AlertTriangle className="h-4 w-4 text-warning" />
+                      <AlertDescription className="text-sm">{aiError}</AlertDescription>
+                    </Alert>
+                  )}
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <AIDisclaimer variant="banner" />
+                  <div className="p-4 rounded-lg bg-muted/30 border text-sm whitespace-pre-wrap max-h-[400px] overflow-y-auto leading-relaxed">
+                    {aiInsights}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setAiInsights(null);
+                      handleGenerateAIInsights();
+                    }}
+                    disabled={aiLoading}
+                  >
+                    {aiLoading ? (
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    ) : (
+                      <Sparkles className="h-4 w-4 mr-2" />
+                    )}
+                    Regenerate
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </CollapsibleContent>
+        </Card>
+      </Collapsible>
 
       {/* Related Health Logs */}
       {relatedLogs.length > 0 && (
