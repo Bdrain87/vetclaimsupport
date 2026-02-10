@@ -220,6 +220,7 @@ export function AppSidebar() {
   return (
     <aside
       className={cn(
+        'hidden',
         'fixed left-0 top-0 z-40 h-screen border-r flex flex-col',
         'border-sidebar-border',
         'transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]',

@@ -1,16 +1,17 @@
-import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, ChevronLeft, X, Search, Shield, User, Briefcase, Stethoscope, Check } from 'lucide-react';
+import { ChevronRight, ChevronLeft, X, Search, Shield, User, Briefcase, Stethoscope, Check, MapPin, Plane } from 'lucide-react';
 import { useProfileStore, BRANCH_LABELS, BRANCH_COLORS, type Branch } from '@/store/useProfileStore';
-import { militaryJobCodes, searchMilitaryJobs, getCodeTypeForBranch, type MilitaryJobCode } from '@/data/militaryMOS';
+import { searchMilitaryJobs, getCodeTypeForBranch, type MilitaryJobCode } from '@/data/militaryMOS';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { type VACondition, getConditionById } from '@/data/vaConditions';
+import useAppStore, { type DutyStation } from '@/store/useAppStore';
+import { SuccessAnimation } from '@/components/ui/success-animation';
 
-const TOTAL_STEPS = 6;
+const TOTAL_STEPS = 8;
 
-// MOS branch mapping
 const BRANCH_TO_MOS: Record<Branch, string> = {
   army: 'Army',
   marines: 'Marines',
@@ -19,6 +20,33 @@ const BRANCH_TO_MOS: Record<Branch, string> = {
   coast_guard: 'Coast Guard',
   space_force: 'Space Force',
 };
+
+const MAJOR_INSTALLATIONS = [
+  'Fort Liberty', 'Fort Cavazos', 'Camp Lejeune', 'Joint Base Lewis-McChord',
+  'Fort Campbell', 'Naval Station Norfolk', 'Camp Pendleton', 'Travis AFB',
+  'Lackland AFB', 'Fort Drum', 'Fort Stewart', 'Fort Carson', 'Fort Bliss',
+  'Fort Riley', 'Fort Sill', 'Fort Leonard Wood', 'Fort Jackson',
+  'Fort Gordon', 'Fort Polk', 'Fort Huachuca',
+  'Schofield Barracks', 'Fort Shafter', 'Fort Wainwright',
+  'NAS Jacksonville', 'NAS Pensacola', 'NAS Oceana', 'Naval Base San Diego',
+  'Naval Station Great Lakes', 'MCAS Cherry Point', 'MCAS Miramar',
+  'MCB Quantico', 'MCRD Parris Island', 'MCRD San Diego',
+  'Eglin AFB', 'Wright-Patterson AFB', 'Ramstein AB', 'Kadena AB',
+  'Osan AB', 'Yokota AB', 'Aviano AB', 'RAF Lakenheath',
+  'Peterson SFB', 'Vandenberg SFB', 'Other',
+];
+
+const OPERATIONS = [
+  'Operation Iraqi Freedom (OIF)',
+  'Operation Enduring Freedom (OEF)',
+  'Operation New Dawn (OND)',
+  'Operation Inherent Resolve (OIR)',
+  "Operation Freedom's Sentinel (OFS)",
+  'Desert Shield/Desert Storm',
+  'Vietnam',
+  'Korea',
+  'Other',
+];
 
 // --- MOS Autocomplete ---
 function MOSAutocomplete({
@@ -128,39 +156,118 @@ function MOSAutocomplete({
   );
 }
 
+// --- Installation Autocomplete ---
+function InstallationAutocomplete({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (val: string) => void;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const filtered = useMemo(() => {
+    if (!value.trim()) return MAJOR_INSTALLATIONS.slice(0, 10);
+    return MAJOR_INSTALLATIONS.filter(b =>
+      b.toLowerCase().includes(value.toLowerCase())
+    ).slice(0, 10);
+  }, [value]);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  return (
+    <div ref={containerRef} className="relative">
+      <input
+        type="text"
+        value={value}
+        onChange={e => { onChange(e.target.value); setIsOpen(true); }}
+        onFocus={() => setIsOpen(true)}
+        placeholder="Base/Installation name..."
+        className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 transition-all"
+      />
+      {isOpen && filtered.length > 0 && (
+        <div className="absolute top-full left-0 right-0 mt-1 z-50 bg-[#1a2d44] border border-white/10 rounded-xl shadow-2xl max-h-48 overflow-y-auto">
+          {filtered.map((base) => (
+            <button
+              key={base}
+              className="w-full text-left px-4 py-2.5 text-sm text-white/80 hover:bg-white/5 transition-colors border-b border-white/[0.04] last:border-0"
+              onClick={() => { onChange(base); setIsOpen(false); }}
+            >
+              {base}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // --- Main Onboarding ---
 export default function Onboarding() {
   const navigate = useNavigate();
-  const store = useProfileStore();
-  const { addCondition, conditions: userConditions } = useUserConditions();
+  const profileStore = useProfileStore();
+  const appStore = useAppStore();
+  const { addCondition } = useUserConditions();
 
   const [step, setStep] = useState(0);
-  const [firstName, setFirstName] = useState(store.firstName);
-  const [lastName, setLastName] = useState(store.lastName);
-  const [branch, setBranch] = useState<Branch | ''>(store.branch);
-  const [mosCode, setMosCode] = useState(store.mosCode);
-  const [mosTitle, setMosTitle] = useState(store.mosTitle);
+  const [firstName, setFirstName] = useState(profileStore.firstName);
+  const [lastName, setLastName] = useState(profileStore.lastName);
+  const [branch, setBranch] = useState<Branch | ''>(profileStore.branch);
+  const [mosCode, setMosCode] = useState(profileStore.mosCode);
+  const [mosTitle, setMosTitle] = useState(profileStore.mosTitle);
   const [addedConditions, setAddedConditions] = useState<string[]>([]);
   const [nameError, setNameError] = useState('');
   const [showManualMOS, setShowManualMOS] = useState(false);
   const [manualCode, setManualCode] = useState('');
   const [manualTitle, setManualTitle] = useState('');
 
-  // If already onboarded, redirect to dashboard
+  // Duty Stations
+  const [dutyStations, setDutyStations] = useState<Omit<DutyStation, 'id'>[]>([]);
+  const [showStationForm, setShowStationForm] = useState(false);
+  const [stationBase, setStationBase] = useState('');
+  const [stationStart, setStationStart] = useState('');
+  const [stationEnd, setStationEnd] = useState('');
+
+  // Deployments
+  const [deployments, setDeployments] = useState<Array<{
+    operationName: string;
+    location: string;
+    startDate: string;
+    endDate: string;
+    combatDeployment: boolean;
+  }>>([]);
+  const [showDeployForm, setShowDeployForm] = useState(false);
+  const [deployOp, setDeployOp] = useState('');
+  const [deployLocation, setDeployLocation] = useState('');
+  const [deployStart, setDeployStart] = useState('');
+  const [deployEnd, setDeployEnd] = useState('');
+  const [deployCombat, setDeployCombat] = useState(false);
+
   useEffect(() => {
-    if (store.hasCompletedOnboarding) {
-      navigate('/dashboard', { replace: true });
+    if (profileStore.hasCompletedOnboarding) {
+      navigate('/', { replace: true });
     }
-  }, [store.hasCompletedOnboarding, navigate]);
+  }, [profileStore.hasCompletedOnboarding, navigate]);
 
   const canProceed = useMemo(() => {
     switch (step) {
-      case 0: return true; // Welcome
-      case 1: return firstName.trim().length > 0; // Name
-      case 2: return branch !== ''; // Branch
-      case 3: return true; // MOS (optional)
-      case 4: return true; // Conditions (optional)
-      case 5: return true; // Complete
+      case 0: return true;
+      case 1: return firstName.trim().length > 0;
+      case 2: return branch !== '';
+      case 3: return true;
+      case 4: return true;
+      case 5: return true;
+      case 6: return true;
+      case 7: return true;
       default: return true;
     }
   }, [step, firstName, branch]);
@@ -186,12 +293,27 @@ export default function Onboarding() {
   };
 
   const handleComplete = () => {
-    store.setFirstName(firstName.trim());
-    store.setLastName(lastName.trim());
-    if (branch) store.setBranch(branch);
-    if (mosCode) store.setMOS(mosCode, mosTitle);
-    store.completeOnboarding();
-    navigate('/dashboard', { replace: true });
+    profileStore.setFirstName(firstName.trim());
+    profileStore.setLastName(lastName.trim());
+    if (branch) profileStore.setBranch(branch);
+    if (mosCode) profileStore.setMOS(mosCode, mosTitle);
+
+    for (const station of dutyStations) {
+      appStore.addDutyStation(station);
+    }
+
+    for (const dep of deployments) {
+      appStore.addDeployment({
+        ...dep,
+        unit: '',
+        role: '',
+        hazardsEncountered: '',
+        notes: '',
+      });
+    }
+
+    profileStore.completeOnboarding();
+    navigate('/', { replace: true });
   };
 
   const handleAddCondition = (condition: VACondition) => {
@@ -203,19 +325,55 @@ export default function Onboarding() {
     setAddedConditions(prev => prev.filter(c => c !== id));
   };
 
-  // Progress dots
-  const ProgressDots = () => (
-    <div className="flex justify-center gap-2">
-      {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
-        <div
-          key={i}
-          className={`h-2 rounded-full transition-all duration-300 ${
-            i === step ? 'w-8 bg-[#C8A628]' : i < step ? 'w-2 bg-[#C8A628]/50' : 'w-2 bg-white/10'
-          }`}
-        />
-      ))}
-    </div>
-  );
+  const handleAddStation = () => {
+    if (!stationBase.trim()) return;
+    setDutyStations(prev => [...prev, { baseName: stationBase, startDate: stationStart, endDate: stationEnd }]);
+    setStationBase('');
+    setStationStart('');
+    setStationEnd('');
+    setShowStationForm(false);
+  };
+
+  const handleRemoveStation = (idx: number) => {
+    setDutyStations(prev => prev.filter((_, i) => i !== idx));
+  };
+
+  const handleAddDeployment = () => {
+    if (!deployOp.trim()) return;
+    setDeployments(prev => [...prev, {
+      operationName: deployOp,
+      location: deployLocation,
+      startDate: deployStart,
+      endDate: deployEnd,
+      combatDeployment: deployCombat,
+    }]);
+    setDeployOp('');
+    setDeployLocation('');
+    setDeployStart('');
+    setDeployEnd('');
+    setDeployCombat(false);
+    setShowDeployForm(false);
+  };
+
+  const handleRemoveDeployment = (idx: number) => {
+    setDeployments(prev => prev.filter((_, i) => i !== idx));
+  };
+
+  const ProgressDots = () => {
+    if (step === TOTAL_STEPS - 1) return null;
+    return (
+      <div className="flex justify-center gap-2">
+        {Array.from({ length: TOTAL_STEPS - 1 }).map((_, i) => (
+          <div
+            key={i}
+            className={`h-2 rounded-full transition-all duration-300 ${
+              i === step ? 'w-8 bg-[#C8A628]' : i < step ? 'w-2 bg-[#C8A628]/50' : 'w-2 bg-white/10'
+            }`}
+          />
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-[100dvh] bg-[#102039] flex flex-col items-center justify-center px-4 py-8">
@@ -244,7 +402,6 @@ export default function Onboarding() {
                     Let&apos;s personalize your experience in under 2 minutes.
                   </p>
                 </div>
-                {/* Legal Notice */}
                 <div className="rounded-xl border border-[#243447] p-4 text-left space-y-2">
                   <p className="text-white/70 text-xs leading-relaxed">
                     <strong className="text-white/90">Not affiliated with the U.S. Department of Veterans Affairs (VA).</strong>
@@ -253,7 +410,6 @@ export default function Onboarding() {
                     <strong className="text-white/90">Not legal advice. Not medical advice.</strong> This app is an organizational tool only.
                   </p>
                 </div>
-
                 <div className="flex items-center justify-center gap-2 p-3 rounded-xl bg-emerald-400/10 border border-emerald-400/20">
                   <Shield className="h-4 w-4 text-emerald-400" />
                   <span className="text-xs text-emerald-400 font-medium">Your data is encrypted in transit and at rest. You control your data, including export and deletion.</span>
@@ -342,7 +498,7 @@ export default function Onboarding() {
                     {branch === 'air_force' && 'Enter your AFSC (e.g., 2T1X1 Vehicle Operations)'}
                     {branch === 'navy' && 'Enter your Rating (e.g., HM Hospital Corpsman)'}
                     {branch === 'marines' && 'Enter your MOS (e.g., 0311 Rifleman)'}
-                    {branch === 'coast_guard' && 'Enter your Rating (e.g., BM Boatswain\'s Mate)'}
+                    {branch === 'coast_guard' && "Enter your Rating (e.g., BM Boatswain's Mate)"}
                     {branch === 'space_force' && 'Enter your AFSC (e.g., 5S0X1 Space Systems Operations)'}
                   </p>
                 </div>
@@ -413,8 +569,202 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 4: Conditions */}
+            {/* Step 4: Duty Stations */}
             {step === 4 && (
+              <div className="space-y-5">
+                <div className="text-center">
+                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
+                    <MapPin className="h-7 w-7 text-[#C8A628]" />
+                  </div>
+                  <h2 className="text-xl font-bold text-white">Where Did You Serve?</h2>
+                  <p className="text-white/40 text-sm mt-1">This helps identify conditions linked to specific locations and eras.</p>
+                </div>
+
+                {dutyStations.length > 0 && (
+                  <div className="space-y-2">
+                    {dutyStations.map((station, idx) => (
+                      <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.04] border border-white/[0.08]">
+                        <div>
+                          <p className="text-white text-sm font-medium">{station.baseName}</p>
+                          {(station.startDate || station.endDate) && (
+                            <p className="text-white/40 text-xs">{station.startDate} — {station.endDate}</p>
+                          )}
+                        </div>
+                        <button
+                          onClick={() => handleRemoveStation(idx)}
+                          className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"
+                        >
+                          <X className="h-4 w-4 text-white/40" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {showStationForm ? (
+                  <div className="space-y-3 p-4 rounded-xl border border-white/[0.1] bg-white/[0.02]">
+                    <InstallationAutocomplete value={stationBase} onChange={setStationBase} />
+                    <div className="grid grid-cols-2 gap-3">
+                      <input
+                        type="month"
+                        value={stationStart}
+                        onChange={e => setStationStart(e.target.value)}
+                        placeholder="Start"
+                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 transition-all"
+                      />
+                      <input
+                        type="month"
+                        value={stationEnd}
+                        onChange={e => setStationEnd(e.target.value)}
+                        placeholder="End"
+                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 transition-all"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={handleAddStation}
+                        disabled={!stationBase.trim()}
+                        className="flex-1 h-10 rounded-xl bg-[#C8A628] text-[#102039] text-sm font-bold disabled:opacity-40 transition-all"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={() => setShowStationForm(false)}
+                        className="h-10 px-4 rounded-xl text-white/50 text-sm hover:text-white transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setShowStationForm(true)}
+                    className="w-full h-12 rounded-xl border border-dashed border-white/20 text-white/50 text-sm hover:border-[#C8A628]/40 hover:text-[#C8A628] transition-all"
+                  >
+                    + Add Duty Station
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* Step 5: Deployments */}
+            {step === 5 && (
+              <div className="space-y-5">
+                <div className="text-center">
+                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
+                    <Plane className="h-7 w-7 text-[#C8A628]" />
+                  </div>
+                  <h2 className="text-xl font-bold text-white">Any Deployments or Combat Tours?</h2>
+                  <p className="text-white/40 text-sm mt-1">Deployments can qualify you for presumptive conditions under the PACT Act and other VA policies.</p>
+                </div>
+
+                {deployments.length > 0 && (
+                  <div className="space-y-2">
+                    {deployments.map((dep, idx) => (
+                      <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.04] border border-white/[0.08]">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <p className="text-white text-sm font-medium">{dep.operationName}</p>
+                            {dep.combatDeployment && (
+                              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/30">COMBAT</span>
+                            )}
+                          </div>
+                          {dep.location && <p className="text-white/40 text-xs">{dep.location}</p>}
+                          {(dep.startDate || dep.endDate) && (
+                            <p className="text-white/30 text-xs">{dep.startDate} — {dep.endDate}</p>
+                          )}
+                        </div>
+                        <button
+                          onClick={() => handleRemoveDeployment(idx)}
+                          className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"
+                        >
+                          <X className="h-4 w-4 text-white/40" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {showDeployForm ? (
+                  <div className="space-y-3 p-4 rounded-xl border border-white/[0.1] bg-white/[0.02]">
+                    <select
+                      value={deployOp}
+                      onChange={e => setDeployOp(e.target.value)}
+                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 transition-all"
+                    >
+                      <option value="" className="bg-[#102039]">Select Operation/Theater...</option>
+                      {OPERATIONS.map(op => (
+                        <option key={op} value={op} className="bg-[#102039]">{op}</option>
+                      ))}
+                    </select>
+                    <input
+                      type="text"
+                      value={deployLocation}
+                      onChange={e => setDeployLocation(e.target.value)}
+                      placeholder="Location (e.g., Baghdad, Iraq)"
+                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 transition-all"
+                    />
+                    <div className="grid grid-cols-2 gap-3">
+                      <input
+                        type="month"
+                        value={deployStart}
+                        onChange={e => setDeployStart(e.target.value)}
+                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 transition-all"
+                      />
+                      <input
+                        type="month"
+                        value={deployEnd}
+                        onChange={e => setDeployEnd(e.target.value)}
+                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 transition-all"
+                      />
+                    </div>
+                    <button
+                      onClick={() => setDeployCombat(!deployCombat)}
+                      className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${
+                        deployCombat ? 'border-red-500/40 bg-red-500/10' : 'border-white/[0.1] bg-white/[0.04]'
+                      }`}
+                    >
+                      <span className="text-white text-sm">Combat Zone?</span>
+                      <div className={`w-10 h-6 rounded-full transition-colors ${deployCombat ? 'bg-red-500' : 'bg-white/20'}`}>
+                        <div className={`w-5 h-5 rounded-full bg-white mt-0.5 transition-transform ${deployCombat ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
+                      </div>
+                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={handleAddDeployment}
+                        disabled={!deployOp.trim()}
+                        className="flex-1 h-10 rounded-xl bg-[#C8A628] text-[#102039] text-sm font-bold disabled:opacity-40 transition-all"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={() => setShowDeployForm(false)}
+                        className="h-10 px-4 rounded-xl text-white/50 text-sm hover:text-white transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setShowDeployForm(true)}
+                    className="w-full h-12 rounded-xl border border-dashed border-white/20 text-white/50 text-sm hover:border-[#C8A628]/40 hover:text-[#C8A628] transition-all"
+                  >
+                    + Add Deployment
+                  </button>
+                )}
+
+                <button
+                  onClick={handleSkip}
+                  className="w-full text-center text-sm text-white/30 hover:text-white/50 transition-colors"
+                >
+                  I was never deployed
+                </button>
+              </div>
+            )}
+
+            {/* Step 6: Conditions */}
+            {step === 6 && (
               <div className="space-y-5">
                 <div className="text-center">
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
@@ -436,7 +786,7 @@ export default function Onboarding() {
                       return (
                         <span key={id} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#C8A628]/10 border border-[#C8A628]/30 text-sm text-[#C8A628]">
                           {c.abbreviation || c.name}
-                          <button onClick={() => handleRemoveCondition(id)} className="ml-1 text-[#C8A628]/60 hover:text-[#C8A628]" aria-label={`Remove ${c.abbreviation}`}>
+                          <button onClick={() => handleRemoveCondition(id)} className="ml-1 text-[#C8A628]/60 hover:text-[#C8A628]" aria-label={`Remove ${c.abbreviation || c.name}`}>
                             <X className="h-3 w-3" />
                           </button>
                         </span>
@@ -447,56 +797,71 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 5: Complete */}
-            {step === 5 && (
+            {/* Step 7: Thank You */}
+            {step === 7 && (
               <div className="text-center space-y-6">
-                <div className="w-20 h-20 mx-auto rounded-2xl bg-emerald-400/10 border border-emerald-400/20 flex items-center justify-center">
-                  <Check className="h-10 w-10 text-emerald-400" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold text-white">You&apos;re all set, {firstName.trim() || 'Veteran'}!</h2>
-                  <p className="text-white/50 mt-2 text-sm">Your personalized dashboard is ready.</p>
-                </div>
-                <div className="rounded-xl bg-white/[0.04] border border-white/[0.08] p-4 text-left space-y-2">
-                  {branch && (
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-white/50">Branch</span>
-                      <span className="text-white font-medium">{BRANCH_LABELS[branch]}</span>
-                    </div>
-                  )}
-                  {mosCode && (
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-white/50">MOS/AFSC</span>
-                      <span className="text-white font-medium">{mosCode} — {mosTitle}</span>
-                    </div>
-                  )}
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-white/50">Conditions</span>
-                    <span className="text-white font-medium">{addedConditions.length} tracked</span>
-                  </div>
-                </div>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0, duration: 0.5 }}
+                >
+                  <span className="text-[80px] leading-none" role="img" aria-label="American flag">&#x1F1FA;&#x1F1F8;</span>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                >
+                  <h2 className="text-2xl font-bold text-white">Thank You for Your Service</h2>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6, duration: 0.5 }}
+                >
+                  <p className="text-lg text-amber-500 font-medium">God Bless America</p>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8, duration: 0.5 }}
+                >
+                  <SuccessAnimation show={true} variant="celebration" size="lg" />
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.9, duration: 0.5 }}
+                >
+                  <button
+                    onClick={handleComplete}
+                    className="w-full h-14 rounded-xl bg-amber-500 text-white text-base font-bold hover:bg-amber-600 transition-colors"
+                  >
+                    Get Started
+                  </button>
+                </motion.div>
               </div>
             )}
           </motion.div>
         </AnimatePresence>
 
         {/* Navigation */}
-        <div className="flex items-center justify-between pt-4">
-          <div>
-            {step > 0 && step < TOTAL_STEPS - 1 && (
-              <button onClick={handleBack} className="flex items-center gap-1 text-sm text-white/50 hover:text-white transition-colors h-11 px-4">
-                <ChevronLeft className="h-4 w-4" />
-                Back
-              </button>
-            )}
-          </div>
-          <div className="flex items-center gap-2">
-            {(step === 3 || step === 4) && (
-              <button onClick={handleSkip} className="text-sm text-white/40 hover:text-white/60 transition-colors h-11 px-4">
-                Skip
-              </button>
-            )}
-            {step < TOTAL_STEPS - 1 ? (
+        {step < TOTAL_STEPS - 1 && (
+          <div className="flex items-center justify-between pt-4">
+            <div>
+              {step > 0 && (
+                <button onClick={handleBack} className="flex items-center gap-1 text-sm text-white/50 hover:text-white transition-colors h-11 px-4">
+                  <ChevronLeft className="h-4 w-4" />
+                  Back
+                </button>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              {(step === 3 || step === 4 || step === 5 || step === 6) && (
+                <button onClick={handleSkip} className="text-sm text-white/40 hover:text-white/60 transition-colors h-11 px-4">
+                  Skip
+                </button>
+              )}
               <button
                 onClick={handleNext}
                 disabled={!canProceed}
@@ -505,17 +870,9 @@ export default function Onboarding() {
                 {step === 0 ? 'Get Started' : 'Continue'}
                 <ChevronRight className="h-4 w-4" />
               </button>
-            ) : (
-              <button
-                onClick={handleComplete}
-                className="flex items-center gap-1 h-11 px-6 rounded-xl bg-[#C8A628] text-[#102039] text-sm font-bold hover:bg-[#C8A628]/90 transition-all"
-              >
-                Go to Dashboard
-                <ChevronRight className="h-4 w-4" />
-              </button>
-            )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
