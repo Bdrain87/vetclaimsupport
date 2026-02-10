@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft, X, Search, Shield, User, Briefcase, Stethoscope, Check } from 'lucide-react';
 import { useProfileStore, BRANCH_LABELS, BRANCH_COLORS, type Branch } from '@/store/useProfileStore';
-import { militaryJobCodes, searchMilitaryJobs, type MilitaryJobCode } from '@/data/militaryMOS';
+import { militaryJobCodes, searchMilitaryJobs, getCodeTypeForBranch, type MilitaryJobCode } from '@/data/militaryMOS';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { type VACondition, getConditionById } from '@/data/vaConditions';
@@ -142,6 +142,9 @@ export default function Onboarding() {
   const [mosTitle, setMosTitle] = useState(store.mosTitle);
   const [addedConditions, setAddedConditions] = useState<string[]>([]);
   const [nameError, setNameError] = useState('');
+  const [showManualMOS, setShowManualMOS] = useState(false);
+  const [manualCode, setManualCode] = useState('');
+  const [manualTitle, setManualTitle] = useState('');
 
   // If already onboarded, redirect to dashboard
   useEffect(() => {
@@ -333,21 +336,78 @@ export default function Onboarding() {
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
                     <Briefcase className="h-7 w-7 text-[#C8A628]" />
                   </div>
-                  <h2 className="text-xl font-bold text-white">What was your military job?</h2>
-                  <p className="text-white/40 text-sm mt-1">Type your code or job title</p>
+                  <h2 className="text-xl font-bold text-white">What is or was your military job?</h2>
+                  <p className="text-white/40 text-sm mt-1">
+                    {branch === 'army' && 'Enter your MOS (e.g., 11B Infantryman)'}
+                    {branch === 'air_force' && 'Enter your AFSC (e.g., 2T1X1 Vehicle Operations)'}
+                    {branch === 'navy' && 'Enter your Rating (e.g., HM Hospital Corpsman)'}
+                    {branch === 'marines' && 'Enter your MOS (e.g., 0311 Rifleman)'}
+                    {branch === 'coast_guard' && 'Enter your Rating (e.g., BM Boatswain\'s Mate)'}
+                    {branch === 'space_force' && 'Enter your AFSC (e.g., 5S0X1 Space Systems Operations)'}
+                  </p>
                 </div>
-                <MOSAutocomplete
-                  branch={branch}
-                  value={mosCode ? `${mosCode} — ${mosTitle}` : ''}
-                  onSelect={(job) => {
-                    setMosCode(job.code);
-                    setMosTitle(job.title);
-                  }}
-                />
-                {mosCode && (
-                  <div className="flex items-center gap-2 text-sm text-[#C8A628]">
-                    <Check className="h-4 w-4" />
-                    <span>{mosCode} — {mosTitle}</span>
+
+                {!showManualMOS ? (
+                  <>
+                    <MOSAutocomplete
+                      branch={branch}
+                      value={mosCode ? `${mosCode} — ${mosTitle}` : ''}
+                      onSelect={(job) => {
+                        setMosCode(job.code);
+                        setMosTitle(job.title);
+                        setShowManualMOS(false);
+                      }}
+                    />
+                    {mosCode && (
+                      <div className="flex items-center gap-2 text-sm text-[#C8A628]">
+                        <Check className="h-4 w-4" />
+                        <span>{getCodeTypeForBranch(BRANCH_TO_MOS[branch])}: {mosCode} — {mosTitle}</span>
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setShowManualMOS(true)}
+                      className="text-sm text-white/40 hover:text-white/60 transition-colors underline underline-offset-2"
+                    >
+                      I don&apos;t see my job
+                    </button>
+                  </>
+                ) : (
+                  <div className="space-y-3">
+                    <p className="text-sm text-white/50">Enter your job code and title manually:</p>
+                    <input
+                      type="text"
+                      value={manualCode}
+                      onChange={e => {
+                        setManualCode(e.target.value);
+                        setMosCode(e.target.value);
+                      }}
+                      placeholder="Job Code (e.g., 11B)"
+                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 transition-all"
+                    />
+                    <input
+                      type="text"
+                      value={manualTitle}
+                      onChange={e => {
+                        setManualTitle(e.target.value);
+                        setMosTitle(e.target.value);
+                      }}
+                      placeholder="Job Title (e.g., Infantryman)"
+                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 transition-all"
+                    />
+                    {manualCode && manualTitle && (
+                      <div className="flex items-center gap-2 text-sm text-[#C8A628]">
+                        <Check className="h-4 w-4" />
+                        <span>{manualCode} — {manualTitle}</span>
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setShowManualMOS(false)}
+                      className="text-sm text-white/40 hover:text-white/60 transition-colors underline underline-offset-2"
+                    >
+                      Back to search
+                    </button>
                   </div>
                 )}
               </div>
