@@ -10,7 +10,7 @@ import { type VACondition, getConditionById } from '@/data/vaConditions';
 import useAppStore, { type DutyStation } from '@/store/useAppStore';
 import { SuccessAnimation } from '@/components/ui/success-animation';
 
-const TOTAL_STEPS = 8;
+const TOTAL_STEPS = 10;
 
 const BRANCH_TO_MOS: Record<Branch, string> = {
   army: 'Army',
@@ -252,6 +252,17 @@ export default function Onboarding() {
   const [deployEnd, setDeployEnd] = useState('');
   const [deployCombat, setDeployCombat] = useState(false);
 
+  // Existing rated conditions
+  const [hasExistingRated, setHasExistingRated] = useState(false);
+  const [existingRated, setExistingRated] = useState<Array<{
+    conditionName: string;
+    rating: number;
+    type: 'primary' | 'secondary';
+  }>>([]);
+  const [newRatedCondition, setNewRatedCondition] = useState('');
+  const [newRatedRating, setNewRatedRating] = useState(0);
+  const [newRatedType, setNewRatedType] = useState<'primary' | 'secondary'>('primary');
+
   useEffect(() => {
     if (profileStore.hasCompletedOnboarding) {
       navigate('/', { replace: true });
@@ -268,6 +279,8 @@ export default function Onboarding() {
       case 5: return true;
       case 6: return true;
       case 7: return true;
+      case 8: return true;
+      case 9: return true;
       default: return true;
     }
   }, [step, firstName, branch]);
@@ -292,6 +305,22 @@ export default function Onboarding() {
     }
   };
 
+  const handleAddExistingRated = () => {
+    if (!newRatedCondition.trim()) return;
+    setExistingRated(prev => [...prev, {
+      conditionName: newRatedCondition.trim(),
+      rating: newRatedRating,
+      type: newRatedType,
+    }]);
+    setNewRatedCondition('');
+    setNewRatedRating(0);
+    setNewRatedType('primary');
+  };
+
+  const handleRemoveExistingRated = (idx: number) => {
+    setExistingRated(prev => prev.filter((_, i) => i !== idx));
+  };
+
   const handleComplete = () => {
     profileStore.setFirstName(firstName.trim());
     profileStore.setLastName(lastName.trim());
@@ -309,6 +338,20 @@ export default function Onboarding() {
         role: '',
         hazardsEncountered: '',
         notes: '',
+      });
+    }
+
+    // Save existing rated conditions as claim conditions
+    for (const rated of existingRated) {
+      appStore.addClaimCondition({
+        name: rated.conditionName,
+        linkedMedicalVisits: [],
+        linkedSymptoms: [],
+        linkedExposures: [],
+        linkedDocuments: [],
+        linkedBuddyContacts: [],
+        notes: `Existing rated condition: ${rated.rating}% (${rated.type})`,
+        createdAt: new Date().toISOString(),
       });
     }
 
@@ -456,7 +499,7 @@ export default function Onboarding() {
             {step === 2 && (
               <div className="space-y-5">
                 <div className="text-center">
-                  <h2 className="text-xl font-bold text-white">Which branch did you serve in?</h2>
+                  <h2 className="text-xl font-bold text-white">Which branch do you serve or did you serve in?</h2>
                 </div>
                 <div className="space-y-2">
                   {(Object.entries(BRANCH_LABELS) as [Branch, string][]).map(([key, label]) => (
@@ -492,7 +535,7 @@ export default function Onboarding() {
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
                     <Briefcase className="h-7 w-7 text-[#3B82F6]" />
                   </div>
-                  <h2 className="text-xl font-bold text-white">What is or was your military job?</h2>
+                  <h2 className="text-xl font-bold text-white">What is or was your military job code?</h2>
                   <p className="text-white/40 text-sm mt-1">
                     {branch === 'army' && 'Enter your MOS (e.g., 11B Infantryman)'}
                     {branch === 'air_force' && 'Enter your AFSC (e.g., 2T1X1 Vehicle Operations)'}
@@ -576,7 +619,7 @@ export default function Onboarding() {
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
                     <MapPin className="h-7 w-7 text-[#3B82F6]" />
                   </div>
-                  <h2 className="text-xl font-bold text-white">Where Did You Serve?</h2>
+                  <h2 className="text-xl font-bold text-white">Where do you or did you serve?</h2>
                   <p className="text-white/40 text-sm mt-1">This helps identify conditions linked to specific locations and eras.</p>
                 </div>
 
@@ -655,7 +698,7 @@ export default function Onboarding() {
                     <Plane className="h-7 w-7 text-[#3B82F6]" />
                   </div>
                   <h2 className="text-xl font-bold text-white">Any Deployments or Combat Tours?</h2>
-                  <p className="text-white/40 text-sm mt-1">Deployments can qualify you for presumptive conditions under the PACT Act and other VA policies.</p>
+                  <p className="text-white/40 text-sm mt-1">Deployments may be connected to presumptive conditions under the PACT Act and other VA policies.</p>
                 </div>
 
                 {deployments.length > 0 && (
@@ -797,8 +840,139 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 7: Thank You */}
+            {/* Step 7: Existing Rated Conditions */}
             {step === 7 && (
+              <div className="space-y-5">
+                <div className="text-center">
+                  <h2 className="text-xl font-bold text-white">Do you have any VA-rated conditions?</h2>
+                  <p className="text-white/40 text-sm mt-1">This helps us show your current combined rating and identify secondary conditions.</p>
+                </div>
+
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setHasExistingRated(true)}
+                    className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${
+                      hasExistingRated
+                        ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40 text-white'
+                        : 'bg-white/[0.04] border-white/[0.08] text-white/70 hover:bg-white/[0.06]'
+                    }`}
+                  >
+                    Yes, I have rated conditions
+                  </button>
+                  <button
+                    onClick={() => { setHasExistingRated(false); setExistingRated([]); }}
+                    className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${
+                      !hasExistingRated && existingRated.length === 0
+                        ? 'bg-white/[0.04] border-white/[0.08] text-white/70'
+                        : !hasExistingRated
+                          ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40 text-white'
+                          : 'bg-white/[0.04] border-white/[0.08] text-white/70 hover:bg-white/[0.06]'
+                    }`}
+                  >
+                    No, not yet
+                  </button>
+                </div>
+
+                {hasExistingRated && (
+                  <div className="space-y-4">
+                    {/* Add new rated condition form */}
+                    <div className="space-y-3 p-4 rounded-xl bg-white/[0.04] border border-white/[0.08]">
+                      <input
+                        type="text"
+                        value={newRatedCondition}
+                        onChange={(e) => setNewRatedCondition(e.target.value)}
+                        placeholder="Condition name (e.g. PTSD, Tinnitus)"
+                        className="w-full px-4 py-3 rounded-xl bg-white/[0.06] border border-white/[0.08] text-white placeholder-white/30 text-sm focus:outline-none focus:border-[#3B82F6]/40"
+                      />
+                      <div className="flex gap-3">
+                        <select
+                          value={newRatedRating}
+                          onChange={(e) => setNewRatedRating(Number(e.target.value))}
+                          className="flex-1 px-3 py-2.5 rounded-xl bg-white/[0.06] border border-white/[0.08] text-white text-sm focus:outline-none focus:border-[#3B82F6]/40"
+                        >
+                          {[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map(v => (
+                            <option key={v} value={v} className="bg-[#102039] text-white">{v}%</option>
+                          ))}
+                        </select>
+                        <div className="flex border border-white/[0.08] rounded-xl overflow-hidden">
+                          <button
+                            onClick={() => setNewRatedType('primary')}
+                            className={`px-3 py-2 text-xs font-medium transition-colors ${
+                              newRatedType === 'primary' ? 'bg-[#3B82F6]/20 text-[#3B82F6]' : 'text-white/50 hover:text-white/80'
+                            }`}
+                          >
+                            Primary
+                          </button>
+                          <button
+                            onClick={() => setNewRatedType('secondary')}
+                            className={`px-3 py-2 text-xs font-medium transition-colors ${
+                              newRatedType === 'secondary' ? 'bg-[#3B82F6]/20 text-[#3B82F6]' : 'text-white/50 hover:text-white/80'
+                            }`}
+                          >
+                            Secondary
+                          </button>
+                        </div>
+                      </div>
+                      <button
+                        onClick={handleAddExistingRated}
+                        disabled={!newRatedCondition.trim()}
+                        className="w-full h-10 rounded-xl bg-[#3B82F6]/20 text-[#3B82F6] text-sm font-medium hover:bg-[#3B82F6]/30 disabled:opacity-40 transition-colors"
+                      >
+                        Add Condition
+                      </button>
+                    </div>
+
+                    {/* List of added rated conditions */}
+                    {existingRated.length > 0 && (
+                      <div className="space-y-2">
+                        {existingRated.map((rc, idx) => (
+                          <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.04] border border-white/[0.08]">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm text-white font-medium truncate">{rc.conditionName}</p>
+                              <p className="text-xs text-white/40">{rc.rating}% · {rc.type}</p>
+                            </div>
+                            <button onClick={() => handleRemoveExistingRated(idx)} className="text-white/40 hover:text-white ml-2" aria-label="Remove">
+                              <X className="h-4 w-4" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Step 8: Tab Tour Cards */}
+            {step === 8 && (
+              <div className="space-y-5">
+                <div className="text-center">
+                  <h2 className="text-xl font-bold text-white">Here's what's inside</h2>
+                  <p className="text-white/40 text-sm mt-1">A quick overview of your tools</p>
+                </div>
+                <div className="space-y-3">
+                  {[
+                    { icon: '🛡️', title: 'Claims', desc: 'Track your conditions, ratings, and evidence' },
+                    { icon: '❤️', title: 'Health', desc: 'Log symptoms, pain, sleep, and medications daily' },
+                    { icon: '📖', title: 'Prep', desc: 'Tools to prepare for exams, fill forms, and build statements' },
+                    { icon: '⚙️', title: 'Settings', desc: 'Export your data, manage your account, and more' },
+                  ].map((card) => (
+                    <div key={card.title} className="flex items-center gap-4 p-4 rounded-xl bg-white/[0.04] border border-white/[0.08]">
+                      <span className="text-2xl flex-shrink-0">{card.icon}</span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-white font-semibold text-sm">{card.title}</p>
+                        <p className="text-white/40 text-xs mt-0.5">{card.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-center text-white/30 text-xs">By continuing, you agree to our <a href="/settings/terms" className="text-[#3B82F6] underline">Terms of Service</a> and <a href="/settings/privacy" className="text-[#3B82F6] underline">Privacy Policy</a>.</p>
+                <p className="text-center text-white/20 text-[10px]">Claim preparation tool. Not affiliated with the VA.</p>
+              </div>
+            )}
+
+            {/* Step 9: Thank You */}
+            {step === 9 && (
               <div className="text-center space-y-6">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -857,7 +1031,7 @@ export default function Onboarding() {
               )}
             </div>
             <div className="flex items-center gap-2">
-              {(step === 3 || step === 4 || step === 5 || step === 6) && (
+              {(step === 3 || step === 4 || step === 5 || step === 6 || step === 7) && (
                 <button onClick={handleSkip} className="text-sm text-white/40 hover:text-white/60 transition-colors h-11 px-4">
                   Skip
                 </button>

@@ -555,7 +555,7 @@ export default function ConditionDetail() {
               <CardContent className="py-8 text-center">
                 <Scale className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
                 <p className="text-muted-foreground">
-                  Rating criteria not yet available for this condition.
+                  For detailed rating criteria for this condition, visit the VA's rating schedule at 38 CFR Part 4.
                 </p>
                 <Button
                   variant="link"
@@ -686,7 +686,7 @@ export default function ConditionDetail() {
               <CardContent className="py-8 text-center">
                 <Stethoscope className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
                 <p className="text-muted-foreground">
-                  DBQ reference not yet available for this condition.
+                  For the Disability Benefits Questionnaire (DBQ) for this condition, ask your examiner or visit va.gov/disability/how-to-file-claim
                 </p>
                 <Button variant="link" className="mt-2" onClick={() => navigate('/exam-prep')}>
                   Go to General Exam Prep
@@ -730,7 +730,7 @@ export default function ConditionDetail() {
                 </div>
               ) : (
                 <p className="text-muted-foreground text-sm">
-                  Secondary conditions data not yet available for this condition.
+                  No secondary conditions mapped for this condition yet. You can explore related conditions using the Secondary Conditions tool in Prep.
                 </p>
               )}
 

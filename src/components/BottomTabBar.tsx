@@ -1,13 +1,13 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Home, FileText, Heart, BookOpen, User } from 'lucide-react';
+import { Home, Shield, Heart, BookOpen, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const tabs = [
   { to: '/', icon: Home, label: 'Home' },
-  { to: '/claims', icon: FileText, label: 'Claims' },
+  { to: '/claims', icon: Shield, label: 'Claims' },
   { to: '/health', icon: Heart, label: 'Health' },
   { to: '/prep', icon: BookOpen, label: 'Prep' },
-  { to: '/profile', icon: User, label: 'Profile' },
+  { to: '/settings', icon: Settings, label: 'Settings' },
 ];
 
 const isTabActive = (tabPath: string, pathname: string) => {
@@ -29,7 +29,7 @@ export function BottomTabBar() {
       className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-xl border-t border-border/50"
       style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
     >
-      <div className="flex items-center justify-around h-20 px-2">
+      <div className="flex items-center justify-around px-2" style={{ height: '56px' }}>
         {tabs.map((tab) => {
           const isActive = isTabActive(tab.to, location.pathname);
           return (
@@ -37,28 +37,26 @@ export function BottomTabBar() {
               key={tab.to}
               onClick={() => navigate(tab.to)}
               className={cn(
-                'relative flex flex-col items-center justify-center gap-1',
-                'flex-1 min-h-[48px] min-w-[48px]',
-                'transition-all duration-200 ease-out',
+                'flex flex-col items-center justify-center gap-0.5',
+                'flex-1 h-full',
+                'transition-colors duration-200 ease-out',
               )}
             >
               <tab.icon
                 className={cn(
-                  'h-6 w-6 transition-all duration-200 ease-out',
-                  isActive ? 'text-blue-500 scale-105' : 'text-slate-400'
+                  'h-6 w-6 transition-colors duration-200 ease-out',
+                  isActive ? 'text-[#3B82F6]' : 'text-[#94A3B8]'
                 )}
               />
               <span
                 className={cn(
-                  'text-xs font-medium transition-colors duration-200 ease-out',
-                  isActive ? 'text-blue-500' : 'text-slate-400'
+                  'font-medium transition-colors duration-200 ease-out',
+                  isActive ? 'text-[#3B82F6]' : 'text-[#94A3B8]'
                 )}
+                style={{ fontSize: '0.6875rem', lineHeight: '1' }}
               >
                 {tab.label}
               </span>
-              {isActive && (
-                <span className="absolute bottom-1 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-blue-500" />
-              )}
             </button>
           );
         })}

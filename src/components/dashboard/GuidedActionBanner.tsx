@@ -107,7 +107,7 @@ export function GuidedActionBanner({ onOpenAddCondition }: GuidedActionBannerPro
         icon: <FileText className="h-5 w-5" />,
         label: 'Link Evidence to Conditions',
         description: `${weakConditions.length} condition${weakConditions.length > 1 ? 's need' : ' needs'} more evidence`,
-        href: '/',
+        href: '/claims',
         priority: 6,
       };
     }

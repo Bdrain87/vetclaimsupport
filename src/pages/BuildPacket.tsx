@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
+import { generateExport, downloadExport } from '@/services/exportEngine';
 
 interface PacketSection {
   id: string;
@@ -163,9 +164,26 @@ export default function BuildPacket() {
     setTimeout(() => setExportMessage(null), 4000);
   };
 
-  const handleGeneratePDF = () => {
-    showMessage('PDF export is coming soon. Opening print dialog as a fallback.');
-    setTimeout(() => window.print(), 600);
+  const handleGeneratePDF = async () => {
+    try {
+      const result = await generateExport({
+        format: 'pdf',
+        sections: {
+          personalInfo: !!selected.claimOverview,
+          conditions: !!selected.claimOverview,
+          evidenceChecklist: !!selected.evidenceChecklist,
+          healthLogs: !!(selected.symptomLogs || selected.medicalVisits || selected.medications),
+          generatedDocs: !!selected.buddyContacts,
+          formDrafts: false,
+          romMeasurements: false,
+          timeline: !!selected.exposures,
+        },
+      });
+      downloadExport(result);
+    } catch {
+      showMessage('Unable to generate PDF. Opening print dialog instead.');
+      setTimeout(() => window.print(), 600);
+    }
   };
 
   const handlePrint = () => {

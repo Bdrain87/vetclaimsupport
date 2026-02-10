@@ -167,7 +167,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
         icon: <AlertTriangle className="h-5 w-5" />,
         title: 'Strengthen Your Evidence',
         message: `${conditionNames} need${weakConditions.length === 1 ? 's' : ''} more linked evidence. Expand each condition card to link medical visits and symptoms.`,
-        action: { label: 'Review Conditions', href: '/' },
+        action: { label: 'Review Conditions', href: '/claims' },
         condition: 'Low evidence strength',
       });
     }
@@ -258,7 +258,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
         icon: <Calendar className="h-5 w-5" />,
         title: 'File an Intent to File',
         message: 'Protect your effective date! Filing an ITF locks in your start date for back pay calculations.',
-        action: { label: 'Learn More', href: '/' },
+        action: { label: 'Learn More', href: '/settings/itf' },
         condition: 'No Intent to File',
       });
     }

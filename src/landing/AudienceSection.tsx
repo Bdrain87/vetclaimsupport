@@ -27,7 +27,7 @@ const audiences = [
   },
   {
     title: 'Long-Time Veterans',
-    description: 'Been out for 20 years? Knees getting worse? Secondary conditions can dramatically increase your rating. Your service earned this.',
+    description: 'Been out for 20 years? Knees getting worse? Secondary conditions may strengthen your claim. Your service earned this.',
     tagline: 'It\'s never too late. Secondary conditions exist.',
     icon: Heart,
     gradient: 'from-rose-500 to-pink-500'

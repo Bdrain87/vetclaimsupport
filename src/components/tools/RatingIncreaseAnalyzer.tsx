@@ -229,7 +229,7 @@ export function RatingIncreaseAnalyzer() {
           {selectedCondition && !conditionData && (
             <div className="p-3 rounded-lg bg-muted border">
               <p className="text-sm text-muted-foreground">
-                Rating criteria not available for this condition. Try selecting a condition like PTSD, Migraines, Sleep Apnea, or Back Pain.
+                For detailed rating criteria for this condition, visit the VA's Schedule for Rating Disabilities (38 CFR Part 4) at va.gov
               </p>
             </div>
           )}

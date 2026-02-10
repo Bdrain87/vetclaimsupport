@@ -582,7 +582,7 @@ export function checkPACTActEligibility(
   result.isEligible = result.matchedLocations.length > 0;
 
   if (result.isEligible) {
-    result.notes.push('File your claim as soon as possible to maximize potential back pay.');
+    result.notes.push('File your claim as soon as possible to preserve your effective date for potential back pay.');
   }
 
   return result;

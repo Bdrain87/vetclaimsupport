@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Construction } from 'lucide-react';
 
-export default function PlaceholderPage({ title = 'Coming in Phase 6' }: { title?: string }) {
+export default function PlaceholderPage({ title = 'Coming Soon' }: { title?: string }) {
   const navigate = useNavigate();
 
   return (

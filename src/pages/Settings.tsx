@@ -316,7 +316,7 @@ export default function Settings() {
         </CardHeader>
         <CardContent className="space-y-2">
           <Link
-            to="/privacy"
+            to="/settings/privacy"
             className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
           >
             <div className="flex items-center gap-3">
@@ -327,7 +327,7 @@ export default function Settings() {
           </Link>
 
           <Link
-            to="/terms"
+            to="/settings/terms"
             className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
           >
             <div className="flex items-center gap-3">
@@ -338,7 +338,7 @@ export default function Settings() {
           </Link>
 
           <Link
-            to="/disclaimer"
+            to="/settings/disclaimer"
             className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
           >
             <div className="flex items-center gap-3">
