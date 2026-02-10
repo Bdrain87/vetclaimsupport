@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Settings, User } from 'lucide-react';
+import { Menu, X, Settings, User, FileDown } from 'lucide-react';
 import { useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useProfileStore } from '@/store/useProfileStore';
 import { cn } from '@/lib/utils';
+import { ExportModal } from '@/components/ExportModal';
 
 const NAV_ITEMS = [
   { label: 'Dashboard', href: '/dashboard' },
@@ -51,6 +52,7 @@ function NavLinkItem({ to, children }: { to: string; children: React.ReactNode }
 export const PlatinumNavbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isCompressed, setIsCompressed] = useState(false);
+  const [exportModalOpen, setExportModalOpen] = useState(false);
   const location = useLocation();
 
   const { firstName } = useProfileStore();
@@ -134,8 +136,15 @@ export const PlatinumNavbar = () => {
                 </div>
               </div>
 
-              {/* Right: Settings + Profile */}
+              {/* Right: Export + Settings + Profile */}
               <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                <button
+                  onClick={() => setExportModalOpen(true)}
+                  className="min-h-[44px] min-w-[44px] flex items-center justify-center text-white/40 hover:text-white/80 transition-colors"
+                  aria-label="Export"
+                >
+                  <FileDown size={18} />
+                </button>
                 <Link
                   to="/settings"
                   className="min-h-[44px] min-w-[44px] flex items-center justify-center text-white/40 hover:text-white/80 transition-colors"
@@ -186,13 +195,22 @@ export const PlatinumNavbar = () => {
                 <span className="text-[#F8FAFC] font-bold tracking-[0.08em] uppercase text-sm">VCS</span>
               </Link>
 
-              <button
-                onClick={() => setDrawerOpen(true)}
-                className="min-h-[44px] min-w-[44px] flex items-center justify-center text-white/60 hover:text-white transition-colors"
-                aria-label="Open menu"
-              >
-                <Menu size={22} />
-              </button>
+              <div className="flex items-center">
+                <button
+                  onClick={() => setExportModalOpen(true)}
+                  className="min-h-[44px] min-w-[44px] flex items-center justify-center text-white/40 hover:text-white/80 transition-colors"
+                  aria-label="Export"
+                >
+                  <FileDown size={18} />
+                </button>
+                <button
+                  onClick={() => setDrawerOpen(true)}
+                  className="min-h-[44px] min-w-[44px] flex items-center justify-center text-white/60 hover:text-white transition-colors"
+                  aria-label="Open menu"
+                >
+                  <Menu size={22} />
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -265,6 +283,9 @@ export const PlatinumNavbar = () => {
           })}
         </nav>
       </div>
+
+      {/* Export Modal */}
+      <ExportModal isOpen={exportModalOpen} onClose={() => setExportModalOpen(false)} />
     </>
   );
 };
