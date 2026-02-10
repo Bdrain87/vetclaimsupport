@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
+import { useProfileStore, BRANCH_LABELS } from '@/store/useProfileStore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -21,7 +22,10 @@ import { exportPersonalStatement } from '@/utils/pdfExport';
 
 export function PersonalStatementGenerator() {
   const { data } = useClaims();
+  const profile = useProfileStore();
   const { toast } = useToast();
+  const veteranFullName = `${profile.firstName} ${profile.lastName}`.trim();
+  const branchLabel = profile.branch ? BRANCH_LABELS[profile.branch] : '';
   const [activeTab, setActiveTab] = useState('preview');
   const [customEdits, setCustomEdits] = useState('');
   const [selectedCondition, setSelectedCondition] = useState<string | null>(null);
@@ -69,16 +73,18 @@ export function PersonalStatementGenerator() {
 VA Form 21-4138
 
 Date: ${today}
+${veteranFullName ? `Veteran: ${veteranFullName}` : ''}
+${branchLabel ? `Branch: ${branchLabel}` : ''}
 Subject: Statement in Support of Claim for ${condition.name}
 
 To Whom It May Concern:
 
-I am writing to provide a personal statement in support of my claim for service connection for ${condition.name}. This statement describes my in-service experiences, the onset of my condition, and its ongoing impact on my daily life.`;
+I${veteranFullName ? `, ${veteranFullName},` : ''} am writing to provide a personal statement in support of my claim for service connection for ${condition.name}. This statement describes my in-service experiences, the onset of my condition, and its ongoing impact on my daily life.`;
 
     const serviceConnection = `
 SERVICE CONNECTION
 
-${earliestService ? `I served in the United States military from ${format(parseISO(earliestService.startDate), 'MMMM yyyy')}${earliestService.endDate ? ` to ${format(parseISO(earliestService.endDate), 'MMMM yyyy')}` : ' to present'}.` : 'During my military service,'}
+${earliestService ? `I served in the ${branchLabel || 'United States military'} from ${format(parseISO(earliestService.startDate), 'MMMM yyyy')}${earliestService.endDate ? ` to ${format(parseISO(earliestService.endDate), 'MMMM yyyy')}` : ' to present'}.` : profile.serviceDates?.start ? `I served in the ${branchLabel || 'United States military'} from ${format(parseISO(profile.serviceDates.start), 'MMMM yyyy')}${profile.serviceDates.end ? ` to ${format(parseISO(profile.serviceDates.end), 'MMMM yyyy')}` : ' to present'}.` : 'During my military service,'}
 
 ${linkedExposures.length > 0 ? `During my service, I was exposed to the following hazards that I believe contributed to my current condition:
 ${linkedExposures.map(e => `- ${e.type} exposure at ${e.location || 'duty station'} (${format(parseISO(e.date), 'MMMM yyyy')})${e.duration ? `, duration: ${e.duration}` : ''}${e.details ? `. ${e.details}` : ''}`).join('\n')}
@@ -129,7 +135,7 @@ _______________________________
 [Your Signature]
 
 _______________________________
-[Your Printed Name]
+${veteranFullName || '[Your Printed Name]'}
 
 _______________________________
 [Date]`;

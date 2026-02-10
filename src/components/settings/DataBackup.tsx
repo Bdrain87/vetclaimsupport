@@ -14,9 +14,10 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { useClaims } from '@/hooks/useClaims';
+import useAppStore from '@/store/useAppStore';
 import { getAllFileIds, getFileData } from '@/lib/indexedDB';
 
-const STORAGE_KEY = 'va-claims-tracker-data';
+const STORAGE_KEY = 'vcs-app-data';
 
 interface BackupData {
   version: string;
@@ -27,7 +28,7 @@ interface BackupData {
 
 export function DataBackup() {
   const { toast } = useToast();
-  const { data, refreshData } = useClaims();
+  const { data } = useClaims();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
@@ -120,8 +121,9 @@ export function DataBackup() {
 
     setIsImporting(true);
     try {
-      // Import claims data
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(pendingImportData.claimsData));
+      // Write to Zustand persist storage key and reload state
+      const claimsData = pendingImportData.claimsData;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ state: claimsData, version: 1 }));
 
       // Import IndexedDB files if present
       if (pendingImportData.indexedDBFiles && pendingImportData.indexedDBFiles.length > 0) {
@@ -131,13 +133,14 @@ export function DataBackup() {
         }
       }
 
-      // Refresh app data
-      refreshData();
-
+      // Reload the page to rehydrate Zustand from the updated localStorage
       toast({
         title: 'Restore Complete',
-        description: `Data restored from backup dated ${new Date(pendingImportData.exportDate).toLocaleDateString()}.`,
+        description: `Data restored from backup dated ${new Date(pendingImportData.exportDate).toLocaleDateString()}. Reloading...`,
       });
+
+      // Small delay to show toast before reload
+      setTimeout(() => window.location.reload(), 500);
     } catch (error) {
       console.error('Import error:', error);
       toast({

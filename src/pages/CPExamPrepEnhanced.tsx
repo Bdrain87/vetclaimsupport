@@ -91,7 +91,7 @@ export default function CPExamPrepEnhanced() {
   // Get user's claimed condition names for highlighting
   const userConditionNames = useMemo(() => {
     const names = new Set<string>();
-    // From ClaimsContext
+    // From claim conditions (useAppStore via useClaims adapter)
     (claimsData.claimConditions || []).forEach(c => names.add(c.name.toLowerCase()));
     // From UserConditions
     userConditions.forEach(uc => {

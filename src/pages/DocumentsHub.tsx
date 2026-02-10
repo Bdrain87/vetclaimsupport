@@ -167,7 +167,7 @@ export default function DocumentsHub() {
     pendingFile: null as { dataUrl: string; fileName: string; fileType: string; fileSize: number } | null,
   });
 
-  // Get conditions from all sources (ClaimsContext + UserConditions)
+  // Get conditions from all sources (useAppStore via adapter hooks)
   const allConditions = useMemo(() => {
     const names = new Set<string>();
     data.symptoms.forEach(s => { if (s.bodyArea) names.add(s.bodyArea); });
