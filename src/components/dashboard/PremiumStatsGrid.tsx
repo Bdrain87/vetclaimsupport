@@ -79,7 +79,7 @@ export function PremiumStatsGrid() {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
       {/* Evidence Score - Glass Card with Gold Readiness Ring */}
-      <Link to="/" className="group">
+      <Link to="/claims" className="group">
         <div className={cn(
           glassCard,
           "hover:scale-[1.02] hover:shadow-[0_12px_40px_rgba(59,130,246,0.2)] hover:border-[#3B82F6]/30"
@@ -110,7 +110,7 @@ export function PremiumStatsGrid() {
       </Link>
 
       {/* Phase Completion - Glass Card */}
-      <Link to="/" className="group">
+      <Link to="/settings/journey" className="group">
         <div className={cn(
           glassCard,
           "hover:scale-[1.02] hover:shadow-[0_12px_40px_rgba(59,130,246,0.2)] hover:border-[#3B82F6]/30"
@@ -130,7 +130,7 @@ export function PremiumStatsGrid() {
       </Link>
 
       {/* Conditions Tracked - Glass Card */}
-      <Link to="/" className="group">
+      <Link to="/claims" className="group">
         <div className={cn(
           glassCard,
           "hover:scale-[1.02] hover:shadow-[0_12px_40px_rgba(59,130,246,0.15)] hover:border-[#3B82F6]/20"

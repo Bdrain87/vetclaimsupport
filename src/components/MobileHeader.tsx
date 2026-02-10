@@ -4,7 +4,7 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import useAppStore from '@/store/useAppStore';
 import { getConditionById } from '@/data/vaConditions';
 
-const ROOT_TAB_ROUTES = ['/', '/claims', '/health', '/prep', '/profile'];
+const ROOT_TAB_ROUTES = ['/', '/claims', '/health', '/prep', '/settings'];
 
 const pageLabels: Record<string, string> = {
   '/': 'Dashboard',
@@ -34,24 +34,23 @@ const pageLabels: Record<string, string> = {
   '/prep/va-speak': 'VA-Speak',
   '/prep/back-pay': 'Back Pay',
   '/prep/packet': 'Claim Packet',
-  '/profile': 'Profile',
-  '/profile/edit': 'Edit Profile',
-  '/profile/service-history': 'Service History',
-  '/profile/vault': 'Documents',
-  '/profile/journey': 'Claim Journey',
-  '/profile/itf': 'Intent to File',
-  '/profile/timeline': 'Medical Timeline',
-  '/profile/settings': 'Settings',
-  '/profile/help': 'Help Center',
-  '/profile/resources': 'VA Resources',
-  '/profile/export-data': 'Export Data',
-  '/profile/delete-account': 'Delete Account',
-  '/profile/privacy': 'Privacy Policy',
-  '/profile/terms': 'Terms of Service',
-  '/profile/disclaimer': 'Disclaimer',
-  '/profile/about': 'About VCS',
-  '/profile/glossary': 'Glossary',
-  '/profile/faq': 'FAQ',
+  '/settings': 'Settings',
+  '/settings/edit-profile': 'Edit Profile',
+  '/settings/service-history': 'Service History',
+  '/settings/vault': 'Documents',
+  '/settings/journey': 'Claim Journey',
+  '/settings/itf': 'Intent to File',
+  '/settings/timeline': 'Medical Timeline',
+  '/settings/help': 'Help Center',
+  '/settings/resources': 'VA Resources',
+  '/settings/export-data': 'Export Data',
+  '/settings/delete-account': 'Delete Account',
+  '/settings/privacy': 'Privacy Policy',
+  '/settings/terms': 'Terms of Service',
+  '/settings/disclaimer': 'Disclaimer',
+  '/settings/about': 'About VCS',
+  '/settings/glossary': 'Glossary',
+  '/settings/faq': 'FAQ',
 };
 
 function getParentRoute(pathname: string): string {

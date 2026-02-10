@@ -2,6 +2,24 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
+import { Capacitor } from '@capacitor/core';
+
+// Configure native plugins when running as native app
+if (Capacitor.isNativePlatform()) {
+  import('@capacitor/status-bar').then(({ StatusBar, Style }) => {
+    StatusBar.setStyle({ style: Style.Dark });
+    StatusBar.setBackgroundColor({ color: '#102039' });
+  });
+
+  import('@capacitor/keyboard').then(({ Keyboard }) => {
+    Keyboard.addListener('keyboardWillShow', (info) => {
+      document.body.style.setProperty('--keyboard-height', `${info.keyboardHeight}px`);
+    });
+    Keyboard.addListener('keyboardWillHide', () => {
+      document.body.style.setProperty('--keyboard-height', '0px');
+    });
+  });
+}
 
 // ============================================================
 // Fatal error display — uses safe DOM APIs (no innerHTML XSS risk)

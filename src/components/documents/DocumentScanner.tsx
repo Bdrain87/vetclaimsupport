@@ -437,8 +437,8 @@ export function DocumentScanner({
             <div className="flex items-start gap-2 p-3 rounded-lg bg-success/10 border border-success/20 text-xs">
               <Lock className="h-4 w-4 text-success shrink-0 mt-0.5" />
               <div className="text-success-foreground">
-                <strong>Privacy Guaranteed:</strong> All text extraction happens locally in your browser. 
-                No images or text are uploaded to any server. Your documents stay on YOUR device.
+                <strong>Local Processing:</strong> All text extraction happens locally in your browser.
+                No images or text are uploaded to any server. Your documents stay on your device.
               </div>
             </div>
 

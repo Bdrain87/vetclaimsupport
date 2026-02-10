@@ -40,7 +40,7 @@ export function DashboardInsights() {
     insights.push({
       icon: <Link2 className="h-5 w-5 text-warning" />,
       message: `You logged ${data.exposures.length} exposure${data.exposures.length > 1 ? 's' : ''} but haven't linked them to any conditions. Use the Claim Builder below to explore related disabilities.`,
-      action: { label: 'Link Exposures', to: '/' },
+      action: { label: 'Link Exposures', to: '/claims' },
       type: 'warning',
     });
   }

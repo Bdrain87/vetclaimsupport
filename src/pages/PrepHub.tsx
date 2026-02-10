@@ -33,16 +33,20 @@ export default function PrepHub() {
         {prepTools.map((tool) => (
           <button
             key={tool.route}
-            onClick={() => navigate(tool.route)}
+            onClick={() => !tool.placeholder && navigate(tool.route)}
+            disabled={tool.placeholder}
             className={cn(
-              'flex flex-col items-start gap-2 p-4 rounded-xl border bg-card hover:bg-accent/50 transition-colors text-left',
+              'flex flex-col items-start gap-2 p-4 rounded-xl border bg-card transition-colors text-left',
+              tool.placeholder
+                ? 'opacity-60 cursor-not-allowed'
+                : 'hover:bg-accent/50',
               tool.highlight
                 ? 'border-blue-500/40 ring-1 ring-blue-500/20'
                 : 'border-border'
             )}
           >
             <div className="flex items-center gap-2 w-full">
-              <tool.icon className="h-6 w-6 text-blue-500" />
+              <tool.icon className={cn('h-6 w-6', tool.placeholder ? 'text-muted-foreground' : 'text-blue-500')} />
               {tool.highlight && (
                 <Badge className="ml-auto text-[9px] bg-blue-500/20 text-blue-500 border-blue-500/30 px-1.5 py-0">
                   NEW
