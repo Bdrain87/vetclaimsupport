@@ -196,7 +196,7 @@ const hearingRequirements: EvidenceRequirement[] = [
   },
   {
     id: 'mos_evidence',
-    label: 'MOS/AFSC Evidence',
+    label: 'Service Job Code Evidence',
     description: 'Job code showing noise-hazardous duties',
     isCritical: false,
     check: (condition, data) => {

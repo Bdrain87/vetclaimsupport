@@ -98,7 +98,7 @@ export function ClaimsJourneyRoadmap() {
       { label: 'File Intent to File', completed: hasItf, href: '/settings/itf' },
       { label: 'Reach 50%+ evidence per condition', completed: conditionsWithStrongEvidence >= 1, href: '/claims' },
       { label: 'Review claim checklist', completed: false, href: '/claim-checklist' },
-      { label: 'Prepare for C&P exam', completed: false, href: '/exam-prep' },
+      { label: 'Prepare for C&P exam', completed: false, href: '/prep/exam' },
     ];
     const phase4Progress = Math.round((phase4Tasks.filter(t => t.completed).length / phase4Tasks.length) * 100);
 

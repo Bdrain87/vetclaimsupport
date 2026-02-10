@@ -46,7 +46,6 @@ const pages: Record<string, () => Promise<{ default: React.ComponentType }>> = {
   BuddyStatements: () => import('@/pages/BuddyStatements'),
   NexusLetterGenerator: () => import('@/pages/NexusLetterGenerator'),
   DocumentsHub: () => import('@/pages/DocumentsHub'),
-  ExamPrep: () => import('@/pages/ExamPrep'),
   CPExamPrepEnhanced: () => import('@/pages/CPExamPrepEnhanced'),
   DBQPrepSheet: () => import('@/pages/DBQPrepSheet'),
   VAForms: () => import('@/pages/VAForms'),

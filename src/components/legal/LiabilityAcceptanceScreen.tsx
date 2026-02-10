@@ -115,6 +115,15 @@ export function LiabilityAcceptanceScreen() {
             </div>
 
             <div>
+              <h3 className="font-semibold text-foreground mb-2">AI-Assisted Features</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                This app uses AI to assist with claim preparation. AI can make
+                mistakes — always verify information before submitting anything
+                to the VA.
+              </p>
+            </div>
+
+            <div>
               <h3 className="font-semibold text-foreground mb-2">Your Responsibility</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 You are responsible for verifying all information and for any

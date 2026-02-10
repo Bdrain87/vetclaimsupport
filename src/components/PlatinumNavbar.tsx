@@ -19,7 +19,7 @@ const DRAWER_ITEMS = [
   { label: 'Health Log', href: '/health-log' },
   { label: 'Claim Tools', href: '/claim-tools' },
   { label: 'Evidence Vault', href: '/documents' },
-  { label: 'Exam Prep', href: '/exam-prep' },
+  { label: 'Exam Prep', href: '/prep/exam' },
   { label: 'Calculator', href: '/bilateral-calculator' },
   { label: 'Settings', href: '/settings' },
 ];

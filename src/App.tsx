@@ -46,8 +46,6 @@ const BuildPacket = lazy(() => import('./pages/BuildPacket'));
 const Combination = lazy(() => import('./components/UnifiedRatingCalculator'));
 const ClaimJourney = lazy(() => import('./pages/ClaimJourney'));
 const HealthLog = lazy(() => import('./pages/HealthLog'));
-const ExamPrep = lazy(() => import('./pages/ExamPrep'));
-
 // Hub pages
 const HealthHub = lazy(() => import('./pages/HealthHub'));
 const PrepHub = lazy(() => import('./pages/PrepHub'));
@@ -163,7 +161,7 @@ function AnimatedRoutes() {
             {/* === PREP === */}
             <Route path="/prep" element={<PrepHub />} />
             <Route path="/prep/exam" element={<CPExamPrepEnhanced />} />
-            <Route path="/prep/personal-statement" element={<ExamPrep />} />
+            <Route path="/prep/personal-statement" element={<Navigate to="/prep/exam" replace />} />
             <Route path="/prep/buddy-statement" element={<BuddyStatements />} />
             <Route path="/prep/nexus-letter" element={<NexusLetterGenerator />} />
             <Route path="/prep/stressor" element={<PlaceholderPage title="Stressor Statement (Coming Soon)" />} />

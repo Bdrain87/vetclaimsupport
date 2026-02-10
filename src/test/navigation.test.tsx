@@ -51,7 +51,7 @@ describe('PlatinumNavbar', () => {
       'Claim Tools': '/claim-tools',
       Calculator: '/bilateral-calculator',
       'Health Log': '/health-log',
-      'Exam Prep': '/exam-prep',
+      'Exam Prep': '/prep/exam',
       Settings: '/settings',
     };
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
-import { Share2, Copy, CheckCircle2, Download, Calendar, FileText, Stethoscope, Pill, Activity, Users } from 'lucide-react';
+import { Share2, Copy, CheckCircle2, Download, Calendar, FileText, Stethoscope, Pill, Activity, Users, Printer } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -13,48 +13,55 @@ export function ShareWithVSO() {
   const [copied, setCopied] = useState(false);
 
   const conditions = data.claimConditions || [];
-  const buddyStatementsReceived = data.buddyContacts.filter(b => 
+  const buddyStatementsReceived = data.buddyContacts.filter(b =>
     b.statementStatus === 'Received' || b.statementStatus === 'Submitted'
   ).length;
-  const documentsObtained = data.documents.filter(d => 
+  const documentsObtained = data.documents.filter(d =>
     d.status === 'Obtained' || d.status === 'Submitted'
   ).length;
 
-  // Generate JSON for export
-  const generateExportData = () => {
-    const summary = {
-      generatedAt: new Date().toISOString(),
-      veteranInfo: {
-        separationDate: data.separationDate,
-        serviceLocations: data.serviceHistory.map(s => s.base).filter(Boolean),
-      },
-      claimsOverview: {
-        totalConditions: conditions.length,
-        conditions: conditions.map(c => ({
-          name: c.name,
-          linkedMedicalVisits: c.linkedMedicalVisits.length,
-          linkedSymptoms: c.linkedSymptoms.length,
-          linkedExposures: c.linkedExposures.length,
-          linkedBuddyContacts: c.linkedBuddyContacts.length,
-        })),
-      },
-      evidenceSummary: {
-        medicalVisits: data.medicalVisits.length,
-        symptoms: data.symptoms.length,
-        exposures: data.exposures.length,
-        medications: data.medications.length,
-        buddyContacts: data.buddyContacts.length,
-        buddyStatementsReceived,
-        documentsObtained,
-      },
-      note: 'This is a summary for VSO review. Full details available in the app.',
-    };
-
-    return JSON.stringify(summary, null, 2);
+  // Generate plain text summary for export
+  const generatePlainTextSummary = () => {
+    const lines: string[] = [];
+    lines.push('VET CLAIM SUPPORT — VSO SUMMARY');
+    lines.push(`Generated: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`);
+    lines.push('');
+    lines.push('--- VETERAN INFO ---');
+    lines.push(`Separation Date: ${data.separationDate ? new Date(data.separationDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Not set'}`);
+    if (data.serviceHistory.length > 0) {
+      lines.push('Service Locations:');
+      data.serviceHistory.filter(s => s.base).forEach(s => {
+        lines.push(`  - ${s.base}`);
+      });
+    }
+    lines.push('');
+    lines.push(`--- CONDITIONS BEING CLAIMED (${conditions.length}) ---`);
+    if (conditions.length > 0) {
+      conditions.forEach(c => {
+        lines.push(`• ${c.name}`);
+        lines.push(`    Medical Visits: ${c.linkedMedicalVisits.length} | Symptoms: ${c.linkedSymptoms.length} | Exposures: ${c.linkedExposures.length} | Buddy Contacts: ${c.linkedBuddyContacts.length}`);
+      });
+    } else {
+      lines.push('No conditions added to claim yet.');
+    }
+    lines.push('');
+    lines.push('--- EVIDENCE SUMMARY ---');
+    lines.push(`Medical Visits: ${data.medicalVisits.length}`);
+    lines.push(`Medications: ${data.medications.length}`);
+    lines.push(`Symptoms Logged: ${data.symptoms.length}`);
+    lines.push(`Buddy Contacts: ${data.buddyContacts.length}`);
+    lines.push('');
+    lines.push('--- DOCUMENTS & STATEMENTS ---');
+    lines.push(`Documents: ${documentsObtained} of ${data.documents.length} obtained/submitted`);
+    lines.push(`Buddy Statements: ${buddyStatementsReceived} of ${data.buddyContacts.length} received`);
+    lines.push(`Exposures Documented: ${data.exposures.length}`);
+    lines.push('');
+    lines.push('Privacy Note: This summary contains only aggregate counts and condition names. Detailed medical information stays on your device.');
+    return lines.join('\n');
   };
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(generateExportData());
+  const handleCopyText = async () => {
+    await navigator.clipboard.writeText(generatePlainTextSummary());
     setCopied(true);
     toast({
       title: 'Summary Copied!',
@@ -63,12 +70,12 @@ export function ShareWithVSO() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleDownload = () => {
-    const blob = new Blob([generateExportData()], { type: 'application/json' });
+  const handleDownloadText = () => {
+    const blob = new Blob([generatePlainTextSummary()], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `vso-summary-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `vso-summary-${new Date().toISOString().split('T')[0]}.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -76,7 +83,15 @@ export function ShareWithVSO() {
 
     toast({
       title: 'Summary Downloaded',
-      description: 'Send this file to your VSO for review',
+      description: 'Send this text file to your VSO for review',
+    });
+  };
+
+  const handlePrintPDF = () => {
+    window.print();
+    toast({
+      title: 'Print Dialog Opened',
+      description: 'Select "Save as PDF" in your print dialog to export as PDF',
     });
   };
 
@@ -218,7 +233,7 @@ export function ShareWithVSO() {
             {/* Privacy Note */}
             <div className="p-3 bg-primary/5 border border-primary/20 rounded-lg">
               <p className="text-xs text-muted-foreground">
-                <strong className="text-foreground">Privacy Note:</strong> This summary contains only 
+                <strong className="text-foreground">Privacy Note:</strong> This summary contains only
                 aggregate counts and condition names. Detailed medical information stays on your device.
               </p>
             </div>
@@ -226,23 +241,29 @@ export function ShareWithVSO() {
         </ScrollArea>
 
         {/* Actions */}
-        <div className="flex gap-2 pt-2">
-          <Button onClick={handleCopy} variant="outline" className="flex-1 gap-2">
-            {copied ? (
-              <>
-                <CheckCircle2 className="h-4 w-4 text-success" />
-                Copied!
-              </>
-            ) : (
-              <>
-                <Copy className="h-4 w-4" />
-                Copy Data
-              </>
-            )}
-          </Button>
-          <Button onClick={handleDownload} className="flex-1 gap-2">
-            <Download className="h-4 w-4" />
-            Download File
+        <div className="flex flex-col gap-2 pt-2">
+          <div className="flex gap-2">
+            <Button onClick={handleCopyText} variant="outline" className="flex-1 gap-2">
+              {copied ? (
+                <>
+                  <CheckCircle2 className="h-4 w-4 text-success" />
+                  Copied!
+                </>
+              ) : (
+                <>
+                  <Copy className="h-4 w-4" />
+                  Copy Text
+                </>
+              )}
+            </Button>
+            <Button onClick={handleDownloadText} className="flex-1 gap-2">
+              <Download className="h-4 w-4" />
+              Download .txt
+            </Button>
+          </div>
+          <Button onClick={handlePrintPDF} variant="outline" className="w-full gap-2">
+            <Printer className="h-4 w-4" />
+            Save as PDF (Print)
           </Button>
         </div>
       </DialogContent>

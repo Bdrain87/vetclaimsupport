@@ -21,6 +21,8 @@ export const BRANCH_COLORS: Record<Branch, string> = {
   space_force: '#000000',
 };
 
+export type ClaimGoal = 'initial' | 'increase' | 'secondary' | 'appeal' | 'exploring';
+
 export interface UserProfile {
   firstName: string;
   lastName: string;
@@ -30,6 +32,7 @@ export interface UserProfile {
   hasCompletedOnboarding: boolean;
   serviceDates?: { start: string; end: string };
   claimType?: 'initial' | 'increase' | 'supplemental';
+  claimGoal?: ClaimGoal;
   intentToFileFiled?: boolean;
   intentToFileDate?: string;
   separationDate?: string;
@@ -45,6 +48,7 @@ interface ProfileState extends UserProfile {
   setMOS: (code: string, title: string) => void;
   setServiceDates: (dates: { start: string; end: string }) => void;
   setClaimType: (type: 'initial' | 'increase' | 'supplemental') => void;
+  setClaimGoal: (goal: ClaimGoal) => void;
   setIntentToFile: (filed: boolean, date?: string) => void;
   setSeparationDate: (date: string) => void;
   setEntitlement: (entitlement: 'preview' | 'lifetime') => void;
@@ -65,6 +69,7 @@ export const useProfileStore = create<ProfileState>()(
       hasCompletedOnboarding: false,
       serviceDates: undefined,
       claimType: undefined,
+      claimGoal: undefined,
       intentToFileFiled: undefined,
       intentToFileDate: undefined,
       separationDate: undefined,
@@ -78,6 +83,7 @@ export const useProfileStore = create<ProfileState>()(
       setMOS: (code, title) => set({ mosCode: code, mosTitle: title }),
       setServiceDates: (dates) => set({ serviceDates: dates }),
       setClaimType: (type) => set({ claimType: type }),
+      setClaimGoal: (goal) => set({ claimGoal: goal }),
       setIntentToFile: (filed, date) => set({ intentToFileFiled: filed, intentToFileDate: date }),
       setSeparationDate: (date) => set({ separationDate: date }),
       setEntitlement: (entitlement) => set({ entitlement }),
@@ -93,6 +99,7 @@ export const useProfileStore = create<ProfileState>()(
         hasCompletedOnboarding: false,
         serviceDates: undefined,
         claimType: undefined,
+        claimGoal: undefined,
         intentToFileFiled: undefined,
         intentToFileDate: undefined,
         separationDate: undefined,

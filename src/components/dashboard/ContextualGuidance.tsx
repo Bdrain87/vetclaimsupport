@@ -279,7 +279,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
           icon: <TrendingUp className="h-5 w-5" />,
           title: 'Great Progress!',
           message: 'Your evidence is building nicely. Consider preparing for your C&P exam and reviewing your claim checklist.',
-          action: { label: 'Prep for Exam', href: '/exam-prep' },
+          action: { label: 'Prep for Exam', href: '/prep/exam' },
           condition: 'Strong evidence base',
         });
       }
