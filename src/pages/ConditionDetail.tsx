@@ -27,7 +27,7 @@ import {
   ChevronLeft, Scale, FileText, Link2, Stethoscope, CheckCircle2,
   AlertTriangle, Info, ExternalLink, Trash2, Edit, BookOpen,
   Activity, TrendingUp, Clock, Brain, Moon, Zap, ArrowRight,
-  Sparkles, Loader2, ChevronDown,
+  Sparkles, Loader2, ChevronDown, FileCheck,
 } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
@@ -38,6 +38,7 @@ import { ClaimIntelligence } from '@/services/claimIntelligence';
 import { getRatingCriteriaByCondition, type RatingCriteria } from '@/data/vaResources/ratingCriteria';
 import { getDBQByCondition, type DBQReference } from '@/data/vaResources/dbqReference';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
+import { useCaseLaw } from '@/hooks/useCaseLaw';
 import { useProfileStore } from '@/store/useProfileStore';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 
@@ -136,6 +137,11 @@ export default function ConditionDetail() {
   const [aiInsights, setAiInsights] = useState<string | null>(null);
   const [aiInsightsOpen, setAiInsightsOpen] = useState(false);
 
+  // Case law
+  const { getCaseLaw, isLoading: caseLawLoading, error: caseLawError } = useCaseLaw();
+  const [caseLawResult, setCaseLawResult] = useState<string | null>(null);
+  const [caseLawOpen, setCaseLawOpen] = useState(false);
+
   // Local state for editing
   const [editRating, setEditRating] = useState<string>(
     userCondition?.rating?.toString() || ''
@@ -215,6 +221,18 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
 
     const result = await aiGenerate(prompt);
     if (result) setAiInsights(result);
+  };
+
+  // Handle case law generation
+  const handleGenerateCaseLaw = async () => {
+    if (!conditionDetails || caseLawResult) return;
+    const claimType = userCondition?.isPrimary ? 'new' : 'secondary';
+    const evidenceList: string[] = [];
+    if ((data.medicalVisits || []).length > 0) evidenceList.push('Medical records');
+    if ((data.buddyContacts || []).length > 0) evidenceList.push('Buddy statements');
+    if ((data.symptoms || []).length > 0) evidenceList.push('Symptom logs');
+    const result = await getCaseLaw(conditionDetails.name, claimType, evidenceList);
+    if (result) setCaseLawResult(result);
   };
 
   // Evidence completion percentage
@@ -442,6 +460,9 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
         <Button variant="outline" size="sm" onClick={() => navigate('/prep/exam')}>
           <Stethoscope className="h-3 w-3 mr-1" /> Exam Prep
         </Button>
+        <Button variant="outline" size="sm" onClick={() => navigate('/cp-exam-packet')}>
+          <FileCheck className="h-3 w-3 mr-1" /> Exam Packet
+        </Button>
       </div>
 
       {/* AI Claim Insights */}
@@ -506,6 +527,83 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                       <Sparkles className="h-4 w-4 mr-2" />
                     )}
                     Regenerate
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </CollapsibleContent>
+        </Card>
+      </Collapsible>
+
+      {/* Case Law References */}
+      <Collapsible open={caseLawOpen} onOpenChange={setCaseLawOpen}>
+        <Card className="border-amber-500/20">
+          <CollapsibleTrigger asChild>
+            <CardHeader className="cursor-pointer hover:bg-muted/30 transition-colors">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Scale className="h-5 w-5 text-amber-500" />
+                  Case Law References
+                </CardTitle>
+                <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${caseLawOpen ? 'rotate-180' : ''}`} />
+              </div>
+            </CardHeader>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <CardContent className="space-y-4 pt-0">
+              {!caseLawResult ? (
+                <div className="space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    Find relevant BVA decisions and case law that could strengthen your claim for {conditionDetails?.name}.
+                  </p>
+                  <Button
+                    onClick={handleGenerateCaseLaw}
+                    disabled={caseLawLoading}
+                    className="w-full"
+                    variant="outline"
+                  >
+                    {caseLawLoading ? (
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    ) : (
+                      <Scale className="h-4 w-4 mr-2" />
+                    )}
+                    {caseLawLoading ? 'Searching Case Law...' : 'Find Relevant Case Law'}
+                  </Button>
+                  {caseLawError && !caseLawLoading && (
+                    <Alert className="border-warning/30 bg-warning/5">
+                      <AlertTriangle className="h-4 w-4 text-warning" />
+                      <AlertDescription className="text-sm">{caseLawError}</AlertDescription>
+                    </Alert>
+                  )}
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <AIDisclaimer variant="banner" />
+                  <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                    <div className="flex items-start gap-2">
+                      <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
+                      <p className="text-xs text-amber-400 leading-relaxed">
+                        AI-generated case law may contain errors or fictional citations. Always verify through official legal databases before citing.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="p-4 rounded-lg bg-muted/30 border text-sm whitespace-pre-wrap max-h-[400px] overflow-y-auto leading-relaxed">
+                    {caseLawResult}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setCaseLawResult(null);
+                    }}
+                    disabled={caseLawLoading}
+                  >
+                    {caseLawLoading ? (
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    ) : (
+                      <Scale className="h-4 w-4 mr-2" />
+                    )}
+                    Search Again
                   </Button>
                 </div>
               )}

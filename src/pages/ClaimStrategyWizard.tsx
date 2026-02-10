@@ -19,6 +19,8 @@ import {
   Lightbulb,
   Download,
   RefreshCw,
+  Scale,
+  AlertTriangle,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -32,7 +34,9 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { exportClaimStrategy } from '@/utils/pdfExport';
 import { useClaims } from '@/hooks/useClaims';
+import { useCaseLaw } from '@/hooks/useCaseLaw';
 import { useProfileStore, BRANCH_LABELS } from '@/store/useProfileStore';
+import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 
 interface ServiceInfo {
   branch: string;
@@ -187,6 +191,10 @@ export default function ClaimStrategyWizard() {
   const [strategy, setStrategy] = useState<StrategyResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+
+  // Case law
+  const { getCaseLaw, isLoading: caseLawLoading, error: caseLawError } = useCaseLaw();
+  const [caseLawResults, setCaseLawResults] = useState<Record<string, string>>({});
 
   const updateServiceInfo = useCallback((field: keyof ServiceInfo, value: string | string[]) => {
     setData(prev => ({
@@ -383,6 +391,21 @@ Consider:
     setStrategy(null);
     setError(null);
     setCurrentStep(1);
+  };
+
+  const handleFindCaseLaw = async (condition: string) => {
+    if (caseLawResults[condition]) return;
+    const evidenceList: string[] = [];
+    if (data.evidence.hasMedicalRecords) evidenceList.push('Medical records');
+    if (data.evidence.hasBuddyStatements) evidenceList.push('Buddy statements');
+    if (data.evidence.hasNexusLetter) evidenceList.push('Nexus letter');
+    if (data.evidence.hasServiceRecords) evidenceList.push('Service records');
+
+    const claimType = data.existingRatings.hasExisting ? 'increase' : 'new';
+    const result = await getCaseLaw(condition, claimType, evidenceList);
+    if (result) {
+      setCaseLawResults(prev => ({ ...prev, [condition]: result }));
+    }
   };
 
   const downloadStrategy = () => {
@@ -854,6 +877,60 @@ attorney for official guidance on your specific claim.
                     </CardContent>
                   </Card>
                 )}
+
+                {/* Case Law References */}
+                <Card className="border-amber-500/20">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Scale className="h-5 w-5 text-amber-500" />
+                      Find Supporting Case Law
+                    </CardTitle>
+                    <CardDescription>AI-generated case law references for your conditions</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <AIDisclaimer variant="banner" />
+                    <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                      <div className="flex items-start gap-2">
+                        <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
+                        <p className="text-xs text-amber-400 leading-relaxed">
+                          AI-generated case law may contain errors or fictional citations. Always verify through official legal databases before citing in any filing.
+                        </p>
+                      </div>
+                    </div>
+
+                    {strategy.priorityConditions.map((cond) => (
+                      <div key={cond.condition} className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">{cond.condition}</span>
+                          {!caseLawResults[cond.condition] && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleFindCaseLaw(cond.condition)}
+                              disabled={caseLawLoading}
+                            >
+                              {caseLawLoading ? (
+                                <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                              ) : (
+                                <Scale className="h-3 w-3 mr-1" />
+                              )}
+                              Find Case Law
+                            </Button>
+                          )}
+                        </div>
+                        {caseLawResults[cond.condition] && (
+                          <div className="p-3 rounded-lg bg-muted/30 border text-sm whitespace-pre-wrap max-h-[300px] overflow-y-auto leading-relaxed">
+                            {caseLawResults[cond.condition]}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+
+                    {caseLawError && (
+                      <p className="text-sm text-destructive">{caseLawError}</p>
+                    )}
+                  </CardContent>
+                </Card>
 
                 {/* Actions */}
                 <div className="flex flex-wrap gap-3">

@@ -43,6 +43,7 @@ const Onboarding = lazy(() => import('./pages/Onboarding'));
 const FormGuide = lazy(() => import('./pages/FormGuide'));
 const FormGuideDetail = lazy(() => import('./pages/FormGuideDetail'));
 const BuildPacket = lazy(() => import('./pages/BuildPacket'));
+const CPExamPacket = lazy(() => import('./pages/CPExamPacket'));
 const Combination = lazy(() => import('./components/UnifiedRatingCalculator'));
 const ClaimJourney = lazy(() => import('./pages/ClaimJourney'));
 const HealthLog = lazy(() => import('./pages/HealthLog'));
@@ -171,6 +172,7 @@ function AnimatedRoutes() {
             <Route path="/prep/va-speak" element={<PlaceholderPage title="VA-Speak Translator (Coming Soon)" />} />
             <Route path="/prep/back-pay" element={<PlaceholderPage title="Back Pay Estimator (Coming Soon)" />} />
             <Route path="/prep/packet" element={<BuildPacket />} />
+            <Route path="/cp-exam-packet" element={<CPExamPacket />} />
 
             {/* === SETTINGS (formerly Profile) === */}
             <Route path="/settings" element={<SettingsPage />} />

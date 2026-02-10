@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import {
   ClipboardCheck, FileText, Users, FileSignature, AlertTriangle,
-  BookOpen, ClipboardList, Languages, DollarSign, Package,
+  BookOpen, ClipboardList, Languages, DollarSign, Package, FileCheck,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -17,6 +17,7 @@ const prepTools = [
   { label: 'VA-Speak Translator', icon: Languages, route: '/prep/va-speak', description: 'Translate VA jargon to plain English', placeholder: true },
   { label: 'Back Pay Estimator', icon: DollarSign, route: '/prep/back-pay', description: 'Estimate your potential back pay', placeholder: true },
   { label: 'Claim Packet Builder', icon: Package, route: '/prep/packet', description: 'Compile your full claim packet', placeholder: false },
+  { label: 'C&P Exam Packet', icon: FileCheck, route: '/cp-exam-packet', description: 'Build your exam preparation packet', placeholder: false, highlight: true },
 ];
 
 export default function PrepHub() {

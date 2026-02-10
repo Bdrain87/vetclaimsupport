@@ -8,6 +8,7 @@ import {
   Activity,
   GraduationCap,
   FileText,
+  FileCheck,
   ChevronRight,
   Zap,
   AlertTriangle,
@@ -186,7 +187,7 @@ export default function Dashboard() {
         {[
           { label: 'Add Condition', icon: Plus, route: '/claims', color: 'text-primary' },
           { label: 'Log Symptoms', icon: Activity, route: '/health/symptoms', color: 'text-emerald-500' },
-          { label: 'Exam Prep', icon: GraduationCap, route: '/prep/exam', color: 'text-blue-500' },
+          { label: 'Exam Packet', icon: FileCheck, route: '/cp-exam-packet', color: 'text-blue-500' },
           { label: 'Form Guide', icon: FileText, route: '/prep/form-guide', color: 'text-blue-500' },
         ].map((action) => (
           <Link
