@@ -1336,7 +1336,6 @@ export interface CPExamPacketData {
   };
   medications: Array<{ id: string; name: string; prescribedFor: string }>;
   examQuestions: Record<string, string>;
-  caseLawResults: Record<string, string>;
 }
 
 export function generateCPExamPacketPDF(data: CPExamPacketData): void {
@@ -1639,34 +1638,14 @@ export function generateCPExamPacketPDF(data: CPExamPacketData): void {
     });
   }
 
-  // === SECTION 7: Case Law References ===
-  addSectionHeader(7, 'CASE LAW REFERENCES');
-  const hasCaseLaw = Object.keys(data.caseLawResults).length > 0;
-  if (!hasCaseLaw) {
-    addText('No case law references generated. Generate them in the app before exporting.');
-  } else {
-    // AI disclaimer
-    y = checkPageBreak(16);
-    doc.setFillColor(255, 245, 230);
-    doc.roundedRect(margin, y - 2, contentWidth, 14, 1, 1, 'F');
-    doc.setFontSize(7);
-    doc.setTextColor(...PDF_COLORS.danger);
-    doc.setFont('helvetica', 'bold');
-    doc.text('WARNING: AI-generated case law may contain errors or fictional citations.', pageWidth / 2, y + 3, { align: 'center' });
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(6);
-    doc.text('Always verify through Westlaw, LexisNexis, or BVA search before citing.', pageWidth / 2, y + 8, { align: 'center' });
-    y += 18;
-
-    Object.entries(data.caseLawResults).forEach(([condition, caseLaw]) => {
-      addSubHeader(condition);
-      const lines = caseLaw.split('\n').filter((l) => l.trim());
-      lines.forEach((line) => {
-        addText(line.trim(), 8);
-      });
-      y += 4;
-    });
-  }
+  // === SECTION 7: Legal Research Resources ===
+  addSectionHeader(7, 'LEGAL RESEARCH RESOURCES');
+  addText('Use these verified legal databases to find case law relevant to your claim:');
+  y += 2;
+  addText('• Board of Veterans\' Appeals (BVA) Decisions — www.va.gov/vbs/bva/');
+  addText('• Court of Appeals for Veterans Claims (CAVC) — www.uscourts.cavc.gov/decisions.php');
+  addText('• Google Scholar — Legal Opinions — scholar.google.com');
+  addText('• 38 U.S.C. — Veterans\' Benefits (Cornell Law) — www.law.cornell.edu/uscode/text/38');
 
   // === Final Footer ===
   y = checkPageBreak(25);

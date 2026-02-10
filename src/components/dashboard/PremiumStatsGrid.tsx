@@ -168,7 +168,7 @@ export function PremiumStatsGrid() {
           </div>
         </div>
       ) : (
-        <Link to="/symptoms" className="group">
+        <Link to="/health/symptoms" className="group">
           <div className={cn(
             glassCard,
             "hover:scale-[1.02] hover:shadow-[0_12px_40px_rgba(59,130,246,0.15)] hover:border-[#3B82F6]/20"

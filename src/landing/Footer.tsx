@@ -27,17 +27,17 @@ export function Footer() {
             </h4>
             <ul className="space-y-3">
               <li>
-                <a href="/privacy" className="text-sm text-white/60 hover:text-white transition-colors">
+                <a href="/settings/privacy" className="text-sm text-white/60 hover:text-white transition-colors">
                   Privacy Policy
                 </a>
               </li>
               <li>
-                <a href="/terms" className="text-sm text-white/60 hover:text-white transition-colors">
+                <a href="/settings/terms" className="text-sm text-white/60 hover:text-white transition-colors">
                   Terms of Service
                 </a>
               </li>
               <li>
-                <a href="/disclaimer" className="text-sm text-white/60 hover:text-white transition-colors">
+                <a href="/settings/disclaimer" className="text-sm text-white/60 hover:text-white transition-colors">
                   Disclaimer
                 </a>
               </li>
@@ -51,12 +51,12 @@ export function Footer() {
             </h4>
             <ul className="space-y-3">
               <li>
-                <a href="/faq" className="text-sm text-white/60 hover:text-white transition-colors">
+                <a href="/settings/faq" className="text-sm text-white/60 hover:text-white transition-colors">
                   FAQ
                 </a>
               </li>
               <li>
-                <a href="/help" className="text-sm text-white/60 hover:text-white transition-colors">
+                <a href="/settings/help" className="text-sm text-white/60 hover:text-white transition-colors">
                   Help Center
                 </a>
               </li>
@@ -70,12 +70,12 @@ export function Footer() {
             </h4>
             <ul className="space-y-3">
               <li>
-                <a href="/va-resources" className="text-sm text-white/60 hover:text-white transition-colors">
+                <a href="/settings/resources" className="text-sm text-white/60 hover:text-white transition-colors">
                   VA Resources
                 </a>
               </li>
               <li>
-                <a href="/user-guide" className="text-sm text-white/60 hover:text-white transition-colors">
+                <a href="/settings/help" className="text-sm text-white/60 hover:text-white transition-colors">
                   User Guide
                 </a>
               </li>

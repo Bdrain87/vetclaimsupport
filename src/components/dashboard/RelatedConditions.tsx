@@ -137,7 +137,7 @@ export function RelatedConditions({ conditionName, existingConditionNames }: Rel
           <Link2 className="h-3 w-3 text-primary" />
           <span className="text-xs font-medium text-foreground">Commonly Linked Secondary Conditions</span>
         </div>
-        <Link to="/reference?tab=secondary">
+        <Link to="/settings/resources">
           <Button variant="ghost" size="sm" className="h-6 px-2 text-[10px] gap-1 text-primary hover:text-primary">
             View All
             <ArrowRight className="h-3 w-3" />

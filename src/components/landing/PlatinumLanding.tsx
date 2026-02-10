@@ -132,7 +132,7 @@ function AccentIconCircle({ children }: { children: React.ReactNode }) {
 /* ─── Apple App Store badge (standard black/white) ─── */
 function AppStoreBadge() {
   return (
-    <Link to="/dashboard" data-store-url="https://apps.apple.com/app/vet-claim-support/PLACEHOLDER" className="inline-flex items-center gap-2.5 bg-black border border-white/20 rounded-xl px-5 py-2.5 hover:bg-white/10 transition-colors min-h-[48px]">
+    <Link to="/" data-store-url="https://apps.apple.com/app/vet-claim-support/PLACEHOLDER" className="inline-flex items-center gap-2.5 bg-black border border-white/20 rounded-xl px-5 py-2.5 hover:bg-white/10 transition-colors min-h-[48px]">
       <svg viewBox="0 0 384 512" width="20" height="24" fill="white" aria-hidden="true">
         <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
       </svg>
@@ -147,7 +147,7 @@ function AppStoreBadge() {
 /* ─── Google Play badge (standard black/white) ─── */
 function GooglePlayBadge() {
   return (
-    <Link to="/dashboard" data-store-url="https://play.google.com/store/apps/details?id=com.vetclaimsupport.app" className="inline-flex items-center gap-2.5 bg-black border border-white/20 rounded-xl px-5 py-2.5 hover:bg-white/10 transition-colors min-h-[48px]">
+    <Link to="/" data-store-url="https://play.google.com/store/apps/details?id=com.vetclaimsupport.app" className="inline-flex items-center gap-2.5 bg-black border border-white/20 rounded-xl px-5 py-2.5 hover:bg-white/10 transition-colors min-h-[48px]">
       <svg viewBox="0 0 512 512" width="22" height="24" fill="none" aria-hidden="true">
         <path d="M48 59.5v393a28.1 28.1 0 0 0 16.4 25.6l225.7-225.5L64.4 27.1A28.6 28.6 0 0 0 48 59.5z" fill="#4285F4"/>
         <path d="M290.1 252.6l62.8-62.8L99.6 57.4a28 28 0 0 0-35.2-30.3l225.7 225.5z" fill="#34A853"/>
@@ -235,7 +235,7 @@ export const PlatinumLanding = () => {
             <p className="text-white/60 text-sm mb-6 text-center">Limited Time Launch Price</p>
 
             <Link
-              to="/dashboard"
+              to="/"
               className="block w-full bg-[#3B82F6] hover:bg-[#2563EB] text-[#102039] font-bold text-lg py-3.5 rounded-xl transition-all duration-300 text-center hover:shadow-[0_0_30px_rgba(59,130,246,0.4)] active:scale-[0.98] min-h-[48px]"
             >
               Get Started Now →
@@ -303,7 +303,7 @@ export const PlatinumLanding = () => {
               a check waiting. Most service members don't know this exists. The ones who do? They build
               their case before they take off the uniform.
             </p>
-            <Link to="/claim-tools" className="inline-flex items-center text-[#3B82F6] font-bold text-base min-h-[44px] group">
+            <Link to="/prep" className="inline-flex items-center text-[#3B82F6] font-bold text-base min-h-[44px] group">
               Start Your BDD Claim <span className="ml-1 transition-transform duration-200 group-hover:translate-x-1">→</span>
             </Link>
           </GlassCard>
@@ -317,7 +317,7 @@ export const PlatinumLanding = () => {
               gets harder to prove later. Stop Googling symptoms at 2 AM. Start building your case
               with the tools the pros use.
             </p>
-            <Link to="/dashboard" className="inline-flex items-center text-[#3B82F6] font-bold text-base min-h-[44px] group">
+            <Link to="/" className="inline-flex items-center text-[#3B82F6] font-bold text-base min-h-[44px] group">
               Organize Your Evidence <span className="ml-1 transition-transform duration-200 group-hover:translate-x-1">→</span>
             </Link>
           </GlassCard>
@@ -331,7 +331,7 @@ export const PlatinumLanding = () => {
               millions. It doesn't matter if you served in Vietnam, Desert Storm, Iraq, or Afghanistan —
               if it's service-connected, it's owed. It's never too late.
             </p>
-            <Link to="/conditions" className="inline-flex items-center text-[#3B82F6] font-bold text-base min-h-[44px] group">
+            <Link to="/claims" className="inline-flex items-center text-[#3B82F6] font-bold text-base min-h-[44px] group">
               See What You Qualify For <span className="ml-1 transition-transform duration-200 group-hover:translate-x-1">→</span>
             </Link>
           </GlassCard>
