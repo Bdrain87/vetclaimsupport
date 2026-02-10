@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
+import { useProfileStore, BRANCH_LABELS } from '@/store/useProfileStore';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,8 +29,10 @@ interface StressorEvent {
 
 export function StressorStatementGenerator() {
   const { data } = useClaims();
+  const profile = useProfileStore();
+  const fullName = `${profile.firstName} ${profile.lastName}`.trim();
   const [events, setEvents] = useState<StressorEvent[]>([]);
-  const [veteranName, setVeteranName] = useState('');
+  const [veteranName, setVeteranName] = useState(fullName);
   const [copied, setCopied] = useState(false);
 
   // Get service history for auto-population

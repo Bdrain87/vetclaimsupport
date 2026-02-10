@@ -27,6 +27,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { vaDisabilitiesBySystem } from '@/data/vaDisabilities';
 import { cn } from '@/lib/utils';
+import { useClaims } from '@/hooks/useClaims';
+import { useUserConditions } from '@/hooks/useUserConditions';
 
 // Get all conditions
 const getAllConditions = (): string[] => {
@@ -129,6 +131,8 @@ interface PrepFormData {
 
 export default function DBQPrepSheet() {
   const printRef = useRef<HTMLDivElement>(null);
+  const { data } = useClaims();
+  const { conditions: userConditions } = useUserConditions();
   const [conditionSearch, setConditionSearch] = useState('');
   const [showConditionDropdown, setShowConditionDropdown] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
@@ -137,6 +141,23 @@ export default function DBQPrepSheet() {
     functional: true,
     medications: true,
   });
+
+  // Build medications pre-fill from store data
+  const storedMedicationsText = useMemo(() => {
+    if (!data.medications || data.medications.length === 0) return '';
+    return data.medications
+      .map(m => `${m.name}${m.dosage ? ` (${m.dosage})` : ''}${m.frequency ? ` - ${m.frequency}` : ''}`)
+      .join('\n');
+  }, [data.medications]);
+
+  // Build side effects pre-fill from store data
+  const storedSideEffectsText = useMemo(() => {
+    if (!data.medications || data.medications.length === 0) return '';
+    return data.medications
+      .filter(m => m.sideEffects)
+      .map(m => `${m.name}: ${m.sideEffects}`)
+      .join('\n');
+  }, [data.medications]);
 
   const [formData, setFormData] = useState<PrepFormData>({
     condition: '',
@@ -159,17 +180,36 @@ export default function DBQPrepSheet() {
     sleepImpact: '',
     workImpact: '',
     daysMissed: '',
-    currentMedications: '',
-    sideEffects: '',
+    currentMedications: storedMedicationsText,
+    sideEffects: storedSideEffectsText,
     additionalNotes: '',
   });
 
+  // Combine user's tracked conditions with the full VA conditions list for search
+  const userConditionNames = useMemo(() => {
+    const names = new Set<string>();
+    (data.claimConditions || []).forEach(c => names.add(c.name));
+    userConditions.forEach(uc => {
+      const details = uc.conditionId;
+      if (details) names.add(details);
+    });
+    return [...names];
+  }, [data.claimConditions, userConditions]);
+
   const filteredConditions = useMemo(() => {
-    if (!conditionSearch) return allConditions.slice(0, 50);
-    return allConditions.filter(c =>
-      c.toLowerCase().includes(conditionSearch.toLowerCase())
-    ).slice(0, 50);
-  }, [conditionSearch]);
+    if (!conditionSearch) {
+      // Show user's tracked conditions first, then general list
+      const userFirst = userConditionNames.filter(c => !allConditions.includes(c));
+      return [...userConditionNames, ...allConditions.filter(c => !userConditionNames.includes(c))].slice(0, 50);
+    }
+    const search = conditionSearch.toLowerCase();
+    // Prioritize user's conditions in search results
+    const userMatches = userConditionNames.filter(c => c.toLowerCase().includes(search));
+    const otherMatches = allConditions.filter(c =>
+      c.toLowerCase().includes(search) && !userMatches.includes(c)
+    );
+    return [...userMatches, ...otherMatches].slice(0, 50);
+  }, [conditionSearch, userConditionNames]);
 
   // Get condition-specific reminders
   const reminders = useMemo(() => {

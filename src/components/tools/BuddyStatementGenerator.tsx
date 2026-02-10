@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { FileText, Download, Copy, Users, CheckCircle2, AlertTriangle, HelpCircle, ChevronDown, Share2, MessageSquare } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { useToast } from '@/hooks/use-toast';
+import { useClaims } from '@/hooks/useClaims';
+import { useProfileStore } from '@/store/useProfileStore';
 import jsPDF from 'jspdf';
 
 const relationshipOptions = [
@@ -41,6 +43,26 @@ interface AssessmentState {
 }
 
 export function BuddyStatementGenerator() {
+  const { data } = useClaims();
+  const profile = useProfileStore();
+  const veteranFullName = `${profile.firstName} ${profile.lastName}`.trim();
+
+  // Pre-fill condition name from user's tracked conditions
+  const primaryConditionName = useMemo(() => {
+    const conditions = data.claimConditions || [];
+    return conditions.length > 0 ? conditions[0].name : '';
+  }, [data.claimConditions]);
+
+  // Pre-fill service dates from profile
+  const serviceDatesText = useMemo(() => {
+    if (profile.serviceDates?.start && profile.serviceDates?.end) {
+      const start = new Date(profile.serviceDates.start);
+      const end = new Date(profile.serviceDates.end);
+      return `${start.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} - ${end.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`;
+    }
+    return '';
+  }, [profile.serviceDates]);
+
   const [formData, setFormData] = useState<FormData>({
     witnessName: '',
     relationship: '',
@@ -52,9 +74,9 @@ export function BuddyStatementGenerator() {
     hasNexusLetter: null,
   });
   const [witnessTemplate, setWitnessTemplate] = useState<WitnessTemplateData>({
-    veteranName: '',
-    conditionName: '',
-    serviceDates: '',
+    veteranName: veteranFullName,
+    conditionName: primaryConditionName,
+    serviceDates: serviceDatesText,
     witnessType: 'service-member',
   });
   const [showGuidance, setShowGuidance] = useState(false);

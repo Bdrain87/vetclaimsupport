@@ -40,7 +40,7 @@ export default function SecondaryFinder() {
       })
       .filter(Boolean) as { id: string; name: string; fullName: string }[];
 
-    // From ClaimsContext (may have conditions not in UserConditions)
+    // From claim conditions in useAppStore (may have conditions not in UserConditions)
     const fromClaimsContext = (claimsData.claimConditions || [])
       .filter(cc => !fromUserConditions.some(uc => uc.fullName.toLowerCase() === cc.name.toLowerCase()))
       .map(cc => {
@@ -49,7 +49,7 @@ export default function SecondaryFinder() {
       });
 
     return [...fromUserConditions, ...fromClaimsContext];
-  }, [userConditions, claimsData.claimConditions]);
+  }, [userConditions, claimsData.claimConditions]); // All data sourced from useAppStore via adapter hooks
 
   // Map user condition names to primary condition names in secondary data
   const findSecondariesForPrimary = useCallback((primaryName: string): (SecondaryConnection & { strength: 'strong' | 'moderate' | 'possible' })[] => {
