@@ -1,0 +1,1290 @@
+import jsPDF from 'jspdf';
+import { format } from 'date-fns';
+import useAppStore from '@/store/useAppStore';
+import { useProfileStore } from '@/store/useProfileStore';
+import { BRANCH_LABELS } from '@/store/useProfileStore';
+import { getConditionById } from '@/data/vaConditions';
+import type { UserCondition } from '@/store/useAppStore';
+import type {
+  ClaimCondition,
+  QuickLogEntry,
+  MedicalVisit,
+  SymptomEntry,
+  Medication,
+  SleepEntry,
+  MigraineEntry,
+  ServiceEntry,
+  Exposure,
+  BuddyContact,
+  DocumentItem,
+  DeploymentEntry,
+  CombatEntry,
+  MajorEvent,
+  PTSDSymptomEntry,
+} from '@/types/claims';
+
+// ============================================================================
+// Types
+// ============================================================================
+
+export interface ExportSections {
+  personalInfo: boolean;
+  conditions: boolean;
+  evidenceChecklist: boolean;
+  healthLogs: boolean;
+  generatedDocs: boolean;
+  formDrafts: boolean;
+  romMeasurements: boolean;
+  timeline: boolean;
+}
+
+export type ExportFormat = 'pdf' | 'text' | 'json';
+
+export interface ExportOptions {
+  sections: ExportSections;
+  format: ExportFormat;
+}
+
+export interface ExportResult {
+  content: string | Blob;
+  filename: string;
+  mimeType: string;
+}
+
+// ============================================================================
+// PDF Color palette (from tokens.ts Dress Blues)
+// ============================================================================
+
+const PDF_COLORS = {
+  navy: [16, 32, 57] as [number, number, number],
+  navyLight: [22, 42, 74] as [number, number, number],
+  blue: [59, 130, 246] as [number, number, number],
+  textPrimary: [248, 250, 252] as [number, number, number],
+  textDark: [15, 23, 42] as [number, number, number],
+  textSecondary: [71, 85, 105] as [number, number, number],
+  textMuted: [100, 116, 139] as [number, number, number],
+  border: [226, 232, 240] as [number, number, number],
+  background: [241, 245, 249] as [number, number, number],
+  success: [16, 185, 129] as [number, number, number],
+  warning: [245, 158, 11] as [number, number, number],
+  danger: [239, 68, 68] as [number, number, number],
+  white: [255, 255, 255] as [number, number, number],
+  watermark: [200, 210, 225] as [number, number, number],
+};
+
+// ============================================================================
+// Data Gathering
+// ============================================================================
+
+interface GatheredData {
+  // Profile
+  firstName: string;
+  lastName: string;
+  branch: string;
+  mosCode: string;
+  mosTitle: string;
+  serviceDates?: { start: string; end: string };
+  claimType?: string;
+  separationDate?: string;
+
+  // App data
+  userConditions: UserCondition[];
+  claimConditions: ClaimCondition[];
+  documents: DocumentItem[];
+  quickLogs: QuickLogEntry[];
+  medicalVisits: MedicalVisit[];
+  symptoms: SymptomEntry[];
+  medications: Medication[];
+  sleepEntries: SleepEntry[];
+  migraines: MigraineEntry[];
+  serviceHistory: ServiceEntry[];
+  exposures: Exposure[];
+  buddyContacts: BuddyContact[];
+  deployments: DeploymentEntry[];
+  combatHistory: CombatEntry[];
+  majorEvents: MajorEvent[];
+  ptsdSymptoms: PTSDSymptomEntry[];
+  formDrafts: Record<string, Record<string, string> & { lastModified: string }>;
+}
+
+function gatherData(): GatheredData {
+  const appState = useAppStore.getState();
+  const profileState = useProfileStore.getState();
+
+  return {
+    firstName: profileState.firstName,
+    lastName: profileState.lastName,
+    branch: profileState.branch ? BRANCH_LABELS[profileState.branch] : '',
+    mosCode: profileState.mosCode,
+    mosTitle: profileState.mosTitle,
+    serviceDates: profileState.serviceDates,
+    claimType: profileState.claimType,
+    separationDate: profileState.separationDate,
+
+    userConditions: appState.userConditions,
+    claimConditions: appState.claimConditions,
+    documents: appState.documents,
+    quickLogs: appState.quickLogs,
+    medicalVisits: appState.medicalVisits,
+    symptoms: appState.symptoms,
+    medications: appState.medications,
+    sleepEntries: appState.sleepEntries,
+    migraines: appState.migraines,
+    serviceHistory: appState.serviceHistory,
+    exposures: appState.exposures,
+    buddyContacts: appState.buddyContacts,
+    deployments: appState.deployments,
+    combatHistory: appState.combatHistory,
+    majorEvents: appState.majorEvents,
+    ptsdSymptoms: appState.ptsdSymptoms,
+    formDrafts: appState.formDrafts,
+  };
+}
+
+// ============================================================================
+// Main Export Function
+// ============================================================================
+
+export async function generateExport(options: ExportOptions): Promise<ExportResult> {
+  const data = gatherData();
+  const dateStr = format(new Date(), 'yyyy-MM-dd');
+
+  switch (options.format) {
+    case 'json':
+      return generateJSON(data, options.sections, dateStr);
+    case 'text':
+      return generateText(data, options.sections, dateStr);
+    case 'pdf':
+      return generatePDF(data, options.sections, dateStr);
+    default:
+      return generateText(data, options.sections, dateStr);
+  }
+}
+
+// ============================================================================
+// JSON Format
+// ============================================================================
+
+function generateJSON(
+  data: GatheredData,
+  sections: ExportSections,
+  dateStr: string
+): ExportResult {
+  const output: Record<string, unknown> = {
+    exportInfo: {
+      generatedAt: new Date().toISOString(),
+      format: 'json',
+      application: 'Vet Claim Support',
+      disclaimer: 'DRAFT - NOT AN OFFICIAL VA DOCUMENT',
+    },
+  };
+
+  if (sections.personalInfo) {
+    output.personalInfo = {
+      name: `${data.firstName} ${data.lastName}`.trim() || 'Not provided',
+      branch: data.branch || 'Not provided',
+      mos: data.mosCode ? `${data.mosCode} - ${data.mosTitle}` : 'Not provided',
+      serviceDates: data.serviceDates || null,
+      separationDate: data.separationDate || null,
+      claimType: data.claimType || null,
+    };
+  }
+
+  if (sections.conditions) {
+    output.conditions = {
+      userConditions: data.userConditions.map((c) => {
+        const vaInfo = getConditionById(c.conditionId);
+        return {
+          name: vaInfo?.name || c.conditionId,
+          diagnosticCode: vaInfo?.diagnosticCode || 'N/A',
+          rating: c.rating ?? null,
+          serviceConnected: c.serviceConnected,
+          claimStatus: c.claimStatus,
+          isPrimary: c.isPrimary,
+          dateAdded: c.dateAdded,
+        };
+      }),
+      claimConditions: data.claimConditions.map((c) => ({
+        name: c.name,
+        linkedMedicalVisits: c.linkedMedicalVisits.length,
+        linkedExposures: c.linkedExposures.length,
+        linkedSymptoms: c.linkedSymptoms.length,
+        linkedDocuments: c.linkedDocuments.length,
+        linkedBuddyContacts: c.linkedBuddyContacts.length,
+        notes: c.notes,
+      })),
+    };
+  }
+
+  if (sections.evidenceChecklist) {
+    output.evidenceChecklist = data.documents.map((d) => ({
+      name: d.name,
+      status: d.status,
+      count: d.count,
+      notes: d.notes,
+    }));
+  }
+
+  if (sections.healthLogs) {
+    output.healthLogs = {
+      quickLogs: data.quickLogs,
+      symptoms: data.symptoms,
+      medications: data.medications,
+      sleepEntries: data.sleepEntries,
+      migraines: data.migraines,
+      ptsdSymptoms: data.ptsdSymptoms,
+    };
+  }
+
+  if (sections.generatedDocs) {
+    output.generatedDocs = {
+      buddyContacts: data.buddyContacts,
+      note: 'Generated documents are stored within the app. Buddy contacts listed here may have associated buddy statement drafts.',
+    };
+  }
+
+  if (sections.formDrafts) {
+    const draftsForExport: Record<string, Record<string, string>> = {};
+    Object.entries(data.formDrafts).forEach(([formId, fields]) => {
+      const { lastModified, ...fieldValues } = fields;
+      const hasContent = Object.values(fieldValues).some((v) => v && v.trim());
+      if (hasContent) {
+        draftsForExport[formId] = { ...fieldValues, lastModified };
+      }
+    });
+    output.formDrafts =
+      Object.keys(draftsForExport).length > 0
+        ? draftsForExport
+        : { note: 'No form drafts recorded yet' };
+  }
+
+  if (sections.romMeasurements) {
+    output.romMeasurements = { note: 'No ROM measurement data recorded yet' };
+  }
+
+  if (sections.timeline) {
+    output.timeline = buildTimelineData(data);
+  }
+
+  const content = JSON.stringify(output, null, 2);
+  return {
+    content,
+    filename: `VCS-Export-${dateStr}.json`,
+    mimeType: 'application/json',
+  };
+}
+
+// ============================================================================
+// Plain Text Format
+// ============================================================================
+
+function generateText(
+  data: GatheredData,
+  sections: ExportSections,
+  dateStr: string
+): ExportResult {
+  const lines: string[] = [];
+  const divider = '═'.repeat(60);
+  const subDivider = '─'.repeat(60);
+
+  lines.push(divider);
+  lines.push('  VET CLAIM SUPPORT');
+  lines.push('  Claim Preparation Packet');
+  lines.push(`  Generated: ${format(new Date(), 'MMMM d, yyyy')}`);
+  lines.push(divider);
+  lines.push('');
+  lines.push('  DRAFT — NOT AN OFFICIAL VA DOCUMENT');
+  lines.push('');
+
+  let sectionNum = 1;
+
+  // 1. Personal Information
+  if (sections.personalInfo) {
+    lines.push(`${sectionNum}. PERSONAL INFORMATION`);
+    lines.push(subDivider);
+    lines.push(`  Name: ${`${data.firstName} ${data.lastName}`.trim() || 'Not provided'}`);
+    lines.push(`  Branch: ${data.branch || 'Not provided'}`);
+    lines.push(`  MOS: ${data.mosCode ? `${data.mosCode} — ${data.mosTitle}` : 'Not provided'}`);
+    if (data.serviceDates) {
+      lines.push(`  Service Dates: ${data.serviceDates.start} to ${data.serviceDates.end || 'Present'}`);
+    }
+    if (data.separationDate) {
+      lines.push(`  Separation Date: ${data.separationDate}`);
+    }
+    if (data.claimType) {
+      lines.push(`  Claim Type: ${data.claimType}`);
+    }
+    lines.push('');
+    sectionNum++;
+  }
+
+  // 2. Conditions & Ratings
+  if (sections.conditions) {
+    lines.push(`${sectionNum}. CONDITIONS & RATINGS`);
+    lines.push(subDivider);
+    if (data.userConditions.length === 0 && data.claimConditions.length === 0) {
+      lines.push('  No conditions recorded yet.');
+    } else {
+      data.userConditions.forEach((c) => {
+        const vaInfo = getConditionById(c.conditionId);
+        const name = vaInfo?.name || c.conditionId;
+        const dc = vaInfo?.diagnosticCode || 'N/A';
+        lines.push(`  • ${name} — DC ${dc}`);
+        lines.push(`    Rating: ${c.rating != null ? `${c.rating}%` : 'Pending'} | Status: ${c.claimStatus} | ${c.isPrimary ? 'Primary' : 'Secondary'}`);
+      });
+      if (data.claimConditions.length > 0) {
+        lines.push('');
+        lines.push('  Claim Builder Conditions:');
+        data.claimConditions.forEach((c) => {
+          lines.push(`  • ${c.name}`);
+          if (c.notes) lines.push(`    Notes: ${c.notes}`);
+        });
+      }
+    }
+    lines.push('');
+    sectionNum++;
+  }
+
+  // 3. Evidence Checklist
+  if (sections.evidenceChecklist) {
+    lines.push(`${sectionNum}. EVIDENCE CHECKLIST`);
+    lines.push(subDivider);
+    data.documents.forEach((d) => {
+      const check = d.status === 'Obtained' || d.status === 'Submitted' ? '✓' : '✗';
+      lines.push(`  [${check}] ${d.name} — ${d.status}${d.count > 0 ? ` (${d.count})` : ''}`);
+    });
+    lines.push('');
+    sectionNum++;
+  }
+
+  // 4. Health Log Summary
+  if (sections.healthLogs) {
+    lines.push(`${sectionNum}. HEALTH LOG SUMMARY`);
+    lines.push(subDivider);
+
+    // Quick Logs
+    if (data.quickLogs.length > 0) {
+      lines.push(`  Daily Logs: ${data.quickLogs.length} entries`);
+      const avgPain = (data.quickLogs.reduce((s, l) => s + (l.painLevel || l.overallFeeling || 0), 0) / data.quickLogs.length).toFixed(1);
+      lines.push(`  Average Pain Level: ${avgPain}/10`);
+      const flareUps = data.quickLogs.filter((l) => l.hadFlareUp).length;
+      lines.push(`  Flare-Ups Recorded: ${flareUps}`);
+      lines.push('');
+    }
+
+    // Symptoms
+    if (data.symptoms.length > 0) {
+      lines.push(`  Symptom Entries: ${data.symptoms.length}`);
+      const avgSev = (data.symptoms.reduce((s, e) => s + e.severity, 0) / data.symptoms.length).toFixed(1);
+      lines.push(`  Average Severity: ${avgSev}/10`);
+      const severe = data.symptoms.filter((s) => s.severity >= 7).length;
+      lines.push(`  Severe Episodes (7+): ${severe}`);
+      lines.push('');
+    }
+
+    // Medications
+    if (data.medications.length > 0) {
+      const current = data.medications.filter((m) => m.stillTaking);
+      lines.push(`  Medications: ${current.length} current, ${data.medications.length - current.length} past`);
+      current.forEach((m) => {
+        lines.push(`    • ${m.name} — for ${m.prescribedFor || 'N/A'}`);
+      });
+      lines.push('');
+    }
+
+    // Sleep
+    if (data.sleepEntries.length > 0) {
+      const avgSleep = (data.sleepEntries.reduce((s, e) => s + (e.hoursSlept || 0), 0) / data.sleepEntries.length).toFixed(1);
+      lines.push(`  Sleep Log: ${data.sleepEntries.length} entries, avg ${avgSleep} hrs/night`);
+      const cpap = data.sleepEntries.filter((e) => e.usesCPAP).length;
+      if (cpap > 0) lines.push(`  CPAP Usage: ${cpap} nights`);
+      lines.push('');
+    }
+
+    // Migraines
+    if (data.migraines.length > 0) {
+      const prostrating = data.migraines.filter((m) => m.wasProstrating).length;
+      lines.push(`  Migraine Log: ${data.migraines.length} entries`);
+      lines.push(`  Prostrating Episodes: ${prostrating}`);
+      const workImpact = data.migraines.filter((m) => m.couldNotWork).length;
+      lines.push(`  Work Impact Episodes: ${workImpact}`);
+      lines.push('');
+    }
+
+    if (
+      data.quickLogs.length === 0 &&
+      data.symptoms.length === 0 &&
+      data.medications.length === 0 &&
+      data.sleepEntries.length === 0 &&
+      data.migraines.length === 0
+    ) {
+      lines.push('  No health log data recorded yet.');
+      lines.push('');
+    }
+    sectionNum++;
+  }
+
+  // 5. Generated Documents
+  if (sections.generatedDocs) {
+    lines.push(`${sectionNum}. GENERATED DOCUMENTS`);
+    lines.push(subDivider);
+    if (data.buddyContacts.length > 0) {
+      lines.push('  Buddy Contacts / Statement Status:');
+      data.buddyContacts.forEach((b) => {
+        lines.push(`  • ${b.rank ? `${b.rank} ` : ''}${b.name} — ${b.statementStatus}`);
+        if (b.whatTheyWitnessed) lines.push(`    Witnessed: ${b.whatTheyWitnessed}`);
+      });
+    } else {
+      lines.push('  No generated documents recorded yet.');
+    }
+    lines.push('');
+    sectionNum++;
+  }
+
+  // 6. Form Drafts
+  if (sections.formDrafts) {
+    lines.push(`${sectionNum}. FORM DRAFTS`);
+    lines.push(subDivider);
+    const draftEntries = Object.entries(data.formDrafts);
+    const nonEmpty = draftEntries.filter(([, fields]) => {
+      const { lastModified, ...vals } = fields;
+      return Object.values(vals).some((v) => v && v.trim());
+    });
+
+    if (nonEmpty.length === 0) {
+      lines.push('  No form drafts recorded yet.');
+    } else {
+      nonEmpty.forEach(([formId, fields]) => {
+        lines.push(`  Form: ${formId}`);
+        const { lastModified, ...vals } = fields;
+        Object.entries(vals).forEach(([fieldId, value]) => {
+          if (value && value.trim()) {
+            lines.push(`    ${fieldId}: ${value}`);
+          }
+        });
+        lines.push('');
+      });
+    }
+    lines.push('');
+    sectionNum++;
+  }
+
+  // 7. ROM Measurements
+  if (sections.romMeasurements) {
+    lines.push(`${sectionNum}. ROM MEASUREMENTS`);
+    lines.push(subDivider);
+    lines.push('  No ROM measurement data recorded yet.');
+    lines.push('');
+    sectionNum++;
+  }
+
+  // 8. Timeline
+  if (sections.timeline) {
+    lines.push(`${sectionNum}. TIMELINE NARRATIVE`);
+    lines.push(subDivider);
+    const timeline = buildTimelineData(data);
+    if (timeline.length === 0) {
+      lines.push('  No timeline data available yet.');
+    } else {
+      timeline.forEach((event) => {
+        lines.push(`  ${event.date} | [${event.type}] ${event.description}`);
+      });
+    }
+    lines.push('');
+  }
+
+  // Footer
+  lines.push(divider);
+  lines.push('  DRAFT WORKSHEET — NOT A VA SUBMISSION');
+  lines.push('  Vet Claim Support — Claim Preparation Tools');
+  lines.push(divider);
+
+  const content = lines.join('\n');
+  return {
+    content,
+    filename: `VCS-Export-${dateStr}.txt`,
+    mimeType: 'text/plain',
+  };
+}
+
+// ============================================================================
+// PDF Format
+// ============================================================================
+
+function generatePDF(
+  data: GatheredData,
+  sections: ExportSections,
+  dateStr: string
+): ExportResult {
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = 20;
+  const contentWidth = pageWidth - margin * 2;
+  let y = 0;
+
+  // --- Helpers ---
+  const addWatermark = () => {
+    doc.setFontSize(9);
+    doc.setTextColor(...PDF_COLORS.watermark);
+    doc.setFont('helvetica', 'italic');
+    doc.text('DRAFT — NOT AN OFFICIAL VA DOCUMENT', pageWidth / 2, pageHeight - 15, { align: 'center' });
+    doc.setFont('helvetica', 'normal');
+  };
+
+  const addFooter = () => {
+    doc.setFontSize(7);
+    doc.setTextColor(...PDF_COLORS.textMuted);
+    doc.text('Vet Claim Support — Claim Preparation Tools', pageWidth / 2, pageHeight - 8, { align: 'center' });
+  };
+
+  const checkPageBreak = (needed: number): number => {
+    if (y + needed > pageHeight - 30) {
+      doc.addPage();
+      addWatermark();
+      addFooter();
+      return 20;
+    }
+    return y;
+  };
+
+  const addSectionHeader = (title: string) => {
+    y = checkPageBreak(20);
+    doc.setFillColor(...PDF_COLORS.navy);
+    doc.roundedRect(margin, y - 4, contentWidth, 12, 2, 2, 'F');
+    doc.setFontSize(11);
+    doc.setTextColor(...PDF_COLORS.white);
+    doc.setFont('helvetica', 'bold');
+    doc.text(title, margin + 6, y + 4);
+    doc.setFont('helvetica', 'normal');
+    y += 14;
+  };
+
+  // --- Page 1 Header ---
+  // Navy header bar
+  doc.setFillColor(...PDF_COLORS.navy);
+  doc.rect(0, 0, pageWidth, 40, 'F');
+
+  // Blue accent line
+  doc.setFillColor(...PDF_COLORS.blue);
+  doc.rect(0, 40, pageWidth, 2, 'F');
+
+  // Header text
+  doc.setFontSize(18);
+  doc.setTextColor(...PDF_COLORS.white);
+  doc.setFont('helvetica', 'bold');
+  doc.text('VET CLAIM SUPPORT', margin, 18);
+
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Claim Preparation Packet', margin, 28);
+
+  doc.setFontSize(9);
+  doc.text(`Generated: ${format(new Date(), 'MMMM d, yyyy')}`, margin, 36);
+
+  // Watermark + footer on first page
+  addWatermark();
+  addFooter();
+
+  y = 52;
+
+  // Draft notice box
+  doc.setFillColor(...PDF_COLORS.background);
+  doc.setDrawColor(...PDF_COLORS.border);
+  doc.roundedRect(margin, y - 2, contentWidth, 14, 2, 2, 'FD');
+  doc.setFontSize(9);
+  doc.setTextColor(...PDF_COLORS.danger);
+  doc.setFont('helvetica', 'bold');
+  doc.text('DRAFT — NOT AN OFFICIAL VA DOCUMENT', pageWidth / 2, y + 7, { align: 'center' });
+  doc.setFont('helvetica', 'normal');
+  y += 20;
+
+  let sectionNum = 1;
+
+  // --- 1. Personal Information ---
+  if (sections.personalInfo) {
+    addSectionHeader(`${sectionNum}. PERSONAL INFORMATION`);
+    const name = `${data.firstName} ${data.lastName}`.trim() || 'Not provided';
+    const infoLines = [
+      ['Name', name],
+      ['Branch', data.branch || 'Not provided'],
+      ['MOS', data.mosCode ? `${data.mosCode} — ${data.mosTitle}` : 'Not provided'],
+    ];
+    if (data.serviceDates) {
+      infoLines.push(['Service Dates', `${data.serviceDates.start} to ${data.serviceDates.end || 'Present'}`]);
+    }
+    if (data.separationDate) {
+      infoLines.push(['Separation Date', data.separationDate]);
+    }
+    if (data.claimType) {
+      infoLines.push(['Claim Type', data.claimType]);
+    }
+
+    infoLines.forEach(([label, value]) => {
+      y = checkPageBreak(8);
+      doc.setFontSize(9);
+      doc.setTextColor(...PDF_COLORS.textMuted);
+      doc.text(`${label}:`, margin + 4, y);
+      doc.setTextColor(...PDF_COLORS.textDark);
+      doc.text(value, margin + 50, y);
+      y += 6;
+    });
+    y += 6;
+    sectionNum++;
+  }
+
+  // --- 2. Conditions & Ratings ---
+  if (sections.conditions) {
+    addSectionHeader(`${sectionNum}. CONDITIONS & RATINGS`);
+    if (data.userConditions.length === 0 && data.claimConditions.length === 0) {
+      doc.setFontSize(9);
+      doc.setTextColor(...PDF_COLORS.textMuted);
+      doc.text('No conditions recorded yet.', margin + 4, y);
+      y += 8;
+    } else {
+      data.userConditions.forEach((c) => {
+        y = checkPageBreak(18);
+        const vaInfo = getConditionById(c.conditionId);
+        const name = vaInfo?.name || c.conditionId;
+        const dc = vaInfo?.diagnosticCode || 'N/A';
+
+        doc.setFontSize(10);
+        doc.setTextColor(...PDF_COLORS.textDark);
+        doc.setFont('helvetica', 'bold');
+        doc.text(name, margin + 4, y);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(...PDF_COLORS.textMuted);
+        doc.text(`DC ${dc}`, margin + 4, y + 5);
+
+        doc.setFontSize(9);
+        const ratingText = c.rating != null ? `${c.rating}%` : 'Pending';
+        doc.setTextColor(...PDF_COLORS.blue);
+        doc.text(`Rating: ${ratingText}`, pageWidth - margin - 40, y);
+        doc.setTextColor(...PDF_COLORS.textSecondary);
+        doc.text(`${c.isPrimary ? 'Primary' : 'Secondary'} | ${c.claimStatus}`, pageWidth - margin - 65, y + 5);
+        y += 14;
+      });
+
+      if (data.claimConditions.length > 0) {
+        y = checkPageBreak(12);
+        doc.setFontSize(9);
+        doc.setTextColor(...PDF_COLORS.textDark);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Claim Builder Conditions:', margin + 4, y);
+        doc.setFont('helvetica', 'normal');
+        y += 6;
+        data.claimConditions.forEach((c) => {
+          y = checkPageBreak(8);
+          doc.setFontSize(9);
+          doc.setTextColor(...PDF_COLORS.textDark);
+          doc.text(`• ${c.name}`, margin + 8, y);
+          y += 6;
+        });
+      }
+    }
+    y += 6;
+    sectionNum++;
+  }
+
+  // --- 3. Evidence Checklist ---
+  if (sections.evidenceChecklist) {
+    addSectionHeader(`${sectionNum}. EVIDENCE CHECKLIST`);
+    data.documents.forEach((d) => {
+      y = checkPageBreak(10);
+      const isObtained = d.status === 'Obtained' || d.status === 'Submitted';
+      doc.setFontSize(9);
+      const checkColor = isObtained ? PDF_COLORS.success : PDF_COLORS.danger;
+      doc.setTextColor(...checkColor);
+      doc.text(isObtained ? '✓' : '✗', margin + 4, y);
+      doc.setTextColor(...PDF_COLORS.textDark);
+      doc.text(d.name, margin + 12, y);
+      doc.setTextColor(...PDF_COLORS.textMuted);
+      doc.setFontSize(8);
+      doc.text(d.status, pageWidth - margin - 30, y);
+      y += 6;
+    });
+    y += 6;
+    sectionNum++;
+  }
+
+  // --- 4. Health Log Summary ---
+  if (sections.healthLogs) {
+    addSectionHeader(`${sectionNum}. HEALTH LOG SUMMARY`);
+    let hasAnyLogs = false;
+
+    // Quick Logs
+    if (data.quickLogs.length > 0) {
+      hasAnyLogs = true;
+      y = checkPageBreak(20);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...PDF_COLORS.textDark);
+      doc.text(`Daily Logs: ${data.quickLogs.length} entries`, margin + 4, y);
+      doc.setFont('helvetica', 'normal');
+      y += 6;
+      const avgPain = (data.quickLogs.reduce((s, l) => s + (l.painLevel || l.overallFeeling || 0), 0) / data.quickLogs.length).toFixed(1);
+      doc.setTextColor(...PDF_COLORS.textSecondary);
+      doc.text(`Average Pain Level: ${avgPain}/10`, margin + 8, y);
+      y += 5;
+      const flareUps = data.quickLogs.filter((l) => l.hadFlareUp).length;
+      doc.text(`Flare-Ups: ${flareUps}`, margin + 8, y);
+      y += 8;
+    }
+
+    // Symptoms
+    if (data.symptoms.length > 0) {
+      hasAnyLogs = true;
+      y = checkPageBreak(20);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...PDF_COLORS.textDark);
+      doc.text(`Symptom Journal: ${data.symptoms.length} entries`, margin + 4, y);
+      doc.setFont('helvetica', 'normal');
+      y += 6;
+      const avgSev = (data.symptoms.reduce((s, e) => s + e.severity, 0) / data.symptoms.length).toFixed(1);
+      doc.setTextColor(...PDF_COLORS.textSecondary);
+      doc.text(`Average Severity: ${avgSev}/10 | Severe (7+): ${data.symptoms.filter((s) => s.severity >= 7).length}`, margin + 8, y);
+      y += 8;
+
+      // Show recent entries
+      const recentSymptoms = [...data.symptoms]
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .slice(0, 5);
+      recentSymptoms.forEach((s) => {
+        y = checkPageBreak(8);
+        doc.setFontSize(8);
+        doc.setTextColor(...PDF_COLORS.textMuted);
+        doc.text(new Date(s.date).toLocaleDateString(), margin + 8, y);
+        doc.setTextColor(...PDF_COLORS.textDark);
+        doc.text(`${s.symptom} (${s.severity}/10)`, margin + 35, y);
+        y += 5;
+      });
+      y += 4;
+    }
+
+    // Medications
+    if (data.medications.length > 0) {
+      hasAnyLogs = true;
+      y = checkPageBreak(14);
+      const current = data.medications.filter((m) => m.stillTaking);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...PDF_COLORS.textDark);
+      doc.text(`Medications: ${current.length} current, ${data.medications.length - current.length} past`, margin + 4, y);
+      doc.setFont('helvetica', 'normal');
+      y += 6;
+      current.slice(0, 5).forEach((m) => {
+        y = checkPageBreak(6);
+        doc.setFontSize(8);
+        doc.setTextColor(...PDF_COLORS.textDark);
+        doc.text(`• ${m.name} — ${m.prescribedFor || 'N/A'}`, margin + 8, y);
+        y += 5;
+      });
+      y += 4;
+    }
+
+    // Sleep
+    if (data.sleepEntries.length > 0) {
+      hasAnyLogs = true;
+      y = checkPageBreak(14);
+      const avgSleep = (data.sleepEntries.reduce((s, e) => s + (e.hoursSlept || 0), 0) / data.sleepEntries.length).toFixed(1);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...PDF_COLORS.textDark);
+      doc.text(`Sleep Log: ${data.sleepEntries.length} entries, avg ${avgSleep} hrs/night`, margin + 4, y);
+      doc.setFont('helvetica', 'normal');
+      y += 8;
+    }
+
+    // Migraines
+    if (data.migraines.length > 0) {
+      hasAnyLogs = true;
+      y = checkPageBreak(14);
+      const prostrating = data.migraines.filter((m) => m.wasProstrating).length;
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...PDF_COLORS.textDark);
+      doc.text(`Migraine Log: ${data.migraines.length} entries`, margin + 4, y);
+      doc.setFont('helvetica', 'normal');
+      y += 6;
+      doc.setTextColor(...PDF_COLORS.textSecondary);
+      doc.text(`Prostrating: ${prostrating} | Work Impact: ${data.migraines.filter((m) => m.couldNotWork).length}`, margin + 8, y);
+      y += 8;
+    }
+
+    if (!hasAnyLogs) {
+      doc.setFontSize(9);
+      doc.setTextColor(...PDF_COLORS.textMuted);
+      doc.text('No health log data recorded yet.', margin + 4, y);
+      y += 8;
+    }
+    y += 4;
+    sectionNum++;
+  }
+
+  // --- 5. Generated Documents ---
+  if (sections.generatedDocs) {
+    addSectionHeader(`${sectionNum}. GENERATED DOCUMENTS`);
+    if (data.buddyContacts.length === 0) {
+      doc.setFontSize(9);
+      doc.setTextColor(...PDF_COLORS.textMuted);
+      doc.text('No generated documents recorded yet.', margin + 4, y);
+      y += 8;
+    } else {
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...PDF_COLORS.textDark);
+      doc.text('Buddy Contacts / Statement Status:', margin + 4, y);
+      doc.setFont('helvetica', 'normal');
+      y += 6;
+      data.buddyContacts.forEach((b) => {
+        y = checkPageBreak(12);
+        doc.setFontSize(9);
+        doc.setTextColor(...PDF_COLORS.textDark);
+        doc.text(`• ${b.rank ? `${b.rank} ` : ''}${b.name}`, margin + 8, y);
+        const statusColor = b.statementStatus === 'Received' || b.statementStatus === 'Submitted'
+          ? PDF_COLORS.success
+          : PDF_COLORS.warning;
+        doc.setTextColor(...statusColor);
+        doc.text(b.statementStatus, pageWidth - margin - 35, y);
+        y += 6;
+      });
+    }
+    y += 6;
+    sectionNum++;
+  }
+
+  // --- 6. Form Drafts ---
+  if (sections.formDrafts) {
+    addSectionHeader(`${sectionNum}. FORM DRAFTS`);
+    const draftEntries = Object.entries(data.formDrafts);
+    const nonEmpty = draftEntries.filter(([, fields]) => {
+      const { lastModified, ...vals } = fields;
+      return Object.values(vals).some((v) => v && v.trim());
+    });
+
+    if (nonEmpty.length === 0) {
+      doc.setFontSize(9);
+      doc.setTextColor(...PDF_COLORS.textMuted);
+      doc.text('No form drafts recorded yet.', margin + 4, y);
+      y += 8;
+    } else {
+      nonEmpty.forEach(([formId, fields]) => {
+        y = checkPageBreak(14);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(...PDF_COLORS.textDark);
+        doc.text(`Form: ${formId}`, margin + 4, y);
+        doc.setFont('helvetica', 'normal');
+        y += 6;
+        const { lastModified, ...vals } = fields;
+        Object.entries(vals).forEach(([fieldId, value]) => {
+          if (value && value.trim()) {
+            y = checkPageBreak(12);
+            doc.setFontSize(8);
+            doc.setTextColor(...PDF_COLORS.textMuted);
+            doc.text(`${fieldId}:`, margin + 8, y);
+            y += 4;
+            doc.setTextColor(...PDF_COLORS.textDark);
+            const wrappedLines = doc.splitTextToSize(value, contentWidth - 16);
+            doc.text(wrappedLines, margin + 8, y);
+            y += wrappedLines.length * 4;
+            y += 2;
+          }
+        });
+        y += 4;
+      });
+    }
+    y += 4;
+    sectionNum++;
+  }
+
+  // --- 7. ROM Measurements ---
+  if (sections.romMeasurements) {
+    addSectionHeader(`${sectionNum}. ROM MEASUREMENTS`);
+    doc.setFontSize(9);
+    doc.setTextColor(...PDF_COLORS.textMuted);
+    doc.text('No ROM measurement data recorded yet.', margin + 4, y);
+    y += 12;
+    sectionNum++;
+  }
+
+  // --- 8. Timeline ---
+  if (sections.timeline) {
+    addSectionHeader(`${sectionNum}. TIMELINE NARRATIVE`);
+    const timeline = buildTimelineData(data);
+    if (timeline.length === 0) {
+      doc.setFontSize(9);
+      doc.setTextColor(...PDF_COLORS.textMuted);
+      doc.text('No timeline data available yet.', margin + 4, y);
+      y += 8;
+    } else {
+      timeline.forEach((event) => {
+        y = checkPageBreak(10);
+
+        // Colored dot for event type
+        const typeColor =
+          event.type === 'Service' ? PDF_COLORS.navy :
+          event.type === 'Medical' ? PDF_COLORS.success :
+          event.type === 'Symptom' ? PDF_COLORS.warning :
+          event.type === 'Deployment' ? PDF_COLORS.blue :
+          PDF_COLORS.textMuted;
+        doc.setFillColor(...typeColor);
+        doc.circle(margin + 6, y - 1, 2, 'F');
+
+        doc.setFontSize(8);
+        doc.setTextColor(...PDF_COLORS.textMuted);
+        doc.text(event.date, margin + 12, y);
+
+        doc.setFontSize(8);
+        doc.setTextColor(...PDF_COLORS.textDark);
+        const desc = `[${event.type}] ${event.description}`;
+        const truncDesc = desc.length > 75 ? desc.substring(0, 72) + '...' : desc;
+        doc.text(truncDesc, margin + 38, y);
+        y += 7;
+      });
+    }
+    y += 4;
+  }
+
+  // --- Final Footer Bar ---
+  y = checkPageBreak(25);
+  doc.setFillColor(...PDF_COLORS.background);
+  doc.setDrawColor(...PDF_COLORS.border);
+  doc.roundedRect(margin, y, contentWidth, 16, 2, 2, 'FD');
+  doc.setFontSize(8);
+  doc.setTextColor(...PDF_COLORS.danger);
+  doc.setFont('helvetica', 'bold');
+  doc.text('DRAFT WORKSHEET — NOT A VA SUBMISSION', pageWidth / 2, y + 6, { align: 'center' });
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7);
+  doc.setTextColor(...PDF_COLORS.textMuted);
+  doc.text('Vet Claim Support — Claim Preparation Tools', pageWidth / 2, y + 12, { align: 'center' });
+
+  const blob = doc.output('blob');
+  return {
+    content: blob,
+    filename: `VCS-Claim-Packet-${dateStr}.pdf`,
+    mimeType: 'application/pdf',
+  };
+}
+
+// ============================================================================
+// Shared PDF utilities (for Form Guide export consistency)
+// ============================================================================
+
+export function generateFormGuidePDF(
+  formId: string,
+  formTitle: string,
+  fields: Array<{ section: string; label: string; fieldId: string }>,
+  drafts: Record<string, string>
+): void {
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = 20;
+  const contentWidth = pageWidth - margin * 2;
+  let y = 0;
+
+  const addWatermark = () => {
+    doc.setFontSize(9);
+    doc.setTextColor(...PDF_COLORS.watermark);
+    doc.setFont('helvetica', 'italic');
+    doc.text('DRAFT WORKSHEET — NOT AN OFFICIAL VA FORM', pageWidth / 2, pageHeight - 15, { align: 'center' });
+    doc.setFont('helvetica', 'normal');
+  };
+
+  const addFooter = () => {
+    doc.setFontSize(7);
+    doc.setTextColor(...PDF_COLORS.textMuted);
+    doc.text('Vet Claim Support — Claim Preparation Tools', pageWidth / 2, pageHeight - 8, { align: 'center' });
+  };
+
+  const checkPageBreak = (needed: number): number => {
+    if (y + needed > pageHeight - 30) {
+      doc.addPage();
+      addWatermark();
+      addFooter();
+      return 20;
+    }
+    return y;
+  };
+
+  // Header bar
+  doc.setFillColor(...PDF_COLORS.navy);
+  doc.rect(0, 0, pageWidth, 35, 'F');
+  doc.setFillColor(...PDF_COLORS.blue);
+  doc.rect(0, 35, pageWidth, 2, 'F');
+
+  doc.setFontSize(16);
+  doc.setTextColor(...PDF_COLORS.white);
+  doc.setFont('helvetica', 'bold');
+  doc.text('VET CLAIM SUPPORT — Draft Worksheet', margin, 16);
+
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`${formId} — ${formTitle}`, margin, 26);
+
+  doc.setFontSize(8);
+  doc.text(`Generated: ${format(new Date(), 'MMMM d, yyyy')}`, margin, 32);
+
+  addWatermark();
+  addFooter();
+  y = 46;
+
+  // Draft notice
+  doc.setFillColor(...PDF_COLORS.background);
+  doc.setDrawColor(...PDF_COLORS.border);
+  doc.roundedRect(margin, y - 2, contentWidth, 12, 2, 2, 'FD');
+  doc.setFontSize(9);
+  doc.setTextColor(...PDF_COLORS.danger);
+  doc.setFont('helvetica', 'bold');
+  doc.text('DRAFT WORKSHEET — NOT AN OFFICIAL VA FORM', pageWidth / 2, y + 6, { align: 'center' });
+  doc.setFont('helvetica', 'normal');
+  y += 18;
+
+  // Fields
+  let currentSection = '';
+  fields.forEach((field) => {
+    const val = drafts[field.fieldId] || '';
+
+    // Section header
+    if (field.section !== currentSection) {
+      currentSection = field.section;
+      y = checkPageBreak(16);
+      doc.setFillColor(...PDF_COLORS.navyLight);
+      doc.roundedRect(margin, y - 3, contentWidth, 10, 1, 1, 'F');
+      doc.setFontSize(9);
+      doc.setTextColor(...PDF_COLORS.white);
+      doc.setFont('helvetica', 'bold');
+      doc.text(field.section, margin + 4, y + 4);
+      doc.setFont('helvetica', 'normal');
+      y += 12;
+    }
+
+    y = checkPageBreak(16);
+    doc.setFontSize(9);
+    doc.setTextColor(...PDF_COLORS.textDark);
+    doc.setFont('helvetica', 'bold');
+    doc.text(field.label, margin + 4, y);
+    doc.setFont('helvetica', 'normal');
+    y += 5;
+
+    if (val && val.trim()) {
+      doc.setFontSize(9);
+      doc.setTextColor(...PDF_COLORS.textSecondary);
+      const wrappedLines = doc.splitTextToSize(val, contentWidth - 8);
+      wrappedLines.forEach((line: string) => {
+        y = checkPageBreak(5);
+        doc.text(line, margin + 4, y);
+        y += 4.5;
+      });
+    } else {
+      doc.setFontSize(9);
+      doc.setTextColor(...PDF_COLORS.textMuted);
+      doc.text('[Not filled]', margin + 4, y);
+      y += 5;
+    }
+    y += 4;
+  });
+
+  // Final footer
+  y = checkPageBreak(20);
+  doc.setFillColor(...PDF_COLORS.background);
+  doc.setDrawColor(...PDF_COLORS.border);
+  doc.roundedRect(margin, y, contentWidth, 14, 2, 2, 'FD');
+  doc.setFontSize(8);
+  doc.setTextColor(...PDF_COLORS.danger);
+  doc.setFont('helvetica', 'bold');
+  doc.text('DRAFT WORKSHEET — NOT A VA SUBMISSION', pageWidth / 2, y + 5, { align: 'center' });
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7);
+  doc.setTextColor(...PDF_COLORS.textMuted);
+  doc.text('Vet Claim Support — Claim Preparation Tools', pageWidth / 2, y + 10, { align: 'center' });
+
+  doc.save(`VCS-Draft-${formId}.pdf`);
+}
+
+// ============================================================================
+// Share / Save / Copy utilities
+// ============================================================================
+
+export async function shareExport(result: ExportResult): Promise<void> {
+  if (navigator.share) {
+    try {
+      const blob =
+        result.content instanceof Blob
+          ? result.content
+          : new Blob([result.content], { type: result.mimeType });
+      const file = new File([blob], result.filename, { type: result.mimeType });
+      await navigator.share({
+        title: 'VCS Claim Packet',
+        files: [file],
+      });
+      return;
+    } catch (err) {
+      // AbortError means user cancelled - that's ok
+      if (err instanceof Error && err.name === 'AbortError') return;
+      // Fall through to download
+    }
+  }
+  downloadExport(result);
+}
+
+export function downloadExport(result: ExportResult): void {
+  const blob =
+    result.content instanceof Blob
+      ? result.content
+      : new Blob([result.content], { type: result.mimeType });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = result.filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+export async function copyExport(result: ExportResult): Promise<boolean> {
+  if (typeof result.content === 'string') {
+    try {
+      await navigator.clipboard.writeText(result.content);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  return false;
+}
+
+// ============================================================================
+// Timeline Builder
+// ============================================================================
+
+interface TimelineEvent {
+  date: string;
+  type: string;
+  description: string;
+  sortDate: number;
+}
+
+function buildTimelineData(data: GatheredData): TimelineEvent[] {
+  const events: TimelineEvent[] = [];
+
+  // Service dates
+  if (data.serviceDates?.start) {
+    events.push({
+      date: data.serviceDates.start,
+      type: 'Service',
+      description: `Entered service${data.branch ? ` (${data.branch})` : ''}`,
+      sortDate: new Date(data.serviceDates.start).getTime(),
+    });
+  }
+  if (data.serviceDates?.end) {
+    events.push({
+      date: data.serviceDates.end,
+      type: 'Service',
+      description: 'Separated from service',
+      sortDate: new Date(data.serviceDates.end).getTime(),
+    });
+  }
+
+  // Service history
+  data.serviceHistory.forEach((entry) => {
+    events.push({
+      date: entry.startDate,
+      type: 'Service',
+      description: `Duty station: ${entry.base || entry.unit || 'Unknown'}`,
+      sortDate: new Date(entry.startDate).getTime(),
+    });
+  });
+
+  // Deployments
+  data.deployments.forEach((dep) => {
+    events.push({
+      date: dep.startDate,
+      type: 'Deployment',
+      description: `${dep.operationName || 'Deployment'} — ${dep.location || 'Unknown'}`,
+      sortDate: new Date(dep.startDate).getTime(),
+    });
+  });
+
+  // Combat history
+  data.combatHistory.forEach((combat) => {
+    events.push({
+      date: combat.startDate,
+      type: 'Service',
+      description: `${combat.combatZoneType}: ${combat.location || 'Unknown'}`,
+      sortDate: new Date(combat.startDate).getTime(),
+    });
+  });
+
+  // Major events
+  data.majorEvents.forEach((event) => {
+    events.push({
+      date: event.date,
+      type: 'Event',
+      description: `${event.type}: ${event.title}`,
+      sortDate: new Date(event.date).getTime(),
+    });
+  });
+
+  // Medical visits (recent)
+  data.medicalVisits.slice(0, 10).forEach((visit) => {
+    events.push({
+      date: visit.date,
+      type: 'Medical',
+      description: visit.reason || visit.diagnosis || 'Medical visit',
+      sortDate: new Date(visit.date).getTime(),
+    });
+  });
+
+  // Severe symptoms
+  data.symptoms
+    .filter((s) => s.severity >= 7)
+    .slice(0, 10)
+    .forEach((symptom) => {
+      events.push({
+        date: symptom.date,
+        type: 'Symptom',
+        description: `${symptom.symptom} (${symptom.severity}/10)`,
+        sortDate: new Date(symptom.date).getTime(),
+      });
+    });
+
+  // Condition add dates
+  data.userConditions.forEach((c) => {
+    if (c.dateAdded) {
+      const vaInfo = getConditionById(c.conditionId);
+      events.push({
+        date: c.dateAdded,
+        type: 'Condition',
+        description: `Claimed: ${vaInfo?.name || c.conditionId}`,
+        sortDate: new Date(c.dateAdded).getTime(),
+      });
+    }
+  });
+
+  // Sort chronologically and deduplicate
+  events.sort((a, b) => a.sortDate - b.sortDate);
+
+  // Format dates for display
+  return events
+    .filter((e) => !isNaN(e.sortDate))
+    .map((e) => ({
+      ...e,
+      date: formatDateSafe(e.date),
+    }));
+}
+
+function formatDateSafe(dateStr: string): string {
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  } catch {
+    return dateStr;
+  }
+}
