@@ -14,8 +14,12 @@ import type { VAForm } from '@/data/vaRequiredForms';
 import { militaryJobCodes } from '@/data/militaryMOS';
 import type { MilitaryJobCode } from '@/data/militaryMOS';
 import type { ClaimsData, ClaimCondition } from '@/types/claims';
+import useAppStore from '@/store/useAppStore';
 import type { UserCondition } from '@/store/useAppStore';
+import { useProfileStore } from '@/store/useProfileStore';
 import type { UserProfile, Branch } from '@/store/useProfileStore';
+import { getConditionsForHazards, hazardConditionMap } from '@/data/hazardConditionMap';
+import type { JobCodeSuggestion, DocumentationStatus, EvidenceItem, RatingOpportunity, ClaimSummary, SymptomAnalysis } from '@/types/intelligence';
 
 // ---------------------------------------------------------------------------
 // Exported interfaces
@@ -122,6 +126,52 @@ function resolveVACondition(uc: UserCondition): VACondition | undefined {
       (c) => c.name.toLowerCase() === uc.conditionId.toLowerCase() ||
              c.abbreviation.toLowerCase() === uc.conditionId.toLowerCase(),
     );
+}
+
+/**
+ * Build a ClaimsData object from the current useAppStore state.
+ * Used internally so intelligence methods can read directly from the store.
+ */
+function getClaimsDataFromStore(): ClaimsData {
+  const s = useAppStore.getState();
+  return {
+    medicalVisits: s.medicalVisits,
+    exposures: s.exposures,
+    symptoms: s.symptoms,
+    medications: s.medications,
+    serviceHistory: s.serviceHistory,
+    combatHistory: s.combatHistory || [],
+    majorEvents: s.majorEvents || [],
+    deployments: s.deployments || [],
+    buddyContacts: s.buddyContacts,
+    documents: s.documents,
+    migraines: s.migraines,
+    sleepEntries: s.sleepEntries || [],
+    ptsdSymptoms: s.ptsdSymptoms || [],
+    separationDate: s.separationDate,
+    uploadedDocuments: s.uploadedDocuments,
+    claimConditions: s.claimConditions || [],
+    quickLogs: s.quickLogs || [],
+    deadlines: s.deadlines || [],
+    documentScanDisclaimerShown: s.documentScanDisclaimerShown,
+    milestonesAchieved: s.milestonesAchieved || [],
+    approvedConditions: s.approvedConditions || [],
+    journeyProgress: s.journeyProgress || { currentPhase: 0, completedChecklist: {} },
+  };
+}
+
+/**
+ * Get profile data from the profile store.
+ */
+function getProfileFromStore(): UserProfile {
+  return useProfileStore.getState();
+}
+
+/**
+ * Get user conditions from the app store.
+ */
+function getUserConditionsFromStore(): UserCondition[] {
+  return useAppStore.getState().userConditions;
 }
 
 /**
@@ -1056,4 +1106,541 @@ export const ClaimIntelligence = {
       trend,
     };
   },
+
+  // -----------------------------------------------------------------------
+  // 8. getJobCodeConditions
+  // -----------------------------------------------------------------------
+  getJobCodeConditions(jobCode?: string, branch?: string): JobCodeSuggestion[] {
+    const profile = getProfileFromStore();
+    const code = jobCode || profile.mosCode;
+    const branchKey = branch || (profile.branch ? BRANCH_MAP[profile.branch as Branch] : '');
+
+    if (!code || !branchKey) return [];
+
+    const job = militaryJobCodes.find(
+      (j) =>
+        j.code.toLowerCase() === code.toLowerCase() &&
+        j.branch === branchKey,
+    );
+
+    if (!job || !job.hazards || job.hazards.length === 0) return [];
+
+    const conditions = getConditionsForHazards(job.hazards);
+    const userConditions = getUserConditionsFromStore();
+    const existingIds = new Set(
+      userConditions.map((uc) => uc.conditionId.toLowerCase()),
+    );
+
+    // Also build a set of existing condition names for fuzzy matching
+    const existingNames = new Set(
+      userConditions.map((uc) => {
+        const vc = resolveVACondition(uc);
+        return (vc?.name ?? uc.conditionId).toLowerCase();
+      }),
+    );
+
+    return conditions.map((c) => {
+      // Find which hazards led to this condition
+      const sourceHazards = job.hazards.filter((hKey) => {
+        const cat = hazardConditionMap[hKey];
+        return cat?.conditions.some(
+          (hc) => hc.conditionName === c.conditionName && hc.diagnosticCode === c.diagnosticCode,
+        );
+      });
+
+      const alreadyClaimed =
+        existingIds.has(c.conditionName.toLowerCase().replace(/\s+/g, '-')) ||
+        existingNames.has(c.conditionName.toLowerCase());
+
+      return {
+        conditionName: c.conditionName,
+        diagnosticCode: c.diagnosticCode,
+        category: c.category,
+        prevalence: c.prevalence,
+        description: c.description,
+        sourceHazards,
+        alreadyClaimed,
+      };
+    });
+  },
+
+  // -----------------------------------------------------------------------
+  // 9. getDocumentationNeeded
+  // -----------------------------------------------------------------------
+  getDocumentationNeeded(conditionId?: string): DocumentationStatus[] {
+    const userConditions = getUserConditionsFromStore();
+    const appState = useAppStore.getState();
+    const evidenceDocs = appState.evidenceDocuments;
+    const claimDocs = appState.claimDocuments;
+
+    const targetConditions = conditionId
+      ? userConditions.filter((uc) => uc.id === conditionId || uc.conditionId === conditionId)
+      : userConditions;
+
+    return targetConditions.map((uc) => {
+      const vaCondition = resolveVACondition(uc);
+      const condName = vaCondition?.name ?? uc.conditionId;
+
+      // Standard evidence types every condition needs
+      const evidenceTypes = [
+        { type: 'medical_records', label: 'Service Treatment Records' },
+        { type: 'buddy_statement', label: 'Buddy / Witness Statement' },
+        { type: 'personal_statement', label: 'Personal Statement' },
+        { type: 'nexus_letter', label: 'Nexus Letter' },
+        { type: 'supporting_docs', label: 'Supporting Photos / Documentation' },
+      ];
+
+      const needed: EvidenceItem[] = [];
+      const collected: EvidenceItem[] = [];
+
+      for (const et of evidenceTypes) {
+        // Check evidenceDocuments for matching category/type
+        const matchingEvidence = evidenceDocs.filter((doc) => {
+          const catMatch =
+            (et.type === 'medical_records' && doc.category === 'medical-records') ||
+            (et.type === 'buddy_statement' && doc.category === 'buddy-letters') ||
+            (et.type === 'personal_statement' && doc.category === 'personal-statements') ||
+            (et.type === 'supporting_docs' && (doc.category === 'photos' || doc.category === 'other'));
+          return catMatch;
+        });
+
+        // Check claimDocuments for matching type
+        const matchingClaimDocs = claimDocs.filter((doc) => {
+          const typeMatch =
+            (et.type === 'medical_records' && (doc.documentType === 'medical-records' || doc.documentType === 'service-records')) ||
+            (et.type === 'buddy_statement' && doc.documentType === 'buddy-statement') ||
+            (et.type === 'personal_statement' && (doc.documentType === 'personal-statement' || doc.documentType === 'stressor-statement')) ||
+            (et.type === 'nexus_letter' && (doc.documentType === 'nexus-letter' || doc.documentType === 'private-medical-opinion')) ||
+            (et.type === 'supporting_docs' && doc.documentType === 'other');
+
+          // If conditionId is specified, also check condition match
+          const condMatch = !conditionId || !doc.condition ||
+            doc.condition.toLowerCase() === condName.toLowerCase();
+
+          return typeMatch && condMatch;
+        });
+
+        const hasEvidence = matchingEvidence.length > 0 || matchingClaimDocs.length > 0;
+
+        if (hasEvidence) {
+          const docId = matchingClaimDocs[0]?.id ?? matchingEvidence[0]?.id;
+          collected.push({
+            type: et.type,
+            label: et.label,
+            status: 'collected',
+            id: docId,
+          });
+        } else {
+          needed.push({
+            type: et.type,
+            label: et.label,
+            status: 'needed',
+          });
+        }
+      }
+
+      const total = needed.length + collected.length;
+      const percentComplete = total > 0 ? Math.round((collected.length / total) * 100) : 0;
+
+      return {
+        conditionId: uc.id,
+        conditionName: condName,
+        needed,
+        collected,
+        percentComplete,
+      };
+    });
+  },
+
+  // -----------------------------------------------------------------------
+  // 10. getRatingIncreaseOpportunities
+  // -----------------------------------------------------------------------
+  getRatingIncreaseOpportunities(): RatingOpportunity[] {
+    const userConditions = getUserConditionsFromStore();
+    const appState = useAppStore.getState();
+    const approvedConditions = appState.approvedConditions || [];
+
+    const ratingTiers = [0, 10, 30, 50, 70, 100];
+
+    return userConditions.map((uc) => {
+      const vaCondition = resolveVACondition(uc);
+      const condName = vaCondition?.name ?? uc.conditionId;
+      const diagnosticCode = vaCondition?.diagnosticCode?.[0] ?? '';
+
+      // Check if there's an approved rating for this condition
+      const approved = approvedConditions.find(
+        (ac) => ac.name.toLowerCase() === condName.toLowerCase(),
+      );
+
+      const currentRating = approved?.rating ?? uc.rating ?? null;
+
+      // Determine the next tier
+      let nextTier: number | null = null;
+      if (currentRating !== null) {
+        const currentIdx = ratingTiers.indexOf(currentRating);
+        if (currentIdx >= 0 && currentIdx < ratingTiers.length - 1) {
+          nextTier = ratingTiers[currentIdx + 1];
+        } else if (currentIdx === -1) {
+          // Current rating is between tiers (e.g., 20), find next standard tier above it
+          nextTier = ratingTiers.find((t) => t > currentRating) ?? null;
+        }
+      }
+
+      // General guidance based on the next tier
+      let generalGuidance = '';
+      if (nextTier === null && currentRating === 100) {
+        generalGuidance = 'You are already at the maximum rating for this condition.';
+      } else if (nextTier === null) {
+        generalGuidance = 'Submit evidence of current severity to establish an initial rating.';
+      } else if (nextTier <= 10) {
+        generalGuidance = 'Document that symptoms are present and require continuous medication or cause occasional functional limitation.';
+      } else if (nextTier <= 30) {
+        generalGuidance = 'Document moderate symptoms with occupational and social impairment. Show reduced reliability and productivity.';
+      } else if (nextTier <= 50) {
+        generalGuidance = 'Document considerable difficulty in occupational and social functioning. Show deficiencies in work, family relations, judgment, thinking, or mood.';
+      } else if (nextTier <= 70) {
+        generalGuidance = 'Document severe occupational impairment. Show inability to perform most work tasks, difficulty maintaining relationships, and significant daily limitations.';
+      } else {
+        generalGuidance = 'Document total occupational and social impairment. Show persistent danger, inability to perform activities of daily living, or complete inability to work.';
+      }
+
+      return {
+        conditionId: uc.id,
+        conditionName: condName,
+        diagnosticCode,
+        currentRating,
+        nextTier,
+        generalGuidance,
+      };
+    });
+  },
+
+  // -----------------------------------------------------------------------
+  // 11. getClaimSummary
+  // -----------------------------------------------------------------------
+  getClaimSummary(): ClaimSummary {
+    const profile = getProfileFromStore();
+    const userConditions = getUserConditionsFromStore();
+    const claimsData = getClaimsDataFromStore();
+    const appState = useAppStore.getState();
+
+    const branchLabel = profile.branch ? BRANCH_MAP[profile.branch as Branch] ?? profile.branch : '';
+
+    // Build documentation status for each condition
+    const docStatuses = ClaimIntelligence.getDocumentationNeeded();
+
+    // Conditions list
+    const conditionsList = userConditions.map((uc) => {
+      const vaCondition = resolveVACondition(uc);
+      const condName = vaCondition?.name ?? uc.conditionId;
+      const diagnosticCode = vaCondition?.diagnosticCode?.[0] ?? '';
+      const docStatus = docStatuses.find((ds) => ds.conditionId === uc.id) ?? {
+        conditionId: uc.id,
+        conditionName: condName,
+        needed: [],
+        collected: [],
+        percentComplete: 0,
+      };
+
+      return {
+        id: uc.id,
+        name: condName,
+        diagnosticCode,
+        status: uc.claimStatus,
+        claimedRating: uc.rating ?? null,
+        isSecondary: !uc.isPrimary,
+        evidenceStatus: docStatus,
+      };
+    });
+
+    // Evidence totals
+    const totalEvidenceNeeded = docStatuses.reduce((sum, ds) => sum + ds.needed.length, 0);
+    const totalEvidenceCollected = docStatuses.reduce((sum, ds) => sum + ds.collected.length, 0);
+    const totalEvidenceItems = totalEvidenceNeeded + totalEvidenceCollected;
+    const overallReadinessPercent = totalEvidenceItems > 0
+      ? Math.round((totalEvidenceCollected / totalEvidenceItems) * 100)
+      : 0;
+
+    // Health logs
+    const allLogs = [
+      ...claimsData.symptoms.map((s) => ({ type: 'symptom', date: s.date })),
+      ...claimsData.quickLogs.map((q) => ({ type: 'quickLog', date: q.date })),
+      ...claimsData.migraines.map((m) => ({ type: 'migraine', date: m.date })),
+      ...claimsData.sleepEntries.map((s) => ({ type: 'sleep', date: s.date })),
+      ...claimsData.ptsdSymptoms.map((p) => ({ type: 'ptsd', date: p.date })),
+    ];
+    const healthLogsByType: Record<string, number> = {};
+    for (const log of allLogs) {
+      healthLogsByType[log.type] = (healthLogsByType[log.type] || 0) + 1;
+    }
+    const sortedLogs = allLogs.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    const recentLogDate = sortedLogs.length > 0 ? sortedLogs[0].date : null;
+
+    // Documents
+    const evidenceDocs = appState.evidenceDocuments || [];
+    const claimDocsArr = appState.claimDocuments || [];
+    const totalDocuments = evidenceDocs.length + claimDocsArr.length;
+    const documentsByType: Record<string, number> = {};
+    for (const doc of evidenceDocs) {
+      documentsByType[doc.category] = (documentsByType[doc.category] || 0) + 1;
+    }
+    for (const doc of claimDocsArr) {
+      documentsByType[doc.documentType] = (documentsByType[doc.documentType] || 0) + 1;
+    }
+
+    // Next steps
+    const nextSteps: string[] = [];
+    if (userConditions.length === 0) {
+      nextSteps.push('Add your claimed conditions to get started.');
+    }
+    if (totalEvidenceNeeded > 0) {
+      nextSteps.push(`Collect ${totalEvidenceNeeded} remaining evidence items across your conditions.`);
+    }
+    const conditionsWithNoEvidence = docStatuses.filter((ds) => ds.collected.length === 0);
+    if (conditionsWithNoEvidence.length > 0) {
+      nextSteps.push(`${conditionsWithNoEvidence.length} condition(s) have no evidence collected yet.`);
+    }
+    if (allLogs.length === 0) {
+      nextSteps.push('Start logging your symptoms daily to build a pattern of evidence.');
+    } else if (recentLogDate && daysAgo(recentLogDate) > 14) {
+      nextSteps.push('Your most recent log is over 2 weeks old. Log symptoms regularly.');
+    }
+    if (claimsData.buddyContacts.length === 0 && userConditions.length > 0) {
+      nextSteps.push('Add buddy/witness contacts for lay evidence support.');
+    }
+
+    return {
+      veteranName: [profile.firstName, profile.lastName].filter(Boolean).join(' ') || 'Not Set',
+      branch: branchLabel,
+      jobCode: profile.mosCode || 'Not Set',
+      jobTitle: profile.mosTitle || 'Not Set',
+      serviceStartDate: profile.serviceDates?.start ?? '',
+      serviceEndDate: profile.serviceDates?.end ?? '',
+      intentToFileDate: profile.intentToFileDate ?? null,
+
+      conditions: conditionsList,
+
+      totalConditions: userConditions.length,
+      totalEvidenceNeeded,
+      totalEvidenceCollected,
+      overallReadinessPercent,
+
+      totalHealthLogs: allLogs.length,
+      healthLogsByType,
+      recentLogDate,
+
+      totalDocuments,
+      documentsByType,
+
+      nextSteps,
+
+      generatedAt: new Date().toISOString(),
+    };
+  },
+
+  // -----------------------------------------------------------------------
+  // 12. getSymptomPatterns
+  // -----------------------------------------------------------------------
+  getSymptomPatterns(conditionId?: string): SymptomAnalysis {
+    const userConditions = getUserConditionsFromStore();
+    const claimsData = getClaimsDataFromStore();
+
+    let conditionName: string | undefined;
+    let matchTerms: string[] = [];
+
+    if (conditionId) {
+      const uc = userConditions.find((c) => c.id === conditionId || c.conditionId === conditionId);
+      if (uc) {
+        const vaCondition = resolveVACondition(uc);
+        conditionName = vaCondition?.name ?? uc.conditionId;
+        matchTerms = [conditionName.toLowerCase()];
+        if (vaCondition) {
+          matchTerms.push(vaCondition.id.toLowerCase());
+          matchTerms.push(vaCondition.abbreviation.toLowerCase());
+          matchTerms.push(...vaCondition.keywords.map((k) => k.toLowerCase()));
+        }
+      }
+    }
+
+    // Gather all entries
+    interface LogEntry {
+      date: string;
+      severity: number;
+      text: string;
+      triggers: string[];
+    }
+
+    const entries: LogEntry[] = [];
+
+    for (const s of claimsData.symptoms) {
+      const text = [s.symptom, s.bodyArea, s.notes].join(' ').toLowerCase();
+      if (matchTerms.length === 0 || matchTerms.some((t) => text.includes(t)) ||
+          (s.conditionTags && s.conditionTags.some((tag) => matchTerms.includes(tag.toLowerCase())))) {
+        entries.push({
+          date: s.date,
+          severity: s.severity,
+          text,
+          triggers: [],
+        });
+      }
+    }
+
+    for (const q of claimsData.quickLogs) {
+      const text = q.flareUpNote.toLowerCase();
+      if (matchTerms.length === 0 || matchTerms.some((t) => text.includes(t)) ||
+          (q.conditionTags && q.conditionTags.some((tag) => matchTerms.includes(tag.toLowerCase())))) {
+        entries.push({
+          date: q.date,
+          severity: q.painLevel ?? q.overallFeeling,
+          text,
+          triggers: [],
+        });
+      }
+    }
+
+    for (const m of claimsData.migraines) {
+      if (matchTerms.length === 0 || matchTerms.some((t) => ['migraine', 'headache'].includes(t))) {
+        const sevValue = m.severity === 'Prostrating' ? 10 : m.severity === 'Severe' ? 8 : m.severity === 'Moderate' ? 5 : 3;
+        entries.push({
+          date: m.date,
+          severity: sevValue,
+          text: [m.treatment, m.notes].join(' ').toLowerCase(),
+          triggers: m.triggers || [],
+        });
+      }
+    }
+
+    for (const sl of claimsData.sleepEntries) {
+      if (matchTerms.length === 0 || matchTerms.some((t) => ['sleep', 'apnea', 'insomnia'].includes(t))) {
+        const qualityVal = sl.quality === 'Very Poor' ? 9 : sl.quality === 'Poor' ? 7 : sl.quality === 'Fair' ? 5 : sl.quality === 'Good' ? 3 : 1;
+        entries.push({
+          date: sl.date,
+          severity: qualityVal,
+          text: [sl.notes, sl.impactOnWork ?? ''].join(' ').toLowerCase(),
+          triggers: [],
+        });
+      }
+    }
+
+    for (const p of claimsData.ptsdSymptoms) {
+      if (matchTerms.length === 0 || matchTerms.some((t) => ['ptsd', 'anxiety', 'mental health'].includes(t))) {
+        entries.push({
+          date: p.date,
+          severity: p.overallSeverity,
+          text: [p.occupationalImpairment, p.socialImpairment, p.notes, p.triggeredBy ?? ''].join(' ').toLowerCase(),
+          triggers: p.triggeredBy ? [p.triggeredBy] : [],
+        });
+      }
+    }
+
+    if (entries.length === 0) {
+      return {
+        conditionId,
+        conditionName,
+        totalEntries: 0,
+        dateRange: null,
+        frequencyPerWeek: 0,
+        severityTrend: 'insufficient_data',
+        commonTriggers: [],
+        peakDays: [],
+        insights: [],
+      };
+    }
+
+    // Sort by date
+    entries.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+    // Date range
+    const startDate = entries[0].date;
+    const endDate = entries[entries.length - 1].date;
+    const daySpan = Math.max(1, Math.ceil(
+      (new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24),
+    ));
+    const weeks = Math.max(1, daySpan / 7);
+    const frequencyPerWeek = Math.round((entries.length / weeks) * 10) / 10;
+
+    // Severity trend
+    let severityTrend: SymptomAnalysis['severityTrend'] = 'insufficient_data';
+    if (entries.length >= 4) {
+      const mid = Math.floor(entries.length / 2);
+      const firstHalf = entries.slice(0, mid);
+      const secondHalf = entries.slice(mid);
+      const firstAvg = firstHalf.reduce((s, e) => s + e.severity, 0) / firstHalf.length;
+      const secondAvg = secondHalf.reduce((s, e) => s + e.severity, 0) / secondHalf.length;
+      const delta = secondAvg - firstAvg;
+      if (delta > 1) severityTrend = 'worsening';
+      else if (delta < -1) severityTrend = 'improving';
+      else severityTrend = 'stable';
+    }
+
+    // Common triggers
+    const triggerCounts: Record<string, number> = {};
+    for (const e of entries) {
+      for (const t of e.triggers) {
+        if (t.trim()) {
+          triggerCounts[t.trim()] = (triggerCounts[t.trim()] || 0) + 1;
+        }
+      }
+    }
+    const commonTriggers = Object.entries(triggerCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([trigger]) => trigger);
+
+    // Peak days
+    const dayCounts: Record<string, number> = { Sun: 0, Mon: 0, Tue: 0, Wed: 0, Thu: 0, Fri: 0, Sat: 0 };
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    for (const e of entries) {
+      const dayIdx = new Date(e.date).getDay();
+      dayCounts[dayNames[dayIdx]]++;
+    }
+    const maxDayCount = Math.max(...Object.values(dayCounts));
+    const peakDays = maxDayCount > 0
+      ? Object.entries(dayCounts)
+          .filter(([, count]) => count === maxDayCount)
+          .map(([day]) => day)
+      : [];
+
+    // Insights
+    const insights: string[] = [];
+    const avgSeverity = entries.reduce((s, e) => s + e.severity, 0) / entries.length;
+
+    if (severityTrend === 'worsening') {
+      insights.push('Symptoms appear to be worsening over time. This trend supports a claim for increased severity.');
+    } else if (severityTrend === 'improving') {
+      insights.push('Symptoms appear to be improving. Continue logging to track the full pattern.');
+    } else if (severityTrend === 'stable') {
+      insights.push('Symptoms are relatively stable. Consistent documentation strengthens your claim.');
+    }
+
+    if (frequencyPerWeek >= 3) {
+      insights.push(`High frequency: averaging ${frequencyPerWeek} entries per week.`);
+    }
+
+    if (avgSeverity >= 7) {
+      insights.push('Average severity is high (7+/10). Document how this impacts daily activities and work.');
+    }
+
+    if (peakDays.length === 1) {
+      insights.push(`Symptoms peak on ${peakDays[0]}s. Consider tracking what activities or triggers are specific to that day.`);
+    }
+
+    if (commonTriggers.length > 0) {
+      insights.push(`Common triggers: ${commonTriggers.join(', ')}. Note these for your C&P exam.`);
+    }
+
+    return {
+      conditionId,
+      conditionName,
+      totalEntries: entries.length,
+      dateRange: { start: startDate, end: endDate },
+      frequencyPerWeek,
+      severityTrend,
+      commonTriggers,
+      peakDays,
+      insights,
+    };
+  },
 };
+
+export type { JobCodeSuggestion, DocumentationStatus, EvidenceItem, RatingOpportunity, ClaimSummary, SymptomAnalysis } from '@/types/intelligence';
