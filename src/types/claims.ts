@@ -313,6 +313,7 @@ export interface QuickLogEntry {
   flareUpNote: string;
   cpapUsed?: boolean;
   painLevel?: number;
+  mood?: 'good' | 'okay' | 'bad';
   createdAt: string;
   conditionTags?: string[];
 }

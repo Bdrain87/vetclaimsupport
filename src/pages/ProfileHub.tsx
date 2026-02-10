@@ -32,8 +32,11 @@ function ProfileRow({ icon: Icon, label, route, danger }: ProfileRowProps) {
 
 export default function ProfileHub() {
   const navigate = useNavigate();
-  const { firstName, lastName, branch, mosCode, mosTitle } = useProfileStore();
+  const { firstName, lastName, branch, mosCode, mosTitle, serviceDates } = useProfileStore();
   const branchLabel = branch ? BRANCH_LABELS[branch] : '';
+  const serviceDateStr = serviceDates?.start
+    ? `${new Date(serviceDates.start).toLocaleDateString()} – ${serviceDates.end ? new Date(serviceDates.end).toLocaleDateString() : 'Present'}`
+    : '';
 
   return (
     <div className="container max-w-2xl mx-auto px-4 py-6 space-y-4">
@@ -52,6 +55,9 @@ export default function ProfileHub() {
             {branchLabel && <p className="text-sm text-muted-foreground">{branchLabel}</p>}
             {mosCode && (
               <p className="text-xs text-muted-foreground truncate">{mosCode} — {mosTitle}</p>
+            )}
+            {serviceDateStr && (
+              <p className="text-xs text-muted-foreground/70 truncate">{serviceDateStr}</p>
             )}
           </div>
           <button
