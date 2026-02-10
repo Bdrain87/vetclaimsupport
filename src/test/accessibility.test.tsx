@@ -37,8 +37,8 @@ const criticalPages = [
   { name: 'HealthLog', load: () => import('@/pages/HealthLog') },
   { name: 'NotFound', load: () => import('@/pages/NotFound') },
   { name: 'FAQ', load: () => import('@/pages/FAQ') },
-  { name: 'Terms', load: () => import('@/pages/Terms') },
-  { name: 'Privacy', load: () => import('@/pages/Privacy') },
+  { name: 'Terms', load: () => import('@/pages/legal/TermsOfServicePage') },
+  { name: 'Privacy', load: () => import('@/pages/legal/PrivacyPolicyPage') },
 ];
 
 // axe-core rules to disable in JSDOM (they give false positives without

@@ -58,9 +58,9 @@ const pages: Record<string, () => Promise<{ default: React.ComponentType }>> = {
   HelpCenter: () => import('@/pages/HelpCenter'),
   UserGuide: () => import('@/pages/UserGuide'),
   AppStorePreview: () => import('@/pages/AppStorePreview'),
-  Terms: () => import('@/pages/Terms'),
-  Privacy: () => import('@/pages/Privacy'),
-  Disclaimer: () => import('@/pages/Disclaimer'),
+  Terms: () => import('@/pages/legal/TermsOfServicePage'),
+  Privacy: () => import('@/pages/legal/PrivacyPolicyPage'),
+  Disclaimer: () => import('@/pages/legal/DisclaimerPage'),
   NotFound: () => import('@/pages/NotFound'),
 };
 
