@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   AlertCircle,
   Info,
+  Lightbulb,
 } from 'lucide-react';
 import { getDBQCondition } from '@/data/dbqCriteria';
 
@@ -197,7 +198,7 @@ export function DBQRatingReference() {
 
         <div className="p-3 bg-primary/5 border border-primary/20 rounded-lg">
           <p className="text-xs text-muted-foreground">
-            <strong className="text-foreground">💡 Tip:</strong> The VA uses these criteria to 
+            <Lightbulb className="h-3 w-3 inline text-primary" /> <strong className="text-foreground">Tip:</strong> The VA uses these criteria to
             determine your rating percentage. Document evidence that matches the higher rating levels.
           </p>
         </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { AlertTriangle, ClipboardCheck } from 'lucide-react';
+import { AlertTriangle, ClipboardCheck, Sparkles } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface ChecklistItem {
@@ -111,7 +111,7 @@ export function CPExamPrepTab() {
 
           {completedCount === checklist.length && (
             <div className="mt-6 p-4 rounded-lg bg-success/10 border border-success/30 text-center">
-              <p className="text-success font-medium">🎉 You're fully prepared for your C&P exam!</p>
+              <p className="text-success font-medium"><Sparkles className="h-4 w-4 inline" /> You're fully prepared for your C&P exam!</p>
             </div>
           )}
         </CardContent>

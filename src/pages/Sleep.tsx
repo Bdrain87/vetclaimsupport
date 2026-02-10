@@ -217,7 +217,7 @@ export default function Sleep() {
     
     if (hasRespiratoryFailure) return { rating: '100%', color: 'text-destructive', note: 'Chronic respiratory failure with CO₂ retention or cor pulmonale' };
     if (usesCPAP) return { rating: '50%', color: 'text-warning', note: 'Requires use of breathing assistance device such as CPAP' };
-    if (hasSevereSleepiness) return { rating: '30%', color: 'text-orange-500', note: 'Persistent daytime hypersomnolence' };
+    if (hasSevereSleepiness) return { rating: '30%', color: 'text-blue-500', note: 'Persistent daytime hypersomnolence' };
     return { rating: '0%', color: 'text-muted-foreground', note: 'Asymptomatic with documented sleep disorder' };
   }, [sleepEntries]);
 
@@ -226,7 +226,7 @@ export default function Sleep() {
       case 'Excellent': return 'bg-success/10 text-success border-success/20';
       case 'Good': return 'bg-green-500/10 text-green-600 border-green-500/20';
       case 'Fair': return 'bg-warning/10 text-warning border-warning/20';
-      case 'Poor': return 'bg-orange-500/10 text-orange-500 border-orange-500/20';
+      case 'Poor': return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
       case 'Very Poor': return 'bg-destructive/10 text-destructive border-destructive/20';
     }
   };
@@ -236,8 +236,8 @@ export default function Sleep() {
       {/* Premium Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-[#C8A628]/20 to-[#C8A628]/5 shadow-[0_0_24px_rgba(200,166,40,0.2)]">
-            <Moon className="h-6 w-6 text-[#C8A628] drop-shadow-[0_0_8px_rgba(200,166,40,0.5)]" />
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-[#3B82F6]/20 to-[#3B82F6]/5 shadow-[0_0_24px_rgba(59,130,246,0.2)]">
+            <Moon className="h-6 w-6 text-[#3B82F6] drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground tracking-tight">Sleep Tracker</h1>
@@ -256,10 +256,10 @@ export default function Sleep() {
       </div>
 
       {/* VA Rating Info - Premium Card */}
-      <div className="rounded-2xl bg-gradient-to-br from-[#C8A628]/10 to-[#C8A628]/5 border border-[#C8A628]/30 p-5 shadow-lg" style={{ boxShadow: '0 4px 24px rgba(200, 166, 40, 0.15)' }}>
+      <div className="rounded-2xl bg-gradient-to-br from-[#3B82F6]/10 to-[#3B82F6]/5 border border-[#3B82F6]/30 p-5 shadow-lg" style={{ boxShadow: '0 4px 24px rgba(59, 130, 246, 0.15)' }}>
         <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 rounded-xl bg-[#C8A628]/20">
-            <Moon className="h-5 w-5 text-[#C8A628]" />
+          <div className="p-2 rounded-xl bg-[#3B82F6]/20">
+            <Moon className="h-5 w-5 text-[#3B82F6]" />
           </div>
           <div>
             <h3 className="font-bold text-foreground">VA Sleep Apnea Ratings</h3>
@@ -271,8 +271,8 @@ export default function Sleep() {
             <span className="font-bold text-muted-foreground text-lg">0%</span>
             <p className="text-muted-foreground mt-1">Asymptomatic, documented</p>
           </div>
-          <div className="bg-background/60 rounded-xl p-3 border border-orange-500/30">
-            <span className="font-bold text-orange-400 text-lg">30%</span>
+          <div className="bg-background/60 rounded-xl p-3 border border-blue-500/30">
+            <span className="font-bold text-blue-400 text-lg">30%</span>
             <p className="text-muted-foreground mt-1">Persistent daytime sleepiness</p>
           </div>
           <div className="bg-background/60 rounded-xl p-3 border border-warning/30">
@@ -288,7 +288,7 @@ export default function Sleep() {
       {/* Add Log Button */}
       <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
         <DialogTrigger asChild>
-          <Button className="gap-2 bg-[#C8A628] hover:bg-[#D4B632] text-[#102039] shadow-[0_4px_16px_rgba(200,166,40,0.3)]">
+          <Button className="gap-2 bg-[#3B82F6] hover:bg-[#2563EB] text-[#102039] shadow-[0_4px_16px_rgba(59,130,246,0.3)]">
             <Plus className="h-4 w-4" />
             Log Sleep
           </Button>
@@ -363,7 +363,7 @@ export default function Sleep() {
                   {/* Sleep Apnea Specific - VA Rating Fields */}
                   <div className="space-y-3">
                     <Label className="text-base font-semibold flex items-center gap-2">
-                      <Wind className="h-4 w-4 text-[#C8A628]" />
+                      <Wind className="h-4 w-4 text-[#3B82F6]" />
                       Sleep Apnea Symptoms (VA DC 6847)
                     </Label>
 
@@ -398,7 +398,7 @@ export default function Sleep() {
                     </div>
 
                     {formData.usesCPAP && (
-                      <div className="ml-4 space-y-3 border-l-2 border-[#C8A628]/30 pl-4">
+                      <div className="ml-4 space-y-3 border-l-2 border-[#3B82F6]/30 pl-4">
                         <div className="flex items-center justify-between rounded-lg border p-3 bg-muted/30">
                           <div className="space-y-0.5">
                             <Label>Used CPAP Last Night?</Label>
@@ -678,11 +678,11 @@ export default function Sleep() {
 
       {/* Estimated Rating Card */}
       {estimatedRating && sleepEntries.length > 0 && (
-        <Card className="border-[#C8A628]/30 bg-[#C8A628]/5">
+        <Card className="border-[#3B82F6]/30 bg-[#3B82F6]/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <TrendingUp className="h-6 w-6 text-[#C8A628]" />
+                <TrendingUp className="h-6 w-6 text-[#3B82F6]" />
                 <div>
                   <p className="font-semibold">Estimated VA Rating</p>
                   <p className="text-xs text-muted-foreground">{estimatedRating.note}</p>
@@ -701,7 +701,7 @@ export default function Sleep() {
         <Card className="data-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <Clock className="h-8 w-8 text-[#C8A628]" />
+              <Clock className="h-8 w-8 text-[#3B82F6]" />
               <div>
                 <p className="text-2xl font-bold">{stats.avgHours}h</p>
                 <p className="text-sm text-muted-foreground">Avg Sleep</p>
@@ -730,7 +730,7 @@ export default function Sleep() {
         <Card className="data-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <Wind className="h-8 w-8 text-orange-500" />
+              <Wind className="h-8 w-8 text-blue-500" />
               <div>
                 <p className="text-2xl font-bold">{stats.gaspingEpisodes}</p>
                 <p className="text-sm text-muted-foreground">Gasping Episodes</p>
@@ -768,7 +768,7 @@ export default function Sleep() {
           <Card className="data-card">
             <CardContent className="pt-4 pb-4">
               <div className="text-center">
-                <p className="text-xl font-bold text-orange-500">{stats.severeSleepiness}</p>
+                <p className="text-xl font-bold text-blue-500">{stats.severeSleepiness}</p>
                 <p className="text-xs text-muted-foreground">Severe Sleepiness</p>
               </div>
             </CardContent>
@@ -821,7 +821,7 @@ export default function Sleep() {
                       <Badge variant="destructive" className="text-xs">Nightmares</Badge>
                     )}
                       {entry.timesWokeGasping && entry.timesWokeGasping > 0 && (
-                        <Badge variant="outline" className="text-xs text-orange-500 border-orange-500/50">Gasping x{entry.timesWokeGasping}</Badge>
+                        <Badge variant="outline" className="text-xs text-blue-500 border-blue-500/50">Gasping x{entry.timesWokeGasping}</Badge>
                       )}
                       {entry.spouseObserved && (
                         <Badge variant="outline" className="text-xs text-purple-500 border-purple-500/50">Witnessed</Badge>

@@ -27,8 +27,8 @@ body {
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); }
-::-webkit-scrollbar-thumb { background: rgba(200, 166, 40, 0.2); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(200, 166, 40, 0.4); }
+::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.2); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(59, 130, 246, 0.4); }
 
 /* Vet Claim Support - Premium Dark Mode Design System */
 
@@ -255,9 +255,9 @@ body {
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Premium selection color — Platinum gold accent */
+  /* Premium selection color — Blue accent */
   ::selection {
-    background: rgba(200, 166, 40, 0.3);
+    background: rgba(59, 130, 246, 0.3);
   }
 }
 
@@ -289,13 +289,13 @@ body {
       inset 0 1px 0 hsl(0 0% 100% / 0.04);
   }
 
-  .gold-button {
-    @apply bg-[#C8A628] text-[#102039] font-black uppercase tracking-tighter rounded-2xl
-           hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-[#C8A628]/20;
+  .primary-button {
+    @apply bg-[#3B82F6] text-white font-bold uppercase tracking-tighter rounded-2xl
+           hover:bg-[#2563EB] hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-[#3B82F6]/20;
   }
 
   .premium-border {
-    @apply border-2 border-[#C8A628] shadow-[0_0_50px_rgba(200,166,40,0.15)];
+    @apply border-2 border-[#3B82F6] shadow-[0_0_50px_rgba(59,130,246,0.15)];
   }
 
   /* Premium stat cards with glassmorphism */
@@ -1497,7 +1497,7 @@ body {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #C9A227;
+  background-color: #3B82F6;
   animation: loadingDotPulse 0.8s ease-in-out infinite;
 }
 
@@ -1915,7 +1915,7 @@ body {
         --navy-800: 220 35% 18%;
         --navy-700: 220 30% 25%;
         --accent-green: 152 69% 40%;
-        --accent-gold: 45 93% 47%;
+        --accent-blue: 217 91% 60%;
         --accent-blue: 210 100% 50%;
     }
 
@@ -1985,19 +1985,16 @@ body {
 
     /* PRO TIP BANNER FIX */
     @media (max-width: 768px) {
-        [class*="bg-gradient"][class*="amber"],
         .pro-tip-card {
               padding: 0.75rem !important;
               margin: 0 0.5rem !important;
         }
 
-      .pro-tip-card h3,
-        [class*="bg-gradient"][class*="amber"] h3 {
+      .pro-tip-card h3 {
               font-size: 0.875rem !important;
         }
 
-      .pro-tip-card p,
-        [class*="bg-gradient"][class*="amber"] p {
+      .pro-tip-card p {
               font-size: 0.75rem !important;
               line-height: 1.4 !important;
         }

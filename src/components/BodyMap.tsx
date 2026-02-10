@@ -24,7 +24,7 @@ export const BodyMap = () => {
             tabIndex={0}
             onClick={() => setSelectedZone('ear')}
             onKeyDown={(e) => e.key === 'Enter' && setSelectedZone('ear')}
-            className={`cursor-pointer outline-none focus:ring-2 focus:ring-[#C8A628] transition-all duration-500 ${selectedZone === 'ear' ? 'fill-[#C8A628] drop-shadow-[0_0_15px_#C8A628]' : 'fill-white/10 hover:fill-white/20'}`}
+            className={`cursor-pointer outline-none focus:ring-2 focus:ring-[#3B82F6] transition-all duration-500 ${selectedZone === 'ear' ? 'fill-[#3B82F6] drop-shadow-[0_0_15px_#3B82F6]' : 'fill-white/10 hover:fill-white/20'}`}
           />
           {/* Spine & Back Zone */}
           <rect
@@ -33,7 +33,7 @@ export const BodyMap = () => {
             tabIndex={0}
             onClick={() => setSelectedZone('musculoskeletal')}
             onKeyDown={(e) => e.key === 'Enter' && setSelectedZone('musculoskeletal')}
-            className={`cursor-pointer outline-none focus:ring-2 focus:ring-[#C8A628] transition-all duration-500 ${selectedZone === 'musculoskeletal' ? 'fill-[#C8A628] drop-shadow-[0_0_15px_#C8A628]' : 'fill-white/10 hover:fill-white/20'}`}
+            className={`cursor-pointer outline-none focus:ring-2 focus:ring-[#3B82F6] transition-all duration-500 ${selectedZone === 'musculoskeletal' ? 'fill-[#3B82F6] drop-shadow-[0_0_15px_#3B82F6]' : 'fill-white/10 hover:fill-white/20'}`}
           />
         </svg>
       </div>
@@ -41,7 +41,7 @@ export const BodyMap = () => {
       {/* Discovery Feed */}
       <div className="flex flex-col">
         <div className="mb-8">
-          <h2 className="text-4xl font-black italic text-white uppercase tracking-tighter">Nexus <span className="text-[#C8A628]">Discovery</span></h2>
+          <h2 className="text-4xl font-black italic text-white uppercase tracking-tighter">Nexus <span className="text-[#3B82F6]">Discovery</span></h2>
           <p className="text-white/40 text-xs font-bold uppercase tracking-widest mt-2">Interactive 38 CFR Mapping</p>
         </div>
 
@@ -54,19 +54,19 @@ export const BodyMap = () => {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  className="p-5 bg-white/5 border border-white/10 rounded-2xl hover:border-[#C8A628]/40 transition-all group"
+                  className="p-5 bg-white/5 border border-white/10 rounded-2xl hover:border-[#3B82F6]/40 transition-all group"
                 >
                   <div className="flex justify-between items-start">
                     <div>
                       <h4 className="text-white font-black text-sm uppercase tracking-tight">{condition.name}</h4>
-                      <p className="text-[#C8A628] text-[10px] font-mono mt-1">DC: {condition.diagnosticCode}</p>
+                      <p className="text-[#3B82F6] text-[10px] font-mono mt-1">DC: {condition.diagnosticCode}</p>
                     </div>
-                    <Activity size={16} className="text-white/40 group-hover:text-[#C8A628] transition-colors" />
+                    <Activity size={16} className="text-white/40 group-hover:text-[#3B82F6] transition-colors" />
                   </div>
                   {condition.possibleSecondaries && (
                     <div className="mt-4 flex flex-wrap gap-2">
                       {condition.possibleSecondaries.map(s => (
-                        <span key={s} className="px-2 py-1 bg-[#C8A628]/10 text-[#C8A628] rounded-md text-[9px] font-black uppercase tracking-tighter border border-[#C8A628]/20">
+                        <span key={s} className="px-2 py-1 bg-[#3B82F6]/10 text-[#3B82F6] rounded-md text-[9px] font-black uppercase tracking-tighter border border-[#3B82F6]/20">
                           + {s}
                         </span>
                       ))}

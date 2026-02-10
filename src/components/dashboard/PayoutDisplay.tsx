@@ -7,13 +7,13 @@ export const PayoutDisplay = ({ rating }: { rating: number }) => {
   const annualPayout = monthlyPayout * 12;
 
   return (
-    <div className="p-8 glass-card border-[#C8A628]/20 bg-gradient-to-br from-[#102039] to-[#1a3a6a]">
+    <div className="p-8 glass-card border-[#3B82F6]/20 bg-gradient-to-br from-[#102039] to-[#1a3a6a]">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h3 className="text-xl font-black italic text-white uppercase tracking-tight">Est. 2026 Benefit</h3>
-          <p className="text-[#C8A628] text-[10px] font-black uppercase tracking-widest mt-1">Veteran Only Rate</p>
+          <p className="text-[#3B82F6] text-[10px] font-black uppercase tracking-widest mt-1">Veteran Only Rate</p>
         </div>
-        <div className="p-3 bg-[#C8A628]/10 rounded-2xl text-[#C8A628]">
+        <div className="p-3 bg-[#3B82F6]/10 rounded-2xl text-[#3B82F6]">
           <DollarSign size={24} />
         </div>
       </div>

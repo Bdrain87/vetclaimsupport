@@ -1,7 +1,9 @@
-import { ChevronRight, Shield, CheckCircle2 } from 'lucide-react';
+import { ChevronRight, Shield, CheckCircle2, Flag, Sun, Award, AlertTriangle, Star, type LucideIcon } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Conflict, getConditionStats } from '@/data/conflictConditions';
+
+const conflictIconMap: Record<string, LucideIcon> = { Flag, Sun, Award, AlertTriangle, Shield, Star };
 
 interface ConflictCardProps {
   conflict: Conflict;
@@ -22,8 +24,8 @@ export function ConflictCard({ conflict, onClick, isSelected }: ConflictCardProp
       <CardContent className="p-4">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="text-3xl" role="img" aria-label={conflict.name}>
-              {conflict.icon}
+            <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-blue-500/10 border border-blue-500/20" role="img" aria-label={conflict.name}>
+              {(() => { const Icon = conflictIconMap[conflict.icon]; return Icon ? <Icon className="h-5 w-5 text-blue-500" /> : null; })()}
             </div>
             <div>
               <h3 className="font-semibold text-foreground">{conflict.name}</h3>

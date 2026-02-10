@@ -103,7 +103,7 @@ export function ProgressTimeline({ events, className }: ProgressTimelineProps) {
     if (!completed && type === 'goal') return 'text-muted-foreground';
     switch (type) {
       case 'milestone':
-        return 'text-amber-500';
+        return 'text-blue-500';
       case 'activity':
         return 'text-primary';
       case 'document':
@@ -119,7 +119,7 @@ export function ProgressTimeline({ events, className }: ProgressTimelineProps) {
     if (!completed && type === 'goal') return 'bg-muted';
     switch (type) {
       case 'milestone':
-        return 'bg-amber-500/10';
+        return 'bg-blue-500/10';
       case 'activity':
         return 'bg-primary/10';
       case 'document':
@@ -183,7 +183,7 @@ export function ProgressTimeline({ events, className }: ProgressTimelineProps) {
                       {event.title}
                     </span>
                     {event.type === 'milestone' && event.completed && (
-                      <span className="text-xs bg-amber-500/20 text-amber-500 px-2 py-0.5 rounded-full">
+                      <span className="text-xs bg-blue-500/20 text-blue-500 px-2 py-0.5 rounded-full">
                         Milestone
                       </span>
                     )}

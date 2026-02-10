@@ -19,11 +19,11 @@ export const TravelCalculator = () => {
 
       <div className="space-y-6">
         <div>
-          <label className="text-[10px] font-black text-[#C8A628] uppercase tracking-widest mb-2 block">Round Trip Mileage</label>
+          <label className="text-[10px] font-black text-[#3B82F6] uppercase tracking-widest mb-2 block">Round Trip Mileage</label>
           <input
             type="number"
             onChange={(e) => setMiles(Number(e.target.value))}
-            className="w-full bg-navy-950 border border-white/10 p-4 rounded-xl text-white outline-none focus:border-[#C8A628]/50"
+            className="w-full bg-navy-950 border border-white/10 p-4 rounded-xl text-white outline-none focus:border-[#3B82F6]/50"
             placeholder="Enter miles to VA facility..."
           />
         </div>

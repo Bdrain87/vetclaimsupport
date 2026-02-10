@@ -83,7 +83,7 @@ function getUrgencyColor(daysRemaining: number): {
     return { bg: 'bg-warning/15', text: 'text-warning', border: 'border-warning/40', label: 'Soon' };
   }
   if (daysRemaining <= 90) {
-    return { bg: 'bg-yellow-500/15', text: 'text-yellow-600 dark:text-yellow-400', border: 'border-yellow-500/40', label: 'Upcoming' };
+    return { bg: 'bg-blue-500/15', text: 'text-blue-600 dark:text-blue-400', border: 'border-blue-500/40', label: 'Upcoming' };
   }
   return { bg: 'bg-success/10', text: 'text-success', border: 'border-success/30', label: 'On Track' };
 }

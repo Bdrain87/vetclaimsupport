@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Settings } from 'lucide-react';
+import { Menu, X, Settings, User } from 'lucide-react';
 import { useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useProfileStore } from '@/store/useProfileStore';
@@ -33,14 +33,14 @@ function NavLinkItem({ to, children }: { to: string; children: React.ReactNode }
       {isActive && (
         <motion.div
           layoutId="nav-active-indicator"
-          className="absolute bottom-0 left-2 right-2 h-[2px] bg-gradient-to-r from-[#C8A628] via-[#E8D05A] to-[#C8A628] rounded-full"
+          className="absolute bottom-0 left-2 right-2 h-[2px] bg-gradient-to-r from-[#3B82F6] via-[#60A5FA] to-[#3B82F6] rounded-full"
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
         />
       )}
       <div className="absolute inset-0 rounded-lg bg-white/0 group-hover:bg-white/[0.04] transition-colors duration-200" />
       <span className={cn(
         'relative text-sm transition-colors duration-200',
-        isActive ? 'text-[#C8A628] font-semibold' : 'text-white/50 font-medium group-hover:text-white/80'
+        isActive ? 'text-[#3B82F6] font-semibold' : 'text-white/50 font-medium group-hover:text-white/80'
       )}>
         {children}
       </span>
@@ -55,7 +55,6 @@ export const PlatinumNavbar = () => {
 
   const { firstName } = useProfileStore();
   const displayName = firstName || 'Veteran';
-  const initial = displayName[0]?.toUpperCase() || 'V';
 
   const isLandingPage = location.pathname === '/' || location.pathname === '/landing';
   const isOnboarding = location.pathname === '/onboarding';
@@ -100,8 +99,8 @@ export const PlatinumNavbar = () => {
             {/* Glass background */}
             <div className="absolute inset-0 bg-[#102039]/70 backdrop-blur-xl border border-white/[0.06] rounded-2xl" />
 
-            {/* Gold accent line */}
-            <div className="absolute top-0 left-4 right-4 h-[1px] bg-gradient-to-r from-transparent via-[#C8A628]/30 to-transparent" />
+            {/* Blue accent line */}
+            <div className="absolute top-0 left-4 right-4 h-[1px] bg-gradient-to-r from-transparent via-[#3B82F6]/30 to-transparent" />
 
             {/* Content */}
             <div className={cn(
@@ -111,24 +110,21 @@ export const PlatinumNavbar = () => {
               {/* Left: Brand + Nav */}
               <div className="flex items-center gap-4 lg:gap-8 min-w-0">
                 <Link to="/" className="flex items-center gap-2.5 group shrink-0">
-                  <div className={cn(
-                    'bg-gradient-to-br from-[#C8A628] to-[#9A7B1A] rounded-lg flex items-center justify-center font-black text-[#102039] transition-all duration-300',
-                    isCompressed ? 'h-7 w-7 text-sm' : 'h-8 w-8 text-base'
-                  )}>V</div>
-                  <div className="hidden md:block">
-                    <span className="text-white font-bold tracking-[0.08em] uppercase text-sm">
-                      VCS
-                    </span>
-                    <span className={cn(
-                      'hidden lg:inline text-white/40 text-xs font-medium ml-2 transition-opacity duration-300',
-                      isCompressed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'
-                    )}>
-                      Claim Preparation Tools
-                    </span>
-                  </div>
+                  <span className={cn(
+                    'text-[#F8FAFC] font-bold tracking-[0.08em] uppercase transition-all duration-300',
+                    isCompressed ? 'text-sm' : 'text-base'
+                  )}>
+                    VCS
+                  </span>
+                  <span className={cn(
+                    'hidden lg:inline text-white/40 text-xs font-medium transition-opacity duration-300',
+                    isCompressed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'
+                  )}>
+                    Claim Preparation Tools
+                  </span>
                 </Link>
 
-                {/* Desktop nav links with sliding gold indicator */}
+                {/* Desktop nav links */}
                 <div className="hidden lg:flex items-center gap-1">
                   {NAV_ITEMS.map(item => (
                     <NavLinkItem key={item.label} to={item.href}>
@@ -150,10 +146,10 @@ export const PlatinumNavbar = () => {
 
                 <div className="hidden sm:flex items-center gap-2.5 pl-2 border-l border-white/[0.06]">
                   <div className={cn(
-                    'rounded-full bg-gradient-to-br from-[#C8A628]/20 to-[#C8A628]/5 border border-[#C8A628]/20 overflow-hidden flex items-center justify-center text-[#C8A628] font-bold transition-all duration-300',
-                    isCompressed ? 'h-7 w-7 text-xs' : 'h-8 w-8 text-sm'
+                    'rounded-full bg-white/[0.06] border border-white/[0.08] flex items-center justify-center text-white/60 transition-all duration-300',
+                    isCompressed ? 'h-7 w-7' : 'h-8 w-8'
                   )}>
-                    {initial}
+                    <User size={isCompressed ? 14 : 16} />
                   </div>
                   <span className={cn(
                     'text-white/60 text-xs font-medium transition-opacity duration-300',
@@ -186,9 +182,8 @@ export const PlatinumNavbar = () => {
           <div className="relative">
             <div className="absolute inset-0 bg-[#102039]/70 backdrop-blur-xl border border-white/[0.06] rounded-xl" />
             <div className="relative flex items-center justify-between px-3 h-12">
-              <Link to="/" className="flex items-center gap-2 group">
-                <div className="h-7 w-7 bg-gradient-to-br from-[#C8A628] to-[#9A7B1A] rounded-lg flex items-center justify-center font-black text-[#102039] text-sm">V</div>
-                <span className="text-white font-bold tracking-[0.08em] uppercase text-sm">VCS</span>
+              <Link to="/" className="flex items-center group">
+                <span className="text-[#F8FAFC] font-bold tracking-[0.08em] uppercase text-sm">VCS</span>
               </Link>
 
               <button
@@ -230,12 +225,12 @@ export const PlatinumNavbar = () => {
         {/* Drawer header */}
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-white/[0.06]">
           <div className="flex items-center gap-2.5">
-            <div className="h-8 w-8 rounded-full bg-gradient-to-br from-[#C8A628]/20 to-[#C8A628]/5 border border-[#C8A628]/20 flex items-center justify-center text-[#C8A628] font-bold text-sm">
-              {initial}
+            <div className="h-8 w-8 rounded-full bg-white/[0.06] border border-white/[0.08] flex items-center justify-center text-white/60">
+              <User size={16} />
             </div>
             <div>
               <p className="text-white text-sm font-medium">{displayName}</p>
-              <p className="text-[#C8A628]/60 text-[10px] uppercase tracking-wider font-medium">Claim Prep Tools</p>
+              <p className="text-[#3B82F6]/60 text-[10px] uppercase tracking-wider font-medium">Claim Prep Tools</p>
             </div>
           </div>
           <button
@@ -260,7 +255,7 @@ export const PlatinumNavbar = () => {
                 className={cn(
                   'flex items-center min-h-[48px] px-4 rounded-xl text-sm font-medium transition-all duration-200',
                   isActive
-                    ? 'text-white bg-white/[0.06] border-l-2 border-[#C8A628]'
+                    ? 'text-white bg-white/[0.06] border-l-2 border-[#3B82F6]'
                     : 'text-white/60 hover:text-white hover:bg-white/[0.03] active:bg-white/[0.06]'
                 )}
               >

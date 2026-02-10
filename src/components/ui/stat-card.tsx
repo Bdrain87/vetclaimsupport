@@ -43,7 +43,7 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
       default: 'bg-card border border-border/50',
       primary: 'bg-primary/5 border border-primary/20',
       success: 'bg-green-500/5 border border-green-500/20',
-      warning: 'bg-amber-500/5 border border-amber-500/20',
+      warning: 'bg-blue-500/5 border border-blue-500/20',
       muted: 'bg-muted/50 border border-border/30',
     };
 
@@ -51,7 +51,7 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
       default: 'text-foreground',
       primary: 'text-primary',
       success: 'text-green-600 dark:text-green-500',
-      warning: 'text-amber-600 dark:text-amber-500',
+      warning: 'text-blue-600 dark:text-blue-500',
       muted: 'text-muted-foreground',
     };
 
@@ -137,7 +137,7 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
                   : variant === 'success'
                   ? 'bg-green-500/10 text-green-600 dark:text-green-500'
                   : variant === 'warning'
-                  ? 'bg-amber-500/10 text-amber-600 dark:text-amber-500'
+                  ? 'bg-blue-500/10 text-blue-600 dark:text-blue-500'
                   : 'bg-muted text-muted-foreground'
               )}
             >

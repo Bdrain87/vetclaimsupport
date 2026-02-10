@@ -267,7 +267,7 @@ export default function BuildPacket() {
               evidenceScore >= 80
                 ? 'border-green-500/40 bg-green-500/10 text-green-400'
                 : evidenceScore >= 50
-                  ? 'border-amber-500/40 bg-amber-500/10 text-amber-400'
+                  ? 'border-blue-500/40 bg-blue-500/10 text-blue-400'
                   : 'border-red-500/40 bg-red-500/10 text-red-400',
             )}
           >
@@ -293,7 +293,7 @@ export default function BuildPacket() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
             { label: 'Conditions', value: conditionsCount, color: 'text-primary' },
-            { label: 'Symptom Entries', value: symptomCount, color: 'text-amber-400' },
+            { label: 'Symptom Entries', value: symptomCount, color: 'text-blue-400' },
             { label: 'Medical Visits', value: medicalVisitCount, color: 'text-emerald-400' },
             { label: 'Documents', value: documentCount, color: 'text-violet-400' },
           ].map((stat) => (
@@ -376,7 +376,7 @@ export default function BuildPacket() {
               <Button
                 onClick={handleGeneratePDF}
                 disabled={selectedCount === 0}
-                className="h-auto flex-col gap-2 py-4 gold-button"
+                className="h-auto flex-col gap-2 py-4 primary-button"
               >
                 <Download className="h-5 w-5" />
                 <span className="text-xs font-semibold">Generate PDF</span>
@@ -487,7 +487,7 @@ export default function BuildPacket() {
             {selected.symptomLogs && (
               <div className="space-y-3">
                 <h3 className="font-semibold text-foreground flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-amber-400" />
+                  <FileText className="h-4 w-4 text-blue-400" />
                   Symptom Logs ({symptomCount})
                 </h3>
                 {symptomCount === 0 ? (
@@ -517,7 +517,7 @@ export default function BuildPacket() {
                             s.severity >= 7
                               ? 'bg-red-500/10 text-red-400'
                               : s.severity >= 4
-                                ? 'bg-amber-500/10 text-amber-400'
+                                ? 'bg-blue-500/10 text-blue-400'
                                 : '',
                           )}
                         >
@@ -652,7 +652,7 @@ export default function BuildPacket() {
                             b.statementStatus === 'Received' || b.statementStatus === 'Submitted'
                               ? 'border-green-500/40 text-green-400'
                               : b.statementStatus === 'Requested'
-                                ? 'border-amber-500/40 text-amber-400'
+                                ? 'border-blue-500/40 text-blue-400'
                                 : '',
                           )}
                         >
@@ -669,7 +669,7 @@ export default function BuildPacket() {
             {selected.exposures && (
               <div className="space-y-3">
                 <h3 className="font-semibold text-foreground flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-orange-400" />
+                  <Shield className="h-4 w-4 text-blue-400" />
                   Exposure Records ({exposureCount})
                 </h3>
                 {exposureCount === 0 ? (
@@ -730,7 +730,7 @@ export default function BuildPacket() {
                             : doc.status === 'Obtained'
                               ? 'border-blue-500/40 text-blue-400'
                               : doc.status === 'In Progress'
-                                ? 'border-amber-500/40 text-amber-400'
+                                ? 'border-blue-500/40 text-blue-400'
                                 : '',
                         )}
                       >

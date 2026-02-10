@@ -705,9 +705,9 @@ export function UnifiedRatingCalculator() {
               </div>
 
               {wouldBeBilateral(newConditionBodyPart) && (
-                <Alert className="border-amber-500/50 bg-amber-500/10">
-                  <Sparkles className="h-4 w-4 text-amber-500" />
-                  <AlertDescription className="text-amber-700 dark:text-amber-300">
+                <Alert className="border-blue-500/50 bg-blue-500/10">
+                  <Sparkles className="h-4 w-4 text-blue-500" />
+                  <AlertDescription className="text-blue-700 dark:text-blue-300">
                     This will create a bilateral pair! The 10% bilateral factor will be automatically applied.
                   </AlertDescription>
                 </Alert>
@@ -752,7 +752,7 @@ export function UnifiedRatingCalculator() {
                       key={condition.id}
                       className={`flex items-center justify-between p-3 rounded-lg border ${
                         isBilateral
-                          ? 'border-amber-500/50 bg-amber-500/5'
+                          ? 'border-blue-500/50 bg-blue-500/5'
                           : 'border-border bg-muted/30'
                       }`}
                     >
@@ -771,7 +771,7 @@ export function UnifiedRatingCalculator() {
                           <span className="text-xs text-muted-foreground">{bodyPartLabel}</span>
                         </div>
                         {isBilateral && (
-                          <Badge variant="outline" className="border-amber-500 text-amber-600 text-xs">
+                          <Badge variant="outline" className="border-blue-500 text-blue-600 text-xs">
                             Bilateral
                           </Badge>
                         )}
@@ -949,9 +949,9 @@ export function UnifiedRatingCalculator() {
               </div>
 
               {result.hasBilateral && (
-                <Alert className="border-amber-500/50 bg-amber-500/10 mt-4">
-                  <Sparkles className="h-4 w-4 text-amber-500" />
-                  <AlertDescription className="text-amber-700 dark:text-amber-300 text-sm">
+                <Alert className="border-blue-500/50 bg-blue-500/10 mt-4">
+                  <Sparkles className="h-4 w-4 text-blue-500" />
+                  <AlertDescription className="text-blue-700 dark:text-blue-300 text-sm">
                     <strong>Bilateral Factor Applied!</strong>
                     <br />
                     Combined bilateral: {result.bilateralExact.toFixed(1)}%

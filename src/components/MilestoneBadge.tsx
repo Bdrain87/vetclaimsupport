@@ -1,5 +1,33 @@
 import { Milestone } from '@/hooks/useMilestones';
+import {
+  Star, Calendar, Trophy, FileText, Zap, File, Folder, FolderOpen,
+  Users, Users2, CheckCircle, Target, Award, Calculator, Bot, Save,
+  BookOpen, Medal, PartyPopper, Sparkles,
+  type LucideIcon,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+export const milestoneIconMap: Record<string, LucideIcon> = {
+  Star,
+  Calendar,
+  Trophy,
+  FileText,
+  Zap,
+  File,
+  Folder,
+  FolderOpen,
+  Users,
+  Users2,
+  CheckCircle,
+  Target,
+  Award,
+  Calculator,
+  Bot,
+  Save,
+  BookOpen,
+  Medal,
+  PartyPopper,
+};
 
 interface MilestoneBadgeProps {
   milestone: Milestone;
@@ -32,7 +60,7 @@ export function MilestoneBadge({
           'transition-all duration-300',
           sizeClasses[size],
           milestone.isUnlocked
-            ? 'bg-gradient-to-br from-amber-400 to-amber-600 shadow-lg shadow-amber-500/30'
+            ? 'bg-gradient-to-br from-blue-400 to-blue-600 shadow-lg shadow-blue-500/30'
             : 'bg-muted border-2 border-dashed border-muted-foreground/30'
         )}
       >
@@ -71,13 +99,16 @@ export function MilestoneBadge({
             !milestone.isUnlocked && 'grayscale opacity-50'
           )}
         >
-          {milestone.icon}
+          {(() => {
+            const IconComponent = milestoneIconMap[milestone.icon];
+            return IconComponent ? <IconComponent className="h-6 w-6" /> : null;
+          })()}
         </span>
 
         {/* Unlocked sparkle */}
         {milestone.isUnlocked && (
           <div className="absolute -top-1 -right-1 w-4 h-4 bg-white rounded-full flex items-center justify-center shadow">
-            <span className="text-xs">✨</span>
+            <Sparkles className="h-3 w-3 text-blue-500" />
           </div>
         )}
       </div>

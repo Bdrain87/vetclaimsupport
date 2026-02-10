@@ -1,4 +1,6 @@
-import { ExternalLink, CheckCircle2, AlertCircle, Shield, FileText } from 'lucide-react';
+import { ExternalLink, CheckCircle2, AlertCircle, Shield, FileText, Flag, Sun, Award, AlertTriangle, Star, type LucideIcon } from 'lucide-react';
+
+const conflictIconMap: Record<string, LucideIcon> = { Flag, Sun, Award, AlertTriangle, Shield, Star };
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -16,8 +18,8 @@ export function ConflictDetail({ conflict, onClose }: ConflictDetailProps) {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-4">
-          <div className="text-4xl" role="img" aria-label={conflict.name}>
-            {conflict.icon}
+          <div className="flex items-center justify-center h-12 w-12 rounded-xl bg-blue-500/10 border border-blue-500/20" role="img" aria-label={conflict.name}>
+            {(() => { const Icon = conflictIconMap[conflict.icon]; return Icon ? <Icon className="h-6 w-6 text-blue-500" /> : null; })()}
           </div>
           <div>
             <h2 className="text-2xl font-bold text-foreground">{conflict.name}</h2>

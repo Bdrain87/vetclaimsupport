@@ -121,9 +121,9 @@ const statementTemplates = [
     title: 'Buddy Statement Request',
     description: 'Email template to request statements from witnesses',
     icon: Users,
-    gradient: 'from-amber-500/20 to-orange-500/10',
-    borderColor: 'border-amber-500/30',
-    iconColor: 'text-amber-400',
+    gradient: 'from-blue-500/20 to-blue-500/10',
+    borderColor: 'border-blue-500/30',
+    iconColor: 'text-blue-400',
   },
   {
     id: 'stressor',
@@ -422,10 +422,10 @@ export default function DocumentsHub() {
 
             <button
               onClick={() => setActiveTab('templates')}
-              className="group p-4 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/10 border border-amber-500/30 hover:scale-[1.02] transition-all text-left"
+              className="group p-4 rounded-2xl bg-gradient-to-br from-blue-500/20 to-blue-500/10 border border-blue-500/30 hover:scale-[1.02] transition-all text-left"
             >
               <div className="flex items-center gap-3 mb-2">
-                <FileSpreadsheet className="h-5 w-5 text-amber-400" />
+                <FileSpreadsheet className="h-5 w-5 text-blue-400" />
                 <ChevronRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity ml-auto" />
               </div>
               <h3 className="font-semibold text-sm">Templates</h3>

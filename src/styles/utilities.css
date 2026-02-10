@@ -99,8 +99,8 @@
   background: linear-gradient(135deg, var(--color-success-500) 0%, var(--color-success-600) 100%);
 }
 
-.ds-bg-gradient-gold {
-  background: linear-gradient(135deg, var(--color-gold-500) 0%, var(--color-gold-600) 100%);
+.ds-bg-gradient-accent {
+  background: linear-gradient(135deg, var(--color-accent-500) 0%, var(--color-accent-600) 100%);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -202,7 +202,7 @@
 }
 
 .hover-glow:hover {
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
 }
 
 .press:active {
@@ -486,7 +486,7 @@
 
 /* High contrast focus indicators */
 :focus-visible {
-  outline: 2px solid var(--color-success-500);
+  outline: 2px solid var(--color-accent-500);
   outline-offset: 2px;
 }
 
@@ -728,9 +728,9 @@
   color: var(--color-navy-600);
 }
 
-.action-icon.bg-gold {
-  background: var(--color-gold-100);
-  color: var(--color-gold-600);
+.action-icon.bg-accent {
+  background: var(--color-accent-100);
+  color: var(--color-accent-500);
 }
 
 .action-icon.bg-gray {

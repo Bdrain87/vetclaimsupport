@@ -10,7 +10,7 @@ const testimonials = [
     branch: "Army",
     years: "2008-2016",
     rating: "70%",
-    ratingColor: "bg-amber-500"
+    ratingColor: "bg-blue-500"
   },
   {
     quote: "Filed my BDD claim 90 days before separation. Had my first check waiting when I got home. This app showed me exactly what evidence I needed.",
@@ -71,7 +71,7 @@ export function TestimonialsSection() {
               {/* Stars */}
               <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
+                  <Star key={i} className="w-5 h-5 fill-blue-400 text-blue-400" />
                 ))}
               </div>
 

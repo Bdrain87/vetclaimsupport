@@ -96,7 +96,7 @@ function AnimatedLogo() {
       <motion.path
         d="M40 4L8 16V36C8 54.78 21.42 72.12 40 76C58.58 72.12 72 54.78 72 36V16L40 4Z"
         fill="#1e2844"
-        stroke="#C9A227"
+        stroke="#3B82F6"
         strokeWidth="2"
         initial={{ pathLength: 0, opacity: 0 }}
         animate={{ pathLength: 1, opacity: 1 }}
@@ -126,7 +126,7 @@ function LoadingDots() {
         <motion.span
           key={i}
           className="w-2 h-2 rounded-full"
-          style={{ backgroundColor: '#C9A227' }}
+          style={{ backgroundColor: '#3B82F6' }}
           animate={{
             scale: [1, 1.3, 1],
             opacity: [0.5, 1, 0.5]

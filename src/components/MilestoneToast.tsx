@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { Milestone } from '@/hooks/useMilestones';
-import { X } from 'lucide-react';
+import { X, Sparkles, PartyPopper, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { milestoneIconMap } from '@/components/MilestoneBadge';
 
 interface MilestoneToastProps {
   milestone: Milestone;
@@ -19,18 +20,21 @@ export function MilestoneToast({ milestone, onClose, autoClose = 5000 }: Milesto
 
   return (
     <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 animate-slide-up">
-      <div className="bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-2xl shadow-2xl shadow-amber-500/30 p-4 pr-12 flex items-center gap-4 min-w-0 w-[calc(100vw-2rem)] sm:min-w-[300px] sm:max-w-[400px]">
+      <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl shadow-2xl shadow-blue-500/30 p-4 pr-12 flex items-center gap-4 min-w-0 w-[calc(100vw-2rem)] sm:min-w-[300px] sm:max-w-[400px]">
         {/* Confetti background effect */}
         <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
-          <div className="absolute -top-1 -left-1 text-2xl animate-bounce" style={{ animationDelay: '0ms' }}>✨</div>
-          <div className="absolute -top-1 -right-8 text-2xl animate-bounce" style={{ animationDelay: '100ms' }}>🎉</div>
-          <div className="absolute -bottom-1 -left-2 text-xl animate-bounce" style={{ animationDelay: '200ms' }}>⭐</div>
+          <div className="absolute -top-1 -left-1 animate-bounce" style={{ animationDelay: '0ms' }}><Sparkles className="h-5 w-5 text-blue-300" /></div>
+          <div className="absolute -top-1 -right-8 animate-bounce" style={{ animationDelay: '100ms' }}><PartyPopper className="h-5 w-5 text-blue-300" /></div>
+          <div className="absolute -bottom-1 -left-2 animate-bounce" style={{ animationDelay: '200ms' }}><Star className="h-4 w-4 text-blue-300" /></div>
         </div>
 
         {/* Badge icon */}
         <div className="relative flex-shrink-0">
-          <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-3xl">
-            {milestone.icon}
+          <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur flex items-center justify-center">
+            {(() => {
+              const IconComponent = milestoneIconMap[milestone.icon];
+              return IconComponent ? <IconComponent className="h-7 w-7 text-white" /> : null;
+            })()}
           </div>
           <div className="absolute -top-1 -right-1 w-5 h-5 bg-white rounded-full flex items-center justify-center">
             <span className="text-xs">✓</span>

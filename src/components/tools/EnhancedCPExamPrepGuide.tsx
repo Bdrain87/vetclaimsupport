@@ -23,6 +23,7 @@ import {
   Calendar,
   Target,
   PenLine,
+  BarChart3,
 } from 'lucide-react';
 import { examPrepData, examCategories, generalExamTips } from '@/data/cpExamPrep';
 
@@ -334,7 +335,7 @@ export function EnhancedCPExamPrepGuide() {
                         {question}
                       </Label>
                       <p className="text-xs text-muted-foreground italic">
-                        💡 Start with: "{generateAnswerStarter(question)}"
+                        <Lightbulb className="h-3 w-3 inline text-primary" /> Start with: "{generateAnswerStarter(question)}"
                       </p>
                       <Textarea
                         placeholder="Write your answer here... Be specific with dates, frequencies, and examples."
@@ -360,7 +361,7 @@ export function EnhancedCPExamPrepGuide() {
               <AccordionItem value="symptom-tips" className="border rounded-lg px-4">
                 <AccordionTrigger className="hover:no-underline">
                   <div className="flex items-center gap-2">
-                    <Target className="h-4 w-4 text-yellow-500" />
+                    <Target className="h-4 w-4 text-blue-500" />
                     <span>How to Describe Your Symptoms</span>
                   </div>
                 </AccordionTrigger>
@@ -368,7 +369,7 @@ export function EnhancedCPExamPrepGuide() {
                   <ul className="space-y-2">
                     {selectedPrep.symptomTips.map((item, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm">
-                        <span className="text-yellow-500 mt-1">★</span>
+                        <span className="text-blue-500 mt-1">★</span>
                         <span>{item}</span>
                       </li>
                     ))}
@@ -378,7 +379,7 @@ export function EnhancedCPExamPrepGuide() {
                   {relevantSymptoms.length > 0 && (
                     <div className="mt-4 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
                       <p className="text-sm font-medium text-blue-700 dark:text-blue-400 mb-2">
-                        📊 Your Logged Symptom Data:
+                        <BarChart3 className="h-3 w-3 inline" /> Your Logged Symptom Data:
                       </p>
                       <ul className="text-xs space-y-1 text-muted-foreground">
                         {relevantSymptoms.slice(0, 3).map((s, i) => (
@@ -391,7 +392,7 @@ export function EnhancedCPExamPrepGuide() {
                         )}
                       </ul>
                       <p className="text-xs text-blue-700 dark:text-blue-400 mt-2">
-                        💡 Reference these specific dates during your exam!
+                        <Lightbulb className="h-3 w-3 inline text-primary" /> Reference these specific dates during your exam!
                       </p>
                     </div>
                   )}
@@ -488,7 +489,7 @@ export function EnhancedCPExamPrepGuide() {
             <AccordionItem value="general-tips" className="border rounded-lg px-4">
               <AccordionTrigger className="hover:no-underline">
                 <div className="flex items-center gap-2">
-                  <Lightbulb className="h-4 w-4 text-yellow-500" />
+                  <Lightbulb className="h-4 w-4 text-blue-500" />
                   <span>Pro Tips from Veterans</span>
                 </div>
               </AccordionTrigger>
@@ -496,7 +497,7 @@ export function EnhancedCPExamPrepGuide() {
                 <ul className="space-y-2">
                   {generalExamTips.proTips.map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm">
-                      <span className="text-yellow-500 mt-1">★</span>
+                      <span className="text-blue-500 mt-1">★</span>
                       <span>{item}</span>
                     </li>
                   ))}

@@ -31,7 +31,7 @@ function priorityLabel(p: FormPriority): string {
 
 function priorityColor(p: FormPriority): string {
   return p === 'urgent'
-    ? 'bg-amber-500/15 text-amber-500 border-amber-500/30'
+    ? 'bg-blue-500/15 text-blue-500 border-blue-500/30'
     : p === 'required'
       ? 'bg-primary/15 text-primary border-primary/30'
       : 'bg-muted text-muted-foreground border-border';
@@ -72,9 +72,9 @@ export default function FormGuide() {
       {/* Disclaimer Banner */}
       <div className={cn(
         'rounded-xl p-4 flex items-start gap-3',
-        'bg-amber-500/[0.08] border border-amber-500/20'
+        'bg-blue-500/[0.08] border border-blue-500/20'
       )}>
-        <AlertTriangle className="h-5 w-5 text-amber-500 flex-shrink-0 mt-0.5" />
+        <AlertTriangle className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
         <div>
           <p className="text-sm font-semibold text-foreground">Drafting Assistant, Not Filing</p>
           <p className="text-xs text-muted-foreground mt-1">

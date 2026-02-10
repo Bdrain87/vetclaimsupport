@@ -193,13 +193,13 @@ export function EnhancedEvidenceChecklist() {
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-green-600 dark:text-green-400';
-    if (score >= 50) return 'text-yellow-600 dark:text-yellow-400';
+    if (score >= 50) return 'text-blue-600 dark:text-blue-400';
     return 'text-red-600 dark:text-red-400';
   };
 
   const getScoreBg = (score: number) => {
     if (score >= 80) return 'bg-green-500/10 border-green-500/30';
-    if (score >= 50) return 'bg-yellow-500/10 border-yellow-500/30';
+    if (score >= 50) return 'bg-blue-500/10 border-blue-500/30';
     return 'bg-red-500/10 border-red-500/30';
   };
 
@@ -318,7 +318,7 @@ export function EnhancedEvidenceChecklist() {
                         
                         {item.firstPersonTip && !item.completed && (
                           <div className="mt-2 p-2 bg-primary/5 rounded text-xs italic text-muted-foreground border border-primary/10">
-                            <span className="text-primary font-medium not-italic">💡 Write it like this: </span>
+                            <span className="text-primary font-medium not-italic"><Lightbulb className="h-3 w-3 inline" /> Write it like this: </span>
                             {item.firstPersonTip}
                           </div>
                         )}

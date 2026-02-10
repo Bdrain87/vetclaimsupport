@@ -16,6 +16,7 @@ import {
   Activity,
   Users,
   FileText,
+  Lightbulb,
 } from 'lucide-react';
 import type { ClaimCondition } from '@/types/claims';
 
@@ -259,7 +260,7 @@ export function EvidenceGapAnalyzer() {
         {/* Overall tip */}
         <div className="p-3 bg-primary/5 border border-primary/20 rounded-lg">
           <p className="text-xs text-muted-foreground">
-            <strong className="text-foreground">💡 Tip:</strong> Aim for 80%+ readiness on each 
+            <Lightbulb className="h-3 w-3 inline text-primary" /> <strong className="text-foreground">Tip:</strong> Aim for 80%+ readiness on each
             condition before filing. The VA looks for medical documentation, symptom patterns, 
             and service connection evidence.
           </p>

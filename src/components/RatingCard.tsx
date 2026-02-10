@@ -12,9 +12,9 @@ export const RatingCard = ({ claims }: { claims: { id: string, rating: number }[
       <div className="flex justify-between items-start mb-6">
         <h3 className="text-white/50 text-[10px] font-black uppercase tracking-[0.3em]">Estimated Rating</h3>
         {detectedPairs.length > 0 && (
-          <div className="flex items-center gap-2 px-3 py-1 bg-[#C8A628]/20 border border-[#C8A628]/40 rounded-full animate-pulse">
-            <Zap size={10} className="text-[#C8A628]" />
-            <span className="text-[#C8A628] text-[9px] font-black uppercase">Bilateral Factor Active</span>
+          <div className="flex items-center gap-2 px-3 py-1 bg-[#3B82F6]/20 border border-[#3B82F6]/40 rounded-full animate-pulse">
+            <Zap size={10} className="text-[#3B82F6]" />
+            <span className="text-[#3B82F6] text-[9px] font-black uppercase">Bilateral Factor Active</span>
           </div>
         )}
       </div>

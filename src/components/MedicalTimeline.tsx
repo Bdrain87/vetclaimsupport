@@ -4,11 +4,11 @@ import { ChevronRight } from 'lucide-react';
 const TimelineEvent = ({ date, title, detail, isLast }: { date: string, title: string, detail: string, isLast?: boolean }) => (
   <div className="flex gap-4">
     <div className="flex flex-col items-center">
-      <div className="h-4 w-4 rounded-full bg-[#C8A628] border-4 border-[#102039] z-10" />
+      <div className="h-4 w-4 rounded-full bg-[#3B82F6] border-4 border-[#102039] z-10" />
       {!isLast && <div className="w-[2px] h-full bg-white/10 -mt-1" />}
     </div>
     <div className="pb-8">
-      <p className="text-[10px] font-black text-[#C8A628] uppercase tracking-[0.2em] mb-1">{date}</p>
+      <p className="text-[10px] font-black text-[#3B82F6] uppercase tracking-[0.2em] mb-1">{date}</p>
       <h4 className="text-sm font-bold text-white mb-1 uppercase tracking-tighter">{title}</h4>
       <p className="text-xs text-white/40 leading-relaxed max-w-xs">{detail}</p>
     </div>
@@ -37,7 +37,7 @@ export const MedicalTimeline = () => {
           isLast
         />
       </div>
-      <button className="w-full mt-4 flex items-center justify-center gap-2 text-[10px] font-black text-white/50 uppercase hover:text-[#C8A628] transition-colors">
+      <button className="w-full mt-4 flex items-center justify-center gap-2 text-[10px] font-black text-white/50 uppercase hover:text-[#3B82F6] transition-colors">
         View Full History <ChevronRight size={14} />
       </button>
     </div>

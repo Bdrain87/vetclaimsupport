@@ -36,24 +36,24 @@ export const PactActModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
 
             <div className="grid gap-6">
               {PACT_ACT_DATA.map((region, i) => (
-                <div key={i} className="p-6 bg-white/5 border border-white/10 rounded-[2rem] hover:border-[#C8A628]/30 transition-all group">
+                <div key={i} className="p-6 bg-white/5 border border-white/10 rounded-[2rem] hover:border-[#3B82F6]/30 transition-all group">
                   <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
                     <div className="flex items-start gap-3">
-                      <MapPin className="text-[#C8A628] shrink-0" size={18} />
+                      <MapPin className="text-[#3B82F6] shrink-0" size={18} />
                       <div>
                         <h3 className="text-lg font-bold text-white uppercase tracking-tight">{region.region}</h3>
                         <p className="text-xs text-white/50 mt-1 leading-relaxed">{region.description}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-navy-950 h-fit border border-white/5">
-                      <Calendar size={14} className="text-[#C8A628]" />
+                      <Calendar size={14} className="text-[#3B82F6]" />
                       <span className="text-[10px] font-black text-white/60 uppercase">{region.dates}</span>
                     </div>
                   </div>
 
                   <div className="flex flex-wrap gap-2">
                     {region.conditions.map(condition => (
-                      <span key={condition} className="px-3 py-1.5 bg-[#C8A628]/10 text-[#C8A628] rounded-xl text-[10px] font-black uppercase tracking-tight border border-[#C8A628]/20 group-hover:bg-[#C8A628] group-hover:text-navy-950 transition-all">
+                      <span key={condition} className="px-3 py-1.5 bg-[#3B82F6]/10 text-[#3B82F6] rounded-xl text-[10px] font-black uppercase tracking-tight border border-[#3B82F6]/20 group-hover:bg-[#3B82F6] group-hover:text-navy-950 transition-all">
                         + {condition}
                       </span>
                     ))}

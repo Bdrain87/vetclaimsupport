@@ -143,7 +143,7 @@ export function MOSCombobox({
       case 'Air Force': return 'bg-blue-500/20 text-blue-700 dark:text-blue-400 border-blue-500/30';
       case 'Navy': return 'bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 border-indigo-500/30';
       case 'Marines': return 'bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/30';
-      case 'Coast Guard': return 'bg-orange-500/20 text-orange-700 dark:text-orange-400 border-orange-500/30';
+      case 'Coast Guard': return 'bg-blue-500/20 text-blue-700 dark:text-blue-400 border-blue-500/30';
       default: return 'bg-muted text-muted-foreground';
     }
   };

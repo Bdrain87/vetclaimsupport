@@ -160,9 +160,12 @@ export function ClaimBuilder() {
                 >
                 <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-base" aria-label={level.label}>
-                        {strength.score >= 75 ? '🟢' : strength.score >= 50 ? '🟡' : '🔴'}
-                      </span>
+                      <span
+                        className={`inline-block h-3 w-3 rounded-full ${
+                          strength.score >= 75 ? 'bg-green-500' : strength.score >= 50 ? 'bg-yellow-500' : 'bg-red-500'
+                        }`}
+                        aria-label={level.label}
+                      />
                       <div>
                         <h4 className="font-semibold text-foreground">{condition.name}</h4>
                         <span className={`text-xs ${level.textClass}`}>{level.label}</span>

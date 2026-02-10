@@ -488,7 +488,7 @@ export default function Conditions() {
                 <div className="text-xs text-muted-foreground">Rated</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-amber-500">
+                <div className="text-2xl font-bold text-blue-500">
                   {userConditions.filter(c => c.rating === undefined).length}
                 </div>
                 <div className="text-xs text-muted-foreground">Pending</div>

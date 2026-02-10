@@ -102,9 +102,9 @@ function ToastItem({ toast, onDismiss, index }: ToastItemProps) {
       icon: 'text-red-600 dark:text-red-500',
     },
     warning: {
-      bg: 'bg-amber-500/10 dark:bg-amber-500/20',
-      border: 'border-amber-500/30',
-      icon: 'text-amber-600 dark:text-amber-500',
+      bg: 'bg-blue-500/10 dark:bg-blue-500/20',
+      border: 'border-blue-500/30',
+      icon: 'text-blue-600 dark:text-blue-500',
     },
     info: {
       bg: 'bg-blue-500/10 dark:bg-blue-500/20',

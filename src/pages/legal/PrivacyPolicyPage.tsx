@@ -17,8 +17,8 @@ export default function PrivacyPolicyPage() {
 
       {/* Header */}
       <div className="flex items-start gap-4">
-        <div className="p-3 rounded-xl bg-[#C8A628]/10 shrink-0">
-          <Shield className="h-6 w-6 text-[#C8A628]" />
+        <div className="p-3 rounded-xl bg-[#3B82F6]/10 shrink-0">
+          <Shield className="h-6 w-6 text-[#3B82F6]" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-white">Privacy Policy</h1>
@@ -36,13 +36,13 @@ export default function PrivacyPolicyPage() {
             When you use Vet Claim Support, the app stores the following types of information based on what you choose to enter:
           </p>
           <ul className="space-y-1.5 text-white/60">
-            <li className="flex items-start gap-2"><span className="text-[#C8A628] mt-0.5">&#x2022;</span>Profile information (name, military branch, MOS/AFSC)</li>
-            <li className="flex items-start gap-2"><span className="text-[#C8A628] mt-0.5">&#x2022;</span>Service history (dates, deployments, duty stations)</li>
-            <li className="flex items-start gap-2"><span className="text-[#C8A628] mt-0.5">&#x2022;</span>Conditions you are tracking or claiming</li>
-            <li className="flex items-start gap-2"><span className="text-[#C8A628] mt-0.5">&#x2022;</span>Health logs (symptoms, sleep, migraines, medications, medical visits)</li>
-            <li className="flex items-start gap-2"><span className="text-[#C8A628] mt-0.5">&#x2022;</span>Evidence metadata (document titles, notes, status)</li>
-            <li className="flex items-start gap-2"><span className="text-[#C8A628] mt-0.5">&#x2022;</span>Uploaded documents and files</li>
-            <li className="flex items-start gap-2"><span className="text-[#C8A628] mt-0.5">&#x2022;</span>VA form drafts and AI-assisted draft content</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Profile information (name, military branch, MOS/AFSC)</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Service history (dates, deployments, duty stations)</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Conditions you are tracking or claiming</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Health logs (symptoms, sleep, migraines, medications, medical visits)</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Evidence metadata (document titles, notes, status)</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Uploaded documents and files</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>VA form drafts and AI-assisted draft content</li>
           </ul>
         </section>
 
@@ -61,9 +61,9 @@ export default function PrivacyPolicyPage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-white">3. Security</h2>
           <ul className="space-y-1.5 text-white/60">
-            <li className="flex items-start gap-2"><span className="text-[#C8A628] mt-0.5">&#x2022;</span><strong className="text-white">Encryption in transit:</strong> All data transmitted between your device and our cloud services is encrypted using TLS (Transport Layer Security).</li>
-            <li className="flex items-start gap-2"><span className="text-[#C8A628] mt-0.5">&#x2022;</span><strong className="text-white">Encryption at rest:</strong> Cloud-stored data is encrypted at rest on the database server.</li>
-            <li className="flex items-start gap-2"><span className="text-[#C8A628] mt-0.5">&#x2022;</span><strong className="text-white">Row Level Security:</strong> Database policies ensure that only you can access your own data. No other user or administrator can query your rows.</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span><strong className="text-white">Encryption in transit:</strong> All data transmitted between your device and our cloud services is encrypted using TLS (Transport Layer Security).</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span><strong className="text-white">Encryption at rest:</strong> Cloud-stored data is encrypted at rest on the database server.</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span><strong className="text-white">Row Level Security:</strong> Database policies ensure that only you can access your own data. No other user or administrator can query your rows.</li>
           </ul>
         </section>
 
@@ -127,7 +127,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-lg font-semibold text-white">10. Contact</h2>
           <p className="text-white/60">
             For privacy-related questions or concerns, contact us at:{' '}
-            <a href="mailto:blakedrain@gmail.com" className="text-[#C8A628] hover:underline">
+            <a href="mailto:blakedrain@gmail.com" className="text-[#3B82F6] hover:underline">
               blakedrain@gmail.com
             </a>
           </p>

@@ -62,8 +62,8 @@ export function LiabilityAcceptanceScreen() {
         <div className="p-6 space-y-5">
           {/* Icon & Title */}
           <div className="text-center space-y-4">
-            <div className="mx-auto h-16 w-16 rounded-2xl bg-amber-500/15 flex items-center justify-center">
-              <ShieldAlert className="h-8 w-8 text-amber-400" />
+            <div className="mx-auto h-16 w-16 rounded-2xl bg-blue-500/15 flex items-center justify-center">
+              <ShieldAlert className="h-8 w-8 text-blue-400" />
             </div>
             <div>
               <h2 className="text-xl font-bold text-foreground">Important Information</h2>

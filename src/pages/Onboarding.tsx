@@ -131,7 +131,7 @@ function MOSAutocomplete({
         onFocus={() => { if (results.length > 0) setIsOpen(true); }}
         onKeyDown={handleKeyDown}
         placeholder="Type your code or job title..."
-        className="w-full h-12 pl-10 pr-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 focus:border-[#C8A628]/50 transition-all"
+        className="w-full h-12 pl-10 pr-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 focus:border-[#3B82F6]/50 transition-all"
       />
       {isOpen && (
         <div className="absolute top-full left-0 right-0 mt-1 z-50 bg-[#1a2d44] border border-white/10 rounded-xl shadow-2xl shadow-black/50 max-h-60 overflow-y-auto">
@@ -140,12 +140,12 @@ function MOSAutocomplete({
               key={`${job.code}-${job.branch}`}
               ref={i === highlightIdx ? highlightRef : undefined}
               className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-colors ${
-                i === highlightIdx ? 'bg-[#C8A628]/15 text-white' : 'text-white/80 hover:bg-white/5'
+                i === highlightIdx ? 'bg-[#3B82F6]/15 text-white' : 'text-white/80 hover:bg-white/5'
               } ${i > 0 ? 'border-t border-white/[0.04]' : ''}`}
               onClick={() => handleSelect(job)}
               onMouseEnter={() => setHighlightIdx(i)}
             >
-              <span className="font-mono text-[#C8A628] text-sm font-bold w-16 shrink-0">{job.code}</span>
+              <span className="font-mono text-[#3B82F6] text-sm font-bold w-16 shrink-0">{job.code}</span>
               <span className="text-sm flex-1 truncate">{job.title}</span>
               <span className="text-[10px] text-white/30 uppercase">{job.branch}</span>
             </button>
@@ -192,7 +192,7 @@ function InstallationAutocomplete({
         onChange={e => { onChange(e.target.value); setIsOpen(true); }}
         onFocus={() => setIsOpen(true)}
         placeholder="Base/Installation name..."
-        className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 transition-all"
+        className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all"
       />
       {isOpen && filtered.length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-1 z-50 bg-[#1a2d44] border border-white/10 rounded-xl shadow-2xl max-h-48 overflow-y-auto">
@@ -367,7 +367,7 @@ export default function Onboarding() {
           <div
             key={i}
             className={`h-2 rounded-full transition-all duration-300 ${
-              i === step ? 'w-8 bg-[#C8A628]' : i < step ? 'w-2 bg-[#C8A628]/50' : 'w-2 bg-white/10'
+              i === step ? 'w-8 bg-[#3B82F6]' : i < step ? 'w-2 bg-[#3B82F6]/50' : 'w-2 bg-white/10'
             }`}
           />
         ))}
@@ -392,7 +392,7 @@ export default function Onboarding() {
             {/* Step 0: Welcome */}
             {step === 0 && (
               <div className="text-center space-y-6">
-                <div className="w-20 h-20 mx-auto rounded-2xl bg-[#C8A628] flex items-center justify-center shadow-lg shadow-[#C8A628]/20">
+                <div className="w-20 h-20 mx-auto rounded-2xl bg-[#3B82F6] flex items-center justify-center shadow-lg shadow-[#3B82F6]/20">
                   <span className="text-[#102039] font-black italic text-3xl">V</span>
                 </div>
                 <div>
@@ -422,7 +422,7 @@ export default function Onboarding() {
               <div className="space-y-5">
                 <div className="text-center">
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
-                    <User className="h-7 w-7 text-[#C8A628]" />
+                    <User className="h-7 w-7 text-[#3B82F6]" />
                   </div>
                   <h2 className="text-xl font-bold text-white">What should we call you?</h2>
                 </div>
@@ -435,7 +435,7 @@ export default function Onboarding() {
                       onBlur={() => { if (!firstName.trim()) setNameError('Please enter your first name'); }}
                       placeholder="First Name"
                       autoFocus
-                      className={`w-full h-12 px-4 bg-white/[0.06] border rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 transition-all ${
+                      className={`w-full h-12 px-4 bg-white/[0.06] border rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all ${
                         nameError ? 'border-red-400/50' : 'border-white/[0.1]'
                       }`}
                     />
@@ -446,7 +446,7 @@ export default function Onboarding() {
                     value={lastName}
                     onChange={e => setLastName(e.target.value)}
                     placeholder="Last Name (optional)"
-                    className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 transition-all"
+                    className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all"
                   />
                 </div>
               </div>
@@ -465,16 +465,16 @@ export default function Onboarding() {
                       onClick={() => setBranch(key)}
                       className={`w-full flex items-center gap-3 p-4 rounded-xl border transition-all ${
                         branch === key
-                          ? 'bg-[#C8A628]/10 border-[#C8A628]/40 text-white'
+                          ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40 text-white'
                           : 'bg-white/[0.04] border-white/[0.08] text-white/70 hover:bg-white/[0.06]'
                       }`}
                     >
                       <div
                         className="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0"
-                        style={{ borderColor: branch === key ? '#C8A628' : 'rgba(255,255,255,0.2)' }}
+                        style={{ borderColor: branch === key ? '#3B82F6' : 'rgba(255,255,255,0.2)' }}
                       >
                         {branch === key && (
-                          <div className="w-2.5 h-2.5 rounded-full bg-[#C8A628]" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-[#3B82F6]" />
                         )}
                       </div>
                       <div className="w-2 h-8 rounded-sm shrink-0" style={{ background: BRANCH_COLORS[key] }} />
@@ -490,7 +490,7 @@ export default function Onboarding() {
               <div className="space-y-5">
                 <div className="text-center">
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
-                    <Briefcase className="h-7 w-7 text-[#C8A628]" />
+                    <Briefcase className="h-7 w-7 text-[#3B82F6]" />
                   </div>
                   <h2 className="text-xl font-bold text-white">What is or was your military job?</h2>
                   <p className="text-white/40 text-sm mt-1">
@@ -515,7 +515,7 @@ export default function Onboarding() {
                       }}
                     />
                     {mosCode && (
-                      <div className="flex items-center gap-2 text-sm text-[#C8A628]">
+                      <div className="flex items-center gap-2 text-sm text-[#3B82F6]">
                         <Check className="h-4 w-4" />
                         <span>{getCodeTypeForBranch(BRANCH_TO_MOS[branch])}: {mosCode} — {mosTitle}</span>
                       </div>
@@ -539,7 +539,7 @@ export default function Onboarding() {
                         setMosCode(e.target.value);
                       }}
                       placeholder="Job Code (e.g., 11B)"
-                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 transition-all"
+                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all"
                     />
                     <input
                       type="text"
@@ -549,10 +549,10 @@ export default function Onboarding() {
                         setMosTitle(e.target.value);
                       }}
                       placeholder="Job Title (e.g., Infantryman)"
-                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 transition-all"
+                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all"
                     />
                     {manualCode && manualTitle && (
-                      <div className="flex items-center gap-2 text-sm text-[#C8A628]">
+                      <div className="flex items-center gap-2 text-sm text-[#3B82F6]">
                         <Check className="h-4 w-4" />
                         <span>{manualCode} — {manualTitle}</span>
                       </div>
@@ -574,7 +574,7 @@ export default function Onboarding() {
               <div className="space-y-5">
                 <div className="text-center">
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
-                    <MapPin className="h-7 w-7 text-[#C8A628]" />
+                    <MapPin className="h-7 w-7 text-[#3B82F6]" />
                   </div>
                   <h2 className="text-xl font-bold text-white">Where Did You Serve?</h2>
                   <p className="text-white/40 text-sm mt-1">This helps identify conditions linked to specific locations and eras.</p>
@@ -610,21 +610,21 @@ export default function Onboarding() {
                         value={stationStart}
                         onChange={e => setStationStart(e.target.value)}
                         placeholder="Start"
-                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 transition-all"
+                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all"
                       />
                       <input
                         type="month"
                         value={stationEnd}
                         onChange={e => setStationEnd(e.target.value)}
                         placeholder="End"
-                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 transition-all"
+                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all"
                       />
                     </div>
                     <div className="flex gap-2">
                       <button
                         onClick={handleAddStation}
                         disabled={!stationBase.trim()}
-                        className="flex-1 h-10 rounded-xl bg-[#C8A628] text-[#102039] text-sm font-bold disabled:opacity-40 transition-all"
+                        className="flex-1 h-10 rounded-xl bg-[#3B82F6] text-[#102039] text-sm font-bold disabled:opacity-40 transition-all"
                       >
                         Save
                       </button>
@@ -639,7 +639,7 @@ export default function Onboarding() {
                 ) : (
                   <button
                     onClick={() => setShowStationForm(true)}
-                    className="w-full h-12 rounded-xl border border-dashed border-white/20 text-white/50 text-sm hover:border-[#C8A628]/40 hover:text-[#C8A628] transition-all"
+                    className="w-full h-12 rounded-xl border border-dashed border-white/20 text-white/50 text-sm hover:border-[#3B82F6]/40 hover:text-[#3B82F6] transition-all"
                   >
                     + Add Duty Station
                   </button>
@@ -652,7 +652,7 @@ export default function Onboarding() {
               <div className="space-y-5">
                 <div className="text-center">
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
-                    <Plane className="h-7 w-7 text-[#C8A628]" />
+                    <Plane className="h-7 w-7 text-[#3B82F6]" />
                   </div>
                   <h2 className="text-xl font-bold text-white">Any Deployments or Combat Tours?</h2>
                   <p className="text-white/40 text-sm mt-1">Deployments can qualify you for presumptive conditions under the PACT Act and other VA policies.</p>
@@ -690,7 +690,7 @@ export default function Onboarding() {
                     <select
                       value={deployOp}
                       onChange={e => setDeployOp(e.target.value)}
-                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 transition-all"
+                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all"
                     >
                       <option value="" className="bg-[#102039]">Select Operation/Theater...</option>
                       {OPERATIONS.map(op => (
@@ -702,20 +702,20 @@ export default function Onboarding() {
                       value={deployLocation}
                       onChange={e => setDeployLocation(e.target.value)}
                       placeholder="Location (e.g., Baghdad, Iraq)"
-                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 transition-all"
+                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all"
                     />
                     <div className="grid grid-cols-2 gap-3">
                       <input
                         type="month"
                         value={deployStart}
                         onChange={e => setDeployStart(e.target.value)}
-                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 transition-all"
+                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all"
                       />
                       <input
                         type="month"
                         value={deployEnd}
                         onChange={e => setDeployEnd(e.target.value)}
-                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 transition-all"
+                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all"
                       />
                     </div>
                     <button
@@ -733,7 +733,7 @@ export default function Onboarding() {
                       <button
                         onClick={handleAddDeployment}
                         disabled={!deployOp.trim()}
-                        className="flex-1 h-10 rounded-xl bg-[#C8A628] text-[#102039] text-sm font-bold disabled:opacity-40 transition-all"
+                        className="flex-1 h-10 rounded-xl bg-[#3B82F6] text-[#102039] text-sm font-bold disabled:opacity-40 transition-all"
                       >
                         Save
                       </button>
@@ -748,7 +748,7 @@ export default function Onboarding() {
                 ) : (
                   <button
                     onClick={() => setShowDeployForm(true)}
-                    className="w-full h-12 rounded-xl border border-dashed border-white/20 text-white/50 text-sm hover:border-[#C8A628]/40 hover:text-[#C8A628] transition-all"
+                    className="w-full h-12 rounded-xl border border-dashed border-white/20 text-white/50 text-sm hover:border-[#3B82F6]/40 hover:text-[#3B82F6] transition-all"
                   >
                     + Add Deployment
                   </button>
@@ -768,7 +768,7 @@ export default function Onboarding() {
               <div className="space-y-5">
                 <div className="text-center">
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
-                    <Stethoscope className="h-7 w-7 text-[#C8A628]" />
+                    <Stethoscope className="h-7 w-7 text-[#3B82F6]" />
                   </div>
                   <h2 className="text-xl font-bold text-white">Are you claiming any conditions?</h2>
                   <p className="text-white/40 text-sm mt-1">This helps show you the most relevant tools.</p>
@@ -784,9 +784,9 @@ export default function Onboarding() {
                       const c = getConditionById(id);
                       if (!c) return null;
                       return (
-                        <span key={id} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#C8A628]/10 border border-[#C8A628]/30 text-sm text-[#C8A628]">
+                        <span key={id} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#3B82F6]/10 border border-[#3B82F6]/30 text-sm text-[#3B82F6]">
                           {c.abbreviation || c.name}
-                          <button onClick={() => handleRemoveCondition(id)} className="ml-1 text-[#C8A628]/60 hover:text-[#C8A628]" aria-label={`Remove ${c.abbreviation || c.name}`}>
+                          <button onClick={() => handleRemoveCondition(id)} className="ml-1 text-[#3B82F6]/60 hover:text-[#3B82F6]" aria-label={`Remove ${c.abbreviation || c.name}`}>
                             <X className="h-3 w-3" />
                           </button>
                         </span>
@@ -819,7 +819,7 @@ export default function Onboarding() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6, duration: 0.5 }}
                 >
-                  <p className="text-lg text-amber-500 font-medium">God Bless America</p>
+                  <p className="text-lg text-blue-500 font-medium">God Bless America</p>
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -835,7 +835,7 @@ export default function Onboarding() {
                 >
                   <button
                     onClick={handleComplete}
-                    className="w-full h-14 rounded-xl bg-amber-500 text-white text-base font-bold hover:bg-amber-600 transition-colors"
+                    className="w-full h-14 rounded-xl bg-blue-500 text-white text-base font-bold hover:bg-blue-600 transition-colors"
                   >
                     Get Started
                   </button>
@@ -865,7 +865,7 @@ export default function Onboarding() {
               <button
                 onClick={handleNext}
                 disabled={!canProceed}
-                className="flex items-center gap-1 h-11 px-6 rounded-xl bg-[#C8A628] text-[#102039] text-sm font-bold hover:bg-[#C8A628]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                className="flex items-center gap-1 h-11 px-6 rounded-xl bg-[#3B82F6] text-[#102039] text-sm font-bold hover:bg-[#3B82F6]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               >
                 {step === 0 ? 'Get Started' : 'Continue'}
                 <ChevronRight className="h-4 w-4" />

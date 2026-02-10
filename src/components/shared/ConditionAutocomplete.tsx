@@ -12,7 +12,7 @@ function HighlightedText({ text, query }: { text: string; query: string }) {
   return (
     <span className="text-sm font-medium">
       {text.slice(0, idx)}
-      <span className="text-[#C8A628] font-semibold">{text.slice(idx, idx + query.length)}</span>
+      <span className="text-[#3B82F6] font-semibold">{text.slice(idx, idx + query.length)}</span>
       {text.slice(idx + query.length)}
     </span>
   );
@@ -161,7 +161,7 @@ export function ConditionAutocomplete({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           autoFocus={autoFocus}
-          className="w-full h-12 pl-10 pr-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#C8A628]/40 focus:border-[#C8A628]/50 transition-all"
+          className="w-full h-12 pl-10 pr-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 focus:border-[#3B82F6]/50 transition-all"
         />
       </div>
 
@@ -180,7 +180,7 @@ export function ConditionAutocomplete({
               ref={i === highlightedIndex ? highlightRef : undefined}
               className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-colors duration-150 ${
                 i === highlightedIndex
-                  ? 'bg-[#C8A628]/15 text-white'
+                  ? 'bg-[#3B82F6]/15 text-white'
                   : 'text-white/80 hover:bg-white/5'
               } ${i > 0 ? 'border-t border-white/[0.04]' : ''}`}
               onClick={() => handleSelect(condition)}
@@ -193,7 +193,7 @@ export function ConditionAutocomplete({
                 )}
               </div>
               {showBodySystem && (condition as Record<string, unknown>).bodySystem && (
-                <span className="text-xs text-[#C8A628]/60 whitespace-nowrap">
+                <span className="text-xs text-[#3B82F6]/60 whitespace-nowrap">
                   {String((condition as Record<string, unknown>).bodySystem)}
                 </span>
               )}
