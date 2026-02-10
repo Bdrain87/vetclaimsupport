@@ -47,6 +47,15 @@ const defaultDocuments: DocumentItem[] = [
   { id: '10', name: 'Nexus Letters', description: 'Doctor statements linking conditions to service', status: 'Not Started', notes: '', count: 0 },
 ];
 
+// ===== DUTY STATION TYPE =====
+
+export interface DutyStation {
+  id: string;
+  baseName: string;
+  startDate: string;
+  endDate: string;
+}
+
 // ===== STORE INTERFACE =====
 
 interface AppState {
@@ -73,6 +82,7 @@ interface AppState {
   milestonesAchieved: string[];
   approvedConditions: ApprovedCondition[];
   journeyProgress: JourneyProgress;
+  dutyStations: DutyStation[];
 
   // --- User Conditions (from UserConditionsContext) ---
   userConditions: UserCondition[];
@@ -185,6 +195,10 @@ interface AppState {
   // Journey Progress
   setJourneyProgress: (progress: Partial<JourneyProgress>) => void;
 
+  // Duty Stations
+  addDutyStation: (station: Omit<DutyStation, 'id'>) => void;
+  removeDutyStation: (id: string) => void;
+
   // ========== USER CONDITIONS METHODS ==========
 
   addUserCondition: (condition: UserCondition) => void;
@@ -243,6 +257,7 @@ const initialState = {
   milestonesAchieved: [] as string[],
   approvedConditions: [] as ApprovedCondition[],
   journeyProgress: { currentPhase: 0, completedChecklist: {} } as JourneyProgress,
+  dutyStations: [] as DutyStation[],
 
   // User conditions
   userConditions: [] as UserCondition[],
@@ -465,6 +480,14 @@ const useAppStore = create<AppState>()(
       // Journey Progress
       setJourneyProgress: (progress) => set((s) => ({
         journeyProgress: { ...(s.journeyProgress || { currentPhase: 0, completedChecklist: {} }), ...progress },
+      })),
+
+      // Duty Stations
+      addDutyStation: (station) => set((s) => ({
+        dutyStations: [...(s.dutyStations || []), { ...station, id: generateId() }],
+      })),
+      removeDutyStation: (id) => set((s) => ({
+        dutyStations: (s.dutyStations || []).filter((d) => d.id !== id),
       })),
 
       // ========== USER CONDITIONS METHODS ==========

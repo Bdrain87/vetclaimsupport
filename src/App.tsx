@@ -1,7 +1,7 @@
 import React, { Suspense, lazy, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Navbar } from './components/layout/Navbar';
+import { MobileHeader } from './components/MobileHeader';
 import { BottomTabBar } from './components/BottomTabBar';
 import { ThemeProvider } from './context/ThemeContext';
 import { TooltipProvider } from './components/ui/tooltip';
@@ -13,22 +13,14 @@ import { migrateOldDataToAppStore } from './utils/migrateData';
 migrateOldDataToAppStore();
 
 // Lazy-loaded route components for code splitting
-const Landing = lazy(() =>
-  import('./pages/Landing').then((mod) => ({ default: mod.Landing }))
-);
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Conditions = lazy(() => import('./pages/Conditions'));
 const ConditionDetail = lazy(() => import('./pages/ConditionDetail'));
-const ConditionGuide = lazy(() => import('./pages/ConditionGuide'));
-const ConditionsByConflict = lazy(() => import('./pages/ConditionsByConflict'));
 const SecondaryFinder = lazy(() => import('./pages/SecondaryFinder'));
 const BilateralCalculator = lazy(() => import('./pages/BilateralCalculator'));
 const ClaimChecklist = lazy(() => import('./pages/ClaimChecklist'));
-const ClaimJourney = lazy(() => import('./pages/ClaimJourney'));
 const ClaimStrategyWizard = lazy(() => import('./pages/ClaimStrategyWizard'));
-const ClaimTools = lazy(() => import('./pages/ClaimTools'));
 const Timeline = lazy(() => import('./pages/Timeline'));
-const HealthLog = lazy(() => import('./pages/HealthLog'));
 const Symptoms = lazy(() => import('./pages/Symptoms'));
 const Sleep = lazy(() => import('./pages/Sleep'));
 const Medications = lazy(() => import('./pages/Medications'));
@@ -38,27 +30,28 @@ const Exposures = lazy(() => import('./pages/Exposures'));
 const BuddyStatements = lazy(() => import('./pages/BuddyStatements'));
 const NexusLetterGenerator = lazy(() => import('./pages/NexusLetterGenerator'));
 const DocumentsHub = lazy(() => import('./pages/DocumentsHub'));
-const ExamPrep = lazy(() => import('./pages/ExamPrep'));
 const CPExamPrepEnhanced = lazy(() => import('./pages/CPExamPrepEnhanced'));
 const DBQPrepSheet = lazy(() => import('./pages/DBQPrepSheet'));
-const VAForms = lazy(() => import('./pages/VAForms'));
 const VAResources = lazy(() => import('./pages/VAResources'));
 const ServiceHistory = lazy(() => import('./pages/ServiceHistory'));
-const Reference = lazy(() => import('./pages/Reference'));
 const Glossary = lazy(() => import('./pages/Glossary'));
 const Settings = lazy(() => import('./pages/Settings'));
 const FAQ = lazy(() => import('./pages/FAQ'));
 const HelpCenter = lazy(() => import('./pages/HelpCenter'));
-const UserGuide = lazy(() => import('./pages/UserGuide'));
-const AppStorePreview = lazy(() => import('./pages/AppStorePreview'));
-const Terms = lazy(() => import('./pages/Terms'));
-const Privacy = lazy(() => import('./pages/Privacy'));
-const Disclaimer = lazy(() => import('./pages/Disclaimer'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const Onboarding = lazy(() => import('./pages/Onboarding'));
 const FormGuide = lazy(() => import('./pages/FormGuide'));
 const BuildPacket = lazy(() => import('./pages/BuildPacket'));
 const Combination = lazy(() => import('./components/UnifiedRatingCalculator'));
+const ClaimJourney = lazy(() => import('./pages/ClaimJourney'));
+const HealthLog = lazy(() => import('./pages/HealthLog'));
+const ExamPrep = lazy(() => import('./pages/ExamPrep'));
+
+// New hub pages
+const HealthHub = lazy(() => import('./pages/HealthHub'));
+const PrepHub = lazy(() => import('./pages/PrepHub'));
+const ProfileHub = lazy(() => import('./pages/ProfileHub'));
+const PlaceholderPage = lazy(() => import('./pages/PlaceholderPage'));
 
 // Account & Legal pages
 const DeleteAccountPage = lazy(() => import('./pages/account/DeleteAccountPage'));
@@ -76,26 +69,20 @@ function LoadingFallback() {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4, ease: 'easeOut' }}
       >
-        {/* Gold V Logo */}
         <div className="relative">
           <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#C8A628] to-[#B8960F] flex items-center justify-center shadow-lg shadow-[#C8A628]/20">
             <span className="text-[#102039] text-4xl font-bold">V</span>
           </div>
-          {/* Subtle pulse ring */}
           <motion.div
             className="absolute inset-0 rounded-2xl border-2 border-[#C8A628]/30"
             animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0, 0.5] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           />
         </div>
-
-        {/* Brand text */}
         <div className="text-center">
           <h1 className="text-white text-lg font-semibold tracking-wide">VCS</h1>
           <p className="text-white/40 text-xs mt-1">Claim Preparation Tools</p>
         </div>
-
-        {/* Loading bar */}
         <div className="w-32 h-0.5 bg-white/10 rounded-full overflow-hidden">
           <motion.div
             className="h-full bg-[#C8A628] rounded-full"
@@ -125,10 +112,9 @@ function useFirstTimeRedirect() {
 
   useEffect(() => {
     const isOnboardingPage = location.pathname === '/onboarding';
-    const isLandingPage = location.pathname === '/';
     const isLegalPage = ['/terms', '/privacy', '/disclaimer', '/profile/privacy', '/profile/terms', '/profile/disclaimer'].includes(location.pathname);
 
-    if (!hasOnboarded && !isOnboardingPage && !isLandingPage && !isLegalPage) {
+    if (!hasOnboarded && !isOnboardingPage && !isLegalPage) {
       navigate('/onboarding', { replace: true });
     }
   }, [location.pathname, navigate, hasOnboarded]);
@@ -145,69 +131,110 @@ function AnimatedRoutes() {
         key={location.pathname}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
         transition={{ duration: 0.15 }}
       >
         <Suspense fallback={<LoadingFallback />}>
           <Routes location={location}>
-            {/* Landing — hero goes behind fixed navbar */}
-            <Route path="/" element={<Landing />} />
-
-            {/* Onboarding — no navbar needed, fullscreen */}
+            {/* === ROOT TABS === */}
+            <Route path="/" element={<Dashboard />} />
             <Route path="/onboarding" element={<Onboarding />} />
 
-            {/* All inner pages — navbar is relative, no padding needed */}
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/conditions" element={<Conditions />} />
-            <Route path="/conditions/:id" element={<ConditionDetail />} />
-            <Route path="/condition-guide" element={<ConditionGuide />} />
-            <Route path="/conditions-by-conflict" element={<ConditionsByConflict />} />
-            <Route path="/secondary-finder" element={<SecondaryFinder />} />
-            <Route path="/bilateral-calculator" element={<BilateralCalculator />} />
-            <Route path="/claim-checklist" element={<ClaimChecklist />} />
-            <Route path="/claim-journey" element={<ClaimJourney />} />
-            <Route path="/claim-strategy" element={<ClaimStrategyWizard />} />
-            <Route path="/claim-tools" element={<ClaimTools />} />
-            <Route path="/timeline" element={<Timeline />} />
-            <Route path="/health-log" element={<HealthLog />} />
-            <Route path="/symptoms" element={<Symptoms />} />
-            <Route path="/sleep" element={<Sleep />} />
-            <Route path="/medications" element={<Medications />} />
-            <Route path="/migraines" element={<Migraines />} />
-            <Route path="/medical-visits" element={<MedicalVisits />} />
-            <Route path="/exposures" element={<Exposures />} />
-            <Route path="/buddy-statements" element={<BuddyStatements />} />
-            <Route path="/nexus-letter" element={<NexusLetterGenerator />} />
-            <Route path="/documents" element={<DocumentsHub />} />
-            <Route path="/exam-prep" element={<ExamPrep />} />
-            <Route path="/cp-exam-prep" element={<CPExamPrepEnhanced />} />
-            <Route path="/dbq-prep" element={<DBQPrepSheet />} />
-            <Route path="/va-forms" element={<VAForms />} />
-            <Route path="/va-resources" element={<VAResources />} />
-            <Route path="/service-history" element={<ServiceHistory />} />
-            <Route path="/reference" element={<Reference />} />
-            <Route path="/glossary" element={<Glossary />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/help" element={<HelpCenter />} />
-            <Route path="/user-guide" element={<UserGuide />} />
-            <Route path="/app-preview" element={<AppStorePreview />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/disclaimer" element={<Disclaimer />} />
-            <Route path="/form-guide" element={<FormGuide />} />
-            <Route path="/build-packet" element={<BuildPacket />} />
-            <Route path="/tools" element={<ClaimTools />} />
-            <Route path="/calculator" element={<Combination />} />
+            {/* === CLAIMS === */}
+            <Route path="/claims" element={<Conditions />} />
+            <Route path="/claims/:id" element={<ConditionDetail />} />
+            <Route path="/claims/strategy" element={<ClaimStrategyWizard />} />
+            <Route path="/claims/body-map" element={<PlaceholderPage title="Body Map — Coming in Phase 6" />} />
+            <Route path="/claims/calculator" element={<Combination />} />
+            <Route path="/claims/bilateral" element={<BilateralCalculator />} />
+            <Route path="/claims/secondary-finder" element={<SecondaryFinder />} />
+            <Route path="/claims/checklist" element={<ClaimChecklist />} />
 
-            {/* Account management routes */}
-            <Route path="/profile/delete-account" element={<DeleteAccountPage />} />
-            <Route path="/profile/export-data" element={<ExportDataPage />} />
+            {/* === HEALTH === */}
+            <Route path="/health" element={<HealthHub />} />
+            <Route path="/health/symptoms" element={<Symptoms />} />
+            <Route path="/health/sleep" element={<Sleep />} />
+            <Route path="/health/migraines" element={<Migraines />} />
+            <Route path="/health/medications" element={<Medications />} />
+            <Route path="/health/visits" element={<MedicalVisits />} />
+            <Route path="/health/exposures" element={<Exposures />} />
+            <Route path="/health/summary" element={<HealthLog />} />
 
-            {/* Legal routes (profile-prefixed) */}
+            {/* === PREP === */}
+            <Route path="/prep" element={<PrepHub />} />
+            <Route path="/prep/exam" element={<CPExamPrepEnhanced />} />
+            <Route path="/prep/personal-statement" element={<ExamPrep />} />
+            <Route path="/prep/buddy-statement" element={<BuddyStatements />} />
+            <Route path="/prep/nexus-letter" element={<NexusLetterGenerator />} />
+            <Route path="/prep/stressor" element={<PlaceholderPage title="Stressor Statement — Coming in Phase 6" />} />
+            <Route path="/prep/form-guide" element={<FormGuide />} />
+            <Route path="/prep/dbq" element={<DBQPrepSheet />} />
+            <Route path="/prep/va-speak" element={<PlaceholderPage title="VA-Speak Translator — Coming in Phase 6" />} />
+            <Route path="/prep/back-pay" element={<PlaceholderPage title="Back Pay Estimator — Coming in Phase 6" />} />
+            <Route path="/prep/packet" element={<BuildPacket />} />
+
+            {/* === PROFILE === */}
+            <Route path="/profile" element={<ProfileHub />} />
+            <Route path="/profile/edit" element={<Settings />} />
+            <Route path="/profile/service-history" element={<ServiceHistory />} />
+            <Route path="/profile/vault" element={<DocumentsHub />} />
+            <Route path="/profile/journey" element={<ClaimJourney />} />
+            <Route path="/profile/itf" element={<PlaceholderPage title="Intent to File — Coming in Phase 6" />} />
+            <Route path="/profile/timeline" element={<Timeline />} />
+            <Route path="/profile/settings" element={<Settings />} />
+            <Route path="/profile/help" element={<HelpCenter />} />
+            <Route path="/profile/glossary" element={<Glossary />} />
+            <Route path="/profile/resources" element={<VAResources />} />
+            <Route path="/profile/faq" element={<FAQ />} />
             <Route path="/profile/privacy" element={<PrivacyPolicyPage />} />
             <Route path="/profile/terms" element={<TermsOfServicePage />} />
             <Route path="/profile/disclaimer" element={<DisclaimerPage />} />
+            <Route path="/profile/about" element={<PlaceholderPage title="About VCS — Coming in Phase 6" />} />
+            <Route path="/profile/export-data" element={<ExportDataPage />} />
+            <Route path="/profile/delete-account" element={<DeleteAccountPage />} />
 
+            {/* === REDIRECTS FROM OLD ROUTES === */}
+            <Route path="/dashboard" element={<Navigate to="/" replace />} />
+            <Route path="/conditions" element={<Navigate to="/claims" replace />} />
+            <Route path="/calculator" element={<Navigate to="/claims/calculator" replace />} />
+            <Route path="/secondary-finder" element={<Navigate to="/claims/secondary-finder" replace />} />
+            <Route path="/nexus-letter" element={<Navigate to="/prep/nexus-letter" replace />} />
+            <Route path="/dbq-prep" element={<Navigate to="/prep/dbq" replace />} />
+            <Route path="/cp-exam-prep" element={<Navigate to="/prep/exam" replace />} />
+            <Route path="/claim-strategy" element={<Navigate to="/claims/strategy" replace />} />
+            <Route path="/health-log" element={<Navigate to="/health/symptoms" replace />} />
+            <Route path="/docs" element={<Navigate to="/profile/vault" replace />} />
+            <Route path="/documents" element={<Navigate to="/profile/vault" replace />} />
+            <Route path="/service-history" element={<Navigate to="/profile/service-history" replace />} />
+            <Route path="/settings" element={<Navigate to="/profile/settings" replace />} />
+            <Route path="/help" element={<Navigate to="/profile/help" replace />} />
+            <Route path="/va-resources" element={<Navigate to="/profile/resources" replace />} />
+            <Route path="/buddy-statements" element={<Navigate to="/prep/buddy-statement" replace />} />
+            <Route path="/journey" element={<Navigate to="/profile/journey" replace />} />
+            <Route path="/claim-journey" element={<Navigate to="/profile/journey" replace />} />
+            <Route path="/checklist" element={<Navigate to="/claims/checklist" replace />} />
+            <Route path="/claim-checklist" element={<Navigate to="/claims/checklist" replace />} />
+            <Route path="/migraines" element={<Navigate to="/health/migraines" replace />} />
+            <Route path="/exposures" element={<Navigate to="/health/exposures" replace />} />
+            <Route path="/medical-visits" element={<Navigate to="/health/visits" replace />} />
+            <Route path="/timeline" element={<Navigate to="/profile/timeline" replace />} />
+            <Route path="/privacy" element={<Navigate to="/profile/privacy" replace />} />
+            <Route path="/terms" element={<Navigate to="/profile/terms" replace />} />
+            <Route path="/disclaimer" element={<Navigate to="/profile/disclaimer" replace />} />
+            <Route path="/symptoms" element={<Navigate to="/health/symptoms" replace />} />
+            <Route path="/sleep" element={<Navigate to="/health/sleep" replace />} />
+            <Route path="/medications" element={<Navigate to="/health/medications" replace />} />
+            <Route path="/bilateral-calculator" element={<Navigate to="/claims/bilateral" replace />} />
+            <Route path="/exam-prep" element={<Navigate to="/prep/exam" replace />} />
+            <Route path="/claim-tools" element={<Navigate to="/prep" replace />} />
+            <Route path="/tools" element={<Navigate to="/prep" replace />} />
+            <Route path="/va-forms" element={<Navigate to="/prep/form-guide" replace />} />
+            <Route path="/form-guide" element={<Navigate to="/prep/form-guide" replace />} />
+            <Route path="/build-packet" element={<Navigate to="/prep/packet" replace />} />
+            <Route path="/glossary" element={<Navigate to="/profile/glossary" replace />} />
+            <Route path="/faq" element={<Navigate to="/profile/faq" replace />} />
+
+            {/* === CATCH-ALL === */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
@@ -223,9 +250,11 @@ function App() {
         <TooltipProvider>
           <BrowserRouter>
             <ScrollToTop />
-            <div className="min-h-[100dvh] bg-[#102039] text-white overflow-x-hidden break-words pb-20 lg:pb-0">
-              <Navbar />
-              <AnimatedRoutes />
+            <div className="min-h-[100dvh] bg-background text-foreground overflow-x-hidden break-words">
+              <MobileHeader />
+              <main className="pt-14 pb-20">
+                <AnimatedRoutes />
+              </main>
               <BottomTabBar />
             </div>
           </BrowserRouter>
