@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Stethoscope,
   CheckCircle2,
@@ -18,6 +19,8 @@ import {
   Star,
   Sparkles,
   Loader2,
+  FileCheck,
+  ChevronRight as ChevronRightIcon,
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -217,6 +220,19 @@ export default function CPExamPrepEnhanced() {
           </p>
         </div>
       </div>
+
+      {/* Exam Packet CTA */}
+      <Link
+        to="/cp-exam-packet"
+        className="flex items-center gap-3 p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 hover:bg-blue-500/20 transition-colors"
+      >
+        <FileCheck className="h-5 w-5 text-blue-500 shrink-0" />
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-semibold text-foreground">Ready for your exam? Build your packet</p>
+          <p className="text-xs text-muted-foreground">Create a comprehensive C&P exam preparation document</p>
+        </div>
+        <ChevronRightIcon className="h-4 w-4 text-muted-foreground shrink-0" />
+      </Link>
 
       {/* Tabs */}
       <Tabs defaultValue="overview" className="w-full">

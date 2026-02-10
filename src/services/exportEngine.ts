@@ -1288,3 +1288,400 @@ function formatDateSafe(dateStr: string): string {
     return dateStr;
   }
 }
+
+// ============================================================================
+// C&P Exam Packet PDF Export
+// ============================================================================
+
+export interface CPExamPacketData {
+  profile: {
+    firstName: string;
+    lastName: string;
+    branch: string;
+    mosCode: string;
+    mosTitle: string;
+    serviceDates?: { start: string; end: string };
+    intentToFileDate?: string;
+    currentRating: number;
+  };
+  conditions: Array<{
+    id: string;
+    name: string;
+    diagnosticCode?: string;
+    claimType: string;
+    isPrimary: boolean;
+    linkedPrimaryName?: string;
+    rating?: number;
+  }>;
+  evidenceSummaries: Array<{
+    conditionName: string;
+    medRecords: number;
+    buddyCount: number;
+    symptomCount: number;
+    docCount: number;
+    hasNexus: boolean;
+    hasPersonalStatement: boolean;
+    gaps: string[];
+  }>;
+  symptomSummary: {
+    avgPain: string;
+    flareUps: number;
+    worstPain: number;
+    worstDate: string | null;
+    avgSleep: string | null;
+    migraineCount: number;
+    prostratingCount: number;
+    currentMeds: Array<{ id: string; name: string; prescribedFor: string }>;
+    totalLogs: number;
+  };
+  medications: Array<{ id: string; name: string; prescribedFor: string }>;
+  examQuestions: Record<string, string>;
+  caseLawResults: Record<string, string>;
+}
+
+export function generateCPExamPacketPDF(data: CPExamPacketData): void {
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = 20;
+  const contentWidth = pageWidth - margin * 2;
+  let y = 0;
+  const dateStr = format(new Date(), 'MMMM d, yyyy');
+  const veteranName = `${data.profile.firstName} ${data.profile.lastName}`.trim() || 'Veteran';
+
+  // --- Helpers ---
+  const addHeader = () => {
+    doc.setFontSize(8);
+    doc.setTextColor(...PDF_COLORS.textMuted);
+    doc.text(`C&P Exam Preparation Packet — ${veteranName} — ${dateStr}`, pageWidth / 2, 8, { align: 'center' });
+  };
+
+  const addFooterText = () => {
+    doc.setFontSize(7);
+    doc.setTextColor(...PDF_COLORS.textMuted);
+    doc.text(
+      'Prepared by Vet Claim Support — For personal use only — Not an official VA document',
+      pageWidth / 2,
+      pageHeight - 8,
+      { align: 'center' }
+    );
+  };
+
+  const checkPageBreak = (needed: number): number => {
+    if (y + needed > pageHeight - 25) {
+      doc.addPage();
+      addHeader();
+      addFooterText();
+      return 18;
+    }
+    return y;
+  };
+
+  const addSectionHeader = (num: number, title: string) => {
+    y = checkPageBreak(18);
+    doc.setFillColor(...PDF_COLORS.navy);
+    doc.roundedRect(margin, y - 4, contentWidth, 12, 2, 2, 'F');
+    doc.setFontSize(11);
+    doc.setTextColor(...PDF_COLORS.white);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`${num}. ${title}`, margin + 6, y + 4);
+    doc.setFont('helvetica', 'normal');
+    y += 14;
+  };
+
+  const addSubHeader = (title: string) => {
+    y = checkPageBreak(12);
+    doc.setFontSize(10);
+    doc.setTextColor(...PDF_COLORS.blue);
+    doc.setFont('helvetica', 'bold');
+    doc.text(title, margin + 4, y);
+    doc.setFont('helvetica', 'normal');
+    y += 6;
+  };
+
+  const addText = (text: string, indent = 4) => {
+    y = checkPageBreak(6);
+    doc.setFontSize(9);
+    doc.setTextColor(...PDF_COLORS.textDark);
+    const lines = doc.splitTextToSize(text, contentWidth - indent - 4);
+    lines.forEach((line: string) => {
+      y = checkPageBreak(5);
+      doc.text(line, margin + indent, y);
+      y += 4.5;
+    });
+  };
+
+  const addLabelValue = (label: string, value: string) => {
+    y = checkPageBreak(7);
+    doc.setFontSize(9);
+    doc.setTextColor(...PDF_COLORS.textMuted);
+    doc.text(`${label}:`, margin + 4, y);
+    doc.setTextColor(...PDF_COLORS.textDark);
+    doc.text(value, margin + 55, y);
+    y += 6;
+  };
+
+  const addBullet = (text: string, indent = 8, color = PDF_COLORS.textDark) => {
+    y = checkPageBreak(6);
+    doc.setFontSize(9);
+    doc.setTextColor(...PDF_COLORS.blue);
+    doc.text('\u2022', margin + indent, y);
+    doc.setTextColor(...color);
+    const lines = doc.splitTextToSize(text, contentWidth - indent - 10);
+    lines.forEach((line: string, i: number) => {
+      if (i > 0) y = checkPageBreak(5);
+      doc.text(line, margin + indent + 5, y);
+      if (i < lines.length - 1) y += 4.5;
+    });
+    y += 5;
+  };
+
+  // === PAGE 1: Title Page + Table of Contents ===
+  doc.setFillColor(...PDF_COLORS.navy);
+  doc.rect(0, 0, pageWidth, 55, 'F');
+  doc.setFillColor(...PDF_COLORS.blue);
+  doc.rect(0, 55, pageWidth, 3, 'F');
+
+  doc.setFontSize(22);
+  doc.setTextColor(...PDF_COLORS.white);
+  doc.setFont('helvetica', 'bold');
+  doc.text('C&P EXAM PREPARATION PACKET', margin, 22);
+
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'normal');
+  doc.text(veteranName, margin, 34);
+  doc.setFontSize(10);
+  doc.text(dateStr, margin, 42);
+  doc.setFontSize(9);
+  doc.text('Vet Claim Support', margin, 50);
+
+  addFooterText();
+  y = 70;
+
+  // Table of Contents
+  doc.setFontSize(14);
+  doc.setTextColor(...PDF_COLORS.textDark);
+  doc.setFont('helvetica', 'bold');
+  doc.text('TABLE OF CONTENTS', margin, y);
+  doc.setFont('helvetica', 'normal');
+  y += 10;
+
+  const tocItems = [
+    '1. Veteran Information',
+    '2. Conditions Being Claimed',
+    '3. Evidence Summary',
+    '4. Symptom History (90 Days)',
+    '5. Key Talking Points',
+    '6. Questions to Expect',
+    '7. Case Law References',
+  ];
+  tocItems.forEach((item) => {
+    doc.setFontSize(10);
+    doc.setTextColor(...PDF_COLORS.textDark);
+    doc.text(item, margin + 4, y);
+    y += 7;
+  });
+
+  y += 6;
+  doc.setFillColor(...PDF_COLORS.background);
+  doc.setDrawColor(...PDF_COLORS.border);
+  doc.roundedRect(margin, y, contentWidth, 14, 2, 2, 'FD');
+  doc.setFontSize(8);
+  doc.setTextColor(...PDF_COLORS.danger);
+  doc.setFont('helvetica', 'bold');
+  doc.text('NOT AN OFFICIAL VA DOCUMENT — FOR PERSONAL USE ONLY', pageWidth / 2, y + 6, { align: 'center' });
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7);
+  doc.setTextColor(...PDF_COLORS.textMuted);
+  doc.text('Always verify AI-generated content before use', pageWidth / 2, y + 11, { align: 'center' });
+
+  // === SECTION 1: Veteran Information ===
+  doc.addPage();
+  addHeader();
+  addFooterText();
+  y = 18;
+
+  addSectionHeader(1, 'VETERAN INFORMATION');
+  addLabelValue('Name', veteranName);
+  addLabelValue('Branch', data.profile.branch || 'Not provided');
+  addLabelValue('MOS/AFSC', data.profile.mosCode ? `${data.profile.mosCode} — ${data.profile.mosTitle}` : 'Not provided');
+  if (data.profile.serviceDates) {
+    addLabelValue('Service Dates', `${data.profile.serviceDates.start} to ${data.profile.serviceDates.end || 'Present'}`);
+  }
+  addLabelValue('Current VA Rating', data.profile.currentRating > 0 ? `${data.profile.currentRating}%` : 'None on file');
+  if (data.profile.intentToFileDate) {
+    addLabelValue('Intent to File', `Filed ${data.profile.intentToFileDate}`);
+  }
+  y += 6;
+
+  // === SECTION 2: Conditions Being Claimed ===
+  addSectionHeader(2, 'CONDITIONS BEING CLAIMED');
+  if (data.conditions.length === 0) {
+    addText('No conditions added yet.');
+  } else {
+    data.conditions.forEach((condition) => {
+      y = checkPageBreak(20);
+      doc.setFontSize(10);
+      doc.setTextColor(...PDF_COLORS.textDark);
+      doc.setFont('helvetica', 'bold');
+      doc.text(condition.name, margin + 4, y);
+      doc.setFont('helvetica', 'normal');
+
+      // Claim type badge
+      doc.setFontSize(8);
+      doc.setTextColor(...PDF_COLORS.blue);
+      doc.text(`[${condition.claimType.toUpperCase()}]`, pageWidth - margin - 30, y);
+      y += 5;
+
+      if (condition.diagnosticCode) {
+        doc.setFontSize(8);
+        doc.setTextColor(...PDF_COLORS.textMuted);
+        doc.text(`Diagnostic Code: ${condition.diagnosticCode}`, margin + 8, y);
+        y += 5;
+      }
+      if (condition.linkedPrimaryName) {
+        doc.setFontSize(8);
+        doc.setTextColor(...PDF_COLORS.textMuted);
+        doc.text(`Secondary to: ${condition.linkedPrimaryName}`, margin + 8, y);
+        y += 5;
+      }
+      y += 4;
+    });
+  }
+  y += 4;
+
+  // === SECTION 3: Evidence Summary ===
+  addSectionHeader(3, 'EVIDENCE SUMMARY');
+  if (data.evidenceSummaries.length === 0) {
+    addText('No evidence data available.');
+  } else {
+    data.evidenceSummaries.forEach((es) => {
+      y = checkPageBreak(30);
+      addSubHeader(es.conditionName);
+      doc.setFontSize(9);
+      doc.setTextColor(...PDF_COLORS.textDark);
+      doc.text(`Medical Records: ${es.medRecords}`, margin + 8, y); y += 5;
+      doc.text(`Buddy Statements: ${es.buddyCount}`, margin + 8, y); y += 5;
+      doc.text(`Nexus Letter: ${es.hasNexus ? 'Yes' : 'Missing'}`, margin + 8, y); y += 5;
+      doc.text(`Personal Statement: ${es.hasPersonalStatement ? 'Yes' : 'Missing'}`, margin + 8, y); y += 5;
+
+      if (es.gaps.length > 0) {
+        doc.setTextColor(...PDF_COLORS.warning);
+        doc.text(`Gaps: ${es.gaps.join(', ')}`, margin + 8, y);
+        y += 5;
+      }
+      y += 4;
+    });
+  }
+
+  // === SECTION 4: Symptom History ===
+  addSectionHeader(4, 'SYMPTOM HISTORY (90 DAYS)');
+  const ss = data.symptomSummary;
+  if (ss.totalLogs === 0 && !ss.avgSleep && ss.migraineCount === 0) {
+    addText('No symptom data recorded yet.');
+  } else {
+    addLabelValue('Average Pain Level', `${ss.avgPain}/10`);
+    addLabelValue('Flare-Ups', String(ss.flareUps));
+    addLabelValue('Worst Pain', ss.worstPain > 0 ? `${ss.worstPain}/10${ss.worstDate ? ` on ${ss.worstDate}` : ''}` : 'N/A');
+    addLabelValue('Total Log Entries', String(ss.totalLogs));
+
+    if (ss.avgSleep) {
+      addLabelValue('Avg Sleep', `${ss.avgSleep} hrs/night`);
+    }
+    if (ss.migraineCount > 0) {
+      addLabelValue('Migraines', `${ss.migraineCount} episodes, ${ss.prostratingCount} prostrating`);
+    }
+    if (ss.currentMeds.length > 0) {
+      y += 2;
+      addSubHeader('Current Medications');
+      ss.currentMeds.forEach((m) => {
+        addBullet(`${m.name} — ${m.prescribedFor || 'N/A'}`);
+      });
+    }
+  }
+  y += 4;
+
+  // === SECTION 5: Key Talking Points ===
+  addSectionHeader(5, 'KEY TALKING POINTS');
+  addSubHeader('For ALL Conditions:');
+  const universalPoints = [
+    'Describe your WORST days, not your average',
+    'Mention how this limits your daily activities and work',
+    'Bring up frequency: how often symptoms occur',
+    "Don't minimize — the examiner is evaluating functional loss",
+    'Be specific with numbers (e.g., "3-4 times per week")',
+  ];
+  universalPoints.forEach((p) => addBullet(p));
+  y += 4;
+
+  // === SECTION 6: Questions to Expect ===
+  addSectionHeader(6, 'QUESTIONS TO EXPECT');
+  const hasQuestions = Object.keys(data.examQuestions).length > 0;
+  if (!hasQuestions) {
+    addText('No AI-generated questions available. Generate them in the app before exporting.');
+  } else {
+    // AI disclaimer
+    y = checkPageBreak(12);
+    doc.setFillColor(245, 245, 220);
+    doc.roundedRect(margin, y - 2, contentWidth, 10, 1, 1, 'F');
+    doc.setFontSize(8);
+    doc.setTextColor(...PDF_COLORS.warning);
+    doc.text('AI-generated content — verify before relying on this information', pageWidth / 2, y + 4, { align: 'center' });
+    y += 12;
+
+    Object.entries(data.examQuestions).forEach(([condition, questions]) => {
+      addSubHeader(condition);
+      const lines = questions.split('\n').filter((l) => l.trim());
+      lines.forEach((line) => {
+        addText(line.trim(), 8);
+      });
+      y += 4;
+    });
+  }
+
+  // === SECTION 7: Case Law References ===
+  addSectionHeader(7, 'CASE LAW REFERENCES');
+  const hasCaseLaw = Object.keys(data.caseLawResults).length > 0;
+  if (!hasCaseLaw) {
+    addText('No case law references generated. Generate them in the app before exporting.');
+  } else {
+    // AI disclaimer
+    y = checkPageBreak(16);
+    doc.setFillColor(255, 245, 230);
+    doc.roundedRect(margin, y - 2, contentWidth, 14, 1, 1, 'F');
+    doc.setFontSize(7);
+    doc.setTextColor(...PDF_COLORS.danger);
+    doc.setFont('helvetica', 'bold');
+    doc.text('WARNING: AI-generated case law may contain errors or fictional citations.', pageWidth / 2, y + 3, { align: 'center' });
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(6);
+    doc.text('Always verify through Westlaw, LexisNexis, or BVA search before citing.', pageWidth / 2, y + 8, { align: 'center' });
+    y += 18;
+
+    Object.entries(data.caseLawResults).forEach(([condition, caseLaw]) => {
+      addSubHeader(condition);
+      const lines = caseLaw.split('\n').filter((l) => l.trim());
+      lines.forEach((line) => {
+        addText(line.trim(), 8);
+      });
+      y += 4;
+    });
+  }
+
+  // === Final Footer ===
+  y = checkPageBreak(25);
+  doc.setFillColor(...PDF_COLORS.background);
+  doc.setDrawColor(...PDF_COLORS.border);
+  doc.roundedRect(margin, y, contentWidth, 16, 2, 2, 'FD');
+  doc.setFontSize(8);
+  doc.setTextColor(...PDF_COLORS.danger);
+  doc.setFont('helvetica', 'bold');
+  doc.text('NOT AN OFFICIAL VA DOCUMENT — FOR PERSONAL USE ONLY', pageWidth / 2, y + 6, { align: 'center' });
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7);
+  doc.setTextColor(...PDF_COLORS.textMuted);
+  doc.text('Prepared by Vet Claim Support — Claim Preparation Tools', pageWidth / 2, y + 12, { align: 'center' });
+
+  const dateFileStr = format(new Date(), 'yyyy-MM-dd');
+  doc.save(`CP-Exam-Packet-${veteranName.replace(/\s+/g, '-')}-${dateFileStr}.pdf`);
+}
