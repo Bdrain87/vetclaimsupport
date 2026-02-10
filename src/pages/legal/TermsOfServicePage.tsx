@@ -33,8 +33,13 @@ export default function TermsOfServicePage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-white">1. Service Description</h2>
           <p className="text-white/60">
-            Vet Claim Support ("the Service") is an organizational tool designed to help veterans prepare and organize information related to VA disability claims. The Service provides educational resources, evidence organization features, health logging tools, rating calculators, and VA form drafting assistance.
+            Vet Claim Support ("the Service") is an organizational tool designed to help service members and veterans prepare and organize information related to VA disability claims. The Service provides educational resources, evidence organization features, health logging tools, rating calculators, and VA form drafting assistance.
           </p>
+          <div className="rounded-xl bg-blue-500/5 border border-blue-500/20 p-4">
+            <p className="text-white/70">
+              <strong className="text-white">Vet Claim Support is not affiliated with, endorsed by, or connected to the U.S. Department of Veterans Affairs.</strong>
+            </p>
+          </div>
         </section>
 
         {/* Lifetime Access */}
@@ -119,6 +124,12 @@ export default function TermsOfServicePage() {
             <a href="mailto:blakedrain@gmail.com" className="text-[#3B82F6] hover:underline">
               blakedrain@gmail.com
             </a>
+          </p>
+          <p className="text-white/60">
+            See also our{' '}
+            <a href="/settings/privacy" className="text-[#3B82F6] hover:underline">
+              Privacy Policy
+            </a>.
           </p>
         </section>
       </div>

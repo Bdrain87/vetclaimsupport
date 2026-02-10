@@ -1,6 +1,6 @@
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
-import { useProfileStore } from '@/store/useProfileStore';
+import { useProfileStore, BRANCH_LABELS } from '@/store/useProfileStore';
 import useAppStore from '@/store/useAppStore';
 import { ClaimIntelligence } from '@/services/claimIntelligence';
 import {
@@ -16,6 +16,8 @@ import {
   Meh,
   ThumbsDown,
   Check,
+  Pencil,
+  User,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { vcsSpring } from '@/constants/animations';
@@ -92,36 +94,58 @@ export default function Dashboard() {
     setSelectedMood(null);
   }, [painLevel, selectedMood, addDashboardQuickLog]);
 
-  const displayName = profile.firstName || 'Veteran';
+  const displayName = profile.firstName
+    ? `${profile.firstName}${profile.lastName ? ' ' + profile.lastName : ''}`
+    : 'Veteran';
   const hasConditions = allConditionNames.size > 0;
+  const branchLabel = profile.branch ? BRANCH_LABELS[profile.branch] : '';
+  const serviceDateStr = profile.serviceDates?.start
+    ? `${new Date(profile.serviceDates.start).toLocaleDateString()} – ${profile.serviceDates.end ? new Date(profile.serviceDates.end).toLocaleDateString() : 'Present'}`
+    : '';
 
   return (
-    <div className="space-y-5 animate-fade-in pb-8 md:pb-4 overflow-x-hidden max-w-full px-4">
-      {/* 1.1 Welcome Bar */}
-      <div className="flex items-center justify-between pt-2">
-        <div>
-          <h1 className="text-xl font-bold text-foreground">
-            Welcome back, {displayName}
-          </h1>
+    <div className="space-y-4 animate-fade-in pb-8 md:pb-4 overflow-x-hidden max-w-full px-4">
+      {/* Profile Card */}
+      <div className="rounded-xl border border-border bg-card overflow-hidden">
+        <div className="p-4 flex items-center gap-4">
+          <div className="h-12 w-12 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
+            <User className="h-6 w-6 text-[#3B82F6]" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-foreground font-semibold truncate">{displayName}</p>
+            {branchLabel && (
+              <p className="text-sm text-muted-foreground" style={{ writingMode: 'horizontal-tb' }}>
+                {branchLabel}
+              </p>
+            )}
+            {profile.mosCode && (
+              <p className="text-xs text-muted-foreground truncate">
+                {profile.mosCode} — {profile.mosTitle}
+              </p>
+            )}
+            {serviceDateStr && (
+              <p className="text-xs text-muted-foreground/70 truncate">{serviceDateStr}</p>
+            )}
+          </div>
+          <button
+            onClick={() => navigate('/settings/edit-profile')}
+            className="p-2 rounded-lg hover:bg-accent transition-colors flex-shrink-0"
+            aria-label="Edit profile"
+          >
+            <Pencil className="h-4 w-4 text-muted-foreground" />
+          </button>
         </div>
-        <button
-          onClick={() => navigate('/prep/packet')}
-          className="p-2 rounded-lg hover:bg-accent transition-colors"
-          aria-label="Export claim packet"
-        >
-          <Download className="h-5 w-5 text-muted-foreground" />
-        </button>
       </div>
 
-      {/* 1.2 Readiness Score Card */}
+      {/* Readiness Score Card */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={vcsSpring}
-        className="rounded-2xl bg-card border border-border p-5 shadow-sm"
+        className="rounded-xl bg-card border border-border p-4 shadow-sm"
       >
-        <div className="flex items-center gap-5">
-          <div className="relative w-20 h-20 flex-shrink-0">
+        <div className="flex items-center gap-4">
+          <div className="relative w-16 h-16 flex-shrink-0">
             <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
               <circle
                 cx="18" cy="18" r="15" fill="none"
@@ -138,7 +162,7 @@ export default function Dashboard() {
                 transition={{ duration: 1.5, ease: 'easeOut' }}
               />
             </svg>
-            <span className="absolute inset-0 flex items-center justify-center text-foreground font-bold text-lg">
+            <span className="absolute inset-0 flex items-center justify-center text-foreground font-bold text-base">
               {readiness}%
             </span>
           </div>
@@ -157,7 +181,7 @@ export default function Dashboard() {
         </div>
       </motion.div>
 
-      {/* 1.3 Quick Actions Row (2x2 grid) */}
+      {/* Quick Actions Row (2x2 grid) */}
       <div className="grid grid-cols-2 gap-3">
         {[
           { label: 'Add Condition', icon: Plus, route: '/claims', color: 'text-primary' },
@@ -173,7 +197,7 @@ export default function Dashboard() {
               'border border-border bg-card',
               'hover:bg-accent/50 transition-colors',
               'active:scale-[0.98]',
-              'min-h-[88px] justify-center'
+              'min-h-[80px] justify-center'
             )}
           >
             <action.icon className={cn('h-6 w-6', action.color)} />
@@ -182,12 +206,12 @@ export default function Dashboard() {
         ))}
       </div>
 
-      {/* 1.4 Active Conditions List */}
+      {/* Active Conditions List */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ ...vcsSpring, delay: 0.1 }}
-        className="rounded-2xl bg-card border border-border shadow-sm overflow-hidden"
+        className="rounded-xl bg-card border border-border shadow-sm overflow-hidden"
       >
         <div className="flex items-center justify-between p-4 pb-2">
           <div className="flex items-center gap-2">
@@ -204,7 +228,7 @@ export default function Dashboard() {
         </div>
 
         {claimConditions.length === 0 && userConditions.length === 0 ? (
-          <div className="px-4 pb-5 pt-2 text-center">
+          <div className="px-4 pb-4 pt-2 text-center">
             <p className="text-sm text-muted-foreground mb-3">
               No conditions yet. Tap Add Condition to start building your claim.
             </p>
@@ -283,7 +307,7 @@ export default function Dashboard() {
         )}
       </motion.div>
 
-      {/* 1.5 Evidence Gaps Alert */}
+      {/* Evidence Gaps Alert */}
       {evidenceGaps.length > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -296,7 +320,7 @@ export default function Dashboard() {
               if (firstGap?.conditionId) navigate(`/claims/${firstGap.conditionId}`);
             }}
             className={cn(
-              'w-full rounded-2xl p-4 text-left',
+              'w-full rounded-xl p-4 text-left',
               'bg-blue-500/10 border border-blue-500/20',
               'hover:bg-blue-500/15 transition-colors'
             )}
@@ -318,57 +342,12 @@ export default function Dashboard() {
         </motion.div>
       )}
 
-      {/* 1.6 Next Steps */}
-      {nextSteps.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...vcsSpring, delay: 0.2 }}
-          className="rounded-2xl bg-card border border-border p-4 shadow-sm"
-        >
-          <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
-            <Zap className="w-4 h-4 text-[#3B82F6]" />
-            Next Steps
-          </h3>
-          <div className="space-y-2.5">
-            {nextSteps.slice(0, 5).map((step, i) => (
-              <div key={step.id} className="flex items-start gap-3">
-                <span
-                  className={cn(
-                    'flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold mt-0.5',
-                    step.priority === 'urgent'
-                      ? 'bg-[#3B82F6]/20 text-[#3B82F6]'
-                      : 'bg-muted text-muted-foreground'
-                  )}
-                >
-                  {i + 1}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm text-foreground">{step.title}</p>
-                  {step.description && (
-                    <p className="text-xs text-muted-foreground mt-0.5">{step.description}</p>
-                  )}
-                </div>
-                {step.actionRoute && (
-                  <Link
-                    to={step.actionRoute}
-                    className="text-[#3B82F6] text-xs hover:text-[#60A5FA] shrink-0 mt-0.5"
-                  >
-                    Go
-                  </Link>
-                )}
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      )}
-
-      {/* 1.7 Quick Daily Log Widget */}
+      {/* Quick Daily Log Widget */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ ...vcsSpring, delay: 0.25 }}
-        className="rounded-2xl bg-card border border-border p-4 shadow-sm"
+        transition={{ ...vcsSpring, delay: 0.2 }}
+        className="rounded-xl bg-card border border-border p-4 shadow-sm"
       >
         <h3 className="font-bold text-sm text-foreground mb-3">Quick Daily Log</h3>
         {logSaved ? (
@@ -398,7 +377,7 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Mood Selector (icon-based, no emojis) */}
+            {/* Mood Selector (icon-based) */}
             <div className="space-y-2">
               <span className="text-xs text-muted-foreground">Mood</span>
               <div className="flex gap-2">
@@ -437,13 +416,58 @@ export default function Dashboard() {
         )}
       </motion.div>
 
+      {/* Next Steps */}
+      {nextSteps.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ ...vcsSpring, delay: 0.25 }}
+          className="rounded-xl bg-card border border-border p-4 shadow-sm"
+        >
+          <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
+            <Zap className="w-4 h-4 text-[#3B82F6]" />
+            Next Steps
+          </h3>
+          <div className="space-y-2.5">
+            {nextSteps.slice(0, 5).map((step, i) => (
+              <div key={step.id} className="flex items-start gap-3">
+                <span
+                  className={cn(
+                    'flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold mt-0.5',
+                    step.priority === 'urgent'
+                      ? 'bg-[#3B82F6]/20 text-[#3B82F6]'
+                      : 'bg-muted text-muted-foreground'
+                  )}
+                >
+                  {i + 1}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-foreground">{step.title}</p>
+                  {step.description && (
+                    <p className="text-xs text-muted-foreground mt-0.5">{step.description}</p>
+                  )}
+                </div>
+                {step.actionRoute && (
+                  <Link
+                    to={step.actionRoute}
+                    className="text-[#3B82F6] text-xs hover:text-[#60A5FA] shrink-0 mt-0.5"
+                  >
+                    Go
+                  </Link>
+                )}
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
       {/* Conditions to Explore — only if recommendations exist */}
       {recommendations.length > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...vcsSpring, delay: 0.3 }}
-          className="rounded-2xl bg-card border border-border p-4 shadow-sm"
+          className="rounded-xl bg-card border border-border p-4 shadow-sm"
         >
           <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
             Conditions to Explore

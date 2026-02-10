@@ -35,7 +35,7 @@ const DBQPrepSheet = lazy(() => import('./pages/DBQPrepSheet'));
 const VAResources = lazy(() => import('./pages/VAResources'));
 const ServiceHistory = lazy(() => import('./pages/ServiceHistory'));
 const Glossary = lazy(() => import('./pages/Glossary'));
-const Settings = lazy(() => import('./pages/Settings'));
+const SettingsPage = lazy(() => import('./pages/Settings'));
 const FAQ = lazy(() => import('./pages/FAQ'));
 const HelpCenter = lazy(() => import('./pages/HelpCenter'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -48,10 +48,9 @@ const ClaimJourney = lazy(() => import('./pages/ClaimJourney'));
 const HealthLog = lazy(() => import('./pages/HealthLog'));
 const ExamPrep = lazy(() => import('./pages/ExamPrep'));
 
-// New hub pages
+// Hub pages
 const HealthHub = lazy(() => import('./pages/HealthHub'));
 const PrepHub = lazy(() => import('./pages/PrepHub'));
-const ProfileHub = lazy(() => import('./pages/ProfileHub'));
 const PlaceholderPage = lazy(() => import('./pages/PlaceholderPage'));
 
 // Account & Legal pages
@@ -113,7 +112,7 @@ function useFirstTimeRedirect() {
 
   useEffect(() => {
     const isOnboardingPage = location.pathname === '/onboarding';
-    const isLegalPage = ['/terms', '/privacy', '/disclaimer', '/profile/privacy', '/profile/terms', '/profile/disclaimer'].includes(location.pathname);
+    const isLegalPage = ['/terms', '/privacy', '/disclaimer', '/settings/privacy', '/settings/terms', '/settings/disclaimer', '/profile/privacy', '/profile/terms', '/profile/disclaimer'].includes(location.pathname);
 
     if (!hasOnboarded && !isOnboardingPage && !isLegalPage) {
       navigate('/onboarding', { replace: true });
@@ -145,7 +144,7 @@ function AnimatedRoutes() {
             <Route path="/claims" element={<Conditions />} />
             <Route path="/claims/:id" element={<ConditionDetail />} />
             <Route path="/claims/strategy" element={<ClaimStrategyWizard />} />
-            <Route path="/claims/body-map" element={<PlaceholderPage title="Body Map — Coming in Phase 6" />} />
+            <Route path="/claims/body-map" element={<PlaceholderPage title="Body Map (Coming Soon)" />} />
             <Route path="/claims/calculator" element={<Combination />} />
             <Route path="/claims/bilateral" element={<BilateralCalculator />} />
             <Route path="/claims/secondary-finder" element={<SecondaryFinder />} />
@@ -167,33 +166,32 @@ function AnimatedRoutes() {
             <Route path="/prep/personal-statement" element={<ExamPrep />} />
             <Route path="/prep/buddy-statement" element={<BuddyStatements />} />
             <Route path="/prep/nexus-letter" element={<NexusLetterGenerator />} />
-            <Route path="/prep/stressor" element={<PlaceholderPage title="Stressor Statement — Coming in Phase 6" />} />
+            <Route path="/prep/stressor" element={<PlaceholderPage title="Stressor Statement (Coming Soon)" />} />
             <Route path="/prep/form-guide" element={<FormGuide />} />
             <Route path="/prep/form-guide/:formId" element={<FormGuideDetail />} />
             <Route path="/prep/dbq" element={<DBQPrepSheet />} />
-            <Route path="/prep/va-speak" element={<PlaceholderPage title="VA-Speak Translator — Coming in Phase 6" />} />
-            <Route path="/prep/back-pay" element={<PlaceholderPage title="Back Pay Estimator — Coming in Phase 6" />} />
+            <Route path="/prep/va-speak" element={<PlaceholderPage title="VA-Speak Translator (Coming Soon)" />} />
+            <Route path="/prep/back-pay" element={<PlaceholderPage title="Back Pay Estimator (Coming Soon)" />} />
             <Route path="/prep/packet" element={<BuildPacket />} />
 
-            {/* === PROFILE === */}
-            <Route path="/profile" element={<ProfileHub />} />
-            <Route path="/profile/edit" element={<Settings />} />
-            <Route path="/profile/service-history" element={<ServiceHistory />} />
-            <Route path="/profile/vault" element={<DocumentsHub />} />
-            <Route path="/profile/journey" element={<ClaimJourney />} />
-            <Route path="/profile/itf" element={<PlaceholderPage title="Intent to File — Coming in Phase 6" />} />
-            <Route path="/profile/timeline" element={<Timeline />} />
-            <Route path="/profile/settings" element={<Settings />} />
-            <Route path="/profile/help" element={<HelpCenter />} />
-            <Route path="/profile/glossary" element={<Glossary />} />
-            <Route path="/profile/resources" element={<VAResources />} />
-            <Route path="/profile/faq" element={<FAQ />} />
-            <Route path="/profile/privacy" element={<PrivacyPolicyPage />} />
-            <Route path="/profile/terms" element={<TermsOfServicePage />} />
-            <Route path="/profile/disclaimer" element={<DisclaimerPage />} />
-            <Route path="/profile/about" element={<PlaceholderPage title="About VCS — Coming in Phase 6" />} />
-            <Route path="/profile/export-data" element={<ExportDataPage />} />
-            <Route path="/profile/delete-account" element={<DeleteAccountPage />} />
+            {/* === SETTINGS (formerly Profile) === */}
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/settings/edit-profile" element={<SettingsPage />} />
+            <Route path="/settings/service-history" element={<ServiceHistory />} />
+            <Route path="/settings/vault" element={<DocumentsHub />} />
+            <Route path="/settings/journey" element={<ClaimJourney />} />
+            <Route path="/settings/itf" element={<PlaceholderPage title="Intent to File (Coming Soon)" />} />
+            <Route path="/settings/timeline" element={<Timeline />} />
+            <Route path="/settings/help" element={<HelpCenter />} />
+            <Route path="/settings/glossary" element={<Glossary />} />
+            <Route path="/settings/resources" element={<VAResources />} />
+            <Route path="/settings/faq" element={<FAQ />} />
+            <Route path="/settings/privacy" element={<PrivacyPolicyPage />} />
+            <Route path="/settings/terms" element={<TermsOfServicePage />} />
+            <Route path="/settings/disclaimer" element={<DisclaimerPage />} />
+            <Route path="/settings/about" element={<PlaceholderPage title="About VCS" />} />
+            <Route path="/settings/export-data" element={<ExportDataPage />} />
+            <Route path="/settings/delete-account" element={<DeleteAccountPage />} />
 
             {/* === REDIRECTS FROM OLD ROUTES === */}
             <Route path="/dashboard" element={<Navigate to="/" replace />} />
@@ -206,24 +204,23 @@ function AnimatedRoutes() {
             <Route path="/cp-exam-prep" element={<Navigate to="/prep/exam" replace />} />
             <Route path="/claim-strategy" element={<Navigate to="/claims/strategy" replace />} />
             <Route path="/health-log" element={<Navigate to="/health/symptoms" replace />} />
-            <Route path="/docs" element={<Navigate to="/profile/vault" replace />} />
-            <Route path="/documents" element={<Navigate to="/profile/vault" replace />} />
-            <Route path="/service-history" element={<Navigate to="/profile/service-history" replace />} />
-            <Route path="/settings" element={<Navigate to="/profile/settings" replace />} />
-            <Route path="/help" element={<Navigate to="/profile/help" replace />} />
-            <Route path="/va-resources" element={<Navigate to="/profile/resources" replace />} />
+            <Route path="/docs" element={<Navigate to="/settings/vault" replace />} />
+            <Route path="/documents" element={<Navigate to="/settings/vault" replace />} />
+            <Route path="/service-history" element={<Navigate to="/settings/service-history" replace />} />
+            <Route path="/help" element={<Navigate to="/settings/help" replace />} />
+            <Route path="/va-resources" element={<Navigate to="/settings/resources" replace />} />
             <Route path="/buddy-statements" element={<Navigate to="/prep/buddy-statement" replace />} />
-            <Route path="/journey" element={<Navigate to="/profile/journey" replace />} />
-            <Route path="/claim-journey" element={<Navigate to="/profile/journey" replace />} />
+            <Route path="/journey" element={<Navigate to="/settings/journey" replace />} />
+            <Route path="/claim-journey" element={<Navigate to="/settings/journey" replace />} />
             <Route path="/checklist" element={<Navigate to="/claims/checklist" replace />} />
             <Route path="/claim-checklist" element={<Navigate to="/claims/checklist" replace />} />
             <Route path="/migraines" element={<Navigate to="/health/migraines" replace />} />
             <Route path="/exposures" element={<Navigate to="/health/exposures" replace />} />
             <Route path="/medical-visits" element={<Navigate to="/health/visits" replace />} />
-            <Route path="/timeline" element={<Navigate to="/profile/timeline" replace />} />
-            <Route path="/privacy" element={<Navigate to="/profile/privacy" replace />} />
-            <Route path="/terms" element={<Navigate to="/profile/terms" replace />} />
-            <Route path="/disclaimer" element={<Navigate to="/profile/disclaimer" replace />} />
+            <Route path="/timeline" element={<Navigate to="/settings/timeline" replace />} />
+            <Route path="/privacy" element={<Navigate to="/settings/privacy" replace />} />
+            <Route path="/terms" element={<Navigate to="/settings/terms" replace />} />
+            <Route path="/disclaimer" element={<Navigate to="/settings/disclaimer" replace />} />
             <Route path="/symptoms" element={<Navigate to="/health/symptoms" replace />} />
             <Route path="/sleep" element={<Navigate to="/health/sleep" replace />} />
             <Route path="/medications" element={<Navigate to="/health/medications" replace />} />
@@ -234,8 +231,28 @@ function AnimatedRoutes() {
             <Route path="/va-forms" element={<Navigate to="/prep/form-guide" replace />} />
             <Route path="/form-guide" element={<Navigate to="/prep/form-guide" replace />} />
             <Route path="/build-packet" element={<Navigate to="/prep/packet" replace />} />
-            <Route path="/glossary" element={<Navigate to="/profile/glossary" replace />} />
-            <Route path="/faq" element={<Navigate to="/profile/faq" replace />} />
+            <Route path="/glossary" element={<Navigate to="/settings/glossary" replace />} />
+            <Route path="/faq" element={<Navigate to="/settings/faq" replace />} />
+
+            {/* Backwards compat: old /profile/* routes → /settings/* */}
+            <Route path="/profile" element={<Navigate to="/settings" replace />} />
+            <Route path="/profile/edit" element={<Navigate to="/settings/edit-profile" replace />} />
+            <Route path="/profile/service-history" element={<Navigate to="/settings/service-history" replace />} />
+            <Route path="/profile/vault" element={<Navigate to="/settings/vault" replace />} />
+            <Route path="/profile/journey" element={<Navigate to="/settings/journey" replace />} />
+            <Route path="/profile/itf" element={<Navigate to="/settings/itf" replace />} />
+            <Route path="/profile/timeline" element={<Navigate to="/settings/timeline" replace />} />
+            <Route path="/profile/settings" element={<Navigate to="/settings" replace />} />
+            <Route path="/profile/help" element={<Navigate to="/settings/help" replace />} />
+            <Route path="/profile/glossary" element={<Navigate to="/settings/glossary" replace />} />
+            <Route path="/profile/resources" element={<Navigate to="/settings/resources" replace />} />
+            <Route path="/profile/faq" element={<Navigate to="/settings/faq" replace />} />
+            <Route path="/profile/privacy" element={<Navigate to="/settings/privacy" replace />} />
+            <Route path="/profile/terms" element={<Navigate to="/settings/terms" replace />} />
+            <Route path="/profile/disclaimer" element={<Navigate to="/settings/disclaimer" replace />} />
+            <Route path="/profile/about" element={<Navigate to="/settings/about" replace />} />
+            <Route path="/profile/export-data" element={<Navigate to="/settings/export-data" replace />} />
+            <Route path="/profile/delete-account" element={<Navigate to="/settings/delete-account" replace />} />
 
             {/* === CATCH-ALL === */}
             <Route path="*" element={<NotFound />} />

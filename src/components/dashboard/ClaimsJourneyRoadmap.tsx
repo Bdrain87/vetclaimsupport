@@ -50,7 +50,7 @@ export function ClaimsJourneyRoadmap() {
       { label: 'Add service history', completed: hasServiceHistory, href: '/service-history' },
       { label: 'Log medical visits', completed: hasMedicalVisits, href: '/medical-visits' },
       { label: 'Document exposures', completed: hasExposures, href: '/exposures' },
-      { label: 'Set separation date', completed: hasSeparationDate, href: '/' },
+      { label: 'Set separation date', completed: hasSeparationDate, href: '/settings/service-history' },
     ];
     const phase1Progress = Math.round((phase1Tasks.filter(t => t.completed).length / phase1Tasks.length) * 100);
 
@@ -63,7 +63,7 @@ export function ClaimsJourneyRoadmap() {
     const phase2Tasks = [
       { label: 'Track symptoms regularly', completed: data.symptoms.length >= 3, href: '/symptoms' },
       { label: 'Log medications', completed: hasMedications, href: '/medications' },
-      { label: 'Add conditions to claim', completed: hasConditions, href: '/' },
+      { label: 'Add conditions to claim', completed: hasConditions, href: '/claims' },
       { label: 'Add buddy contacts', completed: hasBuddyContacts, href: '/buddy-statements' },
     ];
     const phase2Progress = Math.round((phase2Tasks.filter(t => t.completed).length / phase2Tasks.length) * 100);
@@ -80,7 +80,7 @@ export function ClaimsJourneyRoadmap() {
       { label: 'Gather key documents', completed: documentsObtained >= 3, href: '/documents' },
       { label: 'Obtain buddy statements', completed: hasBuddyStatements, href: '/buddy-statements' },
       { label: 'Upload supporting docs', completed: hasUploadedDocs, href: '/documents' },
-      { label: 'Link evidence to conditions', completed: hasLinkedEvidence, href: '/' },
+      { label: 'Link evidence to conditions', completed: hasLinkedEvidence, href: '/claims' },
     ];
     const phase3Progress = Math.round((phase3Tasks.filter(t => t.completed).length / phase3Tasks.length) * 100);
 
@@ -95,8 +95,8 @@ export function ClaimsJourneyRoadmap() {
     }).length || 0;
     
     const phase4Tasks = [
-      { label: 'File Intent to File', completed: hasItf, href: '/' },
-      { label: 'Reach 50%+ evidence per condition', completed: conditionsWithStrongEvidence >= 1, href: '/' },
+      { label: 'File Intent to File', completed: hasItf, href: '/settings/itf' },
+      { label: 'Reach 50%+ evidence per condition', completed: conditionsWithStrongEvidence >= 1, href: '/claims' },
       { label: 'Review claim checklist', completed: false, href: '/claim-checklist' },
       { label: 'Prepare for C&P exam', completed: false, href: '/exam-prep' },
     ];

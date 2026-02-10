@@ -287,7 +287,7 @@ export function AppStoreLandingPage() {
                     </h2>
                     <p className="text-lg text-slate-300 mb-6 max-w-2xl">
                       Enter your symptoms and discover potential <span className="text-emerald-400 font-semibold">VA-ratable conditions</span>.
-                      Our smart analyzer also suggests <span className="text-teal-400 font-semibold">secondary conditions</span> to maximize your combined rating.
+                      Our smart analyzer also suggests <span className="text-teal-400 font-semibold">secondary conditions</span> that may be connected to your service.
                     </p>
 
                     {/* Feature pills */}
