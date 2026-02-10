@@ -2,14 +2,15 @@ import { useState, useRef, useEffect, useMemo } from 'react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { vaDisabilitiesBySystem, type VADisability } from '@/data/vaDisabilities';
+import { type VADisability } from '@/data/vaDisabilities';
+import { searchAllConditions } from '@/utils/conditionSearch';
 import { cn } from '@/lib/utils';
 import { Search, Plus } from 'lucide-react';
 
 interface ConditionSearchInputProps {
   value: string;
   onChange: (value: string) => void;
-  onSelect?: (condition: VADisability) => void;
+  onSelect?: (condition: VADisability & { system: string }) => void;
   placeholder?: string;
   className?: string;
   showDiagnosticCode?: boolean;
@@ -28,30 +29,17 @@ export function ConditionSearchInput({
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
-  // Flatten all conditions for searching
-  const allConditions = useMemo(() => {
-    const conditions: (VADisability & { system: string })[] = [];
-    vaDisabilitiesBySystem.forEach(system => {
-      system.conditions.forEach(condition => {
-        conditions.push({ ...condition, system: system.name });
-      });
-    });
-    return conditions;
-  }, []);
-
-  // Filter conditions based on search
+  // Use unified search across 800+ conditions
   const filteredConditions = useMemo(() => {
     if (!value.trim() || value.length < 2) return [];
-    
-    const searchTerms = value.toLowerCase().split(' ').filter(Boolean);
-    
-    return allConditions
-      .filter(condition => {
-        const searchText = `${condition.name} ${condition.diagnosticCode} ${condition.description}`.toLowerCase();
-        return searchTerms.every(term => searchText.includes(term));
-      })
-      .slice(0, 15); // Limit results
-  }, [value, allConditions]);
+    return searchAllConditions(value, { limit: 15 }).map(sc => ({
+      name: sc.name,
+      diagnosticCode: sc.diagnosticCode,
+      typicalRatings: sc.typicalRatings || '',
+      description: sc.description || '',
+      system: sc.bodySystem || sc.category,
+    }));
+  }, [value]);
 
   // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -83,11 +71,11 @@ export function ConditionSearchInput({
     }
   };
 
-  const handleSelectCondition = (condition: VADisability & { system: string }) => {
+  const handleSelectCondition = (condition: { name: string; diagnosticCode: string; typicalRatings: string; description: string; system: string }) => {
     onChange(condition.name);
     setIsOpen(false);
     setFocusedIndex(-1);
-    onSelect?.(condition);
+    onSelect?.(condition as VADisability & { system: string });
   };
 
   // Scroll focused item into view
@@ -181,11 +169,6 @@ export function ConditionSearchInput({
                       <h4 className="font-semibold text-sm text-foreground">
                         {condition.name}
                       </h4>
-                      {(condition as Record<string, unknown>).isPACTAct && (
-                        <Badge className="text-[9px] px-1.5 py-0 h-4 bg-success/15 text-success border-success/30 hover:bg-success/20">
-                          PACT Act
-                        </Badge>
-                      )}
                     </div>
                     <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">
                       {condition.description}

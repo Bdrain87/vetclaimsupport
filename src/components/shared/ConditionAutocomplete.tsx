@@ -1,64 +1,7 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { Search } from 'lucide-react';
-import { vaConditions, type VACondition } from '@/data/vaConditions';
-
-// --- Fuzzy scoring engine ---
-
-function scoreMatch(query: string, condition: VACondition): number {
-  const q = query.toLowerCase().trim();
-  if (!q) return 0;
-
-  const name = condition.name.toLowerCase();
-  const abbr = condition.abbreviation.toLowerCase();
-  let score = 0;
-
-  // TIER 1: Exact name or abbreviation match (100)
-  if (name === q || abbr === q) return 100;
-
-  // TIER 2: Abbreviation starts with query (95)
-  if (abbr.startsWith(q)) score = Math.max(score, 95);
-
-  // TIER 3: Name starts with query (90)
-  if (name.startsWith(q)) score = Math.max(score, 90);
-
-  // TIER 4: Word in name starts with query (80)
-  const nameWords = name.split(/[\s\-/(),]+/).filter(Boolean);
-  if (nameWords.some(w => w.startsWith(q))) score = Math.max(score, 80);
-
-  // TIER 5: Acronym match - "ptsd" matches "Post Traumatic Stress Disorder" (75)
-  const acronym = nameWords.map(w => w[0] || '').join('').toLowerCase();
-  if (acronym.startsWith(q) || acronym === q) score = Math.max(score, 75);
-
-  // TIER 6: Name or abbreviation contains query (60)
-  if (name.includes(q)) score = Math.max(score, 60);
-  if (abbr.includes(q)) score = Math.max(score, 65);
-
-  // TIER 7: Diagnostic code match (55)
-  if (condition.diagnosticCode?.toString().startsWith(q)) score = Math.max(score, 55);
-
-  // TIER 8: Keyword starts with query (50) or contains query (40)
-  if (condition.keywords?.some(kw => kw.toLowerCase().startsWith(q))) score = Math.max(score, 50);
-  if (condition.keywords?.some(kw => kw.toLowerCase().includes(q))) score = Math.max(score, 40);
-
-  // TIER 9: Body system match (30)
-  if ((condition as Record<string, unknown>).bodySystem && String((condition as Record<string, unknown>).bodySystem).toLowerCase().includes(q)) score = Math.max(score, 30);
-
-  // TIER 10: Misspelling match (20)
-  const misspellings = (condition as Record<string, unknown>).misspellings as string[] | undefined;
-  if (misspellings?.some(ms => ms.toLowerCase().startsWith(q))) score = Math.max(score, 20);
-
-  return score;
-}
-
-function searchConditionsScored(query: string, conditions: VACondition[], excludeIds: string[] = []): VACondition[] {
-  return conditions
-    .filter(c => !excludeIds.includes(c.id))
-    .map(c => ({ condition: c, score: scoreMatch(query, c) }))
-    .filter(r => r.score > 0)
-    .sort((a, b) => b.score - a.score || a.condition.name.localeCompare(b.condition.name))
-    .slice(0, 20)
-    .map(r => r.condition);
-}
+import { type VACondition, getConditionById } from '@/data/vaConditions';
+import { searchAllConditions } from '@/utils/conditionSearch';
 
 // --- Highlighted text ---
 
@@ -114,10 +57,29 @@ export function ConditionAutocomplete({
     return () => clearTimeout(debounceRef.current);
   }, [query]);
 
-  // Memoized search results
-  const results = useMemo(() => {
+  // Memoized search results — uses the unified index (800+ conditions)
+  const results = useMemo((): VACondition[] => {
     if (debouncedQuery.trim().length < 1) return [];
-    return searchConditionsScored(debouncedQuery, vaConditions, excludeIds);
+    const unified = searchAllConditions(debouncedQuery, { excludeIds, limit: 20 });
+    // Map unified results back to VACondition objects where possible,
+    // falling back to constructing a compatible object for disability-only entries
+    return unified.map(sc => {
+      const rich = getConditionById(sc.id);
+      if (rich) return rich;
+      // Build a compatible VACondition-like object for disability-source entries
+      return {
+        id: sc.id,
+        name: sc.name,
+        abbreviation: sc.abbreviation || sc.name,
+        diagnosticCode: sc.diagnosticCode,
+        category: sc.category as VACondition['category'],
+        description: sc.description || '',
+        typicalRatings: sc.typicalRatings || '',
+        keywords: sc.keywords,
+        commonSecondaries: sc.commonSecondaries || [],
+        bodySystem: sc.bodySystem || sc.category,
+      } as VACondition;
+    });
   }, [debouncedQuery, excludeIds]);
 
   // Open dropdown when there are results

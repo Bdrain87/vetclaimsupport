@@ -116,7 +116,7 @@ export function getConditionsByCategory(category: string): VACondition[] {
   return vaConditions.filter(c => c.category === category);
 }
 
-/** Search conditions by text (matches abbreviation, name, keywords, misspellings) */
+/** @deprecated Use searchAllConditions from utils/conditionSearch.ts instead */
 export function searchConditions(query: string, excludeIds: string[] = []): VACondition[] {
   if (!query.trim()) return [];
 

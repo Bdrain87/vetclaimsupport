@@ -23,13 +23,14 @@ import {
 import { Badge } from '@/components/ui/badge';
 import {
   vaConditions,
-  searchConditions,
   getConditionsByCategory,
   getSecondaryConditions,
   categoryLabels,
   type VACondition,
   type ConditionCategory,
+  getConditionById,
 } from '@/data/vaConditions';
+import { searchAllConditions } from '@/utils/conditionSearch';
 import { useUserConditions, type UserCondition } from '@/hooks/useUserConditions';
 
 interface ConditionSelectorProps {
@@ -82,8 +83,25 @@ export function ConditionSelector({
       // Filter by category
       filtered = getConditionsByCategory(category);
     } else if (searchQuery.trim()) {
-      // Search across all conditions
-      filtered = searchConditions(searchQuery, excludeIds);
+      // Search the unified index (800+ conditions) for scored results
+      const unified = searchAllConditions(searchQuery, { excludeIds, limit: 30 });
+      // Map back to VACondition objects, constructing compatible objects for disability-only entries
+      filtered = unified.map(sc => {
+        const rich = getConditionById(sc.id);
+        if (rich) return rich;
+        return {
+          id: sc.id,
+          name: sc.name,
+          abbreviation: sc.abbreviation || sc.name,
+          diagnosticCode: sc.diagnosticCode,
+          category: sc.category as ConditionCategory,
+          description: sc.description || '',
+          typicalRatings: sc.typicalRatings || '',
+          keywords: sc.keywords,
+          commonSecondaries: sc.commonSecondaries || [],
+          bodySystem: sc.bodySystem || sc.category,
+        } as VACondition;
+      });
     } else {
       // Show all conditions
       filtered = vaConditions;

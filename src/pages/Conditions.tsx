@@ -32,21 +32,13 @@ import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete
 import {
   type VACondition,
 } from '@/data/vaConditions';
+import { getAllCategories } from '@/utils/conditionSearch';
 
-// Body system options for filtering
+// Build body system options dynamically from the unified index
+const dynamicCategories = getAllCategories();
 const bodySystems = [
   { value: 'all', label: 'All Body Systems' },
-  { value: 'musculoskeletal', label: 'Musculoskeletal' },
-  { value: 'mental', label: 'Mental Health' },
-  { value: 'neurological', label: 'Neurological' },
-  { value: 'respiratory', label: 'Respiratory' },
-  { value: 'cardiovascular', label: 'Cardiovascular' },
-  { value: 'digestive', label: 'Digestive' },
-  { value: 'skin', label: 'Skin' },
-  { value: 'endocrine', label: 'Endocrine' },
-  { value: 'ear', label: 'Ear/Hearing' },
-  { value: 'eye', label: 'Eye/Vision' },
-  { value: 'genitourinary', label: 'Genitourinary' },
+  ...dynamicCategories.map(c => ({ value: c.toLowerCase(), label: c })),
 ];
 
 interface ConditionCardProps {
@@ -162,6 +154,8 @@ export default function Conditions() {
   // Add condition form state
   const [selectedCondition, setSelectedCondition] = useState<VACondition | null>(null);
   const [newRating, setNewRating] = useState('');
+  const [isSecondary, setIsSecondary] = useState(false);
+  const [linkedPrimaryId, setLinkedPrimaryId] = useState('');
 
   // Filtered user conditions
   const filteredConditions = useMemo(() => {
@@ -189,19 +183,28 @@ export default function Conditions() {
     });
   }, [userConditions, searchQuery, bodySystemFilter, getConditionDetails]);
 
+  // Get primary conditions for the secondary picker
+  const primaryConditions = useMemo(() => {
+    return userConditions.filter(c => c.isPrimary);
+  }, [userConditions]);
+
   // Handle add condition
   const handleAddCondition = useCallback(() => {
     if (!selectedCondition) return;
 
     addCondition(selectedCondition.id, {
       rating: newRating ? parseInt(newRating) : undefined,
+      isPrimary: !isSecondary,
+      linkedPrimaryId: isSecondary && linkedPrimaryId ? linkedPrimaryId : undefined,
     });
 
     // Reset form
     setSelectedCondition(null);
     setNewRating('');
+    setIsSecondary(false);
+    setLinkedPrimaryId('');
     setShowAddDialog(false);
-  }, [selectedCondition, newRating, addCondition]);
+  }, [selectedCondition, newRating, isSecondary, linkedPrimaryId, addCondition]);
 
   // Handle view/edit condition
   const handleViewCondition = (conditionId: string) => {
@@ -261,6 +264,48 @@ export default function Conditions() {
                 )}
               </div>
 
+              {/* Primary/Secondary Toggle */}
+              {selectedCondition && primaryConditions.length > 0 && (
+                <div className="space-y-2">
+                  <Label>Is this secondary to another condition?</Label>
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      variant={!isSecondary ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => { setIsSecondary(false); setLinkedPrimaryId(''); }}
+                    >
+                      Primary
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={isSecondary ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setIsSecondary(true)}
+                    >
+                      Secondary
+                    </Button>
+                  </div>
+                  {isSecondary && (
+                    <Select value={linkedPrimaryId} onValueChange={setLinkedPrimaryId}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select primary condition..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {primaryConditions.map(pc => {
+                          const details = getConditionDetails(pc);
+                          return (
+                            <SelectItem key={pc.id} value={pc.id}>
+                              {details?.abbreviation || details?.name || pc.conditionId}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+                  )}
+                </div>
+              )}
+
               {/* Rating Selection */}
               <div className="space-y-2">
                 <Label htmlFor="rating">Current/Claimed Rating (optional)</Label>
@@ -316,24 +361,74 @@ export default function Conditions() {
         </Select>
       </div>
 
-      {/* Conditions List */}
+      {/* Conditions List — grouped with primaries first, secondaries indented below */}
       {filteredConditions.length > 0 ? (
-        <div className="grid gap-4 sm:grid-cols-2">
-          {filteredConditions.map(uc => {
+        <div className="space-y-4">
+          {/* Primary conditions */}
+          {filteredConditions.filter(uc => uc.isPrimary).map(uc => {
+            const details = getConditionDetails(uc);
+            const secondaries = filteredConditions.filter(s => !s.isPrimary && s.linkedPrimaryId === uc.id);
+            return (
+              <div key={uc.id} className="space-y-2">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <ConditionCard
+                    userCondition={{
+                      ...uc,
+                      evidenceCount: 0,
+                      totalEvidenceNeeded: 5,
+                      hasSecondaries: secondaries.length > 0,
+                    }}
+                    conditionDetails={details ?? null}
+                    onView={() => handleViewCondition(uc.id)}
+                    onRemove={() => handleRemoveCondition(uc.id)}
+                  />
+                </div>
+                {secondaries.length > 0 && (
+                  <div className="ml-6 border-l-2 border-primary/20 pl-4 grid gap-3 sm:grid-cols-2">
+                    {secondaries.map(sec => {
+                      const secDetails = getConditionDetails(sec);
+                      const primaryDetails = getConditionDetails(uc);
+                      return (
+                        <div key={sec.id} className="space-y-1">
+                          <p className="text-xs text-muted-foreground">
+                            Secondary to: {primaryDetails?.abbreviation || primaryDetails?.name || uc.conditionId}
+                          </p>
+                          <ConditionCard
+                            userCondition={{
+                              ...sec,
+                              evidenceCount: 0,
+                              totalEvidenceNeeded: 5,
+                              hasSecondaries: false,
+                            }}
+                            conditionDetails={secDetails ?? null}
+                            onView={() => handleViewCondition(sec.id)}
+                            onRemove={() => handleRemoveCondition(sec.id)}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+          {/* Unlinked secondaries (no matching primary in the list) */}
+          {filteredConditions.filter(uc => !uc.isPrimary && !filteredConditions.some(p => p.isPrimary && p.id === uc.linkedPrimaryId)).map(uc => {
             const details = getConditionDetails(uc);
             return (
-              <ConditionCard
-                key={uc.id}
-                userCondition={{
-                  ...uc,
-                  evidenceCount: uc.evidenceCount || 0,
-                  totalEvidenceNeeded: uc.totalEvidenceNeeded || 5,
-                  hasSecondaries: uc.secondaryConditions && uc.secondaryConditions.length > 0,
-                }}
-                conditionDetails={details}
-                onView={() => handleViewCondition(uc.id)}
-                onRemove={() => handleRemoveCondition(uc.id)}
-              />
+              <div key={uc.id} className="grid gap-4 sm:grid-cols-2">
+                <ConditionCard
+                  userCondition={{
+                    ...uc,
+                    evidenceCount: 0,
+                    totalEvidenceNeeded: 5,
+                    hasSecondaries: false,
+                  }}
+                  conditionDetails={details ?? null}
+                  onView={() => handleViewCondition(uc.id)}
+                  onRemove={() => handleRemoveCondition(uc.id)}
+                />
+              </div>
             );
           })}
         </div>

@@ -386,17 +386,44 @@ export const militaryJobCodes: MilitaryJobCode[] = [
 
 export function searchMilitaryJobs(query: string, branch?: string): MilitaryJobCode[] {
   if (!query.trim() && !branch) return militaryJobCodes.slice(0, 50);
+  if (!query.trim() && branch) return militaryJobCodes.filter(j => j.branch === branch).slice(0, 50);
 
-  const lowerQuery = query.toLowerCase();
-  return militaryJobCodes.filter(job => {
-    const matchesBranch = !branch || job.branch === branch;
-    const matchesQuery = !query.trim() ||
-      job.code.toLowerCase().includes(lowerQuery) ||
-      job.title.toLowerCase().includes(lowerQuery) ||
-      job.category.toLowerCase().includes(lowerQuery) ||
-      job.keywords.some(kw => kw.toLowerCase().includes(lowerQuery));
-    return matchesBranch && matchesQuery;
-  }).slice(0, 50);
+  const lowerQuery = query.toLowerCase().trim();
+
+  // If branch is selected, filter to that branch first
+  const pool = branch
+    ? militaryJobCodes.filter(entry => entry.branch === branch)
+    : militaryJobCodes;
+
+  // Score each entry
+  const scored = pool.map(entry => {
+    let score = 0;
+
+    // Exact code match (highest priority)
+    if (entry.code.toLowerCase() === lowerQuery) score += 100;
+    // Code starts with query
+    else if (entry.code.toLowerCase().startsWith(lowerQuery)) score += 80;
+    // Code contains query
+    else if (entry.code.toLowerCase().includes(lowerQuery)) score += 60;
+
+    // Title match
+    if (entry.title.toLowerCase().includes(lowerQuery)) score += 50;
+
+    // Keywords match
+    if (entry.keywords.some(kw => kw.toLowerCase().includes(lowerQuery))) score += 40;
+
+    // Category match
+    if (entry.category.toLowerCase().includes(lowerQuery)) score += 20;
+
+    return { entry, score };
+  });
+
+  // Return only matches (score > 0), sorted by score descending
+  return scored
+    .filter(s => s.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 20)
+    .map(s => s.entry);
 }
 
 export function getHazardsForMOS(code: string): string[] {
