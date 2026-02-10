@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { DisclaimerNotice } from '@/components/shared/DisclaimerNotice';
+import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import {
   Languages,
   Copy,
@@ -15,8 +16,11 @@ import {
   RotateCcw,
   Plus,
   Trash2,
+  Sparkles,
+  Loader2,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAIGenerate } from '@/hooks/useAIGenerate';
 
 interface TranslationEntry {
   id: string;
@@ -130,12 +134,14 @@ function translateText(input: string): { translated: string; matchedCategories: 
 
 export function VASpeakTranslator() {
   const { toast } = useToast();
+  const { generate: aiTranslate, isLoading: aiLoading, error: aiError } = useAIGenerate('VA_SPEAK_TRANSLATOR');
   const [entries, setEntries] = useState<TranslationEntry[]>([{
     id: crypto.randomUUID(),
     plainText: '',
     clinicalText: '',
   }]);
   const [activeEntryId, setActiveEntryId] = useState(entries[0].id);
+  const [aiResult, setAiResult] = useState<string | null>(null);
 
   const activeEntry = entries.find(e => e.id === activeEntryId) || entries[0];
 
@@ -147,6 +153,13 @@ export function VASpeakTranslator() {
     setEntries(prev => prev.map(e =>
       e.id === activeEntryId ? { ...e, clinicalText: translated } : e
     ));
+  };
+
+  const handleAITranslate = async () => {
+    if (!activeEntry.plainText.trim()) return;
+    setAiResult(null);
+    const result = await aiTranslate(activeEntry.plainText);
+    if (result) setAiResult(result);
   };
 
   const handleAddEntry = () => {
@@ -198,6 +211,7 @@ export function VASpeakTranslator() {
     };
     setEntries([newEntry]);
     setActiveEntryId(newEntry.id);
+    setAiResult(null);
   };
 
   const translatedCount = entries.filter(e => e.clinicalText).length;
@@ -301,6 +315,19 @@ export function VASpeakTranslator() {
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
+            <Button
+              variant="outline"
+              onClick={handleAITranslate}
+              disabled={!activeEntry.plainText.trim() || aiLoading}
+              className="w-full border-primary/30 text-primary hover:bg-primary/5"
+            >
+              {aiLoading ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Sparkles className="h-4 w-4 mr-2" />
+              )}
+              {aiLoading ? 'Enhancing...' : 'Enhance with AI'}
+            </Button>
           </CardContent>
         </Card>
 
@@ -359,6 +386,50 @@ export function VASpeakTranslator() {
           </CardContent>
         </Card>
       </div>
+
+      {/* AI Enhanced Translation */}
+      {aiLoading && (
+        <Card className="border-primary/20">
+          <CardContent className="py-6">
+            <div className="flex items-center justify-center gap-3">
+              <Loader2 className="h-5 w-5 animate-spin text-primary" />
+              <p className="text-sm text-muted-foreground">AI is enhancing your translation...</p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {aiResult && (
+        <Card className="border-primary/20 bg-primary/5">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-primary" />
+              AI-Enhanced Translation
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <AIDisclaimer variant="banner" />
+            <div className="p-4 bg-background border rounded-lg">
+              <p className="text-sm leading-relaxed whitespace-pre-wrap">{aiResult}</p>
+            </div>
+            <Button
+              variant="outline"
+              onClick={() => handleCopySingle(aiResult)}
+              className="w-full gap-2"
+            >
+              <Copy className="h-4 w-4" />
+              Copy AI Translation
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+
+      {aiError && !aiLoading && (
+        <Alert className="border-warning/30 bg-warning/5">
+          <AlertTriangle className="h-4 w-4 text-warning" />
+          <AlertDescription className="text-sm">{aiError}</AlertDescription>
+        </Alert>
+      )}
 
       {/* Actions */}
       {translatedCount > 0 && (

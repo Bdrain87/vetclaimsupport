@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   FileText,
@@ -15,10 +16,14 @@ import {
   Edit3,
   Sparkles,
   AlertTriangle,
+  Loader2,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { format, parseISO } from 'date-fns';
 import { exportPersonalStatement } from '@/utils/pdfExport';
+import { useAIGenerate } from '@/hooks/useAIGenerate';
+import { createPersonalStatementPrompt } from '@/lib/ai-prompts';
+import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 
 export function PersonalStatementGenerator() {
   const { data } = useClaims();
@@ -29,6 +34,9 @@ export function PersonalStatementGenerator() {
   const [activeTab, setActiveTab] = useState('preview');
   const [customEdits, setCustomEdits] = useState('');
   const [selectedCondition, setSelectedCondition] = useState<string | null>(null);
+  const { generate: aiGenerate, isLoading: aiLoading, error: aiError } = useAIGenerate('VA_SPEAK_TRANSLATOR');
+  const [aiDraft, setAiDraft] = useState<string | null>(null);
+  const [draftMode, setDraftMode] = useState<'template' | 'ai'>('template');
 
   const claimConditions = useMemo(() => data.claimConditions ?? [], [data.claimConditions]);
 
@@ -150,6 +158,47 @@ _______________________________
     };
   }, [selectedCondition, claimConditions, data]);
 
+  const handleGenerateAI = async () => {
+    const condition = selectedCondition
+      ? claimConditions.find(c => c.id === selectedCondition)
+      : claimConditions[0];
+    if (!condition) return;
+
+    const linkedSymptoms = data.symptoms.filter(s =>
+      condition.linkedSymptoms.includes(s.id)
+    );
+    const symptomNames = [...new Set(linkedSymptoms.map(s => s.symptom))];
+    const impacts = linkedSymptoms
+      .filter(s => s.dailyImpact)
+      .map(s => s.dailyImpact)
+      .join(' ');
+
+    const serviceEntry = data.serviceHistory.length > 0
+      ? data.serviceHistory.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())[0]
+      : null;
+
+    const prompt = createPersonalStatementPrompt({
+      veteranName: veteranFullName || 'Veteran',
+      condition: condition.name,
+      incidentDescription: condition.description || 'Symptoms began during military service.',
+      currentSymptoms: symptomNames.length > 0 ? symptomNames : ['Ongoing symptoms related to condition'],
+      dailyImpact: impacts || 'This condition affects daily activities.',
+      serviceInfo: {
+        branch: branchLabel || 'United States military',
+        mos: profile.mosTitle || profile.mosCode || undefined,
+        deployments: serviceEntry
+          ? `${format(parseISO(serviceEntry.startDate), 'MMM yyyy')}${serviceEntry.endDate ? ` to ${format(parseISO(serviceEntry.endDate), 'MMM yyyy')}` : ' to present'}`
+          : undefined,
+      },
+    });
+
+    const result = await aiGenerate(prompt);
+    if (result) {
+      setAiDraft(result);
+      setDraftMode('ai');
+    }
+  };
+
   const handleCopy = async () => {
     const content = customEdits || generateStatement.full;
     await navigator.clipboard.writeText(content);
@@ -244,6 +293,44 @@ _______________________________
           </div>
         )}
 
+        {/* Draft Mode Switcher */}
+        <div className="flex gap-2">
+          <Button
+            variant={draftMode === 'template' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setDraftMode('template')}
+            className="flex-1"
+          >
+            <FileText className="h-4 w-4 mr-2" />
+            Template Draft
+          </Button>
+          <Button
+            variant={draftMode === 'ai' ? 'default' : 'outline'}
+            size="sm"
+            onClick={aiDraft ? () => setDraftMode('ai') : handleGenerateAI}
+            disabled={aiLoading}
+            className="flex-1"
+          >
+            {aiLoading ? (
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            ) : (
+              <Sparkles className="h-4 w-4 mr-2" />
+            )}
+            {aiLoading ? 'Generating...' : aiDraft ? 'AI Draft' : 'Generate AI Draft'}
+          </Button>
+        </div>
+
+        {aiError && !aiLoading && (
+          <Alert className="border-warning/30 bg-warning/5">
+            <AlertTriangle className="h-4 w-4 text-warning" />
+            <AlertDescription className="text-sm">{aiError}</AlertDescription>
+          </Alert>
+        )}
+
+        {draftMode === 'ai' && aiDraft && (
+          <AIDisclaimer variant="banner" />
+        )}
+
         {/* Tabs for Preview/Edit */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-2">
@@ -260,14 +347,14 @@ _______________________________
           <TabsContent value="preview" className="mt-4">
             <div className="bg-muted/30 rounded-lg p-4 max-h-[500px] overflow-y-auto">
               <pre className="whitespace-pre-wrap text-sm font-mono text-foreground">
-                {customEdits || generateStatement.full}
+                {draftMode === 'ai' && aiDraft ? (customEdits || aiDraft) : (customEdits || generateStatement.full)}
               </pre>
             </div>
           </TabsContent>
 
           <TabsContent value="edit" className="mt-4">
             <Textarea
-              value={customEdits || generateStatement.full}
+              value={draftMode === 'ai' && aiDraft ? (customEdits || aiDraft) : (customEdits || generateStatement.full)}
               onChange={(e) => setCustomEdits(e.target.value)}
               className="min-h-[500px] font-mono text-sm"
               placeholder="Edit your personal statement..."

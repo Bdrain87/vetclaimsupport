@@ -1,16 +1,19 @@
 import { useState, useMemo } from 'react';
-import { FileText, Download, Copy, Users, CheckCircle2, AlertTriangle, HelpCircle, ChevronDown, Share2, MessageSquare } from 'lucide-react';
+import { FileText, Download, Copy, Users, CheckCircle2, AlertTriangle, HelpCircle, ChevronDown, Share2, MessageSquare, Sparkles, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { useToast } from '@/hooks/use-toast';
 import { useClaims } from '@/hooks/useClaims';
 import { useProfileStore } from '@/store/useProfileStore';
+import { useAIGenerate } from '@/hooks/useAIGenerate';
+import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import jsPDF from 'jspdf';
 
 const relationshipOptions = [
@@ -82,6 +85,8 @@ export function BuddyStatementGenerator() {
   const [showGuidance, setShowGuidance] = useState(false);
   const [showWitnessTemplate, setShowWitnessTemplate] = useState(false);
   const { toast } = useToast();
+  const { generate: aiGenerate, isLoading: aiLoading, error: aiError } = useAIGenerate('VA_SPEAK_TRANSLATOR');
+  const [aiDraft, setAiDraft] = useState<string | null>(null);
 
   // Determine if buddy letters are needed based on assessment
   const getAssessmentResult = () => {
@@ -196,6 +201,30 @@ Contact Information: _________________________
       title: 'PDF Downloaded',
       description: 'The statement has been saved as a PDF.',
     });
+  };
+
+  const handleAIGenerateDraft = async () => {
+    const relationshipLabel = relationshipOptions.find(r => r.value === formData.relationship)?.label || formData.relationship || 'witness';
+    const conditionName = witnessTemplate.conditionName || primaryConditionName || 'service-connected condition';
+
+    const prompt = `Generate a buddy statement outline for a VA disability claim. The buddy is a ${relationshipLabel} of the veteran.
+
+VETERAN: ${witnessTemplate.veteranName || 'the veteran'}
+CONDITION: ${conditionName}
+WITNESS NAME: ${formData.witnessName || '[Witness]'}
+TIME PERIOD KNOWN: ${formData.timePeriod || 'several years'}
+
+Create talking points and an outline that the ${relationshipLabel} can use to write their OWN buddy statement. Include:
+1. Suggested opening that establishes the relationship
+2. Key observations to describe (symptoms witnessed, behavioral changes)
+3. Specific examples they should include (what, when, where)
+4. How to describe the impact on the veteran's daily life
+5. Reminder to use first-person language ("I saw...", "I witnessed...")
+
+IMPORTANT: This is an OUTLINE ONLY. The buddy must write the final statement in their own words based on their actual observations. Do not fabricate specific incidents.`;
+
+    const result = await aiGenerate(prompt);
+    if (result) setAiDraft(result);
   };
 
   const resetForm = () => {
@@ -689,6 +718,62 @@ Thank you for taking the time to help! Your statement could make a real differen
             <Button onClick={resetForm} variant="ghost">
               Reset
             </Button>
+          </div>
+
+          {/* AI Draft Generation */}
+          <div className="space-y-3">
+            <Button
+              variant="outline"
+              onClick={handleAIGenerateDraft}
+              disabled={aiLoading}
+              className="w-full border-primary/30 text-primary hover:bg-primary/5"
+            >
+              {aiLoading ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Sparkles className="h-4 w-4 mr-2" />
+              )}
+              {aiLoading ? 'Generating Outline...' : 'Generate AI Draft Outline'}
+            </Button>
+
+            {aiError && !aiLoading && (
+              <Alert className="border-warning/30 bg-warning/5">
+                <AlertTriangle className="h-4 w-4 text-warning" />
+                <AlertDescription className="text-sm">{aiError}</AlertDescription>
+              </Alert>
+            )}
+
+            {aiDraft && (
+              <div className="space-y-3">
+                <AIDisclaimer variant="banner" />
+                <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/30">
+                  <div className="flex items-start gap-2">
+                    <AlertTriangle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <p className="text-xs text-muted-foreground">
+                      <strong>Important:</strong> This outline helps your buddy understand what to include. They must write the final statement themselves in their own words based on what they personally observed.
+                    </p>
+                  </div>
+                </div>
+                <div className="p-4 rounded-lg bg-background border text-sm whitespace-pre-wrap max-h-[300px] overflow-y-auto">
+                  {aiDraft}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    navigator.clipboard.writeText(aiDraft);
+                    toast({
+                      title: 'Copied',
+                      description: 'AI outline copied to clipboard.',
+                    });
+                  }}
+                  className="w-full"
+                >
+                  <Copy className="h-4 w-4 mr-2" />
+                  Copy AI Outline
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Tips Card */}

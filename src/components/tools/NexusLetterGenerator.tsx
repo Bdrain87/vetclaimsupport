@@ -7,12 +7,16 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Copy, Download, FileText, AlertTriangle, Check, Info, Stethoscope } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Copy, Download, FileText, AlertTriangle, Check, Info, Stethoscope, Sparkles, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput.utils';
 import { DisclaimerNotice } from '@/components/shared/DisclaimerNotice';
 import { exportNexusLetterTemplate } from '@/utils/pdfExport';
+import { useAIGenerate } from '@/hooks/useAIGenerate';
+import { createNexusLetterPrompt } from '@/lib/ai-prompts';
+import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 
 export function NexusLetterGenerator() {
   const { data } = useClaims();
@@ -25,6 +29,8 @@ export function NexusLetterGenerator() {
   const [doctorCredentials, setDoctorCredentials] = useState('');
   const [additionalRationale, setAdditionalRationale] = useState('');
   const [copied, setCopied] = useState(false);
+  const { generate: aiGenerate, isLoading: aiLoading, error: aiError } = useAIGenerate('NEXUS_LOGIC');
+  const [aiOutline, setAiOutline] = useState<string | null>(null);
 
   // Get service dates from service history
   const serviceDates = useMemo(() => {
@@ -89,6 +95,32 @@ ${doctorCredentials || '[Credentials/Specialty]'}
 
 ---
 DISCLAIMER: This document is a template only and is not official VA documentation.`;
+  };
+
+  const handleGenerateAIOutline = async () => {
+    if (!conditionName) return;
+
+    const serviceStart = serviceDates?.start ? format(new Date(serviceDates.start), 'MMMM yyyy') : 'Unknown';
+    const serviceEnd = serviceDates?.end ? format(new Date(serviceDates.end), 'MMMM yyyy') : 'Unknown';
+
+    const linkedSymptoms = data.claimConditions
+      ?.find(c => c.name === conditionName)
+      ?.linkedSymptoms || [];
+    const symptomNames = data.symptoms
+      ?.filter(s => linkedSymptoms.includes(s.id))
+      .map(s => s.symptom) || [];
+
+    const prompt = createNexusLetterPrompt({
+      veteranName: veteranName || 'Veteran',
+      conditionName,
+      serviceStart,
+      serviceEnd,
+      symptoms: symptomNames.length > 0 ? symptomNames : ['Symptoms related to condition'],
+      medicalHistory: additionalRationale || 'Medical history to be provided by examining physician.',
+    });
+
+    const result = await aiGenerate(prompt);
+    if (result) setAiOutline(result);
   };
 
   const handleCopy = () => {
@@ -233,6 +265,28 @@ DISCLAIMER: This document is a template only and is not official VA documentatio
                 rows={4}
               />
             </div>
+
+            {/* AI Outline Button */}
+            <Button
+              variant="outline"
+              onClick={handleGenerateAIOutline}
+              disabled={!conditionName || aiLoading}
+              className="w-full border-primary/30 text-primary hover:bg-primary/5"
+            >
+              {aiLoading ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Sparkles className="h-4 w-4 mr-2" />
+              )}
+              {aiLoading ? 'Generating Outline...' : 'Generate AI Outline'}
+            </Button>
+
+            {aiError && !aiLoading && (
+              <Alert className="border-warning/30 bg-warning/5">
+                <AlertTriangle className="h-4 w-4 text-warning" />
+                <AlertDescription className="text-sm">{aiError}</AlertDescription>
+              </Alert>
+            )}
           </CardContent>
         </Card>
 
@@ -277,6 +331,44 @@ DISCLAIMER: This document is a template only and is not official VA documentatio
           </CardContent>
         </Card>
       </div>
+
+      {/* AI-Generated Outline */}
+      {aiOutline && (
+        <Card className="border-primary/20 bg-primary/5">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-primary" />
+              AI-Generated Nexus Outline
+              <Badge variant="destructive" className="text-xs ml-2">DRAFT</Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <AIDisclaimer variant="banner" />
+            <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/30">
+              <div className="flex items-start gap-2">
+                <AlertTriangle className="h-4 w-4 text-destructive mt-0.5 flex-shrink-0" />
+                <p className="text-xs text-muted-foreground">
+                  <strong className="text-destructive">Medical Professional Review Required:</strong> This AI-generated outline MUST be reviewed, edited, and signed by a qualified medical professional before submission. It is not a medical opinion and cannot be submitted as-is.
+                </p>
+              </div>
+            </div>
+            <div className="p-4 rounded-lg bg-background border font-mono text-xs leading-relaxed whitespace-pre-wrap max-h-[400px] overflow-y-auto">
+              {aiOutline}
+            </div>
+            <Button
+              variant="outline"
+              onClick={() => {
+                navigator.clipboard.writeText(aiOutline);
+                toast.success('AI outline copied to clipboard');
+              }}
+              className="w-full"
+            >
+              <Copy className="h-4 w-4 mr-2" />
+              Copy AI Outline
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Tips */}
       <Card>
