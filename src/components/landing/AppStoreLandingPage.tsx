@@ -35,7 +35,7 @@ const featureCategories = [
   },
   {
     title: 'Premium Tools',
-    description: 'Maximize your rating',
+    description: 'Understand your rating',
     icon: Calculator,
     gradient: 'from-violet-500/20 to-purple-500/20',
     borderColor: 'border-violet-500/30',
@@ -105,7 +105,7 @@ export function AppStoreLandingPage() {
 
             {/* Subtitle */}
             <p className="text-xl sm:text-2xl text-slate-400 mb-8 max-w-2xl mx-auto leading-relaxed">
-              The complete toolkit for tracking, organizing, and maximizing your VA disability claim
+              The complete toolkit for tracking, organizing, and preparing your VA disability claim
             </p>
 
             {/* Coming Soon Badge */}
@@ -443,8 +443,8 @@ export function AppStoreLandingPage() {
                 },
                 {
                   icon: TrendingUp,
-                  title: 'Maximize Your Rating',
-                  description: 'Smart tools help identify secondary conditions and optimize your claim.',
+                  title: 'Understand Your Rating',
+                  description: 'Smart tools help identify secondary conditions and prepare your claim.',
                   gradient: 'from-blue-500/20 to-cyan-500/20',
                   iconColor: 'text-blue-400'
                 },

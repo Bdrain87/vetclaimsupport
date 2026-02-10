@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft, X, Search, Shield, User, Briefcase, Stethoscope, Check, MapPin, Plane } from 'lucide-react';
 import { useProfileStore, BRANCH_LABELS, BRANCH_COLORS, type Branch } from '@/store/useProfileStore';
@@ -966,7 +966,7 @@ export default function Onboarding() {
                     </div>
                   ))}
                 </div>
-                <p className="text-center text-white/30 text-xs">By continuing, you agree to our <a href="/settings/terms" className="text-[#3B82F6] underline">Terms of Service</a> and <a href="/settings/privacy" className="text-[#3B82F6] underline">Privacy Policy</a>.</p>
+                <p className="text-center text-white/30 text-xs">By continuing, you agree to our <Link to="/settings/terms" className="text-[#3B82F6] underline">Terms of Service</Link> and <Link to="/settings/privacy" className="text-[#3B82F6] underline">Privacy Policy</Link>.</p>
                 <p className="text-center text-white/20 text-[10px]">Claim preparation tool. Not affiliated with the VA.</p>
               </div>
             )}
