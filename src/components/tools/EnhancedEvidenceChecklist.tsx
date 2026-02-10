@@ -219,7 +219,7 @@ export function EnhancedEvidenceChecklist() {
               Add conditions to your Claim Builder to see what evidence you need
             </p>
             <Button asChild variant="outline">
-              <Link to="/dashboard">Go to Claim Builder</Link>
+              <Link to="/">Go to Claim Builder</Link>
             </Button>
           </div>
         </CardContent>

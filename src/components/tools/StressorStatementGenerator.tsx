@@ -280,7 +280,7 @@ Keep the veteran's voice. Do not add fabricated details.`;
                   Add your service history to auto-fill dates and locations.
                 </p>
                 <Button variant="outline" size="sm" className="mt-2" asChild>
-                  <Link to="/service-history">
+                  <Link to="/settings/service-history">
                     <Plus className="h-4 w-4 mr-2" />
                     Add Service History
                   </Link>

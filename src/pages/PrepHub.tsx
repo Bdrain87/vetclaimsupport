@@ -7,17 +7,17 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 const prepTools = [
-  { label: 'C&P Exam Prep', icon: ClipboardCheck, route: '/prep/exam', description: 'Prepare for your compensation exam', placeholder: false },
-  { label: 'VA Form Guide', icon: BookOpen, route: '/prep/form-guide', description: 'Step-by-step form filling help', placeholder: false, highlight: true },
-  { label: 'Personal Statement', icon: FileText, route: '/prep/personal-statement', description: 'Generate your personal statement', placeholder: false },
-  { label: 'Buddy Statement', icon: Users, route: '/prep/buddy-statement', description: 'Build a buddy/lay statement', placeholder: false },
-  { label: 'Nexus Letter', icon: FileSignature, route: '/prep/nexus-letter', description: 'Generate a nexus letter template', placeholder: false },
-  { label: 'Stressor Statement', icon: AlertTriangle, route: '/prep/stressor', description: 'Document PTSD stressors', placeholder: true },
-  { label: 'DBQ Prep', icon: ClipboardList, route: '/prep/dbq', description: 'Prep your DBQ talking points', placeholder: false },
-  { label: 'VA-Speak Translator', icon: Languages, route: '/prep/va-speak', description: 'Translate VA jargon to plain English', placeholder: true },
-  { label: 'Back Pay Estimator', icon: DollarSign, route: '/prep/back-pay', description: 'Estimate your potential back pay', placeholder: true },
-  { label: 'Claim Packet Builder', icon: Package, route: '/prep/packet', description: 'Compile your full claim packet', placeholder: false },
-  { label: 'C&P Exam Packet', icon: FileCheck, route: '/cp-exam-packet', description: 'Build your exam preparation packet', placeholder: false, highlight: true },
+  { label: 'C&P Exam Prep', icon: ClipboardCheck, route: '/prep/exam', description: 'Prepare for your compensation exam' },
+  { label: 'VA Form Guide', icon: BookOpen, route: '/prep/form-guide', description: 'Step-by-step form filling help', highlight: true },
+  { label: 'Personal Statement', icon: FileText, route: '/prep/personal-statement', description: 'Generate your personal statement' },
+  { label: 'Buddy Statement', icon: Users, route: '/prep/buddy-statement', description: 'Build a buddy/lay statement' },
+  { label: 'Nexus Letter', icon: FileSignature, route: '/prep/nexus-letter', description: 'Generate a nexus letter template' },
+  { label: 'Stressor Statement', icon: AlertTriangle, route: '/prep/stressor', description: 'Document PTSD stressors' },
+  { label: 'DBQ Prep', icon: ClipboardList, route: '/prep/dbq', description: 'Prep your DBQ talking points' },
+  { label: 'VA-Speak Translator', icon: Languages, route: '/prep/va-speak', description: 'Translate VA jargon to plain English' },
+  { label: 'Back Pay Estimator', icon: DollarSign, route: '/prep/back-pay', description: 'Estimate your potential back pay' },
+  { label: 'Claim Packet Builder', icon: Package, route: '/prep/packet', description: 'Compile your full claim packet' },
+  { label: 'C&P Exam Packet', icon: FileCheck, route: '/cp-exam-packet', description: 'Build your exam preparation packet', highlight: true },
 ];
 
 export default function PrepHub() {
@@ -34,20 +34,16 @@ export default function PrepHub() {
         {prepTools.map((tool) => (
           <button
             key={tool.route}
-            onClick={() => !tool.placeholder && navigate(tool.route)}
-            disabled={tool.placeholder}
+            onClick={() => navigate(tool.route)}
             className={cn(
-              'flex flex-col items-start gap-2 p-4 rounded-xl border bg-card transition-colors text-left',
-              tool.placeholder
-                ? 'opacity-60 cursor-not-allowed'
-                : 'hover:bg-accent/50',
+              'flex flex-col items-start gap-2 p-4 rounded-xl border bg-card transition-colors text-left hover:bg-accent/50',
               tool.highlight
                 ? 'border-blue-500/40 ring-1 ring-blue-500/20'
                 : 'border-border'
             )}
           >
             <div className="flex items-center gap-2 w-full">
-              <tool.icon className={cn('h-6 w-6', tool.placeholder ? 'text-muted-foreground' : 'text-blue-500')} />
+              <tool.icon className="h-6 w-6 text-blue-500" />
               {tool.highlight && (
                 <Badge className="ml-auto text-[9px] bg-blue-500/20 text-blue-500 border-blue-500/30 px-1.5 py-0">
                   NEW
@@ -56,7 +52,7 @@ export default function PrepHub() {
             </div>
             <span className="text-sm font-medium text-foreground">{tool.label}</span>
             <span className="text-xs text-muted-foreground line-clamp-2">
-              {tool.placeholder ? `${tool.description} (Coming Soon)` : tool.description}
+              {tool.description}
             </span>
           </button>
         ))}

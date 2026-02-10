@@ -201,9 +201,9 @@ const glossaryData: GlossaryTerm[] = [
 // ============================================
 const quickStartCards = [
   { icon: <Settings className="h-5 w-5" />, title: 'Set Up Your Profile', description: 'Add service dates and conditions', link: '/settings' },
-  { icon: <Activity className="h-5 w-5" />, title: 'Log Your First Symptom', description: 'Start building evidence', link: '/symptoms' },
-  { icon: <FileText className="h-5 w-5" />, title: 'Upload Documents', description: 'Add medical records', link: '/documents' },
-  { icon: <Shield className="h-5 w-5" />, title: 'Explore Reference', description: 'Search 784+ conditions', link: '/reference' },
+  { icon: <Activity className="h-5 w-5" />, title: 'Log Your First Symptom', description: 'Start building evidence', link: '/health/symptoms' },
+  { icon: <FileText className="h-5 w-5" />, title: 'Upload Documents', description: 'Add medical records', link: '/settings/vault' },
+  { icon: <Shield className="h-5 w-5" />, title: 'Explore Reference', description: 'Search 784+ conditions', link: '/settings/resources' },
 ];
 
 // ============================================

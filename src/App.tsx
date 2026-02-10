@@ -50,7 +50,16 @@ const HealthLog = lazy(() => import('./pages/HealthLog'));
 // Hub pages
 const HealthHub = lazy(() => import('./pages/HealthHub'));
 const PrepHub = lazy(() => import('./pages/PrepHub'));
-const PlaceholderPage = lazy(() => import('./pages/PlaceholderPage'));
+
+// Phase 15 new pages
+const BodyMap = lazy(() => import('./pages/BodyMap'));
+const StressorStatement = lazy(() => import('./pages/StressorStatement'));
+const VASpeakTranslator = lazy(() => import('./pages/VASpeakTranslator'));
+const BackPayEstimator = lazy(() => import('./pages/BackPayEstimator'));
+const IntentToFile = lazy(() => import('./pages/IntentToFile'));
+const AboutVCS = lazy(() => import('./pages/AboutVCS'));
+const ConditionsByConflict = lazy(() => import('./pages/ConditionsByConflict'));
+const ConditionGuide = lazy(() => import('./pages/ConditionGuide'));
 
 // Account & Legal pages
 const DeleteAccountPage = lazy(() => import('./pages/account/DeleteAccountPage'));
@@ -143,7 +152,7 @@ function AnimatedRoutes() {
             <Route path="/claims" element={<Conditions />} />
             <Route path="/claims/:id" element={<ConditionDetail />} />
             <Route path="/claims/strategy" element={<ClaimStrategyWizard />} />
-            <Route path="/claims/body-map" element={<PlaceholderPage title="Body Map (Coming Soon)" />} />
+            <Route path="/claims/body-map" element={<BodyMap />} />
             <Route path="/claims/calculator" element={<Combination />} />
             <Route path="/claims/bilateral" element={<BilateralCalculator />} />
             <Route path="/claims/secondary-finder" element={<SecondaryFinder />} />
@@ -165,14 +174,18 @@ function AnimatedRoutes() {
             <Route path="/prep/personal-statement" element={<Navigate to="/prep/exam" replace />} />
             <Route path="/prep/buddy-statement" element={<BuddyStatements />} />
             <Route path="/prep/nexus-letter" element={<NexusLetterGenerator />} />
-            <Route path="/prep/stressor" element={<PlaceholderPage title="Stressor Statement (Coming Soon)" />} />
+            <Route path="/prep/stressor" element={<StressorStatement />} />
             <Route path="/prep/form-guide" element={<FormGuide />} />
             <Route path="/prep/form-guide/:formId" element={<FormGuideDetail />} />
             <Route path="/prep/dbq" element={<DBQPrepSheet />} />
-            <Route path="/prep/va-speak" element={<PlaceholderPage title="VA-Speak Translator (Coming Soon)" />} />
-            <Route path="/prep/back-pay" element={<PlaceholderPage title="Back Pay Estimator (Coming Soon)" />} />
+            <Route path="/prep/va-speak" element={<VASpeakTranslator />} />
+            <Route path="/prep/back-pay" element={<BackPayEstimator />} />
             <Route path="/prep/packet" element={<BuildPacket />} />
             <Route path="/cp-exam-packet" element={<CPExamPacket />} />
+
+            {/* === REFERENCE === */}
+            <Route path="/reference/conditions-by-conflict" element={<ConditionsByConflict />} />
+            <Route path="/reference/condition-guide" element={<ConditionGuide />} />
 
             {/* === SETTINGS (formerly Profile) === */}
             <Route path="/settings" element={<SettingsPage />} />
@@ -180,7 +193,7 @@ function AnimatedRoutes() {
             <Route path="/settings/service-history" element={<ServiceHistory />} />
             <Route path="/settings/vault" element={<DocumentsHub />} />
             <Route path="/settings/journey" element={<ClaimJourney />} />
-            <Route path="/settings/itf" element={<PlaceholderPage title="Intent to File (Coming Soon)" />} />
+            <Route path="/settings/itf" element={<IntentToFile />} />
             <Route path="/settings/timeline" element={<Timeline />} />
             <Route path="/settings/help" element={<HelpCenter />} />
             <Route path="/settings/glossary" element={<Glossary />} />
@@ -189,7 +202,7 @@ function AnimatedRoutes() {
             <Route path="/settings/privacy" element={<PrivacyPolicyPage />} />
             <Route path="/settings/terms" element={<TermsOfServicePage />} />
             <Route path="/settings/disclaimer" element={<DisclaimerPage />} />
-            <Route path="/settings/about" element={<PlaceholderPage title="About VCS" />} />
+            <Route path="/settings/about" element={<AboutVCS />} />
             <Route path="/settings/export-data" element={<ExportDataPage />} />
             <Route path="/settings/delete-account" element={<DeleteAccountPage />} />
 
@@ -203,7 +216,7 @@ function AnimatedRoutes() {
             <Route path="/dbq-prep" element={<Navigate to="/prep/dbq" replace />} />
             <Route path="/cp-exam-prep" element={<Navigate to="/prep/exam" replace />} />
             <Route path="/claim-strategy" element={<Navigate to="/claims/strategy" replace />} />
-            <Route path="/health-log" element={<Navigate to="/health/symptoms" replace />} />
+            <Route path="/health-log" element={<Navigate to="/health/summary" replace />} />
             <Route path="/docs" element={<Navigate to="/settings/vault" replace />} />
             <Route path="/documents" element={<Navigate to="/settings/vault" replace />} />
             <Route path="/service-history" element={<Navigate to="/settings/service-history" replace />} />
@@ -233,6 +246,10 @@ function AnimatedRoutes() {
             <Route path="/build-packet" element={<Navigate to="/prep/packet" replace />} />
             <Route path="/glossary" element={<Navigate to="/settings/glossary" replace />} />
             <Route path="/faq" element={<Navigate to="/settings/faq" replace />} />
+            <Route path="/reference" element={<Navigate to="/settings/resources" replace />} />
+            <Route path="/conditions-by-conflict" element={<Navigate to="/reference/conditions-by-conflict" replace />} />
+            <Route path="/condition-guide" element={<Navigate to="/reference/condition-guide" replace />} />
+            <Route path="/user-guide" element={<Navigate to="/settings/help" replace />} />
 
             {/* Backwards compat: old /profile/* routes → /settings/* */}
             <Route path="/profile" element={<Navigate to="/settings" replace />} />

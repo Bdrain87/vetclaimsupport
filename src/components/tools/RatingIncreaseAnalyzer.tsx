@@ -441,19 +441,19 @@ export function RatingIncreaseAnalyzer() {
                 </Link>
               </Button>
               <Button variant="outline" size="sm" asChild>
-                <Link to="/medical-visits">
+                <Link to="/health/visits">
                   <Calendar className="h-4 w-4 mr-2" />
                   Add Medical Visit
                 </Link>
               </Button>
               <Button variant="outline" size="sm" asChild>
-                <Link to="/buddy-statements">
+                <Link to="/prep/buddy-statement">
                   <Users className="h-4 w-4 mr-2" />
                   Add Buddy Statement
                 </Link>
               </Button>
               <Button variant="outline" size="sm" asChild>
-                <Link to={`/tools?tab=nexus`}>
+                <Link to="/prep/nexus-letter">
                   <FileText className="h-4 w-4 mr-2" />
                   Get Nexus Letter
                 </Link>
