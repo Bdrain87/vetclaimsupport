@@ -21,15 +21,15 @@ export const Footer = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLEle
             Consult a healthcare provider, attorney, or VSO before making decisions.
           </p>
           <div className="flex items-center justify-center gap-6 mt-4">
-            <Link 
-              to="/privacy" 
+            <Link
+              to="/settings/privacy"
               className="text-xs text-muted-foreground hover:text-primary transition-colors min-h-[44px] flex items-center"
             >
               Privacy
             </Link>
             <div className="w-1 h-1 rounded-full bg-muted-foreground/30" />
-            <Link 
-              to="/terms" 
+            <Link
+              to="/settings/terms"
               className="text-xs text-muted-foreground hover:text-primary transition-colors min-h-[44px] flex items-center"
             >
               Terms

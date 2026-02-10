@@ -12,6 +12,7 @@ const LIABILITY_ACCEPTED_KEY = 'liabilityAccepted';
 export function LiabilityAcceptanceScreen() {
   const [isOpen, setIsOpen] = useState(false);
   const [liabilityChecked, setLiabilityChecked] = useState(false);
+  const [aiChecked, setAiChecked] = useState(false);
   const [termsChecked, setTermsChecked] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -36,13 +37,14 @@ export function LiabilityAcceptanceScreen() {
   const handleContinue = () => {
     try {
       localStorage.setItem(LIABILITY_ACCEPTED_KEY, 'true');
+      localStorage.setItem('consentTimestamp', new Date().toISOString());
     } catch {
       // Storage full or unavailable
     }
     setIsOpen(false);
   };
 
-  const canContinue = liabilityChecked && termsChecked && hasScrolled;
+  const canContinue = liabilityChecked && aiChecked && termsChecked && hasScrolled;
 
   return (
     <Dialog open={isOpen} onOpenChange={() => {}}>
@@ -161,8 +163,28 @@ export function LiabilityAcceptanceScreen() {
                 disabled={!hasScrolled}
               />
               <span className="text-sm text-muted-foreground leading-relaxed">
-                I understand this is an <span className="text-foreground font-medium">educational tool only</span> and
-                does not provide medical, legal, or VA claims advice.
+                I understand this is an <span className="text-foreground font-medium">educational and organizational tool only</span>. It does not provide legal advice, medical advice, or VA-accredited representation.
+              </span>
+            </label>
+
+            <label
+              className={cn(
+                "flex items-start gap-4 p-4 rounded-xl cursor-pointer transition-colors",
+                hasScrolled
+                  ? "bg-muted/50 hover:bg-muted"
+                  : "bg-muted/20 cursor-not-allowed opacity-60"
+              )}
+              htmlFor="ai-consent"
+            >
+              <Checkbox
+                id="ai-consent"
+                checked={aiChecked}
+                onCheckedChange={(checked) => setAiChecked(checked as boolean)}
+                className="mt-0.5"
+                disabled={!hasScrolled}
+              />
+              <span className="text-sm text-muted-foreground leading-relaxed">
+                I understand that <span className="text-foreground font-medium">AI-generated content may contain errors</span> and I am responsible for verifying all information before submitting to the VA.
               </span>
             </label>
 
@@ -185,21 +207,21 @@ export function LiabilityAcceptanceScreen() {
               <span className="text-sm text-muted-foreground leading-relaxed">
                 I agree to the{' '}
                 <Link
-                  to="/privacy"
-                  className="text-primary hover:underline"
-                  onClick={(e) => e.stopPropagation()}
-                  target="_blank"
-                >
-                  Privacy Policy
-                </Link>{' '}
-                and{' '}
-                <Link
-                  to="/terms"
+                  to="/settings/terms"
                   className="text-primary hover:underline"
                   onClick={(e) => e.stopPropagation()}
                   target="_blank"
                 >
                   Terms of Service
+                </Link>{' '}
+                and{' '}
+                <Link
+                  to="/settings/privacy"
+                  className="text-primary hover:underline"
+                  onClick={(e) => e.stopPropagation()}
+                  target="_blank"
+                >
+                  Privacy Policy
                 </Link>.
               </span>
             </label>
@@ -219,7 +241,7 @@ export function LiabilityAcceptanceScreen() {
             <p className="text-xs text-muted-foreground text-center">
               {!hasScrolled
                 ? "Please scroll to read the full disclaimer"
-                : "Please check both boxes to continue"
+                : "Please check all boxes to continue"
               }
             </p>
           )}

@@ -1,18 +1,18 @@
 import { Shield } from 'lucide-react';
 
 const POLICIES = [
-  { title: "We Do Not Collect Your Data", text: "Vet Claim Support is built on a Local-First architecture. Your medical logs, symptoms, and personal claim details never leave your device." },
-  { title: "Hardware-Level Security", text: "All sensitive evidence is protected by your device's native biometric hardware (FaceID, TouchID, or Passcode)." },
-  { title: "No Cloud, No Liability", text: "Your data is stored exclusively in your browser's secure local storage (IndexedDB). You own your data. You control your data." },
-  { title: "Data Deletion", text: "If you clear your browser cache without exporting, your data will be permanently lost. We cannot recover it because we never had it." },
-  { title: "HIPAA & Privacy", text: "Our Zero-Knowledge architecture exceeds industry standards for medical data privacy by removing the possibility of server-side breaches." }
+  { title: "Local-First Storage", text: "Vet Claim Support stores your data locally on your device using browser storage (localStorage and IndexedDB). This is the primary data store and works offline." },
+  { title: "Optional Cloud Sync", text: "If you create an account, data may be optionally synced to our cloud database for cross-device access. Cloud sync is not required to use the app." },
+  { title: "Encryption", text: "Data in transit is encrypted via TLS. Cloud data at rest is encrypted on database servers. Row-level security ensures only you can access your data." },
+  { title: "Data Deletion", text: "If you clear your browser cache without exporting, your local data will be permanently lost. Use the Export feature in Settings to back up your data." },
+  { title: "Your Data, Your Control", text: "We do not sell your data, share it with third parties for marketing, use it for targeted advertising, or use it to train AI models." }
 ];
 
 export const PrivacyPolicy = () => (
   <div className="glass-card p-8 space-y-6">
     <div className="flex items-center gap-3 mb-4">
       <Shield className="text-[#3B82F6]" size={24} />
-      <h2 className="text-2xl font-black italic text-white uppercase tracking-tighter">Zero-Knowledge Privacy</h2>
+      <h2 className="text-2xl font-black italic text-white uppercase tracking-tighter">Privacy Overview</h2>
     </div>
     {POLICIES.map((p, i) => (
       <div key={i} className="p-4 bg-white/5 border border-white/10 rounded-2xl">

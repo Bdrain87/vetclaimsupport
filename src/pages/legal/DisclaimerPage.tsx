@@ -17,8 +17,8 @@ export default function DisclaimerPage() {
 
       {/* Header */}
       <div className="flex items-start gap-4">
-        <div className="p-3 rounded-xl bg-blue-500/10 shrink-0">
-          <AlertTriangle className="h-6 w-6 text-blue-400" />
+        <div className="p-3 rounded-xl bg-amber-500/10 shrink-0">
+          <AlertTriangle className="h-6 w-6 text-amber-400" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-white">Important Disclaimer</h1>
@@ -28,35 +28,76 @@ export default function DisclaimerPage() {
 
       {/* Content */}
       <div className="space-y-6 text-sm leading-relaxed">
-        <div className="rounded-xl bg-blue-500/5 border border-blue-500/20 p-5 space-y-4">
-          <p className="text-white/70">
-            <strong className="text-white">Vet Claim Support is not affiliated with or endorsed by the U.S. Department of Veterans Affairs (VA).</strong>
-          </p>
 
-          <p className="text-white/70">
-            <strong className="text-white">This app is not legal advice, medical advice, or an accredited representative service.</strong>
-          </p>
-
-          <p className="text-white/70">
-            This app is an organizational tool that helps you prepare and organize information related to VA disability claims.
-          </p>
-
-          <p className="text-white/70">
-            You are responsible for reviewing all information, ensuring its accuracy, and consulting with an accredited Veterans Service Organization (VSO) or attorney for legal representation and filing decisions.
-          </p>
-
-          <p className="text-white/70">
-            <strong className="text-white">We do not guarantee any specific outcomes, ratings, or approvals.</strong>
-          </p>
-
-          <p className="text-white/70">
-            Always verify current VA form versions, requirements, and instructions before submission.
+        {/* Main Disclaimer */}
+        <div className="rounded-xl bg-red-500/5 border border-red-500/20 p-5">
+          <p className="text-white/80 font-medium">
+            <strong className="text-white">IMPORTANT:</strong> Vet Claim Support is an educational and organizational tool. It is NOT affiliated with, endorsed by, or connected to the U.S. Department of Veterans Affairs.
           </p>
         </div>
 
-        <div className="text-center">
-          <p className="text-white/30 text-xs">
-            By using this app, you acknowledge that you have read and understood this disclaimer.
+        {/* What This App Is */}
+        <div className="space-y-3">
+          <h2 className="text-lg font-semibold text-white">What This App Is</h2>
+          <ul className="space-y-1.5 text-white/60">
+            <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span>An organizational tool to help you prepare and track information related to VA disability claims</li>
+            <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span>An educational resource about VA benefits and processes</li>
+            <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span>A health and symptom logging tool for your personal records</li>
+          </ul>
+        </div>
+
+        {/* What This App Is NOT */}
+        <div className="space-y-3">
+          <h2 className="text-lg font-semibold text-white">What This App Is NOT</h2>
+          <ul className="space-y-1.5 text-white/60">
+            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>NOT legal advice</li>
+            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>NOT medical advice</li>
+            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>NOT a VA-accredited representative, attorney, claims agent, or VSO</li>
+            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>NOT a substitute for professional consultation</li>
+            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>NOT a guarantee of any claim outcome</li>
+          </ul>
+        </div>
+
+        {/* Your Responsibility */}
+        <div className="space-y-3">
+          <h2 className="text-lg font-semibold text-white">Your Responsibility</h2>
+          <div className="rounded-xl bg-blue-500/5 border border-blue-500/20 p-4">
+            <p className="text-white/70">
+              You are solely responsible for the accuracy of all information you enter. You must review and verify ALL content before submitting anything to the VA &mdash; especially AI-generated content. False or misleading statements in VA claims may constitute federal fraud.
+            </p>
+          </div>
+        </div>
+
+        {/* AI-Generated Content Warning */}
+        <div className="space-y-3">
+          <h2 className="text-lg font-semibold text-white">AI-Generated Content Warning</h2>
+          <div className="rounded-xl bg-amber-500/5 border border-amber-500/20 p-4">
+            <p className="text-white/70">
+              This app uses artificial intelligence (Google Gemini) to generate suggestions and content. AI-generated content may be inaccurate, incomplete, or fabricated. AI-generated case law citations have a documented hallucination rate of 50-88%. <strong className="text-amber-400">NEVER submit AI-generated legal citations without independent verification.</strong> You assume all risk for reliance on AI-generated content.
+            </p>
+          </div>
+        </div>
+
+        {/* Professional Consultation */}
+        <div className="space-y-3">
+          <h2 className="text-lg font-semibold text-white">Professional Consultation</h2>
+          <p className="text-white/60">
+            We strongly recommend consulting with a VA-accredited Veterans Service Organization (VSO), attorney, or claims agent before filing your claim. Find accredited representatives at{' '}
+            <a
+              href="https://www.va.gov/ogc/apps/accreditation"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#3B82F6] hover:underline"
+            >
+              va.gov/ogc/apps/accreditation
+            </a>.
+          </p>
+        </div>
+
+        {/* Acknowledgment */}
+        <div className="text-center pt-4 border-t border-white/10">
+          <p className="text-white/40 text-xs">
+            By using this app, you acknowledge that you have read and understood this disclaimer and agree to be bound by the Terms of Service and Privacy Policy.
           </p>
         </div>
       </div>

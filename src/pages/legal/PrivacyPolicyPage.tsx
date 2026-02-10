@@ -22,111 +22,190 @@ export default function PrivacyPolicyPage() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-white">Privacy Policy</h1>
-          <p className="text-white/40 text-sm mt-1">Vet Claim Support &mdash; Effective February 2026</p>
+          <p className="text-white/40 text-sm mt-1">Vet Claim Support &mdash; Last updated: February 2026</p>
         </div>
       </div>
 
       {/* Content */}
       <div className="space-y-8 text-sm leading-relaxed">
 
-        {/* What We Collect */}
+        {/* Section 1: Overview */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-white">1. What Data We Collect</h2>
+          <h2 className="text-lg font-semibold text-white">1. Overview</h2>
           <p className="text-white/60">
-            When you use Vet Claim Support, the app stores the following types of information based on what you choose to enter:
+            Vet Claim Support respects your privacy. This Privacy Policy explains what data we collect, how we store it, and your rights regarding that data.
           </p>
-          <ul className="space-y-1.5 text-white/60">
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Profile information (name, military branch, service job code)</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Service history (dates, deployments, duty stations)</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Conditions you are tracking or claiming</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Health logs (symptoms, sleep, migraines, medications, medical visits)</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Evidence metadata (document titles, notes, status)</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Uploaded documents and files</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>VA form drafts and AI-assisted draft content</li>
+        </section>
+
+        {/* Section 2: Data We Collect */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-white">2. Data We Collect</h2>
+          <p className="text-white/60">
+            The following categories of data may be collected based on what you choose to enter:
+          </p>
+          <ul className="space-y-2 text-white/60">
+            <li className="flex items-start gap-2">
+              <span className="text-[#3B82F6] mt-0.5">&#x2022;</span>
+              <span><strong className="text-white">Profile Information:</strong> Name, military branch, MOS/AFSC/Rating/NEC/SFSC, service dates, claim type</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-[#3B82F6] mt-0.5">&#x2022;</span>
+              <span><strong className="text-white">Service History:</strong> Deployments, duty stations, combat history, major events</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-[#3B82F6] mt-0.5">&#x2022;</span>
+              <span><strong className="text-white">Health Data:</strong> Symptoms (severity, frequency, body area), sleep logs, migraine logs, medications, medical visits, exposures, PTSD symptoms</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-[#3B82F6] mt-0.5">&#x2022;</span>
+              <span><strong className="text-white">Claims Data:</strong> Conditions being claimed, ratings, evidence status, buddy contact info</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-[#3B82F6] mt-0.5">&#x2022;</span>
+              <span><strong className="text-white">Documents:</strong> User-uploaded evidence files, generated PDFs, form drafts</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-[#3B82F6] mt-0.5">&#x2022;</span>
+              <span><strong className="text-white">AI Interaction Data:</strong> Prompts sent to AI features and responses received (processed in real-time, not stored on our servers)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-[#3B82F6] mt-0.5">&#x2022;</span>
+              <span><strong className="text-white">Operational Data:</strong> Minimal crash/performance metrics, device/OS type (no PII)</span>
+            </li>
           </ul>
         </section>
 
-        {/* Where It's Stored */}
+        {/* Section 3: How Data Is Stored */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-white">2. Where Your Data Is Stored</h2>
+          <h2 className="text-lg font-semibold text-white">3. How Data Is Stored</h2>
           <p className="text-white/60">
-            Your data is stored <strong className="text-white">locally on your device</strong> using browser storage (localStorage and IndexedDB). This is the primary data store and works offline.
+            <strong className="text-white">PRIMARY:</strong> All data is stored locally on your device using browser localStorage and IndexedDB. Files larger than 1MB are automatically stored in IndexedDB.
           </p>
           <p className="text-white/60">
-            When you create an account and sign in, your data is <strong className="text-white">optionally synced to Supabase</strong> (a hosted PostgreSQL database with secure file storage). Cloud sync is a convenience feature that enables backup and multi-device access. It is not required to use the app.
+            <strong className="text-white">OPTIONAL CLOUD SYNC:</strong> If you create an account, data may be synced to our cloud database (Supabase PostgreSQL) for cross-device access. Cloud sync is optional and not required.
+          </p>
+          <p className="text-white/60">
+            <strong className="text-white">ENCRYPTION:</strong> Data in transit is encrypted via TLS. Cloud data at rest is encrypted on database servers. Row-level security ensures only you can access your data.
           </p>
         </section>
 
-        {/* Security */}
+        {/* Section 4: AI Data Processing */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-white">3. Security</h2>
+          <h2 className="text-lg font-semibold text-white">4. AI Data Processing</h2>
+          <p className="text-white/60">
+            When you use AI-powered features, the text you provide is sent to Google&apos;s Gemini API for processing. This data is:
+          </p>
           <ul className="space-y-1.5 text-white/60">
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span><strong className="text-white">Encryption in transit:</strong> All data transmitted between your device and our cloud services is encrypted using TLS (Transport Layer Security).</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span><strong className="text-white">Encryption at rest:</strong> Cloud-stored data is encrypted at rest on the database server.</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span><strong className="text-white">Row Level Security:</strong> Database policies ensure that only you can access your own data. No other user or administrator can query your rows.</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>(a) Transmitted over encrypted connections (TLS)</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>(b) Processed in real-time and not stored by VCS on any server</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>(c) Subject to Google&apos;s own data handling policies</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>(d) Never used by VCS for AI model training</li>
+          </ul>
+          <p className="text-white/60">
+            AI features are entirely optional. The app functions fully without an AI API key.
+          </p>
+        </section>
+
+        {/* Section 5: What We Do NOT Do */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-white">5. What We Do NOT Do</h2>
+          <ul className="space-y-1.5 text-white/60">
+            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do NOT sell your data to anyone</li>
+            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do NOT share your data with third parties for marketing</li>
+            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do NOT use your data for targeted advertising</li>
+            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do NOT use your data to train AI models</li>
+            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do NOT track your browsing activity</li>
+            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do NOT collect your Social Security Number, date of birth, or financial information</li>
           </ul>
         </section>
 
-        {/* What We Don't Do */}
+        {/* Section 6: Your Rights */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-white">4. What We Do Not Do</h2>
+          <h2 className="text-lg font-semibold text-white">6. Your Rights</h2>
+          <p className="text-white/60">You have the right to:</p>
           <ul className="space-y-1.5 text-white/60">
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do not sell your data to anyone.</li>
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do not show advertisements based on your claim content.</li>
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do not share your data with third parties.</li>
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do not use your data for AI model training.</li>
+            <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span><strong className="text-white">ACCESS</strong> all your data via the Export feature in Settings</li>
+            <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span><strong className="text-white">DELETE</strong> all local data from your device</li>
+            <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span><strong className="text-white">DELETE</strong> your cloud account and all associated data</li>
+            <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span><strong className="text-white">PORT</strong> your data by exporting to PDF or text format</li>
           </ul>
+          <p className="text-white/60">
+            To exercise these rights, use the Settings page or contact{' '}
+            <a href="mailto:blakedrain@gmail.com" className="text-[#3B82F6] hover:underline">blakedrain@gmail.com</a>.
+          </p>
         </section>
 
-        {/* User Rights */}
+        {/* Section 7: California Residents (CCPA/CPRA) */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-white">5. Your Rights</h2>
-          <p className="text-white/60">You have full control over your data. At any time, you can:</p>
+          <h2 className="text-lg font-semibold text-white">7. California Residents (CCPA/CPRA)</h2>
+          <p className="text-white/60">
+            If you are a California resident, you have additional rights under the California Consumer Privacy Act (CCPA) and California Privacy Rights Act (CPRA), including:
+          </p>
           <ul className="space-y-1.5 text-white/60">
-            <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span><strong className="text-white">Export all data</strong> &mdash; Download a complete copy in JSON or PDF format.</li>
-            <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span><strong className="text-white">Delete cloud data</strong> &mdash; Remove all synced data from our servers while keeping local data intact.</li>
-            <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span><strong className="text-white">Delete your account</strong> &mdash; Permanently remove all data from both cloud and local storage.</li>
-            <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span><strong className="text-white">Clear local data</strong> &mdash; Wipe all data from this device without affecting cloud data.</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>The right to know what personal information is collected</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>The right to delete personal information</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>The right to opt-out of the sale of personal information (we do not sell your data)</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>The right to non-discrimination for exercising your privacy rights</li>
           </ul>
-        </section>
-
-        {/* Account & Login */}
-        <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-white">6. Account Login Identifiers</h2>
           <p className="text-white/60">
-            You may sign in using Apple, Google, or email. These identifiers are used <strong className="text-white">solely for authentication</strong> purposes. We do not access your contacts, photos, or any other data from these providers.
+            To exercise these rights, contact{' '}
+            <a href="mailto:blakedrain@gmail.com" className="text-[#3B82F6] hover:underline">blakedrain@gmail.com</a>.
           </p>
         </section>
 
-        {/* Purchase Data */}
+        {/* Section 8: Children's Privacy */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-white">7. Purchase Data</h2>
+          <h2 className="text-lg font-semibold text-white">8. Children&apos;s Privacy</h2>
           <p className="text-white/60">
-            We store your entitlement status (preview or lifetime access). Purchase transactions are processed by Apple App Store or Google Play Store. We do not store credit card numbers or payment details.
+            The Service is not intended for use by anyone under the age of 18. We do not knowingly collect data from children under 18.
           </p>
         </section>
 
-        {/* Operational Metrics */}
-        <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-white">8. Operational Metrics</h2>
-          <p className="text-white/60">
-            We may collect minimal crash and performance data to improve app stability. This data does not include any claim content, health information, or personally identifiable information beyond basic device and OS details.
-          </p>
-        </section>
-
-        {/* Data Retention */}
+        {/* Section 9: Data Retention */}
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-white">9. Data Retention</h2>
           <p className="text-white/60">
-            Your data persists until you delete it. When you delete your account, all data is immediately removed from our active systems. Encrypted remnants may persist briefly in provider backups, but cannot be decrypted because the keys are destroyed.
+            Local data persists on your device until you delete it. Cloud data persists until you delete your account. Upon account deletion, data is removed from active systems immediately. Encrypted backup remnants may persist for up to 30 days in provider backup systems before automatic purge.
           </p>
         </section>
 
-        {/* Contact */}
+        {/* Section 10: Third-Party Services */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-white">10. Contact</h2>
+          <h2 className="text-lg font-semibold text-white">10. Third-Party Services</h2>
           <p className="text-white/60">
-            For privacy-related questions or concerns, contact us at:{' '}
+            The Service uses:
+          </p>
+          <ul className="space-y-1.5 text-white/60">
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span><strong className="text-white">Supabase</strong> (cloud database, optional)</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span><strong className="text-white">Google Gemini AI</strong> (AI features, optional)</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span><strong className="text-white">Apple/Google</strong> (authentication and payment processing)</li>
+          </ul>
+          <p className="text-white/60">
+            Each third-party service has its own privacy policy.
+          </p>
+        </section>
+
+        {/* Section 11: Data Breach Notification */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-white">11. Data Breach Notification</h2>
+          <p className="text-white/60">
+            In the event of a data breach affecting your personal information, we will notify affected users via email within 72 hours of discovering the breach, in accordance with applicable state laws.
+          </p>
+        </section>
+
+        {/* Section 12: Changes to This Policy */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-white">12. Changes to This Policy</h2>
+          <p className="text-white/60">
+            We may update this Privacy Policy. Material changes will be communicated through the app. Continued use constitutes acceptance.
+          </p>
+        </section>
+
+        {/* Section 13: Contact */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-white">13. Contact</h2>
+          <p className="text-white/60">
+            Privacy questions:{' '}
             <a href="mailto:blakedrain@gmail.com" className="text-[#3B82F6] hover:underline">
               blakedrain@gmail.com
             </a>

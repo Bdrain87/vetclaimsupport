@@ -450,10 +450,10 @@ export default function Onboarding() {
                 </div>
                 <div className="rounded-xl border border-[#243447] p-4 text-left space-y-2">
                   <p className="text-white/70 text-xs leading-relaxed">
-                    <strong className="text-white/90">Not affiliated with the U.S. Department of Veterans Affairs (VA).</strong>
+                    <strong className="text-white/90">Vet Claim Support is an educational and organizational tool.</strong>
                   </p>
                   <p className="text-white/70 text-xs leading-relaxed">
-                    <strong className="text-white/90">Not legal advice. Not medical advice.</strong> This app is an organizational tool only.
+                    <strong className="text-white/90">Not affiliated with the U.S. Department of Veterans Affairs.</strong> Not legal or medical advice.
                   </p>
                 </div>
                 <div className="flex items-center justify-center gap-2 p-3 rounded-xl bg-emerald-400/10 border border-emerald-400/20">
@@ -1011,8 +1011,7 @@ export default function Onboarding() {
                     </div>
                   ))}
                 </div>
-                <p className="text-center text-white/30 text-xs">By continuing, you agree to our <Link to="/settings/terms" className="text-[#3B82F6] underline">Terms of Service</Link> and <Link to="/settings/privacy" className="text-[#3B82F6] underline">Privacy Policy</Link>.</p>
-                <p className="text-center text-white/20 text-[10px]">Claim preparation tool. Not affiliated with the VA.</p>
+                <p className="text-center text-white/30 text-xs">By continuing, you agree to our <Link to="/settings/terms" className="text-[#3B82F6] underline">Terms of Service</Link> and <Link to="/settings/privacy" className="text-[#3B82F6] underline">Privacy Policy</Link>. This is a claim preparation tool &mdash; not a substitute for professional consultation with a VA-accredited representative.</p>
               </div>
             )}
 

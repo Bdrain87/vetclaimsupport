@@ -718,8 +718,8 @@ export const PlatinumLanding = () => {
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-6 sm:pt-8 border-t border-white/5">
             <div className="flex items-center gap-6 text-white/40 text-xs">
-              <Link to="/terms" className="hover:text-white transition-colors min-h-[44px] inline-flex items-center">Terms of Service</Link>
-              <Link to="/privacy" className="hover:text-white transition-colors min-h-[44px] inline-flex items-center">Privacy Policy</Link>
+              <Link to="/settings/terms" className="hover:text-white transition-colors min-h-[44px] inline-flex items-center">Terms of Service</Link>
+              <Link to="/settings/privacy" className="hover:text-white transition-colors min-h-[44px] inline-flex items-center">Privacy Policy</Link>
               <Link to="/help" className="hover:text-white transition-colors min-h-[44px] inline-flex items-center">Contact</Link>
             </div>
             <p className="text-white/40 text-xs">
