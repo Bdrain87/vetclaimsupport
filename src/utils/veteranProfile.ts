@@ -1,12 +1,12 @@
 /**
  * Veteran Profile Persistence
- * Saves and loads veteran profile data (MOS/AFSC, service dates) to/from localStorage
+ * Saves and loads veteran profile data (service job code, service dates) to/from localStorage
  */
 
 const STORAGE_KEY = 'vet-claim-veteran-profile';
 
 export interface VeteranProfile {
-  // MOS/AFSC information
+  // Service job code information (MOS, AFSC, Rating, SFSC depending on branch)
   primaryMOS: string;
   branch: string;
 
@@ -27,6 +27,31 @@ const defaultProfile: VeteranProfile = {
   rank: '',
   lastUpdated: 0,
 };
+
+/**
+ * Get the correct job code label for a given military branch
+ */
+export function getJobCodeLabel(branch: string): string {
+  switch (branch.toLowerCase()) {
+    case 'army':
+      return 'MOS';
+    case 'marines':
+      return 'MOS';
+    case 'air force':
+    case 'air_force':
+      return 'AFSC';
+    case 'navy':
+      return 'Rating/NEC';
+    case 'coast guard':
+    case 'coast_guard':
+      return 'Rating';
+    case 'space force':
+    case 'space_force':
+      return 'SFSC';
+    default:
+      return 'Service Job Code';
+  }
+}
 
 /**
  * Get veteran profile from localStorage
@@ -62,7 +87,7 @@ export function saveVeteranProfile(profile: Partial<VeteranProfile>): void {
 }
 
 /**
- * Update just the MOS/AFSC
+ * Update just the service job code
  */
 export function saveMOS(mos: string, branch?: string): void {
   saveVeteranProfile({
@@ -72,7 +97,7 @@ export function saveMOS(mos: string, branch?: string): void {
 }
 
 /**
- * Get saved MOS/AFSC
+ * Get saved service job code
  */
 export function getSavedMOS(): { mos: string; branch: string } {
   const profile = getVeteranProfile();

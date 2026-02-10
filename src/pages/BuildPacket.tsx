@@ -516,7 +516,7 @@ export default function BuildPacket() {
                     <span className="font-medium text-foreground">
                       {profile.branch ? BRANCH_LABELS[profile.branch] : 'Not set'}
                     </span>
-                    <span className="text-muted-foreground">MOS/AFSC</span>
+                    <span className="text-muted-foreground">Service Job Code</span>
                     <span className="font-medium text-foreground">
                       {profile.mosCode || 'Not set'}
                       {profile.mosTitle ? ` - ${profile.mosTitle}` : ''}

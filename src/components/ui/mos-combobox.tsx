@@ -19,7 +19,7 @@ export function MOSCombobox({
   value,
   onValueChange,
   onHazardsSuggested,
-  placeholder = "Type MOS/AFSC code or job title...",
+  placeholder = "Type your service job code or title...",
   branch,
   persistToStorage = true
 }: MOSComboboxProps) {

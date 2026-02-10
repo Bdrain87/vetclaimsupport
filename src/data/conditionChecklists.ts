@@ -26,7 +26,7 @@ export const conditionChecklists: Record<string, ConditionChecklist> = {
       { item: 'VA Form 21-4138 (Statement in Support of Claim)', required: false, description: 'Personal statement about onset and symptoms' },
     ],
     recommendedEvidence: [
-      { item: 'Noise exposure documentation', required: true, description: 'MOS/AFSC records showing noise exposure' },
+      { item: 'Noise exposure documentation', required: true, description: 'Service job code records showing noise exposure' },
       { item: 'Audiogram results', required: false },
       { item: 'Buddy statement about noise exposure', required: false },
       { item: 'Statement about symptom onset during service', required: true },

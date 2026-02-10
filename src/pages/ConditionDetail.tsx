@@ -142,7 +142,7 @@ export default function ConditionDetail() {
             <p className="text-muted-foreground mb-4">
               This condition doesn't exist or has been removed.
             </p>
-            <Button onClick={() => navigate('/conditions')}>
+            <Button onClick={() => navigate('/claims')}>
               <ChevronLeft className="h-4 w-4 mr-2" />
               Back to Conditions
             </Button>
@@ -162,7 +162,7 @@ export default function ConditionDetail() {
   // Handle delete
   const handleDelete = () => {
     removeCondition(userCondition.id);
-    navigate('/conditions');
+    navigate('/claims');
   };
 
   // Evidence completion percentage
@@ -173,7 +173,7 @@ export default function ConditionDetail() {
   return (
     <div className="container max-w-4xl mx-auto py-6 px-4 space-y-6">
       {/* Back Button */}
-      <Button variant="ghost" onClick={() => navigate('/conditions')} className="mb-2">
+      <Button variant="ghost" onClick={() => navigate('/claims')} className="mb-2">
         <ChevronLeft className="h-4 w-4 mr-2" />
         Back to Conditions
       </Button>
@@ -364,7 +364,7 @@ export default function ConditionDetail() {
                     variant="outline"
                     size="sm"
                     className="mt-2"
-                    onClick={() => navigate('/symptoms')}
+                    onClick={() => navigate('/health/symptoms')}
                   >
                     <Activity className="h-3 w-3 mr-1" />
                     Log Symptoms
@@ -378,16 +378,16 @@ export default function ConditionDetail() {
 
       {/* Quick Actions */}
       <div className="flex flex-wrap gap-2">
-        <Button variant="outline" size="sm" onClick={() => navigate('/symptoms')}>
+        <Button variant="outline" size="sm" onClick={() => navigate('/health/symptoms')}>
           <Activity className="h-3 w-3 mr-1" /> Log Symptom
         </Button>
-        <Button variant="outline" size="sm" onClick={() => navigate('/secondary-finder')}>
+        <Button variant="outline" size="sm" onClick={() => navigate('/claims/secondary-finder')}>
           <Link2 className="h-3 w-3 mr-1" /> Find Secondaries
         </Button>
-        <Button variant="outline" size="sm" onClick={() => navigate('/nexus-letter')}>
+        <Button variant="outline" size="sm" onClick={() => navigate('/prep/nexus-letter')}>
           <FileText className="h-3 w-3 mr-1" /> Nexus Letter
         </Button>
-        <Button variant="outline" size="sm" onClick={() => navigate('/exam-prep')}>
+        <Button variant="outline" size="sm" onClick={() => navigate('/prep/exam')}>
           <Stethoscope className="h-3 w-3 mr-1" /> Exam Prep
         </Button>
       </div>
@@ -552,18 +552,23 @@ export default function ConditionDetail() {
             </>
           ) : (
             <Card className="border-dashed">
-              <CardContent className="py-8 text-center">
+              <CardContent className="py-8 text-center space-y-3">
                 <Scale className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                <p className="text-muted-foreground">
-                  For detailed rating criteria for this condition, visit the VA's rating schedule at 38 CFR Part 4.
+                <p className="text-sm text-muted-foreground">
+                  We don't have specific rating criteria mapped for {conditionDetails.abbreviation || conditionDetails.name} yet. You can look up rating criteria using the VA's Schedule for Rating Disabilities (VASRD).
                 </p>
-                <Button
-                  variant="link"
-                  className="mt-2"
-                  onClick={() => window.open('https://www.ecfr.gov/current/title-38/chapter-I/part-4', '_blank')}
-                >
-                  View VASRD on eCFR <ExternalLink className="h-4 w-4 ml-1" />
-                </Button>
+                <div className="flex flex-col gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => window.open('https://www.ecfr.gov/current/title-38/chapter-I/part-4', '_blank')}
+                  >
+                    View VASRD on eCFR <ExternalLink className="h-4 w-4 ml-1" />
+                  </Button>
+                  <Button variant="link" size="sm" onClick={() => navigate('/claims/calculator')}>
+                    Use Rating Calculator <ArrowRight className="h-3 w-3 ml-1" />
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           )}
@@ -600,7 +605,7 @@ export default function ConditionDetail() {
                 </div>
               ))}
 
-              <Button variant="outline" className="w-full mt-4" onClick={() => navigate('/documents')}>
+              <Button variant="outline" className="w-full mt-4" onClick={() => navigate('/settings/vault')}>
                 <FileText className="h-4 w-4 mr-2" />
                 Go to Documents Hub
               </Button>
@@ -675,7 +680,7 @@ export default function ConditionDetail() {
                   </ul>
                 </div>
 
-                <Button variant="outline" className="w-full" onClick={() => navigate('/exam-prep')}>
+                <Button variant="outline" className="w-full" onClick={() => navigate('/prep/exam')}>
                   <Stethoscope className="h-4 w-4 mr-2" />
                   Full Exam Prep Guide
                 </Button>
@@ -683,14 +688,21 @@ export default function ConditionDetail() {
             </Card>
           ) : (
             <Card className="border-dashed">
-              <CardContent className="py-8 text-center">
+              <CardContent className="py-8 text-center space-y-3">
                 <Stethoscope className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                <p className="text-muted-foreground">
-                  For the Disability Benefits Questionnaire (DBQ) for this condition, ask your examiner or visit va.gov/disability/how-to-file-claim
+                <p className="text-sm text-muted-foreground">
+                  We don't have a specific DBQ reference mapped for {conditionDetails.abbreviation || conditionDetails.name} yet. Use our general exam prep tools or view DBQ forms on VA.gov.
                 </p>
-                <Button variant="link" className="mt-2" onClick={() => navigate('/exam-prep')}>
-                  Go to General Exam Prep
-                </Button>
+                <div className="flex flex-col gap-2">
+                  <Button variant="outline" size="sm" onClick={() => navigate('/prep/exam')}>
+                    <Stethoscope className="h-4 w-4 mr-2" />
+                    General Exam Prep Guide
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => navigate('/prep/dbq')}>
+                    <FileText className="h-4 w-4 mr-2" />
+                    DBQ Form Guidance Tool
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           )}
@@ -730,11 +742,11 @@ export default function ConditionDetail() {
                 </div>
               ) : (
                 <p className="text-muted-foreground text-sm">
-                  No secondary conditions mapped for this condition yet. You can explore related conditions using the Secondary Conditions tool in Prep.
+                  We don't have specific secondary conditions mapped for {conditionDetails.abbreviation || conditionDetails.name} yet. Use the Secondary Condition Finder to explore potential secondary claims.
                 </p>
               )}
 
-              <Button variant="outline" className="w-full mt-4" onClick={() => navigate('/secondary-finder')}>
+              <Button variant="outline" className="w-full mt-4" onClick={() => navigate('/claims/secondary-finder')}>
                 <Link2 className="h-4 w-4 mr-2" />
                 Explore Secondary Conditions Finder
               </Button>

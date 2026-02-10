@@ -2,7 +2,7 @@ import { useState, useMemo, useRef, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft, X, Search, Shield, User, Briefcase, Stethoscope, Check, MapPin, Plane } from 'lucide-react';
-import { useProfileStore, BRANCH_LABELS, BRANCH_COLORS, type Branch } from '@/store/useProfileStore';
+import { useProfileStore, BRANCH_LABELS, BRANCH_COLORS, type Branch, type ClaimGoal } from '@/store/useProfileStore';
 import { searchMilitaryJobs, getCodeTypeForBranch, type MilitaryJobCode } from '@/data/militaryMOS';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import { useUserConditions } from '@/hooks/useUserConditions';
@@ -10,7 +10,7 @@ import { type VACondition, getConditionById } from '@/data/vaConditions';
 import useAppStore, { type DutyStation } from '@/store/useAppStore';
 import { SuccessAnimation } from '@/components/ui/success-animation';
 
-const TOTAL_STEPS = 10;
+const TOTAL_STEPS = 11;
 
 const BRANCH_TO_MOS: Record<Branch, string> = {
   army: 'Army',
@@ -225,6 +225,7 @@ export default function Onboarding() {
   const [mosCode, setMosCode] = useState(profileStore.mosCode);
   const [mosTitle, setMosTitle] = useState(profileStore.mosTitle);
   const [addedConditions, setAddedConditions] = useState<string[]>([]);
+  const [claimGoal, setClaimGoal] = useState<ClaimGoal | ''>('');
   const [nameError, setNameError] = useState('');
   const [showManualMOS, setShowManualMOS] = useState(false);
   const [manualCode, setManualCode] = useState('');
@@ -278,9 +279,10 @@ export default function Onboarding() {
       case 4: return true;
       case 5: return true;
       case 6: return true;
-      case 7: return true;
+      case 7: return true; // Goal step
       case 8: return true;
       case 9: return true;
+      case 10: return true;
       default: return true;
     }
   }, [step, firstName, branch]);
@@ -326,6 +328,7 @@ export default function Onboarding() {
     profileStore.setLastName(lastName.trim());
     if (branch) profileStore.setBranch(branch);
     if (mosCode) profileStore.setMOS(mosCode, mosTitle);
+    if (claimGoal) profileStore.setClaimGoal(claimGoal);
 
     for (const station of dutyStations) {
       appStore.addDutyStation(station);
@@ -840,8 +843,50 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 7: Existing Rated Conditions */}
+            {/* Step 7: What's Your Goal? */}
             {step === 7 && (
+              <div className="space-y-5">
+                <div className="text-center">
+                  <h2 className="text-xl font-bold text-white">What are you trying to do?</h2>
+                  <p className="text-white/40 text-sm mt-1">This helps us show you the most relevant tools first.</p>
+                </div>
+                <div className="space-y-2">
+                  {([
+                    { value: 'initial' as ClaimGoal, label: 'File an initial claim', desc: 'First time filing with the VA' },
+                    { value: 'increase' as ClaimGoal, label: 'Increase an existing rating', desc: 'Condition has gotten worse' },
+                    { value: 'secondary' as ClaimGoal, label: 'File for secondary conditions', desc: 'Conditions caused by a rated disability' },
+                    { value: 'appeal' as ClaimGoal, label: 'Appeal a denied claim', desc: 'Request a review of a VA decision' },
+                    { value: 'exploring' as ClaimGoal, label: 'Not sure yet \u2014 just exploring', desc: 'Learn what tools are available' },
+                  ]).map(option => (
+                    <button
+                      key={option.value}
+                      onClick={() => setClaimGoal(option.value)}
+                      className={`w-full flex items-start gap-3 p-4 rounded-xl border transition-all text-left ${
+                        claimGoal === option.value
+                          ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40 text-white'
+                          : 'bg-white/[0.04] border-white/[0.08] text-white/70 hover:bg-white/[0.06]'
+                      }`}
+                    >
+                      <div
+                        className="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5"
+                        style={{ borderColor: claimGoal === option.value ? '#3B82F6' : 'rgba(255,255,255,0.2)' }}
+                      >
+                        {claimGoal === option.value && (
+                          <div className="w-2.5 h-2.5 rounded-full bg-[#3B82F6]" />
+                        )}
+                      </div>
+                      <div>
+                        <span className="font-medium text-sm block">{option.label}</span>
+                        <span className="text-xs text-white/40">{option.desc}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Step 8: Existing Rated Conditions */}
+            {step === 8 && (
               <div className="space-y-5">
                 <div className="text-center">
                   <h2 className="text-xl font-bold text-white">Do you have any VA-rated conditions?</h2>
@@ -943,8 +988,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 8: Tab Tour Cards */}
-            {step === 8 && (
+            {/* Step 9: Tab Tour Cards */}
+            {step === 9 && (
               <div className="space-y-5">
                 <div className="text-center">
                   <h2 className="text-xl font-bold text-white">Here's what's inside</h2>
@@ -971,8 +1016,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 9: Thank You */}
-            {step === 9 && (
+            {/* Step 10: Thank You */}
+            {step === 10 && (
               <div className="text-center space-y-6">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -1031,7 +1076,7 @@ export default function Onboarding() {
               )}
             </div>
             <div className="flex items-center gap-2">
-              {(step === 3 || step === 4 || step === 5 || step === 6 || step === 7) && (
+              {(step === 3 || step === 4 || step === 5 || step === 6 || step === 7 || step === 8) && (
                 <button onClick={handleSkip} className="text-sm text-white/40 hover:text-white/60 transition-colors h-11 px-4">
                   Skip
                 </button>

@@ -36,7 +36,7 @@ export default function PrivacyPolicyPage() {
             When you use Vet Claim Support, the app stores the following types of information based on what you choose to enter:
           </p>
           <ul className="space-y-1.5 text-white/60">
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Profile information (name, military branch, MOS/AFSC)</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Profile information (name, military branch, service job code)</li>
             <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Service history (dates, deployments, duty stations)</li>
             <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Conditions you are tracking or claiming</li>
             <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Health logs (symptoms, sleep, migraines, medications, medical visits)</li>

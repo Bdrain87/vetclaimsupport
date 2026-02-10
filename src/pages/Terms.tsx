@@ -1,4 +1,4 @@
-import { FileText, AlertTriangle, Scale, Shield, CreditCard, BookOpen, RefreshCw, Mail, Gavel, Users } from 'lucide-react';
+import { FileText, AlertTriangle, Scale, Shield, CreditCard, BookOpen, RefreshCw, Mail, Gavel, Users, Sparkles } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
@@ -61,6 +61,55 @@ export default function Terms() {
                 Symptom tracking and journaling features
               </li>
             </ul>
+          </section>
+
+          {/* Artificial Intelligence Disclosure */}
+          <section>
+            <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-primary" />
+              Artificial Intelligence Disclosure
+            </h2>
+
+            <div className="space-y-4">
+              <div>
+                <h3 className="font-medium text-foreground mb-2">AI-Generated Content Notice</h3>
+                <p className="text-muted-foreground">
+                  This application uses artificial intelligence (Google Gemini) to provide analysis,
+                  suggestions, and educational content. AI-generated content may be inaccurate,
+                  incomplete, or outdated. Always verify AI-generated information against official
+                  VA resources before relying on it for your claim.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="font-medium text-foreground mb-2">Not a Substitute for Professional Advice</h3>
+                <p className="text-muted-foreground">
+                  AI-generated suggestions are not a substitute for advice from a Veterans Service
+                  Officer (VSO), attorney, or medical professional. The AI does not have access to
+                  your complete medical or service records and may not account for all factors
+                  relevant to your specific situation.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="font-medium text-foreground mb-2">Accuracy Limitation</h3>
+                <p className="text-muted-foreground">
+                  While we strive to provide helpful and accurate information, we do not guarantee
+                  the accuracy, completeness, or timeliness of any AI-generated content. Disability
+                  rating criteria, VA policies, and case law can change. Always confirm current
+                  information with the VA directly.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="font-medium text-foreground mb-2">Data Usage</h3>
+                <p className="text-muted-foreground">
+                  Information you enter into the app may be processed by AI services to generate
+                  personalized analysis. We do not sell your data. See our Privacy Policy for
+                  details on how your information is handled.
+                </p>
+              </div>
+            </div>
           </section>
 
           {/* Important Disclaimers */}

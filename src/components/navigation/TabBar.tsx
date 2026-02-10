@@ -8,7 +8,7 @@ const tabs = [
   { path: '/health-log', icon: FileText, label: 'Conditions' },
   { path: '/symptoms', icon: BookOpen, label: 'Journal' },
   { path: '/documents', icon: FolderOpen, label: 'Evidence' },
-  { path: '/exam-prep', icon: Calendar, label: 'Exam Day' },
+  { path: '/prep/exam', icon: Calendar, label: 'Exam Day' },
 ];
 
 export function TabBar() {

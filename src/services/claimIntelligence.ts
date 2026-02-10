@@ -427,7 +427,7 @@ export const ClaimIntelligence = {
       if (!profile.firstName) missing.push('first name');
       if (!profile.lastName) missing.push('last name');
       if (!profile.branch) missing.push('branch of service');
-      if (!profile.mosCode) missing.push('MOS/AFSC/Rating code');
+      if (!profile.mosCode) missing.push('service job code');
       if (!profile.hasCompletedOnboarding) missing.push('onboarding');
 
       if (missing.length > 0) {
@@ -736,7 +736,7 @@ export const ClaimIntelligence = {
                 addRec({
                   conditionId: cond.id,
                   conditionName: cond.name,
-                  reason: `Your MOS/AFSC (${jobCode.code} - ${jobCode.title}) involved "${hazard}" which is associated with this condition.`,
+                  reason: `Your service job code (${jobCode.code} - ${jobCode.title}) involved "${hazard}" which is associated with this condition.`,
                   source: 'service',
                   strength: hazardLower.includes('combat') || hazardLower.includes('blast') ? 'strong' : 'moderate',
                 });
