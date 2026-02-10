@@ -24,11 +24,11 @@ export const DocumentVault = () => {
     <div className="p-8 min-h-screen">
       {!isUnlocked ? (
         <div className="flex flex-col items-center justify-center mt-32 space-y-6">
-          <div className="p-10 rounded-full bg-[#C8A628]/10 border border-[#C8A628]/20 animate-pulse">
-            <ShieldCheck className="h-16 w-16 text-[#C8A628]" />
+          <div className="p-10 rounded-full bg-[#3B82F6]/10 border border-[#3B82F6]/20 animate-pulse">
+            <ShieldCheck className="h-16 w-16 text-[#3B82F6]" />
           </div>
           <h2 className="text-3xl font-black italic">SECURE VAULT</h2>
-          <button onClick={handleVaultUnlock} className="gold-button px-12 py-4">Authenticate</button>
+          <button onClick={handleVaultUnlock} className="primary-button px-12 py-4">Authenticate</button>
         </div>
       ) : (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">

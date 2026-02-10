@@ -45,7 +45,7 @@ export default function ProfileHub() {
       {/* Group 1: Profile Card */}
       <div className="rounded-xl border border-border bg-card overflow-hidden">
         <div className="p-4 flex items-center gap-4">
-          <div className="h-14 w-14 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 text-xl font-bold">
+          <div className="h-14 w-14 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-500 text-xl font-bold">
             {(firstName?.[0] || 'V').toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">

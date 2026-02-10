@@ -54,9 +54,9 @@ const cardVariant = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] } },
 };
 
-/* ─── gold gradient text style ─── */
-const goldGradientStyle: React.CSSProperties = {
-  background: 'linear-gradient(135deg, #C8A628 0%, #E8D48B 50%, #C8A628 100%)',
+/* ─── blue accent gradient text style ─── */
+const accentGradientStyle: React.CSSProperties = {
+  background: 'linear-gradient(135deg, #3B82F6 0%, #60A5FA 50%, #3B82F6 100%)',
   WebkitBackgroundClip: 'text',
   WebkitTextFillColor: 'transparent',
   backgroundClip: 'text',
@@ -80,11 +80,11 @@ function RedX() {
 }
 
 /* ─── reusable section header ─── */
-function SectionHeader({ gold, sub }: { gold: string; sub?: string }) {
+function SectionHeader({ title, sub }: { title: string; sub?: string }) {
   return (
     <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} className="text-center mb-8 md:mb-12 px-4">
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-wide leading-tight" style={goldGradientStyle}>
-        {gold}
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-wide leading-tight" style={accentGradientStyle}>
+        {title}
       </h2>
       {sub && (
         <p className="mt-3 md:mt-4 text-white/70 text-base sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
@@ -100,19 +100,19 @@ function GlassCard({ children, className = '' }: { children: React.ReactNode; cl
   return (
     <motion.div
       variants={cardVariant}
-      className={`bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-6 sm:p-8 shadow-lg shadow-black/20 transition-all duration-300 ease-out hover:shadow-xl hover:shadow-[#C8A628]/10 hover:border-[#C8A628]/30 hover:-translate-y-1 ${className}`}
+      className={`bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-6 sm:p-8 shadow-lg shadow-black/20 transition-all duration-300 ease-out hover:shadow-xl hover:shadow-[#3B82F6]/10 hover:border-[#3B82F6]/30 hover:-translate-y-1 ${className}`}
     >
       {children}
     </motion.div>
   );
 }
 
-/* ─── tool / log card with premium gold icon ─── */
+/* ─── tool / log card with premium blue accent icon ─── */
 function ToolCard({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
   return (
     <GlassCard>
-      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#C8A628]/20 to-[#C8A628]/5 border border-[#C8A628]/30 flex items-center justify-center shadow-lg shadow-[#C8A628]/10 mb-5 transition-all duration-300 group-hover:shadow-[#C8A628]/20 group-hover:border-[#C8A628]/50 group-hover:scale-105">
-        <span className="text-[#C8A628]">{icon}</span>
+      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#3B82F6]/20 to-[#3B82F6]/5 border border-[#3B82F6]/30 flex items-center justify-center shadow-lg shadow-[#3B82F6]/10 mb-5 transition-all duration-300 group-hover:shadow-[#3B82F6]/20 group-hover:border-[#3B82F6]/50 group-hover:scale-105">
+        <span className="text-[#3B82F6]">{icon}</span>
       </div>
       <h3 className="text-lg font-bold text-white mb-3">{title}</h3>
       <p className="text-white/60 text-sm leading-relaxed">{desc}</p>
@@ -120,10 +120,10 @@ function ToolCard({ icon, title, desc }: { icon: React.ReactNode; title: string;
   );
 }
 
-/* ─── gold icon circle (for audience lanes) ─── */
-function GoldIconCircle({ children }: { children: React.ReactNode }) {
+/* ─── blue accent icon circle (for audience lanes) ─── */
+function AccentIconCircle({ children }: { children: React.ReactNode }) {
   return (
-    <div className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#C8A628]/40 bg-[#C8A628]/10 text-[#C8A628] mb-5">
+    <div className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#3B82F6]/40 bg-[#3B82F6]/10 text-[#3B82F6] mb-5">
       {children}
     </div>
   );
@@ -170,7 +170,7 @@ export const PlatinumLanding = () => {
   const heroScale = useTransform(scrollYProgress, [0, 0.15], [1, 1.05]);
 
   return (
-    <div className="min-h-[100dvh] bg-[#102039] selection:bg-[#C8A628]/30 overflow-x-hidden max-w-full">
+    <div className="min-h-[100dvh] bg-[#102039] selection:bg-[#3B82F6]/30 overflow-x-hidden max-w-full">
       {/* Red glow animation for competitor pricing cards */}
       <style>{`
         @keyframes redGlow {
@@ -187,7 +187,7 @@ export const PlatinumLanding = () => {
           className="absolute inset-0 pointer-events-none"
           aria-hidden
         >
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(200,166,40,0.06)_0%,transparent_70%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.06)_0%,transparent_70%)]" />
         </motion.div>
 
         <motion.h1
@@ -197,7 +197,7 @@ export const PlatinumLanding = () => {
           className="relative text-3xl sm:text-5xl md:text-6xl lg:text-8xl font-black uppercase text-white tracking-tight leading-[1.08] max-w-5xl"
         >
           YOUR CLAIM.{' '}
-          <span className="text-[#C8A628]">YOUR EVIDENCE.</span>{' '}
+          <span className="text-[#3B82F6]">YOUR EVIDENCE.</span>{' '}
           YOUR MONEY.
         </motion.h1>
 
@@ -230,13 +230,13 @@ export const PlatinumLanding = () => {
 
             <div className="flex items-baseline justify-center gap-3 mb-1">
               <span className="text-white/50 line-through text-xl">$19.99</span>
-              <span className="text-5xl sm:text-6xl font-black" style={goldGradientStyle}>$4.99</span>
+              <span className="text-5xl sm:text-6xl font-black" style={accentGradientStyle}>$4.99</span>
             </div>
             <p className="text-white/60 text-sm mb-6 text-center">Limited Time Launch Price</p>
 
             <Link
               to="/dashboard"
-              className="block w-full bg-[#C8A628] hover:bg-[#D4B632] text-[#102039] font-bold text-lg py-3.5 rounded-xl transition-all duration-300 text-center hover:shadow-[0_0_30px_rgba(200,166,40,0.4)] active:scale-[0.98] min-h-[48px]"
+              className="block w-full bg-[#3B82F6] hover:bg-[#2563EB] text-[#102039] font-bold text-lg py-3.5 rounded-xl transition-all duration-300 text-center hover:shadow-[0_0_30px_rgba(59,130,246,0.4)] active:scale-[0.98] min-h-[48px]"
             >
               Get Started Now →
             </Link>
@@ -276,7 +276,7 @@ export const PlatinumLanding = () => {
             { icon: <Scale size={24} />, text: '38 CFR Part 4 Intelligence Built In' },
           ].map((item, i) => (
             <motion.div key={i} variants={cardVariant} className="flex items-center gap-3 text-center md:text-left">
-              <span className="text-[#C8A628] flex-shrink-0">{item.icon}</span>
+              <span className="text-[#3B82F6] flex-shrink-0">{item.icon}</span>
               <span className="text-white font-bold text-sm sm:text-base">{item.text}</span>
             </motion.div>
           ))}
@@ -285,7 +285,7 @@ export const PlatinumLanding = () => {
 
       {/* ═══════════════ SECTION 3: AUDIENCE LANES ═══════════════ */}
       <section className="py-10 sm:py-12 md:py-20 px-4 sm:px-6 max-w-7xl mx-auto">
-        <SectionHeader gold="Where Are You in Your Journey?" />
+        <SectionHeader title="Where Are You in Your Journey?" />
 
         <motion.div
           variants={staggerContainer}
@@ -296,42 +296,42 @@ export const PlatinumLanding = () => {
         >
           {/* Card 1 — Still Serving */}
           <GlassCard>
-            <GoldIconCircle><Shield size={24} /></GoldIconCircle>
+            <AccentIconCircle><Shield size={24} /></AccentIconCircle>
             <h3 className="text-xl font-bold text-white mb-4">Still Serving?</h3>
             <p className="text-white/60 text-sm leading-relaxed mb-6">
               You have 180 days before separation to file a BDD claim — and walk out with a rating and
               a check waiting. Most service members don't know this exists. The ones who do? They build
               their case before they take off the uniform.
             </p>
-            <Link to="/claim-tools" className="inline-flex items-center text-[#C8A628] font-bold text-base min-h-[44px] group">
+            <Link to="/claim-tools" className="inline-flex items-center text-[#3B82F6] font-bold text-base min-h-[44px] group">
               Start Your BDD Claim <span className="ml-1 transition-transform duration-200 group-hover:translate-x-1">→</span>
             </Link>
           </GlassCard>
 
           {/* Card 2 — Just Got Out */}
           <GlassCard>
-            <GoldIconCircle><FileText size={24} /></GoldIconCircle>
+            <AccentIconCircle><FileText size={24} /></AccentIconCircle>
             <h3 className="text-xl font-bold text-white mb-4">Just Got Out?</h3>
             <p className="text-white/60 text-sm leading-relaxed mb-6">
               The clock is ticking on your presumptive window. Every condition you don't document now
               gets harder to prove later. Stop Googling symptoms at 2 AM. Start building your case
               with the tools the pros use.
             </p>
-            <Link to="/dashboard" className="inline-flex items-center text-[#C8A628] font-bold text-base min-h-[44px] group">
+            <Link to="/dashboard" className="inline-flex items-center text-[#3B82F6] font-bold text-base min-h-[44px] group">
               Organize Your Evidence <span className="ml-1 transition-transform duration-200 group-hover:translate-x-1">→</span>
             </Link>
           </GlassCard>
 
           {/* Card 3 — Been Out for Years */}
           <GlassCard>
-            <GoldIconCircle><Flag size={24} /></GoldIconCircle>
+            <AccentIconCircle><Flag size={24} /></AccentIconCircle>
             <h3 className="text-xl font-bold text-white mb-4">10, 20, 30+ Years Out?</h3>
             <p className="text-white/60 text-sm leading-relaxed mb-6">
               New presumptive conditions get added every year. The PACT Act alone opened the door for
               millions. It doesn't matter if you served in Vietnam, Desert Storm, Iraq, or Afghanistan —
               if it's service-connected, it's owed. It's never too late.
             </p>
-            <Link to="/conditions" className="inline-flex items-center text-[#C8A628] font-bold text-base min-h-[44px] group">
+            <Link to="/conditions" className="inline-flex items-center text-[#3B82F6] font-bold text-base min-h-[44px] group">
               See What You Qualify For <span className="ml-1 transition-transform duration-200 group-hover:translate-x-1">→</span>
             </Link>
           </GlassCard>
@@ -347,7 +347,7 @@ export const PlatinumLanding = () => {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             className="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-wide leading-tight mb-8 md:mb-10 px-4"
-            style={goldGradientStyle}
+            style={accentGradientStyle}
           >
             The VA Claims Industry Is a $2 Billion Business Built on Your Confusion
           </motion.h2>
@@ -412,19 +412,19 @@ export const PlatinumLanding = () => {
               variants={cardVariant}
               animate={{
                 boxShadow: [
-                  '0 0 20px rgba(200,166,40,0.2), 0 0 40px rgba(200,166,40,0.1)',
-                  '0 0 30px rgba(200,166,40,0.4), 0 0 60px rgba(200,166,40,0.2)',
-                  '0 0 20px rgba(200,166,40,0.2), 0 0 40px rgba(200,166,40,0.1)',
+                  '0 0 20px rgba(59,130,246,0.2), 0 0 40px rgba(59,130,246,0.1)',
+                  '0 0 30px rgba(59,130,246,0.4), 0 0 60px rgba(59,130,246,0.2)',
+                  '0 0 20px rgba(59,130,246,0.2), 0 0 40px rgba(59,130,246,0.1)',
                 ],
               }}
               transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-              className="relative rounded-2xl p-6 border-2 border-[#C8A628] text-center bg-gradient-to-b from-[#C8A628]/10 to-transparent scale-[1.03]"
+              className="relative rounded-2xl p-6 border-2 border-[#3B82F6] text-center bg-gradient-to-b from-[#3B82F6]/10 to-transparent scale-[1.03]"
             >
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#C8A628] text-[#102039] text-xs font-bold px-4 py-1 rounded-full shadow-lg whitespace-nowrap">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#3B82F6] text-[#102039] text-xs font-bold px-4 py-1 rounded-full shadow-lg whitespace-nowrap">
                 BEST VALUE
               </div>
               <p className="text-white/70 text-sm mb-2 mt-1">Vet Claim Support</p>
-              <p className="font-bold text-xl mb-3" style={goldGradientStyle}>$4.99 Launch Price</p>
+              <p className="font-bold text-xl mb-3" style={accentGradientStyle}>$4.99 Launch Price</p>
               <GreenCheck size={8} />
             </motion.div>
           </motion.div>
@@ -433,7 +433,7 @@ export const PlatinumLanding = () => {
 
       {/* ═══════════════ SECTION 5: THE ARSENAL ═══════════════ */}
       <section className="py-10 sm:py-12 md:py-20 px-4 sm:px-6 max-w-7xl mx-auto">
-        <SectionHeader gold="The Arsenal" sub="Every tool you need to understand, build, and support your claim." />
+        <SectionHeader title="The Arsenal" sub="Every tool you need to understand, build, and support your claim." />
 
         <motion.div
           variants={staggerContainer}
@@ -489,7 +489,7 @@ export const PlatinumLanding = () => {
       <section className="py-10 sm:py-12 md:py-20 px-4 sm:px-6 bg-gradient-to-b from-[#0A1628]/40 via-[#0A1628]/20 to-transparent">
         <div className="max-w-7xl mx-auto">
           <SectionHeader
-            gold="Your Daily Evidence Machine"
+            title="Your Daily Evidence Machine"
             sub="Veterans with organized evidence are better prepared. Don't walk into your exam empty-handed."
           />
 
@@ -532,7 +532,7 @@ export const PlatinumLanding = () => {
       {/* ═══════════════ SECTION 7: BATTLE PREP ═══════════════ */}
       <section className="py-10 sm:py-12 md:py-20 px-4 sm:px-6 max-w-7xl mx-auto">
         <SectionHeader
-          gold="Battle Prep"
+          title="Battle Prep"
           sub="You wouldn't walk into a job interview unprepared. Don't walk into the exam that decides your financial future with nothing."
         />
 
@@ -614,7 +614,7 @@ export const PlatinumLanding = () => {
               { icon: <ShieldCheck size={32} />, label: 'No accounts required' },
             ].map((item, i) => (
               <motion.div key={i} variants={cardVariant} className="flex flex-col items-center gap-3 text-center">
-                <div className="w-16 h-16 flex items-center justify-center bg-white/5 rounded-2xl text-[#C8A628] border border-white/[0.08]">{item.icon}</div>
+                <div className="w-16 h-16 flex items-center justify-center bg-white/5 rounded-2xl text-[#3B82F6] border border-white/[0.08]">{item.icon}</div>
                 <p className="text-white/70 text-sm font-medium max-w-[180px]">{item.label}</p>
               </motion.div>
             ))}
@@ -624,15 +624,15 @@ export const PlatinumLanding = () => {
 
       {/* ═══════════════ SECTION 9: PRICING ═══════════════ */}
       <section className="relative py-12 sm:py-16 md:py-20 px-4 sm:px-6 overflow-hidden">
-        {/* gold glow behind price */}
+        {/* blue accent glow behind price */}
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#C8A628]/[0.04] blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#3B82F6]/[0.04] blur-3xl" />
         </div>
 
         <div className="relative max-w-3xl mx-auto text-center">
           <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}>
             <p className="text-white/60 text-3xl sm:text-4xl md:text-5xl font-bold line-through mb-2">$19.99</p>
-            <p className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black leading-none mb-4" style={goldGradientStyle}>$4.99</p>
+            <p className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black leading-none mb-4" style={accentGradientStyle}>$4.99</p>
             <p className="text-white uppercase text-sm font-bold tracking-widest mb-10 sm:mb-12">
               Limited Time Launch Price
             </p>
@@ -665,11 +665,11 @@ export const PlatinumLanding = () => {
       <section className="py-10 sm:py-12 md:py-20 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
           <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-wide leading-tight mb-8 md:mb-10" style={goldGradientStyle}>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-wide leading-tight mb-8 md:mb-10" style={accentGradientStyle}>
               Built by a Veteran Who Went Through It
             </h2>
 
-            <div className="border-l-4 border-[#C8A628]/60 pl-6 sm:pl-8">
+            <div className="border-l-4 border-[#3B82F6]/60 pl-6 sm:pl-8">
               <p className="text-white/70 text-base sm:text-lg leading-relaxed max-w-[700px] mb-6 sm:mb-8">
                 I'm a 100% service-connected disabled veteran. I went through the claims process myself —
                 the confusion, the denials, the C&amp;P exams, the sharks who wanted thousands of dollars to

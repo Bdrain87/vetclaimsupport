@@ -17,6 +17,7 @@ import {
   FileText,
   Clock,
   Target,
+  Pencil,
 } from 'lucide-react';
 import {
   secondaryConditions,
@@ -280,7 +281,7 @@ export function SmartSecondaryConditionsSuggester() {
                       "{suggestion.firstPersonNarrative}"
                     </div>
                     <p className="text-xs text-muted-foreground mt-2">
-                      ✏️ Customize this with your specific dates, symptoms, and experiences
+                      <Pencil className="h-3 w-3 inline text-muted-foreground" /> Customize this with your specific dates, symptoms, and experiences
                     </p>
                   </AccordionContent>
                 </AccordionItem>

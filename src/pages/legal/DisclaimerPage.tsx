@@ -17,8 +17,8 @@ export default function DisclaimerPage() {
 
       {/* Header */}
       <div className="flex items-start gap-4">
-        <div className="p-3 rounded-xl bg-amber-500/10 shrink-0">
-          <AlertTriangle className="h-6 w-6 text-amber-400" />
+        <div className="p-3 rounded-xl bg-blue-500/10 shrink-0">
+          <AlertTriangle className="h-6 w-6 text-blue-400" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-white">Important Disclaimer</h1>
@@ -28,7 +28,7 @@ export default function DisclaimerPage() {
 
       {/* Content */}
       <div className="space-y-6 text-sm leading-relaxed">
-        <div className="rounded-xl bg-amber-500/5 border border-amber-500/20 p-5 space-y-4">
+        <div className="rounded-xl bg-blue-500/5 border border-blue-500/20 p-5 space-y-4">
           <p className="text-white/70">
             <strong className="text-white">Vet Claim Support is not affiliated with or endorsed by the U.S. Department of Veterans Affairs (VA).</strong>
           </p>

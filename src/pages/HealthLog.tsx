@@ -39,36 +39,36 @@ const quickLogOptions: QuickLogOption[] = [
     icon: Activity,
     label: 'Log Symptom',
     description: 'Track pain, fatigue, or other symptoms',
-    gradient: 'from-[#C8A628]/20 to-[#C8A628]/5',
-    iconColor: 'text-[#C8A628]',
-    borderColor: 'border-[#C8A628]/30',
+    gradient: 'from-[#3B82F6]/20 to-[#3B82F6]/5',
+    iconColor: 'text-[#3B82F6]',
+    borderColor: 'border-[#3B82F6]/30',
   },
   {
     type: 'migraine',
     icon: Brain,
     label: 'Log Migraine',
     description: 'Track attacks with VA-aligned criteria',
-    gradient: 'from-[#C8A628]/20 to-[#C8A628]/5',
-    iconColor: 'text-[#C8A628]',
-    borderColor: 'border-[#C8A628]/30',
+    gradient: 'from-[#3B82F6]/20 to-[#3B82F6]/5',
+    iconColor: 'text-[#3B82F6]',
+    borderColor: 'border-[#3B82F6]/30',
   },
   {
     type: 'sleep',
     icon: Moon,
     label: 'Log Sleep',
     description: 'Track sleep quality and apnea symptoms',
-    gradient: 'from-[#C8A628]/20 to-[#C8A628]/5',
-    iconColor: 'text-[#C8A628]',
-    borderColor: 'border-[#C8A628]/30',
+    gradient: 'from-[#3B82F6]/20 to-[#3B82F6]/5',
+    iconColor: 'text-[#3B82F6]',
+    borderColor: 'border-[#3B82F6]/30',
   },
   {
     type: 'medication',
     icon: Pill,
     label: 'Add Medication',
     description: 'Track prescriptions and side effects',
-    gradient: 'from-[#C8A628]/20 to-[#C8A628]/5',
-    iconColor: 'text-[#C8A628]',
-    borderColor: 'border-[#C8A628]/30',
+    gradient: 'from-[#3B82F6]/20 to-[#3B82F6]/5',
+    iconColor: 'text-[#3B82F6]',
+    borderColor: 'border-[#3B82F6]/30',
   },
 ];
 
@@ -170,9 +170,9 @@ export default function HealthLog() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className="relative">
-            <div className="absolute inset-0 bg-[#C8A628]/30 blur-2xl rounded-full scale-150 opacity-50" />
-            <div className="relative p-3.5 rounded-2xl bg-gradient-to-br from-[#C8A628]/20 to-[#C8A628]/5 border border-[#C8A628]/20 shadow-lg shadow-[#C8A628]/10">
-              <Heart className="h-7 w-7 text-[#C8A628]" />
+            <div className="absolute inset-0 bg-[#3B82F6]/30 blur-2xl rounded-full scale-150 opacity-50" />
+            <div className="relative p-3.5 rounded-2xl bg-gradient-to-br from-[#3B82F6]/20 to-[#3B82F6]/5 border border-[#3B82F6]/20 shadow-lg shadow-[#3B82F6]/10">
+              <Heart className="h-7 w-7 text-[#3B82F6]" />
             </div>
           </div>
           <div>
@@ -306,13 +306,13 @@ export default function HealthLog() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Symptoms Card */}
               <Card
-                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-[#C8A628]/30"
+                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-[#3B82F6]/30"
                 onClick={() => setActiveTab('symptoms')}
               >
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="p-2 rounded-xl bg-[#C8A628]/10">
-                      <Activity className="h-5 w-5 text-[#C8A628]" />
+                    <div className="p-2 rounded-xl bg-[#3B82F6]/10">
+                      <Activity className="h-5 w-5 text-[#3B82F6]" />
                     </div>
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Symptoms</p>
@@ -330,13 +330,13 @@ export default function HealthLog() {
 
               {/* Migraines Card */}
               <Card
-                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-[#C8A628]/30"
+                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-[#3B82F6]/30"
                 onClick={() => setActiveTab('migraines')}
               >
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="p-2 rounded-xl bg-[#C8A628]/10">
-                      <Brain className="h-5 w-5 text-[#C8A628]" />
+                    <div className="p-2 rounded-xl bg-[#3B82F6]/10">
+                      <Brain className="h-5 w-5 text-[#3B82F6]" />
                     </div>
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Migraines</p>
@@ -355,13 +355,13 @@ export default function HealthLog() {
 
               {/* Sleep Card */}
               <Card
-                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-[#C8A628]/30"
+                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-[#3B82F6]/30"
                 onClick={() => setActiveTab('sleep')}
               >
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="p-2 rounded-xl bg-[#C8A628]/10">
-                      <Moon className="h-5 w-5 text-[#C8A628]" />
+                    <div className="p-2 rounded-xl bg-[#3B82F6]/10">
+                      <Moon className="h-5 w-5 text-[#3B82F6]" />
                     </div>
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Sleep Logs</p>
@@ -379,13 +379,13 @@ export default function HealthLog() {
 
               {/* Medications Card */}
               <Card
-                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-[#C8A628]/30"
+                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-[#3B82F6]/30"
                 onClick={() => setActiveTab('medications')}
               >
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="p-2 rounded-xl bg-[#C8A628]/10">
-                      <Pill className="h-5 w-5 text-[#C8A628]" />
+                    <div className="p-2 rounded-xl bg-[#3B82F6]/10">
+                      <Pill className="h-5 w-5 text-[#3B82F6]" />
                     </div>
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Active Meds</p>
@@ -393,7 +393,7 @@ export default function HealthLog() {
                     </div>
                   </div>
                   {stats.medications.withSideEffects > 0 && (
-                    <div className="flex items-center gap-2 text-xs text-amber-500">
+                    <div className="flex items-center gap-2 text-xs text-blue-500">
                       <AlertCircle className="h-3 w-3" />
                       <span>{stats.medications.withSideEffects} with side effects</span>
                     </div>

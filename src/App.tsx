@@ -71,11 +71,11 @@ function LoadingFallback() {
         transition={{ duration: 0.4, ease: 'easeOut' }}
       >
         <div className="relative">
-          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#C8A628] to-[#B8960F] flex items-center justify-center shadow-lg shadow-[#C8A628]/20">
+          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#3B82F6] to-[#1D4ED8] flex items-center justify-center shadow-lg shadow-[#3B82F6]/20">
             <span className="text-[#102039] text-4xl font-bold">V</span>
           </div>
           <motion.div
-            className="absolute inset-0 rounded-2xl border-2 border-[#C8A628]/30"
+            className="absolute inset-0 rounded-2xl border-2 border-[#3B82F6]/30"
             animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0, 0.5] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           />
@@ -86,7 +86,7 @@ function LoadingFallback() {
         </div>
         <div className="w-32 h-0.5 bg-white/10 rounded-full overflow-hidden">
           <motion.div
-            className="h-full bg-[#C8A628] rounded-full"
+            className="h-full bg-[#3B82F6] rounded-full"
             animate={{ x: ['-100%', '100%'] }}
             transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
           />

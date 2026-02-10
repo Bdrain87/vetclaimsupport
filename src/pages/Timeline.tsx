@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
-import { Clock, Shield, Stethoscope, AlertTriangle, Activity, Pill, Brain, Moon, FileText } from 'lucide-react';
+import { Clock, Shield, Stethoscope, AlertTriangle, Activity, Pill, Brain, Moon, FileText, Lightbulb } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { format, parseISO } from 'date-fns';
@@ -72,7 +72,7 @@ export default function Timeline() {
           title: `${exposure.type} Exposure`,
           description: exposure.location || exposure.details || 'Hazardous exposure',
           icon: AlertTriangle,
-          color: 'bg-orange-500',
+          color: 'bg-blue-500',
         });
       }
     });
@@ -197,7 +197,7 @@ export default function Timeline() {
         <Badge variant="outline" className="bg-blue-500/10 border-blue-500/30">
           <Stethoscope className="h-3 w-3 mr-1" /> Medical
         </Badge>
-        <Badge variant="outline" className="bg-orange-500/10 border-orange-500/30">
+        <Badge variant="outline" className="bg-blue-500/10 border-blue-500/30">
           <AlertTriangle className="h-3 w-3 mr-1" /> Exposure
         </Badge>
         <Badge variant="outline" className="bg-rose-500/10 border-rose-500/30">
@@ -257,7 +257,7 @@ export default function Timeline() {
       <Card className="bg-primary/5 border-primary/20">
         <CardContent className="py-4">
           <p className="text-sm text-muted-foreground">
-            <strong className="text-foreground">💡 Tip:</strong> This timeline helps demonstrate service connection 
+            <strong className="text-foreground inline-flex items-center gap-1"><Lightbulb className="h-4 w-4 text-blue-500" /> Tip:</strong> This timeline helps demonstrate service connection 
             by showing how events, exposures, and symptoms relate to your military service.
           </p>
         </CardContent>

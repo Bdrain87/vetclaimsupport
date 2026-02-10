@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Construction } from 'lucide-react';
 
 export default function PlaceholderPage({ title = 'Coming in Phase 6' }: { title?: string }) {
   const navigate = useNavigate();
@@ -14,8 +14,8 @@ export default function PlaceholderPage({ title = 'Coming in Phase 6' }: { title
         Back
       </button>
       <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
-        <div className="h-16 w-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
-          <span className="text-2xl">🚧</span>
+        <div className="h-16 w-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+          <Construction className="h-8 w-8 text-blue-500" />
         </div>
         <h1 className="text-xl font-bold text-foreground">{title}</h1>
         <p className="text-muted-foreground text-sm max-w-sm">

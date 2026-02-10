@@ -10,7 +10,7 @@ export function SyncStatusIndicator() {
       label: 'Synced',
     },
     syncing: {
-      color: 'bg-[#C8A628]',
+      color: 'bg-[#3B82F6]',
       label: 'Syncing...',
     },
     offline: {
@@ -32,7 +32,7 @@ export function SyncStatusIndicator() {
       title={config.label}
     >
       {status === 'syncing' ? (
-        <Loader2 className="h-2.5 w-2.5 text-[#C8A628] animate-spin" />
+        <Loader2 className="h-2.5 w-2.5 text-[#3B82F6] animate-spin" />
       ) : (
         <div className={`h-2.5 w-2.5 rounded-full ${config.color}`} />
       )}

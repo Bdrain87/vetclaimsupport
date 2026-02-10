@@ -203,7 +203,7 @@ export function CPExamPrepGuide({ initialCondition }: CPExamPrepGuideProps) {
               <AccordionItem value="symptom-tips" className="border rounded-lg px-4">
                 <AccordionTrigger className="hover:no-underline">
                   <div className="flex items-center gap-2">
-                    <Lightbulb className="h-4 w-4 text-yellow-500" />
+                    <Lightbulb className="h-4 w-4 text-blue-500" />
                     <span>Tips for Describing Symptoms</span>
                   </div>
                 </AccordionTrigger>
@@ -211,7 +211,7 @@ export function CPExamPrepGuide({ initialCondition }: CPExamPrepGuideProps) {
                   <ul className="space-y-2">
                     {selectedPrep.symptomTips.map((item, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm">
-                        <span className="text-yellow-500 mt-1">★</span>
+                        <span className="text-blue-500 mt-1">★</span>
                         <span>{item}</span>
                       </li>
                     ))}
@@ -366,7 +366,7 @@ export function CPExamPrepGuide({ initialCondition }: CPExamPrepGuideProps) {
             <AccordionItem value="pro-tips" className="border rounded-lg px-4">
               <AccordionTrigger className="hover:no-underline">
                 <div className="flex items-center gap-2">
-                  <Lightbulb className="h-4 w-4 text-yellow-500" />
+                  <Lightbulb className="h-4 w-4 text-blue-500" />
                   <span>Pro Tips from Veterans</span>
                 </div>
               </AccordionTrigger>
@@ -374,7 +374,7 @@ export function CPExamPrepGuide({ initialCondition }: CPExamPrepGuideProps) {
                 <ul className="space-y-2">
                   {generalExamTips.proTips.map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm">
-                      <span className="text-yellow-500 mt-1">★</span>
+                      <span className="text-blue-500 mt-1">★</span>
                       <span>{item}</span>
                     </li>
                   ))}

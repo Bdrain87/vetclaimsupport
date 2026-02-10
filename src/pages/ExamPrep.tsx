@@ -83,7 +83,7 @@ const generalTips = [
   { icon: Clock, tip: 'Arrive 15 minutes early with ID and any medical records', color: 'text-warning' },
   { icon: ThumbsUp, tip: 'Be honest but don\'t minimize your symptoms', color: 'text-success' },
   { icon: MessageSquare, tip: 'If asked "Can you do X?" - describe pain/difficulty, not just yes/no', color: 'text-primary' },
-  { icon: Activity, tip: 'Don\'t take pain medication before the exam if possible', color: 'text-orange-500' },
+  { icon: Activity, tip: 'Don\'t take pain medication before the exam if possible', color: 'text-blue-500' },
   { icon: Star, tip: 'Mention all conditions being claimed, examiners sometimes miss some', color: 'text-purple-500' },
 ];
 

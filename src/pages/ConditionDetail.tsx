@@ -466,7 +466,7 @@ export default function ConditionDetail() {
                         <Badge
                           className={
                             level.percentage === 0 ? 'bg-gray-500' :
-                            level.percentage <= 30 ? 'bg-amber-500' :
+                            level.percentage <= 30 ? 'bg-blue-500' :
                             level.percentage <= 70 ? 'bg-blue-500' :
                             'bg-green-500'
                           }

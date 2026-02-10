@@ -26,7 +26,7 @@ export const conflicts: Conflict[] = [
     id: 'vietnam',
     name: 'Vietnam War',
     years: '1955-1975',
-    icon: '🇻🇳',
+    icon: 'Flag',
     description: 'Service in Vietnam, Thailand, or Korean DMZ during this period may qualify for Agent Orange presumptive conditions.',
     commonConditions: [
       {
@@ -89,7 +89,7 @@ export const conflicts: Conflict[] = [
     id: 'gulf-war',
     name: 'Gulf War',
     years: '1990-1991',
-    icon: '🏜️',
+    icon: 'Sun',
     description: 'Operation Desert Shield/Storm veterans may qualify for Gulf War Syndrome presumptive conditions.',
     commonConditions: [
       {
@@ -147,7 +147,7 @@ export const conflicts: Conflict[] = [
     id: 'iraq-afghanistan',
     name: 'Iraq & Afghanistan (OEF/OIF/OND)',
     years: '2001-Present',
-    icon: '🎖️',
+    icon: 'Award',
     description: 'Post-9/11 veterans benefit from PACT Act (2022) burn pit presumptives and combat-related condition support.',
     commonConditions: [
       {
@@ -228,7 +228,7 @@ export const conflicts: Conflict[] = [
     id: 'korea',
     name: 'Korean War',
     years: '1950-1953',
-    icon: '🇰🇷',
+    icon: 'Flag',
     description: 'Korean War veterans may qualify for cold injury and POW presumptive conditions.',
     commonConditions: [
       {
@@ -290,7 +290,7 @@ export const conflicts: Conflict[] = [
     id: 'cold-war',
     name: 'Cold War Era',
     years: '1947-1991',
-    icon: '☢️',
+    icon: 'AlertTriangle',
     description: 'Includes atomic veterans, Camp Lejeune contamination, and other Cold War-era exposures.',
     commonConditions: [
       {
@@ -369,7 +369,7 @@ export const conflicts: Conflict[] = [
     id: 'peacetime',
     name: 'Peacetime Service',
     years: 'Various',
-    icon: '🛡️',
+    icon: 'Shield',
     description: 'All service eras - training injuries, occupational exposures, and MST apply regardless of wartime service.',
     commonConditions: [
       {
@@ -427,7 +427,7 @@ export const conflicts: Conflict[] = [
     id: 'wwii',
     name: 'World War II',
     years: '1941-1945',
-    icon: '⭐',
+    icon: 'Star',
     description: 'WWII veterans may qualify for POW presumptives, radiation exposure, and combat-related conditions.',
     commonConditions: [
       {

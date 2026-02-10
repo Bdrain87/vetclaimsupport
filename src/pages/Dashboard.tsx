@@ -130,7 +130,7 @@ export default function Dashboard() {
               />
               <motion.circle
                 cx="18" cy="18" r="15" fill="none"
-                stroke="#C8A628" strokeWidth="3"
+                stroke="#3B82F6" strokeWidth="3"
                 strokeLinecap="round"
                 strokeDasharray={`${readiness}, 100`}
                 initial={{ strokeDasharray: '0, 100' }}
@@ -162,7 +162,7 @@ export default function Dashboard() {
         {[
           { label: 'Add Condition', icon: Plus, route: '/claims', color: 'text-primary' },
           { label: 'Log Symptoms', icon: Activity, route: '/health/symptoms', color: 'text-emerald-500' },
-          { label: 'Exam Prep', icon: GraduationCap, route: '/prep/exam', color: 'text-amber-500' },
+          { label: 'Exam Prep', icon: GraduationCap, route: '/prep/exam', color: 'text-blue-500' },
           { label: 'Form Guide', icon: FileText, route: '/prep/form-guide', color: 'text-blue-500' },
         ].map((action) => (
           <Link
@@ -239,7 +239,7 @@ export default function Dashboard() {
                   <div
                     className={cn(
                       'w-2.5 h-2.5 rounded-full flex-shrink-0',
-                      score >= 75 ? 'bg-emerald-500' : score >= 50 ? 'bg-amber-500' : 'bg-muted-foreground/40'
+                      score >= 75 ? 'bg-emerald-500' : score >= 50 ? 'bg-blue-500' : 'bg-muted-foreground/40'
                     )}
                   />
                   <div className="flex-1 min-w-0">
@@ -297,12 +297,12 @@ export default function Dashboard() {
             }}
             className={cn(
               'w-full rounded-2xl p-4 text-left',
-              'bg-amber-500/10 border border-amber-500/20',
-              'hover:bg-amber-500/15 transition-colors'
+              'bg-blue-500/10 border border-blue-500/20',
+              'hover:bg-blue-500/15 transition-colors'
             )}
           >
             <div className="flex items-start gap-3">
-              <AlertTriangle className="h-5 w-5 text-amber-500 flex-shrink-0 mt-0.5" />
+              <AlertTriangle className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-foreground">
                   Evidence Gaps Found ({evidenceGaps.length})
@@ -327,7 +327,7 @@ export default function Dashboard() {
           className="rounded-2xl bg-card border border-border p-4 shadow-sm"
         >
           <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
-            <Zap className="w-4 h-4 text-[#C8A628]" />
+            <Zap className="w-4 h-4 text-[#3B82F6]" />
             Next Steps
           </h3>
           <div className="space-y-2.5">
@@ -337,7 +337,7 @@ export default function Dashboard() {
                   className={cn(
                     'flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold mt-0.5',
                     step.priority === 'urgent'
-                      ? 'bg-[#C8A628]/20 text-[#C8A628]'
+                      ? 'bg-[#3B82F6]/20 text-[#3B82F6]'
                       : 'bg-muted text-muted-foreground'
                   )}
                 >
@@ -352,7 +352,7 @@ export default function Dashboard() {
                 {step.actionRoute && (
                   <Link
                     to={step.actionRoute}
-                    className="text-[#C8A628] text-xs hover:text-[#E8D05A] shrink-0 mt-0.5"
+                    className="text-[#3B82F6] text-xs hover:text-[#60A5FA] shrink-0 mt-0.5"
                   >
                     Go
                   </Link>

@@ -17,8 +17,8 @@ export default function TermsOfServicePage() {
 
       {/* Header */}
       <div className="flex items-start gap-4">
-        <div className="p-3 rounded-xl bg-[#C8A628]/10 shrink-0">
-          <FileText className="h-6 w-6 text-[#C8A628]" />
+        <div className="p-3 rounded-xl bg-[#3B82F6]/10 shrink-0">
+          <FileText className="h-6 w-6 text-[#3B82F6]" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-white">Terms of Service</h1>
@@ -56,7 +56,7 @@ export default function TermsOfServicePage() {
         {/* No Professional Advice */}
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-white">4. No Professional Advice</h2>
-          <div className="rounded-xl bg-amber-500/5 border border-amber-500/20 p-4">
+          <div className="rounded-xl bg-blue-500/5 border border-blue-500/20 p-4">
             <p className="text-white/70">
               <strong className="text-white">The Service, including the VA Form Guide and any AI-generated draft text, is not legal advice, medical advice, or an accredited representative service.</strong> We are not attorneys, medical professionals, or VA-accredited claims agents. Using the Service does not create any professional-client relationship.
             </p>
@@ -70,11 +70,11 @@ export default function TermsOfServicePage() {
             <strong className="text-white">You are responsible for the accuracy of all information you enter and submit to any government agency.</strong> By using the Service, you agree to:
           </p>
           <ul className="space-y-1.5 text-white/60">
-            <li className="flex items-start gap-2"><span className="text-[#C8A628] mt-0.5">&#x2022;</span>Provide truthful and accurate information</li>
-            <li className="flex items-start gap-2"><span className="text-[#C8A628] mt-0.5">&#x2022;</span>Review and verify all information before submitting to the VA</li>
-            <li className="flex items-start gap-2"><span className="text-[#C8A628] mt-0.5">&#x2022;</span>Consult with accredited professionals when appropriate</li>
-            <li className="flex items-start gap-2"><span className="text-[#C8A628] mt-0.5">&#x2022;</span>Verify current VA form versions and requirements before submission</li>
-            <li className="flex items-start gap-2"><span className="text-[#C8A628] mt-0.5">&#x2022;</span>Not use the Service for fraudulent purposes</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Provide truthful and accurate information</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Review and verify all information before submitting to the VA</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Consult with accredited professionals when appropriate</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Verify current VA form versions and requirements before submission</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Not use the Service for fraudulent purposes</li>
           </ul>
         </section>
 
@@ -116,7 +116,7 @@ export default function TermsOfServicePage() {
           <h2 className="text-lg font-semibold text-white">9. Contact</h2>
           <p className="text-white/60">
             For questions about these Terms, contact us at:{' '}
-            <a href="mailto:blakedrain@gmail.com" className="text-[#C8A628] hover:underline">
+            <a href="mailto:blakedrain@gmail.com" className="text-[#3B82F6] hover:underline">
               blakedrain@gmail.com
             </a>
           </p>

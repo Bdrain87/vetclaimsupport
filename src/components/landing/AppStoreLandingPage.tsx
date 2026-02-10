@@ -1,4 +1,4 @@
-import { ShieldCheck, Lock, Medal, Flag, Activity, FileText, FolderOpen, Moon, Pill, Upload, Users, Clock, ClipboardCheck, History, Database, Heart, BookOpen, Stethoscope, ArrowRight, Sparkles, Calculator, Brain, MapPin, Star, CheckCircle2, TrendingUp, Zap, Shield, Award } from 'lucide-react';
+import { ShieldCheck, Lock, Medal, Flag, Activity, FileText, FolderOpen, Moon, Pill, Upload, Users, Clock, ClipboardCheck, History, Database, Heart, BookOpen, Stethoscope, ArrowRight, Sparkles, Calculator, Brain, MapPin, Star, CheckCircle2, TrendingUp, Zap, Shield, Award, Rocket } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { totalDisabilitiesCount } from '@/data/vaDisabilities';
@@ -136,7 +136,7 @@ export function AppStoreLandingPage() {
                     {/* Launch Special Badge */}
                     <div className="flex justify-center mb-3">
                       <Badge className="bg-gradient-to-r from-primary/80 to-blue-500/80 text-white border-0 shadow-lg shadow-primary/20 text-xs font-bold px-4 py-1.5 animate-pulse">
-                        🚀 LIMITED TIME LAUNCH PRICE
+                        <Rocket className="h-3.5 w-3.5 inline" /> LIMITED TIME LAUNCH PRICE
                       </Badge>
                     </div>
 
@@ -205,25 +205,25 @@ export function AppStoreLandingPage() {
         {/* Veteran Badge Section */}
         <section className="px-6 pb-16">
           <div className="max-w-4xl mx-auto">
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-900/30 via-amber-950/20 to-amber-900/10 border border-amber-600/20 p-8 sm:p-10">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy-800/30 via-navy-900/20 to-navy-900/10 border border-blue-600/20 p-8 sm:p-10">
               {/* Decorative elements */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl" />
-              <div className="absolute bottom-0 left-0 w-48 h-48 bg-amber-600/10 rounded-full blur-2xl" />
+              <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-600/10 rounded-full blur-2xl" />
 
               <div className="relative flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
                 <div className="flex gap-4">
-                  <div className="flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/30 shadow-lg shadow-amber-500/10">
-                    <Medal className="h-8 w-8 text-amber-400" />
+                  <div className="flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/30 shadow-lg shadow-blue-500/10">
+                    <Medal className="h-8 w-8 text-blue-400" />
                   </div>
-                  <div className="flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/30 shadow-lg shadow-amber-500/10">
-                    <Flag className="h-8 w-8 text-amber-400" />
+                  <div className="flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/30 shadow-lg shadow-blue-500/10">
+                    <Flag className="h-8 w-8 text-blue-400" />
                   </div>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl sm:text-2xl font-bold text-amber-100 mb-2">
+                  <h3 className="text-xl sm:text-2xl font-bold text-blue-100 mb-2">
                     Built by a Veteran, For Those Who Serve
                   </h3>
-                  <p className="text-amber-200/70 text-base sm:text-lg">
+                  <p className="text-blue-200/70 text-base sm:text-lg">
                     Created by someone who has been through the claims process—for veterans, service members, and their families.
                   </p>
                 </div>
@@ -438,8 +438,8 @@ export function AppStoreLandingPage() {
                   icon: Zap,
                   title: 'Instant Access',
                   description: 'No signup required. Install and start building your evidence immediately.',
-                  gradient: 'from-amber-500/20 to-orange-500/20',
-                  iconColor: 'text-amber-400'
+                  gradient: 'from-blue-500/20 to-blue-500/20',
+                  iconColor: 'text-blue-400'
                 },
                 {
                   icon: TrendingUp,

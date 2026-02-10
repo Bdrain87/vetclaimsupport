@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Search, ArrowRight, Link } from 'lucide-react';
+import { Search, ArrowRight, Link, Lightbulb } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -91,7 +91,7 @@ export function SecondaryConditionsTab() {
                 significantly increase your combined rating.
               </p>
               <p className="text-xs text-warning/90 font-medium">
-                💡 Tip: Conditions affecting different body systems are easier to rate separately.
+                <Lightbulb className="h-3 w-3 inline text-warning/90" /> Tip: Conditions affecting different body systems are easier to rate separately.
               </p>
             </div>
           </div>

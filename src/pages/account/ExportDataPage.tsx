@@ -49,8 +49,8 @@ export default function ExportDataPage() {
 
       {/* Header */}
       <div className="text-center space-y-3">
-        <div className="w-16 h-16 mx-auto rounded-full bg-[#C8A628]/10 border border-[#C8A628]/20 flex items-center justify-center">
-          <Download className="h-8 w-8 text-[#C8A628]" />
+        <div className="w-16 h-16 mx-auto rounded-full bg-[#3B82F6]/10 border border-[#3B82F6]/20 flex items-center justify-center">
+          <Download className="h-8 w-8 text-[#3B82F6]" />
         </div>
         <h1 className="text-2xl font-bold text-white">Export Your Data</h1>
         <p className="text-white/50 text-sm">
@@ -66,11 +66,11 @@ export default function ExportDataPage() {
             onClick={() => setFormat('json')}
             className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${
               format === 'json'
-                ? 'bg-[#C8A628]/10 border-[#C8A628]/40'
+                ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40'
                 : 'bg-white/[0.04] border-white/[0.08] hover:bg-white/[0.06]'
             }`}
           >
-            <FileJson className={`h-8 w-8 ${format === 'json' ? 'text-[#C8A628]' : 'text-white/40'}`} />
+            <FileJson className={`h-8 w-8 ${format === 'json' ? 'text-[#3B82F6]' : 'text-white/40'}`} />
             <span className={`text-sm font-medium ${format === 'json' ? 'text-white' : 'text-white/60'}`}>JSON</span>
             <span className="text-[10px] text-white/30">Machine-readable</span>
           </button>
@@ -79,11 +79,11 @@ export default function ExportDataPage() {
             onClick={() => setFormat('pdf')}
             className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${
               format === 'pdf'
-                ? 'bg-[#C8A628]/10 border-[#C8A628]/40'
+                ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40'
                 : 'bg-white/[0.04] border-white/[0.08] hover:bg-white/[0.06]'
             }`}
           >
-            <FileText className={`h-8 w-8 ${format === 'pdf' ? 'text-[#C8A628]' : 'text-white/40'}`} />
+            <FileText className={`h-8 w-8 ${format === 'pdf' ? 'text-[#3B82F6]' : 'text-white/40'}`} />
             <span className={`text-sm font-medium ${format === 'pdf' ? 'text-white' : 'text-white/60'}`}>PDF</span>
             <span className="text-[10px] text-white/30">Human-readable</span>
           </button>
@@ -94,7 +94,7 @@ export default function ExportDataPage() {
       <button
         onClick={handleExport}
         disabled={exporting}
-        className="w-full h-12 rounded-xl bg-[#C8A628] text-[#102039] font-bold text-sm hover:bg-[#C8A628]/90 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+        className="w-full h-12 rounded-xl bg-[#3B82F6] text-[#102039] font-bold text-sm hover:bg-[#3B82F6]/90 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
       >
         {exporting ? (
           <>

@@ -37,7 +37,7 @@ export function BottomTabBar() {
               key={tab.to}
               onClick={() => navigate(tab.to)}
               className={cn(
-                'flex flex-col items-center justify-center gap-1',
+                'relative flex flex-col items-center justify-center gap-1',
                 'flex-1 min-h-[48px] min-w-[48px]',
                 'transition-all duration-200 ease-out',
               )}
@@ -45,17 +45,20 @@ export function BottomTabBar() {
               <tab.icon
                 className={cn(
                   'h-6 w-6 transition-all duration-200 ease-out',
-                  isActive ? 'text-amber-500 scale-105' : 'text-muted-foreground'
+                  isActive ? 'text-blue-500 scale-105' : 'text-slate-400'
                 )}
               />
               <span
                 className={cn(
                   'text-xs font-medium transition-colors duration-200 ease-out',
-                  isActive ? 'text-amber-500' : 'text-muted-foreground'
+                  isActive ? 'text-blue-500' : 'text-slate-400'
                 )}
               >
                 {tab.label}
               </span>
+              {isActive && (
+                <span className="absolute bottom-1 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-blue-500" />
+              )}
             </button>
           );
         })}

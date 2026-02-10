@@ -23,7 +23,7 @@ const audiences = [
     description: 'Just got out? Denied or underrated? Now you\'ll understand why. Learn exactly what the VA needs and prepare a winning supplemental claim.',
     tagline: 'Denied or underrated? Now you\'ll know why',
     icon: Briefcase,
-    gradient: 'from-amber-500 to-orange-500'
+    gradient: 'from-blue-500 to-blue-500'
   },
   {
     title: 'Long-Time Veterans',

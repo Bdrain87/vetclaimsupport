@@ -16,9 +16,9 @@ const stats = [
     value: '$15,000+',
     label: 'average cost for claim consultant "help"',
     icon: DollarSign,
-    color: 'text-amber-500',
-    bgColor: 'bg-amber-50',
-    borderColor: 'border-amber-100'
+    color: 'text-blue-500',
+    bgColor: 'bg-blue-50',
+    borderColor: 'border-blue-100'
   },
   {
     value: '4.5 years',

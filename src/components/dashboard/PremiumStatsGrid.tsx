@@ -82,14 +82,14 @@ export function PremiumStatsGrid() {
       <Link to="/" className="group">
         <div className={cn(
           glassCard,
-          "hover:scale-[1.02] hover:shadow-[0_12px_40px_rgba(200,166,40,0.2)] hover:border-[#C8A628]/30"
+          "hover:scale-[1.02] hover:shadow-[0_12px_40px_rgba(59,130,246,0.2)] hover:border-[#3B82F6]/30"
         )}>
           <div className="flex items-center justify-center mb-2">
             <div className="relative w-16 h-16">
               <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
                 <circle cx="18" cy="18" r="15" fill="none" stroke="currentColor" className="text-white/[0.06]" strokeWidth="2.5" />
                 <motion.circle
-                  cx="18" cy="18" r="15" fill="none" stroke="#C8A628" strokeWidth="2.5"
+                  cx="18" cy="18" r="15" fill="none" stroke="#3B82F6" strokeWidth="2.5"
                   strokeLinecap="round"
                   initial={{ strokeDasharray: "0, 100" }}
                   animate={{ strokeDasharray: `${overallScore}, 100` }}
@@ -113,11 +113,11 @@ export function PremiumStatsGrid() {
       <Link to="/" className="group">
         <div className={cn(
           glassCard,
-          "hover:scale-[1.02] hover:shadow-[0_12px_40px_rgba(200,166,40,0.2)] hover:border-[#C8A628]/30"
+          "hover:scale-[1.02] hover:shadow-[0_12px_40px_rgba(59,130,246,0.2)] hover:border-[#3B82F6]/30"
         )}>
           <div className="flex items-start justify-between mb-2">
-            <div className="p-2 rounded-xl bg-[#C8A628]/10 border border-[#C8A628]/20">
-              <CheckCircle2 className="h-5 w-5 text-[#C8A628]" />
+            <div className="p-2 rounded-xl bg-[#3B82F6]/10 border border-[#3B82F6]/20">
+              <CheckCircle2 className="h-5 w-5 text-[#3B82F6]" />
             </div>
           </div>
           <div className="text-2xl font-bold text-white">
@@ -133,11 +133,11 @@ export function PremiumStatsGrid() {
       <Link to="/" className="group">
         <div className={cn(
           glassCard,
-          "hover:scale-[1.02] hover:shadow-[0_12px_40px_rgba(200,166,40,0.15)] hover:border-[#C8A628]/20"
+          "hover:scale-[1.02] hover:shadow-[0_12px_40px_rgba(59,130,246,0.15)] hover:border-[#3B82F6]/20"
         )}>
           <div className="flex items-start justify-between mb-2">
-            <div className="p-2 rounded-xl bg-[#C8A628]/10 border border-[#C8A628]/20">
-              <FileText className="h-5 w-5 text-[#C8A628]" />
+            <div className="p-2 rounded-xl bg-[#3B82F6]/10 border border-[#3B82F6]/20">
+              <FileText className="h-5 w-5 text-[#3B82F6]" />
             </div>
           </div>
           <div className="text-2xl font-bold text-white">
@@ -153,11 +153,11 @@ export function PremiumStatsGrid() {
       {daysUntilSep ? (
         <div className={cn(
           glassCard,
-          "border-[#C8A628]/20"
+          "border-[#3B82F6]/20"
         )}>
           <div className="flex items-start justify-between mb-2">
-            <div className="p-2 rounded-xl bg-[#C8A628]/10 border border-[#C8A628]/20">
-              <Calendar className="h-5 w-5 text-[#C8A628]" />
+            <div className="p-2 rounded-xl bg-[#3B82F6]/10 border border-[#3B82F6]/20">
+              <Calendar className="h-5 w-5 text-[#3B82F6]" />
             </div>
           </div>
           <div className="text-2xl font-bold text-white">
@@ -171,11 +171,11 @@ export function PremiumStatsGrid() {
         <Link to="/symptoms" className="group">
           <div className={cn(
             glassCard,
-            "hover:scale-[1.02] hover:shadow-[0_12px_40px_rgba(200,166,40,0.15)] hover:border-[#C8A628]/20"
+            "hover:scale-[1.02] hover:shadow-[0_12px_40px_rgba(59,130,246,0.15)] hover:border-[#3B82F6]/20"
           )}>
             <div className="flex items-start justify-between mb-2">
-              <div className="p-2 rounded-xl bg-[#C8A628]/10 border border-[#C8A628]/20">
-                <Activity className="h-5 w-5 text-[#C8A628]" />
+              <div className="p-2 rounded-xl bg-[#3B82F6]/10 border border-[#3B82F6]/20">
+                <Activity className="h-5 w-5 text-[#3B82F6]" />
               </div>
             </div>
             <div className="text-2xl font-bold text-white">

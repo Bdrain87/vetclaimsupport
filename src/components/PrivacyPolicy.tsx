@@ -11,13 +11,13 @@ const POLICIES = [
 export const PrivacyPolicy = () => (
   <div className="glass-card p-8 space-y-6">
     <div className="flex items-center gap-3 mb-4">
-      <Shield className="text-[#C8A628]" size={24} />
+      <Shield className="text-[#3B82F6]" size={24} />
       <h2 className="text-2xl font-black italic text-white uppercase tracking-tighter">Zero-Knowledge Privacy</h2>
     </div>
     {POLICIES.map((p, i) => (
       <div key={i} className="p-4 bg-white/5 border border-white/10 rounded-2xl">
         <h3 className="text-sm font-black text-white uppercase tracking-tight mb-1">
-          <span className="text-[#C8A628] mr-2">{i + 1}.</span>{p.title}
+          <span className="text-[#3B82F6] mr-2">{i + 1}.</span>{p.title}
         </h3>
         <p className="text-xs text-white/40 leading-relaxed">{p.text}</p>
       </div>

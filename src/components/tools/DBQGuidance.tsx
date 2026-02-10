@@ -15,6 +15,7 @@ import {
   Download,
   Printer,
   HelpCircle,
+  Lightbulb,
 } from 'lucide-react';
 import jsPDF from 'jspdf';
 
@@ -875,7 +876,7 @@ export function DBQGuidance() {
       <Card className="data-card bg-primary/5 border-primary/20">
         <CardContent className="pt-4">
           <h4 className="font-medium text-foreground mb-3 flex items-center gap-2">
-            💡 Pro Tips for Private DBQs
+            <Lightbulb className="h-4 w-4 text-blue-500" /> Pro Tips for Private DBQs
           </h4>
           <ul className="text-sm text-muted-foreground space-y-2">
             <li className="flex items-start gap-2">

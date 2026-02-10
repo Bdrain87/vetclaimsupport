@@ -1,14 +1,14 @@
 import { Shield, Lock, Eye, Database, Trash2, ShieldCheck } from 'lucide-react';
 
 const PolicySection = ({ icon: Icon, number, title, children }: { icon: React.ElementType, number: number, title: string, children: React.ReactNode }) => (
-  <div className="p-6 bg-white/5 border border-white/10 rounded-[2rem] hover:border-[#C8A628]/30 transition-all group">
+  <div className="p-6 bg-white/5 border border-white/10 rounded-[2rem] hover:border-[#3B82F6]/30 transition-all group">
     <div className="flex items-start gap-4">
-      <div className="p-3 bg-[#C8A628]/10 rounded-xl text-[#C8A628] shrink-0 group-hover:scale-110 transition-transform">
+      <div className="p-3 bg-[#3B82F6]/10 rounded-xl text-[#3B82F6] shrink-0 group-hover:scale-110 transition-transform">
         <Icon size={20} />
       </div>
       <div>
         <h2 className="text-lg font-black italic text-white uppercase tracking-tight mb-3">
-          <span className="text-[#C8A628] mr-2">{number}.</span>{title}
+          <span className="text-[#3B82F6] mr-2">{number}.</span>{title}
         </h2>
         <div className="text-sm text-white/50 leading-relaxed font-medium">
           {children}
@@ -23,12 +23,12 @@ export default function Privacy() {
     <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
       {/* Header */}
       <div className="text-center pt-8 pb-4">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C8A628]/10 border border-[#C8A628]/20 mb-6">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#3B82F6]/10 border border-[#3B82F6]/20 mb-6">
           <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-[10px] font-black text-[#C8A628] uppercase tracking-[0.2em]">Zero-Knowledge Architecture</span>
+          <span className="text-[10px] font-black text-[#3B82F6] uppercase tracking-[0.2em]">Zero-Knowledge Architecture</span>
         </div>
         <h1 className="text-4xl md:text-5xl font-black italic text-white tracking-tighter uppercase mb-4">
-          Zero-Knowledge <span className="text-[#C8A628]">Privacy Policy</span>
+          Zero-Knowledge <span className="text-[#3B82F6]">Privacy Policy</span>
         </h1>
         <p className="text-white/40 text-sm font-bold uppercase tracking-widest">
           Vet Claim Support | Platinum
@@ -39,7 +39,7 @@ export default function Privacy() {
       {/* Policy Sections */}
       <div className="glass-card premium-border p-8 space-y-6">
         <PolicySection icon={Eye} number={1} title="We Do Not Collect Your Data">
-          Vet Claim Support is built on a <strong className="text-[#C8A628]">"Local-First" architecture</strong>.
+          Vet Claim Support is built on a <strong className="text-[#3B82F6]">"Local-First" architecture</strong>.
           Unlike traditional apps, we do not maintain a central database. Your medical logs,
           symptoms, and personal claim details never leave your device.
         </PolicySection>
@@ -65,7 +65,7 @@ export default function Privacy() {
         <PolicySection icon={ShieldCheck} number={5} title="HIPAA & Privacy">
           While we are not a "Covered Entity" under HIPAA (as we are a software tool and
           not a healthcare provider), our Zero-Knowledge architecture{' '}
-          <strong className="text-[#C8A628]">exceeds industry standards</strong> for medical
+          <strong className="text-[#3B82F6]">exceeds industry standards</strong> for medical
           data privacy by removing the possibility of server-side data breaches.
         </PolicySection>
       </div>
@@ -73,7 +73,7 @@ export default function Privacy() {
       {/* Footer Disclaimer */}
       <div className="text-center pb-12">
         <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/5">
-          <Shield className="text-[#C8A628]" size={16} />
+          <Shield className="text-[#3B82F6]" size={16} />
           <p className="text-[10px] text-white/50 font-black uppercase tracking-[0.2em]">
             Built for Veterans. Your data never leaves your device.
           </p>
