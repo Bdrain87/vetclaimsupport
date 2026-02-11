@@ -11,13 +11,6 @@ export function useAIGenerate(persona: keyof typeof AI_CONFIG) {
   const generateWithCache = useCallback(async (input: string): Promise<string | null> => {
     setError(null);
 
-    // Check for API key first
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-    if (!apiKey) {
-      setError('AI features are temporarily unavailable. Please try again later.');
-      return null;
-    }
-
     const cacheKey = `${persona}:${input.substring(0, 200)}`;
     const cached = getCache(cacheKey);
     if (cached) return cached;
