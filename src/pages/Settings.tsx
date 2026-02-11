@@ -573,17 +573,20 @@ export default function Settings() {
       <Card>
         <CardHeader>
           <CardTitle>Data Privacy</CardTitle>
-          <CardDescription>Your data stays on your device</CardDescription>
+          <CardDescription>How your data is handled</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            Your personal documents and health data are stored locally on your device using browser storage (IndexedDB and localStorage). We never collect or store your personal health information on our servers.
+            Most of your personal documents and health data are stored locally on your device using browser storage (IndexedDB and localStorage). Some features use cloud services to function.
           </p>
           <p className="text-sm text-muted-foreground">
-            <strong className="text-foreground">AI Features:</strong> When you use AI-powered features (like the symptom checker), only the specific information you're analyzing is processed — never stored on external servers. You control what gets analyzed.
+            <strong className="text-foreground">AI Features:</strong> When you use AI-powered features, the specific information you choose to analyze is sent to third-party AI services for processing. This data is not permanently stored by these services but does leave your device during analysis. You control what gets analyzed.
           </p>
           <p className="text-sm text-muted-foreground">
-            No accounts required. No tracking. Your data, your control.
+            <strong className="text-foreground">Cloud Sync:</strong> If you use account or sync features, some data may be transmitted to our cloud infrastructure. See our <Link to="/settings/privacy" className="text-gold underline">Privacy Policy</Link> and <Link to="/settings/terms" className="text-gold underline">Terms of Service</Link> for full details on what data is collected, how it is used, and your rights.
+          </p>
+          <p className="text-sm text-muted-foreground">
+            We are committed to minimizing data collection and giving you control over your information.
           </p>
         </CardContent>
       </Card>
