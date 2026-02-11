@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ExternalLink, FileText, Shield, BookOpen } from 'lucide-react';
 import PACTActChecker from '@/components/tools/PACTActChecker';
+import { PageContainer } from '@/components/PageContainer';
 
 interface VAResource {
   title: string;
@@ -72,7 +73,7 @@ export default function VAResources() {
   const [activeTab, setActiveTab] = useState('links');
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <PageContainer>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-foreground mb-2">VA Resources</h1>
         <p className="text-muted-foreground">
@@ -359,6 +360,6 @@ export default function VAResources() {
           </div>
         </TabsContent>
       </Tabs>
-    </div>
+    </PageContainer>
   );
 }

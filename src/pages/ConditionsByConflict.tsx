@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ConflictCard } from '@/components/ConflictCard';
 import { ConflictDetail } from '@/components/ConflictDetail';
 import { conflicts, searchConditions, getAllPresumptiveConditions, Conflict } from '@/data/conflictConditions';
+import { PageContainer } from '@/components/PageContainer';
 
 type FilterType = 'all' | 'presumptive';
 
@@ -44,7 +45,7 @@ export default function ConditionsByConflict() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <PageContainer className="space-y-6 animate-fade-in">
       {/* Header */}
       <div className="section-header">
         <div className="section-icon">
@@ -234,6 +235,6 @@ export default function ConditionsByConflict() {
           </CardContent>
         </Card>
       )}
-    </div>
+    </PageContainer>
   );
 }

@@ -26,6 +26,7 @@ import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { generateCPExamPacketPDF } from '@/services/exportEngine';
 import { cn } from '@/lib/utils';
 import { format, subDays } from 'date-fns';
+import { PageContainer } from '@/components/PageContainer';
 
 // Condition-specific reminders
 const conditionReminders: Record<string, string[]> = {
@@ -375,7 +376,7 @@ export default function CPExamPacket() {
   ];
 
   return (
-    <div className="container max-w-4xl mx-auto px-4 py-6 space-y-4 animate-fade-in">
+    <PageContainer className="py-6 space-y-4 animate-fade-in">
       {/* Back Button */}
       <Button variant="ghost" onClick={() => navigate(-1)} className="mb-1">
         <ChevronLeft className="h-4 w-4 mr-2" />
@@ -748,7 +749,7 @@ export default function CPExamPacket() {
           {pdfExporting ? 'Generating PDF...' : 'Export as PDF'}
         </Button>
       </div>
-    </div>
+    </PageContainer>
   );
 }
 

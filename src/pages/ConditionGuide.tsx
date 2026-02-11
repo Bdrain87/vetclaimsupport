@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { PageContainer } from '@/components/PageContainer';
 
 interface ConditionGuide {
   id: string;
@@ -233,7 +234,7 @@ export default function ConditionGuide() {
 
   if (selectedGuide) {
     return (
-      <div className="space-y-6 animate-fade-in">
+      <PageContainer className="space-y-6 animate-fade-in">
         <button
           onClick={() => setSelectedGuide(null)}
           className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1"
@@ -355,12 +356,12 @@ export default function ConditionGuide() {
             </CardContent>
           </Card>
         </div>
-      </div>
+      </PageContainer>
     );
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <PageContainer className="space-y-6 animate-fade-in">
       <div className="section-header">
         <div className="section-icon">
           <BookOpen className="h-5 w-5" />
@@ -426,6 +427,6 @@ export default function ConditionGuide() {
           </CardContent>
         </Card>
       )}
-    </div>
+    </PageContainer>
   );
 }

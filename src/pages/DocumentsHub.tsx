@@ -69,6 +69,7 @@ import { DocumentScanner } from '@/components/documents/DocumentScanner';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import type { DocumentItem, DocumentTypeId } from '@/types/claims';
+import { PageContainer } from '@/components/PageContainer';
 
 // Tab configuration
 const tabConfig = [
@@ -343,7 +344,7 @@ export default function DocumentsHub() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <PageContainer className="space-y-6 animate-fade-in">
       {/* Premium Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
@@ -1099,6 +1100,6 @@ export default function DocumentsHub() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </PageContainer>
   );
 }

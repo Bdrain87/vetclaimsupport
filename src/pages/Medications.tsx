@@ -12,6 +12,7 @@ import { Switch } from '@/components/ui/switch';
 import { MedicationCombobox } from '@/components/ui/medication-combobox';
 import { exportMedications } from '@/utils/pdfExport';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
+import { PageContainer } from '@/components/PageContainer';
 import type { Medication } from '@/types/claims';
 
 export default function Medications() {
@@ -68,7 +69,7 @@ export default function Medications() {
   const pastMeds = data.medications.filter(m => !m.stillTaking);
 
   return (
-    <div className="space-y-6 animate-fade-in overflow-x-hidden max-w-full">
+    <PageContainer className="space-y-6 animate-fade-in overflow-x-hidden">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="section-header mb-0">
@@ -315,6 +316,6 @@ export default function Medications() {
           </CardContent>
         </Card>
       )}
-    </div>
+    </PageContainer>
   );
 }

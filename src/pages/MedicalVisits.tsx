@@ -13,6 +13,7 @@ import { Switch } from '@/components/ui/switch';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { exportMedicalVisits } from '@/utils/pdfExport';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
+import { PageContainer } from '@/components/PageContainer';
 import type { MedicalVisit } from '@/types/claims';
 
 const visitTypes = ['Sick Call', 'ER', 'Mental Health', 'PT', 'Dental', 'Specialist'] as const;
@@ -80,7 +81,7 @@ export default function MedicalVisits() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in overflow-x-hidden max-w-full">
+    <PageContainer className="space-y-6 animate-fade-in overflow-x-hidden">
       {/* Important Tip Alert */}
       <Alert className="border-warning/50 bg-warning/10">
         <AlertTriangle className="h-5 w-5 text-warning" />
@@ -369,6 +370,6 @@ export default function MedicalVisits() {
           ))}
         </div>
       )}
-    </div>
+    </PageContainer>
   );
 }

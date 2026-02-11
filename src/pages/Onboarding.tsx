@@ -9,6 +9,7 @@ import { useUserConditions } from '@/hooks/useUserConditions';
 import { type VACondition, getConditionById } from '@/data/vaConditions';
 import useAppStore, { type DutyStation } from '@/store/useAppStore';
 import { SuccessAnimation } from '@/components/ui/success-animation';
+import { PageContainer } from '@/components/PageContainer';
 
 const TOTAL_STEPS = 11;
 
@@ -422,7 +423,8 @@ export default function Onboarding() {
   };
 
   return (
-    <div className="min-h-[100dvh] bg-[#102039] flex flex-col items-center justify-center px-4 py-8">
+    <div className="min-h-[100dvh] flex flex-col bg-background">
+      <PageContainer className="flex-1 flex flex-col justify-center py-8">
       <div className="w-full max-w-md mx-auto space-y-8">
         <ProgressDots />
 
@@ -1092,6 +1094,7 @@ export default function Onboarding() {
           </div>
         )}
       </div>
+      </PageContainer>
     </div>
   );
 }

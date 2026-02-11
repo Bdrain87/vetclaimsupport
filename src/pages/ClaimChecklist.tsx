@@ -14,6 +14,7 @@ import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
+import { PageContainer } from '@/components/PageContainer';
 
 interface ChecklistItem {
   id: string;
@@ -319,7 +320,7 @@ export default function ClaimChecklist() {
   };
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <PageContainer className="space-y-8 animate-fade-in">
       {/* Header */}
       <div className="section-header">
         <div className="section-icon">
@@ -506,6 +507,6 @@ export default function ClaimChecklist() {
           </CardContent>
         </Card>
       )}
-    </div>
+    </PageContainer>
   );
 }

@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { PageContainer } from '@/components/PageContainer';
 
 // ---------------------------------------------------------------------------
 // VA Glossary Data
@@ -284,7 +285,7 @@ export default function VASpeakTranslator() {
   // -------------------------------------------------------------------------
 
   return (
-    <div className="container max-w-4xl mx-auto px-4 py-6 space-y-6 animate-fade-in">
+    <PageContainer className="py-6 space-y-6 animate-fade-in">
       {/* Back navigation */}
       <Button variant="ghost" onClick={() => navigate(-1)} className="mb-1">
         <ChevronLeft className="h-4 w-4 mr-2" />
@@ -553,6 +554,6 @@ export default function VASpeakTranslator() {
           </ul>
         </CardContent>
       </Card>
-    </div>
+    </PageContainer>
   );
 }

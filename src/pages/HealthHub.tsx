@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Activity, Moon, Brain, Pill, Stethoscope, AlertTriangle, BarChart3 } from 'lucide-react';
 import useAppStore from '@/store/useAppStore';
+import { PageContainer } from '@/components/PageContainer';
 
 const healthCards = [
   { label: 'Symptoms', icon: Activity, route: '/health/symptoms', storeKey: 'symptoms' as const },
@@ -60,7 +61,7 @@ export default function HealthHub() {
   }, [store.symptoms, store.quickLogs]);
 
   return (
-    <div className="container max-w-2xl mx-auto px-4 py-6 space-y-6">
+    <PageContainer className="py-6 space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-foreground">Health Tracking</h1>
         <p className="text-muted-foreground text-sm mt-1">Track your health for stronger VA evidence.</p>
@@ -114,6 +115,6 @@ export default function HealthHub() {
           );
         })}
       </div>
-    </div>
+    </PageContainer>
   );
 }

@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { PageContainer } from '@/components/PageContainer';
 import { cn } from '@/lib/utils';
 
 // Import individual log components
@@ -165,7 +166,7 @@ export default function HealthLog() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <PageContainer className="space-y-6 animate-fade-in">
       {/* Premium Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
@@ -527,6 +528,6 @@ export default function HealthLog() {
           <Medications />
         </TabsContent>
       </Tabs>
-    </div>
+    </PageContainer>
   );
 }

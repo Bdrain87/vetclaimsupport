@@ -23,8 +23,9 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { Slider } from '@/components/ui/slider';
 import { Progress } from '@/components/ui/progress';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
-import type { 
-  MigraineEntry, MigraineSeverity, MigraineDuration, 
+import { PageContainer } from '@/components/PageContainer';
+import type {
+  MigraineEntry, MigraineSeverity, MigraineDuration,
   MigraneTrigger, MigraineImpact, MigraineSymptom, EconomicImpactType
 } from '@/types/claims';
 
@@ -322,7 +323,7 @@ export default function Migraines() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in overflow-x-hidden max-w-full">
+    <PageContainer className="space-y-6 animate-fade-in overflow-x-hidden">
       {/* Premium Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
@@ -1057,6 +1058,6 @@ export default function Migraines() {
           ))}
         </div>
       )}
-    </div>
+    </PageContainer>
   );
 }

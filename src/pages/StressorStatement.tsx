@@ -23,6 +23,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { cn } from '@/lib/utils';
+import { PageContainer } from '@/components/PageContainer';
 
 interface StressorFormData {
   whatHappened: string;
@@ -617,7 +618,7 @@ export default function StressorStatement() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in overflow-x-hidden max-w-full">
+    <PageContainer className="space-y-6 animate-fade-in overflow-x-hidden">
       {/* Back Button */}
       <Button variant="ghost" onClick={() => navigate(-1)} className="mb-1">
         <ChevronLeft className="h-4 w-4 mr-2" />
@@ -743,6 +744,6 @@ export default function StressorStatement() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </PageContainer>
   );
 }

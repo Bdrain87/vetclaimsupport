@@ -33,6 +33,7 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { exportClaimStrategy } from '@/utils/pdfExport';
 import { useClaims } from '@/hooks/useClaims';
+import { PageContainer } from '@/components/PageContainer';
 import { useProfileStore, BRANCH_LABELS } from '@/store/useProfileStore';
 
 interface ServiceInfo {
@@ -911,7 +912,7 @@ attorney for official guidance on your specific claim.
   };
 
   return (
-    <div className="space-y-6 animate-fade-in max-w-4xl mx-auto">
+    <PageContainer className="space-y-6 animate-fade-in">
       {/* Header */}
       <div className="section-header">
         <div className="section-icon">
@@ -1017,6 +1018,6 @@ attorney for official guidance on your specific claim.
           </div>
         </CardContent>
       </Card>
-    </div>
+    </PageContainer>
   );
 }

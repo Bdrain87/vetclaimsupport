@@ -108,7 +108,7 @@ export function MobileHeader() {
         </div>
 
         {/* Center: Page title */}
-        <span className="font-semibold text-foreground text-sm truncate max-w-[200px]">
+        <span className="font-semibold text-foreground text-sm truncate flex-1 text-center px-2">
           {pageTitle}
         </span>
 

@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { PageContainer } from '@/components/PageContainer';
 
 const prepTools = [
   { label: 'C&P Exam Prep', icon: ClipboardCheck, route: '/prep/exam', description: 'Prepare for your compensation exam' },
@@ -24,7 +25,7 @@ export default function PrepHub() {
   const navigate = useNavigate();
 
   return (
-    <div className="container max-w-2xl mx-auto px-4 py-6 space-y-6">
+    <PageContainer className="py-6 space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-foreground">Claim Prep</h1>
         <p className="text-muted-foreground text-sm mt-1">Tools to prepare and strengthen your claim.</p>
@@ -57,6 +58,6 @@ export default function PrepHub() {
           </button>
         ))}
       </div>
-    </div>
+    </PageContainer>
   );
 }

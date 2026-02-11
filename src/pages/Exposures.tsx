@@ -13,6 +13,7 @@ import { Switch } from '@/components/ui/switch';
 import { exportExposures } from '@/utils/pdfExport';
 import { BranchExposuresSelector } from '@/components/exposures/BranchExposuresSelector';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
+import { PageContainer } from '@/components/PageContainer';
 import type { Exposure, ExposureType } from '@/types/claims';
 
 // Extended exposure types including branch-specific ones
@@ -146,7 +147,7 @@ export default function Exposures() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in overflow-x-hidden max-w-full">
+    <PageContainer className="space-y-6 animate-fade-in overflow-x-hidden">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="section-header mb-0">
@@ -368,6 +369,6 @@ export default function Exposures() {
           ))}
         </div>
       )}
-    </div>
+    </PageContainer>
   );
 }

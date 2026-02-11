@@ -24,6 +24,7 @@ import { motion } from 'framer-motion';
 import { vcsSpring } from '@/constants/animations';
 import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { PageContainer } from '@/components/PageContainer';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { useState, useMemo, useCallback } from 'react';
@@ -105,7 +106,7 @@ export default function Dashboard() {
     : '';
 
   return (
-    <div className="space-y-4 animate-fade-in pb-8 md:pb-4 overflow-x-hidden max-w-full px-4">
+    <PageContainer className="space-y-4 animate-fade-in pb-8 md:pb-4 overflow-x-hidden">
       {/* Profile Card */}
       <div className="rounded-xl border border-border bg-card overflow-hidden">
         <div className="p-4 flex items-center gap-4">
@@ -494,7 +495,7 @@ export default function Dashboard() {
           </div>
         </motion.div>
       )}
-    </div>
+    </PageContainer>
   );
 }
 

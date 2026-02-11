@@ -18,6 +18,7 @@ import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/Evid
 import { MOSCombobox } from '@/components/ui/mos-combobox';
 import { AwardsCombobox } from '@/components/ui/awards-combobox';
 import type { ServiceEntry, CombatEntry, MajorEvent, DeploymentEntry, MajorEventType } from '@/types/claims';
+import { PageContainer } from '@/components/PageContainer';
 
 const COMBAT_ZONE_TYPES = ['Combat Zone', 'Hostile Fire Area', 'Imminent Danger Area', 'Hazardous Duty'] as const;
 const MAJOR_EVENT_TYPES: MajorEventType[] = ['Injury', 'Accident', 'Assault/MST', 'Award/Decoration', 'TBI Event', 'Traumatic Event', 'Line of Duty Investigation', 'Other'];
@@ -241,7 +242,7 @@ export default function ServiceHistory() {
   const deployments = data.deployments || [];
 
   return (
-    <div className="space-y-6 animate-fade-in overflow-x-hidden max-w-full">
+    <PageContainer className="space-y-6 animate-fade-in overflow-x-hidden">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="section-header mb-0">
@@ -842,6 +843,6 @@ export default function ServiceHistory() {
           )}
         </TabsContent>
       </Tabs>
-    </div>
+    </PageContainer>
   );
 }

@@ -21,6 +21,7 @@ import {
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { generateExport, downloadExport } from '@/services/exportEngine';
+import { PageContainer } from '@/components/PageContainer';
 
 interface PacketSection {
   id: string;
@@ -286,6 +287,7 @@ export default function BuildPacket() {
   // --------------- render ---------------
 
   return (
+    <PageContainer>
     <motion.div
       className="space-y-8"
       initial="hidden"
@@ -846,5 +848,6 @@ export default function BuildPacket() {
         </Card>
       </motion.div>
     </motion.div>
+    </PageContainer>
   );
 }

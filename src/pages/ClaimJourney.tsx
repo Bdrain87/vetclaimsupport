@@ -24,6 +24,7 @@ import {
   HelpCircle, ExternalLink, PartyPopper, Target
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { PageContainer } from '@/components/PageContainer';
 
 // Journey phases configuration
 interface JourneyPhase {
@@ -248,7 +249,7 @@ export default function ClaimJourney() {
   const currentPhase = journeyPhases[journeyProgress.currentPhase];
 
   return (
-    <div className="container max-w-5xl mx-auto py-8 px-4 space-y-8 animate-fade-in">
+    <PageContainer className="py-8 space-y-8 animate-fade-in">
       {/* Celebration Overlay */}
       <SuccessOverlay
         show={showCelebration}
@@ -636,6 +637,6 @@ export default function ClaimJourney() {
           )}
         </DialogContent>
       </Dialog>
-    </div>
+    </PageContainer>
   );
 }

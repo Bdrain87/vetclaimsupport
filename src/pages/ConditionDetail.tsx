@@ -40,6 +40,7 @@ import { getDBQByCondition, type DBQReference } from '@/data/vaResources/dbqRefe
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { useProfileStore } from '@/store/useProfileStore';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { PageContainer } from '@/components/PageContainer';
 
 // Common ratings for selector
 const commonRatings = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
@@ -145,7 +146,7 @@ export default function ConditionDetail() {
   // Handle not found
   if (!userCondition || !conditionDetails) {
     return (
-      <div className="container max-w-4xl mx-auto py-6 px-4">
+      <PageContainer className="py-6">
         <Card>
           <CardContent className="py-12 text-center">
             <AlertTriangle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
@@ -159,7 +160,7 @@ export default function ConditionDetail() {
             </Button>
           </CardContent>
         </Card>
-      </div>
+      </PageContainer>
     );
   }
 
@@ -223,7 +224,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
     : 0;
 
   return (
-    <div className="container max-w-4xl mx-auto py-6 px-4 space-y-6">
+    <PageContainer className="py-6 space-y-6">
       {/* Back Button */}
       <Button variant="ghost" onClick={() => navigate('/claims')} className="mb-2">
         <ChevronLeft className="h-4 w-4 mr-2" />
@@ -930,6 +931,6 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
           </CardContent>
         </Card>
       )}
-    </div>
+    </PageContainer>
   );
 }

@@ -6,6 +6,7 @@ import { useClaims } from '@/hooks/useClaims';
 import { secondaryConditions, type SecondaryConnection } from '@/data/secondaryConditions';
 import { vaConditions, type VACondition, getConditionById, searchConditions } from '@/data/vaConditions';
 import { Link } from 'react-router-dom';
+import { PageContainer } from '@/components/PageContainer';
 
 // Connection strength heuristic based on data
 function getConnectionStrength(connection: SecondaryConnection): 'strong' | 'moderate' | 'possible' {
@@ -102,7 +103,7 @@ export default function SecondaryFinder() {
   };
 
   return (
-    <div className="container max-w-5xl mx-auto py-6 px-4 space-y-6">
+    <PageContainer className="py-6 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="w-12 h-12 rounded-xl bg-[#3B82F6]/10 border border-[#3B82F6]/20 flex items-center justify-center">
@@ -240,6 +241,6 @@ export default function SecondaryFinder() {
           </ol>
         </div>
       )}
-    </div>
+    </PageContainer>
   );
 }

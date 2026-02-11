@@ -4,6 +4,7 @@ import { Clock, Shield, Stethoscope, AlertTriangle, Activity, Pill, Brain, Moon,
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { format, parseISO } from 'date-fns';
+import { PageContainer } from '@/components/PageContainer';
 
 interface TimelineEvent {
   id: string;
@@ -150,7 +151,7 @@ export default function Timeline() {
 
   if (events.length === 0) {
     return (
-      <div className="space-y-8 animate-fade-in">
+      <PageContainer className="space-y-8 animate-fade-in">
         <div className="section-header">
           <div className="section-icon">
             <Clock className="h-5 w-5" />
@@ -170,12 +171,12 @@ export default function Timeline() {
             </p>
           </CardContent>
         </Card>
-      </div>
+      </PageContainer>
     );
   }
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <PageContainer className="space-y-8 animate-fade-in">
       {/* Header */}
       <div className="section-header">
         <div className="section-icon">
@@ -262,6 +263,6 @@ export default function Timeline() {
           </p>
         </CardContent>
       </Card>
-    </div>
+    </PageContainer>
   );
 }

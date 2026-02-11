@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { HelpCircle, Search, ChevronDown, ChevronUp } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { PageContainer } from '@/components/PageContainer';
 
 interface FAQItem {
   question: string;
@@ -148,7 +149,7 @@ export default function FAQ() {
   }, {} as Record<string, (FAQItem & { originalIndex: number })[]>);
 
   return (
-    <div className="space-y-6 animate-fade-in max-w-4xl">
+    <PageContainer className="space-y-6 animate-fade-in">
       <div className="section-header">
         <div className="section-icon">
           <HelpCircle className="h-5 w-5" />
@@ -244,6 +245,6 @@ export default function FAQ() {
           </CardContent>
         </Card>
       )}
-    </div>
+    </PageContainer>
   );
 }

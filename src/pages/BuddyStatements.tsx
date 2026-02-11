@@ -14,6 +14,7 @@ import { exportBuddyContacts, exportBuddyStatement } from '@/utils/pdfExport';
 import { DocumentUploader } from '@/components/documents/DocumentUploader';
 import { useToast } from '@/hooks/use-toast';
 import type { BuddyContact } from '@/types/claims';
+import { PageContainer } from '@/components/PageContainer';
 
 const statementStatuses = ['Not Requested', 'Requested', 'Received', 'Submitted'] as const;
 
@@ -396,7 +397,7 @@ Date: ${today}`;
   };
 
   return (
-    <div className="space-y-6 animate-fade-in overflow-x-hidden max-w-full">
+    <PageContainer className="space-y-6 animate-fade-in overflow-x-hidden">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="section-header mb-0">
@@ -697,6 +698,6 @@ Date: ${today}`;
           </div>
         </TabsContent>
       </Tabs>
-    </div>
+    </PageContainer>
   );
 }

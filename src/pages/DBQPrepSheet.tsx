@@ -29,6 +29,7 @@ import { vaDisabilitiesBySystem } from '@/data/vaDisabilities';
 import { cn } from '@/lib/utils';
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
+import { PageContainer } from '@/components/PageContainer';
 
 // Get all conditions
 const getAllConditions = (): string[] => {
@@ -284,7 +285,7 @@ export default function DBQPrepSheet() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <PageContainer className="space-y-6 animate-fade-in">
       {/* Header */}
       <div className="section-header">
         <div className="section-icon">
@@ -828,6 +829,6 @@ export default function DBQPrepSheet() {
           }
         }
       `}</style>
-    </div>
+    </PageContainer>
   );
 }
