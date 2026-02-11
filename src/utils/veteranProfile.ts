@@ -129,6 +129,45 @@ export function getSavedServiceDates(): { startDate: string; endDate: string } {
 }
 
 /**
+ * Get all unique branch labels from a profile's service periods, with fallback to single branch.
+ * Returns a comma-separated string like "Army, Marine Corps" or a single label like "Navy".
+ */
+export function getAllBranchLabels(profile: {
+  branch?: string;
+  servicePeriods?: Array<{ branch: string }>;
+}): string {
+  const LABELS: Record<string, string> = {
+    army: 'Army',
+    marines: 'Marine Corps',
+    navy: 'Navy',
+    air_force: 'Air Force',
+    coast_guard: 'Coast Guard',
+    space_force: 'Space Force',
+  };
+
+  const periods = profile.servicePeriods || [];
+  const uniqueBranches: string[] = [];
+
+  for (const period of periods) {
+    if (period.branch) {
+      const label = LABELS[period.branch] || period.branch;
+      if (!uniqueBranches.includes(label)) {
+        uniqueBranches.push(label);
+      }
+    }
+  }
+
+  if (uniqueBranches.length > 0) return uniqueBranches.join(', ');
+
+  // Fallback to single branch
+  if (profile.branch) {
+    return LABELS[profile.branch] || profile.branch;
+  }
+
+  return '';
+}
+
+/**
  * Clear veteran profile
  */
 export function clearVeteranProfile(): void {

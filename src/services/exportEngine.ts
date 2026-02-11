@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import useAppStore from '@/store/useAppStore';
 import { useProfileStore } from '@/store/useProfileStore';
-import { BRANCH_LABELS } from '@/store/useProfileStore';
+import { getAllBranchLabels } from '@/utils/veteranProfile';
 import { getConditionById } from '@/data/vaConditions';
 import type { UserCondition } from '@/store/useAppStore';
 import type {
@@ -113,7 +113,7 @@ function gatherData(): GatheredData {
   return {
     firstName: profileState.firstName,
     lastName: profileState.lastName,
-    branch: profileState.branch ? BRANCH_LABELS[profileState.branch] : '',
+    branch: getAllBranchLabels(profileState) || '',
     mosCode: profileState.mosCode,
     mosTitle: profileState.mosTitle,
     serviceDates: profileState.serviceDates,

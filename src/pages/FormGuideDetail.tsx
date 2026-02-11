@@ -8,7 +8,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { getFormGuideById, type FormField } from '@/data/formGuideData';
 import useAppStore from '@/store/useAppStore';
-import { useProfileStore, BRANCH_LABELS } from '@/store/useProfileStore';
+import { useProfileStore } from '@/store/useProfileStore';
+import { getAllBranchLabels } from '@/utils/veteranProfile';
 import { useClaims } from '@/hooks/useClaims';
 import { useGemini } from '@/hooks/useGemini';
 import { generateFormGuidePDF } from '@/services/exportEngine';
@@ -67,7 +68,8 @@ function FieldCard({ field, formId: _formId, savedValue, onSave }: FieldCardProp
     contextParts.push(`Field: ${field.label}`);
     if (value.trim()) contextParts.push(`Veteran's input: ${value}`);
     if (profile.firstName) contextParts.push(`Name: ${profile.firstName} ${profile.lastName}`);
-    if (profile.branch) contextParts.push(`Branch: ${BRANCH_LABELS[profile.branch]}`);
+    const allBranches = getAllBranchLabels(profile);
+    if (allBranches) contextParts.push(`Branch: ${allBranches}`);
     if (profile.mosCode) contextParts.push(`MOS: ${profile.mosCode} — ${profile.mosTitle}`);
     if (profile.serviceDates?.start)
       contextParts.push(`Service: ${profile.serviceDates.start} to ${profile.serviceDates.end || 'present'}`);

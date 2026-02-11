@@ -27,8 +27,17 @@ import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { PageContainer } from '@/components/PageContainer';
 import { useProfileStore } from '@/store/useProfileStore';
+import { useClaims } from '@/hooks/useClaims';
 import { cn } from '@/lib/utils';
 import { exportPersonalStatement } from '@/utils/pdfExport';
+import { PrefillBadge } from '@/components/ui/PrefillBadge';
+import {
+  getConditionSymptoms,
+  getConditionMedications,
+  buildSymptomSummary,
+  buildMedicationSummary,
+  buildFunctionalImpactSummary,
+} from '@/utils/prefillHelpers';
 import type { VACondition } from '@/data/vaConditions';
 
 interface PersonalStatementFormData {
@@ -111,20 +120,57 @@ function GuidanceTip({ tips }: GuidanceTipProps) {
 
 export default function PersonalStatement() {
   const { firstName, lastName } = useProfileStore();
+  const { data: claimsData } = useClaims();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<PersonalStatementFormData>(initialFormData);
   const [copied, setCopied] = useState(false);
   const [polishedStatement, setPolishedStatement] = useState<string | null>(null);
+  const [prefilled, setPrefilled] = useState<Record<string, boolean>>({});
   const { generate: aiPolish, isLoading: isPolishing, error: aiError } = useAIGenerate('VA_SPEAK_TRANSLATOR');
 
   const updateField = useCallback(
     <K extends keyof PersonalStatementFormData>(field: K, value: PersonalStatementFormData[K]) => {
       setFormData((prev) => ({ ...prev, [field]: value }));
-      // Clear polished statement when any field changes
       setPolishedStatement(null);
+      // Clear prefill badge for this field if user manually changes it
+      if (typeof value === 'string') {
+        setPrefilled((prev) => ({ ...prev, [field]: false }));
+      }
     },
     []
   );
+
+  // Pre-fill from store when a condition is selected
+  const handleConditionSelect = useCallback((condition: VACondition) => {
+    const conditionName = condition.name;
+    const matchingSymptoms = getConditionSymptoms(conditionName, claimsData.symptoms || []);
+    const matchingMeds = getConditionMedications(conditionName, claimsData.medications || []);
+    const newPrefilled: Record<string, boolean> = {};
+
+    setFormData((prev) => {
+      const next = { ...prev, condition };
+      // Only fill empty fields
+      if (!prev.currentSymptoms.trim() && matchingSymptoms.length > 0) {
+        next.currentSymptoms = buildSymptomSummary(matchingSymptoms);
+        newPrefilled.currentSymptoms = true;
+      }
+      if (!prev.treatmentHistory.trim() && matchingMeds.length > 0) {
+        next.treatmentHistory = buildMedicationSummary(matchingMeds);
+        newPrefilled.treatmentHistory = true;
+      }
+      if (!prev.dailyImpact.trim() && matchingSymptoms.length > 0) {
+        const impact = buildFunctionalImpactSummary(matchingSymptoms);
+        if (impact) {
+          next.dailyImpact = impact;
+          newPrefilled.dailyImpact = true;
+        }
+      }
+      return next;
+    });
+
+    setPrefilled((prev) => ({ ...prev, ...newPrefilled }));
+    setPolishedStatement(null);
+  }, [claimsData.symptoms, claimsData.medications]);
 
   const generateStatement = useCallback((): string => {
     const today = new Date().toLocaleDateString('en-US', {
@@ -264,7 +310,7 @@ export default function PersonalStatement() {
             <div className="space-y-2">
               <Label>Search for your condition</Label>
               <ConditionAutocomplete
-                onSelect={(condition) => updateField('condition', condition)}
+                onSelect={handleConditionSelect}
                 placeholder="Type to search conditions (e.g., tinnitus, PTSD, sleep apnea)..."
                 autoFocus
               />
@@ -347,8 +393,11 @@ export default function PersonalStatement() {
         return (
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="currentSymptoms">
+              <Label htmlFor="currentSymptoms" className="flex items-center gap-2 flex-wrap">
                 Describe your current symptoms and how they affect daily life
+                {prefilled.currentSymptoms && (
+                  <PrefillBadge onClear={() => { updateField('currentSymptoms', ''); setPrefilled(p => ({ ...p, currentSymptoms: false })); }} />
+                )}
               </Label>
               <Textarea
                 id="currentSymptoms"
@@ -380,8 +429,11 @@ export default function PersonalStatement() {
         return (
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="treatmentHistory">
+              <Label htmlFor="treatmentHistory" className="flex items-center gap-2 flex-wrap">
                 What treatment have you received? Medications? Ongoing care?
+                {prefilled.treatmentHistory && (
+                  <PrefillBadge onClear={() => { updateField('treatmentHistory', ''); setPrefilled(p => ({ ...p, treatmentHistory: false })); }} />
+                )}
               </Label>
               <Textarea
                 id="treatmentHistory"
@@ -414,8 +466,11 @@ export default function PersonalStatement() {
         return (
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="dailyImpact">
+              <Label htmlFor="dailyImpact" className="flex items-center gap-2 flex-wrap">
                 How does this condition affect work, family, and daily activities?
+                {prefilled.dailyImpact && (
+                  <PrefillBadge onClear={() => { updateField('dailyImpact', ''); setPrefilled(p => ({ ...p, dailyImpact: false })); }} />
+                )}
               </Label>
               <Textarea
                 id="dailyImpact"

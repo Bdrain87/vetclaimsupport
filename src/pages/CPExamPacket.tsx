@@ -19,7 +19,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
-import { useProfileStore, BRANCH_LABELS } from '@/store/useProfileStore';
+import { useProfileStore } from '@/store/useProfileStore';
+import { getAllBranchLabels } from '@/utils/veteranProfile';
 import useAppStore from '@/store/useAppStore';
 import { getConditionById } from '@/data/vaConditions';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
@@ -329,7 +330,7 @@ export default function CPExamPacket() {
         profile: {
           firstName: profile.firstName,
           lastName: profile.lastName,
-          branch: profile.branch ? BRANCH_LABELS[profile.branch] : '',
+          branch: getAllBranchLabels(profile),
           mosCode: profile.mosCode,
           mosTitle: profile.mosTitle,
           serviceDates: profile.serviceDates,
@@ -439,7 +440,7 @@ export default function CPExamPacket() {
         <PacketSection title="Veteran Information" icon={User} sectionNumber={1} defaultOpen>
           <div className="space-y-2 text-sm">
             <InfoRow label="Name" value={`${profile.firstName} ${profile.lastName}`.trim() || 'Not provided'} />
-            <InfoRow label="Branch" value={profile.branch ? BRANCH_LABELS[profile.branch] : 'Not provided'} />
+            <InfoRow label="Branch" value={getAllBranchLabels(profile) || 'Not provided'} />
             <InfoRow label="Service Dates" value={
               profile.serviceDates
                 ? `${profile.serviceDates.start} to ${profile.serviceDates.end || 'Present'}`

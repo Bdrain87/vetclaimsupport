@@ -1,6 +1,7 @@
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
-import { useProfileStore, BRANCH_LABELS } from '@/store/useProfileStore';
+import { useProfileStore } from '@/store/useProfileStore';
+import { getAllBranchLabels } from '@/utils/veteranProfile';
 import useAppStore from '@/store/useAppStore';
 import { ClaimIntelligence } from '@/services/claimIntelligence';
 import {
@@ -122,7 +123,7 @@ export default function Dashboard() {
   const displayName = profile.firstName
     ? `${profile.firstName}${profile.lastName ? ' ' + profile.lastName : ''}`
     : 'Veteran';
-  const branchLabel = profile.branch ? BRANCH_LABELS[profile.branch] : '';
+  const branchLabel = getAllBranchLabels(profile);
 
   // Multi-service-period display
   const servicePeriods = profile.servicePeriods || [];
@@ -145,34 +146,23 @@ export default function Dashboard() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-foreground font-semibold truncate">{displayName}</p>
-            {mostRecentPeriod ? (
-              <>
-                <p className="text-sm text-muted-foreground" style={{ writingMode: 'horizontal-tb' }}>
-                  {mostRecentPeriod.branch ? BRANCH_LABELS[mostRecentPeriod.branch as keyof typeof BRANCH_LABELS] || mostRecentPeriod.branch : branchLabel}
-                </p>
-                {mostRecentPeriod.mos && (
-                  <p className="text-xs text-muted-foreground truncate">
-                    {mostRecentPeriod.mos} — {mostRecentPeriod.jobTitle}
-                    {additionalPeriodsCount > 0 && (
-                      <span className="text-primary ml-1">(+{additionalPeriodsCount} more)</span>
-                    )}
-                  </p>
-                )}
-              </>
-            ) : (
-              <>
-                {branchLabel && (
-                  <p className="text-sm text-muted-foreground" style={{ writingMode: 'horizontal-tb' }}>
-                    {branchLabel}
-                  </p>
-                )}
-                {profile.mosCode && (
-                  <p className="text-xs text-muted-foreground truncate">
-                    {profile.mosCode} — {profile.mosTitle}
-                  </p>
-                )}
-              </>
+            {branchLabel && (
+              <p className="text-sm text-muted-foreground" style={{ writingMode: 'horizontal-tb' }}>
+                {branchLabel}
+              </p>
             )}
+            {mostRecentPeriod?.mos ? (
+              <p className="text-xs text-muted-foreground truncate">
+                {mostRecentPeriod.mos} — {mostRecentPeriod.jobTitle}
+                {additionalPeriodsCount > 0 && (
+                  <span className="text-primary ml-1">(+{additionalPeriodsCount} service periods)</span>
+                )}
+              </p>
+            ) : profile.mosCode ? (
+              <p className="text-xs text-muted-foreground truncate">
+                {profile.mosCode} — {profile.mosTitle}
+              </p>
+            ) : null}
             {serviceDateStr && (
               <p className="text-xs text-muted-foreground/70 truncate">{serviceDateStr}</p>
             )}

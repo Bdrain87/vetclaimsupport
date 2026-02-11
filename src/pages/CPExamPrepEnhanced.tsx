@@ -37,6 +37,7 @@ import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { createCPExamPrepPrompt } from '@/lib/ai-prompts';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { PageContainer } from '@/components/PageContainer';
+import { getConditionSymptoms, getConditionMedications } from '@/utils/prefillHelpers';
 
 interface ChecklistItem {
   id: string;
@@ -147,13 +148,22 @@ export default function CPExamPrepEnhanced() {
     setShowSuggestion(false);
     setUserAnswer('');
 
-    const userSymptoms = (claimsData.symptoms || []).map(s => s.symptom);
-    const userTreatments = (claimsData.medications || []).map(m => m.name);
+    // Filter symptoms and medications by the selected condition
+    const conditionSymptoms = getConditionSymptoms(selectedCondition, claimsData.symptoms || []);
+    const conditionMeds = getConditionMedications(selectedCondition, claimsData.medications || []);
+
+    // Fall back to all symptoms/meds if no condition-specific matches
+    const userSymptoms = conditionSymptoms.length > 0
+      ? conditionSymptoms.map(s => s.symptom)
+      : (claimsData.symptoms || []).map(s => s.symptom);
+    const userTreatments = conditionMeds.length > 0
+      ? conditionMeds.map(m => m.name)
+      : (claimsData.medications || []).map(m => m.name);
 
     const prompt = createCPExamPrepPrompt({
       condition: selectedCondition,
-      currentSymptoms: userSymptoms.length > 0 ? userSymptoms.slice(0, 10) : ['Symptoms related to condition'],
-      currentTreatments: userTreatments.length > 0 ? userTreatments.slice(0, 5) : ['Current treatment regimen'],
+      currentSymptoms: userSymptoms.length > 0 ? userSymptoms : ['Symptoms related to condition'],
+      currentTreatments: userTreatments.length > 0 ? userTreatments : ['Current treatment regimen'],
     });
 
     const result = await aiGenerate(prompt);

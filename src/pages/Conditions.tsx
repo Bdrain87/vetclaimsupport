@@ -23,16 +23,19 @@ import {
 import { Label } from '@/components/ui/label';
 import {
   Search, Plus, ChevronRight, AlertCircle, ClipboardList,
-  Activity, Link2, Trash2, Edit, Filter
+  Activity, Link2, Trash2, Edit, Filter, Shield, FileText,
+  Stethoscope, Calendar
 } from 'lucide-react';
 
 import { useUserConditions } from '@/hooks/useUserConditions';
+import useAppStore from '@/store/useAppStore';
 import { PageContainer } from '@/components/PageContainer';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import {
   type VACondition,
+  getConditionById,
 } from '@/data/vaConditions';
-import { getAllCategories } from '@/utils/conditionSearch';
+import { getAllCategories, searchAllConditions } from '@/utils/conditionSearch';
 
 // Build body system options dynamically from the unified index
 const dynamicCategories = getAllCategories();
@@ -41,6 +44,20 @@ const bodySystems = [
   ...dynamicCategories.map(c => ({ value: c.toLowerCase(), label: c })),
 ];
 
+const STATUS_COLORS: Record<string, string> = {
+  pending: 'bg-yellow-500/20 text-yellow-600 border-yellow-500/30',
+  approved: 'bg-green-500/20 text-green-600 border-green-500/30',
+  denied: 'bg-red-500/20 text-red-600 border-red-500/30',
+  appeal: 'bg-purple-500/20 text-purple-600 border-purple-500/30',
+};
+
+const STATUS_LABELS: Record<string, string> = {
+  pending: 'Pending',
+  approved: 'Approved',
+  denied: 'Denied',
+  appeal: 'Appeal',
+};
+
 interface ConditionCardProps {
   userCondition: {
     id: string;
@@ -48,18 +65,23 @@ interface ConditionCardProps {
     rating?: number;
     claimedRating?: number;
     notes?: string;
-    evidenceCount?: number;
-    totalEvidenceNeeded?: number;
     hasSecondaries?: boolean;
+    claimStatus?: string;
+    serviceConnected?: boolean;
+    secondariesCount?: number;
+    evidenceChecked?: number;
+    evidenceTotal?: number;
+    dateAdded?: string;
   };
   conditionDetails: VACondition | null;
   onView: () => void;
   onRemove: () => void;
+  onNavigate?: (path: string) => void;
 }
 
-function ConditionCard({ userCondition, conditionDetails, onView, onRemove }: ConditionCardProps) {
-  const evidenceProgress = userCondition.evidenceCount && userCondition.totalEvidenceNeeded
-    ? (userCondition.evidenceCount / userCondition.totalEvidenceNeeded) * 100
+function ConditionCard({ userCondition, conditionDetails, onView, onRemove, onNavigate }: ConditionCardProps) {
+  const evidenceProgress = userCondition.evidenceTotal && userCondition.evidenceTotal > 0
+    ? (userCondition.evidenceChecked || 0) / userCondition.evidenceTotal * 100
     : 0;
 
   return (
@@ -70,14 +92,19 @@ function ConditionCard({ userCondition, conditionDetails, onView, onRemove }: Co
       <CardContent className="p-4">
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
               <h3 className="font-semibold truncate group-hover:text-primary transition-colors">
                 {conditionDetails?.abbreviation || conditionDetails?.name || userCondition.conditionId}
               </h3>
-              {userCondition.hasSecondaries && (
-                <Badge variant="outline" className="text-xs flex-shrink-0">
-                  <Link2 className="h-3 w-3 mr-1" />
-                  Secondaries
+              {userCondition.claimStatus && (
+                <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${STATUS_COLORS[userCondition.claimStatus] || ''}`}>
+                  {STATUS_LABELS[userCondition.claimStatus] || userCondition.claimStatus}
+                </Badge>
+              )}
+              {userCondition.serviceConnected && (
+                <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-blue-500/10 text-blue-500 border-blue-500/30">
+                  <Shield className="h-2.5 w-2.5 mr-0.5" />
+                  SC
                 </Badge>
               )}
             </div>
@@ -88,7 +115,7 @@ function ConditionCard({ userCondition, conditionDetails, onView, onRemove }: Co
               </p>
             )}
 
-            <div className="flex items-center gap-3 mb-3">
+            <div className="flex items-center gap-3 mb-2 flex-wrap">
               {userCondition.rating !== undefined && (
                 <Badge className="bg-primary/20 text-primary hover:bg-primary/30">
                   Current: {userCondition.rating}%
@@ -99,36 +126,62 @@ function ConditionCard({ userCondition, conditionDetails, onView, onRemove }: Co
                   Claimed: {userCondition.claimedRating}%
                 </Badge>
               )}
+              {userCondition.secondariesCount !== undefined && userCondition.secondariesCount > 0 && (
+                <Badge variant="outline" className="text-xs">
+                  <Link2 className="h-3 w-3 mr-1" />
+                  {userCondition.secondariesCount} secondary{userCondition.secondariesCount !== 1 ? 'ies' : 'y'}
+                </Badge>
+              )}
             </div>
 
             {/* Evidence Progress */}
-            {userCondition.totalEvidenceNeeded && userCondition.totalEvidenceNeeded > 0 && (
-              <div className="space-y-1">
+            {userCondition.evidenceTotal !== undefined && userCondition.evidenceTotal > 0 && (
+              <div className="space-y-1 mb-2">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-muted-foreground">Evidence</span>
                   <span className="font-medium">
-                    {userCondition.evidenceCount || 0}/{userCondition.totalEvidenceNeeded}
+                    {userCondition.evidenceChecked || 0}/{userCondition.evidenceTotal}
                   </span>
                 </div>
                 <Progress value={evidenceProgress} className="h-1.5" />
               </div>
+            )}
+
+            {/* Date added */}
+            {userCondition.dateAdded && (
+              <p className="text-[10px] text-muted-foreground/60 flex items-center gap-1">
+                <Calendar className="h-2.5 w-2.5" />
+                Added {new Date(userCondition.dateAdded).toLocaleDateString()}
+              </p>
             )}
           </div>
 
           <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
         </div>
 
-        {/* Actions */}
+        {/* Quick Actions + Remove */}
         <div
-          className="flex gap-2 mt-3 pt-3 border-t border-border opacity-0 group-hover:opacity-100 transition-opacity"
+          className="flex gap-1 mt-3 pt-3 border-t border-border flex-wrap opacity-0 group-hover:opacity-100 transition-opacity"
           onClick={(e) => e.stopPropagation()}
         >
-          <Button variant="ghost" size="sm" onClick={onView}>
-            <Edit className="h-4 w-4 mr-1" />
-            Edit
-          </Button>
-          <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={onRemove}>
-            <Trash2 className="h-4 w-4 mr-1" />
+          {conditionDetails && onNavigate && (
+            <>
+              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate(`/dbq-prep?condition=${encodeURIComponent(conditionDetails.name)}`)}>
+                <FileText className="h-3 w-3 mr-1" />
+                DBQ
+              </Button>
+              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate('/cp-exam-prep')}>
+                <Stethoscope className="h-3 w-3 mr-1" />
+                C&P Prep
+              </Button>
+              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate('/personal-statement')}>
+                <Edit className="h-3 w-3 mr-1" />
+                Statement
+              </Button>
+            </>
+          )}
+          <Button variant="ghost" size="sm" className="text-xs h-7 px-2 text-destructive hover:text-destructive ml-auto" onClick={onRemove}>
+            <Trash2 className="h-3 w-3 mr-1" />
             Remove
           </Button>
         </div>
@@ -145,6 +198,11 @@ export default function Conditions() {
     removeCondition,
     getConditionDetails,
   } = useUserConditions();
+
+  const conditionEvidenceChecks = useAppStore(s => s.conditionEvidenceChecks);
+
+  // Standard evidence items for calculating progress
+  const EVIDENCE_ITEMS = ['Medical Records', 'Personal Statement', 'Buddy Statement', 'Nexus Letter', 'C&P Exam Prep'];
 
   // Search and filter state
   const [searchQuery, setSearchQuery] = useState('');
@@ -187,6 +245,13 @@ export default function Conditions() {
   const primaryConditions = useMemo(() => {
     return userConditions.filter(c => c.isPrimary);
   }, [userConditions]);
+
+  // Search VA database for conditions to add
+  const databaseResults = useMemo(() => {
+    if (searchQuery.trim().length < 2) return [];
+    const existingIds = userConditions.map(c => c.conditionId);
+    return searchAllConditions(searchQuery, { excludeIds: existingIds, limit: 8 });
+  }, [searchQuery, userConditions]);
 
   // Handle add condition
   const handleAddCondition = useCallback(() => {
@@ -354,7 +419,7 @@ export default function Conditions() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search your conditions..."
+            placeholder="Search conditions or add new..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
@@ -382,19 +447,22 @@ export default function Conditions() {
           {filteredConditions.filter(uc => uc.isPrimary).map(uc => {
             const details = getConditionDetails(uc);
             const secondaries = filteredConditions.filter(s => !s.isPrimary && s.linkedPrimaryId === uc.id);
+            const checked = conditionEvidenceChecks[uc.id] || [];
             return (
               <div key={uc.id} className="space-y-2">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <ConditionCard
                     userCondition={{
                       ...uc,
-                      evidenceCount: undefined,
-                      totalEvidenceNeeded: undefined,
                       hasSecondaries: secondaries.length > 0,
+                      secondariesCount: secondaries.length,
+                      evidenceChecked: checked.length,
+                      evidenceTotal: EVIDENCE_ITEMS.length,
                     }}
                     conditionDetails={details ?? null}
                     onView={() => handleViewCondition(uc.id)}
                     onRemove={() => handleRemoveCondition(uc.id)}
+                    onNavigate={(path) => navigate(path)}
                   />
                 </div>
                 {secondaries.length > 0 && (
@@ -402,6 +470,7 @@ export default function Conditions() {
                     {secondaries.map(sec => {
                       const secDetails = getConditionDetails(sec);
                       const primaryDetails = getConditionDetails(uc);
+                      const secChecked = conditionEvidenceChecks[sec.id] || [];
                       return (
                         <div key={sec.id} className="space-y-1">
                           <p className="text-xs text-muted-foreground">
@@ -410,13 +479,15 @@ export default function Conditions() {
                           <ConditionCard
                             userCondition={{
                               ...sec,
-                              evidenceCount: 0,
-                              totalEvidenceNeeded: 5,
                               hasSecondaries: false,
+                              secondariesCount: 0,
+                              evidenceChecked: secChecked.length,
+                              evidenceTotal: EVIDENCE_ITEMS.length,
                             }}
                             conditionDetails={secDetails ?? null}
                             onView={() => handleViewCondition(sec.id)}
                             onRemove={() => handleRemoveCondition(sec.id)}
+                            onNavigate={(path) => navigate(path)}
                           />
                         </div>
                       );
@@ -429,18 +500,21 @@ export default function Conditions() {
           {/* Unlinked secondaries (no matching primary in the list) */}
           {filteredConditions.filter(uc => !uc.isPrimary && !filteredConditions.some(p => p.isPrimary && p.id === uc.linkedPrimaryId)).map(uc => {
             const details = getConditionDetails(uc);
+            const checked = conditionEvidenceChecks[uc.id] || [];
             return (
               <div key={uc.id} className="grid gap-4 sm:grid-cols-2">
                 <ConditionCard
                   userCondition={{
                     ...uc,
-                    evidenceCount: 0,
-                    totalEvidenceNeeded: 5,
                     hasSecondaries: false,
+                    secondariesCount: 0,
+                    evidenceChecked: checked.length,
+                    evidenceTotal: EVIDENCE_ITEMS.length,
                   }}
                   conditionDetails={details ?? null}
                   onView={() => handleViewCondition(uc.id)}
                   onRemove={() => handleRemoveCondition(uc.id)}
+                  onNavigate={(path) => navigate(path)}
                 />
               </div>
             );
@@ -511,6 +585,49 @@ export default function Conditions() {
           </CardContent>
         </Card>
       )}
+      {/* Add from VA Database */}
+      {databaseResults.length > 0 && (
+        <Card>
+          <CardContent className="pt-4">
+            <p className="text-sm font-medium mb-3 flex items-center gap-2">
+              <Search className="h-4 w-4 text-primary" />
+              Add from VA database
+            </p>
+            <div className="space-y-2">
+              {databaseResults.map(result => (
+                <div
+                  key={result.id}
+                  className="flex items-center justify-between p-3 rounded-lg border border-border hover:border-primary/30 transition-colors"
+                >
+                  <div className="flex-1 min-w-0 mr-3">
+                    <p className="text-sm font-medium truncate">{result.name}</p>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      {result.diagnosticCode && (
+                        <span className="text-xs text-muted-foreground">DC {result.diagnosticCode}</span>
+                      )}
+                      <span className="text-xs text-muted-foreground">{result.category}</span>
+                    </div>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      const vaCondition = getConditionById(result.id);
+                      if (vaCondition) {
+                        addCondition(vaCondition.id);
+                      }
+                    }}
+                  >
+                    <Plus className="h-3 w-3 mr-1" />
+                    Add
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Remove Condition Confirmation Dialog */}
       <Dialog open={!!removeTarget} onOpenChange={(open) => { if (!open) setRemoveTarget(null); }}>
         <DialogContent>

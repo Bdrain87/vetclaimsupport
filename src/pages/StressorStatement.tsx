@@ -25,6 +25,9 @@ import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { cn } from '@/lib/utils';
 import { exportStressorStatement } from '@/utils/pdfExport';
 import { PageContainer } from '@/components/PageContainer';
+import { useClaims } from '@/hooks/useClaims';
+import { PrefillBadge } from '@/components/ui/PrefillBadge';
+import { buildStressorPrefill } from '@/utils/prefillHelpers';
 
 interface StressorFormData {
   whatHappened: string;
@@ -124,8 +127,34 @@ function GuidanceTip({ tips }: GuidanceTipProps) {
 
 export default function StressorStatement() {
   const navigate = useNavigate();
+  const { data: claimsData } = useClaims();
+
+  // Build prefilled initial data from store
+  const [prefilled, setPrefilled] = useState<Record<string, boolean>>({});
+  const [prefilledData] = useState<Partial<StressorFormData>>(() => {
+    const stressor = buildStressorPrefill({
+      combatHistory: claimsData.combatHistory,
+      majorEvents: claimsData.majorEvents,
+      ptsdSymptoms: claimsData.ptsdSymptoms,
+      deployments: claimsData.deployments,
+    });
+    const result: Partial<StressorFormData> = {};
+    const marks: Record<string, boolean> = {};
+    if (stressor.whatHappened) { result.whatHappened = stressor.whatHappened; marks.whatHappened = true; }
+    if (stressor.whenStart) { result.whenStart = stressor.whenStart; marks.whenStart = true; }
+    if (stressor.whenEnd) { result.whenEnd = stressor.whenEnd; marks.whenEnd = true; }
+    if (stressor.whereLocation) { result.whereLocation = stressor.whereLocation; marks.whereLocation = true; }
+    if (stressor.whereUnit) { result.whereUnit = stressor.whereUnit; marks.whereUnit = true; }
+    if (stressor.howAffectedOngoing) { result.howAffectedOngoing = stressor.howAffectedOngoing; marks.howAffectedOngoing = true; }
+    setPrefilled(marks);
+    return result;
+  });
+
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState<StressorFormData>(initialFormData);
+  const [formData, setFormData] = useState<StressorFormData>({
+    ...initialFormData,
+    ...prefilledData,
+  });
   const [copied, setCopied] = useState(false);
 
   const updateField = useCallback(
@@ -297,7 +326,12 @@ export default function StressorStatement() {
         return (
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="whatHappened">Describe what happened</Label>
+              <Label htmlFor="whatHappened" className="flex items-center gap-2 flex-wrap">
+                Describe what happened
+                {prefilled.whatHappened && (
+                  <PrefillBadge onClear={() => { updateField('whatHappened', ''); setPrefilled(p => ({ ...p, whatHappened: false })); }} />
+                )}
+              </Label>
               <Textarea
                 id="whatHappened"
                 placeholder="Describe the traumatic event or stressor in your own words. Include as much detail as you are comfortable sharing..."
@@ -379,7 +413,12 @@ export default function StressorStatement() {
         return (
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="whereLocation">Location</Label>
+              <Label htmlFor="whereLocation" className="flex items-center gap-2 flex-wrap">
+                Location
+                {prefilled.whereLocation && (
+                  <PrefillBadge onClear={() => { updateField('whereLocation', ''); setPrefilled(p => ({ ...p, whereLocation: false })); }} />
+                )}
+              </Label>
               <Input
                 id="whereLocation"
                 placeholder="e.g., FOB Salerno, Khost Province, Afghanistan"
@@ -481,7 +520,12 @@ export default function StressorStatement() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="howAffectedOngoing">What ongoing symptoms do you experience?</Label>
+              <Label htmlFor="howAffectedOngoing" className="flex items-center gap-2 flex-wrap">
+                What ongoing symptoms do you experience?
+                {prefilled.howAffectedOngoing && (
+                  <PrefillBadge onClear={() => { updateField('howAffectedOngoing', ''); setPrefilled(p => ({ ...p, howAffectedOngoing: false })); }} />
+                )}
+              </Label>
               <Textarea
                 id="howAffectedOngoing"
                 placeholder="Describe symptoms that continue to this day (e.g., nightmares, flashbacks, anxiety, depression, anger, avoidance of certain places or situations, hypervigilance, difficulty trusting others)..."

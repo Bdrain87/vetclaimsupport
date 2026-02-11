@@ -34,7 +34,8 @@ import { exportClaimStrategy } from '@/utils/pdfExport';
 import { useClaims } from '@/hooks/useClaims';
 import { PageContainer } from '@/components/PageContainer';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
-import { useProfileStore, BRANCH_LABELS } from '@/store/useProfileStore';
+import { useProfileStore } from '@/store/useProfileStore';
+import { getAllBranchLabels } from '@/utils/veteranProfile';
 
 interface ServiceInfo {
   branch: string;
@@ -143,7 +144,7 @@ const branches = ['Army', 'Navy', 'Air Force', 'Marine Corps', 'Coast Guard', 'S
 export default function ClaimStrategyWizard() {
   const { data: claimsData } = useClaims();
   const profile = useProfileStore();
-  const branchLabel = profile.branch ? BRANCH_LABELS[profile.branch] : '';
+  const branchLabel = getAllBranchLabels(profile);
 
   // Pre-populate from stored data
   const prePopulated = useMemo<WizardData>(() => {

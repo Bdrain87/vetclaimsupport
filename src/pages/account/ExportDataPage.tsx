@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Download, FileJson, FileText, Loader2, ChevronLeft, Check } from 'lucide-react';
+import { Download, FileText, Loader2, ChevronLeft, Check } from 'lucide-react';
 import { exportAllData } from '@/services/accountManagement';
 import { saveAs } from 'file-saver';
 import { PageContainer } from '@/components/PageContainer';
 
 export default function ExportDataPage() {
   const navigate = useNavigate();
-  const [format, setFormat] = useState<'json' | 'pdf'>('json');
+  const format = 'pdf' as const;
   const [exporting, setExporting] = useState(false);
   const [exported, setExported] = useState(false);
 
@@ -59,36 +59,11 @@ export default function ExportDataPage() {
         </p>
       </div>
 
-      {/* Format selector */}
-      <div className="space-y-3">
-        <label className="block text-sm text-muted-foreground font-medium">Choose format:</label>
-        <div className="grid grid-cols-2 gap-3">
-          <button
-            onClick={() => setFormat('json')}
-            className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${
-              format === 'json'
-                ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40'
-                : 'bg-muted/50 border-border hover:bg-muted'
-            }`}
-          >
-            <FileJson className={`h-8 w-8 ${format === 'json' ? 'text-[#3B82F6]' : 'text-muted-foreground/70'}`} />
-            <span className={`text-sm font-medium ${format === 'json' ? 'text-foreground' : 'text-muted-foreground'}`}>JSON</span>
-            <span className="text-xs text-muted-foreground/70">Machine-readable</span>
-          </button>
-
-          <button
-            onClick={() => setFormat('pdf')}
-            className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${
-              format === 'pdf'
-                ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40'
-                : 'bg-muted/50 border-border hover:bg-muted'
-            }`}
-          >
-            <FileText className={`h-8 w-8 ${format === 'pdf' ? 'text-[#3B82F6]' : 'text-muted-foreground/70'}`} />
-            <span className={`text-sm font-medium ${format === 'pdf' ? 'text-foreground' : 'text-muted-foreground'}`}>PDF</span>
-            <span className="text-xs text-muted-foreground/70">Human-readable</span>
-          </button>
-        </div>
+      {/* Format info */}
+      <div className="flex flex-col items-center gap-2 p-4 rounded-xl border bg-[#3B82F6]/10 border-[#3B82F6]/40">
+        <FileText className="h-8 w-8 text-[#3B82F6]" />
+        <span className="text-sm font-medium text-foreground">PDF Export</span>
+        <span className="text-xs text-muted-foreground/70">Human-readable, ready for submission</span>
       </div>
 
       {/* Export button */}
