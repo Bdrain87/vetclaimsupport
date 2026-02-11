@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
-import { Share2, Copy, CheckCircle2, Download, Calendar, FileText, Stethoscope, Pill, Activity, Users, Printer } from 'lucide-react';
+import { Share2, Copy, CheckCircle2, Download, Calendar, FileText, Stethoscope, Pill, Activity, Users } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -11,6 +11,7 @@ export function ShareWithVSO() {
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
   const conditions = data.claimConditions || [];
   const buddyStatementsReceived = data.buddyContacts.filter(b =>
@@ -20,7 +21,7 @@ export function ShareWithVSO() {
     d.status === 'Obtained' || d.status === 'Submitted'
   ).length;
 
-  // Generate plain text summary for export
+  // Generate plain text summary for clipboard
   const generatePlainTextSummary = () => {
     const lines: string[] = [];
     lines.push('VET CLAIM SUPPORT — VSO SUMMARY');
@@ -70,29 +71,101 @@ export function ShareWithVSO() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleDownloadText = () => {
-    const blob = new Blob([generatePlainTextSummary()], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `vso-summary-${new Date().toISOString().split('T')[0]}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  const handleDownloadPDF = async () => {
+    setExporting(true);
+    try {
+      const { default: jsPDF } = await import('jspdf');
+      const doc = new jsPDF({ unit: 'pt', format: 'letter' });
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const margin = 50;
+      const maxWidth = pageWidth - margin * 2;
+      let y = 50;
 
-    toast({
-      title: 'Summary Downloaded',
-      description: 'Send this text file to your VSO for review',
-    });
-  };
+      const addText = (text: string, size: number, style: 'normal' | 'bold' = 'normal') => {
+        doc.setFontSize(size);
+        doc.setFont('helvetica', style);
+        const lines = doc.splitTextToSize(text, maxWidth);
+        if (y + lines.length * size * 1.2 > doc.internal.pageSize.getHeight() - 50) {
+          doc.addPage();
+          y = 50;
+        }
+        doc.text(lines, margin, y);
+        y += lines.length * size * 1.2 + 4;
+      };
 
-  const handlePrintPDF = () => {
-    window.print();
-    toast({
-      title: 'Print Dialog Opened',
-      description: 'Select "Save as PDF" in your print dialog to export as PDF',
-    });
+      const addSpacer = (px = 12) => { y += px; };
+
+      // Header
+      addText('VET CLAIM SUPPORT — VSO SUMMARY', 16, 'bold');
+      addText(`Generated: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`, 10, 'normal');
+      addSpacer(16);
+
+      // Veteran Info
+      addText('VETERAN INFO', 12, 'bold');
+      addText(`Separation Date: ${data.separationDate ? new Date(data.separationDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Not set'}`, 10);
+      if (data.serviceHistory.length > 0) {
+        addText('Service Locations:', 10, 'bold');
+        data.serviceHistory.filter(s => s.base).forEach(s => {
+          addText(`  • ${s.base}`, 10);
+        });
+      } else {
+        addText('No service history logged', 10);
+      }
+      addSpacer();
+
+      // Conditions
+      addText(`CONDITIONS BEING CLAIMED (${conditions.length})`, 12, 'bold');
+      if (conditions.length > 0) {
+        conditions.forEach(c => {
+          addText(`• ${c.name}`, 10, 'bold');
+          addText(`  Medical Visits: ${c.linkedMedicalVisits.length} | Symptoms: ${c.linkedSymptoms.length} | Exposures: ${c.linkedExposures.length} | Buddy Contacts: ${c.linkedBuddyContacts.length}`, 9);
+        });
+      } else {
+        addText('No conditions added to claim yet.', 10);
+      }
+      addSpacer();
+
+      // Evidence Summary
+      addText('EVIDENCE SUMMARY', 12, 'bold');
+      addText(`Medical Visits: ${data.medicalVisits.length}`, 10);
+      addText(`Medications: ${data.medications.length}`, 10);
+      addText(`Symptoms Logged: ${data.symptoms.length}`, 10);
+      addText(`Buddy Contacts: ${data.buddyContacts.length}`, 10);
+      addSpacer();
+
+      // Documents
+      addText('DOCUMENTS & STATEMENTS', 12, 'bold');
+      addText(`Documents: ${documentsObtained} of ${data.documents.length} obtained/submitted`, 10);
+      addText(`Buddy Statements: ${buddyStatementsReceived} of ${data.buddyContacts.length} received`, 10);
+      addText(`Exposures Documented: ${data.exposures.length}`, 10);
+      addSpacer(20);
+
+      // Privacy note
+      doc.setDrawColor(180, 150, 46);
+      doc.setFillColor(250, 245, 230);
+      doc.roundedRect(margin, y, maxWidth, 36, 4, 4, 'FD');
+      y += 14;
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Privacy Note:', margin + 8, y);
+      doc.setFont('helvetica', 'normal');
+      doc.text(' This summary contains only aggregate counts and condition names. Detailed medical information stays on your device.', margin + 60, y);
+
+      doc.save(`vso-summary-${new Date().toISOString().split('T')[0]}.pdf`);
+
+      toast({
+        title: 'PDF Downloaded',
+        description: 'Send this PDF to your VSO for review',
+      });
+    } catch {
+      toast({
+        title: 'Export Failed',
+        description: 'Could not generate PDF. Try the Copy Text option instead.',
+        variant: 'destructive',
+      });
+    } finally {
+      setExporting(false);
+    }
   };
 
   const formatDate = (dateString: string | null) => {
@@ -125,7 +198,7 @@ export function ShareWithVSO() {
             {/* Veteran Info Section */}
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                <Calendar className="h-4 w-4 text-primary" />
+                <Calendar className="h-4 w-4 text-gold" />
                 Veteran Info
               </div>
               <div className="pl-6 space-y-1 text-sm text-muted-foreground">
@@ -149,7 +222,7 @@ export function ShareWithVSO() {
             {/* Conditions Being Claimed */}
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                <FileText className="h-4 w-4 text-primary" />
+                <FileText className="h-4 w-4 text-gold" />
                 Conditions Being Claimed ({conditions.length})
               </div>
               <div className="pl-6 text-sm">
@@ -176,33 +249,33 @@ export function ShareWithVSO() {
             {/* Evidence Summary */}
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                <Activity className="h-4 w-4 text-primary" />
+                <Activity className="h-4 w-4 text-gold" />
                 Evidence Summary
               </div>
               <div className="pl-6 grid grid-cols-2 gap-2 text-sm">
                 <div className="flex items-center gap-2 p-2 bg-muted/30 rounded-md">
-                  <Stethoscope className="h-4 w-4 text-medical" />
+                  <Stethoscope className="h-4 w-4 text-gold" />
                   <div>
                     <p className="font-medium text-foreground">{data.medicalVisits.length}</p>
                     <p className="text-xs text-muted-foreground">Medical Visits</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 p-2 bg-muted/30 rounded-md">
-                  <Pill className="h-4 w-4 text-medications" />
+                  <Pill className="h-4 w-4 text-gold" />
                   <div>
                     <p className="font-medium text-foreground">{data.medications.length}</p>
                     <p className="text-xs text-muted-foreground">Medications</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 p-2 bg-muted/30 rounded-md">
-                  <Activity className="h-4 w-4 text-symptoms" />
+                  <Activity className="h-4 w-4 text-gold" />
                   <div>
                     <p className="font-medium text-foreground">{data.symptoms.length}</p>
                     <p className="text-xs text-muted-foreground">Symptoms Logged</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 p-2 bg-muted/30 rounded-md">
-                  <Users className="h-4 w-4 text-buddy" />
+                  <Users className="h-4 w-4 text-gold" />
                   <div>
                     <p className="font-medium text-foreground">{data.buddyContacts.length}</p>
                     <p className="text-xs text-muted-foreground">Buddy Contacts</p>
@@ -214,7 +287,7 @@ export function ShareWithVSO() {
             {/* Documents Status */}
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                <FileText className="h-4 w-4 text-primary" />
+                <FileText className="h-4 w-4 text-gold" />
                 Documents & Statements
               </div>
               <div className="pl-6 space-y-1 text-sm text-muted-foreground">
@@ -231,7 +304,7 @@ export function ShareWithVSO() {
             </div>
 
             {/* Privacy Note */}
-            <div className="p-3 bg-primary/5 border border-primary/20 rounded-lg">
+            <div className="p-3 bg-[rgba(214,178,94,0.08)] border border-[rgba(214,178,94,0.25)] rounded-lg">
               <p className="text-xs text-muted-foreground">
                 <strong className="text-foreground">Privacy Note:</strong> This summary contains only
                 aggregate counts and condition names. Detailed medical information stays on your device.
@@ -246,7 +319,7 @@ export function ShareWithVSO() {
             <Button onClick={handleCopyText} variant="outline" className="flex-1 gap-2">
               {copied ? (
                 <>
-                  <CheckCircle2 className="h-4 w-4 text-success" />
+                  <CheckCircle2 className="h-4 w-4 text-gold" />
                   Copied!
                 </>
               ) : (
@@ -256,15 +329,15 @@ export function ShareWithVSO() {
                 </>
               )}
             </Button>
-            <Button onClick={handleDownloadText} className="flex-1 gap-2">
+            <Button
+              onClick={handleDownloadPDF}
+              disabled={exporting}
+              className="flex-1 gap-2 bg-gold hover:bg-gold-dk text-black font-semibold"
+            >
               <Download className="h-4 w-4" />
-              Download .txt
+              {exporting ? 'Generating...' : 'Download PDF'}
             </Button>
           </div>
-          <Button onClick={handlePrintPDF} variant="outline" className="w-full gap-2">
-            <Printer className="h-4 w-4" />
-            Save as PDF (Print)
-          </Button>
         </div>
       </DialogContent>
     </Dialog>
