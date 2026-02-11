@@ -336,10 +336,18 @@ export default function CPExamPacket() {
           mosTitle: profile.mosTitle,
           serviceDates: profile.serviceDates,
           intentToFileDate: profile.intentToFileDate,
-          currentRating: userConditions.reduce(
-            (max, c) => (c.rating && c.rating > max ? c.rating : max),
-            0
-          ),
+          currentRating: (() => {
+            const ratings = userConditions
+              .filter(uc => uc.rating && uc.rating > 0)
+              .map(uc => uc.rating!)
+              .sort((a, b) => b - a);
+            if (ratings.length === 0) return 0;
+            let combined = 0;
+            for (const r of ratings) {
+              combined = combined + ((100 - combined) * r / 100);
+            }
+            return Math.round(combined / 10) * 10;
+          })(),
         },
         conditions: allConditions,
         evidenceSummaries: allConditions.map((c) => ({

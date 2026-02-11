@@ -65,7 +65,7 @@ const BODY_REGIONS: BodyRegion[] = [
     conditions: [
       { id: 'cervical-strain', name: 'Cervical Spine Strain', diagnosticCode: '5237', description: 'Neck strain or degenerative changes from service duties' },
       { id: 'cervical-radiculopathy', name: 'Cervical Radiculopathy', diagnosticCode: '8510', description: 'Nerve compression in the cervical spine causing pain/numbness' },
-      { id: 'cervical-disc', name: 'Cervical Disc Disease', diagnosticCode: '5243', description: 'Intervertebral disc degeneration in the cervical spine' },
+      { id: 'herniated-disc-cervical', name: 'Cervical Disc Disease', diagnosticCode: '5243', description: 'Intervertebral disc degeneration in the cervical spine' },
     ],
   },
   {
@@ -101,9 +101,9 @@ const BODY_REGIONS: BodyRegion[] = [
     cy: 160,
     r: 16,
     conditions: [
-      { id: 'elbow-strain', name: 'Elbow Strain / Tendinitis', diagnosticCode: '5206', description: 'Lateral or medial epicondylitis from repetitive use' },
+      { id: 'tennis-elbow', name: 'Elbow Strain / Tendinitis', diagnosticCode: '5206', description: 'Lateral or medial epicondylitis from repetitive use' },
       { id: 'elbow-arthritis', name: 'Elbow Arthritis', diagnosticCode: '5003', description: 'Degenerative joint disease of the elbow' },
-      { id: 'cubital-tunnel', name: 'Cubital Tunnel Syndrome', diagnosticCode: '8516', description: 'Ulnar nerve entrapment at the elbow' },
+      { id: 'cubital-tunnel-syndrome', name: 'Cubital Tunnel Syndrome', diagnosticCode: '8516', description: 'Ulnar nerve entrapment at the elbow' },
     ],
   },
   {
@@ -113,9 +113,9 @@ const BODY_REGIONS: BodyRegion[] = [
     cy: 160,
     r: 16,
     conditions: [
-      { id: 'elbow-strain', name: 'Elbow Strain / Tendinitis', diagnosticCode: '5206', description: 'Lateral or medial epicondylitis from repetitive use' },
+      { id: 'tennis-elbow', name: 'Elbow Strain / Tendinitis', diagnosticCode: '5206', description: 'Lateral or medial epicondylitis from repetitive use' },
       { id: 'elbow-arthritis', name: 'Elbow Arthritis', diagnosticCode: '5003', description: 'Degenerative joint disease of the elbow' },
-      { id: 'cubital-tunnel', name: 'Cubital Tunnel Syndrome', diagnosticCode: '8516', description: 'Ulnar nerve entrapment at the elbow' },
+      { id: 'cubital-tunnel-syndrome', name: 'Cubital Tunnel Syndrome', diagnosticCode: '8516', description: 'Ulnar nerve entrapment at the elbow' },
     ],
   },
   {
@@ -126,7 +126,7 @@ const BODY_REGIONS: BodyRegion[] = [
     r: 14,
     conditions: [
       { id: 'carpal-tunnel', name: 'Carpal Tunnel Syndrome', diagnosticCode: '8515', description: 'Median nerve compression causing numbness and weakness in the hand' },
-      { id: 'wrist-strain', name: 'Wrist Tendinitis / Strain', diagnosticCode: '5215', description: 'Chronic wrist pain from repetitive motion or injury' },
+      { id: 'wrist-tendonitis', name: 'Wrist Tendinitis / Strain', diagnosticCode: '5215', description: 'Chronic wrist pain from repetitive motion or injury' },
       { id: 'trigger-finger', name: 'Trigger Finger', diagnosticCode: '5228', description: 'Locking or catching of finger tendons' },
     ],
   },
@@ -138,7 +138,7 @@ const BODY_REGIONS: BodyRegion[] = [
     r: 14,
     conditions: [
       { id: 'carpal-tunnel', name: 'Carpal Tunnel Syndrome', diagnosticCode: '8515', description: 'Median nerve compression causing numbness and weakness in the hand' },
-      { id: 'wrist-strain', name: 'Wrist Tendinitis / Strain', diagnosticCode: '5215', description: 'Chronic wrist pain from repetitive motion or injury' },
+      { id: 'wrist-tendonitis', name: 'Wrist Tendinitis / Strain', diagnosticCode: '5215', description: 'Chronic wrist pain from repetitive motion or injury' },
       { id: 'trigger-finger', name: 'Trigger Finger', diagnosticCode: '5228', description: 'Locking or catching of finger tendons' },
     ],
   },
@@ -163,8 +163,8 @@ const BODY_REGIONS: BodyRegion[] = [
     cy: 155,
     r: 18,
     conditions: [
-      { id: 'thoracic-strain', name: 'Thoracic Spine Strain', diagnosticCode: '5237', description: 'Upper/mid-back strain from carrying heavy gear or repetitive duties' },
-      { id: 'thoracic-disc', name: 'Thoracic Disc Disease', diagnosticCode: '5243', description: 'Disc degeneration in the thoracic spine' },
+      { id: 'thoracic-ddd', name: 'Thoracic Spine Strain', diagnosticCode: '5237', description: 'Upper/mid-back strain from carrying heavy gear or repetitive duties' },
+      { id: 'herniated-disc-thoracic', name: 'Thoracic Disc Disease', diagnosticCode: '5243', description: 'Disc degeneration in the thoracic spine' },
       { id: 'scoliosis', name: 'Scoliosis (Aggravation)', diagnosticCode: '5237', description: 'Curvature of the spine aggravated by military service' },
     ],
   },
@@ -189,10 +189,10 @@ const BODY_REGIONS: BodyRegion[] = [
     r: 20,
     conditions: [
       { id: 'lumbar-strain', name: 'Lumbosacral Strain', diagnosticCode: '5237', description: 'Lower back strain or degenerative disc disease from service' },
-      { id: 'lumbar-disc', name: 'Lumbar Disc Disease', diagnosticCode: '5243', description: 'Herniated or degenerated discs in the lumbar spine' },
+      { id: 'herniated-disc-lumbar', name: 'Lumbar Disc Disease', diagnosticCode: '5243', description: 'Herniated or degenerated discs in the lumbar spine' },
       { id: 'sciatica', name: 'Sciatica / Radiculopathy', diagnosticCode: '8520', description: 'Sciatic nerve pain radiating from the lower back into the leg' },
       { id: 'hip-strain', name: 'Hip Strain / Arthritis', diagnosticCode: '5252', description: 'Hip joint degeneration or injury from running, rucking, or parachuting' },
-      { id: 'si-joint', name: 'SI Joint Dysfunction', diagnosticCode: '5236', description: 'Sacroiliac joint instability or inflammation' },
+      { id: 'sacroiliac-dysfunction', name: 'SI Joint Dysfunction', diagnosticCode: '5236', description: 'Sacroiliac joint instability or inflammation' },
     ],
   },
   {
@@ -205,7 +205,7 @@ const BODY_REGIONS: BodyRegion[] = [
       { id: 'knee-strain', name: 'Knee Strain / Instability', diagnosticCode: '5257', description: 'Recurrent subluxation or lateral instability of the knee' },
       { id: 'knee-arthritis', name: 'Knee Arthritis', diagnosticCode: '5003', description: 'Degenerative joint disease of the knee' },
       { id: 'meniscus-tear', name: 'Meniscus Tear', diagnosticCode: '5258', description: 'Dislocated semilunar cartilage with locking and effusion' },
-      { id: 'patellofemoral', name: 'Patellofemoral Pain Syndrome', diagnosticCode: '5260', description: 'Pain around the kneecap from overuse during service' },
+      { id: 'patellofemoral-syndrome', name: 'Patellofemoral Pain Syndrome', diagnosticCode: '5260', description: 'Pain around the kneecap from overuse during service' },
     ],
   },
   {
@@ -218,7 +218,7 @@ const BODY_REGIONS: BodyRegion[] = [
       { id: 'knee-strain', name: 'Knee Strain / Instability', diagnosticCode: '5257', description: 'Recurrent subluxation or lateral instability of the knee' },
       { id: 'knee-arthritis', name: 'Knee Arthritis', diagnosticCode: '5003', description: 'Degenerative joint disease of the knee' },
       { id: 'meniscus-tear', name: 'Meniscus Tear', diagnosticCode: '5258', description: 'Dislocated semilunar cartilage with locking and effusion' },
-      { id: 'patellofemoral', name: 'Patellofemoral Pain Syndrome', diagnosticCode: '5260', description: 'Pain around the kneecap from overuse during service' },
+      { id: 'patellofemoral-syndrome', name: 'Patellofemoral Pain Syndrome', diagnosticCode: '5260', description: 'Pain around the kneecap from overuse during service' },
     ],
   },
   {
@@ -255,7 +255,7 @@ const BODY_REGIONS: BodyRegion[] = [
       { id: 'plantar-fasciitis', name: 'Plantar Fasciitis', diagnosticCode: '5276', description: 'Heel/foot pain from overuse during military service' },
       { id: 'flat-feet', name: 'Pes Planus (Flat Feet)', diagnosticCode: '5276', description: 'Acquired or aggravated flat feet from prolonged standing/marching' },
       { id: 'ankle-strain', name: 'Ankle Strain / Instability', diagnosticCode: '5271', description: 'Chronic ankle instability from sprains during service' },
-      { id: 'hallux-valgus', name: 'Hallux Valgus (Bunion)', diagnosticCode: '5280', description: 'Bunion deformity aggravated by ill-fitting military boots' },
+      { id: 'bunion', name: 'Hallux Valgus (Bunion)', diagnosticCode: '5280', description: 'Bunion deformity aggravated by ill-fitting military boots' },
     ],
   },
   {
@@ -268,7 +268,7 @@ const BODY_REGIONS: BodyRegion[] = [
       { id: 'plantar-fasciitis', name: 'Plantar Fasciitis', diagnosticCode: '5276', description: 'Heel/foot pain from overuse during military service' },
       { id: 'flat-feet', name: 'Pes Planus (Flat Feet)', diagnosticCode: '5276', description: 'Acquired or aggravated flat feet from prolonged standing/marching' },
       { id: 'ankle-strain', name: 'Ankle Strain / Instability', diagnosticCode: '5271', description: 'Chronic ankle instability from sprains during service' },
-      { id: 'hallux-valgus', name: 'Hallux Valgus (Bunion)', diagnosticCode: '5280', description: 'Bunion deformity aggravated by ill-fitting military boots' },
+      { id: 'bunion', name: 'Hallux Valgus (Bunion)', diagnosticCode: '5280', description: 'Bunion deformity aggravated by ill-fitting military boots' },
     ],
   },
 ];

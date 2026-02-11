@@ -32,7 +32,7 @@ export function RatingIncreaseAnalyzer() {
       symptoms: data.symptoms.filter(s => condition.linkedSymptoms.includes(s.id)),
       medicalVisits: data.medicalVisits.filter(v => condition.linkedMedicalVisits.includes(v.id)),
       buddyContacts: data.buddyContacts.filter(b => condition.linkedBuddyContacts.includes(b.id)),
-      medications: data.medications.filter(m => condition.linkedDocuments?.includes(m.id)),
+      medications: data.medications.filter(m => condition.linkedSymptoms?.includes(m.id)),
       // Also check for PTSD symptoms if it's a mental health condition
       ptsdSymptoms: selectedCondition.toLowerCase().includes('ptsd') || 
                     selectedCondition.toLowerCase().includes('anxiety') ||
@@ -74,7 +74,7 @@ export function RatingIncreaseAnalyzer() {
     if (!conditionData || !currentRating) return null;
 
     const currentRatingNum = parseInt(currentRating);
-    const ratings = conditionData.ratings.sort((a, b) => a.percentage - b.percentage);
+    const ratings = [...conditionData.ratings].sort((a, b) => a.percentage - b.percentage);
     
     const currentLevel = ratings.find(r => r.percentage === currentRatingNum);
     const nextLevel = ratings.find(r => r.percentage > currentRatingNum);

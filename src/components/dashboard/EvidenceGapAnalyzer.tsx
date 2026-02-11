@@ -122,10 +122,15 @@ export function EvidenceGapAnalyzer() {
       });
 
       // Documents (nexus letter is key)
-      const hasNexus = data.documents.some(d => 
-        d.name.includes('Nexus') && 
+      const hasNexusChecklist = data.documents.some(d =>
+        d.name.includes('Nexus') &&
         (d.status === 'Obtained' || d.status === 'Submitted')
       );
+      const hasNexusUploaded = (data.uploadedDocuments ?? []).some(doc =>
+        doc.documentType === 'nexus' ||
+        doc.title.toLowerCase().includes('nexus')
+      );
+      const hasNexus = hasNexusChecklist || hasNexusUploaded;
       if (hasNexus) {
         score += 15;
         strengths.push('Nexus letter links condition to service');

@@ -9,23 +9,15 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { exportBackPayEstimate } from '@/utils/pdfExport';
 import { PageContainer } from '@/components/PageContainer';
+import { COMP_RATES_2026 } from '@/data/compRates2026';
 
 // ---------------------------------------------------------------------------
-// 2024 VA Compensation Rate Table (veteran alone, monthly)
+// 2026 VA Compensation Rate Table (veteran alone, monthly)
 // ---------------------------------------------------------------------------
 
 const BASE_RATES: Record<number, number> = {
   0: 0,
-  10: 171,
-  20: 338,
-  30: 524,
-  40: 755,
-  50: 1075,
-  60: 1361,
-  70: 1716,
-  80: 1995,
-  90: 2241,
-  100: 3737,
+  ...COMP_RATES_2026,
 };
 
 const SPOUSE_ADDITION = 100; // additional per month at 30%+ with spouse
@@ -476,7 +468,7 @@ export default function BackPayEstimator() {
           <p className="text-sm font-medium text-amber-400">Disclaimer</p>
           <p className="text-xs text-muted-foreground leading-relaxed">
             This is an estimate only. Actual back pay amounts are determined by the VA. Rates shown
-            are approximate 2024 VA compensation rates. Your actual compensation may differ based on
+            are approximate 2026 VA compensation rates. Your actual compensation may differ based on
             specific circumstances, rate changes, withholdings, or other factors. Dependent additions
             are simplified estimates; actual VA rates vary by rating level and number of dependents.
             Consult the VA or a Veterans Service Organization (VSO) for precise amounts.

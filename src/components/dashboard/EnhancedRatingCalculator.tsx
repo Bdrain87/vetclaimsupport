@@ -20,22 +20,11 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Calculator, Plus, Trash2, Info, AlertTriangle, TrendingUp, Award, ArrowRight, DollarSign, Sparkles } from 'lucide-react';
-import { format, differenceInMonths, parseISO, addDays } from 'date-fns';
+import { format, differenceInMonths, parseISO, subYears } from 'date-fns';
+import { COMP_RATES_2026 } from '@/data/compRates2026';
 
 // 2026 VA compensation rates (single veteran, no dependents)
-const monthlyCompensation: Record<number, number> = {
-  0: 0,
-  10: 175.51,
-  20: 347.14,
-  30: 537.32,
-  40: 773.64,
-  50: 1101.71,
-  60: 1395.07,
-  70: 1759.14,
-  80: 2044.74,
-  90: 2297.14,
-  100: 3937.04,
-};
+const monthlyCompensation: Record<number, number> = { 0: 0, ...COMP_RATES_2026 };
 
 const commonRatings = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
@@ -194,11 +183,15 @@ export function EnhancedRatingCalculator() {
   const monthlyIncrease = projectedMonthly - currentMonthly;
 
   // Back pay estimation
+  // The stored deadline date is the ITF expiration (1 year after filing).
+  // Subtract exactly 1 year to recover the effective filing date.
   const itfDeadline = data.deadlines?.find(d => d.type === 'intent_to_file');
-  const itfDate = itfDeadline?.date 
-    ? format(addDays(parseISO(itfDeadline.date), -365), 'yyyy-MM-dd')
+  const itfEffectiveDate = itfDeadline?.date
+    ? subYears(parseISO(itfDeadline.date), 1)
     : null;
-  const backPayMonths = itfDate ? differenceInMonths(new Date(), parseISO(itfDate)) : 0;
+  const itfDate = itfEffectiveDate ? format(itfEffectiveDate, 'yyyy-MM-dd') : null;
+  // Months of back pay = current date minus effective date (positive when effective date is in the past)
+  const backPayMonths = itfEffectiveDate ? differenceInMonths(new Date(), itfEffectiveDate) : 0;
   const estimatedBackPay = monthlyIncrease > 0 && backPayMonths > 0 ? monthlyIncrease * backPayMonths : 0;
 
   const hasApprovedConditions = approvedConditions.length > 0;

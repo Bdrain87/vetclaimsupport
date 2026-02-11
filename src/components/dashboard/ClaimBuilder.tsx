@@ -23,6 +23,8 @@ export function ClaimBuilder() {
   const [isOpen, setIsOpen] = useState(false);
   const [newConditionName, setNewConditionName] = useState('');
   const [expandedCondition, setExpandedCondition] = useState<string | null>(null);
+  const [showAllMedicalVisits, setShowAllMedicalVisits] = useState(false);
+  const [showAllSymptoms, setShowAllSymptoms] = useState(false);
 
   const claimConditions = data.claimConditions || [];
 
@@ -226,8 +228,8 @@ export function ClaimBuilder() {
                         <p className="text-xs font-medium flex items-center gap-1">
                           <Stethoscope className="h-3 w-3" /> Medical Visits
                         </p>
-                        <div className="space-y-1 max-h-32 overflow-y-auto">
-                          {data.medicalVisits.slice(0, 5).map((visit) => (
+                        <div className="space-y-1 max-h-48 overflow-y-auto">
+                          {(showAllMedicalVisits ? data.medicalVisits : data.medicalVisits.slice(0, 5)).map((visit) => (
                             <div key={visit.id} className="flex items-center gap-2 text-xs">
                               <Checkbox
                                 checked={condition.linkedMedicalVisits.includes(visit.id)}
@@ -239,6 +241,16 @@ export function ClaimBuilder() {
                             </div>
                           ))}
                         </div>
+                        {data.medicalVisits.length > 5 && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 text-xs w-full"
+                            onClick={(e) => { e.stopPropagation(); setShowAllMedicalVisits(!showAllMedicalVisits); }}
+                          >
+                            {showAllMedicalVisits ? 'Show Less' : `Show All (${data.medicalVisits.length})`}
+                          </Button>
+                        )}
                       </div>
                     )}
 
@@ -268,8 +280,8 @@ export function ClaimBuilder() {
                         <p className="text-xs font-medium flex items-center gap-1">
                           <Activity className="h-3 w-3" /> Symptoms
                         </p>
-                        <div className="space-y-1 max-h-32 overflow-y-auto">
-                          {data.symptoms.slice(0, 5).map((symptom) => (
+                        <div className="space-y-1 max-h-48 overflow-y-auto">
+                          {(showAllSymptoms ? data.symptoms : data.symptoms.slice(0, 5)).map((symptom) => (
                             <div key={symptom.id} className="flex items-center gap-2 text-xs">
                               <Checkbox
                                 checked={condition.linkedSymptoms.includes(symptom.id)}
@@ -279,6 +291,16 @@ export function ClaimBuilder() {
                             </div>
                           ))}
                         </div>
+                        {data.symptoms.length > 5 && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 text-xs w-full"
+                            onClick={(e) => { e.stopPropagation(); setShowAllSymptoms(!showAllSymptoms); }}
+                          >
+                            {showAllSymptoms ? 'Show Less' : `Show All (${data.symptoms.length})`}
+                          </Button>
+                        )}
                       </div>
                     )}
 

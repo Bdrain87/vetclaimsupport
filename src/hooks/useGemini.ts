@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { AI_CONFIG } from '@/lib/ai-prompts';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/lib/supabase';
 
 export const useGemini = (persona: keyof typeof AI_CONFIG) => {
   const [isLoading, setIsLoading] = useState(false);

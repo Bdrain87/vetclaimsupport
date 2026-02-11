@@ -285,6 +285,7 @@ export default function Sleep() {
             <p className="text-muted-foreground mt-1">Chronic respiratory failure</p>
           </div>
       </div>
+      </div>
 
       {/* Add Log Button */}
       <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
@@ -675,7 +676,6 @@ export default function Sleep() {
             </form>
           </DialogContent>
         </Dialog>
-      </div>
 
       {/* Estimated Rating Card */}
       {estimatedRating && sleepEntries.length > 0 && (

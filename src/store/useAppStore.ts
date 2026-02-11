@@ -207,7 +207,7 @@ interface AppState {
   clearFormDraft: (formId: string) => void;
 
   // Dashboard Quick Log (convenience)
-  addDashboardQuickLog: (pain: number, mood: 'good' | 'okay' | 'bad') => void;
+  addDashboardQuickLog: (pain: number, mood: 'good' | 'okay' | 'bad', condition?: string, notes?: string, date?: string) => void;
 
   // ========== USER CONDITIONS METHODS ==========
 
@@ -528,15 +528,17 @@ const useAppStore = create<AppState>()(
       }),
 
       // Dashboard Quick Log (convenience)
-      addDashboardQuickLog: (pain, mood) => set((s) => ({
+      addDashboardQuickLog: (pain, mood, condition, notes, date) => set((s) => ({
         quickLogs: [...(s.quickLogs || []), {
           id: generateId(),
-          date: new Date().toISOString(),
+          date: date || new Date().toISOString(),
           overallFeeling: pain,
           hadFlareUp: false,
-          flareUpNote: '',
+          flareUpNote: notes || '',
           painLevel: pain,
           mood,
+          condition: condition || 'general',
+          notes: notes || '',
           createdAt: new Date().toISOString(),
         }],
       })),
@@ -767,7 +769,7 @@ const useAppStore = create<AppState>()(
 
       // ========== GLOBAL ==========
 
-      resetAllData: () => set({ ...initialState }),
+      resetAllData: () => set({ ...initialState, _evidenceLoading: new Set<string>(), _claimDocLoading: new Set<string>() }),
     }),
     {
       name: 'vcs-app-data',

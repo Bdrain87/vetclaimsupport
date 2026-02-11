@@ -31,7 +31,7 @@ const ptsdRequirements: EvidenceRequirement[] = [
     check: (condition, data) => {
       const mentalHealthVisits = data.medicalVisits.filter(v => 
         condition.linkedMedicalVisits.includes(v.id) && 
-        (v.visitType === 'Mental Health' || v.reason.toLowerCase().includes('mental') || v.reason.toLowerCase().includes('ptsd'))
+        (v.visitType === 'Mental Health' || (v.reason ?? '').toLowerCase().includes('mental') || (v.reason ?? '').toLowerCase().includes('ptsd'))
       );
       return { met: mentalHealthVisits.length > 0, count: mentalHealthVisits.length };
     },
@@ -64,11 +64,11 @@ const ptsdRequirements: EvidenceRequirement[] = [
     description: 'Prescriptions for anxiety, depression, or sleep related to PTSD',
     isCritical: false,
     check: (condition, data) => {
-      const relatedMeds = data.medications.filter(med => 
-        med.prescribedFor.toLowerCase().includes('ptsd') ||
-        med.prescribedFor.toLowerCase().includes('anxiety') ||
-        med.prescribedFor.toLowerCase().includes('depression') ||
-        med.prescribedFor.toLowerCase().includes('sleep')
+      const relatedMeds = data.medications.filter(med =>
+        (med.prescribedFor ?? '').toLowerCase().includes('ptsd') ||
+        (med.prescribedFor ?? '').toLowerCase().includes('anxiety') ||
+        (med.prescribedFor ?? '').toLowerCase().includes('depression') ||
+        (med.prescribedFor ?? '').toLowerCase().includes('sleep')
       );
       return { met: relatedMeds.length > 0, count: relatedMeds.length };
     },
@@ -129,12 +129,12 @@ const physicalRequirements: EvidenceRequirement[] = [
     isCritical: false,
     check: (condition, data) => {
       // Check for imaging in medical visits or uploaded documents
-      const hasImaging = data.medicalVisits.some(v => 
+      const hasImaging = data.medicalVisits.some(v =>
         condition.linkedMedicalVisits.includes(v.id) &&
-        (v.diagnosis.toLowerCase().includes('x-ray') ||
-         v.diagnosis.toLowerCase().includes('mri') ||
-         v.diagnosis.toLowerCase().includes('ct scan') ||
-         v.treatment.toLowerCase().includes('imaging'))
+        ((v.diagnosis ?? '').toLowerCase().includes('x-ray') ||
+         (v.diagnosis ?? '').toLowerCase().includes('mri') ||
+         (v.diagnosis ?? '').toLowerCase().includes('ct scan') ||
+         (v.treatment ?? '').toLowerCase().includes('imaging'))
       );
       const hasUploadedImaging = data.uploadedDocuments?.some(doc =>
         doc.title.toLowerCase().includes('x-ray') ||

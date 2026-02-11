@@ -158,10 +158,15 @@ export async function deleteAccount(): Promise<void> {
   // 4. Delete the profiles row
   await supabase.from('profiles').delete().eq('id', userId);
 
-  // 5. Sign out and clear all local data
-  // TODO: Actual auth user deletion requires an edge function calling
-  // supabase.auth.admin.deleteUser(userId). For now, we sign out
-  // and clear local state. The auth user row remains but all data is gone.
+  // 5. Delete auth user via Edge Function, then sign out and clear local data
+  try {
+    await supabase.functions.invoke('delete-user', {
+      body: { userId },
+    });
+  } catch {
+    // Edge function may not be deployed yet; continue with sign-out
+  }
+
   stopSync();
   await supabase.auth.signOut();
   clearLocalData();

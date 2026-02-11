@@ -421,7 +421,7 @@ export default function ServiceHistory() {
             </Card>
           ) : (
             <div className="space-y-4">
-              {data.serviceHistory.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime()).map((entry, index) => (
+              {[...data.serviceHistory].sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime()).map((entry, index) => (
                 <Card key={entry.id} className="data-card group hover:border-primary/30 transition-all duration-300 animate-fade-in" style={{ animationDelay: `${index * 0.05}s` }}>
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
@@ -562,7 +562,7 @@ export default function ServiceHistory() {
             </Card>
           ) : (
             <div className="space-y-4">
-              {combatHistory.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime()).map((entry) => (
+              {[...(combatHistory || [])].sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime()).map((entry) => (
                 <Card key={entry.id} className="data-card border-destructive/20">
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
@@ -680,7 +680,7 @@ export default function ServiceHistory() {
             </Card>
           ) : (
             <div className="space-y-4">
-              {majorEvents.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((entry) => (
+              {[...(majorEvents || [])].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((entry) => (
                 <Card key={entry.id} className="data-card">
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
@@ -804,7 +804,7 @@ export default function ServiceHistory() {
             </Card>
           ) : (
             <div className="space-y-4">
-              {deployments.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime()).map((entry) => (
+              {[...(deployments || [])].sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime()).map((entry) => (
                 <Card key={entry.id} className="data-card">
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">

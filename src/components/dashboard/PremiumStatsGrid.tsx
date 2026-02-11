@@ -35,7 +35,7 @@ export function PremiumStatsGrid() {
   // Calculate phase completion
   const calculatePhaseProgress = () => {
     let completedTasks = 0;
-    const totalTasks = 16; // 4 phases × 4 tasks
+    const totalTasks = 12; // 3 phases × 4 tasks
 
     // Phase 1
     if (data.serviceHistory.length > 0) completedTasks++;

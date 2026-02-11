@@ -197,10 +197,14 @@ Date: ${today}`;
 
   const copyToClipboard = async () => {
     const statement = generateStatement();
-    await navigator.clipboard.writeText(statement);
-    setCopied(true);
-    toast({ title: 'Copied to clipboard', description: 'Statement has been copied.' });
-    setTimeout(() => setCopied(false), 2000);
+    try {
+      await navigator.clipboard.writeText(statement);
+      setCopied(true);
+      toast({ title: 'Copied to clipboard', description: 'Statement has been copied.' });
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast({ title: 'Copy failed', description: 'Please select and copy the text manually.', variant: 'destructive' });
+    }
   };
 
   const downloadAsPDF = () => {

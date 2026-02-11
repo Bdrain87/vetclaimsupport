@@ -22,7 +22,7 @@ import {
   CheckCircle2,
   CalendarIcon,
 } from 'lucide-react';
-import { format, differenceInDays, addDays, addYears } from 'date-fns';
+import { format, differenceInDays, addDays, addYears, startOfDay } from 'date-fns';
 import { cn } from '@/lib/utils';
 import type { DeadlineType } from '@/types/claims';
 
@@ -288,7 +288,7 @@ export function DeadlinesReminders() {
           </div>
         ) : (
           sortedDeadlines.map((deadline) => {
-            const daysRemaining = differenceInDays(new Date(deadline.date), new Date());
+            const daysRemaining = differenceInDays(startOfDay(new Date(deadline.date)), startOfDay(new Date()));
             const urgency = getUrgencyColor(daysRemaining);
             const config = deadlineTypeConfig[deadline.type];
             const Icon = config.icon;

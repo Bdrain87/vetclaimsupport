@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import {
   Wand2,
   ChevronRight,
@@ -30,7 +30,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/lib/supabase';
 import { exportClaimStrategy } from '@/utils/pdfExport';
 import { useClaims } from '@/hooks/useClaims';
 import { PageContainer } from '@/components/PageContainer';
@@ -189,6 +189,14 @@ export default function ClaimStrategyWizard() {
   const [strategy, setStrategy] = useState<StrategyResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+
+  // Sync form data when profile/claims load asynchronously, but only while
+  // the user hasn't advanced past the first step (avoid clobbering edits).
+  useEffect(() => {
+    if (currentStep === 1) {
+      setData(prePopulated);
+    }
+  }, [prePopulated, currentStep]);
 
   const updateServiceInfo = useCallback((field: keyof ServiceInfo, value: string | string[]) => {
     setData(prev => ({

@@ -436,18 +436,7 @@ export default function Migraines() {
         </AlertDescription>
       </Alert>
 
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="section-header mb-0">
-          <div className="section-icon bg-[#3B82F6]/10">
-            <Brain className="h-5 w-5 text-[#3B82F6]" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Migraine Tracker</h1>
-            <p className="text-muted-foreground text-sm">Document attacks for VA disability claims</p>
-          </div>
-        </div>
-
         <div className="flex gap-2 flex-shrink-0">
           <Button variant="outline" onClick={handleExportPDF} className="gap-2 hidden sm:flex">
             <Download className="h-4 w-4" />

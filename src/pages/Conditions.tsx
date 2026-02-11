@@ -217,7 +217,9 @@ export default function Conditions() {
 
   // Handle remove condition (with confirmation)
   const handleRemoveCondition = (id: string) => {
-    const details = getConditionDetails(userConditions.find(c => c.id === id)!);
+    const uc = userConditions.find(c => c.id === id);
+    if (!uc) return;
+    const details = getConditionDetails(uc);
     setRemoveTarget({ id, name: details?.name || 'this condition' });
   };
 
@@ -387,8 +389,8 @@ export default function Conditions() {
                   <ConditionCard
                     userCondition={{
                       ...uc,
-                      evidenceCount: 0,
-                      totalEvidenceNeeded: 5,
+                      evidenceCount: undefined,
+                      totalEvidenceNeeded: undefined,
                       hasSecondaries: secondaries.length > 0,
                     }}
                     conditionDetails={details ?? null}

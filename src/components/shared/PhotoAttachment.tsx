@@ -29,6 +29,7 @@ export function PhotoAttachment({ photos, onPhotosChange, maxPhotos = 5 }: Photo
       return;
     }
 
+    const validFiles: File[] = [];
     Array.from(files).forEach(file => {
       if (!file.type.startsWith('image/')) {
         toast({
@@ -48,13 +49,22 @@ export function PhotoAttachment({ photos, onPhotosChange, maxPhotos = 5 }: Photo
         return;
       }
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const dataUrl = e.target?.result as string;
-        onPhotosChange([...photos, dataUrl]);
-      };
-      reader.readAsDataURL(file);
+      validFiles.push(file);
     });
+
+    if (validFiles.length > 0) {
+      Promise.all(
+        validFiles.map(file => new Promise<string>((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            resolve(e.target?.result as string);
+          };
+          reader.readAsDataURL(file);
+        }))
+      ).then(newDataUrls => {
+        onPhotosChange([...photos, ...newDataUrls]);
+      });
+    }
 
     // Reset input
     if (fileInputRef.current) {

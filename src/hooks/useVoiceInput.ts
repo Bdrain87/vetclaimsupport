@@ -45,17 +45,25 @@ interface UseVoiceInputReturn {
 
 export function useVoiceInput(options: UseVoiceInputOptions = {}): UseVoiceInputReturn {
   const { onResult, onInterimResult, continuous = false, language = 'en-US' } = options;
-  
+
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [interimTranscript, setInterimTranscript] = useState('');
   const [error, setError] = useState<string | null>(null);
-  
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const recognitionRef = useRef<any>(null);
+  // Use refs for callbacks to avoid recreating SpeechRecognition on every render
+  const onResultRef = useRef(onResult);
+  const onInterimResultRef = useRef(onInterimResult);
+  const transcriptRef = useRef('');
+
+  // Keep refs up to date
+  useEffect(() => { onResultRef.current = onResult; }, [onResult]);
+  useEffect(() => { onInterimResultRef.current = onInterimResult; }, [onInterimResult]);
 
   // Check browser support
-  const isSupported = typeof window !== 'undefined' && 
+  const isSupported = typeof window !== 'undefined' &&
     ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
 
   useEffect(() => {
@@ -63,7 +71,7 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}): UseVoiceInput
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
-    
+
     recognition.continuous = continuous;
     recognition.interimResults = true;
     recognition.lang = language;
@@ -109,13 +117,18 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}): UseVoiceInput
 
       if (interim) {
         setInterimTranscript(interim);
-        onInterimResult?.(interim);
+        onInterimResultRef.current?.(interim);
       }
 
       if (finalTranscript) {
-        setTranscript(finalTranscript);
+        // In continuous mode, append to existing transcript
+        const accumulated = continuous
+          ? transcriptRef.current + (transcriptRef.current ? ' ' : '') + finalTranscript
+          : finalTranscript;
+        transcriptRef.current = accumulated;
+        setTranscript(accumulated);
         setInterimTranscript('');
-        onResult?.(finalTranscript);
+        onResultRef.current?.(accumulated);
       }
     };
 
@@ -124,18 +137,19 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}): UseVoiceInput
     return () => {
       recognition.abort();
     };
-  }, [isSupported, continuous, language, onResult, onInterimResult]);
+  }, [isSupported, continuous, language]);
 
   const startListening = useCallback(() => {
     if (!isSupported || !recognitionRef.current) {
       setError('Speech recognition not supported');
       return;
     }
-    
+
     setTranscript('');
     setInterimTranscript('');
     setError(null);
-    
+    transcriptRef.current = '';
+
     try {
       recognitionRef.current.start();
     } catch (e) {

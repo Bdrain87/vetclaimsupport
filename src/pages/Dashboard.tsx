@@ -101,9 +101,10 @@ export default function Dashboard() {
     return names;
   }, [claimConditions, userConditions]);
 
-  // Calculate combined VA rating using VA math
+  // Calculate combined VA rating using VA math (approved conditions only, round to nearest 10)
   const combinedRating = useMemo(() => {
     const ratings = userConditions
+      .filter(uc => uc.claimStatus === 'approved')
       .map(uc => uc.rating)
       .filter((r): r is number => r !== undefined && r > 0)
       .sort((a, b) => b - a); // Sort descending
@@ -115,7 +116,7 @@ export default function Dashboard() {
       const remaining = 100 - combined;
       combined = combined + (remaining * rating / 100);
     }
-    return Math.round(combined);
+    return Math.round(combined / 10) * 10;
   }, [userConditions]);
 
   // Quick log state
@@ -128,7 +129,7 @@ export default function Dashboard() {
 
   const handleSaveQuickLog = useCallback(() => {
     if (!selectedMood) return;
-    addDashboardQuickLog(painLevel, selectedMood);
+    addDashboardQuickLog(painLevel, selectedMood, logCondition, logNotes, logDate);
     setLogSaved(true);
     setTimeout(() => setLogSaved(false), 2000);
     setPainLevel(5);
@@ -136,7 +137,7 @@ export default function Dashboard() {
     setLogCondition('general');
     setLogNotes('');
     setLogDate(new Date().toISOString().split('T')[0]);
-  }, [painLevel, selectedMood, addDashboardQuickLog]);
+  }, [painLevel, selectedMood, logCondition, logNotes, logDate, addDashboardQuickLog]);
 
   // Handle adding a recommended condition
   const handleAddRecommendation = useCallback((conditionId: string) => {
