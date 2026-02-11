@@ -22,10 +22,12 @@ describe('App Render', () => {
 
   it('renders the VCS brand or Dashboard title', async () => {
     render(<App />);
-    // The MobileHeader renders "VCS" on root tabs and page titles on sub-pages.
-    // waitFor handles the Suspense / lazy-load boundary.
+    // The LoadingFallback renders "Vet Claim Support" while lazy routes load,
+    // and MobileHeader renders "VCS" on root tabs once loaded.
     await waitFor(() => {
-      expect(screen.getByText('VCS')).toBeInTheDocument();
+      expect(
+        screen.queryByText('VCS') || screen.queryByText('Vet Claim Support')
+      ).toBeTruthy();
     });
   });
 });

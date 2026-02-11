@@ -132,7 +132,7 @@ function MOSAutocomplete({
         onFocus={() => { if (results.length > 0) setIsOpen(true); }}
         onKeyDown={handleKeyDown}
         placeholder="Type your code or job title..."
-        className="w-full h-12 pl-10 pr-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 focus:border-[#3B82F6]/50 transition-all"
+        className="w-full h-12 pl-10 pr-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] focus:border-[rgba(214,178,94,0.5)] transition-all"
       />
       {isOpen && (
         <div className="absolute top-full left-0 right-0 mt-1 z-50 bg-[#1a2d44] border border-white/10 rounded-xl shadow-2xl shadow-black/50 max-h-60 overflow-y-auto">
@@ -141,12 +141,12 @@ function MOSAutocomplete({
               key={`${job.code}-${job.branch}`}
               ref={i === highlightIdx ? highlightRef : undefined}
               className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-colors ${
-                i === highlightIdx ? 'bg-[#3B82F6]/15 text-white' : 'text-white/80 hover:bg-white/5'
+                i === highlightIdx ? 'bg-[rgba(214,178,94,0.15)] text-white' : 'text-white/80 hover:bg-white/5'
               } ${i > 0 ? 'border-t border-white/[0.04]' : ''}`}
               onClick={() => handleSelect(job)}
               onMouseEnter={() => setHighlightIdx(i)}
             >
-              <span className="font-mono text-[#3B82F6] text-sm font-bold w-16 shrink-0">{job.code}</span>
+              <span className="font-mono text-gold text-sm font-bold w-16 shrink-0">{job.code}</span>
               <span className="text-sm flex-1 truncate">{job.title}</span>
               <span className="text-[10px] text-white/30 uppercase">{job.branch}</span>
             </button>
@@ -193,7 +193,7 @@ function InstallationAutocomplete({
         onChange={e => { onChange(e.target.value); setIsOpen(true); }}
         onFocus={() => setIsOpen(true)}
         placeholder="Base/Installation name..."
-        className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all"
+        className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
       />
       {isOpen && filtered.length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-1 z-50 bg-[#1a2d44] border border-white/10 rounded-xl shadow-2xl max-h-48 overflow-y-auto">
@@ -485,7 +485,7 @@ export default function Onboarding() {
               <div className="space-y-5">
                 <div className="text-center">
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
-                    <User className="h-7 w-7 text-[#3B82F6]" />
+                    <User className="h-7 w-7 text-gold" />
                   </div>
                   <h2 className="text-xl font-bold text-white">What should we call you?</h2>
                 </div>
@@ -498,7 +498,7 @@ export default function Onboarding() {
                       onBlur={() => { if (!firstName.trim()) setNameError('Please enter your first name'); }}
                       placeholder="First Name"
                       autoFocus
-                      className={`w-full h-12 px-4 bg-white/[0.06] border rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all ${
+                      className={`w-full h-12 px-4 bg-white/[0.06] border rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all ${
                         nameError ? 'border-red-400/50' : 'border-white/[0.1]'
                       }`}
                     />
@@ -509,7 +509,7 @@ export default function Onboarding() {
                     value={lastName}
                     onChange={e => setLastName(e.target.value)}
                     placeholder="Last Name (optional)"
-                    className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all"
+                    className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
                   />
                 </div>
               </div>
@@ -540,13 +540,13 @@ export default function Onboarding() {
                         }}
                         className={`w-full flex items-center gap-3 p-4 rounded-xl border transition-all ${
                           isSelected
-                            ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40 text-white'
+                            ? 'bg-[rgba(214,178,94,0.1)] border-[rgba(214,178,94,0.4)] text-white'
                             : 'bg-white/[0.04] border-white/[0.08] text-white/70 hover:bg-white/[0.06]'
                         }`}
                       >
                         <div
                           className="w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0"
-                          style={{ borderColor: isSelected ? '#3B82F6' : 'rgba(255,255,255,0.2)', background: isSelected ? '#3B82F6' : 'transparent' }}
+                          style={{ borderColor: isSelected ? '#D6B25E' : 'rgba(255,255,255,0.2)', background: isSelected ? '#D6B25E' : 'transparent' }}
                         >
                           {isSelected && (
                             <Check className="w-3 h-3 text-white" />
@@ -566,7 +566,7 @@ export default function Onboarding() {
               <div className="space-y-5">
                 <div className="text-center">
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
-                    <Briefcase className="h-7 w-7 text-[#3B82F6]" />
+                    <Briefcase className="h-7 w-7 text-gold" />
                   </div>
                   <h2 className="text-xl font-bold text-white">What is or was your military job code?</h2>
                   <p className="text-white/40 text-sm mt-1">
@@ -591,7 +591,7 @@ export default function Onboarding() {
                       }}
                     />
                     {mosCode && (
-                      <div className="flex items-center gap-2 text-sm text-[#3B82F6]">
+                      <div className="flex items-center gap-2 text-sm text-gold">
                         <Check className="h-4 w-4" />
                         <span>{getCodeTypeForBranch(BRANCH_TO_MOS[branch])}: {mosCode} — {mosTitle}</span>
                       </div>
@@ -615,7 +615,7 @@ export default function Onboarding() {
                         setMosCode(e.target.value);
                       }}
                       placeholder="Job Code (e.g., 11B)"
-                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all"
+                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
                     />
                     <input
                       type="text"
@@ -625,10 +625,10 @@ export default function Onboarding() {
                         setMosTitle(e.target.value);
                       }}
                       placeholder="Job Title (e.g., Infantryman)"
-                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all"
+                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
                     />
                     {manualCode && manualTitle && (
-                      <div className="flex items-center gap-2 text-sm text-[#3B82F6]">
+                      <div className="flex items-center gap-2 text-sm text-gold">
                         <Check className="h-4 w-4" />
                         <span>{manualCode} — {manualTitle}</span>
                       </div>
@@ -650,7 +650,7 @@ export default function Onboarding() {
               <div className="space-y-5">
                 <div className="text-center">
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
-                    <MapPin className="h-7 w-7 text-[#3B82F6]" />
+                    <MapPin className="h-7 w-7 text-gold" />
                   </div>
                   <h2 className="text-xl font-bold text-white">Where do you or did you serve?</h2>
                   <p className="text-white/40 text-sm mt-1">This helps identify conditions linked to specific locations and eras.</p>
@@ -686,21 +686,21 @@ export default function Onboarding() {
                         value={stationStart}
                         onChange={e => setStationStart(e.target.value)}
                         placeholder="Start"
-                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all"
+                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
                       />
                       <input
                         type="month"
                         value={stationEnd}
                         onChange={e => setStationEnd(e.target.value)}
                         placeholder="End"
-                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all"
+                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
                       />
                     </div>
                     <div className="flex gap-2">
                       <button
                         onClick={handleAddStation}
                         disabled={!stationBase.trim()}
-                        className="flex-1 h-10 rounded-xl bg-[#3B82F6] text-[#102039] text-sm font-bold disabled:opacity-40 transition-all"
+                        className="flex-1 h-10 rounded-xl bg-gold text-[#102039] text-sm font-bold disabled:opacity-40 transition-all"
                       >
                         Save
                       </button>
@@ -715,7 +715,7 @@ export default function Onboarding() {
                 ) : (
                   <button
                     onClick={() => setShowStationForm(true)}
-                    className="w-full h-12 rounded-xl border border-dashed border-white/20 text-white/50 text-sm hover:border-[#3B82F6]/40 hover:text-[#3B82F6] transition-all"
+                    className="w-full h-12 rounded-xl border border-dashed border-white/20 text-white/50 text-sm hover:border-[rgba(214,178,94,0.4)] hover:text-gold transition-all"
                   >
                     + Add Duty Station
                   </button>
@@ -728,7 +728,7 @@ export default function Onboarding() {
               <div className="space-y-5">
                 <div className="text-center">
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
-                    <Plane className="h-7 w-7 text-[#3B82F6]" />
+                    <Plane className="h-7 w-7 text-gold" />
                   </div>
                   <h2 className="text-xl font-bold text-white">Any Deployments or Combat Tours?</h2>
                   <p className="text-white/40 text-sm mt-1">Deployments may be connected to presumptive conditions under the PACT Act and other VA policies.</p>
@@ -766,7 +766,7 @@ export default function Onboarding() {
                     <select
                       value={deployOp}
                       onChange={e => setDeployOp(e.target.value)}
-                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all"
+                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
                     >
                       <option value="" className="bg-[#102039]">Select Operation/Theater...</option>
                       {OPERATIONS.map(op => (
@@ -778,20 +778,20 @@ export default function Onboarding() {
                       value={deployLocation}
                       onChange={e => setDeployLocation(e.target.value)}
                       placeholder="Location (e.g., Baghdad, Iraq)"
-                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all"
+                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
                     />
                     <div className="grid grid-cols-2 gap-3">
                       <input
                         type="month"
                         value={deployStart}
                         onChange={e => setDeployStart(e.target.value)}
-                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all"
+                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
                       />
                       <input
                         type="month"
                         value={deployEnd}
                         onChange={e => setDeployEnd(e.target.value)}
-                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 transition-all"
+                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
                       />
                     </div>
                     <button
@@ -809,7 +809,7 @@ export default function Onboarding() {
                       <button
                         onClick={handleAddDeployment}
                         disabled={!deployOp.trim()}
-                        className="flex-1 h-10 rounded-xl bg-[#3B82F6] text-[#102039] text-sm font-bold disabled:opacity-40 transition-all"
+                        className="flex-1 h-10 rounded-xl bg-gold text-[#102039] text-sm font-bold disabled:opacity-40 transition-all"
                       >
                         Save
                       </button>
@@ -824,7 +824,7 @@ export default function Onboarding() {
                 ) : (
                   <button
                     onClick={() => setShowDeployForm(true)}
-                    className="w-full h-12 rounded-xl border border-dashed border-white/20 text-white/50 text-sm hover:border-[#3B82F6]/40 hover:text-[#3B82F6] transition-all"
+                    className="w-full h-12 rounded-xl border border-dashed border-white/20 text-white/50 text-sm hover:border-[rgba(214,178,94,0.4)] hover:text-gold transition-all"
                   >
                     + Add Deployment
                   </button>
@@ -844,7 +844,7 @@ export default function Onboarding() {
               <div className="space-y-5">
                 <div className="text-center">
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
-                    <Stethoscope className="h-7 w-7 text-[#3B82F6]" />
+                    <Stethoscope className="h-7 w-7 text-gold" />
                   </div>
                   <h2 className="text-xl font-bold text-white">Are you claiming any conditions?</h2>
                   <p className="text-white/40 text-sm mt-1">This helps show you the most relevant tools.</p>
@@ -860,9 +860,9 @@ export default function Onboarding() {
                       const c = getConditionById(id);
                       if (!c) return null;
                       return (
-                        <span key={id} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#3B82F6]/10 border border-[#3B82F6]/30 text-sm text-[#3B82F6]">
+                        <span key={id} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.3)] text-sm text-gold">
                           {c.abbreviation || c.name}
-                          <button onClick={() => handleRemoveCondition(id)} className="ml-1 text-[#3B82F6]/60 hover:text-[#3B82F6]" aria-label={`Remove ${c.abbreviation || c.name}`}>
+                          <button onClick={() => handleRemoveCondition(id)} className="ml-1 text-gold/60 hover:text-gold" aria-label={`Remove ${c.abbreviation || c.name}`}>
                             <X className="h-3 w-3" />
                           </button>
                         </span>
@@ -893,16 +893,16 @@ export default function Onboarding() {
                       onClick={() => setClaimGoal(option.value)}
                       className={`w-full flex items-start gap-3 p-4 rounded-xl border transition-all text-left ${
                         claimGoal === option.value
-                          ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40 text-white'
+                          ? 'bg-[rgba(214,178,94,0.1)] border-[rgba(214,178,94,0.4)] text-white'
                           : 'bg-white/[0.04] border-white/[0.08] text-white/70 hover:bg-white/[0.06]'
                       }`}
                     >
                       <div
                         className="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5"
-                        style={{ borderColor: claimGoal === option.value ? '#3B82F6' : 'rgba(255,255,255,0.2)' }}
+                        style={{ borderColor: claimGoal === option.value ? '#D6B25E' : 'rgba(255,255,255,0.2)' }}
                       >
                         {claimGoal === option.value && (
-                          <div className="w-2.5 h-2.5 rounded-full bg-[#3B82F6]" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-gold" />
                         )}
                       </div>
                       <div>
@@ -928,7 +928,7 @@ export default function Onboarding() {
                     onClick={() => setHasExistingRated(true)}
                     className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${
                       hasExistingRated === true
-                        ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40 text-white'
+                        ? 'bg-[rgba(214,178,94,0.1)] border-[rgba(214,178,94,0.4)] text-white'
                         : 'bg-white/[0.04] border-white/[0.08] text-white/70 hover:bg-white/[0.06]'
                     }`}
                   >
@@ -938,7 +938,7 @@ export default function Onboarding() {
                     onClick={() => { setHasExistingRated(false); setExistingRated([]); }}
                     className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${
                       hasExistingRated === false
-                        ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40 text-white'
+                        ? 'bg-[rgba(214,178,94,0.1)] border-[rgba(214,178,94,0.4)] text-white'
                         : 'bg-white/[0.04] border-white/[0.08] text-white/70 hover:bg-white/[0.06]'
                     }`}
                   >
@@ -955,13 +955,13 @@ export default function Onboarding() {
                         value={newRatedCondition}
                         onChange={(e) => setNewRatedCondition(e.target.value)}
                         placeholder="Condition name (e.g. PTSD, Tinnitus)"
-                        className="w-full px-4 py-3 rounded-xl bg-white/[0.06] border border-white/[0.08] text-white placeholder-white/30 text-sm focus:outline-none focus:border-[#3B82F6]/40"
+                        className="w-full px-4 py-3 rounded-xl bg-white/[0.06] border border-white/[0.08] text-white placeholder-white/30 text-sm focus:outline-none focus:border-[rgba(214,178,94,0.4)]"
                       />
                       <div className="flex gap-3">
                         <select
                           value={newRatedRating}
                           onChange={(e) => setNewRatedRating(Number(e.target.value))}
-                          className="flex-1 px-3 py-2.5 rounded-xl bg-white/[0.06] border border-white/[0.08] text-white text-sm focus:outline-none focus:border-[#3B82F6]/40"
+                          className="flex-1 px-3 py-2.5 rounded-xl bg-white/[0.06] border border-white/[0.08] text-white text-sm focus:outline-none focus:border-[rgba(214,178,94,0.4)]"
                         >
                           {[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map(v => (
                             <option key={v} value={v} className="bg-[#102039] text-white">{v}%</option>
@@ -971,7 +971,7 @@ export default function Onboarding() {
                           <button
                             onClick={() => setNewRatedType('primary')}
                             className={`px-3 py-2 text-xs font-medium transition-colors ${
-                              newRatedType === 'primary' ? 'bg-[#3B82F6]/20 text-[#3B82F6]' : 'text-white/50 hover:text-white/80'
+                              newRatedType === 'primary' ? 'bg-[rgba(214,178,94,0.2)] text-gold' : 'text-white/50 hover:text-white/80'
                             }`}
                           >
                             Primary
@@ -979,7 +979,7 @@ export default function Onboarding() {
                           <button
                             onClick={() => setNewRatedType('secondary')}
                             className={`px-3 py-2 text-xs font-medium transition-colors ${
-                              newRatedType === 'secondary' ? 'bg-[#3B82F6]/20 text-[#3B82F6]' : 'text-white/50 hover:text-white/80'
+                              newRatedType === 'secondary' ? 'bg-[rgba(214,178,94,0.2)] text-gold' : 'text-white/50 hover:text-white/80'
                             }`}
                           >
                             Secondary
@@ -989,7 +989,7 @@ export default function Onboarding() {
                       <button
                         onClick={handleAddExistingRated}
                         disabled={!newRatedCondition.trim()}
-                        className="w-full h-10 rounded-xl bg-[#3B82F6]/20 text-[#3B82F6] text-sm font-medium hover:bg-[#3B82F6]/30 disabled:opacity-40 transition-colors"
+                        className="w-full h-10 rounded-xl bg-[rgba(214,178,94,0.2)] text-gold text-sm font-medium hover:bg-[rgba(214,178,94,0.3)] disabled:opacity-40 transition-colors"
                       >
                         Add Condition
                       </button>
@@ -1042,7 +1042,7 @@ export default function Onboarding() {
                     { title: 'Condition Explorer', desc: 'Discover conditions related to your MOS with rating criteria breakdowns' },
                   ].map((card) => (
                     <div key={card.title} className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.04] border border-white/[0.08]">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] mt-1.5 flex-shrink-0" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-gold mt-1.5 flex-shrink-0" />
                       <div className="flex-1 min-w-0">
                         <p className="text-white font-semibold text-sm">{card.title}</p>
                         <p className="text-white/40 text-xs mt-0.5">{card.desc}</p>
@@ -1050,7 +1050,7 @@ export default function Onboarding() {
                     </div>
                   ))}
                 </div>
-                <p className="text-center text-white/30 text-xs">By continuing, you agree to our <Link to="/settings/terms" className="text-[#3B82F6] underline">Terms of Service</Link> and <Link to="/settings/privacy" className="text-[#3B82F6] underline">Privacy Policy</Link>. This is a claim preparation tool &mdash; not a substitute for professional consultation with a VA-accredited representative.</p>
+                <p className="text-center text-white/30 text-xs">By continuing, you agree to our <Link to="/settings/terms" className="text-gold underline">Terms of Service</Link> and <Link to="/settings/privacy" className="text-gold underline">Privacy Policy</Link>. This is a claim preparation tool &mdash; not a substitute for professional consultation with a VA-accredited representative.</p>
               </div>
             )}
 
@@ -1153,7 +1153,7 @@ export default function Onboarding() {
               <button
                 onClick={handleNext}
                 disabled={!canProceed}
-                className="flex items-center gap-1 h-11 px-6 rounded-xl bg-[#3B82F6] text-[#102039] text-sm font-bold hover:bg-[#3B82F6]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                className="flex items-center gap-1 h-11 px-6 rounded-xl bg-gold text-[#102039] text-sm font-bold hover:bg-gold/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               >
                 {step === 0 ? 'Get Started' : 'Continue'}
                 <ChevronRight className="h-4 w-4" />

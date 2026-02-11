@@ -106,7 +106,7 @@ export function MobileHeader() {
               <ChevronLeft className="h-5 w-5 text-foreground" />
             </button>
           ) : (
-            <span className="text-sm font-bold text-blue-500 tracking-wider">VCS</span>
+            <span className="text-sm font-bold text-gold tracking-wider">VCS</span>
           )}
         </div>
 

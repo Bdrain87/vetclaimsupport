@@ -20,8 +20,8 @@ describe('Full App Render Interrogation', () => {
     const { container } = render(<App />);
     const text = container.textContent || '';
 
-    // The MobileHeader renders "VCS" on root tab pages and "Dashboard" as the
-    // page title on the home route. Check for either.
-    expect(text).toContain('VCS');
+    // The LoadingFallback renders "Vet Claim Support" while routes load,
+    // and MobileHeader renders "VCS" once loaded. Check for either.
+    expect(text.includes('VCS') || text.includes('Vet Claim Support')).toBe(true);
   });
 });

@@ -12,7 +12,7 @@ function HighlightedText({ text, query }: { text: string; query: string }) {
   return (
     <span className="text-sm font-medium">
       {text.slice(0, idx)}
-      <span className="text-[#3B82F6] font-semibold">{text.slice(idx, idx + query.length)}</span>
+      <span className="text-gold font-semibold">{text.slice(idx, idx + query.length)}</span>
       {text.slice(idx + query.length)}
     </span>
   );
@@ -151,7 +151,7 @@ export function ConditionAutocomplete({
     <div ref={containerRef} className={`relative ${className}`}>
       {/* Search input */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <input
           ref={inputRef}
           type="text"
@@ -161,15 +161,15 @@ export function ConditionAutocomplete({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           autoFocus={autoFocus}
-          className="w-full h-12 pl-10 pr-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/40 focus:border-[#3B82F6]/50 transition-all"
+          className="w-full h-12 pl-10 pr-4 bg-secondary border border-border rounded-xl text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[var(--gold-md)]/40 focus:border-[var(--gold-md)]/50 transition-all"
         />
       </div>
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-1 z-[100] overflow-hidden bg-[#1a2d44] border border-white/10 rounded-xl shadow-2xl shadow-black/50 backdrop-blur-xl max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+        <div className="absolute top-full left-0 right-0 mt-1 z-[100] overflow-hidden bg-popover border border-border rounded-xl shadow-2xl shadow-black/20 backdrop-blur-xl max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
           {results.length === 0 && query.length > 1 && (
-            <div className="px-4 py-8 text-center text-white/40 text-sm">
+            <div className="px-4 py-8 text-center text-muted-foreground text-sm">
               No conditions found for &ldquo;{query}&rdquo;
             </div>
           )}
@@ -180,20 +180,20 @@ export function ConditionAutocomplete({
               ref={i === highlightedIndex ? highlightRef : undefined}
               className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-colors duration-150 ${
                 i === highlightedIndex
-                  ? 'bg-[#3B82F6]/15 text-white'
-                  : 'text-white/80 hover:bg-white/5'
-              } ${i > 0 ? 'border-t border-white/[0.04]' : ''}`}
+                  ? 'bg-[rgba(214,178,94,0.15)] text-foreground'
+                  : 'text-foreground/80 hover:bg-accent'
+              } ${i > 0 ? 'border-t border-border/50' : ''}`}
               onClick={() => handleSelect(condition)}
               onMouseEnter={() => setHighlightedIndex(i)}
             >
               <div className="flex-1 min-w-0">
                 <HighlightedText text={condition.abbreviation !== condition.name ? `${condition.abbreviation} — ${condition.name}` : condition.name} query={query} />
                 {condition.diagnosticCode && (
-                  <span className="text-xs text-white/30 ml-2">DC {condition.diagnosticCode}</span>
+                  <span className="text-xs text-muted-foreground ml-2">DC {condition.diagnosticCode}</span>
                 )}
               </div>
               {showBodySystem && (condition as Record<string, unknown>).bodySystem && (
-                <span className="text-xs text-[#3B82F6]/60 whitespace-nowrap">
+                <span className="text-xs text-gold/60 whitespace-nowrap">
                   {String((condition as Record<string, unknown>).bodySystem)}
                 </span>
               )}
@@ -201,7 +201,7 @@ export function ConditionAutocomplete({
           ))}
 
           {results.length > 0 && (
-            <div className="px-4 py-2 border-t border-white/[0.06] flex items-center justify-between text-[10px] text-white/20">
+            <div className="px-4 py-2 border-t border-border/30 flex items-center justify-between text-[10px] text-muted-foreground/50">
               <span>&uarr;&darr; Navigate</span>
               <span>Enter to select</span>
               <span>Esc to close</span>

@@ -141,8 +141,8 @@ export default function Dashboard() {
       {/* Profile Card */}
       <div className="rounded-xl border border-border bg-card overflow-hidden">
         <div className="p-4 flex items-center gap-4">
-          <div className="h-12 w-12 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
-            <User className="h-6 w-6 text-[#3B82F6]" />
+          <div className="h-12 w-12 rounded-full bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)] flex items-center justify-center flex-shrink-0">
+            <User className="h-6 w-6 text-gold" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-foreground font-semibold truncate">{displayName}</p>
@@ -196,7 +196,7 @@ export default function Dashboard() {
                 />
                 <motion.circle
                   cx="18" cy="18" r="15" fill="none"
-                  stroke="#3B82F6" strokeWidth="3"
+                  stroke="var(--gold-md, #D6B25E)" strokeWidth="3"
                   strokeLinecap="round"
                   strokeDasharray={`${combinedRating}, 100`}
                   initial={{ strokeDasharray: '0, 100' }}
@@ -261,7 +261,7 @@ export default function Dashboard() {
               to={tool.path}
               className="flex flex-col items-center gap-1.5 min-w-[76px] p-2 rounded-xl border border-border bg-secondary hover:bg-accent/50 transition-colors snap-start"
             >
-              <tool.icon className="h-5 w-5 text-blue-500" />
+              <tool.icon className="h-5 w-5 text-gold" />
               <span className="text-[10px] font-medium text-foreground text-center leading-tight">{tool.name}</span>
             </Link>
           ))}
