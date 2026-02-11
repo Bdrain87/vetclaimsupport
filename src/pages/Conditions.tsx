@@ -102,7 +102,7 @@ function ConditionCard({ userCondition, conditionDetails, onView, onRemove, onNa
                 </Badge>
               )}
               {userCondition.serviceConnected && (
-                <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-blue-500/10 text-blue-500 border-blue-500/30">
+                <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-[rgba(214,178,94,0.1)] text-gold border-[rgba(214,178,94,0.3)]">
                   <Shield className="h-2.5 w-2.5 mr-0.5" />
                   SC
                 </Badge>
@@ -576,7 +576,7 @@ export default function Conditions() {
                 <div className="text-xs text-muted-foreground">Rated</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-blue-500">
+                <div className="text-2xl font-bold text-gold">
                   {userConditions.filter(c => c.rating === undefined).length}
                 </div>
                 <div className="text-xs text-muted-foreground">Pending</div>

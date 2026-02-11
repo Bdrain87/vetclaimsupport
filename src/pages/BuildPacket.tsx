@@ -321,7 +321,7 @@ export default function BuildPacket() {
               evidenceScore >= 80
                 ? 'border-green-500/40 bg-green-500/10 text-green-400'
                 : evidenceScore >= 50
-                  ? 'border-blue-500/40 bg-blue-500/10 text-blue-400'
+                  ? 'border-[rgba(214,178,94,0.4)] bg-[rgba(214,178,94,0.1)] text-gold'
                   : 'border-red-500/40 bg-red-500/10 text-red-400',
             )}
           >
@@ -347,7 +347,7 @@ export default function BuildPacket() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
             { label: 'Conditions', value: conditionsCount, color: 'text-primary' },
-            { label: 'Symptom Entries', value: symptomCount, color: 'text-blue-400' },
+            { label: 'Symptom Entries', value: symptomCount, color: 'text-gold' },
             { label: 'Medical Visits', value: medicalVisitCount, color: 'text-emerald-400' },
             { label: 'Documents', value: documentCount, color: 'text-violet-400' },
           ].map((stat) => (
@@ -561,7 +561,7 @@ export default function BuildPacket() {
             {selected.symptomLogs && (
               <div className="space-y-3">
                 <h3 className="font-semibold text-foreground flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-blue-400" />
+                  <FileText className="h-4 w-4 text-gold" />
                   Symptom Logs ({symptomCount})
                 </h3>
                 {symptomCount === 0 ? (
@@ -591,7 +591,7 @@ export default function BuildPacket() {
                             s.severity >= 7
                               ? 'bg-red-500/10 text-red-400'
                               : s.severity >= 4
-                                ? 'bg-blue-500/10 text-blue-400'
+                                ? 'bg-[rgba(214,178,94,0.1)] text-gold'
                                 : '',
                           )}
                         >
@@ -698,7 +698,7 @@ export default function BuildPacket() {
             {selected.buddyContacts && (
               <div className="space-y-3">
                 <h3 className="font-semibold text-foreground flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-blue-400" />
+                  <FileText className="h-4 w-4 text-gold" />
                   Buddy Contact List ({buddyCount})
                 </h3>
                 {buddyCount === 0 ? (
@@ -726,7 +726,7 @@ export default function BuildPacket() {
                             b.statementStatus === 'Received' || b.statementStatus === 'Submitted'
                               ? 'border-green-500/40 text-green-400'
                               : b.statementStatus === 'Requested'
-                                ? 'border-blue-500/40 text-blue-400'
+                                ? 'border-[rgba(214,178,94,0.4)] text-gold'
                                 : '',
                           )}
                         >
@@ -743,7 +743,7 @@ export default function BuildPacket() {
             {selected.exposures && (
               <div className="space-y-3">
                 <h3 className="font-semibold text-foreground flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-blue-400" />
+                  <Shield className="h-4 w-4 text-gold" />
                   Exposure Records ({exposureCount})
                 </h3>
                 {exposureCount === 0 ? (
@@ -802,9 +802,9 @@ export default function BuildPacket() {
                           doc.status === 'Submitted'
                             ? 'border-green-500/40 text-green-400'
                             : doc.status === 'Obtained'
-                              ? 'border-blue-500/40 text-blue-400'
+                              ? 'border-[rgba(214,178,94,0.4)] text-gold'
                               : doc.status === 'In Progress'
-                                ? 'border-blue-500/40 text-blue-400'
+                                ? 'border-[rgba(214,178,94,0.4)] text-gold'
                                 : '',
                         )}
                       >

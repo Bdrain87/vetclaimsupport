@@ -34,6 +34,7 @@ const pageLabels: Record<string, string> = {
   '/prep/va-speak': 'VA-Speak Translator',
   '/prep/back-pay': 'Back Pay Estimator',
   '/prep/packet': 'Claim Packet',
+  '/prep/appeals': 'Appeals Guide',
   '/settings': 'Settings',
   '/settings/edit-profile': 'Edit Profile',
   '/settings/service-history': 'Service History',

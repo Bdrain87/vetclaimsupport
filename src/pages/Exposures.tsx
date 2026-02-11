@@ -13,6 +13,7 @@ import { Switch } from '@/components/ui/switch';
 import { exportExposures } from '@/utils/pdfExport';
 import { BranchExposuresSelector } from '@/components/exposures/BranchExposuresSelector';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
+import { LocationAutocomplete } from '@/components/shared/LocationAutocomplete';
 import { PageContainer } from '@/components/PageContainer';
 import type { Exposure, ExposureType } from '@/types/claims';
 
@@ -220,11 +221,11 @@ export default function Exposures() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="location">Location</Label>
-                  <Input 
-                    id="location" 
-                    placeholder="Base, deployment location"
+                  <LocationAutocomplete
                     value={formData.location}
-                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                    onChange={(val) => setFormData({ ...formData, location: val })}
+                    onSelect={(val) => setFormData({ ...formData, location: val })}
+                    placeholder="Base, deployment location"
                   />
                 </div>
               </div>

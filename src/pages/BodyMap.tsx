@@ -379,8 +379,8 @@ export default function BodyMap() {
           </Button>
 
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20">
-              <Activity className="h-6 w-6 text-blue-400" />
+            <div className="p-2.5 rounded-xl bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)]">
+              <Activity className="h-6 w-6 text-gold" />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white">Body Map</h1>
@@ -394,7 +394,7 @@ export default function BodyMap() {
         {/* Summary Badge */}
         {totalSelected > 0 && (
           <div className="flex items-center gap-2">
-            <Badge className="bg-blue-500/20 text-blue-400 border border-blue-500/30 hover:bg-blue-500/30">
+            <Badge className="bg-[rgba(214,178,94,0.2)] text-gold border border-[rgba(214,178,94,0.3)] hover:bg-[rgba(214,178,94,0.3)]">
               {totalSelected} condition{totalSelected !== 1 ? 's' : ''} selected
             </Badge>
           </div>
@@ -403,7 +403,7 @@ export default function BodyMap() {
         {/* Main layout: body diagram + condition panel */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* SVG Body Diagram */}
-          <Card className="bg-blue-900/30 border-border">
+          <Card className="bg-[rgba(214,178,94,0.08)] border-border">
             <CardHeader className="pb-2">
               <CardTitle className="text-base text-slate-300">
                 Front View
@@ -459,7 +459,7 @@ export default function BodyMap() {
                           cy={region.cy}
                           r={region.r + 4}
                           fill="none"
-                          stroke="rgb(96, 165, 250)"
+                          stroke="rgb(214, 178, 94)"
                           strokeWidth="1"
                           opacity="0.4"
                           className="animate-ping"
@@ -474,18 +474,18 @@ export default function BodyMap() {
                         r={region.r}
                         fill={
                           isSelected
-                            ? 'rgba(59, 130, 246, 0.35)'
+                            ? 'rgba(214, 178, 94, 0.35)'
                             : hasConditions
-                              ? 'rgba(59, 130, 246, 0.2)'
+                              ? 'rgba(214, 178, 94, 0.2)'
                               : isHovered
                                 ? 'rgba(148, 163, 184, 0.15)'
                                 : 'rgba(148, 163, 184, 0.06)'
                         }
                         stroke={
                           isSelected
-                            ? 'rgb(96, 165, 250)'
+                            ? 'rgb(214, 178, 94)'
                             : hasConditions
-                              ? 'rgb(96, 165, 250)'
+                              ? 'rgb(214, 178, 94)'
                               : isHovered
                                 ? 'rgb(148, 163, 184)'
                                 : 'rgba(148, 163, 184, 0.3)'
@@ -515,7 +515,7 @@ export default function BodyMap() {
                             cx={region.cx + region.r - 2}
                             cy={region.cy - region.r + 2}
                             r={6}
-                            fill="rgb(59, 130, 246)"
+                            fill="rgb(214, 178, 94)"
                           />
                           <text
                             x={region.cx + region.r - 2}
@@ -558,11 +558,11 @@ export default function BodyMap() {
             {activeRegion ? (
               <>
                 {/* Region header */}
-                <Card className="bg-blue-900/30 border-border">
+                <Card className="bg-[rgba(214,178,94,0.08)] border-border">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-lg text-white flex items-center gap-2">
-                        <div className="h-2.5 w-2.5 rounded-full bg-blue-400" />
+                        <div className="h-2.5 w-2.5 rounded-full bg-gold" />
                         {activeRegion.label}
                       </CardTitle>
                       <Button
@@ -592,7 +592,7 @@ export default function BodyMap() {
                           }
                           className={`w-full text-left rounded-lg border p-3 transition-all duration-200 ${
                             isAdded
-                              ? 'bg-blue-500/15 border-blue-500/40 hover:bg-blue-500/20'
+                              ? 'bg-[rgba(214,178,94,0.15)] border-[rgba(214,178,94,0.4)] hover:bg-[rgba(214,178,94,0.2)]'
                               : 'bg-white/[0.02] border-border hover:bg-white/[0.05] hover:border-slate-500/50'
                           }`}
                         >
@@ -600,7 +600,7 @@ export default function BodyMap() {
                             <div
                               className={`mt-0.5 flex-shrink-0 h-5 w-5 rounded-full border-2 flex items-center justify-center transition-colors ${
                                 isAdded
-                                  ? 'bg-blue-500 border-blue-500'
+                                  ? 'bg-gold border-gold'
                                   : 'border-slate-500'
                               }`}
                             >
@@ -612,7 +612,7 @@ export default function BodyMap() {
                               <div className="flex items-center gap-2 flex-wrap">
                                 <span
                                   className={`font-medium text-sm ${
-                                    isAdded ? 'text-blue-300' : 'text-slate-200'
+                                    isAdded ? 'text-gold-hl' : 'text-slate-200'
                                   }`}
                                 >
                                   {condition.name}
@@ -639,11 +639,11 @@ export default function BodyMap() {
               </>
             ) : (
               /* Empty state when no region is selected */
-              <Card className="bg-blue-900/30 border-border">
+              <Card className="bg-[rgba(214,178,94,0.08)] border-border">
                 <CardContent className="py-16">
                   <div className="text-center space-y-4">
-                    <div className="mx-auto w-14 h-14 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-                      <Info className="h-7 w-7 text-blue-400" />
+                    <div className="mx-auto w-14 h-14 rounded-full bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)] flex items-center justify-center">
+                      <Info className="h-7 w-7 text-gold" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-white mb-1">
@@ -661,10 +661,10 @@ export default function BodyMap() {
 
             {/* Selected conditions summary */}
             {totalSelected > 0 && (
-              <Card className="bg-blue-900/30 border-border">
+              <Card className="bg-[rgba(214,178,94,0.08)] border-border">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base text-slate-300 flex items-center gap-2">
-                    <Plus className="h-4 w-4 text-blue-400" />
+                    <Plus className="h-4 w-4 text-gold" />
                     Selected Conditions ({totalSelected})
                   </CardTitle>
                 </CardHeader>
@@ -686,7 +686,7 @@ export default function BodyMap() {
                         return (
                           <Badge
                             key={uc.id}
-                            className="bg-blue-500/15 text-blue-300 border border-blue-500/30 hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30 cursor-pointer transition-colors gap-1 pr-1.5"
+                            className="bg-[rgba(214,178,94,0.15)] text-gold-hl border border-[rgba(214,178,94,0.3)] hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30 cursor-pointer transition-colors gap-1 pr-1.5"
                             onClick={() => removeUserCondition(uc.id)}
                           >
                             <span className="max-w-[180px] truncate">

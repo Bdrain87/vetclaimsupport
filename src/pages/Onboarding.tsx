@@ -5,6 +5,7 @@ import { ChevronRight, ChevronLeft, X, Search, Shield, User, Briefcase, Stethosc
 import { useProfileStore, BRANCH_LABELS, BRANCH_COLORS, type Branch, type ClaimGoal } from '@/store/useProfileStore';
 import { searchMilitaryJobs, getCodeTypeForBranch, type MilitaryJobCode } from '@/data/militaryMOS';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
+import { LocationAutocomplete } from '@/components/shared/LocationAutocomplete';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { type VACondition, getConditionById } from '@/data/vaConditions';
 import useAppStore, { type DutyStation } from '@/store/useAppStore';
@@ -22,20 +23,6 @@ const BRANCH_TO_MOS: Record<Branch, string> = {
   space_force: 'Space Force',
 };
 
-const MAJOR_INSTALLATIONS = [
-  'Fort Liberty', 'Fort Cavazos', 'Camp Lejeune', 'Joint Base Lewis-McChord',
-  'Fort Campbell', 'Naval Station Norfolk', 'Camp Pendleton', 'Travis AFB',
-  'Lackland AFB', 'Fort Drum', 'Fort Stewart', 'Fort Carson', 'Fort Bliss',
-  'Fort Riley', 'Fort Sill', 'Fort Leonard Wood', 'Fort Jackson',
-  'Fort Gordon', 'Fort Polk', 'Fort Huachuca',
-  'Schofield Barracks', 'Fort Shafter', 'Fort Wainwright',
-  'NAS Jacksonville', 'NAS Pensacola', 'NAS Oceana', 'Naval Base San Diego',
-  'Naval Station Great Lakes', 'MCAS Cherry Point', 'MCAS Miramar',
-  'MCB Quantico', 'MCRD Parris Island', 'MCRD San Diego',
-  'Eglin AFB', 'Wright-Patterson AFB', 'Ramstein AB', 'Kadena AB',
-  'Osan AB', 'Yokota AB', 'Aviano AB', 'RAF Lakenheath',
-  'Peterson SFB', 'Vandenberg SFB', 'Other',
-];
 
 const OPERATIONS = [
   'Operation Iraqi Freedom (OIF)',
@@ -157,60 +144,6 @@ function MOSAutocomplete({
   );
 }
 
-// --- Installation Autocomplete ---
-function InstallationAutocomplete({
-  value,
-  onChange,
-}: {
-  value: string;
-  onChange: (val: string) => void;
-}) {
-  const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const filtered = useMemo(() => {
-    if (!value.trim()) return MAJOR_INSTALLATIONS.slice(0, 10);
-    return MAJOR_INSTALLATIONS.filter(b =>
-      b.toLowerCase().includes(value.toLowerCase())
-    ).slice(0, 10);
-  }, [value]);
-
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  return (
-    <div ref={containerRef} className="relative">
-      <input
-        type="text"
-        value={value}
-        onChange={e => { onChange(e.target.value); setIsOpen(true); }}
-        onFocus={() => setIsOpen(true)}
-        placeholder="Base/Installation name..."
-        className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
-      />
-      {isOpen && filtered.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-1 z-50 bg-[#1a2d44] border border-white/10 rounded-xl shadow-2xl max-h-48 overflow-y-auto">
-          {filtered.map((base) => (
-            <button
-              key={base}
-              className="w-full text-left px-4 py-2.5 text-sm text-white/80 hover:bg-white/5 transition-colors border-b border-white/[0.04] last:border-0"
-              onClick={() => { onChange(base); setIsOpen(false); }}
-            >
-              {base}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
 
 // --- Main Onboarding ---
 export default function Onboarding() {
@@ -679,7 +612,12 @@ export default function Onboarding() {
 
                 {showStationForm ? (
                   <div className="space-y-3 p-4 rounded-xl border border-white/[0.1] bg-white/[0.02]">
-                    <InstallationAutocomplete value={stationBase} onChange={setStationBase} />
+                    <LocationAutocomplete
+                      value={stationBase}
+                      onChange={setStationBase}
+                      onSelect={setStationBase}
+                      placeholder="Base/Installation name..."
+                    />
                     <div className="grid grid-cols-2 gap-3">
                       <input
                         type="month"
@@ -773,12 +711,11 @@ export default function Onboarding() {
                         <option key={op} value={op} className="bg-[#102039]">{op}</option>
                       ))}
                     </select>
-                    <input
-                      type="text"
+                    <LocationAutocomplete
                       value={deployLocation}
-                      onChange={e => setDeployLocation(e.target.value)}
+                      onChange={setDeployLocation}
+                      onSelect={setDeployLocation}
                       placeholder="Location (e.g., Baghdad, Iraq)"
-                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
                     />
                     <div className="grid grid-cols-2 gap-3">
                       <input

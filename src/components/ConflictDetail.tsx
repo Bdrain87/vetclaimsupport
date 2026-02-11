@@ -18,8 +18,8 @@ export function ConflictDetail({ conflict, onClose }: ConflictDetailProps) {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-4">
-          <div className="flex items-center justify-center h-12 w-12 rounded-xl bg-blue-500/10 border border-blue-500/20" role="img" aria-label={conflict.name}>
-            {(() => { const Icon = conflictIconMap[conflict.icon]; return Icon ? <Icon className="h-6 w-6 text-blue-500" /> : null; })()}
+          <div className="flex items-center justify-center h-12 w-12 rounded-xl bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)]" role="img" aria-label={conflict.name}>
+            {(() => { const Icon = conflictIconMap[conflict.icon]; return Icon ? <Icon className="h-6 w-6 text-gold" /> : null; })()}
           </div>
           <div>
             <h2 className="text-2xl font-bold text-foreground">{conflict.name}</h2>

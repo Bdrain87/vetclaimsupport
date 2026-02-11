@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   ClipboardCheck, FileText, Users, FileSignature, AlertTriangle,
   BookOpen, ClipboardList, Languages, DollarSign, Package, FileCheck,
-  Calculator,
+  Calculator, Scale,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -21,6 +21,7 @@ const prepTools = [
   { label: 'Back Pay Estimator', icon: DollarSign, route: '/prep/back-pay', description: 'Estimate your potential back pay' },
   { label: 'Claim Packet Builder', icon: Package, route: '/prep/packet', description: 'Compile your full claim packet' },
   { label: 'C&P Exam Packet', icon: FileCheck, route: '/cp-exam-packet', description: 'Build your exam preparation packet', highlight: true },
+  { label: 'Appeals Guide', icon: Scale, route: '/prep/appeals', description: 'Appeal lanes & verified case law', highlight: true },
 ];
 
 export default function PrepHub() {
@@ -41,14 +42,14 @@ export default function PrepHub() {
             className={cn(
               'flex flex-col items-start gap-2 p-4 rounded-xl border bg-card transition-colors text-left hover:bg-accent/50',
               tool.highlight
-                ? 'border-blue-500/40 ring-1 ring-blue-500/20'
+                ? 'border-[rgba(214,178,94,0.4)] ring-1 ring-[rgba(214,178,94,0.2)]'
                 : 'border-border'
             )}
           >
             <div className="flex items-center gap-2 w-full">
-              <tool.icon className="h-6 w-6 text-blue-500" />
+              <tool.icon className="h-6 w-6 text-gold" />
               {tool.highlight && (
-                <Badge className="ml-auto text-[9px] bg-blue-500/20 text-blue-500 border-blue-500/30 px-1.5 py-0">
+                <Badge className="ml-auto text-[9px] bg-[rgba(214,178,94,0.2)] text-gold border-[rgba(214,178,94,0.3)] px-1.5 py-0">
                   NEW
                 </Badge>
               )}

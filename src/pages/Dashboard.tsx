@@ -325,7 +325,7 @@ export default function Dashboard() {
                   <div
                     className={cn(
                       'w-2.5 h-2.5 rounded-full flex-shrink-0',
-                      score >= 75 ? 'bg-emerald-500' : score >= 50 ? 'bg-blue-500' : 'bg-muted-foreground/40'
+                      score >= 75 ? 'bg-emerald-500' : score >= 50 ? 'bg-gold' : 'bg-muted-foreground/40'
                     )}
                     role="img"
                     aria-label={score >= 75 ? 'Strong evidence' : score >= 50 ? 'Moderate evidence' : 'Needs more evidence'}
@@ -385,12 +385,12 @@ export default function Dashboard() {
             }}
             className={cn(
               'w-full rounded-xl p-4 text-left',
-              'bg-blue-500/10 border border-blue-500/20',
-              'hover:bg-blue-500/15 transition-colors'
+              'bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)]',
+              'hover:bg-[rgba(214,178,94,0.15)] transition-colors'
             )}
           >
             <div className="flex items-start gap-3">
-              <AlertTriangle className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+              <AlertTriangle className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-foreground">
                   Evidence Gaps Found ({evidenceGaps.length})
@@ -414,7 +414,7 @@ export default function Dashboard() {
         className="rounded-xl bg-card border border-border p-4 shadow-sm"
       >
         <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
-          <Compass className="w-4 h-4 text-[#3B82F6]" />
+          <Compass className="w-4 h-4 text-gold" />
           Conditions You May Want to Consider
         </h3>
         {recommendations.length > 0 ? (
@@ -473,7 +473,7 @@ export default function Dashboard() {
         className="rounded-xl bg-card border border-border p-4 shadow-sm"
       >
         <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
-          <Zap className="w-4 h-4 text-[#3B82F6]" />
+          <Zap className="w-4 h-4 text-gold" />
           What to Do Next
         </h3>
         {nextSteps.length > 0 ? (
@@ -484,7 +484,7 @@ export default function Dashboard() {
                   className={cn(
                     'flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold mt-0.5',
                     step.priority === 'urgent'
-                      ? 'bg-[#3B82F6]/20 text-[#3B82F6]'
+                      ? 'bg-[rgba(214,178,94,0.2)] text-gold'
                       : 'bg-muted text-muted-foreground'
                   )}
                 >
@@ -499,7 +499,7 @@ export default function Dashboard() {
                 {step.actionRoute && (
                   <Link
                     to={step.actionRoute}
-                    className="text-[#3B82F6] text-xs hover:text-[#60A5FA] shrink-0 mt-0.5"
+                    className="text-gold text-xs hover:text-gold-hl shrink-0 mt-0.5"
                   >
                     Go
                   </Link>
@@ -515,7 +515,7 @@ export default function Dashboard() {
               { title: 'Generate a personal statement', description: 'Create a compelling statement for your claim.', route: '/prep/personal-statement' },
             ].map((step, i) => (
               <div key={i} className="flex items-start gap-3">
-                <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold mt-0.5 bg-[#3B82F6]/20 text-[#3B82F6]">
+                <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold mt-0.5 bg-[rgba(214,178,94,0.2)] text-gold">
                   {i + 1}
                 </span>
                 <div className="flex-1 min-w-0">
@@ -524,7 +524,7 @@ export default function Dashboard() {
                 </div>
                 <Link
                   to={step.route}
-                  className="text-[#3B82F6] text-xs hover:text-[#60A5FA] shrink-0 mt-0.5"
+                  className="text-gold text-xs hover:text-gold-hl shrink-0 mt-0.5"
                 >
                   Go
                 </Link>

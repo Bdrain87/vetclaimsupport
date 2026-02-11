@@ -297,14 +297,14 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
 
   const typeStyles = {
     action: 'bg-primary/10 border-primary/30 text-primary',
-    tip: 'bg-blue-500/10 border-blue-500/30 text-blue-500',
+    tip: 'bg-[rgba(214,178,94,0.1)] border-[rgba(214,178,94,0.3)] text-gold',
     warning: 'bg-warning/10 border-warning/30 text-warning',
     milestone: 'bg-success/10 border-success/30 text-success',
   };
 
   const iconBgStyles = {
     action: 'bg-primary/20 text-primary',
-    tip: 'bg-blue-500/20 text-blue-500',
+    tip: 'bg-[rgba(214,178,94,0.2)] text-gold',
     warning: 'bg-warning/20 text-warning',
     milestone: 'bg-success/20 text-success',
   };
@@ -376,7 +376,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
                           className={cn(
                             "h-7 px-0 mt-2 gap-1",
                             nudge.type === 'action' && "text-primary hover:text-primary",
-                            nudge.type === 'tip' && "text-blue-500 hover:text-blue-500",
+                            nudge.type === 'tip' && "text-gold hover:text-gold-hl",
                             nudge.type === 'warning' && "text-warning hover:text-warning",
                             nudge.type === 'milestone' && "text-success hover:text-success"
                           )}
