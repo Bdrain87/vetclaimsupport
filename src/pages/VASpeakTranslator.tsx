@@ -184,7 +184,7 @@ const CATEGORY_LABELS: Record<GlossaryEntry['category'], string> = {
 const CATEGORY_COLORS: Record<GlossaryEntry['category'], string> = {
   'claims-process': 'bg-blue-500/10 text-blue-400 border-blue-500/20',
   medical: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  legal: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  legal: 'bg-[rgba(214,178,94,0.1)] text-gold border-[rgba(214,178,94,0.2)]',
   rating: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
   evidence: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
 };
@@ -506,21 +506,21 @@ export default function VASpeakTranslator() {
       {/* ----------------------------------------------------------------- */}
       {/* Tips Card                                                          */}
       {/* ----------------------------------------------------------------- */}
-      <Card className="border-amber-500/20 bg-amber-500/5">
+      <Card className="border-[rgba(214,178,94,0.2)] bg-[rgba(214,178,94,0.05)]">
         <CardContent className="pt-6 space-y-3">
           <h3 className="text-sm font-semibold text-foreground">
             Tips for Describing Your Symptoms
           </h3>
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li className="flex items-start gap-2">
-              <span className="text-amber-400 mt-0.5 shrink-0">1.</span>
+              <span className="text-gold mt-0.5 shrink-0">1.</span>
               <span>
                 <strong className="text-foreground">Be specific about frequency</strong>
                 {' '}&mdash; say "5 times per week" instead of "frequently."
               </span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-amber-400 mt-0.5 shrink-0">2.</span>
+              <span className="text-gold mt-0.5 shrink-0">2.</span>
               <span>
                 <strong className="text-foreground">Describe your worst days</strong>
                 {' '}&mdash; the VA rates based on the impact of flare-ups, not just
@@ -528,7 +528,7 @@ export default function VASpeakTranslator() {
               </span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-amber-400 mt-0.5 shrink-0">3.</span>
+              <span className="text-gold mt-0.5 shrink-0">3.</span>
               <span>
                 <strong className="text-foreground">Include functional impact</strong>
                 {' '}&mdash; explain what you can no longer do (work tasks, hobbies,
@@ -536,7 +536,7 @@ export default function VASpeakTranslator() {
               </span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-amber-400 mt-0.5 shrink-0">4.</span>
+              <span className="text-gold mt-0.5 shrink-0">4.</span>
               <span>
                 <strong className="text-foreground">Mention both sides</strong>
                 {' '}&mdash; if a condition affects both knees or both shoulders,
@@ -544,7 +544,7 @@ export default function VASpeakTranslator() {
               </span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-amber-400 mt-0.5 shrink-0">5.</span>
+              <span className="text-gold mt-0.5 shrink-0">5.</span>
               <span>
                 <strong className="text-foreground">Stay truthful</strong>
                 {' '}&mdash; clinical language should describe what you actually

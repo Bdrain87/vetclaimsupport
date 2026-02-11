@@ -25,7 +25,7 @@
 
 .btn:focus-visible {
   outline: none;
-  box-shadow: var(--shadow-focus);
+  box-shadow: var(--shadow-focus-gold);
 }
 
 .btn:disabled {
@@ -95,6 +95,24 @@
 
 .btn-danger:hover:not(:disabled) {
   background: var(--color-error-600);
+}
+
+/* Gold - Premium/earned/finish CTAs */
+.btn-gold {
+  background: var(--gold-gradient);
+  color: #102039;
+  font-weight: 700;
+}
+
+.btn-gold:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px var(--gold-glow);
+}
+
+.btn-gold:active:not(:disabled) {
+  filter: brightness(0.95);
+  transform: translateY(0);
 }
 
 /* Size variants */
@@ -199,8 +217,8 @@
 
 .input-ds:focus {
   outline: none;
-  border-color: var(--color-accent-500);
-  box-shadow: var(--shadow-focus);
+  border-color: var(--gold-md);
+  box-shadow: var(--shadow-focus-gold);
 }
 
 .input-ds-error {
@@ -301,6 +319,17 @@
   color: var(--color-gray-300);
 }
 
+.rating-badge-gold {
+  background: var(--gold-gradient-subtle);
+  color: var(--gold-md);
+  border: 1px solid var(--gold-border-strong);
+}
+
+.dark .rating-badge-gold {
+  background: rgba(214, 178, 94, 0.12);
+  color: var(--gold-hl);
+}
+
 /* Large rating display */
 .rating-display {
   font-size: var(--text-5xl);
@@ -380,11 +409,11 @@
 }
 
 .tab-item-ds.active {
-  color: var(--color-accent-500);
+  color: var(--gold-md);
 }
 
 .dark .tab-item-ds.active {
-  color: var(--color-accent-400);
+  color: var(--gold-hl);
 }
 
 .tab-item-ds .icon {

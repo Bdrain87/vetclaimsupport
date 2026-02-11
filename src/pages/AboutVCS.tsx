@@ -230,7 +230,7 @@ export default function AboutVCS() {
             className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
           >
             <div className="flex items-center gap-3">
-              <AlertCircle className="h-5 w-5 text-amber-400" />
+              <AlertCircle className="h-5 w-5 text-gold" />
               <span className="font-medium text-foreground text-sm">Disclaimer</span>
             </div>
             <ChevronLeft className="h-4 w-4 text-muted-foreground rotate-180" />

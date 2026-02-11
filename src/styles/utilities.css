@@ -70,6 +70,8 @@
 .ds-text-error { color: var(--text-error); }
 .ds-text-brand { color: var(--text-brand); }
 .ds-text-inverse { color: var(--text-inverse); }
+.ds-text-gold { color: var(--gold-md); }
+.ds-text-gold-hl { color: var(--gold-hl); }
 
 /* Font weights */
 .font-normal { font-weight: var(--font-normal); }
@@ -89,6 +91,8 @@
 .ds-bg-success { background: var(--bg-success); }
 .ds-bg-warning { background: var(--bg-warning); }
 .ds-bg-error { background: var(--bg-error); }
+.ds-bg-gold { background: var(--gold-gradient); }
+.ds-bg-gold-subtle { background: var(--gold-gradient-subtle); }
 
 /* Gradient backgrounds */
 .ds-bg-gradient-brand {
@@ -171,6 +175,8 @@
 .ds-shadow-lg { box-shadow: var(--shadow-lg); }
 .ds-shadow-xl { box-shadow: var(--shadow-xl); }
 .ds-shadow-focus { box-shadow: var(--shadow-focus); }
+.ds-shadow-gold { box-shadow: 0 0 24px var(--gold-glow); }
+.ds-shadow-focus-gold { box-shadow: var(--shadow-focus-gold); }
 
 /* ═══════════════════════════════════════════════════════════════
    ANIMATION UTILITIES
@@ -203,6 +209,10 @@
 
 .hover-glow:hover {
   box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.hover-glow-gold:hover {
+  box-shadow: 0 0 20px var(--gold-glow);
 }
 
 .press:active {
@@ -486,7 +496,7 @@
 
 /* High contrast focus indicators */
 :focus-visible {
-  outline: 2px solid var(--color-accent-500);
+  outline: 2px solid var(--gold-md);
   outline-offset: 2px;
 }
 

@@ -74,6 +74,15 @@ export default {
         service: "hsl(var(--service))",
         buddy: "hsl(var(--buddy))",
         documents: "hsl(var(--documents))",
+        // Gold Accent System — Metallic tokens
+        gold: {
+          DEFAULT: 'var(--gold-md)',
+          hl: 'var(--gold-hl)',
+          dk: 'var(--gold-dk)',
+          border: 'var(--gold-border)',
+          'border-strong': 'var(--gold-border-strong)',
+          glow: 'var(--gold-glow)',
+        },
         // Dress Blues Design System Colors
         navy: {
           900: '#102039',
@@ -118,6 +127,8 @@ export default {
       },
       backgroundImage: {
         'glass-gradient': 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%)',
+        'gold': 'var(--gold-gradient)',
+        'gold-subtle': 'var(--gold-gradient-subtle)',
       },
       keyframes: {
         "accordion-down": {

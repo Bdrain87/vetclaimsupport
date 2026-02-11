@@ -492,7 +492,7 @@ export default function CPExamPacket() {
                           condition.claimType === 'secondary'
                             ? 'bg-purple-500/20 text-purple-400 border-purple-500/30'
                             : condition.claimType === 'increase'
-                            ? 'bg-amber-500/20 text-amber-400 border-amber-500/30'
+                            ? 'bg-[rgba(214,178,94,0.2)] text-gold border-[rgba(214,178,94,0.3)]'
                             : 'bg-blue-500/20 text-blue-400 border-blue-500/30'
                         )}
                       >
@@ -544,9 +544,9 @@ export default function CPExamPacket() {
                       <EvidenceItem label="Personal Statement" status={evidence.hasPersonalStatement} />
                     </div>
                     {evidence.gaps.length > 0 && (
-                      <div className="flex items-start gap-2 p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
-                        <AlertTriangle className="h-3.5 w-3.5 text-amber-500 mt-0.5 shrink-0" />
-                        <p className="text-xs text-amber-400">
+                      <div className="flex items-start gap-2 p-2 rounded-lg bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)]">
+                        <AlertTriangle className="h-3.5 w-3.5 text-gold mt-0.5 shrink-0" />
+                        <p className="text-xs text-gold">
                           Missing: {evidence.gaps.join(', ')}
                         </p>
                       </div>
@@ -645,7 +645,7 @@ export default function CPExamPacket() {
                   <ul className="space-y-1.5">
                     {reminders.map((reminder, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                        <span className="text-amber-500 mt-0.5 shrink-0">&#x25B8;</span>
+                        <span className="text-gold mt-0.5 shrink-0">&#x25B8;</span>
                         {reminder}
                       </li>
                     ))}

@@ -175,10 +175,10 @@ export function AppSidebar() {
             'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] min-h-[44px]',
             'hover:translate-x-1',
             isActive && 'text-primary',
-            isPremium && 'text-primary font-semibold'
+            isPremium && 'text-gold font-semibold'
           )}>
             <div className="flex items-center gap-3">
-              <group.icon className={cn('h-5 w-5 flex-shrink-0 transition-transform duration-200', (isActive || isPremium) && 'text-primary')} />
+              <group.icon className={cn('h-5 w-5 flex-shrink-0 transition-transform duration-200', isPremium ? 'text-gold' : isActive && 'text-primary')} />
               <span>{group.label}</span>
             </div>
             {!group.alwaysOpen && (
@@ -202,10 +202,10 @@ export function AppSidebar() {
                       'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground',
                       'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
                       'hover:translate-x-1',
-                      isItemActive && 'bg-gradient-to-r from-primary/15 to-transparent text-primary font-medium border-l-2 border-primary'
+                      isItemActive && 'bg-gradient-to-r from-[var(--gold-border)] to-transparent text-gold font-medium border-l-2 border-gold'
                     )}
                   >
-                    <item.icon className={cn('h-4 w-4 flex-shrink-0 transition-transform duration-200', isItemActive && 'text-primary drop-shadow-[0_0_6px_rgba(59,130,246,0.4)]')} />
+                    <item.icon className={cn('h-4 w-4 flex-shrink-0 transition-transform duration-200', isItemActive && 'text-gold drop-shadow-[0_0_6px_var(--gold-glow)]')} />
                     <span>{item.label}</span>
                   </NavLink>
                 </li>

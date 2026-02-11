@@ -110,7 +110,7 @@ function GuidanceTip({ tips }: GuidanceTipProps) {
   return (
     <div className="rounded-lg border border-border bg-muted/30 p-4">
       <div className="flex items-center gap-2 mb-2">
-        <Lightbulb className="h-4 w-4 text-yellow-500 shrink-0" />
+        <Lightbulb className="h-4 w-4 text-gold shrink-0" />
         <span className="text-sm font-medium text-foreground">Writing Tips</span>
       </div>
       <ul className="space-y-1.5">
@@ -607,10 +607,10 @@ export default function StressorStatement() {
             </div>
 
             {filledSections < 5 && (
-              <Card className="border-yellow-500/30 bg-yellow-500/5">
+              <Card className="border-[rgba(214,178,94,0.3)] bg-[rgba(214,178,94,0.05)]">
                 <CardContent className="pt-4">
                   <div className="flex items-start gap-2">
-                    <AlertCircle className="h-5 w-5 text-yellow-500 mt-0.5 shrink-0" />
+                    <AlertCircle className="h-5 w-5 text-gold mt-0.5 shrink-0" />
                     <div className="text-sm">
                       <p className="font-medium text-foreground">Incomplete Sections</p>
                       <p className="text-muted-foreground">

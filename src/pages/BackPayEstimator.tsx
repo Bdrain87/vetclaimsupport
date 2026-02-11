@@ -175,7 +175,7 @@ export default function BackPayEstimator() {
 
           {/* Validation message for rating selection */}
           {currentRating && newRating && !hasValidIncrease && (
-            <div className="flex items-center gap-2 text-amber-400 text-sm bg-amber-400/10 border border-amber-400/20 rounded-xl px-4 py-3">
+            <div className="flex items-center gap-2 text-gold text-sm bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)] rounded-xl px-4 py-3">
               <Info className="h-4 w-4 shrink-0" />
               New rating must be higher than current rating to calculate back pay.
             </div>
@@ -415,10 +415,10 @@ export default function BackPayEstimator() {
       )}
 
       {/* Disclaimer */}
-      <div className="flex items-start gap-3 bg-amber-500/5 border border-amber-500/20 rounded-xl p-4">
-        <Info className="h-5 w-5 text-amber-400 shrink-0 mt-0.5" />
+      <div className="flex items-start gap-3 bg-[rgba(214,178,94,0.05)] border border-[rgba(214,178,94,0.2)] rounded-xl p-4">
+        <Info className="h-5 w-5 text-gold shrink-0 mt-0.5" />
         <div className="space-y-1">
-          <p className="text-sm font-medium text-amber-400">Disclaimer</p>
+          <p className="text-sm font-medium text-gold">Disclaimer</p>
           <p className="text-xs text-muted-foreground leading-relaxed">
             This is an estimate only. Actual back pay amounts are determined by the VA. Rates shown
             are approximate 2026 VA compensation rates. Your actual compensation may differ based on
