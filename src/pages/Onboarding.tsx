@@ -431,7 +431,7 @@ export default function Onboarding() {
           <div
             key={i}
             className={`h-2 rounded-full transition-all duration-300 ${
-              i === step ? 'w-8 bg-[#3B82F6]' : i < step ? 'w-2 bg-[#3B82F6]/50' : 'w-2 bg-white/10'
+              i === step ? 'w-8 bg-[image:var(--gold-gradient)]' : i < step ? 'w-2 bg-[var(--gold-md)]/50' : 'w-2 bg-white/10'
             }`}
           />
         ))}
@@ -457,7 +457,7 @@ export default function Onboarding() {
             {/* Step 0: Welcome */}
             {step === 0 && (
               <div className="text-center space-y-6">
-                <img src="/app-icon.png" alt="Vet Claim Support" className="w-20 h-20 mx-auto rounded-2xl shadow-lg" />
+                <img src="/app-icon.png" alt="Vet Claim Support" className="w-20 h-20 mx-auto rounded-2xl shadow-lg shadow-[var(--gold-glow)]" />
                 <div>
                   <h1 className="text-2xl font-bold text-white">Welcome to Vet Claim Support</h1>
                   <p className="text-white/50 mt-2 text-sm leading-relaxed">
@@ -1122,7 +1122,8 @@ export default function Onboarding() {
                 >
                   <button
                     onClick={handleComplete}
-                    className="w-full h-14 rounded-xl bg-blue-500 text-white text-base font-bold hover:bg-blue-600 transition-colors"
+                    className="w-full h-14 rounded-xl text-[#102039] text-base font-bold transition-all hover:brightness-110 hover:shadow-[0_4px_24px_var(--gold-glow)]"
+                    style={{ background: 'var(--gold-gradient)' }}
                   >
                     Get Started
                   </button>

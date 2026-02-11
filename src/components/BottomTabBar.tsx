@@ -46,21 +46,25 @@ export function BottomTabBar() {
               aria-selected={isActive}
               aria-label={tab.label}
               className={cn(
-                'flex flex-col items-center justify-center gap-0.5',
+                'relative flex flex-col items-center justify-center gap-0.5',
                 'flex-1 h-full',
                 'transition-colors duration-200 ease-out',
               )}
             >
+              {isActive && (
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full"
+                     style={{ background: 'var(--gold-gradient)' }} />
+              )}
               <tab.icon
                 className={cn(
                   'h-6 w-6 transition-colors duration-200 ease-out',
-                  isActive ? 'text-[#3B82F6]' : 'text-[#94A3B8]'
+                  isActive ? 'text-gold' : 'text-[#94A3B8]'
                 )}
               />
               <span
                 className={cn(
                   'font-medium transition-colors duration-200 ease-out',
-                  isActive ? 'text-[#3B82F6]' : 'text-[#94A3B8]'
+                  isActive ? 'text-gold' : 'text-[#94A3B8]'
                 )}
                 style={{ fontSize: '0.6875rem', lineHeight: '1' }}
               >

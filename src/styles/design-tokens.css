@@ -190,6 +190,27 @@
   --shadow-focus-error: 0 0 0 3px rgba(239, 68, 68, 0.4);
 
   /* ═══════════════════════════════════════════════════════════════
+     GOLD ACCENT SYSTEM — Metallic "Real Gold" Palette
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* Core gold tones */
+  --gold-hl: #F6E4AA;
+  --gold-md: #D6B25E;
+  --gold-dk: #8A5A16;
+
+  /* Gold transparency variants */
+  --gold-glow: rgba(214, 178, 94, 0.28);
+  --gold-border: rgba(246, 228, 170, 0.16);
+  --gold-border-strong: rgba(214, 178, 94, 0.28);
+
+  /* Metallic gradient */
+  --gold-gradient: linear-gradient(135deg, var(--gold-hl) 0%, var(--gold-md) 45%, var(--gold-dk) 100%);
+  --gold-gradient-subtle: linear-gradient(135deg, rgba(246, 228, 170, 0.12) 0%, rgba(214, 178, 94, 0.06) 100%);
+
+  /* Gold focus ring */
+  --shadow-focus-gold: 0 0 0 2px var(--gold-md), 0 0 12px var(--gold-glow);
+
+  /* ═══════════════════════════════════════════════════════════════
      TRANSITIONS
      ═══════════════════════════════════════════════════════════════ */
 

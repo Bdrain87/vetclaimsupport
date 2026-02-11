@@ -61,7 +61,7 @@ export function MilestoneBadge({
           'transition-all duration-300',
           sizeClasses[size],
           milestone.isUnlocked
-            ? 'bg-gradient-to-br from-blue-400 to-blue-600 shadow-lg shadow-blue-500/30'
+            ? 'bg-[image:var(--gold-gradient)] shadow-lg shadow-[var(--gold-glow)]'
             : 'bg-muted border-2 border-dashed border-muted-foreground/30'
         )}
       >
@@ -108,8 +108,8 @@ export function MilestoneBadge({
 
         {/* Unlocked sparkle */}
         {milestone.isUnlocked && (
-          <div className="absolute -top-1 -right-1 w-4 h-4 bg-white rounded-full flex items-center justify-center shadow">
-            <Sparkles className="h-3 w-3 text-blue-500" />
+          <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#FFF9E8] rounded-full flex items-center justify-center shadow">
+            <Sparkles className="h-3 w-3 text-gold" />
           </div>
         )}
       </div>

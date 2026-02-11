@@ -45,7 +45,7 @@ const bodySystems = [
 ];
 
 const STATUS_COLORS: Record<string, string> = {
-  pending: 'bg-yellow-500/20 text-yellow-600 border-yellow-500/30',
+  pending: 'bg-[rgba(214,178,94,0.2)] text-gold-dk border-[rgba(214,178,94,0.3)]',
   approved: 'bg-green-500/20 text-green-600 border-green-500/30',
   denied: 'bg-red-500/20 text-red-600 border-red-500/30',
   appeal: 'bg-purple-500/20 text-purple-600 border-purple-500/30',

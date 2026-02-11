@@ -112,14 +112,14 @@ export default function IntentToFile() {
   const getStatusColor = () => {
     if (!timeRemaining) return 'text-muted-foreground';
     if (timeRemaining.isExpired) return 'text-red-400';
-    if (timeRemaining.isExpiringSoon) return 'text-amber-400';
+    if (timeRemaining.isExpiringSoon) return 'text-gold';
     return 'text-emerald-400';
   };
 
   const getProgressColor = () => {
     if (!timeRemaining) return '';
     if (timeRemaining.isExpired) return '[&>div]:bg-red-500';
-    if (timeRemaining.isExpiringSoon) return '[&>div]:bg-amber-500';
+    if (timeRemaining.isExpiringSoon) return '[&>div]:bg-gold';
     return '[&>div]:bg-emerald-500';
   };
 
@@ -162,7 +162,7 @@ export default function IntentToFile() {
               timeRemaining.isExpired
                 ? 'border-red-500/30'
                 : timeRemaining.isExpiringSoon
-                ? 'border-amber-500/30'
+                ? 'border-[rgba(214,178,94,0.3)]'
                 : 'border-emerald-500/30'
             }`}
           >
@@ -171,7 +171,7 @@ export default function IntentToFile() {
                 timeRemaining.isExpired
                   ? 'bg-red-500/5'
                   : timeRemaining.isExpiringSoon
-                  ? 'bg-amber-500/5'
+                  ? 'bg-[rgba(214,178,94,0.05)]'
                   : 'bg-emerald-500/5'
               }`}
             >
@@ -183,7 +183,7 @@ export default function IntentToFile() {
                     timeRemaining.isExpired
                       ? 'border-red-500/50 text-red-400'
                       : timeRemaining.isExpiringSoon
-                      ? 'border-amber-500/50 text-amber-400'
+                      ? 'border-[rgba(214,178,94,0.5)] text-gold'
                       : 'border-emerald-500/50 text-emerald-400'
                   }`}
                 >
@@ -266,10 +266,10 @@ export default function IntentToFile() {
 
               {/* Urgency Warning */}
               {timeRemaining.isExpiringSoon && !timeRemaining.isExpired && (
-                <div className="mt-4 flex items-start gap-3 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
-                  <AlertCircle className="h-5 w-5 text-amber-400 flex-shrink-0 mt-0.5" />
+                <div className="mt-4 flex items-start gap-3 p-3 rounded-lg bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)]">
+                  <AlertCircle className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-amber-400">
+                    <p className="text-sm font-medium text-gold">
                       Your ITF expires in less than 90 days
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
@@ -649,14 +649,14 @@ export default function IntentToFile() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
-              <AlertCircle className="h-5 w-5 text-amber-400" />
+              <AlertCircle className="h-5 w-5 text-gold" />
               Important Deadline Tips
             </CardTitle>
           </CardHeader>
           <CardContent>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0 mt-2" />
+                <div className="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0 mt-2" />
                 <span className="text-sm text-muted-foreground">
                   <strong className="text-foreground">
                     Set a reminder at 9 months.
@@ -666,7 +666,7 @@ export default function IntentToFile() {
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0 mt-2" />
+                <div className="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0 mt-2" />
                 <span className="text-sm text-muted-foreground">
                   <strong className="text-foreground">
                     You can file a new ITF at any time.
@@ -677,7 +677,7 @@ export default function IntentToFile() {
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0 mt-2" />
+                <div className="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0 mt-2" />
                 <span className="text-sm text-muted-foreground">
                   <strong className="text-foreground">
                     Each benefit type needs its own ITF.
@@ -688,7 +688,7 @@ export default function IntentToFile() {
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0 mt-2" />
+                <div className="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0 mt-2" />
                 <span className="text-sm text-muted-foreground">
                   <strong className="text-foreground">
                     Partial submissions count.

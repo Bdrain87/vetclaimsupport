@@ -18,8 +18,8 @@ export default function DisclaimerPage() {
 
       {/* Header */}
       <div className="flex items-start gap-4">
-        <div className="p-3 rounded-xl bg-amber-500/10 shrink-0">
-          <AlertTriangle className="h-6 w-6 text-amber-400" />
+        <div className="p-3 rounded-xl bg-[rgba(214,178,94,0.1)] shrink-0">
+          <AlertTriangle className="h-6 w-6 text-gold" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Important Disclaimer</h1>
@@ -72,9 +72,9 @@ export default function DisclaimerPage() {
         {/* AI-Generated Content Warning */}
         <div className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">AI-Generated Content Warning</h2>
-          <div className="rounded-xl bg-amber-500/5 border border-amber-500/20 p-4">
+          <div className="rounded-xl bg-[rgba(214,178,94,0.05)] border border-[rgba(214,178,94,0.2)] p-4">
             <p className="text-muted-foreground">
-              This app uses artificial intelligence (Google Gemini) to generate suggestions and content. AI-generated content may be inaccurate, incomplete, or fabricated. AI-generated case law citations have a documented hallucination rate of 50-88%. <strong className="text-amber-400">NEVER submit AI-generated legal citations without independent verification.</strong> You assume all risk for reliance on AI-generated content.
+              This app uses artificial intelligence (Google Gemini) to generate suggestions and content. AI-generated content may be inaccurate, incomplete, or fabricated. AI-generated case law citations have a documented hallucination rate of 50-88%. <strong className="text-gold">NEVER submit AI-generated legal citations without independent verification.</strong> You assume all risk for reliance on AI-generated content.
             </p>
           </div>
         </div>

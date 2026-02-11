@@ -37,18 +37,22 @@ export function TabBar() {
             key={tab.path}
             to={tab.path}
             className={cn(
-              "flex flex-col items-center justify-center gap-1",
+              "relative flex flex-col items-center justify-center gap-1",
               "min-w-[56px] min-h-[44px] px-3 py-1.5",
               "rounded-lg",
               "text-xs font-medium",
               "transition-all duration-200",
               "-webkit-tap-highlight-color-transparent",
               isActive
-                ? "text-success-600 dark:text-success-400"
+                ? "text-gold"
                 : "text-muted-foreground hover:text-foreground"
             )}
             aria-current={isActive ? 'page' : undefined}
           >
+            {isActive && (
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full"
+                   style={{ background: 'var(--gold-gradient)' }} />
+            )}
             <Icon
               className={cn(
                 "w-6 h-6 transition-transform duration-200",

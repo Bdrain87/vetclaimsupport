@@ -5,7 +5,7 @@ interface ProgressRingProps extends React.HTMLAttributes<HTMLDivElement> {
   value: number; // 0-100
   size?: 'sm' | 'md' | 'lg' | 'xl';
   strokeWidth?: number;
-  variant?: 'default' | 'primary' | 'success' | 'warning' | 'danger';
+  variant?: 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'gold';
   showValue?: boolean;
   label?: string;
   animate?: boolean;
@@ -106,6 +106,11 @@ const ProgressRing = React.forwardRef<HTMLDivElement, ProgressRingProps>(
         progress: 'stroke-red-500',
         text: 'text-red-600 dark:text-red-500',
       },
+      gold: {
+        track: 'stroke-[var(--gold-md)]/20',
+        progress: 'stroke-[var(--gold-md)]',
+        text: 'text-[var(--gold-md)]',
+      },
     };
 
     const styles = variantStyles[variant];
@@ -202,6 +207,7 @@ const ProgressRingIcon = React.forwardRef<HTMLDivElement, ProgressRingIconProps>
       success: 'text-green-600 dark:text-green-500',
       warning: 'text-blue-600 dark:text-blue-500',
       danger: 'text-red-600 dark:text-red-500',
+      gold: 'text-[var(--gold-md)]',
     };
 
     return (

@@ -164,7 +164,7 @@ export function ClaimBuilder() {
                     <div className="flex items-center gap-2">
                       <span
                         className={`inline-block h-3 w-3 rounded-full ${
-                          strength.score >= 75 ? 'bg-green-500' : strength.score >= 50 ? 'bg-yellow-500' : 'bg-red-500'
+                          strength.score >= 75 ? 'bg-green-500' : strength.score >= 50 ? 'bg-gold' : 'bg-red-500'
                         }`}
                         aria-label={level.label}
                       />

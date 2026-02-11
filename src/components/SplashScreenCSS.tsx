@@ -7,8 +7,8 @@ interface SplashScreenCSSProps {
 
 /**
  * CSS-only splash screen fallback
- * Uses pure CSS animations for better compatibility
- * with iOS WebViews and slower devices
+ * Uses pure CSS animations — no framer-motion dependency.
+ * Designed for iOS WebViews and slower devices.
  */
 export function SplashScreenCSS({
   onComplete,
@@ -20,11 +20,11 @@ export function SplashScreenCSS({
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsFadingOut(true);
-      // Wait for fade out animation to complete
+      // Wait for the dissolve animation (0.6s) to finish
       setTimeout(() => {
         setIsVisible(false);
         onComplete();
-      }, 500);
+      }, 600);
     }, minimumDuration);
 
     return () => clearTimeout(timer);
@@ -35,45 +35,23 @@ export function SplashScreenCSS({
   return (
     <div className={`splash-screen ${isFadingOut ? 'fade-out' : ''}`}>
       <div className="splash-content">
-        {/* Static Logo */}
+        {/* Logo with lens sweep overlay */}
         <div className="splash-logo">
-          <svg
-            width="80"
-            height="80"
-            viewBox="0 0 80 80"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            {/* Shield */}
-            <path
-              d="M40 4L8 16V36C8 54.78 21.42 72.12 40 76C58.58 72.12 72 54.78 72 36V16L40 4Z"
-              fill="#1e2844"
-              stroke="#3B82F6"
-              strokeWidth="2"
-            />
-            {/* Checkmark */}
-            <path
-              d="M30 40L37 47L50 34"
-              stroke="#10B981"
-              strokeWidth="4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              fill="none"
-            />
-          </svg>
+          <img
+            src="/app-icon.png"
+            alt="Vet Claim Support"
+            className="splash-logo-img"
+          />
+          <div className="splash-lens-sweep" aria-hidden="true" />
         </div>
 
         {/* App Name */}
-        <h1 className="splash-title">
-          Vet Claim Support
-        </h1>
+        <h1 className="splash-title">Vet Claim Support</h1>
 
         {/* Tagline */}
-        <p className="splash-tagline">
-          Get the rating you earned
-        </p>
+        <p className="splash-tagline">Get the rating you earned</p>
 
-        {/* Loading dots */}
+        {/* Gold loading dots */}
         <div className="loading-dots">
           <span className="loading-dot" />
           <span className="loading-dot" />

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState, useRef } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 interface SplashScreenProps {
   onComplete: () => void;
@@ -11,16 +11,24 @@ export function SplashScreen({
   minimumDuration = 1500
 }: SplashScreenProps) {
   const [isVisible, setIsVisible] = useState(true);
+  const prefersReducedMotion = useReducedMotion();
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
 
   useEffect(() => {
+    const displayTime = prefersReducedMotion
+      ? Math.min(minimumDuration, 800)
+      : minimumDuration;
+
     const timer = setTimeout(() => {
       setIsVisible(false);
-      // Wait for exit animation to complete
-      setTimeout(onComplete, 500);
-    }, minimumDuration);
+      // Wait for the exit animation to finish before unmounting
+      const exitDuration = prefersReducedMotion ? 300 : 600;
+      setTimeout(() => onCompleteRef.current(), exitDuration);
+    }, displayTime);
 
     return () => clearTimeout(timer);
-  }, [minimumDuration, onComplete]);
+  }, [minimumDuration, prefersReducedMotion]);
 
   return (
     <AnimatePresence>
@@ -28,50 +36,57 @@ export function SplashScreen({
         <motion.div
           className="fixed inset-0 z-[9999] flex items-center justify-center"
           style={{
-            background: 'linear-gradient(135deg, #14192b 0%, #1e2844 100%)'
+            background: 'linear-gradient(160deg, #0a0f1c 0%, #14192b 50%, #1a2544 100%)'
           }}
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5, ease: 'easeInOut' }}
+          initial={{ opacity: 1, scale: 1 }}
+          exit={{
+            opacity: 0,
+            scale: 1.5,
+            transition: {
+              duration: prefersReducedMotion ? 0.3 : 0.6,
+              ease: 'easeInOut'
+            }
+          }}
         >
           <div className="flex flex-col items-center gap-5 text-center px-6">
-            {/* Animated Logo */}
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
-            >
-              <AnimatedLogo />
-            </motion.div>
+            {/* Logo with blur-in and lens sweep */}
+            <LogoWithLens prefersReducedMotion={!!prefersReducedMotion} />
 
             {/* App Name */}
             <motion.h1
               className="text-[28px] font-semibold text-white tracking-[-0.02em] m-0"
-              style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" }}
-              initial={{ opacity: 0, y: 20 }}
+              style={{
+                fontFamily:
+                  "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif"
+              }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
+              transition={{ duration: 0.5, delay: 0.4, ease: 'easeOut' }}
             >
               Vet Claim Support
             </motion.h1>
 
             {/* Tagline */}
             <motion.p
-              className="text-base text-white/70 m-0"
-              style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif" }}
+              className="text-base m-0"
+              style={{
+                color: 'rgba(255, 255, 255, 0.7)',
+                fontFamily:
+                  "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+              }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
+              transition={{ duration: 0.5, delay: 0.6, ease: 'easeOut' }}
             >
               Get the rating you earned
             </motion.p>
 
-            {/* Loading indicator */}
+            {/* Gold loading dots */}
             <motion.div
               className="mt-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.7 }}
+              transition={{ delay: 0.8 }}
             >
               <LoadingDots />
             </motion.div>
@@ -82,43 +97,62 @@ export function SplashScreen({
   );
 }
 
-// Animated shield logo with draw effect
-function AnimatedLogo() {
+/** Logo image that resolves from blurred to crisp with a lens sweep overlay */
+function LogoWithLens({
+  prefersReducedMotion
+}: {
+  prefersReducedMotion: boolean;
+}) {
   return (
-    <motion.svg
-      width="80"
-      height="80"
-      viewBox="0 0 80 80"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
+    <motion.div
+      className="relative"
+      style={{ width: 96, height: 96 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
     >
-      {/* Shield outline */}
-      <motion.path
-        d="M40 4L8 16V36C8 54.78 21.42 72.12 40 76C58.58 72.12 72 54.78 72 36V16L40 4Z"
-        fill="#1e2844"
-        stroke="#3B82F6"
-        strokeWidth="2"
-        initial={{ pathLength: 0, opacity: 0 }}
-        animate={{ pathLength: 1, opacity: 1 }}
-        transition={{ duration: 1, ease: 'easeInOut' }}
+      {/* The logo image: blur-in animation */}
+      <motion.img
+        src="/app-icon.png"
+        alt="Vet Claim Support"
+        width={96}
+        height={96}
+        style={{ borderRadius: 20, display: 'block' }}
+        initial={{ filter: prefersReducedMotion ? 'blur(0px)' : 'blur(20px)' }}
+        animate={{ filter: 'blur(0px)' }}
+        transition={{
+          duration: prefersReducedMotion ? 0 : 0.8,
+          ease: 'easeOut'
+        }}
       />
-      {/* Checkmark inside */}
-      <motion.path
-        d="M30 40L37 47L50 34"
-        stroke="#10B981"
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-        initial={{ pathLength: 0 }}
-        animate={{ pathLength: 1 }}
-        transition={{ duration: 0.5, delay: 0.8, ease: 'easeOut' }}
-      />
-    </motion.svg>
+
+      {/* Lens sweep: a diagonal highlight that moves across the logo */}
+      {!prefersReducedMotion && (
+        <motion.div
+          aria-hidden
+          style={{
+            position: 'absolute',
+            inset: '-20%',
+            borderRadius: 20,
+            overflow: 'hidden',
+            pointerEvents: 'none' as const,
+            background:
+              'linear-gradient(105deg, transparent 40%, rgba(246,228,170,0.10) 45%, rgba(255,255,255,0.12) 50%, rgba(246,228,170,0.10) 55%, transparent 60%)'
+          }}
+          initial={{ x: '-200%', opacity: 1 }}
+          animate={{ x: '200%', opacity: 1 }}
+          transition={{
+            duration: 1.2,
+            delay: 0.5,
+            ease: 'easeInOut'
+          }}
+        />
+      )}
+    </motion.div>
   );
 }
 
-// Loading dots animation
+/** Three gold pulsing dots */
 function LoadingDots() {
   return (
     <div className="flex gap-2">
@@ -126,7 +160,7 @@ function LoadingDots() {
         <motion.span
           key={i}
           className="w-2 h-2 rounded-full"
-          style={{ backgroundColor: '#3B82F6' }}
+          style={{ backgroundColor: 'var(--gold-md, #D6B25E)' }}
           animate={{
             scale: [1, 1.3, 1],
             opacity: [0.5, 1, 0.5]
