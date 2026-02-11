@@ -447,11 +447,11 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                   <Badge variant="secondary">{conditionDetails.bodySystem}</Badge>
                 </div>
               )}
-              {conditionDetails.commonSymptoms && conditionDetails.commonSymptoms.length > 0 && (
+              {conditionDetails.keywords && conditionDetails.keywords.length > 0 && (
                 <div>
-                  <span className="text-sm font-medium">Common Symptoms:</span>
+                  <span className="text-sm font-medium">Related Terms:</span>
                   <div className="flex flex-wrap gap-1.5 mt-1">
-                    {conditionDetails.commonSymptoms.map((s: string) => (
+                    {conditionDetails.keywords.slice(0, 6).map((s: string) => (
                       <Badge key={s} variant="outline" className="text-xs">{s}</Badge>
                     ))}
                   </div>
@@ -1013,17 +1013,20 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
             <CardContent>
               {conditionDetails.commonSecondaries && conditionDetails.commonSecondaries.length > 0 ? (
                 <div className="space-y-2">
-                  {conditionDetails.commonSecondaries.map((secondary, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-                      <div className="flex items-center gap-2">
-                        <Link2 className="h-4 w-4 text-primary" />
-                        <span className="font-medium text-sm">{secondary}</span>
+                  {conditionDetails.commonSecondaries.map((secondary, idx) => {
+                    const secondaryDetails = getConditionById(secondary);
+                    return (
+                      <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                        <div className="flex items-center gap-2">
+                          <Link2 className="h-4 w-4 text-primary" />
+                          <span className="font-medium text-sm">{secondaryDetails?.name || secondary}</span>
+                        </div>
+                        <Button variant="ghost" size="sm" onClick={() => navigate(`/claims/${secondary}`)}>
+                          View
+                        </Button>
                       </div>
-                      <Button variant="ghost" size="sm">
-                        Add
-                      </Button>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               ) : (
                 <p className="text-muted-foreground text-sm">

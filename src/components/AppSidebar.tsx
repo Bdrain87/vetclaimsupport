@@ -60,12 +60,12 @@ const premiumToolsGroup: NavGroup = {
   alwaysOpen: true,
   defaultOpen: true,
   items: [
-    { to: '/claim-tools', icon: Calculator, label: 'Rating Calculator' },
-    { to: '/secondary-finder', icon: Search, label: 'Secondary Finder' },
-    { to: '/nexus-letter', icon: FileSignature, label: 'Nexus Letter Generator' },
-    { to: '/dbq-prep', icon: ClipboardList, label: 'DBQ Prep Sheet' },
-    { to: '/claim-strategy', icon: Wand2, label: 'Strategy Wizard' },
-    { to: '/cp-exam-prep', icon: ClipboardCheck, label: 'C&P Exam Prep' },
+    { to: '/claims/calculator', icon: Calculator, label: 'Rating Calculator' },
+    { to: '/claims/secondary-finder', icon: Search, label: 'Secondary Finder' },
+    { to: '/prep/nexus-letter', icon: FileSignature, label: 'Nexus Letter Generator' },
+    { to: '/prep/dbq', icon: ClipboardList, label: 'DBQ Prep Sheet' },
+    { to: '/claims/strategy', icon: Wand2, label: 'Strategy Wizard' },
+    { to: '/prep/exam', icon: ClipboardCheck, label: 'C&P Exam Prep' },
   ],
 };
 
@@ -76,9 +76,9 @@ const navGroups: NavGroup[] = [
     icon: FileText,
     defaultOpen: true,
     items: [
-      { to: '/claim-journey', icon: Route, label: 'Journey' },
-      { to: '/documents', icon: Files, label: 'Documents' },
-      { to: '/claim-checklist', icon: ClipboardCheck, label: 'Checklist' },
+      { to: '/settings/journey', icon: Route, label: 'Journey' },
+      { to: '/settings/vault', icon: Files, label: 'Documents' },
+      { to: '/claims/checklist', icon: ClipboardCheck, label: 'Checklist' },
     ],
   },
   {
@@ -86,10 +86,10 @@ const navGroups: NavGroup[] = [
     icon: Shield,
     defaultOpen: false,
     items: [
-      { to: '/service-history', icon: Shield, label: 'Service Record' },
-      { to: '/medical-visits', icon: Stethoscope, label: 'Medical Visits' },
-      { to: '/exposures', icon: AlertTriangle, label: 'Exposures' },
-      { to: '/timeline', icon: Clock, label: 'Timeline' },
+      { to: '/settings/service-history', icon: Shield, label: 'Service Record' },
+      { to: '/health/visits', icon: Stethoscope, label: 'Medical Visits' },
+      { to: '/health/exposures', icon: AlertTriangle, label: 'Exposures' },
+      { to: '/settings/timeline', icon: Clock, label: 'Timeline' },
     ],
   },
   {
@@ -97,24 +97,24 @@ const navGroups: NavGroup[] = [
     icon: Heart,
     defaultOpen: false,
     items: [
-      { to: '/health-log', icon: Calendar, label: 'Daily Log' },
-      { to: '/symptoms', icon: FileText, label: 'Symptoms Journal' },
-      { to: '/migraines', icon: Brain, label: 'Migraines' },
-      { to: '/sleep', icon: Moon, label: 'Sleep Tracking' },
-      { to: '/medications', icon: Pill, label: 'Medications' },
+      { to: '/health/summary', icon: Calendar, label: 'Daily Log' },
+      { to: '/health/symptoms', icon: FileText, label: 'Symptoms Journal' },
+      { to: '/health/migraines', icon: Brain, label: 'Migraines' },
+      { to: '/health/sleep', icon: Moon, label: 'Sleep Tracking' },
+      { to: '/health/medications', icon: Pill, label: 'Medications' },
     ],
   },
 ];
 
 // Single link items
 const singleNavItems: NavItem[] = [
-  { to: '/buddy-statements', icon: Users, label: 'Buddy Statements' },
-  { to: '/va-resources', icon: BookOpen, label: 'VA Resources' },
+  { to: '/prep/buddy-statement', icon: Users, label: 'Buddy Statements' },
+  { to: '/settings/resources', icon: BookOpen, label: 'VA Resources' },
 ];
 
 // Bottom navigation items
 const secondaryNavItems: NavItem[] = [
-  { to: '/help', icon: HelpCircle, label: 'Help Center' },
+  { to: '/settings/help', icon: HelpCircle, label: 'Help Center' },
   { to: '/settings', icon: Settings, label: 'Settings' },
 ];
 

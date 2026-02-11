@@ -47,9 +47,9 @@ export function ClaimsJourneyRoadmap() {
     const hasSeparationDate = !!data.separationDate;
     
     const phase1Tasks = [
-      { label: 'Add service history', completed: hasServiceHistory, href: '/service-history' },
-      { label: 'Log medical visits', completed: hasMedicalVisits, href: '/medical-visits' },
-      { label: 'Document exposures', completed: hasExposures, href: '/exposures' },
+      { label: 'Add service history', completed: hasServiceHistory, href: '/settings/service-history' },
+      { label: 'Log medical visits', completed: hasMedicalVisits, href: '/health/visits' },
+      { label: 'Document exposures', completed: hasExposures, href: '/health/exposures' },
       { label: 'Set separation date', completed: hasSeparationDate, href: '/settings/service-history' },
     ];
     const phase1Progress = Math.round((phase1Tasks.filter(t => t.completed).length / phase1Tasks.length) * 100);
@@ -61,10 +61,10 @@ export function ClaimsJourneyRoadmap() {
     const hasBuddyContacts = data.buddyContacts.length > 0;
     
     const phase2Tasks = [
-      { label: 'Track symptoms regularly', completed: data.symptoms.length >= 3, href: '/symptoms' },
-      { label: 'Log medications', completed: hasMedications, href: '/medications' },
+      { label: 'Track symptoms regularly', completed: data.symptoms.length >= 3, href: '/health/symptoms' },
+      { label: 'Log medications', completed: hasMedications, href: '/health/medications' },
       { label: 'Add conditions to claim', completed: hasConditions, href: '/claims' },
-      { label: 'Add buddy contacts', completed: hasBuddyContacts, href: '/buddy-statements' },
+      { label: 'Add buddy contacts', completed: hasBuddyContacts, href: '/prep/buddy-statement' },
     ];
     const phase2Progress = Math.round((phase2Tasks.filter(t => t.completed).length / phase2Tasks.length) * 100);
 
@@ -77,9 +77,9 @@ export function ClaimsJourneyRoadmap() {
     ) || false;
     
     const phase3Tasks = [
-      { label: 'Gather key documents', completed: documentsObtained >= 3, href: '/documents' },
-      { label: 'Obtain buddy statements', completed: hasBuddyStatements, href: '/buddy-statements' },
-      { label: 'Upload supporting docs', completed: hasUploadedDocs, href: '/documents' },
+      { label: 'Gather key documents', completed: documentsObtained >= 3, href: '/settings/vault' },
+      { label: 'Obtain buddy statements', completed: hasBuddyStatements, href: '/prep/buddy-statement' },
+      { label: 'Upload supporting docs', completed: hasUploadedDocs, href: '/settings/vault' },
       { label: 'Link evidence to conditions', completed: hasLinkedEvidence, href: '/claims' },
     ];
     const phase3Progress = Math.round((phase3Tasks.filter(t => t.completed).length / phase3Tasks.length) * 100);
@@ -97,7 +97,7 @@ export function ClaimsJourneyRoadmap() {
     const phase4Tasks = [
       { label: 'File Intent to File', completed: hasItf, href: '/settings/itf' },
       { label: 'Reach 50%+ evidence per condition', completed: conditionsWithStrongEvidence >= 1, href: '/claims' },
-      { label: 'Review claim checklist', completed: false, href: '/claim-checklist' },
+      { label: 'Review claim checklist', completed: false, href: '/claims/checklist' },
       { label: 'Prepare for C&P exam', completed: false, href: '/prep/exam' },
     ];
     const phase4Progress = Math.round((phase4Tasks.filter(t => t.completed).length / phase4Tasks.length) * 100);

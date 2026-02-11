@@ -176,7 +176,7 @@ export default function Conditions() {
 
       // Body system filter
       if (bodySystemFilter !== 'all' && details) {
-        const matchesSystem = details.bodySystem?.toLowerCase().includes(bodySystemFilter);
+        const matchesSystem = details.category === bodySystemFilter || details.bodySystem?.toLowerCase().includes(bodySystemFilter);
         if (!matchesSystem) return false;
       }
 

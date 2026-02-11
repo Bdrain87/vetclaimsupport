@@ -57,7 +57,7 @@ export function GuidedActionBanner({ onOpenAddCondition }: GuidedActionBannerPro
         icon: <Shield className="h-5 w-5" />,
         label: 'Document Your Service',
         description: 'Add assignments, bases, and duties',
-        href: '/service-history',
+        href: '/settings/service-history',
         priority: 2,
       };
     }
@@ -68,7 +68,7 @@ export function GuidedActionBanner({ onOpenAddCondition }: GuidedActionBannerPro
         icon: <Stethoscope className="h-5 w-5" />,
         label: 'Log Medical Visits',
         description: 'Document in-service treatment',
-        href: '/medical-visits',
+        href: '/health/visits',
         priority: 3,
       };
     }
@@ -79,7 +79,7 @@ export function GuidedActionBanner({ onOpenAddCondition }: GuidedActionBannerPro
         icon: <Activity className="h-5 w-5" />,
         label: 'Start Symptom Journal',
         description: 'Track how conditions affect you',
-        href: '/symptoms',
+        href: '/health/symptoms',
         priority: 4,
       };
     }
@@ -90,7 +90,7 @@ export function GuidedActionBanner({ onOpenAddCondition }: GuidedActionBannerPro
         icon: <Users className="h-5 w-5" />,
         label: 'Add Witness Contacts',
         description: 'Get buddy statements to support your claim',
-        href: '/buddy-statements',
+        href: '/prep/buddy-statement',
         priority: 5,
       };
     }

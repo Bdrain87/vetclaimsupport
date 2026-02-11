@@ -154,7 +154,7 @@ export default function SecondaryFinder() {
               </h2>
               <p className="text-white/40 text-sm">{currentSecondaries.length} connections found</p>
             </div>
-            <Link to={`/nexus-letter?primary=${encodeURIComponent(selectedPrimary)}`}>
+            <Link to={`/prep/nexus-letter?primary=${encodeURIComponent(selectedPrimary)}`}>
               <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3B82F6]/10 border border-[#3B82F6]/30 text-[#3B82F6] text-sm font-medium hover:bg-[#3B82F6]/20 transition-colors">
                 <FileSignature className="h-4 w-4" />
                 Generate Nexus Letter

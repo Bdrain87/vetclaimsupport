@@ -71,7 +71,7 @@ export default function ClaimChecklist() {
           : data.serviceHistory.length < 2 
             ? 'Add additional duty stations or deployments for a complete service record.'
             : 'Great! Your service history is well documented.',
-        link: '/service-history',
+        link: '/settings/service-history',
         linkText: 'Add Entry',
         priority: 'high',
       },
@@ -87,7 +87,7 @@ export default function ClaimChecklist() {
         guidance: metrics.hasDD214 
           ? 'Your DD-214 is ready for your claim.'
           : 'Request from National Personnel Records Center (NPRC) if you don\'t have a copy.',
-        link: '/documents',
+        link: '/settings/vault',
         linkText: 'Update Status',
         priority: 'high',
       },
@@ -123,7 +123,7 @@ export default function ClaimChecklist() {
         guidance: metrics.hasSTRs 
           ? 'Your STRs will help establish service connection.'
           : 'Request from your last duty station or NPRC. These are critical for proving in-service events.',
-        link: '/documents',
+        link: '/settings/vault',
         linkText: 'Update Status',
         priority: 'high',
       },
@@ -141,7 +141,7 @@ export default function ClaimChecklist() {
           : data.medicalVisits.length < 5
             ? `Add ${5 - data.medicalVisits.length} more visits. Include sick call, ER visits, and specialist appointments.`
             : 'Excellent documentation! Keep logging new visits.',
-        link: '/medical-visits',
+        link: '/health/visits',
         linkText: 'Add Visit',
         priority: 'high',
       },
@@ -161,7 +161,7 @@ export default function ClaimChecklist() {
           : data.medicalVisits.length === 0
             ? 'Log medical visits first, then track your summaries.'
             : 'All summaries collected! These strengthen your medical evidence.',
-        link: '/medical-visits',
+        link: '/health/visits',
         linkText: 'Review Visits',
         priority: 'medium',
       },
@@ -177,7 +177,7 @@ export default function ClaimChecklist() {
         guidance: metrics.hasNexus 
           ? 'Your nexus letter provides crucial medical opinion for service connection.'
           : 'A nexus letter from your doctor can significantly strengthen claims. Ask your physician to write one.',
-        link: '/documents',
+        link: '/settings/vault',
         linkText: 'Update Status',
         priority: 'high',
       },
@@ -197,7 +197,7 @@ export default function ClaimChecklist() {
           : data.symptoms.length < 10
             ? `Add ${10 - data.symptoms.length} more entries. Consistent logging shows chronic conditions.`
             : `Strong symptom history! ${metrics.severeSymptoms} severe episodes documented.`,
-        link: '/symptoms',
+        link: '/health/symptoms',
         linkText: 'Log Symptom',
         priority: 'medium',
       },
@@ -215,7 +215,7 @@ export default function ClaimChecklist() {
           : data.medications.length < 2
             ? 'Add any other medications, including over-the-counter treatments for your conditions.'
             : 'Good medication history. Remember to log any new prescriptions.',
-        link: '/medications',
+        link: '/health/medications',
         linkText: 'Add Medication',
         priority: 'low',
       },
@@ -235,7 +235,7 @@ export default function ClaimChecklist() {
         guidance: data.exposures.length === 0
           ? 'If you were near burn pits, chemicals, or other hazards, document them. PACT Act may apply.'
           : 'Exposures documented. Check if you qualify for PACT Act presumptive conditions.',
-        link: '/exposures',
+        link: '/health/exposures',
         linkText: 'Add Exposure',
         priority: 'medium',
       },
@@ -255,7 +255,7 @@ export default function ClaimChecklist() {
           : data.buddyContacts.length < 2
             ? 'Add at least one more contact. Multiple witnesses strengthen your claim.'
             : 'Good network of witnesses identified.',
-        link: '/buddy-statements',
+        link: '/prep/buddy-statement',
         linkText: 'Add Contact',
         priority: 'medium',
       },
@@ -277,7 +277,7 @@ export default function ClaimChecklist() {
             : metrics.buddyStatementsReceived < data.buddyContacts.length
               ? `${data.buddyContacts.length - metrics.buddyStatementsReceived} statement(s) pending. Follow up with your contacts.`
               : 'All statements collected! These provide valuable third-party evidence.',
-        link: '/buddy-statements',
+        link: '/prep/buddy-statement',
         linkText: 'Track Status',
         priority: 'high',
       },

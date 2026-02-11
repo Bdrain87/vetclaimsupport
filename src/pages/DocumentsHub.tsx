@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { useClaimDocuments } from '@/hooks/useClaimDocuments';
@@ -138,6 +139,7 @@ const statementTemplates = [
 ];
 
 export default function DocumentsHub() {
+  const navigate = useNavigate();
   const { data, updateDocument, addUploadedDocument, deleteUploadedDocument } = useClaims();
   const { conditions: userConditions } = useUserConditions();
   const {
@@ -905,7 +907,7 @@ export default function DocumentsHub() {
                 )}
                 onClick={() => {
                   // Navigate to claim tools for the template
-                  window.location.href = '/claim-tools';
+                  navigate('/prep');
                 }}
               >
                 <CardContent className="p-6">

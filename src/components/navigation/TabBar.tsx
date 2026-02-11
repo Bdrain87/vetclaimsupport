@@ -5,9 +5,9 @@ import { cn } from '@/lib/utils';
 
 const tabs = [
   { path: '/', icon: Home, label: 'Home' },
-  { path: '/health-log', icon: FileText, label: 'Conditions' },
-  { path: '/symptoms', icon: BookOpen, label: 'Journal' },
-  { path: '/documents', icon: FolderOpen, label: 'Evidence' },
+  { path: '/health/summary', icon: FileText, label: 'Conditions' },
+  { path: '/health/symptoms', icon: BookOpen, label: 'Journal' },
+  { path: '/settings/vault', icon: FolderOpen, label: 'Evidence' },
   { path: '/prep/exam', icon: Calendar, label: 'Exam Day' },
 ];
 

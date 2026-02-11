@@ -58,7 +58,7 @@ export const PlatinumNavbar = () => {
   const { firstName } = useProfileStore();
   const displayName = firstName || 'Veteran';
 
-  const isLandingPage = location.pathname === '/' || location.pathname === '/landing';
+  const isLandingPage = location.pathname === '/';
   const isOnboarding = location.pathname === '/onboarding';
 
   // Scroll compression
