@@ -101,7 +101,7 @@ export default function Migraines() {
   const [selectedConditionTags, setSelectedConditionTags] = useState<string[]>([]);
   const modalContentRef = useRef<HTMLDivElement>(null);
 
-  const claimConditions = data.claimConditions || [];
+  const claimConditions = useMemo(() => data.claimConditions || [], [data.claimConditions]);
   const allConditionNames = useMemo(() => {
     const names = new Set<string>();
     claimConditions.forEach(c => names.add(c.name));

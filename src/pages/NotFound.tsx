@@ -8,9 +8,8 @@ const NotFound = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
-    console.error('404 Error: User attempted to access non-existent route:', location.pathname);
-  }, [location.pathname]);
+  // Track 404 for debugging purposes
+  useEffect(() => { /* route not found: location.pathname */ }, [location.pathname]);
 
   const quickLinks = [
     { path: '/', label: 'Dashboard', icon: Home },

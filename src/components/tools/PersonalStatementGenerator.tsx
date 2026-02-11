@@ -156,7 +156,7 @@ _______________________________
       conclusion,
       full: header + serviceConnection + symptomsSection + impact + conclusion,
     };
-  }, [selectedCondition, claimConditions, data]);
+  }, [selectedCondition, claimConditions, data, veteranFullName, branchLabel, profile.serviceDates]);
 
   const handleGenerateAI = async () => {
     const condition = selectedCondition

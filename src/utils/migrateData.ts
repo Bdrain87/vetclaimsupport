@@ -68,7 +68,7 @@ export function migrateOldDataToAppStore(): void {
     return;
   }
 
-  console.info('[migration] Migrating old data into unified store...');
+  // Migrating old data into unified store
 
   // 1. Read old claims data (the 554-line hook's data)
   const oldClaimsData = safeJSONParse<Record<string, unknown>>(OLD_CLAIMS_DATA_KEY, {});
@@ -130,7 +130,7 @@ export function migrateOldDataToAppStore(): void {
 
   try {
     localStorage.setItem(NEW_STORE_KEY, JSON.stringify(zustandPayload));
-    console.info('[migration] Data migrated successfully.');
+    // Data migrated successfully
   } catch (err) {
     console.error('[migration] Failed to write migrated data:', err);
   }

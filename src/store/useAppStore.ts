@@ -232,6 +232,11 @@ interface AppState {
   deleteClaimDocument: (id: string) => Promise<void>;
   _hydrateClaimDocuments: () => Promise<void>;
 
+  // ========== EVIDENCE CHECKLIST (per condition) ==========
+
+  conditionEvidenceChecks: Record<string, string[]>;
+  toggleEvidenceCheck: (conditionId: string, item: string) => void;
+
   // ========== GLOBAL ==========
 
   resetAllData: () => void;
@@ -282,6 +287,9 @@ const initialState = {
   // Claim documents
   claimDocuments: [] as ClaimDocument[],
   _claimDocLoading: new Set<string>(),
+
+  // Evidence checklist per condition
+  conditionEvidenceChecks: {} as Record<string, string[]>,
 };
 
 // ===== THE ONE STORE =====
@@ -741,6 +749,21 @@ const useAppStore = create<AppState>()(
 
         set({ _claimDocLoading: new Set() });
       },
+
+      // ========== EVIDENCE CHECKLIST ==========
+
+      toggleEvidenceCheck: (conditionId, item) => set((s) => {
+        const current = s.conditionEvidenceChecks[conditionId] || [];
+        const updated = current.includes(item)
+          ? current.filter((i) => i !== item)
+          : [...current, item];
+        return {
+          conditionEvidenceChecks: {
+            ...s.conditionEvidenceChecks,
+            [conditionId]: updated,
+          },
+        };
+      }),
 
       // ========== GLOBAL ==========
 

@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const milestoneIconMap: Record<string, LucideIcon> = {
   Star,
   Calendar,
