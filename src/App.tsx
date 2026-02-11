@@ -73,7 +73,12 @@ const DisclaimerPage = lazy(() => import('./pages/legal/DisclaimerPage'));
 
 function LoadingFallback() {
   return (
-    <div className="min-h-[100dvh] flex items-center justify-center bg-[#102039]" role="status" aria-label="Loading application">
+    <div
+      className="min-h-[100dvh] flex items-center justify-center"
+      style={{ background: 'linear-gradient(160deg, #0a0f1c 0%, #14192b 50%, #1a2544 100%)' }}
+      role="status"
+      aria-label="Loading application"
+    >
       <motion.div
         className="flex flex-col items-center gap-6"
         initial={{ opacity: 0, scale: 0.9 }}
@@ -81,22 +86,28 @@ function LoadingFallback() {
         transition={{ duration: 0.4, ease: 'easeOut' }}
       >
         <div className="relative">
-          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#3B82F6] to-[#1D4ED8] flex items-center justify-center shadow-lg shadow-[#3B82F6]/20">
-            <span className="text-[#102039] text-4xl font-bold" aria-hidden="true">V</span>
-          </div>
+          <img
+            src="/app-icon.png"
+            alt=""
+            width={80}
+            height={80}
+            style={{ borderRadius: 18, display: 'block' }}
+          />
           <motion.div
-            className="absolute inset-0 rounded-2xl border-2 border-[#3B82F6]/30"
+            className="absolute inset-0"
+            style={{ borderRadius: 18, border: '2px solid rgba(214, 178, 94, 0.3)' }}
             animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0, 0.5] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           />
         </div>
         <div className="text-center">
-          <h1 className="text-white text-lg font-semibold tracking-wide">VCS</h1>
-          <p className="text-white/40 text-xs mt-1">Claim Preparation Tools</p>
+          <h1 className="text-white text-lg font-semibold tracking-wide">Vet Claim Support</h1>
+          <p className="text-white/40 text-xs mt-1">Get the rating you earned</p>
         </div>
         <div className="w-32 h-0.5 bg-white/10 rounded-full overflow-hidden" aria-hidden="true">
           <motion.div
-            className="h-full bg-[#3B82F6] rounded-full"
+            className="h-full rounded-full"
+            style={{ background: 'var(--gold-gradient, linear-gradient(135deg, #F6E4AA 0%, #D6B25E 45%, #8A5A16 100%))' }}
             animate={{ x: ['-100%', '100%'] }}
             transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
           />
