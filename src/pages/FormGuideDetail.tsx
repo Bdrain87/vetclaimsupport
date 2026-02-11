@@ -12,6 +12,7 @@ import { useProfileStore, BRANCH_LABELS } from '@/store/useProfileStore';
 import { useClaims } from '@/hooks/useClaims';
 import { useGemini } from '@/hooks/useGemini';
 import { generateFormGuidePDF } from '@/services/exportEngine';
+import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { PageContainer } from '@/components/PageContainer';
 
 // ---------------------------------------------------------------------------
@@ -175,6 +176,7 @@ function FieldCard({ field, formId, savedValue, onSave }: FieldCardProps) {
           )}
           {aiSuggestion && (
             <>
+              <AIDisclaimer variant="banner" className="mb-2" />
               <p className="text-xs text-foreground whitespace-pre-wrap">{aiSuggestion}</p>
               <div className="flex gap-2">
                 <Button size="sm" className="text-xs h-8" onClick={handleUseAI}>

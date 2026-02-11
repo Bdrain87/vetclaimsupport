@@ -6,6 +6,7 @@ import { BottomTabBar } from './components/BottomTabBar';
 import { ThemeProvider } from './context/ThemeContext';
 import { TooltipProvider } from './components/ui/tooltip';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { LiabilityAcceptanceScreen } from './components/legal/LiabilityAcceptanceScreen';
 import { useProfileStore } from './store/useProfileStore';
 import { migrateOldDataToAppStore } from './utils/migrateData';
 
@@ -294,6 +295,7 @@ function App() {
           <BrowserRouter>
             <ScrollToTop />
             <div className="min-h-[100dvh] bg-background text-foreground overflow-x-hidden break-words">
+              <LiabilityAcceptanceScreen />
               <MobileHeader />
               <main className="pt-14 pb-20 overflow-x-hidden">
                 <AnimatedRoutes />

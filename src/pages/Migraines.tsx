@@ -412,6 +412,10 @@ export default function Migraines() {
                 </AlertDescription>
               </Alert>
             )}
+
+            <p className="text-[10px] text-muted-foreground leading-relaxed pt-2 border-t border-border/50">
+              For educational reference only. This is not a determination of benefits. Your actual rating will be decided by the VA based on your C&P exam and medical evidence.
+            </p>
           </CardContent>
         </div>
       )}

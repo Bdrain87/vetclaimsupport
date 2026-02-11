@@ -34,6 +34,7 @@ import { supabase } from '@/lib/supabase';
 import { exportClaimStrategy } from '@/utils/pdfExport';
 import { useClaims } from '@/hooks/useClaims';
 import { PageContainer } from '@/components/PageContainer';
+import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { useProfileStore, BRANCH_LABELS } from '@/store/useProfileStore';
 
 interface ServiceInfo {
@@ -738,6 +739,8 @@ attorney for official guidance on your specific claim.
 
             {strategy && !isGenerating && (
               <>
+                <AIDisclaimer variant="banner" />
+
                 {/* Summary */}
                 <Card className="bg-primary/5 border-primary/30">
                   <CardContent className="pt-6">

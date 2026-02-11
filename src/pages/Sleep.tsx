@@ -680,7 +680,7 @@ export default function Sleep() {
       {/* Estimated Rating Card */}
       {estimatedRating && sleepEntries.length > 0 && (
         <Card className="border-[#3B82F6]/30 bg-[#3B82F6]/5">
-          <CardContent className="p-4">
+          <CardContent className="p-4 space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <TrendingUp className="h-6 w-6 text-[#3B82F6]" />
@@ -693,6 +693,9 @@ export default function Sleep() {
                 {estimatedRating.rating}
               </Badge>
             </div>
+            <p className="text-[10px] text-muted-foreground leading-relaxed">
+              For educational reference only. This is not a determination of benefits. Your actual rating will be decided by the VA based on your C&P exam and medical evidence.
+            </p>
           </CardContent>
         </Card>
       )}

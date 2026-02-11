@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { 
-  Target, 
-  Sparkles, 
-  Link2, 
+import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import {
+  Target,
+  Sparkles,
+  Link2,
   Loader2,
   Brain,
   Ear,
@@ -145,16 +146,16 @@ export function ConditionsExplorer({ claimConditions, onAddCondition }: Conditio
     setAnalysisError(null);
 
     try {
+      const summaryParts = [
+        `Medical visits: ${data.medicalVisits.map((v: { diagnosis?: string; treatment?: string }) => [v.diagnosis, v.treatment].filter(Boolean).join(' - ')).join('; ')}`,
+        `Symptoms: ${data.symptoms.map((s: { name?: string; severity?: string }) => [s.name, s.severity].filter(Boolean).join(' ')).join('; ')}`,
+        `Exposures: ${data.exposures.map((e: { type?: string }) => e.type).filter(Boolean).join('; ')}`,
+        `Medications: ${data.medications.map((m: { name?: string }) => m.name).filter(Boolean).join('; ')}`,
+      ];
+      const prompt = `You are an expert VA disability claims analyst. Based on the following veteran health evidence, suggest VA disabilities they may qualify for. Respond in JSON with a "suggestions" array where each has: condition, category, evidenceStrength (Strong/Moderate/Weak), reasoning, supportingEvidence (array), additionalEvidence (array), typicalRating. Also include overallAssessment and priorityActions.\n\n${summaryParts.join('\n')}`;
+
       const { data: responseData, error: invokeError } = await supabase.functions.invoke('analyze-disabilities', {
-        body: { 
-          userData: {
-            medicalVisits: data.medicalVisits,
-            exposures: data.exposures,
-            symptoms: data.symptoms,
-            medications: data.medications,
-            serviceHistory: data.serviceHistory,
-          }
-        }
+        body: { prompt }
       });
 
       if (invokeError) {
@@ -337,6 +338,7 @@ export function ConditionsExplorer({ claimConditions, onAddCondition }: Conditio
                 </div>
               ) : (
                 <div className="space-y-2">
+                  <AIDisclaimer variant="banner" />
                   {analysisResult.suggestions?.slice(0, 6).map((suggestion, idx) => (
                     <div 
                       key={idx}

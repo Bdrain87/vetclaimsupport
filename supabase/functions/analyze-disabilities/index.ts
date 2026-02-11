@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 // Allow both production and local development origins
 const ALLOWED_ORIGINS = [
@@ -27,6 +28,25 @@ const getCorsHeaders = (origin: string | null) => ({
 const MAX_PAYLOAD_SIZE = 500 * 1024;
 const REQUEST_TIMEOUT = 30000; // 30 seconds
 
+// In-memory rate limiter: max 10 requests per user per minute
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const RATE_LIMIT_MAX = 10;
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+
+function checkRateLimit(userId: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(userId);
+  if (!entry || now >= entry.resetAt) {
+    rateLimitMap.set(userId, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return true;
+  }
+  if (entry.count >= RATE_LIMIT_MAX) {
+    return false;
+  }
+  entry.count++;
+  return true;
+}
+
 // Generate unique request ID for tracking
 function generateRequestId(): string {
   return `req_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
@@ -42,9 +62,50 @@ serve(async (req) => {
   }
 
   try {
+    // --- JWT Authentication (mirrors delete-user pattern) ---
+    const authHeader = req.headers.get('authorization');
+    if (!authHeader) {
+      return new Response(JSON.stringify({
+        error: 'Missing authorization header',
+        code: 'UNAUTHORIZED',
+        requestId
+      }), {
+        status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
+
+    const userClient = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+
+    const { data: { user }, error: userError } = await userClient.auth.getUser();
+    if (userError || !user) {
+      return new Response(JSON.stringify({
+        error: 'Unauthorized',
+        code: 'UNAUTHORIZED',
+        requestId
+      }), {
+        status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // --- Rate Limiting ---
+    if (!checkRateLimit(user.id)) {
+      return new Response(JSON.stringify({
+        error: 'Too many requests. Please wait a moment and try again.',
+        code: 'RATE_LIMIT',
+        requestId
+      }), {
+        status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // --- Payload validation ---
     const contentLength = req.headers.get('content-length');
     if (contentLength && parseInt(contentLength) > MAX_PAYLOAD_SIZE) {
-      console.error(`[${requestId}] Payload too large: ${contentLength} bytes`);
       return new Response(JSON.stringify({
         error: 'Payload too large. Maximum size is 500KB.',
         code: 'PAYLOAD_TOO_LARGE',
@@ -56,7 +117,6 @@ serve(async (req) => {
 
     const userData = await req.json();
     if (!userData || typeof userData !== 'object') {
-      console.error(`[${requestId}] Invalid request body`);
       return new Response(JSON.stringify({
         error: 'Invalid request. Please provide valid claim data.',
         code: 'INVALID_REQUEST',
@@ -72,7 +132,6 @@ serve(async (req) => {
       return new Response(JSON.stringify({
         error: 'AI service is not configured. Please contact support.',
         code: 'SERVICE_UNAVAILABLE',
-        details: 'The GEMINI_API_KEY environment variable is not set.',
         requestId
       }), {
         status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -91,21 +150,33 @@ serve(async (req) => {
       });
     }
 
-    const prompt = typeof userData.prompt === 'string'
-      ? userData.prompt
-      : "You are an expert VA disability claims analyst. Based on the evidence, suggest VA disabilities: " + JSON.stringify(userData);
+    // Only accept explicit prompt strings — never stringify the whole body
+    if (typeof userData.prompt !== 'string' || !userData.prompt.trim()) {
+      return new Response(JSON.stringify({
+        error: 'Invalid request. A prompt string is required.',
+        code: 'INVALID_REQUEST',
+        requestId
+      }), {
+        status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const prompt = userData.prompt;
 
     // Add timeout to fetch request
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
 
     try {
-      console.log(`[${requestId}] Calling Gemini API...`);
+      console.log(`[${requestId}] Calling Gemini API for user ${user.id.substring(0, 8)}...`);
       const response = await fetch(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + GEMINI_API_KEY,
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "x-goog-api-key": GEMINI_API_KEY,
+          },
           body: JSON.stringify({
             contents: [{ parts: [{ text: prompt }] }],
             generationConfig: { temperature: 0.7, maxOutputTokens: 2048 }
@@ -118,7 +189,7 @@ serve(async (req) => {
 
       if (!response.ok) {
         const errorBody = await response.text();
-        console.error(`[${requestId}] Gemini API error: ${response.status} - ${errorBody}`);
+        console.error(`[${requestId}] Gemini API error: ${response.status}`);
 
         // Parse specific error codes
         let userMessage = 'AI analysis could not be completed. Please try again.';
@@ -186,11 +257,10 @@ serve(async (req) => {
     }
 
   } catch (error) {
-    console.error(`[${requestId}] Unexpected error:`, error);
+    console.error(`[${requestId}] Unexpected error`);
     return new Response(JSON.stringify({
       error: 'An unexpected error occurred. Please try again.',
       code: 'INTERNAL_ERROR',
-      details: error instanceof Error ? error.message : 'Unknown error',
       requestId
     }), {
       status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
