@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { AI_CONFIG } from '@/lib/ai-prompts';
+import { supabase } from '@/integrations/supabase/client';
 
 export const useGemini = (persona: keyof typeof AI_CONFIG) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -13,33 +14,21 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
 
     setIsLoading(true);
     try {
-      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-      if (!apiKey) {
-        throw new Error('AI features are temporarily unavailable. Please try again later.');
+      const { data, error } = await supabase.functions.invoke('analyze-disabilities', {
+        body: {
+          prompt: `${AI_CONFIG[persona]}\n\nInput: ${input}`,
+        },
+      });
+
+      if (controller.signal.aborted) return null;
+
+      if (error) {
+        throw new Error(error.message || 'AI service request failed');
       }
 
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          signal: controller.signal,
-          body: JSON.stringify({
-            contents: [{
-              parts: [{ text: `${AI_CONFIG[persona]}\n\nInput: ${input}` }]
-            }]
-          })
-        }
-      );
-
-      if (!res.ok) {
-        throw new Error(`Gemini API error: ${res.status} ${res.statusText}`);
-      }
-
-      const data = await res.json();
-      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      const text = data?.analysis;
       if (!text) {
-        throw new Error('Unexpected response format from Gemini API');
+        throw new Error('Unexpected response format from AI service');
       }
       return text;
     } catch (error: unknown) {

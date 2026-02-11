@@ -34,12 +34,12 @@ A Progressive Web App (PWA) designed to help U.S. veterans track medical visits,
 
 ## Privacy First
 
-Your data stays on your device. We prioritize privacy and security:
+We prioritize privacy and security:
 
-- **100% Local Storage** - All data stored in your browser (localStorage/IndexedDB)
+- **Local-First Storage** - Data stored in your browser (localStorage/IndexedDB) by default
+- **Optional Cloud Sync** - Sign in with Supabase auth to sync across devices; your data stays in your control
 - **No Tracking** - No analytics, cookies, or third-party trackers
-- **No Account Required** - Use immediately without sign-up
-- **Optional AI** - AI features only activate when you explicitly request them
+- **Optional AI** - AI features only activate when you explicitly request them and are processed server-side via Supabase Edge Functions
 - **Data Export** - Export your data anytime as JSON backup
 
 ## Tech Stack

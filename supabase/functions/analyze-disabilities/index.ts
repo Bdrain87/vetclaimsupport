@@ -4,6 +4,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 const ALLOWED_ORIGINS = [
   'https://vetclaimsupport.com',
   'https://www.vetclaimsupport.com',
+  'https://service-evidence.vercel.app',
   'http://localhost:5173',
   'http://localhost:3000',
   'http://127.0.0.1:5173',
@@ -90,7 +91,9 @@ serve(async (req) => {
       });
     }
 
-    const prompt = "You are an expert VA disability claims analyst. Based on the evidence, suggest VA disabilities: " + JSON.stringify(userData);
+    const prompt = typeof userData.prompt === 'string'
+      ? userData.prompt
+      : "You are an expert VA disability claims analyst. Based on the evidence, suggest VA disabilities: " + JSON.stringify(userData);
 
     // Add timeout to fetch request
     const controller = new AbortController();
