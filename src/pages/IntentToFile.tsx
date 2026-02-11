@@ -25,6 +25,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { useProfileStore } from '@/store/useProfileStore';
+import { PageContainer } from '@/components/PageContainer';
 
 const ITF_DURATION_DAYS = 365;
 const VA_ITF_URL = 'https://www.va.gov/resources/your-intent-to-file-a-va-claim/';
@@ -125,8 +126,7 @@ export default function IntentToFile() {
   const todayStr = new Date().toISOString().split('T')[0];
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-3xl mx-auto px-4 py-6 sm:py-8 space-y-6">
+    <PageContainer className="min-h-screen py-6 sm:py-8 space-y-6">
         {/* Back Navigation */}
         <Button
           variant="ghost"
@@ -741,7 +741,6 @@ export default function IntentToFile() {
             (VSO) or VA-accredited attorney.
           </p>
         </div>
-      </div>
-    </div>
+    </PageContainer>
   );
 }

@@ -37,6 +37,7 @@ import {
   type VACondition,
 } from '@/data/vaConditions';
 import { SecondaryConditionSuggestions } from '@/components/SecondaryConditionSuggestions';
+import { PageContainer } from '@/components/PageContainer';
 
 // Storage key for localStorage persistence
 const STORAGE_KEY = 'vet-claim-unified-calculator';
@@ -567,7 +568,7 @@ export function UnifiedRatingCalculator() {
   };
 
   return (
-    <div className="space-y-6">
+    <PageContainer className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="p-2 rounded-xl bg-primary/10">
@@ -1027,7 +1028,7 @@ export function UnifiedRatingCalculator() {
           </Card>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 }
 

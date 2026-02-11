@@ -12,6 +12,7 @@ import { useProfileStore, BRANCH_LABELS } from '@/store/useProfileStore';
 import { useClaims } from '@/hooks/useClaims';
 import { useGemini } from '@/hooks/useGemini';
 import { generateFormGuidePDF } from '@/services/exportEngine';
+import { PageContainer } from '@/components/PageContainer';
 
 // ---------------------------------------------------------------------------
 // Field Card — each field in the form
@@ -255,17 +256,17 @@ export default function FormGuideDetail() {
 
   if (!formDef) {
     return (
-      <div className="container max-w-2xl mx-auto px-4 py-6 text-center">
+      <PageContainer className="py-6 text-center">
         <p className="text-muted-foreground">Form not found.</p>
         <Button variant="outline" className="mt-4" onClick={() => navigate('/prep/form-guide')}>
           Back to Form Guide
         </Button>
-      </div>
+      </PageContainer>
     );
   }
 
   return (
-    <div className="container max-w-2xl mx-auto px-4 py-6 space-y-5">
+    <PageContainer className="py-6 space-y-5">
       {/* Header */}
       <div>
         <p className="font-mono text-sm font-semibold text-primary">{formDef.formId}</p>
@@ -346,6 +347,6 @@ export default function FormGuideDetail() {
           Clear All
         </Button>
       </div>
-    </div>
+    </PageContainer>
   );
 }

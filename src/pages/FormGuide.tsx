@@ -9,6 +9,7 @@ import { searchFormGuides } from '@/data/formGuideData';
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { getConditionById } from '@/data/vaConditions';
+import { PageContainer } from '@/components/PageContainer';
 
 type FormPriority = 'urgent' | 'required' | 'recommended';
 
@@ -60,7 +61,7 @@ export default function FormGuide() {
   }, [searchQuery]);
 
   return (
-    <div className="container max-w-2xl mx-auto px-4 py-6 space-y-5">
+    <PageContainer className="py-6 space-y-5">
       {/* Page Title */}
       <div>
         <h1 className="text-2xl font-bold text-foreground">VA Form Guide</h1>
@@ -146,6 +147,6 @@ export default function FormGuide() {
           </div>
         )}
       </motion.div>
-    </div>
+    </PageContainer>
   );
 }

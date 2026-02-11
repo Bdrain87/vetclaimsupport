@@ -37,6 +37,7 @@ import { useUserConditions } from '@/hooks/useUserConditions';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { createCPExamPrepPrompt } from '@/lib/ai-prompts';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { PageContainer } from '@/components/PageContainer';
 
 interface ChecklistItem {
   id: string;
@@ -207,7 +208,7 @@ export default function CPExamPrepEnhanced() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <PageContainer className="space-y-6 animate-fade-in">
       {/* Header */}
       <div className="section-header">
         <div className="section-icon">
@@ -798,6 +799,6 @@ export default function CPExamPrepEnhanced() {
           </div>
         </TabsContent>
       </Tabs>
-    </div>
+    </PageContainer>
   );
 }

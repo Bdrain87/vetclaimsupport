@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { BookOpen, Search } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { PageContainer } from '@/components/PageContainer';
 
 interface GlossaryTerm {
   term: string;
@@ -193,7 +194,7 @@ export default function Glossary() {
   const letters = Object.keys(groupedTerms).sort();
 
   return (
-    <div className="space-y-6 animate-fade-in max-w-4xl">
+    <PageContainer className="space-y-6 animate-fade-in">
       <div className="section-header">
         <div className="section-icon">
           <BookOpen className="h-5 w-5" />
@@ -279,6 +280,6 @@ export default function Glossary() {
           </CardContent>
         </Card>
       )}
-    </div>
+    </PageContainer>
   );
 }

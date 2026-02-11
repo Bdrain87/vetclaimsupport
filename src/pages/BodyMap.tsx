@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import useAppStore from '@/store/useAppStore';
+import { PageContainer } from '@/components/PageContainer';
 import type { UserCondition } from '@/store/useAppStore';
 
 // ---------------------------------------------------------------------------
@@ -365,7 +366,7 @@ export default function BodyMap() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container max-w-5xl mx-auto py-6 px-4 space-y-6">
+      <PageContainer className="py-6 space-y-6">
         {/* Back + Header */}
         <div>
           <Button
@@ -704,7 +705,7 @@ export default function BodyMap() {
             )}
           </div>
         </div>
-      </div>
+      </PageContainer>
     </div>
   );
 }

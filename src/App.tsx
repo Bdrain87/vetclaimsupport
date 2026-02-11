@@ -289,7 +289,7 @@ function App() {
             <ScrollToTop />
             <div className="min-h-[100dvh] bg-background text-foreground overflow-x-hidden break-words">
               <MobileHeader />
-              <main className="pt-14 pb-20">
+              <main className="pt-14 pb-20 overflow-x-hidden">
                 <AnimatedRoutes />
               </main>
               <BottomTabBar />

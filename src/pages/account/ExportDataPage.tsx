@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Download, FileJson, FileText, Loader2, ChevronLeft, Check } from 'lucide-react';
 import { exportAllData } from '@/services/accountManagement';
 import { saveAs } from 'file-saver';
+import { PageContainer } from '@/components/PageContainer';
 
 export default function ExportDataPage() {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ export default function ExportDataPage() {
   };
 
   return (
-    <div className="max-w-lg mx-auto space-y-6 animate-fade-in px-4 py-8">
+    <PageContainer className="space-y-6 animate-fade-in py-8">
       {/* Back button */}
       <button
         onClick={() => navigate(-1)}
@@ -122,6 +123,6 @@ export default function ExportDataPage() {
           attachments are not included in the export.
         </p>
       </div>
-    </div>
+    </PageContainer>
   );
 }

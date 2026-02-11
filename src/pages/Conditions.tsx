@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 
 import { useUserConditions } from '@/hooks/useUserConditions';
+import { PageContainer } from '@/components/PageContainer';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import {
   type VACondition,
@@ -217,7 +218,7 @@ export default function Conditions() {
   };
 
   return (
-    <div className="container max-w-4xl mx-auto py-6 px-4 space-y-6">
+    <PageContainer className="py-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
@@ -497,6 +498,6 @@ export default function Conditions() {
           </CardContent>
         </Card>
       )}
-    </div>
+    </PageContainer>
   );
 }

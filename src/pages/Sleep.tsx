@@ -18,6 +18,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
+import { PageContainer } from '@/components/PageContainer';
 import type { SleepEntry, SleepQuality, DaytimeSleepiness } from '@/types/claims';
 import { exportSleepLog } from '@/utils/pdfExport';
 
@@ -232,7 +233,7 @@ export default function Sleep() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in overflow-x-hidden max-w-full">
+    <PageContainer className="space-y-6 animate-fade-in overflow-x-hidden">
       {/* Premium Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
@@ -893,6 +894,6 @@ export default function Sleep() {
           ))}
         </div>
       )}
-    </div>
+    </PageContainer>
   );
 }

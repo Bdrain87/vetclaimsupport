@@ -12,6 +12,7 @@ import { ExportButton } from '@/components/dashboard/ExportButton';
 import { DataBackup } from '@/components/settings/DataBackup';
 import { Link, useNavigate } from 'react-router-dom';
 import { useProfileStore } from '@/store/useProfileStore';
+import { PageContainer } from '@/components/PageContainer';
 
 const REMINDER_SETTINGS_KEY = 'va-claims-reminder-settings';
 
@@ -137,7 +138,7 @@ export default function Settings() {
   };
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <PageContainer className="space-y-8 animate-fade-in">
       {/* Header */}
       <div className="section-header">
         <div className="section-icon">
@@ -382,6 +383,6 @@ export default function Settings() {
         </button>
       </div>
 
-    </div>
+    </PageContainer>
   );
 }

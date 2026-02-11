@@ -18,6 +18,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
+import { PageContainer } from '@/components/PageContainer';
 
 // ============================================
 // DATA: FAQ Items
@@ -260,7 +261,7 @@ export default function HelpCenter() {
   }, []);
 
   return (
-    <div className="container max-w-5xl mx-auto py-8 px-4 space-y-8 animate-fade-in">
+    <PageContainer className="py-8 space-y-8 animate-fade-in">
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-4">
@@ -638,6 +639,6 @@ export default function HelpCenter() {
           </TabsContent>
         </Tabs>
       )}
-    </div>
+    </PageContainer>
   );
 }

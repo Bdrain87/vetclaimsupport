@@ -1,11 +1,12 @@
 import { AlertTriangle, ChevronLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { PageContainer } from '@/components/PageContainer';
 
 export default function DisclaimerPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6 animate-fade-in px-4 py-8">
+    <PageContainer className="space-y-6 animate-fade-in py-8">
       {/* Back button */}
       <button
         onClick={() => navigate(-1)}
@@ -101,6 +102,6 @@ export default function DisclaimerPage() {
           </p>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 }

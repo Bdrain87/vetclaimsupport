@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AlertTriangle, Trash2, Loader2, CheckCircle, ChevronLeft } from 'lucide-react';
 import { deleteAccount } from '@/services/accountManagement';
+import { PageContainer } from '@/components/PageContainer';
 
 export default function DeleteAccountPage() {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ export default function DeleteAccountPage() {
   }
 
   return (
-    <div className="max-w-lg mx-auto space-y-6 animate-fade-in px-4 py-8">
+    <PageContainer className="space-y-6 animate-fade-in py-8">
       {/* Back button */}
       <button
         onClick={() => navigate(-1)}
@@ -148,6 +149,6 @@ export default function DeleteAccountPage() {
           </>
         )}
       </button>
-    </div>
+    </PageContainer>
   );
 }

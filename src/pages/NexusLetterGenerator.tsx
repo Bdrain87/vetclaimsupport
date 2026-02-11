@@ -27,6 +27,7 @@ import { secondaryConditions } from '@/data/secondaryConditions';
 import { cn } from '@/lib/utils';
 import { useClaims } from '@/hooks/useClaims';
 import { useProfileStore, BRANCH_LABELS } from '@/store/useProfileStore';
+import { PageContainer } from '@/components/PageContainer';
 
 // Get all conditions for autocomplete
 const getAllConditions = (): string[] => {
@@ -562,7 +563,7 @@ export default function NexusLetterGenerator() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <PageContainer className="space-y-6 animate-fade-in">
       {/* Header */}
       <div className="section-header">
         <div className="section-icon">
@@ -676,6 +677,6 @@ export default function NexusLetterGenerator() {
           }
         }
       `}</style>
-    </div>
+    </PageContainer>
   );
 }

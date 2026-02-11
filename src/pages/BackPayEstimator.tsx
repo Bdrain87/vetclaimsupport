@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
+import { PageContainer } from '@/components/PageContainer';
 
 // ---------------------------------------------------------------------------
 // 2024 VA Compensation Rate Table (veteran alone, monthly)
@@ -133,7 +134,7 @@ export default function BackPayEstimator() {
     currentRating && newRating && parseInt(newRating, 10) > parseInt(currentRating, 10);
 
   return (
-    <div className="container max-w-4xl mx-auto px-4 py-6 space-y-4 animate-fade-in">
+    <PageContainer className="py-6 space-y-4 animate-fade-in">
       {/* Back Button */}
       <Button variant="ghost" onClick={() => navigate(-1)} className="mb-1">
         <ChevronLeft className="h-4 w-4 mr-2" />
@@ -454,6 +455,6 @@ export default function BackPayEstimator() {
           </p>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 }

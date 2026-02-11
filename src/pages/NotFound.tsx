@@ -2,6 +2,7 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Home, ArrowLeft, Search, FileText, Calculator, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { PageContainer } from '@/components/PageContainer';
 
 const NotFound = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const NotFound = () => {
   ];
 
   return (
-    <div className="flex min-h-[70vh] items-center justify-center px-4">
+    <PageContainer className="flex min-h-[70vh] items-center justify-center">
       <div className="text-center max-w-md">
         {/* Large 404 */}
         <div className="relative mb-6">
@@ -83,7 +84,7 @@ const NotFound = () => {
           Attempted URL: <code className="px-1 py-0.5 bg-muted rounded">{location.pathname}</code>
         </p>
       </div>
-    </div>
+    </PageContainer>
   );
 };
 

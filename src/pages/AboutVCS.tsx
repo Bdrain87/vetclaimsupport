@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { PageContainer } from '@/components/PageContainer';
 
 const APP_VERSION = '1.0.0';
 
@@ -11,7 +12,7 @@ export default function AboutVCS() {
   const navigate = useNavigate();
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6 animate-fade-in px-4 py-8">
+    <PageContainer className="space-y-6 animate-fade-in py-8">
       {/* Back Button */}
       <button
         onClick={() => navigate(-1)}
@@ -312,6 +313,6 @@ export default function AboutVCS() {
           </p>
         </CardContent>
       </Card>
-    </div>
+    </PageContainer>
   );
 }
