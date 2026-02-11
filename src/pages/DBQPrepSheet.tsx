@@ -3,6 +3,7 @@ import {
   ClipboardList,
   Search,
   Printer,
+  Download,
   AlertCircle,
   Info,
   Calendar,
@@ -29,6 +30,7 @@ import { vaDisabilitiesBySystem } from '@/data/vaDisabilities';
 import { cn } from '@/lib/utils';
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
+import { exportDBQPrepSheet } from '@/utils/pdfExport';
 import { PageContainer } from '@/components/PageContainer';
 
 // Get all conditions
@@ -274,6 +276,10 @@ export default function DBQPrepSheet() {
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleDownloadPDF = () => {
+    exportDBQPrepSheet(formData);
   };
 
   const generateDate = () => {
@@ -716,11 +722,15 @@ export default function DBQPrepSheet() {
         </CardContent>
       </Card>
 
-      {/* Print Button */}
+      {/* Export Buttons */}
       <div className="flex flex-wrap gap-3">
         <Button onClick={handlePrint} className="gap-2">
           <Printer className="h-4 w-4" />
           Print Prep Sheet
+        </Button>
+        <Button variant="outline" onClick={handleDownloadPDF} className="gap-2">
+          <Download className="h-4 w-4" />
+          Download PDF
         </Button>
       </div>
 

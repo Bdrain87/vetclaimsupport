@@ -27,6 +27,7 @@ import { secondaryConditions } from '@/data/secondaryConditions';
 import { cn } from '@/lib/utils';
 import { useClaims } from '@/hooks/useClaims';
 import { useProfileStore, BRANCH_LABELS } from '@/store/useProfileStore';
+import { exportNexusLetterTemplate } from '@/utils/pdfExport';
 import { PageContainer } from '@/components/PageContainer';
 
 // Get all conditions for autocomplete
@@ -180,6 +181,90 @@ export default function NexusLetterGenerator() {
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const generateLetterText = (): string => {
+    const lines: string[] = [];
+    lines.push('INFORMATION SUMMARY FOR YOUR DOCTOR');
+    lines.push('For VA Disability Claim');
+    lines.push('');
+    lines.push(`Date: ${generateLetterDate()}`);
+    lines.push(`Re: ${formData.veteranName}`);
+    lines.push(`Condition: ${formData.secondaryCondition}`);
+    lines.push('');
+    lines.push('To Whom It May Concern:');
+    lines.push('');
+
+    let intro = `I am writing this letter in support of ${formData.veteranName}'s claim for VA disability benefits for ${formData.secondaryCondition}`;
+    if (formData.connectionType === 'secondary' && formData.primaryCondition) {
+      intro += ` as secondary to their service-connected ${formData.primaryCondition}`;
+    } else if (formData.connectionType === 'direct') {
+      intro += ' as directly connected to their military service';
+    } else if (formData.connectionType === 'aggravation') {
+      intro += ' which was aggravated beyond its natural progression during military service';
+    }
+    intro += '.';
+    lines.push(intro);
+    lines.push('');
+
+    let background = `Patient Background:\n${formData.veteranName} served in the ${formData.branchOfService}`;
+    if (formData.serviceStartDate && formData.serviceEndDate) {
+      background += ` from ${new Date(formData.serviceStartDate).toLocaleDateString()} to ${new Date(formData.serviceEndDate).toLocaleDateString()}`;
+    }
+    background += '.';
+    if (formData.diagnosisDate) {
+      background += ` The patient was diagnosed with ${formData.secondaryCondition} on ${new Date(formData.diagnosisDate).toLocaleDateString()}.`;
+    }
+    lines.push(background);
+    lines.push('');
+
+    lines.push(`Current Symptoms:\n${formData.currentSymptoms}`);
+    lines.push('');
+
+    if (formData.impactOnLife) {
+      lines.push(`Functional Impact:\n${formData.impactOnLife}`);
+      lines.push('');
+    }
+
+    if (formData.connectionType === 'secondary' && medicalConnection) {
+      lines.push(`Medical Rationale for Secondary Connection:\n${medicalConnection}`);
+      lines.push('');
+    }
+
+    let opinion = `Medical Opinion:\nBased on my review of the medical evidence and my clinical expertise, it is my professional medical opinion that the veteran's ${formData.secondaryCondition} is at least as likely as not (50% or greater probability)`;
+    if (formData.connectionType === 'secondary') {
+      opinion += ` caused by or aggravated by their service-connected ${formData.primaryCondition}`;
+    } else if (formData.connectionType === 'direct') {
+      opinion += ' directly related to their military service';
+    } else {
+      opinion += ' permanently aggravated beyond its natural progression as a result of military service';
+    }
+    opinion += '.';
+    lines.push(opinion);
+    lines.push('');
+
+    lines.push('This opinion is provided with reasonable medical certainty and is based on generally accepted medical principles and current peer-reviewed medical literature.');
+    lines.push('');
+    lines.push('Respectfully submitted,');
+    lines.push('');
+    lines.push('_______________________________');
+    lines.push('Physician Signature');
+    lines.push('');
+    lines.push('_______________________________');
+    lines.push('Printed Name, Credentials');
+    lines.push('');
+    lines.push('_______________________________');
+    lines.push('Date');
+    lines.push('');
+    lines.push('_______________________________');
+    lines.push('License Number / NPI');
+
+    return lines.join('\n');
+  };
+
+  const handleDownloadPDF = () => {
+    const letterText = generateLetterText();
+    exportNexusLetterTemplate(letterText, formData.secondaryCondition);
   };
 
   const generateLetterDate = () => {
@@ -535,6 +620,10 @@ export default function NexusLetterGenerator() {
               <Button onClick={handlePrint} className="gap-2">
                 <Printer className="h-4 w-4" />
                 Print Summary
+              </Button>
+              <Button variant="outline" onClick={handleDownloadPDF} className="gap-2">
+                <Download className="h-4 w-4" />
+                Download PDF
               </Button>
             </div>
 

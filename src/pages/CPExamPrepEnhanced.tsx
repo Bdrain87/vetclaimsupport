@@ -12,6 +12,7 @@ import {
   ChevronRight,
   Calendar,
   Printer,
+  Download,
   Lightbulb,
   Shield,
   Search,
@@ -791,10 +792,16 @@ export default function CPExamPrepEnhanced() {
             </Card>
           </div>
 
-          <div className="flex justify-center">
+          <div className="flex justify-center gap-3">
             <Button variant="outline" className="gap-2" onClick={() => window.print()}>
               <Printer className="h-4 w-4" />
               Print Checklist
+            </Button>
+            <Button variant="outline" className="gap-2" asChild>
+              <Link to="/cp-exam-packet">
+                <Download className="h-4 w-4" />
+                Download Full Exam Packet PDF
+              </Link>
             </Button>
           </div>
         </TabsContent>
