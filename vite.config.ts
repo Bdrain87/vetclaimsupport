@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
+import { VitePWA } from "vite-plugin-pwa";
 import path from "path";
 
 export default defineConfig({
@@ -9,7 +10,24 @@ export default defineConfig({
   },
   plugins: [
     react(),
-    // Lovable/GPT-Engineer plugins intentionally removed here
+    VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['logo.svg', 'icon-*.png'],
+      manifest: false, // Use existing public/manifest.json
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'google-fonts-cache',
+              expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 },
+            },
+          },
+        ],
+      },
+    }),
   ],
   resolve: {
     alias: {

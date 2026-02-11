@@ -16,12 +16,12 @@ describe('Full App Render Interrogation', () => {
     expect(html.length).toBeGreaterThan(0);
   });
 
-  it('should render the navbar brand text', () => {
+  it('should render the header brand text', () => {
     const { container } = render(<App />);
     const text = container.textContent || '';
 
-    // The PlatinumNavbar renders synchronously and contains the brand name.
-    // PlatinumLanding is lazy-loaded and shows "Loading..." until resolved.
-    expect(text).toContain('Vet Claim Support');
+    // The MobileHeader renders "VCS" on root tab pages and "Dashboard" as the
+    // page title on the home route. Check for either.
+    expect(text).toContain('VCS');
   });
 });

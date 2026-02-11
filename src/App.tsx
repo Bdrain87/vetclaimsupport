@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MobileHeader } from './components/MobileHeader';
 import { BottomTabBar } from './components/BottomTabBar';
@@ -104,6 +104,11 @@ function LoadingFallback() {
   );
 }
 
+function RedirectConditionToClaimsId() {
+  const { id } = useParams();
+  return <Navigate to={`/claims/${id}`} replace />;
+}
+
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -151,13 +156,13 @@ function AnimatedRoutes() {
 
             {/* === CLAIMS === */}
             <Route path="/claims" element={<Conditions />} />
-            <Route path="/claims/:id" element={<ConditionDetail />} />
             <Route path="/claims/strategy" element={<ClaimStrategyWizard />} />
             <Route path="/claims/body-map" element={<BodyMap />} />
             <Route path="/claims/calculator" element={<Combination />} />
             <Route path="/claims/bilateral" element={<BilateralCalculator />} />
             <Route path="/claims/secondary-finder" element={<SecondaryFinder />} />
             <Route path="/claims/checklist" element={<ClaimChecklist />} />
+            <Route path="/claims/:id" element={<ConditionDetail />} />
 
             {/* === HEALTH === */}
             <Route path="/health" element={<HealthHub />} />
@@ -210,7 +215,7 @@ function AnimatedRoutes() {
             {/* === REDIRECTS FROM OLD ROUTES === */}
             <Route path="/dashboard" element={<Navigate to="/" replace />} />
             <Route path="/conditions" element={<Navigate to="/claims" replace />} />
-            <Route path="/conditions/:id" element={<Navigate to="/claims" replace />} />
+            <Route path="/conditions/:id" element={<RedirectConditionToClaimsId />} />
             <Route path="/calculator" element={<Navigate to="/claims/calculator" replace />} />
             <Route path="/secondary-finder" element={<Navigate to="/claims/secondary-finder" replace />} />
             <Route path="/nexus-letter" element={<Navigate to="/prep/nexus-letter" replace />} />

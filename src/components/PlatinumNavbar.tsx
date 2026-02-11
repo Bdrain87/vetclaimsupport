@@ -7,20 +7,20 @@ import { cn } from '@/lib/utils';
 import { ExportModal } from '@/components/ExportModal';
 
 const NAV_ITEMS = [
-  { label: 'Dashboard', href: '/dashboard' },
-  { label: 'Conditions', href: '/conditions' },
-  { label: 'Tools', href: '/claim-tools' },
-  { label: 'Health Log', href: '/health-log' },
+  { label: 'Dashboard', href: '/' },
+  { label: 'Conditions', href: '/claims' },
+  { label: 'Tools', href: '/prep' },
+  { label: 'Health Log', href: '/health' },
 ];
 
 const DRAWER_ITEMS = [
-  { label: 'Dashboard', href: '/dashboard' },
-  { label: 'Conditions', href: '/conditions' },
-  { label: 'Health Log', href: '/health-log' },
-  { label: 'Claim Tools', href: '/claim-tools' },
-  { label: 'Evidence Vault', href: '/documents' },
+  { label: 'Dashboard', href: '/' },
+  { label: 'Conditions', href: '/claims' },
+  { label: 'Health Log', href: '/health' },
+  { label: 'Claim Tools', href: '/prep' },
+  { label: 'Evidence Vault', href: '/settings/vault' },
   { label: 'Exam Prep', href: '/prep/exam' },
-  { label: 'Calculator', href: '/bilateral-calculator' },
+  { label: 'Calculator', href: '/claims/bilateral' },
   { label: 'Settings', href: '/settings' },
 ];
 

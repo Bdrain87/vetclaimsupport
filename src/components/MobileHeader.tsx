@@ -51,6 +51,9 @@ const pageLabels: Record<string, string> = {
   '/settings/about': 'About VCS',
   '/settings/glossary': 'Glossary',
   '/settings/faq': 'FAQ',
+  '/reference/conditions-by-conflict': 'Conditions by Conflict',
+  '/reference/condition-guide': 'Condition Guide',
+  '/cp-exam-packet': 'C&P Exam Packet',
 };
 
 function getParentRoute(pathname: string): string {

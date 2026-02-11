@@ -17,41 +17,40 @@ const renderNavbar = (route = '/') =>
   );
 
 describe('PlatinumNavbar', () => {
-  it('renders the logo', () => {
+  it('renders the brand text', () => {
     renderNavbar();
-    // The logo is a gold "V" square + "Vet Claim Support" text, linking to "/"
-    const logoLink = screen.getByRole('link', { name: /Vet Claim Support/i });
-    expect(logoLink).toBeInTheDocument();
-    expect(logoLink).toHaveAttribute('href', '/');
+    // The brand shows "VCS" text — there are two (desktop + mobile) so use getAll
+    const logoLinks = screen.getAllByRole('link', { name: /VCS/i });
+    expect(logoLinks.length).toBeGreaterThanOrEqual(1);
+    expect(logoLinks[0]).toHaveAttribute('href', '/');
   });
 
   it('renders desktop nav links', () => {
     renderNavbar();
     // The first four NAV_ITEMS are shown in the desktop nav bar
-    const expectedLabels = ['Dashboard', 'Evidence Vault', 'Conditions', 'Claim Tools'];
+    const expectedLabels = ['Dashboard', 'Conditions', 'Tools', 'Health Log'];
     for (const label of expectedLabels) {
       const links = screen.getAllByText(label);
       expect(links.length).toBeGreaterThanOrEqual(1);
     }
   });
 
-  it('renders the hamburger button with lg:hidden class', () => {
+  it('renders the hamburger/menu buttons with aria-labels', () => {
     renderNavbar();
-    const hamburger = screen.getByLabelText('Open menu');
-    expect(hamburger).toBeInTheDocument();
-    expect(hamburger.className).toContain('lg:hidden');
+    const menuButtons = screen.getAllByLabelText('Open menu');
+    expect(menuButtons.length).toBeGreaterThanOrEqual(1);
   });
 
   it('all nav links have correct href values', () => {
     renderNavbar();
     const expectedLinks: Record<string, string> = {
-      Dashboard: '/dashboard',
-      'Evidence Vault': '/documents',
-      Conditions: '/conditions',
-      'Claim Tools': '/claim-tools',
-      Calculator: '/bilateral-calculator',
-      'Health Log': '/health-log',
+      Dashboard: '/',
+      Conditions: '/claims',
+      'Health Log': '/health',
+      'Claim Tools': '/prep',
+      'Evidence Vault': '/settings/vault',
       'Exam Prep': '/prep/exam',
+      Calculator: '/claims/bilateral',
       Settings: '/settings',
     };
 

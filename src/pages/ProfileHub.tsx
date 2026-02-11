@@ -61,7 +61,7 @@ export default function ProfileHub() {
             )}
           </div>
           <button
-            onClick={() => navigate('/profile/edit')}
+            onClick={() => navigate('/settings/edit-profile')}
             className="p-2 rounded-lg hover:bg-accent transition-colors"
           >
             <Pencil className="h-4 w-4 text-muted-foreground" />
@@ -71,11 +71,11 @@ export default function ProfileHub() {
 
       {/* Group 2: Service & Claims */}
       <div className="rounded-xl border border-border bg-card overflow-hidden divide-y divide-border">
-        <ProfileRow icon={Shield} label="Service History" route="/profile/service-history" />
-        <ProfileRow icon={FolderOpen} label="Document Vault" route="/profile/vault" />
-        <ProfileRow icon={Route} label="Claim Journey" route="/profile/journey" />
-        <ProfileRow icon={FileCheck} label="Intent to File" route="/profile/itf" />
-        <ProfileRow icon={Clock} label="Medical Timeline" route="/profile/timeline" />
+        <ProfileRow icon={Shield} label="Service History" route="/settings/service-history" />
+        <ProfileRow icon={FolderOpen} label="Document Vault" route="/settings/vault" />
+        <ProfileRow icon={Route} label="Claim Journey" route="/settings/journey" />
+        <ProfileRow icon={FileCheck} label="Intent to File" route="/settings/itf" />
+        <ProfileRow icon={Clock} label="Medical Timeline" route="/settings/timeline" />
       </div>
 
       {/* Group 3: Settings */}
@@ -88,30 +88,30 @@ export default function ProfileHub() {
           <ThemeToggle />
         </div>
         <div className="border-t border-border">
-          <ProfileRow icon={Settings} label="All Settings" route="/profile/settings" />
+          <ProfileRow icon={Settings} label="All Settings" route="/settings/settings" />
         </div>
       </div>
 
       {/* Group 4: Resources */}
       <div className="rounded-xl border border-border bg-card overflow-hidden divide-y divide-border">
-        <ProfileRow icon={HelpCircle} label="Help Center" route="/profile/help" />
-        <ProfileRow icon={MessageSquare} label="FAQ" route="/profile/faq" />
-        <ProfileRow icon={BookOpen} label="Glossary" route="/profile/glossary" />
-        <ProfileRow icon={Globe} label="VA Resources" route="/profile/resources" />
+        <ProfileRow icon={HelpCircle} label="Help Center" route="/settings/help" />
+        <ProfileRow icon={MessageSquare} label="FAQ" route="/settings/faq" />
+        <ProfileRow icon={BookOpen} label="Glossary" route="/settings/glossary" />
+        <ProfileRow icon={Globe} label="VA Resources" route="/settings/resources" />
       </div>
 
       {/* Group 5: Legal */}
       <div className="rounded-xl border border-border bg-card overflow-hidden divide-y divide-border">
-        <ProfileRow icon={Info} label="About VCS" route="/profile/about" />
-        <ProfileRow icon={FileText} label="Terms of Service" route="/profile/terms" />
-        <ProfileRow icon={Lock} label="Privacy Policy" route="/profile/privacy" />
-        <ProfileRow icon={AlertTriangle} label="Disclaimer" route="/profile/disclaimer" />
+        <ProfileRow icon={Info} label="About VCS" route="/settings/about" />
+        <ProfileRow icon={FileText} label="Terms of Service" route="/settings/terms" />
+        <ProfileRow icon={Lock} label="Privacy Policy" route="/settings/privacy" />
+        <ProfileRow icon={AlertTriangle} label="Disclaimer" route="/settings/disclaimer" />
       </div>
 
       {/* Group 6: Account */}
       <div className="rounded-xl border border-border bg-card overflow-hidden divide-y divide-border">
-        <ProfileRow icon={Download} label="Export Data" route="/profile/export-data" />
-        <ProfileRow icon={Trash2} label="Delete Account" route="/profile/delete-account" danger />
+        <ProfileRow icon={Download} label="Export Data" route="/settings/export-data" />
+        <ProfileRow icon={Trash2} label="Delete Account" route="/settings/delete-account" danger />
       </div>
     </div>
   );

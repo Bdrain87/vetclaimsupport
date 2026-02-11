@@ -333,7 +333,7 @@ export const ClaimIntelligence = {
           'Start by adding the conditions you plan to claim. This drives all evidence recommendations and form guidance.',
         priority: 'urgent',
         category: 'conditions',
-        actionRoute: '/conditions',
+        actionRoute: '/claims',
       });
     }
 
@@ -359,7 +359,7 @@ export const ClaimIntelligence = {
           'You have not logged any symptoms in the past 30 days. Regular logging strengthens your claim by documenting severity and frequency.',
         priority: 'high',
         category: 'logging',
-        actionRoute: '/log',
+        actionRoute: '/health/symptoms',
       });
     }
 
@@ -383,7 +383,7 @@ export const ClaimIntelligence = {
             `No claim builder entry found for "${condName}". Create one and link medical visits, exposures, and buddy statements.`,
           priority: 'high',
           category: 'evidence',
-          actionRoute: '/claim-builder',
+          actionRoute: '/claims/checklist',
         });
         continue;
       }
@@ -403,7 +403,7 @@ export const ClaimIntelligence = {
             `"${condName}" only has ${evidenceCount} linked evidence item${evidenceCount === 1 ? '' : 's'}. Aim for at least 3 (medical visits, symptoms, buddy statements).`,
           priority: evidenceCount === 0 ? 'urgent' : 'medium',
           category: 'evidence',
-          actionRoute: '/claim-builder',
+          actionRoute: '/claims/checklist',
         });
       }
     }
@@ -417,7 +417,7 @@ export const ClaimIntelligence = {
           'Buddy statements are one of the strongest forms of lay evidence. Add at least one person who can attest to your conditions.',
         priority: 'medium',
         category: 'statements',
-        actionRoute: '/buddy-contacts',
+        actionRoute: '/prep/buddy-statement',
       });
     }
 
@@ -437,7 +437,7 @@ export const ClaimIntelligence = {
           description: `Missing profile info: ${missing.join(', ')}. A complete profile enables service-based condition recommendations.`,
           priority: missing.includes('onboarding') ? 'high' : 'low',
           category: 'profile',
-          actionRoute: '/profile',
+          actionRoute: '/settings',
         });
       }
     }

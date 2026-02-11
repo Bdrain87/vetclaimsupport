@@ -8,7 +8,7 @@ let syncInterval: ReturnType<typeof setInterval> | null = null;
 let currentStatus: SyncStatus = 'offline';
 let lastSyncedAt: string | null = null;
 const statusListeners = new Set<(status: SyncStatus) => void>();
-const SYNC_DEBOUNCE_MS = 5000;
+const SYNC_DEBOUNCE_MS = 60000; // 60 seconds — avoid hammering the server
 
 function notifyListeners() {
   statusListeners.forEach((fn) => fn(currentStatus));
@@ -224,6 +224,7 @@ export async function syncNow(): Promise<void> {
 
   try {
     setStatus('syncing');
+    await pullFromCloud();
     await pushToCloud();
     setStatus('synced');
   } catch (err) {

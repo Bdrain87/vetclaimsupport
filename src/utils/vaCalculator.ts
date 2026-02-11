@@ -76,41 +76,52 @@ export function calculateVARating(ratings: RatingEntry[]): CalculationResult {
     }
   }
 
-  // Calculate combined rating using VA math
+  // Per 38 CFR § 4.25/4.26: Bilateral conditions are combined first using VA math,
+  // then the 10% bilateral factor is applied, and the result is combined with all
+  // non-bilateral ratings using the standard VA whole-person method.
+
+  // Build a list of effective ratings: bilateral combined values + non-bilateral ratings
+  const effectiveRatings: { rating: number; description: string }[] = [];
+
+  // Add bilateral combined values (with 10% factor already applied)
+  for (const pair of bilateralPairs) {
+    const combined = combineTwoRatings(pair[0].rating, pair[1].rating);
+    const withFactor = Math.round(combined * 1.1);
+    effectiveRatings.push({
+      rating: withFactor,
+      description: `Bilateral: ${pair[0].condition} + ${pair[1].condition} (${withFactor}%)`,
+    });
+  }
+
+  // Add non-bilateral ratings
+  for (const rating of sortedRatings) {
+    if (bilateralConditionIds.has(rating.id)) continue;
+    effectiveRatings.push({
+      rating: rating.rating,
+      description: `${rating.condition} (${rating.rating}%)`,
+    });
+  }
+
+  // Sort all effective ratings from highest to lowest
+  effectiveRatings.sort((a, b) => b.rating - a.rating);
+
+  // Combine using VA whole-person method
   let efficiency = 100;
 
-  for (let i = 0; i < sortedRatings.length; i++) {
-    const rating = sortedRatings[i];
-
-    // Skip if part of bilateral pair already calculated
-    if (bilateralConditionIds.has(rating.id)) {
-      continue;
-    }
-
-    const disability = (rating.rating / 100) * efficiency;
+  for (const entry of effectiveRatings) {
+    const disability = (entry.rating / 100) * efficiency;
     const newEfficiency = efficiency - disability;
 
     steps.push({
-      description: `${rating.condition} (${rating.rating}%)`,
-      calculation: `${rating.rating}% × ${efficiency.toFixed(1)}% remaining = ${disability.toFixed(1)}% disability`,
+      description: entry.description,
+      calculation: `${entry.rating}% × ${efficiency.toFixed(1)}% remaining = ${disability.toFixed(1)}% disability`,
       result: Number((100 - newEfficiency).toFixed(1))
     });
 
     efficiency = newEfficiency;
   }
 
-  // If there were bilateral conditions, factor them in
-  let combinedRating = 100 - efficiency;
-  if (hasBilateral) {
-    // Add bilateral ratings to combined using VA math
-    for (const pair of bilateralPairs) {
-      const combined = combineTwoRatings(pair[0].rating, pair[1].rating);
-      const withFactor = Math.round(combined * 1.1);
-      const disability = (withFactor / 100) * efficiency;
-      efficiency -= disability;
-    }
-    combinedRating = 100 - efficiency;
-  }
+  const combinedRating = 100 - efficiency;
 
   const roundedRating = Math.round(combinedRating / 10) * 10;
 
@@ -262,37 +273,19 @@ export function formatRating(rating: number): string {
 
 /**
  * Calculate what the next condition needs to be rated at
- * to reach a target combined rating
+ * to reach a target combined rating.
+ * VA ratings are always in increments of 10, so we check each valid tier.
  */
 export function ratingNeededForTarget(
   currentRatings: number[],
   targetRating: number
 ): number | null {
-  if (targetRating > 100) return null;
-  if (targetRating < 0) return null;
+  if (targetRating > 100 || targetRating < 0) return null;
 
-  // Binary search for the needed rating
-  let low = 0;
-  let high = 100;
+  // Check if we already meet the target
+  if (simpleVAMath(currentRatings) >= targetRating) return 0;
 
-  while (low <= high) {
-    const mid = Math.floor((low + high) / 2);
-    const combined = simpleVAMath([...currentRatings, mid]);
-
-    if (combined === targetRating) {
-      // Found exact match, try to find minimum
-      if (mid === 0 || simpleVAMath([...currentRatings, mid - 10]) < targetRating) {
-        return mid;
-      }
-      high = mid - 1;
-    } else if (combined < targetRating) {
-      low = mid + 1;
-    } else {
-      high = mid - 1;
-    }
-  }
-
-  // Return the minimum rating that achieves target
+  // VA ratings are in increments of 10, so iterate valid tiers
   for (let rating = 10; rating <= 100; rating += 10) {
     if (simpleVAMath([...currentRatings, rating]) >= targetRating) {
       return rating;

@@ -12,28 +12,35 @@ let dbPromise: Promise<IDBDatabase> | null = null;
 
 function openDB(): Promise<IDBDatabase> {
   if (dbPromise) return dbPromise;
-  
-  dbPromise = new Promise((resolve, reject) => {
+
+  dbPromise = new Promise<IDBDatabase>((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
-    
+
     request.onerror = () => {
       console.error('Failed to open IndexedDB:', request.error);
+      // Clear the cached promise so future calls can retry
+      dbPromise = null;
       reject(request.error);
     };
-    
+
     request.onsuccess = () => {
-      resolve(request.result);
+      const db = request.result;
+      // Handle unexpected closure (e.g., storage cleared while app is running)
+      db.onclose = () => {
+        dbPromise = null;
+      };
+      resolve(db);
     };
-    
+
     request.onupgradeneeded = (event) => {
       const db = (event.target as IDBOpenDBRequest).result;
-      
+
       if (!db.objectStoreNames.contains(STORE_NAME)) {
         db.createObjectStore(STORE_NAME, { keyPath: 'id' });
       }
     };
   });
-  
+
   return dbPromise;
 }
 

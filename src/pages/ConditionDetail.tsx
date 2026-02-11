@@ -683,7 +683,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                 {ratingCriteria.ratingLevels.map(level => (
                   <Card
                     key={level.percentage}
-                    className={userCondition.rating === level.percentage ? 'border-primary' : ''}
+                    className={userCondition?.rating === level.percentage ? 'border-primary' : ''}
                   >
                     <CardHeader className="pb-2">
                       <CardTitle className="text-lg flex items-center gap-2">
@@ -697,7 +697,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                         >
                           {level.percentage}%
                         </Badge>
-                        {userCondition.rating === level.percentage && (
+                        {userCondition?.rating === level.percentage && (
                           <Badge variant="outline" className="text-xs">Current</Badge>
                         )}
                       </CardTitle>

@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { AI_CONFIG } from '@/lib/ai-prompts';
 
 export const useGemini = (persona: keyof typeof AI_CONFIG) => {
@@ -55,6 +55,13 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
 
   const cancel = useCallback(() => {
     abortControllerRef.current?.abort();
+  }, []);
+
+  // Clean up in-flight requests when the component unmounts
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort();
+    };
   }, []);
 
   return { generate, isLoading, cancel };

@@ -27,6 +27,8 @@ export function BottomTabBar() {
   return (
     <nav
       className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-xl border-t border-border/50"
+      aria-label="Main navigation"
+      role="tablist"
       style={{
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',
         paddingLeft: 'env(safe-area-inset-left, 0px)',
@@ -40,6 +42,9 @@ export function BottomTabBar() {
             <button
               key={tab.to}
               onClick={() => navigate(tab.to)}
+              role="tab"
+              aria-selected={isActive}
+              aria-label={tab.label}
               className={cn(
                 'flex flex-col items-center justify-center gap-0.5',
                 'flex-1 h-full',
