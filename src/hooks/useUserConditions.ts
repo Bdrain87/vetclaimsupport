@@ -36,7 +36,7 @@ export function useUserConditions() {
     (conditionId: string, options?: Partial<UserCondition>): UserCondition | null => {
       const vaCondition = getConditionById(conditionId);
       if (!vaCondition) {
-        console.warn(`Condition ${conditionId} not found in database`);
+        // Condition not found in database
         return null;
       }
 
@@ -44,14 +44,14 @@ export function useUserConditions() {
 
       const existingWithSameId = current.filter((c) => c.conditionId === conditionId);
       if (existingWithSameId.length > 0 && !options?.bodyPart) {
-        console.warn(`Condition ${conditionId} already added`);
+        // Condition already added
         return null;
       }
 
       if (options?.bodyPart) {
         const existingWithBodyPart = existingWithSameId.find((c) => c.bodyPart === options.bodyPart);
         if (existingWithBodyPart) {
-          console.warn(`Condition ${conditionId} with body part ${options.bodyPart} already added`);
+          // Condition with body part already added
           return null;
         }
       }

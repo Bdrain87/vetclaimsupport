@@ -57,7 +57,7 @@ export default function Dashboard() {
   const addDashboardQuickLog = useAppStore((s) => s.addDashboardQuickLog);
   const navigate = useNavigate();
 
-  const claimConditions = data.claimConditions || [];
+  const claimConditions = useMemo(() => data.claimConditions || [], [data.claimConditions]);
 
   // Intelligence Engine computations
   const readiness = useMemo(

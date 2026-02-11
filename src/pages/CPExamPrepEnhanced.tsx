@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Stethoscope,
@@ -115,10 +115,10 @@ export default function CPExamPrepEnhanced() {
     return names;
   }, [claimsData.claimConditions, userConditions, getConditionDetails]);
 
-  const isUserCondition = (conditionName: string) => {
+  const isUserCondition = useCallback((conditionName: string) => {
     const lower = conditionName.toLowerCase();
     return Array.from(userConditionNames).some(name => lower.includes(name) || name.includes(lower));
-  };
+  }, [userConditionNames]);
 
   const [selectedCondition, setSelectedCondition] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -146,7 +146,7 @@ export default function CPExamPrepEnhanced() {
     return examCategories.flatMap(cat =>
       cat.conditions.map(cond => ({ condition: cond, category: cat.name, isUserClaimed: isUserCondition(cond) }))
     );
-  }, [userConditionNames]);
+  }, [isUserCondition]);
 
   const filteredConditions = useMemo(() => {
     const base = !searchQuery.trim()
@@ -200,9 +200,9 @@ export default function CPExamPrepEnhanced() {
       // Parse questions from AI response
       const lines = result.split('\n').filter(line => {
         const trimmed = line.trim();
-        return trimmed.match(/^\d+[\.\)]\s/) || trimmed.startsWith('- ') || trimmed.startsWith('Q:');
+        return trimmed.match(/^\d+[.)]\s/) || trimmed.startsWith('- ') || trimmed.startsWith('Q:');
       });
-      const parsed = lines.map(l => l.replace(/^\d+[\.\)]\s*/, '').replace(/^-\s*/, '').replace(/^Q:\s*/, '').trim()).filter(Boolean);
+      const parsed = lines.map(l => l.replace(/^\d+[.)]\s*/, '').replace(/^-\s*/, '').replace(/^Q:\s*/, '').trim()).filter(Boolean);
       setAiQuestions(parsed.length > 0 ? parsed.slice(0, 10) : [result.slice(0, 500)]);
     }
   };

@@ -39,11 +39,81 @@ import { getRatingCriteriaByCondition, type RatingCriteria } from '@/data/vaReso
 import { getDBQByCondition, type DBQReference } from '@/data/vaResources/dbqReference';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { useProfileStore } from '@/store/useProfileStore';
+import useAppStore from '@/store/useAppStore';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { PageContainer } from '@/components/PageContainer';
 
 // Common ratings for selector
 const commonRatings = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+
+// Evidence checklist items
+const EVIDENCE_ITEMS = [
+  { name: 'Service Treatment Records (STRs)', required: true, description: 'Records from your time in service' },
+  { name: 'Post-service medical records', required: true, description: 'Civilian treatment records showing ongoing condition' },
+  { name: 'Current diagnosis from healthcare provider', required: true, description: 'Formal diagnosis of the condition' },
+  { name: 'Nexus letter / Doctor summary', required: true, description: 'Medical opinion linking condition to service' },
+  { name: 'Buddy/Lay statements', required: false, description: 'Statements from people who witnessed your condition' },
+  { name: 'Personal statement', required: false, description: 'Your account of symptoms and impact' },
+  { name: 'VA C&P exam scheduled/completed', required: false, description: 'Compensation & Pension examination' },
+  { name: 'Medication records', required: false, description: 'Records of prescriptions for this condition' },
+  { name: 'Symptom log entries', required: false, description: 'Logged symptom entries from the app' },
+  { name: 'Sleep log entries', required: false, description: 'Sleep tracking data if applicable' },
+];
+
+function EvidenceChecklistCard({ conditionId, conditionName, onNavigate }: { conditionId: string; conditionName: string; onNavigate: (path: string) => void }) {
+  const checkedItems = useAppStore((s) => s.conditionEvidenceChecks[conditionId] || []);
+  const toggleCheck = useAppStore((s) => s.toggleEvidenceCheck);
+
+  const completedCount = checkedItems.length;
+  const totalCount = EVIDENCE_ITEMS.length;
+  const progressPercent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-lg">Evidence Checklist</CardTitle>
+        <CardDescription>
+          Recommended evidence to support your claim for {conditionName}
+        </CardDescription>
+        <div className="mt-3 space-y-1">
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-muted-foreground">Evidence: {completedCount}/{totalCount} items</span>
+            <span className="font-medium">{progressPercent}%</span>
+          </div>
+          <Progress value={progressPercent} className="h-2" />
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-2">
+        {EVIDENCE_ITEMS.map((item) => {
+          const isChecked = checkedItems.includes(item.name);
+          return (
+            <button
+              key={item.name}
+              onClick={() => toggleCheck(conditionId, item.name)}
+              className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 w-full text-left hover:bg-muted/70 transition-colors"
+            >
+              <CheckCircle2 className={`h-5 w-5 mt-0.5 flex-shrink-0 transition-colors ${isChecked ? 'text-green-500' : 'text-muted-foreground/40'}`} />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className={`font-medium text-sm ${isChecked ? 'line-through text-muted-foreground' : ''}`}>{item.name}</span>
+                  {item.required && (
+                    <Badge variant="outline" className="text-xs flex-shrink-0">Required</Badge>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground mt-0.5">{item.description}</p>
+              </div>
+            </button>
+          );
+        })}
+
+        <Button variant="outline" className="w-full mt-4" onClick={() => onNavigate('/settings/vault')}>
+          <FileText className="h-4 w-4 mr-2" />
+          Go to Documents Hub
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
 
 export default function ConditionDetail() {
   const { id } = useParams<{ id: string }>();
@@ -58,7 +128,7 @@ export default function ConditionDetail() {
   } = useUserConditions();
 
   // Find the claim condition from the app store (for claimCondition ID lookups)
-  const claimConditions = data.claimConditions || [];
+  const claimConditions = useMemo(() => data.claimConditions || [], [data.claimConditions]);
   const claimCondition = useMemo(() => {
     return claimConditions.find(c => c.id === id);
   }, [claimConditions, id]);
@@ -821,41 +891,11 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
 
         {/* Evidence Tab */}
         <TabsContent value="evidence" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Evidence Checklist</CardTitle>
-              <CardDescription>
-                Recommended evidence to support your claim for {conditionDetails.abbreviation || conditionDetails.name}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {[
-                { name: 'Service Treatment Records', required: true, description: 'Records from your time in service' },
-                { name: 'Nexus Letter', required: true, description: 'Medical opinion linking condition to service' },
-                { name: 'Current Medical Records', required: true, description: 'Recent treatment records' },
-                { name: 'Buddy Statements', required: false, description: 'Statements from fellow service members' },
-                { name: 'Personal Statement', required: false, description: 'Your account of symptoms and impact' },
-              ].map((item, idx) => (
-                <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
-                  <CheckCircle2 className="h-5 w-5 text-muted-foreground mt-0.5" />
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-sm">{item.name}</span>
-                      {item.required && (
-                        <Badge variant="outline" className="text-xs">Required</Badge>
-                      )}
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-0.5">{item.description}</p>
-                  </div>
-                </div>
-              ))}
-
-              <Button variant="outline" className="w-full mt-4" onClick={() => navigate('/settings/vault')}>
-                <FileText className="h-4 w-4 mr-2" />
-                Go to Documents Hub
-              </Button>
-            </CardContent>
-          </Card>
+          <EvidenceChecklistCard
+            conditionId={id || ''}
+            conditionName={conditionDetails.abbreviation || conditionDetails.name}
+            onNavigate={navigate}
+          />
         </TabsContent>
 
         {/* C&P Exam Tab */}

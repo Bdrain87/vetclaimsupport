@@ -97,7 +97,7 @@ export default function Symptoms() {
 
   // Get user's claimed conditions for tagging
   const { conditions: userConditions } = useUserConditions();
-  const claimConditions = data.claimConditions || [];
+  const claimConditions = useMemo(() => data.claimConditions || [], [data.claimConditions]);
 
   const allConditionNames = useMemo(() => {
     const names = new Set<string>();

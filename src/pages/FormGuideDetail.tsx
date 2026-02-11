@@ -252,7 +252,8 @@ export default function FormGuideDetail() {
       formDef.fields.map((f) => ({ section: f.section, label: f.label, fieldId: f.fieldId })),
       drafts as Record<string, string>
     );
-  }, [formDef, formId, drafts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formDef, formId, formDrafts]);
 
   if (!formDef) {
     return (

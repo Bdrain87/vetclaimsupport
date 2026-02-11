@@ -207,14 +207,25 @@ export default function Conditions() {
     setShowAddDialog(false);
   }, [selectedCondition, newRating, isSecondary, linkedPrimaryId, addCondition]);
 
+  // Confirm remove state
+  const [removeTarget, setRemoveTarget] = useState<{ id: string; name: string } | null>(null);
+
   // Handle view/edit condition
   const handleViewCondition = (conditionId: string) => {
     navigate(`/claims/${conditionId}`);
   };
 
-  // Handle remove condition
+  // Handle remove condition (with confirmation)
   const handleRemoveCondition = (id: string) => {
-    removeCondition(id);
+    const details = getConditionDetails(userConditions.find(c => c.id === id)!);
+    setRemoveTarget({ id, name: details?.name || 'this condition' });
+  };
+
+  const confirmRemoveCondition = () => {
+    if (removeTarget) {
+      removeCondition(removeTarget.id);
+      setRemoveTarget(null);
+    }
   };
 
   return (
@@ -499,6 +510,21 @@ export default function Conditions() {
           </CardContent>
         </Card>
       )}
+      {/* Remove Condition Confirmation Dialog */}
+      <Dialog open={!!removeTarget} onOpenChange={(open) => { if (!open) setRemoveTarget(null); }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Remove Condition</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to remove {removeTarget?.name}? This will remove all associated evidence tracking for this condition.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setRemoveTarget(null)}>Cancel</Button>
+            <Button variant="destructive" onClick={confirmRemoveCondition}>Remove</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </PageContainer>
   );
 }

@@ -42,13 +42,13 @@ export function canAddHealthLog(currentCount: number): boolean {
 // Stub for future IAP integration
 export async function purchaseLifetime(): Promise<boolean> {
   // TODO: Integrate with RevenueCat / native IAP
-  console.warn('IAP not yet configured. This is a stub.');
+  // IAP not yet configured — stub
   return false;
 }
 
 // Stub for restore purchases
 export async function restorePurchases(): Promise<boolean> {
   // TODO: Integrate with RevenueCat
-  console.warn('Restore Purchases not yet configured. This is a stub.');
+  // Restore Purchases not yet configured — stub
   return false;
 }

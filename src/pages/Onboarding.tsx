@@ -289,7 +289,7 @@ export default function Onboarding() {
       case 10: return true;
       default: return true;
     }
-  }, [step, firstName, branch]);
+  }, [step, firstName, selectedBranches.length]);
 
   const handleNext = () => {
     if (step === 1 && !firstName.trim()) {
