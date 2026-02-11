@@ -209,7 +209,7 @@ function AnimatedRoutes() {
             <Route path="/settings/terms" element={<TermsOfServicePage />} />
             <Route path="/settings/disclaimer" element={<DisclaimerPage />} />
             <Route path="/settings/about" element={<AboutVCS />} />
-            <Route path="/settings/export-data" element={<ExportDataPage />} />
+            <Route path="/settings/export-data" element={<Navigate to="/settings" replace />} />
             <Route path="/settings/delete-account" element={<DeleteAccountPage />} />
 
             {/* === REDIRECTS FROM OLD ROUTES === */}
@@ -274,7 +274,7 @@ function AnimatedRoutes() {
             <Route path="/profile/terms" element={<Navigate to="/settings/terms" replace />} />
             <Route path="/profile/disclaimer" element={<Navigate to="/settings/disclaimer" replace />} />
             <Route path="/profile/about" element={<Navigate to="/settings/about" replace />} />
-            <Route path="/profile/export-data" element={<Navigate to="/settings/export-data" replace />} />
+            <Route path="/profile/export-data" element={<Navigate to="/settings" replace />} />
             <Route path="/profile/delete-account" element={<Navigate to="/settings/delete-account" replace />} />
 
             {/* === CATCH-ALL === */}

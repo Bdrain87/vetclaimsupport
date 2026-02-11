@@ -223,6 +223,9 @@ export default function Onboarding() {
   const [firstName, setFirstName] = useState(profileStore.firstName);
   const [lastName, setLastName] = useState(profileStore.lastName);
   const [branch, setBranch] = useState<Branch | ''>(profileStore.branch);
+  const [selectedBranches, setSelectedBranches] = useState<Branch[]>(
+    profileStore.branch ? [profileStore.branch] : []
+  );
   const [mosCode, setMosCode] = useState(profileStore.mosCode);
   const [mosTitle, setMosTitle] = useState(profileStore.mosTitle);
   const [addedConditions, setAddedConditions] = useState<string[]>([]);
@@ -275,7 +278,7 @@ export default function Onboarding() {
     switch (step) {
       case 0: return true;
       case 1: return firstName.trim().length > 0;
-      case 2: return branch !== '';
+      case 2: return selectedBranches.length > 0;
       case 3: return true;
       case 4: return true;
       case 5: return true;
@@ -330,6 +333,19 @@ export default function Onboarding() {
     if (branch) profileStore.setBranch(branch);
     if (mosCode) profileStore.setMOS(mosCode, mosTitle);
     if (claimGoal) profileStore.setClaimGoal(claimGoal);
+
+    // Save service periods from selected branches
+    const periods = selectedBranches.map((b, i) => ({
+      id: crypto.randomUUID(),
+      branch: b,
+      mos: i === 0 ? mosCode : '',
+      jobTitle: i === 0 ? mosTitle : '',
+      startDate: '',
+      endDate: '',
+    }));
+    if (periods.length > 0) {
+      profileStore.setServicePeriods(periods);
+    }
 
     for (const station of dutyStations) {
       appStore.addDutyStation(station);
@@ -446,7 +462,7 @@ export default function Onboarding() {
                 <div>
                   <h1 className="text-2xl font-bold text-white">Welcome to Vet Claim Support</h1>
                   <p className="text-white/50 mt-2 text-sm leading-relaxed">
-                    Built by veterans, for veterans.<br />
+                    Built by veterans, for service members &amp; veterans.<br />
                     Let&apos;s personalize your experience in under 2 minutes.
                   </p>
                 </div>
@@ -500,35 +516,48 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 2: Branch */}
+            {/* Step 2: Branch (Multi-select) */}
             {step === 2 && (
               <div className="space-y-5">
                 <div className="text-center">
-                  <h2 className="text-xl font-bold text-white">Which branch do you serve or did you serve in?</h2>
+                  <h2 className="text-xl font-bold text-white">Which branch(es) did you serve in?</h2>
+                  <p className="text-white/40 text-sm mt-1">Select all that apply</p>
                 </div>
                 <div className="space-y-2">
-                  {(Object.entries(BRANCH_LABELS) as [Branch, string][]).map(([key, label]) => (
-                    <button
-                      key={key}
-                      onClick={() => setBranch(key)}
-                      className={`w-full flex items-center gap-3 p-4 rounded-xl border transition-all ${
-                        branch === key
-                          ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40 text-white'
-                          : 'bg-white/[0.04] border-white/[0.08] text-white/70 hover:bg-white/[0.06]'
-                      }`}
-                    >
-                      <div
-                        className="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0"
-                        style={{ borderColor: branch === key ? '#3B82F6' : 'rgba(255,255,255,0.2)' }}
+                  {(Object.entries(BRANCH_LABELS) as [Branch, string][]).map(([key, label]) => {
+                    const isSelected = selectedBranches.includes(key);
+                    return (
+                      <button
+                        key={key}
+                        onClick={() => {
+                          setSelectedBranches(prev => {
+                            const next = prev.includes(key)
+                              ? prev.filter(b => b !== key)
+                              : [...prev, key];
+                            // Set primary branch to first selected
+                            setBranch(next.length > 0 ? next[0] : '');
+                            return next;
+                          });
+                        }}
+                        className={`w-full flex items-center gap-3 p-4 rounded-xl border transition-all ${
+                          isSelected
+                            ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40 text-white'
+                            : 'bg-white/[0.04] border-white/[0.08] text-white/70 hover:bg-white/[0.06]'
+                        }`}
                       >
-                        {branch === key && (
-                          <div className="w-2.5 h-2.5 rounded-full bg-[#3B82F6]" />
-                        )}
-                      </div>
-                      <div className="w-2 h-8 rounded-sm shrink-0" style={{ background: BRANCH_COLORS[key] }} />
-                      <span className="font-medium text-sm">{label}</span>
-                    </button>
-                  ))}
+                        <div
+                          className="w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0"
+                          style={{ borderColor: isSelected ? '#3B82F6' : 'rgba(255,255,255,0.2)', background: isSelected ? '#3B82F6' : 'transparent' }}
+                        >
+                          {isSelected && (
+                            <Check className="w-3 h-3 text-white" />
+                          )}
+                        </div>
+                        <div className="w-2 h-8 rounded-sm shrink-0" style={{ background: BRANCH_COLORS[key] }} />
+                        <span className="font-medium text-sm">{label}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -990,22 +1019,27 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 9: Tab Tour Cards */}
+            {/* Step 9: Feature Showcase */}
             {step === 9 && (
               <div className="space-y-5">
                 <div className="text-center">
                   <h2 className="text-xl font-bold text-white">Here's what's inside</h2>
-                  <p className="text-white/40 text-sm mt-1">A quick overview of your tools</p>
+                  <p className="text-white/40 text-sm mt-1">Tools built to help you prepare your claim</p>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-2 max-h-[50vh] overflow-y-auto pr-1">
                   {[
-                    { icon: '🛡️', title: 'Claims', desc: 'Track your conditions, ratings, and evidence' },
-                    { icon: '❤️', title: 'Health', desc: 'Log symptoms, pain, sleep, and medications daily' },
-                    { icon: '📖', title: 'Prep', desc: 'Tools to prepare for exams, fill forms, and build statements' },
-                    { icon: '⚙️', title: 'Settings', desc: 'Export your data, manage your account, and more' },
+                    { title: 'Rating Calculator', desc: 'Calculate your combined VA disability rating using the bilateral factor formula' },
+                    { title: 'C&P Exam Prep', desc: 'Prepare for your compensation exam with condition-specific checklists' },
+                    { title: 'Personal Statement Generator', desc: 'Build a compelling personal statement step-by-step' },
+                    { title: 'Doctor Summary Builder', desc: 'Create a medical summary letter for your provider' },
+                    { title: 'Symptom & Sleep Tracking', desc: 'Log symptoms, sleep patterns, and medications to build your evidence trail' },
+                    { title: 'Buddy Statement Builder', desc: 'Draft lay statements from people who witnessed your condition' },
+                    { title: 'VA-Speak Translator', desc: 'Translate VA jargon and acronyms into plain English' },
+                    { title: 'Back Pay Estimator', desc: 'Estimate your potential retroactive compensation' },
+                    { title: 'Condition Explorer', desc: 'Discover conditions related to your MOS with rating criteria breakdowns' },
                   ].map((card) => (
-                    <div key={card.title} className="flex items-center gap-4 p-4 rounded-xl bg-white/[0.04] border border-white/[0.08]">
-                      <span className="text-2xl flex-shrink-0">{card.icon}</span>
+                    <div key={card.title} className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.04] border border-white/[0.08]">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] mt-1.5 flex-shrink-0" />
                       <div className="flex-1 min-w-0">
                         <p className="text-white font-semibold text-sm">{card.title}</p>
                         <p className="text-white/40 text-xs mt-0.5">{card.desc}</p>
