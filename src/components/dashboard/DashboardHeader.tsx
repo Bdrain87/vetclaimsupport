@@ -102,7 +102,7 @@ export function DashboardHeader() {
         {/* Share dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon" className="h-11 w-11 min-h-[44px] min-w-[44px]">
+            <Button variant="outline" size="icon" className="h-11 w-11 min-h-[44px] min-w-[44px]" aria-label="Share evidence summary">
               <Share className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>

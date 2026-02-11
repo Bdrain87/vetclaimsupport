@@ -992,11 +992,11 @@ export function SpineSymptomLogger() {
                     </div>
                     <div className="flex gap-2">
                       {spineData && (
-                        <Button variant="ghost" size="icon" onClick={() => handleEdit(symptom)}>
+                        <Button variant="ghost" size="icon" onClick={() => handleEdit(symptom)} aria-label="Edit spine symptom">
                           <Edit className="h-4 w-4" />
                         </Button>
                       )}
-                      <Button variant="ghost" size="icon" onClick={() => deleteSymptom(symptom.id)}>
+                      <Button variant="ghost" size="icon" onClick={() => deleteSymptom(symptom.id)} aria-label="Delete spine symptom">
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
                     </div>

@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { AI_CONFIG } from '@/lib/ai-prompts';
 import { supabase } from '@/lib/supabase';
+import { sanitizePHI } from '@/utils/phiSanitizer';
 
 export const useGemini = (persona: keyof typeof AI_CONFIG) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,9 +15,10 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
 
     setIsLoading(true);
     try {
+      const sanitizedInput = sanitizePHI(input);
       const { data, error } = await supabase.functions.invoke('analyze-disabilities', {
         body: {
-          prompt: `${AI_CONFIG[persona]}\n\nInput: ${input}`,
+          prompt: `${AI_CONFIG[persona]}\n\nInput: ${sanitizedInput}`,
         },
       });
 

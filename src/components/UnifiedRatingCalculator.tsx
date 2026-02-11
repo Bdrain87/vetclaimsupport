@@ -799,6 +799,7 @@ export function UnifiedRatingCalculator() {
                           size="icon"
                           className="h-8 w-8 text-muted-foreground hover:text-destructive"
                           onClick={() => removeCondition(condition.id)}
+                          aria-label="Remove condition"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -912,6 +913,7 @@ export function UnifiedRatingCalculator() {
                             size="icon"
                             className="h-8 w-8 text-muted-foreground hover:text-destructive"
                             onClick={() => removeDependent(dependent.id)}
+                            aria-label="Remove dependent"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>

@@ -414,6 +414,7 @@ export function RatingCalculator() {
                     size="icon"
                     onClick={() => removeCondition(condition.id)}
                     className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                    aria-label="Remove condition"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>

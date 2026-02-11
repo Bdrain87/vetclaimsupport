@@ -9,6 +9,8 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { LiabilityAcceptanceScreen } from './components/legal/LiabilityAcceptanceScreen';
 import { useProfileStore } from './store/useProfileStore';
 import { migrateOldDataToAppStore } from './utils/migrateData';
+import { useSessionTimeout } from './hooks/useSessionTimeout';
+import { checkDataRetention } from './utils/dataRetention';
 
 // Run migration before React renders (synchronous, runs once)
 migrateOldDataToAppStore();
@@ -71,7 +73,7 @@ const DisclaimerPage = lazy(() => import('./pages/legal/DisclaimerPage'));
 
 function LoadingFallback() {
   return (
-    <div className="min-h-[100dvh] flex items-center justify-center bg-[#102039]">
+    <div className="min-h-[100dvh] flex items-center justify-center bg-[#102039]" role="status" aria-label="Loading application">
       <motion.div
         className="flex flex-col items-center gap-6"
         initial={{ opacity: 0, scale: 0.9 }}
@@ -80,7 +82,7 @@ function LoadingFallback() {
       >
         <div className="relative">
           <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#3B82F6] to-[#1D4ED8] flex items-center justify-center shadow-lg shadow-[#3B82F6]/20">
-            <span className="text-[#102039] text-4xl font-bold">V</span>
+            <span className="text-[#102039] text-4xl font-bold" aria-hidden="true">V</span>
           </div>
           <motion.div
             className="absolute inset-0 rounded-2xl border-2 border-[#3B82F6]/30"
@@ -92,7 +94,7 @@ function LoadingFallback() {
           <h1 className="text-white text-lg font-semibold tracking-wide">VCS</h1>
           <p className="text-white/40 text-xs mt-1">Claim Preparation Tools</p>
         </div>
-        <div className="w-32 h-0.5 bg-white/10 rounded-full overflow-hidden">
+        <div className="w-32 h-0.5 bg-white/10 rounded-full overflow-hidden" aria-hidden="true">
           <motion.div
             className="h-full bg-[#3B82F6] rounded-full"
             animate={{ x: ['-100%', '100%'] }}
@@ -287,6 +289,12 @@ function AnimatedRoutes() {
 }
 
 function App() {
+  useSessionTimeout();
+
+  useEffect(() => {
+    checkDataRetention();
+  }, []);
+
   return (
     <ErrorBoundary>
       <ThemeProvider>
@@ -294,9 +302,15 @@ function App() {
           <BrowserRouter>
             <ScrollToTop />
             <div className="min-h-[100dvh] bg-background text-foreground overflow-x-hidden break-words">
+              <a
+                href="#main-content"
+                className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:text-sm focus:font-medium"
+              >
+                Skip to main content
+              </a>
               <LiabilityAcceptanceScreen />
               <MobileHeader />
-              <main className="pt-14 pb-20 overflow-x-hidden">
+              <main id="main-content" className="pt-14 pb-20 overflow-x-hidden">
                 <AnimatedRoutes />
               </main>
               <BottomTabBar />

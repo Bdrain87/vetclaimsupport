@@ -195,7 +195,7 @@ export function SecondaryConditionSuggestions({
         })}
       </div>
 
-      <p className="text-[10px] text-muted-foreground text-center">
+      <p className="text-xs text-muted-foreground text-center">
         Secondary conditions affect different body systems (38 CFR 4.14 compliant)
       </p>
     </div>

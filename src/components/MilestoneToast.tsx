@@ -56,6 +56,7 @@ export function MilestoneToast({ milestone, onClose, autoClose = 5000 }: Milesto
           size="icon"
           className="absolute top-2 right-2 h-8 w-8 text-white/80 hover:text-white hover:bg-white/20"
           onClick={onClose}
+          aria-label="Close milestone notification"
         >
           <X className="h-4 w-4" />
         </Button>

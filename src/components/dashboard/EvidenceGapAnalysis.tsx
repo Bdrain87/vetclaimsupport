@@ -282,26 +282,27 @@ export function EvidenceGapAnalysis({ condition, data }: EvidenceGapAnalysisProp
           <span className={`text-sm font-bold ${getScoreColor(analysis.score)}`}>
             {analysis.score}%
           </span>
-          <span className="text-[10px] text-muted-foreground">complete</span>
+          <span className="text-xs text-muted-foreground">complete</span>
         </div>
       </div>
 
       {/* Progress Bar */}
-      <Progress 
-        value={analysis.score} 
+      <Progress
+        value={analysis.score}
         className={`h-1.5 ${getProgressBg(analysis.score)}`}
+        aria-label={`Evidence completeness: ${analysis.score}%`}
       />
 
       {/* Critical Missing Alert */}
       {analysis.criticalMissing.length > 0 && (
-        <div className="bg-destructive/10 border border-destructive/30 rounded-md p-2">
-          <p className="text-[10px] font-medium text-destructive flex items-center gap-1">
+        <div className="bg-destructive/10 border border-destructive/30 rounded-md p-2" role="alert">
+          <p className="text-xs font-medium text-destructive flex items-center gap-1">
             <AlertTriangle className="h-3 w-3" />
             Missing Critical Evidence:
           </p>
           <ul className="mt-1 space-y-0.5">
             {analysis.criticalMissing.map(item => (
-              <li key={item.id} className="text-[10px] text-destructive/80 ml-4">
+              <li key={item.id} className="text-xs text-destructive/80 ml-4">
                 • {item.label}
               </li>
             ))}
@@ -344,7 +345,7 @@ export function EvidenceGapAnalysis({ condition, data }: EvidenceGapAnalysisProp
                   </span>
                 )}
               </p>
-              <p className="text-[10px] text-muted-foreground">
+              <p className="text-xs text-muted-foreground">
                 {item.description}
                 {item.result.count !== undefined && (
                   <span className="ml-1">

@@ -73,7 +73,7 @@ export default function ExportDataPage() {
           >
             <FileJson className={`h-8 w-8 ${format === 'json' ? 'text-[#3B82F6]' : 'text-muted-foreground/70'}`} />
             <span className={`text-sm font-medium ${format === 'json' ? 'text-foreground' : 'text-muted-foreground'}`}>JSON</span>
-            <span className="text-[10px] text-muted-foreground/70">Machine-readable</span>
+            <span className="text-xs text-muted-foreground/70">Machine-readable</span>
           </button>
 
           <button
@@ -86,7 +86,7 @@ export default function ExportDataPage() {
           >
             <FileText className={`h-8 w-8 ${format === 'pdf' ? 'text-[#3B82F6]' : 'text-muted-foreground/70'}`} />
             <span className={`text-sm font-medium ${format === 'pdf' ? 'text-foreground' : 'text-muted-foreground'}`}>PDF</span>
-            <span className="text-[10px] text-muted-foreground/70">Human-readable</span>
+            <span className="text-xs text-muted-foreground/70">Human-readable</span>
           </button>
         </div>
       </div>

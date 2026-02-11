@@ -835,15 +835,17 @@ export default function DocumentsHub() {
                               }
                             }}
                             disabled={(doc.count || 0) === 0}
+                            aria-label="Decrease document count"
                           >
                             <Minus className="h-4 w-4" />
                           </Button>
-                          <div className="w-10 text-center font-mono">{doc.count || 0}</div>
+                          <div className="w-10 text-center font-mono" aria-label={`Document count: ${doc.count || 0}`}>{doc.count || 0}</div>
                           <Button
                             variant="outline"
                             size="icon"
                             className="h-10 w-10"
                             onClick={() => updateDocument(doc.id, { count: (doc.count || 0) + 1 })}
+                            aria-label="Increase document count"
                           >
                             <Plus className="h-4 w-4" />
                           </Button>

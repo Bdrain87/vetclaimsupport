@@ -809,7 +809,7 @@ function StatCard({ label, value, sub }: { label: string; value: string; sub?: s
     <div className="p-3 rounded-lg bg-muted/30 border border-border">
       <p className="text-xl font-bold text-foreground">{value}</p>
       <p className="text-xs text-muted-foreground">{label}</p>
-      {sub && <p className="text-[10px] text-muted-foreground/70">{sub}</p>}
+      {sub && <p className="text-xs text-muted-foreground/70">{sub}</p>}
     </div>
   );
 }

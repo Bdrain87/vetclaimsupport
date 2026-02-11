@@ -367,10 +367,10 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
                         </Badge>
                       </div>
                       <div className="flex gap-1">
-                        <Button variant="ghost" size="icon" onClick={() => handleEdit(entry)}>
+                        <Button variant="ghost" size="icon" onClick={() => handleEdit(entry)} aria-label="Edit PTSD symptom entry">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => deletePTSDSymptom(entry.id)}>
+                        <Button variant="ghost" size="icon" onClick={() => deletePTSDSymptom(entry.id)} aria-label="Delete PTSD symptom entry">
                           <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>
                       </div>

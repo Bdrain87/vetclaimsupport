@@ -32,7 +32,7 @@ const ProgressRing = React.forwardRef<HTMLDivElement, ProgressRingProps>(
 
     // Size configurations
     const sizeConfig = {
-      sm: { dimension: 64, stroke: 4, fontSize: 'text-sm', labelSize: 'text-[10px]' },
+      sm: { dimension: 64, stroke: 4, fontSize: 'text-sm', labelSize: 'text-xs' },
       md: { dimension: 96, stroke: 6, fontSize: 'text-xl', labelSize: 'text-xs' },
       lg: { dimension: 128, stroke: 8, fontSize: 'text-2xl', labelSize: 'text-sm' },
       xl: { dimension: 160, stroke: 10, fontSize: 'text-3xl', labelSize: 'text-base' },
@@ -113,6 +113,11 @@ const ProgressRing = React.forwardRef<HTMLDivElement, ProgressRingProps>(
     return (
       <div
         ref={ref}
+        role="progressbar"
+        aria-valuenow={Math.round(clampedValue)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={label ? `${label}: ${Math.round(clampedValue)}%` : `${Math.round(clampedValue)}%`}
         className={cn('relative inline-flex items-center justify-center', className)}
         style={{ width: config.dimension, height: config.dimension }}
         {...props}

@@ -249,7 +249,7 @@ export function AppSidebar() {
       </div>
 
       {/* Main Navigation */}
-      <nav className="flex-1 overflow-y-auto py-3 scrollbar-thin">
+      <nav aria-label="Sidebar navigation" className="flex-1 overflow-y-auto py-3 scrollbar-thin">
         {/* Dashboard */}
         <div className="px-2 mb-3">
           <NavLink
@@ -366,6 +366,7 @@ export function AppSidebar() {
           variant="ghost"
           size="sm"
           onClick={() => setCollapsed(!collapsed)}
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           className={cn(
             'w-full text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground min-h-[44px]',
             collapsed && 'px-2'

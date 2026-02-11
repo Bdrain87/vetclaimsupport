@@ -692,7 +692,7 @@ export default function Sleep() {
                 {estimatedRating.rating}
               </Badge>
             </div>
-            <p className="text-[10px] text-muted-foreground leading-relaxed">
+            <p className="text-xs text-muted-foreground leading-relaxed">
               For educational reference only. This is not a determination of benefits. Your actual rating will be decided by the VA based on your C&P exam and medical evidence.
             </p>
           </CardContent>

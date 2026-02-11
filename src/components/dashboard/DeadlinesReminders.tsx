@@ -361,6 +361,7 @@ export function DeadlinesReminders() {
                     size="icon"
                     className="h-7 w-7"
                     onClick={() => deleteDeadline(deadline.id)}
+                    aria-label="Delete deadline"
                   >
                     <Trash2 className="h-3.5 w-3.5 text-destructive" />
                   </Button>

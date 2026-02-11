@@ -217,6 +217,7 @@ export function DocumentUploader({ documents, category, onAdd, onDelete }: Docum
                     size="icon"
                     className="h-8 w-8"
                     onClick={() => setViewingDoc(doc)}
+                    aria-label="View document"
                   >
                     <Eye className="h-4 w-4" />
                   </Button>
@@ -225,6 +226,7 @@ export function DocumentUploader({ documents, category, onAdd, onDelete }: Docum
                     size="icon"
                     className="h-8 w-8"
                     onClick={() => onDelete(doc.id)}
+                    aria-label="Delete document"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>

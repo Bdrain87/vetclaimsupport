@@ -198,7 +198,7 @@ export default function Dashboard() {
         >
           <div className="flex items-center gap-4">
             <div className="relative w-16 h-16 flex-shrink-0">
-              <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+              <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90" role="img" aria-label={`Combined VA rating: ${combinedRating} percent`}>
                 <circle
                   cx="18" cy="18" r="15" fill="none"
                   stroke="currentColor" className="text-muted/30"
@@ -337,6 +337,8 @@ export default function Dashboard() {
                       'w-2.5 h-2.5 rounded-full flex-shrink-0',
                       score >= 75 ? 'bg-emerald-500' : score >= 50 ? 'bg-blue-500' : 'bg-muted-foreground/40'
                     )}
+                    role="img"
+                    aria-label={score >= 75 ? 'Strong evidence' : score >= 50 ? 'Moderate evidence' : 'Needs more evidence'}
                   />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-foreground truncate">{condition.name}</p>
@@ -438,7 +440,7 @@ export default function Dashboard() {
                   <div className="min-w-0 flex-1 mr-3">
                     <p className="text-sm font-medium text-foreground truncate">{rec.conditionName}</p>
                     {diagCode && (
-                      <p className="text-[10px] text-muted-foreground">DC {diagCode}</p>
+                      <p className="text-xs text-muted-foreground">DC {diagCode}</p>
                     )}
                     <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{rec.reason}</p>
                   </div>
@@ -559,8 +561,9 @@ export default function Dashboard() {
           <div className="space-y-3">
             {/* Date Selector */}
             <div className="space-y-1.5">
-              <span className="text-xs text-muted-foreground">Date</span>
+              <label htmlFor="quick-log-date" className="text-xs text-muted-foreground">Date</label>
               <Input
+                id="quick-log-date"
                 type="date"
                 value={logDate}
                 onChange={(e) => setLogDate(e.target.value)}
@@ -570,9 +573,9 @@ export default function Dashboard() {
 
             {/* Condition Selector */}
             <div className="space-y-1.5">
-              <span className="text-xs text-muted-foreground">Condition</span>
+              <label htmlFor="quick-log-condition" className="text-xs text-muted-foreground">Condition</label>
               <Select value={logCondition} onValueChange={setLogCondition}>
-                <SelectTrigger className="h-10">
+                <SelectTrigger className="h-10" id="quick-log-condition" aria-label="Condition">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -592,7 +595,7 @@ export default function Dashboard() {
             {/* Pain Slider */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs text-muted-foreground">Pain Level</span>
+                <span id="pain-level-label" className="text-xs text-muted-foreground">Pain Level</span>
                 <span className="text-sm font-bold text-foreground">{painLevel}</span>
               </div>
               <Slider
@@ -602,15 +605,16 @@ export default function Dashboard() {
                 max={10}
                 step={1}
                 className="w-full"
+                aria-label={`Pain level: ${painLevel} out of 10`}
               />
-              <div className="flex justify-between text-[10px] text-muted-foreground">
+              <div className="flex justify-between text-xs text-muted-foreground" aria-hidden="true">
                 <span>1</span>
                 <span>10</span>
               </div>
             </div>
 
             {/* Mood Selector */}
-            <div className="space-y-2">
+            <div className="space-y-2" role="radiogroup" aria-label="Mood">
               <span className="text-xs text-muted-foreground">Mood</span>
               <div className="flex gap-2">
                 {([
@@ -620,6 +624,9 @@ export default function Dashboard() {
                 ]).map(({ mood, icon: Icon, label }) => (
                   <button
                     key={mood}
+                    role="radio"
+                    aria-checked={selectedMood === mood}
+                    aria-label={`Mood: ${label}`}
                     onClick={() => setSelectedMood(mood)}
                     className={cn(
                       'flex-1 flex flex-col items-center gap-1 py-2 rounded-lg border transition-colors min-h-[44px]',
@@ -629,7 +636,7 @@ export default function Dashboard() {
                     )}
                   >
                     <Icon className="h-5 w-5" />
-                    <span className="text-[10px] font-medium">{label}</span>
+                    <span className="text-xs font-medium">{label}</span>
                   </button>
                 ))}
               </div>
@@ -637,8 +644,9 @@ export default function Dashboard() {
 
             {/* Notes */}
             <div className="space-y-1.5">
-              <span className="text-xs text-muted-foreground">Notes (optional)</span>
+              <label htmlFor="quick-log-notes" className="text-xs text-muted-foreground">Notes (optional)</label>
               <Textarea
+                id="quick-log-notes"
                 value={logNotes}
                 onChange={(e) => setLogNotes(e.target.value)}
                 placeholder="Symptoms, triggers, activities affected..."

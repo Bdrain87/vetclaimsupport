@@ -23,6 +23,7 @@ import { useClaims } from '@/hooks/useClaims';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/lib/supabase';
 import { secondaryConditions } from '@/data/secondaryConditions';
+import { sanitizePHI } from '@/utils/phiSanitizer';
 
 // Common VA disability conditions with icons
 const COMMON_CONDITIONS = [
@@ -152,7 +153,8 @@ export function ConditionsExplorer({ claimConditions, onAddCondition }: Conditio
         `Exposures: ${data.exposures.map((e: { type?: string }) => e.type).filter(Boolean).join('; ')}`,
         `Medications: ${data.medications.map((m: { name?: string }) => m.name).filter(Boolean).join('; ')}`,
       ];
-      const prompt = `You are an expert VA disability claims analyst. Based on the following veteran health evidence, suggest VA disabilities they may qualify for. Respond in JSON with a "suggestions" array where each has: condition, category, evidenceStrength (Strong/Moderate/Weak), reasoning, supportingEvidence (array), additionalEvidence (array), typicalRating. Also include overallAssessment and priorityActions.\n\n${summaryParts.join('\n')}`;
+      const rawPrompt = `You are an expert VA disability claims analyst. Based on the following veteran health evidence, suggest VA disabilities they may qualify for. Respond in JSON with a "suggestions" array where each has: condition, category, evidenceStrength (Strong/Moderate/Weak), reasoning, supportingEvidence (array), additionalEvidence (array), typicalRating. Also include overallAssessment and priorityActions.\n\n${summaryParts.join('\n')}`;
+      const prompt = sanitizePHI(rawPrompt);
 
       const { data: responseData, error: invokeError } = await supabase.functions.invoke('analyze-disabilities', {
         body: { prompt }

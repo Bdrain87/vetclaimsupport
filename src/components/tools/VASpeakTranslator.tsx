@@ -279,6 +279,7 @@ export function VASpeakTranslator() {
                         size="icon"
                         className="h-5 w-5 ml-0.5"
                         onClick={() => handleRemoveEntry(e.id)}
+                        aria-label="Remove entry"
                       >
                         <Trash2 className="h-3 w-3" />
                       </Button>

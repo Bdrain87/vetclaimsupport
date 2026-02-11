@@ -79,17 +79,17 @@ export default function HealthHub() {
         <div className="grid grid-cols-3 gap-3 text-center">
           <div>
             <p className="text-lg font-bold text-foreground">{thirtyDayStats.totalSymptoms}</p>
-            <p className="text-[10px] text-muted-foreground">Symptom Entries</p>
+            <p className="text-xs text-muted-foreground">Symptom Entries</p>
           </div>
           <div>
             <p className="text-lg font-bold text-foreground">
               {thirtyDayStats.avgPain > 0 ? thirtyDayStats.avgPain : '--'}
             </p>
-            <p className="text-[10px] text-muted-foreground">Avg Pain Level</p>
+            <p className="text-xs text-muted-foreground">Avg Pain Level</p>
           </div>
           <div>
             <p className="text-lg font-bold text-foreground">{thirtyDayStats.flareUps}</p>
-            <p className="text-[10px] text-muted-foreground">Flare-Ups</p>
+            <p className="text-xs text-muted-foreground">Flare-Ups</p>
           </div>
         </div>
       </button>

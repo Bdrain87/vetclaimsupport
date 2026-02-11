@@ -384,7 +384,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
               <div className="flex gap-2">
                 <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
                   <DialogTrigger asChild>
-                    <Button variant="outline" size="icon" className="text-destructive">
+                    <Button variant="outline" size="icon" className="text-destructive" aria-label="Remove condition">
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </DialogTrigger>

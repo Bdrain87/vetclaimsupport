@@ -29,6 +29,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/lib/supabase';
+import { sanitizePHI } from '@/utils/phiSanitizer';
 import { exportClaimStrategy } from '@/utils/pdfExport';
 import { useClaims } from '@/hooks/useClaims';
 import { PageContainer } from '@/components/PageContainer';
@@ -303,8 +304,9 @@ Consider:
 - PACT Act benefits if applicable`;
 
     try {
+      const sanitizedPrompt = sanitizePHI(prompt);
       const { data: result, error: apiError } = await supabase.functions.invoke('analyze-disabilities', {
-        body: { prompt },
+        body: { prompt: sanitizedPrompt },
       });
 
       if (apiError) {
