@@ -23,6 +23,16 @@ export const BRANCH_COLORS: Record<Branch, string> = {
 
 export type ClaimGoal = 'initial' | 'increase' | 'secondary' | 'appeal' | 'exploring';
 
+export interface ServicePeriod {
+  id: string;
+  branch: Branch | '';
+  mos: string;
+  jobTitle: string;
+  startDate: string;
+  endDate: string;
+  dutyStation?: string;
+}
+
 export interface UserProfile {
   firstName: string;
   lastName: string;
@@ -31,6 +41,7 @@ export interface UserProfile {
   mosTitle: string;
   hasCompletedOnboarding: boolean;
   serviceDates?: { start: string; end: string };
+  servicePeriods: ServicePeriod[];
   claimType?: 'initial' | 'increase' | 'supplemental';
   claimGoal?: ClaimGoal;
   intentToFileFiled?: boolean;
@@ -47,6 +58,10 @@ interface ProfileState extends UserProfile {
   setBranch: (branch: Branch | '') => void;
   setMOS: (code: string, title: string) => void;
   setServiceDates: (dates: { start: string; end: string }) => void;
+  setServicePeriods: (periods: ServicePeriod[]) => void;
+  addServicePeriod: (period: ServicePeriod) => void;
+  updateServicePeriod: (id: string, updates: Partial<ServicePeriod>) => void;
+  removeServicePeriod: (id: string) => void;
   setClaimType: (type: 'initial' | 'increase' | 'supplemental') => void;
   setClaimGoal: (goal: ClaimGoal) => void;
   setIntentToFile: (filed: boolean, date?: string) => void;
@@ -68,6 +83,7 @@ export const useProfileStore = create<ProfileState>()(
       mosTitle: '',
       hasCompletedOnboarding: false,
       serviceDates: undefined,
+      servicePeriods: [],
       claimType: undefined,
       claimGoal: undefined,
       intentToFileFiled: undefined,
@@ -82,6 +98,18 @@ export const useProfileStore = create<ProfileState>()(
       setBranch: (branch) => set({ branch }),
       setMOS: (code, title) => set({ mosCode: code, mosTitle: title }),
       setServiceDates: (dates) => set({ serviceDates: dates }),
+      setServicePeriods: (periods) => set({ servicePeriods: periods }),
+      addServicePeriod: (period) => set((state) => ({
+        servicePeriods: [...state.servicePeriods, period],
+      })),
+      updateServicePeriod: (id, updates) => set((state) => ({
+        servicePeriods: state.servicePeriods.map((p) =>
+          p.id === id ? { ...p, ...updates } : p
+        ),
+      })),
+      removeServicePeriod: (id) => set((state) => ({
+        servicePeriods: state.servicePeriods.filter((p) => p.id !== id),
+      })),
       setClaimType: (type) => set({ claimType: type }),
       setClaimGoal: (goal) => set({ claimGoal: goal }),
       setIntentToFile: (filed, date) => set({ intentToFileFiled: filed, intentToFileDate: date }),
@@ -98,6 +126,7 @@ export const useProfileStore = create<ProfileState>()(
         mosTitle: '',
         hasCompletedOnboarding: false,
         serviceDates: undefined,
+        servicePeriods: [],
         claimType: undefined,
         claimGoal: undefined,
         intentToFileFiled: undefined,
@@ -110,7 +139,7 @@ export const useProfileStore = create<ProfileState>()(
     }),
     {
       name: 'vet-user-profile',
-      version: 3,
+      version: 4,
       migrate: (persistedState: unknown, version: number) => {
         const state = persistedState as Record<string, unknown>;
         if (version < 2) {
@@ -124,6 +153,7 @@ export const useProfileStore = create<ProfileState>()(
             entitlement: 'preview',
             vaultPasscodeSet: false,
             lastSyncedAt: null,
+            servicePeriods: [],
           };
         }
         if (version < 3) {
@@ -132,6 +162,31 @@ export const useProfileStore = create<ProfileState>()(
             entitlement: state.entitlement || 'preview',
             vaultPasscodeSet: state.vaultPasscodeSet ?? false,
             lastSyncedAt: state.lastSyncedAt ?? null,
+            servicePeriods: [],
+          };
+        }
+        if (version < 4) {
+          // Migrate from single MOS fields to servicePeriods array
+          const periods: ServicePeriod[] = [];
+          const branch = state.branch as string;
+          const mosCode = state.mosCode as string;
+          const mosTitle = state.mosTitle as string;
+          const serviceDates = state.serviceDates as { start: string; end: string } | undefined;
+
+          if (branch || mosCode) {
+            periods.push({
+              id: crypto.randomUUID(),
+              branch: (branch || '') as Branch | '',
+              mos: mosCode || '',
+              jobTitle: mosTitle || '',
+              startDate: serviceDates?.start || '',
+              endDate: serviceDates?.end || '',
+            });
+          }
+
+          return {
+            ...state,
+            servicePeriods: periods,
           };
         }
         return state as ProfileState;

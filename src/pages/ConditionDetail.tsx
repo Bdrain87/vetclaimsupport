@@ -33,7 +33,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
-import { getConditionById, type VACondition } from '@/data/vaConditions';
+import { vaConditions, getConditionById, type VACondition } from '@/data/vaConditions';
 import { ClaimIntelligence } from '@/services/claimIntelligence';
 import { getRatingCriteriaByCondition, type RatingCriteria } from '@/data/vaResources/ratingCriteria';
 import { getDBQByCondition, type DBQReference } from '@/data/vaResources/dbqReference';
@@ -57,21 +57,42 @@ export default function ConditionDetail() {
     getConditionDetails,
   } = useUserConditions();
 
-  // Find the user condition (by user condition ID or by database condition ID)
+  // Find the claim condition from the app store (for claimCondition ID lookups)
+  const claimConditions = data.claimConditions || [];
+  const claimCondition = useMemo(() => {
+    return claimConditions.find(c => c.id === id);
+  }, [claimConditions, id]);
+
+  // Find the user condition (by user condition ID, by database condition ID, or by matching claimCondition name)
   const userCondition = useMemo(() => {
     const byId = userConditions.find(c => c.id === id);
     if (byId) return byId;
     // Also check if ID matches a database condition ID that the user has added
-    return userConditions.find(c => c.conditionId === id);
-  }, [userConditions, id]);
+    const byConditionId = userConditions.find(c => c.conditionId === id);
+    if (byConditionId) return byConditionId;
+    // If we found a claimCondition, try to find a matching userCondition by name
+    if (claimCondition) {
+      return userConditions.find(c => {
+        const details = getConditionById(c.conditionId);
+        return details?.name.toLowerCase() === claimCondition.name.toLowerCase();
+      });
+    }
+    return undefined;
+  }, [userConditions, id, claimCondition]);
 
-  // Get condition details from database - try user condition first, then direct DB lookup
+  // Get condition details from database - try user condition first, then claimCondition name, then direct DB lookup
   const conditionDetails = useMemo(() => {
     if (userCondition) return getConditionDetails(userCondition);
+    // If we have a claimCondition, try to find VA condition by name
+    if (claimCondition) {
+      const allConditions = vaConditions;
+      const match = allConditions.find(c => c.name.toLowerCase() === claimCondition.name.toLowerCase());
+      if (match) return match;
+    }
     // If not a tracked condition, try looking up directly in the database
     if (id) return getConditionById(id);
     return null;
-  }, [userCondition, getConditionDetails, id]);
+  }, [userCondition, getConditionDetails, id, claimCondition]);
 
   // Whether this is a "browse" view (condition not yet tracked by user)
   const isBrowseMode = !userCondition && !!conditionDetails;

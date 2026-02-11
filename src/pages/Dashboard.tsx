@@ -32,6 +32,8 @@ import {
   BookOpen,
   Share2,
   Calendar,
+  Search,
+  Compass,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { vcsSpring } from '@/constants/animations';
@@ -46,10 +48,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useState, useMemo, useCallback } from 'react';
 import { getConditionById } from '@/data/vaConditions';
 import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput.utils';
+import { ExportButton } from '@/components/dashboard/ExportButton';
 
 export default function Dashboard() {
   const { data } = useClaims();
-  const { conditions: userConditions } = useUserConditions();
+  const { conditions: userConditions, addCondition } = useUserConditions();
   const profile = useProfileStore();
   const addDashboardQuickLog = useAppStore((s) => s.addDashboardQuickLog);
   const navigate = useNavigate();
@@ -135,11 +138,24 @@ export default function Dashboard() {
     setLogDate(new Date().toISOString().split('T')[0]);
   }, [painLevel, selectedMood, addDashboardQuickLog]);
 
+  // Handle adding a recommended condition
+  const handleAddRecommendation = useCallback((conditionId: string) => {
+    addCondition(conditionId);
+  }, [addCondition]);
+
   const displayName = profile.firstName
     ? `${profile.firstName}${profile.lastName ? ' ' + profile.lastName : ''}`
     : 'Veteran';
   const hasConditions = allConditionNames.size > 0;
   const branchLabel = profile.branch ? BRANCH_LABELS[profile.branch] : '';
+
+  // Multi-service-period display
+  const servicePeriods = profile.servicePeriods || [];
+  const mostRecentPeriod = servicePeriods.length > 0
+    ? servicePeriods[servicePeriods.length - 1]
+    : null;
+  const additionalPeriodsCount = servicePeriods.length > 1 ? servicePeriods.length - 1 : 0;
+
   const serviceDateStr = profile.serviceDates?.start
     ? `${new Date(profile.serviceDates.start).toLocaleDateString()} – ${profile.serviceDates.end ? new Date(profile.serviceDates.end).toLocaleDateString() : 'Present'}`
     : '';
@@ -154,27 +170,39 @@ export default function Dashboard() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-foreground font-semibold truncate">{displayName}</p>
-            {branchLabel && (
-              <p className="text-sm text-muted-foreground" style={{ writingMode: 'horizontal-tb' }}>
-                {branchLabel}
-              </p>
-            )}
-            {profile.mosCode && (
-              <p className="text-xs text-muted-foreground truncate">
-                {profile.mosCode} — {profile.mosTitle}
-              </p>
+            {mostRecentPeriod ? (
+              <>
+                <p className="text-sm text-muted-foreground" style={{ writingMode: 'horizontal-tb' }}>
+                  {mostRecentPeriod.branch ? BRANCH_LABELS[mostRecentPeriod.branch as keyof typeof BRANCH_LABELS] || mostRecentPeriod.branch : branchLabel}
+                </p>
+                {mostRecentPeriod.mos && (
+                  <p className="text-xs text-muted-foreground truncate">
+                    {mostRecentPeriod.mos} — {mostRecentPeriod.jobTitle}
+                    {additionalPeriodsCount > 0 && (
+                      <span className="text-primary ml-1">(+{additionalPeriodsCount} more)</span>
+                    )}
+                  </p>
+                )}
+              </>
+            ) : (
+              <>
+                {branchLabel && (
+                  <p className="text-sm text-muted-foreground" style={{ writingMode: 'horizontal-tb' }}>
+                    {branchLabel}
+                  </p>
+                )}
+                {profile.mosCode && (
+                  <p className="text-xs text-muted-foreground truncate">
+                    {profile.mosCode} — {profile.mosTitle}
+                  </p>
+                )}
+              </>
             )}
             {serviceDateStr && (
               <p className="text-xs text-muted-foreground/70 truncate">{serviceDateStr}</p>
             )}
           </div>
-          <button
-            onClick={() => navigate('/settings/export-data')}
-            className="p-2 rounded-lg hover:bg-accent transition-colors flex-shrink-0"
-            aria-label="Export data"
-          >
-            <Download className="h-4 w-4 text-muted-foreground" />
-          </button>
+          <ExportButton />
           <button
             onClick={() => navigate('/settings/edit-profile')}
             className="p-2 rounded-lg hover:bg-accent transition-colors flex-shrink-0"
@@ -185,61 +213,64 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* My Current Rating */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={vcsSpring}
-        className="rounded-xl bg-card border border-border p-4 shadow-sm"
-      >
-        <div className="flex items-center gap-4">
-          <div className="relative w-16 h-16 flex-shrink-0">
-            <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
-              <circle
-                cx="18" cy="18" r="15" fill="none"
-                stroke="currentColor" className="text-muted/30"
-                strokeWidth="3"
-              />
-              <motion.circle
-                cx="18" cy="18" r="15" fill="none"
-                stroke="#3B82F6" strokeWidth="3"
-                strokeLinecap="round"
-                strokeDasharray={`${combinedRating}, 100`}
-                initial={{ strokeDasharray: '0, 100' }}
-                animate={{ strokeDasharray: `${combinedRating}, 100` }}
-                transition={{ duration: 1.5, ease: 'easeOut' }}
-              />
-            </svg>
-            <span className="absolute inset-0 flex items-center justify-center text-foreground font-bold text-base">
-              {combinedRating}%
-            </span>
+      {/* My Current Rating — Clickable to go to Rating Calculator */}
+      <Link to="/claims/calculator" className="block">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={vcsSpring}
+          className="rounded-xl bg-card border border-border p-4 shadow-sm hover:bg-accent/30 transition-colors cursor-pointer"
+        >
+          <div className="flex items-center gap-4">
+            <div className="relative w-16 h-16 flex-shrink-0">
+              <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+                <circle
+                  cx="18" cy="18" r="15" fill="none"
+                  stroke="currentColor" className="text-muted/30"
+                  strokeWidth="3"
+                />
+                <motion.circle
+                  cx="18" cy="18" r="15" fill="none"
+                  stroke="#3B82F6" strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeDasharray={`${combinedRating}, 100`}
+                  initial={{ strokeDasharray: '0, 100' }}
+                  animate={{ strokeDasharray: `${combinedRating}, 100` }}
+                  transition={{ duration: 1.5, ease: 'easeOut' }}
+                />
+              </svg>
+              <span className="absolute inset-0 flex items-center justify-center text-foreground font-bold text-base">
+                {combinedRating}%
+              </span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold text-foreground">My Combined Rating</p>
+              {userConditions.filter(uc => uc.rating !== undefined).length > 0 ? (
+                <div className="mt-1 space-y-0.5">
+                  {userConditions.filter(uc => uc.rating !== undefined).slice(0, 4).map(uc => {
+                    const details = getConditionById(uc.conditionId);
+                    return (
+                      <p key={uc.id} className="text-xs text-muted-foreground truncate">
+                        {details?.abbreviation || details?.name || uc.conditionId}: {uc.rating}%
+                      </p>
+                    );
+                  })}
+                  {userConditions.filter(uc => uc.rating !== undefined).length > 4 && (
+                    <p className="text-xs text-muted-foreground">+{userConditions.filter(uc => uc.rating !== undefined).length - 4} more</p>
+                  )}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground mt-1">
+                  Add conditions with ratings to calculate
+                </p>
+              )}
+            </div>
+            <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="font-semibold text-foreground">My Combined Rating</p>
-            {userConditions.filter(uc => uc.rating !== undefined).length > 0 ? (
-              <div className="mt-1 space-y-0.5">
-                {userConditions.filter(uc => uc.rating !== undefined).slice(0, 4).map(uc => {
-                  const details = getConditionById(uc.conditionId);
-                  return (
-                    <p key={uc.id} className="text-xs text-muted-foreground truncate">
-                      {details?.abbreviation || details?.name || uc.conditionId}: {uc.rating}%
-                    </p>
-                  );
-                })}
-                {userConditions.filter(uc => uc.rating !== undefined).length > 4 && (
-                  <p className="text-xs text-muted-foreground">+{userConditions.filter(uc => uc.rating !== undefined).length - 4} more</p>
-                )}
-              </div>
-            ) : (
-              <p className="text-sm text-muted-foreground mt-1">
-                Add conditions with ratings to calculate
-              </p>
-            )}
-          </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </Link>
 
-      {/* What's Inside VCS */}
+      {/* Tools & Features */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -249,12 +280,12 @@ export default function Dashboard() {
         <h3 className="font-bold text-sm text-foreground mb-3">Tools & Features</h3>
         <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 snap-x snap-mandatory scrollbar-hide">
           {[
+            { name: 'Rating Calculator', icon: Calculator, path: '/claims/calculator' },
             { name: 'VA-Speak Translator', icon: Languages, path: '/prep/va-speak' },
             { name: 'C&P Exam Prep', icon: ClipboardCheck, path: '/prep/exam' },
             { name: 'Doctor Summary', icon: FileSignature, path: '/prep/nexus-letter' },
             { name: 'Stressor Statement', icon: Shield, path: '/prep/stressor' },
             { name: 'Buddy Statement', icon: Users, path: '/prep/buddy-statement' },
-            { name: 'Rating Calculator', icon: Calculator, path: '/claims/calculator' },
             { name: 'Back Pay Estimator', icon: DollarSign, path: '/prep/back-pay' },
             { name: 'Health Trackers', icon: Heart, path: '/health' },
             { name: 'DBQ Prep', icon: FileCheckIcon, path: '/prep/dbq' },
@@ -408,11 +439,139 @@ export default function Dashboard() {
         </motion.div>
       )}
 
-      {/* Quick Daily Log Widget */}
+      {/* Conditions to Explore — always rendered */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ ...vcsSpring, delay: 0.2 }}
+        className="rounded-xl bg-card border border-border p-4 shadow-sm"
+      >
+        <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
+          <Compass className="w-4 h-4 text-[#3B82F6]" />
+          Conditions You May Want to Consider
+        </h3>
+        {recommendations.length > 0 ? (
+          <div className="space-y-2">
+            {recommendations.slice(0, 4).map((rec, i) => {
+              const diagResult = getDiagnosticCodeForCondition(rec.conditionName);
+              const diagCode = diagResult?.code;
+              return (
+                <div
+                  key={rec.conditionId + i}
+                  className="flex items-center justify-between p-3 rounded-xl bg-secondary border border-border"
+                >
+                  <div className="min-w-0 flex-1 mr-3">
+                    <p className="text-sm font-medium text-foreground truncate">{rec.conditionName}</p>
+                    {diagCode && (
+                      <p className="text-[10px] text-muted-foreground">DC {diagCode}</p>
+                    )}
+                    <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{rec.reason}</p>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="shrink-0 text-xs h-8"
+                    onClick={() => handleAddRecommendation(rec.conditionId)}
+                  >
+                    <Plus className="h-3 w-3 mr-1" />
+                    Add
+                  </Button>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="text-center py-4">
+            <Search className="h-6 w-6 text-muted-foreground/40 mx-auto mb-2" />
+            <p className="text-sm text-muted-foreground">
+              Add your MOS and conditions to see personalized suggestions.
+            </p>
+            <Button
+              size="sm"
+              variant="outline"
+              className="mt-2"
+              onClick={() => navigate('/claims/secondary-finder')}
+            >
+              Explore Conditions
+            </Button>
+          </div>
+        )}
+      </motion.div>
+
+      {/* Next Steps — always rendered */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ ...vcsSpring, delay: 0.25 }}
+        className="rounded-xl bg-card border border-border p-4 shadow-sm"
+      >
+        <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
+          <Zap className="w-4 h-4 text-[#3B82F6]" />
+          What to Do Next
+        </h3>
+        {nextSteps.length > 0 ? (
+          <div className="space-y-2.5">
+            {nextSteps.slice(0, 5).map((step, i) => (
+              <div key={step.id} className="flex items-start gap-3">
+                <span
+                  className={cn(
+                    'flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold mt-0.5',
+                    step.priority === 'urgent'
+                      ? 'bg-[#3B82F6]/20 text-[#3B82F6]'
+                      : 'bg-muted text-muted-foreground'
+                  )}
+                >
+                  {i + 1}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-foreground">{step.title}</p>
+                  {step.description && (
+                    <p className="text-xs text-muted-foreground mt-0.5">{step.description}</p>
+                  )}
+                </div>
+                {step.actionRoute && (
+                  <Link
+                    to={step.actionRoute}
+                    className="text-[#3B82F6] text-xs hover:text-[#60A5FA] shrink-0 mt-0.5"
+                  >
+                    Go
+                  </Link>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-2.5">
+            {[
+              { title: 'Add your first condition', description: 'Start tracking conditions you plan to claim.', route: '/claims' },
+              { title: 'Log your symptoms daily', description: 'Build an evidence trail with consistent symptom logs.', route: '/health/symptoms' },
+              { title: 'Generate a personal statement', description: 'Create a compelling statement for your claim.', route: '/prep/personal-statement' },
+            ].map((step, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold mt-0.5 bg-[#3B82F6]/20 text-[#3B82F6]">
+                  {i + 1}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-foreground">{step.title}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{step.description}</p>
+                </div>
+                <Link
+                  to={step.route}
+                  className="text-[#3B82F6] text-xs hover:text-[#60A5FA] shrink-0 mt-0.5"
+                >
+                  Go
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
+      </motion.div>
+
+      {/* Quick Daily Log Widget — at the BOTTOM */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ ...vcsSpring, delay: 0.3 }}
         className="rounded-xl bg-card border border-border p-4 shadow-sm"
       >
         <h3 className="font-bold text-sm text-foreground mb-3">Quick Daily Log</h3>
@@ -524,84 +683,6 @@ export default function Dashboard() {
           </div>
         )}
       </motion.div>
-
-      {/* Next Steps */}
-      {nextSteps.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...vcsSpring, delay: 0.25 }}
-          className="rounded-xl bg-card border border-border p-4 shadow-sm"
-        >
-          <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
-            <Zap className="w-4 h-4 text-[#3B82F6]" />
-            Next Steps
-          </h3>
-          <div className="space-y-2.5">
-            {nextSteps.slice(0, 5).map((step, i) => (
-              <div key={step.id} className="flex items-start gap-3">
-                <span
-                  className={cn(
-                    'flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold mt-0.5',
-                    step.priority === 'urgent'
-                      ? 'bg-[#3B82F6]/20 text-[#3B82F6]'
-                      : 'bg-muted text-muted-foreground'
-                  )}
-                >
-                  {i + 1}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm text-foreground">{step.title}</p>
-                  {step.description && (
-                    <p className="text-xs text-muted-foreground mt-0.5">{step.description}</p>
-                  )}
-                </div>
-                {step.actionRoute && (
-                  <Link
-                    to={step.actionRoute}
-                    className="text-[#3B82F6] text-xs hover:text-[#60A5FA] shrink-0 mt-0.5"
-                  >
-                    Go
-                  </Link>
-                )}
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      )}
-
-      {/* Conditions to Explore — only if recommendations exist */}
-      {recommendations.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...vcsSpring, delay: 0.3 }}
-          className="rounded-xl bg-card border border-border p-4 shadow-sm"
-        >
-          <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
-            Conditions to Explore
-          </h3>
-          <div className="space-y-2">
-            {recommendations.slice(0, 3).map((rec, i) => (
-              <div
-                key={rec.conditionId + i}
-                className="flex items-center justify-between p-3 rounded-xl bg-secondary border border-border"
-              >
-                <div className="min-w-0 flex-1 mr-3">
-                  <p className="text-sm font-medium text-foreground truncate">{rec.conditionName}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{rec.reason}</p>
-                </div>
-                <Link
-                  to={rec.conditionId ? `/claims/${rec.conditionId}` : `/claims/secondary-finder`}
-                  className="text-xs text-primary hover:underline shrink-0"
-                >
-                  Learn more
-                </Link>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      )}
     </PageContainer>
   );
 }
