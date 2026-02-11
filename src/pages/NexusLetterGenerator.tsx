@@ -68,7 +68,7 @@ const STEPS = [
   { id: 2, title: 'Connection Type', icon: Shield },
   { id: 3, title: 'Service Details', icon: Calendar },
   { id: 4, title: 'Current Status', icon: User },
-  { id: 5, title: 'Review & Generate', icon: FileText },
+  { id: 5, title: 'Review & Build Summary', icon: FileText },
 ];
 
 export default function NexusLetterGenerator() {
@@ -424,7 +424,7 @@ export default function NexusLetterGenerator() {
                   <span className="font-medium">Review Your Information</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Please review the information below. You can print this letter and have it signed by a qualified medical professional.
+                  Please review the information below. You can print this summary and share it with a qualified medical professional.
                 </p>
               </CardContent>
             </Card>
@@ -433,7 +433,7 @@ export default function NexusLetterGenerator() {
             <div ref={printRef} className="bg-white dark:bg-gray-900 p-8 rounded-lg border border-border print:border-none print:shadow-none">
               <div className="text-foreground space-y-6 font-serif print:text-black">
                 <div className="text-center mb-8">
-                  <h1 className="text-xl font-bold">MEDICAL NEXUS LETTER</h1>
+                  <h1 className="text-xl font-bold">INFORMATION SUMMARY FOR YOUR DOCTOR</h1>
                   <p className="text-sm text-muted-foreground print:text-gray-600">
                     For VA Disability Claim
                   </p>
@@ -534,7 +534,7 @@ export default function NexusLetterGenerator() {
             <div className="flex flex-wrap gap-3">
               <Button onClick={handlePrint} className="gap-2">
                 <Printer className="h-4 w-4" />
-                Print Letter
+                Print Summary
               </Button>
             </div>
 
@@ -570,12 +570,24 @@ export default function NexusLetterGenerator() {
           <FileSignature className="h-5 w-5" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Nexus Letter Generator</h1>
+          <h1 className="text-2xl font-bold text-foreground">Doctor Summary Builder</h1>
           <p className="text-muted-foreground">
-            Create a professional nexus letter template for your VA claim
+            Create an organized summary of your service-connected condition to share with your doctor
           </p>
         </div>
       </div>
+
+      {/* Disclaimer */}
+      <Card className="border-primary/30 bg-primary/5">
+        <CardContent className="pt-4">
+          <div className="flex items-start gap-2">
+            <Info className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+            <p className="text-sm text-muted-foreground">
+              This tool helps you organize your information into a clear summary. A licensed medical professional must write the actual nexus letter. This summary is designed to help your doctor understand your condition and service connection.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Progress Steps */}
       <div className="flex items-center justify-between overflow-x-auto pb-2">
@@ -623,11 +635,11 @@ export default function NexusLetterGenerator() {
             Step {currentStep}: {STEPS[currentStep - 1].title}
           </CardTitle>
           <CardDescription>
-            {currentStep === 1 && 'Select the conditions for your nexus letter'}
+            {currentStep === 1 && 'Select the conditions for your summary'}
             {currentStep === 2 && 'Choose how this condition is connected to your service'}
             {currentStep === 3 && 'Enter your military service information'}
             {currentStep === 4 && 'Describe your current medical status'}
-            {currentStep === 5 && 'Review and generate your nexus letter'}
+            {currentStep === 5 && 'Review and build your summary'}
           </CardDescription>
         </CardHeader>
         <CardContent>

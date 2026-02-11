@@ -27,7 +27,7 @@ import {
   ChevronLeft, Scale, FileText, Link2, Stethoscope, CheckCircle2,
   AlertTriangle, Info, ExternalLink, Trash2, Edit, BookOpen,
   Activity, TrendingUp, Clock, Brain, Moon, Zap, ArrowRight,
-  Sparkles, Loader2, ChevronDown, FileCheck,
+  Sparkles, Loader2, ChevronDown, FileCheck, Plus,
 } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
@@ -51,21 +51,30 @@ export default function ConditionDetail() {
   const { data } = useClaims();
   const {
     conditions: userConditions,
+    addCondition,
     updateCondition,
     removeCondition,
     getConditionDetails,
   } = useUserConditions();
 
-  // Find the user condition
+  // Find the user condition (by user condition ID or by database condition ID)
   const userCondition = useMemo(() => {
-    return userConditions.find(c => c.id === id);
+    const byId = userConditions.find(c => c.id === id);
+    if (byId) return byId;
+    // Also check if ID matches a database condition ID that the user has added
+    return userConditions.find(c => c.conditionId === id);
   }, [userConditions, id]);
 
-  // Get condition details from database
+  // Get condition details from database - try user condition first, then direct DB lookup
   const conditionDetails = useMemo(() => {
-    if (!userCondition) return null;
-    return getConditionDetails(userCondition);
-  }, [userCondition, getConditionDetails]);
+    if (userCondition) return getConditionDetails(userCondition);
+    // If not a tracked condition, try looking up directly in the database
+    if (id) return getConditionById(id);
+    return null;
+  }, [userCondition, getConditionDetails, id]);
+
+  // Whether this is a "browse" view (condition not yet tracked by user)
+  const isBrowseMode = !userCondition && !!conditionDetails;
 
   // Get rating criteria if available
   const ratingCriteria = useMemo(() => {
@@ -139,12 +148,21 @@ export default function ConditionDetail() {
 
   // Local state for editing
   const [editRating, setEditRating] = useState<string>(
-    userCondition?.rating?.toString() || ''
+    userCondition?.rating?.toString() || 'not-rated'
   );
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
+  // Handle adding condition from browse mode
+  const handleAddThisCondition = () => {
+    if (!conditionDetails) return;
+    const result = addCondition(conditionDetails.id);
+    if (result) {
+      navigate(`/claims/${result.id}`, { replace: true });
+    }
+  };
+
   // Handle not found
-  if (!userCondition || !conditionDetails) {
+  if (!conditionDetails) {
     return (
       <PageContainer className="py-6">
         <Card>
@@ -167,12 +185,14 @@ export default function ConditionDetail() {
   // Handle rating update
   const handleRatingUpdate = (value: string) => {
     setEditRating(value);
-    const rating = value ? parseInt(value) : undefined;
+    if (!userCondition) return;
+    const rating = value && value !== 'not-rated' ? parseInt(value) : undefined;
     updateCondition(userCondition.id, { rating });
   };
 
   // Handle delete
   const handleDelete = () => {
+    if (!userCondition) return;
     removeCondition(userCondition.id);
     navigate('/claims');
   };
@@ -219,7 +239,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
   };
 
   // Evidence completion percentage
-  const evidenceProgress = userCondition.evidenceCount && userCondition.totalEvidenceNeeded
+  const evidenceProgress = userCondition?.evidenceCount && userCondition?.totalEvidenceNeeded
     ? (userCondition.evidenceCount / userCondition.totalEvidenceNeeded) * 100
     : 0;
 
@@ -230,6 +250,22 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
         <ChevronLeft className="h-4 w-4 mr-2" />
         Back to Conditions
       </Button>
+
+      {/* Add This Condition Banner (Browse Mode) */}
+      {isBrowseMode && (
+        <Alert className="border-primary/30 bg-primary/5">
+          <Info className="h-4 w-4" />
+          <AlertDescription className="flex items-center justify-between gap-3">
+            <span className="text-sm">
+              You're viewing condition details. Add it to track evidence and prepare for your claim.
+            </span>
+            <Button size="sm" onClick={handleAddThisCondition} className="shrink-0">
+              <Plus className="h-4 w-4 mr-1" />
+              Add This Condition
+            </Button>
+          </AlertDescription>
+        </Alert>
+      )}
 
       {/* Header Card */}
       <Card>
@@ -250,34 +286,37 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                 </Badge>
               )}
             </div>
-            <div className="flex gap-2">
-              <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-                <DialogTrigger asChild>
-                  <Button variant="outline" size="icon" className="text-destructive">
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Remove Condition</DialogTitle>
-                    <DialogDescription>
-                      Are you sure you want to remove this condition? This action cannot be undone.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <DialogFooter>
-                    <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
-                      Cancel
+            {!isBrowseMode && (
+              <div className="flex gap-2">
+                <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="icon" className="text-destructive">
+                      <Trash2 className="h-4 w-4" />
                     </Button>
-                    <Button variant="destructive" onClick={handleDelete}>
-                      Remove Condition
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            </div>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Remove Condition</DialogTitle>
+                      <DialogDescription>
+                        Are you sure you want to remove this condition? This action cannot be undone.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
+                        Cancel
+                      </Button>
+                      <Button variant="destructive" onClick={handleDelete}>
+                        Remove Condition
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </div>
+            )}
           </div>
         </CardHeader>
         <CardContent>
+          {!isBrowseMode && userCondition ? (
           <div className="grid gap-6 sm:grid-cols-2">
             {/* Rating Selector */}
             <div className="space-y-2">
@@ -287,7 +326,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                   <SelectValue placeholder="Select rating" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Not yet rated</SelectItem>
+                  <SelectItem value="not-rated">Not yet rated</SelectItem>
                   {commonRatings.map(r => (
                     <SelectItem key={r} value={r.toString()}>{r}%</SelectItem>
                   ))}
@@ -309,6 +348,30 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
               </div>
             </div>
           </div>
+          ) : (
+            <div className="space-y-3">
+              {conditionDetails.bodySystem && (
+                <div>
+                  <span className="text-sm font-medium">Body System: </span>
+                  <Badge variant="secondary">{conditionDetails.bodySystem}</Badge>
+                </div>
+              )}
+              {conditionDetails.commonSymptoms && conditionDetails.commonSymptoms.length > 0 && (
+                <div>
+                  <span className="text-sm font-medium">Common Symptoms:</span>
+                  <div className="flex flex-wrap gap-1.5 mt-1">
+                    {conditionDetails.commonSymptoms.map((s: string) => (
+                      <Badge key={s} variant="outline" className="text-xs">{s}</Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <Button onClick={handleAddThisCondition} className="w-full mt-2">
+                <Plus className="h-4 w-4 mr-2" />
+                Add This Condition to My Claim
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
 

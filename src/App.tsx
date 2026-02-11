@@ -52,6 +52,7 @@ const HealthHub = lazy(() => import('./pages/HealthHub'));
 const PrepHub = lazy(() => import('./pages/PrepHub'));
 
 // Phase 15 new pages
+const PersonalStatement = lazy(() => import('./pages/PersonalStatement'));
 const BodyMap = lazy(() => import('./pages/BodyMap'));
 const StressorStatement = lazy(() => import('./pages/StressorStatement'));
 const VASpeakTranslator = lazy(() => import('./pages/VASpeakTranslator'));
@@ -171,7 +172,7 @@ function AnimatedRoutes() {
             {/* === PREP === */}
             <Route path="/prep" element={<PrepHub />} />
             <Route path="/prep/exam" element={<CPExamPrepEnhanced />} />
-            <Route path="/prep/personal-statement" element={<Navigate to="/prep/exam" replace />} />
+            <Route path="/prep/personal-statement" element={<PersonalStatement />} />
             <Route path="/prep/buddy-statement" element={<BuddyStatements />} />
             <Route path="/prep/nexus-letter" element={<NexusLetterGenerator />} />
             <Route path="/prep/stressor" element={<StressorStatement />} />

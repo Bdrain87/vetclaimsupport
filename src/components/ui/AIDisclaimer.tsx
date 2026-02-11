@@ -19,7 +19,7 @@ export function AIDisclaimer({ className, variant = 'inline' }: AIDisclaimerProp
       >
         <Sparkles className="h-3.5 w-3.5 text-[var(--interactive-primary)] shrink-0" />
         <p className="text-xs leading-relaxed">
-          AI-generated content (Google Gemini). May contain errors. You must verify all content before use. Not legal or medical advice.
+          AI-generated content. May contain errors. You must verify all content before use. Not legal or medical advice.
         </p>
       </div>
     );
@@ -33,7 +33,7 @@ export function AIDisclaimer({ className, variant = 'inline' }: AIDisclaimerProp
       )}
     >
       <Sparkles className="h-3 w-3 text-[var(--interactive-primary)]" />
-      AI-generated content (Google Gemini). May contain errors. You must verify all content before use. Not legal or medical advice.
+      AI-generated content. May contain errors. You must verify all content before use. Not legal or medical advice.
     </span>
   );
 }

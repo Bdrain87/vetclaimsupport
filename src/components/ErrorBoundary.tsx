@@ -1,5 +1,5 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
-import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { AlertTriangle, Home, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -35,6 +35,10 @@ export class ErrorBoundary extends Component<Props, State> {
     this.setState({ hasError: false, error: null, errorInfo: null });
   };
 
+  private handleGoHome = (): void => {
+    window.location.href = '/';
+  };
+
   private handleReload = (): void => {
     window.location.reload();
   };
@@ -63,14 +67,18 @@ export class ErrorBoundary extends Component<Props, State> {
                   <RefreshCw className="mr-2 h-4 w-4" />
                   Try Again
                 </Button>
+                <Button onClick={this.handleGoHome} variant="outline" className="w-full">
+                  <Home className="mr-2 h-4 w-4" />
+                  Go Home
+                </Button>
                 <Button onClick={this.handleReload} variant="outline" className="w-full">
                   Reload Page
                 </Button>
               </div>
-              {process.env.NODE_ENV === 'development' && this.state.error && (
+              {this.state.error && (
                 <details className="mt-4 text-sm">
                   <summary className="cursor-pointer text-muted-foreground hover:text-foreground">
-                    Error Details (Development Only)
+                    Error Details
                   </summary>
                   <pre className="mt-2 p-2 bg-muted rounded text-xs overflow-auto max-h-32">
                     {this.state.error.toString()}

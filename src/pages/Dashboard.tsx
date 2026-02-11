@@ -19,6 +19,19 @@ import {
   Check,
   Pencil,
   User,
+  Calculator,
+  Heart,
+  Languages,
+  ClipboardCheck,
+  FileSignature,
+  Shield,
+  Users,
+  DollarSign,
+  FileCheck as FileCheckIcon,
+  Package,
+  BookOpen,
+  Share2,
+  Calendar,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { vcsSpring } from '@/constants/animations';
@@ -27,6 +40,9 @@ import { cn } from '@/lib/utils';
 import { PageContainer } from '@/components/PageContainer';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useState, useMemo, useCallback } from 'react';
 import { getConditionById } from '@/data/vaConditions';
 import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput.utils';
@@ -82,10 +98,30 @@ export default function Dashboard() {
     return names;
   }, [claimConditions, userConditions]);
 
+  // Calculate combined VA rating using VA math
+  const combinedRating = useMemo(() => {
+    const ratings = userConditions
+      .map(uc => uc.rating)
+      .filter((r): r is number => r !== undefined && r > 0)
+      .sort((a, b) => b - a); // Sort descending
+
+    if (ratings.length === 0) return 0;
+
+    let combined = 0;
+    for (const rating of ratings) {
+      const remaining = 100 - combined;
+      combined = combined + (remaining * rating / 100);
+    }
+    return Math.round(combined);
+  }, [userConditions]);
+
   // Quick log state
   const [painLevel, setPainLevel] = useState(5);
   const [selectedMood, setSelectedMood] = useState<'good' | 'okay' | 'bad' | null>(null);
   const [logSaved, setLogSaved] = useState(false);
+  const [logCondition, setLogCondition] = useState('general');
+  const [logNotes, setLogNotes] = useState('');
+  const [logDate, setLogDate] = useState(new Date().toISOString().split('T')[0]);
 
   const handleSaveQuickLog = useCallback(() => {
     if (!selectedMood) return;
@@ -94,6 +130,9 @@ export default function Dashboard() {
     setTimeout(() => setLogSaved(false), 2000);
     setPainLevel(5);
     setSelectedMood(null);
+    setLogCondition('general');
+    setLogNotes('');
+    setLogDate(new Date().toISOString().split('T')[0]);
   }, [painLevel, selectedMood, addDashboardQuickLog]);
 
   const displayName = profile.firstName
@@ -130,6 +169,13 @@ export default function Dashboard() {
             )}
           </div>
           <button
+            onClick={() => navigate('/settings/export-data')}
+            className="p-2 rounded-lg hover:bg-accent transition-colors flex-shrink-0"
+            aria-label="Export data"
+          >
+            <Download className="h-4 w-4 text-muted-foreground" />
+          </button>
+          <button
             onClick={() => navigate('/settings/edit-profile')}
             className="p-2 rounded-lg hover:bg-accent transition-colors flex-shrink-0"
             aria-label="Edit profile"
@@ -139,7 +185,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Readiness Score Card */}
+      {/* My Current Rating */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -158,55 +204,73 @@ export default function Dashboard() {
                 cx="18" cy="18" r="15" fill="none"
                 stroke="#3B82F6" strokeWidth="3"
                 strokeLinecap="round"
-                strokeDasharray={`${readiness}, 100`}
+                strokeDasharray={`${combinedRating}, 100`}
                 initial={{ strokeDasharray: '0, 100' }}
-                animate={{ strokeDasharray: `${readiness}, 100` }}
+                animate={{ strokeDasharray: `${combinedRating}, 100` }}
                 transition={{ duration: 1.5, ease: 'easeOut' }}
               />
             </svg>
             <span className="absolute inset-0 flex items-center justify-center text-foreground font-bold text-base">
-              {readiness}%
+              {combinedRating}%
             </span>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="font-semibold text-foreground">Claim Readiness</p>
-            {hasConditions ? (
-              <p className="text-sm text-muted-foreground mt-1">
-                Based on {allConditionNames.size} condition{allConditionNames.size !== 1 ? 's' : ''} and your evidence
-              </p>
+            <p className="font-semibold text-foreground">My Combined Rating</p>
+            {userConditions.filter(uc => uc.rating !== undefined).length > 0 ? (
+              <div className="mt-1 space-y-0.5">
+                {userConditions.filter(uc => uc.rating !== undefined).slice(0, 4).map(uc => {
+                  const details = getConditionById(uc.conditionId);
+                  return (
+                    <p key={uc.id} className="text-xs text-muted-foreground truncate">
+                      {details?.abbreviation || details?.name || uc.conditionId}: {uc.rating}%
+                    </p>
+                  );
+                })}
+                {userConditions.filter(uc => uc.rating !== undefined).length > 4 && (
+                  <p className="text-xs text-muted-foreground">+{userConditions.filter(uc => uc.rating !== undefined).length - 4} more</p>
+                )}
+              </div>
             ) : (
               <p className="text-sm text-muted-foreground mt-1">
-                Add your first condition to get started
+                Add conditions with ratings to calculate
               </p>
             )}
           </div>
         </div>
       </motion.div>
 
-      {/* Quick Actions Row (2x2 grid) */}
-      <div className="grid grid-cols-2 gap-3">
-        {[
-          { label: 'Add Condition', icon: Plus, route: '/claims', color: 'text-primary' },
-          { label: 'Log Symptoms', icon: Activity, route: '/health/symptoms', color: 'text-emerald-500' },
-          { label: 'Exam Packet', icon: FileCheck, route: '/cp-exam-packet', color: 'text-blue-500' },
-          { label: 'Form Guide', icon: FileText, route: '/prep/form-guide', color: 'text-blue-500' },
-        ].map((action) => (
-          <Link
-            key={action.route}
-            to={action.route}
-            className={cn(
-              'flex flex-col items-center gap-2 p-4 rounded-xl',
-              'border border-border bg-card',
-              'hover:bg-accent/50 transition-colors',
-              'active:scale-[0.98]',
-              'min-h-[80px] justify-center'
-            )}
-          >
-            <action.icon className={cn('h-6 w-6', action.color)} />
-            <span className="text-sm font-medium text-foreground">{action.label}</span>
-          </Link>
-        ))}
-      </div>
+      {/* What's Inside VCS */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ ...vcsSpring, delay: 0.05 }}
+        className="rounded-xl bg-card border border-border p-4 shadow-sm"
+      >
+        <h3 className="font-bold text-sm text-foreground mb-3">Tools & Features</h3>
+        <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 snap-x snap-mandatory scrollbar-hide">
+          {[
+            { name: 'VA-Speak Translator', icon: Languages, path: '/prep/va-speak' },
+            { name: 'C&P Exam Prep', icon: ClipboardCheck, path: '/prep/exam' },
+            { name: 'Doctor Summary', icon: FileSignature, path: '/prep/nexus-letter' },
+            { name: 'Stressor Statement', icon: Shield, path: '/prep/stressor' },
+            { name: 'Buddy Statement', icon: Users, path: '/prep/buddy-statement' },
+            { name: 'Rating Calculator', icon: Calculator, path: '/claims/calculator' },
+            { name: 'Back Pay Estimator', icon: DollarSign, path: '/prep/back-pay' },
+            { name: 'Health Trackers', icon: Heart, path: '/health' },
+            { name: 'DBQ Prep', icon: FileCheckIcon, path: '/prep/dbq' },
+            { name: 'Claim Packet', icon: Package, path: '/prep/packet' },
+          ].map((tool) => (
+            <Link
+              key={tool.path}
+              to={tool.path}
+              className="flex flex-col items-center gap-1.5 min-w-[76px] p-2 rounded-xl border border-border bg-secondary hover:bg-accent/50 transition-colors snap-start"
+            >
+              <tool.icon className="h-5 w-5 text-blue-500" />
+              <span className="text-[10px] font-medium text-foreground text-center leading-tight">{tool.name}</span>
+            </Link>
+          ))}
+        </div>
+      </motion.div>
 
       {/* Active Conditions List */}
       <motion.div
@@ -231,9 +295,9 @@ export default function Dashboard() {
 
         {claimConditions.length === 0 && userConditions.length === 0 ? (
           <div className="px-4 pb-4 pt-2 text-center">
-            <p className="text-sm text-muted-foreground mb-3">
-              No conditions yet. Tap Add Condition to start building your claim.
-            </p>
+            <button onClick={() => navigate('/claims')} className="text-sm text-muted-foreground mb-3 hover:text-primary transition-colors cursor-pointer">
+              No conditions yet — tap here to add your first condition.
+            </button>
             <Button size="sm" variant="outline" onClick={() => navigate('/claims')}>
               <Plus className="h-4 w-4 mr-1" />
               Add Condition
@@ -358,7 +422,39 @@ export default function Dashboard() {
             <span className="text-sm font-medium">Logged</span>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3">
+            {/* Date Selector */}
+            <div className="space-y-1.5">
+              <span className="text-xs text-muted-foreground">Date</span>
+              <Input
+                type="date"
+                value={logDate}
+                onChange={(e) => setLogDate(e.target.value)}
+                className="h-10"
+              />
+            </div>
+
+            {/* Condition Selector */}
+            <div className="space-y-1.5">
+              <span className="text-xs text-muted-foreground">Condition</span>
+              <Select value={logCondition} onValueChange={setLogCondition}>
+                <SelectTrigger className="h-10">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="general">General</SelectItem>
+                  {userConditions.map(uc => {
+                    const details = getConditionById(uc.conditionId);
+                    return (
+                      <SelectItem key={uc.id} value={uc.id}>
+                        {details?.abbreviation || details?.name || uc.conditionId}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+            </div>
+
             {/* Pain Slider */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -379,7 +475,7 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Mood Selector (icon-based) */}
+            {/* Mood Selector */}
             <div className="space-y-2">
               <span className="text-xs text-muted-foreground">Mood</span>
               <div className="flex gap-2">
@@ -403,6 +499,17 @@ export default function Dashboard() {
                   </button>
                 ))}
               </div>
+            </div>
+
+            {/* Notes */}
+            <div className="space-y-1.5">
+              <span className="text-xs text-muted-foreground">Notes (optional)</span>
+              <Textarea
+                value={logNotes}
+                onChange={(e) => setLogNotes(e.target.value)}
+                placeholder="Symptoms, triggers, activities affected..."
+                className="min-h-[60px] resize-none text-sm"
+              />
             </div>
 
             {/* Save Button */}
@@ -485,7 +592,7 @@ export default function Dashboard() {
                   <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{rec.reason}</p>
                 </div>
                 <Link
-                  to="/claims/secondary-finder"
+                  to={rec.conditionId ? `/claims/${rec.conditionId}` : `/claims/secondary-finder`}
                   className="text-xs text-primary hover:underline shrink-0"
                 >
                   Learn more

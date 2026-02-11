@@ -15,7 +15,7 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
     try {
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
       if (!apiKey) {
-        throw new Error('Gemini API key is not configured');
+        throw new Error('AI features are temporarily unavailable. Please try again later.');
       }
 
       const res = await fetch(
