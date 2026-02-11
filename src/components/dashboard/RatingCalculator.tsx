@@ -19,6 +19,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { COMP_RATES_2026 } from '@/data/compRates2026';
 
 type BodyPart = 
   | 'left_arm' | 'right_arm' 
@@ -81,19 +82,7 @@ const bilateralPairs: Record<string, string> = {
 };
 
 // 2026 VA compensation rates (single veteran, no dependents)
-const monthlyCompensation: Record<number, number> = {
-  0: 0,
-  10: 175.51,
-  20: 347.14,
-  30: 537.32,
-  40: 773.64,
-  50: 1101.71,
-  60: 1395.07,
-  70: 1759.14,
-  80: 2044.74,
-  90: 2297.14,
-  100: 3937.04,
-};
+const monthlyCompensation: Record<number, number> = { 0: 0, ...COMP_RATES_2026 };
 
 interface CalculationStep {
   description: string;

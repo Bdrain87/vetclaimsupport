@@ -10,7 +10,7 @@ export default function DisclaimerPage() {
       {/* Back button */}
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-1 text-white/50 hover:text-white text-sm transition-colors"
+        className="flex items-center gap-1 text-muted-foreground hover:text-foreground text-sm transition-colors"
       >
         <ChevronLeft className="h-4 w-4" />
         Back
@@ -22,8 +22,8 @@ export default function DisclaimerPage() {
           <AlertTriangle className="h-6 w-6 text-amber-400" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white">Important Disclaimer</h1>
-          <p className="text-white/40 text-sm mt-1">Vet Claim Support</p>
+          <h1 className="text-2xl font-bold text-foreground">Important Disclaimer</h1>
+          <p className="text-muted-foreground/70 text-sm mt-1">Vet Claim Support</p>
         </div>
       </div>
 
@@ -32,15 +32,15 @@ export default function DisclaimerPage() {
 
         {/* Main Disclaimer */}
         <div className="rounded-xl bg-red-500/5 border border-red-500/20 p-5">
-          <p className="text-white/80 font-medium">
-            <strong className="text-white">IMPORTANT:</strong> Vet Claim Support is an educational and organizational tool. It is NOT affiliated with, endorsed by, or connected to the U.S. Department of Veterans Affairs.
+          <p className="text-foreground/80 font-medium">
+            <strong className="text-foreground">IMPORTANT:</strong> Vet Claim Support is an educational and organizational tool. It is NOT affiliated with, endorsed by, or connected to the U.S. Department of Veterans Affairs.
           </p>
         </div>
 
         {/* What This App Is */}
         <div className="space-y-3">
-          <h2 className="text-lg font-semibold text-white">What This App Is</h2>
-          <ul className="space-y-1.5 text-white/60">
+          <h2 className="text-lg font-semibold text-foreground">What This App Is</h2>
+          <ul className="space-y-1.5 text-muted-foreground">
             <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span>An organizational tool to help you prepare and track information related to VA disability claims</li>
             <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span>An educational resource about VA benefits and processes</li>
             <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span>A health and symptom logging tool for your personal records</li>
@@ -49,8 +49,8 @@ export default function DisclaimerPage() {
 
         {/* What This App Is NOT */}
         <div className="space-y-3">
-          <h2 className="text-lg font-semibold text-white">What This App Is NOT</h2>
-          <ul className="space-y-1.5 text-white/60">
+          <h2 className="text-lg font-semibold text-foreground">What This App Is NOT</h2>
+          <ul className="space-y-1.5 text-muted-foreground">
             <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>NOT legal advice</li>
             <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>NOT medical advice</li>
             <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>NOT a VA-accredited representative, attorney, claims agent, or VSO</li>
@@ -61,9 +61,9 @@ export default function DisclaimerPage() {
 
         {/* Your Responsibility */}
         <div className="space-y-3">
-          <h2 className="text-lg font-semibold text-white">Your Responsibility</h2>
+          <h2 className="text-lg font-semibold text-foreground">Your Responsibility</h2>
           <div className="rounded-xl bg-blue-500/5 border border-blue-500/20 p-4">
-            <p className="text-white/70">
+            <p className="text-muted-foreground">
               You are solely responsible for the accuracy of all information you enter. You must review and verify ALL content before submitting anything to the VA &mdash; especially AI-generated content. False or misleading statements in VA claims may constitute federal fraud.
             </p>
           </div>
@@ -71,9 +71,9 @@ export default function DisclaimerPage() {
 
         {/* AI-Generated Content Warning */}
         <div className="space-y-3">
-          <h2 className="text-lg font-semibold text-white">AI-Generated Content Warning</h2>
+          <h2 className="text-lg font-semibold text-foreground">AI-Generated Content Warning</h2>
           <div className="rounded-xl bg-amber-500/5 border border-amber-500/20 p-4">
-            <p className="text-white/70">
+            <p className="text-muted-foreground">
               This app uses artificial intelligence (Google Gemini) to generate suggestions and content. AI-generated content may be inaccurate, incomplete, or fabricated. AI-generated case law citations have a documented hallucination rate of 50-88%. <strong className="text-amber-400">NEVER submit AI-generated legal citations without independent verification.</strong> You assume all risk for reliance on AI-generated content.
             </p>
           </div>
@@ -81,8 +81,8 @@ export default function DisclaimerPage() {
 
         {/* Professional Consultation */}
         <div className="space-y-3">
-          <h2 className="text-lg font-semibold text-white">Professional Consultation</h2>
-          <p className="text-white/60">
+          <h2 className="text-lg font-semibold text-foreground">Professional Consultation</h2>
+          <p className="text-muted-foreground">
             We strongly recommend consulting with a VA-accredited Veterans Service Organization (VSO), attorney, or claims agent before filing your claim. Find accredited representatives at{' '}
             <a
               href="https://www.va.gov/ogc/apps/accreditation"
@@ -96,8 +96,8 @@ export default function DisclaimerPage() {
         </div>
 
         {/* Acknowledgment */}
-        <div className="text-center pt-4 border-t border-white/10">
-          <p className="text-white/40 text-xs">
+        <div className="text-center pt-4 border-t border-border">
+          <p className="text-muted-foreground/70 text-xs">
             By using this app, you acknowledge that you have read and understood this disclaimer and agree to be bound by the Terms of Service and Privacy Policy.
           </p>
         </div>

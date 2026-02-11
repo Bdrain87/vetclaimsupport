@@ -36,6 +36,7 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { useSidebarStore } from '@/store/useSidebarStore';
 
 interface NavItem {
   to: string;
@@ -119,7 +120,7 @@ const secondaryNavItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
-  const [collapsed, setCollapsed] = useState(false);
+  const { collapsed, setCollapsed } = useSidebarStore();
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = { [premiumToolsGroup.label]: true };
     navGroups.forEach(group => {
@@ -220,8 +221,8 @@ export function AppSidebar() {
   return (
     <aside
       className={cn(
-        'hidden',
-        'fixed left-0 top-0 z-40 h-screen border-r flex flex-col',
+        'hidden md:flex',
+        'fixed left-0 top-0 z-40 h-screen border-r flex-col',
         'border-sidebar-border',
         'transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]',
         'bg-gradient-to-b from-sidebar-background via-sidebar-background to-[hsl(220_20%_5%)]',

@@ -18,23 +18,12 @@ import { Award, Plus, Trash2, Calendar, TrendingUp, ChevronDown, ChevronUp, Ligh
 import { format, parseISO } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { secondaryConditions } from '@/data/secondaryConditions';
+import { COMP_RATES_2026 } from '@/data/compRates2026';
 
 const commonRatings = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
 // 2026 VA compensation rates (single veteran, no dependents)
-const monthlyCompensation: Record<number, number> = {
-  0: 0,
-  10: 175.51,
-  20: 347.14,
-  30: 537.32,
-  40: 773.64,
-  50: 1101.71,
-  60: 1395.07,
-  70: 1759.14,
-  80: 2044.74,
-  90: 2297.14,
-  100: 3937.04,
-};
+const monthlyCompensation: Record<number, number> = { 0: 0, ...COMP_RATES_2026 };
 
 const bodyPartOptions: { value: BodyPart; label: string }[] = [
   { value: 'other', label: 'Other / Non-extremity' },

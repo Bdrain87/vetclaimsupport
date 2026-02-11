@@ -284,11 +284,19 @@ export function MockExamSimulator() {
       })
       .join('\n\n');
 
-    await navigator.clipboard.writeText(transcript);
-    toast({
-      title: 'Transcript Copied',
-      description: 'Your mock exam transcript has been copied to clipboard.',
-    });
+    try {
+      await navigator.clipboard.writeText(transcript);
+      toast({
+        title: 'Transcript Copied',
+        description: 'Your mock exam transcript has been copied to clipboard.',
+      });
+    } catch {
+      toast({
+        title: 'Copy failed',
+        description: 'Please select and copy the text manually.',
+        variant: 'destructive',
+      });
+    }
   };
 
   const handleDownloadTranscript = () => {

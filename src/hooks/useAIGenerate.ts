@@ -11,7 +11,7 @@ export function useAIGenerate(persona: keyof typeof AI_CONFIG) {
   const generateWithCache = useCallback(async (input: string): Promise<string | null> => {
     setError(null);
 
-    const cacheKey = `${persona}:${input.substring(0, 200)}`;
+    const cacheKey = `${persona}:${input.substring(0, 500)}`;
     const cached = getCache(cacheKey);
     if (cached) return cached;
 

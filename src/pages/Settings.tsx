@@ -595,7 +595,7 @@ export default function Settings() {
             profile.resetProfile();
             navigate('/onboarding');
           }}
-          className="text-white/60 hover:text-white text-sm underline"
+          className="text-muted-foreground hover:text-foreground text-sm underline"
         >
           Reset Onboarding
         </button>

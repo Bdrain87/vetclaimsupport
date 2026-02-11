@@ -20,7 +20,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useClaims } from '@/hooks/useClaims';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/lib/supabase';
 import { secondaryConditions } from '@/data/secondaryConditions';
 
 // Common VA disability conditions with icons
@@ -165,11 +165,46 @@ export function ConditionsExplorer({ claimConditions, onAddCondition }: Conditio
         throw new Error(responseData.error);
       }
 
-      setAnalysisResult(responseData);
+      // The edge function returns { analysis: "raw text" } — parse into structured format
+      let parsed: AnalysisResult;
+      if (responseData.suggestions) {
+        parsed = responseData as AnalysisResult;
+      } else if (responseData.analysis) {
+        // Try to extract JSON from the raw AI response
+        const text = responseData.analysis as string;
+        let jsonParsed = false;
+        try {
+          const jsonMatch = text.match(/\{[\s\S]*"suggestions"[\s\S]*\}/);
+          if (jsonMatch) {
+            parsed = JSON.parse(jsonMatch[0]) as AnalysisResult;
+            jsonParsed = true;
+          }
+        } catch { /* not JSON */ }
+        if (!jsonParsed!) {
+          // Fallback: display raw analysis as a single suggestion
+          parsed = {
+            suggestions: [{
+              condition: 'AI Analysis Results',
+              category: 'General',
+              evidenceStrength: 'Moderate' as const,
+              reasoning: text,
+              supportingEvidence: [],
+              additionalEvidence: [],
+              typicalRating: 'See analysis',
+            }],
+            overallAssessment: text,
+            priorityActions: [],
+          };
+        }
+      } else {
+        throw new Error('Unexpected response format');
+      }
+
+      setAnalysisResult(parsed!);
       setExpandedTier('evidence');
       toast({
         title: 'Analysis Complete',
-        description: `Found ${responseData.suggestions?.length || 0} conditions based on your evidence.`,
+        description: `Found ${parsed!.suggestions?.length || 0} conditions based on your evidence.`,
       });
     } catch (err) {
       console.error('Analysis error:', err);

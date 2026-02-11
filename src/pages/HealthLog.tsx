@@ -417,7 +417,7 @@ export default function HealthLog() {
                   // Combine all recent entries
                   const allEntries: { type: string; date: string; label: string; icon: React.ElementType }[] = [];
 
-                  (data.symptoms || []).slice(0, 3).forEach(s => {
+                  [...(data.symptoms || [])].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 3).forEach(s => {
                     allEntries.push({
                       type: 'symptom',
                       date: s.date,
@@ -426,7 +426,7 @@ export default function HealthLog() {
                     });
                   });
 
-                  (data.migraines || []).slice(0, 3).forEach(m => {
+                  [...(data.migraines || [])].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 3).forEach(m => {
                     allEntries.push({
                       type: 'migraine',
                       date: m.date,
@@ -435,7 +435,7 @@ export default function HealthLog() {
                     });
                   });
 
-                  (data.sleepEntries || []).slice(0, 3).forEach(s => {
+                  [...(data.sleepEntries || [])].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 3).forEach(s => {
                     allEntries.push({
                       type: 'sleep',
                       date: s.date,

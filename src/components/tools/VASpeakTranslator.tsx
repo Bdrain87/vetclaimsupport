@@ -114,9 +114,8 @@ function translateText(input: string): { translated: string; matchedCategories: 
   for (const rule of TRANSLATION_RULES) {
     if (rule.pattern.test(result)) {
       categories.add(rule.category);
+      rule.pattern.lastIndex = 0; // Reset before replace
       result = result.replace(rule.pattern, rule.replacement);
-      // Reset lastIndex for global regex
-      rule.pattern.lastIndex = 0;
     }
   }
 

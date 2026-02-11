@@ -27,6 +27,7 @@ import { Slider } from '@/components/ui/slider';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { vaDisabilitiesBySystem } from '@/data/vaDisabilities';
+import { getConditionById } from '@/data/conditions';
 import { cn } from '@/lib/utils';
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
@@ -149,7 +150,7 @@ export default function DBQPrepSheet() {
   const storedMedicationsText = useMemo(() => {
     if (!data.medications || data.medications.length === 0) return '';
     return data.medications
-      .map(m => `${m.name}${m.dosage ? ` (${m.dosage})` : ''}${m.frequency ? ` - ${m.frequency}` : ''}`)
+      .map(m => `${m.name}${m.prescribedFor ? ` (for ${m.prescribedFor})` : ''}${m.sideEffects ? ` - side effects: ${m.sideEffects}` : ''}`)
       .join('\n');
   }, [data.medications]);
 
@@ -193,8 +194,9 @@ export default function DBQPrepSheet() {
     const names = new Set<string>();
     (data.claimConditions || []).forEach(c => names.add(c.name));
     userConditions.forEach(uc => {
-      const details = uc.conditionId;
-      if (details) names.add(details);
+      const vaCondition = getConditionById(uc.conditionId);
+      if (vaCondition) names.add(vaCondition.name);
+      else if (uc.conditionId) names.add(uc.conditionId);
     });
     return [...names];
   }, [data.claimConditions, userConditions]);

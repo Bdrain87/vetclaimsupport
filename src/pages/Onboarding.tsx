@@ -217,7 +217,7 @@ export default function Onboarding() {
   const navigate = useNavigate();
   const profileStore = useProfileStore();
   const appStore = useAppStore();
-  const { addCondition } = useUserConditions();
+  const { addCondition, removeCondition } = useUserConditions();
 
   const [step, setStep] = useState(0);
   const [firstName, setFirstName] = useState(profileStore.firstName);
@@ -385,6 +385,7 @@ export default function Onboarding() {
   };
 
   const handleRemoveCondition = (id: string) => {
+    removeCondition(id);
     setAddedConditions(prev => prev.filter(c => c !== id));
   };
 

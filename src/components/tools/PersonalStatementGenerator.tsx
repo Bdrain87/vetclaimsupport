@@ -70,8 +70,8 @@ export function PersonalStatementGenerator() {
 
     // Service dates
     const serviceEntries = data.serviceHistory;
-    const earliestService = serviceEntries.length > 0 
-      ? serviceEntries.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())[0]
+    const earliestService = serviceEntries.length > 0
+      ? [...serviceEntries].sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())[0]
       : null;
 
     const today = format(new Date(), 'MMMM d, yyyy');

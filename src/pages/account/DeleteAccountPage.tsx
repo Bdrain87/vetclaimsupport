@@ -37,8 +37,8 @@ export default function DeleteAccountPage() {
           <div className="w-16 h-16 mx-auto rounded-full bg-emerald-400/10 border border-emerald-400/20 flex items-center justify-center">
             <CheckCircle className="h-8 w-8 text-emerald-400" />
           </div>
-          <h2 className="text-xl font-bold text-white">Account Deleted</h2>
-          <p className="text-white/50 text-sm">
+          <h2 className="text-xl font-bold text-foreground">Account Deleted</h2>
+          <p className="text-muted-foreground text-sm">
             Your account and all associated data have been deleted. You will be signed out.
           </p>
         </div>
@@ -51,7 +51,7 @@ export default function DeleteAccountPage() {
       {/* Back button */}
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-1 text-white/50 hover:text-white text-sm transition-colors"
+        className="flex items-center gap-1 text-muted-foreground hover:text-foreground text-sm transition-colors"
       >
         <ChevronLeft className="h-4 w-4" />
         Back
@@ -62,8 +62,8 @@ export default function DeleteAccountPage() {
         <div className="w-16 h-16 mx-auto rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center">
           <AlertTriangle className="h-8 w-8 text-red-400" />
         </div>
-        <h1 className="text-2xl font-bold text-white">Delete Your Account</h1>
-        <p className="text-white/50 text-sm leading-relaxed">
+        <h1 className="text-2xl font-bold text-foreground">Delete Your Account</h1>
+        <p className="text-muted-foreground text-sm leading-relaxed">
           This will permanently delete your account and all associated data.
           This action cannot be undone.
         </p>
@@ -72,7 +72,7 @@ export default function DeleteAccountPage() {
       {/* What will be deleted */}
       <div className="rounded-xl bg-red-500/5 border border-red-500/20 p-4 space-y-2">
         <h3 className="text-sm font-semibold text-red-400 mb-3">The following will be permanently deleted:</h3>
-        <ul className="space-y-1.5 text-sm text-white/60">
+        <ul className="space-y-1.5 text-sm text-muted-foreground">
           <li className="flex items-start gap-2">
             <span className="text-red-400 mt-0.5">&#x2022;</span>
             Your profile and account information
@@ -111,15 +111,15 @@ export default function DeleteAccountPage() {
 
       {/* Confirmation input */}
       <div className="space-y-2">
-        <label className="block text-sm text-white/50">
-          Type <span className="font-mono font-bold text-white">DELETE</span> to confirm:
+        <label className="block text-sm text-muted-foreground">
+          Type <span className="font-mono font-bold text-foreground">DELETE</span> to confirm:
         </label>
         <input
           type="text"
           value={confirmText}
           onChange={(e) => setConfirmText(e.target.value)}
           placeholder="Type DELETE"
-          className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-red-400/40 focus:border-red-400/50 transition-all"
+          className="w-full h-12 px-4 bg-muted border border-border rounded-xl text-foreground text-sm placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-red-400/40 focus:border-red-400/50 transition-all"
           disabled={processing}
         />
       </div>

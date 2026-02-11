@@ -311,6 +311,7 @@ export function useMilestones() {
   // Get progress percentage
   const getOverallProgress = useCallback(() => {
     const all = Object.values(state.milestones);
+    if (all.length === 0) return 0;
     const unlocked = all.filter((m) => m.isUnlocked).length;
     return Math.round((unlocked / all.length) * 100);
   }, [state.milestones]);

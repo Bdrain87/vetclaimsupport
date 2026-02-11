@@ -2,6 +2,8 @@ import { useMemo } from 'react';
 import { BILATERAL_PAIRS } from '@/data/bilateralMap';
 
 export const useBilateralDetector = (activeClaims: { id: string, rating: number }[]) => {
+  const claimsKey = JSON.stringify(activeClaims);
+
   return useMemo(() => {
     const bilateralRatings: number[] = [];
     const standardRatings: number[] = [];
@@ -30,5 +32,6 @@ export const useBilateralDetector = (activeClaims: { id: string, rating: number 
     });
 
     return { bilateralRatings, standardRatings, detectedPairs };
-  }, [activeClaims]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [claimsKey]);
 };

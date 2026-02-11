@@ -66,16 +66,19 @@ export async function pullFromCloud(): Promise<void> {
   if (conditions && conditions.length > 0) {
     const appStore = useAppStore.getState();
     conditions.forEach((condition) => {
-      const existing = appStore.claimConditions.find((c) => c.id === condition.id);
+      const existing = appStore.claimConditions.find(
+        (c) => c.name === condition.name || c.id === condition.id
+      );
       if (!existing) {
         appStore.addClaimCondition({
-          id: condition.id,
           name: condition.name,
-          diagnosticCode: condition.diagnostic_code || '',
-          category: condition.category || '',
-          status: condition.status || 'active',
-          claimedRating: condition.claimed_rating,
-          isSecondary: condition.is_secondary || false,
+          linkedMedicalVisits: [],
+          linkedExposures: [],
+          linkedSymptoms: [],
+          linkedDocuments: [],
+          linkedBuddyContacts: [],
+          notes: '',
+          createdAt: condition.created_at || new Date().toISOString(),
         });
       }
     });
@@ -160,11 +163,7 @@ export async function pushToCloud(): Promise<void> {
       id: c.id,
       user_id: userId,
       name: c.name,
-      diagnostic_code: c.diagnosticCode || null,
-      category: c.category || null,
-      status: c.status || 'active',
-      claimed_rating: c.claimedRating ?? null,
-      is_secondary: c.isSecondary || false,
+      notes: c.notes || null,
       updated_at: new Date().toISOString(),
     }));
     await supabase.from('conditions').upsert(conditionRows);

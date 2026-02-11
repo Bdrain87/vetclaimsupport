@@ -46,6 +46,7 @@ export function EvidenceAttachment({
       return;
     }
 
+    const validFiles: File[] = [];
     Array.from(files).forEach(file => {
       // Validate file size (10MB limit for documents)
       if (file.size > 10 * 1024 * 1024) {
@@ -57,43 +58,53 @@ export function EvidenceAttachment({
         return;
       }
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const dataUrl = e.target?.result as string;
-        const suggestedCategory = suggestCategoryFromFilename(file.name);
-        
-        const newDoc: EvidenceDocument = {
-          id: crypto.randomUUID(),
-          fileName: file.name,
-          fileType: file.type,
-          fileSize: file.size,
-          dataUrl,
-          uploadedAt: new Date().toISOString(),
-          category: suggestedCategory,
-          title: file.name.replace(/\.[^/.]+$/, ''), // Remove extension for title
-          linkedEntries: [{
-            entryType,
-            entryId,
-            linkedAt: new Date().toISOString(),
-          }],
-          autoSuggestedCategory: suggestedCategory,
-          storageType: 'localStorage', // All local storage, no cloud
-        };
+      validFiles.push(file);
+    });
 
-        // Generate thumbnail for images
-        if (file.type.startsWith('image/')) {
-          newDoc.thumbnailUrl = dataUrl;
-        }
+    if (validFiles.length > 0) {
+      Promise.all(
+        validFiles.map(file => new Promise<EvidenceDocument>((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const dataUrl = e.target?.result as string;
+            const suggestedCategory = suggestCategoryFromFilename(file.name);
 
-        onDocumentsChange([...documents, newDoc]);
-        
+            const newDoc: EvidenceDocument = {
+              id: crypto.randomUUID(),
+              fileName: file.name,
+              fileType: file.type,
+              fileSize: file.size,
+              dataUrl,
+              uploadedAt: new Date().toISOString(),
+              category: suggestedCategory,
+              title: file.name.replace(/\.[^/.]+$/, ''), // Remove extension for title
+              linkedEntries: [{
+                entryType,
+                entryId,
+                linkedAt: new Date().toISOString(),
+              }],
+              autoSuggestedCategory: suggestedCategory,
+              storageType: 'localStorage', // All local storage, no cloud
+            };
+
+            // Generate thumbnail for images
+            if (file.type.startsWith('image/')) {
+              newDoc.thumbnailUrl = dataUrl;
+            }
+
+            resolve(newDoc);
+          };
+          reader.readAsDataURL(file);
+        }))
+      ).then(newDocs => {
+        onDocumentsChange([...documents, ...newDocs]);
+
         toast({
           title: 'Evidence Attached',
-          description: `${file.name} added to this entry.`,
+          description: `${newDocs.length} file${newDocs.length > 1 ? 's' : ''} added to this entry.`,
         });
-      };
-      reader.readAsDataURL(file);
-    });
+      });
+    }
 
     // Reset input
     if (fileInputRef.current) {

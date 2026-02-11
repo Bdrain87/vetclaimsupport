@@ -42,7 +42,7 @@ export default function ExportDataPage() {
       {/* Back button */}
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-1 text-white/50 hover:text-white text-sm transition-colors"
+        className="flex items-center gap-1 text-muted-foreground hover:text-foreground text-sm transition-colors"
       >
         <ChevronLeft className="h-4 w-4" />
         Back
@@ -53,27 +53,27 @@ export default function ExportDataPage() {
         <div className="w-16 h-16 mx-auto rounded-full bg-[#3B82F6]/10 border border-[#3B82F6]/20 flex items-center justify-center">
           <Download className="h-8 w-8 text-[#3B82F6]" />
         </div>
-        <h1 className="text-2xl font-bold text-white">Export Your Data</h1>
-        <p className="text-white/50 text-sm">
+        <h1 className="text-2xl font-bold text-foreground">Export Your Data</h1>
+        <p className="text-muted-foreground text-sm">
           Download a copy of all your claim data and health logs.
         </p>
       </div>
 
       {/* Format selector */}
       <div className="space-y-3">
-        <label className="block text-sm text-white/50 font-medium">Choose format:</label>
+        <label className="block text-sm text-muted-foreground font-medium">Choose format:</label>
         <div className="grid grid-cols-2 gap-3">
           <button
             onClick={() => setFormat('json')}
             className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${
               format === 'json'
                 ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40'
-                : 'bg-white/[0.04] border-white/[0.08] hover:bg-white/[0.06]'
+                : 'bg-muted/50 border-border hover:bg-muted'
             }`}
           >
-            <FileJson className={`h-8 w-8 ${format === 'json' ? 'text-[#3B82F6]' : 'text-white/40'}`} />
-            <span className={`text-sm font-medium ${format === 'json' ? 'text-white' : 'text-white/60'}`}>JSON</span>
-            <span className="text-[10px] text-white/30">Machine-readable</span>
+            <FileJson className={`h-8 w-8 ${format === 'json' ? 'text-[#3B82F6]' : 'text-muted-foreground/70'}`} />
+            <span className={`text-sm font-medium ${format === 'json' ? 'text-foreground' : 'text-muted-foreground'}`}>JSON</span>
+            <span className="text-[10px] text-muted-foreground/70">Machine-readable</span>
           </button>
 
           <button
@@ -81,12 +81,12 @@ export default function ExportDataPage() {
             className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${
               format === 'pdf'
                 ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40'
-                : 'bg-white/[0.04] border-white/[0.08] hover:bg-white/[0.06]'
+                : 'bg-muted/50 border-border hover:bg-muted'
             }`}
           >
-            <FileText className={`h-8 w-8 ${format === 'pdf' ? 'text-[#3B82F6]' : 'text-white/40'}`} />
-            <span className={`text-sm font-medium ${format === 'pdf' ? 'text-white' : 'text-white/60'}`}>PDF</span>
-            <span className="text-[10px] text-white/30">Human-readable</span>
+            <FileText className={`h-8 w-8 ${format === 'pdf' ? 'text-[#3B82F6]' : 'text-muted-foreground/70'}`} />
+            <span className={`text-sm font-medium ${format === 'pdf' ? 'text-foreground' : 'text-muted-foreground'}`}>PDF</span>
+            <span className="text-[10px] text-muted-foreground/70">Human-readable</span>
           </button>
         </div>
       </div>
@@ -116,8 +116,8 @@ export default function ExportDataPage() {
       </button>
 
       {/* Info */}
-      <div className="rounded-xl bg-white/[0.04] border border-white/[0.08] p-4">
-        <p className="text-xs text-white/40 leading-relaxed">
+      <div className="rounded-xl bg-muted/50 border border-border p-4">
+        <p className="text-xs text-muted-foreground/70 leading-relaxed">
           Your export includes your profile, conditions, health logs, medications,
           medical visits, service history, and document metadata. Uploaded file
           attachments are not included in the export.

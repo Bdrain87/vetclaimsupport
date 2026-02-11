@@ -1265,7 +1265,7 @@ export const ClaimIntelligence = {
     return userConditions.map((uc) => {
       const vaCondition = resolveVACondition(uc);
       const condName = vaCondition?.name ?? uc.conditionId;
-      const diagnosticCode = vaCondition?.diagnosticCode?.[0] ?? '';
+      const diagnosticCode = vaCondition?.diagnosticCode ?? '';
 
       // Check if there's an approved rating for this condition
       const approved = approvedConditions.find(
@@ -1333,7 +1333,7 @@ export const ClaimIntelligence = {
     const conditionsList = userConditions.map((uc) => {
       const vaCondition = resolveVACondition(uc);
       const condName = vaCondition?.name ?? uc.conditionId;
-      const diagnosticCode = vaCondition?.diagnosticCode?.[0] ?? '';
+      const diagnosticCode = vaCondition?.diagnosticCode ?? '';
       const docStatus = docStatuses.find((ds) => ds.conditionId === uc.id) ?? {
         conditionId: uc.id,
         conditionName: condName,

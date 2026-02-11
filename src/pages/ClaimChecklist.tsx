@@ -105,7 +105,7 @@ export default function ClaimChecklist() {
         guidance: data.separationDate 
           ? 'Your BDD timeline is being tracked on the dashboard.'
           : 'Set this to track your Benefits Delivery at Discharge window.',
-        link: '/',
+        link: '/settings/service-history',
         linkText: 'Set Date',
         priority: 'medium',
       },
@@ -499,8 +499,8 @@ export default function ClaimChecklist() {
               is comprehensive and ready for submission.
             </p>
             <Button asChild>
-              <Link to="/">
-                Export Your Report
+              <Link to="/settings/vault">
+                View Your Documents
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Link>
             </Button>
