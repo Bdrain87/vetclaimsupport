@@ -34,7 +34,7 @@ export default function PrepHub() {
         <p className="text-muted-foreground text-sm mt-1">Tools to prepare and strengthen your claim.</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {prepTools.map((tool) => (
           <button
             key={tool.route}
@@ -54,7 +54,7 @@ export default function PrepHub() {
                 </Badge>
               )}
             </div>
-            <span className="text-sm font-medium text-foreground">{tool.label}</span>
+            <span className="text-sm font-medium text-foreground truncate w-full">{tool.label}</span>
             <span className="text-xs text-muted-foreground line-clamp-2">
               {tool.description}
             </span>

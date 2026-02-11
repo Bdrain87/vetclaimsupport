@@ -543,7 +543,7 @@ Date: ${today}`;
               </CardContent>
             </Card>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {data.buddyContacts.map((contact) => (
                 <Card key={contact.id} className="data-card">
                   <CardHeader className="pb-3">
@@ -563,7 +563,7 @@ Date: ${today}`;
                         </Button>
                       </div>
                     </div>
-                    <CardTitle className="text-base mt-2">
+                    <CardTitle className="text-base mt-2 break-words">
                       {contact.rank && `${contact.rank} `}{contact.name}
                     </CardTitle>
                   </CardHeader>
@@ -580,11 +580,11 @@ Date: ${today}`;
                     )}
 
                     {contact.contactInfo && (
-                      <div className="flex items-center gap-2 text-muted-foreground">
+                      <div className="flex items-center gap-2 text-muted-foreground min-w-0">
                         {contact.contactInfo.includes('@') ? (
-                          <Mail className="h-4 w-4" />
+                          <Mail className="h-4 w-4 flex-shrink-0" />
                         ) : (
-                          <Phone className="h-4 w-4" />
+                          <Phone className="h-4 w-4 flex-shrink-0" />
                         )}
                         <span className="text-xs truncate">{contact.contactInfo}</span>
                       </div>
@@ -635,7 +635,7 @@ Date: ${today}`;
           </Card>
 
           {/* Progress Steps */}
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center overflow-x-auto pb-1">
             {steps.map((step, index) => (
               <div key={step.id} className="flex items-center">
                 <div
@@ -662,7 +662,7 @@ Date: ${today}`;
                 </div>
                 {index < steps.length - 1 && (
                   <div
-                    className={`w-8 sm:w-16 h-0.5 mx-1 ${
+                    className={`w-4 sm:w-16 h-0.5 mx-0.5 sm:mx-1 ${
                       step.id < currentStep ? 'bg-success' : 'bg-muted'
                     }`}
                   />

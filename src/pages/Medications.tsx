@@ -211,7 +211,7 @@ export default function Medications() {
             <h2 className="text-lg font-semibold text-foreground">Current Medications</h2>
             <span className="text-xs text-muted-foreground">({currentMeds.length})</span>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {currentMeds.map((med, index) => (
               <Card key={med.id} className="data-card group hover:border-primary/30 transition-all duration-300 animate-fade-in" style={{ animationDelay: `${index * 0.05}s` }}>
                 <CardHeader className="pb-3">
@@ -229,7 +229,7 @@ export default function Medications() {
                       </Button>
                     </div>
                   </div>
-                  <CardTitle className="text-base mt-2 group-hover:text-primary transition-colors">{med.name}</CardTitle>
+                  <CardTitle className="text-base mt-2 group-hover:text-primary transition-colors break-words">{med.name}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm">
                   {med.prescribedFor && (
@@ -261,7 +261,7 @@ export default function Medications() {
       {pastMeds.length > 0 && (
         <div className="space-y-4">
           <h2 className="text-lg font-semibold text-foreground">Past Medications</h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {pastMeds.map((med) => (
               <Card key={med.id} className="data-card opacity-75">
                 <CardHeader className="pb-3">
@@ -278,7 +278,7 @@ export default function Medications() {
                       </Button>
                     </div>
                   </div>
-                  <CardTitle className="text-base mt-2">{med.name}</CardTitle>
+                  <CardTitle className="text-base mt-2 break-words">{med.name}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm">
                   {med.prescribedFor && (

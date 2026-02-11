@@ -21,13 +21,13 @@ export const DocumentVault = () => {
   };
 
   return (
-    <div className="p-8 min-h-screen">
+    <div className="p-4 sm:p-8 min-h-screen">
       {!isUnlocked ? (
         <div className="flex flex-col items-center justify-center mt-32 space-y-6">
           <div className="p-10 rounded-full bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)] animate-pulse">
             <ShieldCheck className="h-16 w-16 text-gold" />
           </div>
-          <h2 className="text-3xl font-black italic">SECURE VAULT</h2>
+          <h2 className="text-2xl sm:text-3xl font-black italic">SECURE VAULT</h2>
           <button onClick={handleVaultUnlock} className="primary-button px-12 py-4">Authenticate</button>
         </div>
       ) : (

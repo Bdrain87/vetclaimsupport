@@ -404,7 +404,7 @@ export default function DBQPrepSheet() {
                       <button
                         key={condition}
                         type="button"
-                        className="w-full text-left px-3 py-2 hover:bg-muted text-sm"
+                        className="w-full text-left px-3 py-2 hover:bg-muted text-sm truncate"
                         onClick={() => handleConditionSelect(condition)}
                       >
                         {condition}
@@ -414,7 +414,7 @@ export default function DBQPrepSheet() {
                 )}
               </div>
               {formData.condition && (
-                <Badge variant="secondary">{formData.condition}</Badge>
+                <Badge variant="secondary" className="truncate max-w-full">{formData.condition}</Badge>
               )}
             </div>
 
@@ -463,7 +463,7 @@ export default function DBQPrepSheet() {
             <div className="flex items-start gap-2">
               <Info className="h-5 w-5 text-primary mt-0.5" />
               <div>
-                <p className="font-medium text-sm mb-2">
+                <p className="font-medium text-sm mb-2 break-words">
                   Reminders for {formData.condition}
                 </p>
                 <ul className="space-y-1">
@@ -529,7 +529,7 @@ export default function DBQPrepSheet() {
             </div>
 
             {/* Pain Levels */}
-            <div className="grid gap-6 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
               <div className="space-y-3">
                 <Label>Average Pain Level: {formData.averagePain}/10</Label>
                 <Slider

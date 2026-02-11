@@ -13,10 +13,10 @@ export const BodyMap = () => {
   }, [selectedZone]);
 
   return (
-    <div className="grid lg:grid-cols-2 gap-12 glass-card p-10 border-white/5">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 glass-card p-4 sm:p-6 lg:p-10 border-white/5 overflow-hidden">
       {/* Interactive SVG Body */}
-      <div className="relative bg-navy-950/40 rounded-[3rem] p-8 border border-white/5">
-        <svg viewBox="0 0 200 500" className="h-[550px] mx-auto overflow-visible">
+      <div className="relative bg-navy-950/40 rounded-2xl sm:rounded-[3rem] p-4 sm:p-8 border border-white/5">
+        <svg viewBox="0 0 200 500" className="h-[350px] sm:h-[450px] lg:h-[550px] mx-auto overflow-visible">
           {/* Head & Neck Zone */}
           <circle
             cx="100" cy="60" r="35"
@@ -58,7 +58,7 @@ export const BodyMap = () => {
                 >
                   <div className="flex justify-between items-start">
                     <div>
-                      <h4 className="text-white font-black text-sm uppercase tracking-tight">{condition.name}</h4>
+                      <h4 className="text-white font-black text-sm uppercase tracking-tight break-words">{condition.name}</h4>
                       <p className="text-gold text-[10px] font-mono mt-1">DC: {condition.diagnosticCode}</p>
                     </div>
                     <Activity size={16} className="text-white/40 group-hover:text-gold transition-colors" />
@@ -66,7 +66,7 @@ export const BodyMap = () => {
                   {condition.possibleSecondaries && (
                     <div className="mt-4 flex flex-wrap gap-2">
                       {condition.possibleSecondaries.map(s => (
-                        <span key={s} className="px-2 py-1 bg-[rgba(214,178,94,0.1)] text-gold rounded-md text-[9px] font-black uppercase tracking-tighter border border-[rgba(214,178,94,0.2)]">
+                        <span key={s} className="px-2 py-1 bg-[rgba(214,178,94,0.1)] text-gold rounded-md text-[9px] font-black uppercase tracking-tighter border border-[rgba(214,178,94,0.2)] truncate max-w-full">
                           + {s}
                         </span>
                       ))}

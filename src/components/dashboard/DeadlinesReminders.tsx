@@ -106,8 +106,8 @@ function CountdownTimer({ targetDate }: { targetDate: Date }) {
   if (days > 7) return null; // Only show countdown for urgent deadlines
 
   return (
-    <div className="flex items-center gap-1 text-xs font-mono bg-destructive/10 text-destructive px-2 py-1 rounded-md">
-      <Clock className="h-3 w-3" />
+    <div className="flex items-center gap-1 text-xs font-mono bg-destructive/10 text-destructive px-2 py-1 rounded-md whitespace-nowrap overflow-hidden">
+      <Clock className="h-3 w-3 flex-shrink-0" />
       {days > 0 && <span>{days}d</span>}
       <span>{String(hours).padStart(2, '0')}:{String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}</span>
     </div>
@@ -179,9 +179,9 @@ export function DeadlinesReminders() {
     <Card className="data-card">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-base flex items-center gap-2">
-            <CalendarClock className="h-5 w-5 text-primary" />
-            Deadlines & Reminders
+          <CardTitle className="text-base flex items-center gap-2 min-w-0">
+            <CalendarClock className="h-5 w-5 text-primary flex-shrink-0" />
+            <span className="truncate">Deadlines & Reminders</span>
           </CardTitle>
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
@@ -327,13 +327,13 @@ export function DeadlinesReminders() {
                   <div className="flex flex-col items-end gap-1 flex-shrink-0">
                     <div className="flex items-center gap-1">
                       <span className={cn(
-                        "text-xs font-semibold px-2 py-0.5 rounded-full",
+                        "text-xs font-semibold px-2 py-0.5 rounded-full whitespace-nowrap",
                         urgency.bg,
                         urgency.text
                       )}>
-                        {daysRemaining < 0 
+                        {daysRemaining < 0
                           ? `${Math.abs(daysRemaining)}d overdue`
-                          : daysRemaining === 0 
+                          : daysRemaining === 0
                             ? 'Today!'
                             : `${daysRemaining}d left`
                         }

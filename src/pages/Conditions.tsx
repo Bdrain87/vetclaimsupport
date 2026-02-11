@@ -93,16 +93,16 @@ function ConditionCard({ userCondition, conditionDetails, onView, onRemove, onNa
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <h3 className="font-semibold truncate group-hover:text-primary transition-colors">
+              <h3 className="font-semibold truncate max-w-full group-hover:text-primary transition-colors">
                 {conditionDetails?.abbreviation || conditionDetails?.name || userCondition.conditionId}
               </h3>
               {userCondition.claimStatus && (
-                <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${STATUS_COLORS[userCondition.claimStatus] || ''}`}>
+                <Badge variant="outline" className={`text-[10px] px-1.5 py-0 truncate max-w-full ${STATUS_COLORS[userCondition.claimStatus] || ''}`}>
                   {STATUS_LABELS[userCondition.claimStatus] || userCondition.claimStatus}
                 </Badge>
               )}
               {userCondition.serviceConnected && (
-                <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-[rgba(214,178,94,0.1)] text-gold border-[rgba(214,178,94,0.3)]">
+                <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-[rgba(214,178,94,0.1)] text-gold border-[rgba(214,178,94,0.3)] flex-shrink-0">
                   <Shield className="h-2.5 w-2.5 mr-0.5" />
                   SC
                 </Badge>
@@ -161,7 +161,7 @@ function ConditionCard({ userCondition, conditionDetails, onView, onRemove, onNa
 
         {/* Quick Actions + Remove */}
         <div
-          className="flex gap-1 mt-3 pt-3 border-t border-border flex-wrap opacity-0 group-hover:opacity-100 transition-opacity"
+          className="flex gap-1 mt-3 pt-3 border-t border-border flex-wrap opacity-0 group-hover:opacity-100 transition-opacity overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           {conditionDetails && onNavigate && (
@@ -297,7 +297,7 @@ export default function Conditions() {
   return (
     <PageContainer className="py-6 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-primary/10">
             <ClipboardList className="h-6 w-6 text-primary" />
@@ -473,7 +473,7 @@ export default function Conditions() {
                       const secChecked = conditionEvidenceChecks[sec.id] || [];
                       return (
                         <div key={sec.id} className="space-y-1">
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-xs text-muted-foreground truncate">
                             Secondary to: {primaryDetails?.abbreviation || primaryDetails?.name || uc.conditionId}
                           </p>
                           <ConditionCard
@@ -603,9 +603,9 @@ export default function Conditions() {
                     <p className="text-sm font-medium truncate">{result.name}</p>
                     <div className="flex items-center gap-2 mt-0.5">
                       {result.diagnosticCode && (
-                        <span className="text-xs text-muted-foreground">DC {result.diagnosticCode}</span>
+                        <span className="text-xs text-muted-foreground whitespace-nowrap">DC {result.diagnosticCode}</span>
                       )}
-                      <span className="text-xs text-muted-foreground">{result.category}</span>
+                      <span className="text-xs text-muted-foreground truncate">{result.category}</span>
                     </div>
                   </div>
                   <Button

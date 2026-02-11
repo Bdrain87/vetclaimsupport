@@ -347,43 +347,43 @@ export default function BackPayEstimator() {
             <div className="bg-muted/30 rounded-xl p-4 border border-border/20 space-y-2">
               <p className="text-sm font-medium text-foreground">Calculation Breakdown</p>
               <div className="space-y-1 text-sm text-muted-foreground">
-                <div className="flex justify-between">
-                  <span>Base rate at {currentRating}%</span>
-                  <span>{formatCurrencyExact(BASE_RATES[parseInt(currentRating, 10)] ?? 0)}/mo</span>
+                <div className="flex justify-between gap-2">
+                  <span className="min-w-0">Base rate at {currentRating}%</span>
+                  <span className="shrink-0">{formatCurrencyExact(BASE_RATES[parseInt(currentRating, 10)] ?? 0)}/mo</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>Base rate at {newRating}%</span>
-                  <span>{formatCurrencyExact(BASE_RATES[parseInt(newRating, 10)] ?? 0)}/mo</span>
+                <div className="flex justify-between gap-2">
+                  <span className="min-w-0">Base rate at {newRating}%</span>
+                  <span className="shrink-0">{formatCurrencyExact(BASE_RATES[parseInt(newRating, 10)] ?? 0)}/mo</span>
                 </div>
                 {hasSpouse && parseInt(newRating, 10) >= 30 && (
-                  <div className="flex justify-between">
-                    <span>Spouse addition (30%+)</span>
-                    <span>+{formatCurrencyExact(SPOUSE_ADDITION)}/mo</span>
+                  <div className="flex justify-between gap-2">
+                    <span className="min-w-0">Spouse addition (30%+)</span>
+                    <span className="shrink-0">+{formatCurrencyExact(SPOUSE_ADDITION)}/mo</span>
                   </div>
                 )}
                 {parseInt(dependentCount, 10) > 0 && parseInt(newRating, 10) >= 30 && (
-                  <div className="flex justify-between">
-                    <span>
+                  <div className="flex justify-between gap-2">
+                    <span className="min-w-0">
                       {dependentCount} dependent{parseInt(dependentCount, 10) !== 1 ? 's' : ''} (30%+)
                     </span>
-                    <span>+{formatCurrencyExact(parseInt(dependentCount, 10) * DEPENDENT_ADDITION)}/mo</span>
+                    <span className="shrink-0">+{formatCurrencyExact(parseInt(dependentCount, 10) * DEPENDENT_ADDITION)}/mo</span>
                   </div>
                 )}
                 {hasSpouse && parseInt(currentRating, 10) >= 30 && (
-                  <div className="flex justify-between text-xs">
-                    <span className="italic">Spouse already included at current rating</span>
-                    <span>-{formatCurrencyExact(SPOUSE_ADDITION)}/mo</span>
+                  <div className="flex justify-between gap-2 text-xs">
+                    <span className="italic min-w-0">Spouse already included at current rating</span>
+                    <span className="shrink-0">-{formatCurrencyExact(SPOUSE_ADDITION)}/mo</span>
                   </div>
                 )}
                 {parseInt(dependentCount, 10) > 0 && parseInt(currentRating, 10) >= 30 && (
-                  <div className="flex justify-between text-xs">
-                    <span className="italic">Dependents already included at current rating</span>
-                    <span>-{formatCurrencyExact(parseInt(dependentCount, 10) * DEPENDENT_ADDITION)}/mo</span>
+                  <div className="flex justify-between gap-2 text-xs">
+                    <span className="italic min-w-0">Dependents already included at current rating</span>
+                    <span className="shrink-0">-{formatCurrencyExact(parseInt(dependentCount, 10) * DEPENDENT_ADDITION)}/mo</span>
                   </div>
                 )}
-                <div className="border-t border-border/30 pt-1 mt-1 flex justify-between font-medium text-foreground">
-                  <span>Net monthly difference</span>
-                  <span>+{formatCurrencyExact(calculation.monthlyDifference)}/mo</span>
+                <div className="border-t border-border/30 pt-1 mt-1 flex justify-between gap-2 font-medium text-foreground">
+                  <span className="min-w-0">Net monthly difference</span>
+                  <span className="shrink-0">+{formatCurrencyExact(calculation.monthlyDifference)}/mo</span>
                 </div>
               </div>
             </div>

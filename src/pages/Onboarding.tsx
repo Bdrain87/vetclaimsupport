@@ -524,9 +524,9 @@ export default function Onboarding() {
                       }}
                     />
                     {mosCode && (
-                      <div className="flex items-center gap-2 text-sm text-gold">
-                        <Check className="h-4 w-4" />
-                        <span>{getCodeTypeForBranch(BRANCH_TO_MOS[branch])}: {mosCode} — {mosTitle}</span>
+                      <div className="flex items-start gap-2 text-sm text-gold min-w-0">
+                        <Check className="h-4 w-4 flex-shrink-0 mt-0.5" />
+                        <span className="break-words min-w-0">{getCodeTypeForBranch(BRANCH_TO_MOS[branch])}: {mosCode} — {mosTitle}</span>
                       </div>
                     )}
                     <button
@@ -561,9 +561,9 @@ export default function Onboarding() {
                       className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
                     />
                     {manualCode && manualTitle && (
-                      <div className="flex items-center gap-2 text-sm text-gold">
-                        <Check className="h-4 w-4" />
-                        <span>{manualCode} — {manualTitle}</span>
+                      <div className="flex items-center gap-2 text-sm text-gold min-w-0">
+                        <Check className="h-4 w-4 flex-shrink-0" />
+                        <span className="truncate">{manualCode} — {manualTitle}</span>
                       </div>
                     )}
                     <button
@@ -592,9 +592,9 @@ export default function Onboarding() {
                 {dutyStations.length > 0 && (
                   <div className="space-y-2">
                     {dutyStations.map((station, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.04] border border-white/[0.08]">
-                        <div>
-                          <p className="text-white text-sm font-medium">{station.baseName}</p>
+                      <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.04] border border-white/[0.08] gap-2">
+                        <div className="min-w-0 flex-1">
+                          <p className="text-white text-sm font-medium truncate">{station.baseName}</p>
                           {(station.startDate || station.endDate) && (
                             <p className="text-white/40 text-xs">{station.startDate} — {station.endDate}</p>
                           )}
@@ -675,15 +675,15 @@ export default function Onboarding() {
                 {deployments.length > 0 && (
                   <div className="space-y-2">
                     {deployments.map((dep, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.04] border border-white/[0.08]">
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <p className="text-white text-sm font-medium">{dep.operationName}</p>
+                      <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.04] border border-white/[0.08] gap-2">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <p className="text-white text-sm font-medium truncate">{dep.operationName}</p>
                             {dep.combatDeployment && (
                               <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/30">COMBAT</span>
                             )}
                           </div>
-                          {dep.location && <p className="text-white/40 text-xs">{dep.location}</p>}
+                          {dep.location && <p className="text-white/40 text-xs truncate">{dep.location}</p>}
                           {(dep.startDate || dep.endDate) && (
                             <p className="text-white/30 text-xs">{dep.startDate} — {dep.endDate}</p>
                           )}
@@ -797,8 +797,8 @@ export default function Onboarding() {
                       const c = getConditionById(id);
                       if (!c) return null;
                       return (
-                        <span key={id} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.3)] text-sm text-gold">
-                          {c.abbreviation || c.name}
+                        <span key={id} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.3)] text-sm text-gold max-w-full">
+                          <span className="truncate">{c.abbreviation || c.name}</span>
                           <button onClick={() => handleRemoveCondition(id)} className="ml-1 text-gold/60 hover:text-gold" aria-label={`Remove ${c.abbreviation || c.name}`}>
                             <X className="h-3 w-3" />
                           </button>
@@ -936,7 +936,7 @@ export default function Onboarding() {
                     {existingRated.length > 0 && (
                       <div className="space-y-2">
                         {existingRated.map((rc, idx) => (
-                          <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.04] border border-white/[0.08]">
+                          <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.04] border border-white/[0.08] gap-2">
                             <div className="flex-1 min-w-0">
                               <p className="text-sm text-white font-medium truncate">{rc.conditionName}</p>
                               <p className="text-xs text-white/40">{rc.rating}% · {rc.type}</p>
@@ -987,7 +987,7 @@ export default function Onboarding() {
                     </div>
                   ))}
                 </div>
-                <p className="text-center text-white/30 text-xs">By continuing, you agree to our <Link to="/settings/terms" className="text-gold underline">Terms of Service</Link> and <Link to="/settings/privacy" className="text-gold underline">Privacy Policy</Link>. This is a claim preparation tool &mdash; not a substitute for professional consultation with a VA-accredited representative.</p>
+                <p className="text-center text-white/30 text-xs break-words">By continuing, you agree to our <Link to="/settings/terms" className="text-gold underline">Terms of Service</Link> and <Link to="/settings/privacy" className="text-gold underline">Privacy Policy</Link>. This is a claim preparation tool &mdash; not a substitute for professional consultation with a VA-accredited representative.</p>
               </div>
             )}
 

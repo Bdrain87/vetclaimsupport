@@ -387,13 +387,13 @@ export default function ClaimJourney() {
       <Card className="border-0 shadow-lg">
         <CardHeader className="border-b border-border/50 bg-gradient-to-r from-primary/5 to-transparent">
           <div className="flex items-center gap-4">
-            <div className="p-3 rounded-xl bg-primary/10 text-primary">
+            <div className="p-3 rounded-xl bg-primary/10 text-primary flex-shrink-0">
               {currentPhase.icon}
             </div>
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <Badge variant="secondary" className="mb-1">Current Phase</Badge>
-              <CardTitle>{currentPhase.title}</CardTitle>
-              <CardDescription>{currentPhase.description}</CardDescription>
+              <CardTitle className="truncate">{currentPhase.title}</CardTitle>
+              <CardDescription className="line-clamp-2">{currentPhase.description}</CardDescription>
             </div>
             <ProgressRing
               value={phaseProgress[journeyProgress.currentPhase]}
@@ -409,7 +409,7 @@ export default function ClaimJourney() {
               <Sparkles className="h-4 w-4 text-blue-500" />
               Tips for Success
             </h3>
-            <div className="grid sm:grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {currentPhase.tips.map((tip, i) => (
                 <div key={i} className="flex items-start gap-2 p-3 rounded-xl bg-blue-500/5 border border-blue-500/20">
                   <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
@@ -501,7 +501,7 @@ export default function ClaimJourney() {
       {/* All Phases Overview */}
       <div className="space-y-4">
         <h2 className="text-lg font-semibold">All Phases</h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {journeyPhases.map((phase, index) => {
             const status = getPhaseStatus(index);
             return (

@@ -173,17 +173,17 @@ export function ProgressTimeline({ events, className }: ProgressTimelineProps) {
 
                 {/* Content */}
                 <div className="min-h-[50px]">
-                  <div className="flex items-center gap-2 mb-1">
+                  <div className="flex items-center gap-2 mb-1 min-w-0">
                     <span
                       className={cn(
-                        'font-medium text-sm',
+                        'font-medium text-sm min-w-0 truncate',
                         event.completed ? 'text-foreground' : 'text-muted-foreground'
                       )}
                     >
                       {event.title}
                     </span>
                     {event.type === 'milestone' && event.completed && (
-                      <span className="text-xs bg-[rgba(214,178,94,0.2)] text-gold px-2 py-0.5 rounded-full">
+                      <span className="text-xs bg-[rgba(214,178,94,0.2)] text-gold px-2 py-0.5 rounded-full whitespace-nowrap flex-shrink-0">
                         Milestone
                       </span>
                     )}

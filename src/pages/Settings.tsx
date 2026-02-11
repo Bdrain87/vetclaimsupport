@@ -233,7 +233,7 @@ export default function Settings() {
           <CardDescription>Your personal information</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label htmlFor="firstName">First Name</Label>
               <Input
@@ -303,7 +303,7 @@ export default function Settings() {
                 </Select>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <Label htmlFor={`mos-${period.id}`}>MOS/Rating/AFSC</Label>
                   <Input
@@ -324,7 +324,7 @@ export default function Settings() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <Label htmlFor={`startDate-${period.id}`}>Start Date</Label>
                   <Input

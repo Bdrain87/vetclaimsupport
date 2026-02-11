@@ -208,7 +208,7 @@ export function ShareWithVSO() {
                     <span className="font-medium text-foreground">Service Locations:</span>
                     <ul className="list-disc list-inside ml-2 mt-1">
                       {data.serviceHistory.filter(s => s.base).map((s, i) => (
-                        <li key={i}>{s.base}</li>
+                        <li key={i} className="truncate">{s.base}</li>
                       ))}
                     </ul>
                   </div>
@@ -230,8 +230,8 @@ export function ShareWithVSO() {
                   <ul className="space-y-2">
                     {conditions.map((c, i) => (
                       <li key={i} className="p-2 bg-muted/30 rounded-md">
-                        <p className="font-medium text-foreground">{c.name}</p>
-                        <div className="text-xs text-muted-foreground mt-1 grid grid-cols-2 gap-1">
+                        <p className="font-medium text-foreground truncate">{c.name}</p>
+                        <div className="text-xs text-muted-foreground mt-1 grid grid-cols-1 sm:grid-cols-2 gap-1">
                           <span>• {c.linkedMedicalVisits.length} medical visits</span>
                           <span>• {c.linkedSymptoms.length} symptoms</span>
                           <span>• {c.linkedExposures.length} exposures</span>
@@ -252,7 +252,7 @@ export function ShareWithVSO() {
                 <Activity className="h-4 w-4 text-gold" />
                 Evidence Summary
               </div>
-              <div className="pl-6 grid grid-cols-2 gap-2 text-sm">
+              <div className="pl-6 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                 <div className="flex items-center gap-2 p-2 bg-muted/30 rounded-md">
                   <Stethoscope className="h-4 w-4 text-gold" />
                   <div>

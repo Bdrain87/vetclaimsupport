@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect } from 'react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MobileHeader } from './components/MobileHeader';
@@ -7,6 +7,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { TooltipProvider } from './components/ui/tooltip';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { LiabilityAcceptanceScreen } from './components/legal/LiabilityAcceptanceScreen';
+import { SplashScreen } from './components/SplashScreen';
 import { useProfileStore } from './store/useProfileStore';
 import { migrateOldDataToAppStore } from './utils/migrateData';
 import { useSessionTimeout } from './hooks/useSessionTimeout';
@@ -303,6 +304,7 @@ function AnimatedRoutes() {
 
 function App() {
   useSessionTimeout();
+  const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
     checkDataRetention();
@@ -312,6 +314,9 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider>
         <TooltipProvider>
+          {showSplash && (
+            <SplashScreen onComplete={() => setShowSplash(false)} minimumDuration={1800} />
+          )}
           <BrowserRouter>
             <ScrollToTop />
             <div className="min-h-[100dvh] bg-background text-foreground overflow-x-hidden break-words">

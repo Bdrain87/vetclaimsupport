@@ -308,7 +308,7 @@ export default function Exposures() {
             <Card key={exposure.id} className="data-card">
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 flex-wrap">
                     <span className={`inline-flex items-center rounded-md px-2.5 py-1 text-xs font-medium ring-1 ring-inset ${getExposureColor(exposure.type)}`}>
                       {exposure.type}
                     </span>
@@ -329,27 +329,27 @@ export default function Exposures() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 text-sm">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
-                    {new Date(exposure.date).toLocaleDateString()}
+                <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 text-sm">
+                  <div className="flex items-center gap-2 text-muted-foreground min-w-0">
+                    <Calendar className="h-4 w-4 flex-shrink-0" />
+                    <span className="truncate">{new Date(exposure.date).toLocaleDateString()}</span>
                   </div>
                   {exposure.location && (
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <MapPin className="h-4 w-4" />
-                      {exposure.location}
+                    <div className="flex items-center gap-2 text-muted-foreground min-w-0">
+                      <MapPin className="h-4 w-4 flex-shrink-0" />
+                      <span className="truncate">{exposure.location}</span>
                     </div>
                   )}
                   {exposure.duration && (
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <Shield className="h-4 w-4" />
-                      {exposure.duration}
+                    <div className="flex items-center gap-2 text-muted-foreground min-w-0">
+                      <Shield className="h-4 w-4 flex-shrink-0" />
+                      <span className="truncate">{exposure.duration}</span>
                     </div>
                   )}
                   {exposure.witnesses && (
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <Users className="h-4 w-4" />
-                      {exposure.witnesses}
+                    <div className="flex items-center gap-2 text-muted-foreground min-w-0">
+                      <Users className="h-4 w-4 flex-shrink-0" />
+                      <span className="truncate">{exposure.witnesses}</span>
                     </div>
                   )}
                 </div>

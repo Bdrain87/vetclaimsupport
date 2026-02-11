@@ -121,7 +121,7 @@ export function DashboardInsights() {
             }`}
           >
             <div className="flex-shrink-0 mt-0.5">{insight.icon}</div>
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <p className="text-sm text-foreground">{insight.message}</p>
               {insight.action && (
                 <Link 

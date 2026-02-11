@@ -105,11 +105,11 @@ export default function SecondaryFinder() {
   return (
     <PageContainer className="py-6 space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="w-12 h-12 rounded-xl bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)] flex items-center justify-center">
+      <div className="flex items-center gap-3 min-w-0">
+        <div className="w-12 h-12 rounded-xl bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)] flex items-center justify-center shrink-0">
           <Link2 className="h-6 w-6 text-gold" />
         </div>
-        <div>
+        <div className="min-w-0">
           <h1 className="text-2xl font-bold text-white">Secondary Conditions Finder</h1>
           <p className="text-white/50 text-sm">Discover conditions connected to your primary claims</p>
         </div>
@@ -131,13 +131,13 @@ export default function SecondaryFinder() {
               <button
                 key={c.id}
                 onClick={() => handleChipClick(c.fullName)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all max-w-full truncate ${
                   selectedPrimary === c.fullName
                     ? 'bg-[rgba(214,178,94,0.2)] text-gold border border-[rgba(214,178,94,0.4)]'
                     : 'bg-white/[0.06] text-white/70 border border-white/[0.08] hover:border-[rgba(214,178,94,0.3)] hover:text-white'
                 }`}
               >
-                {c.name} <ArrowRight className="inline h-3 w-3 ml-1" />
+                <span className="truncate">{c.name}</span> <ArrowRight className="inline h-3 w-3 ml-1 shrink-0" />
               </button>
             ))}
           </div>
@@ -148,16 +148,16 @@ export default function SecondaryFinder() {
       {selectedPrimary && (
         <div className="space-y-4">
           <div className="flex items-center justify-between flex-wrap gap-2">
-            <div>
-              <h2 className="text-lg font-bold text-white">
+            <div className="min-w-0 flex-1">
+              <h2 className="text-lg font-bold text-white break-words">
                 Secondary Conditions for: <span className="text-gold">{selectedPrimary}</span>
               </h2>
               <p className="text-white/40 text-sm">{currentSecondaries.length} connections found</p>
             </div>
             <Link to={`/prep/nexus-letter?primary=${encodeURIComponent(selectedPrimary)}`}>
-              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.3)] text-gold text-sm font-medium hover:bg-[rgba(214,178,94,0.2)] transition-colors">
-                <FileSignature className="h-4 w-4" />
-                Generate Nexus Letter
+              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.3)] text-gold text-sm font-medium hover:bg-[rgba(214,178,94,0.2)] transition-colors whitespace-nowrap shrink-0">
+                <FileSignature className="h-4 w-4 shrink-0" />
+                <span className="hidden sm:inline">Generate</span> Nexus Letter
               </button>
             </Link>
           </div>
@@ -169,7 +169,7 @@ export default function SecondaryFinder() {
               <p className="text-sm mt-1">Try searching for a different condition above.</p>
             </div>
           ) : (
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {currentSecondaries.map((connection, idx) => {
                 const cfg = strengthConfig[connection.strength];
                 const claimed = isAlreadyClaimed(connection.secondaryCondition);
@@ -182,10 +182,10 @@ export default function SecondaryFinder() {
                     <div className="flex items-start gap-3 mb-3">
                       <div className={`w-3 h-3 rounded-full mt-1 shrink-0 ${cfg.dot}`} />
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-white text-sm">{connection.secondaryCondition}</h3>
+                        <h3 className="font-bold text-white text-sm break-words">{connection.secondaryCondition}</h3>
                         <p className={`text-xs ${cfg.color} font-medium`}>{cfg.label}</p>
                       </div>
-                      <span className="text-[10px] font-semibold uppercase tracking-wider text-white/30 whitespace-nowrap">
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-white/30 shrink-0 hidden sm:block">
                         {connection.category}
                       </span>
                     </div>

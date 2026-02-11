@@ -441,14 +441,14 @@ export default function ServiceHistory() {
                       </div>
                     </div>
                     <CardTitle className="text-lg mt-2 flex items-center gap-2">
-                      <MapPin className="h-5 w-5 text-service" />
-                      {entry.base}
+                      <MapPin className="h-5 w-5 text-service flex-shrink-0" />
+                      <span className="break-words min-w-0">{entry.base}</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    <div className="grid gap-3 sm:grid-cols-2 text-sm">
-                      {entry.unit && <div className="flex items-center gap-2 text-muted-foreground"><Shield className="h-4 w-4" />{entry.unit}</div>}
-                      {entry.afsc && <div className="flex items-center gap-2 text-muted-foreground"><Briefcase className="h-4 w-4" />{entry.afsc}</div>}
+                    <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 text-sm">
+                      {entry.unit && <div className="flex items-center gap-2 text-muted-foreground min-w-0"><Shield className="h-4 w-4 flex-shrink-0" /><span className="truncate">{entry.unit}</span></div>}
+                      {entry.afsc && <div className="flex items-center gap-2 text-muted-foreground min-w-0"><Briefcase className="h-4 w-4 flex-shrink-0" /><span className="truncate">{entry.afsc}</span></div>}
                     </div>
                     {entry.duties && <div><p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Duties</p><p className="text-sm">{entry.duties}</p></div>}
                     {entry.hazards && (
@@ -586,10 +586,10 @@ export default function ServiceHistory() {
                         <Button variant="ghost" size="icon" onClick={() => deleteCombatEntry(entry.id)} aria-label="Delete combat entry"><Trash2 className="h-4 w-4 text-destructive" /></Button>
                       </div>
                     </div>
-                    <CardTitle className="text-lg mt-2 flex items-center gap-2">
-                      <Sword className="h-5 w-5 text-destructive" />
-                      {entry.location}
-                      <Badge variant="destructive" className="ml-2">{entry.combatZoneType}</Badge>
+                    <CardTitle className="text-lg mt-2 flex items-center gap-2 flex-wrap">
+                      <Sword className="h-5 w-5 text-destructive flex-shrink-0" />
+                      <span className="break-words min-w-0">{entry.location}</span>
+                      <Badge variant="destructive" className="flex-shrink-0">{entry.combatZoneType}</Badge>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
@@ -838,10 +838,10 @@ export default function ServiceHistory() {
                         <Button variant="ghost" size="icon" onClick={() => deleteDeployment(entry.id)} aria-label="Delete deployment"><Trash2 className="h-4 w-4 text-destructive" /></Button>
                       </div>
                     </div>
-                    <CardTitle className="text-lg mt-2 flex items-center gap-2">
-                      <Plane className="h-5 w-5 text-primary" />
-                      {entry.operationName} - {entry.location}
-                      {entry.combatDeployment && <Badge variant="destructive" className="ml-2">Combat</Badge>}
+                    <CardTitle className="text-lg mt-2 flex items-center gap-2 flex-wrap">
+                      <Plane className="h-5 w-5 text-primary flex-shrink-0" />
+                      <span className="break-words min-w-0">{entry.operationName} - {entry.location}</span>
+                      {entry.combatDeployment && <Badge variant="destructive" className="flex-shrink-0">Combat</Badge>}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">

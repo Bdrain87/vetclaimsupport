@@ -115,7 +115,7 @@ function FieldCard({ field, formId: _formId, savedValue, onSave }: FieldCardProp
         <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">
           {field.section}
         </p>
-        <h3 className="font-semibold text-sm text-foreground mt-1">{field.label}</h3>
+        <h3 className="font-semibold text-sm text-foreground mt-1 break-words">{field.label}</h3>
       </div>
 
       {/* Plain-language explanation */}
@@ -275,7 +275,7 @@ export default function FormGuideDetail() {
       {/* Header */}
       <div>
         <p className="font-mono text-sm font-semibold text-primary">{formDef.formId}</p>
-        <h1 className="text-xl font-bold text-foreground mt-1">{formDef.formTitle}</h1>
+        <h1 className="text-xl font-bold text-foreground mt-1 break-words">{formDef.formTitle}</h1>
       </div>
 
       {/* Form Source Notice */}
@@ -337,10 +337,10 @@ export default function FormGuideDetail() {
       </div>
 
       {/* Export + Clear Buttons */}
-      <div className="flex gap-3 pt-2 pb-4">
+      <div className="flex flex-col sm:flex-row gap-3 pt-2 pb-4">
         <Button className="flex-1 gap-2" onClick={handleExportPDF}>
           <Download className="h-4 w-4" />
-          Export Draft Worksheet
+          <span className="truncate">Export Draft Worksheet</span>
         </Button>
         <Button
           variant="outline"

@@ -571,7 +571,7 @@ export default function StressorStatement() {
         return (
           <div className="space-y-4">
             {/* Completion Summary */}
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid grid-cols-5 gap-1 sm:gap-2 overflow-hidden">
               {steps.slice(0, 5).map((step) => {
                 const isComplete = (() => {
                   switch (step.id) {
@@ -629,7 +629,7 @@ export default function StressorStatement() {
                 <CardTitle className="text-base">Statement Preview</CardTitle>
               </CardHeader>
               <CardContent>
-                <pre className="whitespace-pre-wrap text-sm font-mono text-foreground overflow-auto max-h-96 leading-relaxed">
+                <pre className="whitespace-pre-wrap text-sm font-mono text-foreground overflow-auto max-h-96 leading-relaxed break-words">
                   {generateStatement()}
                 </pre>
               </CardContent>

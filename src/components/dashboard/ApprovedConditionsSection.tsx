@@ -352,13 +352,13 @@ export function ApprovedConditionsSection({ onNavigateToCalculator }: ApprovedCo
                 <div className="space-y-2">
                   {secondarySuggestions.slice(0, 3).map((suggestion, idx) => (
                     <div key={idx} className="p-3 rounded-lg bg-warning/5 border border-warning/20">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="font-medium text-sm">{suggestion.condition}</span>
-                        <Badge variant="outline" className="text-xs bg-success/10 text-success border-success/20">
+                      <div className="flex items-center justify-between mb-1 gap-2">
+                        <span className="font-medium text-sm min-w-0 truncate">{suggestion.condition}</span>
+                        <Badge variant="outline" className="text-xs bg-success/10 text-success border-success/20 flex-shrink-0">
                           {suggestion.category}
                         </Badge>
                       </div>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-muted-foreground line-clamp-2">
                         Secondary to <strong>{suggestion.primary}</strong>: {suggestion.connection.substring(0, 100)}...
                       </p>
                     </div>

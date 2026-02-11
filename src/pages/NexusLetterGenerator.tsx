@@ -290,7 +290,7 @@ export default function NexusLetterGenerator() {
                           <button
                             key={condition}
                             type="button"
-                            className="w-full text-left px-3 py-2 hover:bg-muted text-sm"
+                            className="w-full text-left px-3 py-2 hover:bg-muted text-sm truncate"
                             onClick={() => {
                               updateFormData('primaryCondition', condition);
                               setPrimarySearch(condition);
@@ -304,7 +304,7 @@ export default function NexusLetterGenerator() {
                     )}
                   </div>
                   {formData.primaryCondition && (
-                    <Badge variant="secondary">{formData.primaryCondition}</Badge>
+                    <Badge variant="secondary" className="truncate max-w-full">{formData.primaryCondition}</Badge>
                   )}
                 </div>
               )}
@@ -329,7 +329,7 @@ export default function NexusLetterGenerator() {
                         <button
                           key={condition}
                           type="button"
-                          className="w-full text-left px-3 py-2 hover:bg-muted text-sm"
+                          className="w-full text-left px-3 py-2 hover:bg-muted text-sm truncate"
                           onClick={() => {
                             updateFormData('secondaryCondition', condition);
                             setSecondarySearch(condition);
@@ -343,7 +343,7 @@ export default function NexusLetterGenerator() {
                   )}
                 </div>
                 {formData.secondaryCondition && (
-                  <Badge variant="secondary">{formData.secondaryCondition}</Badge>
+                  <Badge variant="secondary" className="truncate max-w-full">{formData.secondaryCondition}</Badge>
                 )}
               </div>
 
@@ -505,8 +505,8 @@ export default function NexusLetterGenerator() {
             </Card>
 
             {/* Letter Preview */}
-            <div ref={printRef} className="bg-white dark:bg-gray-900 p-8 rounded-lg border border-border print:border-none print:shadow-none">
-              <div className="text-foreground space-y-6 font-serif print:text-black">
+            <div ref={printRef} className="bg-white dark:bg-gray-900 p-4 sm:p-8 rounded-lg border border-border print:border-none print:shadow-none">
+              <div className="text-foreground space-y-6 font-serif print:text-black overflow-hidden break-words">
                 <div className="text-center mb-8">
                   <h1 className="text-xl font-bold">INFORMATION SUMMARY FOR YOUR DOCTOR</h1>
                   <p className="text-sm text-muted-foreground print:text-gray-600">
@@ -588,16 +588,16 @@ export default function NexusLetterGenerator() {
                     <p className="mb-8">Respectfully submitted,</p>
 
                     <div className="space-y-4">
-                      <div className="border-b border-border w-64 print:border-gray-300"></div>
+                      <div className="border-b border-border w-full max-w-64 print:border-gray-300"></div>
                       <p><strong>Physician Signature</strong></p>
 
-                      <div className="border-b border-border w-64 print:border-gray-300"></div>
+                      <div className="border-b border-border w-full max-w-64 print:border-gray-300"></div>
                       <p><strong>Printed Name, Credentials</strong></p>
 
-                      <div className="border-b border-border w-64 print:border-gray-300"></div>
+                      <div className="border-b border-border w-full max-w-64 print:border-gray-300"></div>
                       <p><strong>Date</strong></p>
 
-                      <div className="border-b border-border w-64 print:border-gray-300"></div>
+                      <div className="border-b border-border w-full max-w-64 print:border-gray-300"></div>
                       <p><strong>License Number / NPI</strong></p>
                     </div>
                   </div>
@@ -660,7 +660,7 @@ export default function NexusLetterGenerator() {
       <Card className="border-primary/30 bg-primary/5">
         <CardContent className="pt-4">
           <div className="flex items-start gap-2">
-            <Info className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+            <Info className="h-5 w-5 text-primary mt-0.5 shrink-0 flex-shrink-0" />
             <p className="text-sm text-muted-foreground">
               This tool helps you organize your information into a clear summary. A licensed medical professional must write the actual nexus letter. This summary is designed to help your doctor understand your condition and service connection.
             </p>
@@ -669,7 +669,7 @@ export default function NexusLetterGenerator() {
       </Card>
 
       {/* Progress Steps */}
-      <div className="flex items-center justify-between overflow-x-auto pb-2">
+      <div className="flex items-center justify-between overflow-x-auto pb-2 -mx-1 px-1 scrollbar-thin gap-0">
         {STEPS.map((step, index) => (
           <div key={step.id} className="flex items-center">
             <button

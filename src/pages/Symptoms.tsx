@@ -337,7 +337,7 @@ export default function Symptoms() {
 
       {/* Analytics Dashboard - Premium Cards */}
       {data.symptoms.length > 0 && (
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
           {/* Severity Trend Chart */}
           <div className="rounded-2xl bg-card border border-border overflow-hidden shadow-lg" style={{ boxShadow: '0 8px 32px rgba(0, 0, 0, 0.25)' }}>
             <div className="p-4 border-b border-border/50 bg-gradient-to-r from-[#3B82F6]/5 via-transparent to-transparent">
@@ -743,8 +743,8 @@ export default function Symptoms() {
                               onClick={() => toggleConditionTag(name)}
                               className={
                                 selectedConditionTags.includes(name)
-                                  ? 'px-3 py-1.5 rounded-full text-xs font-medium border bg-primary/20 border-primary/50 text-primary transition-colors'
-                                  : 'px-3 py-1.5 rounded-full text-xs font-medium border bg-muted border-border text-muted-foreground hover:border-primary/30 transition-colors'
+                                  ? 'px-3 py-1.5 rounded-full text-xs font-medium border bg-primary/20 border-primary/50 text-primary transition-colors max-w-full truncate'
+                                  : 'px-3 py-1.5 rounded-full text-xs font-medium border bg-muted border-border text-muted-foreground hover:border-primary/30 transition-colors max-w-full truncate'
                               }
                             >
                               {name}
@@ -825,18 +825,18 @@ export default function Symptoms() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap mb-1">
                             {symptom.bodyArea && (
-                              <Badge variant="default" className="text-xs font-semibold">
+                              <Badge variant="default" className="text-xs font-semibold max-w-[200px] truncate">
                                 {symptom.bodyArea}
                               </Badge>
                             )}
-                            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${getSeverityColor(symptom.severity)}`}>
+                            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium flex-shrink-0 ${getSeverityColor(symptom.severity)}`}>
                               {symptom.severity}/10
                             </span>
                             {symptom.frequency && (
-                              <span className="text-xs text-muted-foreground">{symptom.frequency}</span>
+                              <span className="text-xs text-muted-foreground truncate">{symptom.frequency}</span>
                             )}
                           </div>
-                          <p className="font-medium mt-1">{symptom.symptom}</p>
+                          <p className="font-medium mt-1 break-words">{symptom.symptom}</p>
                           {symptom.dailyImpact && (
                             <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{symptom.dailyImpact}</p>
                           )}
@@ -873,14 +873,14 @@ export default function Symptoms() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap mb-1">
                           {symptom.bodyArea && (
-                            <Badge variant="default" className="text-xs font-semibold">
+                            <Badge variant="default" className="text-xs font-semibold max-w-[200px] truncate">
                               {symptom.bodyArea}
                             </Badge>
                           )}
-                          <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${getSeverityColor(symptom.severity)}`}>
+                          <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium flex-shrink-0 ${getSeverityColor(symptom.severity)}`}>
                             {symptom.severity}/10
                           </span>
-                          <span className="text-xs text-muted-foreground flex items-center gap-1">
+                          <span className="text-xs text-muted-foreground flex items-center gap-1 flex-shrink-0">
                             <Calendar className="h-3 w-3" />
                             {format(parseISO(symptom.date), 'MMM d, yyyy')}
                           </span>

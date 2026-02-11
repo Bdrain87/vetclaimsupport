@@ -206,16 +206,16 @@ export function ConditionSelector({
                         isAdded && mode === 'add' && 'opacity-50'
                       )}
                     >
-                      <div className="flex flex-col">
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">{condition.abbreviation}</span>
+                      <div className="flex flex-col min-w-0">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className="font-medium truncate">{condition.abbreviation}</span>
                           {condition.diagnosticCode && (
-                            <Badge variant="outline" className="text-xs px-1.5 py-0">
+                            <Badge variant="outline" className="text-xs px-1.5 py-0 flex-shrink-0">
                               {condition.diagnosticCode}
                             </Badge>
                           )}
                         </div>
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-xs text-muted-foreground truncate">
                           {condition.name}
                         </span>
                         {condition.typicalRatings && (
@@ -306,12 +306,12 @@ export function SelectedConditionsDisplay({
               <Badge
                 variant="secondary"
                 className={cn(
-                  'flex items-center gap-1.5 pr-1 cursor-default',
+                  'flex items-center gap-1.5 pr-1 cursor-default max-w-full',
                   compact ? 'text-xs py-0.5' : 'text-sm py-1',
                   showStatus && statusColors[userCondition.claimStatus]
                 )}
               >
-                <span className="font-medium">{details.abbreviation}</span>
+                <span className="font-medium truncate">{details.abbreviation}</span>
                 {userCondition.bodyPart && (
                   <span className="text-muted-foreground">
                     ({userCondition.bodyPart})

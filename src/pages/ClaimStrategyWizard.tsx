@@ -502,7 +502,7 @@ attorney for official guidance on your specific claim.
 
             <div className="space-y-2">
               <Label>Combat Zones (select all that apply)</Label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {combatZones.map(zone => (
                   <div key={zone} className="flex items-center gap-2">
                     <Checkbox
@@ -523,15 +523,16 @@ attorney for official guidance on your specific claim.
           <div className="space-y-6">
             <div className="space-y-2">
               <Label>Select conditions you want to claim (check all that apply)</Label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-64 overflow-y-auto p-2 border rounded-lg">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 max-h-64 overflow-y-auto p-2 border rounded-lg">
                 {commonConditions.map(condition => (
-                  <div key={condition} className="flex items-center gap-2">
+                  <div key={condition} className="flex items-center gap-2 min-w-0">
                     <Checkbox
                       id={`cond-${condition}`}
                       checked={data.healthConditions.conditions.includes(condition)}
                       onCheckedChange={() => toggleCondition(condition)}
+                      className="shrink-0"
                     />
-                    <label htmlFor={`cond-${condition}`} className="text-sm">{condition}</label>
+                    <label htmlFor={`cond-${condition}`} className="text-sm truncate">{condition}</label>
                   </div>
                 ))}
               </div>
@@ -562,7 +563,7 @@ attorney for official guidance on your specific claim.
                 <p className="text-sm text-muted-foreground mb-2">Selected conditions:</p>
                 <div className="flex flex-wrap gap-2">
                   {data.healthConditions.conditions.map(c => (
-                    <Badge key={c} variant="secondary">{c}</Badge>
+                    <Badge key={c} variant="secondary" className="truncate max-w-full">{c}</Badge>
                   ))}
                 </div>
               </div>
@@ -778,10 +779,10 @@ attorney for official guidance on your specific claim.
                   <CardContent>
                     <div className="space-y-4">
                       {strategy.priorityConditions.map((cond, i) => (
-                        <div key={i} className="p-4 rounded-lg border">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="font-semibold">{cond.condition}</span>
-                            <Badge variant="outline">{cond.estimatedRating}</Badge>
+                        <div key={i} className="p-4 rounded-lg border overflow-hidden">
+                          <div className="flex items-start justify-between gap-2 mb-2">
+                            <span className="font-semibold min-w-0 break-words">{cond.condition}</span>
+                            <Badge variant="outline" className="shrink-0">{cond.estimatedRating}</Badge>
                           </div>
                           <p className="text-sm text-muted-foreground">{cond.reason}</p>
                         </div>
@@ -883,21 +884,21 @@ attorney for official guidance on your specific claim.
                       <p className="text-sm text-slate-400 mb-3">
                         Use these verified legal databases to find case law relevant to your claim:
                       </p>
-                      <div className="space-y-2">
+                      <div className="space-y-2 overflow-hidden">
                         <a href="https://www.va.gov/vbs/bva/" target="_blank" rel="noopener noreferrer"
-                           className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm">
+                           className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm break-words min-w-0">
                           Board of Veterans' Appeals (BVA) Decisions
                         </a>
                         <a href="https://www.uscourts.cavc.gov/decisions.php" target="_blank" rel="noopener noreferrer"
-                           className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm">
+                           className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm break-words min-w-0">
                           Court of Appeals for Veterans Claims (CAVC)
                         </a>
                         <a href="https://scholar.google.com/" target="_blank" rel="noopener noreferrer"
-                           className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm">
+                           className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm break-words min-w-0">
                           Google Scholar — Legal Opinions
                         </a>
                         <a href="https://www.law.cornell.edu/uscode/text/38" target="_blank" rel="noopener noreferrer"
-                           className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm">
+                           className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm break-words min-w-0">
                           38 U.S.C. — Veterans' Benefits (Cornell Law)
                         </a>
                       </div>
@@ -939,7 +940,7 @@ attorney for official guidance on your specific claim.
       </div>
 
       {/* Progress Steps */}
-      <div className="flex justify-between items-center overflow-x-auto pb-2">
+      <div className="flex items-center overflow-x-auto pb-2 gap-0">
         {steps.map((step, index) => {
           const Icon = step.icon;
           const isActive = step.id === currentStep;
@@ -963,7 +964,7 @@ attorney for official guidance on your specific claim.
                 >
                   {isComplete ? <CheckCircle2 className="h-5 w-5" /> : <Icon className="h-5 w-5" />}
                 </div>
-                <span className="text-xs hidden sm:block whitespace-nowrap">{step.title}</span>
+                <span className="text-xs hidden sm:block whitespace-nowrap truncate">{step.title}</span>
               </div>
               {index < steps.length - 1 && (
                 <div

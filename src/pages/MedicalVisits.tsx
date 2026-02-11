@@ -316,24 +316,24 @@ export default function MedicalVisits() {
                     </Button>
                   </div>
                 </div>
-                <CardTitle className="text-lg mt-2">{visit.reason || 'Medical Visit'}</CardTitle>
+                <CardTitle className="text-lg mt-2 break-words">{visit.reason || 'Medical Visit'}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 text-sm">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
-                    {new Date(visit.date).toLocaleDateString()}
+                <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 text-sm">
+                  <div className="flex items-center gap-2 text-muted-foreground min-w-0">
+                    <Calendar className="h-4 w-4 flex-shrink-0" />
+                    <span className="truncate">{new Date(visit.date).toLocaleDateString()}</span>
                   </div>
                   {visit.location && (
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <MapPin className="h-4 w-4" />
-                      {visit.location}
+                    <div className="flex items-center gap-2 text-muted-foreground min-w-0">
+                      <MapPin className="h-4 w-4 flex-shrink-0" />
+                      <span className="truncate">{visit.location}</span>
                     </div>
                   )}
                   {visit.provider && (
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <User className="h-4 w-4" />
-                      {visit.provider}
+                    <div className="flex items-center gap-2 text-muted-foreground min-w-0">
+                      <User className="h-4 w-4 flex-shrink-0" />
+                      <span className="truncate">{visit.provider}</span>
                     </div>
                   )}
                 </div>
