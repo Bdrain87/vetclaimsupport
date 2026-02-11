@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, Calculator, DollarSign, Calendar, Users, Info } from 'lucide-react';
+import { ChevronLeft, Calculator, DollarSign, Calendar, Users, Info, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
+import { exportBackPayEstimate } from '@/utils/pdfExport';
 import { PageContainer } from '@/components/PageContainer';
 
 // ---------------------------------------------------------------------------
@@ -368,6 +369,33 @@ export default function BackPayEstimator() {
               <p className="text-xs text-muted-foreground">
                 {formatCurrencyExact(calculation.monthlyDifference)} &times; {calculation.months} month{calculation.months !== 1 ? 's' : ''}
               </p>
+            </div>
+
+            {/* Download PDF */}
+            <div className="flex justify-center">
+              <Button
+                variant="outline"
+                className="gap-2"
+                onClick={() => {
+                  if (calculation) {
+                    exportBackPayEstimate({
+                      currentRating: parseInt(currentRating, 10),
+                      newRating: parseInt(newRating, 10),
+                      effectiveDate,
+                      hasSpouse,
+                      dependentCount: parseInt(dependentCount, 10) || 0,
+                      monthlyBefore: calculation.monthlyBefore,
+                      monthlyAfter: calculation.monthlyAfter,
+                      monthlyDifference: calculation.monthlyDifference,
+                      totalBackPay: calculation.totalBackPay,
+                      months: calculation.months,
+                    });
+                  }
+                }}
+              >
+                <Download className="h-4 w-4" />
+                Download PDF
+              </Button>
             </div>
 
             {/* Breakdown Detail */}

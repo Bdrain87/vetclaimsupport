@@ -23,6 +23,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { cn } from '@/lib/utils';
+import { exportStressorStatement } from '@/utils/pdfExport';
 import { PageContainer } from '@/components/PageContainer';
 
 interface StressorFormData {
@@ -239,15 +240,7 @@ export default function StressorStatement() {
 
   const handleDownload = useCallback(() => {
     const statement = generateStatement();
-    const blob = new Blob([statement], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `stressor-statement-${new Date().toISOString().split('T')[0]}.txt`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    exportStressorStatement(statement);
   }, [generateStatement]);
 
   const handleCopy = useCallback(async () => {
@@ -606,7 +599,7 @@ export default function StressorStatement() {
               </Button>
               <Button variant="outline" onClick={handleDownload} className="flex-1 gap-2">
                 <Download className="h-4 w-4" />
-                Download as Text File
+                Download PDF
               </Button>
             </div>
           </div>

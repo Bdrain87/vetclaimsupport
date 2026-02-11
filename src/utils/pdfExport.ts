@@ -1783,3 +1783,280 @@ export const exportBuddyStatementTemplate = (templateText: string, templateTitle
   addPDFFooter(doc);
   doc.save(`buddy-statement-template-${templateTitle?.replace(/\s+/g, '-').toLowerCase() || 'general'}.pdf`);
 };
+
+// DBQ Prep Sheet Export
+export interface DBQPrepSheetData {
+  condition: string;
+  appointmentType: string;
+  appointmentDate: string;
+  currentSymptoms: string[];
+  customSymptoms: string;
+  averagePain: number;
+  worstPain: number;
+  bestPain: number;
+  hasFlareups: boolean;
+  flareupFrequency: string;
+  flareupDuration: string;
+  flareupTriggers: string;
+  flareupLimitations: string;
+  walkingLimit: string;
+  standingLimit: string;
+  sittingLimit: string;
+  liftingLimit: string;
+  sleepImpact: string;
+  workImpact: string;
+  daysMissed: string;
+  currentMedications: string;
+  sideEffects: string;
+  additionalNotes: string;
+}
+
+export const exportDBQPrepSheet = (data: DBQPrepSheetData) => {
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+
+  let yPos = addPDFHeader(doc, {
+    title: 'C&P Exam Prep Sheet',
+    subtitle: data.condition ? `Condition: ${data.condition}` : 'Disability Benefits Questionnaire Preparation',
+  });
+
+  // Appointment info
+  doc.setFillColor(...colors.background);
+  doc.roundedRect(20, yPos, pageWidth - 40, 22, 2, 2, 'F');
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...colors.secondary);
+  doc.text('Condition:', 25, yPos + 8);
+  doc.setFont('helvetica', 'normal');
+  doc.text(data.condition || 'Not specified', 55, yPos + 8);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Appointment:', 25, yPos + 16);
+  doc.setFont('helvetica', 'normal');
+  const apptType = data.appointmentType.replace('_', ' ').toUpperCase();
+  const apptDate = data.appointmentDate ? new Date(data.appointmentDate).toLocaleDateString() : 'Not set';
+  doc.text(`${apptType} — ${apptDate}`, 55, yPos + 16);
+  yPos += 30;
+
+  // Symptoms section
+  yPos = checkPageBreak(doc, yPos, 30);
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...colors.secondary);
+  doc.text('Symptoms & Pain Levels', 20, yPos);
+  yPos += 8;
+
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  const allSymptoms = [...data.currentSymptoms, data.customSymptoms].filter(Boolean).join(', ') || 'None specified';
+  doc.setTextColor(...colors.muted);
+  doc.text('Current Symptoms:', 25, yPos);
+  const symptomLines = wrapText(doc, allSymptoms, pageWidth - 75);
+  doc.setTextColor(...colors.secondary);
+  doc.text(symptomLines, 65, yPos);
+  yPos += symptomLines.length * 4 + 4;
+
+  doc.setTextColor(...colors.muted);
+  doc.text('Pain Levels:', 25, yPos);
+  doc.setTextColor(...colors.secondary);
+  doc.text(`Average: ${data.averagePain}/10  |  Worst: ${data.worstPain}/10  |  Best: ${data.bestPain}/10`, 65, yPos);
+  yPos += 10;
+
+  // Flare-ups section
+  if (data.hasFlareups) {
+    yPos = checkPageBreak(doc, yPos, 30);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...colors.secondary);
+    doc.text('Flare-ups', 20, yPos);
+    yPos += 8;
+
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    const flareFields = [
+      { label: 'Frequency', value: data.flareupFrequency },
+      { label: 'Duration', value: data.flareupDuration },
+      { label: 'Triggers', value: data.flareupTriggers },
+      { label: 'Limitations', value: data.flareupLimitations },
+    ];
+    flareFields.forEach(f => {
+      if (f.value) {
+        doc.setTextColor(...colors.muted);
+        doc.text(`${f.label}:`, 25, yPos);
+        const lines = wrapText(doc, f.value, pageWidth - 75);
+        doc.setTextColor(...colors.secondary);
+        doc.text(lines, 65, yPos);
+        yPos += lines.length * 4 + 3;
+      }
+    });
+    yPos += 4;
+  }
+
+  // Functional impact section
+  yPos = checkPageBreak(doc, yPos, 30);
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...colors.secondary);
+  doc.text('Functional Limitations', 20, yPos);
+  yPos += 8;
+
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  const funcFields = [
+    { label: 'Walking', value: data.walkingLimit },
+    { label: 'Standing', value: data.standingLimit },
+    { label: 'Sitting', value: data.sittingLimit },
+    { label: 'Lifting', value: data.liftingLimit },
+    { label: 'Sleep Impact', value: data.sleepImpact },
+    { label: 'Work Impact', value: data.workImpact },
+    { label: 'Days Missed', value: data.daysMissed },
+  ];
+  funcFields.forEach(f => {
+    if (f.value) {
+      yPos = checkPageBreak(doc, yPos, 10);
+      doc.setTextColor(...colors.muted);
+      doc.text(`${f.label}:`, 25, yPos);
+      const lines = wrapText(doc, f.value, pageWidth - 75);
+      doc.setTextColor(...colors.secondary);
+      doc.text(lines, 65, yPos);
+      yPos += lines.length * 4 + 3;
+    }
+  });
+  yPos += 4;
+
+  // Medications section
+  yPos = checkPageBreak(doc, yPos, 20);
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...colors.secondary);
+  doc.text('Medications & Treatments', 20, yPos);
+  yPos += 8;
+
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  if (data.currentMedications) {
+    doc.setTextColor(...colors.muted);
+    doc.text('Current:', 25, yPos);
+    const medLines = wrapText(doc, data.currentMedications, pageWidth - 75);
+    doc.setTextColor(...colors.secondary);
+    doc.text(medLines, 65, yPos);
+    yPos += medLines.length * 4 + 3;
+  }
+  if (data.sideEffects) {
+    doc.setTextColor(...colors.muted);
+    doc.text('Side Effects:', 25, yPos);
+    const seLines = wrapText(doc, data.sideEffects, pageWidth - 75);
+    doc.setTextColor(...colors.secondary);
+    doc.text(seLines, 65, yPos);
+    yPos += seLines.length * 4 + 3;
+  }
+  yPos += 4;
+
+  // Additional notes
+  if (data.additionalNotes) {
+    yPos = checkPageBreak(doc, yPos, 20);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...colors.secondary);
+    doc.text('Additional Notes', 20, yPos);
+    yPos += 8;
+
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...colors.secondary);
+    const noteLines = wrapText(doc, data.additionalNotes, pageWidth - 40);
+    noteLines.forEach((line: string) => {
+      yPos = checkPageBreak(doc, yPos, 8);
+      doc.text(line, 25, yPos);
+      yPos += 5;
+    });
+    yPos += 4;
+  }
+
+  // Reminders box
+  yPos = checkPageBreak(doc, yPos, 35);
+  yPos = drawInfoBox(doc, 'REMEMBER: Describe your WORST days, not your best. Be specific about frequency and duration. Mention ALL limitations. Bring copies of relevant medical records.', yPos);
+
+  addPDFFooter(doc);
+  doc.save(`dbq-prep-sheet-${data.condition?.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase() || 'general'}.pdf`);
+};
+
+// Back Pay Estimate Export
+export interface BackPayEstimateData {
+  currentRating: number;
+  newRating: number;
+  effectiveDate: string;
+  hasSpouse: boolean;
+  dependentCount: number;
+  monthlyBefore: number;
+  monthlyAfter: number;
+  monthlyDifference: number;
+  totalBackPay: number;
+  months: number;
+}
+
+export const exportBackPayEstimate = (data: BackPayEstimateData) => {
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+
+  let yPos = addPDFHeader(doc, {
+    title: 'Back Pay Estimate',
+    subtitle: 'VA Disability Compensation Estimate',
+  });
+
+  yPos = drawInfoBox(doc, 'DISCLAIMER: This is an estimate only. Actual back pay amounts are determined by the VA. Rates shown are approximate. Consult a VSO for precise amounts.', yPos);
+
+  // Summary box
+  yPos = drawSummaryBox(doc, [
+    { value: `${data.currentRating}%`, label: 'Current Rating' },
+    { value: `${data.newRating}%`, label: 'New Rating' },
+    { value: String(data.months), label: 'Months Owed' },
+  ], yPos);
+
+  // Calculation details
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...colors.secondary);
+  doc.text('Calculation Details', 20, yPos);
+  yPos += 10;
+
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+
+  const fmt = (n: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(n);
+
+  const rows = [
+    { label: 'Effective Date', value: new Date(data.effectiveDate + 'T00:00:00').toLocaleDateString() },
+    { label: 'Spouse', value: data.hasSpouse ? 'Yes' : 'No' },
+    { label: 'Dependents', value: String(data.dependentCount) },
+    { label: `Monthly at ${data.currentRating}%`, value: fmt(data.monthlyBefore) },
+    { label: `Monthly at ${data.newRating}%`, value: fmt(data.monthlyAfter) },
+    { label: 'Monthly Difference', value: `+${fmt(data.monthlyDifference)}` },
+    { label: 'Months of Back Pay', value: String(data.months) },
+  ];
+
+  rows.forEach(row => {
+    doc.setTextColor(...colors.muted);
+    doc.text(row.label + ':', 25, yPos);
+    doc.setTextColor(...colors.secondary);
+    doc.text(row.value, 85, yPos);
+    yPos += 7;
+  });
+
+  yPos += 5;
+
+  // Total highlight
+  doc.setFillColor(...colors.successBg);
+  doc.roundedRect(20, yPos, pageWidth - 40, 25, 2, 2, 'F');
+  doc.setFillColor(...colors.success);
+  doc.rect(20, yPos, 3, 25, 'F');
+
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...colors.success);
+  doc.text('Total Estimated Back Pay', 28, yPos + 10);
+  doc.setFontSize(16);
+  doc.text(fmt(data.totalBackPay), 28, yPos + 20);
+
+  addPDFFooter(doc);
+  doc.save('back-pay-estimate.pdf');
+};

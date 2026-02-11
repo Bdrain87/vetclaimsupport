@@ -28,6 +28,7 @@ import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { PageContainer } from '@/components/PageContainer';
 import { useProfileStore } from '@/store/useProfileStore';
 import { cn } from '@/lib/utils';
+import { exportPersonalStatement } from '@/utils/pdfExport';
 import type { VACondition } from '@/data/vaConditions';
 
 interface PersonalStatementFormData {
@@ -193,18 +194,8 @@ export default function PersonalStatement() {
 
   const handleDownload = useCallback(() => {
     const statement = polishedStatement || generateStatement();
-    const conditionSlug = formData.condition
-      ? formData.condition.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 30)
-      : 'personal';
-    const blob = new Blob([statement], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `personal-statement-${conditionSlug}-${new Date().toISOString().split('T')[0]}.txt`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    const conditionName = formData.condition?.name;
+    exportPersonalStatement(statement, conditionName);
   }, [generateStatement, polishedStatement, formData.condition]);
 
   const handleCopy = useCallback(async () => {
@@ -596,7 +587,7 @@ export default function PersonalStatement() {
               </Button>
               <Button variant="outline" onClick={handleDownload} className="flex-1 gap-2">
                 <Download className="h-4 w-4" />
-                Download as Text File
+                Download PDF
               </Button>
             </div>
           </div>
