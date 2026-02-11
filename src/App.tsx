@@ -53,6 +53,7 @@ const HealthLog = lazy(() => import('./pages/HealthLog'));
 // Hub pages
 const HealthHub = lazy(() => import('./pages/HealthHub'));
 const PrepHub = lazy(() => import('./pages/PrepHub'));
+const AppealsGuide = lazy(() => import('./pages/AppealsGuide'));
 
 // Phase 15 new pages
 const PersonalStatement = lazy(() => import('./pages/PersonalStatement'));
@@ -200,6 +201,7 @@ function AnimatedRoutes() {
             <Route path="/prep/va-speak" element={<VASpeakTranslator />} />
             <Route path="/prep/back-pay" element={<BackPayEstimator />} />
             <Route path="/prep/packet" element={<BuildPacket />} />
+            <Route path="/prep/appeals" element={<AppealsGuide />} />
             <Route path="/cp-exam-packet" element={<CPExamPacket />} />
 
             {/* === REFERENCE === */}

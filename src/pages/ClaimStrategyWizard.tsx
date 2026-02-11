@@ -873,31 +873,31 @@ attorney for official guidance on your specific claim.
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
-                      <Scale className="h-5 w-5 text-blue-500" />
+                      <Scale className="h-5 w-5 text-gold" />
                       Research Legal Precedent
                     </CardTitle>
                     <CardDescription>Use verified legal databases to find case law relevant to your claim</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="bg-blue-900/30 border border-blue-700/50 rounded-lg p-4">
+                    <div className="bg-[rgba(214,178,94,0.08)] border border-[rgba(214,178,94,0.2)] rounded-lg p-4">
                       <p className="text-sm text-slate-400 mb-3">
                         Use these verified legal databases to find case law relevant to your claim:
                       </p>
                       <div className="space-y-2">
                         <a href="https://www.va.gov/vbs/bva/" target="_blank" rel="noopener noreferrer"
-                           className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm">
+                           className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm">
                           Board of Veterans' Appeals (BVA) Decisions
                         </a>
                         <a href="https://www.uscourts.cavc.gov/decisions.php" target="_blank" rel="noopener noreferrer"
-                           className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm">
+                           className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm">
                           Court of Appeals for Veterans Claims (CAVC)
                         </a>
                         <a href="https://scholar.google.com/" target="_blank" rel="noopener noreferrer"
-                           className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm">
+                           className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm">
                           Google Scholar — Legal Opinions
                         </a>
                         <a href="https://www.law.cornell.edu/uscode/text/38" target="_blank" rel="noopener noreferrer"
-                           className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm">
+                           className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm">
                           38 U.S.C. — Veterans' Benefits (Cornell Law)
                         </a>
                       </div>

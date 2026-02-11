@@ -259,7 +259,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
               <div className="flex items-center justify-between mb-4">
                 <button
                   onClick={toggleAll}
-                  className="text-sm font-medium text-[#3B82F6] hover:text-[#60A5FA] transition-colors"
+                  className="text-sm font-medium text-gold hover:text-gold-hl transition-colors"
                 >
                   {allChecked ? 'Deselect All' : 'Select All'}
                 </button>
@@ -278,7 +278,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
                       onClick={() => toggleSection(item.key)}
                       className={`w-full flex items-start gap-3 p-3 rounded-xl border transition-all duration-150 text-left ${
                         checked
-                          ? 'border-[#3B82F6]/30 bg-[#3B82F6]/[0.06]'
+                          ? 'border-[rgba(214,178,94,0.3)] bg-[rgba(214,178,94,0.06)]'
                           : 'border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04]'
                       }`}
                     >
@@ -286,7 +286,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
                       <div
                         className={`mt-0.5 w-5 h-5 rounded flex items-center justify-center flex-shrink-0 transition-colors ${
                           checked
-                            ? 'bg-[#3B82F6] border-[#3B82F6]'
+                            ? 'bg-gold border-gold'
                             : 'border-2 border-[#475569] bg-transparent'
                         }`}
                       >
@@ -294,7 +294,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
                       </div>
 
                       {/* Icon */}
-                      <div className={`flex-shrink-0 mt-0.5 ${checked ? 'text-[#3B82F6]' : 'text-[#64748B]'}`}>
+                      <div className={`flex-shrink-0 mt-0.5 ${checked ? 'text-gold' : 'text-[#64748B]'}`}>
                         {item.icon}
                       </div>
 
@@ -322,7 +322,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
                       onClick={() => setFormat(option.value)}
                       className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all duration-150 text-left ${
                         format === option.value
-                          ? 'border-[#3B82F6]/30 bg-[#3B82F6]/[0.06]'
+                          ? 'border-[rgba(214,178,94,0.3)] bg-[rgba(214,178,94,0.06)]'
                           : 'border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04]'
                       }`}
                     >
@@ -330,12 +330,12 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
                       <div
                         className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
                           format === option.value
-                            ? 'border-[#3B82F6]'
+                            ? 'border-gold'
                             : 'border-[#475569]'
                         }`}
                       >
                         {format === option.value && (
-                          <div className="w-2.5 h-2.5 rounded-full bg-[#3B82F6]" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-gold" />
                         )}
                       </div>
 
@@ -365,7 +365,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
             <div className="px-6 py-4 border-t border-white/[0.06] space-y-2">
               {isGenerating ? (
                 <div className="flex items-center justify-center gap-3 py-4">
-                  <Loader2 size={20} className="text-[#3B82F6] animate-spin" />
+                  <Loader2 size={20} className="text-gold animate-spin" />
                   <span className="text-sm text-[#94A3B8]">Generating your packet...</span>
                 </div>
               ) : (
@@ -374,7 +374,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
                   <button
                     onClick={handleExportAndShare}
                     disabled={noneChecked}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#3B82F6] hover:bg-[#2563EB] active:bg-[#1D4ED8] text-white font-medium text-sm transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gold hover:bg-gold-dk active:bg-[#B8962E] text-white font-medium text-sm transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     <Share2 size={18} />
                     Export & Share

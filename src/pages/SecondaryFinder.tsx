@@ -22,7 +22,7 @@ function getConnectionStrength(connection: SecondaryConnection): 'strong' | 'mod
 
 const strengthConfig = {
   strong: { label: 'Strong Connection', color: 'text-emerald-400', bg: 'bg-emerald-400/10 border-emerald-400/20', dot: 'bg-emerald-400' },
-  moderate: { label: 'Moderate Connection', color: 'text-blue-400', bg: 'bg-blue-400/10 border-blue-400/20', dot: 'bg-blue-400' },
+  moderate: { label: 'Moderate Connection', color: 'text-gold', bg: 'bg-[rgba(214,178,94,0.1)] border-[rgba(214,178,94,0.2)]', dot: 'bg-gold' },
   possible: { label: 'Possible Connection', color: 'text-white/40', bg: 'bg-white/5 border-white/10', dot: 'bg-white/40' },
 };
 
@@ -106,8 +106,8 @@ export default function SecondaryFinder() {
     <PageContainer className="py-6 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-12 h-12 rounded-xl bg-[#3B82F6]/10 border border-[#3B82F6]/20 flex items-center justify-center">
-          <Link2 className="h-6 w-6 text-[#3B82F6]" />
+        <div className="w-12 h-12 rounded-xl bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)] flex items-center justify-center">
+          <Link2 className="h-6 w-6 text-gold" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-white">Secondary Conditions Finder</h1>
@@ -133,8 +133,8 @@ export default function SecondaryFinder() {
                 onClick={() => handleChipClick(c.fullName)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                   selectedPrimary === c.fullName
-                    ? 'bg-[#3B82F6]/20 text-[#3B82F6] border border-[#3B82F6]/40'
-                    : 'bg-white/[0.06] text-white/70 border border-white/[0.08] hover:border-[#3B82F6]/30 hover:text-white'
+                    ? 'bg-[rgba(214,178,94,0.2)] text-gold border border-[rgba(214,178,94,0.4)]'
+                    : 'bg-white/[0.06] text-white/70 border border-white/[0.08] hover:border-[rgba(214,178,94,0.3)] hover:text-white'
                 }`}
               >
                 {c.name} <ArrowRight className="inline h-3 w-3 ml-1" />
@@ -150,12 +150,12 @@ export default function SecondaryFinder() {
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div>
               <h2 className="text-lg font-bold text-white">
-                Secondary Conditions for: <span className="text-[#3B82F6]">{selectedPrimary}</span>
+                Secondary Conditions for: <span className="text-gold">{selectedPrimary}</span>
               </h2>
               <p className="text-white/40 text-sm">{currentSecondaries.length} connections found</p>
             </div>
             <Link to={`/prep/nexus-letter?primary=${encodeURIComponent(selectedPrimary)}`}>
-              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3B82F6]/10 border border-[#3B82F6]/30 text-[#3B82F6] text-sm font-medium hover:bg-[#3B82F6]/20 transition-colors">
+              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.3)] text-gold text-sm font-medium hover:bg-[rgba(214,178,94,0.2)] transition-colors">
                 <FileSignature className="h-4 w-4" />
                 Generate Nexus Letter
               </button>
@@ -202,7 +202,7 @@ export default function SecondaryFinder() {
                     ) : (
                       <button
                         onClick={() => handleAddToClaim(connection.secondaryCondition)}
-                        className="flex items-center gap-2 text-xs font-medium text-[#3B82F6] hover:text-[#3B82F6]/80 transition-colors"
+                        className="flex items-center gap-2 text-xs font-medium text-gold hover:text-gold/80 transition-colors"
                       >
                         <Plus className="h-4 w-4" />
                         Add to My Claim
@@ -231,7 +231,7 @@ export default function SecondaryFinder() {
 
       {/* Info card */}
       {!selectedPrimary && (
-        <div className="rounded-2xl p-5 bg-[#3B82F6]/5 border border-[#3B82F6]/15">
+        <div className="rounded-2xl p-5 bg-[rgba(214,178,94,0.05)] border border-[rgba(214,178,94,0.15)]">
           <h3 className="text-white/90 font-semibold mb-2 text-sm">How Secondary Claims Work</h3>
           <ol className="space-y-1.5 text-xs text-white/50">
             <li>1. Select your already service-connected (primary) condition</li>

@@ -17,6 +17,7 @@ import { exportServiceHistory } from '@/utils/pdfExport';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import { MOSCombobox } from '@/components/ui/mos-combobox';
 import { AwardsCombobox } from '@/components/ui/awards-combobox';
+import { LocationAutocomplete } from '@/components/shared/LocationAutocomplete';
 import type { ServiceEntry, CombatEntry, MajorEvent, DeploymentEntry, MajorEventType } from '@/types/claims';
 import { PageContainer } from '@/components/PageContainer';
 
@@ -317,7 +318,12 @@ export default function ServiceHistory() {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
                         <Label htmlFor="base">Base/Location</Label>
-                        <Input id="base" placeholder="e.g., Nellis AFB, NV" value={formData.base} onChange={(e) => setFormData({ ...formData, base: e.target.value })} required />
+                        <LocationAutocomplete
+                          value={formData.base}
+                          onChange={(val) => setFormData({ ...formData, base: val })}
+                          onSelect={(val) => setFormData({ ...formData, base: val })}
+                          placeholder="e.g., Nellis AFB, NV"
+                        />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="unit">Unit</Label>
@@ -488,7 +494,12 @@ export default function ServiceHistory() {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
                         <Label>Location/Country</Label>
-                        <Input placeholder="e.g., Afghanistan, Iraq, Kuwait" value={combatForm.location} onChange={(e) => setCombatForm({ ...combatForm, location: e.target.value })} required />
+                        <LocationAutocomplete
+                          value={combatForm.location}
+                          onChange={(val) => setCombatForm({ ...combatForm, location: val })}
+                          onSelect={(val) => setCombatForm({ ...combatForm, location: val })}
+                          placeholder="e.g., Afghanistan, Iraq, Kuwait"
+                        />
                       </div>
                       <div className="space-y-2">
                         <Label>Zone Type</Label>
@@ -634,7 +645,12 @@ export default function ServiceHistory() {
                     </div>
                     <div className="space-y-2">
                       <Label>Location</Label>
-                      <Input placeholder="Where did this occur?" value={eventForm.location} onChange={(e) => setEventForm({ ...eventForm, location: e.target.value })} />
+                      <LocationAutocomplete
+                        value={eventForm.location}
+                        onChange={(val) => setEventForm({ ...eventForm, location: val })}
+                        onSelect={(val) => setEventForm({ ...eventForm, location: val })}
+                        placeholder="Where did this occur?"
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label>Description</Label>
@@ -747,7 +763,12 @@ export default function ServiceHistory() {
                       </div>
                       <div className="space-y-2">
                         <Label>Location</Label>
-                        <Input placeholder="e.g., Afghanistan, Iraq" value={deployForm.location} onChange={(e) => setDeployForm({ ...deployForm, location: e.target.value })} required />
+                        <LocationAutocomplete
+                          value={deployForm.location}
+                          onChange={(val) => setDeployForm({ ...deployForm, location: val })}
+                          onSelect={(val) => setDeployForm({ ...deployForm, location: val })}
+                          placeholder="e.g., Afghanistan, Iraq"
+                        />
                       </div>
                     </div>
                     <div className="grid gap-4 sm:grid-cols-2">

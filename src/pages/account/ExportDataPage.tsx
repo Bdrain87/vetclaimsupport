@@ -50,8 +50,8 @@ export default function ExportDataPage() {
 
       {/* Header */}
       <div className="text-center space-y-3">
-        <div className="w-16 h-16 mx-auto rounded-full bg-[#3B82F6]/10 border border-[#3B82F6]/20 flex items-center justify-center">
-          <Download className="h-8 w-8 text-[#3B82F6]" />
+        <div className="w-16 h-16 mx-auto rounded-full bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)] flex items-center justify-center">
+          <Download className="h-8 w-8 text-gold" />
         </div>
         <h1 className="text-2xl font-bold text-foreground">Export Your Data</h1>
         <p className="text-muted-foreground text-sm">
@@ -60,8 +60,8 @@ export default function ExportDataPage() {
       </div>
 
       {/* Format info */}
-      <div className="flex flex-col items-center gap-2 p-4 rounded-xl border bg-[#3B82F6]/10 border-[#3B82F6]/40">
-        <FileText className="h-8 w-8 text-[#3B82F6]" />
+      <div className="flex flex-col items-center gap-2 p-4 rounded-xl border bg-[rgba(214,178,94,0.1)] border-[rgba(214,178,94,0.4)]">
+        <FileText className="h-8 w-8 text-gold" />
         <span className="text-sm font-medium text-foreground">PDF Export</span>
         <span className="text-xs text-muted-foreground/70">Human-readable, ready for submission</span>
       </div>
@@ -70,7 +70,7 @@ export default function ExportDataPage() {
       <button
         onClick={handleExport}
         disabled={exporting}
-        className="w-full h-12 rounded-xl bg-[#3B82F6] text-[#102039] font-bold text-sm hover:bg-[#3B82F6]/90 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+        className="w-full h-12 rounded-xl bg-gold text-[#102039] font-bold text-sm hover:bg-gold/90 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
       >
         {exporting ? (
           <>

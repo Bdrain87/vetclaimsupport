@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, lazy, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -41,6 +41,9 @@ import { useAIGenerate } from '@/hooks/useAIGenerate';
 import useAppStore from '@/store/useAppStore';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { PageContainer } from '@/components/PageContainer';
+
+// Lazy-load RatingGuidance so criteria data is not bundled until needed
+const LazyRatingGuidance = lazy(() => import('@/components/RatingGuidance'));
 
 // Common ratings for selector
 const commonRatings = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
@@ -166,19 +169,23 @@ export default function ConditionDetail() {
   // Whether this is a "browse" view (condition not yet tracked by user)
   const isBrowseMode = !userCondition && !!conditionDetails;
 
-  // Get rating criteria if available
-  const ratingCriteria = useMemo(() => {
+  // Derive a simplified condition key for looking up rating criteria / DBQ data
+  const ratingCriteriaKey = useMemo(() => {
     if (!conditionDetails) return null;
-    // Try to find rating criteria by condition name or a simplified key
-    const key = conditionDetails.name.toLowerCase()
+    return conditionDetails.name.toLowerCase()
       .replace(/post-traumatic stress disorder/i, 'ptsd')
       .replace(/lumbosacral strain.*/i, 'lumbar-spine')
       .replace(/knee.*/i, 'knee')
       .replace(/sleep apnea.*/i, 'sleep-apnea')
       .replace(/migraine.*/i, 'migraines')
       .replace(/tinnitus/i, 'tinnitus');
-    return getRatingCriteriaByCondition(key);
   }, [conditionDetails]);
+
+  // Get rating criteria if available
+  const ratingCriteria = useMemo(() => {
+    if (!ratingCriteriaKey) return null;
+    return getRatingCriteriaByCondition(ratingCriteriaKey);
+  }, [ratingCriteriaKey]);
 
   // Get DBQ reference if available
   const dbqReference = useMemo(() => {
@@ -605,6 +612,25 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
         </Button>
       </div>
 
+      {/* Rating Criteria — lazy loaded */}
+      {conditionDetails && ratingCriteriaKey && (
+        <Suspense
+          fallback={
+            <Card className="bg-card/80 backdrop-blur-sm border-border">
+              <CardContent className="py-8 text-center">
+                <Scale className="h-6 w-6 text-muted-foreground mx-auto mb-2 animate-pulse" />
+                <p className="text-sm text-muted-foreground">Loading rating criteria...</p>
+              </CardContent>
+            </Card>
+          }
+        >
+          <LazyRatingGuidance
+            conditionId={ratingCriteriaKey}
+            conditionName={conditionDetails.abbreviation || conditionDetails.name}
+          />
+        </Suspense>
+      )}
+
       {/* AI Claim Insights */}
       <Collapsible open={aiInsightsOpen} onOpenChange={setAiInsightsOpen}>
         <Card className="border-primary/20">
@@ -679,30 +705,30 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
       <Card>
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
-            <Scale className="h-5 w-5 text-blue-500" />
+            <Scale className="h-5 w-5 text-gold" />
             Research Legal Precedent
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="bg-blue-900/30 border border-blue-700/50 rounded-lg p-4">
+          <div className="bg-[rgba(214,178,94,0.08)] border border-[rgba(214,178,94,0.2)] rounded-lg p-4">
             <p className="text-sm text-slate-400 mb-3">
               Use these verified legal databases to find case law relevant to your claim:
             </p>
             <div className="space-y-2">
               <a href="https://www.va.gov/vbs/bva/" target="_blank" rel="noopener noreferrer"
-                 className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm">
+                 className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm">
                 Board of Veterans' Appeals (BVA) Decisions
               </a>
               <a href="https://www.uscourts.cavc.gov/decisions.php" target="_blank" rel="noopener noreferrer"
-                 className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm">
+                 className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm">
                 Court of Appeals for Veterans Claims (CAVC)
               </a>
               <a href="https://scholar.google.com/" target="_blank" rel="noopener noreferrer"
-                 className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm">
+                 className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm">
                 Google Scholar — Legal Opinions
               </a>
               <a href="https://www.law.cornell.edu/uscode/text/38" target="_blank" rel="noopener noreferrer"
-                 className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm">
+                 className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm">
                 38 U.S.C. — Veterans' Benefits (Cornell Law)
               </a>
             </div>
@@ -784,8 +810,8 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                         <Badge
                           className={
                             level.percentage === 0 ? 'bg-gray-500' :
-                            level.percentage <= 30 ? 'bg-blue-500' :
-                            level.percentage <= 70 ? 'bg-blue-500' :
+                            level.percentage <= 30 ? 'bg-gold' :
+                            level.percentage <= 70 ? 'bg-gold' :
                             'bg-green-500'
                           }
                         >

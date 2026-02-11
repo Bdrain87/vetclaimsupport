@@ -48,19 +48,19 @@ export function IntentToFileCard() {
   return (
     <Card className={cn(
       "relative overflow-hidden",
-      "bg-gradient-to-r from-blue-500/10 via-blue-400/5 to-blue-500/10",
-      "border-2 border-blue-500/30",
-      "shadow-lg shadow-blue-500/10"
+      "bg-gradient-to-r from-[rgba(214,178,94,0.1)] via-[rgba(214,178,94,0.05)] to-[rgba(214,178,94,0.1)]",
+      "border-2 border-[rgba(214,178,94,0.3)]",
+      "shadow-lg shadow-[rgba(214,178,94,0.1)]"
     )}>
       {/* Animated accent line */}
-      <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-blue-400 to-blue-500" />
+      <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-gold to-gold" />
 
       <CardContent className="pt-4 pb-4 pl-6 pr-4">
         {/* Dismiss button */}
         <Button
           variant="ghost"
           size="icon"
-          className="absolute right-2 top-2 h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-blue-500/10"
+          className="absolute right-2 top-2 h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-[rgba(214,178,94,0.1)]"
           onClick={handleDismiss}
           aria-label="Dismiss"
         >
@@ -70,11 +70,11 @@ export function IntentToFileCard() {
         <div className="flex items-start gap-4 pr-8">
           {/* Icon */}
           <div className="relative flex-shrink-0">
-            <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-400/20 to-blue-500/20 border border-blue-500/30 flex items-center justify-center">
-              <Flag className="h-6 w-6 text-blue-500" />
+            <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-[rgba(214,178,94,0.2)] to-[rgba(214,178,94,0.2)] border border-[rgba(214,178,94,0.3)] flex items-center justify-center">
+              <Flag className="h-6 w-6 text-gold" />
             </div>
             {/* Subtle glow */}
-            <div className="absolute inset-0 bg-blue-400/20 blur-xl rounded-full scale-150 -z-10" />
+            <div className="absolute inset-0 bg-[rgba(214,178,94,0.2)] blur-xl rounded-full scale-150 -z-10" />
           </div>
 
           <div className="space-y-2 flex-1">
@@ -83,19 +83,19 @@ export function IntentToFileCard() {
               <h3 className="font-bold text-foreground text-base sm:text-lg">
                 Pro Tip: File an Intent to File First!
               </h3>
-              <Lightbulb className="h-5 w-5 text-blue-500 flex-shrink-0" />
+              <Lightbulb className="h-5 w-5 text-gold flex-shrink-0" />
             </div>
 
             {/* Content */}
             <div className="space-y-1.5 text-sm text-muted-foreground">
               <p>
                 Filing an <strong className="text-foreground">Intent to File (ITF)</strong> protects
-                your effective date for <strong className="text-blue-600 dark:text-blue-400">up to 1 year</strong> while
+                your effective date for <strong className="text-gold-dk dark:text-gold">up to 1 year</strong> while
                 you gather evidence.
               </p>
               <p className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-blue-500 flex-shrink-0" />
-                <span>This could mean <strong className="text-blue-600 dark:text-blue-400">thousands in back pay</strong> if approved.</span>
+                <Clock className="h-4 w-4 text-gold flex-shrink-0" />
+                <span>This could mean <strong className="text-gold-dk dark:text-gold">thousands in back pay</strong> if approved.</span>
               </p>
             </div>
 
@@ -108,7 +108,7 @@ export function IntentToFileCard() {
               >
                 <Button
                   size="sm"
-                  className="h-9 gap-2 bg-gradient-to-r from-blue-500 to-blue-500 hover:from-blue-500/90 hover:to-blue-500/90 text-white font-semibold shadow-md shadow-blue-500/20"
+                  className="h-9 gap-2 bg-gradient-to-r from-gold to-gold hover:from-gold/90 hover:to-gold/90 text-[#102039] font-semibold shadow-md shadow-[rgba(214,178,94,0.2)]"
                 >
                   File Intent to File
                   <ExternalLink className="h-3.5 w-3.5" />
@@ -118,7 +118,7 @@ export function IntentToFileCard() {
                 href="https://www.va.gov/resources/your-intent-to-file-a-va-claim/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                className="text-sm text-gold-dk dark:text-gold hover:underline font-medium"
               >
                 Learn more →
               </a>
