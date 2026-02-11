@@ -74,7 +74,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
         icon: <Stethoscope className="h-5 w-5" />,
         title: 'Document Your Medical History',
         message: `You're claiming ${data.claimConditions?.length} condition${data.claimConditions?.length !== 1 ? 's' : ''}, but haven't logged any medical visits. The VA needs to see in-service treatment records.`,
-        action: { label: 'Log Medical Visits', href: '/medical-visits' },
+        action: { label: 'Log Medical Visits', href: '/health/visits' },
         condition: 'Conditions without medical evidence',
       });
     }
@@ -88,7 +88,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
         icon: <Shield className="h-5 w-5" />,
         title: 'Add Your Service History',
         message: 'Your service assignments, duties, and locations help establish where and how you were exposed to conditions.',
-        action: { label: 'Add Service History', href: '/service-history' },
+        action: { label: 'Add Service History', href: '/settings/service-history' },
         condition: 'Missing service history',
       });
     }
@@ -109,7 +109,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
         icon: <Brain className="h-5 w-5" />,
         title: 'Track Your PTSD Symptoms',
         message: 'PTSD claims require documented symptoms matching 38 CFR 4.130 criteria. Regular symptom logging strengthens your case.',
-        action: { label: 'Log PTSD Symptoms', href: '/symptoms' },
+        action: { label: 'Log PTSD Symptoms', href: '/health/symptoms' },
         condition: 'PTSD claimed without symptom tracking',
       });
     }
@@ -126,7 +126,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
         icon: <Activity className="h-5 w-5" />,
         title: 'Track Your Sleep',
         message: 'Sleep apnea claims benefit from CPAP usage logs and sleep quality tracking. The VA looks at treatment compliance.',
-        action: { label: 'Log Sleep', href: '/sleep' },
+        action: { label: 'Log Sleep', href: '/health/sleep' },
         condition: 'Sleep apnea without sleep tracking',
       });
     }
@@ -144,7 +144,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
         icon: <Activity className="h-5 w-5" />,
         title: 'Log Your Migraines',
         message: 'Migraine ratings depend on frequency and severity. Track each episode to show prostrating attacks.',
-        action: { label: 'Log Migraines', href: '/migraines' },
+        action: { label: 'Log Migraines', href: '/health/migraines' },
         condition: 'Migraines claimed without tracking',
       });
     }
@@ -181,7 +181,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
         icon: <Activity className="h-5 w-5" />,
         title: 'Start a Symptom Journal',
         message: 'Regular symptom tracking shows the VA how your conditions affect daily life. Even 1-2 entries per week helps.',
-        action: { label: 'Track Symptoms', href: '/symptoms' },
+        action: { label: 'Track Symptoms', href: '/health/symptoms' },
         condition: 'Medical visits without symptom tracking',
       });
     }
@@ -195,7 +195,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
         icon: <Users className="h-5 w-5" />,
         title: 'Add Witness Contacts',
         message: 'Fellow service members who witnessed your condition can provide powerful supporting statements.',
-        action: { label: 'Add Buddy Contacts', href: '/buddy-statements' },
+        action: { label: 'Add Buddy Contacts', href: '/prep/buddy-statement' },
         condition: 'No buddy contacts',
       });
     }
@@ -210,7 +210,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
         icon: <Users className="h-5 w-5" />,
         title: 'Request Buddy Statements',
         message: `You have ${unrequestedBuddies} contact${unrequestedBuddies > 1 ? 's' : ''} who could provide statements. Use the Buddy Statement Generator in Tools.`,
-        action: { label: 'View Contacts', href: '/buddy-statements' },
+        action: { label: 'View Contacts', href: '/prep/buddy-statement' },
         condition: 'Pending buddy requests',
       });
     }
@@ -231,7 +231,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
           icon: <Clock className="h-5 w-5" />,
           title: 'You\'re in the BDD Window!',
           message: `Only ${daysUntilSep} days until separation. Filing now means faster processing and potential back pay from day 1.`,
-          action: { label: 'View Checklist', href: '/claim-checklist' },
+          action: { label: 'View Checklist', href: '/claims/checklist' },
           condition: 'BDD window active',
         });
       } else if (daysUntilSep > 0 && daysUntilSep <= 90) {
@@ -242,7 +242,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
           icon: <AlertTriangle className="h-5 w-5" />,
           title: 'BDD Window Closing Soon',
           message: `Only ${daysUntilSep} days left to file before separation. After this, you'll need to file a standard claim.`,
-          action: { label: 'Start Filing', href: '/claim-checklist' },
+          action: { label: 'Start Filing', href: '/claims/checklist' },
           condition: 'BDD window closing',
         });
       }

@@ -25,7 +25,10 @@ export function PaywallModal({ isOpen, onClose }: PaywallModalProps) {
   const handlePurchase = async () => {
     setPurchasing(true);
     try {
-      await purchaseLifetime();
+      const success = await purchaseLifetime();
+      if (!success) {
+        alert('In-app purchases are not yet available. Check back soon!');
+      }
     } finally {
       setPurchasing(false);
     }
@@ -34,7 +37,10 @@ export function PaywallModal({ isOpen, onClose }: PaywallModalProps) {
   const handleRestore = async () => {
     setRestoring(true);
     try {
-      await restorePurchases();
+      const success = await restorePurchases();
+      if (!success) {
+        alert('No previous purchases found to restore.');
+      }
     } finally {
       setRestoring(false);
     }

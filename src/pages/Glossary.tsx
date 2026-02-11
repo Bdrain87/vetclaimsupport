@@ -254,12 +254,13 @@ export default function Glossary() {
                   <div className="flex flex-wrap gap-2 mt-2">
                     <span className="text-xs text-muted-foreground">Related:</span>
                     {item.related.map((related) => (
-                      <span
+                      <button
                         key={related}
-                        className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary"
+                        onClick={() => setSearchTerm(related)}
+                        className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors cursor-pointer"
                       >
                         {related}
-                      </span>
+                      </button>
                     ))}
                   </div>
                 )}

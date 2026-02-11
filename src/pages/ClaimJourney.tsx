@@ -130,7 +130,7 @@ const journeyPhases: JourneyPhase[] = [
       { id: 'exam-notes', label: 'Post-exam notes written', description: 'Document what happened at exam' },
     ],
     resources: [
-      { label: 'C&P Exam Prep Guide', link: '/cp-exam-prep' },
+      { label: 'C&P Exam Prep Guide', link: '/prep/exam' },
       { label: 'What to Expect', link: 'https://www.va.gov/disability/va-claim-exam/' },
     ],
   },

@@ -51,7 +51,7 @@ export function DashboardInsights() {
     insights.push({
       icon: <FileText className="h-5 w-5 text-destructive" />,
       message: `${missingSummaries} medical visit${missingSummaries > 1 ? 's are' : ' is'} missing After-Visit Summaries. Request these from your MTF records office.`,
-      action: { label: 'View Medical Visits', to: '/medical-visits' },
+      action: { label: 'View Medical Visits', to: '/health/visits' },
       type: 'warning',
     });
   }
@@ -61,7 +61,7 @@ export function DashboardInsights() {
     insights.push({
       icon: <TrendingUp className="h-5 w-5 text-primary" />,
       message: `You have medical visits logged but no symptom journal entries. Regular symptom tracking strengthens your claim.`,
-      action: { label: 'Start Tracking', to: '/symptoms' },
+      action: { label: 'Start Tracking', to: '/health/symptoms' },
       type: 'info',
     });
   }
@@ -75,14 +75,14 @@ export function DashboardInsights() {
       insights.push({
         icon: <Clock className="h-5 w-5 text-warning" />,
         message: `${pending} buddy statement${pending > 1 ? 's are' : ' is'} pending. Follow up with your contacts.`,
-        action: { label: 'View Contacts', to: '/buddy-statements' },
+        action: { label: 'View Contacts', to: '/prep/buddy-statement' },
         type: 'warning',
       });
     } else if (notRequested > 0) {
       insights.push({
         icon: <Lightbulb className="h-5 w-5 text-primary" />,
         message: `You have ${notRequested} buddy contact${notRequested > 1 ? 's' : ''} who haven't been asked for statements yet.`,
-        action: { label: 'Request Statements', to: '/buddy-statements' },
+        action: { label: 'Request Statements', to: '/prep/buddy-statement' },
         type: 'info',
       });
     }
@@ -94,7 +94,7 @@ export function DashboardInsights() {
       insights.push({
         icon: <Lightbulb className="h-5 w-5 text-primary" />,
         message: `Start by logging your service history and any medical visits. The more evidence you gather, the stronger your claim.`,
-        action: { label: 'Add Service History', to: '/service-history' },
+        action: { label: 'Add Service History', to: '/settings/service-history' },
         type: 'info',
       });
     }

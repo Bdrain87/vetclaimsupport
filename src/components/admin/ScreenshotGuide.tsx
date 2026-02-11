@@ -28,7 +28,7 @@ const SCREENSHOTS = [
     id: 1,
     caption: 'Know your combined VA rating instantly',
     description: 'Calculator showing combined rating with monthly compensation',
-    page: '/claim-tools',
+    page: '/claims/calculator',
     icon: Calculator,
     keyElements: ['Rating percentage display', 'Monthly pay calculation', 'Bilateral factor indicator'],
     tips: 'Show a realistic rating (e.g., 70% or 80%) with multiple conditions listed'
@@ -46,7 +46,7 @@ const SCREENSHOTS = [
     id: 3,
     caption: 'Dominate your C&P exam',
     description: 'Exam Companion document with condition-specific prep',
-    page: '/cp-exam-prep',
+    page: '/prep/exam',
     icon: ClipboardCheck,
     keyElements: ['Condition-specific talking points', 'Examiner tips', 'Common mistakes section'],
     tips: 'Show PTSD or back pain as example conditions'
@@ -55,7 +55,7 @@ const SCREENSHOTS = [
     id: 4,
     caption: 'Discover conditions you didn\'t know about',
     description: 'Secondary condition suggestions',
-    page: '/secondary-finder',
+    page: '/claims/secondary-finder',
     icon: Link2,
     keyElements: ['Primary condition selected', 'Related secondaries list', 'Connection strength indicators'],
     tips: 'Show knee condition with hip, back, and sleep apnea secondaries'
@@ -64,7 +64,7 @@ const SCREENSHOTS = [
     id: 5,
     caption: 'Document your worst days',
     description: 'Journal entry with symptom tracking',
-    page: '/health-log',
+    page: '/health/summary',
     icon: BookOpen,
     keyElements: ['Pain level sliders', 'Sleep quality entry', 'Daily impact notes'],
     tips: 'Show a "bad day" entry with high pain and low sleep quality'
@@ -73,7 +73,7 @@ const SCREENSHOTS = [
     id: 6,
     caption: 'Organize your evidence package',
     description: 'Evidence checklist with completion status',
-    page: '/documents',
+    page: '/settings/vault',
     icon: FolderOpen,
     keyElements: ['Document categories', 'Completion indicators', 'Missing items highlighted'],
     tips: 'Show some items complete, some pending, some missing'
@@ -82,7 +82,7 @@ const SCREENSHOTS = [
     id: 7,
     caption: 'See exactly what examiners look for',
     description: 'DBQ information showing rating criteria',
-    page: '/dbq-prep',
+    page: '/prep/dbq',
     icon: FileText,
     keyElements: ['DBQ form sections', 'Rating breakdowns', 'Required findings'],
     tips: 'Use a common condition like lumbar spine or PTSD'
@@ -91,7 +91,7 @@ const SCREENSHOTS = [
     id: 8,
     caption: 'Know what each rating requires',
     description: 'PTSD or back condition rating criteria breakdown',
-    page: '/condition-guide',
+    page: '/reference/condition-guide',
     icon: Target,
     keyElements: ['Rating levels (0%, 10%, 30%, 50%, 70%, 100%)', 'Specific criteria for each level', 'Your current status indicator'],
     tips: 'PTSD rating criteria is most universally understood'

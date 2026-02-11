@@ -41,9 +41,9 @@ interface NavItem {
 
 const bottomNavItems: NavItem[] = [
   { title: 'Home', path: '/', icon: Home },
-  { title: 'Tools', path: '/claim-tools', icon: Wrench },
-  { title: 'Add', path: '/health-log', icon: Plus, primary: true },
-  { title: 'Claim', path: '/claim-journey', icon: FileText },
+  { title: 'Tools', path: '/prep', icon: Wrench },
+  { title: 'Add', path: '/health/summary', icon: Plus, primary: true },
+  { title: 'Claim', path: '/settings/journey', icon: FileText },
   { title: 'Menu', path: null, icon: Menu, opensDrawer: true },
 ];
 
@@ -52,43 +52,43 @@ const drawerSections = [
   {
     title: 'Premium Tools',
     items: [
-      { title: 'Rating Calculator', path: '/claim-tools', icon: Calculator },
-      { title: 'Secondary Finder', path: '/secondary-finder', icon: Search },
-      { title: 'Nexus Letter Generator', path: '/nexus-letter', icon: FileSignature },
-      { title: 'DBQ Prep Sheet', path: '/dbq-prep', icon: ClipboardList },
-      { title: 'Strategy Wizard', path: '/claim-strategy', icon: Wand2 },
-      { title: 'C&P Exam Prep', path: '/cp-exam-prep', icon: ClipboardCheck },
+      { title: 'Rating Calculator', path: '/claims/calculator', icon: Calculator },
+      { title: 'Secondary Finder', path: '/claims/secondary-finder', icon: Search },
+      { title: 'Nexus Letter Generator', path: '/prep/nexus-letter', icon: FileSignature },
+      { title: 'DBQ Prep Sheet', path: '/prep/dbq', icon: ClipboardList },
+      { title: 'Strategy Wizard', path: '/claims/strategy', icon: Wand2 },
+      { title: 'C&P Exam Prep', path: '/prep/exam', icon: ClipboardCheck },
     ],
   },
   {
     title: 'My Claim',
     items: [
-      { title: 'Journey', path: '/claim-journey', icon: Route },
-      { title: 'Documents', path: '/documents', icon: Files },
-      { title: 'Checklist', path: '/claim-checklist', icon: ClipboardCheck },
+      { title: 'Journey', path: '/settings/journey', icon: Route },
+      { title: 'Documents', path: '/settings/vault', icon: Files },
+      { title: 'Checklist', path: '/claims/checklist', icon: ClipboardCheck },
     ],
   },
   {
     title: 'Service History',
     items: [
-      { title: 'Service Record', path: '/service-history', icon: Shield },
-      { title: 'Medical Visits', path: '/medical-visits', icon: Stethoscope },
-      { title: 'Exposures', path: '/exposures', icon: AlertTriangle },
-      { title: 'Timeline', path: '/timeline', icon: Clock },
+      { title: 'Service Record', path: '/settings/service-history', icon: Shield },
+      { title: 'Medical Visits', path: '/health/visits', icon: Stethoscope },
+      { title: 'Exposures', path: '/health/exposures', icon: AlertTriangle },
+      { title: 'Timeline', path: '/settings/timeline', icon: Clock },
     ],
   },
   {
     title: 'Health Tracking',
     items: [
-      { title: 'Daily Log', path: '/health-log', icon: Activity },
-      { title: 'Migraines', path: '/migraines', icon: Brain },
+      { title: 'Daily Log', path: '/health/summary', icon: Activity },
+      { title: 'Migraines', path: '/health/migraines', icon: Brain },
     ],
   },
 ];
 
 const drawerSingleItems = [
-  { title: 'Buddy Statements', path: '/buddy-statements', icon: Users },
-  { title: 'Help Center', path: '/help', icon: HelpCircle },
+  { title: 'Buddy Statements', path: '/prep/buddy-statement', icon: Users },
+  { title: 'Help Center', path: '/settings/help', icon: HelpCircle },
   { title: 'Settings', path: '/settings', icon: Settings },
 ];
 

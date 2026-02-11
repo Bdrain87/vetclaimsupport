@@ -87,7 +87,7 @@ export function EnhancedEvidenceChecklist() {
         required: true,
         completed: hasMedical,
         count: linkedVisits,
-        link: '/medical-visits',
+        link: '/health/visits',
         firstPersonTip: `"I first sought treatment for [condition] on [DATE] at [FACILITY]. My doctor diagnosed me with [DIAGNOSIS] and prescribed [TREATMENT]."`,
       });
 
@@ -108,7 +108,7 @@ export function EnhancedEvidenceChecklist() {
         required: true,
         completed: hasSymptoms,
         count: linkedSymptoms,
-        link: '/symptoms',
+        link: '/health/symptoms',
         firstPersonTip: `"My symptoms occur [FREQUENCY], typically lasting [DURATION]. On a scale of 1-10, the severity is usually [X] but reaches [Y] during flare-ups. This prevents me from [SPECIFIC ACTIVITIES]."`,
       });
 
@@ -127,7 +127,7 @@ export function EnhancedEvidenceChecklist() {
         required: true,
         completed: hasExposures,
         count: linkedExposures,
-        link: '/exposures',
+        link: '/health/exposures',
         firstPersonTip: `"During my service from [START DATE] to [END DATE] at [LOCATION], I was exposed to [HAZARD/EVENT]. This exposure occurred while performing my duties as [MOS/RATE]."`,
       });
 
@@ -146,7 +146,7 @@ export function EnhancedEvidenceChecklist() {
         required: false,
         completed: hasBuddy,
         count: linkedBuddies,
-        link: '/buddy-statements',
+        link: '/prep/buddy-statement',
         firstPersonTip: `Ask your buddy to write: "I served with [NAME] at [LOCATION] from [DATE] to [DATE]. I personally witnessed [SPECIFIC INCIDENT/SYMPTOMS]. I observed that [NAME] [SPECIFIC OBSERVATIONS]."`,
       });
 
@@ -166,7 +166,7 @@ export function EnhancedEvidenceChecklist() {
         category: 'document',
         required: false,
         completed: hasNexus,
-        link: '/claim-tools?tab=nexus',
+        link: '/prep/nexus-letter',
         firstPersonTip: `Ask your doctor to include: "It is my medical opinion that [VETERAN]'s [CONDITION] is at least as likely as not (50% probability or greater) related to their military service."`,
       });
 

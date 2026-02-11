@@ -58,7 +58,7 @@ export function EvidenceGapAnalyzer() {
         description: hasMedical 
           ? 'Medical visits document your condition in official records'
           : 'Link medical visits showing diagnosis or treatment for this condition',
-        link: '/medical-visits',
+        link: '/health/visits',
         icon: Stethoscope,
         isMet: hasMedical,
       });
@@ -78,7 +78,7 @@ export function EvidenceGapAnalyzer() {
         description: hasSymptoms
           ? 'Symptoms show chronic, ongoing nature of condition'
           : `Add ${3 - symptomCount} more symptom entries to show pattern (${symptomCount}/3)`,
-        link: '/symptoms',
+        link: '/health/symptoms',
         icon: Activity,
         isMet: hasSymptoms,
       });
@@ -96,7 +96,7 @@ export function EvidenceGapAnalyzer() {
           description: hasExposures
             ? 'Exposure helps establish service connection'
             : 'Link exposures that may have caused or worsened this condition',
-          link: '/exposures',
+          link: '/health/exposures',
           icon: AlertCircle,
           isMet: hasExposures,
         });
@@ -116,7 +116,7 @@ export function EvidenceGapAnalyzer() {
         description: hasBuddy
           ? 'Third-party witness strengthens your claim'
           : 'A buddy statement from someone who witnessed your condition is powerful evidence',
-        link: '/buddy-statements',
+        link: '/prep/buddy-statement',
         icon: Users,
         isMet: hasBuddy,
       });
@@ -136,7 +136,7 @@ export function EvidenceGapAnalyzer() {
         description: hasNexus
           ? 'Medical opinion linking condition to service'
           : 'A nexus letter from a doctor significantly increases approval odds',
-        link: '/documents',
+        link: '/settings/vault',
         icon: FileText,
         isMet: hasNexus,
       });
