@@ -188,7 +188,7 @@ serve(async (req) => {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        const errorBody = await response.text();
+        await response.text();
         console.error(`[${requestId}] Gemini API error: ${response.status}`);
 
         // Parse specific error codes
@@ -256,7 +256,7 @@ serve(async (req) => {
       throw fetchError;
     }
 
-  } catch (error) {
+  } catch {
     console.error(`[${requestId}] Unexpected error`);
     return new Response(JSON.stringify({
       error: 'An unexpected error occurred. Please try again.',

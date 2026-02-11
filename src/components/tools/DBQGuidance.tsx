@@ -17,8 +17,6 @@ import {
   HelpCircle,
   Lightbulb,
 } from 'lucide-react';
-import jsPDF from 'jspdf';
-
 interface DBQFormInfo {
   formNumber: string;
   formName: string;
@@ -390,9 +388,10 @@ export function DBQGuidance() {
     return claimConditions.map(condition => ({
       condition,
       dbqType: getDBQTypeForCondition(condition.name),
-      dbqInfo: getDBQTypeForCondition(condition.name) 
-        ? dbqFormDatabase[getDBQTypeForCondition(condition.name)!] 
-        : null,
+      dbqInfo: (() => {
+        const type = getDBQTypeForCondition(condition.name);
+        return type ? dbqFormDatabase[type] : null;
+      })(),
     })).filter(c => c.dbqInfo !== null);
   }, [claimConditions]);
 
@@ -404,12 +403,13 @@ export function DBQGuidance() {
     window.print();
   }, []);
 
-  const handleExportPDF = useCallback(() => {
+  const handleExportPDF = useCallback(async () => {
     if (conditionsWithDBQ.length === 0) {
       alert('No conditions with DBQ guidance to export');
       return;
     }
 
+    const { default: jsPDF } = await import('jspdf');
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
@@ -689,21 +689,24 @@ export function DBQGuidance() {
             </p>
           </CardHeader>
           <CardContent className="space-y-4">
-            {conditionsWithDBQ.map(({ condition, dbqInfo }) => (
+            {conditionsWithDBQ.map(({ condition, dbqInfo }) => {
+              if (!dbqInfo) return null;
+
+              return (
               <div key={condition.id} className="border rounded-lg overflow-hidden">
                 <div className="p-4 bg-muted/30">
                   <div className="flex items-start justify-between flex-wrap gap-2">
                     <div>
                       <h4 className="font-medium text-foreground">{condition.name}</h4>
                       <p className="text-xs text-muted-foreground mt-1">
-                        Form: {dbqInfo!.formNumber}
+                        Form: {dbqInfo?.formNumber}
                       </p>
                     </div>
                     <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
-                      DC {dbqInfo!.diagnosticCodes.join(', ')}
+                      DC {dbqInfo?.diagnosticCodes.join(', ')}
                     </Badge>
                   </div>
-                  <p className="text-sm text-foreground mt-2">{dbqInfo!.formName}</p>
+                  <p className="text-sm text-foreground mt-2">{dbqInfo?.formName}</p>
                 </div>
 
                 <div className="p-4">
@@ -718,7 +721,7 @@ export function DBQGuidance() {
                       </AccordionTrigger>
                       <AccordionContent>
                         <ul className="space-y-2 pb-3">
-                          {dbqInfo!.keySections.map((section, idx) => (
+                          {dbqInfo?.keySections.map((section, idx) => (
                             <li key={idx} className="flex items-start gap-2 text-sm">
                               <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
                               {section}
@@ -738,7 +741,7 @@ export function DBQGuidance() {
                       </AccordionTrigger>
                       <AccordionContent>
                         <ul className="space-y-2 pb-3">
-                          {dbqInfo!.strongDBQTips.map((tip, idx) => (
+                          {dbqInfo?.strongDBQTips.map((tip, idx) => (
                             <li key={idx} className="flex items-start gap-2 text-sm text-success">
                               <CheckCircle2 className="h-4 w-4 flex-shrink-0 mt-0.5" />
                               <span className="text-foreground">{tip}</span>
@@ -758,7 +761,7 @@ export function DBQGuidance() {
                       </AccordionTrigger>
                       <AccordionContent>
                         <ul className="space-y-2 pb-3">
-                          {dbqInfo!.weakDBQWarnings.map((warning, idx) => (
+                          {dbqInfo?.weakDBQWarnings.map((warning, idx) => (
                             <li key={idx} className="flex items-start gap-2 text-sm text-destructive">
                               <AlertTriangle className="h-4 w-4 flex-shrink-0 mt-0.5" />
                               <span className="text-foreground">{warning}</span>
@@ -782,7 +785,7 @@ export function DBQGuidance() {
                             Share these instructions with your doctor before the DBQ appointment:
                           </p>
                           <ul className="space-y-2">
-                            {dbqInfo!.doctorInstructions.map((instruction, idx) => (
+                            {dbqInfo?.doctorInstructions.map((instruction, idx) => (
                               <li key={idx} className="flex items-start gap-2 text-sm">
                                 <span className="text-primary font-medium">{idx + 1}.</span>
                                 {instruction}
@@ -808,7 +811,7 @@ export function DBQGuidance() {
                             Think about your answers beforehand to provide accurate information:
                           </p>
                           <ul className="space-y-2">
-                            {dbqInfo!.doctorQuestions.map((question, idx) => (
+                            {dbqInfo?.doctorQuestions.map((question, idx) => (
                               <li key={idx} className="flex items-start gap-2 text-sm">
                                 <span className="text-muted-foreground font-medium">?</span>
                                 <span className="text-foreground">{question}</span>
@@ -828,14 +831,15 @@ export function DBQGuidance() {
                     variant="outline"
                     size="sm"
                     className="w-full mt-3"
-                    onClick={() => window.open(`https://www.va.gov/find-forms/?q=${dbqInfo!.formNumber}`, '_blank')}
+                    onClick={() => window.open(`https://www.va.gov/find-forms/?q=${dbqInfo?.formNumber}`, '_blank')}
                   >
                     <ExternalLink className="h-4 w-4 mr-2" />
-                    Download DBQ Form {dbqInfo!.formNumber}
+                    Download DBQ Form {dbqInfo?.formNumber}
                   </Button>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </CardContent>
         </Card>
       )}

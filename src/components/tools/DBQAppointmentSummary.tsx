@@ -18,7 +18,6 @@ import {
   Calendar,
   CheckCircle2,
 } from 'lucide-react';
-import jsPDF from 'jspdf';
 import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput.utils';
 import { DisclaimerNotice } from '@/components/shared/DisclaimerNotice';
 
@@ -104,12 +103,13 @@ export function DBQAppointmentSummary() {
     return { symptoms, medicalVisits, medications, migraines, sleepEntries };
   }, [selectedCondition, data]);
 
-  const generatePDF = () => {
+  const generatePDF = async () => {
     if (!selectedCondition || !linkedEvidence) return;
     
     setIsGenerating(true);
     
     try {
+      const { default: jsPDF } = await import('jspdf');
       const doc = new jsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();
       let yPos = 20;

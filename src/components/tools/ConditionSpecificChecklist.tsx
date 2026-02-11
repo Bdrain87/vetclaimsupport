@@ -16,9 +16,6 @@ import {
   AlertCircle,
   CheckCircle2,
   XCircle,
-  Stethoscope,
-  Users,
-  Activity,
 } from 'lucide-react';
 import { getConditionChecklist, ConditionChecklist } from '@/data/conditionChecklists';
 
@@ -206,6 +203,7 @@ export function ConditionSpecificChecklist() {
       </CardHeader>
       <CardContent className="space-y-3">
         {conditionsWithChecklists.map(({ condition, checklist, evidenceStatus, readinessScore }) => {
+          if (!checklist) return null;
           const isExpanded = expandedCondition === condition.id;
 
           return (
@@ -216,12 +214,12 @@ export function ConditionSpecificChecklist() {
               >
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <h4 className="font-medium">{checklist!.name}</h4>
+                    <h4 className="font-medium">{checklist.name}</h4>
                     <Badge variant="outline" className={getScoreColor(readinessScore)}>
                       {readinessScore}% Ready
                     </Badge>
                   </div>
-                  <p className="text-xs text-muted-foreground">DC {checklist!.diagnosticCode}</p>
+                  <p className="text-xs text-muted-foreground">DC {checklist.diagnosticCode}</p>
                   <Progress value={readinessScore} className="h-1.5 mt-2 w-32" />
                 </div>
                 {isExpanded ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
@@ -295,7 +293,7 @@ export function ConditionSpecificChecklist() {
                       <p className="text-xs text-muted-foreground mb-3">
                         ✓ = You have this | ○ = Recommended but missing
                       </p>
-                      {checklist!.recommendedEvidence.map((ev, idx) => {
+                      {checklist.recommendedEvidence.map((ev, idx) => {
                         // Determine if user has this evidence type
                         const hasEvidence = (() => {
                           const item = ev.item.toLowerCase();
@@ -359,7 +357,7 @@ export function ConditionSpecificChecklist() {
                     </TabsContent>
 
                     <TabsContent value="forms" className="mt-4 space-y-2">
-                      {checklist!.requiredForms.map((form, idx) => (
+                      {checklist.requiredForms.map((form, idx) => (
                         <div key={idx} className="flex items-start gap-3 p-2">
                           <div className="h-5 w-5 rounded border-2 border-muted-foreground/30 flex-shrink-0 mt-0.5" />
                           <div className="flex-1">
@@ -384,7 +382,7 @@ export function ConditionSpecificChecklist() {
                         Prepare answers to these likely C&P exam questions:
                       </p>
                       <ul className="space-y-2">
-                        {checklist!.examQuestions.map((q, idx) => (
+                        {checklist.examQuestions.map((q, idx) => (
                           <li key={idx} className="flex items-start gap-2 text-sm p-2 bg-muted/30 rounded-lg">
                             <MessageSquare className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
                             {q}
@@ -395,9 +393,9 @@ export function ConditionSpecificChecklist() {
 
                     <TabsContent value="secondary" className="mt-4 space-y-2">
                       <p className="text-xs text-muted-foreground mb-3">
-                        Conditions you may be able to claim secondary to {checklist!.name}:
+                        Conditions you may be able to claim secondary to {checklist.name}:
                       </p>
-                      {checklist!.secondaryConditions.map((sec, idx) => (
+                      {checklist.secondaryConditions.map((sec, idx) => (
                         <div key={idx} className="p-3 bg-purple-500/5 border border-purple-500/20 rounded-lg">
                           <p className="font-medium text-sm text-purple-600 dark:text-purple-400">{sec.name}</p>
                           <p className="text-xs text-muted-foreground mt-1">{sec.connection}</p>
@@ -407,14 +405,14 @@ export function ConditionSpecificChecklist() {
                   </Tabs>
 
                   {/* Pro Tips */}
-                  {checklist!.tips.length > 0 && (
+                  {checklist.tips.length > 0 && (
                     <div className="mt-4 p-3 bg-primary/5 border border-primary/20 rounded-lg">
                       <p className="text-xs font-medium text-foreground mb-2 flex items-center gap-1">
                         <Lightbulb className="h-3 w-3" />
-                        Pro Tips for {checklist!.name}
+                        Pro Tips for {checklist.name}
                       </p>
                       <ul className="space-y-1">
-                        {checklist!.tips.map((tip, idx) => (
+                        {checklist.tips.map((tip, idx) => (
                           <li key={idx} className="text-xs text-muted-foreground">• {tip}</li>
                         ))}
                       </ul>

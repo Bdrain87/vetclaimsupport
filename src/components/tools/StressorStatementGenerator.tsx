@@ -1,6 +1,6 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { useClaims } from '@/hooks/useClaims';
-import { useProfileStore, BRANCH_LABELS } from '@/store/useProfileStore';
+import { useProfileStore } from '@/store/useProfileStore';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

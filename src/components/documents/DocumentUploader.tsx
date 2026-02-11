@@ -1,8 +1,8 @@
 import { useState, useRef } from 'react';
-import { Camera, Upload, X, Eye, Trash2, FileText, Image as ImageIcon, File } from 'lucide-react';
+import { Camera, Upload, Eye, Trash2, FileText, File } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -26,7 +26,7 @@ export function DocumentUploader({ documents, category, onAdd, onDelete }: Docum
 
   const filteredDocs = documents.filter(doc => doc.category === category);
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>, source: 'file' | 'camera') => {
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>, _source: 'file' | 'camera') => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -85,12 +85,6 @@ export function DocumentUploader({ documents, category, onAdd, onDelete }: Docum
     if (bytes < 1024) return bytes + ' B';
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-  };
-
-  const getFileIcon = (type: string) => {
-    if (type.startsWith('image/')) return <ImageIcon className="h-4 w-4" />;
-    if (type === 'application/pdf') return <FileText className="h-4 w-4" />;
-    return <File className="h-4 w-4" />;
   };
 
   const isImage = (type: string) => type.startsWith('image/');

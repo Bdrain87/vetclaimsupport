@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Shield, ChevronDown, Plus } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import {
   Select,
   SelectContent,
@@ -10,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { branchExposures, militaryBranches, type MilitaryBranch, type BranchExposure } from '@/data/branchExposures';
+import { branchExposures, militaryBranches, type MilitaryBranch } from '@/data/branchExposures';
 
 interface BranchExposuresSelectorProps {
   onSelectExposure: (exposureName: string) => void;

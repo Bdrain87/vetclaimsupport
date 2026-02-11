@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { Camera, X, Image as ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -11,8 +11,6 @@ interface PhotoAttachmentProps {
 }
 
 export function PhotoAttachment({ photos, onPhotosChange, maxPhotos = 5 }: PhotoAttachmentProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [previewPhoto, setPreviewPhoto] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 

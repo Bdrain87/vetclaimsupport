@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { FileDown, Download } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useClaims } from '@/hooks/useClaims';
 import { useToast } from '@/hooks/use-toast';
-import jsPDF from 'jspdf';
 import { ExportCustomizationModal, ExportSections } from './ExportCustomizationModal';
 
 // Colors (matching the app's design tokens)
@@ -31,7 +30,8 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
   const { toast } = useToast();
   const [modalOpen, setModalOpen] = useState(false);
 
-  const exportPDF = (sections: ExportSections) => {
+  const exportPDF = async (sections: ExportSections) => {
+    const { default: jsPDF } = await import('jspdf');
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     const now = new Date();

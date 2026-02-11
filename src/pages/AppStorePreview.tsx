@@ -27,7 +27,7 @@ import { cn } from '@/lib/utils';
 // App Store listing content
 const APP_STORE_CONTENT = {
   name: 'Vet Claim Support',
-  subtitle: 'Win Your VA Disability Claim',
+  subtitle: 'Prepare Your VA Disability Claim',
   promotionalText: 'New: PACT Act presumptive conditions database. Know if your condition qualifies for easier approval. Built by veterans, for veterans.',
   keywords: 'VA,disability,claim,veteran,military,rating,C&P,exam,PTSD,benefits,secondary,nexus,DBQ,compensation',
   description: `Get the VA rating you earned.
@@ -44,7 +44,7 @@ See the exact criteria the VA uses to rate your conditions. The same DBQ forms a
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-DOMINATE YOUR C&P EXAM
+PREPARE FOR YOUR C&P EXAM
 
 Your Compensation & Pension exam is the most important 30 minutes of your claim. Generate a personalized Exam Companion document with:
 - Key symptoms to describe for each condition
@@ -85,7 +85,7 @@ Track medical records, service treatment records, buddy statements, and nexus le
 BUILT FOR EVERY VETERAN
 
 - Active Duty: Start documenting now for when you separate
-- BDD Filers: File before discharge, get paid Day 1
+- BDD Filers: File before discharge for benefits from Day 1
 - Recently Separated: Denied or underrated? Now you'll know why
 - Long-Time Veterans: It's never too late. Secondary conditions exist.
 

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import useAppStore from '@/store/useAppStore';
-import type { EvidenceDocument, DocumentCategory, AttachableEntryType } from '@/types/documents';
+import type { DocumentCategory, AttachableEntryType } from '@/types/documents';
 
 /**
  * Adapter hook — returns the same shape as the old EvidenceContext / useEvidenceDocuments.

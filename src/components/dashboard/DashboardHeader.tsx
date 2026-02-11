@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Share, Download, MessageCircle, Mail, FileText, FileDown } from 'lucide-react';
+import { Share, MessageCircle, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,

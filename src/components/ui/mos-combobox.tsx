@@ -3,7 +3,7 @@ import { Check, Briefcase } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { searchMilitaryJobs, formatMOSDisplay, getHazardsForMOS, type MilitaryJobCode } from '@/data/militaryMOS';
+import { searchMilitaryJobs, type MilitaryJobCode } from '@/data/militaryMOS';
 import { saveMOS, getSavedMOS } from '@/utils/veteranProfile';
 
 interface MOSComboboxProps {
@@ -47,7 +47,6 @@ export function MOSCombobox({
   }, [inputValue, branch]);
 
   const handleSelect = (job: MilitaryJobCode) => {
-    const displayValue = formatMOSDisplay(job);
     setInputValue(job.code);
     onValueChange(job.code, job);
 

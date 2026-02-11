@@ -154,7 +154,7 @@ export async function decrypt(
     // Decode to string
     const decoder = new TextDecoder();
     return decoder.decode(decryptedBuffer);
-  } catch (error) {
+  } catch {
     throw new Error('Decryption failed. Incorrect password or corrupted data.');
   }
 }
@@ -177,16 +177,101 @@ export async function decryptObject<T>(
   return JSON.parse(jsonString) as T;
 }
 
-// Hash a string (for password verification, not storage)
-export async function hashString(str: string): Promise<string> {
+/**
+ * Hash a password for verification using PBKDF2 with a random salt.
+ *
+ * Returns a string in the format `<base64-salt>:<base64-hash>` so the salt is
+ * stored alongside the hash and can be used during verification.
+ *
+ * Uses the same iteration count as key derivation (100 000 rounds of
+ * PBKDF2-SHA-256) to make brute-force attacks expensive.
+ */
+export async function hashPassword(password: string): Promise<string> {
   if (!isEncryptionSupported()) {
     throw new Error('Web Crypto API is not supported');
   }
 
   const encoder = new TextEncoder();
-  const data = encoder.encode(str);
+  const salt = generateSalt(); // 16 random bytes
+
+  const keyMaterial = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(password),
+    'PBKDF2',
+    false,
+    ['deriveBits'],
+  );
+
+  const hashBuffer = await crypto.subtle.deriveBits(
+    {
+      name: 'PBKDF2',
+      salt,
+      iterations: KEY_ITERATIONS,
+      hash: 'SHA-256',
+    },
+    keyMaterial,
+    256, // 32 bytes
+  );
+
+  return bufferToBase64(salt.buffer) + ':' + bufferToBase64(hashBuffer);
+}
+
+/**
+ * Verify a password against a stored hash.
+ *
+ * Supports both the new salted format (`<salt>:<hash>`) and the legacy
+ * unsalted SHA-256 format (plain base64) for backwards compatibility.
+ */
+export async function verifyPasswordHash(
+  password: string,
+  storedHash: string,
+): Promise<boolean> {
+  if (!isEncryptionSupported()) {
+    throw new Error('Web Crypto API is not supported');
+  }
+
+  const encoder = new TextEncoder();
+
+  if (storedHash.includes(':')) {
+    // New salted PBKDF2 format: "base64salt:base64hash"
+    const [saltB64, expectedHashB64] = storedHash.split(':');
+    const salt = base64ToBuffer(saltB64);
+
+    const keyMaterial = await crypto.subtle.importKey(
+      'raw',
+      encoder.encode(password),
+      'PBKDF2',
+      false,
+      ['deriveBits'],
+    );
+
+    const hashBuffer = await crypto.subtle.deriveBits(
+      {
+        name: 'PBKDF2',
+        salt,
+        iterations: KEY_ITERATIONS,
+        hash: 'SHA-256',
+      },
+      keyMaterial,
+      256,
+    );
+
+    return bufferToBase64(hashBuffer) === expectedHashB64;
+  }
+
+  // Legacy unsalted SHA-256 path -- kept for backwards compatibility with
+  // hashes created before the PBKDF2 migration.
+  const data = encoder.encode(password);
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  return bufferToBase64(hashBuffer);
+  return bufferToBase64(hashBuffer) === storedHash;
+}
+
+/**
+ * @deprecated Use `hashPassword` instead.  Retained only so that call-sites
+ * that have not yet been migrated continue to compile.
+ */
+export async function hashString(str: string): Promise<string> {
+  return hashPassword(str);
 }
 
 // Generate a secure random password
@@ -248,7 +333,7 @@ export function isEncryptionEnabled(): boolean {
 
 // Enable encryption with password
 export async function enableEncryption(password: string): Promise<void> {
-  const hash = await hashString(password);
+  const hash = await hashPassword(password);
   try {
     localStorage.setItem(PASSWORD_HASH_KEY, hash);
     localStorage.setItem(ENCRYPTION_ENABLED_KEY, 'true');
@@ -263,11 +348,10 @@ export function disableEncryption(): void {
   localStorage.removeItem(ENCRYPTION_ENABLED_KEY);
 }
 
-// Verify password
+// Verify password against the stored hash
 export async function verifyPassword(password: string): Promise<boolean> {
   const storedHash = localStorage.getItem(PASSWORD_HASH_KEY);
   if (!storedHash) return false;
 
-  const hash = await hashString(password);
-  return hash === storedHash;
+  return verifyPasswordHash(password, storedHash);
 }

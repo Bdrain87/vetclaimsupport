@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Link } from 'react-router-dom';
@@ -13,11 +12,7 @@ import {
   CheckCircle2,
   Circle,
   ChevronRight,
-  Target,
-  Calendar,
-  ClipboardCheck,
   Send,
-  Award,
   MapPin,
 } from 'lucide-react';
 
@@ -55,7 +50,6 @@ export function ClaimsJourneyRoadmap() {
     const phase1Progress = Math.round((phase1Tasks.filter(t => t.completed).length / phase1Tasks.length) * 100);
 
     // Phase 2: Evidence Gathering
-    const hasSymptoms = data.symptoms.length > 0;
     const hasMedications = data.medications.length > 0;
     const hasConditions = (data.claimConditions?.length || 0) > 0;
     const hasBuddyContacts = data.buddyContacts.length > 0;

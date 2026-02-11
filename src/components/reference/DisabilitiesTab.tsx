@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { vaDisabilitiesBySystem, allVADisabilities, totalDisabilitiesCount, VADisability } from '@/data/vaDisabilities';
-import { getRequiredFormsForCondition, universalForms, VAForm } from '@/data/vaRequiredForms';
+import { getRequiredFormsForCondition, VAForm } from '@/data/vaRequiredForms';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
   Select,

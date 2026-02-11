@@ -6,7 +6,7 @@
  * single searchable index with deduplication and scored ranking.
  */
 
-import { vaConditions, type VACondition } from '../data/vaConditions';
+import { vaConditions } from '../data/vaConditions';
 import { vaDisabilitiesBySystem } from '../data/vaDisabilities';
 
 export interface SearchableCondition {

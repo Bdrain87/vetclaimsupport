@@ -86,7 +86,7 @@ function formatDate(date: Date): string {
 
 export default function IntentToFile() {
   const navigate = useNavigate();
-  const { intentToFileDate, intentToFileFiled, setIntentToFile } =
+  const { intentToFileDate, setIntentToFile } =
     useProfileStore();
 
   const [dateInput, setDateInput] = useState(intentToFileDate ?? '');

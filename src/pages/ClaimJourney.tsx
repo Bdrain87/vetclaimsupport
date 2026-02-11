@@ -1,8 +1,6 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { useClaims } from '@/hooks/useClaims';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -18,10 +16,10 @@ import { StatCard, StatsGrid } from '@/components/ui/stat-card';
 import { SuccessOverlay } from '@/components/ui/success-animation';
 import { cn } from '@/lib/utils';
 import {
-  Flag, FileText, Send, Stethoscope, Award, ChevronRight, Check,
-  Lock, Calendar, AlertCircle, Clock, ArrowRight, Sparkles,
-  FileCheck, Users, ClipboardList, Shield, CheckCircle, XCircle,
-  HelpCircle, ExternalLink, PartyPopper, Target
+  Flag, FileText, Send, Stethoscope, Award, Check,
+  Lock, ArrowRight, Sparkles,
+  ClipboardList, CheckCircle,
+  ExternalLink, Target
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { PageContainer } from '@/components/PageContainer';
@@ -161,7 +159,6 @@ const journeyPhases: JourneyPhase[] = [
 
 export default function ClaimJourney() {
   const { data, updateData } = useClaims();
-  const [currentPhaseIndex, setCurrentPhaseIndex] = useState(0);
   const [showCelebration, setShowCelebration] = useState(false);
   const [completedPhaseId, setCompletedPhaseId] = useState<string | null>(null);
   const [selectedPhase, setSelectedPhase] = useState<JourneyPhase | null>(null);

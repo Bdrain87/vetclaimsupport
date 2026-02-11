@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { Button } from '@/components/ui/button';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import {
   ArrowRight,
@@ -11,7 +11,6 @@ import {
   Users,
   Activity,
   Shield,
-  CheckCircle2,
   Sparkles,
 } from 'lucide-react';
 
@@ -30,7 +29,6 @@ interface GuidedAction {
 
 export function GuidedActionBanner({ onOpenAddCondition }: GuidedActionBannerProps) {
   const { data } = useClaims();
-  const navigate = useNavigate();
 
   const nextAction = useMemo((): GuidedAction | null => {
     const hasConditions = (data.claimConditions?.length || 0) > 0;

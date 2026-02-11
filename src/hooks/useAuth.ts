@@ -21,7 +21,8 @@ export function useAuth() {
         setSession(sess);
         setUser(sess?.user ?? null);
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error('Failed to load auth session:', error);
         setSession(null);
         setUser(null);
       })

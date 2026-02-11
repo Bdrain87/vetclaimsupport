@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Shield, CheckCircle, Star, TrendingUp, Users } from 'lucide-react';
+import { Shield, CheckCircle, TrendingUp, Users } from 'lucide-react';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
@@ -52,10 +52,10 @@ export function HeroSection() {
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight"
             variants={fadeInUp}
           >
-            Get the VA Rating
+            Prepare for the VA Rating
             <br />
             <span className="bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
-              You Earned
+              You Deserve
             </span>
           </motion.h1>
 

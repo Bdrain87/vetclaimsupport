@@ -49,19 +49,7 @@ const bodyPartOptions: { value: BodyPart; label: string }[] = [
   { value: 'right_wrist', label: 'Right Wrist' },
 ];
 
-// Bilateral pairs for matching
-const bilateralPairs: Record<string, string> = {
-  'left_arm': 'right_arm', 'right_arm': 'left_arm',
-  'left_leg': 'right_leg', 'right_leg': 'left_leg',
-  'left_hand': 'right_hand', 'right_hand': 'left_hand',
-  'left_foot': 'right_foot', 'right_foot': 'left_foot',
-  'left_knee': 'right_knee', 'right_knee': 'left_knee',
-  'left_hip': 'right_hip', 'right_hip': 'left_hip',
-  'left_shoulder': 'right_shoulder', 'right_shoulder': 'left_shoulder',
-  'left_elbow': 'right_elbow', 'right_elbow': 'left_elbow',
-  'left_ankle': 'right_ankle', 'right_ankle': 'left_ankle',
-  'left_wrist': 'right_wrist', 'right_wrist': 'left_wrist',
-};
+
 
 function calculateCombinedRating(conditions: ApprovedCondition[]): { exact: number; official: number } {
   const ratings = conditions.filter(c => c.rating > 0);
@@ -82,7 +70,7 @@ function calculateCombinedRating(conditions: ApprovedCondition[]): { exact: numb
     partGroups[partType].push(condition);
   }
 
-  for (const [partType, partConditions] of Object.entries(partGroups)) {
+  for (const [_partType, partConditions] of Object.entries(partGroups)) {
     const hasLeft = partConditions.some(c => c.bodyPart.startsWith('left_'));
     const hasRight = partConditions.some(c => c.bodyPart.startsWith('right_'));
     if (hasLeft && hasRight) {
@@ -192,13 +180,6 @@ export function ApprovedConditionsSection({ onNavigateToCalculator }: ApprovedCo
       currency: 'USD',
       minimumFractionDigits: 0,
     }).format(amount);
-  };
-
-  const getEarliestEffectiveDate = () => {
-    if (approvedConditions.length === 0) return null;
-    return approvedConditions.reduce((earliest, c) => 
-      !earliest || c.effectiveDate < earliest ? c.effectiveDate : earliest
-    , approvedConditions[0].effectiveDate);
   };
 
   return (

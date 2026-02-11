@@ -12,7 +12,6 @@ import {
   FileText,
   Copy,
   Download,
-  CheckCircle2,
   Edit3,
   Sparkles,
   AlertTriangle,

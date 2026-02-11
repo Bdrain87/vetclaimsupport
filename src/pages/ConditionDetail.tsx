@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/dialog';
 import {
   ChevronLeft, Scale, FileText, Link2, Stethoscope, CheckCircle2,
-  AlertTriangle, Info, ExternalLink, Trash2, Edit, BookOpen,
+  AlertTriangle, Info, ExternalLink, Trash2, BookOpen,
   Activity, TrendingUp, Clock, Brain, Moon, Zap, ArrowRight,
   Sparkles, Loader2, ChevronDown, FileCheck, Plus,
 } from 'lucide-react';
@@ -33,12 +33,11 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
-import { vaConditions, getConditionById, type VACondition } from '@/data/vaConditions';
+import { vaConditions, getConditionById } from '@/data/vaConditions';
 import { ClaimIntelligence } from '@/services/claimIntelligence';
-import { getRatingCriteriaByCondition, type RatingCriteria } from '@/data/vaResources/ratingCriteria';
-import { getDBQByCondition, type DBQReference } from '@/data/vaResources/dbqReference';
+import { getRatingCriteriaByCondition } from '@/data/vaResources/ratingCriteria';
+import { getDBQByCondition } from '@/data/vaResources/dbqReference';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
-import { useProfileStore } from '@/store/useProfileStore';
 import useAppStore from '@/store/useAppStore';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { PageContainer } from '@/components/PageContainer';
@@ -232,7 +231,6 @@ export default function ConditionDetail() {
   }, [conditionDetails, data]);
 
   // AI state
-  const profile = useProfileStore();
   const { generate: aiGenerate, isLoading: aiLoading, error: aiError } = useAIGenerate('VA_SPEAK_TRANSLATOR');
   const [aiInsights, setAiInsights] = useState<string | null>(null);
   const [aiInsightsOpen, setAiInsightsOpen] = useState(false);

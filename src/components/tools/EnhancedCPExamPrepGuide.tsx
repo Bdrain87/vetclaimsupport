@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -20,7 +19,6 @@ import {
   MessageCircleQuestion,
   Lightbulb,
   Clock,
-  Calendar,
   Target,
   PenLine,
   BarChart3,
@@ -41,20 +39,6 @@ export function EnhancedCPExamPrepGuide() {
 
   // Get user's claimed conditions
   const claimedConditions = data.claimConditions?.map(c => c.name) || [];
-
-  // Get service dates for narrative
-  const serviceInfo = useMemo(() => {
-    if (data.serviceHistory?.length > 0) {
-      const latest = data.serviceHistory[data.serviceHistory.length - 1];
-      return {
-        startDate: latest.startDate,
-        endDate: latest.endDate,
-        location: latest.base,
-        unit: latest.unit,
-      };
-    }
-    return null;
-  }, [data.serviceHistory]);
 
   // Get relevant symptom data for the selected condition
   const relevantSymptoms = useMemo(() => {

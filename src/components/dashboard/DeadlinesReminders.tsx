@@ -14,7 +14,6 @@ import {
   Plus, 
   Trash2, 
   Clock, 
-  AlertTriangle,
   FileText,
   Stethoscope,
   Scale,

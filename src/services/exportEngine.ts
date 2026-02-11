@@ -1,4 +1,3 @@
-import jsPDF from 'jspdf';
 import { format } from 'date-fns';
 import useAppStore from '@/store/useAppStore';
 import { useProfileStore } from '@/store/useProfileStore';
@@ -447,7 +446,7 @@ function generateText(
     lines.push(subDivider);
     const draftEntries = Object.entries(data.formDrafts);
     const nonEmpty = draftEntries.filter(([, fields]) => {
-      const { lastModified, ...vals } = fields;
+      const { lastModified: _lastModified, ...vals } = fields;
       return Object.values(vals).some((v) => v && v.trim());
     });
 
@@ -456,7 +455,7 @@ function generateText(
     } else {
       nonEmpty.forEach(([formId, fields]) => {
         lines.push(`  Form: ${formId}`);
-        const { lastModified, ...vals } = fields;
+        const { lastModified: _lastModified, ...vals } = fields;
         Object.entries(vals).forEach(([fieldId, value]) => {
           if (value && value.trim()) {
             lines.push(`    ${fieldId}: ${value}`);
@@ -511,11 +510,12 @@ function generateText(
 // PDF Format
 // ============================================================================
 
-function generatePDF(
+async function generatePDF(
   data: GatheredData,
   sections: ExportSections,
   dateStr: string
-): ExportResult {
+): Promise<ExportResult> {
+  const { default: jsPDF } = await import('jspdf');
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
@@ -860,7 +860,7 @@ function generatePDF(
     addSectionHeader(`${sectionNum}. FORM DRAFTS`);
     const draftEntries = Object.entries(data.formDrafts);
     const nonEmpty = draftEntries.filter(([, fields]) => {
-      const { lastModified, ...vals } = fields;
+      const { lastModified: _lastModified, ...vals } = fields;
       return Object.values(vals).some((v) => v && v.trim());
     });
 
@@ -878,7 +878,7 @@ function generatePDF(
         doc.text(`Form: ${formId}`, margin + 4, y);
         doc.setFont('helvetica', 'normal');
         y += 6;
-        const { lastModified, ...vals } = fields;
+        const { lastModified: _lastModified, ...vals } = fields;
         Object.entries(vals).forEach(([fieldId, value]) => {
           if (value && value.trim()) {
             y = checkPageBreak(12);
@@ -974,12 +974,13 @@ function generatePDF(
 // Shared PDF utilities (for Form Guide export consistency)
 // ============================================================================
 
-export function generateFormGuidePDF(
+export async function generateFormGuidePDF(
   formId: string,
   formTitle: string,
   fields: Array<{ section: string; label: string; fieldId: string }>,
   drafts: Record<string, string>
-): void {
+): Promise<void> {
+  const { default: jsPDF } = await import('jspdf');
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
@@ -1338,7 +1339,8 @@ export interface CPExamPacketData {
   examQuestions: Record<string, string>;
 }
 
-export function generateCPExamPacketPDF(data: CPExamPacketData): void {
+export async function generateCPExamPacketPDF(data: CPExamPacketData): Promise<void> {
+  const { default: jsPDF } = await import('jspdf');
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();

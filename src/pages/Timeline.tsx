@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
-import { Clock, Shield, Stethoscope, AlertTriangle, Activity, Pill, Brain, Moon, FileText, Lightbulb } from 'lucide-react';
+import { Clock, Shield, Stethoscope, AlertTriangle, Activity, Pill, Brain, Lightbulb } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { format, parseISO } from 'date-fns';
@@ -225,7 +225,7 @@ export default function Timeline() {
 
               {/* Events */}
               <div className="space-y-6">
-                {yearEvents.map((event, index) => (
+                {yearEvents.map((event, _index) => (
                   <div key={event.id} className="relative flex gap-4 pl-10">
                     {/* Timeline dot */}
                     <div className={`absolute left-2 w-5 h-5 rounded-full ${event.color} flex items-center justify-center ring-4 ring-background`}>

@@ -4,8 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Select,
@@ -111,8 +109,6 @@ function calculateVACombinedRating(conditions: RatedCondition[]): CalculationRes
   // Find bilateral conditions (conditions affecting paired extremities)
   const bilateralConditions: RatedCondition[] = [];
   const nonBilateralConditions: RatedCondition[] = [];
-  const usedParts = new Set<string>();
-
   // Group by body part type (e.g., "arm", "leg", "knee")
   const partGroups: Record<string, RatedCondition[]> = {};
   
@@ -130,7 +126,7 @@ function calculateVACombinedRating(conditions: RatedCondition[]): CalculationRes
   }
 
   // Check each part group for bilateral pairs
-  for (const [partType, partConditions] of Object.entries(partGroups)) {
+  for (const [_partType, partConditions] of Object.entries(partGroups)) {
     const hasLeft = partConditions.some(c => c.bodyPart.startsWith('left_'));
     const hasRight = partConditions.some(c => c.bodyPart.startsWith('right_'));
     
@@ -207,8 +203,7 @@ function calculateVACombinedRating(conditions: RatedCondition[]): CalculationRes
   allRatings = allRatings.sort((a, b) => b - a);
 
   let remaining = 100;
-  let startIdx = 0;
-  
+
   if (hasBilateral && allRatings.length > 0) {
     // Start with bilateral total
     remaining = remaining - (remaining * (bilateralCombined / 100));
@@ -218,7 +213,6 @@ function calculateVACombinedRating(conditions: RatedCondition[]): CalculationRes
       remaining: 100,
       applied: bilateralCombined,
     });
-    startIdx = 1;
   }
 
   // Process remaining conditions

@@ -18,7 +18,7 @@ const ptsdRequirements: EvidenceRequirement[] = [
     label: 'Buddy Statements (2+ recommended)',
     description: 'Fellow service members who witnessed events or symptoms',
     isCritical: true,
-    check: (condition, data) => {
+    check: (condition, _data) => {
       const count = condition.linkedBuddyContacts.length;
       return { met: count >= 2, count, required: 2 };
     },
@@ -41,7 +41,7 @@ const ptsdRequirements: EvidenceRequirement[] = [
     label: 'Stressor Statement',
     description: 'Detailed personal statement describing traumatic events',
     isCritical: true,
-    check: (condition, data) => {
+    check: (condition, _data) => {
       // Check for symptoms/notes that indicate stressor documentation
       const hasDetailedSymptoms = condition.linkedSymptoms.length > 0;
       const hasNotes = Boolean(condition.notes && condition.notes.length > 50);

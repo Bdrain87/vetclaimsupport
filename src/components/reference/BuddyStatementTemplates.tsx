@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FileText, Download, Edit3, Users, Heart, Shield, Copy } from 'lucide-react';
+import { FileText, Download, Users, Heart, Shield, Copy } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';

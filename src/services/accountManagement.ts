@@ -2,7 +2,6 @@ import { supabase } from '@/lib/supabase';
 import useAppStore from '@/store/useAppStore';
 import { useProfileStore } from '@/store/useProfileStore';
 import { stopSync } from '@/services/syncEngine';
-import { jsPDF } from 'jspdf';
 
 export async function exportAllData(format: 'json' | 'pdf'): Promise<Blob> {
   const appState = useAppStore.getState();
@@ -41,6 +40,7 @@ export async function exportAllData(format: 'json' | 'pdf'): Promise<Blob> {
   }
 
   // PDF export
+  const { jsPDF } = await import('jspdf');
   const doc = new jsPDF();
   const margin = 20;
   let y = margin;

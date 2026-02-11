@@ -2,8 +2,7 @@ import { useState, useRef, useCallback } from 'react';
 import { 
   Camera, 
   Upload, 
-  Eye, 
-  Trash2, 
+  Trash2,
   FileText, 
   X, 
   Scan,
@@ -22,7 +21,6 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { Card } from '@/components/ui/card';
-import { createWorker, OEM } from 'tesseract.js';
 import type { UploadedDocument, DocumentTypeId } from '@/types/claims';
 
 interface DocumentScannerProps {
@@ -77,6 +75,7 @@ export function DocumentScanner({
     setScanResult(null);
 
     try {
+      const { createWorker, OEM } = await import('tesseract.js');
       const worker = await createWorker('eng', OEM.LSTM_ONLY, {
         logger: (m) => {
           if (m.status === 'recognizing text') {

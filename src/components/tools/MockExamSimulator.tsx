@@ -74,8 +74,6 @@ const RATING_CRITERIA_MAP: Record<string, { criteria: string; cfrReference: stri
 
 // Build exam question sequences by condition type
 function getExamSequence(conditionName: string): { question: string; focus: string; followUp: string }[] {
-  const name = conditionName.toLowerCase();
-
   // Try to get from examPrepData
   const prepKey = Object.keys(examPrepData).find(k => k.toLowerCase() === conditionName.toLowerCase());
   const prepData = prepKey ? examPrepData[prepKey] : null;
@@ -159,17 +157,6 @@ export function MockExamSimulator() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const claimedConditions = data.claimConditions?.map(c => c.name) || [];
-
-  // Available conditions from exam prep data
-  const availableConditions = useMemo(() => {
-    const conditions: string[] = [];
-    examCategories.forEach(cat => {
-      cat.conditions.forEach(c => {
-        if (!conditions.includes(c)) conditions.push(c);
-      });
-    });
-    return conditions.sort();
-  }, []);
 
   const examSequence = useMemo(() => {
     if (!selectedCondition) return [];

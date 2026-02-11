@@ -7,7 +7,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
-import { createWorker, OEM } from 'tesseract.js';
 import { 
   AlertTriangle, 
   Scale, 
@@ -243,6 +242,7 @@ export function AppealStrategyAdvisor() {
     setExtractedText('');
 
     try {
+      const { createWorker, OEM } = await import('tesseract.js');
       const worker = await createWorker('eng', OEM.LSTM_ONLY, {
         logger: (m) => {
           if (m.status === 'recognizing text') {

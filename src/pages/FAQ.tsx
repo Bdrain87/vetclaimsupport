@@ -140,7 +140,7 @@ export default function FAQ() {
     setExpandedItems(newExpanded);
   };
 
-  const groupedFAQ = filteredFAQ.reduce((acc, item, index) => {
+  const groupedFAQ = filteredFAQ.reduce((acc, item, _index) => {
     if (!acc[item.category]) {
       acc[item.category] = [];
     }

@@ -25,7 +25,6 @@ import {
   HelpCircle,
   Star,
   Files,
-  Activity,
   FileSignature,
   ClipboardList,
   Calendar,

@@ -14,7 +14,6 @@ import {
   File,
   Trash2,
   Eye,
-  Calendar,
   X,
   FileCheck,
   Users,
@@ -28,14 +27,13 @@ import {
   Plus,
   Minus,
   Download,
-  FolderPlus,
   CheckCircle2,
   FileSpreadsheet,
   Sparkles,
   ChevronRight,
   ListChecks,
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -69,7 +67,7 @@ import { exportDocuments } from '@/utils/pdfExport';
 import { DocumentScanner } from '@/components/documents/DocumentScanner';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
-import type { DocumentItem, DocumentTypeId } from '@/types/claims';
+import type { DocumentTypeId } from '@/types/claims';
 import { PageContainer } from '@/components/PageContainer';
 
 // Tab configuration

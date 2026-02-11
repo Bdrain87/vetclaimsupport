@@ -8,8 +8,6 @@ import {
   FileText,
   Sparkles,
   User,
-  Calendar,
-  MapPin,
   AlertCircle,
   CheckCircle2,
   Loader2,

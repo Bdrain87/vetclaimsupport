@@ -16,7 +16,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { ChevronDown } from 'lucide-react';
 import type { SpineSymptomEntry, SpineRegion, MuscleSpasm, Guarding, RadiculopathySeverity, RadiculopathySide } from '@/types/spine';
 import type { SymptomEntry } from '@/types/claims';
-import { NORMAL_ROM, SPINE_RATING_CRITERIA } from '@/types/spine';
+import { NORMAL_ROM } from '@/types/spine';
 
 const painTypes = ['Sharp', 'Dull', 'Burning', 'Aching', 'Radiating', 'Throbbing', 'Stabbing'];
 const radiculopathySymptoms = ['Numbness', 'Tingling', 'Weakness', 'Burning sensation', 'Electric shock feeling', 'Loss of reflexes'];
@@ -96,10 +96,6 @@ export function SpineSymptomLogger() {
   const getEstimatedRating = () => {
     const rom = formData.rangeOfMotion;
     const combinedROM = calculateCombinedROM();
-    const criteria = formData.region === 'Cervical' 
-      ? SPINE_RATING_CRITERIA.cervical 
-      : SPINE_RATING_CRITERIA.thoracolumbar;
-
     if (formData.region === 'Thoracolumbar') {
       if (rom.forwardFlexion !== null) {
         if (rom.forwardFlexion <= 30) return '40%';

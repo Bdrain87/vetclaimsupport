@@ -3,7 +3,6 @@ import { Search, BookOpen, ChevronRight, CheckCircle2, AlertCircle, FileText, St
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { PageContainer } from '@/components/PageContainer';
 
 interface ConditionGuide {

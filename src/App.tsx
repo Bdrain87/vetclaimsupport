@@ -65,7 +65,6 @@ const ConditionGuide = lazy(() => import('./pages/ConditionGuide'));
 
 // Account & Legal pages
 const DeleteAccountPage = lazy(() => import('./pages/account/DeleteAccountPage'));
-const ExportDataPage = lazy(() => import('./pages/account/ExportDataPage'));
 const PrivacyPolicyPage = lazy(() => import('./pages/legal/PrivacyPolicyPage'));
 const TermsOfServicePage = lazy(() => import('./pages/legal/TermsOfServicePage'));
 const DisclaimerPage = lazy(() => import('./pages/legal/DisclaimerPage'));

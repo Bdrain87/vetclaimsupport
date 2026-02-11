@@ -31,13 +31,6 @@ import {
   Check,
   X,
 } from 'lucide-react';
-import { secondaryConditions } from '@/data/secondaryConditions';
-import { vaConditions } from '@/data/vaConditions';
-
-/* ─── dynamic counts from data files ─── */
-const secondaryCount = Math.floor(secondaryConditions.length / 10) * 10;
-const conditionCount = Math.floor(vaConditions.length / 10) * 10;
-
 /* ─── animation helpers ─── */
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -329,10 +322,10 @@ export const PlatinumLanding = () => {
             <p className="text-white/60 text-sm leading-relaxed mb-6">
               New presumptive conditions get added every year. The PACT Act alone opened the door for
               millions. It doesn't matter if you served in Vietnam, Desert Storm, Iraq, or Afghanistan —
-              if it's service-connected, it's owed. It's never too late.
+              if it's service-connected, you may be entitled to compensation. It's never too late.
             </p>
             <Link to="/claims" className="inline-flex items-center text-[#3B82F6] font-bold text-base min-h-[44px] group">
-              See What You Qualify For <span className="ml-1 transition-transform duration-200 group-hover:translate-x-1">→</span>
+              Explore Your Options <span className="ml-1 transition-transform duration-200 group-hover:translate-x-1">→</span>
             </Link>
           </GlassCard>
         </motion.div>

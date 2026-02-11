@@ -7,8 +7,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, CartesianGrid } from 'recharts';
-import { format, subDays, startOfDay, parseISO, getDay } from 'date-fns';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts';
+import { format, subDays, parseISO, getDay } from 'date-fns';
 
 const chartConfig = {
   count: {
@@ -196,7 +196,7 @@ export function SymptomPatterns() {
               Most Common Symptoms
             </p>
             <div className="grid grid-cols-3 gap-2">
-              {topSymptoms.map((symptom, idx) => (
+              {topSymptoms.map((symptom, _idx) => (
                 <div
                   key={symptom.name}
                   className="p-2 rounded-lg bg-secondary text-center"

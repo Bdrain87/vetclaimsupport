@@ -5,14 +5,9 @@ import useAppStore from '@/store/useAppStore';
 import { ClaimIntelligence } from '@/services/claimIntelligence';
 import {
   Plus,
-  Activity,
-  GraduationCap,
-  FileText,
-  FileCheck,
   ChevronRight,
   Zap,
   AlertTriangle,
-  Download,
   ThumbsUp,
   Meh,
   ThumbsDown,
@@ -29,9 +24,6 @@ import {
   DollarSign,
   FileCheck as FileCheckIcon,
   Package,
-  BookOpen,
-  Share2,
-  Calendar,
   Search,
   Compass,
 } from 'lucide-react';
@@ -59,12 +51,6 @@ export default function Dashboard() {
 
   const claimConditions = useMemo(() => data.claimConditions || [], [data.claimConditions]);
 
-  // Intelligence Engine computations
-  const readiness = useMemo(
-    () => ClaimIntelligence.getOverallReadiness(userConditions, data, profile),
-    [userConditions, data, profile]
-  );
-
   const nextSteps = useMemo(
     () => ClaimIntelligence.getNextSteps(profile, userConditions, data),
     [profile, userConditions, data]
@@ -89,17 +75,6 @@ export default function Dashboard() {
     });
     return gaps;
   }, [claimConditions]);
-
-  // Combine userConditions info with claimConditions
-  const allConditionNames = useMemo(() => {
-    const names = new Set<string>();
-    claimConditions.forEach((c) => names.add(c.name));
-    userConditions.forEach((uc) => {
-      const details = getConditionById(uc.conditionId);
-      if (details) names.add(details.name);
-    });
-    return names;
-  }, [claimConditions, userConditions]);
 
   // Calculate combined VA rating using VA math (approved conditions only, round to nearest 10)
   const combinedRating = useMemo(() => {
@@ -147,7 +122,6 @@ export default function Dashboard() {
   const displayName = profile.firstName
     ? `${profile.firstName}${profile.lastName ? ' ' + profile.lastName : ''}`
     : 'Veteran';
-  const hasConditions = allConditionNames.size > 0;
   const branchLabel = profile.branch ? BRANCH_LABELS[profile.branch] : '';
 
   // Multi-service-period display

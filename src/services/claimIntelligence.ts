@@ -6,14 +6,11 @@
  */
 
 import { secondaryConditions, conditionProfiles } from '@/data/secondaryConditions';
-import type { SecondaryConnection, ConditionSecondaryProfile } from '@/data/secondaryConditions';
 import { vaConditions, getConditionById } from '@/data/vaConditions';
 import type { VACondition } from '@/data/vaConditions';
 import { dbqForms } from '@/data/vaRequiredForms';
-import type { VAForm } from '@/data/vaRequiredForms';
 import { militaryJobCodes } from '@/data/militaryMOS';
-import type { MilitaryJobCode } from '@/data/militaryMOS';
-import type { ClaimsData, ClaimCondition } from '@/types/claims';
+import type { ClaimsData } from '@/types/claims';
 import useAppStore from '@/store/useAppStore';
 import type { UserCondition } from '@/store/useAppStore';
 import { useProfileStore } from '@/store/useProfileStore';
@@ -838,7 +835,7 @@ export const ClaimIntelligence = {
   // -----------------------------------------------------------------------
   getRequiredForms(
     userConditions: UserCondition[],
-    claimType?: string,
+    _claimType?: string,
   ): FormGuidance[] {
     const forms: FormGuidance[] = [];
     const seenFormNumbers = new Set<string>();

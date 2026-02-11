@@ -6,8 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import { TrendingUp, CheckCircle2, Circle, AlertTriangle, ArrowRight, FileText, Calendar, Activity, Users, Pill, Info } from 'lucide-react';
-import { getDBQCondition, type RatingLevel } from '@/data/dbqCriteria';
+import { TrendingUp, CheckCircle2, Circle, AlertTriangle, ArrowRight, FileText, Calendar, Activity, Users } from 'lucide-react';
+import { getDBQCondition } from '@/data/dbqCriteria';
 import { Link } from 'react-router-dom';
 
 export function RatingIncreaseAnalyzer() {

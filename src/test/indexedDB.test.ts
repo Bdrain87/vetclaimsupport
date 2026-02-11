@@ -97,8 +97,6 @@ describe('IndexedDB Storage', () => {
 
   describe('deleteFileData', () => {
     it('should delete file data by id', async () => {
-      const testId = 'test-file-123';
-
       mockStore.delete.mockReturnValue({
         onsuccess: null as ((event: Event) => void) | null,
       });

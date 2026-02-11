@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { calculatePlatinumRating } from '@/utils/vaMath';
 
 describe('Form Validation', () => {
   describe('Date Validation', () => {
@@ -117,45 +118,26 @@ describe('Data Export/Import Validation', () => {
   });
 });
 
-describe('VA Rating Calculations', () => {
+describe('VA Rating Calculations (using real calculatePlatinumRating)', () => {
   describe('Combined Rating Formula', () => {
-    // VA uses bilateral factor and combined ratings table
-    const calculateCombinedRating = (ratings: number[]): number => {
-      if (ratings.length === 0) return 0;
-      if (ratings.length === 1) return ratings[0];
-
-      // Sort descending
-      const sorted = [...ratings].sort((a, b) => b - a);
-
-      // Apply VA combined ratings formula
-      let remaining = 100;
-      for (const rating of sorted) {
-        remaining = remaining * (1 - rating / 100);
-      }
-
-      const combined = 100 - remaining;
-      // Round to nearest 10%
-      return Math.round(combined / 10) * 10;
-    };
-
     it('should calculate single rating correctly', () => {
-      expect(calculateCombinedRating([30])).toBe(30);
+      expect(calculatePlatinumRating([30], [])).toBe(30);
     });
 
     it('should calculate two ratings correctly', () => {
       // 50% + 30% = 50 + 30*(100-50)/100 = 50 + 15 = 65 -> rounds to 70
-      const result = calculateCombinedRating([50, 30]);
+      const result = calculatePlatinumRating([50, 30], []);
       expect(result).toBe(70);
     });
 
     it('should handle three ratings', () => {
-      // 50% + 30% + 20%
-      const result = calculateCombinedRating([50, 30, 20]);
-      expect(result).toBeGreaterThanOrEqual(70);
+      // 50% + 30% + 20%: remaining = 100*0.5*0.7*0.8 = 28 => combined 72 -> rounds to 70
+      const result = calculatePlatinumRating([50, 30, 20], []);
+      expect(result).toBe(70);
     });
 
     it('should return 0 for empty ratings', () => {
-      expect(calculateCombinedRating([])).toBe(0);
+      expect(calculatePlatinumRating([], [])).toBe(0);
     });
   });
 });

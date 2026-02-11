@@ -32,12 +32,6 @@ export function WebGateWrapper({ children }: WebGateWrapperProps) {
       'www.vetclaimsupport.com',
     ];
 
-    // Allowed domains (development, preview, Vercel)
-    const isAllowedDomain =
-      hostname === 'localhost' ||
-      hostname.includes('vercel.app') ||
-      hostname.includes('127.0.0.1');
-
     // Show gate if:
     // - On production domain AND
     // - NOT running as PWA

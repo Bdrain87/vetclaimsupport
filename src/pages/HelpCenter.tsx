@@ -1,10 +1,10 @@
 import { useState, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  HelpCircle, Search, ChevronDown, ChevronRight, ChevronUp, BookOpen,
+  HelpCircle, Search, ChevronRight, BookOpen,
   MessageSquare, FileText, Shield, Clock, Users, Download, Activity,
   Settings, CheckCircle, AlertCircle, ExternalLink, Mail, Sparkles,
-  Home, Printer, X
+  Printer, X
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -17,7 +17,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { cn } from '@/lib/utils';
 import { PageContainer } from '@/components/PageContainer';
 
 // ============================================

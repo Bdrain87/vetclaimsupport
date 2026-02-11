@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { Button } from './button';
 import {
   FileText, Search, Bell, Calendar, Users, Heart, Shield,
-  Folder, MessageSquare, Clock, Star, Inbox, Image
+  Inbox
 } from 'lucide-react';
 
 interface EmptyStateProps extends React.HTMLAttributes<HTMLDivElement> {

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { encryptedStorage } from '@/lib/encryptedStorage';
 
 export type Branch = 'army' | 'marines' | 'navy' | 'air_force' | 'coast_guard' | 'space_force';
 
@@ -140,6 +141,7 @@ export const useProfileStore = create<ProfileState>()(
     {
       name: 'vet-user-profile',
       version: 4,
+      storage: createJSONStorage(() => encryptedStorage),
       migrate: (persistedState: unknown, version: number) => {
         const state = persistedState as Record<string, unknown>;
         if (version < 2) {

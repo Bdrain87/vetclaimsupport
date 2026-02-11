@@ -70,7 +70,7 @@ export function ConditionSelector({
 }: ConditionSelectorProps) {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const { conditions: userConditions, addCondition, hasCondition } = useUserConditions();
+  const { addCondition, hasCondition } = useUserConditions();
 
   // Get available conditions based on filters
   const availableConditions = useMemo(() => {

@@ -238,7 +238,7 @@ export const evidenceForms: VAForm[] = [
 ];
 
 // Function to get required forms for a condition
-export function getRequiredFormsForCondition(conditionName: string, diagnosticCode?: string): VAForm[] {
+export function getRequiredFormsForCondition(conditionName: string, _diagnosticCode?: string): VAForm[] {
   const name = conditionName.toLowerCase();
   const forms: VAForm[] = [];
   

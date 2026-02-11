@@ -15,7 +15,6 @@ import {
   Star,
   Lightbulb,
   FileText,
-  Clock,
   Target,
   Pencil,
 } from 'lucide-react';
@@ -343,7 +342,7 @@ export function SmartSecondaryConditionsSuggester() {
 function generateActionableSteps(
   secondary: SecondaryConnection, 
   primaryCondition: string,
-  medicalVisits: { date: string; provider?: string; notes?: string }[]
+  _medicalVisits: { date: string; provider?: string; notes?: string }[]
 ): string[] {
   const steps: string[] = [];
   

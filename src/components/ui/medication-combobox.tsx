@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Check, Pill, Lightbulb } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
-import { commonMedications, medicationCategories, type MedicationOption } from '@/data/commonMedications';
+import { commonMedications, type MedicationOption } from '@/data/commonMedications';
 import { Badge } from '@/components/ui/badge';
 
 interface MedicationComboboxProps {
@@ -21,15 +21,6 @@ export function MedicationCombobox({
   const [highlightedIndex, setHighlightedIndex] = React.useState(-1);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const listRef = React.useRef<HTMLDivElement>(null);
-
-  // Group medications by category
-  const groupedMedications = React.useMemo(() => {
-    const groups: Record<string, MedicationOption[]> = {};
-    for (const category of medicationCategories) {
-      groups[category] = commonMedications.filter(med => med.category === category);
-    }
-    return groups;
-  }, []);
 
   // Filter based on input - flatten for easier keyboard navigation
   const filteredMedications = React.useMemo(() => {

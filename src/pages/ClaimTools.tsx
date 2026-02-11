@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import {
   FileText, Scale, Stethoscope, Calculator, Users,
   BookOpen, Gavel, FileSignature, TrendingUp, ShieldAlert,

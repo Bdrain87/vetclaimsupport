@@ -158,9 +158,7 @@ export default function CPExamPacket() {
   const quickLogs = appState.quickLogs;
   const sleepEntries = appState.sleepEntries;
   const migraines = appState.migraines;
-  const buddyContacts = appState.buddyContacts;
   const documents = appState.documents;
-  const medicalVisits = appState.medicalVisits;
 
   // All conditions with details
   const allConditions = useMemo(() => {
@@ -327,7 +325,7 @@ export default function CPExamPacket() {
   const handleExportPDF = async () => {
     setPdfExporting(true);
     try {
-      generateCPExamPacketPDF({
+      await generateCPExamPacketPDF({
         profile: {
           firstName: profile.firstName,
           lastName: profile.lastName,

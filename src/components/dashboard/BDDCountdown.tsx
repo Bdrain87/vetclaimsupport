@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { format, differenceInDays, addDays, subDays, isWithinInterval } from 'date-fns';
+import { format, differenceInDays, subDays, isWithinInterval } from 'date-fns';
 import { Calendar, Clock, AlertCircle, CheckCircle2, XCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';

@@ -9,65 +9,18 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { exportBackPayEstimate } from '@/utils/pdfExport';
 import { PageContainer } from '@/components/PageContainer';
-import { COMP_RATES_2026 } from '@/data/compRates2026';
-
-// ---------------------------------------------------------------------------
-// 2026 VA Compensation Rate Table (veteran alone, monthly)
-// ---------------------------------------------------------------------------
-
-const BASE_RATES: Record<number, number> = {
-  0: 0,
-  ...COMP_RATES_2026,
-};
-
-const SPOUSE_ADDITION = 100; // additional per month at 30%+ with spouse
-const DEPENDENT_ADDITION = 50; // additional per month per dependent at 30%+
+import {
+  BASE_RATES,
+  SPOUSE_ADDITION,
+  DEPENDENT_ADDITION,
+  calculateMonthlyCompensation,
+  monthsBetween,
+  formatCurrency,
+  formatCurrencyExact,
+} from '@/utils/backPayCalc';
 
 const RATING_OPTIONS = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 const DEPENDENT_COUNT_OPTIONS = Array.from({ length: 11 }, (_, i) => i);
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-function calculateMonthlyCompensation(
-  rating: number,
-  hasSpouse: boolean,
-  dependentCount: number
-): number {
-  const base = BASE_RATES[rating] ?? 0;
-  if (rating < 30) return base;
-  const spouseAdd = hasSpouse ? SPOUSE_ADDITION : 0;
-  const depAdd = dependentCount * DEPENDENT_ADDITION;
-  return base + spouseAdd + depAdd;
-}
-
-function monthsBetween(start: Date, end: Date): number {
-  const years = end.getFullYear() - start.getFullYear();
-  const months = end.getMonth() - start.getMonth();
-  const totalMonths = years * 12 + months;
-  // Include partial month if the end day is past the start day
-  const partialAdjust = end.getDate() >= start.getDate() ? 0 : -1;
-  return Math.max(0, totalMonths + partialAdjust);
-}
-
-function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(amount);
-}
-
-function formatCurrencyExact(amount: number): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(amount);
-}
 
 // ---------------------------------------------------------------------------
 // Component

@@ -1,4 +1,4 @@
-import { ShieldCheck, Lock, Medal, Flag, Activity, FileText, FolderOpen, Moon, Pill, Upload, Users, Clock, ClipboardCheck, History, Database, Heart, BookOpen, Stethoscope, ArrowRight, Sparkles, Calculator, Brain, MapPin, Star, CheckCircle2, TrendingUp, Zap, Shield, Award, Rocket } from 'lucide-react';
+import { ShieldCheck, Lock, Medal, Flag, Activity, FileText, FolderOpen, Moon, Pill, Upload, Users, Clock, ClipboardCheck, History, Database, Heart, BookOpen, Stethoscope, ArrowRight, Sparkles, Calculator, Brain, MapPin, CheckCircle2, TrendingUp, Zap, Shield, Award, Rocket } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { totalDisabilitiesCount } from '@/data/vaDisabilities';

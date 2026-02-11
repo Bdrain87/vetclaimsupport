@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { z } from 'zod';
 import { Download, Upload, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,17 +15,27 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { useClaims } from '@/hooks/useClaims';
-import useAppStore from '@/store/useAppStore';
 import { getAllFileIds, getFileData } from '@/lib/indexedDB';
 
 const STORAGE_KEY = 'vcs-app-data';
 
-interface BackupData {
-  version: string;
-  exportDate: string;
-  claimsData: unknown;
-  indexedDBFiles?: Array<{ id: string; dataUrl: string }>;
-}
+// Zod schema for validating imported backup data
+const backupDataSchema = z.object({
+  version: z.string(),
+  exportDate: z.string(),
+  claimsData: z.record(z.unknown()).refine(
+    (data) => typeof data === 'object' && data !== null,
+    { message: 'claimsData must be a non-null object' }
+  ),
+  indexedDBFiles: z.array(
+    z.object({
+      id: z.string(),
+      dataUrl: z.string(),
+    })
+  ).optional(),
+});
+
+type BackupData = z.infer<typeof backupDataSchema>;
 
 export function DataBackup() {
   const { toast } = useToast();
@@ -90,14 +101,16 @@ export function DataBackup() {
     reader.onload = (e) => {
       try {
         const content = e.target?.result as string;
-        const parsed = JSON.parse(content) as BackupData;
+        const json = JSON.parse(content);
 
-        // Validate backup structure
-        if (!parsed.version || !parsed.claimsData) {
+        // Validate backup structure with Zod
+        const result = backupDataSchema.safeParse(json);
+        if (!result.success) {
+          console.error('Backup validation failed:', result.error.format());
           throw new Error('Invalid backup file format');
         }
 
-        setPendingImportData(parsed);
+        setPendingImportData(result.data);
         setShowImportConfirm(true);
       } catch (error) {
         console.error('Import parse error:', error);

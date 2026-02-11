@@ -1,15 +1,13 @@
 import { useState, useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
-import { useEvidence } from '@/hooks/useEvidence';
 import { getConditionById } from '@/data/vaConditions';
 import {
-  Heart, Activity, Brain, Moon, Pill, Plus, Download,
-  Calendar, Clock, Zap, Target, TrendingUp, ChevronRight,
+  Heart, Activity, Brain, Moon, Pill,
+  Clock, Target, TrendingUp, ChevronRight,
   AlertCircle, Sparkles, BarChart3, Filter
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PageContainer } from '@/components/PageContainer';

@@ -7,7 +7,6 @@ import {
   FileText,
   Menu,
   X,
-  Heart,
   Shield,
   Users,
   HelpCircle,

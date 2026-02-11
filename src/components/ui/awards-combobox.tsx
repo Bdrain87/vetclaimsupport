@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { Check, Medal, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { searchAwards, formatAwardDisplay, type MilitaryAward } from '@/data/militaryAwards';
+import { searchAwards, type MilitaryAward } from '@/data/militaryAwards';
 
 interface AwardsComboboxProps {
   value: string;

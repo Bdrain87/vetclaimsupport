@@ -31,7 +31,6 @@ import {
 import { vaCompensationRates2024 } from '@/data/vaCompensationRates';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import {
-  vaConditions,
   searchConditions,
   getConditionById,
   type VACondition,
@@ -341,7 +340,6 @@ export function UnifiedRatingCalculator() {
     addCondition: addUserCondition,
     removeCondition: removeUserCondition,
     updateCondition: updateUserCondition,
-    hasCondition,
     getConditionDetails,
   } = useUserConditions();
 

@@ -12,7 +12,7 @@ import { ShareWithVSO } from '@/components/dashboard/ShareWithVSO';
 import { ExportButton } from '@/components/dashboard/ExportButton';
 import { DataBackup } from '@/components/settings/DataBackup';
 import { Link, useNavigate } from 'react-router-dom';
-import { useProfileStore, BRANCH_LABELS, type Branch, type ServicePeriod } from '@/store/useProfileStore';
+import { useProfileStore, type Branch, type ServicePeriod } from '@/store/useProfileStore';
 import { PageContainer } from '@/components/PageContainer';
 
 const REMINDER_SETTINGS_KEY = 'va-claims-reminder-settings';

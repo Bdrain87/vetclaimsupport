@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
-import { Check, Circle, Lock } from 'lucide-react';
+import { Check, Lock } from 'lucide-react';
 
 interface Step {
   id: string;

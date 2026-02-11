@@ -14,7 +14,7 @@ const audiences = [
   {
     title: 'BDD Filers',
     description: '180-90 days before separation is your window. Get organized, file your claim before discharge, and receive compensation from Day 1.',
-    tagline: 'File before discharge, get paid Day 1',
+    tagline: 'File before discharge for benefits from Day 1',
     icon: Clock,
     gradient: 'from-emerald-500 to-teal-500'
   },

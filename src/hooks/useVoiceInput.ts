@@ -152,7 +152,7 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}): UseVoiceInput
 
     try {
       recognitionRef.current.start();
-    } catch (e) {
+    } catch {
       // Already started
     }
   }, [isSupported]);

@@ -1,14 +1,15 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { encryptedStorage } from '@/lib/encryptedStorage';
 import type {
-  ClaimsData, MedicalVisit, Exposure, SymptomEntry, Medication,
+  MedicalVisit, Exposure, SymptomEntry, Medication,
   ServiceEntry, BuddyContact, DocumentItem, MigraineEntry,
   UploadedDocument, SleepEntry, ClaimCondition, QuickLogEntry,
   Deadline, PTSDSymptomEntry, CombatEntry, MajorEvent,
   DeploymentEntry, ApprovedCondition, JourneyProgress,
 } from '@/types/claims';
-import type { EvidenceDocument, DocumentCategory, AttachableEntryType } from '@/types/documents';
-import type { ClaimDocument, ClaimDocumentType } from '@/types/claimDocuments';
+import type { EvidenceDocument, AttachableEntryType } from '@/types/documents';
+import type { ClaimDocument } from '@/types/claimDocuments';
 import {
   storeFileData,
   getFileData,
@@ -774,6 +775,7 @@ const useAppStore = create<AppState>()(
     {
       name: 'vcs-app-data',
       version: 2,
+      storage: createJSONStorage(() => encryptedStorage),
       migrate: (persistedState: unknown, version: number) => {
         const state = persistedState as Record<string, unknown>;
         if (version < 2) {

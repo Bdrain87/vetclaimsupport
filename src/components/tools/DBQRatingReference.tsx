@@ -82,18 +82,21 @@ export function DBQRatingReference() {
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
-        {conditionsWithCriteria.map(({ condition, dbq }) => (
+        {conditionsWithCriteria.map(({ condition, dbq }) => {
+          if (!dbq) return null;
+
+          return (
           <div key={condition.id} className="border rounded-lg overflow-hidden">
             <div className="p-4 bg-muted/30">
               <div className="flex items-start justify-between">
                 <div>
-                  <h4 className="font-medium text-foreground">{dbq!.name}</h4>
+                  <h4 className="font-medium text-foreground">{dbq.name}</h4>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Diagnostic Code: {dbq!.diagnosticCode}
+                    Diagnostic Code: {dbq.diagnosticCode}
                   </p>
                 </div>
                 <Badge variant="outline">
-                  {dbq!.ratings.map(r => `${r.percentage}%`).join(' / ')}
+                  {dbq.ratings.map(r => `${r.percentage}%`).join(' / ')}
                 </Badge>
               </div>
             </div>
@@ -106,7 +109,7 @@ export function DBQRatingReference() {
                   Rating Criteria
                 </h5>
                 <div className="space-y-3">
-                  {dbq!.ratings.map((rating, idx) => (
+                  {dbq.ratings.map((rating, idx) => (
                     <div key={idx} className="p-3 border rounded-lg">
                       <div className="flex items-center gap-3 mb-2">
                         <Badge 
@@ -144,18 +147,18 @@ export function DBQRatingReference() {
               </div>
 
               {/* Exam Tips */}
-              {dbq!.examTips.length > 0 && (
+              {dbq.examTips.length > 0 && (
                 <Accordion type="single" collapsible>
                   <AccordionItem value="tips">
                     <AccordionTrigger className="text-sm">
                       <span className="flex items-center gap-2">
                         <MessageSquare className="h-4 w-4" />
-                        Exam Tips ({dbq!.examTips.length})
+                        Exam Tips ({dbq.examTips.length})
                       </span>
                     </AccordionTrigger>
                     <AccordionContent>
                       <ul className="space-y-2">
-                        {dbq!.examTips.map((tip, idx) => (
+                        {dbq.examTips.map((tip, idx) => (
                           <li key={idx} className="flex items-start gap-2 text-sm">
                             <AlertCircle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
                             {tip}
@@ -168,18 +171,18 @@ export function DBQRatingReference() {
               )}
 
               {/* Secondary Conditions */}
-              {dbq!.secondaryConditions.length > 0 && (
+              {dbq.secondaryConditions.length > 0 && (
                 <Accordion type="single" collapsible>
                   <AccordionItem value="secondary">
                     <AccordionTrigger className="text-sm">
                       <span className="flex items-center gap-2">
                         <Link2 className="h-4 w-4" />
-                        Common Secondary Conditions ({dbq!.secondaryConditions.length})
+                        Common Secondary Conditions ({dbq.secondaryConditions.length})
                       </span>
                     </AccordionTrigger>
                     <AccordionContent>
                       <div className="flex flex-wrap gap-2">
-                        {dbq!.secondaryConditions.map((sec, idx) => (
+                        {dbq.secondaryConditions.map((sec, idx) => (
                           <Badge key={idx} variant="outline" className="bg-purple-500/10 text-purple-600 border-purple-500/30">
                             {sec}
                           </Badge>
@@ -194,7 +197,8 @@ export function DBQRatingReference() {
               )}
             </div>
           </div>
-        ))}
+          );
+        })}
 
         <div className="p-3 bg-primary/5 border border-primary/20 rounded-lg">
           <p className="text-xs text-muted-foreground">

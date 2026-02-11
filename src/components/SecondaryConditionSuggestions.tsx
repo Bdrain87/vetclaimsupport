@@ -10,7 +10,6 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import {
-  vaConditions,
   getConditionById,
   getSecondaryConditions,
   type VACondition,

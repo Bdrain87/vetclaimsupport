@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
@@ -80,12 +79,6 @@ export function QuickJournalEntry({ onSave, onCancel }: QuickJournalEntryProps) 
     if (painLevel <= 3) return 'text-success-500';
     if (painLevel <= 6) return 'text-warning-500';
     return 'text-destructive';
-  };
-
-  const getPainBgColor = () => {
-    if (painLevel <= 3) return 'bg-success-500';
-    if (painLevel <= 6) return 'bg-warning-500';
-    return 'bg-destructive';
   };
 
   return (

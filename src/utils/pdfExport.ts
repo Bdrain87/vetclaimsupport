@@ -1,6 +1,11 @@
 // PDF Export Utilities for Vet Claim Support
-import jsPDF from 'jspdf';
+import type jsPDFType from 'jspdf';
 import type { ServiceEntry, MedicalVisit, SymptomEntry, Medication, Exposure, DocumentItem, BuddyContact, ClaimsData, ClaimCondition, MigraineEntry, SleepEntry } from '@/types/claims';
+
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import('jspdf');
+  return jsPDF;
+};
 
 // Duration labels for migraines
 const migraineDurations: Record<string, string> = {
@@ -36,7 +41,7 @@ const colors = {
 };
 
 // Helper to add header to each PDF
-const addPDFHeader = (doc: jsPDF, options: PDFExportOptions, yPos: number = 20): number => {
+const addPDFHeader = (doc: jsPDFType, options: PDFExportOptions, yPos: number = 20): number => {
   const date = options.generatedDate || new Date();
   const pageWidth = doc.internal.pageSize.getWidth();
   
@@ -92,7 +97,7 @@ const addPDFFooter = (doc: jsPDF) => {
 };
 
 // Helper to check for page break
-const checkPageBreak = (doc: jsPDF, yPos: number, neededHeight: number = 40): number => {
+const checkPageBreak = (doc: jsPDFType, yPos: number, neededHeight: number = 40): number => {
   const pageHeight = doc.internal.pageSize.getHeight();
   if (yPos + neededHeight > pageHeight - 45) {
     doc.addPage();
@@ -102,7 +107,7 @@ const checkPageBreak = (doc: jsPDF, yPos: number, neededHeight: number = 40): nu
 };
 
 // Helper to draw info box
-const drawInfoBox = (doc: jsPDF, text: string, yPos: number, type: 'info' | 'success' = 'info'): number => {
+const drawInfoBox = (doc: jsPDFType, text: string, yPos: number, type: 'info' | 'success' = 'info'): number => {
   const pageWidth = doc.internal.pageSize.getWidth();
   const bgColor = type === 'success' ? colors.successBg : colors.infoBg;
   const borderColor = type === 'success' ? colors.success : colors.primary;
@@ -127,7 +132,7 @@ const drawInfoBox = (doc: jsPDF, text: string, yPos: number, type: 'info' | 'suc
 };
 
 // Helper to draw summary box
-const drawSummaryBox = (doc: jsPDF, items: { value: string | number; label: string }[], yPos: number): number => {
+const drawSummaryBox = (doc: jsPDFType, items: { value: string | number; label: string }[], yPos: number): number => {
   const pageWidth = doc.internal.pageSize.getWidth();
   const boxWidth = (pageWidth - 50) / items.length;
   
@@ -153,17 +158,18 @@ const drawSummaryBox = (doc: jsPDF, items: { value: string | number; label: stri
 };
 
 // Helper to wrap text properly
-const wrapText = (doc: jsPDF, text: string, maxWidth: number): string[] => {
+const wrapText = (doc: jsPDFType, text: string, maxWidth: number): string[] => {
   return doc.splitTextToSize(text || '', maxWidth);
 };
 
 // Service History Export
-export const exportServiceHistory = (entries: ServiceEntry[]) => {
+export const exportServiceHistory = async (entries: ServiceEntry[]) => {
   if (entries.length === 0) {
     alert('No service history entries to export');
     return;
   }
 
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
   const sorted = [...entries].sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
@@ -258,12 +264,13 @@ export const exportServiceHistory = (entries: ServiceEntry[]) => {
 };
 
 // Medical Visits Export
-export const exportMedicalVisits = (visits: MedicalVisit[]) => {
+export const exportMedicalVisits = async (visits: MedicalVisit[]) => {
   if (visits.length === 0) {
     alert('No medical visits to export');
     return;
   }
 
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
   const sorted = [...visits].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -351,12 +358,13 @@ export const exportMedicalVisits = (visits: MedicalVisit[]) => {
 };
 
 // Symptoms Journal Export
-export const exportSymptoms = (symptoms: SymptomEntry[]) => {
+export const exportSymptoms = async (symptoms: SymptomEntry[]) => {
   if (symptoms.length === 0) {
     alert('No symptoms to export');
     return;
   }
 
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
   const sorted = [...symptoms].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -439,12 +447,13 @@ export const exportSymptoms = (symptoms: SymptomEntry[]) => {
 };
 
 // Medications Export
-export const exportMedications = (medications: Medication[]) => {
+export const exportMedications = async (medications: Medication[]) => {
   if (medications.length === 0) {
     alert('No medications to export');
     return;
   }
 
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
   const current = medications.filter(m => m.stillTaking);
@@ -534,12 +543,13 @@ export const exportMedications = (medications: Medication[]) => {
 };
 
 // Exposures Export
-export const exportExposures = (exposures: Exposure[]) => {
+export const exportExposures = async (exposures: Exposure[]) => {
   if (exposures.length === 0) {
     alert('No exposures to export');
     return;
   }
 
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
   const sorted = [...exposures].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -630,12 +640,13 @@ export const exportExposures = (exposures: Exposure[]) => {
 };
 
 // Documents Checklist Export
-export const exportDocuments = (documents: DocumentItem[]) => {
+export const exportDocuments = async (documents: DocumentItem[]) => {
   if (documents.length === 0) {
     alert('No documents to export');
     return;
   }
 
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
   const completed = documents.filter(d => d.status === 'Obtained' || d.status === 'Submitted');
@@ -704,12 +715,13 @@ export const exportDocuments = (documents: DocumentItem[]) => {
 };
 
 // Buddy Contacts Export
-export const exportBuddyContacts = (contacts: BuddyContact[]) => {
+export const exportBuddyContacts = async (contacts: BuddyContact[]) => {
   if (contacts.length === 0) {
     alert('No buddy contacts to export');
     return;
   }
 
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
   const received = contacts.filter(c => c.statementStatus === 'Received' || c.statementStatus === 'Submitted');
@@ -808,10 +820,10 @@ export const exportBuddyContacts = (contacts: BuddyContact[]) => {
 };
 
 // Comprehensive Evidence Export
-export const exportAllEvidence = (data: ClaimsData) => {
+export const exportAllEvidence = async (data: ClaimsData) => {
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
-  const pageWidth = doc.internal.pageSize.getWidth();
-  
+
   let yPos = addPDFHeader(doc, {
     title: 'Complete VA Evidence Package',
     subtitle: 'Comprehensive Documentation for VA Disability Claims'
@@ -902,12 +914,13 @@ export const exportAllEvidence = (data: ClaimsData) => {
 };
 
 // Migraines Export
-export const exportMigraines = (migraines: MigraineEntry[], stats?: { totalLast30Days: number; prostratingLast30Days: number; totalAll: number }) => {
+export const exportMigraines = async (migraines: MigraineEntry[], stats?: { totalLast30Days: number; prostratingLast30Days: number; totalAll: number }) => {
   if (migraines.length === 0) {
     alert('No migraine entries to export');
     return;
   }
 
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
   const sorted = [...migraines].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -1041,7 +1054,7 @@ export const exportMigraines = (migraines: MigraineEntry[], stats?: { totalLast3
 };
 
 // Condition-Specific Evidence Package Export
-export const exportConditionEvidence = (
+export const exportConditionEvidence = async (
   conditionName: string,
   claimDate: string,
   evidenceScore: number,
@@ -1051,6 +1064,7 @@ export const exportConditionEvidence = (
   linkedExposures: Exposure[],
   linkedBuddyContacts: BuddyContact[]
 ) => {
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
   
@@ -1408,12 +1422,13 @@ export const exportConditionEvidence = (
 };
 
 // Sleep Log Export
-export const exportSleepLog = (entries: SleepEntry[]) => {
+export const exportSleepLog = async (entries: SleepEntry[]) => {
   if (entries.length === 0) {
     alert('No sleep entries to export');
     return;
   }
 
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
   const sorted = [...entries].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -1574,7 +1589,8 @@ export const exportSleepLog = (entries: SleepEntry[]) => {
 };
 
 // Buddy Statement Export (Generated Statement)
-export const exportBuddyStatement = (statementText: string, witnessName: string) => {
+export const exportBuddyStatement = async (statementText: string, witnessName: string) => {
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
 
@@ -1624,7 +1640,8 @@ export const exportBuddyStatement = (statementText: string, witnessName: string)
 };
 
 // Stressor Statement Export (PTSD)
-export const exportStressorStatement = (statementText: string) => {
+export const exportStressorStatement = async (statementText: string) => {
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
 
@@ -1652,7 +1669,8 @@ export const exportStressorStatement = (statementText: string) => {
 };
 
 // Personal Statement Export
-export const exportPersonalStatement = (statementText: string, conditionName?: string) => {
+export const exportPersonalStatement = async (statementText: string, conditionName?: string) => {
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
 
@@ -1680,7 +1698,8 @@ export const exportPersonalStatement = (statementText: string, conditionName?: s
 };
 
 // Nexus Letter Template Export
-export const exportNexusLetterTemplate = (statementText: string, conditionName?: string) => {
+export const exportNexusLetterTemplate = async (statementText: string, conditionName?: string) => {
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
 
@@ -1708,7 +1727,8 @@ export const exportNexusLetterTemplate = (statementText: string, conditionName?:
 };
 
 // Claim Strategy Export
-export const exportClaimStrategy = (statementText: string) => {
+export const exportClaimStrategy = async (statementText: string) => {
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
 
@@ -1736,7 +1756,8 @@ export const exportClaimStrategy = (statementText: string) => {
 };
 
 // Buddy Statement Template Export
-export const exportBuddyStatementTemplate = (templateText: string, templateTitle?: string) => {
+export const exportBuddyStatementTemplate = async (templateText: string, templateTitle?: string) => {
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
 
@@ -1811,7 +1832,8 @@ export interface DBQPrepSheetData {
   additionalNotes: string;
 }
 
-export const exportDBQPrepSheet = (data: DBQPrepSheetData) => {
+export const exportDBQPrepSheet = async (data: DBQPrepSheetData) => {
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
 
@@ -1994,7 +2016,8 @@ export interface BackPayEstimateData {
   months: number;
 }
 
-export const exportBackPayEstimate = (data: BackPayEstimateData) => {
+export const exportBackPayEstimate = async (data: BackPayEstimateData) => {
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
 

@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Stethoscope,
@@ -17,7 +17,6 @@ import {
   Shield,
   Search,
   AlertTriangle,
-  Star,
   Sparkles,
   Loader2,
   FileCheck,
@@ -34,7 +33,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { examCategories, examPrepData } from '@/data/cpExamPrep';
 import { useClaims } from '@/hooks/useClaims';
-import { useUserConditions } from '@/hooks/useUserConditions';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { createCPExamPrepPrompt } from '@/lib/ai-prompts';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
@@ -98,28 +96,7 @@ const dontsList = [
 
 export default function CPExamPrepEnhanced() {
   const { data: claimsData } = useClaims();
-  const { conditions: userConditions, getConditionDetails } = useUserConditions();
 
-  // Get user's claimed condition names for highlighting
-  const userConditionNames = useMemo(() => {
-    const names = new Set<string>();
-    // From claim conditions (useAppStore via useClaims adapter)
-    (claimsData.claimConditions || []).forEach(c => names.add(c.name.toLowerCase()));
-    // From UserConditions
-    userConditions.forEach(uc => {
-      const details = getConditionDetails(uc);
-      if (details) {
-        names.add(details.name.toLowerCase());
-        names.add(details.abbreviation.toLowerCase());
-      }
-    });
-    return names;
-  }, [claimsData.claimConditions, userConditions, getConditionDetails]);
-
-  const isUserCondition = useCallback((conditionName: string) => {
-    const lower = conditionName.toLowerCase();
-    return Array.from(userConditionNames).some(name => lower.includes(name) || name.includes(lower));
-  }, [userConditionNames]);
 
   const [selectedCondition, setSelectedCondition] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -142,23 +119,6 @@ export default function CPExamPrepEnhanced() {
       localStorage.setItem('cp-exam-checklist', JSON.stringify([...checkedItems]));
     } catch { /* storage full */ }
   }, [checkedItems]);
-
-  const allConditions = useMemo(() => {
-    return examCategories.flatMap(cat =>
-      cat.conditions.map(cond => ({ condition: cond, category: cat.name, isUserClaimed: isUserCondition(cond) }))
-    );
-  }, [isUserCondition]);
-
-  const filteredConditions = useMemo(() => {
-    const base = !searchQuery.trim()
-      ? allConditions
-      : allConditions.filter(c =>
-          c.condition.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          c.category.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-    // Sort user's conditions to top
-    return [...base].sort((a, b) => (b.isUserClaimed ? 1 : 0) - (a.isUserClaimed ? 1 : 0));
-  }, [allConditions, searchQuery]);
 
   const selectedPrepData = selectedCondition ? examPrepData[selectedCondition] : null;
 
@@ -218,7 +178,7 @@ export default function CPExamPrepEnhanced() {
         <div>
           <h1 className="text-2xl font-bold text-foreground">C&P Exam Preparation</h1>
           <p className="text-muted-foreground">
-            Everything you need to ace your Compensation & Pension exam
+            Everything you need to prepare for your Compensation & Pension exam
           </p>
         </div>
       </div>

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import type { EvidenceDocument, AttachableEntryType, DocumentCategory } from '@/types/documents';
+import type { EvidenceDocument, AttachableEntryType } from '@/types/documents';
 import { suggestCategoryFromFilename, formatFileSize, documentCategoryLabels } from '@/types/documents';
 
 interface EvidenceAttachmentProps {

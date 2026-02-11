@@ -6,7 +6,6 @@ import {
   Download,
   AlertCircle,
   Info,
-  Calendar,
   Activity,
   Zap,
   Clock,
@@ -18,7 +17,7 @@ import {
   Check,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -204,7 +203,6 @@ export default function DBQPrepSheet() {
   const filteredConditions = useMemo(() => {
     if (!conditionSearch) {
       // Show user's tracked conditions first, then general list
-      const userFirst = userConditionNames.filter(c => !allConditions.includes(c));
       return [...userConditionNames, ...allConditions.filter(c => !userConditionNames.includes(c))].slice(0, 50);
     }
     const search = conditionSearch.toLowerCase();

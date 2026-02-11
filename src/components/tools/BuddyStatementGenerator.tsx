@@ -14,7 +14,6 @@ import { useClaims } from '@/hooks/useClaims';
 import { useProfileStore } from '@/store/useProfileStore';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
-import jsPDF from 'jspdf';
 
 const relationshipOptions = [
   { value: 'fellow-service-member', label: 'Fellow Service Member' },
@@ -138,7 +137,8 @@ Contact Information: _________________________
     });
   };
 
-  const downloadPDF = () => {
+  const downloadPDF = async () => {
+    const { default: jsPDF } = await import('jspdf');
     const doc = new jsPDF();
     const relationshipLabel = relationshipOptions.find(r => r.value === formData.relationship)?.label || formData.relationship;
     

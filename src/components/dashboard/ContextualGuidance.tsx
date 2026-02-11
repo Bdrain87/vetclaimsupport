@@ -6,12 +6,10 @@ import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import {
-  Lightbulb,
   AlertTriangle,
   ArrowRight,
   Sparkles,
   Target,
-  FileText,
   Users,
   Stethoscope,
   Calendar,

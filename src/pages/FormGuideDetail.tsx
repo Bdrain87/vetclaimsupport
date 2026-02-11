@@ -26,7 +26,7 @@ interface FieldCardProps {
   onSave: (fieldId: string, value: string) => void;
 }
 
-function FieldCard({ field, formId, savedValue, onSave }: FieldCardProps) {
+function FieldCard({ field, formId: _formId, savedValue, onSave }: FieldCardProps) {
   const [value, setValue] = useState(savedValue);
   const [copied, setCopied] = useState(false);
   const [showAI, setShowAI] = useState(false);
@@ -246,9 +246,9 @@ export default function FormGuideDetail() {
     [formId, setFormDraft]
   );
 
-  const handleExportPDF = useCallback(() => {
+  const handleExportPDF = useCallback(async () => {
     if (!formDef || !formId) return;
-    generateFormGuidePDF(
+    await generateFormGuidePDF(
       formDef.formId,
       formDef.formTitle,
       formDef.fields.map((f) => ({ section: f.section, label: f.label, fieldId: f.fieldId })),

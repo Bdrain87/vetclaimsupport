@@ -1,25 +1,18 @@
 import { useMemo, useState } from 'react';
 import { useClaims } from '@/hooks/useClaims';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Link } from 'react-router-dom';
 import {
   ClipboardList,
   CheckCircle2,
   XCircle,
-  AlertTriangle,
   FileText,
-  Stethoscope,
-  Users,
-  Activity,
-  Calendar,
   ArrowRight,
   Lightbulb,
-  Clock,
   Target,
 } from 'lucide-react';
 import { getConditionChecklist, type ConditionChecklist } from '@/data/conditionChecklists';
@@ -382,7 +375,7 @@ export function EnhancedEvidenceChecklist() {
   );
 }
 
-function generateConditionStatement(conditionName: string, serviceYear: number | string, checklist: ConditionChecklist | null): string {
+function generateConditionStatement(conditionName: string, serviceYear: number | string, _checklist: ConditionChecklist | null): string {
   const name = conditionName.toLowerCase();
   
   let statement = `I am writing to support my claim for ${conditionName}. `;

@@ -113,17 +113,6 @@ export default function NexusLetterGenerator() {
     impactOnLife: buildImpactSummary(),
   });
 
-  // Track which fields were auto-filled
-  const autoFilledFields = useMemo(() => {
-    const fields: Record<string, string> = {};
-    if (fullName) fields.veteranName = 'your profile';
-    if (branchLabel) fields.branchOfService = 'your profile';
-    if (profile.serviceDates?.start) fields.serviceStartDate = 'your profile';
-    if (profile.serviceDates?.end) fields.serviceEndDate = 'your profile';
-    if (data.symptoms.length > 0) fields.currentSymptoms = 'your Health Log';
-    if (data.symptoms.some(s => s.dailyImpact)) fields.impactOnLife = 'your Health Log';
-    return fields;
-  }, [fullName, branchLabel, profile.serviceDates, data.symptoms]);
   const [primarySearch, setPrimarySearch] = useState(formData.primaryCondition);
   const [secondarySearch, setSecondarySearch] = useState(formData.secondaryCondition);
   const [showPrimaryDropdown, setShowPrimaryDropdown] = useState(false);

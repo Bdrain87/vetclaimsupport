@@ -1,12 +1,11 @@
 import { useState, useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
-import { ApprovedCondition, BodyPart } from '@/types/claims';
+import { BodyPart } from '@/types/claims';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Select,
   SelectContent,
@@ -19,7 +18,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Calculator, Plus, Trash2, Info, AlertTriangle, TrendingUp, Award, ArrowRight, DollarSign, Sparkles } from 'lucide-react';
+import { Calculator, Plus, Trash2, Info, AlertTriangle, Award, ArrowRight, DollarSign, Sparkles } from 'lucide-react';
 import { format, differenceInMonths, parseISO, subYears } from 'date-fns';
 import { COMP_RATES_2026 } from '@/data/compRates2026';
 
@@ -78,7 +77,7 @@ function calculateCombinedRating(conditions: RatedCondition[]): { exact: number;
     partGroups[partType].push(condition);
   }
 
-  for (const [partType, partConditions] of Object.entries(partGroups)) {
+  for (const [_partType, partConditions] of Object.entries(partGroups)) {
     const hasLeft = partConditions.some(c => c.bodyPart.startsWith('left_'));
     const hasRight = partConditions.some(c => c.bodyPart.startsWith('right_'));
     if (hasLeft && hasRight) {

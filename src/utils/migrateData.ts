@@ -82,10 +82,6 @@ export function migrateOldDataToAppStore(): void {
   // 4. Read old evidence documents
   const oldEvidenceDocs = safeJSONParse<unknown[]>(OLD_EVIDENCE_DOCS_KEY, []);
 
-  // 5. Read old claim store (calculator entries)
-  const oldClaimStore = safeJSONParse<Record<string, unknown>>(OLD_CLAIM_STORE_KEY, {});
-  const oldClaimStoreState = (oldClaimStore as Record<string, unknown>)?.state as Record<string, unknown> | undefined;
-
   // Build the new unified state
   const migratedState: Record<string, unknown> = {
     // From old claims data
