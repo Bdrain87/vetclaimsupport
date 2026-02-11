@@ -23,12 +23,12 @@ export function ConflictCard({ conflict, onClick, isSelected }: ConflictCardProp
     >
       <CardContent className="p-4">
         <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)]" role="img" aria-label={conflict.name}>
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)] flex-shrink-0" role="img" aria-label={conflict.name}>
               {(() => { const Icon = conflictIconMap[conflict.icon]; return Icon ? <Icon className="h-5 w-5 text-gold" /> : null; })()}
             </div>
-            <div>
-              <h3 className="font-semibold text-foreground">{conflict.name}</h3>
+            <div className="min-w-0">
+              <h3 className="font-semibold text-foreground truncate">{conflict.name}</h3>
               <p className="text-sm text-muted-foreground">{conflict.years}</p>
             </div>
           </div>
@@ -58,7 +58,7 @@ export function ConflictCard({ conflict, onClick, isSelected }: ConflictCardProp
 
         <div className="flex flex-wrap gap-1 mt-3">
           {conflict.exposures.slice(0, 3).map((exposure) => (
-            <Badge key={exposure} variant="outline" className="text-xs">
+            <Badge key={exposure} variant="outline" className="text-xs truncate max-w-full">
               {exposure}
             </Badge>
           ))}

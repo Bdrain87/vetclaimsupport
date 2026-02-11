@@ -195,7 +195,7 @@ export function ClaimsJourneyRoadmap() {
                   )}
                 </div>
                 <span className={cn(
-                  "text-[11px] mt-1.5 text-center max-w-[65px] font-medium",
+                  "text-[11px] mt-1.5 text-center max-w-[72px] font-medium break-words",
                   phase.status === 'current' ? "text-primary" : 
                   phase.status === 'completed' ? "text-success" : "text-muted-foreground"
                 )}>

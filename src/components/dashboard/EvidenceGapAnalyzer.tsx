@@ -204,9 +204,9 @@ export function EvidenceGapAnalyzer() {
       <CardContent className="space-y-4">
         {analyses.map(({ condition, readinessScore, gaps, strengths }) => (
           <div key={condition.id} className={`rounded-lg border p-4 ${getScoreBg(readinessScore)}`}>
-            <div className="flex items-center justify-between mb-3">
-              <h4 className="font-medium text-foreground">{condition.name}</h4>
-              <Badge variant="outline" className={getScoreColor(readinessScore)}>
+            <div className="flex items-center justify-between mb-3 gap-2">
+              <h4 className="font-medium text-foreground min-w-0 truncate">{condition.name}</h4>
+              <Badge variant="outline" className={`flex-shrink-0 ${getScoreColor(readinessScore)}`}>
                 {readinessScore}% Ready
               </Badge>
             </div>

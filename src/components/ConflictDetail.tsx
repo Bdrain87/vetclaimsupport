@@ -16,13 +16,13 @@ export function ConflictDetail({ conflict, onClose }: ConflictDetailProps) {
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Header */}
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center justify-center h-12 w-12 rounded-xl bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)]" role="img" aria-label={conflict.name}>
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex items-center gap-4 min-w-0">
+          <div className="flex items-center justify-center h-12 w-12 rounded-xl bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)] flex-shrink-0" role="img" aria-label={conflict.name}>
             {(() => { const Icon = conflictIconMap[conflict.icon]; return Icon ? <Icon className="h-6 w-6 text-gold" /> : null; })()}
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-foreground">{conflict.name}</h2>
+            <h2 className="text-2xl font-bold text-foreground break-words">{conflict.name}</h2>
             <p className="text-muted-foreground">{conflict.years}</p>
           </div>
         </div>
@@ -97,18 +97,18 @@ export function ConflictDetail({ conflict, onClose }: ConflictDetailProps) {
                     </p>
                   </div>
                 )}
-                <div className="grid gap-2 sm:grid-cols-2">
+                <div className="grid gap-2 grid-cols-1 sm:grid-cols-2">
                   {group.conditions.map((condition) => (
                     <div
                       key={condition}
-                      className="flex items-center gap-2 p-2 rounded-lg bg-card border border-border text-sm"
+                      className="flex items-center gap-2 p-2 rounded-lg bg-card border border-border text-sm min-w-0"
                     >
                       {group.presumptive ? (
                         <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0" />
                       ) : (
                         <div className="h-4 w-4 rounded-full border-2 border-muted-foreground/30 flex-shrink-0" />
                       )}
-                      <span>{condition}</span>
+                      <span className="break-words min-w-0">{condition}</span>
                     </div>
                   ))}
                 </div>
@@ -149,9 +149,9 @@ export function ConflictDetail({ conflict, onClose }: ConflictDetailProps) {
                 href={resource.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-muted/50 transition-colors group"
+                className="flex items-center justify-between gap-2 p-3 rounded-lg border border-border hover:bg-muted/50 transition-colors group min-w-0"
               >
-                <span className="text-sm font-medium">{resource.name}</span>
+                <span className="text-sm font-medium truncate">{resource.name}</span>
                 <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
               </a>
             ))}

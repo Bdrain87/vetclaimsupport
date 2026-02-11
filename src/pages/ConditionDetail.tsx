@@ -96,8 +96,8 @@ function EvidenceChecklistCard({ conditionId, conditionName, onNavigate }: { con
             >
               <CheckCircle2 className={`h-5 w-5 mt-0.5 flex-shrink-0 transition-colors ${isChecked ? 'text-green-500' : 'text-muted-foreground/40'}`} />
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className={`font-medium text-sm ${isChecked ? 'line-through text-muted-foreground' : ''}`}>{item.name}</span>
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className={`font-medium text-sm min-w-0 truncate ${isChecked ? 'line-through text-muted-foreground' : ''}`}>{item.name}</span>
                   {item.required && (
                     <Badge variant="outline" className="text-xs flex-shrink-0">Required</Badge>
                   )}
@@ -371,9 +371,9 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
       {/* Header Card */}
       <Card>
         <CardHeader>
-          <div className="flex items-start justify-between">
-            <div>
-              <CardTitle className="text-2xl">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <CardTitle className="text-2xl break-words">
                 {conditionDetails.abbreviation || conditionDetails.name}
               </CardTitle>
               {conditionDetails.name !== conditionDetails.abbreviation && (
@@ -462,7 +462,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                   <span className="text-sm font-medium">Related Terms:</span>
                   <div className="flex flex-wrap gap-1.5 mt-1">
                     {conditionDetails.keywords.slice(0, 6).map((s: string) => (
-                      <Badge key={s} variant="outline" className="text-xs">{s}</Badge>
+                      <Badge key={s} variant="outline" className="text-xs truncate max-w-full">{s}</Badge>
                     ))}
                   </div>
                 </div>
@@ -504,7 +504,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                     {conditionReadiness.overallScore}%
                   </span>
                 </div>
-                <div className="flex-1 space-y-1 text-xs">
+                <div className="flex-1 min-w-0 space-y-1 text-xs">
                   <div className="flex justify-between"><span className="text-muted-foreground">Medical</span><span>{conditionReadiness.components.medicalEvidence}%</span></div>
                   <div className="flex justify-between"><span className="text-muted-foreground">Service Link</span><span>{conditionReadiness.components.serviceConnection}%</span></div>
                   <div className="flex justify-between"><span className="text-muted-foreground">Severity</span><span>{conditionReadiness.components.currentSeverity}%</span></div>
@@ -536,7 +536,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
             <CardContent className="space-y-3">
               {frequencyReport && frequencyReport.totalEntries > 0 ? (
                 <>
-                  <div className="grid grid-cols-3 gap-3 text-center">
+                  <div className="grid grid-cols-3 gap-2 sm:gap-3 text-center">
                     <div className="bg-muted/50 rounded-lg p-2">
                       <p className="text-xl font-bold">{frequencyReport.totalEntries}</p>
                       <p className="text-xs text-muted-foreground">Entries</p>
@@ -565,7 +565,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                           .sort(([, a], [, b]) => b - a)
                           .slice(0, 5)
                           .map(([symptom, count]) => (
-                            <Badge key={symptom} variant="secondary" className="text-xs">
+                            <Badge key={symptom} variant="secondary" className="text-xs truncate max-w-full">
                               {symptom} ({count})
                             </Badge>
                           ))}
@@ -675,7 +675,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
               ) : (
                 <div className="space-y-3">
                   <AIDisclaimer variant="banner" />
-                  <div className="p-4 rounded-lg bg-muted/30 border text-sm whitespace-pre-wrap max-h-[400px] overflow-y-auto leading-relaxed">
+                  <div className="p-4 rounded-lg bg-muted/30 border text-sm whitespace-pre-wrap max-h-[400px] overflow-y-auto overflow-x-hidden leading-relaxed break-words">
                     {aiInsights}
                   </div>
                   <Button
@@ -714,21 +714,21 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
             <p className="text-sm text-slate-400 mb-3">
               Use these verified legal databases to find case law relevant to your claim:
             </p>
-            <div className="space-y-2">
+            <div className="space-y-2 overflow-hidden">
               <a href="https://www.va.gov/vbs/bva/" target="_blank" rel="noopener noreferrer"
-                 className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm">
+                 className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm truncate">
                 Board of Veterans' Appeals (BVA) Decisions
               </a>
               <a href="https://www.uscourts.cavc.gov/decisions.php" target="_blank" rel="noopener noreferrer"
-                 className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm">
+                 className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm truncate">
                 Court of Appeals for Veterans Claims (CAVC)
               </a>
               <a href="https://scholar.google.com/" target="_blank" rel="noopener noreferrer"
-                 className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm">
+                 className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm truncate">
                 Google Scholar — Legal Opinions
               </a>
               <a href="https://www.law.cornell.edu/uscode/text/38" target="_blank" rel="noopener noreferrer"
-                 className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm">
+                 className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm truncate">
                 38 U.S.C. — Veterans' Benefits (Cornell Law)
               </a>
             </div>
@@ -769,7 +769,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
 
       {/* Tabs */}
       <Tabs defaultValue="criteria" className="space-y-4">
-        <TabsList className="w-full grid grid-cols-4">
+        <TabsList className="w-full grid grid-cols-4 overflow-hidden">
           <TabsTrigger value="criteria" className="text-xs sm:text-sm">
             <Scale className="h-4 w-4 mr-1 hidden sm:inline" />
             Criteria
@@ -831,7 +831,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                         </h5>
                         <div className="flex flex-wrap gap-1">
                           {level.keywords.map((keyword, idx) => (
-                            <Badge key={idx} variant="secondary" className="text-xs">
+                            <Badge key={idx} variant="secondary" className="text-xs truncate max-w-full">
                               {keyword}
                             </Badge>
                           ))}
@@ -936,7 +936,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                   <Stethoscope className="h-5 w-5" />
                   C&P Exam Preparation
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="truncate">
                   Form {dbqReference.formNumber} - {dbqReference.name}
                 </CardDescription>
               </CardHeader>
@@ -1045,10 +1045,10 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                   {conditionDetails.commonSecondaries.map((secondary, idx) => {
                     const secondaryDetails = getConditionById(secondary);
                     return (
-                      <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-                        <div className="flex items-center gap-2">
-                          <Link2 className="h-4 w-4 text-primary" />
-                          <span className="font-medium text-sm">{secondaryDetails?.name || secondary}</span>
+                      <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-muted/50 gap-2 overflow-hidden">
+                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                          <Link2 className="h-4 w-4 text-primary flex-shrink-0" />
+                          <span className="font-medium text-sm truncate">{secondaryDetails?.name || secondary}</span>
                         </div>
                         <Button variant="ghost" size="sm" onClick={() => navigate(`/claims/${secondary}`)}>
                           View

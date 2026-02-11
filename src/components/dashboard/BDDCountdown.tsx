@@ -145,10 +145,10 @@ export function BDDCountdown({ separationDate, onSeparationDateChange }: BDDCoun
 
               {/* Timeline visualization */}
               <div className="space-y-2">
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>180 days (window opens)</span>
-                  <span>90 days (window closes)</span>
-                  <span>Separation</span>
+                <div className="flex justify-between text-xs text-muted-foreground gap-1">
+                  <span className="min-w-0 truncate">180d (opens)</span>
+                  <span className="min-w-0 truncate text-center">90d (closes)</span>
+                  <span className="min-w-0 truncate text-right">Separation</span>
                 </div>
                 <div className="relative h-3 bg-muted rounded-full overflow-hidden">
                   {/* Full bar representing 180 days */}

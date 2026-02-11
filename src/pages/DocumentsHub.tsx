@@ -396,7 +396,7 @@ export default function DocumentsHub() {
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-6 mt-0">
           {/* Quick Actions */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <button
               onClick={() => setActiveTab('my-docs')}
               className="group p-4 rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/10 border border-blue-500/30 hover:scale-[1.02] transition-all text-left"
@@ -447,7 +447,7 @@ export default function DocumentsHub() {
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
@@ -665,7 +665,7 @@ export default function DocumentsHub() {
               </CardContent>
             </Card>
           ) : (
-            <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="grid gap-4 grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
               {filteredDocuments.map((doc) => (
                 <Card
                   key={doc.id}
@@ -739,7 +739,7 @@ export default function DocumentsHub() {
         {/* Checklist Tab */}
         <TabsContent value="checklist" className="space-y-6 mt-0">
           {/* Progress Summary */}
-          <div className="grid gap-3 grid-cols-2 sm:grid-cols-4">
+          <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             <Card className="border-primary/20 bg-primary/5">
               <CardContent className="pt-4 pb-3">
                 <div className="flex items-center gap-3">
@@ -1057,7 +1057,7 @@ export default function DocumentsHub() {
                 )}
               </div>
 
-              <div className="grid grid-cols-2 gap-4 text-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                 <div>
                   <p className="text-muted-foreground">Type</p>
                   <p className="font-medium">{claimDocumentTypeLabels[selectedDoc.documentType]}</p>

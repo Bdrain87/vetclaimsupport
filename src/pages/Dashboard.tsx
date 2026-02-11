@@ -147,7 +147,7 @@ export default function Dashboard() {
           <div className="flex-1 min-w-0">
             <p className="text-foreground font-semibold truncate">{displayName}</p>
             {branchLabel && (
-              <p className="text-sm text-muted-foreground" style={{ writingMode: 'horizontal-tb' }}>
+              <p className="text-sm text-muted-foreground truncate" style={{ writingMode: 'horizontal-tb' }}>
                 {branchLabel}
               </p>
             )}
@@ -395,7 +395,7 @@ export default function Dashboard() {
                 <p className="text-sm font-semibold text-foreground">
                   Evidence Gaps Found ({evidenceGaps.length})
                 </p>
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-xs text-muted-foreground mt-1 truncate">
                   {evidenceGaps[0]?.conditionName}: missing {evidenceGaps[0]?.missing.join(', ')}
                   {evidenceGaps.length > 1 && ` (+${evidenceGaps.length - 1} more)`}
                 </p>
@@ -425,7 +425,7 @@ export default function Dashboard() {
               return (
                 <div
                   key={rec.conditionId + i}
-                  className="flex items-center justify-between p-3 rounded-xl bg-secondary border border-border"
+                  className="flex items-center justify-between p-3 rounded-xl bg-secondary border border-border overflow-hidden"
                 >
                   <div className="min-w-0 flex-1 mr-3">
                     <p className="text-sm font-medium text-foreground truncate">{rec.conditionName}</p>
@@ -491,9 +491,9 @@ export default function Dashboard() {
                   {i + 1}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-foreground">{step.title}</p>
+                  <p className="text-sm text-foreground truncate">{step.title}</p>
                   {step.description && (
-                    <p className="text-xs text-muted-foreground mt-0.5">{step.description}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{step.description}</p>
                   )}
                 </div>
                 {step.actionRoute && (
@@ -519,8 +519,8 @@ export default function Dashboard() {
                   {i + 1}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-foreground">{step.title}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">{step.description}</p>
+                  <p className="text-sm text-foreground truncate">{step.title}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{step.description}</p>
                 </div>
                 <Link
                   to={step.route}

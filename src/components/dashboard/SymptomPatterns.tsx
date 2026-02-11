@@ -195,7 +195,7 @@ export function SymptomPatterns() {
               <Activity className="h-3 w-3" />
               Most Common Symptoms
             </p>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {topSymptoms.map((symptom, _idx) => (
                 <div
                   key={symptom.name}

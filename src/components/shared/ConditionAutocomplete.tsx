@@ -193,7 +193,7 @@ export function ConditionAutocomplete({
                 )}
               </div>
               {showBodySystem && (condition as Record<string, unknown>).bodySystem && (
-                <span className="text-xs text-gold/60 whitespace-nowrap">
+                <span className="text-xs text-gold/60 whitespace-nowrap flex-shrink-0 max-w-[100px] truncate">
                   {String((condition as Record<string, unknown>).bodySystem)}
                 </span>
               )}

@@ -135,8 +135,8 @@ export function MilestoneCelebration() {
             <Icon className="h-10 w-10 text-success" />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-foreground">{currentMilestone.title}</h3>
-            <p className="text-muted-foreground mt-1">{currentMilestone.description}</p>
+            <h3 className="text-xl font-bold text-foreground break-words">{currentMilestone.title}</h3>
+            <p className="text-muted-foreground mt-1 break-words">{currentMilestone.description}</p>
           </div>
           <div className="p-4 bg-success/10 border border-success/30 rounded-lg">
             <p className="text-sm text-foreground">{currentMilestone.celebrationMessage}</p>

@@ -392,9 +392,9 @@ export function RatingCalculator() {
                   isBilateralPart(condition.bodyPart) ? 'border-purple-500/30 bg-purple-500/5' : ''
                 }`}
               >
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium">{condition.name}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="font-medium truncate">{condition.name}</span>
                     {isBilateralPart(condition.bodyPart) && (
                       <Badge variant="outline" className="text-xs bg-purple-500/10 text-purple-500 border-purple-500/20">
                         Bilateral
@@ -492,7 +492,7 @@ export function RatingCalculator() {
                 </button>
                 
                 {showSteps && (
-                  <div className="p-3 space-y-2 text-sm bg-muted/10">
+                  <div className="p-3 space-y-2 text-sm bg-muted/10 break-words">
                     {result.steps.map((step, idx) => (
                       <div 
                         key={idx} 

@@ -314,7 +314,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
       <div className="flex items-center gap-2 px-1">
         <Sparkles className="h-4 w-4 text-primary" />
         <h3 className="text-sm font-semibold text-foreground">Smart Guidance</h3>
-        <Badge variant="secondary" className="text-xs">
+        <Badge variant="secondary" className="text-xs truncate max-w-full">
           {visibleNudges.length} {visibleNudges.length === 1 ? 'tip' : 'tips'}
         </Badge>
       </div>
@@ -338,7 +338,7 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
-                    <h4 className="font-medium text-sm text-foreground">
+                    <h4 className="font-medium text-sm text-foreground truncate">
                       {nudge.title}
                     </h4>
                     <Button

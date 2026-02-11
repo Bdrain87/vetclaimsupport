@@ -67,7 +67,7 @@ export function IntentToFileCard() {
           <X className="h-4 w-4" />
         </Button>
 
-        <div className="flex items-start gap-4 pr-8">
+        <div className="flex items-start gap-3 sm:gap-4 pr-6 overflow-hidden">
           {/* Icon */}
           <div className="relative flex-shrink-0">
             <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-[rgba(214,178,94,0.2)] to-[rgba(214,178,94,0.2)] border border-[rgba(214,178,94,0.3)] flex items-center justify-center">
@@ -77,10 +77,10 @@ export function IntentToFileCard() {
             <div className="absolute inset-0 bg-[rgba(214,178,94,0.2)] blur-xl rounded-full scale-150 -z-10" />
           </div>
 
-          <div className="space-y-2 flex-1">
+          <div className="space-y-2 flex-1 min-w-0">
             {/* Header */}
-            <div className="flex items-center gap-2">
-              <h3 className="font-bold text-foreground text-base sm:text-lg">
+            <div className="flex items-center gap-2 min-w-0">
+              <h3 className="font-bold text-foreground text-base sm:text-lg min-w-0">
                 Pro Tip: File an Intent to File First!
               </h3>
               <Lightbulb className="h-5 w-5 text-gold flex-shrink-0" />

@@ -131,7 +131,7 @@ export default function FormGuide() {
                       {priorityLabel(priority)}
                     </Badge>
                   </div>
-                  <h3 className="font-medium text-foreground text-sm">{form.formTitle}</h3>
+                  <h3 className="font-medium text-foreground text-sm break-words">{form.formTitle}</h3>
                   <p className="text-xs text-muted-foreground mt-1">{form.description}</p>
                 </div>
                 <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-1" />

@@ -316,13 +316,13 @@ export default function PersonalStatement() {
               />
               {formData.condition && (
                 <div className="mt-3 p-3 rounded-lg border border-green-500/30 bg-green-500/5">
-                  <div className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500 shrink-0" />
-                    <div>
-                      <p className="text-sm font-medium text-foreground">
+                  <div className="flex items-start gap-2">
+                    <Check className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-foreground break-words">
                         {formData.condition.name}
                       </p>
-                      <div className="flex items-center gap-2 mt-1">
+                      <div className="flex items-center gap-2 mt-1 flex-wrap">
                         {formData.condition.diagnosticCode && (
                           <Badge variant="secondary" className="text-xs">
                             DC {formData.condition.diagnosticCode}
@@ -511,7 +511,7 @@ export default function PersonalStatement() {
               <Progress value={progressPercent} />
             </div>
 
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid grid-cols-5 gap-1 sm:gap-2 overflow-hidden">
               {steps.slice(0, 5).map((step) => {
                 const isComplete = (() => {
                   switch (step.id) {
@@ -566,10 +566,10 @@ export default function PersonalStatement() {
             {/* Statement Preview */}
             <Card className="bg-muted/30">
               <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-base">Statement Preview</CardTitle>
+                <div className="flex items-center justify-between gap-2">
+                  <CardTitle className="text-base min-w-0">Statement Preview</CardTitle>
                   {polishedStatement && (
-                    <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">
+                    <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 shrink-0">
                       <Sparkles className="h-3 w-3 mr-1" />
                       AI Polished
                     </Badge>
@@ -577,7 +577,7 @@ export default function PersonalStatement() {
                 </div>
               </CardHeader>
               <CardContent>
-                <pre className="whitespace-pre-wrap text-sm font-mono text-foreground overflow-auto max-h-96 leading-relaxed">
+                <pre className="whitespace-pre-wrap text-sm font-mono text-foreground overflow-auto max-h-96 leading-relaxed break-words">
                   {polishedStatement || generateStatement()}
                 </pre>
               </CardContent>

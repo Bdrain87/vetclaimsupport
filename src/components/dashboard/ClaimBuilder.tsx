@@ -161,15 +161,15 @@ export function ClaimBuilder() {
                   onClick={() => setExpandedCondition(isExpanded ? null : condition.id)}
                 >
                 <div className="flex items-start justify-between mb-2">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
                       <span
-                        className={`inline-block h-3 w-3 rounded-full ${
+                        className={`inline-block h-3 w-3 rounded-full flex-shrink-0 ${
                           strength.score >= 75 ? 'bg-green-500' : strength.score >= 50 ? 'bg-gold' : 'bg-red-500'
                         }`}
                         aria-label={level.label}
                       />
                       <div>
-                        <h4 className="font-semibold text-foreground">{condition.name}</h4>
+                        <h4 className="font-semibold text-foreground truncate">{condition.name}</h4>
                         <span className={`text-xs ${level.textClass}`}>{level.label}</span>
                       </div>
                     </div>

@@ -513,7 +513,7 @@ export function ConditionsExplorer({ claimConditions, onAddCondition }: Conditio
               <p className="text-[10px] text-muted-foreground pt-2 mb-2">
                 Commonly claimed service-connected conditions
               </p>
-              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                 {availableCommonConditions.slice(0, 12).map((condition) => {
                   const IconComponent = condition.icon;
                   return (

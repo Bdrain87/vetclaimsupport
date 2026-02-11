@@ -329,7 +329,7 @@ export function EnhancedRatingCalculator() {
                 className="flex items-center justify-between p-4 border rounded-xl bg-primary/5 border-primary/20 transition-all duration-200 hover:border-primary/40"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
-                <div className="flex-1 min-w-0">
+                <div className="flex-1 min-w-0 truncate">
                   <span className="font-medium text-sm">{condition.name}</span>
                   <span className="text-xs text-muted-foreground ml-2">
                     ({bodyPartOptions.find(bp => bp.value === condition.bodyPart)?.label})
@@ -368,7 +368,7 @@ export function EnhancedRatingCalculator() {
               /* Comparison View */
               <div className="space-y-4">
                 {/* Rating Comparison */}
-                <div className="grid grid-cols-[1fr,auto,1fr] gap-3 items-center">
+                <div className="grid grid-cols-[1fr,auto,1fr] gap-2 sm:gap-3 items-center">
                   <div className="text-center p-4 bg-muted/50 rounded-xl border border-border">
                     <p className="text-xs text-muted-foreground mb-1">Current</p>
                     <p className="text-3xl font-bold number-display">{currentResult.official}%</p>

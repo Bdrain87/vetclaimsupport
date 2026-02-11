@@ -262,7 +262,7 @@ export default function RatingGuidance({ conditionId, conditionName }: RatingGui
       </div>
 
       {/* Rating level cards in bento grid */}
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
         {criteria.ratingLevels.map((level) => (
           <RatingLevelCard key={level.percentage} level={level} />
         ))}

@@ -426,7 +426,7 @@ export default function BuildPacket() {
             </p>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-3 sm:grid-cols-3 gap-3 mb-3">
+            <div className="grid grid-cols-3 gap-3 mb-3">
               <Button
                 onClick={handleGeneratePDF}
                 disabled={selectedCount === 0}
@@ -454,7 +454,7 @@ export default function BuildPacket() {
                 <span className="text-xs">JSON</span>
               </Button>
             </div>
-            <div className="grid grid-cols-3 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               <Button
                 variant="outline"
                 onClick={handleShare}
@@ -508,24 +508,24 @@ export default function BuildPacket() {
                   Claim Overview
                 </h3>
                 <div className="rounded-lg border border-border bg-muted/30 p-4 space-y-2">
-                  <div className="grid grid-cols-2 gap-x-6 gap-y-1">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1">
                     <span className="text-muted-foreground">Veteran</span>
-                    <span className="font-medium text-foreground">
+                    <span className="font-medium text-foreground truncate">
                       {profile.firstName && profile.lastName
                         ? `${profile.firstName} ${profile.lastName}`
                         : 'Not set'}
                     </span>
                     <span className="text-muted-foreground">Branch</span>
-                    <span className="font-medium text-foreground">
+                    <span className="font-medium text-foreground truncate">
                       {getAllBranchLabels(profile) || 'Not set'}
                     </span>
                     <span className="text-muted-foreground">Service Job Code</span>
-                    <span className="font-medium text-foreground">
+                    <span className="font-medium text-foreground truncate">
                       {profile.mosCode || 'Not set'}
                       {profile.mosTitle ? ` - ${profile.mosTitle}` : ''}
                     </span>
                     <span className="text-muted-foreground">Claim Type</span>
-                    <span className="font-medium text-foreground capitalize">
+                    <span className="font-medium text-foreground capitalize truncate">
                       {profile.claimType || 'Not set'}
                     </span>
                     <span className="text-muted-foreground">Evidence Strength</span>
@@ -538,7 +538,7 @@ export default function BuildPacket() {
                       </p>
                       <div className="flex flex-wrap gap-1.5">
                         {data.claimConditions.map((c) => (
-                          <Badge key={c.id} variant="secondary" className="text-xs">
+                          <Badge key={c.id} variant="secondary" className="text-xs truncate max-w-full">
                             {c.name}
                           </Badge>
                         ))}
@@ -573,13 +573,13 @@ export default function BuildPacket() {
                         key={s.id}
                         className="flex items-center justify-between text-xs border-b border-border/50 pb-1.5 last:border-0"
                       >
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 min-w-0 flex-1">
                           <span className="text-muted-foreground w-20 flex-shrink-0">
                             {new Date(s.date).toLocaleDateString()}
                           </span>
-                          <span className="font-medium text-foreground">{s.symptom}</span>
+                          <span className="font-medium text-foreground truncate">{s.symptom}</span>
                           {s.bodyArea && (
-                            <Badge variant="outline" className="text-[10px]">
+                            <Badge variant="outline" className="text-[10px] shrink-0">
                               {s.bodyArea}
                             </Badge>
                           )}
@@ -638,7 +638,7 @@ export default function BuildPacket() {
                         <span className="text-muted-foreground w-20 flex-shrink-0">
                           {new Date(v.date).toLocaleDateString()}
                         </span>
-                        <div className="flex-1">
+                        <div className="flex-1 min-w-0">
                           <span className="font-medium text-foreground">{v.visitType}</span>
                           {v.location && (
                             <span className="text-muted-foreground"> at {v.location}</span>
@@ -676,15 +676,15 @@ export default function BuildPacket() {
                     {data.medications.map((m) => (
                       <div
                         key={m.id}
-                        className="flex items-center justify-between text-xs border-b border-border/50 pb-1.5 last:border-0"
+                        className="flex items-center justify-between gap-2 text-xs border-b border-border/50 pb-1.5 last:border-0"
                       >
-                        <div>
-                          <span className="font-medium text-foreground">{m.name}</span>
+                        <div className="min-w-0 flex-1 overflow-hidden">
+                          <span className="font-medium text-foreground break-words">{m.name}</span>
                           {m.prescribedFor && (
                             <span className="text-muted-foreground"> -- {m.prescribedFor}</span>
                           )}
                         </div>
-                        <Badge variant={m.stillTaking ? 'default' : 'secondary'} className="text-[10px]">
+                        <Badge variant={m.stillTaking ? 'default' : 'secondary'} className="text-[10px] shrink-0">
                           {m.stillTaking ? 'Current' : 'Past'}
                         </Badge>
                       </div>
@@ -708,10 +708,10 @@ export default function BuildPacket() {
                     {data.buddyContacts.map((b) => (
                       <div
                         key={b.id}
-                        className="flex items-center justify-between text-xs border-b border-border/50 pb-1.5 last:border-0"
+                        className="flex items-center justify-between gap-2 text-xs border-b border-border/50 pb-1.5 last:border-0"
                       >
-                        <div>
-                          <span className="font-medium text-foreground">
+                        <div className="min-w-0 flex-1">
+                          <span className="font-medium text-foreground truncate block">
                             {b.rank ? `${b.rank} ` : ''}
                             {b.name}
                           </span>
@@ -758,7 +758,7 @@ export default function BuildPacket() {
                         <span className="text-muted-foreground w-20 flex-shrink-0">
                           {new Date(e.date).toLocaleDateString()}
                         </span>
-                        <div className="flex-1">
+                        <div className="flex-1 min-w-0">
                           <span className="font-medium text-foreground">{e.type}</span>
                           {e.location && (
                             <span className="text-muted-foreground"> -- {e.location}</span>
@@ -785,15 +785,15 @@ export default function BuildPacket() {
                   {data.documents.map((doc) => (
                     <div
                       key={doc.id}
-                      className="flex items-center justify-between text-xs border-b border-border/50 pb-1.5 last:border-0"
+                      className="flex items-center justify-between gap-2 text-xs border-b border-border/50 pb-1.5 last:border-0"
                     >
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 min-w-0 flex-1">
                         {doc.status === 'Obtained' || doc.status === 'Submitted' ? (
                           <CheckCircle2 className="h-3.5 w-3.5 text-green-400" />
                         ) : (
                           <div className="h-3.5 w-3.5 rounded-full border border-muted-foreground/40" />
                         )}
-                        <span className="font-medium text-foreground">{doc.name}</span>
+                        <span className="font-medium text-foreground truncate">{doc.name}</span>
                       </div>
                       <Badge
                         variant="outline"

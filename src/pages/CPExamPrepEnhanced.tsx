@@ -208,7 +208,7 @@ export default function CPExamPrepEnhanced() {
 
       {/* Tabs */}
       <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="conditions">By Condition</TabsTrigger>
           <TabsTrigger value="tips">Do's & Don'ts</TabsTrigger>
@@ -227,20 +227,20 @@ export default function CPExamPrepEnhanced() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-start gap-3">
-                  <Badge variant="outline">Duration</Badge>
-                  <span className="text-sm">20-60 minutes depending on conditions</span>
+                  <Badge variant="outline" className="shrink-0">Duration</Badge>
+                  <span className="text-sm min-w-0">20-60 minutes depending on conditions</span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Badge variant="outline">Examiner</Badge>
-                  <span className="text-sm">Doctor, PA, NP, or psychologist (for MH)</span>
+                  <Badge variant="outline" className="shrink-0">Examiner</Badge>
+                  <span className="text-sm min-w-0">Doctor, PA, NP, or psychologist (for MH)</span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Badge variant="outline">Location</Badge>
-                  <span className="text-sm">VA facility or contracted clinic (QTC, VES, LHI)</span>
+                  <Badge variant="outline" className="shrink-0">Location</Badge>
+                  <span className="text-sm min-w-0">VA facility or contracted clinic (QTC, VES, LHI)</span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Badge variant="outline">Purpose</Badge>
-                  <span className="text-sm">Document current severity of your conditions</span>
+                  <Badge variant="outline" className="shrink-0">Purpose</Badge>
+                  <span className="text-sm min-w-0">Document current severity of your conditions</span>
                 </div>
               </CardContent>
             </Card>
@@ -390,7 +390,7 @@ export default function CPExamPrepEnhanced() {
                             <button
                               key={condition}
                               onClick={() => setSelectedCondition(condition)}
-                              className={`w-full text-left p-2 rounded-lg text-sm transition-colors ${
+                              className={`w-full text-left p-2 rounded-lg text-sm transition-colors truncate ${
                                 selectedCondition === condition
                                   ? 'bg-primary/10 text-primary font-medium'
                                   : 'hover:bg-muted'
@@ -410,7 +410,7 @@ export default function CPExamPrepEnhanced() {
             <div className="lg:col-span-2">
               {selectedPrepData ? (
                 <div className="space-y-4">
-                  <h2 className="text-xl font-bold text-foreground">{selectedCondition}</h2>
+                  <h2 className="text-xl font-bold text-foreground break-words">{selectedCondition}</h2>
 
                   <Card>
                     <CardHeader>
@@ -545,7 +545,7 @@ export default function CPExamPrepEnhanced() {
                         <>
                           <AIDisclaimer variant="banner" />
                           <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
-                            <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
                               <Badge variant="outline">
                                 Question {currentQuestionIndex + 1} of {aiQuestions.length}
                               </Badge>
@@ -762,7 +762,7 @@ export default function CPExamPrepEnhanced() {
             </Card>
           </div>
 
-          <div className="flex justify-center gap-3">
+          <div className="flex flex-wrap justify-center gap-3">
             <Button variant="outline" className="gap-2" onClick={() => window.print()}>
               <Printer className="h-4 w-4" />
               Print Checklist
@@ -770,7 +770,7 @@ export default function CPExamPrepEnhanced() {
             <Button variant="outline" className="gap-2" asChild>
               <Link to="/cp-exam-packet">
                 <Download className="h-4 w-4" />
-                Download Full Exam Packet PDF
+                <span className="truncate">Download Full Exam Packet PDF</span>
               </Link>
             </Button>
           </div>
