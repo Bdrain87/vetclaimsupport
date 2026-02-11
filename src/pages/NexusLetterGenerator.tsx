@@ -26,7 +26,8 @@ import { vaDisabilitiesBySystem } from '@/data/vaDisabilities';
 import { secondaryConditions } from '@/data/secondaryConditions';
 import { cn } from '@/lib/utils';
 import { useClaims } from '@/hooks/useClaims';
-import { useProfileStore, BRANCH_LABELS } from '@/store/useProfileStore';
+import { useProfileStore } from '@/store/useProfileStore';
+import { getAllBranchLabels } from '@/utils/veteranProfile';
 import { exportNexusLetterTemplate } from '@/utils/pdfExport';
 import { PageContainer } from '@/components/PageContainer';
 
@@ -95,7 +96,7 @@ export default function NexusLetterGenerator() {
       .join('; ');
   };
 
-  const branchLabel = profile.branch ? BRANCH_LABELS[profile.branch] : '';
+  const branchLabel = getAllBranchLabels(profile);
   const fullName = `${profile.firstName} ${profile.lastName}`.trim();
 
   const [currentStep, setCurrentStep] = useState(1);

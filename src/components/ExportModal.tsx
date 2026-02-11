@@ -112,11 +112,6 @@ const FORMAT_OPTIONS: {
     label: 'Plain Text',
     note: 'Simple text file, good for email or printing',
   },
-  {
-    value: 'json',
-    label: 'JSON',
-    note: 'Raw data backup, importable later',
-  },
 ];
 
 // ============================================================================

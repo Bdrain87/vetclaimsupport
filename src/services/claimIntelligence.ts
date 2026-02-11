@@ -16,6 +16,7 @@ import type { UserCondition } from '@/store/useAppStore';
 import { useProfileStore } from '@/store/useProfileStore';
 import type { UserProfile, Branch } from '@/store/useProfileStore';
 import { getConditionsForHazards, hazardConditionMap } from '@/data/hazardConditionMap';
+import { getAllBranchLabels } from '@/utils/veteranProfile';
 import type { JobCodeSuggestion, DocumentationStatus, EvidenceItem, RatingOpportunity, ClaimSummary, SymptomAnalysis } from '@/types/intelligence';
 
 // ---------------------------------------------------------------------------
@@ -1321,7 +1322,7 @@ export const ClaimIntelligence = {
     const claimsData = getClaimsDataFromStore();
     const appState = useAppStore.getState();
 
-    const branchLabel = profile.branch ? BRANCH_MAP[profile.branch as Branch] ?? profile.branch : '';
+    const branchLabel = getAllBranchLabels(profile) || '';
 
     // Build documentation status for each condition
     const docStatuses = ClaimIntelligence.getDocumentationNeeded();

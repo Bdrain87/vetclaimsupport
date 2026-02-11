@@ -32,6 +32,8 @@ import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { exportDBQPrepSheet } from '@/utils/pdfExport';
 import { PageContainer } from '@/components/PageContainer';
+import { PrefillBadge } from '@/components/ui/PrefillBadge';
+import { getConditionSymptoms, getConditionMedications } from '@/utils/prefillHelpers';
 
 // Get all conditions
 const getAllConditions = (): string[] => {
@@ -257,8 +259,75 @@ export default function DBQPrepSheet() {
     return ['Pain', 'Fatigue', 'Discomfort', 'Limited function', 'Sleep issues'];
   }, [formData.condition]);
 
+  const [prefilled, setPrefilled] = useState<Record<string, boolean>>({});
+
   const updateFormData = <K extends keyof PrepFormData>(field: K, value: PrepFormData[K]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    if (typeof value === 'string') {
+      setPrefilled(prev => ({ ...prev, [field]: false }));
+    }
+  };
+
+  // Auto-prefill symptoms and pain when condition is selected
+  const handleConditionSelect = (conditionName: string) => {
+    updateFormData('condition', conditionName);
+    setConditionSearch(conditionName);
+    setShowConditionDropdown(false);
+
+    // Match stored symptoms to this condition
+    const matchingSymptoms = getConditionSymptoms(conditionName, data.symptoms || []);
+    const matchingMeds = getConditionMedications(conditionName, data.medications || []);
+    const newPrefilled: Record<string, boolean> = {};
+
+    if (matchingSymptoms.length > 0) {
+      // Auto-check matching symptoms
+      const symptomNames = matchingSymptoms.map(s => s.symptom);
+      const customMatches = symptomNames.filter(name =>
+        !commonSymptoms.some(cs => cs.toLowerCase() === name.toLowerCase())
+      );
+
+      setFormData(prev => {
+        const autoChecked = commonSymptoms.filter(cs =>
+          symptomNames.some(sn => sn.toLowerCase().includes(cs.toLowerCase()) || cs.toLowerCase().includes(sn.toLowerCase()))
+        );
+        const next = { ...prev, condition: conditionName };
+        if (autoChecked.length > 0) {
+          next.currentSymptoms = [...new Set([...prev.currentSymptoms, ...autoChecked])];
+          newPrefilled.currentSymptoms = true;
+        }
+        if (customMatches.length > 0 && !prev.customSymptoms.trim()) {
+          next.customSymptoms = customMatches.join(', ');
+          newPrefilled.customSymptoms = true;
+        }
+        // Calculate average pain from stored severity values
+        const severities = matchingSymptoms.map(s => s.severity).filter(Boolean);
+        if (severities.length > 0) {
+          const avg = Math.round(severities.reduce((a, b) => a + b, 0) / severities.length);
+          const max = Math.max(...severities);
+          const min = Math.min(...severities);
+          next.averagePain = avg;
+          next.worstPain = max;
+          next.bestPain = min;
+          newPrefilled.pain = true;
+        }
+        return next;
+      });
+    }
+
+    if (matchingMeds.length > 0) {
+      setFormData(prev => {
+        if (!prev.currentMedications.trim() || prev.currentMedications === storedMedicationsText) {
+          const medText = matchingMeds
+            .map(m => `${m.name}${m.prescribedFor ? ` (for ${m.prescribedFor})` : ''}${m.sideEffects ? ` - side effects: ${m.sideEffects}` : ''}`)
+            .join('\n');
+          newPrefilled.currentMedications = true;
+          return { ...prev, currentMedications: medText };
+        }
+        return prev;
+      });
+    }
+
+    setPrefilled(p => ({ ...p, ...newPrefilled }));
   };
 
   const toggleSection = (section: string) => {
@@ -336,11 +405,7 @@ export default function DBQPrepSheet() {
                         key={condition}
                         type="button"
                         className="w-full text-left px-3 py-2 hover:bg-muted text-sm"
-                        onClick={() => {
-                          updateFormData('condition', condition);
-                          setConditionSearch(condition);
-                          setShowConditionDropdown(false);
-                        }}
+                        onClick={() => handleConditionSelect(condition)}
                       >
                         {condition}
                       </button>
@@ -683,7 +748,12 @@ export default function DBQPrepSheet() {
         {expandedSections.medications && (
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label>Current Medications for This Condition</Label>
+              <Label className="flex items-center gap-2 flex-wrap">
+                Current Medications for This Condition
+                {prefilled.currentMedications && (
+                  <PrefillBadge onClear={() => { updateFormData('currentMedications', ''); setPrefilled(p => ({ ...p, currentMedications: false })); }} />
+                )}
+              </Label>
               <Textarea
                 value={formData.currentMedications}
                 onChange={(e) => updateFormData('currentMedications', e.target.value)}

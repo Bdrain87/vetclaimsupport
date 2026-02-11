@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
-import { useProfileStore, BRANCH_LABELS } from '@/store/useProfileStore';
+import { useProfileStore } from '@/store/useProfileStore';
+import { getAllBranchLabels } from '@/utils/veteranProfile';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -29,7 +30,7 @@ export function PersonalStatementGenerator() {
   const profile = useProfileStore();
   const { toast } = useToast();
   const veteranFullName = `${profile.firstName} ${profile.lastName}`.trim();
-  const branchLabel = profile.branch ? BRANCH_LABELS[profile.branch] : '';
+  const branchLabel = getAllBranchLabels(profile);
   const [activeTab, setActiveTab] = useState('preview');
   const [customEdits, setCustomEdits] = useState('');
   const [selectedCondition, setSelectedCondition] = useState<string | null>(null);

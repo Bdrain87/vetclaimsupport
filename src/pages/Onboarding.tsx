@@ -258,7 +258,7 @@ export default function Onboarding() {
   const [deployCombat, setDeployCombat] = useState(false);
 
   // Existing rated conditions
-  const [hasExistingRated, setHasExistingRated] = useState(false);
+  const [hasExistingRated, setHasExistingRated] = useState<boolean | null>(null);
   const [existingRated, setExistingRated] = useState<Array<{
     conditionName: string;
     rating: number;
@@ -457,9 +457,7 @@ export default function Onboarding() {
             {/* Step 0: Welcome */}
             {step === 0 && (
               <div className="text-center space-y-6">
-                <div className="w-20 h-20 mx-auto rounded-2xl bg-[#3B82F6] flex items-center justify-center shadow-lg shadow-[#3B82F6]/20">
-                  <span className="text-[#102039] font-black italic text-3xl">V</span>
-                </div>
+                <img src="/app-icon.png" alt="Vet Claim Support" className="w-20 h-20 mx-auto rounded-2xl shadow-lg" />
                 <div>
                   <h1 className="text-2xl font-bold text-white">Welcome to Vet Claim Support</h1>
                   <p className="text-white/50 mt-2 text-sm leading-relaxed">
@@ -929,7 +927,7 @@ export default function Onboarding() {
                   <button
                     onClick={() => setHasExistingRated(true)}
                     className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${
-                      hasExistingRated
+                      hasExistingRated === true
                         ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40 text-white'
                         : 'bg-white/[0.04] border-white/[0.08] text-white/70 hover:bg-white/[0.06]'
                     }`}
@@ -939,18 +937,16 @@ export default function Onboarding() {
                   <button
                     onClick={() => { setHasExistingRated(false); setExistingRated([]); }}
                     className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${
-                      !hasExistingRated && existingRated.length === 0
-                        ? 'bg-white/[0.04] border-white/[0.08] text-white/70'
-                        : !hasExistingRated
-                          ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40 text-white'
-                          : 'bg-white/[0.04] border-white/[0.08] text-white/70 hover:bg-white/[0.06]'
+                      hasExistingRated === false
+                        ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40 text-white'
+                        : 'bg-white/[0.04] border-white/[0.08] text-white/70 hover:bg-white/[0.06]'
                     }`}
                   >
                     No, not yet
                   </button>
                 </div>
 
-                {hasExistingRated && (
+                {hasExistingRated === true && (
                   <div className="space-y-4">
                     {/* Add new rated condition form */}
                     <div className="space-y-3 p-4 rounded-xl bg-white/[0.04] border border-white/[0.08]">
@@ -1032,6 +1028,12 @@ export default function Onboarding() {
                     { title: 'Rating Calculator', desc: 'Calculate your combined VA disability rating using the bilateral factor formula' },
                     { title: 'C&P Exam Prep', desc: 'Prepare for your compensation exam with condition-specific checklists' },
                     { title: 'Personal Statement Generator', desc: 'Build a compelling personal statement step-by-step' },
+                    { title: 'Stressor Statement Builder', desc: 'Guided PTSD/MST stressor statement with who, what, when, where, and how' },
+                    { title: 'Secondary Condition Finder', desc: 'Discover conditions commonly secondary to your rated disabilities' },
+                    { title: 'DBQ Prep Sheet', desc: 'Condition-specific worksheet to organize symptoms, pain levels, and medications before your exam' },
+                    { title: 'Form Fill Guide', desc: 'Step-by-step help completing VA forms with auto-populated fields from your profile' },
+                    { title: 'Claims Journey Tracker', desc: 'Visual timeline showing where each claim stands and what to do next' },
+                    { title: 'Document Scanner', desc: 'Scan and organize your service records, medical documents, and buddy statements' },
                     { title: 'Doctor Summary Builder', desc: 'Create a medical summary letter for your provider' },
                     { title: 'Symptom & Sleep Tracking', desc: 'Log symptoms, sleep patterns, and medications to build your evidence trail' },
                     { title: 'Buddy Statement Builder', desc: 'Draft lay statements from people who witnessed your condition' },
@@ -1055,12 +1057,42 @@ export default function Onboarding() {
             {/* Step 10: Thank You */}
             {step === 10 && (
               <div className="text-center space-y-6">
+                <style>{`
+                  @keyframes flagWave {
+                    0% { transform: perspective(400px) rotateY(0deg); }
+                    25% { transform: perspective(400px) rotateY(3deg) skewY(-1deg); }
+                    50% { transform: perspective(400px) rotateY(0deg); }
+                    75% { transform: perspective(400px) rotateY(-3deg) skewY(1deg); }
+                    100% { transform: perspective(400px) rotateY(0deg); }
+                  }
+                `}</style>
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0, duration: 0.5 }}
+                  className="flex justify-center"
                 >
-                  <span className="text-[80px] leading-none" role="img" aria-label="American flag">&#x1F1FA;&#x1F1F8;</span>
+                  <div style={{ animation: 'flagWave 4s ease-in-out infinite', transformOrigin: 'left center' }}>
+                    <svg width="120" height="80" viewBox="0 0 190 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="American flag">
+                      {/* 13 stripes */}
+                      {Array.from({ length: 13 }).map((_, i) => (
+                        <rect key={i} x="0" y={i * (100 / 13)} width="190" height={100 / 13 + 0.5} fill={i % 2 === 0 ? '#B22234' : '#FFFFFF'} />
+                      ))}
+                      {/* Blue canton */}
+                      <rect x="0" y="0" width="76" height={100 * 7 / 13} rx="0" fill="#3C3B6E" />
+                      {/* Stars - 5 rows of 6 + 4 rows of 5 = 50 stars */}
+                      {[0, 1, 2, 3, 4].map(row =>
+                        [0, 1, 2, 3, 4, 5].map(col => (
+                          <circle key={`a${row}-${col}`} cx={6.5 + col * 12.5} cy={4.5 + row * 10.8} r="2" fill="#FFFFFF" />
+                        ))
+                      )}
+                      {[0, 1, 2, 3].map(row =>
+                        [0, 1, 2, 3, 4].map(col => (
+                          <circle key={`b${row}-${col}`} cx={12.75 + col * 12.5} cy={9.9 + row * 10.8} r="2" fill="#FFFFFF" />
+                        ))
+                      )}
+                    </svg>
+                  </div>
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}

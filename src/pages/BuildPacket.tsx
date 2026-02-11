@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
-import { useProfileStore, BRANCH_LABELS } from '@/store/useProfileStore';
+import { useProfileStore } from '@/store/useProfileStore';
+import { getAllBranchLabels } from '@/utils/veteranProfile';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -205,7 +206,7 @@ export default function BuildPacket() {
       `VA Claim Packet Summary\n` +
         `========================\n\n` +
         `Veteran: ${profile.firstName} ${profile.lastName}\n` +
-        `Branch: ${profile.branch ? BRANCH_LABELS[profile.branch] : 'Not set'}\n` +
+        `Branch: ${getAllBranchLabels(profile) || 'Not set'}\n` +
         `MOS: ${profile.mosCode || 'Not set'}${profile.mosTitle ? ` - ${profile.mosTitle}` : ''}\n\n` +
         `Conditions: ${conditionsCount}\n` +
         `Symptom Entries: ${symptomCount}\n` +
@@ -516,7 +517,7 @@ export default function BuildPacket() {
                     </span>
                     <span className="text-muted-foreground">Branch</span>
                     <span className="font-medium text-foreground">
-                      {profile.branch ? BRANCH_LABELS[profile.branch] : 'Not set'}
+                      {getAllBranchLabels(profile) || 'Not set'}
                     </span>
                     <span className="text-muted-foreground">Service Job Code</span>
                     <span className="font-medium text-foreground">
