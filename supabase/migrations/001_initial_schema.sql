@@ -96,6 +96,15 @@ CREATE TABLE IF NOT EXISTS entitlements (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Performance indexes on user_id columns (critical for RLS and query performance)
+CREATE INDEX IF NOT EXISTS idx_conditions_user_id ON conditions(user_id);
+CREATE INDEX IF NOT EXISTS idx_health_logs_user_id ON health_logs(user_id);
+CREATE INDEX IF NOT EXISTS idx_health_logs_log_type ON health_logs(user_id, log_type);
+CREATE INDEX IF NOT EXISTS idx_evidence_user_id ON evidence(user_id);
+CREATE INDEX IF NOT EXISTS idx_documents_user_id ON documents(user_id);
+CREATE INDEX IF NOT EXISTS idx_form_drafts_user_id ON form_drafts(user_id);
+CREATE INDEX IF NOT EXISTS idx_entitlements_user_id ON entitlements(user_id);
+
 -- Enable Row Level Security on ALL tables
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE conditions ENABLE ROW LEVEL SECURITY;

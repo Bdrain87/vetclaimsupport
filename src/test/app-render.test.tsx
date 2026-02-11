@@ -20,12 +20,12 @@ describe('App Render', () => {
     expect(container.innerHTML.length).toBeGreaterThan(0);
   });
 
-  it('renders the Vet Claim Support brand name', async () => {
+  it('renders the VCS brand or Dashboard title', async () => {
     render(<App />);
-    // The brand name lives in the PlatinumNavbar and is visible on md+ screens.
+    // The MobileHeader renders "VCS" on root tabs and page titles on sub-pages.
     // waitFor handles the Suspense / lazy-load boundary.
     await waitFor(() => {
-      expect(screen.getByText('Vet Claim Support')).toBeInTheDocument();
+      expect(screen.getByText('VCS')).toBeInTheDocument();
     });
   });
 });
