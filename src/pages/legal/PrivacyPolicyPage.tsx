@@ -86,7 +86,7 @@ export default function PrivacyPolicyPage() {
             <strong className="text-white">OPTIONAL CLOUD SYNC:</strong> If you create an account, data may be synced to our cloud database (Supabase PostgreSQL) for cross-device access. Cloud sync is optional and not required.
           </p>
           <p className="text-white/60">
-            <strong className="text-white">ENCRYPTION:</strong> Data in transit is encrypted via TLS. Cloud data at rest is encrypted on database servers. Row-level security ensures only you can access your data.
+            <strong className="text-white">ENCRYPTION:</strong> Data in transit is encrypted via TLS. Cloud data at rest is encrypted on database servers. Access controls are in place to ensure only you can access your data.
           </p>
         </section>
 
@@ -94,12 +94,12 @@ export default function PrivacyPolicyPage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-white">4. AI Data Processing</h2>
           <p className="text-white/60">
-            When you use AI-powered features, the text you provide is sent to Google&apos;s Gemini API for processing. This data is:
+            When you use AI-powered features, the text you provide is sent to a third-party AI service for processing. This data is:
           </p>
           <ul className="space-y-1.5 text-white/60">
             <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>(a) Transmitted over encrypted connections (TLS)</li>
             <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>(b) Processed in real-time and not stored by VCS on any server</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>(c) Subject to Google&apos;s own data handling policies</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>(c) Subject to the AI provider&apos;s own data handling policies</li>
             <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>(d) Never used by VCS for AI model training</li>
           </ul>
           <p className="text-white/60">
@@ -136,20 +136,11 @@ export default function PrivacyPolicyPage() {
           </p>
         </section>
 
-        {/* Section 7: California Residents (CCPA/CPRA) */}
+        {/* Section 7: Privacy Rights */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-white">7. California Residents (CCPA/CPRA)</h2>
+          <h2 className="text-lg font-semibold text-white">7. Privacy Rights</h2>
           <p className="text-white/60">
-            If you are a California resident, you have additional rights under the California Consumer Privacy Act (CCPA) and California Privacy Rights Act (CPRA), including:
-          </p>
-          <ul className="space-y-1.5 text-white/60">
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>The right to know what personal information is collected</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>The right to delete personal information</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>The right to opt-out of the sale of personal information (we do not sell your data)</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>The right to non-discrimination for exercising your privacy rights</li>
-          </ul>
-          <p className="text-white/60">
-            To exercise these rights, contact{' '}
+            We strive to honor privacy rights under applicable laws, including those of California residents. We do not sell your data. You may exercise your privacy rights (access, deletion, portability) by using the Settings page or contacting{' '}
             <a href="mailto:blakedrain@gmail.com" className="text-[#3B82F6] hover:underline">blakedrain@gmail.com</a>.
           </p>
         </section>
@@ -178,8 +169,7 @@ export default function PrivacyPolicyPage() {
           </p>
           <ul className="space-y-1.5 text-white/60">
             <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span><strong className="text-white">Supabase</strong> (cloud database, optional)</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span><strong className="text-white">Google Gemini AI</strong> (AI features, optional)</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span><strong className="text-white">Apple/Google</strong> (authentication and payment processing)</li>
+            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span><strong className="text-white">AI Service Provider</strong> (AI features, optional)</li>
           </ul>
           <p className="text-white/60">
             Each third-party service has its own privacy policy.
@@ -190,7 +180,7 @@ export default function PrivacyPolicyPage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-white">11. Data Breach Notification</h2>
           <p className="text-white/60">
-            In the event of a data breach affecting your personal information, we will notify affected users via email within 72 hours of discovering the breach, in accordance with applicable state laws.
+            In the event of a data breach affecting your personal information, we will notify affected users as soon as reasonably practicable, in accordance with applicable state laws.
           </p>
         </section>
 

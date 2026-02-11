@@ -14,7 +14,7 @@ export function useAIGenerate(persona: keyof typeof AI_CONFIG) {
     // Check for API key first
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     if (!apiKey) {
-      setError('AI features require a Gemini API key. Add VITE_GEMINI_API_KEY to your environment.');
+      setError('AI features are temporarily unavailable. Please try again later.');
       return null;
     }
 

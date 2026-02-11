@@ -12,7 +12,7 @@ const prepTools = [
   { label: 'VA Form Guide', icon: BookOpen, route: '/prep/form-guide', description: 'Step-by-step form filling help', highlight: true },
   { label: 'Personal Statement', icon: FileText, route: '/prep/personal-statement', description: 'Generate your personal statement' },
   { label: 'Buddy Statement', icon: Users, route: '/prep/buddy-statement', description: 'Build a buddy/lay statement' },
-  { label: 'Nexus Letter', icon: FileSignature, route: '/prep/nexus-letter', description: 'Generate a nexus letter template' },
+  { label: 'Doctor Summary', icon: FileSignature, route: '/prep/nexus-letter', description: 'Create a summary for your doctor' },
   { label: 'Stressor Statement', icon: AlertTriangle, route: '/prep/stressor', description: 'Document PTSD stressors' },
   { label: 'DBQ Prep', icon: ClipboardList, route: '/prep/dbq', description: 'Prep your DBQ talking points' },
   { label: 'VA-Speak Translator', icon: Languages, route: '/prep/va-speak', description: 'Translate VA jargon to plain English' },

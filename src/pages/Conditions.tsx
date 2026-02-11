@@ -194,7 +194,7 @@ export default function Conditions() {
     if (!selectedCondition) return;
 
     addCondition(selectedCondition.id, {
-      rating: newRating ? parseInt(newRating) : undefined,
+      rating: newRating && newRating !== 'not-rated' ? parseInt(newRating) : undefined,
       isPrimary: !isSecondary,
       linkedPrimaryId: isSecondary && linkedPrimaryId ? linkedPrimaryId : undefined,
     });
@@ -315,7 +315,7 @@ export default function Conditions() {
                     <SelectValue placeholder="Select rating" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Not yet rated</SelectItem>
+                    <SelectItem value="not-rated">Not yet rated</SelectItem>
                     {[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map(r => (
                       <SelectItem key={r} value={r.toString()}>{r}%</SelectItem>
                     ))}

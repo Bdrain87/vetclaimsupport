@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Scale, Shield, FileText, AlertTriangle, ChevronRight } from 'lucide-react';
+import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Scale, Shield, FileText, AlertTriangle, ChevronRight, User } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useTheme } from '@/hooks/useTheme';
@@ -41,7 +42,28 @@ export default function Settings() {
   const { theme, toggleTheme } = useTheme();
   const { toast } = useToast();
   const navigate = useNavigate();
-  const resetProfile = useProfileStore((s) => s.resetProfile);
+  const profile = useProfileStore();
+  const [profileForm, setProfileForm] = useState({
+    firstName: profile.firstName || '',
+    lastName: profile.lastName || '',
+    branch: profile.branch || '',
+    mosCode: profile.mosCode || '',
+    mosTitle: profile.mosTitle || '',
+    serviceStart: profile.serviceDates?.start || '',
+    serviceEnd: profile.serviceDates?.end || '',
+  });
+
+  const handleSaveProfile = () => {
+    profile.setFirstName(profileForm.firstName);
+    profile.setLastName(profileForm.lastName);
+    if (profileForm.branch) {
+      profile.setBranch(profileForm.branch as any);
+    }
+    profile.setMOS(profileForm.mosCode, profileForm.mosTitle);
+    profile.setServiceDates({ start: profileForm.serviceStart, end: profileForm.serviceEnd });
+    toast({ title: 'Profile Updated', description: 'Your profile has been saved.' });
+  };
+
   const [reminderSettings, setReminderSettings] = useState<ReminderSettings>(getInitialReminderSettings);
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default');
 
@@ -149,6 +171,105 @@ export default function Settings() {
           <p className="text-muted-foreground">Customize your app experience</p>
         </div>
       </div>
+
+      {/* Profile Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <User className="h-5 w-5" />
+            Profile
+          </CardTitle>
+          <CardDescription>Your personal and service information</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="firstName">First Name</Label>
+              <Input
+                id="firstName"
+                value={profileForm.firstName}
+                onChange={(e) => setProfileForm(prev => ({ ...prev, firstName: e.target.value }))}
+                placeholder="First name"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="lastName">Last Name</Label>
+              <Input
+                id="lastName"
+                value={profileForm.lastName}
+                onChange={(e) => setProfileForm(prev => ({ ...prev, lastName: e.target.value }))}
+                placeholder="Last name"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="branch">Branch of Service</Label>
+            <Select
+              value={profileForm.branch}
+              onValueChange={(v) => setProfileForm(prev => ({ ...prev, branch: v }))}
+            >
+              <SelectTrigger id="branch">
+                <SelectValue placeholder="Select branch" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="army">Army</SelectItem>
+                <SelectItem value="navy">Navy</SelectItem>
+                <SelectItem value="air_force">Air Force</SelectItem>
+                <SelectItem value="marines">Marines</SelectItem>
+                <SelectItem value="coast_guard">Coast Guard</SelectItem>
+                <SelectItem value="space_force">Space Force</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="mosCode">MOS/Rating/AFSC</Label>
+              <Input
+                id="mosCode"
+                value={profileForm.mosCode}
+                onChange={(e) => setProfileForm(prev => ({ ...prev, mosCode: e.target.value }))}
+                placeholder="e.g., 11B"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="mosTitle">Job Title</Label>
+              <Input
+                id="mosTitle"
+                value={profileForm.mosTitle}
+                onChange={(e) => setProfileForm(prev => ({ ...prev, mosTitle: e.target.value }))}
+                placeholder="e.g., Infantryman"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="serviceStart">Service Start</Label>
+              <Input
+                id="serviceStart"
+                type="date"
+                value={profileForm.serviceStart}
+                onChange={(e) => setProfileForm(prev => ({ ...prev, serviceStart: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="serviceEnd">Service End</Label>
+              <Input
+                id="serviceEnd"
+                type="date"
+                value={profileForm.serviceEnd}
+                onChange={(e) => setProfileForm(prev => ({ ...prev, serviceEnd: e.target.value }))}
+              />
+            </div>
+          </div>
+
+          <Button onClick={handleSaveProfile} className="w-full">
+            Save Profile
+          </Button>
+        </CardContent>
+      </Card>
 
       {/* Appearance */}
       <Card>
@@ -374,7 +495,7 @@ export default function Settings() {
       <div className="flex justify-center pt-2 pb-4">
         <button
           onClick={() => {
-            resetProfile();
+            profile.resetProfile();
             navigate('/onboarding');
           }}
           className="text-white/60 hover:text-white text-sm underline"
