@@ -65,16 +65,17 @@ function AnimatedBorderCard({
     },
   };
 
-  const speeds = { red: 4, green: 5, gold: 3.5 };
+  const speeds = { red: 4, green: 5, gold: 3 };
+  const isGold = color === 'gold';
 
   return (
     <motion.div
       variants={fadeInUp}
       whileHover={hoverScale ? { scale: 1.02 } : undefined}
       transition={hoverScale ? { type: 'spring', stiffness: 300, damping: 20 } : undefined}
-      className={`relative rounded-2xl p-[2px] overflow-hidden ${className}`}
+      className={`relative rounded-2xl overflow-hidden ${isGold ? 'p-[2.5px]' : 'p-[2px]'} ${className}`}
     >
-      {/* Spinning conic gradient — the animated border */}
+      {/* Primary spinning conic gradient */}
       <motion.div
         className="absolute rounded-full pointer-events-none"
         style={{
@@ -84,11 +85,25 @@ function AnimatedBorderCard({
         animate={{ rotate: 360 }}
         transition={{ duration: speeds[color], repeat: Infinity, ease: 'linear' }}
       />
+      {/* Gold gets a second counter-rotating gradient for shimmer effect */}
+      {isGold && (
+        <motion.div
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            inset: '-40%',
+            background: 'conic-gradient(from 180deg, transparent 0%, #F5D680 8%, #FFFFFF 15%, #F5D680 22%, transparent 35%, transparent 65%, #F5D680 78%, #FFFFFF 85%, #F5D680 92%, transparent 100%)',
+            mixBlendMode: 'screen',
+            opacity: 0.6,
+          }}
+          animate={{ rotate: -360 }}
+          transition={{ duration: 4.5, repeat: Infinity, ease: 'linear' }}
+        />
+      )}
       {/* Outer glow pulse */}
       <motion.div
         className="absolute inset-0 rounded-2xl pointer-events-none"
         animate={glows[color]}
-        transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+        transition={{ duration: isGold ? 2 : 2.5, repeat: Infinity, ease: 'easeInOut' }}
       />
       {/* Inner content */}
       <div className="relative rounded-[14px] h-full" style={{ backgroundColor: '#1a1a1a' }}>
