@@ -3,8 +3,6 @@ import { MARQUEE_STYLES } from '@/lib/landing-animations';
 
 const TRUST_ITEMS = [
   'Built by Veterans',
-  'Privacy-First',
-  'Offline-Capable',
   '39+ Tools',
   '780+ Conditions',
   'C&P Exam Prep',
@@ -30,7 +28,7 @@ function MarqueeRow({ direction, speed }: { direction: 'left' | 'right'; speed: 
           <div key={i} className="flex items-center mx-5 md:mx-8 whitespace-nowrap">
             <span
               className="text-sm md:text-base font-medium tracking-wide"
-              style={{ color: 'rgba(197, 164, 66, 0.6)' }}
+              style={{ color: 'rgba(191, 149, 63, 0.6)' }}
             >
               {item}
             </span>
