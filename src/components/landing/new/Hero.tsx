@@ -139,9 +139,9 @@ export function Hero() {
         <motion.div
           className="inline-flex items-center gap-3 text-sm px-6 py-2.5 rounded-full"
           style={{
-            border: '1.5px solid rgba(255,255,255,0.25)',
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)',
-            boxShadow: '0 0 15px rgba(255,255,255,0.15), 0 0 40px rgba(255,255,255,0.08), 0 0 80px rgba(255,255,255,0.04)',
+            border: '2px solid rgba(255,255,255,0.5)',
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 100%)',
+            boxShadow: '0 0 10px rgba(255,255,255,0.4), 0 0 25px rgba(255,255,255,0.25), 0 0 50px rgba(255,255,255,0.15), 0 0 100px rgba(255,255,255,0.08)',
           }}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
