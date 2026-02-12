@@ -541,13 +541,13 @@ const N = CARDS.length;
 const VISIBLE = 7; // cards rendered in the visible stack
 const SHUFFLE_MS = 2800; // time between shuffles
 
-// Stack layout: each position further back is smaller, lower, offset right
+// Stack layout: isometric diagonal recession into the background
 const stackPos = (i: number) => ({
-  y: i * 30,
-  x: i * 12,
-  scale: 1 - i * 0.035,
+  y: i * 25,
+  x: i * 60,
+  scale: 1 - i * 0.06,
   opacity: Math.max(0.15, 1 - i * 0.12),
-  rotateZ: i * 0.6,
+  rotateZ: 0,
   rotateY: 0,
   zIndex: VISIBLE - i,
 });
@@ -604,11 +604,11 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
       },
     });
 
-    // Front card flies out to the right with rotation
+    // Front card flies out to the left with rotation
     tl.to(frontEl, {
-      x: 650,
-      rotateZ: 12,
-      rotateY: -25,
+      x: -650,
+      rotateZ: -12,
+      rotateY: 25,
       opacity: 0,
       scale: 0.8,
       duration: 0.75,
@@ -657,18 +657,18 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
       {/* 3D perspective wrapper */}
       <div
         style={{
-          perspective: '1200px',
+          perspective: '2000px',
           perspectiveOrigin: '50% 45%',
         }}
       >
-        {/* Slight tilt for that portfolio 3D feel */}
+        {/* Isometric 3D tilt for diagonal stack */}
         <div
           style={{
             position: 'relative',
             width: '560px',
             height: '400px',
             transformStyle: 'preserve-3d',
-            transform: 'rotateX(6deg) rotateY(-4deg)',
+            transform: 'rotateX(10deg) rotateY(-25deg)',
           }}
         >
           {Array.from({ length: VISIBLE }).map((_, slotIdx) => {
