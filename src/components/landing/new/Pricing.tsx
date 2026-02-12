@@ -34,15 +34,26 @@ function FreeCard({ children }: { children: React.ReactNode }) {
     <motion.div
       variants={fadeInUp}
       whileHover={{
-        y: -4,
-        boxShadow: '0 0 20px rgba(34,197,94,0.15), 0 12px 40px rgba(0,0,0,0.3)',
+        y: -6,
+        boxShadow: '0 0 25px rgba(34,197,94,0.5), 0 0 50px rgba(34,197,94,0.25), 0 0 100px rgba(34,197,94,0.12)',
       }}
-      transition={{ duration: 0.25 }}
       className="relative rounded-2xl p-px"
       style={{
-        background: 'linear-gradient(135deg, rgba(34,197,94,0.3), rgba(34,197,94,0.08), rgba(34,197,94,0.3))',
+        background: 'linear-gradient(135deg, rgba(34,197,94,0.4), rgba(34,197,94,0.1), rgba(34,197,94,0.4))',
       }}
     >
+      {/* Neon glow — breathing animation */}
+      <motion.div
+        className="absolute -inset-px rounded-2xl pointer-events-none"
+        animate={{
+          boxShadow: [
+            '0 0 10px rgba(34,197,94,0.15), 0 0 25px rgba(34,197,94,0.08), 0 0 50px rgba(34,197,94,0.04)',
+            '0 0 20px rgba(34,197,94,0.35), 0 0 45px rgba(34,197,94,0.18), 0 0 80px rgba(34,197,94,0.08)',
+            '0 0 10px rgba(34,197,94,0.15), 0 0 25px rgba(34,197,94,0.08), 0 0 50px rgba(34,197,94,0.04)',
+          ],
+        }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+      />
       <div className="relative rounded-[15px] h-full" style={{ backgroundColor: '#111111' }}>
         {children}
       </div>
@@ -55,13 +66,12 @@ function PremiumCard({ children }: { children: React.ReactNode }) {
     <motion.div
       variants={fadeInUp}
       whileHover={{
-        y: -4,
-        boxShadow: '0 0 30px rgba(197,164,66,0.2), 0 12px 40px rgba(0,0,0,0.3)',
+        y: -6,
+        boxShadow: '0 0 30px rgba(197,164,66,0.6), 0 0 60px rgba(197,164,66,0.3), 0 0 120px rgba(197,164,66,0.15)',
       }}
-      transition={{ duration: 0.25 }}
       className="relative rounded-2xl p-px overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, rgba(197,164,66,0.5), rgba(197,164,66,0.12), rgba(197,164,66,0.5))',
+        background: 'linear-gradient(135deg, rgba(197,164,66,0.6), rgba(197,164,66,0.15), rgba(197,164,66,0.6))',
       }}
     >
       {/* Shimmer sweep across border */}
@@ -73,14 +83,14 @@ function PremiumCard({ children }: { children: React.ReactNode }) {
           animation: 'shimmer-border 4s ease-in-out infinite',
         }}
       />
-      {/* Soft breathing glow */}
+      {/* Neon glow — breathing animation (stronger than Free) */}
       <motion.div
-        className="absolute inset-0 rounded-2xl pointer-events-none"
+        className="absolute -inset-px rounded-2xl pointer-events-none"
         animate={{
           boxShadow: [
-            '0 0 15px rgba(197,164,66,0.08)',
-            '0 0 30px rgba(197,164,66,0.18)',
-            '0 0 15px rgba(197,164,66,0.08)',
+            '0 0 15px rgba(197,164,66,0.25), 0 0 35px rgba(197,164,66,0.12), 0 0 70px rgba(197,164,66,0.06)',
+            '0 0 25px rgba(197,164,66,0.5), 0 0 60px rgba(197,164,66,0.25), 0 0 120px rgba(197,164,66,0.1)',
+            '0 0 15px rgba(197,164,66,0.25), 0 0 35px rgba(197,164,66,0.12), 0 0 70px rgba(197,164,66,0.06)',
           ],
         }}
         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
