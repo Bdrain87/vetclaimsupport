@@ -39,7 +39,7 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
 }
 
 const STATS = [
-  { value: 39, suffix: '+', label: 'Tools & Features' },
+  { value: 45, suffix: '+', label: 'Tools & Features' },
   { value: 780, suffix: '+', label: 'VA Conditions' },
   { value: 100, suffix: '%', label: 'Local-First Design' },
   { value: 0, suffix: '', label: 'Veteran Founded', isText: true },
@@ -64,10 +64,10 @@ export function SocialProof() {
             }`}
           >
             {stat.isText ? (
-              <span className="block text-3xl md:text-4xl">
-                <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <div className="flex items-center justify-center h-[36px] md:h-[40px]">
+                <svg width="48" height="32" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <defs>
-                    <linearGradient id="metallic-gold-flag" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                    <linearGradient id="metallic-gold-flag" x1="0" y1="0" x2="60" y2="40" gradientUnits="userSpaceOnUse">
                       <stop offset="0%" stopColor="#BF953F"/>
                       <stop offset="25%" stopColor="#FCF6BA"/>
                       <stop offset="50%" stopColor="#B38728"/>
@@ -75,32 +75,33 @@ export function SocialProof() {
                       <stop offset="100%" stopColor="#AA771C"/>
                     </linearGradient>
                   </defs>
-                  {/* Flagpole */}
-                  <rect x="8" y="8" width="3" height="48" rx="1.5" fill="url(#metallic-gold-flag)"/>
                   {/* Flag body */}
-                  <rect x="11" y="10" width="40" height="28" rx="2" fill="url(#metallic-gold-flag)" opacity="0.9"/>
+                  <rect x="0" y="0" width="60" height="40" rx="3" fill="url(#metallic-gold-flag)" opacity="0.9"/>
                   {/* Stripes */}
-                  <rect x="11" y="14.3" width="40" height="2.15" fill="#0A0A0A" opacity="0.25"/>
-                  <rect x="11" y="18.6" width="40" height="2.15" fill="#0A0A0A" opacity="0.25"/>
-                  <rect x="11" y="22.9" width="40" height="2.15" fill="#0A0A0A" opacity="0.25"/>
-                  <rect x="11" y="27.2" width="40" height="2.15" fill="#0A0A0A" opacity="0.25"/>
-                  <rect x="11" y="31.5" width="40" height="2.15" fill="#0A0A0A" opacity="0.25"/>
-                  <rect x="11" y="35.8" width="40" height="2.15" fill="#0A0A0A" opacity="0.25"/>
+                  <rect x="0" y="6.15" width="60" height="3.08" rx="0" fill="#0A0A0A" opacity="0.2"/>
+                  <rect x="0" y="12.3" width="60" height="3.08" rx="0" fill="#0A0A0A" opacity="0.2"/>
+                  <rect x="0" y="18.45" width="60" height="3.08" rx="0" fill="#0A0A0A" opacity="0.2"/>
+                  <rect x="0" y="24.6" width="60" height="3.08" rx="0" fill="#0A0A0A" opacity="0.2"/>
+                  <rect x="0" y="30.75" width="60" height="3.08" rx="0" fill="#0A0A0A" opacity="0.2"/>
+                  <rect x="0" y="36.9" width="60" height="3.1" rx="0" fill="#0A0A0A" opacity="0.2"/>
                   {/* Star field */}
-                  <rect x="11" y="10" width="18" height="15" rx="1" fill="#0A0A0A" opacity="0.3"/>
+                  <rect x="0" y="0" width="24" height="21.5" rx="2" fill="#0A0A0A" opacity="0.3"/>
                   {/* Stars */}
-                  <circle cx="15" cy="13.5" r="1" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="20" cy="13.5" r="1" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="25" cy="13.5" r="1" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="17.5" cy="16.5" r="1" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="22.5" cy="16.5" r="1" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="15" cy="19.5" r="1" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="20" cy="19.5" r="1" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="25" cy="19.5" r="1" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="17.5" cy="22.5" r="1" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="22.5" cy="22.5" r="1" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="5" cy="4" r="1.2" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="12" cy="4" r="1.2" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="19" cy="4" r="1.2" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="8.5" cy="7.5" r="1.2" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="15.5" cy="7.5" r="1.2" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="5" cy="11" r="1.2" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="12" cy="11" r="1.2" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="19" cy="11" r="1.2" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="8.5" cy="14.5" r="1.2" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="15.5" cy="14.5" r="1.2" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="5" cy="18" r="1.2" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="12" cy="18" r="1.2" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="19" cy="18" r="1.2" fill="url(#metallic-gold-flag)"/>
                 </svg>
-              </span>
+              </div>
             ) : (
               <AnimatedNumber value={stat.value} suffix={stat.suffix} />
             )}

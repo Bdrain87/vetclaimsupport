@@ -3,13 +3,21 @@ import { MARQUEE_STYLES } from '@/lib/landing-animations';
 
 const TRUST_ITEMS = [
   'Built by Veterans',
-  '39+ Tools',
+  '45+ Tools',
   '780+ Conditions',
   'C&P Exam Prep',
-  'Statement Generator',
-  'Travel Pay Calculator',
-  'BDD Countdown',
+  'Statement Generators',
+  'Health Trackers',
+  'Rating Calculator',
+  'Nexus Letter Generator',
   'Body Map Explorer',
+  'PACT Act Guide',
+  'Sleep & Migraine Tracking',
+  'Decision Review Guide',
+  'VA-Speak Translator',
+  'Evidence Packet Builder',
+  'Back Pay Estimator',
+  'Secondary Condition Finder',
 ];
 
 function MarqueeRow({ direction, speed }: { direction: 'left' | 'right'; speed: number }) {

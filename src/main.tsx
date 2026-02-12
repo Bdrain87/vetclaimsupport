@@ -51,7 +51,7 @@ window.addEventListener('unhandledrejection', (event) => {
 });
 
 // ============================================================
-// SERVICE WORKER — auto-update on deploy
+// SERVICE WORKER — instant updates on every deploy
 // ============================================================
 if ('serviceWorker' in navigator) {
   // When a new SW takes control, reload so the user sees fresh content
@@ -63,13 +63,51 @@ if ('serviceWorker' in navigator) {
     }
   });
 
-  // Check for SW updates every 60s and whenever the tab regains focus
+  // Purge old runtime caches that may hold stale JS/CSS from
+  // previous builds. The SW handles its own precache cleanup,
+  // but runtime caches (pages, app-assets) from older SW versions
+  // can linger. Delete any cache name we no longer use.
+  const VALID_CACHES = ['pages', 'app-assets', 'google-fonts-cache', 'google-fonts-webfonts'];
+  caches.keys().then((names) => {
+    names.forEach((name) => {
+      if (!VALID_CACHES.includes(name)) {
+        caches.delete(name);
+      }
+    });
+  });
+
+  // Check for SW updates immediately on load, every 30s, and on tab focus
   navigator.serviceWorker.ready.then((registration) => {
-    setInterval(() => registration.update(), 60_000);
+    // Immediate check on boot
+    registration.update();
+
+    // Poll every 30s (was 60s — faster catches deploys sooner)
+    setInterval(() => registration.update(), 30_000);
+
+    // Check when user returns to tab
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') {
         registration.update();
       }
+    });
+
+    // If a new SW is already waiting (installed before page loaded),
+    // tell it to activate immediately
+    if (registration.waiting) {
+      registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+    }
+
+    // Also catch the case where a new SW finishes installing while
+    // the page is open
+    registration.addEventListener('updatefound', () => {
+      const newSW = registration.installing;
+      if (!newSW) return;
+      newSW.addEventListener('statechange', () => {
+        if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+          // New SW installed while old one controls — force activate
+          newSW.postMessage({ type: 'SKIP_WAITING' });
+        }
+      });
     });
   });
 }

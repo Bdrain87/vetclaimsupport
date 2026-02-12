@@ -102,8 +102,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          The privacy-first toolkit that helps you organize evidence, learn
-          about VA processes, and prepare and organize your claim documentation.
+          Evidence packets, statement builders, exam prep, symptom tracking, and VA math. 45+ tools in one place. One workflow. One system. Generate shareable PDF packets in a click.
         </motion.p>
 
         {/* CTAs */}
