@@ -1,7 +1,7 @@
 {
   "name": "Vet Claim Support",
   "short_name": "VetClaim",
-  "description": "Elite 38 CFR Evidence Mapping & Rating Forecast",
+  "description": "Tools to support your VA disability claim",
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#14192b",
