@@ -25,7 +25,7 @@ export function LegalDisclaimer() {
         </p>
         <p className="text-xs leading-relaxed text-center" style={{ color: '#6B7280' }}>
           AI-generated content may contain errors and must be independently verified before use.
-          Always consult with a{' '}
+          Free VA-accredited Veterans Service Organizations (VSOs) are available at{' '}
           <a
             href="https://www.va.gov/vso"
             target="_blank"
@@ -33,19 +33,9 @@ export function LegalDisclaimer() {
             className="underline"
             style={{ color: '#9CA3AF' }}
           >
-            free VA-accredited VSO
+            va.gov/vso
           </a>{' '}
-          or{' '}
-          <a
-            href="https://www.va.gov/ogc/apps/accreditation"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline"
-            style={{ color: '#9CA3AF' }}
-          >
-            accredited attorney
-          </a>{' '}
-          for claims filing assistance.
+          to help with claims filing.
         </p>
       </div>
     </motion.section>

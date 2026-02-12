@@ -33,7 +33,7 @@ function ShieldIcon() {
 export function PrivacySection() {
   return (
     <section
-      className="py-20 md:py-28"
+      className="py-12 md:py-16"
       style={{
         background:
           'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
@@ -41,7 +41,7 @@ export function PrivacySection() {
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <motion.h2
-          className="text-3xl md:text-4xl text-black text-center mb-16"
+          className="text-2xl md:text-3xl text-black text-center mb-10"
           style={HEADING_H2_STYLE}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -52,7 +52,7 @@ export function PrivacySection() {
         </motion.h2>
 
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"

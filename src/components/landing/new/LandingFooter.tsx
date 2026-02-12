@@ -137,7 +137,7 @@ export function LandingFooter() {
           VCS does NOT provide legal advice, medical advice, or professional claims filing services.
           VCS does NOT file claims on your behalf and does NOT guarantee any claim outcomes.
           AI-generated content may contain errors and must be independently verified.
-          Always consult with a free VA-accredited VSO or accredited attorney for claims filing assistance.
+          Free VA-accredited Veterans Service Organizations (VSOs) are available at va.gov/vso to help with claims filing.
         </p>
       </div>
     </footer>
