@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { fadeInUp, staggerContainer } from '@/lib/landing-animations';
-import { Check } from 'lucide-react';
+import { fadeInUp, staggerContainer, GOLD_GRADIENT_TEXT } from '@/lib/landing-animations';
+import { Check, AlertTriangle } from 'lucide-react';
 
 const FREE_FEATURES = [
   'Rating Calculator',
@@ -28,6 +28,37 @@ const SHIMMER_CSS = `
   100% { background-position: 200% center; }
 }
 `;
+
+function RedCard({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div
+      variants={fadeInUp}
+      whileHover={{
+        y: -4,
+        boxShadow: '0 0 25px rgba(239,68,68,0.4), 0 0 50px rgba(239,68,68,0.2), 0 0 80px rgba(239,68,68,0.08)',
+      }}
+      className="relative rounded-2xl p-px"
+      style={{
+        background: 'linear-gradient(135deg, rgba(239,68,68,0.4), rgba(239,68,68,0.08), rgba(239,68,68,0.4))',
+      }}
+    >
+      <motion.div
+        className="absolute -inset-px rounded-2xl pointer-events-none"
+        animate={{
+          boxShadow: [
+            '0 0 8px rgba(239,68,68,0.12), 0 0 20px rgba(239,68,68,0.06), 0 0 40px rgba(239,68,68,0.03)',
+            '0 0 15px rgba(239,68,68,0.3), 0 0 35px rgba(239,68,68,0.15), 0 0 60px rgba(239,68,68,0.06)',
+            '0 0 8px rgba(239,68,68,0.12), 0 0 20px rgba(239,68,68,0.06), 0 0 40px rgba(239,68,68,0.03)',
+          ],
+        }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <div className="relative rounded-[15px] h-full" style={{ backgroundColor: '#111111' }}>
+        {children}
+      </div>
+    </motion.div>
+  );
+}
 
 function FreeCard({ children }: { children: React.ReactNode }) {
   return (
@@ -118,18 +149,19 @@ export function Pricing() {
       <div className="max-w-4xl mx-auto">
 
         <motion.h2
-          className="text-center text-3xl md:text-5xl text-white mb-4"
+          className="text-center text-3xl md:text-5xl mb-4"
           style={{
             letterSpacing: '-0.025em',
             fontWeight: 500,
             lineHeight: 1.15,
+            ...GOLD_GRADIENT_TEXT,
           }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          Simple, Transparent Pricing
+          The VA Claims Industry
         </motion.h2>
         <motion.p
           className="text-center mb-12 text-lg"
@@ -139,8 +171,89 @@ export function Pricing() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          Affordable preparation tools, with a free plan to get started.
+          Many veterans pay thousands for services they may not need. Know your options.
         </motion.p>
+
+        {/* Competitor comparison cards */}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+        >
+          <RedCard>
+            <div className="p-6">
+              <div className="flex items-center gap-2 mb-3">
+                <AlertTriangle size={18} style={{ color: '#EF4444' }} />
+                <h3 className="text-base font-semibold" style={{ color: '#EF4444' }}>Claim Companies</h3>
+              </div>
+              <p className="text-sm mb-3" style={{ color: '#9CA3AF' }}>
+                Third-party companies that charge veterans for claim preparation assistance.
+              </p>
+              <div className="mb-3">
+                <span className="text-2xl font-bold text-white">$4,000–$6,000</span>
+                <span className="text-xs ml-2" style={{ color: '#9CA3AF' }}>typical cost</span>
+              </div>
+              <ul className="space-y-1.5">
+                <li className="flex items-center gap-2 text-sm" style={{ color: '#9CA3AF' }}>
+                  <span style={{ color: '#EF4444' }}>&#10005;</span> May not be VA-accredited
+                </li>
+                <li className="flex items-center gap-2 text-sm" style={{ color: '#9CA3AF' }}>
+                  <span style={{ color: '#EF4444' }}>&#10005;</span> Large upfront fees
+                </li>
+                <li className="flex items-center gap-2 text-sm" style={{ color: '#9CA3AF' }}>
+                  <span style={{ color: '#EF4444' }}>&#10005;</span> No guaranteed outcomes
+                </li>
+              </ul>
+            </div>
+          </RedCard>
+
+          <RedCard>
+            <div className="p-6">
+              <div className="flex items-center gap-2 mb-3">
+                <AlertTriangle size={18} style={{ color: '#EF4444' }} />
+                <h3 className="text-base font-semibold" style={{ color: '#EF4444' }}>Private Attorneys</h3>
+              </div>
+              <p className="text-sm mb-3" style={{ color: '#9CA3AF' }}>
+                Attorneys who typically take a percentage of retroactive back pay after approval.
+              </p>
+              <div className="mb-3">
+                <span className="text-2xl font-bold text-white">20–33%</span>
+                <span className="text-xs ml-2" style={{ color: '#9CA3AF' }}>of back pay</span>
+              </div>
+              <ul className="space-y-1.5">
+                <li className="flex items-center gap-2 text-sm" style={{ color: '#9CA3AF' }}>
+                  <span style={{ color: '#EF4444' }}>&#10005;</span> Contingency fees from your award
+                </li>
+                <li className="flex items-center gap-2 text-sm" style={{ color: '#9CA3AF' }}>
+                  <span style={{ color: '#EF4444' }}>&#10005;</span> Can total thousands of dollars
+                </li>
+                <li className="flex items-center gap-2 text-sm" style={{ color: '#9CA3AF' }}>
+                  <span style={{ color: '#EF4444' }}>&#10005;</span> You still do the preparation work
+                </li>
+              </ul>
+            </div>
+          </RedCard>
+        </motion.div>
+
+        {/* OR divider */}
+        <motion.div
+          className="flex items-center justify-center gap-4 mb-10"
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4 }}
+        >
+          <div className="h-px flex-1 max-w-[100px]" style={{ background: 'linear-gradient(to right, transparent, #C5A442)' }} />
+          <span
+            className="text-lg font-semibold px-3"
+            style={GOLD_GRADIENT_TEXT}
+          >
+            &mdash; OR &mdash;
+          </span>
+          <div className="h-px flex-1 max-w-[100px]" style={{ background: 'linear-gradient(to left, transparent, #C5A442)' }} />
+        </motion.div>
 
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 gap-5"
@@ -264,9 +377,11 @@ export function Pricing() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
+          Pricing shown reflects typical industry ranges based on publicly available information.
           VCS is an educational and organizational tool, not a law firm, claims agent, or filing service.
           We do not file claims on your behalf and do not guarantee any outcomes.
-          Always consult a free VA-accredited VSO or attorney for claims filing assistance.
+          Free VA-accredited VSOs are available at{' '}
+          <a href="https://www.va.gov/vso" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: '#6B7280' }}>va.gov/vso</a>.
         </motion.p>
 
       </div>
