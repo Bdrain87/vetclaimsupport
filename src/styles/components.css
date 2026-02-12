@@ -33,20 +33,21 @@
   cursor: not-allowed;
 }
 
-/* Primary - Success green for main CTAs */
+/* Primary - Gold for main CTAs */
 .btn-primary {
-  background: var(--interactive-primary);
-  color: var(--color-white);
+  background: var(--gold-gradient);
+  color: #102039;
+  font-weight: 700;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: var(--interactive-primary-hover);
+  filter: brightness(1.1);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 16px var(--gold-glow);
 }
 
 .btn-primary:active:not(:disabled) {
-  background: var(--interactive-primary-active);
+  filter: brightness(0.95);
   transform: translateY(0);
 }
 
@@ -376,7 +377,7 @@
 }
 
 .dark .nav-item-ds.active {
-  background: rgba(59, 130, 246, 0.15);
+  background: rgba(214, 178, 94, 0.15);
   color: var(--color-accent-400);
 }
 

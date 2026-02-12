@@ -29,8 +29,8 @@ export function HeroSection() {
       }} />
 
       {/* Ambient glow effects */}
-      <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[150px]" />
-      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-[#3B82F6]/10 rounded-full blur-[120px]" />
+      <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[#D6B25E]/10 rounded-full blur-[150px]" />
+      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-[#D6B25E]/10 rounded-full blur-[120px]" />
 
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 py-20 lg:py-32">
         <motion.div
@@ -54,7 +54,7 @@ export function HeroSection() {
           >
             Prepare for the VA Rating
             <br />
-            <span className="bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-white via-[#FDF8E8] to-white bg-clip-text text-transparent">
               You Deserve
             </span>
           </motion.h1>

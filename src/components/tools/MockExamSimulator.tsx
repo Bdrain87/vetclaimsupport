@@ -528,10 +528,10 @@ export function MockExamSimulator() {
 
           {/* Rating Criteria Reference */}
           {ratingCriteria && ratingCriteria.length > 0 && (
-            <Card className="border-blue-500/20 bg-blue-500/5">
+            <Card className="border-[#D6B25E]/20 bg-[#D6B25E]/5">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
-                  <MessageSquare className="h-4 w-4 text-blue-500" />
+                  <MessageSquare className="h-4 w-4 text-[#D6B25E]" />
                   38 CFR Rating Criteria Reference
                 </CardTitle>
                 <CardDescription>

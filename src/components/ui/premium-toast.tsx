@@ -102,14 +102,14 @@ function ToastItem({ toast, onDismiss, index }: ToastItemProps) {
       icon: 'text-red-600 dark:text-red-500',
     },
     warning: {
-      bg: 'bg-blue-500/10 dark:bg-blue-500/20',
-      border: 'border-blue-500/30',
-      icon: 'text-blue-600 dark:text-blue-500',
+      bg: 'bg-[#D6B25E]/10 dark:bg-[#D6B25E]/20',
+      border: 'border-[#D6B25E]/30',
+      icon: 'text-[#B8972E] dark:text-[#D6B25E]',
     },
     info: {
-      bg: 'bg-blue-500/10 dark:bg-blue-500/20',
-      border: 'border-blue-500/30',
-      icon: 'text-blue-600 dark:text-blue-500',
+      bg: 'bg-[#D6B25E]/10 dark:bg-[#D6B25E]/20',
+      border: 'border-[#D6B25E]/30',
+      icon: 'text-[#B8972E] dark:text-[#D6B25E]',
     },
   };
 

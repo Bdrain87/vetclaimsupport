@@ -63,7 +63,7 @@ export function PaywallModal({ isOpen, onClose }: PaywallModalProps) {
 
         {/* Header */}
         <div className="px-6 pt-8 pb-4 text-center">
-          <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#3B82F6] to-[#1D4ED8] flex items-center justify-center shadow-lg shadow-[#3B82F6]/20 mb-4">
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#D6B25E] to-[#8A5A16] flex items-center justify-center shadow-lg shadow-[#D6B25E]/20 mb-4">
             <Shield className="h-8 w-8 text-[#102039]" />
           </div>
           <h2 className="text-xl font-bold text-white mb-1">Unlock Lifetime Access</h2>
@@ -74,8 +74,8 @@ export function PaywallModal({ isOpen, onClose }: PaywallModalProps) {
         <div className="px-6 pb-4 space-y-2">
           {VALUE_BULLETS.map(({ icon: Icon, text }) => (
             <div key={text} className="flex items-center gap-3 p-2.5 rounded-lg bg-white/[0.04]">
-              <div className="p-1.5 rounded-md bg-[#3B82F6]/10">
-                <Icon className="h-4 w-4 text-[#3B82F6]" />
+              <div className="p-1.5 rounded-md bg-[#D6B25E]/10">
+                <Icon className="h-4 w-4 text-[#D6B25E]" />
               </div>
               <span className="text-sm text-white/80">{text}</span>
               <Check className="h-4 w-4 text-emerald-400 ml-auto" />
@@ -88,7 +88,7 @@ export function PaywallModal({ isOpen, onClose }: PaywallModalProps) {
           <button
             onClick={handlePurchase}
             disabled={purchasing}
-            className="w-full h-12 rounded-xl bg-gradient-to-r from-[#3B82F6] to-[#1D4ED8] text-[#102039] font-bold text-sm hover:opacity-90 disabled:opacity-50 transition-all"
+            className="w-full h-12 rounded-xl bg-gradient-to-r from-[#D6B25E] to-[#8A5A16] text-[#102039] font-bold text-sm hover:opacity-90 disabled:opacity-50 transition-all"
           >
             {purchasing ? 'Processing...' : 'Unlock Lifetime Access'}
           </button>

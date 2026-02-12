@@ -1043,7 +1043,7 @@ export default function Onboarding() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6, duration: 0.5 }}
                 >
-                  <p className="text-lg text-blue-500 font-medium">God Bless America</p>
+                  <p className="text-lg text-gold font-medium">God Bless America</p>
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0 }}

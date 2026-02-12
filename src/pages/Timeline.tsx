@@ -58,7 +58,7 @@ export default function Timeline() {
           title: `${visit.visitType} Visit`,
           description: visit.reason || visit.diagnosis || 'Medical appointment',
           icon: Stethoscope,
-          color: 'bg-blue-500',
+          color: 'bg-[#D6B25E]',
         });
       }
     });
@@ -73,7 +73,7 @@ export default function Timeline() {
           title: `${exposure.type} Exposure`,
           description: exposure.location || exposure.details || 'Hazardous exposure',
           icon: AlertTriangle,
-          color: 'bg-blue-500',
+          color: 'bg-[#D6B25E]',
         });
       }
     });
@@ -195,10 +195,10 @@ export default function Timeline() {
         <Badge variant="outline" className="bg-emerald-500/10 border-emerald-500/30">
           <Shield className="h-3 w-3 mr-1" /> Service
         </Badge>
-        <Badge variant="outline" className="bg-blue-500/10 border-blue-500/30">
+        <Badge variant="outline" className="bg-[#D6B25E]/10 border-[#D6B25E]/30">
           <Stethoscope className="h-3 w-3 mr-1" /> Medical
         </Badge>
-        <Badge variant="outline" className="bg-blue-500/10 border-blue-500/30">
+        <Badge variant="outline" className="bg-[#D6B25E]/10 border-[#D6B25E]/30">
           <AlertTriangle className="h-3 w-3 mr-1" /> Exposure
         </Badge>
         <Badge variant="outline" className="bg-rose-500/10 border-rose-500/30">
@@ -258,7 +258,7 @@ export default function Timeline() {
       <Card className="bg-primary/5 border-primary/20">
         <CardContent className="py-4">
           <p className="text-sm text-muted-foreground">
-            <strong className="text-foreground inline-flex items-center gap-1"><Lightbulb className="h-4 w-4 text-blue-500" /> Tip:</strong> This timeline helps demonstrate service connection 
+            <strong className="text-foreground inline-flex items-center gap-1"><Lightbulb className="h-4 w-4 text-[#D6B25E]" /> Tip:</strong> This timeline helps demonstrate service connection 
             by showing how events, exposures, and symptoms relate to your military service.
           </p>
         </CardContent>

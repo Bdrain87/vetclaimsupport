@@ -182,7 +182,7 @@ const CATEGORY_LABELS: Record<GlossaryEntry['category'], string> = {
 };
 
 const CATEGORY_COLORS: Record<GlossaryEntry['category'], string> = {
-  'claims-process': 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  'claims-process': 'bg-[#D6B25E]/10 text-[#F6E4AA] border-[#D6B25E]/20',
   medical: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
   legal: 'bg-[rgba(214,178,94,0.1)] text-gold border-[rgba(214,178,94,0.2)]',
   rating: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
@@ -294,8 +294,8 @@ export default function VASpeakTranslator() {
 
       {/* Page header */}
       <div className="flex items-center gap-3">
-        <div className="w-12 h-12 rounded-xl bg-[var(--interactive-primary,#3B82F6)]/10 border border-[var(--interactive-primary,#3B82F6)]/20 flex items-center justify-center shrink-0">
-          <Languages className="h-6 w-6 text-[var(--interactive-primary,#3B82F6)]" />
+        <div className="w-12 h-12 rounded-xl bg-[var(--interactive-primary,#D6B25E)]/10 border border-[var(--interactive-primary,#D6B25E)]/20 flex items-center justify-center shrink-0">
+          <Languages className="h-6 w-6 text-[var(--interactive-primary,#D6B25E)]" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">VA-Speak Translator</h1>
@@ -314,7 +314,7 @@ export default function VASpeakTranslator() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
-            <Sparkles className="h-5 w-5 text-[var(--interactive-primary,#3B82F6)]" />
+            <Sparkles className="h-5 w-5 text-[var(--interactive-primary,#D6B25E)]" />
             Translate Your Symptoms
           </CardTitle>
           <CardDescription>
@@ -421,7 +421,7 @@ export default function VASpeakTranslator() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
-            <BookOpen className="h-5 w-5 text-[var(--interactive-primary,#3B82F6)]" />
+            <BookOpen className="h-5 w-5 text-[var(--interactive-primary,#D6B25E)]" />
             VA Terms Glossary
           </CardTitle>
           <CardDescription>
@@ -449,7 +449,7 @@ export default function VASpeakTranslator() {
                 onClick={() => setActiveCategory(cat)}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
                   activeCategory === cat
-                    ? 'bg-[var(--interactive-primary,#3B82F6)]/15 text-[var(--interactive-primary,#3B82F6)] border-[var(--interactive-primary,#3B82F6)]/40'
+                    ? 'bg-[var(--interactive-primary,#D6B25E)]/15 text-[var(--interactive-primary,#D6B25E)] border-[var(--interactive-primary,#D6B25E)]/40'
                     : 'bg-muted/50 text-muted-foreground border-border hover:bg-muted'
                 }`}
               >

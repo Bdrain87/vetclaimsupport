@@ -240,7 +240,7 @@ export function SmartSecondaryConditionsSuggester() {
                   </Badge>
                 )}
                 {suggestion.userHasSymptoms && (
-                  <Badge variant="outline" className="text-xs border-blue-500/30 text-blue-600 dark:text-blue-400">
+                  <Badge variant="outline" className="text-xs border-[#D6B25E]/30 text-[#B8972E] dark:text-[#F6E4AA]">
                     <CheckCircle2 className="h-3 w-3 mr-1" />
                     You've logged symptoms
                   </Badge>

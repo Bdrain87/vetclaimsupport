@@ -7,7 +7,7 @@ export const DBQHelp = () => {
   return (
     <div className="p-8 glass-card border-white/5">
       <div className="flex items-center gap-4 mb-8">
-        <div className="p-3 bg-blue-500/10 rounded-2xl text-[#3B82F6]">
+        <div className="p-3 bg-[#D6B25E]/10 rounded-2xl text-[#D6B25E]">
           <BookOpen size={24} />
         </div>
         <div>
@@ -23,14 +23,14 @@ export const DBQHelp = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="p-5 bg-white/5 border border-white/10 rounded-2xl group hover:border-[#3B82F6]/30 transition-all"
+            className="p-5 bg-white/5 border border-white/10 rounded-2xl group hover:border-[#D6B25E]/30 transition-all"
           >
             <div className="flex justify-between items-start mb-2">
-              <span className="text-[10px] font-black text-[#3B82F6] uppercase tracking-widest">{tip.section}</span>
+              <span className="text-[10px] font-black text-[#D6B25E] uppercase tracking-widest">{tip.section}</span>
               <div className="px-2 py-0.5 rounded bg-white/10 text-[8px] font-bold text-white/40 uppercase">Insider Edge</div>
             </div>
             <h4 className="text-white font-bold mb-3 flex items-center gap-2">
-              <ChevronRight size={14} className="text-[#3B82F6]" /> {tip.focus}
+              <ChevronRight size={14} className="text-[#D6B25E]" /> {tip.focus}
             </h4>
             <p className="text-xs text-white/60 leading-relaxed italic">
               "{tip.insiderSecret}"

@@ -10,13 +10,13 @@ interface PrefillBadgeProps {
  */
 export function PrefillBadge({ onClear }: PrefillBadgeProps) {
   return (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-[10px] text-blue-500 font-medium">
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#D6B25E]/10 border border-[#D6B25E]/20 text-[10px] text-[#D6B25E] font-medium">
       <Database className="h-2.5 w-2.5" />
       Pre-filled from your data
       <button
         type="button"
         onClick={(e) => { e.stopPropagation(); onClear(); }}
-        className="ml-0.5 hover:text-blue-700 transition-colors"
+        className="ml-0.5 hover:text-[#8A5A16] transition-colors"
         aria-label="Clear pre-filled data"
       >
         <X className="h-2.5 w-2.5" />

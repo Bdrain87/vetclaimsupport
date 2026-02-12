@@ -237,8 +237,8 @@ export function AppSidebar() {
         'bg-gradient-to-r from-transparent via-primary/[0.02] to-transparent',
         collapsed && 'justify-center px-2'
       )}>
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary/25 to-primary/10 shadow-[0_0_24px_hsl(217_91%_60%/0.25)] transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-105 hover:shadow-[0_0_32px_hsl(217_91%_60%/0.35)]">
-          <ShieldCheck className="h-5 w-5 text-primary drop-shadow-[0_0_8px_hsl(217_91%_60%/0.5)]" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary/25 to-primary/10 shadow-[0_0_24px_rgba(214,178,94,0.25)] transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-105 hover:shadow-[0_0_32px_rgba(214,178,94,0.35)]">
+          <ShieldCheck className="h-5 w-5 text-primary drop-shadow-[0_0_8px_rgba(214,178,94,0.5)]" />
         </div>
         {!collapsed && (
           <div className="flex flex-col animate-fade-in">
@@ -265,9 +265,9 @@ export function AppSidebar() {
             title={collapsed ? 'Dashboard' : undefined}
           >
             {location.pathname === '/' && (
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-7 bg-gradient-to-b from-primary to-primary/60 rounded-r-full shadow-[0_0_12px_rgba(59,130,246,0.5)]" />
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-7 bg-gradient-to-b from-primary to-primary/60 rounded-r-full shadow-[0_0_12px_rgba(214,178,94,0.5)]" />
             )}
-            <LayoutDashboard className={cn('h-5 w-5 flex-shrink-0 transition-transform duration-200', location.pathname === '/' && 'text-primary drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]')} />
+            <LayoutDashboard className={cn('h-5 w-5 flex-shrink-0 transition-transform duration-200', location.pathname === '/' && 'text-primary drop-shadow-[0_0_8px_rgba(214,178,94,0.5)]')} />
             {!collapsed && <span className="font-semibold">Dashboard</span>}
           </NavLink>
         </div>
@@ -310,9 +310,9 @@ export function AppSidebar() {
                 title={collapsed ? item.label : undefined}
               >
                 {isActive && (
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-7 bg-gradient-to-b from-primary to-primary/60 rounded-r-full shadow-[0_0_12px_rgba(59,130,246,0.5)]" />
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-7 bg-gradient-to-b from-primary to-primary/60 rounded-r-full shadow-[0_0_12px_rgba(214,178,94,0.5)]" />
                 )}
-                <item.icon className={cn('h-5 w-5 flex-shrink-0 transition-transform duration-200', isActive && 'text-primary drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]')} />
+                <item.icon className={cn('h-5 w-5 flex-shrink-0 transition-transform duration-200', isActive && 'text-primary drop-shadow-[0_0_8px_rgba(214,178,94,0.5)]')} />
                 {!collapsed && <span>{item.label}</span>}
               </NavLink>
             );

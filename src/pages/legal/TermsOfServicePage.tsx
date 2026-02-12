@@ -18,8 +18,8 @@ export default function TermsOfServicePage() {
 
       {/* Header */}
       <div className="flex items-start gap-4">
-        <div className="p-3 rounded-xl bg-[#3B82F6]/10 shrink-0">
-          <FileText className="h-6 w-6 text-[#3B82F6]" />
+        <div className="p-3 rounded-xl bg-[#D6B25E]/10 shrink-0">
+          <FileText className="h-6 w-6 text-[#D6B25E]" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Terms of Service</h1>
@@ -45,13 +45,13 @@ export default function TermsOfServicePage() {
             Vet Claim Support is an educational and organizational tool designed to help veterans and service members prepare and organize information related to VA disability claims. The Service provides:
           </p>
           <ul className="space-y-1.5 text-muted-foreground">
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Educational resources about VA benefits and processes</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Health and symptom logging tools</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Evidence organization and tracking</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>VA form drafting assistance</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>AI-powered writing suggestions</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>Rating calculators and estimators</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>C&amp;P exam preparation materials</li>
+            <li className="flex items-start gap-2"><span className="text-[#D6B25E] mt-0.5">&#x2022;</span>Educational resources about VA benefits and processes</li>
+            <li className="flex items-start gap-2"><span className="text-[#D6B25E] mt-0.5">&#x2022;</span>Health and symptom logging tools</li>
+            <li className="flex items-start gap-2"><span className="text-[#D6B25E] mt-0.5">&#x2022;</span>Evidence organization and tracking</li>
+            <li className="flex items-start gap-2"><span className="text-[#D6B25E] mt-0.5">&#x2022;</span>VA form drafting assistance</li>
+            <li className="flex items-start gap-2"><span className="text-[#D6B25E] mt-0.5">&#x2022;</span>AI-powered writing suggestions</li>
+            <li className="flex items-start gap-2"><span className="text-[#D6B25E] mt-0.5">&#x2022;</span>Rating calculators and estimators</li>
+            <li className="flex items-start gap-2"><span className="text-[#D6B25E] mt-0.5">&#x2022;</span>C&amp;P exam preparation materials</li>
           </ul>
         </section>
 
@@ -71,7 +71,7 @@ export default function TermsOfServicePage() {
         {/* Section 4: No Professional Advice */}
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">4. No Professional Advice</h2>
-          <div className="rounded-xl bg-blue-500/5 border border-blue-500/20 p-4">
+          <div className="rounded-xl bg-[#D6B25E]/5 border border-[#D6B25E]/20 p-4">
             <p className="text-muted-foreground">
               The Service does not provide legal advice, medical advice, or professional representation of any kind. We are not attorneys, medical professionals, or VA-accredited claims agents. Using the Service does not create any attorney-client, doctor-patient, or professional-client relationship.
             </p>
@@ -88,11 +88,11 @@ export default function TermsOfServicePage() {
             YOU ARE SOLELY RESPONSIBLE FOR:
           </p>
           <ul className="space-y-1.5 text-muted-foreground">
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>(a) The accuracy and truthfulness of all information you enter into the Service</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>(b) Reviewing, editing, and verifying ALL content &mdash; including AI-generated content &mdash; before using it in any VA submission</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>(c) Ensuring any documents you submit to the VA are truthful, accurate, and complete</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>(d) Consulting with accredited professionals when appropriate</li>
-            <li className="flex items-start gap-2"><span className="text-[#3B82F6] mt-0.5">&#x2022;</span>(e) Verifying current VA form versions, requirements, and deadlines</li>
+            <li className="flex items-start gap-2"><span className="text-[#D6B25E] mt-0.5">&#x2022;</span>(a) The accuracy and truthfulness of all information you enter into the Service</li>
+            <li className="flex items-start gap-2"><span className="text-[#D6B25E] mt-0.5">&#x2022;</span>(b) Reviewing, editing, and verifying ALL content &mdash; including AI-generated content &mdash; before using it in any VA submission</li>
+            <li className="flex items-start gap-2"><span className="text-[#D6B25E] mt-0.5">&#x2022;</span>(c) Ensuring any documents you submit to the VA are truthful, accurate, and complete</li>
+            <li className="flex items-start gap-2"><span className="text-[#D6B25E] mt-0.5">&#x2022;</span>(d) Consulting with accredited professionals when appropriate</li>
+            <li className="flex items-start gap-2"><span className="text-[#D6B25E] mt-0.5">&#x2022;</span>(e) Verifying current VA form versions, requirements, and deadlines</li>
           </ul>
           <div className="rounded-xl bg-red-500/5 border border-red-500/20 p-4">
             <p className="text-muted-foreground">
@@ -230,7 +230,7 @@ export default function TermsOfServicePage() {
           <h2 className="text-lg font-semibold text-foreground">18. Contact</h2>
           <p className="text-muted-foreground">
             Questions about these Terms:{' '}
-            <a href="mailto:blakedrain@gmail.com" className="text-[#3B82F6] hover:underline">
+            <a href="mailto:blakedrain@gmail.com" className="text-[#D6B25E] hover:underline">
               blakedrain@gmail.com
             </a>
           </p>

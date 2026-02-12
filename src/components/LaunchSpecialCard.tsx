@@ -5,15 +5,15 @@ export const LaunchSpecialCard = () => {
   const price = isLaunchWindow ? "$4.99" : "$19.99";
 
   return (
-    <div className="p-12 rounded-[3rem] bg-[#102039] border-2 border-[#3B82F6] shadow-2xl relative overflow-hidden">
+    <div className="p-12 rounded-[3rem] bg-[#102039] border-2 border-[#D6B25E] shadow-2xl relative overflow-hidden">
       {isLaunchWindow && (
         <div className="absolute top-4 right-[-40px] rotate-45 bg-emerald-500 text-navy-950 px-12 py-1 font-black text-[10px] uppercase">
           Early Access
         </div>
       )}
       <h2 className="text-6xl font-black text-white italic">{price}</h2>
-      <p className="text-[#3B82F6] font-bold uppercase tracking-widest mt-2">Limited Time Launch Price</p>
-      <button className="w-full mt-8 py-4 bg-[#3B82F6] text-navy-950 font-black rounded-2xl">Unlock Platinum Suite</button>
+      <p className="text-[#D6B25E] font-bold uppercase tracking-widest mt-2">Limited Time Launch Price</p>
+      <button className="w-full mt-8 py-4 bg-[#D6B25E] text-navy-950 font-black rounded-2xl">Unlock Platinum Suite</button>
     </div>
   );
 };
