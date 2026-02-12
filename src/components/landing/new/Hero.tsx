@@ -73,21 +73,22 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.3 }}
         >
           Prepare Your VA Claim with{' '}
-          <span className="inline-block relative" style={{ minWidth: '3ch' }}>
+          <span className="relative inline-block" style={{ minWidth: '280px', height: '1.2em' }}>
             <AnimatePresence mode="wait">
               <motion.span
                 key={ROTATING_WORDS[index]}
-                className="inline-block"
+                className="absolute left-0 inline-block"
                 style={{
-                  background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+                  background: 'linear-gradient(135deg, #F5D680 0%, #C5A442 50%, #A38A35 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
+                  display: 'inline-block',
                 }}
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.35, ease: 'easeInOut' }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
               >
                 {ROTATING_WORDS[index]}
               </motion.span>
@@ -144,7 +145,7 @@ export function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.9 }}
         >
-          Free plan available &bull; Premium from $9.99/mo &bull; Veteran founded
+          Free plan available &bull; Premium from $4.99/mo &bull; Veteran founded
         </motion.p>
       </div>
     </section>

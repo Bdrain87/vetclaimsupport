@@ -2,48 +2,38 @@ import { useRef, useEffect, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { fadeInUp, staggerContainer } from '@/lib/landing-animations';
 
-interface Stat {
-  target: number;
-  suffix: string;
-  label: string;
-  isText?: boolean;
-  text?: string;
-}
-
-const STATS: Stat[] = [
-  { target: 10, suffix: '+', label: 'Preparation Tools' },
-  { target: 40, suffix: '+', label: 'Conditions Covered' },
-  { target: 100, suffix: '%', label: 'Private by Default' },
-  { target: 0, suffix: '', label: 'Veteran Founded', isText: true, text: '\u2713' },
-];
-
-function CountUp({ stat }: { stat: Stat }) {
-  const [count, setCount] = useState(0);
+function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true });
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
+  const [display, setDisplay] = useState(0);
 
   useEffect(() => {
-    if (!isInView || stat.isText) return;
-    const duration = 1200;
-    const steps = 30;
-    const increment = stat.target / steps;
-    let current = 0;
-    let step = 0;
-    const timer = setInterval(() => {
-      step++;
-      current = Math.min(Math.round(increment * step), stat.target);
-      setCount(current);
-      if (step >= steps) clearInterval(timer);
-    }, duration / steps);
-    return () => clearInterval(timer);
-  }, [isInView, stat.target, stat.isText]);
+    if (!isInView) return;
+    let start = 0;
+    const duration = 1500;
+    const startTime = Date.now();
 
-  return (
-    <span ref={ref}>
-      {stat.isText ? stat.text : `${isInView ? count : 0}${stat.suffix}`}
-    </span>
-  );
+    const tick = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setDisplay(Math.round(eased * value));
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+
+    requestAnimationFrame(tick);
+  }, [isInView, value]);
+
+  return <span ref={ref}>{isInView ? display : 0}{suffix}</span>;
 }
+
+const STATS = [
+  { value: 10, suffix: '+', label: 'Preparation Tools' },
+  { value: 40, suffix: '+', label: 'Conditions Covered' },
+  { value: 100, suffix: '%', label: 'Private by Default' },
+  { value: 0, suffix: '', label: 'Veteran Founded', isText: true },
+];
 
 export function SocialProof() {
   return (
@@ -72,7 +62,7 @@ export function SocialProof() {
                 backgroundClip: 'text',
               }}
             >
-              <CountUp stat={stat} />
+              {stat.isText ? '\u2713' : <AnimatedNumber value={stat.value} suffix={stat.suffix} />}
             </span>
             <span className="text-sm" style={{ color: '#9CA3AF' }}>
               {stat.label}
