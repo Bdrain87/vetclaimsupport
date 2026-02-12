@@ -137,10 +137,11 @@ export function Hero() {
 
         {/* Trust line */}
         <motion.div
-          className="inline-flex items-center gap-3 text-sm px-5 py-2 rounded-full border"
+          className="inline-flex items-center gap-3 text-sm px-6 py-2.5 rounded-full"
           style={{
-            borderColor: 'rgba(197,164,66,0.3)',
-            background: 'linear-gradient(135deg, rgba(197,164,66,0.08) 0%, rgba(197,164,66,0.02) 100%)',
+            border: '1.5px solid rgba(255,255,255,0.25)',
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)',
+            boxShadow: '0 0 15px rgba(255,255,255,0.15), 0 0 40px rgba(255,255,255,0.08), 0 0 80px rgba(255,255,255,0.04)',
           }}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
