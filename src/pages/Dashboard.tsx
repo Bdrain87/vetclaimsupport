@@ -427,13 +427,16 @@ export default function Dashboard() {
                   key={rec.conditionId + i}
                   className="flex items-center justify-between p-3 rounded-xl bg-secondary border border-border overflow-hidden"
                 >
-                  <div className="min-w-0 flex-1 mr-3">
+                  <button
+                    className="min-w-0 flex-1 mr-3 text-left"
+                    onClick={() => navigate(`/claims/${rec.conditionId}`)}
+                  >
                     <p className="text-sm font-medium text-foreground truncate">{rec.conditionName}</p>
                     {diagCode && (
                       <p className="text-xs text-muted-foreground">DC {diagCode}</p>
                     )}
                     <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{rec.reason}</p>
-                  </div>
+                  </button>
                   <Button
                     size="sm"
                     variant="outline"
