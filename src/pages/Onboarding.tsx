@@ -119,7 +119,7 @@ function MOSAutocomplete({
         onFocus={() => { if (results.length > 0) setIsOpen(true); }}
         onKeyDown={handleKeyDown}
         placeholder="Type your code or job title..."
-        className="w-full h-12 pl-10 pr-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] focus:border-[rgba(214,178,94,0.5)] transition-all"
+        className="w-full h-12 pl-10 pr-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] focus:border-[rgba(214,178,94,0.5)] transition-all"
       />
       {isOpen && (
         <div className="absolute top-full left-0 right-0 mt-1 z-50 bg-[#1a2d44] border border-white/10 rounded-xl shadow-2xl shadow-black/50 max-h-60 overflow-y-auto">
@@ -420,7 +420,7 @@ export default function Onboarding() {
             {step === 1 && (
               <div className="space-y-5">
                 <div className="text-center">
-                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
+                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.09] border border-white/[0.14] flex items-center justify-center mb-4">
                     <User className="h-7 w-7 text-gold" />
                   </div>
                   <h2 className="text-xl font-bold text-white">What should we call you?</h2>
@@ -434,8 +434,8 @@ export default function Onboarding() {
                       onBlur={() => { if (!firstName.trim()) setNameError('Please enter your first name'); }}
                       placeholder="First Name"
                       autoFocus
-                      className={`w-full h-12 px-4 bg-white/[0.06] border rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all ${
-                        nameError ? 'border-red-400/50' : 'border-white/[0.1]'
+                      className={`w-full h-12 px-4 bg-white/[0.09] border rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all ${
+                        nameError ? 'border-red-400/50' : 'border-white/[0.14]'
                       }`}
                     />
                     {nameError && <p className="text-red-400 text-xs mt-1">{nameError}</p>}
@@ -445,7 +445,7 @@ export default function Onboarding() {
                     value={lastName}
                     onChange={e => setLastName(e.target.value)}
                     placeholder="Last Name (optional)"
-                    className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
+                    className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
                   />
                 </div>
               </div>
@@ -477,7 +477,7 @@ export default function Onboarding() {
                         className={`w-full flex items-center gap-3 p-4 rounded-xl border transition-all ${
                           isSelected
                             ? 'bg-[rgba(214,178,94,0.1)] border-[rgba(214,178,94,0.4)] text-white'
-                            : 'bg-white/[0.04] border-white/[0.08] text-white/70 hover:bg-white/[0.06]'
+                            : 'bg-white/[0.07] border-white/[0.12] text-white/70 hover:bg-white/[0.10]'
                         }`}
                       >
                         <div
@@ -501,7 +501,7 @@ export default function Onboarding() {
             {step === 3 && branch && (
               <div className="space-y-5">
                 <div className="text-center">
-                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
+                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.09] border border-white/[0.14] flex items-center justify-center mb-4">
                     <Briefcase className="h-7 w-7 text-gold" />
                   </div>
                   <h2 className="text-xl font-bold text-white">What is or was your military job code?</h2>
@@ -551,7 +551,7 @@ export default function Onboarding() {
                         setMosCode(e.target.value);
                       }}
                       placeholder="Job Code (e.g., 11B)"
-                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
+                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
                     />
                     <input
                       type="text"
@@ -561,7 +561,7 @@ export default function Onboarding() {
                         setMosTitle(e.target.value);
                       }}
                       placeholder="Job Title (e.g., Infantryman)"
-                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
+                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
                     />
                     {manualCode && manualTitle && (
                       <div className="flex items-center gap-2 text-sm text-gold min-w-0">
@@ -585,7 +585,7 @@ export default function Onboarding() {
             {step === 4 && (
               <div className="space-y-5">
                 <div className="text-center">
-                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
+                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.09] border border-white/[0.14] flex items-center justify-center mb-4">
                     <MapPin className="h-7 w-7 text-gold" />
                   </div>
                   <h2 className="text-xl font-bold text-white">Where do you or did you serve?</h2>
@@ -595,7 +595,7 @@ export default function Onboarding() {
                 {dutyStations.length > 0 && (
                   <div className="space-y-2">
                     {dutyStations.map((station, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.04] border border-white/[0.08] gap-2">
+                      <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.07] border border-white/[0.12] gap-2">
                         <div className="min-w-0 flex-1">
                           <p className="text-white text-sm font-medium truncate">{station.baseName}</p>
                           {(station.startDate || station.endDate) && (
@@ -615,7 +615,7 @@ export default function Onboarding() {
                 )}
 
                 {showStationForm ? (
-                  <div className="space-y-3 p-4 rounded-xl border border-white/[0.1] bg-white/[0.02]">
+                  <div className="space-y-3 p-4 rounded-xl border border-white/[0.14] bg-white/[0.02]">
                     <LocationAutocomplete
                       value={stationBase}
                       onChange={setStationBase}
@@ -628,14 +628,14 @@ export default function Onboarding() {
                         value={stationStart}
                         onChange={e => setStationStart(e.target.value)}
                         placeholder="Start"
-                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
+                        className="h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
                       />
                       <input
                         type="month"
                         value={stationEnd}
                         onChange={e => setStationEnd(e.target.value)}
                         placeholder="End"
-                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
+                        className="h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
                       />
                     </div>
                     <div className="flex gap-2">
@@ -669,7 +669,7 @@ export default function Onboarding() {
             {step === 5 && (
               <div className="space-y-5">
                 <div className="text-center">
-                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
+                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.09] border border-white/[0.14] flex items-center justify-center mb-4">
                     <Plane className="h-7 w-7 text-gold" />
                   </div>
                   <h2 className="text-xl font-bold text-white">Any Deployments or Combat Tours?</h2>
@@ -679,7 +679,7 @@ export default function Onboarding() {
                 {deployments.length > 0 && (
                   <div className="space-y-2">
                     {deployments.map((dep, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.04] border border-white/[0.08] gap-2">
+                      <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.07] border border-white/[0.12] gap-2">
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2 flex-wrap">
                             <p className="text-white text-sm font-medium truncate">{dep.operationName}</p>
@@ -705,11 +705,11 @@ export default function Onboarding() {
                 )}
 
                 {showDeployForm ? (
-                  <div className="space-y-3 p-4 rounded-xl border border-white/[0.1] bg-white/[0.02]">
+                  <div className="space-y-3 p-4 rounded-xl border border-white/[0.14] bg-white/[0.02]">
                     <select
                       value={deployOp}
                       onChange={e => setDeployOp(e.target.value)}
-                      className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
+                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
                     >
                       <option value="" className="bg-[#000000]">Select Operation/Theater...</option>
                       {OPERATIONS.map(op => (
@@ -727,19 +727,19 @@ export default function Onboarding() {
                         type="month"
                         value={deployStart}
                         onChange={e => setDeployStart(e.target.value)}
-                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
+                        className="h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
                       />
                       <input
                         type="month"
                         value={deployEnd}
                         onChange={e => setDeployEnd(e.target.value)}
-                        className="h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
+                        className="h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
                       />
                     </div>
                     <button
                       onClick={() => setDeployCombat(!deployCombat)}
                       className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${
-                        deployCombat ? 'border-red-500/40 bg-red-500/10' : 'border-white/[0.1] bg-white/[0.04]'
+                        deployCombat ? 'border-red-500/40 bg-red-500/10' : 'border-white/[0.14] bg-white/[0.07]'
                       }`}
                     >
                       <span className="text-white text-sm">Combat Zone?</span>
@@ -785,7 +785,7 @@ export default function Onboarding() {
             {step === 6 && (
               <div className="space-y-5">
                 <div className="text-center">
-                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center mb-4">
+                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.09] border border-white/[0.14] flex items-center justify-center mb-4">
                     <Stethoscope className="h-7 w-7 text-gold" />
                   </div>
                   <h2 className="text-xl font-bold text-white">Are you claiming any conditions?</h2>
@@ -836,7 +836,7 @@ export default function Onboarding() {
                       className={`w-full flex items-start gap-3 p-4 rounded-xl border transition-all text-left ${
                         claimGoal === option.value
                           ? 'bg-[rgba(214,178,94,0.1)] border-[rgba(214,178,94,0.4)] text-white'
-                          : 'bg-white/[0.04] border-white/[0.08] text-white/70 hover:bg-white/[0.06]'
+                          : 'bg-white/[0.07] border-white/[0.12] text-white/70 hover:bg-white/[0.10]'
                       }`}
                     >
                       <div
@@ -871,7 +871,7 @@ export default function Onboarding() {
                     className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${
                       hasExistingRated === true
                         ? 'bg-[rgba(214,178,94,0.1)] border-[rgba(214,178,94,0.4)] text-white'
-                        : 'bg-white/[0.04] border-white/[0.08] text-white/70 hover:bg-white/[0.06]'
+                        : 'bg-white/[0.07] border-white/[0.12] text-white/70 hover:bg-white/[0.10]'
                     }`}
                   >
                     Yes, I have rated conditions
@@ -881,7 +881,7 @@ export default function Onboarding() {
                     className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${
                       hasExistingRated === false
                         ? 'bg-[rgba(214,178,94,0.1)] border-[rgba(214,178,94,0.4)] text-white'
-                        : 'bg-white/[0.04] border-white/[0.08] text-white/70 hover:bg-white/[0.06]'
+                        : 'bg-white/[0.07] border-white/[0.12] text-white/70 hover:bg-white/[0.10]'
                     }`}
                   >
                     No, not yet
@@ -891,7 +891,7 @@ export default function Onboarding() {
                 {hasExistingRated === true && (
                   <div className="space-y-4">
                     {/* Add new rated condition form */}
-                    <div className="space-y-3 p-4 rounded-xl bg-white/[0.04] border border-white/[0.08]">
+                    <div className="space-y-3 p-4 rounded-xl bg-white/[0.07] border border-white/[0.12]">
                       {!newRatedCondition ? (
                         <ConditionAutocomplete
                           onSelect={(condition) => setNewRatedCondition(condition.name)}
@@ -909,13 +909,13 @@ export default function Onboarding() {
                         <select
                           value={newRatedRating}
                           onChange={(e) => setNewRatedRating(Number(e.target.value))}
-                          className="flex-1 px-3 py-2.5 rounded-xl bg-white/[0.06] border border-white/[0.08] text-white text-sm focus:outline-none focus:border-[rgba(214,178,94,0.4)]"
+                          className="flex-1 px-3 py-2.5 rounded-xl bg-white/[0.09] border border-white/[0.12] text-white text-sm focus:outline-none focus:border-[rgba(214,178,94,0.4)]"
                         >
                           {[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map(v => (
                             <option key={v} value={v} className="bg-[#000000] text-white">{v}%</option>
                           ))}
                         </select>
-                        <div className="flex border border-white/[0.08] rounded-xl overflow-hidden">
+                        <div className="flex border border-white/[0.12] rounded-xl overflow-hidden">
                           <button
                             onClick={() => setNewRatedType('primary')}
                             className={`px-3 py-2 text-xs font-medium transition-colors ${
@@ -947,7 +947,7 @@ export default function Onboarding() {
                     {existingRated.length > 0 && (
                       <div className="space-y-2">
                         {existingRated.map((rc, idx) => (
-                          <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.04] border border-white/[0.08] gap-2">
+                          <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.07] border border-white/[0.12] gap-2">
                             <div className="flex-1 min-w-0">
                               <p className="text-sm text-white font-medium truncate">{rc.conditionName}</p>
                               <p className="text-xs text-white/40">{rc.rating}% · {rc.type}</p>
@@ -989,7 +989,7 @@ export default function Onboarding() {
                     { title: 'Back Pay Estimator', desc: 'Estimate your potential retroactive compensation' },
                     { title: 'Condition Explorer', desc: 'Discover conditions related to your MOS with rating criteria breakdowns' },
                   ].map((card) => (
-                    <div key={card.title} className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.04] border border-white/[0.08]">
+                    <div key={card.title} className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.07] border border-white/[0.12]">
                       <div className="w-1.5 h-1.5 rounded-full bg-gold mt-1.5 flex-shrink-0" />
                       <div className="flex-1 min-w-0">
                         <p className="text-white font-semibold text-sm">{card.title}</p>

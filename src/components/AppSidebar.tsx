@@ -224,7 +224,7 @@ export function AppSidebar() {
         'fixed left-0 top-0 z-40 h-screen border-r flex-col',
         'border-sidebar-border',
         'transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]',
-        'bg-gradient-to-b from-sidebar-background via-sidebar-background to-[hsl(220_20%_5%)]',
+        'bg-gradient-to-b from-sidebar-background via-sidebar-background to-[hsl(0_0%_5%)]',
         collapsed ? 'w-16' : 'w-64'
       )}
       style={{

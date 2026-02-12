@@ -93,7 +93,7 @@ function GlassCard({ children, className = '' }: { children: React.ReactNode; cl
   return (
     <motion.div
       variants={cardVariant}
-      className={`bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-6 sm:p-8 shadow-lg shadow-black/20 transition-all duration-300 ease-out hover:shadow-xl hover:shadow-[#D6B25E]/10 hover:border-[#D6B25E]/30 hover:-translate-y-1 ${className}`}
+      className={`bg-white/[0.07] backdrop-blur-xl border border-white/[0.12] rounded-2xl p-6 sm:p-8 shadow-lg shadow-black/20 transition-all duration-300 ease-out hover:shadow-xl hover:shadow-[#D6B25E]/10 hover:border-[#D6B25E]/30 hover:-translate-y-1 ${className}`}
     >
       {children}
     </motion.div>
@@ -211,7 +211,7 @@ export const PlatinumLanding = () => {
           transition={{ delay: 0.3, duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
           className="relative mt-8 sm:mt-10 w-full max-w-sm"
         >
-          <div className="relative bg-white/[0.04] backdrop-blur-xl border border-white/10 rounded-2xl p-6 sm:p-8 shadow-xl shadow-black/30">
+          <div className="relative bg-white/[0.07] backdrop-blur-xl border border-white/10 rounded-2xl p-6 sm:p-8 shadow-xl shadow-black/30">
             {/* SALE badge */}
             <motion.span
               animate={{ scale: [1, 1.05, 1] }}
@@ -261,7 +261,7 @@ export const PlatinumLanding = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
-          className="max-w-5xl mx-auto bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-4 sm:p-8 md:p-10 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-16 shadow-lg shadow-black/20"
+          className="max-w-5xl mx-auto bg-white/[0.07] backdrop-blur-xl border border-white/[0.12] rounded-2xl p-4 sm:p-8 md:p-10 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-16 shadow-lg shadow-black/20"
         >
           {[
             { icon: <Award size={24} />, text: 'Built by a 100% Disabled Veteran' },
@@ -607,7 +607,7 @@ export const PlatinumLanding = () => {
               { icon: <ShieldCheck size={32} />, label: 'No accounts required' },
             ].map((item, i) => (
               <motion.div key={i} variants={cardVariant} className="flex flex-col items-center gap-3 text-center">
-                <div className="w-16 h-16 flex items-center justify-center bg-white/5 rounded-2xl text-[#D6B25E] border border-white/[0.08]">{item.icon}</div>
+                <div className="w-16 h-16 flex items-center justify-center bg-white/5 rounded-2xl text-[#D6B25E] border border-white/[0.12]">{item.icon}</div>
                 <p className="text-white/70 text-sm font-medium max-w-[180px]">{item.label}</p>
               </motion.div>
             ))}

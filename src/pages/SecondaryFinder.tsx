@@ -134,7 +134,7 @@ export default function SecondaryFinder() {
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all max-w-full truncate ${
                   selectedPrimary === c.fullName
                     ? 'bg-[rgba(214,178,94,0.2)] text-gold border border-[rgba(214,178,94,0.4)]'
-                    : 'bg-white/[0.06] text-white/70 border border-white/[0.08] hover:border-[rgba(214,178,94,0.3)] hover:text-white'
+                    : 'bg-white/[0.09] text-white/70 border border-white/[0.12] hover:border-[rgba(214,178,94,0.3)] hover:text-white'
                 }`}
               >
                 <span className="truncate">{c.name}</span> <ArrowRight className="inline h-3 w-3 ml-1 shrink-0" />
@@ -219,7 +219,7 @@ export default function SecondaryFinder() {
       {/* Empty state when nothing selected */}
       {!selectedPrimary && claimedConditions.length === 0 && (
         <div className="text-center py-16">
-          <div className="w-16 h-16 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 rounded-2xl bg-white/[0.07] border border-white/[0.12] flex items-center justify-center mx-auto mb-4">
             <Link2 className="h-8 w-8 text-white/20" />
           </div>
           <h3 className="text-white/70 font-semibold mb-2">Search for a condition to get started</h3>

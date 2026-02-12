@@ -74,7 +74,7 @@ export function PaywallModal({ isOpen, onClose }: PaywallModalProps) {
         {/* Value bullets */}
         <div className="px-6 pb-4 space-y-2">
           {VALUE_BULLETS.map(({ icon: Icon, text }) => (
-            <div key={text} className="flex items-center gap-3 p-2.5 rounded-lg bg-white/[0.04]">
+            <div key={text} className="flex items-center gap-3 p-2.5 rounded-lg bg-white/[0.07]">
               <div className="p-1.5 rounded-md bg-[#D6B25E]/10">
                 <Icon className="h-4 w-4 text-[#D6B25E]" />
               </div>
@@ -96,7 +96,7 @@ export function PaywallModal({ isOpen, onClose }: PaywallModalProps) {
 
           <button
             onClick={onClose}
-            className="w-full h-10 rounded-xl bg-white/[0.06] border border-white/10 text-white/60 text-sm hover:bg-white/[0.1] transition-all"
+            className="w-full h-10 rounded-xl bg-white/[0.09] border border-white/10 text-white/60 text-sm hover:bg-white/[0.1] transition-all"
           >
             Continue in Preview
           </button>

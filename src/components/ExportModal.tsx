@@ -232,10 +232,10 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="relative w-full max-w-lg mx-4 my-8 sm:my-16 bg-[#111111] border border-white/[0.08] rounded-2xl shadow-2xl overflow-hidden"
+            className="relative w-full max-w-lg mx-4 my-8 sm:my-16 bg-[#111111] border border-white/[0.12] rounded-2xl shadow-2xl overflow-hidden"
           >
             {/* Header */}
-            <div className="px-6 pt-6 pb-4 border-b border-white/[0.06]">
+            <div className="px-6 pt-6 pb-4 border-b border-white/[0.10]">
               <div className="flex items-start justify-between">
                 <div>
                   <h2 className="text-lg font-bold text-[#F8FAFC]">Build Your Packet</h2>
@@ -245,7 +245,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
                 </div>
                 <button
                   onClick={onClose}
-                  className="min-h-[44px] min-w-[44px] flex items-center justify-center text-white/40 hover:text-white/80 transition-colors rounded-lg hover:bg-white/[0.04]"
+                  className="min-h-[44px] min-w-[44px] flex items-center justify-center text-white/40 hover:text-white/80 transition-colors rounded-lg hover:bg-white/[0.07]"
                   aria-label="Close"
                 >
                   <X size={20} />
@@ -279,7 +279,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
                       className={`w-full flex items-start gap-3 p-3 rounded-xl border transition-all duration-150 text-left ${
                         checked
                           ? 'border-[rgba(214,178,94,0.3)] bg-[rgba(214,178,94,0.06)]'
-                          : 'border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04]'
+                          : 'border-white/[0.10] bg-white/[0.02] hover:bg-white/[0.07]'
                       }`}
                     >
                       {/* Custom checkbox */}
@@ -323,7 +323,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
                       className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all duration-150 text-left ${
                         format === option.value
                           ? 'border-[rgba(214,178,94,0.3)] bg-[rgba(214,178,94,0.06)]'
-                          : 'border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04]'
+                          : 'border-white/[0.10] bg-white/[0.02] hover:bg-white/[0.07]'
                       }`}
                     >
                       {/* Radio button */}
@@ -362,7 +362,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
             )}
 
             {/* Action Buttons */}
-            <div className="px-6 py-4 border-t border-white/[0.06] space-y-2">
+            <div className="px-6 py-4 border-t border-white/[0.10] space-y-2">
               {isGenerating ? (
                 <div className="flex items-center justify-center gap-3 py-4">
                   <Loader2 size={20} className="text-gold animate-spin" />
@@ -384,7 +384,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
                   <button
                     onClick={handleSaveToDevice}
                     disabled={noneChecked}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-white/[0.1] bg-white/[0.04] hover:bg-white/[0.08] text-[#F8FAFC] font-medium text-sm transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-white/[0.14] bg-white/[0.07] hover:bg-white/[0.12] text-[#F8FAFC] font-medium text-sm transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     <Download size={18} />
                     Save to Device

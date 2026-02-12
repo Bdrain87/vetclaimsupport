@@ -38,7 +38,7 @@ function NavLinkItem({ to, children }: { to: string; children: React.ReactNode }
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
         />
       )}
-      <div className="absolute inset-0 rounded-lg bg-white/0 group-hover:bg-white/[0.04] transition-colors duration-200" />
+      <div className="absolute inset-0 rounded-lg bg-white/0 group-hover:bg-white/[0.07] transition-colors duration-200" />
       <span className={cn(
         'relative text-sm transition-colors duration-200',
         isActive ? 'text-[#D6B25E] font-semibold' : 'text-white/50 font-medium group-hover:text-white/80'
@@ -99,7 +99,7 @@ export const PlatinumNavbar = () => {
         )}>
           <div className="relative max-w-7xl mx-auto">
             {/* Glass background */}
-            <div className="absolute inset-0 bg-[#000000]/70 backdrop-blur-xl border border-white/[0.06] rounded-2xl" />
+            <div className="absolute inset-0 bg-[#000000]/70 backdrop-blur-xl border border-white/[0.10] rounded-2xl" />
 
             {/* Blue accent line */}
             <div className="absolute top-0 left-4 right-4 h-[1px] bg-gradient-to-r from-transparent via-[#D6B25E]/30 to-transparent" />
@@ -153,9 +153,9 @@ export const PlatinumNavbar = () => {
                   <Settings size={18} />
                 </Link>
 
-                <div className="hidden sm:flex items-center gap-2.5 pl-2 border-l border-white/[0.06]">
+                <div className="hidden sm:flex items-center gap-2.5 pl-2 border-l border-white/[0.10]">
                   <div className={cn(
-                    'rounded-full bg-white/[0.06] border border-white/[0.08] flex items-center justify-center text-white/60 transition-all duration-300',
+                    'rounded-full bg-white/[0.09] border border-white/[0.12] flex items-center justify-center text-white/60 transition-all duration-300',
                     isCompressed ? 'h-7 w-7' : 'h-8 w-8'
                   )}>
                     <User size={isCompressed ? 14 : 16} />
@@ -189,7 +189,7 @@ export const PlatinumNavbar = () => {
       )}>
         <div className="px-3 py-2" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
           <div className="relative">
-            <div className="absolute inset-0 bg-[#000000]/70 backdrop-blur-xl border border-white/[0.06] rounded-xl" />
+            <div className="absolute inset-0 bg-[#000000]/70 backdrop-blur-xl border border-white/[0.10] rounded-xl" />
             <div className="relative flex items-center justify-between px-3 h-12">
               <Link to="/" className="flex items-center group">
                 <span className="text-[#F8FAFC] font-bold tracking-[0.08em] uppercase text-sm">VCS</span>
@@ -235,15 +235,15 @@ export const PlatinumNavbar = () => {
       <div
         className={cn(
           'fixed top-0 right-0 z-[201] h-[100dvh] w-[min(320px,85vw)]',
-          'bg-[#0c1829]/95 backdrop-blur-xl border-l border-white/[0.06]',
+          'bg-[#0c1829]/95 backdrop-blur-xl border-l border-white/[0.10]',
           'shadow-2xl transform transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]',
           drawerOpen ? 'translate-x-0' : 'translate-x-full'
         )}
       >
         {/* Drawer header */}
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-white/[0.06]">
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-white/[0.10]">
           <div className="flex items-center gap-2.5">
-            <div className="h-8 w-8 rounded-full bg-white/[0.06] border border-white/[0.08] flex items-center justify-center text-white/60">
+            <div className="h-8 w-8 rounded-full bg-white/[0.09] border border-white/[0.12] flex items-center justify-center text-white/60">
               <User size={16} />
             </div>
             <div>
@@ -273,8 +273,8 @@ export const PlatinumNavbar = () => {
                 className={cn(
                   'flex items-center min-h-[48px] px-4 rounded-xl text-sm font-medium transition-all duration-200',
                   isActive
-                    ? 'text-white bg-white/[0.06] border-l-2 border-[#D6B25E]'
-                    : 'text-white/60 hover:text-white hover:bg-white/[0.03] active:bg-white/[0.06]'
+                    ? 'text-white bg-white/[0.09] border-l-2 border-[#D6B25E]'
+                    : 'text-white/60 hover:text-white hover:bg-white/[0.03] active:bg-white/[0.09]'
                 )}
               >
                 {item.label}

@@ -41,59 +41,59 @@ body {
 
 @layer base {
   :root {
-    /* Premium Dark Mode - Refined & Polished */
+    /* Premium Dark Mode - Black, Gold & Gray */
     --background: 0 0% 0%;
     --foreground: 0 0% 98%;
 
-    /* Elevated surfaces with depth */
-    --card: 0 0% 7%;
+    /* Elevated surfaces — charcoal depth */
+    --card: 0 0% 9%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 10%;
+    --popover: 0 0% 11%;
     --popover-foreground: 0 0% 98%;
 
-    /* Primary Gold - Vibrant & Eye-catching */
+    /* Primary Gold */
     --primary: 43 64% 60%;
-    --primary-foreground: 210 40% 10%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Subtle elevated surface */
-    --secondary: 0 0% 12%;
+    /* Secondary — charcoal surface */
+    --secondary: 0 0% 13%;
     --secondary-foreground: 0 0% 85%;
 
-    --muted: 0 0% 14%;
-    --muted-foreground: 220 10% 50%;
+    --muted: 0 0% 16%;
+    --muted-foreground: 0 0% 50%;
 
     --accent: 43 64% 60%;
-    --accent-foreground: 210 40% 10%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    /* System Colors - Vibrant against dark */
+    /* System Colors */
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 0%;
 
     --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;
 
-    --border: 220 13% 16%;
-    --input: 0 0% 12%;
+    --border: 0 0% 18%;
+    --input: 0 0% 13%;
     --ring: 43 64% 60%;
 
     --radius: 1rem;
 
-    /* Premium Sidebar with subtle gradient support */
-    --sidebar-background: 0 0% 2%;
-    --sidebar-foreground: 220 10% 55%;
+    /* Sidebar — slightly off-black */
+    --sidebar-background: 0 0% 3%;
+    --sidebar-foreground: 0 0% 55%;
     --sidebar-primary: 43 64% 60%;
-    --sidebar-primary-foreground: 210 40% 10%;
-    --sidebar-accent: 0 0% 10%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 11%;
     --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 220 13% 12%;
+    --sidebar-border: 0 0% 14%;
     --sidebar-ring: 43 64% 60%;
-    --sidebar-muted: 220 10% 45%;
+    --sidebar-muted: 0 0% 45%;
 
-    /* Section colors - High contrast for dark mode */
+    /* Section colors */
     --medical: 210 90% 56%;
     --exposure: 38 92% 50%;
     --symptoms: 142 71% 45%;
@@ -103,81 +103,81 @@ body {
     --documents: 48 96% 53%;
 
     /* Glassmorphism variables */
-    --glass-bg: 0 0% 7% / 0.7;
-    --glass-border: 220 13% 20% / 0.5;
+    --glass-bg: 0 0% 9% / 0.7;
+    --glass-border: 0 0% 22% / 0.5;
     --glass-blur: 20px;
   }
 
   .dark {
     --background: 0 0% 0%;
     --foreground: 0 0% 98%;
-    --card: 0 0% 7%;
+    --card: 0 0% 9%;
     --card-foreground: 0 0% 98%;
-    --popover: 0 0% 10%;
+    --popover: 0 0% 11%;
     --popover-foreground: 0 0% 98%;
     --primary: 43 64% 60%;
-    --primary-foreground: 210 40% 10%;
-    --secondary: 0 0% 12%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 13%;
     --secondary-foreground: 0 0% 85%;
-    --muted: 0 0% 14%;
-    --muted-foreground: 220 10% 50%;
+    --muted: 0 0% 16%;
+    --muted-foreground: 0 0% 50%;
     --accent: 43 64% 60%;
-    --accent-foreground: 210 40% 10%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 0%;
     --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;
-    --border: 220 13% 16%;
-    --input: 0 0% 12%;
+    --border: 0 0% 18%;
+    --input: 0 0% 13%;
     --ring: 43 64% 60%;
-    --sidebar-background: 0 0% 2%;
-    --sidebar-foreground: 220 10% 55%;
+    --sidebar-background: 0 0% 3%;
+    --sidebar-foreground: 0 0% 55%;
     --sidebar-primary: 43 64% 60%;
-    --sidebar-primary-foreground: 210 40% 10%;
-    --sidebar-accent: 0 0% 10%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 11%;
     --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 220 13% 12%;
+    --sidebar-border: 0 0% 14%;
     --sidebar-ring: 43 64% 60%;
   }
 
   /* Light mode - Clean & Professional */
   .light {
-    --background: 220 20% 98%;
-    --foreground: 220 20% 10%;
+    --background: 0 0% 98%;
+    --foreground: 0 0% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 220 20% 10%;
+    --card-foreground: 0 0% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 10%;
+    --popover-foreground: 0 0% 10%;
     --primary: 43 64% 45%;
-    --primary-foreground: 210 40% 10%;
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 220 20% 25%;
-    --muted: 220 14% 95%;
-    --muted-foreground: 220 10% 45%;
+    --primary-foreground: 0 0% 10%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 25%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 45%;
     --accent: 43 64% 45%;
-    --accent-foreground: 210 40% 10%;
+    --accent-foreground: 0 0% 10%;
     --destructive: 0 84% 55%;
     --destructive-foreground: 0 0% 100%;
     --warning: 38 92% 45%;
     --warning-foreground: 0 0% 0%;
     --success: 142 71% 35%;
     --success-foreground: 0 0% 100%;
-    --border: 220 13% 88%;
-    --input: 220 14% 92%;
+    --border: 0 0% 88%;
+    --input: 0 0% 92%;
     --ring: 43 64% 45%;
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 220 10% 35%;
+    --sidebar-foreground: 0 0% 35%;
     --sidebar-primary: 43 64% 45%;
-    --sidebar-primary-foreground: 210 40% 10%;
+    --sidebar-primary-foreground: 0 0% 10%;
     --sidebar-accent: 43 64% 97%;
     --sidebar-accent-foreground: 43 64% 35%;
-    --sidebar-border: 220 13% 92%;
+    --sidebar-border: 0 0% 92%;
     --sidebar-ring: 43 64% 45%;
-    --sidebar-muted: 220 10% 55%;
+    --sidebar-muted: 0 0% 55%;
     --glass-bg: 0 0% 100% / 0.8;
-    --glass-border: 220 13% 88% / 0.6;
+    --glass-border: 0 0% 88% / 0.6;
   }
 }
 
@@ -402,7 +402,7 @@ body {
     background: linear-gradient(
       145deg,
       hsl(var(--card)) 0%,
-      hsl(220 15% 6%) 100%
+      hsl(0 0% 6%) 100%
     );
     box-shadow: 
       0 4px 24px -4px hsl(0 0% 0% / 0.4),

@@ -125,7 +125,7 @@ export default function ClaimTools() {
           <button
             key={tool.id}
             onClick={() => setSelectedToolId(tool.id)}
-            className="group text-left p-5 rounded-2xl bg-white/[0.04] border border-white/[0.08] hover:border-[#D6B25E]/30 hover:bg-white/[0.07] transition-all duration-200 hover:shadow-lg hover:shadow-[#D6B25E]/5"
+            className="group text-left p-5 rounded-2xl bg-white/[0.07] border border-white/[0.12] hover:border-[#D6B25E]/30 hover:bg-white/[0.07] transition-all duration-200 hover:shadow-lg hover:shadow-[#D6B25E]/5"
           >
             <div className="w-11 h-11 rounded-xl bg-[#D6B25E]/10 border border-[#D6B25E]/20 flex items-center justify-center mb-4 group-hover:bg-[#D6B25E]/20 transition-colors">
               <tool.icon className="h-5 w-5 text-[#D6B25E]" />

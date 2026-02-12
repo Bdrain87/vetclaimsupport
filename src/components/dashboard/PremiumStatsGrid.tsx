@@ -72,7 +72,7 @@ export function PremiumStatsGrid() {
   const daysUntilSep = getDaysUntilSeparation();
   const totalEvidence = data.symptoms.length + data.medicalVisits.length + data.documents.filter(d => d.status === 'Obtained').length;
 
-  const glassCard = "bg-white/[0.04] backdrop-blur-sm border border-white/[0.06] rounded-2xl p-4 transition-all duration-300 ease-out overflow-hidden";
+  const glassCard = "bg-white/[0.07] backdrop-blur-sm border border-white/[0.10] rounded-2xl p-4 transition-all duration-300 ease-out overflow-hidden";
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
