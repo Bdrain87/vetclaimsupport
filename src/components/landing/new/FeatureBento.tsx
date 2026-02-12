@@ -1,11 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import {
-  motion,
-  AnimatePresence,
-  useMotionValue,
-  useMotionValueEvent,
-  useAnimationFrame,
-} from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   HEADING_H2_STYLE,
   PILL_STYLE,
@@ -534,110 +528,96 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
 }
 
 /* ────────────────────────────────────────────────
- * Desktop 3D Carousel
+ * Desktop 3D Perspective Grid
+ *
+ * A flat grid of cards viewed from a dramatic 3D angle
+ * (like looking down at a wall of portfolio pieces from
+ * above-left). One card at a time auto-pops forward.
  * ──────────────────────────────────────────────── */
 
-const DEGREES_PER_SECOND = 4;
-const RADIUS = 520;
-const POP_EXTRA_Z = 80;
 const N = CARDS.length;
-const DEG_PER_CARD = 360 / N;
+const POP_HOLD_MS = 2500; // how long each card stays popped
 
 function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => void }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const activeIndexRef = useRef(0);
-  const rotationAngle = useMotionValue(0);
-  const rotationRef = useRef(0);
-  const isPausedRef = useRef(false);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
-  // Sync pause state to ref for useAnimationFrame
+  // Auto-cycle the popped card
   useEffect(() => {
-    isPausedRef.current = isHovered;
-  }, [isHovered]);
+    if (isPaused) return;
+    const timer = setTimeout(() => {
+      setActiveIndex((prev) => (prev + 1) % N);
+    }, POP_HOLD_MS);
+    return () => clearTimeout(timer);
+  }, [activeIndex, isPaused]);
 
-  // Drive rotation with animation frame
-  useAnimationFrame((_, delta) => {
-    if (isPausedRef.current) return;
-    rotationRef.current += (delta / 1000) * DEGREES_PER_SECOND;
-    rotationAngle.set(rotationRef.current);
-  });
-
-  // Compute active card from rotation angle
-  useMotionValueEvent(rotationAngle, 'change', (angle) => {
-    const normalizedFront = (((-angle) % 360) + 360) % 360;
-    const newIndex = Math.round(normalizedFront / DEG_PER_CARD) % N;
-    if (newIndex !== activeIndexRef.current) {
-      activeIndexRef.current = newIndex;
-      setActiveIndex(newIndex);
-    }
-  });
+  // The card that's visually popped: hovered takes priority, then auto-cycle
+  const poppedIndex = hoveredIndex ?? activeIndex;
 
   return (
     <div
-      className="relative mx-auto"
-      style={{ height: '520px', maxWidth: '1200px' }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      ref={sectionRef}
+      className="relative mx-auto overflow-hidden"
+      style={{ height: '700px', maxWidth: '1400px' }}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => {
+        setIsPaused(false);
+        setHoveredIndex(null);
+      }}
     >
-      {/* Perspective container */}
+      {/* Perspective wrapper */}
       <div
-        className="absolute inset-0"
-        style={{ perspective: '1200px', perspectiveOrigin: '50% 45%' }}
+        className="absolute inset-0 flex items-center justify-center"
+        style={{ perspective: '1800px', perspectiveOrigin: '50% 35%' }}
       >
-        {/* Rotating group */}
-        <motion.div
-          className="absolute"
+        {/* Tilted grid plane */}
+        <div
           style={{
-            left: '50%',
-            top: '50%',
-            rotateY: rotationAngle,
+            transform: 'rotateX(48deg) rotateY(-8deg) rotateZ(8deg)',
             transformStyle: 'preserve-3d',
-            width: 0,
-            height: 0,
+            transformOrigin: 'center center',
           }}
         >
-          {CARDS.map((card, i) => {
-            const cardAngle = DEG_PER_CARD * i;
-            const isActive = i === activeIndex;
-            const Icon = card.icon;
+          {/* CSS grid of cards */}
+          <div
+            className="grid gap-3"
+            style={{
+              gridTemplateColumns: 'repeat(5, 240px)',
+              transformStyle: 'preserve-3d',
+            }}
+          >
+            {CARDS.map((card, i) => {
+              const isPopped = i === poppedIndex;
+              const Icon = card.icon;
 
-            return (
-              <div
-                key={card.title}
-                className="absolute"
-                style={{
-                  transform: `rotateY(${cardAngle}deg) translateZ(${RADIUS}px)`,
-                  transformStyle: 'preserve-3d',
-                  left: '-104px', // half of card width (208px)
-                  top: '-72px', // half of card height (~144px)
-                  willChange: 'transform',
-                }}
-              >
+              return (
                 <motion.div
+                  key={card.title}
                   className="cursor-pointer"
                   style={{
-                    width: '208px',
-                    backfaceVisibility: 'hidden',
                     transformStyle: 'preserve-3d',
+                    willChange: 'transform',
                   }}
                   animate={{
-                    z: isActive ? POP_EXTRA_Z : 0,
-                    scale: isActive ? 1.08 : 1,
+                    z: isPopped ? 90 : 0,
+                    scale: isPopped ? 1.06 : 1,
                   }}
                   transition={{ duration: 0.5, ease: EASE_SMOOTH }}
-                  whileHover={{ borderColor: 'rgba(197, 164, 66, 0.3)' }}
+                  onMouseEnter={() => setHoveredIndex(i)}
+                  onMouseLeave={() => setHoveredIndex(null)}
                   onClick={() => onSelectCard(card)}
                 >
                   <div
-                    className="rounded-[20px] p-5"
+                    className="rounded-[20px] p-5 h-full"
                     style={{
                       background: SILVER_GRADIENT,
-                      border: isActive
-                        ? '1px solid rgba(197, 164, 66, 0.3)'
-                        : '1px solid rgba(255, 255, 255, 0.3)',
-                      boxShadow: isActive ? CARD_SHADOW_ACTIVE : CARD_SHADOW,
-                      transition: 'box-shadow 0.3s, border-color 0.3s',
+                      border: isPopped
+                        ? '1px solid rgba(197, 164, 66, 0.35)'
+                        : '1px solid rgba(255, 255, 255, 0.25)',
+                      boxShadow: isPopped ? CARD_SHADOW_ACTIVE : CARD_SHADOW,
+                      transition: 'box-shadow 0.4s, border-color 0.4s',
                     }}
                   >
                     <div
@@ -647,30 +627,38 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
                       <Icon size={16} style={{ color: '#8B7332' }} />
                     </div>
                     <h4
-                      className="text-sm font-semibold mb-1 leading-tight"
+                      className="text-[15px] font-semibold mb-1.5 leading-tight"
                       style={{ color: '#0A0A0A', letterSpacing: '-0.02em' }}
                     >
                       {card.title}
                     </h4>
-                    <p className="text-xs leading-snug" style={{ color: '#333' }}>
+                    <p className="text-xs leading-snug" style={{ color: '#444' }}>
                       {card.short}
                     </p>
                   </div>
                 </motion.div>
-              </div>
-            );
-          })}
-        </motion.div>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
-      {/* Top + bottom fades */}
+      {/* Edge fades */}
       <div
-        className="absolute top-0 left-0 right-0 h-24 pointer-events-none z-10"
+        className="absolute top-0 left-0 right-0 h-40 pointer-events-none z-10"
         style={{ background: 'linear-gradient(to bottom, #000 0%, transparent 100%)' }}
       />
       <div
-        className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none z-10"
+        className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none z-10"
         style={{ background: 'linear-gradient(to top, #000 0%, transparent 100%)' }}
+      />
+      <div
+        className="absolute top-0 bottom-0 left-0 w-32 pointer-events-none z-10"
+        style={{ background: 'linear-gradient(to right, #000 0%, transparent 100%)' }}
+      />
+      <div
+        className="absolute top-0 bottom-0 right-0 w-32 pointer-events-none z-10"
+        style={{ background: 'linear-gradient(to left, #000 0%, transparent 100%)' }}
       />
     </div>
   );
