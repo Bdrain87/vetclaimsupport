@@ -17,15 +17,21 @@ export default function LandingPage() {
     const html = document.documentElement;
     const body = document.body;
 
-    // The app's global CSS sets overflow-x:hidden on html and
-    // overscroll-behavior:none on body which can block trackpad
-    // momentum scrolling. Override for the landing page.
+    // The app's global CSS sets overflow-x:hidden on html/body which
+    // breaks position:sticky and overscroll-behavior:none on body
+    // which blocks trackpad momentum scrolling. Override for landing page.
+    // Using 'clip' instead of 'hidden' — clips overflow without creating
+    // a scroll container, so sticky positioning still works.
     html.style.overflowY = 'scroll';
+    html.style.overflowX = 'clip';
     body.style.overscrollBehavior = 'auto';
+    body.style.overflowX = 'clip';
 
     return () => {
       html.style.overflowY = '';
+      html.style.overflowX = '';
       body.style.overscrollBehavior = '';
+      body.style.overflowX = '';
     };
   }, []);
 
