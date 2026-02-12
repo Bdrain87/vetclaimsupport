@@ -83,13 +83,13 @@ export default {
           'border-strong': 'var(--gold-border-strong)',
           glow: 'var(--gold-glow)',
         },
-        // Dress Blues Design System Colors
+        // Black & Gray Design System Colors
         navy: {
-          900: '#102039',
-          800: '#162A4A',
-          700: '#1A2B42',
-          600: '#243447',
-          500: '#2D3F56',
+          900: '#000000',
+          800: '#111111',
+          700: '#1a1a1a',
+          600: '#2a2a2a',
+          500: '#333333',
         },
         'accent-blue': {
           DEFAULT: '#3B82F6',

@@ -163,7 +163,7 @@ export const PlatinumLanding = () => {
   const heroScale = useTransform(scrollYProgress, [0, 0.15], [1, 1.05]);
 
   return (
-    <div className="min-h-[100dvh] bg-[#102039] selection:bg-[#D6B25E]/30 overflow-x-hidden max-w-full">
+    <div className="min-h-[100dvh] bg-[#000000] selection:bg-[#D6B25E]/30 overflow-x-hidden max-w-full">
       {/* Red glow animation for competitor pricing cards */}
       <style>{`
         @keyframes redGlow {
@@ -229,7 +229,7 @@ export const PlatinumLanding = () => {
 
             <Link
               to="/"
-              className="block w-full bg-[#D6B25E] hover:bg-[#B8972E] text-[#102039] font-bold text-lg py-3.5 rounded-xl transition-all duration-300 text-center hover:shadow-[0_0_30px_rgba(214,178,94,0.4)] active:scale-[0.98] min-h-[48px]"
+              className="block w-full bg-[#D6B25E] hover:bg-[#B8972E] text-[#000000] font-bold text-lg py-3.5 rounded-xl transition-all duration-300 text-center hover:shadow-[0_0_30px_rgba(214,178,94,0.4)] active:scale-[0.98] min-h-[48px]"
             >
               Get Started Now →
             </Link>
@@ -413,7 +413,7 @@ export const PlatinumLanding = () => {
               transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
               className="relative rounded-2xl p-6 border-2 border-[#D6B25E] text-center bg-gradient-to-b from-[#D6B25E]/10 to-transparent scale-[1.03]"
             >
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#D6B25E] text-[#102039] text-xs font-bold px-4 py-1 rounded-full shadow-lg whitespace-nowrap">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#D6B25E] text-[#000000] text-xs font-bold px-4 py-1 rounded-full shadow-lg whitespace-nowrap">
                 BEST VALUE
               </div>
               <p className="text-white/70 text-sm mb-2 mt-1">Vet Claim Support</p>

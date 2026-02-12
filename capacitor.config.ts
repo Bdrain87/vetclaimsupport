@@ -6,20 +6,20 @@ const config: CapacitorConfig = {
   webDir: 'dist',
   ios: {
     contentInset: 'automatic',
-    backgroundColor: '#0a0f1c',
+    backgroundColor: '#000000',
     preferredContentMode: 'mobile',
     scrollEnabled: true,
   },
   plugins: {
     StatusBar: {
       style: 'LIGHT',
-      backgroundColor: '#0a0f1c',
+      backgroundColor: '#000000',
       overlaysWebView: true,
     },
     SplashScreen: {
       launchAutoHide: true,
       launchShowDuration: 2000,
-      backgroundColor: '#0a0f1c',
+      backgroundColor: '#000000',
       showSpinner: false,
       androidScaleType: 'CENTER_CROP',
       splashFullScreen: true,

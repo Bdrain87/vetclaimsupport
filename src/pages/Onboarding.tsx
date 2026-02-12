@@ -401,7 +401,7 @@ export default function Onboarding() {
                     Let&apos;s personalize your experience in under 2 minutes.
                   </p>
                 </div>
-                <div className="rounded-xl border border-[#243447] p-4 text-left space-y-2">
+                <div className="rounded-xl border border-[#2a2a2a] p-4 text-left space-y-2">
                   <p className="text-white/70 text-xs leading-relaxed">
                     <strong className="text-white/90">Vet Claim Support is an educational and organizational tool.</strong>
                   </p>
@@ -642,7 +642,7 @@ export default function Onboarding() {
                       <button
                         onClick={handleAddStation}
                         disabled={!stationBase.trim()}
-                        className="flex-1 h-10 rounded-xl bg-gold text-[#102039] text-sm font-bold disabled:opacity-40 transition-all"
+                        className="flex-1 h-10 rounded-xl bg-gold text-[#000000] text-sm font-bold disabled:opacity-40 transition-all"
                       >
                         Save
                       </button>
@@ -711,9 +711,9 @@ export default function Onboarding() {
                       onChange={e => setDeployOp(e.target.value)}
                       className="w-full h-12 px-4 bg-white/[0.06] border border-white/[0.1] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(214,178,94,0.4)] transition-all"
                     >
-                      <option value="" className="bg-[#102039]">Select Operation/Theater...</option>
+                      <option value="" className="bg-[#000000]">Select Operation/Theater...</option>
                       {OPERATIONS.map(op => (
-                        <option key={op} value={op} className="bg-[#102039]">{op}</option>
+                        <option key={op} value={op} className="bg-[#000000]">{op}</option>
                       ))}
                     </select>
                     <LocationAutocomplete
@@ -751,7 +751,7 @@ export default function Onboarding() {
                       <button
                         onClick={handleAddDeployment}
                         disabled={!deployOp.trim()}
-                        className="flex-1 h-10 rounded-xl bg-gold text-[#102039] text-sm font-bold disabled:opacity-40 transition-all"
+                        className="flex-1 h-10 rounded-xl bg-gold text-[#000000] text-sm font-bold disabled:opacity-40 transition-all"
                       >
                         Save
                       </button>
@@ -912,7 +912,7 @@ export default function Onboarding() {
                           className="flex-1 px-3 py-2.5 rounded-xl bg-white/[0.06] border border-white/[0.08] text-white text-sm focus:outline-none focus:border-[rgba(214,178,94,0.4)]"
                         >
                           {[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map(v => (
-                            <option key={v} value={v} className="bg-[#102039] text-white">{v}%</option>
+                            <option key={v} value={v} className="bg-[#000000] text-white">{v}%</option>
                           ))}
                         </select>
                         <div className="flex border border-white/[0.08] rounded-xl overflow-hidden">
@@ -1070,7 +1070,7 @@ export default function Onboarding() {
                 >
                   <button
                     onClick={handleComplete}
-                    className="w-full h-14 rounded-xl text-[#102039] text-base font-bold transition-all hover:brightness-110 hover:shadow-[0_4px_24px_var(--gold-glow)]"
+                    className="w-full h-14 rounded-xl text-[#000000] text-base font-bold transition-all hover:brightness-110 hover:shadow-[0_4px_24px_var(--gold-glow)]"
                     style={{ background: 'var(--gold-gradient)' }}
                   >
                     Get Started
@@ -1101,7 +1101,7 @@ export default function Onboarding() {
               <button
                 onClick={handleNext}
                 disabled={!canProceed}
-                className="flex items-center gap-1 h-11 px-6 rounded-xl bg-gold text-[#102039] text-sm font-bold hover:bg-gold/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                className="flex items-center gap-1 h-11 px-6 rounded-xl bg-gold text-[#000000] text-sm font-bold hover:bg-gold/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               >
                 {step === 0 ? 'Get Started' : 'Continue'}
                 <ChevronRight className="h-4 w-4" />

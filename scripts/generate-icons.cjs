@@ -10,8 +10,8 @@ async function createSourceIcon() {
     <svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#1e3a5f;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#102039;stop-opacity:1" />
+          <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#000000;stop-opacity:1" />
         </linearGradient>
         <linearGradient id="shield" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />

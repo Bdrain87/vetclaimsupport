@@ -36,7 +36,7 @@
 /* Primary - Gold for main CTAs */
 .btn-primary {
   background: var(--gold-gradient);
-  color: #102039;
+  color: #000000;
   font-weight: 700;
 }
 
@@ -101,7 +101,7 @@
 /* Gold - Premium/earned/finish CTAs */
 .btn-gold {
   background: var(--gold-gradient);
-  color: #102039;
+  color: #000000;
   font-weight: 700;
 }
 

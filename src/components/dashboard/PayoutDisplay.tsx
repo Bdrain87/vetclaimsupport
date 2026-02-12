@@ -7,7 +7,7 @@ export const PayoutDisplay = ({ rating }: { rating: number }) => {
   const annualPayout = monthlyPayout * 12;
 
   return (
-    <div className="p-4 sm:p-8 glass-card border-[rgba(214,178,94,0.2)] bg-gradient-to-br from-[#102039] to-[#1a3a6a] overflow-hidden">
+    <div className="p-4 sm:p-8 glass-card border-[rgba(214,178,94,0.2)] bg-gradient-to-br from-[#000000] to-[#1a1a1a] overflow-hidden">
       <div className="flex justify-between items-center mb-6 gap-3">
         <div className="min-w-0">
           <h3 className="text-xl font-black italic text-white uppercase tracking-tight truncate">Est. 2026 Benefit</h3>

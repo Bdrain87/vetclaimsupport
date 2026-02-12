@@ -108,7 +108,7 @@ export function IntentToFileCard() {
               >
                 <Button
                   size="sm"
-                  className="h-9 gap-2 bg-gradient-to-r from-gold to-gold hover:from-gold/90 hover:to-gold/90 text-[#102039] font-semibold shadow-md shadow-[rgba(214,178,94,0.2)]"
+                  className="h-9 gap-2 bg-gradient-to-r from-gold to-gold hover:from-gold/90 hover:to-gold/90 text-[#000000] font-semibold shadow-md shadow-[rgba(214,178,94,0.2)]"
                 >
                   File Intent to File
                   <ExternalLink className="h-3.5 w-3.5" />

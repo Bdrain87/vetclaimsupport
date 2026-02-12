@@ -1,8 +1,8 @@
 /* Landing Page Design System - Apple/Meta Level Quality */
 :root {
   /* Primary palette */
-  --landing-primary: #14192b;
-  --landing-secondary: #1e2844;
+  --landing-primary: #000000;
+  --landing-secondary: #0a0a0a;
   --landing-accent: #D6B25E;
   --landing-success: #10B981;
 
@@ -17,7 +17,7 @@
   --landing-gray-600: #4B5563;
   --landing-gray-700: #374151;
   --landing-gray-800: #1F2937;
-  --landing-gray-900: #111827;
+  --landing-gray-900: #000000;
 
   /* Typography */
   --font-display: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -145,7 +145,7 @@
 .stat-value {
   font-size: clamp(2.5rem, 5vw, 3.5rem);
   font-weight: 700;
-  color: #14192b;
+  color: #000000;
   line-height: 1;
 }
 

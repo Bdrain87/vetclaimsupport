@@ -64,7 +64,7 @@ export function SolutionSection() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#14192b] mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#000000] mb-4">
             Everything You Need to Win
           </h2>
           <p className="text-lg sm:text-xl text-gray-500 max-w-2xl mx-auto">
@@ -90,7 +90,7 @@ export function SolutionSection() {
 
                 {/* Content */}
                 <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-[#14192b] mb-2 group-hover:text-[#1e2844] transition-colors">
+                  <h3 className="text-xl font-semibold text-[#000000] mb-2 group-hover:text-[#0a0a0a] transition-colors">
                     {feature.title}
                   </h3>
                   <p className="text-gray-600 leading-relaxed">

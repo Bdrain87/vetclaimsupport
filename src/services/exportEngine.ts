@@ -55,8 +55,8 @@ export interface ExportResult {
 // ============================================================================
 
 const PDF_COLORS = {
-  navy: [16, 32, 57] as [number, number, number],
-  navyLight: [22, 42, 74] as [number, number, number],
+  navy: [0, 0, 0] as [number, number, number],
+  navyLight: [26, 26, 26] as [number, number, number],
   blue: [59, 130, 246] as [number, number, number],
   textPrimary: [248, 250, 252] as [number, number, number],
   textDark: [15, 23, 42] as [number, number, number],

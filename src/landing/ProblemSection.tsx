@@ -52,7 +52,7 @@ export function ProblemSection() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#14192b] mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#000000] mb-4">
             The VA Claims System Is Broken
           </h2>
           <p className="text-lg sm:text-xl text-gray-500 max-w-2xl mx-auto">

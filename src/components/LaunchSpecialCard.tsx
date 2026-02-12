@@ -5,7 +5,7 @@ export const LaunchSpecialCard = () => {
   const price = isLaunchWindow ? "$4.99" : "$19.99";
 
   return (
-    <div className="p-12 rounded-[3rem] bg-[#102039] border-2 border-[#D6B25E] shadow-2xl relative overflow-hidden">
+    <div className="p-12 rounded-[3rem] bg-[#000000] border-2 border-[#D6B25E] shadow-2xl relative overflow-hidden">
       {isLaunchWindow && (
         <div className="absolute top-4 right-[-40px] rotate-45 bg-emerald-500 text-navy-950 px-12 py-1 font-black text-[10px] uppercase">
           Early Access

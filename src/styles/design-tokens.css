@@ -8,12 +8,12 @@
      COLOR SYSTEM
      ═══════════════════════════════════════════════════════════════ */
 
-  /* Primary - Deep Navy (Dress Blues Palette) */
-  --color-navy-900: #102039;
-  --color-navy-800: #162A4A;
-  --color-navy-700: #1A2B42;
-  --color-navy-600: #243447;
-  --color-navy-500: #2D3F56;
+  /* Primary - Black & Gray Palette */
+  --color-navy-900: #000000;
+  --color-navy-800: #111111;
+  --color-navy-700: #1a1a1a;
+  --color-navy-600: #2a2a2a;
+  --color-navy-500: #333333;
 
   /* Success Green (Approved, Positive, Action) */
   --color-success-700: #047857;

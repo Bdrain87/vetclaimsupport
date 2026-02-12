@@ -44,7 +44,7 @@ export function TestimonialsSection() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#14192b] mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#000000] mb-4">
             Veterans Winning Their Claims
           </h2>
           <p className="text-lg sm:text-xl text-gray-500 max-w-2xl mx-auto">
@@ -82,7 +82,7 @@ export function TestimonialsSection() {
 
               {/* Author */}
               <div className="border-t border-gray-200 pt-4">
-                <p className="font-semibold text-[#14192b]">{testimonial.name}</p>
+                <p className="font-semibold text-[#000000]">{testimonial.name}</p>
                 <p className="text-sm text-gray-500">
                   {testimonial.branch} • {testimonial.years}
                 </p>

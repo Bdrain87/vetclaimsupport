@@ -65,7 +65,7 @@ export function PaywallModal({ isOpen, onClose }: PaywallModalProps) {
         {/* Header */}
         <div className="px-6 pt-8 pb-4 text-center">
           <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#D6B25E] to-[#8A5A16] flex items-center justify-center shadow-lg shadow-[#D6B25E]/20 mb-4">
-            <Shield className="h-8 w-8 text-[#102039]" />
+            <Shield className="h-8 w-8 text-[#000000]" />
           </div>
           <h2 className="text-xl font-bold text-white mb-1">Unlock Lifetime Access</h2>
           <p className="text-white/40 text-sm">One-time purchase. No subscriptions.</p>
@@ -89,7 +89,7 @@ export function PaywallModal({ isOpen, onClose }: PaywallModalProps) {
           <button
             onClick={handlePurchase}
             disabled={purchasing}
-            className="w-full h-12 rounded-xl bg-gradient-to-r from-[#D6B25E] to-[#8A5A16] text-[#102039] font-bold text-sm hover:opacity-90 disabled:opacity-50 transition-all"
+            className="w-full h-12 rounded-xl bg-gradient-to-r from-[#D6B25E] to-[#8A5A16] text-[#000000] font-bold text-sm hover:opacity-90 disabled:opacity-50 transition-all"
           >
             {purchasing ? 'Processing...' : 'Unlock Lifetime Access'}
           </button>

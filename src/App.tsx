@@ -78,7 +78,7 @@ function LoadingFallback() {
   return (
     <div
       className="min-h-[100dvh] flex items-center justify-center"
-      style={{ background: 'linear-gradient(160deg, #0a0f1c 0%, #14192b 50%, #1a2544 100%)' }}
+      style={{ background: 'linear-gradient(160deg, #000000 0%, #000000 50%, #000000 100%)' }}
       role="status"
       aria-label="Loading application"
     >

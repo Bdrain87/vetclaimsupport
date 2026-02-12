@@ -1,6 +1,6 @@
 // src/theme/tokens.ts
 // ============================================
-// VCS DESIGN SYSTEM — "DRESS BLUES" PALETTE
+// VCS DESIGN SYSTEM — BLACK, GOLD & GRAY PALETTE
 // ============================================
 // To change the app's color scheme, edit ONLY this file.
 // Every component imports from here. Zero hardcoded colors anywhere else.
@@ -8,11 +8,11 @@
 export const colors = {
   // === BACKGROUNDS ===
   navy: {
-    900: '#102039',    // Page background (primary)
-    800: '#162A4A',    // Elevated background (modals, drawers)
-    700: '#1A2B42',    // Card background
-    600: '#243447',    // Card border / input background
-    500: '#2D3F56',    // Hover states on cards
+    900: '#000000',    // Page background (primary) — true black
+    800: '#111111',    // Elevated background (modals, drawers)
+    700: '#1a1a1a',    // Card background
+    600: '#2a2a2a',    // Card border / input background
+    500: '#333333',    // Hover states on cards
   },
 
   // === GOLD ACCENT (Primary Interactive) ===

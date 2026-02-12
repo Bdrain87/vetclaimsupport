@@ -99,7 +99,7 @@ export const PlatinumNavbar = () => {
         )}>
           <div className="relative max-w-7xl mx-auto">
             {/* Glass background */}
-            <div className="absolute inset-0 bg-[#102039]/70 backdrop-blur-xl border border-white/[0.06] rounded-2xl" />
+            <div className="absolute inset-0 bg-[#000000]/70 backdrop-blur-xl border border-white/[0.06] rounded-2xl" />
 
             {/* Blue accent line */}
             <div className="absolute top-0 left-4 right-4 h-[1px] bg-gradient-to-r from-transparent via-[#D6B25E]/30 to-transparent" />
@@ -189,7 +189,7 @@ export const PlatinumNavbar = () => {
       )}>
         <div className="px-3 py-2" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
           <div className="relative">
-            <div className="absolute inset-0 bg-[#102039]/70 backdrop-blur-xl border border-white/[0.06] rounded-xl" />
+            <div className="absolute inset-0 bg-[#000000]/70 backdrop-blur-xl border border-white/[0.06] rounded-xl" />
             <div className="relative flex items-center justify-between px-3 h-12">
               <Link to="/" className="flex items-center group">
                 <span className="text-[#F8FAFC] font-bold tracking-[0.08em] uppercase text-sm">VCS</span>

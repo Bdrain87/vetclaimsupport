@@ -10,7 +10,7 @@ export async function initNativeFeatures() {
     const { StatusBar, Style } = await import('@capacitor/status-bar');
     // Status bar - light text on dark background
     await StatusBar.setStyle({ style: Style.Dark });
-    await StatusBar.setBackgroundColor({ color: '#102039' });
+    await StatusBar.setBackgroundColor({ color: '#000000' });
   } catch (error) {
     console.warn('StatusBar init error:', error);
   }

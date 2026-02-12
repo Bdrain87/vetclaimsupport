@@ -48,7 +48,7 @@ export function AudienceSection() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#14192b] mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#000000] mb-4">
             Built For Every Veteran
           </h2>
           <p className="text-lg sm:text-xl text-gray-500 max-w-2xl mx-auto">
@@ -77,13 +77,13 @@ export function AudienceSection() {
 
                 {/* Content */}
                 <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-[#14192b] mb-2">
+                  <h3 className="text-xl font-semibold text-[#000000] mb-2">
                     {audience.title}
                   </h3>
                   <p className="text-gray-600 leading-relaxed mb-4">
                     {audience.description}
                   </p>
-                  <p className="text-sm font-semibold bg-gradient-to-r from-[#14192b] to-[#1e2844] bg-clip-text text-transparent">
+                  <p className="text-sm font-semibold bg-gradient-to-r from-[#000000] to-[#0a0a0a] bg-clip-text text-transparent">
                     {audience.tagline}
                   </p>
                 </div>

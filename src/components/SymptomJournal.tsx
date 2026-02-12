@@ -31,7 +31,7 @@ export const SymptomJournal = () => {
           <button
             onClick={handlePolish}
             disabled={isLoading}
-            className="flex items-center gap-2 px-4 py-2 bg-[#D6B25E] text-[#102039] rounded-xl font-black text-[10px] uppercase tracking-tighter hover:scale-105 active:scale-95 transition-all shadow-lg disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-[#D6B25E] text-[#000000] rounded-xl font-black text-[10px] uppercase tracking-tighter hover:scale-105 active:scale-95 transition-all shadow-lg disabled:opacity-50"
           >
             <Sparkles size={14} className={isLoading ? 'animate-spin' : ''} />
             {isLoading ? 'Processing...' : 'VA-Speak Polish'}

@@ -33,7 +33,7 @@ export const buttonVariants = cva(
           "active:scale-[0.97] active:bg-muted",
         ],
         gold: [
-          "text-[#102039] font-bold rounded-xl",
+          "text-[#000000] font-bold rounded-xl",
           "bg-[image:var(--gold-gradient)]",
           "shadow-[0_2px_8px_var(--gold-glow),inset_0_1px_0_rgba(255,255,255,0.25)]",
           "hover:brightness-110 hover:shadow-[0_4px_16px_var(--gold-glow)] hover:translate-y-[-1px]",

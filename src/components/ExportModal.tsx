@@ -232,7 +232,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="relative w-full max-w-lg mx-4 my-8 sm:my-16 bg-[#162A4A] border border-white/[0.08] rounded-2xl shadow-2xl overflow-hidden"
+            className="relative w-full max-w-lg mx-4 my-8 sm:my-16 bg-[#111111] border border-white/[0.08] rounded-2xl shadow-2xl overflow-hidden"
           >
             {/* Header */}
             <div className="px-6 pt-6 pb-4 border-b border-white/[0.06]">

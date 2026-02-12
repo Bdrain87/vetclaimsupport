@@ -4,7 +4,7 @@ import { ChevronRight } from 'lucide-react';
 const TimelineEvent = ({ date, title, detail, isLast }: { date: string, title: string, detail: string, isLast?: boolean }) => (
   <div className="flex gap-4">
     <div className="flex flex-col items-center">
-      <div className="h-4 w-4 rounded-full bg-[#D6B25E] border-4 border-[#102039] z-10" />
+      <div className="h-4 w-4 rounded-full bg-[#D6B25E] border-4 border-[#000000] z-10" />
       {!isLast && <div className="w-[2px] h-full bg-white/10 -mt-1" />}
     </div>
     <div className="pb-8">

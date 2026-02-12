@@ -70,7 +70,7 @@ export default function ExportDataPage() {
       <button
         onClick={handleExport}
         disabled={exporting}
-        className="w-full h-12 rounded-xl bg-gold text-[#102039] font-bold text-sm hover:bg-gold/90 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+        className="w-full h-12 rounded-xl bg-gold text-[#000000] font-bold text-sm hover:bg-gold/90 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
       >
         {exporting ? (
           <>
