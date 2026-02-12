@@ -106,14 +106,15 @@ export default function Medications() {
                 <MedicationCombobox
                   value={formData.name}
                   onValueChange={(name, prescribedFor) => {
-                    setFormData({ 
-                      ...formData, 
+                    setFormData({
+                      ...formData,
                       name,
                       // Auto-fill prescribed for if selecting from list and field is empty
                       prescribedFor: prescribedFor && !formData.prescribedFor ? prescribedFor : formData.prescribedFor
                     });
                   }}
                   placeholder="Search or type medication name..."
+                  required
                 />
                 <p className="text-xs text-muted-foreground">
                   Search common VA/military medications or type a custom name

@@ -16,7 +16,7 @@ export const SymptomJournal = () => {
     <div className="glass-card p-8">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-xl font-black italic text-white uppercase tracking-tight">Symptom Journal</h3>
-        <button className="text-white/40 hover:text-[#D6B25E] transition-colors"><History size={20} /></button>
+        <button className="min-h-[44px] min-w-[44px] flex items-center justify-center text-white/40 hover:text-[#D6B25E] transition-colors" aria-label="View history"><History size={20} /></button>
       </div>
 
       <div className="relative">
@@ -37,7 +37,7 @@ export const SymptomJournal = () => {
             {isLoading ? 'Processing...' : 'VA-Speak Polish'}
           </button>
 
-          <button className="p-2 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all">
+          <button className="p-3 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all" aria-label="Save entry">
             <Save size={18} />
           </button>
         </div>

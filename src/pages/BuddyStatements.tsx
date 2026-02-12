@@ -151,6 +151,23 @@ export default function BuddyStatements() {
     setStatementData((prev) => ({ ...prev, [field]: value }));
   };
 
+  const canProceed = (): boolean => {
+    switch (currentStep) {
+      case 1:
+        return statementData.witnessName.trim() !== '';
+      case 2:
+        return statementData.witnessRelationship.trim() !== '';
+      case 3:
+        return statementData.specificObservations.trim() !== '';
+      case 4:
+        return statementData.frequencyWitnessed.trim() !== '';
+      case 5:
+        return true;
+      default:
+        return false;
+    }
+  };
+
   const generateStatement = (): string => {
     const today = new Date().toLocaleDateString('en-US', {
       year: 'numeric',
@@ -693,7 +710,7 @@ Date: ${today}`;
             </Button>
             <Button
               onClick={() => setCurrentStep((prev) => Math.min(steps.length, prev + 1))}
-              disabled={currentStep === steps.length}
+              disabled={currentStep === steps.length || !canProceed()}
               className="gap-2"
             >
               {currentStep === steps.length - 1 ? 'Review' : 'Next'}

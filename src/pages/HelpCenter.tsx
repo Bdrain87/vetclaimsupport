@@ -589,35 +589,31 @@ export default function HelpCenter() {
               <CardContent className="space-y-6">
                 <div className="grid sm:grid-cols-2 gap-4">
                   <a
-                    href="https://github.com/anthropics/claude-code/issues"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="mailto:support@vetclaimsupport.com"
                     className="flex items-center gap-4 p-4 rounded-2xl border border-border/50 bg-card hover:border-primary/30 hover:shadow-md transition-all group"
                   >
                     <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
-                      <MessageSquare className="h-5 w-5" />
+                      <Mail className="h-5 w-5" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-semibold text-sm">Report an Issue</p>
+                      <p className="font-semibold text-sm">Email Support</p>
                       <p className="text-xs text-muted-foreground">Found a bug? Let us know</p>
                     </div>
-                    <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                    <Mail className="h-4 w-4 text-muted-foreground" />
                   </a>
 
                   <a
-                    href="https://github.com/anthropics/claude-code/issues"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="mailto:support@vetclaimsupport.com?subject=Feature%20Request"
                     className="flex items-center gap-4 p-4 rounded-2xl border border-border/50 bg-card hover:border-primary/30 hover:shadow-md transition-all group"
                   >
                     <div className="p-2.5 rounded-xl bg-green-500/10 text-green-600">
                       <Sparkles className="h-5 w-5" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-semibold text-sm">Request a Feature</p>
+                      <p className="font-semibold text-sm">Email Feature Request</p>
                       <p className="text-xs text-muted-foreground">Have an idea? Share it</p>
                     </div>
-                    <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                    <Mail className="h-4 w-4 text-muted-foreground" />
                   </a>
                 </div>
 

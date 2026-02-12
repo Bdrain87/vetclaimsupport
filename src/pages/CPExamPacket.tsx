@@ -448,9 +448,19 @@ export default function CPExamPacket() {
             } />
             <InfoRow label="MOS/AFSC" value={profile.mosCode ? `${profile.mosCode} — ${profile.mosTitle}` : 'Not provided'} />
             <InfoRow label="Current VA Rating" value={
-              userConditions.some((c) => c.rating !== undefined && c.rating > 0)
-                ? `${userConditions.reduce((max, c) => (c.rating && c.rating > max ? c.rating : max), 0)}%`
-                : 'None on file'
+              (() => {
+                const ratings = userConditions
+                  .filter(c => c.claimStatus === 'approved')
+                  .map(c => c.rating)
+                  .filter((r): r is number => r !== undefined && r > 0)
+                  .sort((a, b) => b - a);
+                if (ratings.length === 0) return 'None on file';
+                let combined = 0;
+                for (const r of ratings) {
+                  combined = combined + ((100 - combined) * r / 100);
+                }
+                return `${Math.round(combined / 10) * 10}%`;
+              })()
             } />
             <InfoRow label="Intent to File" value={
               profile.intentToFileDate

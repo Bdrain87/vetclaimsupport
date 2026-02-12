@@ -291,7 +291,8 @@ export default function ClaimJourney() {
                 >
                   {/* Phase Circle */}
                   <button
-                    onClick={() => setSelectedPhase(phase)}
+                    onClick={() => status !== 'locked' && setSelectedPhase(phase)}
+                    disabled={status === 'locked'}
                     className={cn(
                       'relative flex flex-col items-center transition-all duration-300',
                       status !== 'locked' && 'cursor-pointer hover:scale-105',

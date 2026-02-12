@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Scale, Shield, FileText, AlertTriangle, ChevronRight, User, Plus, Trash2, Briefcase } from 'lucide-react';
+import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Scale, Shield, FileText, AlertTriangle, ChevronRight, User, Plus, Trash2, Briefcase, Info, HelpCircle, BookOpen } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -563,6 +563,73 @@ export default function Settings() {
             <div className="flex items-center gap-3">
               <AlertTriangle className="h-5 w-5 text-warning" />
               <span className="font-medium text-foreground">Disclaimer</span>
+            </div>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+          </Link>
+        </CardContent>
+      </Card>
+
+      {/* More Pages */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Info className="h-5 w-5" />
+            More
+          </CardTitle>
+          <CardDescription>Additional resources and account management</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <Link
+            to="/settings/about"
+            className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <Info className="h-5 w-5 text-primary" />
+              <span className="font-medium text-foreground">About VCS</span>
+            </div>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+          </Link>
+
+          <Link
+            to="/settings/export-data"
+            className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <FileDown className="h-5 w-5 text-primary" />
+              <span className="font-medium text-foreground">Export Data</span>
+            </div>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+          </Link>
+
+          <Link
+            to="/settings/delete-account"
+            className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <Trash2 className="h-5 w-5 text-destructive" />
+              <span className="font-medium text-foreground">Delete Account</span>
+            </div>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+          </Link>
+
+          <Link
+            to="/settings/glossary"
+            className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <BookOpen className="h-5 w-5 text-primary" />
+              <span className="font-medium text-foreground">Glossary</span>
+            </div>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+          </Link>
+
+          <Link
+            to="/settings/faq"
+            className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <HelpCircle className="h-5 w-5 text-primary" />
+              <span className="font-medium text-foreground">FAQ</span>
             </div>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </Link>

@@ -520,7 +520,7 @@ body {
 
   /* Premium glow effects */
   .glow-primary {
-    box-shadow: 0 0 30px hsl(211 100% 50% / 0.3);
+    box-shadow: 0 0 30px hsl(43 64% 60% / 0.3);
   }
 
   .glow-success {
@@ -726,25 +726,25 @@ body {
       inset 0 1px 0 hsl(142 76% 46% / 0.15);
   }
 
-  /* Primary result card - subtle blue background */
+  /* Primary result card - subtle gold background */
   .result-card-primary {
     @apply relative overflow-hidden rounded-2xl border p-6;
-    border-color: hsl(211 100% 50% / 0.3);
-    background: linear-gradient(135deg, 
-      hsl(211 100% 50% / 0.08) 0%, 
-      hsl(211 100% 50% / 0.02) 100%);
-    box-shadow: 
-      0 4px 24px hsl(211 100% 50% / 0.1),
-      inset 0 1px 0 hsl(211 100% 50% / 0.1);
+    border-color: hsl(43 64% 60% / 0.3);
+    background: linear-gradient(135deg,
+      hsl(43 64% 60% / 0.08) 0%,
+      hsl(43 64% 60% / 0.02) 100%);
+    box-shadow:
+      0 4px 24px hsl(43 64% 60% / 0.1),
+      inset 0 1px 0 hsl(43 64% 60% / 0.1);
   }
 
   .dark .result-card-primary {
-    background: linear-gradient(135deg, 
-      hsl(211 100% 50% / 0.12) 0%, 
-      hsl(211 100% 50% / 0.04) 100%);
-    box-shadow: 
-      0 4px 24px hsl(211 100% 50% / 0.15),
-      inset 0 1px 0 hsl(211 100% 50% / 0.15);
+    background: linear-gradient(135deg,
+      hsl(43 64% 60% / 0.12) 0%,
+      hsl(43 64% 60% / 0.04) 100%);
+    box-shadow:
+      0 4px 24px hsl(43 64% 60% / 0.15),
+      inset 0 1px 0 hsl(43 64% 60% / 0.15);
   }
 
   /* Big number display for results */
@@ -768,7 +768,7 @@ body {
 
   .result-number-primary {
     @apply text-primary;
-    text-shadow: 0 2px 12px hsl(211 100% 50% / 0.3);
+    text-shadow: 0 2px 12px hsl(43 64% 60% / 0.3);
   }
 
   /* Comparison table rows */
@@ -1149,7 +1149,7 @@ body {
   }
 
   .hover-glow:hover {
-    box-shadow: 0 0 20px hsl(211 100% 50% / 0.15);
+    box-shadow: 0 0 20px hsl(43 64% 60% / 0.15);
   }
 
   .hover-scale {

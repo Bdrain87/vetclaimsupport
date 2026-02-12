@@ -9,12 +9,14 @@ interface MedicationComboboxProps {
   value: string;
   onValueChange: (value: string, prescribedFor?: string) => void;
   placeholder?: string;
+  required?: boolean;
 }
 
-export function MedicationCombobox({ 
-  value, 
-  onValueChange, 
-  placeholder = "Type or search medication name..." 
+export function MedicationCombobox({
+  value,
+  onValueChange,
+  placeholder = "Type or search medication name...",
+  required
 }: MedicationComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState(value);
@@ -157,6 +159,7 @@ export function MedicationCombobox({
           placeholder={placeholder}
           className="pl-9"
           autoComplete="off"
+          required={required}
         />
       </div>
       

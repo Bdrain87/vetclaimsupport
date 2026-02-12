@@ -255,10 +255,12 @@ export default function AboutVCS() {
           <Button
             variant="outline"
             className="w-full sm:w-auto"
-            onClick={() => window.open('https://github.com/anthropics/claude-code/issues', '_blank', 'noopener,noreferrer')}
+            asChild
           >
-            <ExternalLink className="h-4 w-4 mr-2" />
-            Report an Issue on GitHub
+            <a href="mailto:support@vetclaimsupport.com">
+              <ExternalLink className="h-4 w-4 mr-2" />
+              Contact Support
+            </a>
           </Button>
         </CardContent>
       </Card>

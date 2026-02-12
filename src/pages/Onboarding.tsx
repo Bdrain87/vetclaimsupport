@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft, X, Search, Shield, User, Briefcase, Stethoscope, Check, MapPin, Plane } from 'lucide-react';
 import { useProfileStore, BRANCH_LABELS, BRANCH_COLORS, type Branch, type ClaimGoal } from '@/store/useProfileStore';
@@ -150,7 +150,7 @@ export default function Onboarding() {
   const navigate = useNavigate();
   const profileStore = useProfileStore();
   const appStore = useAppStore();
-  const { addCondition, removeCondition } = useUserConditions();
+  const { addCondition, removeCondition, conditions: userConditions } = useUserConditions();
 
   const [step, setStep] = useState(0);
   const [firstName, setFirstName] = useState(profileStore.firstName);
@@ -318,7 +318,10 @@ export default function Onboarding() {
   };
 
   const handleRemoveCondition = (id: string) => {
-    removeCondition(id);
+    const userCondition = userConditions.find(c => c.conditionId === id);
+    if (userCondition) {
+      removeCondition(userCondition.id);
+    }
     setAddedConditions(prev => prev.filter(c => c !== id));
   };
 
@@ -601,7 +604,8 @@ export default function Onboarding() {
                         </div>
                         <button
                           onClick={() => handleRemoveStation(idx)}
-                          className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"
+                          className="h-10 w-10 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"
+                          aria-label="Remove station"
                         >
                           <X className="h-4 w-4 text-white/40" />
                         </button>
@@ -690,7 +694,8 @@ export default function Onboarding() {
                         </div>
                         <button
                           onClick={() => handleRemoveDeployment(idx)}
-                          className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"
+                          className="h-10 w-10 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"
+                          aria-label="Remove deployment"
                         >
                           <X className="h-4 w-4 text-white/40" />
                         </button>
@@ -993,7 +998,7 @@ export default function Onboarding() {
                     </div>
                   ))}
                 </div>
-                <p className="text-center text-white/30 text-xs break-words">By continuing, you agree to our <Link to="/settings/terms" className="text-gold underline">Terms of Service</Link> and <Link to="/settings/privacy" className="text-gold underline">Privacy Policy</Link>. This is a claim preparation tool &mdash; not a substitute for professional consultation with a VA-accredited representative.</p>
+                <p className="text-center text-white/30 text-xs break-words">By continuing, you agree to our <a href="/settings/terms" target="_blank" rel="noopener noreferrer" className="text-gold underline">Terms of Service</a> and <a href="/settings/privacy" target="_blank" rel="noopener noreferrer" className="text-gold underline">Privacy Policy</a>. This is a claim preparation tool &mdash; not a substitute for professional consultation with a VA-accredited representative.</p>
               </div>
             )}
 

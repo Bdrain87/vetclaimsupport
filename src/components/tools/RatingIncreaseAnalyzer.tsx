@@ -435,7 +435,7 @@ export function RatingIncreaseAnalyzer() {
           <CardContent className="pt-4">
             <div className="flex flex-wrap gap-2">
               <Button variant="outline" size="sm" asChild>
-                <Link to={`/symptoms`}>
+                <Link to="/health/symptoms">
                   <Activity className="h-4 w-4 mr-2" />
                   Log Symptoms
                 </Link>

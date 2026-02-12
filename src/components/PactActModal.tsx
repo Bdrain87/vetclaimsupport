@@ -29,7 +29,7 @@ export const PactActModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
                   <p className="text-white/50 text-xs font-bold uppercase tracking-widest">Presumptive Exposure Mapping</p>
                 </div>
               </div>
-              <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full transition-colors">
+              <button onClick={onClose} className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-white/5 rounded-full transition-colors" aria-label="Close">
                 <X className="text-white/50" />
               </button>
             </div>

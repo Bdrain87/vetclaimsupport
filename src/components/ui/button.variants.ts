@@ -7,8 +7,8 @@ export const buttonVariants = cva(
       variant: {
         default: [
           "bg-primary text-primary-foreground rounded-xl",
-          "shadow-[0_2px_8px_hsl(211_100%_50%/0.3),inset_0_1px_0_rgba(255,255,255,0.15)]",
-          "hover:brightness-110 hover:shadow-[0_4px_16px_hsl(211_100%_50%/0.4)] hover:translate-y-[-1px]",
+          "shadow-[0_2px_8px_hsl(43_64%_60%/0.3),inset_0_1px_0_rgba(255,255,255,0.15)]",
+          "hover:brightness-110 hover:shadow-[0_4px_16px_hsl(43_64%_60%/0.4)] hover:translate-y-[-1px]",
           "active:scale-[0.97] active:brightness-95 active:translate-y-0",
         ],
         destructive: [
