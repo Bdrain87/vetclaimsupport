@@ -3,38 +3,39 @@ import { fadeInUp, staggerContainer } from '@/lib/landing-animations';
 
 function ClipboardIcon() {
   return (
-    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="8" y="6" width="24" height="30" rx="3" stroke="#C5A442" strokeWidth="2" />
-      <rect x="14" y="2" width="12" height="6" rx="2" fill="#C5A442" />
-      <line x1="14" y1="16" x2="26" y2="16" stroke="#C5A442" strokeWidth="2" strokeLinecap="round" />
-      <line x1="14" y1="22" x2="26" y2="22" stroke="#C5A442" strokeWidth="2" strokeLinecap="round" />
-      <line x1="14" y1="28" x2="22" y2="28" stroke="#C5A442" strokeWidth="2" strokeLinecap="round" />
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C5A442" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+      <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
     </svg>
   );
 }
 
 function TranslateIcon() {
   return (
-    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M6 8h16M14 4v4M10 8c0 6 4 12 10 14M18 8c0 6-4 12-10 14" stroke="#C5A442" strokeWidth="2" strokeLinecap="round" />
-      <path d="M24 36l4-12 4 12M25.5 32h5" stroke="#C5A442" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C5A442" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 8l6 6" />
+      <path d="M4 14l6-6 2-3" />
+      <path d="M2 5h12" />
+      <path d="M7 2h1" />
+      <path d="M22 22l-5-10-5 10" />
+      <path d="M14 18h6" />
     </svg>
   );
 }
 
 function CalculatorIcon() {
   return (
-    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="8" y="4" width="24" height="32" rx="3" stroke="#C5A442" strokeWidth="2" />
-      <rect x="12" y="8" width="16" height="8" rx="1.5" fill="#C5A442" opacity="0.2" stroke="#C5A442" strokeWidth="1.5" />
-      <circle cx="15" cy="22" r="1.5" fill="#C5A442" />
-      <circle cx="20" cy="22" r="1.5" fill="#C5A442" />
-      <circle cx="25" cy="22" r="1.5" fill="#C5A442" />
-      <circle cx="15" cy="28" r="1.5" fill="#C5A442" />
-      <circle cx="20" cy="28" r="1.5" fill="#C5A442" />
-      <circle cx="25" cy="28" r="1.5" fill="#C5A442" />
-      <circle cx="15" cy="33" r="1.5" fill="#C5A442" />
-      <rect x="19" y="31.5" width="7" height="3" rx="1" fill="#C5A442" />
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C5A442" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="4" y="2" width="16" height="20" rx="2" />
+      <line x1="8" y1="6" x2="16" y2="6" />
+      <line x1="16" y1="14" x2="16" y2="18" />
+      <line x1="8" y1="10" x2="8" y2="10.01" />
+      <line x1="12" y1="10" x2="12" y2="10.01" />
+      <line x1="16" y1="10" x2="16" y2="10.01" />
+      <line x1="8" y1="14" x2="8" y2="14.01" />
+      <line x1="12" y1="14" x2="12" y2="14.01" />
+      <line x1="8" y1="18" x2="8" y2="18.01" />
+      <line x1="12" y1="18" x2="12" y2="18.01" />
     </svg>
   );
 }
@@ -43,53 +44,62 @@ const PROPS = [
   {
     Icon: ClipboardIcon,
     title: 'Organize Your Evidence',
-    desc: 'Add your conditions, upload documents, and let AI help you build a complete evidence package for each claim.',
+    desc: 'Track your conditions, log symptoms daily, and keep your documentation organized. Built-in health trackers map directly to VA rating criteria.',
   },
   {
     Icon: TranslateIcon,
     title: 'Understand VA Language',
-    desc: "Our VA-Speak Translator converts complex medical and legal jargon into plain English you can actually understand.",
+    desc: 'Translate VA letters and decisions into plain English. Access our condition database and understand what the VA is actually asking for.',
   },
   {
     Icon: CalculatorIcon,
-    title: 'Know Your Rating',
-    desc: 'Calculate your estimated combined rating before you file. No surprises, no guessing.',
+    title: 'Estimate Your Rating',
+    desc: 'Calculate your combined disability rating, estimate potential compensation, and understand how VA math works with bilateral factors.',
   },
 ];
 
 export function ValueProps() {
   return (
     <section className="py-20 md:py-28" style={{ backgroundColor: '#111111' }}>
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <motion.div
-          className="text-center mb-16"
+      <div className="mx-auto max-w-5xl px-4 sm:px-6">
+        <motion.h2
+          className="text-3xl md:text-4xl font-bold text-white text-center mb-4"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            What is Vet Claim Support?
-          </h2>
-          <p style={{ color: '#9CA3AF' }} className="text-lg">
-            Your all-in-one VA claim preparation toolkit
-          </p>
-        </motion.div>
+          Everything You Need to Prepare
+        </motion.h2>
+        <motion.p
+          className="text-center mb-16 text-lg max-w-2xl mx-auto"
+          style={{ color: '#9CA3AF' }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          Preparation tools, condition tracking, and document generators &mdash; all in one place.
+        </motion.p>
 
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16"
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-80px' }}
         >
           {PROPS.map(({ Icon, title, desc }) => (
-            <motion.div key={title} variants={fadeInUp} className="text-center">
-              <div className="flex justify-center mb-5">
+            <motion.div
+              key={title}
+              variants={fadeInUp}
+              className="text-center"
+            >
+              <div className="flex justify-center mb-4">
                 <Icon />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">{title}</h3>
-              <p style={{ color: '#9CA3AF' }} className="leading-relaxed">
+              <h3 className="text-lg font-bold text-white mb-2">{title}</h3>
+              <p className="text-sm leading-relaxed" style={{ color: '#9CA3AF' }}>
                 {desc}
               </p>
             </motion.div>

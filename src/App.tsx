@@ -314,22 +314,10 @@ function AnimatedRoutes() {
 
 function AppContent() {
   const location = useLocation();
-  const navigate = useNavigate();
-  const hasOnboarded = useProfileStore((s) => s.hasCompletedOnboarding);
   const isLandingRoute = isWeb && location.pathname === '/';
 
-  // Web: after onboarding completes (navigates to /), redirect to /app
-  useEffect(() => {
-    if (isLandingRoute && hasOnboarded) {
-      navigate('/app', { replace: true });
-    }
-  }, [isLandingRoute, hasOnboarded, navigate]);
-
-  // Web root — landing page for new visitors, loading fallback while redirecting onboarded users
+  // Web root — show landing page (users click through to /app)
   if (isLandingRoute) {
-    if (hasOnboarded) {
-      return <LoadingFallback />;
-    }
     return (
       <Suspense fallback={<LoadingFallback />}>
         <LandingPage />
@@ -339,7 +327,7 @@ function AppContent() {
 
   // App shell
   return (
-    <div className="min-h-[100dvh] bg-background text-foreground overflow-x-hidden break-words">
+    <div className="h-screen overflow-hidden flex flex-col bg-background text-foreground break-words">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:text-sm focus:font-medium"
@@ -348,7 +336,7 @@ function AppContent() {
       </a>
       <LiabilityAcceptanceScreen />
       <MobileHeader />
-      <main id="main-content" className="pt-14 pb-20 overflow-x-hidden">
+      <main id="main-content" className="flex-1 overflow-y-auto pt-14 pb-20">
         <AnimatedRoutes />
       </main>
       <BottomTabBar />

@@ -1,12 +1,19 @@
-import { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
-const ROTATING_WORDS = ['Confidence', 'Precision', 'Intelligence', 'Evidence'];
+const ROTATING_WORDS = ['Confidence', 'Clarity', 'Precision', 'Evidence'];
 const CYCLE_MS = 3000;
 
 export function Hero() {
   const [index, setIndex] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
 
   const advance = useCallback(() => {
     setIndex((prev) => (prev + 1) % ROTATING_WORDS.length);
@@ -24,20 +31,33 @@ export function Hero() {
 
   return (
     <section
+      ref={sectionRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      style={{
-        background: `
-          radial-gradient(ellipse at 20% 50%, rgba(197,164,66,0.08) 0%, transparent 50%),
-          radial-gradient(ellipse at 80% 20%, rgba(197,164,66,0.05) 0%, transparent 50%),
-          #000000
-        `,
-      }}
+      style={{ backgroundColor: '#000000' }}
     >
+      {/* Parallax background */}
+      <motion.div
+        className="absolute inset-0"
+        style={{
+          y: bgY,
+          background: `
+            radial-gradient(ellipse at 20% 50%, rgba(197,164,66,0.08) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 20%, rgba(197,164,66,0.05) 0%, transparent 50%),
+            #000000
+          `,
+        }}
+      />
+
       <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 text-center py-32">
         {/* Intro line */}
         <motion.p
           className="uppercase tracking-[0.25em] text-sm font-medium mb-6"
-          style={{ color: '#C5A442' }}
+          style={{
+            background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+          }}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -58,7 +78,12 @@ export function Hero() {
               <motion.span
                 key={ROTATING_WORDS[index]}
                 className="inline-block"
-                style={{ color: '#C5A442' }}
+                style={{
+                  background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -16 }}
@@ -78,8 +103,8 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          The privacy-first AI companion that helps you organize evidence, understand
-          VA language, and build the strongest possible claim.
+          The privacy-first toolkit that helps you organize evidence, understand
+          VA language, and prepare the strongest possible claim.
         </motion.p>
 
         {/* CTAs */}
@@ -119,7 +144,7 @@ export function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.9 }}
         >
-          No account required &bull; 100% Private &bull; Veterans &amp; Service Members
+          Free plan available &bull; Premium from $9.99/mo &bull; Veteran founded
         </motion.p>
       </div>
     </section>

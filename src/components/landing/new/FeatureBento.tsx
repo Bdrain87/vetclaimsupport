@@ -1,7 +1,18 @@
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer } from '@/lib/landing-animations';
+import {
+  Brain,
+  Shield,
+  FileSearch,
+  Stethoscope,
+  PenTool,
+  DollarSign,
+  Target,
+  Zap,
+} from 'lucide-react';
 
 interface BentoCard {
+  Icon: typeof Brain;
   title: string;
   desc: string;
   span: 1 | 2;
@@ -9,59 +20,78 @@ interface BentoCard {
 
 const CARDS: BentoCard[] = [
   {
-    title: 'Rating Calculator',
-    desc: 'Calculate your combined VA disability rating instantly. Add conditions, see your estimated rating, understand bilateral factors.',
+    Icon: Brain,
+    title: 'Claim Intelligence',
+    desc: "Enter your service history and get personalized insights. Our tools cross-reference your conditions against our database to surface secondary connections and identify evidence gaps you might have missed.",
     span: 2,
   },
   {
-    title: 'VA-Speak Translator',
-    desc: 'Decode VA jargon into plain English.',
-    span: 1,
-  },
-  {
+    Icon: Stethoscope,
     title: 'C&P Exam Prep',
-    desc: 'Know exactly what to expect and say.',
-    span: 1,
-  },
-  {
-    title: 'AI Claim Intelligence',
-    desc: 'Our AI analyzes your conditions and suggests secondary claims, missing evidence, and preparation strategies.',
+    desc: "Review commonly used DBQs, range-of-motion benchmarks, and typical interview questions for your conditions. Walk into your exam prepared and informed.",
     span: 2,
   },
   {
-    title: 'Buddy & Stressor Statements',
-    desc: 'Generate properly formatted supporting statements.',
+    Icon: PenTool,
+    title: 'Document Generators',
+    desc: 'Generate personal statements, buddy statements, nexus letter drafts, stressor statements, and more. All formatted to meet VA expectations.',
     span: 1,
   },
   {
-    title: 'Back Pay Estimator',
-    desc: 'See what you could be owed in retroactive benefits.',
+    Icon: FileSearch,
+    title: 'Secondary Condition Finder',
+    desc: 'Search our database of conditions with mapped secondary connections. Discover conditions linked to your primary disabilities that you may be eligible to claim.',
     span: 1,
+  },
+  {
+    Icon: Target,
+    title: 'Health Trackers',
+    desc: 'Log symptoms, sleep, migraines, medications, medical visits, and exposures. Every tracker maps to VA rating criteria so your daily logs become organized supporting documentation.',
+    span: 2,
+  },
+  {
+    Icon: DollarSign,
+    title: 'Compensation Estimator',
+    desc: "Estimate potential retroactive benefits based on your effective date, dependents, and projected rating. Understand the numbers before you file.",
+    span: 1,
+  },
+  {
+    Icon: Zap,
+    title: 'VA-Speak Translator',
+    desc: 'Paste any VA letter, CFR section, or rating decision. Get plain English instantly. Finally understand what they actually said.',
+    span: 1,
+  },
+  {
+    Icon: Shield,
+    title: 'Privacy-First Architecture',
+    desc: 'All data stored locally on your device by default. Optional encrypted cloud sync available with a premium account. We never sell your data.',
+    span: 2,
   },
 ];
-
-function CardIcon() {
-  return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="3" y="3" width="22" height="22" rx="6" stroke="#C5A442" strokeWidth="1.5" />
-      <path d="M10 14h8M14 10v8" stroke="#C5A442" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
 
 export function FeatureBento() {
   return (
     <section id="features" className="py-20 md:py-28" style={{ backgroundColor: '#111111', scrollMarginTop: '5rem' }}>
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <motion.h2
-          className="text-3xl md:text-4xl font-bold text-white text-center mb-16"
+          className="text-3xl md:text-4xl font-bold text-white text-center mb-4"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          Everything You Need, Nothing You Don&apos;t
+          Tools That Help You Prepare
         </motion.h2>
+        <motion.p
+          className="text-center mb-16 text-lg max-w-2xl mx-auto"
+          style={{ color: '#9CA3AF' }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          From evidence organization to document generation — everything you need in one app.
+        </motion.p>
 
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 gap-4"
@@ -81,8 +111,11 @@ export function FeatureBento() {
               }`}
               style={{ backgroundColor: '#1a1a1a' }}
             >
-              <div className="mb-4">
-                <CardIcon />
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
+                style={{ backgroundColor: 'rgba(197, 164, 66, 0.1)' }}
+              >
+                <card.Icon size={20} style={{ color: '#C5A442' }} />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">{card.title}</h3>
               <p className="text-sm leading-relaxed" style={{ color: '#9CA3AF' }}>

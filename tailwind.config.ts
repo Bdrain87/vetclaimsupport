@@ -91,13 +91,6 @@ export default {
           600: '#2a2a2a',
           500: '#333333',
         },
-        'accent-blue': {
-          DEFAULT: '#3B82F6',
-          hover: '#2563EB',
-          active: '#1D4ED8',
-          light: '#60A5FA',
-          muted: 'rgba(59, 130, 246, 0.1)',
-        },
         platinum: {
           DEFAULT: '#F8FAFC',
           secondary: '#94A3B8',

@@ -13,23 +13,23 @@ interface Frame {
 const FRAMES: Frame[] = [
   {
     num: '01',
-    heading: "Filing a VA Claim Shouldn't Be This Hard",
-    sub: "The system wasn't designed for you. It was designed for the system.",
+    heading: "You Served Your Country. Now Let's Get What You Earned.",
+    sub: "The VA claims process is complex, time-consuming, and filled with jargon. Many veterans don't know where to start — or what they're eligible for.",
   },
   {
     num: '02',
-    heading: 'You Spend Months Gathering Evidence',
-    sub: '...only to find out you missed one document and get denied. Starting over from scratch.',
+    heading: 'One Missing Document Can Set You Back Months',
+    sub: "Between gathering records, writing statements, and understanding rating criteria, it's easy to miss something critical. Preparation is everything.",
   },
   {
     num: '03',
-    heading: "You Don't Speak 'VA'",
-    sub: "Rating criteria, diagnostic codes, bilateral factors, pyramiding rules — it's designed to be confusing.",
+    heading: 'Professional Help Comes at a Price',
+    sub: "Claim consultants and attorneys can be expensive. You shouldn't need to spend thousands just to understand your own benefits.",
   },
   {
     num: '04',
-    heading: 'What If You Had a Guide?',
-    sub: 'Vet Claim Support organizes your evidence, translates the language, and prepares you for every step.',
+    heading: "Now There's a Better Way.",
+    sub: 'A privacy-first toolkit with preparation tools, condition tracking, and document generators — all in one place.',
     cta: true,
   },
 ];
@@ -70,14 +70,10 @@ function DesktopFrame({
   index: number;
   total: number;
 }) {
-  // Each frame occupies 1/total of the scroll range
   const seg = 1 / total;
   const start = index * seg;
   const end = start + seg;
 
-  // First frame: visible immediately (opacity 1 at progress 0), fades out at segment end
-  // Middle frames: fade in at segment start, fade out at segment end
-  // Last frame: fades in at segment start, stays visible (opacity 1 at progress 1)
   const isFirst = index === 0;
   const isLast = index === total - 1;
 
@@ -103,7 +99,13 @@ function DesktopFrame({
       <div className="max-w-3xl text-center">
         <span
           className="block text-8xl font-black mb-6"
-          style={{ color: '#C5A442', opacity: 0.15 }}
+          style={{
+            background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            opacity: 0.2,
+          }}
         >
           {frame.num}
         </span>
@@ -145,7 +147,13 @@ function MobileScrollStory() {
         >
           <span
             className="block text-6xl font-black mb-4"
-            style={{ color: '#C5A442', opacity: 0.15 }}
+            style={{
+              background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              opacity: 0.2,
+            }}
           >
             {frame.num}
           </span>

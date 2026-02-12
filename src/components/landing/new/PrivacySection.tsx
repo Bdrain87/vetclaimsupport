@@ -4,15 +4,15 @@ import { fadeInUp, staggerContainer } from '@/lib/landing-animations';
 const POINTS = [
   {
     title: 'Local-First Storage',
-    desc: 'All data lives on your device by default. No account or cloud required to use the app.',
+    desc: 'All data lives on your device by default. The free tier works entirely offline with local storage.',
   },
   {
     title: 'Optional Cloud Sync',
-    desc: 'Create an account to sync across devices. Data is encrypted in transit and at rest on our servers.',
+    desc: 'Create an account to sync across devices. Data is encrypted in transit on our servers.',
   },
   {
-    title: 'We Never Sell Your Data',
-    desc: 'No targeted ads, no marketing sharing, no data sales. Your information is yours.',
+    title: 'No Data Sales',
+    desc: 'No targeted ads, no marketing sharing, no data sales. Your information stays yours.',
   },
 ];
 

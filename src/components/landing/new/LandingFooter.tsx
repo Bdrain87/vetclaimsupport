@@ -128,6 +128,15 @@ export function LandingFooter() {
             Built with care by a veteran.
           </p>
         </div>
+
+        {/* Legal disclaimer — required */}
+        <p className="text-xs mt-6 text-center leading-relaxed" style={{ color: '#4B5563' }}>
+          Vet Claim Support is an independent preparation tool and is not affiliated with, endorsed
+          by, or connected to the U.S. Department of Veterans Affairs or any government agency. This
+          tool does not provide legal advice, file claims, or guarantee outcomes. Always consult with
+          an accredited Veterans Service Organization (VSO) or VA-accredited attorney for claims
+          filing assistance.
+        </p>
       </div>
     </footer>
   );

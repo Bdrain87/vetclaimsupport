@@ -4,23 +4,23 @@ import { fadeInUp, staggerContainer } from '@/lib/landing-animations';
 const STEPS = [
   {
     num: 1,
-    title: 'Select Your MOS & Conditions',
-    desc: "Tell us your military job code and claimed conditions. We'll recommend secondary conditions you might be missing.",
+    title: 'Enter Your Service Details',
+    desc: 'MOS, duty stations, deployments, combat zones, and exposures. We help you organize your service history and identify conditions you may want to research further.',
   },
   {
     num: 2,
-    title: 'Build Your Evidence Package',
-    desc: 'Our AI guides you through exactly what documentation the VA needs for each condition.',
+    title: 'Build Your Evidence Strategy',
+    desc: 'For each condition, identify the medical records, buddy statements, and supporting documents that may strengthen your claim. Stay organized and know what to prepare.',
   },
   {
     num: 3,
-    title: 'Prepare for Your C&P Exam',
-    desc: 'Know the specific questions, tests, and criteria the examiner will use.',
+    title: 'Prep, Track, Generate',
+    desc: 'Use health trackers to log symptoms mapped to rating criteria. Generate supporting documents and statements. Prepare for your C&P exam with commonly used DBQ formats.',
   },
   {
     num: 4,
     title: 'Submit with Confidence',
-    desc: 'Export your complete claim package with all evidence organized and ready to file.',
+    desc: 'Export your organized evidence, formatted statements, and tracked health data. Everything in one place, ready for submission.',
   },
 ];
 
@@ -29,14 +29,24 @@ export function HowItWorks() {
     <section id="how-it-works" className="py-20 md:py-28" style={{ backgroundColor: '#000000', scrollMarginTop: '5rem' }}>
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
         <motion.h2
-          className="text-3xl md:text-4xl font-bold text-white text-center mb-16"
+          className="text-3xl md:text-4xl font-bold text-white text-center mb-4"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          Get Claim-Ready in 4 Steps
+          From Overwhelmed to Organized
         </motion.h2>
+        <motion.p
+          className="text-center mb-16 text-lg"
+          style={{ color: '#9CA3AF' }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          What takes months with a lawyer takes minutes with VCS.
+        </motion.p>
 
         <motion.div
           className="space-y-0"

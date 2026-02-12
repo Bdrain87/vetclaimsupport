@@ -185,11 +185,14 @@ export default function TermsOfServicePage() {
           </p>
         </section>
 
-        {/* Section 13: Payment and Lifetime Access */}
+        {/* Section 13: Payment and Subscriptions */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-foreground">13. Payment and Lifetime Access</h2>
+          <h2 className="text-lg font-semibold text-foreground">13. Payment and Subscriptions</h2>
           <p className="text-muted-foreground">
-            If you purchase VCS, &quot;lifetime access&quot; means access for the operational lifetime of the Service, not the lifetime of the user. If the Service is discontinued, we will provide at least 30 days notice and data export capabilities. Payment is processed through Apple App Store or Google Play Store &mdash; VCS does not collect or store your payment card information.
+            VCS offers a free tier with limited features and a paid Premium subscription. Premium subscriptions are billed monthly and may be cancelled at any time. Upon cancellation, you retain access to Premium features through the end of your current billing period, after which your account reverts to the free tier. Pricing is subject to change with 30 days&apos; notice to active subscribers.
+          </p>
+          <p className="text-muted-foreground">
+            If the Service is discontinued, we will provide at least 30 days&apos; notice and data export capabilities. Payment is processed through the platform where you subscribed (e.g., Apple App Store, Google Play Store, or web payment processor). VCS does not directly collect or store your payment card information.
           </p>
         </section>
 
