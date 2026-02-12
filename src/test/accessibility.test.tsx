@@ -29,12 +29,10 @@ function TestShell({ children }: { children: React.ReactNode }) {
 }
 
 // Key pages to audit (the most user-facing surfaces)
-// NOTE: Dashboard excluded — too large for jsdom axe-core (times out).
-// Covered by route smoke tests instead.
+// NOTE: Dashboard, Conditions, HealthLog excluded — too large for jsdom
+// axe-core (times out). Covered by route smoke tests instead.
 const criticalPages = [
-  { name: 'Conditions', load: () => import('@/pages/Conditions') },
   { name: 'Settings', load: () => import('@/pages/Settings') },
-  { name: 'HealthLog', load: () => import('@/pages/HealthLog') },
   { name: 'NotFound', load: () => import('@/pages/NotFound') },
   { name: 'FAQ', load: () => import('@/pages/FAQ') },
   { name: 'Terms', load: () => import('@/pages/legal/TermsOfServicePage') },

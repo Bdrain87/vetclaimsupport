@@ -22,12 +22,14 @@ describe('App Render', () => {
 
   it('renders the VCS brand or Dashboard title', async () => {
     render(<App />);
-    // The LoadingFallback renders "Vet Claim Support" while lazy routes load,
-    // and MobileHeader renders "VCS" on root tabs once loaded.
+    // The LoadingFallback and MobileHeader may both render "Vet Claim Support",
+    // so use queryAllByText to tolerate multiple matches.
     await waitFor(() => {
-      expect(
-        screen.queryByText('VCS') || screen.queryByText('Vet Claim Support')
-      ).toBeTruthy();
+      const matches = [
+        ...screen.queryAllByText('VCS'),
+        ...screen.queryAllByText('Vet Claim Support'),
+      ];
+      expect(matches.length).toBeGreaterThan(0);
     });
   });
 });
