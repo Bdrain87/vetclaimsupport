@@ -237,8 +237,8 @@ export function ScreenshotGuide() {
                   </div>
 
                   {/* Tips */}
-                  <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
-                    <p className="text-xs text-blue-600 dark:text-blue-400">
+                  <div className="p-3 rounded-lg bg-[#D6B25E]/10 border border-[#D6B25E]/20">
+                    <p className="text-xs text-[#B8972E] dark:text-[#F6E4AA]">
                       <strong>Tip:</strong> {screenshot.tips}
                     </p>
                   </div>

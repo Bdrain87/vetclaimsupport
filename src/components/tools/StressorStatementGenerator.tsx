@@ -461,8 +461,8 @@ Keep the veteran's voice. Do not add fabricated details.`;
                       </Button>
 
                       {aiSafetyBlocked[event.id] && (
-                        <Alert className="border-blue-500/30 bg-blue-500/5">
-                          <Info className="h-4 w-4 text-blue-500" />
+                        <Alert className="border-[#D6B25E]/30 bg-[#D6B25E]/5">
+                          <Info className="h-4 w-4 text-[#D6B25E]" />
                           <AlertDescription className="text-sm">
                             Our AI was unable to process this content. You can continue writing your statement manually, and it will be just as valid. Consider working with a VSO for additional support.
                           </AlertDescription>

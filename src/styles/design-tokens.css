@@ -25,13 +25,13 @@
   --color-success-100: #D1FAE5;
   --color-success-50:  #ECFDF5;
 
-  /* Blue Accent (Primary Interactive - Dress Blues) */
-  --color-accent-700: #1D4ED8;
-  --color-accent-600: #2563EB;
-  --color-accent-500: #3B82F6;
-  --color-accent-400: #60A5FA;
-  --color-accent-200: rgba(59, 130, 246, 0.2);
-  --color-accent-100: rgba(59, 130, 246, 0.1);
+  /* Gold Accent (Primary Interactive) */
+  --color-accent-700: #8A5A16;
+  --color-accent-600: #B8972E;
+  --color-accent-500: #D6B25E;
+  --color-accent-400: #F6E4AA;
+  --color-accent-200: rgba(214, 178, 94, 0.2);
+  --color-accent-100: rgba(214, 178, 94, 0.1);
 
   /* Warning Orange */
   --color-warning-600: #D97706;
@@ -186,7 +186,7 @@
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
   /* Focus Rings */
-  --shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.4);
+  --shadow-focus: 0 0 0 3px rgba(214, 178, 94, 0.4);
   --shadow-focus-error: 0 0 0 3px rgba(239, 68, 68, 0.4);
 
   /* ═══════════════════════════════════════════════════════════════

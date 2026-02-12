@@ -122,18 +122,18 @@ export function MedicationCombobox({
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'Pain': return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
+      case 'Pain': return 'bg-[#D6B25E]/10 text-[#D6B25E] border-[#D6B25E]/20';
       case 'Mental Health': return 'bg-purple-500/10 text-purple-500 border-purple-500/20';
       case 'Sleep': return 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20';
       case 'Muscle Relaxant': return 'bg-cyan-500/10 text-cyan-500 border-cyan-500/20';
-      case 'GI': return 'bg-blue-500/10 text-blue-600 border-blue-500/20';
+      case 'GI': return 'bg-[#D6B25E]/10 text-[#B8972E] border-[#D6B25E]/20';
       case 'Blood Pressure': return 'bg-red-500/10 text-red-500 border-red-500/20';
-      case 'Diabetes': return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
+      case 'Diabetes': return 'bg-[#D6B25E]/10 text-[#D6B25E] border-[#D6B25E]/20';
       case 'Cholesterol': return 'bg-green-500/10 text-green-500 border-green-500/20';
       case 'Antibiotic': return 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20';
       case 'Allergy': return 'bg-pink-500/10 text-pink-500 border-pink-500/20';
       case 'Respiratory': return 'bg-teal-500/10 text-teal-500 border-teal-500/20';
-      case 'Topical': return 'bg-blue-500/10 text-blue-600 border-blue-500/20';
+      case 'Topical': return 'bg-[#D6B25E]/10 text-[#B8972E] border-[#D6B25E]/20';
       case 'Migraine': return 'bg-violet-500/10 text-violet-500 border-violet-500/20';
       case 'Thyroid': return 'bg-sky-500/10 text-sky-500 border-sky-500/20';
       case 'Bone Health': return 'bg-stone-500/10 text-stone-600 border-stone-500/20';

@@ -369,7 +369,7 @@ export function AppealStrategyAdvisor() {
             <Card className="border-muted bg-muted/30">
               <CardContent className="p-4 space-y-3">
                 <div className="flex items-start gap-2">
-                  <AlertTriangle className="h-5 w-5 text-blue-500 shrink-0 mt-0.5" />
+                  <AlertTriangle className="h-5 w-5 text-[#D6B25E] shrink-0 mt-0.5" />
                   <div>
                     <p className="font-medium">{selectedDenial.title}</p>
                     <p className="text-sm text-muted-foreground mt-1">{selectedDenial.explanation}</p>
@@ -614,8 +614,8 @@ export function AppealStrategyAdvisor() {
               ))}
             </div>
             
-            <div className="mt-4 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-              <p className="text-sm text-blue-700 dark:text-blue-400 flex items-start gap-2">
+            <div className="mt-4 p-3 bg-[#D6B25E]/10 border border-[#D6B25E]/20 rounded-lg">
+              <p className="text-sm text-[#8A5A16] dark:text-[#F6E4AA] flex items-start gap-2">
                 <Lightbulb className="h-4 w-4 shrink-0 mt-0.5" />
                 <span>
                   <strong>Pro Tip:</strong> A strong Nexus Letter from a qualified medical professional is often the single most important piece of evidence for overturning a denial.

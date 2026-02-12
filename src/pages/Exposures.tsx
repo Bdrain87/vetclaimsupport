@@ -127,16 +127,16 @@ export default function Exposures() {
 
   const getExposureColor = (type: string) => {
     const colors: Record<string, string> = {
-      'Burn pit': 'bg-blue-500/10 text-blue-600 ring-blue-500/20',
+      'Burn pit': 'bg-[#D6B25E]/10 text-[#B8972E] ring-[#D6B25E]/20',
       'Jet fuel': 'bg-purple-500/10 text-purple-600 ring-purple-500/20',
       'Chemicals': 'bg-red-500/10 text-red-600 ring-red-500/20',
-      'Noise': 'bg-blue-500/10 text-blue-600 ring-blue-500/20',
-      'Radiation': 'bg-blue-500/10 text-blue-600 ring-blue-500/20',
+      'Noise': 'bg-[#D6B25E]/10 text-[#B8972E] ring-[#D6B25E]/20',
+      'Radiation': 'bg-[#D6B25E]/10 text-[#B8972E] ring-[#D6B25E]/20',
       'Asbestos': 'bg-gray-500/10 text-gray-600 ring-gray-500/20',
       'Extreme temps': 'bg-cyan-500/10 text-cyan-600 ring-cyan-500/20',
       'Diesel exhaust': 'bg-stone-500/10 text-stone-600 ring-stone-500/20',
-      'Depleted uranium': 'bg-blue-500/10 text-blue-600 ring-blue-500/20',
-      'Sand/dust': 'bg-blue-600/10 text-blue-700 ring-blue-600/20',
+      'Depleted uranium': 'bg-[#D6B25E]/10 text-[#B8972E] ring-[#D6B25E]/20',
+      'Sand/dust': 'bg-[#B8972E]/10 text-[#8A5A16] ring-[#B8972E]/20',
       'Contaminated water (Camp Lejeune)': 'bg-teal-500/10 text-teal-600 ring-teal-500/20',
       'Contaminated water': 'bg-teal-500/10 text-teal-600 ring-teal-500/20',
       'Herbicides': 'bg-green-500/10 text-green-600 ring-green-500/20',

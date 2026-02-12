@@ -657,8 +657,8 @@ export default function PersonalStatement() {
     <PageContainer className="space-y-6 animate-fade-in overflow-x-hidden">
       {/* Header */}
       <div className="section-header mb-0">
-        <div className="section-icon bg-blue-500/10">
-          <FileText className="h-5 w-5 text-blue-500" />
+        <div className="section-icon bg-[#D6B25E]/10">
+          <FileText className="h-5 w-5 text-[#D6B25E]" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Personal Statement Builder</h1>

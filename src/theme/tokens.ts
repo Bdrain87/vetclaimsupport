@@ -15,14 +15,14 @@ export const colors = {
     500: '#2D3F56',    // Hover states on cards
   },
 
-  // === BLUE ACCENT (Primary Interactive) ===
+  // === GOLD ACCENT (Primary Interactive) ===
   blue: {
-    500: '#3B82F6',    // Primary buttons, links, active nav, focus rings
-    600: '#2563EB',    // Hover state for primary buttons
-    700: '#1D4ED8',    // Active/pressed state
-    400: '#60A5FA',    // Light accent (tags, badges, subtle highlights)
-    100: 'rgba(59, 130, 246, 0.1)',  // Tinted backgrounds
-    200: 'rgba(59, 130, 246, 0.2)',  // Slightly more visible tinted bg
+    500: '#D6B25E',    // Primary buttons, links, active nav, focus rings
+    600: '#B8972E',    // Hover state for primary buttons
+    700: '#8A5A16',    // Active/pressed state
+    400: '#F6E4AA',    // Light accent (tags, badges, subtle highlights)
+    100: 'rgba(214, 178, 94, 0.1)',  // Tinted backgrounds
+    200: 'rgba(214, 178, 94, 0.2)',  // Slightly more visible tinted bg
   },
 
   // === TEXT HIERARCHY (Platinum/Silver) ===

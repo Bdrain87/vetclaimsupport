@@ -62,7 +62,7 @@ export default function DisclaimerPage() {
         {/* Your Responsibility */}
         <div className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">Your Responsibility</h2>
-          <div className="rounded-xl bg-blue-500/5 border border-blue-500/20 p-4">
+          <div className="rounded-xl bg-[#D6B25E]/5 border border-[#D6B25E]/20 p-4">
             <p className="text-muted-foreground">
               You are solely responsible for the accuracy of all information you enter. You must review and verify ALL content before submitting anything to the VA &mdash; especially AI-generated content. False or misleading statements in VA claims may constitute federal fraud.
             </p>
@@ -88,7 +88,7 @@ export default function DisclaimerPage() {
               href="https://www.va.gov/ogc/apps/accreditation"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#3B82F6] hover:underline"
+              className="text-[#D6B25E] hover:underline"
             >
               va.gov/ogc/apps/accreditation
             </a>.

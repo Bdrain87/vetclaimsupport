@@ -16,17 +16,17 @@ const stats = [
     value: '$15,000+',
     label: 'average cost for claim consultant "help"',
     icon: DollarSign,
-    color: 'text-blue-500',
-    bgColor: 'bg-blue-50',
-    borderColor: 'border-blue-100'
+    color: 'text-[#D6B25E]',
+    bgColor: 'bg-[#FDF8E8]',
+    borderColor: 'border-[#FDF8E8]'
   },
   {
     value: '4.5 years',
     label: 'average wait for appeals',
     icon: Clock,
-    color: 'text-blue-500',
-    bgColor: 'bg-blue-50',
-    borderColor: 'border-blue-100'
+    color: 'text-[#D6B25E]',
+    bgColor: 'bg-[#FDF8E8]',
+    borderColor: 'border-[#FDF8E8]'
   },
   {
     value: 'Zero',

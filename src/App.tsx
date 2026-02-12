@@ -69,6 +69,7 @@ const ConditionGuide = lazy(() => import('./pages/ConditionGuide'));
 
 // Account & Legal pages
 const DeleteAccountPage = lazy(() => import('./pages/account/DeleteAccountPage'));
+const ExportDataPage = lazy(() => import('./pages/account/ExportDataPage'));
 const PrivacyPolicyPage = lazy(() => import('./pages/legal/PrivacyPolicyPage'));
 const TermsOfServicePage = lazy(() => import('./pages/legal/TermsOfServicePage'));
 const DisclaimerPage = lazy(() => import('./pages/legal/DisclaimerPage'));
@@ -225,7 +226,7 @@ function AnimatedRoutes() {
             <Route path="/settings/terms" element={<TermsOfServicePage />} />
             <Route path="/settings/disclaimer" element={<DisclaimerPage />} />
             <Route path="/settings/about" element={<AboutVCS />} />
-            <Route path="/settings/export-data" element={<Navigate to="/settings" replace />} />
+            <Route path="/settings/export-data" element={<ExportDataPage />} />
             <Route path="/settings/delete-account" element={<DeleteAccountPage />} />
 
             {/* === REDIRECTS FROM OLD ROUTES === */}
@@ -290,7 +291,7 @@ function AnimatedRoutes() {
             <Route path="/profile/terms" element={<Navigate to="/settings/terms" replace />} />
             <Route path="/profile/disclaimer" element={<Navigate to="/settings/disclaimer" replace />} />
             <Route path="/profile/about" element={<Navigate to="/settings/about" replace />} />
-            <Route path="/profile/export-data" element={<Navigate to="/settings" replace />} />
+            <Route path="/profile/export-data" element={<Navigate to="/settings/export-data" replace />} />
             <Route path="/profile/delete-account" element={<Navigate to="/settings/delete-account" replace />} />
 
             {/* === CATCH-ALL === */}

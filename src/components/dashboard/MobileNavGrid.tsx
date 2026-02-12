@@ -136,7 +136,7 @@ export function MobileNavGrid() {
                     : 'text-muted-foreground'
                 )}
               >
-                <item.icon className={cn('w-5 h-5', isActive(item.path) && 'drop-shadow-[0_0_6px_rgba(59,130,246,0.5)]')} />
+                <item.icon className={cn('w-5 h-5', isActive(item.path) && 'drop-shadow-[0_0_6px_rgba(214,178,94,0.5)]')} />
                 <span className="text-[10px] mt-1 font-medium">{item.title}</span>
               </NavLink>
             )

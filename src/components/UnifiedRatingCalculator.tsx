@@ -655,7 +655,7 @@ export function UnifiedRatingCalculator() {
                                 {isAlreadyAdded ? (
                                   <Badge variant="secondary" className="text-xs">Added</Badge>
                                 ) : condition.typicalRatings ? (
-                                  <span className="text-xs text-blue-600">{condition.typicalRatings}</span>
+                                  <span className="text-xs text-[#B8972E]">{condition.typicalRatings}</span>
                                 ) : null}
                               </div>
                               {condition.diagnosticCode && (
@@ -704,9 +704,9 @@ export function UnifiedRatingCalculator() {
               </div>
 
               {wouldBeBilateral(newConditionBodyPart) && (
-                <Alert className="border-blue-500/50 bg-blue-500/10">
-                  <Sparkles className="h-4 w-4 text-blue-500" />
-                  <AlertDescription className="text-blue-700 dark:text-blue-300">
+                <Alert className="border-[#D6B25E]/50 bg-[#D6B25E]/10">
+                  <Sparkles className="h-4 w-4 text-[#D6B25E]" />
+                  <AlertDescription className="text-[#8A5A16] dark:text-[#F6E4AA]">
                     This will create a bilateral pair! The 10% bilateral factor will be automatically applied.
                   </AlertDescription>
                 </Alert>
@@ -751,7 +751,7 @@ export function UnifiedRatingCalculator() {
                       key={condition.id}
                       className={`flex items-center justify-between p-3 rounded-lg border ${
                         isBilateral
-                          ? 'border-blue-500/50 bg-blue-500/5'
+                          ? 'border-[#D6B25E]/50 bg-[#D6B25E]/5'
                           : 'border-border bg-muted/30'
                       }`}
                     >
@@ -770,7 +770,7 @@ export function UnifiedRatingCalculator() {
                           <span className="text-xs text-muted-foreground">{bodyPartLabel}</span>
                         </div>
                         {isBilateral && (
-                          <Badge variant="outline" className="border-blue-500 text-blue-600 text-xs">
+                          <Badge variant="outline" className="border-[#D6B25E] text-[#B8972E] text-xs">
                             Bilateral
                           </Badge>
                         )}
@@ -840,9 +840,9 @@ export function UnifiedRatingCalculator() {
               <CollapsibleContent>
                 <CardContent className="space-y-4">
                   {result.officialRating < 30 && (
-                    <Alert className="border-blue-500/50 bg-blue-500/10">
-                      <Info className="h-4 w-4 text-blue-500" />
-                      <AlertDescription className="text-blue-700 dark:text-blue-300">
+                    <Alert className="border-[#D6B25E]/50 bg-[#D6B25E]/10">
+                      <Info className="h-4 w-4 text-[#D6B25E]" />
+                      <AlertDescription className="text-[#8A5A16] dark:text-[#F6E4AA]">
                         Dependent benefits require a combined rating of 30% or higher.
                       </AlertDescription>
                     </Alert>
@@ -950,9 +950,9 @@ export function UnifiedRatingCalculator() {
               </div>
 
               {result.hasBilateral && (
-                <Alert className="border-blue-500/50 bg-blue-500/10 mt-4">
-                  <Sparkles className="h-4 w-4 text-blue-500" />
-                  <AlertDescription className="text-blue-700 dark:text-blue-300 text-sm">
+                <Alert className="border-[#D6B25E]/50 bg-[#D6B25E]/10 mt-4">
+                  <Sparkles className="h-4 w-4 text-[#D6B25E]" />
+                  <AlertDescription className="text-[#8A5A16] dark:text-[#F6E4AA] text-sm">
                     <strong>Bilateral Factor Applied!</strong>
                     <br />
                     Combined bilateral: {result.bilateralExact.toFixed(1)}%

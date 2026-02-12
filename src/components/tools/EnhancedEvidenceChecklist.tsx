@@ -186,13 +186,13 @@ export function EnhancedEvidenceChecklist() {
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-green-600 dark:text-green-400';
-    if (score >= 50) return 'text-blue-600 dark:text-blue-400';
+    if (score >= 50) return 'text-[#B8972E] dark:text-[#F6E4AA]';
     return 'text-red-600 dark:text-red-400';
   };
 
   const getScoreBg = (score: number) => {
     if (score >= 80) return 'bg-green-500/10 border-green-500/30';
-    if (score >= 50) return 'bg-blue-500/10 border-blue-500/30';
+    if (score >= 50) return 'bg-[#D6B25E]/10 border-[#D6B25E]/30';
     return 'bg-red-500/10 border-red-500/30';
   };
 
