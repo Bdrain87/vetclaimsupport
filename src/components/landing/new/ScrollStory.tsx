@@ -100,7 +100,7 @@ function DesktopFrame({
         <span
           className="block text-8xl font-black mb-6"
           style={{
-            background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+            background: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
@@ -120,7 +120,7 @@ function DesktopFrame({
               className="inline-block rounded-full px-8 py-3 text-lg font-semibold text-black no-underline"
               style={{
                 background:
-                  'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+                  'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
               }}
             >
               Start Preparing Your Claim
@@ -148,7 +148,7 @@ function MobileScrollStory() {
           <span
             className="block text-6xl font-black mb-4"
             style={{
-              background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+              background: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
@@ -167,7 +167,7 @@ function MobileScrollStory() {
               className="inline-block rounded-full px-8 py-3 text-base font-semibold text-black no-underline"
               style={{
                 background:
-                  'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+                  'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
               }}
             >
               Start Preparing Your Claim

@@ -117,11 +117,11 @@ function StackingCard({
               <div
                 className="w-12 h-12 rounded-xl flex items-center justify-center"
                 style={{
-                  backgroundColor: 'rgba(197,164,66,0.1)',
-                  border: '1px solid rgba(197,164,66,0.2)',
+                  backgroundColor: 'rgba(191,149,63,0.1)',
+                  border: '1px solid rgba(191,149,63,0.2)',
                 }}
               >
-                <card.Icon size={22} style={{ color: '#C5A442' }} />
+                <card.Icon size={22} style={{ color: '#BF953F' }} />
               </div>
               <span
                 className="text-[10px] font-medium tracking-widest uppercase"
@@ -133,7 +133,7 @@ function StackingCard({
 
             {/* Text */}
             <div className="min-w-0">
-              <h3 className="text-lg font-semibold text-white mb-1.5 group-hover:text-[#E8C560] transition-colors duration-300">
+              <h3 className="text-lg font-semibold text-white mb-1.5 group-hover:text-[#FCF6BA] transition-colors duration-300">
                 {card.title}
               </h3>
               <p className="text-sm leading-relaxed" style={{ color: '#9CA3AF' }}>
@@ -148,7 +148,7 @@ function StackingCard({
             style={{
               borderRadius: '24px',
               background:
-                'radial-gradient(ellipse at 50% 100%, rgba(197,164,66,0.06) 0%, transparent 60%)',
+                'radial-gradient(ellipse at 50% 100%, rgba(191,149,63,0.06) 0%, transparent 60%)',
             }}
           />
         </motion.div>

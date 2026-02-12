@@ -139,14 +139,14 @@ export const hoverLift = {
 
 export const hoverTap = { scale: 0.98 };
 
-export const hoverGlow = (color: string = 'rgba(197,164,66,0.3)') => ({
+export const hoverGlow = (color: string = 'rgba(191,149,63,0.3)') => ({
   y: -4,
   boxShadow: `0 0 30px ${color}, 0 0 60px ${color}`,
   transition: { duration: 0.3 },
 });
 
-// --- GOLD GRADIENT CONSTANTS ---
-export const GOLD_GRADIENT = 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)';
+// --- METALLIC GOLD GRADIENT CONSTANTS ---
+export const GOLD_GRADIENT = 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)';
 export const GOLD_GRADIENT_TEXT = {
   background: GOLD_GRADIENT,
   WebkitBackgroundClip: 'text',
@@ -173,19 +173,19 @@ export const CARD_SHADOW = '0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.1
 
 export const CARD_STYLE_GOLD = {
   backgroundColor: '#111111',
-  border: '1px solid rgba(197, 164, 66, 0.12)',
+  border: '1px solid rgba(191, 149, 63, 0.12)',
   borderRadius: '24px',
 } as React.CSSProperties;
 
 // --- SECTION BACKGROUND OVERLAYS ---
 export const SECTION_TOP_GLOW = 'linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 30%)';
-export const SECTION_TOP_GLOW_GOLD = 'linear-gradient(180deg, rgba(197,164,66,0.04) 0%, transparent 30%)';
+export const SECTION_TOP_GLOW_GOLD = 'linear-gradient(180deg, rgba(191,149,63,0.04) 0%, transparent 30%)';
 
 // --- PILL LABEL STYLE ---
 export const PILL_STYLE = {
-  background: 'rgba(197, 164, 66, 0.1)',
-  color: '#C5A442',
-  border: '1px solid rgba(197, 164, 66, 0.15)',
+  background: 'rgba(191, 149, 63, 0.1)',
+  color: '#BF953F',
+  border: '1px solid rgba(191, 149, 63, 0.15)',
   borderRadius: '9999px',
   fontSize: '13px',
   fontWeight: 500,
@@ -237,8 +237,8 @@ export const MARQUEE_STYLES = `
   100% { background-position: 200% center; }
 }
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(197,164,66,0.1); }
-  50% { box-shadow: 0 0 40px rgba(197,164,66,0.25); }
+  0%, 100% { box-shadow: 0 0 20px rgba(191,149,63,0.1); }
+  50% { box-shadow: 0 0 40px rgba(191,149,63,0.25); }
 }
 `;
 

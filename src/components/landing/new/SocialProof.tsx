@@ -26,7 +26,7 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
       <span
         className="block text-3xl md:text-4xl font-bold"
         style={{
-          background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+          background: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',
@@ -64,16 +64,42 @@ export function SocialProof() {
             }`}
           >
             {stat.isText ? (
-              <span
-                className="block text-3xl md:text-4xl font-bold"
-                style={{
-                  background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}
-              >
-                &#10003;
+              <span className="block text-3xl md:text-4xl">
+                <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="metallic-gold-flag" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stopColor="#BF953F"/>
+                      <stop offset="25%" stopColor="#FCF6BA"/>
+                      <stop offset="50%" stopColor="#B38728"/>
+                      <stop offset="75%" stopColor="#FBF5B7"/>
+                      <stop offset="100%" stopColor="#AA771C"/>
+                    </linearGradient>
+                  </defs>
+                  {/* Flagpole */}
+                  <rect x="8" y="8" width="3" height="48" rx="1.5" fill="url(#metallic-gold-flag)"/>
+                  {/* Flag body */}
+                  <rect x="11" y="10" width="40" height="28" rx="2" fill="url(#metallic-gold-flag)" opacity="0.9"/>
+                  {/* Stripes */}
+                  <rect x="11" y="14.3" width="40" height="2.15" fill="#0A0A0A" opacity="0.25"/>
+                  <rect x="11" y="18.6" width="40" height="2.15" fill="#0A0A0A" opacity="0.25"/>
+                  <rect x="11" y="22.9" width="40" height="2.15" fill="#0A0A0A" opacity="0.25"/>
+                  <rect x="11" y="27.2" width="40" height="2.15" fill="#0A0A0A" opacity="0.25"/>
+                  <rect x="11" y="31.5" width="40" height="2.15" fill="#0A0A0A" opacity="0.25"/>
+                  <rect x="11" y="35.8" width="40" height="2.15" fill="#0A0A0A" opacity="0.25"/>
+                  {/* Star field */}
+                  <rect x="11" y="10" width="18" height="15" rx="1" fill="#0A0A0A" opacity="0.3"/>
+                  {/* Stars */}
+                  <circle cx="15" cy="13.5" r="1" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="20" cy="13.5" r="1" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="25" cy="13.5" r="1" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="17.5" cy="16.5" r="1" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="22.5" cy="16.5" r="1" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="15" cy="19.5" r="1" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="20" cy="19.5" r="1" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="25" cy="19.5" r="1" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="17.5" cy="22.5" r="1" fill="url(#metallic-gold-flag)"/>
+                  <circle cx="22.5" cy="22.5" r="1" fill="url(#metallic-gold-flag)"/>
+                </svg>
               </span>
             ) : (
               <AnimatedNumber value={stat.value} suffix={stat.suffix} />

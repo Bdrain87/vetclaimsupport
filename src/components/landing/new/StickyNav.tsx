@@ -55,7 +55,7 @@ export function StickyNav() {
               <button
                 key={link.href}
                 onClick={() => scrollTo(link.href)}
-                className="bg-transparent border-none text-white/80 hover:text-[#C5A442] transition-colors text-sm font-medium cursor-pointer"
+                className="bg-transparent border-none text-white/80 hover:text-[#BF953F] transition-colors text-sm font-medium cursor-pointer"
               >
                 {link.label}
               </button>
@@ -65,7 +65,7 @@ export function StickyNav() {
               className="rounded-full px-6 py-2 text-sm font-semibold text-black no-underline"
               style={{
                 background:
-                  'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+                  'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
               }}
             >
               Launch App
@@ -97,7 +97,7 @@ export function StickyNav() {
               <button
                 key={link.href}
                 onClick={() => scrollTo(link.href)}
-                className="bg-transparent border-none text-white text-2xl font-medium cursor-pointer hover:text-[#C5A442] transition-colors"
+                className="bg-transparent border-none text-white text-2xl font-medium cursor-pointer hover:text-[#BF953F] transition-colors"
               >
                 {link.label}
               </button>
@@ -108,7 +108,7 @@ export function StickyNav() {
               className="rounded-full px-8 py-3 text-lg font-semibold text-black no-underline mt-4"
               style={{
                 background:
-                  'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+                  'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
               }}
             >
               Launch App

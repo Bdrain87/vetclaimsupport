@@ -98,18 +98,18 @@ function PremiumCard({ children }: { children: React.ReactNode }) {
       variants={fadeInUp}
       whileHover={{
         y: -6,
-        boxShadow: '0 0 30px rgba(197,164,66,0.6), 0 0 60px rgba(197,164,66,0.3), 0 0 120px rgba(197,164,66,0.15)',
+        boxShadow: '0 0 30px rgba(191,149,63,0.6), 0 0 60px rgba(191,149,63,0.3), 0 0 120px rgba(191,149,63,0.15)',
       }}
       className="relative rounded-2xl p-px overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, rgba(197,164,66,0.6), rgba(197,164,66,0.15), rgba(197,164,66,0.6))',
+        background: 'linear-gradient(135deg, rgba(191,149,63,0.6), rgba(191,149,63,0.15), rgba(191,149,63,0.6))',
       }}
     >
       {/* Shimmer sweep across border */}
       <div
         className="absolute inset-0 rounded-2xl pointer-events-none"
         style={{
-          background: 'linear-gradient(90deg, transparent 0%, transparent 35%, rgba(245,214,128,0.5) 50%, transparent 65%, transparent 100%)',
+          background: 'linear-gradient(90deg, transparent 0%, transparent 35%, rgba(252,246,186,0.5) 50%, transparent 65%, transparent 100%)',
           backgroundSize: '200% 100%',
           animation: 'shimmer-border 4s ease-in-out infinite',
         }}
@@ -119,9 +119,9 @@ function PremiumCard({ children }: { children: React.ReactNode }) {
         className="absolute -inset-px rounded-2xl pointer-events-none"
         animate={{
           boxShadow: [
-            '0 0 15px rgba(197,164,66,0.25), 0 0 35px rgba(197,164,66,0.12), 0 0 70px rgba(197,164,66,0.06)',
-            '0 0 25px rgba(197,164,66,0.5), 0 0 60px rgba(197,164,66,0.25), 0 0 120px rgba(197,164,66,0.1)',
-            '0 0 15px rgba(197,164,66,0.25), 0 0 35px rgba(197,164,66,0.12), 0 0 70px rgba(197,164,66,0.06)',
+            '0 0 15px rgba(191,149,63,0.25), 0 0 35px rgba(191,149,63,0.12), 0 0 70px rgba(191,149,63,0.06)',
+            '0 0 25px rgba(191,149,63,0.5), 0 0 60px rgba(191,149,63,0.25), 0 0 120px rgba(191,149,63,0.1)',
+            '0 0 15px rgba(191,149,63,0.25), 0 0 35px rgba(191,149,63,0.12), 0 0 70px rgba(191,149,63,0.06)',
           ],
         }}
         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
@@ -245,14 +245,14 @@ export function Pricing() {
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
         >
-          <div className="h-px flex-1 max-w-[100px]" style={{ background: 'linear-gradient(to right, transparent, #C5A442)' }} />
+          <div className="h-px flex-1 max-w-[100px]" style={{ background: 'linear-gradient(to right, transparent, #BF953F)' }} />
           <span
             className="text-lg font-semibold px-3"
             style={GOLD_GRADIENT_TEXT}
           >
             &mdash; OR &mdash;
           </span>
-          <div className="h-px flex-1 max-w-[100px]" style={{ background: 'linear-gradient(to left, transparent, #C5A442)' }} />
+          <div className="h-px flex-1 max-w-[100px]" style={{ background: 'linear-gradient(to left, transparent, #BF953F)' }} />
         </motion.div>
 
         <motion.div
@@ -307,7 +307,7 @@ export function Pricing() {
               <div
                 className="absolute top-0 right-0 px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-bl-lg rounded-tr-[15px]"
                 style={{
-                  background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+                  background: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
                   color: '#000000',
                 }}
               >
@@ -338,7 +338,7 @@ export function Pricing() {
                 <span
                   className="text-3xl font-bold"
                   style={{
-                    background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+                    background: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
@@ -351,7 +351,7 @@ export function Pricing() {
               <ul className="space-y-2.5 mb-6">
                 {PREMIUM_FEATURES.map((f) => (
                   <li key={f} className="flex items-center gap-2.5 text-sm">
-                    <Check size={16} style={{ color: '#C5A442' }} className="shrink-0" />
+                    <Check size={16} style={{ color: '#BF953F' }} className="shrink-0" />
                     <span style={{ color: '#D1D5DB' }}>{f}</span>
                   </li>
                 ))}
@@ -360,7 +360,7 @@ export function Pricing() {
                 to="/app"
                 className="mt-auto block text-center rounded-full px-5 py-2.5 text-sm font-semibold text-black no-underline"
                 style={{
-                  background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+                  background: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
                 }}
               >
                 Go Premium — $4.99/mo

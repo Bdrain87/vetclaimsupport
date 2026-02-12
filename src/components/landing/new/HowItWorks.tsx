@@ -127,11 +127,11 @@ export function HowItWorks() {
                 <div
                   className="w-12 h-12 rounded-full flex items-center justify-center"
                   style={{
-                    background: 'rgba(197, 164, 66, 0.1)',
-                    border: '1px solid rgba(197, 164, 66, 0.2)',
+                    background: 'rgba(191, 149, 63, 0.1)',
+                    border: '1px solid rgba(191, 149, 63, 0.2)',
                   }}
                 >
-                  <span className="text-sm font-semibold" style={{ color: '#C5A442' }}>
+                  <span className="text-sm font-semibold" style={{ color: '#BF953F' }}>
                     {step.num}
                   </span>
                 </div>
@@ -144,7 +144,7 @@ export function HowItWorks() {
               </div>
 
               <h3
-                className="text-xl md:text-2xl text-white mb-3 group-hover:text-[#E8C560] transition-colors duration-300"
+                className="text-xl md:text-2xl text-white mb-3 group-hover:text-[#FCF6BA] transition-colors duration-300"
                 style={HEADING_H3_STYLE}
               >
                 {step.title}
@@ -156,14 +156,14 @@ export function HowItWorks() {
 
             <div
               className="absolute bottom-0 left-0 right-0 h-px"
-              style={{ background: 'linear-gradient(90deg, transparent, rgba(197, 164, 66, 0.2), transparent)' }}
+              style={{ background: 'linear-gradient(90deg, transparent, rgba(191, 149, 63, 0.2), transparent)' }}
             />
 
             <div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
               style={{
                 borderRadius: '24px',
-                background: 'radial-gradient(ellipse at 50% 100%, rgba(197, 164, 66, 0.04) 0%, transparent 60%)',
+                background: 'radial-gradient(ellipse at 50% 100%, rgba(191, 149, 63, 0.04) 0%, transparent 60%)',
               }}
             />
           </motion.div>

@@ -42,8 +42,8 @@ export function Hero() {
         style={{
           y: bgY,
           background: `
-            radial-gradient(ellipse at 20% 50%, rgba(197,164,66,0.08) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 20%, rgba(197,164,66,0.05) 0%, transparent 50%),
+            radial-gradient(ellipse at 20% 50%, rgba(191,149,63,0.08) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 20%, rgba(191,149,63,0.05) 0%, transparent 50%),
             #000000
           `,
         }}
@@ -54,7 +54,7 @@ export function Hero() {
         <motion.p
           className="uppercase tracking-[0.25em] text-sm font-medium mb-6"
           style={{
-            background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+            background: 'linear-gradient(135deg, #FCF6BA 0%, #BF953F 40%, #AA771C 70%, #BF953F 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
@@ -119,7 +119,7 @@ export function Hero() {
               className="inline-block rounded-full px-8 py-3 text-lg font-semibold text-black no-underline"
               style={{
                 background:
-                  'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+                  'linear-gradient(135deg, #FCF6BA 0%, #BF953F 40%, #AA771C 70%, #BF953F 100%)',
               }}
             >
               Get Started Free
@@ -148,11 +148,11 @@ export function Hero() {
           transition={{ duration: 0.5, delay: 0.9 }}
         >
           <span style={{ color: '#22C55E' }}>Explore free — upgrade anytime</span>
-          <span style={{ color: 'rgba(197,164,66,0.4)' }}>&bull;</span>
+          <span style={{ color: 'rgba(191,149,63,0.4)' }}>&bull;</span>
           <span style={{ color: '#6B7280', textDecoration: 'line-through', fontWeight: 400 }}>$19.99/mo</span>
           {' '}
           <span style={{
-            background: 'linear-gradient(135deg, #F5D680, #C5A442)',
+            background: 'linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
