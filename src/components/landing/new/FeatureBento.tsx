@@ -69,6 +69,9 @@ export function FeatureBento() {
     offset: ['start start', 'end end'],
   });
 
+  // Pin content in viewport using transform (immune to parent overflow-x:hidden)
+  // Section = 280vh, viewport = 100vh → 180vh of scroll travel to compensate
+  const contentY = useTransform(scrollYProgress, [0, 1], ['0vh', '180vh']);
   // Map vertical scroll → horizontal card translation
   const x = useTransform(scrollYProgress, [0, 1], ['2%', '-62%']);
   // Fade heading in at top, out at end
@@ -80,9 +83,13 @@ export function FeatureBento() {
     <section
       id="features"
       ref={containerRef}
+      className="relative"
       style={{ height: '280vh', backgroundColor: '#000000', scrollMarginTop: '5rem' }}
     >
-      <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
+      <motion.div
+        className="h-screen flex flex-col justify-center overflow-hidden"
+        style={{ y: contentY }}
+      >
         {/* Header — fixed in place while cards scroll */}
         <motion.div
           className="px-6 sm:px-10 mb-8"
@@ -199,7 +206,7 @@ export function FeatureBento() {
             </motion.div>
           ))}
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 }
