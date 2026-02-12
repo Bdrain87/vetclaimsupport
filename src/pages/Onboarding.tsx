@@ -887,13 +887,19 @@ export default function Onboarding() {
                   <div className="space-y-4">
                     {/* Add new rated condition form */}
                     <div className="space-y-3 p-4 rounded-xl bg-white/[0.04] border border-white/[0.08]">
-                      <input
-                        type="text"
-                        value={newRatedCondition}
-                        onChange={(e) => setNewRatedCondition(e.target.value)}
-                        placeholder="Condition name (e.g. PTSD, Tinnitus)"
-                        className="w-full px-4 py-3 rounded-xl bg-white/[0.06] border border-white/[0.08] text-white placeholder-white/30 text-sm focus:outline-none focus:border-[rgba(214,178,94,0.4)]"
-                      />
+                      {!newRatedCondition ? (
+                        <ConditionAutocomplete
+                          onSelect={(condition) => setNewRatedCondition(condition.name)}
+                          placeholder="Search conditions (e.g. PTSD, Tinnitus)"
+                        />
+                      ) : (
+                        <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.3)]">
+                          <span className="flex-1 text-sm text-gold font-medium">{newRatedCondition}</span>
+                          <button onClick={() => setNewRatedCondition('')} className="text-white/40 hover:text-white" aria-label="Change condition">
+                            <X className="h-4 w-4" />
+                          </button>
+                        </div>
+                      )}
                       <div className="flex gap-3">
                         <select
                           value={newRatedRating}
