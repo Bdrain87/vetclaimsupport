@@ -236,7 +236,7 @@ export const PlatinumNavbar = () => {
         className={cn(
           'fixed top-0 right-0 z-[201] h-[100dvh] w-[min(320px,85vw)]',
           'bg-[#0c1829]/95 backdrop-blur-xl border-l border-white/[0.10]',
-          'shadow-2xl transform transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]',
+          'shadow-2xl transform transition-transform duration-300 ease-vcs',
           drawerOpen ? 'translate-x-0' : 'translate-x-full'
         )}
       >

@@ -150,7 +150,7 @@ export function AppSidebar() {
           className={cn(
             'flex items-center justify-center rounded-xl px-2 py-2.5 min-h-[44px]',
             'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground',
-            'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
+            'transition-all duration-200 ease-vcs',
             'hover:scale-105',
             isActive && 'bg-primary/10 text-primary',
             isPremium && 'text-primary'
@@ -172,7 +172,7 @@ export function AppSidebar() {
           <div className={cn(
             'flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium',
             'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground',
-            'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] min-h-[44px]',
+            'transition-all duration-200 ease-vcs min-h-[44px]',
             'hover:translate-x-1',
             isActive && 'text-primary',
             isPremium && 'text-gold font-semibold'
@@ -183,7 +183,7 @@ export function AppSidebar() {
             </div>
             {!group.alwaysOpen && (
               <ChevronDown className={cn(
-                'h-4 w-4 transition-transform duration-250 ease-[cubic-bezier(0.32,0.72,0,1)]',
+                'h-4 w-4 transition-transform duration-250 ease-vcs',
                 isOpen && 'rotate-180'
               )} />
             )}
@@ -200,7 +200,7 @@ export function AppSidebar() {
                     className={cn(
                       'flex items-center gap-3 rounded-lg px-3 py-2 text-sm',
                       'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground',
-                      'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
+                      'transition-all duration-200 ease-vcs',
                       'hover:translate-x-1',
                       isItemActive && 'bg-gradient-to-r from-[var(--gold-border)] to-transparent text-gold font-medium border-l-2 border-gold'
                     )}
@@ -223,7 +223,7 @@ export function AppSidebar() {
         'hidden md:flex',
         'fixed left-0 top-0 z-40 h-screen border-r flex-col',
         'border-sidebar-border',
-        'transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]',
+        'transition-all duration-300 ease-vcs',
         'bg-gradient-to-b from-sidebar-background via-sidebar-background to-[hsl(0_0%_5%)]',
         collapsed ? 'w-16' : 'w-64'
       )}
@@ -233,11 +233,11 @@ export function AppSidebar() {
     >
       {/* Header */}
       <div className={cn(
-        'flex items-center gap-3 px-4 py-5 border-b border-sidebar-border/50 transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
+        'flex items-center gap-3 px-4 py-5 border-b border-sidebar-border/50 transition-all duration-200 ease-vcs',
         'bg-gradient-to-r from-transparent via-primary/[0.02] to-transparent',
         collapsed && 'justify-center px-2'
       )}>
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary/25 to-primary/10 shadow-[0_0_24px_rgba(197,164,66,0.25)] transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-105 hover:shadow-[0_0_32px_rgba(197,164,66,0.35)]">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary/25 to-primary/10 shadow-[0_0_24px_rgba(197,164,66,0.25)] transition-all duration-200 ease-vcs hover:scale-105 hover:shadow-[0_0_32px_rgba(197,164,66,0.35)]">
           <ShieldCheck className="h-5 w-5 text-primary drop-shadow-[0_0_8px_rgba(197,164,66,0.5)]" />
         </div>
         {!collapsed && (
@@ -256,7 +256,7 @@ export function AppSidebar() {
             to="/"
             className={cn(
               'relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium',
-              'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
+              'transition-all duration-200 ease-vcs',
               'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground hover:translate-x-1',
               'min-h-[44px]',
               location.pathname === '/' && 'bg-gradient-to-r from-primary/15 to-primary/5 text-primary border border-primary/20',
@@ -301,7 +301,7 @@ export function AppSidebar() {
                 to={item.to}
                 className={cn(
                   'relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium',
-                  'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
+                  'transition-all duration-200 ease-vcs',
                   'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground hover:translate-x-1',
                   'min-h-[44px]',
                   isActive && 'bg-gradient-to-r from-primary/15 to-primary/5 text-primary border border-primary/20',
@@ -330,7 +330,7 @@ export function AppSidebar() {
                     to={item.to}
                     className={cn(
                       'relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium',
-                      'transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]',
+                      'transition-all duration-200 ease-vcs',
                       'text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground hover:translate-x-1',
                       'min-h-[44px]',
                       isActive && 'bg-primary/10 text-primary',

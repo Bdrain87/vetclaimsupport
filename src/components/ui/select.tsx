@@ -34,7 +34,7 @@ const SelectTrigger = React.forwardRef<
       "data-[state=open]:ring-2 data-[state=open]:ring-primary/50",
       "data-[state=open]:shadow-[0_0_0_4px_hsl(43_64%_60%/0.1)]",
       "disabled:cursor-not-allowed disabled:opacity-50",
-      "transition-all duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]",
+      "transition-all duration-200 ease-vcs",
       "[&>span]:line-clamp-1",
       className
     )}

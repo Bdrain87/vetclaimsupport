@@ -121,6 +121,9 @@ export default {
         '18': '4.5rem',
         '22': '5.5rem',
       },
+      transitionTimingFunction: {
+        vcs: 'cubic-bezier(0.32, 0.72, 0, 1)',
+      },
       backdropBlur: {
         'xl': '20px',
         '2xl': '40px',

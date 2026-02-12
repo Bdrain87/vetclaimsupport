@@ -12,7 +12,7 @@ const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
         "border border-border/50",
         "shadow-[0_4px_24px_-4px_hsl(0_0%_0%/0.1)]",
         "dark:shadow-[0_4px_24px_-4px_hsl(0_0%_0%/0.4),inset_0_1px_0_hsl(0_0%_100%/0.04)]",
-        "transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]",
+        "transition-all duration-300 ease-vcs",
         "hover:shadow-[0_8px_32px_-8px_hsl(0_0%_0%/0.15)]",
         "dark:hover:shadow-[0_8px_32px_-8px_hsl(0_0%_0%/0.5)]",
         className
