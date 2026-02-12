@@ -51,10 +51,10 @@ function CardIcon() {
 
 export function FeatureBento() {
   return (
-    <section id="features" className="py-20 md:py-28 bg-white">
+    <section id="features" className="py-20 md:py-28" style={{ backgroundColor: '#111111', scrollMarginTop: '5rem' }}>
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <motion.h2
-          className="text-3xl md:text-4xl font-bold text-black text-center mb-16"
+          className="text-3xl md:text-4xl font-bold text-white text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -64,7 +64,7 @@ export function FeatureBento() {
         </motion.h2>
 
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+          className="grid grid-cols-1 md:grid-cols-2 gap-4"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
@@ -77,7 +77,7 @@ export function FeatureBento() {
               whileHover={{ y: -4, scale: 1.01 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
               className={`rounded-2xl p-6 md:p-8 border border-transparent hover:border-[#C5A442]/30 transition-colors ${
-                card.span === 2 ? 'lg:col-span-2' : ''
+                card.span === 2 ? 'md:col-span-2' : ''
               }`}
               style={{ backgroundColor: '#1a1a1a' }}
             >

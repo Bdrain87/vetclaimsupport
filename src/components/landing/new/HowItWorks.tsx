@@ -26,7 +26,7 @@ const STEPS = [
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-20 md:py-28" style={{ backgroundColor: '#000000' }}>
+    <section id="how-it-works" className="py-20 md:py-28" style={{ backgroundColor: '#000000', scrollMarginTop: '5rem' }}>
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
         <motion.h2
           className="text-3xl md:text-4xl font-bold text-white text-center mb-16"
@@ -74,7 +74,7 @@ export function HowItWorks() {
               </div>
 
               {/* Text */}
-              <div className={`pb-12 ${i === STEPS.length - 1 ? 'pb-0' : ''}`}>
+              <div className={i === STEPS.length - 1 ? '' : 'pb-12'}>
                 <h3 className="text-xl font-semibold text-white mb-2">{step.title}</h3>
                 <p style={{ color: '#9CA3AF' }} className="leading-relaxed">
                   {step.desc}

@@ -3,16 +3,16 @@ import { fadeInUp, staggerContainer } from '@/lib/landing-animations';
 
 const POINTS = [
   {
-    title: '100% Local-First',
-    desc: 'Everything stored on your phone. No cloud required.',
+    title: 'Local-First Storage',
+    desc: 'All data lives on your device by default. No account or cloud required to use the app.',
   },
   {
-    title: 'Optional Encrypted Sync',
-    desc: 'Choose to sync across devices with end-to-end encryption.',
+    title: 'Optional Cloud Sync',
+    desc: 'Create an account to sync across devices. Data is encrypted in transit and at rest on our servers.',
   },
   {
-    title: 'Zero Data Collection',
-    desc: "We don't track you, sell your data, or share anything. Ever.",
+    title: 'We Never Sell Your Data',
+    desc: 'No targeted ads, no marketing sharing, no data sales. Your information is yours.',
   },
 ];
 
@@ -47,7 +47,7 @@ export function PrivacySection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          Your Data Never Leaves Your Device
+          Your Privacy Comes First
         </motion.h2>
 
         <motion.div

@@ -37,18 +37,23 @@ const FRAMES: Frame[] = [
 /* ── Desktop: sticky scroll crossfade ── */
 function DesktopScrollStory() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start start', 'end end'] });
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  });
 
   return (
     <div ref={containerRef} className="hidden md:block relative" style={{ height: '400vh' }}>
       <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
-        {FRAMES.map((frame, i) => {
-          const start = i / FRAMES.length;
-          const end = (i + 1) / FRAMES.length;
-          return (
-            <DesktopFrame key={frame.num} frame={frame} progress={scrollYProgress} start={start} end={end} />
-          );
-        })}
+        {FRAMES.map((frame, i) => (
+          <DesktopFrame
+            key={frame.num}
+            frame={frame}
+            progress={scrollYProgress}
+            index={i}
+            total={FRAMES.length}
+          />
+        ))}
       </div>
     </div>
   );
@@ -57,17 +62,38 @@ function DesktopScrollStory() {
 function DesktopFrame({
   frame,
   progress,
-  start,
-  end,
+  index,
+  total,
 }: {
   frame: Frame;
   progress: ReturnType<typeof useScroll>['scrollYProgress'];
-  start: number;
-  end: number;
+  index: number;
+  total: number;
 }) {
-  const fadeIn = start + 0.02;
-  const fadeOut = end - 0.02;
-  const opacity = useTransform(progress, [start, fadeIn, fadeOut, end], [0, 1, 1, 0]);
+  // Each frame occupies 1/total of the scroll range
+  const seg = 1 / total;
+  const start = index * seg;
+  const end = start + seg;
+
+  // First frame: visible immediately (opacity 1 at progress 0), fades out at segment end
+  // Middle frames: fade in at segment start, fade out at segment end
+  // Last frame: fades in at segment start, stays visible (opacity 1 at progress 1)
+  const isFirst = index === 0;
+  const isLast = index === total - 1;
+
+  const inputRange = isFirst
+    ? [0, end - 0.05, end]
+    : isLast
+      ? [start, start + 0.05, 1]
+      : [start, start + 0.05, end - 0.05, end];
+
+  const outputRange = isFirst
+    ? [1, 1, 0]
+    : isLast
+      ? [0, 1, 1]
+      : [0, 1, 1, 0];
+
+  const opacity = useTransform(progress, inputRange, outputRange);
 
   return (
     <motion.div

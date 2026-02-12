@@ -320,13 +320,16 @@ function AppContent() {
 
   // Web: after onboarding completes (navigates to /), redirect to /app
   useEffect(() => {
-    if (isWeb && location.pathname === '/' && hasOnboarded) {
+    if (isLandingRoute && hasOnboarded) {
       navigate('/app', { replace: true });
     }
-  }, [location.pathname, hasOnboarded, navigate]);
+  }, [isLandingRoute, hasOnboarded, navigate]);
 
-  // Landing page — no app shell
-  if (isLandingRoute && !hasOnboarded) {
+  // Web root — landing page for new visitors, loading fallback while redirecting onboarded users
+  if (isLandingRoute) {
+    if (hasOnboarded) {
+      return <LoadingFallback />;
+    }
     return (
       <Suspense fallback={<LoadingFallback />}>
         <LandingPage />

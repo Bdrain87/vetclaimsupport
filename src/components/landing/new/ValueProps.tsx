@@ -59,7 +59,7 @@ const PROPS = [
 
 export function ValueProps() {
   return (
-    <section className="py-20 md:py-28 bg-white">
+    <section className="py-20 md:py-28" style={{ backgroundColor: '#111111' }}>
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <motion.div
           className="text-center mb-16"
@@ -68,10 +68,10 @@ export function ValueProps() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             What is Vet Claim Support?
           </h2>
-          <p style={{ color: '#6B7280' }} className="text-lg">
+          <p style={{ color: '#9CA3AF' }} className="text-lg">
             Your all-in-one VA claim preparation toolkit
           </p>
         </motion.div>
@@ -88,8 +88,8 @@ export function ValueProps() {
               <div className="flex justify-center mb-5">
                 <Icon />
               </div>
-              <h3 className="text-xl font-semibold text-black mb-3">{title}</h3>
-              <p style={{ color: '#6B7280' }} className="leading-relaxed">
+              <h3 className="text-xl font-semibold text-white mb-3">{title}</h3>
+              <p style={{ color: '#9CA3AF' }} className="leading-relaxed">
                 {desc}
               </p>
             </motion.div>

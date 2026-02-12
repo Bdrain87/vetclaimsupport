@@ -4,8 +4,8 @@ import { fadeInUp, staggerContainer } from '@/lib/landing-animations';
 const STATS = [
   { number: '12+', label: 'Claim Tools' },
   { number: '40+', label: 'Conditions Covered' },
-  { number: '100%', label: 'Local-First Privacy' },
-  { number: 'Veteran', label: 'Built' },
+  { number: '100%', label: 'Private by Default' },
+  { number: 'Veteran', label: 'Founded' },
 ];
 
 export function SocialProof() {

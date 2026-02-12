@@ -42,7 +42,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          Built by Veterans, for Veterans
+          Built for Those Who Served
         </motion.p>
 
         {/* Main heading */}
@@ -119,7 +119,7 @@ export function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.9 }}
         >
-          No account required &bull; 100% Private &bull; Built for Veterans
+          No account required &bull; 100% Private &bull; Veterans &amp; Service Members
         </motion.p>
       </div>
     </section>

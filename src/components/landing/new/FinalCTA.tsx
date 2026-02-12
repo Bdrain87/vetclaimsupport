@@ -31,7 +31,7 @@ export function FinalCTA() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          Join veterans who stopped guessing and started preparing.
+          Join veterans and service members who stopped guessing and started preparing.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -60,7 +60,7 @@ export function FinalCTA() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          Free to start. No account required. 100% private.
+          Free to start. No account required. Your data stays on your device.
         </motion.p>
       </div>
     </section>

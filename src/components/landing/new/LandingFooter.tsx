@@ -35,7 +35,7 @@ export function LandingFooter() {
               <span className="text-white font-semibold">Vet Claim Support</span>
             </div>
             <p className="text-sm leading-relaxed" style={{ color: '#9CA3AF' }}>
-              Privacy-first VA claim preparation tools built by a veteran.
+              Privacy-first VA claim preparation tools for veterans and service members.
             </p>
           </div>
 
