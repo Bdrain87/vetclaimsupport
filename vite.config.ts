@@ -15,6 +15,8 @@ export default defineConfig({
       includeAssets: ['logo.svg', 'icon-*.png'],
       manifest: false, // Use existing public/manifest.json
       workbox: {
+        skipWaiting: true,
+        clientsClaim: true,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         runtimeCaching: [
           {
