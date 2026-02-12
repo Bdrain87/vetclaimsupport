@@ -51,6 +51,30 @@ window.addEventListener('unhandledrejection', (event) => {
 });
 
 // ============================================================
+// SERVICE WORKER — auto-update on deploy
+// ============================================================
+if ('serviceWorker' in navigator) {
+  // When a new SW takes control, reload so the user sees fresh content
+  let refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!refreshing) {
+      refreshing = true;
+      window.location.reload();
+    }
+  });
+
+  // Check for SW updates every 60s and whenever the tab regains focus
+  navigator.serviceWorker.ready.then((registration) => {
+    setInterval(() => registration.update(), 60_000);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        registration.update();
+      }
+    });
+  });
+}
+
+// ============================================================
 // BOOT
 // ============================================================
 const container = document.getElementById('root');
