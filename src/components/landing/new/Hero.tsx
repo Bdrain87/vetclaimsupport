@@ -146,17 +146,17 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.9 }}
         >
-          <span style={{ color: '#22C55E' }}>Free plan available</span>
+          <span style={{ color: '#22C55E' }}>Try free — no card required</span>
           <span style={{ color: 'rgba(197,164,66,0.4)' }}>&bull;</span>
+          <span style={{ color: '#6B7280', textDecoration: 'line-through', fontWeight: 400 }}>$19.99/mo</span>
+          {' '}
           <span style={{
             background: 'linear-gradient(135deg, #F5D680, #C5A442)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
             fontWeight: 600,
-          }}>Premium from $4.99/mo</span>
-          <span style={{ color: 'rgba(197,164,66,0.4)' }}>&bull;</span>
-          <span style={{ color: '#D1D5DB' }}>Veteran founded</span>
+          }}>$4.99/mo — limited launch price</span>
         </motion.div>
       </div>
     </section>
