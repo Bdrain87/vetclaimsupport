@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import gsap from 'gsap';
 import {
   HEADING_H2_STYLE,
   PILL_STYLE,
@@ -528,197 +529,250 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
 }
 
 /* ────────────────────────────────────────────────
- * Desktop 3D Perspective Scatter
+ * Desktop 3D Shuffling Card Deck (GSAP)
  *
- * Large overlapping cards scattered like a desk of
- * portfolio pieces, viewed from a dramatic 3D angle.
- * Cards overlap each other. One pops toward the viewer
- * at a time, then recedes and the next pops out.
+ * A stack of large cards with 3D perspective. The front
+ * card auto-pops out to the side and flies to the back
+ * while the deck shuffles forward. Infinite loop.
+ * Every card is clickable for detail modal.
  * ──────────────────────────────────────────────── */
 
 const N = CARDS.length;
-const POP_HOLD_MS = 2200;
+const VISIBLE = 7; // cards rendered in the visible stack
+const SHUFFLE_MS = 2800; // time between shuffles
 
-// Card dimensions
-const CARD_W = 380;
-const CARD_H = 280;
-
-// Loose overlapping grid: 6 columns, staggered rows
-// Cards overlap ~100px horizontally and ~60px vertically
-const COL_SPACING = 280;
-const ROW_SPACING = 220;
-const COLS = 6;
-
-// Pre-compute scattered positions for all cards
-const CARD_POSITIONS = CARDS.map((_, i) => {
-  const col = i % COLS;
-  const row = Math.floor(i / COLS);
-  // Stagger odd rows by half a column for a natural offset
-  const stagger = row % 2 === 1 ? COL_SPACING * 0.45 : 0;
-  // Small pseudo-random jitter for organic feel
-  const seed = (i * 7 + 13) % 37;
-  const jitterX = ((seed % 11) - 5) * 4;
-  const jitterY = ((seed % 7) - 3) * 5;
-
-  return {
-    x: col * COL_SPACING + stagger + jitterX,
-    y: row * ROW_SPACING + jitterY,
-  };
+// Stack layout: each position further back is smaller, lower, offset right
+const stackPos = (i: number) => ({
+  y: i * 30,
+  x: i * 12,
+  scale: 1 - i * 0.035,
+  opacity: Math.max(0.15, 1 - i * 0.12),
+  rotateZ: i * 0.6,
+  rotateY: 0,
+  zIndex: VISIBLE - i,
 });
 
-// Center the plane — compute bounding box and offset
-const planeW = Math.max(...CARD_POSITIONS.map((p) => p.x)) + CARD_W;
-const planeH = Math.max(...CARD_POSITIONS.map((p) => p.y)) + CARD_H;
-
 function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => void }) {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [isPaused, setIsPaused] = useState(false);
+  // offset tracks which CARDS index is currently at the front of the stack
+  const [offset, setOffset] = useState(0);
+  const slotRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const isAnimating = useRef(false);
+  const isPaused = useRef(false);
+  const timerRef = useRef<ReturnType<typeof setInterval>>();
 
-  // Auto-cycle the popped card
+  // Derive visible cards from offset
+  const getCard = (slotIdx: number) => CARDS[(offset + slotIdx) % N];
+
+  // Apply stack positions instantly (called after each shuffle completes)
+  const resetPositions = useCallback(() => {
+    slotRefs.current.forEach((el, i) => {
+      if (!el) return;
+      const p = stackPos(i);
+      gsap.set(el, {
+        x: p.x,
+        y: p.y,
+        scale: p.scale,
+        opacity: p.opacity,
+        rotateZ: p.rotateZ,
+        rotateY: 0,
+      });
+      el.style.zIndex = String(p.zIndex);
+    });
+  }, []);
+
+  // Set positions on mount and whenever offset changes (new cards in slots)
   useEffect(() => {
-    if (isPaused) return;
-    const timer = setTimeout(() => {
-      setActiveIndex((prev) => (prev + 1) % N);
-    }, POP_HOLD_MS);
-    return () => clearTimeout(timer);
-  }, [activeIndex, isPaused]);
+    resetPositions();
+  }, [offset, resetPositions]);
 
-  const poppedIndex = hoveredIndex ?? activeIndex;
+  // The shuffle animation
+  const doShuffle = useCallback(() => {
+    if (isAnimating.current || isPaused.current) return;
+    isAnimating.current = true;
+
+    const frontEl = slotRefs.current[0];
+    if (!frontEl) {
+      isAnimating.current = false;
+      return;
+    }
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        // Advance the deck — front card's slot gets new data
+        setOffset((prev) => (prev + 1) % N);
+        isAnimating.current = false;
+      },
+    });
+
+    // Front card flies out to the right with rotation
+    tl.to(frontEl, {
+      x: 650,
+      rotateZ: 12,
+      rotateY: -25,
+      opacity: 0,
+      scale: 0.8,
+      duration: 0.75,
+      ease: 'power3.inOut',
+    });
+
+    // Simultaneously shift remaining cards forward one stack position
+    for (let i = 1; i < VISIBLE; i++) {
+      const el = slotRefs.current[i];
+      if (!el) continue;
+      const newPos = stackPos(i - 1);
+      tl.to(
+        el,
+        {
+          x: newPos.x,
+          y: newPos.y,
+          scale: newPos.scale,
+          opacity: newPos.opacity,
+          rotateZ: newPos.rotateZ,
+          zIndex: newPos.zIndex,
+          duration: 0.55,
+          ease: 'power2.out',
+        },
+        '<0.04',
+      );
+    }
+  }, []);
+
+  // Auto-shuffle timer
+  useEffect(() => {
+    timerRef.current = setInterval(doShuffle, SHUFFLE_MS);
+    return () => clearInterval(timerRef.current);
+  }, [doShuffle]);
 
   return (
     <div
-      className="relative mx-auto"
-      style={{ height: '800px', maxWidth: '100vw' }}
-      onMouseEnter={() => setIsPaused(true)}
+      className="relative mx-auto flex items-center justify-center"
+      style={{ height: '650px', maxWidth: '1200px' }}
+      onMouseEnter={() => {
+        isPaused.current = true;
+      }}
       onMouseLeave={() => {
-        setIsPaused(false);
-        setHoveredIndex(null);
+        isPaused.current = false;
       }}
     >
-      {/* Perspective container */}
+      {/* 3D perspective wrapper */}
       <div
-        className="absolute inset-0 flex items-center justify-center"
         style={{
-          perspective: '1600px',
-          perspectiveOrigin: '50% 40%',
+          perspective: '1200px',
+          perspectiveOrigin: '50% 45%',
         }}
       >
-        {/* Tilted plane — the whole scattered layout rotated in 3D */}
+        {/* Slight tilt for that portfolio 3D feel */}
         <div
           style={{
-            width: planeW,
-            height: planeH,
             position: 'relative',
-            transform: 'rotateX(52deg) rotateY(-6deg) rotateZ(6deg)',
+            width: '560px',
+            height: '400px',
             transformStyle: 'preserve-3d',
-            transformOrigin: 'center center',
+            transform: 'rotateX(6deg) rotateY(-4deg)',
           }}
         >
-          {CARDS.map((card, i) => {
-            const pos = CARD_POSITIONS[i];
-            const isPopped = i === poppedIndex;
+          {Array.from({ length: VISIBLE }).map((_, slotIdx) => {
+            const card = getCard(slotIdx);
             const Icon = card.icon;
+            const isFront = slotIdx === 0;
 
             return (
-              <motion.div
-                key={card.title}
-                className="absolute cursor-pointer"
+              <div
+                key={`slot-${slotIdx}`}
+                ref={(el) => {
+                  slotRefs.current[slotIdx] = el;
+                }}
+                className="absolute inset-0 rounded-2xl cursor-pointer"
                 style={{
-                  left: pos.x,
-                  top: pos.y,
-                  width: CARD_W,
-                  height: CARD_H,
-                  transformStyle: 'preserve-3d',
-                  willChange: 'transform',
-                  zIndex: isPopped ? 20 : 1,
+                  backfaceVisibility: 'hidden',
+                  pointerEvents: 'auto',
+                  willChange: 'transform, opacity',
                 }}
-                animate={{
-                  z: isPopped ? 120 : 0,
-                  scale: isPopped ? 1.08 : 1,
-                }}
-                transition={{ duration: 0.6, ease: EASE_SMOOTH }}
-                onMouseEnter={() => setHoveredIndex(i)}
-                onMouseLeave={() => setHoveredIndex(null)}
                 onClick={() => onSelectCard(card)}
               >
                 <div
-                  className="w-full h-full rounded-2xl p-6 flex flex-col"
+                  className="w-full h-full rounded-2xl p-8 flex flex-col"
                   style={{
                     background: SILVER_GRADIENT,
-                    border: isPopped
-                      ? '1px solid rgba(197, 164, 66, 0.4)'
-                      : '1px solid rgba(255, 255, 255, 0.25)',
-                    boxShadow: isPopped ? CARD_SHADOW_ACTIVE : CARD_SHADOW,
-                    transition: 'box-shadow 0.5s, border-color 0.5s',
+                    border: isFront
+                      ? '1px solid rgba(197,164,66,0.35)'
+                      : '1px solid rgba(255,255,255,0.25)',
+                    boxShadow: isFront ? CARD_SHADOW_ACTIVE : CARD_SHADOW,
                   }}
                 >
-                  <div className="flex items-start gap-4 mb-4">
+                  {/* Top row: icon + category/title */}
+                  <div className="flex items-start gap-5 mb-5">
                     <div
-                      className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                      style={{ backgroundColor: 'rgba(0,0,0,0.06)', border: '1px solid rgba(0,0,0,0.05)' }}
+                      className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{
+                        backgroundColor: 'rgba(0,0,0,0.06)',
+                        border: '1px solid rgba(0,0,0,0.06)',
+                      }}
                     >
-                      <Icon size={20} style={{ color: '#8B7332' }} />
+                      <Icon size={24} style={{ color: '#8B7332' }} />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <span
-                        className="text-[9px] font-semibold tracking-[0.15em] uppercase block mb-0.5"
+                        className="text-[10px] font-semibold tracking-[0.15em] uppercase block mb-1"
                         style={{ color: '#8B7332' }}
                       >
                         {card.category}
                       </span>
                       <h4
-                        className="text-[17px] font-semibold leading-tight"
+                        className="text-xl font-semibold leading-tight"
                         style={{ color: '#0A0A0A', letterSpacing: '-0.02em' }}
                       >
                         {card.title}
                       </h4>
                     </div>
                   </div>
+
+                  {/* Description */}
                   <p
-                    className="text-[13px] leading-relaxed flex-1"
+                    className="text-[15px] leading-relaxed flex-1"
                     style={{ color: '#333' }}
                   >
                     {card.short}
                   </p>
-                  <div className="flex items-center justify-between mt-3 pt-3" style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+
+                  {/* Footer */}
+                  <div
+                    className="flex items-center justify-between mt-4 pt-4"
+                    style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}
+                  >
                     <span
-                      className="text-[10px] font-medium"
-                      style={{ color: card.plan === 'Free' ? '#555' : '#8B7332' }}
+                      className="inline-block rounded-full px-3 py-1 text-[11px] font-semibold"
+                      style={{
+                        backgroundColor:
+                          card.plan === 'Free'
+                            ? 'rgba(0,0,0,0.06)'
+                            : 'rgba(139,115,50,0.12)',
+                        color: card.plan === 'Free' ? '#444' : '#8B7332',
+                      }}
                     >
                       {card.plan === 'Free' ? 'Free' : 'Launch Plan'}
                     </span>
                     <span
-                      className="text-[10px] font-medium"
+                      className="text-[11px] font-medium"
                       style={{ color: '#999' }}
                     >
                       Click to explore →
                     </span>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>
       </div>
 
-      {/* Edge fades — clip the overflow visually */}
+      {/* Card counter */}
       <div
-        className="absolute top-0 left-0 right-0 pointer-events-none z-10"
-        style={{ height: '35%', background: 'linear-gradient(to bottom, #000 0%, #000 20%, transparent 100%)' }}
-      />
-      <div
-        className="absolute bottom-0 left-0 right-0 pointer-events-none z-10"
-        style={{ height: '30%', background: 'linear-gradient(to top, #000 0%, #000 15%, transparent 100%)' }}
-      />
-      <div
-        className="absolute top-0 bottom-0 left-0 pointer-events-none z-10"
-        style={{ width: '18%', background: 'linear-gradient(to right, #000 0%, #000 30%, transparent 100%)' }}
-      />
-      <div
-        className="absolute top-0 bottom-0 right-0 pointer-events-none z-10"
-        style={{ width: '18%', background: 'linear-gradient(to left, #000 0%, #000 30%, transparent 100%)' }}
-      />
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs tabular-nums"
+        style={{ color: '#555' }}
+      >
+        {(offset % N) + 1} / {N}
+      </div>
     </div>
   );
 }
