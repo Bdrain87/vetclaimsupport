@@ -5,6 +5,7 @@ import { sanitizePHI } from '@/utils/phiSanitizer';
 
 export const useGemini = (persona: keyof typeof AI_CONFIG) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const generate = useCallback(async (input: string): Promise<string | null> => {
@@ -14,9 +15,10 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
     abortControllerRef.current = controller;
 
     setIsLoading(true);
+    setError(null);
     try {
       const sanitizedInput = sanitizePHI(input);
-      const { data, error } = await supabase.functions.invoke('analyze-disabilities', {
+      const { data, error: invokeError } = await supabase.functions.invoke('analyze-disabilities', {
         body: {
           prompt: `${AI_CONFIG[persona]}\n\nInput: ${sanitizedInput}`,
         },
@@ -24,20 +26,25 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
 
       if (controller.signal.aborted) return null;
 
-      if (error) {
-        throw new Error(error.message || 'AI service request failed');
+      if (invokeError) {
+        const msg = invokeError.message || 'AI service request failed';
+        setError(msg);
+        return null;
       }
 
       const text = data?.analysis;
       if (!text) {
-        throw new Error('Unexpected response format from AI service');
-      }
-      return text;
-    } catch (error: unknown) {
-      if (error instanceof DOMException && error.name === 'AbortError') {
+        setError('Unexpected response format from AI service');
         return null;
       }
-      console.error('[useGemini]', error);
+      return text;
+    } catch (err: unknown) {
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        return null;
+      }
+      if (controller.signal.aborted) return null;
+      const msg = err instanceof Error ? err.message : 'AI service request failed';
+      setError(msg);
       return null;
     } finally {
       setIsLoading(false);
@@ -55,5 +62,5 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
     };
   }, []);
 
-  return { generate, isLoading, cancel };
+  return { generate, isLoading, cancel, error };
 };

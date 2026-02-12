@@ -54,7 +54,7 @@ export const BodyMap = () => {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  className="p-5 bg-white/5 border border-white/10 rounded-2xl hover:border-[rgba(214,178,94,0.4)] transition-all group"
+                  className="p-5 bg-white/5 border border-white/10 rounded-2xl hover:border-[rgba(197,164,66,0.4)] transition-all group"
                 >
                   <div className="flex justify-between items-start">
                     <div>
@@ -66,7 +66,7 @@ export const BodyMap = () => {
                   {condition.possibleSecondaries && (
                     <div className="mt-4 flex flex-wrap gap-2">
                       {condition.possibleSecondaries.map(s => (
-                        <span key={s} className="px-2 py-1 bg-[rgba(214,178,94,0.1)] text-gold rounded-md text-[9px] font-black uppercase tracking-tighter border border-[rgba(214,178,94,0.2)] truncate max-w-full">
+                        <span key={s} className="px-2 py-1 bg-[rgba(197,164,66,0.1)] text-gold rounded-md text-[9px] font-black uppercase tracking-tighter border border-[rgba(197,164,66,0.2)] truncate max-w-full">
                           + {s}
                         </span>
                       ))}

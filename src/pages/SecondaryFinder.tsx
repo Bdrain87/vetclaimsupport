@@ -22,7 +22,7 @@ function getConnectionStrength(connection: SecondaryConnection): 'strong' | 'mod
 
 const strengthConfig = {
   strong: { label: 'Strong Connection', color: 'text-emerald-400', bg: 'bg-emerald-400/10 border-emerald-400/20', dot: 'bg-emerald-400' },
-  moderate: { label: 'Moderate Connection', color: 'text-gold', bg: 'bg-[rgba(214,178,94,0.1)] border-[rgba(214,178,94,0.2)]', dot: 'bg-gold' },
+  moderate: { label: 'Moderate Connection', color: 'text-gold', bg: 'bg-[rgba(197,164,66,0.1)] border-[rgba(197,164,66,0.2)]', dot: 'bg-gold' },
   possible: { label: 'Possible Connection', color: 'text-white/40', bg: 'bg-white/5 border-white/10', dot: 'bg-white/40' },
 };
 
@@ -106,7 +106,7 @@ export default function SecondaryFinder() {
     <PageContainer className="py-6 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3 min-w-0">
-        <div className="w-12 h-12 rounded-xl bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)] flex items-center justify-center shrink-0">
+        <div className="w-12 h-12 rounded-xl bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.2)] flex items-center justify-center shrink-0">
           <Link2 className="h-6 w-6 text-gold" />
         </div>
         <div className="min-w-0">
@@ -133,8 +133,8 @@ export default function SecondaryFinder() {
                 onClick={() => handleChipClick(c.fullName)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all max-w-full truncate ${
                   selectedPrimary === c.fullName
-                    ? 'bg-[rgba(214,178,94,0.2)] text-gold border border-[rgba(214,178,94,0.4)]'
-                    : 'bg-white/[0.09] text-white/70 border border-white/[0.12] hover:border-[rgba(214,178,94,0.3)] hover:text-white'
+                    ? 'bg-[rgba(197,164,66,0.2)] text-gold border border-[rgba(197,164,66,0.4)]'
+                    : 'bg-white/[0.09] text-white/70 border border-white/[0.12] hover:border-[rgba(197,164,66,0.3)] hover:text-white'
                 }`}
               >
                 <span className="truncate">{c.name}</span> <ArrowRight className="inline h-3 w-3 ml-1 shrink-0" />
@@ -155,7 +155,7 @@ export default function SecondaryFinder() {
               <p className="text-white/40 text-sm">{currentSecondaries.length} connections found</p>
             </div>
             <Link to={`/prep/nexus-letter?primary=${encodeURIComponent(selectedPrimary)}`}>
-              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.3)] text-gold text-sm font-medium hover:bg-[rgba(214,178,94,0.2)] transition-colors whitespace-nowrap shrink-0">
+              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.3)] text-gold text-sm font-medium hover:bg-[rgba(197,164,66,0.2)] transition-colors whitespace-nowrap shrink-0">
                 <FileSignature className="h-4 w-4 shrink-0" />
                 <span className="hidden sm:inline">Generate</span> Nexus Letter
               </button>
@@ -231,7 +231,7 @@ export default function SecondaryFinder() {
 
       {/* Info card */}
       {!selectedPrimary && (
-        <div className="rounded-2xl p-5 bg-[rgba(214,178,94,0.05)] border border-[rgba(214,178,94,0.15)]">
+        <div className="rounded-2xl p-5 bg-[rgba(197,164,66,0.05)] border border-[rgba(197,164,66,0.15)]">
           <h3 className="text-white/90 font-semibold mb-2 text-sm">How Secondary Claims Work</h3>
           <ol className="space-y-1.5 text-xs text-white/50">
             <li>1. Select your already service-connected (primary) condition</li>

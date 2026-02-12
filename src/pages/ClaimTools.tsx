@@ -90,8 +90,8 @@ export default function ClaimTools() {
         </button>
 
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 rounded-xl bg-[#D6B25E]/10 border border-[#D6B25E]/20 flex items-center justify-center">
-            <selectedTool.icon className="h-6 w-6 text-[#D6B25E]" />
+          <div className="w-12 h-12 rounded-xl bg-[#C5A442]/10 border border-[#C5A442]/20 flex items-center justify-center">
+            <selectedTool.icon className="h-6 w-6 text-[#C5A442]" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-white">{selectedTool.name}</h1>
@@ -108,8 +108,8 @@ export default function ClaimTools() {
     <div className="container max-w-5xl mx-auto py-6 px-4 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-12 h-12 rounded-xl bg-[#D6B25E]/10 border border-[#D6B25E]/20 flex items-center justify-center">
-          <Wrench className="h-6 w-6 text-[#D6B25E]" />
+        <div className="w-12 h-12 rounded-xl bg-[#C5A442]/10 border border-[#C5A442]/20 flex items-center justify-center">
+          <Wrench className="h-6 w-6 text-[#C5A442]" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-white">Claim Tools</h1>
@@ -125,12 +125,12 @@ export default function ClaimTools() {
           <button
             key={tool.id}
             onClick={() => setSelectedToolId(tool.id)}
-            className="group text-left p-5 rounded-2xl bg-white/[0.07] border border-white/[0.12] hover:border-[#D6B25E]/30 hover:bg-white/[0.07] transition-all duration-200 hover:shadow-lg hover:shadow-[#D6B25E]/5"
+            className="group text-left p-5 rounded-2xl bg-white/[0.07] border border-white/[0.12] hover:border-[#C5A442]/30 hover:bg-white/[0.07] transition-all duration-200 hover:shadow-lg hover:shadow-[#C5A442]/5"
           >
-            <div className="w-11 h-11 rounded-xl bg-[#D6B25E]/10 border border-[#D6B25E]/20 flex items-center justify-center mb-4 group-hover:bg-[#D6B25E]/20 transition-colors">
-              <tool.icon className="h-5 w-5 text-[#D6B25E]" />
+            <div className="w-11 h-11 rounded-xl bg-[#C5A442]/10 border border-[#C5A442]/20 flex items-center justify-center mb-4 group-hover:bg-[#C5A442]/20 transition-colors">
+              <tool.icon className="h-5 w-5 text-[#C5A442]" />
             </div>
-            <h3 className="text-sm font-bold text-white mb-1.5 group-hover:text-[#D6B25E] transition-colors">
+            <h3 className="text-sm font-bold text-white mb-1.5 group-hover:text-[#C5A442] transition-colors">
               {tool.name}
             </h3>
             <p className="text-xs text-white/50 leading-relaxed line-clamp-2">

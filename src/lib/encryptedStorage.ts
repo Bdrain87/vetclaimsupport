@@ -79,20 +79,13 @@ export const encryptedStorage: StateStorage = {
       // No password available -- we cannot decrypt.  Return null so the store
       // falls back to its initial state.  The app should prompt the user for
       // their vault passcode and then trigger a rehydrate.
-      console.warn(
-        `[encryptedStorage] Encrypted data found for key "${key}" but no session password is set.`,
-      );
       return null;
     }
 
     // decrypt is async (Web Crypto), so we return a Promise here.
     const ciphertext = raw.slice(ENCRYPTED_PREFIX.length);
     return decrypt(ciphertext, password)
-      .catch((err) => {
-        console.error(
-          `[encryptedStorage] Decryption failed for key "${key}":`,
-          err,
-        );
+      .catch(() => {
         // Graceful degradation: return null so the store initialises with
         // defaults instead of throwing.
         return null;
@@ -115,13 +108,10 @@ export const encryptedStorage: StateStorage = {
       .then((ciphertext) => {
         localStorage.setItem(key, ENCRYPTED_PREFIX + ciphertext);
       })
-      .catch((err) => {
+      .catch(() => {
         // If encryption fails for any reason, fall back to plaintext so the
-        // user does not lose data.
-        console.error(
-          `[encryptedStorage] Encryption failed for key "${key}", falling back to plaintext:`,
-          err,
-        );
+        // user does not lose data.  Warn so the issue is visible in devtools.
+        console.warn('[encryptedStorage] Encryption failed — falling back to plaintext write for key:', key);
         localStorage.setItem(key, value);
       });
   },

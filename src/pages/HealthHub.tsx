@@ -70,10 +70,10 @@ export default function HealthHub() {
       {/* 30-Day Summary Card */}
       <button
         onClick={() => navigate('/health/summary')}
-        className="w-full rounded-xl border border-[#D6B25E]/30 bg-[#D6B25E]/5 hover:bg-[#D6B25E]/10 transition-colors p-4"
+        className="w-full rounded-xl border border-[#C5A442]/30 bg-[#C5A442]/5 hover:bg-[#C5A442]/10 transition-colors p-4"
       >
         <div className="flex items-center gap-3 mb-3">
-          <BarChart3 className="h-5 w-5 text-[#D6B25E]" />
+          <BarChart3 className="h-5 w-5 text-[#C5A442]" />
           <span className="text-sm font-medium text-foreground">30-Day Summary</span>
         </div>
         <div className="grid grid-cols-3 gap-3 text-center">
@@ -105,7 +105,7 @@ export default function HealthHub() {
               onClick={() => navigate(card.route)}
               className="flex flex-col items-center gap-2 p-4 rounded-xl border border-border bg-card hover:bg-accent/50 transition-colors text-center"
             >
-              <card.icon className="h-8 w-8 text-[#D6B25E]" />
+              <card.icon className="h-8 w-8 text-[#C5A442]" />
               <span className="text-sm font-medium text-foreground">{card.label}</span>
               <span className="text-xs text-muted-foreground">
                 {count} {count === 1 ? 'entry' : 'entries'}

@@ -345,8 +345,8 @@ export function DBQAppointmentSummary() {
       // Save PDF
       doc.save(`DBQ-Summary-${selectedCondition.name.replace(/\s+/g, '-')}.pdf`);
       
-    } catch (error) {
-      console.error('Error generating PDF:', error);
+    } catch {
+      // PDF generation failed silently
     } finally {
       setIsGenerating(false);
     }

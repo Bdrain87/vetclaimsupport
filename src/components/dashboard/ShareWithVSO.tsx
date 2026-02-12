@@ -62,13 +62,17 @@ export function ShareWithVSO() {
   };
 
   const handleCopyText = async () => {
-    await navigator.clipboard.writeText(generatePlainTextSummary());
-    setCopied(true);
-    toast({
-      title: 'Summary Copied!',
-      description: 'You can now paste this summary to share with your VSO',
-    });
-    setTimeout(() => setCopied(false), 2000);
+    try {
+      await navigator.clipboard.writeText(generatePlainTextSummary());
+      setCopied(true);
+      toast({
+        title: 'Summary Copied!',
+        description: 'You can now paste this summary to share with your VSO',
+      });
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast({ title: 'Copy failed', description: 'Unable to access clipboard.', variant: 'destructive' });
+    }
   };
 
   const handleDownloadPDF = async () => {
@@ -304,7 +308,7 @@ export function ShareWithVSO() {
             </div>
 
             {/* Privacy Note */}
-            <div className="p-3 bg-[rgba(214,178,94,0.08)] border border-[rgba(214,178,94,0.25)] rounded-lg">
+            <div className="p-3 bg-[rgba(197,164,66,0.08)] border border-[rgba(197,164,66,0.25)] rounded-lg">
               <p className="text-xs text-muted-foreground">
                 <strong className="text-foreground">Privacy Note:</strong> This summary contains only
                 aggregate counts and condition names. Detailed medical information stays on your device.

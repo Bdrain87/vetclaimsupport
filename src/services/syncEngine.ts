@@ -7,6 +7,7 @@ export type SyncStatus = 'synced' | 'syncing' | 'offline' | 'error';
 let syncInterval: ReturnType<typeof setInterval> | null = null;
 let currentStatus: SyncStatus = 'offline';
 let lastSyncedAt: string | null = null;
+let syncInProgress: Promise<void> | null = null;
 const statusListeners = new Set<(status: SyncStatus) => void>();
 const SYNC_DEBOUNCE_MS = 60000; // 60 seconds — avoid hammering the server
 
@@ -57,17 +58,20 @@ export async function pullFromCloud(): Promise<void> {
     }
   }
 
-  // Pull conditions
-  const { data: conditions } = await supabase
+  // Pull conditions — match on id only (matching on name can cause false
+  // positives when two genuinely different conditions share a label).
+  const { data: conditions, error: conditionsError } = await supabase
     .from('conditions')
     .select('*')
     .eq('user_id', userId);
+
+  if (conditionsError) console.error('[sync] pull conditions failed:', conditionsError.message);
 
   if (conditions && conditions.length > 0) {
     const appStore = useAppStore.getState();
     conditions.forEach((condition) => {
       const existing = appStore.claimConditions.find(
-        (c) => c.name === condition.name || c.id === condition.id
+        (c) => c.id === condition.id
       );
       if (!existing) {
         appStore.addClaimCondition({
@@ -85,10 +89,12 @@ export async function pullFromCloud(): Promise<void> {
   }
 
   // Pull health logs
-  const { data: healthLogs } = await supabase
+  const { data: healthLogs, error: healthLogsError } = await supabase
     .from('health_logs')
     .select('*')
     .eq('user_id', userId);
+
+  if (healthLogsError) console.error('[sync] pull health_logs failed:', healthLogsError.message);
 
   if (healthLogs && healthLogs.length > 0) {
     const appStore = useAppStore.getState();
@@ -141,8 +147,8 @@ export async function pushToCloud(): Promise<void> {
   const profileState = useProfileStore.getState();
   const appState = useAppStore.getState();
 
-  // Push profile
-  await supabase.from('profiles').upsert({
+  // Push profile (upsert by id -- local state wins on conflict)
+  const { error: profilePushError } = await supabase.from('profiles').upsert({
     id: userId,
     email: session.user.email,
     branch: profileState.branch || null,
@@ -156,8 +162,9 @@ export async function pushToCloud(): Promise<void> {
     display_name: [profileState.firstName, profileState.lastName].filter(Boolean).join(' ') || null,
     updated_at: new Date().toISOString(),
   });
+  if (profilePushError) console.error('[sync] push profile failed:', profilePushError.message);
 
-  // Push conditions
+  // Push conditions (upsert by id -- local state wins on conflict)
   if (appState.claimConditions.length > 0) {
     const conditionRows = appState.claimConditions.map((c) => ({
       id: c.id,
@@ -166,7 +173,8 @@ export async function pushToCloud(): Promise<void> {
       notes: c.notes || null,
       updated_at: new Date().toISOString(),
     }));
-    await supabase.from('conditions').upsert(conditionRows);
+    const { error } = await supabase.from('conditions').upsert(conditionRows);
+    if (error) console.error('[sync] push conditions failed:', error.message);
   }
 
   // Push symptoms as health logs
@@ -178,7 +186,8 @@ export async function pushToCloud(): Promise<void> {
       data: s,
       logged_at: s.date || new Date().toISOString(),
     }));
-    await supabase.from('health_logs').upsert(symptomRows);
+    const { error } = await supabase.from('health_logs').upsert(symptomRows);
+    if (error) console.error('[sync] push symptoms failed:', error.message);
   }
 
   // Push sleep entries as health logs
@@ -190,7 +199,8 @@ export async function pushToCloud(): Promise<void> {
       data: s,
       logged_at: s.date || new Date().toISOString(),
     }));
-    await supabase.from('health_logs').upsert(sleepRows);
+    const { error } = await supabase.from('health_logs').upsert(sleepRows);
+    if (error) console.error('[sync] push sleep failed:', error.message);
   }
 
   // Push migraines as health logs
@@ -202,7 +212,8 @@ export async function pushToCloud(): Promise<void> {
       data: m,
       logged_at: m.date || new Date().toISOString(),
     }));
-    await supabase.from('health_logs').upsert(migraineRows);
+    const { error } = await supabase.from('health_logs').upsert(migraineRows);
+    if (error) console.error('[sync] push migraines failed:', error.message);
   }
 
   lastSyncedAt = new Date().toISOString();
@@ -210,26 +221,38 @@ export async function pushToCloud(): Promise<void> {
 }
 
 export async function syncNow(): Promise<void> {
+  if (syncInProgress) return syncInProgress;
+
   if (!navigator.onLine) {
     setStatus('offline');
     return;
   }
 
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) {
-    setStatus('offline');
-    return;
-  }
+  const doSync = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      setStatus('offline');
+      return;
+    }
 
-  try {
-    setStatus('syncing');
-    await pullFromCloud();
-    await pushToCloud();
-    setStatus('synced');
-  } catch (err) {
-    console.error('Sync failed:', err);
-    setStatus('error');
-  }
+    try {
+      setStatus('syncing');
+      await pullFromCloud();
+      await pushToCloud();
+      setStatus('synced');
+    } catch (err) {
+      // Network errors, auth expiry, or unexpected failures. Individual
+      // push/pull operations log their own granular errors above; this catch
+      // handles truly fatal issues (e.g. no network mid-sync).
+      console.error('[sync] syncNow failed:', err);
+      setStatus('error');
+    }
+  };
+
+  syncInProgress = doSync().finally(() => {
+    syncInProgress = null;
+  });
+  return syncInProgress;
 }
 
 export function startSync(): void {

@@ -196,7 +196,7 @@ export default function CPExamPrepEnhanced() {
       {/* Exam Packet CTA */}
       <Link
         to="/cp-exam-packet"
-        className="flex items-center gap-3 p-4 rounded-xl bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.3)] hover:bg-[rgba(214,178,94,0.2)] transition-colors"
+        className="flex items-center gap-3 p-4 rounded-xl bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.3)] hover:bg-[rgba(197,164,66,0.2)] transition-colors"
       >
         <FileCheck className="h-5 w-5 text-gold shrink-0" />
         <div className="flex-1 min-w-0">

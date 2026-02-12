@@ -15,6 +15,7 @@ import { useGemini } from '@/hooks/useGemini';
 import { generateFormGuidePDF } from '@/services/exportEngine';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { PageContainer } from '@/components/PageContainer';
+import { useToast } from '@/hooks/use-toast';
 
 // ---------------------------------------------------------------------------
 // Field Card — each field in the form
@@ -35,6 +36,7 @@ function FieldCard({ field, formId: _formId, savedValue, onSave }: FieldCardProp
   const [aiError, setAiError] = useState(false);
 
   const { generate, isLoading: aiLoading, cancel: cancelAI } = useGemini('VA_SPEAK_TRANSLATOR');
+  const { toast } = useToast();
   const profile = useProfileStore();
   const { data } = useClaims();
 
@@ -52,7 +54,7 @@ function FieldCard({ field, formId: _formId, savedValue, onSave }: FieldCardProp
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Fallback: noop
+      toast({ title: 'Copy failed', description: 'Unable to access clipboard.', variant: 'destructive' });
     }
   }, [value]);
 

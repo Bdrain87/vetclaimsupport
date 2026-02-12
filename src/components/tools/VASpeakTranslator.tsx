@@ -112,10 +112,13 @@ function translateText(input: string): { translated: string; matchedCategories: 
   const categories = new Set<string>();
 
   for (const rule of TRANSLATION_RULES) {
-    if (rule.pattern.test(result)) {
+    let matched = false;
+    result = result.replace(rule.pattern, (...args) => {
+      matched = true;
+      return rule.replacement;
+    });
+    if (matched) {
       categories.add(rule.category);
-      rule.pattern.lastIndex = 0; // Reset before replace
-      result = result.replace(rule.pattern, rule.replacement);
     }
   }
 
@@ -187,19 +190,27 @@ export function VASpeakTranslator() {
       .map(e => e.clinicalText)
       .join('\n\n');
 
-    await navigator.clipboard.writeText(text);
-    toast({
-      title: 'Copied to Clipboard',
-      description: `${translatedEntries.length} translated statement${translatedEntries.length > 1 ? 's' : ''} copied.`,
-    });
+    try {
+      await navigator.clipboard.writeText(text);
+      toast({
+        title: 'Copied to Clipboard',
+        description: `${translatedEntries.length} translated statement${translatedEntries.length > 1 ? 's' : ''} copied.`,
+      });
+    } catch {
+      toast({ title: 'Copy failed', description: 'Unable to access clipboard.', variant: 'destructive' });
+    }
   };
 
   const handleCopySingle = async (text: string) => {
-    await navigator.clipboard.writeText(text);
-    toast({
-      title: 'Copied',
-      description: 'Translation copied to clipboard.',
-    });
+    try {
+      await navigator.clipboard.writeText(text);
+      toast({
+        title: 'Copied',
+        description: 'Translation copied to clipboard.',
+      });
+    } catch {
+      toast({ title: 'Copy failed', description: 'Unable to access clipboard.', variant: 'destructive' });
+    }
   };
 
   const handleReset = () => {
@@ -445,7 +456,7 @@ export function VASpeakTranslator() {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <Lightbulb className="h-4 w-4 text-[#D6B25E]" />
+            <Lightbulb className="h-4 w-4 text-[#C5A442]" />
             Translation Examples
           </CardTitle>
           <CardDescription>

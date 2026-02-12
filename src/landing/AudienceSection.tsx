@@ -9,7 +9,7 @@ const audiences = [
     description: 'Getting out in 6 months? Start documenting now. Build your evidence package while you still have access to military medical records.',
     tagline: 'Start documenting now for when you separate',
     icon: Shield,
-    gradient: 'from-[#D6B25E] to-[#8A5A16]'
+    gradient: 'from-[#C5A442] to-[#7A672A]'
   },
   {
     title: 'BDD Filers',
@@ -23,7 +23,7 @@ const audiences = [
     description: 'Just got out? Denied or underrated? Now you\'ll understand why. Learn exactly what the VA needs and prepare a winning supplemental claim.',
     tagline: 'Denied or underrated? Now you\'ll know why',
     icon: Briefcase,
-    gradient: 'from-[#D6B25E] to-[#D6B25E]'
+    gradient: 'from-[#C5A442] to-[#C5A442]'
   },
   {
     title: 'Long-Time Veterans',

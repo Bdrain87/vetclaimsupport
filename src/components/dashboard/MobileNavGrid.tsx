@@ -121,6 +121,7 @@ export function MobileNavGrid() {
               <NavLink
                 key={item.title}
                 to={item.path!}
+                aria-label={item.title}
                 className="flex items-center justify-center w-14 h-14 -mt-5 bg-primary rounded-full text-primary-foreground shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all duration-200 hover:scale-105 active:scale-95"
               >
                 <item.icon className="w-6 h-6" />
@@ -136,7 +137,7 @@ export function MobileNavGrid() {
                     : 'text-muted-foreground'
                 )}
               >
-                <item.icon className={cn('w-5 h-5', isActive(item.path) && 'drop-shadow-[0_0_6px_rgba(214,178,94,0.5)]')} />
+                <item.icon className={cn('w-5 h-5', isActive(item.path) && 'drop-shadow-[0_0_6px_rgba(197,164,66,0.5)]')} />
                 <span className="text-[10px] mt-1 font-medium">{item.title}</span>
               </NavLink>
             )
@@ -154,13 +155,14 @@ export function MobileNavGrid() {
           />
 
           {/* Drawer */}
-          <div className="fixed right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-card border-l border-border z-50 md:hidden overflow-y-auto animate-slide-in-right">
+          <div role="dialog" aria-modal="true" aria-label="Navigation menu" className="fixed right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-card border-l border-border z-50 md:hidden overflow-y-auto animate-slide-in-right">
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-border sticky top-0 bg-card/95 backdrop-blur-lg">
               <span className="font-semibold">Menu</span>
               <button
                 onClick={() => setDrawerOpen(false)}
                 className="p-2 hover:bg-accent rounded-lg transition-colors"
+                aria-label="Close menu"
               >
                 <X className="w-5 h-5" />
               </button>

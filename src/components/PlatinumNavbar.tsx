@@ -34,14 +34,14 @@ function NavLinkItem({ to, children }: { to: string; children: React.ReactNode }
       {isActive && (
         <motion.div
           layoutId="nav-active-indicator"
-          className="absolute bottom-0 left-2 right-2 h-[2px] bg-gradient-to-r from-[#D6B25E] via-[#F6E4AA] to-[#D6B25E] rounded-full"
+          className="absolute bottom-0 left-2 right-2 h-[2px] bg-gradient-to-r from-[#C5A442] via-[#F5D680] to-[#C5A442] rounded-full"
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
         />
       )}
       <div className="absolute inset-0 rounded-lg bg-white/0 group-hover:bg-white/[0.07] transition-colors duration-200" />
       <span className={cn(
         'relative text-sm transition-colors duration-200',
-        isActive ? 'text-[#D6B25E] font-semibold' : 'text-white/50 font-medium group-hover:text-white/80'
+        isActive ? 'text-[#C5A442] font-semibold' : 'text-white/50 font-medium group-hover:text-white/80'
       )}>
         {children}
       </span>
@@ -102,7 +102,7 @@ export const PlatinumNavbar = () => {
             <div className="absolute inset-0 bg-[#000000]/70 backdrop-blur-xl border border-white/[0.10] rounded-2xl" />
 
             {/* Blue accent line */}
-            <div className="absolute top-0 left-4 right-4 h-[1px] bg-gradient-to-r from-transparent via-[#D6B25E]/30 to-transparent" />
+            <div className="absolute top-0 left-4 right-4 h-[1px] bg-gradient-to-r from-transparent via-[#C5A442]/30 to-transparent" />
 
             {/* Content */}
             <div className={cn(
@@ -248,7 +248,7 @@ export const PlatinumNavbar = () => {
             </div>
             <div>
               <p className="text-white text-sm font-medium">{displayName}</p>
-              <p className="text-[#D6B25E]/60 text-[10px] uppercase tracking-wider font-medium">Claim Prep Tools</p>
+              <p className="text-[#C5A442]/60 text-[10px] uppercase tracking-wider font-medium">Claim Prep Tools</p>
             </div>
           </div>
           <button
@@ -273,7 +273,7 @@ export const PlatinumNavbar = () => {
                 className={cn(
                   'flex items-center min-h-[48px] px-4 rounded-xl text-sm font-medium transition-all duration-200',
                   isActive
-                    ? 'text-white bg-white/[0.09] border-l-2 border-[#D6B25E]'
+                    ? 'text-white bg-white/[0.09] border-l-2 border-[#C5A442]'
                     : 'text-white/60 hover:text-white hover:bg-white/[0.03] active:bg-white/[0.09]'
                 )}
               >

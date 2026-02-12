@@ -97,8 +97,7 @@ export function DocumentScanner({
         title: 'OCR Complete',
         description: `Text extracted with ${Math.round(data.confidence)}% confidence`,
       });
-    } catch (error) {
-      console.error('OCR Error:', error);
+    } catch {
       setOcrError('Failed to process image. Please try again.');
       toast({
         title: 'OCR Failed',
@@ -223,6 +222,7 @@ export function DocumentScanner({
         capture="environment"
         className="hidden"
         onChange={handleFileSelect}
+        aria-label="Take a photo of document"
       />
       <input
         ref={fileInputRef}
@@ -230,6 +230,7 @@ export function DocumentScanner({
         accept="image/*,.pdf"
         className="hidden"
         onChange={handleFileSelect}
+        aria-label="Choose document file"
       />
       
       {/* Inline Action Buttons */}

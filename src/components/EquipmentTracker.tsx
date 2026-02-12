@@ -25,10 +25,10 @@ export const EquipmentTracker = () => {
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="p-4 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-between gap-3 group hover:border-[rgba(214,178,94,0.3)] transition-colors"
+            className="p-4 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-between gap-3 group hover:border-[rgba(197,164,66,0.3)] transition-colors"
           >
             <div className="flex items-center gap-4 min-w-0 flex-1">
-              <div className="h-10 w-10 rounded-xl bg-[rgba(214,178,94,0.1)] flex items-center justify-center text-gold flex-shrink-0">
+              <div className="h-10 w-10 rounded-xl bg-[rgba(197,164,66,0.1)] flex items-center justify-center text-gold flex-shrink-0">
                 <CheckCircle2 size={18} />
               </div>
               <div className="min-w-0">
@@ -44,7 +44,7 @@ export const EquipmentTracker = () => {
         ))}
       </div>
 
-      <div className="mt-8 p-4 rounded-xl bg-[rgba(214,178,94,0.05)] border border-[rgba(214,178,94,0.2)] flex gap-3 items-start">
+      <div className="mt-8 p-4 rounded-xl bg-[rgba(197,164,66,0.05)] border border-[rgba(197,164,66,0.2)] flex gap-3 items-start">
         <AlertCircle className="text-gold shrink-0" size={16} />
         <p className="text-[10px] text-white/50 leading-relaxed font-medium italic">
           Professional Note: VA-issued Durable Medical Equipment (DME) is primary evidence of clinical necessity and functional loss during a C&P exam.

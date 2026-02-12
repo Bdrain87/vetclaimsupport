@@ -5,7 +5,8 @@
 
 const SALT_LENGTH = 16;
 const IV_LENGTH = 12;
-const KEY_ITERATIONS = 100000;
+// OWASP 2023 recommends 600,000+ iterations for PBKDF2-SHA256
+const KEY_ITERATIONS = 600000;
 
 // Check if Web Crypto is available
 export function isEncryptionSupported(): boolean {

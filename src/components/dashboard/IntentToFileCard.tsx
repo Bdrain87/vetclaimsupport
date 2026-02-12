@@ -48,9 +48,9 @@ export function IntentToFileCard() {
   return (
     <Card className={cn(
       "relative overflow-hidden",
-      "bg-gradient-to-r from-[rgba(214,178,94,0.1)] via-[rgba(214,178,94,0.05)] to-[rgba(214,178,94,0.1)]",
-      "border-2 border-[rgba(214,178,94,0.3)]",
-      "shadow-lg shadow-[rgba(214,178,94,0.1)]"
+      "bg-gradient-to-r from-[rgba(197,164,66,0.1)] via-[rgba(197,164,66,0.05)] to-[rgba(197,164,66,0.1)]",
+      "border-2 border-[rgba(197,164,66,0.3)]",
+      "shadow-lg shadow-[rgba(197,164,66,0.1)]"
     )}>
       {/* Animated accent line */}
       <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-gold to-gold" />
@@ -60,7 +60,7 @@ export function IntentToFileCard() {
         <Button
           variant="ghost"
           size="icon"
-          className="absolute right-2 top-2 h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-[rgba(214,178,94,0.1)]"
+          className="absolute right-2 top-2 h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-[rgba(197,164,66,0.1)]"
           onClick={handleDismiss}
           aria-label="Dismiss"
         >
@@ -70,11 +70,11 @@ export function IntentToFileCard() {
         <div className="flex items-start gap-3 sm:gap-4 pr-6 overflow-hidden">
           {/* Icon */}
           <div className="relative flex-shrink-0">
-            <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-[rgba(214,178,94,0.2)] to-[rgba(214,178,94,0.2)] border border-[rgba(214,178,94,0.3)] flex items-center justify-center">
+            <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-[rgba(197,164,66,0.2)] to-[rgba(197,164,66,0.2)] border border-[rgba(197,164,66,0.3)] flex items-center justify-center">
               <Flag className="h-6 w-6 text-gold" />
             </div>
             {/* Subtle glow */}
-            <div className="absolute inset-0 bg-[rgba(214,178,94,0.2)] blur-xl rounded-full scale-150 -z-10" />
+            <div className="absolute inset-0 bg-[rgba(197,164,66,0.2)] blur-xl rounded-full scale-150 -z-10" />
           </div>
 
           <div className="space-y-2 flex-1 min-w-0">
@@ -108,7 +108,7 @@ export function IntentToFileCard() {
               >
                 <Button
                   size="sm"
-                  className="h-9 gap-2 bg-gradient-to-r from-gold to-gold hover:from-gold/90 hover:to-gold/90 text-[#000000] font-semibold shadow-md shadow-[rgba(214,178,94,0.2)]"
+                  className="h-9 gap-2 bg-gradient-to-r from-gold to-gold hover:from-gold/90 hover:to-gold/90 text-[#000000] font-semibold shadow-md shadow-[rgba(197,164,66,0.2)]"
                 >
                   File Intent to File
                   <ExternalLink className="h-3.5 w-3.5" />

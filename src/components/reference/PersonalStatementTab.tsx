@@ -75,13 +75,17 @@ export function PersonalStatementTab() {
 
   const handleCopy = async () => {
     const statement = generateStatement();
-    await navigator.clipboard.writeText(statement);
-    setCopied(true);
-    toast({
-      title: 'Copied to Clipboard',
-      description: 'Your personal statement has been copied.',
-    });
-    setTimeout(() => setCopied(false), 2000);
+    try {
+      await navigator.clipboard.writeText(statement);
+      setCopied(true);
+      toast({
+        title: 'Copied to Clipboard',
+        description: 'Your personal statement has been copied.',
+      });
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast({ title: 'Copy failed', description: 'Unable to access clipboard.', variant: 'destructive' });
+    }
   };
 
   return (

@@ -81,8 +81,7 @@ export function DataBackup() {
         title: 'Backup Created',
         description: 'Your data has been exported successfully.',
       });
-    } catch (error) {
-      console.error('Export error:', error);
+    } catch {
       toast({
         title: 'Export Failed',
         description: 'Failed to export your data. Please try again.',
@@ -106,14 +105,12 @@ export function DataBackup() {
         // Validate backup structure with Zod
         const result = backupDataSchema.safeParse(json);
         if (!result.success) {
-          console.error('Backup validation failed:', result.error.format());
           throw new Error('Invalid backup file format');
         }
 
         setPendingImportData(result.data);
         setShowImportConfirm(true);
-      } catch (error) {
-        console.error('Import parse error:', error);
+      } catch {
         toast({
           title: 'Invalid File',
           description: 'The selected file is not a valid backup file.',
@@ -154,8 +151,7 @@ export function DataBackup() {
 
       // Small delay to show toast before reload
       setTimeout(() => window.location.reload(), 500);
-    } catch (error) {
-      console.error('Import error:', error);
+    } catch {
       toast({
         title: 'Restore Failed',
         description: 'Failed to restore your data. Please try again.',

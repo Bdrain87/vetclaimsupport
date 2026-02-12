@@ -172,11 +172,15 @@ Keep the veteran's voice. Do not add fabricated details.`;
     }
   };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(generateStatement());
-    setCopied(true);
-    toast.success('Statement copied to clipboard');
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(generateStatement());
+      setCopied(true);
+      toast.success('Statement copied to clipboard');
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error('Copy failed — unable to access clipboard.');
+    }
   };
 
   const handleDownload = () => {
@@ -461,8 +465,8 @@ Keep the veteran's voice. Do not add fabricated details.`;
                       </Button>
 
                       {aiSafetyBlocked[event.id] && (
-                        <Alert className="border-[#D6B25E]/30 bg-[#D6B25E]/5">
-                          <Info className="h-4 w-4 text-[#D6B25E]" />
+                        <Alert className="border-[#C5A442]/30 bg-[#C5A442]/5">
+                          <Info className="h-4 w-4 text-[#C5A442]" />
                           <AlertDescription className="text-sm">
                             Our AI was unable to process this content. You can continue writing your statement manually, and it will be just as valid. Consider working with a VSO for additional support.
                           </AlertDescription>

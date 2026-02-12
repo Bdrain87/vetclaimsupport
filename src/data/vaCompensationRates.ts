@@ -1,3 +1,10 @@
+// ========================================================================
+// WARNING: These are 2024 rates. Update annually when VA publishes new
+// COLA rates. The 2026 projected rates live in compRates2026.ts.
+// Check https://www.va.gov/disability/compensation-rates/veteran-rates/
+// for the latest official rates each December.
+// ========================================================================
+//
 // 2024 VA Compensation Rates (Effective December 1, 2023)
 // Source: https://www.va.gov/disability/compensation-rates/veteran-rates/
 // Last verified: February 2024

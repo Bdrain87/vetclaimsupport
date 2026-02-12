@@ -45,7 +45,7 @@ const bodySystems = [
 ];
 
 const STATUS_COLORS: Record<string, string> = {
-  pending: 'bg-[rgba(214,178,94,0.2)] text-gold-dk border-[rgba(214,178,94,0.3)]',
+  pending: 'bg-[rgba(197,164,66,0.2)] text-gold-dk border-[rgba(197,164,66,0.3)]',
   approved: 'bg-green-500/20 text-green-600 border-green-500/30',
   denied: 'bg-red-500/20 text-red-600 border-red-500/30',
   appeal: 'bg-purple-500/20 text-purple-600 border-purple-500/30',
@@ -102,7 +102,7 @@ function ConditionCard({ userCondition, conditionDetails, onView, onRemove, onNa
                 </Badge>
               )}
               {userCondition.serviceConnected && (
-                <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-[rgba(214,178,94,0.1)] text-gold border-[rgba(214,178,94,0.3)] flex-shrink-0">
+                <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-[rgba(197,164,66,0.1)] text-gold border-[rgba(197,164,66,0.3)] flex-shrink-0">
                   <Shield className="h-2.5 w-2.5 mr-0.5" />
                   SC
                 </Badge>

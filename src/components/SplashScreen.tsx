@@ -16,6 +16,7 @@ export function SplashScreen({
   onCompleteRef.current = onComplete;
 
   useEffect(() => {
+    let innerTimer: ReturnType<typeof setTimeout>;
     const displayTime = prefersReducedMotion
       ? Math.min(minimumDuration, 800)
       : minimumDuration;
@@ -24,10 +25,13 @@ export function SplashScreen({
       setIsVisible(false);
       // Wait for the exit animation to finish before unmounting
       const exitDuration = prefersReducedMotion ? 300 : 600;
-      setTimeout(() => onCompleteRef.current(), exitDuration);
+      innerTimer = setTimeout(() => onCompleteRef.current(), exitDuration);
     }, displayTime);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(innerTimer);
+    };
   }, [minimumDuration, prefersReducedMotion]);
 
   return (
@@ -137,7 +141,7 @@ function LogoWithLens({
             overflow: 'hidden',
             pointerEvents: 'none' as const,
             background:
-              'linear-gradient(105deg, transparent 40%, rgba(246,228,170,0.10) 45%, rgba(255,255,255,0.12) 50%, rgba(246,228,170,0.10) 55%, transparent 60%)'
+              'linear-gradient(105deg, transparent 40%, rgba(245,214,128,0.10) 45%, rgba(255,255,255,0.12) 50%, rgba(245,214,128,0.10) 55%, transparent 60%)'
           }}
           initial={{ x: '-200%', opacity: 1 }}
           animate={{ x: '200%', opacity: 1 }}
@@ -160,7 +164,7 @@ function LoadingDots() {
         <motion.span
           key={i}
           className="w-2 h-2 rounded-full"
-          style={{ backgroundColor: 'var(--gold-md, #D6B25E)' }}
+          style={{ backgroundColor: 'var(--gold-md, #C5A442)' }}
           animate={{
             scale: [1, 1.3, 1],
             opacity: [0.5, 1, 0.5]

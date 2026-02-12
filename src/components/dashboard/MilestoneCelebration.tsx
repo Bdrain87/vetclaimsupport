@@ -92,8 +92,9 @@ export function MilestoneCelebration() {
   const [currentMilestone, setCurrentMilestone] = useState<Milestone | null>(null);
 
   useEffect(() => {
+    let confettiTimer: ReturnType<typeof setTimeout>;
     const achieved = data.milestonesAchieved || [];
-    
+
     // Check for newly achieved milestones
     for (const milestone of milestones) {
       if (!achieved.includes(milestone.id) && milestone.condition(data)) {
@@ -101,20 +102,24 @@ export function MilestoneCelebration() {
         setCurrentMilestone(milestone);
         setShowCelebration(true);
         addMilestone(milestone.id);
-        
+
         // Trigger confetti
-        setTimeout(() => {
+        confettiTimer = setTimeout(() => {
           confetti({
             particleCount: 100,
             spread: 70,
             origin: { y: 0.6 },
-            colors: ['#D6B25E', '#E8CC6E', '#B8962E', '#E8CC6E'],
+            colors: ['#C5A442', '#E8C560', '#A38A35', '#E8C560'],
           });
         }, 200);
-        
+
         break; // Only show one at a time
       }
     }
+
+    return () => {
+      clearTimeout(confettiTimer);
+    };
   }, [data, addMilestone]);
 
   if (!currentMilestone) return null;

@@ -16,7 +16,7 @@ const features = [
     title: 'Know What They\'re Looking For',
     description: 'Access DBQ forms and rating criteria the VA uses to evaluate your conditions. Know exactly what evidence you need before you file.',
     icon: FileText,
-    gradient: 'from-[#D6B25E] to-cyan-500'
+    gradient: 'from-[#C5A442] to-cyan-500'
   },
   {
     title: 'Build Your Evidence Package',
@@ -34,7 +34,7 @@ const features = [
     title: 'Discover Secondary Conditions',
     description: 'Find hidden connections between your conditions. 800+ conditions with 775+ secondary connections to support your claim.',
     icon: Link2,
-    gradient: 'from-[#D6B25E] to-[#D6B25E]'
+    gradient: 'from-[#C5A442] to-[#C5A442]'
   },
   {
     title: 'Dominate Your C&P Exam',
@@ -46,7 +46,7 @@ const features = [
     title: 'Document Your Worst Days',
     description: 'Log symptoms daily to build a compelling record. The VA needs to see how your conditions affect your life on bad days.',
     icon: BookOpen,
-    gradient: 'from-[#8A5A16] to-[#D6B25E]'
+    gradient: 'from-[#7A672A] to-[#C5A442]'
   }
 ];
 

@@ -297,14 +297,14 @@ export function ContextualGuidance({ onOpenAddCondition }: ContextualGuidancePro
 
   const typeStyles = {
     action: 'bg-primary/10 border-primary/30 text-primary',
-    tip: 'bg-[rgba(214,178,94,0.1)] border-[rgba(214,178,94,0.3)] text-gold',
+    tip: 'bg-[rgba(197,164,66,0.1)] border-[rgba(197,164,66,0.3)] text-gold',
     warning: 'bg-warning/10 border-warning/30 text-warning',
     milestone: 'bg-success/10 border-success/30 text-success',
   };
 
   const iconBgStyles = {
     action: 'bg-primary/20 text-primary',
-    tip: 'bg-[rgba(214,178,94,0.2)] text-gold',
+    tip: 'bg-[rgba(197,164,66,0.2)] text-gold',
     warning: 'bg-warning/20 text-warning',
     milestone: 'bg-success/20 text-success',
   };

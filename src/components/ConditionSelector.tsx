@@ -288,7 +288,7 @@ export function SelectedConditionsDisplay({
   };
 
   const statusColors: Record<UserCondition['claimStatus'], string> = {
-    pending: 'bg-[rgba(214,178,94,0.2)] text-gold-dk dark:bg-navy-800 dark:text-gold',
+    pending: 'bg-[rgba(197,164,66,0.2)] text-gold-dk dark:bg-navy-800 dark:text-gold',
     approved: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
     denied: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
     appeal: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',

@@ -155,13 +155,17 @@ export function AwardsCombobox({
               className="gap-1 py-0.5 px-2 text-xs"
             >
               {award}
-              <X
-                className="h-3 w-3 cursor-pointer hover:text-destructive"
+              <button
+                type="button"
                 onClick={(e) => {
                   e.stopPropagation();
                   removeAward(award);
                 }}
-              />
+                aria-label={`Remove ${award}`}
+                className="cursor-pointer hover:text-destructive"
+              >
+                <X className="h-3 w-3" />
+              </button>
             </Badge>
           ))}
           <input
@@ -173,6 +177,10 @@ export function AwardsCombobox({
             placeholder={selectedAwards.length === 0 ? placeholder : "Add more..."}
             className="flex-1 min-w-[120px] bg-transparent outline-none text-sm placeholder:text-muted-foreground"
             autoComplete="off"
+            aria-label="Search military awards"
+            role="combobox"
+            aria-expanded={open && filteredAwards.length > 0}
+            aria-autocomplete="list"
           />
         </div>
       </div>
@@ -180,6 +188,8 @@ export function AwardsCombobox({
       {open && filteredAwards.length > 0 && (
         <div
           ref={listRef}
+          role="listbox"
+          aria-label="Award suggestions"
           className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg max-h-64 overflow-y-auto"
         >
           {filteredAwards.map((award, index) => {
@@ -188,6 +198,8 @@ export function AwardsCombobox({
               <div
                 key={`${award.name}-${index}`}
                 data-item
+                role="option"
+                aria-selected={isSelected}
                 onClick={() => handleSelect(award)}
                 className={cn(
                   "px-3 py-2 cursor-pointer flex items-start gap-3 border-b border-border/50 last:border-0",

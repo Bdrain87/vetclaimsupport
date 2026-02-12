@@ -78,7 +78,7 @@ function LoadingFallback() {
   return (
     <div
       className="min-h-[100dvh] flex items-center justify-center"
-      style={{ background: 'linear-gradient(160deg, #000000 0%, #000000 50%, #000000 100%)' }}
+      style={{ background: '#000000' }}
       role="status"
       aria-label="Loading application"
     >
@@ -98,7 +98,7 @@ function LoadingFallback() {
           />
           <motion.div
             className="absolute inset-0"
-            style={{ borderRadius: 18, border: '2px solid rgba(214, 178, 94, 0.3)' }}
+            style={{ borderRadius: 18, border: '2px solid rgba(197, 164, 66, 0.3)' }}
             animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0, 0.5] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           />
@@ -110,7 +110,7 @@ function LoadingFallback() {
         <div className="w-32 h-0.5 bg-white/10 rounded-full overflow-hidden" aria-hidden="true">
           <motion.div
             className="h-full rounded-full"
-            style={{ background: 'var(--gold-gradient, linear-gradient(135deg, #F6E4AA 0%, #D6B25E 45%, #8A5A16 100%))' }}
+            style={{ background: 'var(--gold-gradient, linear-gradient(135deg, #F5D680 0%, #C5A442 45%, #7A672A 100%))' }}
             animate={{ x: ['-100%', '100%'] }}
             transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
           />

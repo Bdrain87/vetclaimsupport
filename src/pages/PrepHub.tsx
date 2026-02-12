@@ -42,14 +42,14 @@ export default function PrepHub() {
             className={cn(
               'flex flex-col items-start gap-2 p-4 rounded-xl border bg-card transition-colors text-left hover:bg-accent/50',
               tool.highlight
-                ? 'border-[rgba(214,178,94,0.4)] ring-1 ring-[rgba(214,178,94,0.2)]'
+                ? 'border-[rgba(197,164,66,0.4)] ring-1 ring-[rgba(197,164,66,0.2)]'
                 : 'border-border'
             )}
           >
             <div className="flex items-center gap-2 w-full">
               <tool.icon className="h-6 w-6 text-gold" />
               {tool.highlight && (
-                <Badge className="ml-auto text-[9px] bg-[rgba(214,178,94,0.2)] text-gold border-[rgba(214,178,94,0.3)] px-1.5 py-0">
+                <Badge className="ml-auto text-[9px] bg-[rgba(197,164,66,0.2)] text-gold border-[rgba(197,164,66,0.3)] px-1.5 py-0">
                   NEW
                 </Badge>
               )}

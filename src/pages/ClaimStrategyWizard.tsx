@@ -338,8 +338,7 @@ Consider:
           warnings: ['Consult with a VSO for personalized guidance']
         });
       }
-    } catch (err) {
-      console.error('Strategy generation error:', err);
+    } catch {
       setError('Unable to generate strategy. Please try again or check your connection.');
 
       // Provide a basic fallback strategy
@@ -880,7 +879,7 @@ attorney for official guidance on your specific claim.
                     <CardDescription>Use verified legal databases to find case law relevant to your claim</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="bg-[rgba(214,178,94,0.08)] border border-[rgba(214,178,94,0.2)] rounded-lg p-4">
+                    <div className="bg-[rgba(197,164,66,0.08)] border border-[rgba(197,164,66,0.2)] rounded-lg p-4">
                       <p className="text-sm text-slate-400 mb-3">
                         Use these verified legal databases to find case law relevant to your claim:
                       </p>

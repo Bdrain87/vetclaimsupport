@@ -155,7 +155,7 @@ export function ClaimsJourneyRoadmap() {
       <CardHeader className="pb-3 bg-gradient-to-r from-primary/10 via-transparent to-transparent">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 shadow-[0_0_20px_rgba(214,178,94,0.2)]">
+            <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 shadow-[0_0_20px_rgba(197,164,66,0.2)]">
               <MapPin className="h-5 w-5 text-primary" />
             </div>
             <div>
@@ -184,7 +184,7 @@ export function ClaimsJourneyRoadmap() {
                   className={cn(
                     "flex items-center justify-center w-11 h-11 rounded-full border-2 transition-all duration-300",
                     phase.status === 'completed' && "bg-gradient-to-br from-[#22c55e] to-[#16a34a] border-transparent text-white shadow-[0_4px_16px_rgba(34,197,94,0.4)]",
-                    phase.status === 'current' && "bg-gradient-to-br from-[#D6B25E] to-[#8A5A16] border-transparent text-white shadow-[0_4px_16px_rgba(214,178,94,0.4)] animate-[pulse_4s_cubic-bezier(0.4,0,0.6,1)_infinite]",
+                    phase.status === 'current' && "bg-gradient-to-br from-[#C5A442] to-[#7A672A] border-transparent text-white shadow-[0_4px_16px_rgba(197,164,66,0.4)] animate-[pulse_4s_cubic-bezier(0.4,0,0.6,1)_infinite]",
                     phase.status === 'upcoming' && "bg-muted border-border text-muted-foreground"
                   )}
                 >
@@ -207,7 +207,7 @@ export function ClaimsJourneyRoadmap() {
           {/* Connecting line - Premium gradient */}
           <div className="absolute top-[26px] left-6 right-6 h-1 bg-border rounded-full -z-0 overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-[#22c55e] via-[#D6B25E] to-[#D6B25E] transition-all duration-700 ease-out rounded-full"
+              className="h-full bg-gradient-to-r from-[#22c55e] via-[#C5A442] to-[#C5A442] transition-all duration-700 ease-out rounded-full"
               style={{ width: `${overallProgress}%` }}
             />
           </div>

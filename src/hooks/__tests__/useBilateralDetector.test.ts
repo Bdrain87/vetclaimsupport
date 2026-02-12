@@ -105,7 +105,7 @@ describe('useBilateralDetector', () => {
 
     expect(result.current.bilateralRatings).toEqual([20, 20]);
     expect(result.current.standardRatings).toEqual([]);
-    expect(result.current.detectedPairs).toEqual(['Radiculopathy (Lower)']);
+    expect(result.current.detectedPairs).toEqual(['Radiculopathy (Lower Extremity)']);
   });
 
   // --- Mix of bilateral and standard ---
