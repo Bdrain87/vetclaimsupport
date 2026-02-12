@@ -137,15 +137,28 @@ export function Hero() {
         </motion.div>
 
         {/* Trust line */}
-        <motion.p
-          className="text-sm"
-          style={{ color: '#9CA3AF' }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+        <motion.div
+          className="inline-flex items-center gap-3 text-sm px-5 py-2 rounded-full border"
+          style={{
+            borderColor: 'rgba(197,164,66,0.3)',
+            background: 'linear-gradient(135deg, rgba(197,164,66,0.08) 0%, rgba(197,164,66,0.02) 100%)',
+          }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.9 }}
         >
-          Free plan available &bull; Premium from $4.99/mo &bull; Veteran founded
-        </motion.p>
+          <span style={{ color: '#22C55E' }}>Free plan available</span>
+          <span style={{ color: 'rgba(197,164,66,0.4)' }}>&bull;</span>
+          <span style={{
+            background: 'linear-gradient(135deg, #F5D680, #C5A442)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            fontWeight: 600,
+          }}>Premium from $4.99/mo</span>
+          <span style={{ color: 'rgba(197,164,66,0.4)' }}>&bull;</span>
+          <span style={{ color: '#D1D5DB' }}>Veteran founded</span>
+        </motion.div>
       </div>
     </section>
   );

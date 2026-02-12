@@ -21,9 +21,7 @@ const PREMIUM_FEATURES = [
   'Priority Support',
 ];
 
-/* ── Animated border wrapper ──
-   Uses a spinning conic-gradient behind a 2px "gap" to create
-   an animated glowing border that rotates continuously. */
+/* ── Standard animated border (red / green) ── */
 function AnimatedBorderCard({
   children,
   color,
@@ -31,16 +29,14 @@ function AnimatedBorderCard({
   hoverScale = false,
 }: {
   children: React.ReactNode;
-  color: 'red' | 'green' | 'gold';
+  color: 'red' | 'green';
   className?: string;
   hoverScale?: boolean;
 }) {
   const gradients = {
     red: 'conic-gradient(from 0deg, transparent 0%, #EF4444 12%, #FF6B6B 25%, transparent 37%, transparent 62%, #EF4444 75%, #FF6B6B 87%, transparent 100%)',
     green: 'conic-gradient(from 0deg, transparent 0%, #22C55E 12%, #4ADE80 25%, transparent 37%, transparent 62%, #22C55E 75%, #4ADE80 87%, transparent 100%)',
-    gold: 'conic-gradient(from 0deg, transparent 0%, #C5A442 10%, #F5D680 20%, #E8C560 30%, transparent 40%, transparent 60%, #C5A442 70%, #F5D680 80%, #E8C560 90%, transparent 100%)',
   };
-
   const glows = {
     red: {
       boxShadow: [
@@ -56,57 +52,91 @@ function AnimatedBorderCard({
         '0 0 15px rgba(34,197,94,0.15), 0 0 30px rgba(34,197,94,0.06)',
       ],
     },
-    gold: {
-      boxShadow: [
-        '0 0 20px rgba(197,164,66,0.25), 0 0 40px rgba(197,164,66,0.1)',
-        '0 0 35px rgba(197,164,66,0.5), 0 0 70px rgba(197,164,66,0.2)',
-        '0 0 20px rgba(197,164,66,0.25), 0 0 40px rgba(197,164,66,0.1)',
-      ],
-    },
   };
-
-  const speeds = { red: 4, green: 5, gold: 3 };
-  const isGold = color === 'gold';
+  const speeds = { red: 4, green: 5 };
 
   return (
     <motion.div
       variants={fadeInUp}
       whileHover={hoverScale ? { scale: 1.02 } : undefined}
       transition={hoverScale ? { type: 'spring', stiffness: 300, damping: 20 } : undefined}
-      className={`relative rounded-2xl overflow-hidden ${isGold ? 'p-[2.5px]' : 'p-[2px]'} ${className}`}
+      className={`relative rounded-2xl p-[2px] overflow-hidden flex flex-col ${className}`}
     >
-      {/* Primary spinning conic gradient */}
+      <motion.div
+        className="absolute rounded-full pointer-events-none"
+        style={{ inset: '-40%', background: gradients[color] }}
+        animate={{ rotate: 360 }}
+        transition={{ duration: speeds[color], repeat: Infinity, ease: 'linear' }}
+      />
+      <motion.div
+        className="absolute inset-0 rounded-2xl pointer-events-none"
+        animate={glows[color]}
+        transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <div className="relative rounded-[14px] flex-1 flex flex-col" style={{ backgroundColor: '#1a1a1a' }}>
+        {children}
+      </div>
+    </motion.div>
+  );
+}
+
+/* ── Premium animated border (gold) — spotlight comet sweep ──
+   A concentrated bright white-gold comet chases around the border
+   over a dim gold base. Completely different from the dual-beam
+   spin used on the other cards. */
+function PremiumBorderCard({
+  children,
+  className = '',
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <motion.div
+      variants={fadeInUp}
+      whileHover={{ scale: 1.02 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      className={`relative rounded-2xl p-[2.5px] overflow-hidden flex flex-col ${className}`}
+    >
+      {/* Dim gold base border — always visible */}
+      <div
+        className="absolute inset-0 rounded-2xl pointer-events-none"
+        style={{ border: '2.5px solid rgba(197,164,66,0.25)' }}
+      />
+      {/* Bright comet — single concentrated spotlight that sweeps */}
       <motion.div
         className="absolute rounded-full pointer-events-none"
         style={{
           inset: '-40%',
-          background: gradients[color],
+          background: 'conic-gradient(from 0deg, transparent 0%, transparent 60%, #A38A35 72%, #C5A442 80%, #F5D680 88%, #FFFFFF 93%, #F5D680 96%, transparent 100%)',
         }}
         animate={{ rotate: 360 }}
-        transition={{ duration: speeds[color], repeat: Infinity, ease: 'linear' }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
       />
-      {/* Gold gets a second counter-rotating gradient for shimmer effect */}
-      {isGold && (
-        <motion.div
-          className="absolute rounded-full pointer-events-none"
-          style={{
-            inset: '-40%',
-            background: 'conic-gradient(from 180deg, transparent 0%, #F5D680 8%, #FFFFFF 15%, #F5D680 22%, transparent 35%, transparent 65%, #F5D680 78%, #FFFFFF 85%, #F5D680 92%, transparent 100%)',
-            mixBlendMode: 'screen',
-            opacity: 0.6,
-          }}
-          animate={{ rotate: -360 }}
-          transition={{ duration: 4.5, repeat: Infinity, ease: 'linear' }}
-        />
-      )}
-      {/* Outer glow pulse */}
+      {/* Second comet offset — creates trailing afterglow */}
+      <motion.div
+        className="absolute rounded-full pointer-events-none"
+        style={{
+          inset: '-40%',
+          background: 'conic-gradient(from 180deg, transparent 0%, transparent 70%, #C5A442 82%, #F5D680 90%, #E8C560 95%, transparent 100%)',
+          opacity: 0.5,
+        }}
+        animate={{ rotate: 360 }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
+      />
+      {/* Breathing glow — stronger than other cards */}
       <motion.div
         className="absolute inset-0 rounded-2xl pointer-events-none"
-        animate={glows[color]}
-        transition={{ duration: isGold ? 2 : 2.5, repeat: Infinity, ease: 'easeInOut' }}
+        animate={{
+          boxShadow: [
+            '0 0 20px rgba(197,164,66,0.2), 0 0 40px rgba(197,164,66,0.08), inset 0 0 20px rgba(197,164,66,0.03)',
+            '0 0 40px rgba(197,164,66,0.5), 0 0 80px rgba(197,164,66,0.2), inset 0 0 30px rgba(197,164,66,0.06)',
+            '0 0 20px rgba(197,164,66,0.2), 0 0 40px rgba(197,164,66,0.08), inset 0 0 20px rgba(197,164,66,0.03)',
+          ],
+        }}
+        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
       />
-      {/* Inner content */}
-      <div className="relative rounded-[14px] h-full" style={{ backgroundColor: '#1a1a1a' }}>
+      <div className="relative rounded-[14px] flex-1 flex flex-col" style={{ backgroundColor: '#1a1a1a' }}>
         {children}
       </div>
     </motion.div>
@@ -280,8 +310,8 @@ export function Pricing() {
             </div>
           </AnimatedBorderCard>
 
-          {/* Premium plan — GOLD animated border + BEST VALUE badge */}
-          <AnimatedBorderCard color="gold" hoverScale className="flex flex-col">
+          {/* Premium plan — GOLD spotlight comet border + BEST VALUE badge */}
+          <PremiumBorderCard>
             <div className="p-8 flex flex-col flex-1 relative">
               {/* BEST VALUE badge */}
               <div
@@ -347,7 +377,7 @@ export function Pricing() {
                 Go Premium — $4.99/mo
               </Link>
             </div>
-          </AnimatedBorderCard>
+          </PremiumBorderCard>
         </motion.div>
 
         {/* Legal disclaimer */}
