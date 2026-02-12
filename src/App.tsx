@@ -12,6 +12,7 @@ import { useProfileStore } from './store/useProfileStore';
 import { migrateOldDataToAppStore } from './utils/migrateData';
 import { useSessionTimeout } from './hooks/useSessionTimeout';
 import { checkDataRetention } from './utils/dataRetention';
+import { isWeb } from './lib/platform';
 
 // Run migration before React renders (synchronous, runs once)
 migrateOldDataToAppStore();
@@ -73,6 +74,9 @@ const ExportDataPage = lazy(() => import('./pages/account/ExportDataPage'));
 const PrivacyPolicyPage = lazy(() => import('./pages/legal/PrivacyPolicyPage'));
 const TermsOfServicePage = lazy(() => import('./pages/legal/TermsOfServicePage'));
 const DisclaimerPage = lazy(() => import('./pages/legal/DisclaimerPage'));
+
+// Landing page (web only)
+const LandingPage = lazy(() => import('./pages/LandingPage'));
 
 function LoadingFallback() {
   return (
@@ -167,7 +171,12 @@ function AnimatedRoutes() {
         <Suspense fallback={<LoadingFallback />}>
           <Routes location={location}>
             {/* === ROOT TABS === */}
-            <Route path="/" element={<Dashboard />} />
+            {isWeb ? (
+              <Route path="/" element={<Navigate to="/app" replace />} />
+            ) : (
+              <Route path="/" element={<Dashboard />} />
+            )}
+            <Route path="/app" element={<Dashboard />} />
             <Route path="/onboarding" element={<Onboarding />} />
 
             {/* === CLAIMS === */}
@@ -230,7 +239,7 @@ function AnimatedRoutes() {
             <Route path="/settings/delete-account" element={<DeleteAccountPage />} />
 
             {/* === REDIRECTS FROM OLD ROUTES === */}
-            <Route path="/dashboard" element={<Navigate to="/" replace />} />
+            <Route path="/dashboard" element={<Navigate to={isWeb ? '/app' : '/'} replace />} />
             <Route path="/conditions" element={<Navigate to="/claims" replace />} />
             <Route path="/conditions/:id" element={<RedirectConditionToClaimsId />} />
             <Route path="/calculator" element={<Navigate to="/claims/calculator" replace />} />
@@ -303,9 +312,54 @@ function AnimatedRoutes() {
   );
 }
 
+function AppContent() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const hasOnboarded = useProfileStore((s) => s.hasCompletedOnboarding);
+  const isLandingRoute = isWeb && location.pathname === '/';
+
+  // Web: after onboarding completes (navigates to /), redirect to /app
+  useEffect(() => {
+    if (isWeb && location.pathname === '/' && hasOnboarded) {
+      navigate('/app', { replace: true });
+    }
+  }, [location.pathname, hasOnboarded, navigate]);
+
+  // Landing page — no app shell
+  if (isLandingRoute && !hasOnboarded) {
+    return (
+      <Suspense fallback={<LoadingFallback />}>
+        <LandingPage />
+      </Suspense>
+    );
+  }
+
+  // App shell
+  return (
+    <div className="min-h-[100dvh] bg-background text-foreground overflow-x-hidden break-words">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:text-sm focus:font-medium"
+      >
+        Skip to main content
+      </a>
+      <LiabilityAcceptanceScreen />
+      <MobileHeader />
+      <main id="main-content" className="pt-14 pb-20 overflow-x-hidden">
+        <AnimatedRoutes />
+      </main>
+      <BottomTabBar />
+    </div>
+  );
+}
+
 function App() {
   useSessionTimeout();
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(() => {
+    // Skip splash on web landing page
+    if (isWeb && window.location.pathname === '/') return false;
+    return true;
+  });
 
   useEffect(() => {
     checkDataRetention();
@@ -320,20 +374,7 @@ function App() {
           )}
           <BrowserRouter>
             <ScrollToTop />
-            <div className="min-h-[100dvh] bg-background text-foreground overflow-x-hidden break-words">
-              <a
-                href="#main-content"
-                className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:text-sm focus:font-medium"
-              >
-                Skip to main content
-              </a>
-              <LiabilityAcceptanceScreen />
-              <MobileHeader />
-              <main id="main-content" className="pt-14 pb-20 overflow-x-hidden">
-                <AnimatedRoutes />
-              </main>
-              <BottomTabBar />
-            </div>
+            <AppContent />
           </BrowserRouter>
         </TooltipProvider>
       </ThemeProvider>

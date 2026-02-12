@@ -1,0 +1,127 @@
+import { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
+
+const ROTATING_WORDS = ['Confidence', 'Precision', 'Intelligence', 'Evidence'];
+const CYCLE_MS = 3000;
+
+export function Hero() {
+  const [index, setIndex] = useState(0);
+
+  const advance = useCallback(() => {
+    setIndex((prev) => (prev + 1) % ROTATING_WORDS.length);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(advance, CYCLE_MS);
+    return () => clearInterval(timer);
+  }, [advance]);
+
+  const scrollToHowItWorks = () => {
+    const el = document.getElementById('how-it-works');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
+    <section
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      style={{
+        background: `
+          radial-gradient(ellipse at 20% 50%, rgba(197,164,66,0.08) 0%, transparent 50%),
+          radial-gradient(ellipse at 80% 20%, rgba(197,164,66,0.05) 0%, transparent 50%),
+          #000000
+        `,
+      }}
+    >
+      <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 text-center py-32">
+        {/* Intro line */}
+        <motion.p
+          className="uppercase tracking-[0.25em] text-sm font-medium mb-6"
+          style={{ color: '#C5A442' }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          Built by Veterans, for Veterans
+        </motion.p>
+
+        {/* Main heading */}
+        <motion.h1
+          className="text-4xl md:text-6xl font-bold leading-tight text-white mb-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          Prepare Your VA Claim with{' '}
+          <span className="inline-block relative" style={{ minWidth: '3ch' }}>
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={ROTATING_WORDS[index]}
+                className="inline-block"
+                style={{ color: '#C5A442' }}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.35, ease: 'easeInOut' }}
+              >
+                {ROTATING_WORDS[index]}
+              </motion.span>
+            </AnimatePresence>
+          </span>
+        </motion.h1>
+
+        {/* Subtitle */}
+        <motion.p
+          className="text-lg md:text-xl max-w-2xl mx-auto mb-10"
+          style={{ color: '#D1D5DB' }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+        >
+          The privacy-first AI companion that helps you organize evidence, understand
+          VA language, and build the strongest possible claim.
+        </motion.p>
+
+        {/* CTAs */}
+        <motion.div
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+        >
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
+            <Link
+              to="/app"
+              className="inline-block rounded-full px-8 py-3 text-lg font-semibold text-black no-underline"
+              style={{
+                background:
+                  'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+              }}
+            >
+              Get Started Free
+            </Link>
+          </motion.div>
+          <motion.button
+            onClick={scrollToHowItWorks}
+            className="inline-block rounded-full px-8 py-3 text-lg font-semibold text-white bg-transparent border border-white/30 cursor-pointer hover:border-white/60 transition-colors"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            See How It Works
+          </motion.button>
+        </motion.div>
+
+        {/* Trust line */}
+        <motion.p
+          className="text-sm"
+          style={{ color: '#9CA3AF' }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.9 }}
+        >
+          No account required &bull; 100% Private &bull; Built for Veterans
+        </motion.p>
+      </div>
+    </section>
+  );
+}
