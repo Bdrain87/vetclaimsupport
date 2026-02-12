@@ -23,12 +23,18 @@ export default function BDDGuide() {
   const navigate = useNavigate();
   const { separationDate, setSeparationDate } = useProfileStore();
 
-  const parsedDate = separationDate ? new Date(separationDate + 'T00:00:00') : null;
+  const parsedDate = (() => {
+    if (!separationDate) return null;
+    const d = new Date(separationDate + 'T00:00:00');
+    return isNaN(d.getTime()) ? null : d;
+  })();
 
   const handleDateChange = (date: Date | null) => {
     if (date) {
-      const formatted = date.toISOString().split('T')[0];
-      setSeparationDate(formatted);
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      setSeparationDate(`${y}-${m}-${d}`);
     }
   };
 

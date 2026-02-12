@@ -25,6 +25,14 @@ const BTSSS_URL = 'https://dvagov-btsss.dynamics365portals.us/';
 export default function TravelPayCalculator() {
   const navigate = useNavigate();
 
+  // Validate numeric input: reject negative values
+  const sanitizeNumericInput = (value: string): string => {
+    if (value === '' || value === '.') return value;
+    const num = parseFloat(value);
+    if (isNaN(num) || num < 0) return '';
+    return value;
+  };
+
   const [oneWayMiles, setOneWayMiles] = useState('');
   const [tolls, setTolls] = useState('');
   const [parking, setParking] = useState('');
@@ -110,7 +118,7 @@ export default function TravelPayCalculator() {
                 inputMode="decimal"
                 min="0"
                 value={oneWayMiles}
-                onChange={(e) => setOneWayMiles(e.target.value)}
+                onChange={(e) => setOneWayMiles(sanitizeNumericInput(e.target.value))}
                 placeholder="e.g., 25"
                 className="bg-muted/50"
               />
@@ -131,7 +139,7 @@ export default function TravelPayCalculator() {
                 min="0"
                 step="0.01"
                 value={tolls}
-                onChange={(e) => setTolls(e.target.value)}
+                onChange={(e) => setTolls(sanitizeNumericInput(e.target.value))}
                 placeholder="$0.00"
                 className="bg-muted/50"
               />
@@ -147,7 +155,7 @@ export default function TravelPayCalculator() {
                 min="0"
                 step="0.01"
                 value={parking}
-                onChange={(e) => setParking(e.target.value)}
+                onChange={(e) => setParking(sanitizeNumericInput(e.target.value))}
                 placeholder="$0.00"
                 className="bg-muted/50"
               />
@@ -186,6 +194,7 @@ export default function TravelPayCalculator() {
                 step={1}
                 className="w-full"
                 aria-label={`${appointmentsPerMonth} appointments per month`}
+                aria-valuetext={`${appointmentsPerMonth} appointments per month`}
               />
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>1</span>
@@ -233,7 +242,7 @@ export default function TravelPayCalculator() {
               {!deductibleWaived && (
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Deductible (round trip)</span>
-                  <span className="text-red-400 font-medium">
+                  <span className="text-red-400 font-medium" aria-label={`Deductible: minus $${DEDUCTIBLE_ROUND_TRIP.toFixed(2)}`}>
                     -${DEDUCTIBLE_ROUND_TRIP.toFixed(2)}
                   </span>
                 </div>
@@ -286,7 +295,7 @@ export default function TravelPayCalculator() {
             </div>
 
             <p className="text-xs text-muted-foreground text-center">
-              Based on 2025-2026 VA mileage rate of ${RATE_PER_MILE}/mile
+              Based on current VA mileage rate of ${RATE_PER_MILE}/mile
             </p>
           </CardContent>
         </Card>

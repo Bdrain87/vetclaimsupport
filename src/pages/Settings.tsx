@@ -46,6 +46,7 @@ export default function Settings() {
   const [profileForm, setProfileForm] = useState({
     firstName: profile.firstName || '',
     lastName: profile.lastName || '',
+    separationDate: profile.separationDate || '',
   });
 
   // Initialize service periods from store (or create default from legacy fields)
@@ -99,6 +100,9 @@ export default function Settings() {
     profile.setFirstName(profileForm.firstName);
     profile.setLastName(profileForm.lastName);
 
+    // Save separation date from form (consistent with other fields)
+    profile.setSeparationDate(profileForm.separationDate || undefined);
+
     // Save service periods
     profile.setServicePeriods(servicePeriods);
 
@@ -109,7 +113,9 @@ export default function Settings() {
         profile.setBranch(first.branch as Branch);
       }
       profile.setMOS(first.mos, first.jobTitle);
-      profile.setServiceDates({ start: first.startDate, end: first.endDate });
+      if (first.startDate || first.endDate) {
+        profile.setServiceDates({ start: first.startDate, end: first.endDate });
+      }
     }
 
     toast({ title: 'Profile Updated', description: 'Your profile has been saved.' });
@@ -383,8 +389,8 @@ export default function Settings() {
             <Input
               id="separationDate"
               type="date"
-              value={profile.separationDate || ''}
-              onChange={(e) => profile.setSeparationDate(e.target.value)}
+              value={profileForm.separationDate}
+              onChange={(e) => setProfileForm(prev => ({ ...prev, separationDate: e.target.value }))}
             />
             <p className="text-xs text-muted-foreground">
               Used to calculate your BDD filing window. Leave blank if you are already separated.
@@ -402,6 +408,9 @@ export default function Settings() {
               </Button>
             </Link>
           </div>
+          <p className="text-xs text-muted-foreground">
+            Separation date is saved when you click &quot;Save Profile&quot; above.
+          </p>
         </CardContent>
       </Card>
 
@@ -483,7 +492,7 @@ export default function Settings() {
 
           {/* Frequency */}
           <div className="space-y-2">
-            <Label>Reminder Frequency</Label>
+            <Label htmlFor="reminder-frequency">Reminder Frequency</Label>
             <Select
               value={reminderSettings.frequency}
               onValueChange={(value: 'daily' | 'weekly') => 
@@ -491,7 +500,7 @@ export default function Settings() {
               }
               disabled={!reminderSettings.enabled}
             >
-              <SelectTrigger className="w-full" aria-label="Reminder frequency">
+              <SelectTrigger className="w-full" id="reminder-frequency" aria-label="Reminder frequency">
                 <SelectValue placeholder="Select frequency" />
               </SelectTrigger>
               <SelectContent>

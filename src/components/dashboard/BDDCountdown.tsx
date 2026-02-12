@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { format, differenceInDays, subDays, isWithinInterval } from 'date-fns';
-import { Calendar, Clock, AlertCircle, CheckCircle2, XCircle } from 'lucide-react';
+import { format, differenceInDays, subDays, isWithinInterval, startOfDay } from 'date-fns';
+import { Calendar, Clock, AlertCircle, CheckCircle2, XCircle, Info } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -18,18 +18,17 @@ export function BDDCountdown({ separationDate, onSeparationDateChange }: BDDCoun
   const bddStatus = useMemo(() => {
     if (!separationDate) return null;
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const sepDate = new Date(separationDate);
-    sepDate.setHours(0, 0, 0, 0);
+    const today = startOfDay(new Date());
+    const sepDate = startOfDay(new Date(separationDate));
 
     const daysUntilSeparation = differenceInDays(sepDate, today);
     const bddWindowStart = subDays(sepDate, 180);
     const bddWindowEnd = subDays(sepDate, 90);
 
-    const isInBDDWindow = isWithinInterval(today, { start: bddWindowStart, end: bddWindowEnd });
+    const isInBDDWindow = daysUntilSeparation > 0 && isWithinInterval(today, { start: bddWindowStart, end: bddWindowEnd });
     const isTooEarly = today < bddWindowStart;
-    const isTooLate = today > bddWindowEnd;
+    const isTooLate = today > bddWindowEnd && daysUntilSeparation > 0;
+    const isPastSeparation = daysUntilSeparation <= 0;
     const daysUntilWindowOpens = differenceInDays(bddWindowStart, today);
     const daysLeftInWindow = differenceInDays(bddWindowEnd, today);
 
@@ -38,12 +37,19 @@ export function BDDCountdown({ separationDate, onSeparationDateChange }: BDDCoun
       isInBDDWindow,
       isTooEarly,
       isTooLate,
+      isPastSeparation,
       daysUntilWindowOpens,
       daysLeftInWindow,
       bddWindowStart,
       bddWindowEnd,
+      sepDate,
     };
   }, [separationDate]);
+
+  const calendarDisabledDate = useMemo(() => {
+    const todayStart = startOfDay(new Date());
+    return (date: Date) => date < todayStart;
+  }, []);
 
   return (
     <Card className={cn(
@@ -85,7 +91,7 @@ export function BDDCountdown({ separationDate, onSeparationDateChange }: BDDCoun
                     onSeparationDateChange(date || null);
                     setOpen(false);
                   }}
-                  disabled={(date) => date < new Date()}
+                  disabled={calendarDisabledDate}
                   initialFocus
                   className={cn('p-3 pointer-events-auto')}
                 />
@@ -98,8 +104,16 @@ export function BDDCountdown({ separationDate, onSeparationDateChange }: BDDCoun
             <div className="space-y-4">
               {/* Days until separation */}
               <div className="text-center py-4 bg-muted/50 rounded-lg">
-                <p className="text-4xl font-bold text-foreground">{bddStatus.daysUntilSeparation}</p>
-                <p className="text-sm text-muted-foreground">days until separation</p>
+                <p className="text-4xl font-bold text-foreground">
+                  {bddStatus.isPastSeparation
+                    ? Math.abs(bddStatus.daysUntilSeparation)
+                    : bddStatus.daysUntilSeparation}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {bddStatus.isPastSeparation
+                    ? 'days since separation'
+                    : 'days until separation'}
+                </p>
               </div>
 
               {/* BDD Window Status */}
@@ -107,7 +121,7 @@ export function BDDCountdown({ separationDate, onSeparationDateChange }: BDDCoun
                 <div className="flex gap-3 p-3 bg-success/10 border border-success/20 rounded-lg">
                   <CheckCircle2 className="h-5 w-5 text-success flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-medium text-success">You're in the BDD window!</p>
+                    <p className="font-medium text-success">You&apos;re in the BDD window!</p>
                     <p className="text-sm text-foreground/80">
                       You have <strong>{bddStatus.daysLeftInWindow} days</strong> left to file your BDD claim.
                       File now to get your rating decision soon after separation.
@@ -122,65 +136,81 @@ export function BDDCountdown({ separationDate, onSeparationDateChange }: BDDCoun
                   <div>
                     <p className="font-medium text-primary">BDD window opens soon</p>
                     <p className="text-sm text-foreground/80">
-                      The BDD window opens in <strong>{bddStatus.daysUntilWindowOpens} days</strong> 
-                      ({format(bddStatus.bddWindowStart, 'MMM d, yyyy')}). Use this time to gather 
+                      The BDD window opens in <strong>{bddStatus.daysUntilWindowOpens} days</strong>
+                      ({format(bddStatus.bddWindowStart, 'MMM d, yyyy')}). Use this time to gather
                       medical records, buddy statements, and document your conditions.
                     </p>
                   </div>
                 </div>
               )}
 
-              {bddStatus.isTooLate && bddStatus.daysUntilSeparation > 0 && (
+              {bddStatus.isTooLate && (
                 <div className="flex gap-3 p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
                   <XCircle className="h-5 w-5 text-destructive flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-medium text-destructive">BDD window has closed</p>
                     <p className="text-sm text-foreground/80">
-                      You're now within 90 days of separation. The BDD filing window has passed,
+                      You&apos;re now within 90 days of separation. The BDD filing window has passed,
                       but you can still file a standard VA disability claim before or after separation.
                     </p>
                   </div>
                 </div>
               )}
 
-              {/* Timeline visualization */}
-              <div className="space-y-2">
-                <div className="flex justify-between text-xs text-muted-foreground gap-1">
-                  <span className="min-w-0 truncate">180d (opens)</span>
-                  <span className="min-w-0 truncate text-center">90d (closes)</span>
-                  <span className="min-w-0 truncate text-right">Separation</span>
+              {bddStatus.isPastSeparation && (
+                <div className="flex gap-3 p-3 bg-muted/50 border border-border rounded-lg">
+                  <Info className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-medium text-foreground">You have separated</p>
+                    <p className="text-sm text-foreground/80">
+                      Your separation date has passed. You can still file a standard VA disability claim
+                      at any time. There is no deadline to file, but earlier filing may result in an
+                      earlier effective date.
+                    </p>
+                  </div>
                 </div>
-                <div className="relative h-3 bg-muted rounded-full overflow-hidden">
-                  {/* Full bar representing 180 days */}
-                  <div 
-                    className="absolute h-full bg-success/50" 
-                    style={{ 
-                      left: '0%', 
-                      width: '50%' 
-                    }} 
-                  />
-                  {/* Current position marker */}
-                  {bddStatus.daysUntilSeparation <= 180 && bddStatus.daysUntilSeparation > 0 && (
-                    <div 
-                      className="absolute top-0 w-1 h-full bg-primary"
-                      style={{ 
-                        left: `${((180 - bddStatus.daysUntilSeparation) / 180) * 100}%` 
+              )}
+
+              {/* Timeline visualization */}
+              {!bddStatus.isPastSeparation && (
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs text-muted-foreground gap-1">
+                    <span className="min-w-0 truncate">180d (opens)</span>
+                    <span className="min-w-0 truncate text-center">90d (closes)</span>
+                    <span className="min-w-0 truncate text-right">Separation</span>
+                  </div>
+                  <div className="relative h-3 bg-muted rounded-full overflow-hidden">
+                    {/* Full bar representing 180 days */}
+                    <div
+                      className="absolute h-full bg-success/50"
+                      style={{
+                        left: '0%',
+                        width: '50%'
                       }}
                     />
-                  )}
+                    {/* Current position marker */}
+                    {bddStatus.daysUntilSeparation <= 180 && bddStatus.daysUntilSeparation > 0 && (
+                      <div
+                        className="absolute top-0 w-1 h-full bg-primary"
+                        style={{
+                          left: `${((180 - bddStatus.daysUntilSeparation) / 180) * 100}%`
+                        }}
+                      />
+                    )}
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-muted-foreground">
+                      {format(bddStatus.bddWindowStart, 'MMM d')}
+                    </span>
+                    <span className="text-muted-foreground">
+                      {format(bddStatus.bddWindowEnd, 'MMM d')}
+                    </span>
+                    <span className="font-medium text-foreground">
+                      {format(bddStatus.sepDate, 'MMM d')}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex justify-between text-xs">
-                  <span className="text-muted-foreground">
-                    {format(bddStatus.bddWindowStart, 'MMM d')}
-                  </span>
-                  <span className="text-muted-foreground">
-                    {format(bddStatus.bddWindowEnd, 'MMM d')}
-                  </span>
-                  <span className="font-medium text-foreground">
-                    {format(separationDate!, 'MMM d')}
-                  </span>
-                </div>
-              </div>
+              )}
             </div>
           )}
 

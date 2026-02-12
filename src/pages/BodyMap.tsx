@@ -296,6 +296,7 @@ export default function BodyMap() {
   // UI state
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
+  const [focusedRegion, setFocusedRegion] = useState<string | null>(null);
 
   // Derive which condition keys are already stored
   const addedConditionKeys = useMemo(() => {
@@ -413,8 +414,8 @@ export default function BodyMap() {
               <svg
                 viewBox="0 0 200 440"
                 className="w-full max-w-[280px] h-auto select-none"
-                role="img"
-                aria-label="Interactive body diagram"
+                role="application"
+                aria-label="Interactive body diagram — use Tab to navigate regions"
               >
                 {/* Body silhouette outline */}
                 <g fill="none" stroke="currentColor" className="text-slate-600" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -500,6 +501,8 @@ export default function BodyMap() {
                         role="button"
                         tabIndex={0}
                         aria-label={`${region.label}${count > 0 ? `, ${count} condition${count !== 1 ? 's' : ''} selected` : ''}`}
+                        onFocus={() => setFocusedRegion(region.id)}
+                        onBlur={() => setFocusedRegion(null)}
                         onKeyDown={(e) => {
                           if (e.key === 'Enter' || e.key === ' ') {
                             e.preventDefault();
@@ -532,8 +535,8 @@ export default function BodyMap() {
                         </>
                       )}
 
-                      {/* Label (visible on hover or selection) */}
-                      {(isSelected || isHovered) && (
+                      {/* Label (visible on hover, focus, or selection) */}
+                      {(isSelected || isHovered || focusedRegion === region.id) && (
                         <text
                           x={region.cx}
                           y={region.cy + region.r + 12}
@@ -688,6 +691,7 @@ export default function BodyMap() {
                             key={uc.id}
                             className="bg-[rgba(197,164,66,0.15)] text-gold-hl border border-[rgba(197,164,66,0.3)] hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30 cursor-pointer transition-colors gap-1 pr-1.5"
                             onClick={() => removeUserCondition(uc.id)}
+                            title={`${label} (${regionLabel}) — click to remove`}
                           >
                             <span className="max-w-[180px] truncate">
                               {label}

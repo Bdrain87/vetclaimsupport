@@ -86,8 +86,7 @@ export const ALL_LOCAL_STORAGE_KEYS = [
   'cp-exam-checklist',
   'vet-claim-unified-calculator',
   'va-claims-reminder-settings',
-  'intentToFileDismissed',
-  'intentToFileDismissedAt',
+  'itf-popup-dismissed',
   'pwaPromptDismissed',
   'militaryBranch',
   // Milestones & veteran profile

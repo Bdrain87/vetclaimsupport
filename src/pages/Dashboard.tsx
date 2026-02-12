@@ -105,7 +105,11 @@ export default function Dashboard() {
   const [logSaved, setLogSaved] = useState(false);
   const [logCondition, setLogCondition] = useState('general');
   const [logNotes, setLogNotes] = useState('');
-  const [logDate, setLogDate] = useState(new Date().toISOString().split('T')[0]);
+  // Use local date (not UTC) to avoid timezone-related off-by-one
+  const [logDate, setLogDate] = useState(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  });
 
   const handleSaveQuickLog = useCallback(() => {
     if (!selectedMood) return;
@@ -116,7 +120,8 @@ export default function Dashboard() {
     setSelectedMood(null);
     setLogCondition('general');
     setLogNotes('');
-    setLogDate(new Date().toISOString().split('T')[0]);
+    const d = new Date();
+    setLogDate(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`);
   }, [painLevel, selectedMood, logCondition, logNotes, logDate, addDashboardQuickLog]);
 
   // Handle adding a recommended condition
@@ -242,25 +247,31 @@ export default function Dashboard() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-foreground">My Combined Rating</p>
-              {userConditions.filter(uc => uc.rating !== undefined).length > 0 ? (
-                <div className="mt-1 space-y-0.5">
-                  {userConditions.filter(uc => uc.rating !== undefined).slice(0, 4).map(uc => {
-                    const details = getConditionById(uc.conditionId);
-                    return (
-                      <p key={uc.id} className="text-xs text-muted-foreground truncate">
-                        {details?.abbreviation || details?.name || uc.conditionId}: {uc.rating}%
-                      </p>
-                    );
-                  })}
-                  {userConditions.filter(uc => uc.rating !== undefined).length > 4 && (
-                    <p className="text-xs text-muted-foreground">+{userConditions.filter(uc => uc.rating !== undefined).length - 4} more</p>
-                  )}
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground mt-1">
-                  Add conditions with ratings to calculate
-                </p>
-              )}
+              {(() => {
+                const ratedConditions = userConditions.filter(uc => uc.rating !== undefined);
+                if (ratedConditions.length === 0) {
+                  return (
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Add conditions with ratings to calculate
+                    </p>
+                  );
+                }
+                return (
+                  <div className="mt-1 space-y-0.5">
+                    {ratedConditions.slice(0, 4).map(uc => {
+                      const details = getConditionById(uc.conditionId);
+                      return (
+                        <p key={uc.id} className="text-xs text-muted-foreground truncate">
+                          {details?.abbreviation || details?.name || uc.conditionId}: {uc.rating}%
+                        </p>
+                      );
+                    })}
+                    {ratedConditions.length > 4 && (
+                      <p className="text-xs text-muted-foreground">+{ratedConditions.length - 4} more</p>
+                    )}
+                  </div>
+                );
+              })()}
             </div>
             <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
           </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, X, ExternalLink, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -8,6 +8,7 @@ const ITF_DISMISSED_KEY = 'itf-popup-dismissed';
 
 export function IntentToFileBanner() {
   const { intentToFileDate, intentToFileFiled } = useProfileStore();
+
   const [dismissed, setDismissed] = useState(() => {
     try {
       return localStorage.getItem(ITF_DISMISSED_KEY) === 'true';
@@ -15,14 +16,29 @@ export function IntentToFileBanner() {
       return false;
     }
   });
-  const [visible, setVisible] = useState(false);
 
+  // Derive visibility directly from state — no separate useEffect needed
+  const shouldShow = !intentToFileDate && !intentToFileFiled && !dismissed;
+  const [visible, setVisible] = useState(shouldShow);
+  const dismissTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Sync visibility when profile store values change
   useEffect(() => {
-    // Show banner if ITF not filed and not dismissed
-    if (!intentToFileDate && !intentToFileFiled && !dismissed) {
+    if (shouldShow) {
       setVisible(true);
+    } else {
+      setVisible(false);
     }
-  }, [intentToFileDate, intentToFileFiled, dismissed]);
+  }, [shouldShow]);
+
+  // Cleanup timer on unmount to prevent memory leak
+  useEffect(() => {
+    return () => {
+      if (dismissTimerRef.current) {
+        clearTimeout(dismissTimerRef.current);
+      }
+    };
+  }, []);
 
   const handleDismiss = () => {
     setVisible(false);
@@ -31,10 +47,12 @@ export function IntentToFileBanner() {
     } catch {
       // Storage unavailable
     }
-    setTimeout(() => setDismissed(true), 300);
+    // Delay state update so exit animation completes before unmounting
+    dismissTimerRef.current = setTimeout(() => setDismissed(true), 300);
   };
 
-  if (dismissed || intentToFileDate || intentToFileFiled) return null;
+  // Early return after hooks — if already dismissed or ITF filed, nothing to render
+  if (!shouldShow && !visible) return null;
 
   return (
     <AnimatePresence>
@@ -46,17 +64,19 @@ export function IntentToFileBanner() {
           transition={{ duration: 0.3, ease: 'easeOut' }}
         >
           <div className="rounded-xl border-2 border-[rgba(197,164,66,0.5)] bg-[#1a1a1a] p-4 relative overflow-hidden">
-            {/* Gold accent line */}
+            {/* Gold accent line (decorative) */}
             <div
               className="absolute top-0 left-0 right-0 h-1"
               style={{ background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)' }}
+              aria-hidden="true"
             />
 
             {/* Dismiss button */}
             <button
+              type="button"
               onClick={handleDismiss}
               className="absolute top-2 right-2 p-3 rounded-lg hover:bg-white/10 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
-              aria-label="Dismiss"
+              aria-label="Dismiss intent to file banner"
             >
               <X className="h-5 w-5 text-white/50 hover:text-white" />
             </button>
@@ -72,7 +92,7 @@ export function IntentToFileBanner() {
                 <p className="text-xs text-[#D1D5DB] leading-relaxed">
                   Filing an Intent to File (ITF) protects your effective date and gives you one year to submit your claim. This is one of the most important first steps.
                 </p>
-                <div className="flex flex-wrap gap-2 pt-1">
+                <div className="flex flex-wrap gap-2 pt-1" role="group" aria-label="Intent to File actions">
                   <Link
                     to="/settings/itf"
                     className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-xs font-semibold transition-colors min-h-[44px]"
