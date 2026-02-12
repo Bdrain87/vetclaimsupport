@@ -62,144 +62,156 @@ const CARDS = [
   },
 ];
 
-export function FeatureBento() {
-  const containerRef = useRef<HTMLDivElement>(null);
+/* ────────────────────────────────────────────────
+ * Individual stacking card
+ * Each card is sticky — as you scroll, the next card
+ * slides up and stacks on top of the previous one.
+ * Cards scale down slightly once covered, creating depth.
+ * ──────────────────────────────────────────────── */
+function StackingCard({
+  card,
+  index,
+  total,
+}: {
+  card: (typeof CARDS)[0];
+  index: number;
+  total: number;
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end end'],
+    target: cardRef,
+    offset: ['start start', 'end start'],
   });
 
-  // Map vertical scroll → horizontal card translation
-  const x = useTransform(scrollYProgress, [0, 1], ['2%', '-62%']);
-  // Fade heading in at top, out at end
-  const headerOpacity = useTransform(scrollYProgress, [0, 0.05, 0.85, 1], [0, 1, 1, 0]);
-  // Progress bar width
-  const progressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+  // Scale down as the NEXT card scrolls over this one (depth effect)
+  const targetScale = 1 - (total - index) * 0.015;
+  const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
 
+  return (
+    <div
+      ref={cardRef}
+      style={{ height: '160px' }} /* scroll spacer — controls pacing between cards */
+    >
+      <motion.div
+        className="sticky group cursor-default"
+        style={{
+          top: `calc(18vh + ${index * 28}px)`,
+          scale,
+          transformOrigin: 'top center',
+        }}
+      >
+        <motion.div
+          className="relative overflow-hidden rounded-2xl p-6 md:p-8"
+          style={{
+            ...CARD_STYLE,
+            boxShadow: CARD_SHADOW,
+          }}
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.5, ease: EASE_SMOOTH }}
+        >
+          <div className="relative z-10 flex items-start gap-5">
+            {/* Icon + number */}
+            <div className="flex-shrink-0 flex flex-col items-center gap-2">
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center"
+                style={{
+                  backgroundColor: 'rgba(197,164,66,0.1)',
+                  border: '1px solid rgba(197,164,66,0.2)',
+                }}
+              >
+                <card.Icon size={22} style={{ color: '#C5A442' }} />
+              </div>
+              <span
+                className="text-[10px] font-medium tracking-widest uppercase"
+                style={{ color: 'rgba(255,255,255,0.25)' }}
+              >
+                {String(index + 1).padStart(2, '0')}
+              </span>
+            </div>
+
+            {/* Text */}
+            <div className="min-w-0">
+              <h3 className="text-lg font-semibold text-white mb-1.5 group-hover:text-[#E8C560] transition-colors duration-300">
+                {card.title}
+              </h3>
+              <p className="text-sm leading-relaxed" style={{ color: '#9CA3AF' }}>
+                {card.desc}
+              </p>
+            </div>
+          </div>
+
+          {/* Hover glow */}
+          <div
+            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+            style={{
+              borderRadius: '24px',
+              background:
+                'radial-gradient(ellipse at 50% 100%, rgba(197,164,66,0.06) 0%, transparent 60%)',
+            }}
+          />
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+}
+
+/* ────────────────────────────────────────────────
+ * FeatureBento — stacking cards section
+ * ──────────────────────────────────────────────── */
+export function FeatureBento() {
   return (
     <section
       id="features"
-      ref={containerRef}
-      className="relative"
-      style={{ height: '280vh', backgroundColor: '#000000', scrollMarginTop: '5rem' }}
+      style={{ backgroundColor: '#000000', scrollMarginTop: '5rem' }}
     >
-      <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
-        {/* Header — fixed in place while cards scroll */}
+      {/* Header */}
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-20 md:pt-28">
         <motion.div
-          className="px-6 sm:px-10 mb-8"
-          style={{ opacity: headerOpacity }}
+          className="mb-4"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, ease: EASE_SMOOTH }}
         >
-          <motion.div
-            className="mb-4"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, ease: EASE_SMOOTH }}
-          >
-            <span style={PILL_STYLE}>Our Toolkit</span>
-          </motion.div>
-
-          <motion.h2
-            className="text-3xl md:text-5xl text-white mb-3"
-            style={HEADING_H2_STYLE}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.05, ease: EASE_SMOOTH }}
-          >
-            Tools That Help You{' '}
-            <span style={GOLD_GRADIENT_TEXT}>Prepare</span>
-          </motion.h2>
-
-          <motion.p
-            className="text-lg max-w-xl"
-            style={{ color: '#9CA3AF' }}
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1, ease: EASE_SMOOTH }}
-          >
-            From evidence organization to document generation — everything you need in one app.
-          </motion.p>
-
-          {/* Scroll progress bar */}
-          <div
-            className="mt-6 h-px w-48 rounded-full overflow-hidden"
-            style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
-          >
-            <motion.div
-              className="h-full rounded-full"
-              style={{
-                width: progressWidth,
-                background: 'linear-gradient(90deg, #C5A442, #E8C560)',
-              }}
-            />
-          </div>
+          <span style={PILL_STYLE}>Our Toolkit</span>
         </motion.div>
 
-        {/* Horizontal scrolling cards */}
-        <motion.div
-          className="flex gap-5 pl-6 sm:pl-10 pr-[20vw]"
-          style={{ x }}
+        <motion.h2
+          className="text-3xl md:text-5xl text-white mb-3"
+          style={HEADING_H2_STYLE}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.05, ease: EASE_SMOOTH }}
         >
-          {CARDS.map((card, i) => (
-            <motion.div
-              key={card.title}
-              className="flex-shrink-0 w-[300px] md:w-[360px] relative overflow-hidden group cursor-default"
-              style={{
-                ...CARD_STYLE,
-                padding: '28px',
-                boxShadow: CARD_SHADOW,
-              }}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.06, ease: EASE_SMOOTH }}
-              whileHover={{
-                y: -8,
-                scale: 1.03,
-                boxShadow: '0 0 30px rgba(197,164,66,0.15), 0 20px 50px rgba(0,0,0,0.4)',
-              }}
-            >
-              <div className="relative z-10">
-                {/* Number badge */}
-                <div className="flex items-center gap-3 mb-5">
-                  <div
-                    className="w-11 h-11 rounded-xl flex items-center justify-center"
-                    style={{
-                      backgroundColor: 'rgba(197,164,66,0.1)',
-                      border: '1px solid rgba(197,164,66,0.2)',
-                    }}
-                  >
-                    <card.Icon size={20} style={{ color: '#C5A442' }} />
-                  </div>
-                  <span
-                    className="text-xs font-medium tracking-widest uppercase"
-                    style={{ color: 'rgba(255,255,255,0.3)' }}
-                  >
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                </div>
+          Tools That Help You{' '}
+          <span style={GOLD_GRADIENT_TEXT}>Prepare</span>
+        </motion.h2>
 
-                <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-[#E8C560] transition-colors duration-300">
-                  {card.title}
-                </h3>
-                <p className="text-sm leading-relaxed" style={{ color: '#9CA3AF' }}>
-                  {card.desc}
-                </p>
-              </div>
+        <motion.p
+          className="text-lg max-w-xl mb-12"
+          style={{ color: '#9CA3AF' }}
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1, ease: EASE_SMOOTH }}
+        >
+          From evidence organization to document generation — everything you need in one app.
+        </motion.p>
+      </div>
 
-              {/* Hover glow */}
-              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                style={{
-                  borderRadius: '24px',
-                  background: 'radial-gradient(ellipse at 50% 100%, rgba(197,164,66,0.06) 0%, transparent 60%)',
-                }}
-              />
-            </motion.div>
-          ))}
-        </motion.div>
+      {/* Stacking cards */}
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 pb-[45vh]">
+        {CARDS.map((card, i) => (
+          <StackingCard
+            key={card.title}
+            card={card}
+            index={i}
+            total={CARDS.length}
+          />
+        ))}
       </div>
     </section>
   );
