@@ -528,21 +528,52 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
 }
 
 /* ────────────────────────────────────────────────
- * Desktop 3D Perspective Grid
+ * Desktop 3D Perspective Scatter
  *
- * A flat grid of cards viewed from a dramatic 3D angle
- * (like looking down at a wall of portfolio pieces from
- * above-left). One card at a time auto-pops forward.
+ * Large overlapping cards scattered like a desk of
+ * portfolio pieces, viewed from a dramatic 3D angle.
+ * Cards overlap each other. One pops toward the viewer
+ * at a time, then recedes and the next pops out.
  * ──────────────────────────────────────────────── */
 
 const N = CARDS.length;
-const POP_HOLD_MS = 2500; // how long each card stays popped
+const POP_HOLD_MS = 2200;
+
+// Card dimensions
+const CARD_W = 380;
+const CARD_H = 280;
+
+// Loose overlapping grid: 6 columns, staggered rows
+// Cards overlap ~100px horizontally and ~60px vertically
+const COL_SPACING = 280;
+const ROW_SPACING = 220;
+const COLS = 6;
+
+// Pre-compute scattered positions for all cards
+const CARD_POSITIONS = CARDS.map((_, i) => {
+  const col = i % COLS;
+  const row = Math.floor(i / COLS);
+  // Stagger odd rows by half a column for a natural offset
+  const stagger = row % 2 === 1 ? COL_SPACING * 0.45 : 0;
+  // Small pseudo-random jitter for organic feel
+  const seed = (i * 7 + 13) % 37;
+  const jitterX = ((seed % 11) - 5) * 4;
+  const jitterY = ((seed % 7) - 3) * 5;
+
+  return {
+    x: col * COL_SPACING + stagger + jitterX,
+    y: row * ROW_SPACING + jitterY,
+  };
+});
+
+// Center the plane — compute bounding box and offset
+const planeW = Math.max(...CARD_POSITIONS.map((p) => p.x)) + CARD_W;
+const planeH = Math.max(...CARD_POSITIONS.map((p) => p.y)) + CARD_H;
 
 function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => void }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isPaused, setIsPaused] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
 
   // Auto-cycle the popped card
   useEffect(() => {
@@ -553,112 +584,140 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
     return () => clearTimeout(timer);
   }, [activeIndex, isPaused]);
 
-  // The card that's visually popped: hovered takes priority, then auto-cycle
   const poppedIndex = hoveredIndex ?? activeIndex;
 
   return (
     <div
-      ref={sectionRef}
-      className="relative mx-auto overflow-hidden"
-      style={{ height: '700px', maxWidth: '1400px' }}
+      className="relative mx-auto"
+      style={{ height: '800px', maxWidth: '100vw' }}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => {
         setIsPaused(false);
         setHoveredIndex(null);
       }}
     >
-      {/* Perspective wrapper */}
+      {/* Perspective container */}
       <div
         className="absolute inset-0 flex items-center justify-center"
-        style={{ perspective: '1800px', perspectiveOrigin: '50% 35%' }}
+        style={{
+          perspective: '1600px',
+          perspectiveOrigin: '50% 40%',
+        }}
       >
-        {/* Tilted grid plane */}
+        {/* Tilted plane — the whole scattered layout rotated in 3D */}
         <div
           style={{
-            transform: 'rotateX(48deg) rotateY(-8deg) rotateZ(8deg)',
+            width: planeW,
+            height: planeH,
+            position: 'relative',
+            transform: 'rotateX(52deg) rotateY(-6deg) rotateZ(6deg)',
             transformStyle: 'preserve-3d',
             transformOrigin: 'center center',
           }}
         >
-          {/* CSS grid of cards */}
-          <div
-            className="grid gap-3"
-            style={{
-              gridTemplateColumns: 'repeat(5, 240px)',
-              transformStyle: 'preserve-3d',
-            }}
-          >
-            {CARDS.map((card, i) => {
-              const isPopped = i === poppedIndex;
-              const Icon = card.icon;
+          {CARDS.map((card, i) => {
+            const pos = CARD_POSITIONS[i];
+            const isPopped = i === poppedIndex;
+            const Icon = card.icon;
 
-              return (
-                <motion.div
-                  key={card.title}
-                  className="cursor-pointer"
+            return (
+              <motion.div
+                key={card.title}
+                className="absolute cursor-pointer"
+                style={{
+                  left: pos.x,
+                  top: pos.y,
+                  width: CARD_W,
+                  height: CARD_H,
+                  transformStyle: 'preserve-3d',
+                  willChange: 'transform',
+                  zIndex: isPopped ? 20 : 1,
+                }}
+                animate={{
+                  z: isPopped ? 120 : 0,
+                  scale: isPopped ? 1.08 : 1,
+                }}
+                transition={{ duration: 0.6, ease: EASE_SMOOTH }}
+                onMouseEnter={() => setHoveredIndex(i)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                onClick={() => onSelectCard(card)}
+              >
+                <div
+                  className="w-full h-full rounded-2xl p-6 flex flex-col"
                   style={{
-                    transformStyle: 'preserve-3d',
-                    willChange: 'transform',
+                    background: SILVER_GRADIENT,
+                    border: isPopped
+                      ? '1px solid rgba(197, 164, 66, 0.4)'
+                      : '1px solid rgba(255, 255, 255, 0.25)',
+                    boxShadow: isPopped ? CARD_SHADOW_ACTIVE : CARD_SHADOW,
+                    transition: 'box-shadow 0.5s, border-color 0.5s',
                   }}
-                  animate={{
-                    z: isPopped ? 90 : 0,
-                    scale: isPopped ? 1.06 : 1,
-                  }}
-                  transition={{ duration: 0.5, ease: EASE_SMOOTH }}
-                  onMouseEnter={() => setHoveredIndex(i)}
-                  onMouseLeave={() => setHoveredIndex(null)}
-                  onClick={() => onSelectCard(card)}
                 >
-                  <div
-                    className="rounded-[20px] p-5 h-full"
-                    style={{
-                      background: SILVER_GRADIENT,
-                      border: isPopped
-                        ? '1px solid rgba(197, 164, 66, 0.35)'
-                        : '1px solid rgba(255, 255, 255, 0.25)',
-                      boxShadow: isPopped ? CARD_SHADOW_ACTIVE : CARD_SHADOW,
-                      transition: 'box-shadow 0.4s, border-color 0.4s',
-                    }}
-                  >
+                  <div className="flex items-start gap-4 mb-4">
                     <div
-                      className="w-9 h-9 rounded-lg flex items-center justify-center mb-3"
-                      style={{ backgroundColor: 'rgba(0,0,0,0.06)' }}
+                      className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{ backgroundColor: 'rgba(0,0,0,0.06)', border: '1px solid rgba(0,0,0,0.05)' }}
                     >
-                      <Icon size={16} style={{ color: '#8B7332' }} />
+                      <Icon size={20} style={{ color: '#8B7332' }} />
                     </div>
-                    <h4
-                      className="text-[15px] font-semibold mb-1.5 leading-tight"
-                      style={{ color: '#0A0A0A', letterSpacing: '-0.02em' }}
-                    >
-                      {card.title}
-                    </h4>
-                    <p className="text-xs leading-snug" style={{ color: '#444' }}>
-                      {card.short}
-                    </p>
+                    <div>
+                      <span
+                        className="text-[9px] font-semibold tracking-[0.15em] uppercase block mb-0.5"
+                        style={{ color: '#8B7332' }}
+                      >
+                        {card.category}
+                      </span>
+                      <h4
+                        className="text-[17px] font-semibold leading-tight"
+                        style={{ color: '#0A0A0A', letterSpacing: '-0.02em' }}
+                      >
+                        {card.title}
+                      </h4>
+                    </div>
                   </div>
-                </motion.div>
-              );
-            })}
-          </div>
+                  <p
+                    className="text-[13px] leading-relaxed flex-1"
+                    style={{ color: '#333' }}
+                  >
+                    {card.short}
+                  </p>
+                  <div className="flex items-center justify-between mt-3 pt-3" style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+                    <span
+                      className="text-[10px] font-medium"
+                      style={{ color: card.plan === 'Free' ? '#555' : '#8B7332' }}
+                    >
+                      {card.plan === 'Free' ? 'Free' : 'Launch Plan'}
+                    </span>
+                    <span
+                      className="text-[10px] font-medium"
+                      style={{ color: '#999' }}
+                    >
+                      Click to explore →
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
 
-      {/* Edge fades */}
+      {/* Edge fades — clip the overflow visually */}
       <div
-        className="absolute top-0 left-0 right-0 h-40 pointer-events-none z-10"
-        style={{ background: 'linear-gradient(to bottom, #000 0%, transparent 100%)' }}
+        className="absolute top-0 left-0 right-0 pointer-events-none z-10"
+        style={{ height: '35%', background: 'linear-gradient(to bottom, #000 0%, #000 20%, transparent 100%)' }}
       />
       <div
-        className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none z-10"
-        style={{ background: 'linear-gradient(to top, #000 0%, transparent 100%)' }}
+        className="absolute bottom-0 left-0 right-0 pointer-events-none z-10"
+        style={{ height: '30%', background: 'linear-gradient(to top, #000 0%, #000 15%, transparent 100%)' }}
       />
       <div
-        className="absolute top-0 bottom-0 left-0 w-32 pointer-events-none z-10"
-        style={{ background: 'linear-gradient(to right, #000 0%, transparent 100%)' }}
+        className="absolute top-0 bottom-0 left-0 pointer-events-none z-10"
+        style={{ width: '18%', background: 'linear-gradient(to right, #000 0%, #000 30%, transparent 100%)' }}
       />
       <div
-        className="absolute top-0 bottom-0 right-0 w-32 pointer-events-none z-10"
-        style={{ background: 'linear-gradient(to left, #000 0%, transparent 100%)' }}
+        className="absolute top-0 bottom-0 right-0 pointer-events-none z-10"
+        style={{ width: '18%', background: 'linear-gradient(to left, #000 0%, #000 30%, transparent 100%)' }}
       />
     </div>
   );
@@ -780,7 +839,7 @@ export function FeatureBento() {
   return (
     <section
       id="features"
-      className="relative overflow-hidden"
+      className="relative"
       style={{ backgroundColor: '#000000', scrollMarginTop: '5rem' }}
     >
       {/* Header */}
