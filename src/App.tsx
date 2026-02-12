@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate, usePa
 import { motion, AnimatePresence } from 'framer-motion';
 import { MobileHeader } from './components/MobileHeader';
 import { BottomTabBar } from './components/BottomTabBar';
+import { AppSidebar } from './components/AppSidebar';
+import { useSidebarStore } from './store/useSidebarStore';
 import { ThemeProvider } from './context/ThemeContext';
 import { TooltipProvider } from './components/ui/tooltip';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -319,6 +321,7 @@ function AnimatedRoutes() {
 function AppContent() {
   const location = useLocation();
   const isLandingRoute = isWeb && location.pathname === '/';
+  const { collapsed } = useSidebarStore();
 
   // Web root — show landing page (users click through to /app)
   if (isLandingRoute) {
@@ -331,7 +334,7 @@ function AppContent() {
 
   // App shell
   return (
-    <div className="h-screen overflow-hidden flex flex-col bg-background text-foreground break-words">
+    <div className="h-screen overflow-hidden flex flex-row bg-background text-foreground break-words">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:text-sm focus:font-medium"
@@ -339,11 +342,17 @@ function AppContent() {
         Skip to main content
       </a>
       <LiabilityAcceptanceScreen />
-      <MobileHeader />
-      <main id="main-content" className="flex-1 overflow-y-auto pt-14 pb-20">
-        <AnimatedRoutes />
-      </main>
-      <BottomTabBar />
+      {/* Desktop Sidebar */}
+      <div className="hidden md:block">
+        <AppSidebar />
+      </div>
+      <div className={`flex-1 flex flex-col overflow-hidden transition-all duration-300 ${collapsed ? 'md:ml-16' : 'md:ml-64'}`}>
+        <MobileHeader />
+        <main id="main-content" className="flex-1 overflow-y-auto pt-14 pb-20 md:pt-0 md:pb-0">
+          <AnimatedRoutes />
+        </main>
+        <BottomTabBar />
+      </div>
     </div>
   );
 }

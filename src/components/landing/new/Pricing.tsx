@@ -21,32 +21,82 @@ const PREMIUM_FEATURES = [
   'Priority Support',
 ];
 
-/* ── Animated border keyframes (shared) ── */
-const redGlow = {
-  boxShadow: [
-    '0 0 10px rgba(239,68,68,0.4), 0 0 25px rgba(239,68,68,0.15), inset 0 0 8px rgba(239,68,68,0.05)',
-    '0 0 20px rgba(239,68,68,0.7), 0 0 45px rgba(239,68,68,0.3), inset 0 0 15px rgba(239,68,68,0.1)',
-    '0 0 10px rgba(239,68,68,0.4), 0 0 25px rgba(239,68,68,0.15), inset 0 0 8px rgba(239,68,68,0.05)',
-  ],
-};
+/* ── Animated border wrapper ──
+   Uses a spinning conic-gradient behind a 2px "gap" to create
+   an animated glowing border that rotates continuously. */
+function AnimatedBorderCard({
+  children,
+  color,
+  className = '',
+  hoverScale = false,
+}: {
+  children: React.ReactNode;
+  color: 'red' | 'green' | 'gold';
+  className?: string;
+  hoverScale?: boolean;
+}) {
+  const gradients = {
+    red: 'conic-gradient(from 0deg, transparent 0%, #EF4444 12%, #FF6B6B 25%, transparent 37%, transparent 62%, #EF4444 75%, #FF6B6B 87%, transparent 100%)',
+    green: 'conic-gradient(from 0deg, transparent 0%, #22C55E 12%, #4ADE80 25%, transparent 37%, transparent 62%, #22C55E 75%, #4ADE80 87%, transparent 100%)',
+    gold: 'conic-gradient(from 0deg, transparent 0%, #C5A442 10%, #F5D680 20%, #E8C560 30%, transparent 40%, transparent 60%, #C5A442 70%, #F5D680 80%, #E8C560 90%, transparent 100%)',
+  };
 
-const greenGlow = {
-  boxShadow: [
-    '0 0 10px rgba(34,197,94,0.3), 0 0 25px rgba(34,197,94,0.1), inset 0 0 8px rgba(34,197,94,0.05)',
-    '0 0 20px rgba(34,197,94,0.6), 0 0 50px rgba(34,197,94,0.25), inset 0 0 15px rgba(34,197,94,0.1)',
-    '0 0 10px rgba(34,197,94,0.3), 0 0 25px rgba(34,197,94,0.1), inset 0 0 8px rgba(34,197,94,0.05)',
-  ],
-};
+  const glows = {
+    red: {
+      boxShadow: [
+        '0 0 15px rgba(239,68,68,0.2), 0 0 30px rgba(239,68,68,0.08)',
+        '0 0 25px rgba(239,68,68,0.4), 0 0 50px rgba(239,68,68,0.15)',
+        '0 0 15px rgba(239,68,68,0.2), 0 0 30px rgba(239,68,68,0.08)',
+      ],
+    },
+    green: {
+      boxShadow: [
+        '0 0 15px rgba(34,197,94,0.15), 0 0 30px rgba(34,197,94,0.06)',
+        '0 0 25px rgba(34,197,94,0.35), 0 0 50px rgba(34,197,94,0.12)',
+        '0 0 15px rgba(34,197,94,0.15), 0 0 30px rgba(34,197,94,0.06)',
+      ],
+    },
+    gold: {
+      boxShadow: [
+        '0 0 20px rgba(197,164,66,0.25), 0 0 40px rgba(197,164,66,0.1)',
+        '0 0 35px rgba(197,164,66,0.5), 0 0 70px rgba(197,164,66,0.2)',
+        '0 0 20px rgba(197,164,66,0.25), 0 0 40px rgba(197,164,66,0.1)',
+      ],
+    },
+  };
 
-const goldGlow = {
-  boxShadow: [
-    '0 0 12px rgba(197,164,66,0.4), 0 0 30px rgba(197,164,66,0.15), inset 0 0 10px rgba(197,164,66,0.05)',
-    '0 0 24px rgba(197,164,66,0.7), 0 0 60px rgba(197,164,66,0.3), inset 0 0 20px rgba(197,164,66,0.1)',
-    '0 0 12px rgba(197,164,66,0.4), 0 0 30px rgba(197,164,66,0.15), inset 0 0 10px rgba(197,164,66,0.05)',
-  ],
-};
+  const speeds = { red: 4, green: 5, gold: 3.5 };
 
-const pulseTransition = { duration: 2.5, repeat: Infinity, ease: 'easeInOut' as const };
+  return (
+    <motion.div
+      variants={fadeInUp}
+      whileHover={hoverScale ? { scale: 1.02 } : undefined}
+      transition={hoverScale ? { type: 'spring', stiffness: 300, damping: 20 } : undefined}
+      className={`relative rounded-2xl p-[2px] overflow-hidden ${className}`}
+    >
+      {/* Spinning conic gradient — the animated border */}
+      <motion.div
+        className="absolute rounded-full pointer-events-none"
+        style={{
+          inset: '-40%',
+          background: gradients[color],
+        }}
+        animate={{ rotate: 360 }}
+        transition={{ duration: speeds[color], repeat: Infinity, ease: 'linear' }}
+      />
+      {/* Outer glow pulse */}
+      <motion.div
+        className="absolute inset-0 rounded-2xl pointer-events-none"
+        animate={glows[color]}
+        transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      {/* Inner content */}
+      <div className="relative rounded-[14px] h-full" style={{ backgroundColor: '#1a1a1a' }}>
+        {children}
+      </div>
+    </motion.div>
+  );
+}
 
 export function Pricing() {
   return (
@@ -80,7 +130,7 @@ export function Pricing() {
           Every year, veterans spend thousands on services that profit from confusion. There&apos;s a better way.
         </motion.p>
 
-        {/* ── Competitor cards (RED glowing pulsing borders) ── */}
+        {/* ── Competitor cards (RED animated borders) ── */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"
           variants={staggerContainer}
@@ -89,18 +139,8 @@ export function Pricing() {
           viewport={{ once: true, margin: '-60px' }}
         >
           {/* Claim Shark card */}
-          <motion.div
-            variants={fadeInUp}
-            className="rounded-2xl p-6 relative overflow-hidden"
-            style={{ backgroundColor: '#1a1a1a' }}
-          >
-            <motion.div
-              className="absolute inset-0 rounded-2xl pointer-events-none"
-              style={{ border: '2px solid #EF4444' }}
-              animate={redGlow}
-              transition={pulseTransition}
-            />
-            <div className="relative">
+          <AnimatedBorderCard color="red">
+            <div className="p-6">
               <div className="flex items-center gap-2 mb-3">
                 <AlertTriangle size={20} style={{ color: '#EF4444' }} />
                 <h3 className="text-lg font-bold" style={{ color: '#EF4444' }}>Claim Shark</h3>
@@ -124,21 +164,11 @@ export function Pricing() {
                 </li>
               </ul>
             </div>
-          </motion.div>
+          </AnimatedBorderCard>
 
           {/* VA Attorney card */}
-          <motion.div
-            variants={fadeInUp}
-            className="rounded-2xl p-6 relative overflow-hidden"
-            style={{ backgroundColor: '#1a1a1a' }}
-          >
-            <motion.div
-              className="absolute inset-0 rounded-2xl pointer-events-none"
-              style={{ border: '2px solid #EF4444' }}
-              animate={redGlow}
-              transition={pulseTransition}
-            />
-            <div className="relative">
+          <AnimatedBorderCard color="red">
+            <div className="p-6">
               <div className="flex items-center gap-2 mb-3">
                 <AlertTriangle size={20} style={{ color: '#EF4444' }} />
                 <h3 className="text-lg font-bold" style={{ color: '#EF4444' }}>VA Attorney</h3>
@@ -162,7 +192,7 @@ export function Pricing() {
                 </li>
               </ul>
             </div>
-          </motion.div>
+          </AnimatedBorderCard>
         </motion.div>
 
         {/* ── "OR" divider ── */}
@@ -188,7 +218,7 @@ export function Pricing() {
           <div className="h-px flex-1 max-w-[120px]" style={{ background: 'linear-gradient(to left, transparent, #C5A442)' }} />
         </motion.div>
 
-        {/* ── Plan cards (Green + Gold glowing borders) ── */}
+        {/* ── Plan cards (Green + Gold animated borders) ── */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
           variants={staggerContainer}
@@ -196,25 +226,9 @@ export function Pricing() {
           whileInView="visible"
           viewport={{ once: true, margin: '-60px' }}
         >
-          {/* Free plan — GREEN glow */}
-          <motion.div
-            variants={fadeInUp}
-            whileHover={{
-              scale: 1.02,
-              boxShadow: '0 0 30px rgba(34,197,94,0.3), 0 0 60px rgba(34,197,94,0.15)',
-            }}
-            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            className="rounded-2xl p-8 relative overflow-hidden flex flex-col"
-            style={{ backgroundColor: '#1a1a1a' }}
-          >
-            {/* Green pulsing border */}
-            <motion.div
-              className="absolute inset-0 rounded-2xl pointer-events-none"
-              style={{ border: '2px solid #22C55E' }}
-              animate={greenGlow}
-              transition={pulseTransition}
-            />
-            <div className="relative flex flex-col flex-1">
+          {/* Free plan — GREEN animated border */}
+          <AnimatedBorderCard color="green" hoverScale className="flex flex-col">
+            <div className="p-8 flex flex-col flex-1">
               <h3 className="text-2xl font-bold text-white mb-1">Free</h3>
               <div className="mb-6">
                 <span
@@ -249,63 +263,44 @@ export function Pricing() {
                 Get Started Free
               </Link>
             </div>
-          </motion.div>
+          </AnimatedBorderCard>
 
-          {/* Premium plan — GOLD glow + BEST VALUE badge + sale animation */}
-          <motion.div
-            variants={fadeInUp}
-            whileHover={{
-              scale: 1.02,
-              boxShadow: '0 0 30px rgba(197,164,66,0.35), 0 0 60px rgba(197,164,66,0.15)',
-            }}
-            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            className="rounded-2xl p-8 relative overflow-hidden flex flex-col"
-            style={{ backgroundColor: '#1a1a1a' }}
-          >
-            {/* Gold pulsing border */}
-            <motion.div
-              className="absolute inset-0 rounded-2xl pointer-events-none"
-              style={{ border: '2px solid #C5A442' }}
-              animate={goldGlow}
-              transition={pulseTransition}
-            />
+          {/* Premium plan — GOLD animated border + BEST VALUE badge */}
+          <AnimatedBorderCard color="gold" hoverScale className="flex flex-col">
+            <div className="p-8 flex flex-col flex-1 relative">
+              {/* BEST VALUE badge */}
+              <div
+                className="absolute top-0 right-0 px-4 py-1 text-xs font-bold uppercase tracking-wider rounded-bl-xl rounded-tr-[14px]"
+                style={{
+                  background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+                  color: '#000000',
+                }}
+              >
+                Best Value
+              </div>
 
-            {/* BEST VALUE badge */}
-            <div
-              className="absolute top-0 right-0 px-4 py-1 text-xs font-bold uppercase tracking-wider rounded-bl-xl"
-              style={{
-                background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
-                color: '#000000',
-              }}
-            >
-              Best Value
-            </div>
+              {/* Sale ribbon */}
+              <motion.div
+                className="absolute top-4 left-0 px-3 py-1 text-xs font-bold uppercase"
+                style={{
+                  background: '#EF4444',
+                  color: '#FFFFFF',
+                  borderRadius: '0 4px 4px 0',
+                }}
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                Launch Sale
+              </motion.div>
 
-            {/* Sale ribbon */}
-            <motion.div
-              className="absolute top-4 left-0 px-3 py-1 text-xs font-bold uppercase"
-              style={{
-                background: '#EF4444',
-                color: '#FFFFFF',
-                borderRadius: '0 4px 4px 0',
-              }}
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              Launch Sale
-            </motion.div>
-
-            <div className="relative flex flex-col flex-1">
               <h3 className="text-2xl font-bold text-white mb-1 mt-2">Premium</h3>
               <div className="mb-6">
-                {/* Struck-through original price */}
                 <span
                   className="text-lg line-through mr-2"
                   style={{ color: '#6B7280' }}
                 >
                   $19.99
                 </span>
-                {/* Sale price */}
                 <span
                   className="text-4xl font-bold"
                   style={{
@@ -337,7 +332,7 @@ export function Pricing() {
                 Go Premium — $4.99/mo
               </Link>
             </div>
-          </motion.div>
+          </AnimatedBorderCard>
         </motion.div>
 
         {/* Legal disclaimer */}
