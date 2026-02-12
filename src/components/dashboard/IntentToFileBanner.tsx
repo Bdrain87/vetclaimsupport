@@ -55,10 +55,10 @@ export function IntentToFileBanner() {
             {/* Dismiss button */}
             <button
               onClick={handleDismiss}
-              className="absolute top-3 right-3 p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+              className="absolute top-2 right-2 p-3 rounded-lg hover:bg-white/10 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
               aria-label="Dismiss"
             >
-              <X className="h-4 w-4 text-white/50 hover:text-white" />
+              <X className="h-5 w-5 text-white/50 hover:text-white" />
             </button>
 
             <div className="flex items-start gap-3 pr-8">
@@ -75,7 +75,7 @@ export function IntentToFileBanner() {
                 <div className="flex flex-wrap gap-2 pt-1">
                   <Link
                     to="/settings/itf"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors"
+                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-xs font-semibold transition-colors min-h-[44px]"
                     style={{ background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)', color: '#000' }}
                   >
                     Learn How to File
@@ -85,7 +85,7 @@ export function IntentToFileBanner() {
                     href="https://www.va.gov/disability/how-to-file-claim/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[rgba(197,164,66,0.4)] text-gold text-xs font-semibold hover:bg-[rgba(197,164,66,0.1)] transition-colors"
+                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg border border-[rgba(197,164,66,0.4)] text-gold text-xs font-semibold hover:bg-[rgba(197,164,66,0.1)] transition-colors min-h-[44px]"
                   >
                     File Now on VA.gov
                     <ExternalLink className="h-3 w-3" />

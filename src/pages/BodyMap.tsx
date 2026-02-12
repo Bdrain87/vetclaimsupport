@@ -61,7 +61,7 @@ const BODY_REGIONS: BodyRegion[] = [
     label: 'Neck',
     cx: 100,
     cy: 68,
-    r: 14,
+    r: 18,
     conditions: [
       { id: 'cervical-strain', name: 'Cervical Spine Strain', diagnosticCode: '5237', description: 'Neck strain or degenerative changes from service duties' },
       { id: 'cervical-radiculopathy', name: 'Cervical Radiculopathy', diagnosticCode: '8510', description: 'Nerve compression in the cervical spine causing pain/numbness' },
@@ -123,7 +123,7 @@ const BODY_REGIONS: BodyRegion[] = [
     label: 'Left Hand / Wrist',
     cx: 24,
     cy: 222,
-    r: 14,
+    r: 18,
     conditions: [
       { id: 'carpal-tunnel', name: 'Carpal Tunnel Syndrome', diagnosticCode: '8515', description: 'Median nerve compression causing numbness and weakness in the hand' },
       { id: 'wrist-tendonitis', name: 'Wrist Tendinitis / Strain', diagnosticCode: '5215', description: 'Chronic wrist pain from repetitive motion or injury' },
@@ -135,7 +135,7 @@ const BODY_REGIONS: BodyRegion[] = [
     label: 'Right Hand / Wrist',
     cx: 176,
     cy: 222,
-    r: 14,
+    r: 18,
     conditions: [
       { id: 'carpal-tunnel', name: 'Carpal Tunnel Syndrome', diagnosticCode: '8515', description: 'Median nerve compression causing numbness and weakness in the hand' },
       { id: 'wrist-tendonitis', name: 'Wrist Tendinitis / Strain', diagnosticCode: '5215', description: 'Chronic wrist pain from repetitive motion or injury' },
@@ -226,7 +226,7 @@ const BODY_REGIONS: BodyRegion[] = [
     label: 'Left Leg / Shin',
     cx: 76,
     cy: 350,
-    r: 14,
+    r: 18,
     conditions: [
       { id: 'shin-splints', name: 'Shin Splints (Tibial Stress)', diagnosticCode: '5262', description: 'Chronic anterior tibial pain from marching and running' },
       { id: 'peripheral-neuropathy', name: 'Peripheral Neuropathy', diagnosticCode: '8520', description: 'Nerve damage causing numbness, tingling, or weakness in the legs' },
@@ -238,7 +238,7 @@ const BODY_REGIONS: BodyRegion[] = [
     label: 'Right Leg / Shin',
     cx: 124,
     cy: 350,
-    r: 14,
+    r: 18,
     conditions: [
       { id: 'shin-splints', name: 'Shin Splints (Tibial Stress)', diagnosticCode: '5262', description: 'Chronic anterior tibial pain from marching and running' },
       { id: 'peripheral-neuropathy', name: 'Peripheral Neuropathy', diagnosticCode: '8520', description: 'Nerve damage causing numbness, tingling, or weakness in the legs' },
@@ -250,7 +250,7 @@ const BODY_REGIONS: BodyRegion[] = [
     label: 'Left Foot / Ankle',
     cx: 74,
     cy: 408,
-    r: 14,
+    r: 18,
     conditions: [
       { id: 'plantar-fasciitis', name: 'Plantar Fasciitis', diagnosticCode: '5276', description: 'Heel/foot pain from overuse during military service' },
       { id: 'flat-feet', name: 'Pes Planus (Flat Feet)', diagnosticCode: '5276', description: 'Acquired or aggravated flat feet from prolonged standing/marching' },
@@ -263,7 +263,7 @@ const BODY_REGIONS: BodyRegion[] = [
     label: 'Right Foot / Ankle',
     cx: 126,
     cy: 408,
-    r: 14,
+    r: 18,
     conditions: [
       { id: 'plantar-fasciitis', name: 'Plantar Fasciitis', diagnosticCode: '5276', description: 'Heel/foot pain from overuse during military service' },
       { id: 'flat-feet', name: 'Pes Planus (Flat Feet)', diagnosticCode: '5276', description: 'Acquired or aggravated flat feet from prolonged standing/marching' },

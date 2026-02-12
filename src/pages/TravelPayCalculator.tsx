@@ -254,7 +254,7 @@ export default function TravelPayCalculator() {
             </div>
 
             {/* Monthly & Annual */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="p-3 rounded-lg bg-muted/30 border border-border text-center">
                 <p className="text-xs text-muted-foreground mb-1">
                   Monthly ({appointmentsPerMonth} visits)
