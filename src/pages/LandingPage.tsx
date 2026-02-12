@@ -8,6 +8,7 @@ import { PrivacySection } from '@/components/landing/new/PrivacySection';
 import { HowItWorks } from '@/components/landing/new/HowItWorks';
 import { Pricing } from '@/components/landing/new/Pricing';
 import { FinalCTA } from '@/components/landing/new/FinalCTA';
+import { TrustMarquee } from '@/components/landing/new/TrustMarquee';
 import { LandingFooter } from '@/components/landing/new/LandingFooter';
 
 export default function LandingPage() {
@@ -32,6 +33,7 @@ export default function LandingPage() {
       <StickyNav />
       <Hero />
       <SocialProof />
+      <TrustMarquee />
       <Pricing />
       <ValueProps />
       <FeatureBento />

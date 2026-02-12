@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { fadeInUp, staggerContainer } from '@/lib/landing-animations';
+import { fadeInUp, staggerContainer, cardRevealScale } from '@/lib/landing-animations';
 import {
   Brain,
   Shield,
@@ -73,6 +73,26 @@ export function FeatureBento() {
   return (
     <section id="features" className="py-20 md:py-28" style={{ backgroundColor: '#111111', scrollMarginTop: '5rem' }}>
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        {/* Pill label */}
+        <motion.div
+          className="text-center mb-6"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <span
+            className="inline-block px-5 py-2 rounded-full text-sm font-semibold tracking-wide uppercase"
+            style={{
+              background: 'rgba(197, 164, 66, 0.12)',
+              color: '#C5A442',
+              border: '1px solid rgba(197, 164, 66, 0.2)',
+            }}
+          >
+            Our Toolkit
+          </span>
+        </motion.div>
+
         <motion.h2
           className="text-3xl md:text-4xl font-bold text-white text-center mb-4"
           initial={{ opacity: 0, y: 20 }}
@@ -103,24 +123,43 @@ export function FeatureBento() {
           {CARDS.map((card) => (
             <motion.div
               key={card.title}
-              variants={fadeInUp}
-              whileHover={{ y: -4, scale: 1.01 }}
+              variants={cardRevealScale}
+              whileHover={{
+                y: -6,
+                scale: 1.02,
+                boxShadow: '0 0 30px rgba(197, 164, 66, 0.12), 0 15px 40px rgba(0, 0, 0, 0.3)',
+              }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              className={`rounded-2xl p-6 md:p-8 border border-transparent hover:border-[#C5A442]/30 transition-colors ${
+              className={`relative rounded-2xl p-6 md:p-8 overflow-hidden group ${
                 card.span === 2 ? 'md:col-span-2' : ''
               }`}
-              style={{ backgroundColor: '#1a1a1a' }}
+              style={{
+                backgroundColor: '#1a1a1a',
+                border: '1px solid rgba(197, 164, 66, 0.1)',
+              }}
             >
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
-                style={{ backgroundColor: 'rgba(197, 164, 66, 0.1)' }}
-              >
-                <card.Icon size={20} style={{ color: '#C5A442' }} />
+              <div className="relative z-10">
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
+                  style={{
+                    backgroundColor: 'rgba(197, 164, 66, 0.1)',
+                    border: '1px solid rgba(197, 164, 66, 0.2)',
+                  }}
+                >
+                  <card.Icon size={20} style={{ color: '#C5A442' }} />
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-[#E8C560] transition-colors duration-300">{card.title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: '#9CA3AF' }}>
+                  {card.desc}
+                </p>
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">{card.title}</h3>
-              <p className="text-sm leading-relaxed" style={{ color: '#9CA3AF' }}>
-                {card.desc}
-              </p>
+              {/* Hover glow overlay */}
+              <div
+                className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                style={{
+                  background: 'radial-gradient(ellipse at 50% 100%, rgba(197, 164, 66, 0.06) 0%, transparent 60%)',
+                }}
+              />
             </motion.div>
           ))}
         </motion.div>

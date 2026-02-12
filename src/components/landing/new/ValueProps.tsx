@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { fadeInUp, staggerContainer } from '@/lib/landing-animations';
+import { fadeInUp, staggerContainer, cardRevealScale } from '@/lib/landing-animations';
 
 function ClipboardIcon() {
   return (
@@ -62,6 +62,26 @@ export function ValueProps() {
   return (
     <section className="py-20 md:py-28" style={{ backgroundColor: '#111111' }}>
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
+        {/* Pill label */}
+        <motion.div
+          className="text-center mb-6"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <span
+            className="inline-block px-5 py-2 rounded-full text-sm font-semibold tracking-wide uppercase"
+            style={{
+              background: 'rgba(197, 164, 66, 0.12)',
+              color: '#C5A442',
+              border: '1px solid rgba(197, 164, 66, 0.2)',
+            }}
+          >
+            Why Veterans Choose VCS
+          </span>
+        </motion.div>
+
         <motion.h2
           className="text-3xl md:text-4xl font-bold text-white text-center mb-4"
           initial={{ opacity: 0, y: 20 }}
@@ -92,16 +112,42 @@ export function ValueProps() {
           {PROPS.map(({ Icon, title, desc }) => (
             <motion.div
               key={title}
-              variants={fadeInUp}
-              className="text-center"
+              variants={cardRevealScale}
+              whileHover={{
+                y: -6,
+                scale: 1.02,
+                boxShadow: '0 0 30px rgba(197, 164, 66, 0.12), 0 15px 40px rgba(0, 0, 0, 0.3)',
+              }}
+              className="relative text-center rounded-2xl p-8 overflow-hidden group"
+              style={{
+                backgroundColor: '#1a1a1a',
+                border: '1px solid rgba(197, 164, 66, 0.1)',
+              }}
             >
-              <div className="flex justify-center mb-4">
-                <Icon />
+              <div className="relative z-10">
+                <div className="flex justify-center mb-4">
+                  <div
+                    className="w-14 h-14 rounded-2xl flex items-center justify-center"
+                    style={{
+                      background: 'rgba(197, 164, 66, 0.1)',
+                      border: '1px solid rgba(197, 164, 66, 0.2)',
+                    }}
+                  >
+                    <Icon />
+                  </div>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#E8C560] transition-colors duration-300">{title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: '#9CA3AF' }}>
+                  {desc}
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">{title}</h3>
-              <p className="text-sm leading-relaxed" style={{ color: '#9CA3AF' }}>
-                {desc}
-              </p>
+              {/* Hover glow overlay */}
+              <div
+                className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                style={{
+                  background: 'radial-gradient(ellipse at 50% 100%, rgba(197, 164, 66, 0.06) 0%, transparent 60%)',
+                }}
+              />
             </motion.div>
           ))}
         </motion.div>

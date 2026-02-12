@@ -150,7 +150,7 @@ export function AppStoreLandingPage() {
 
                     {/* Regular Price */}
                     <div className="flex items-center justify-center gap-3 mb-4">
-                      <span className="text-slate-500 line-through text-lg">$9.99</span>
+                      <span className="text-slate-500 line-through text-lg">$19.99</span>
                       <span className="text-slate-500">•</span>
                       <span className="text-slate-400 text-sm">One-time purchase</span>
                     </div>
