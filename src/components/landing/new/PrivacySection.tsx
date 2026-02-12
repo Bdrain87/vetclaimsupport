@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { fadeInUp, staggerContainer } from '@/lib/landing-animations';
+import { fadeInUp, staggerContainer, HEADING_H2_STYLE } from '@/lib/landing-animations';
 
 const POINTS = [
   {
@@ -8,7 +8,7 @@ const POINTS = [
   },
   {
     title: 'Optional Cloud Sync',
-    desc: 'Create an account to sync across devices. Data is encrypted in transit on our servers.',
+    desc: 'Create an account to sync across devices. Your data is secured using industry-standard practices.',
   },
   {
     title: 'No Data Sales',
@@ -41,7 +41,8 @@ export function PrivacySection() {
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <motion.h2
-          className="text-3xl md:text-4xl font-bold text-black text-center mb-16"
+          className="text-3xl md:text-4xl text-black text-center mb-16"
+          style={HEADING_H2_STYLE}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

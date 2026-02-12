@@ -10,6 +10,7 @@ import { Pricing } from '@/components/landing/new/Pricing';
 import { FinalCTA } from '@/components/landing/new/FinalCTA';
 import { TrustMarquee } from '@/components/landing/new/TrustMarquee';
 import { LandingFooter } from '@/components/landing/new/LandingFooter';
+import { LegalDisclaimer } from '@/components/landing/new/LegalDisclaimer';
 
 export default function LandingPage() {
   useEffect(() => {
@@ -40,6 +41,7 @@ export default function LandingPage() {
       <HowItWorks />
       <PrivacySection />
       <FinalCTA />
+      <LegalDisclaimer />
       <LandingFooter />
     </div>
   );

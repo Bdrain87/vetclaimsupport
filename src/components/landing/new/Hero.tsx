@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE } from '@/lib/landing-animations';
 
 const ROTATING_WORDS = ['Confidence', 'Clarity', 'Precision', 'Evidence'];
 const CYCLE_MS = 3000;
@@ -67,7 +68,8 @@ export function Hero() {
 
         {/* Main heading */}
         <motion.h1
-          className="text-4xl md:text-6xl font-bold leading-tight text-white mb-6"
+          className="text-4xl md:text-6xl leading-tight text-white mb-6"
+          style={HEADING_H1_STYLE}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
@@ -79,10 +81,7 @@ export function Hero() {
                 key={ROTATING_WORDS[index]}
                 style={{
                   display: 'inline-block',
-                  background: 'linear-gradient(135deg, #F5D680 0%, #C5A442 50%, #A38A35 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
+                  ...GOLD_GRADIENT_TEXT,
                 }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -103,8 +102,8 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          The privacy-first toolkit that helps you organize evidence, understand
-          VA language, and prepare the strongest possible claim.
+          The privacy-first toolkit that helps you organize evidence, learn
+          about VA processes, and prepare and organize your claim documentation.
         </motion.p>
 
         {/* CTAs */}

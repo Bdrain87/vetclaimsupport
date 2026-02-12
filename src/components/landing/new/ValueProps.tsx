@@ -1,5 +1,12 @@
 import { motion } from 'framer-motion';
-import { fadeInUp, staggerContainer, cardRevealScale } from '@/lib/landing-animations';
+import {
+  fadeInUp,
+  staggerContainer,
+  cardRevealScale,
+  HEADING_H2_STYLE,
+  PILL_STYLE,
+  EASE_SMOOTH,
+} from '@/lib/landing-animations';
 
 function ClipboardIcon() {
   return (
@@ -48,8 +55,8 @@ const PROPS = [
   },
   {
     Icon: TranslateIcon,
-    title: 'Understand VA Language',
-    desc: 'Translate VA letters and decisions into plain English. Access our condition database and understand what the VA is actually asking for.',
+    title: 'Learn About VA Processes',
+    desc: 'Use our tools to help interpret VA letters and decisions. Access our condition database and learn about the VA claims process.',
   },
   {
     Icon: CalculatorIcon,
@@ -70,24 +77,16 @@ export function ValueProps() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <span
-            className="inline-block px-5 py-2 rounded-full text-sm font-semibold tracking-wide uppercase"
-            style={{
-              background: 'rgba(197, 164, 66, 0.12)',
-              color: '#C5A442',
-              border: '1px solid rgba(197, 164, 66, 0.2)',
-            }}
-          >
-            Why Veterans Choose VCS
-          </span>
+          <span style={PILL_STYLE}>Why Veterans Choose VCS</span>
         </motion.div>
 
         <motion.h2
-          className="text-3xl md:text-4xl font-bold text-white text-center mb-4"
+          className="text-3xl md:text-4xl text-white text-center mb-4"
+          style={HEADING_H2_STYLE}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.5, ease: EASE_SMOOTH }}
         >
           Everything You Need to Prepare
         </motion.h2>

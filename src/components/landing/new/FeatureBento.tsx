@@ -1,5 +1,16 @@
 import { motion } from 'framer-motion';
-import { fadeInUp, staggerContainer, cardRevealScale } from '@/lib/landing-animations';
+import {
+  fadeInUp,
+  staggerContainer,
+  cardRevealScale,
+  HEADING_H2_STYLE,
+  PILL_STYLE,
+  CARD_STYLE,
+  CARD_SHADOW,
+  SECTION_TOP_GLOW,
+  EASE_SMOOTH,
+  hoverLift,
+} from '@/lib/landing-animations';
 import {
   Brain,
   Shield,
@@ -21,8 +32,8 @@ interface BentoCard {
 const CARDS: BentoCard[] = [
   {
     Icon: Brain,
-    title: 'Claim Intelligence',
-    desc: "Enter your service history and get personalized insights. Our tools cross-reference your conditions against our database to surface secondary connections and identify evidence gaps you might have missed.",
+    title: 'Service History Organizer',
+    desc: "Enter your service history and organize your conditions. Our tools cross-reference your entries against our database to surface potential secondary connections for your research.",
     span: 2,
   },
   {
@@ -34,13 +45,13 @@ const CARDS: BentoCard[] = [
   {
     Icon: PenTool,
     title: 'Document Generators',
-    desc: 'Generate personal statements, buddy statements, nexus letter drafts, stressor statements, and more. All formatted to meet VA expectations.',
+    desc: 'Generate draft personal statements, buddy statements, stressor statements, and more. All formatted to help you prepare your claim documentation.',
     span: 1,
   },
   {
     Icon: FileSearch,
     title: 'Secondary Condition Finder',
-    desc: 'Search our database of conditions with mapped secondary connections. Discover conditions linked to your primary disabilities that you may be eligible to claim.',
+    desc: 'Search our database of conditions with mapped secondary connections. Discover conditions linked to your primary disabilities that may be worth researching further.',
     span: 1,
   },
   {
@@ -52,7 +63,7 @@ const CARDS: BentoCard[] = [
   {
     Icon: DollarSign,
     title: 'Compensation Estimator',
-    desc: "Estimate potential retroactive benefits based on your effective date, dependents, and projected rating. Understand the numbers before you file.",
+    desc: "Estimate potential compensation scenarios based on your effective date, dependents, and projected rating. For informational and educational purposes only.",
     span: 1,
   },
   {
@@ -81,24 +92,16 @@ export function FeatureBento() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <span
-            className="inline-block px-5 py-2 rounded-full text-sm font-semibold tracking-wide uppercase"
-            style={{
-              background: 'rgba(197, 164, 66, 0.12)',
-              color: '#C5A442',
-              border: '1px solid rgba(197, 164, 66, 0.2)',
-            }}
-          >
-            Our Toolkit
-          </span>
+          <span style={PILL_STYLE}>Our Toolkit</span>
         </motion.div>
 
         <motion.h2
-          className="text-3xl md:text-4xl font-bold text-white text-center mb-4"
+          className="text-3xl md:text-4xl text-white text-center mb-4"
+          style={HEADING_H2_STYLE}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.5, ease: EASE_SMOOTH }}
         >
           Tools That Help You Prepare
         </motion.h2>
@@ -130,12 +133,13 @@ export function FeatureBento() {
                 boxShadow: '0 0 30px rgba(197, 164, 66, 0.12), 0 15px 40px rgba(0, 0, 0, 0.3)',
               }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              className={`relative rounded-2xl p-6 md:p-8 overflow-hidden group ${
+              className={`relative overflow-hidden group ${
                 card.span === 2 ? 'md:col-span-2' : ''
               }`}
               style={{
-                backgroundColor: '#1a1a1a',
-                border: '1px solid rgba(197, 164, 66, 0.1)',
+                ...CARD_STYLE,
+                padding: '24px 32px',
+                boxShadow: CARD_SHADOW,
               }}
             >
               <div className="relative z-10">

@@ -41,7 +41,7 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
 const STATS = [
   { value: 39, suffix: '+', label: 'Tools & Features' },
   { value: 780, suffix: '+', label: 'VA Conditions' },
-  { value: 100, suffix: '%', label: 'Privacy-First Design' },
+  { value: 100, suffix: '%', label: 'Local-First Design' },
   { value: 0, suffix: '', label: 'Veteran Founded', isText: true },
 ];
 

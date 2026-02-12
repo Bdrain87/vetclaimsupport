@@ -131,11 +131,13 @@ export function LandingFooter() {
 
         {/* Legal disclaimer — required */}
         <p className="text-xs mt-6 text-center leading-relaxed" style={{ color: '#4B5563' }}>
-          Vet Claim Support is an independent preparation tool and is not affiliated with, endorsed
-          by, or connected to the U.S. Department of Veterans Affairs or any government agency. This
-          tool does not provide legal advice, file claims, or guarantee outcomes. Always consult with
-          an accredited Veterans Service Organization (VSO) or VA-accredited attorney for claims
-          filing assistance.
+          Vet Claim Support is an educational and organizational tool and is NOT affiliated with,
+          endorsed by, or connected to the U.S. Department of Veterans Affairs or any government agency.
+          VCS is NOT a VA-accredited representative, attorney, claims agent, or Veterans Service Organization (VSO).
+          VCS does NOT provide legal advice, medical advice, or professional claims filing services.
+          VCS does NOT file claims on your behalf and does NOT guarantee any claim outcomes.
+          AI-generated content may contain errors and must be independently verified.
+          Always consult with a free VA-accredited VSO or accredited attorney for claims filing assistance.
         </p>
       </div>
     </footer>

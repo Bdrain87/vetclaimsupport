@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { fadeInUp, staggerContainer } from '@/lib/landing-animations';
-import { Check, AlertTriangle } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 const FREE_FEATURES = [
   'Rating Calculator',
@@ -150,19 +150,18 @@ export function Pricing() {
 
         {/* ── Section heading ── */}
         <motion.h2
-          className="text-center text-3xl md:text-4xl font-bold mb-4"
+          className="text-center text-3xl md:text-5xl text-white mb-4"
           style={{
-            background: 'linear-gradient(135deg, #F5D680 0%, #C5A442 50%, #A38A35 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
+            letterSpacing: '-0.025em',
+            fontWeight: 500,
+            lineHeight: 1.15,
           }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          The VA Claims Industry Exposed
+          Simple, Transparent Pricing
         </motion.h2>
         <motion.p
           className="text-center mb-16 text-lg"
@@ -172,96 +171,8 @@ export function Pricing() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          Every year, veterans spend thousands on services that profit from confusion. There&apos;s a better way.
+          Affordable preparation tools, with a free plan to get started.
         </motion.p>
-
-        {/* ── Competitor cards (RED animated borders) ── */}
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
-        >
-          {/* Claim Shark card */}
-          <AnimatedBorderCard color="red">
-            <div className="p-6">
-              <div className="flex items-center gap-2 mb-3">
-                <AlertTriangle size={20} style={{ color: '#EF4444' }} />
-                <h3 className="text-lg font-bold" style={{ color: '#EF4444' }}>Claim Shark</h3>
-              </div>
-              <p className="text-sm mb-4" style={{ color: '#9CA3AF' }}>
-                Unaccredited claim filing companies that charge premium prices for basic paperwork assistance.
-              </p>
-              <div className="mb-3">
-                <span className="text-3xl font-bold text-white">$4,000–$6,000</span>
-                <span className="text-sm ml-2" style={{ color: '#9CA3AF' }}>typical cost</span>
-              </div>
-              <ul className="space-y-2">
-                <li className="flex items-center gap-2 text-sm" style={{ color: '#9CA3AF' }}>
-                  <span style={{ color: '#EF4444' }}>&#10005;</span> Often unaccredited by the VA
-                </li>
-                <li className="flex items-center gap-2 text-sm" style={{ color: '#9CA3AF' }}>
-                  <span style={{ color: '#EF4444' }}>&#10005;</span> Large upfront fees required
-                </li>
-                <li className="flex items-center gap-2 text-sm" style={{ color: '#9CA3AF' }}>
-                  <span style={{ color: '#EF4444' }}>&#10005;</span> No guarantee of better results
-                </li>
-              </ul>
-            </div>
-          </AnimatedBorderCard>
-
-          {/* VA Attorney card */}
-          <AnimatedBorderCard color="red">
-            <div className="p-6">
-              <div className="flex items-center gap-2 mb-3">
-                <AlertTriangle size={20} style={{ color: '#EF4444' }} />
-                <h3 className="text-lg font-bold" style={{ color: '#EF4444' }}>VA Attorney</h3>
-              </div>
-              <p className="text-sm mb-4" style={{ color: '#9CA3AF' }}>
-                Attorneys who take a percentage of your retroactive back pay after your claim is approved.
-              </p>
-              <div className="mb-3">
-                <span className="text-3xl font-bold text-white">20–33%</span>
-                <span className="text-sm ml-2" style={{ color: '#9CA3AF' }}>of your back pay</span>
-              </div>
-              <ul className="space-y-2">
-                <li className="flex items-center gap-2 text-sm" style={{ color: '#9CA3AF' }}>
-                  <span style={{ color: '#EF4444' }}>&#10005;</span> Takes a cut of money you earned
-                </li>
-                <li className="flex items-center gap-2 text-sm" style={{ color: '#9CA3AF' }}>
-                  <span style={{ color: '#EF4444' }}>&#10005;</span> Can cost thousands in back pay
-                </li>
-                <li className="flex items-center gap-2 text-sm" style={{ color: '#9CA3AF' }}>
-                  <span style={{ color: '#EF4444' }}>&#10005;</span> You do the prep work anyway
-                </li>
-              </ul>
-            </div>
-          </AnimatedBorderCard>
-        </motion.div>
-
-        {/* ── "OR" divider ── */}
-        <motion.div
-          className="flex items-center justify-center gap-4 mb-12"
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
-        >
-          <div className="h-px flex-1 max-w-[120px]" style={{ background: 'linear-gradient(to right, transparent, #C5A442)' }} />
-          <span
-            className="text-xl font-bold px-4 py-2 rounded-full"
-            style={{
-              background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            &mdash; OR &mdash;
-          </span>
-          <div className="h-px flex-1 max-w-[120px]" style={{ background: 'linear-gradient(to left, transparent, #C5A442)' }} />
-        </motion.div>
 
         {/* ── Plan cards (Green + Gold animated borders) ── */}
         <motion.div
@@ -389,9 +300,9 @@ export function Pricing() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          Competitor pricing reflects typical industry ranges based on publicly available information.
-          Vet Claim Support is a preparation tool, not a law firm or claims filing service.
-          We do not file claims on your behalf.
+          VCS is an educational and organizational tool, not a law firm, claims agent, or filing service.
+          We do not file claims on your behalf and do not guarantee any outcomes.
+          Always consult a free VA-accredited VSO or attorney for claims filing assistance.
         </motion.p>
 
       </div>
