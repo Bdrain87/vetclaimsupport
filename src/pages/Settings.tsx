@@ -368,6 +368,43 @@ export default function Settings() {
         </CardContent>
       </Card>
 
+      {/* Separation Date & Intent to File */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Clock className="h-5 w-5" />
+            Claim Dates
+          </CardTitle>
+          <CardDescription>Track your separation date and Intent to File</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-1.5">
+            <Label htmlFor="separationDate">Separation Date (ETS/DOS)</Label>
+            <Input
+              id="separationDate"
+              type="date"
+              value={profile.separationDate || ''}
+              onChange={(e) => profile.setSeparationDate(e.target.value)}
+            />
+            <p className="text-xs text-muted-foreground">
+              Used to calculate your BDD filing window. Leave blank if you are already separated.
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Link to="/prep/bdd-guide" className="flex-1">
+              <Button variant="outline" className="w-full text-sm">
+                BDD Guide
+              </Button>
+            </Link>
+            <Link to="/settings/itf" className="flex-1">
+              <Button variant="outline" className="w-full text-sm">
+                Intent to File
+              </Button>
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Appearance */}
       <Card>
         <CardHeader>

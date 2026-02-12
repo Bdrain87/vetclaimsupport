@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   ClipboardCheck, FileText, Users, FileSignature, AlertTriangle,
   BookOpen, ClipboardList, Languages, DollarSign, Package, FileCheck,
-  Calculator, Scale,
+  Calculator, Scale, Activity, Navigation, Clock, Shield,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -22,6 +22,10 @@ const prepTools = [
   { label: 'Claim Packet Builder', icon: Package, route: '/prep/packet', description: 'Compile your full claim packet' },
   { label: 'C&P Exam Packet', icon: FileCheck, route: '/cp-exam-packet', description: 'Build your exam preparation packet', highlight: true },
   { label: 'Appeals Guide', icon: Scale, route: '/prep/appeals', description: 'Appeal lanes & verified case law', highlight: true },
+  { label: 'Body Map', icon: Activity, route: '/claims/body-map', description: 'Interactive body diagram to discover VA-ratable conditions', highlight: true },
+  { label: 'Travel Pay Calculator', icon: Navigation, route: '/prep/travel-pay', description: 'Estimate VA travel reimbursement per trip, monthly, and annually' },
+  { label: 'BDD Claim Guide', icon: Clock, route: '/prep/bdd-guide', description: 'Pre-discharge filing guide for active-duty service members' },
+  { label: 'Intent to File', icon: Shield, route: '/settings/itf', description: 'Track your Intent to File date and protect your effective date' },
 ];
 
 export default function PrepHub() {

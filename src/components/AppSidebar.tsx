@@ -30,6 +30,8 @@ import {
   Calendar,
   Moon,
   Pill,
+  Activity,
+  Navigation,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -66,6 +68,8 @@ const premiumToolsGroup: NavGroup = {
     { to: '/prep/dbq', icon: ClipboardList, label: 'DBQ Prep Sheet' },
     { to: '/claims/strategy', icon: Wand2, label: 'Strategy Wizard' },
     { to: '/prep/exam', icon: ClipboardCheck, label: 'C&P Exam Prep' },
+    { to: '/claims/body-map', icon: Activity, label: 'Body Map' },
+    { to: '/prep/travel-pay', icon: Navigation, label: 'Travel Pay' },
   ],
 };
 

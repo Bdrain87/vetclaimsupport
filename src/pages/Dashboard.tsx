@@ -27,6 +27,8 @@ import {
   Package,
   Search,
   Compass,
+  Activity,
+  Navigation,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { vcsSpring } from '@/constants/animations';
@@ -42,6 +44,8 @@ import { useState, useMemo, useCallback } from 'react';
 import { getConditionById } from '@/data/vaConditions';
 import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput.utils';
 import { ExportButton } from '@/components/dashboard/ExportButton';
+import { IntentToFileBanner } from '@/components/dashboard/IntentToFileBanner';
+import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
 
 export default function Dashboard() {
   const { data } = useClaims();
@@ -136,8 +140,36 @@ export default function Dashboard() {
     ? `${new Date(profile.serviceDates.start).toLocaleDateString()} – ${profile.serviceDates.end ? new Date(profile.serviceDates.end).toLocaleDateString() : 'Present'}`
     : '';
 
+  const separationDateParsed = profile.separationDate
+    ? new Date(profile.separationDate + 'T00:00:00')
+    : null;
+
+  const handleSeparationDateChange = useCallback((date: Date | null) => {
+    if (date) {
+      const formatted = date.toISOString().split('T')[0];
+      profile.setSeparationDate(formatted);
+    }
+  }, [profile]);
+
   return (
     <PageContainer className="space-y-4 animate-fade-in pb-8 md:pb-4 overflow-x-hidden">
+      {/* Intent to File Banner */}
+      <IntentToFileBanner />
+
+      {/* BDD Countdown — shown when user has a separation date */}
+      {profile.separationDate && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={vcsSpring}
+        >
+          <BDDCountdown
+            separationDate={separationDateParsed}
+            onSeparationDateChange={handleSeparationDateChange}
+          />
+        </motion.div>
+      )}
+
       {/* Profile Card */}
       <div className="rounded-xl border border-border bg-card overflow-hidden">
         <div className="p-4 flex items-center gap-4">
@@ -254,6 +286,8 @@ export default function Dashboard() {
             { name: 'Back Pay Estimator', icon: DollarSign, path: '/prep/back-pay' },
             { name: 'Health Trackers', icon: Heart, path: '/health' },
             { name: 'DBQ Prep', icon: FileCheckIcon, path: '/prep/dbq' },
+            { name: 'Body Map', icon: Activity, path: '/claims/body-map' },
+            { name: 'Travel Pay', icon: Navigation, path: '/prep/travel-pay' },
             { name: 'Claim Packet', icon: Package, path: '/prep/packet' },
           ].map((tool) => (
             <Link

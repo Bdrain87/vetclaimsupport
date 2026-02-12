@@ -64,6 +64,8 @@ const StressorStatement = lazy(() => import('./pages/StressorStatement'));
 const VASpeakTranslator = lazy(() => import('./pages/VASpeakTranslator'));
 const BackPayEstimator = lazy(() => import('./pages/BackPayEstimator'));
 const IntentToFile = lazy(() => import('./pages/IntentToFile'));
+const TravelPayCalculator = lazy(() => import('./pages/TravelPayCalculator'));
+const BDDGuide = lazy(() => import('./pages/BDDGuide'));
 const AboutVCS = lazy(() => import('./pages/AboutVCS'));
 const ConditionsByConflict = lazy(() => import('./pages/ConditionsByConflict'));
 const ConditionGuide = lazy(() => import('./pages/ConditionGuide'));
@@ -211,6 +213,8 @@ function AnimatedRoutes() {
             <Route path="/prep/dbq" element={<DBQPrepSheet />} />
             <Route path="/prep/va-speak" element={<VASpeakTranslator />} />
             <Route path="/prep/back-pay" element={<BackPayEstimator />} />
+            <Route path="/prep/travel-pay" element={<TravelPayCalculator />} />
+            <Route path="/prep/bdd-guide" element={<BDDGuide />} />
             <Route path="/prep/packet" element={<BuildPacket />} />
             <Route path="/prep/appeals" element={<AppealsGuide />} />
             <Route path="/cp-exam-packet" element={<CPExamPacket />} />
