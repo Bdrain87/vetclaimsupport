@@ -23,9 +23,9 @@ const featureCategories = [
     title: 'Evidence Building',
     description: 'Build your strongest case',
     icon: FolderOpen,
-    gradient: 'from-[#D6B25E]/20 to-cyan-500/20',
-    borderColor: 'border-[#D6B25E]/30',
-    iconColor: 'text-[#F6E4AA]',
+    gradient: 'from-[#C5A442]/20 to-cyan-500/20',
+    borderColor: 'border-[#C5A442]/30',
+    iconColor: 'text-[#F5D680]',
     items: [
       { icon: Upload, name: 'Document Upload', desc: 'Secure storage' },
       { icon: FolderOpen, name: 'Evidence Library', desc: 'Organized records' },
@@ -71,7 +71,7 @@ export function AppStoreLandingPage() {
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[128px] opacity-50" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-violet-500/15 rounded-full blur-[100px] opacity-40" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#D6B25E]/10 rounded-full blur-[150px] opacity-30" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#C5A442]/10 rounded-full blur-[150px] opacity-30" />
       </div>
 
       {/* Content */}
@@ -83,7 +83,7 @@ export function AppStoreLandingPage() {
             <div className="mb-8 inline-block">
               <div className="relative group">
                 {/* Glow */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/40 to-[#D6B25E]/40 blur-3xl rounded-full scale-150 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/40 to-[#C5A442]/40 blur-3xl rounded-full scale-150 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                 {/* Icon Container */}
                 <div className="relative flex h-28 w-28 sm:h-32 sm:w-32 items-center justify-center rounded-[2rem] bg-gradient-to-br from-slate-800/80 to-slate-900/80 border border-white/10 shadow-2xl backdrop-blur-sm transform transition-transform duration-500 group-hover:scale-105">
                   <div className="absolute inset-[1px] rounded-[calc(2rem-1px)] bg-gradient-to-br from-slate-800 to-slate-900" />
@@ -98,7 +98,7 @@ export function AppStoreLandingPage() {
                 Vet Claim
               </span>
               <br />
-              <span className="bg-gradient-to-r from-primary via-[#F6E4AA] to-primary bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-primary via-[#F5D680] to-primary bg-clip-text text-transparent">
                 Support
               </span>
             </h1>
@@ -109,7 +109,7 @@ export function AppStoreLandingPage() {
             </p>
 
             {/* Available Badge */}
-            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-gradient-to-r from-primary/10 to-[#D6B25E]/10 border border-primary/20 mb-10">
+            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-gradient-to-r from-primary/10 to-[#C5A442]/10 border border-primary/20 mb-10">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-slow-pulse absolute inline-flex h-full w-full rounded-full bg-primary"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
@@ -135,7 +135,7 @@ export function AppStoreLandingPage() {
                   <div className="relative">
                     {/* Launch Special Badge */}
                     <div className="flex justify-center mb-3">
-                      <Badge className="bg-gradient-to-r from-primary/80 to-[#D6B25E]/80 text-white border-0 shadow-lg shadow-primary/20 text-xs font-bold px-4 py-1.5 animate-pulse">
+                      <Badge className="bg-gradient-to-r from-primary/80 to-[#C5A442]/80 text-white border-0 shadow-lg shadow-primary/20 text-xs font-bold px-4 py-1.5 animate-pulse">
                         <Rocket className="h-3.5 w-3.5 inline" /> LIMITED TIME LAUNCH PRICE
                       </Badge>
                     </div>
@@ -161,9 +161,9 @@ export function AppStoreLandingPage() {
                         <CheckCircle2 className="h-4 w-4 text-emerald-400" />
                         <span className="text-sm text-emerald-300 font-medium">No Ads</span>
                       </div>
-                      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#D6B25E]/10 border border-[#D6B25E]/20">
-                        <CheckCircle2 className="h-4 w-4 text-[#F6E4AA]" />
-                        <span className="text-sm text-[#F6E4AA] font-medium">No Subscription</span>
+                      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#C5A442]/10 border border-[#C5A442]/20">
+                        <CheckCircle2 className="h-4 w-4 text-[#F5D680]" />
+                        <span className="text-sm text-[#F5D680] font-medium">No Subscription</span>
                       </div>
                       <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20">
                         <CheckCircle2 className="h-4 w-4 text-violet-400" />
@@ -205,25 +205,25 @@ export function AppStoreLandingPage() {
         {/* Veteran Badge Section */}
         <section className="px-6 pb-16">
           <div className="max-w-4xl mx-auto">
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy-800/30 via-navy-900/20 to-navy-900/10 border border-[#B8972E]/20 p-8 sm:p-10">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy-800/30 via-navy-900/20 to-navy-900/10 border border-[#A38A35]/20 p-8 sm:p-10">
               {/* Decorative elements */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-[#D6B25E]/10 rounded-full blur-3xl" />
-              <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#B8972E]/10 rounded-full blur-2xl" />
+              <div className="absolute top-0 right-0 w-64 h-64 bg-[#C5A442]/10 rounded-full blur-3xl" />
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#A38A35]/10 rounded-full blur-2xl" />
 
               <div className="relative flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
                 <div className="flex gap-4">
-                  <div className="flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-[#D6B25E]/20 to-[#B8972E]/10 border border-[#D6B25E]/30 shadow-lg shadow-[#D6B25E]/10">
-                    <Medal className="h-8 w-8 text-[#F6E4AA]" />
+                  <div className="flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-[#C5A442]/20 to-[#A38A35]/10 border border-[#C5A442]/30 shadow-lg shadow-[#C5A442]/10">
+                    <Medal className="h-8 w-8 text-[#F5D680]" />
                   </div>
-                  <div className="flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-[#D6B25E]/20 to-[#B8972E]/10 border border-[#D6B25E]/30 shadow-lg shadow-[#D6B25E]/10">
-                    <Flag className="h-8 w-8 text-[#F6E4AA]" />
+                  <div className="flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-[#C5A442]/20 to-[#A38A35]/10 border border-[#C5A442]/30 shadow-lg shadow-[#C5A442]/10">
+                    <Flag className="h-8 w-8 text-[#F5D680]" />
                   </div>
                 </div>
                 <div className="flex-1">
                   <h3 className="text-xl sm:text-2xl font-bold text-[#FDF8E8] mb-2">
                     Built by a Veteran, For Those Who Serve
                   </h3>
-                  <p className="text-[#F6E4AA]/70 text-base sm:text-lg">
+                  <p className="text-[#F5D680]/70 text-base sm:text-lg">
                     Created by someone who has been through the claims process—for veterans, service members, and their families.
                   </p>
                 </div>
@@ -375,17 +375,17 @@ export function AppStoreLandingPage() {
             </div>
 
             {/* Reference Database */}
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/20 via-[#D6B25E]/10 to-violet-500/10 border border-primary/20 p-8 sm:p-10">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/20 via-[#C5A442]/10 to-violet-500/10 border border-primary/20 p-8 sm:p-10">
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
 
               <div className="relative flex flex-col sm:flex-row items-center gap-8">
-                <div className="flex items-center justify-center h-24 w-24 rounded-2xl bg-gradient-to-br from-primary/30 to-[#D6B25E]/20 border border-primary/30 shadow-xl shadow-primary/10 shrink-0">
+                <div className="flex items-center justify-center h-24 w-24 rounded-2xl bg-gradient-to-br from-primary/30 to-[#C5A442]/20 border border-primary/30 shadow-xl shadow-primary/10 shrink-0">
                   <Database className="h-12 w-12 text-primary" />
                 </div>
 
                 <div className="text-center sm:text-left flex-1">
                   <div className="flex items-baseline justify-center sm:justify-start gap-3 mb-3">
-                    <span className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-primary via-[#F6E4AA] to-violet-400 bg-clip-text text-transparent">
+                    <span className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-primary via-[#F5D680] to-violet-400 bg-clip-text text-transparent">
                       {totalDisabilitiesCount}
                     </span>
                     <span className="text-2xl sm:text-3xl font-semibold text-white">VA Conditions</span>
@@ -438,15 +438,15 @@ export function AppStoreLandingPage() {
                   icon: Zap,
                   title: 'Instant Access',
                   description: 'No signup required. Install and start building your evidence immediately.',
-                  gradient: 'from-[#D6B25E]/20 to-[#D6B25E]/20',
-                  iconColor: 'text-[#F6E4AA]'
+                  gradient: 'from-[#C5A442]/20 to-[#C5A442]/20',
+                  iconColor: 'text-[#F5D680]'
                 },
                 {
                   icon: TrendingUp,
                   title: 'Understand Your Rating',
                   description: 'Smart tools help identify secondary conditions and prepare your claim.',
-                  gradient: 'from-[#D6B25E]/20 to-cyan-500/20',
-                  iconColor: 'text-[#F6E4AA]'
+                  gradient: 'from-[#C5A442]/20 to-cyan-500/20',
+                  iconColor: 'text-[#F5D680]'
                 },
               ].map((item) => (
                 <div

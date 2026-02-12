@@ -201,11 +201,15 @@ _______________________________
 
   const handleCopy = async () => {
     const content = customEdits || generateStatement.full;
-    await navigator.clipboard.writeText(content);
-    toast({
-      title: 'Copied to Clipboard',
-      description: 'Personal statement copied successfully',
-    });
+    try {
+      await navigator.clipboard.writeText(content);
+      toast({
+        title: 'Copied to Clipboard',
+        description: 'Personal statement copied successfully',
+      });
+    } catch {
+      toast({ title: 'Copy failed', description: 'Unable to access clipboard.', variant: 'destructive' });
+    }
   };
 
   const handleDownload = () => {

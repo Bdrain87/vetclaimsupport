@@ -1,13 +1,11 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+// Production-only origins — no localhost allowed
 const ALLOWED_ORIGINS = [
   'https://vetclaimsupport.com',
   'https://www.vetclaimsupport.com',
   'https://service-evidence.vercel.app',
-  'http://localhost:5173',
-  'http://localhost:3000',
-  'http://127.0.0.1:5173',
 ];
 
 const getAllowedOrigin = (origin: string | null): string => {
@@ -69,8 +67,29 @@ serve(async (req: Request) => {
       );
     }
 
-    // Use the service role key to delete the auth user
+    // Use the service role key for privileged operations
     const adminClient = createClient(supabaseUrl, supabaseServiceKey);
+
+    // --- Cascade: clean up user-owned rows BEFORE deleting the auth user ---
+    // supabase auth.admin.deleteUser does NOT cascade to app tables unless
+    // you have ON DELETE CASCADE foreign-key constraints pointing at
+    // auth.users.  Explicitly delete known app-level data here so orphan
+    // rows are not left behind.  If your schema already uses CASCADE FKs
+    // for every table that references auth.users(id), you can remove these
+    // calls, but keeping them is a safe belt-and-suspenders approach.
+    const tablesToClean = ['profiles', 'claims', 'documents', 'analyses'];
+    for (const table of tablesToClean) {
+      const { error: cleanupError } = await adminClient
+        .from(table)
+        .delete()
+        .eq('user_id', userId);
+      if (cleanupError) {
+        console.error(`Failed to clean up ${table} for user ${userId}: ${cleanupError.message}`);
+        // Non-fatal — continue with the rest; the auth deletion is the
+        // critical step.  Log so we can reconcile later.
+      }
+    }
+
     const { error: deleteError } = await adminClient.auth.admin.deleteUser(userId);
 
     if (deleteError) {

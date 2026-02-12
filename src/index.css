@@ -34,8 +34,8 @@ body {
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); }
-::-webkit-scrollbar-thumb { background: rgba(214, 178, 94, 0.2); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(214, 178, 94, 0.4); }
+::-webkit-scrollbar-thumb { background: rgba(197, 164, 66, 0.2); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(197, 164, 66, 0.4); }
 
 /* Vet Claim Support - Premium Dark Mode Design System */
 
@@ -260,7 +260,7 @@ body {
 
   /* Premium selection color — Gold accent */
   ::selection {
-    background: rgba(214, 178, 94, 0.25);
+    background: rgba(197, 164, 66, 0.25);
   }
 }
 
@@ -575,9 +575,9 @@ body {
   /* Primary gradient card - vivid gold gradient for info results */
   .gradient-card-primary {
     @apply relative overflow-hidden rounded-2xl p-6;
-    background: linear-gradient(135deg, #D6B25E 0%, #8A5A16 100%);
+    background: linear-gradient(135deg, #C5A442 0%, #7A672A 100%);
     box-shadow:
-      0 8px 32px rgba(214, 178, 94, 0.35),
+      0 8px 32px rgba(197, 164, 66, 0.35),
       0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   }
 
@@ -638,8 +638,8 @@ body {
 
   .gradient-stat-primary {
     @apply relative overflow-hidden rounded-2xl p-5;
-    background: linear-gradient(135deg, #D6B25E 0%, #8A5A16 100%);
-    box-shadow: 0 8px 32px rgba(214, 178, 94, 0.3);
+    background: linear-gradient(135deg, #C5A442 0%, #7A672A 100%);
+    box-shadow: 0 8px 32px rgba(197, 164, 66, 0.3);
   }
 
   .gradient-stat-warning {
@@ -700,9 +700,9 @@ body {
 
   .premium-badge-primary {
     @apply premium-badge;
-    background: rgba(214, 178, 94, 0.15);
-    color: #D6B25E;
-    border: 1px solid rgba(214, 178, 94, 0.2);
+    background: rgba(197, 164, 66, 0.15);
+    color: #C5A442;
+    border: 1px solid rgba(197, 164, 66, 0.2);
   }
 
   /* Success result card - subtle green background */
@@ -1200,7 +1200,7 @@ body {
 
   /* Apple text gradient */
   .text-gradient-blue {
-    @apply bg-gradient-to-r from-primary via-[#F6E4AA] to-cyan-400 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary via-[#F5D680] to-cyan-400 bg-clip-text text-transparent;
   }
 
   .text-gradient-gold {
@@ -1380,7 +1380,7 @@ body {
   from {
     box-shadow:
       0 0 0 2px hsl(var(--background)),
-      0 0 0 2px rgba(214, 178, 94, 0);
+      0 0 0 2px rgba(197, 164, 66, 0);
   }
   to {
     box-shadow:
@@ -1548,9 +1548,9 @@ body {
   background: linear-gradient(
     105deg,
     transparent 40%,
-    rgba(246, 228, 170, 0.08) 45%,
+    rgba(245, 214, 128, 0.08) 45%,
     rgba(255, 255, 255, 0.12) 50%,
-    rgba(246, 228, 170, 0.08) 55%,
+    rgba(245, 214, 128, 0.08) 55%,
     transparent 60%
   );
   animation: lensSweep 1.4s ease-in-out 0.3s forwards;
@@ -1636,7 +1636,7 @@ body {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: var(--gold-md, #D6B25E);
+  background-color: var(--gold-md, #C5A442);
   animation: loadingDotPulse 0.8s ease-in-out infinite;
 }
 

@@ -257,8 +257,8 @@ export default function Symptoms() {
       
       setIsOpen(false);
       resetForm();
-    } catch (error) {
-      console.error('Error saving symptom:', error);
+    } catch {
+      // Symptom save failed silently
     }
   };
 
@@ -318,8 +318,8 @@ export default function Symptoms() {
       {/* Header - Premium Styling */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-[#D6B25E]/20 to-[#D6B25E]/5 shadow-[0_0_24px_rgba(214,178,94,0.2)]">
-            <Activity className="h-6 w-6 text-[#D6B25E] drop-shadow-[0_0_8px_rgba(214,178,94,0.5)]" />
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-[#C5A442]/20 to-[#C5A442]/5 shadow-[0_0_24px_rgba(197,164,66,0.2)]">
+            <Activity className="h-6 w-6 text-[#C5A442] drop-shadow-[0_0_8px_rgba(197,164,66,0.5)]" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground tracking-tight">Symptoms Journal</h1>
@@ -340,10 +340,10 @@ export default function Symptoms() {
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
           {/* Severity Trend Chart */}
           <div className="rounded-2xl bg-card border border-border overflow-hidden shadow-lg" style={{ boxShadow: '0 8px 32px rgba(0, 0, 0, 0.25)' }}>
-            <div className="p-4 border-b border-border/50 bg-gradient-to-r from-[#D6B25E]/5 via-transparent to-transparent">
+            <div className="p-4 border-b border-border/50 bg-gradient-to-r from-[#C5A442]/5 via-transparent to-transparent">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-gradient-to-br from-[#D6B25E]/20 to-[#D6B25E]/5">
-                  <TrendingUp className="h-5 w-5 text-[#D6B25E]" />
+                <div className="p-2 rounded-xl bg-gradient-to-br from-[#C5A442]/20 to-[#C5A442]/5">
+                  <TrendingUp className="h-5 w-5 text-[#C5A442]" />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-foreground">Severity Trend</h3>
@@ -368,10 +368,10 @@ export default function Symptoms() {
                     <Line
                       type="monotone"
                       dataKey="avgSeverity"
-                      stroke="#D6B25E"
+                      stroke="#C5A442"
                       strokeWidth={3}
-                      dot={{ fill: '#D6B25E', strokeWidth: 0, r: 4 }}
-                      activeDot={{ r: 6, fill: '#D6B25E', stroke: 'hsl(var(--background))', strokeWidth: 2 }}
+                      dot={{ fill: '#C5A442', strokeWidth: 0, r: 4 }}
+                      activeDot={{ r: 6, fill: '#C5A442', stroke: 'hsl(var(--background))', strokeWidth: 2 }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -383,10 +383,10 @@ export default function Symptoms() {
 
           {/* Condition Frequency */}
           <div className="rounded-2xl bg-card border border-border overflow-hidden shadow-lg" style={{ boxShadow: '0 8px 32px rgba(0, 0, 0, 0.25)' }}>
-            <div className="p-4 border-b border-border/50 bg-gradient-to-r from-[#D6B25E]/5 via-transparent to-transparent">
+            <div className="p-4 border-b border-border/50 bg-gradient-to-r from-[#C5A442]/5 via-transparent to-transparent">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-gradient-to-br from-[#D6B25E]/20 to-[#D6B25E]/5">
-                  <BarChart3 className="h-5 w-5 text-[#D6B25E]" />
+                <div className="p-2 rounded-xl bg-gradient-to-br from-[#C5A442]/20 to-[#C5A442]/5">
+                  <BarChart3 className="h-5 w-5 text-[#C5A442]" />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-foreground">Entries by Condition</h3>
@@ -412,7 +412,7 @@ export default function Symptoms() {
                         name === 'count' ? 'Frequency' : 'Severity'
                       ]}
                     />
-                    <Bar dataKey="count" fill="#D6B25E" radius={[0, 6, 6, 0]} />
+                    <Bar dataKey="count" fill="#C5A442" radius={[0, 6, 6, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               ) : (

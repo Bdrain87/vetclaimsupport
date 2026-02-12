@@ -36,17 +36,18 @@ export function PWAInstallPrompt() {
       setShowPrompt(true);
     };
 
-    window.addEventListener('beforeinstallprompt', handler);
-
-    // Check if app was installed
-    window.addEventListener('appinstalled', () => {
+    const installedHandler = () => {
       setIsInstalled(true);
       setShowPrompt(false);
       setDeferredPrompt(null);
-    });
+    };
+
+    window.addEventListener('beforeinstallprompt', handler);
+    window.addEventListener('appinstalled', installedHandler);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handler);
+      window.removeEventListener('appinstalled', installedHandler);
     };
   }, []);
 

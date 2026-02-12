@@ -141,7 +141,7 @@ export default function Dashboard() {
       {/* Profile Card */}
       <div className="rounded-xl border border-border bg-card overflow-hidden">
         <div className="p-4 flex items-center gap-4">
-          <div className="h-12 w-12 rounded-full bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)] flex items-center justify-center flex-shrink-0">
+          <div className="h-12 w-12 rounded-full bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.2)] flex items-center justify-center flex-shrink-0">
             <User className="h-6 w-6 text-gold" />
           </div>
           <div className="flex-1 min-w-0">
@@ -196,7 +196,7 @@ export default function Dashboard() {
                 />
                 <motion.circle
                   cx="18" cy="18" r="15" fill="none"
-                  stroke="var(--gold-md, #D6B25E)" strokeWidth="3"
+                  stroke="var(--gold-md, #C5A442)" strokeWidth="3"
                   strokeLinecap="round"
                   strokeDasharray={`${combinedRating}, 100`}
                   initial={{ strokeDasharray: '0, 100' }}
@@ -385,8 +385,8 @@ export default function Dashboard() {
             }}
             className={cn(
               'w-full rounded-xl p-4 text-left',
-              'bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)]',
-              'hover:bg-[rgba(214,178,94,0.15)] transition-colors'
+              'bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.2)]',
+              'hover:bg-[rgba(197,164,66,0.15)] transition-colors'
             )}
           >
             <div className="flex items-start gap-3">
@@ -487,7 +487,7 @@ export default function Dashboard() {
                   className={cn(
                     'flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold mt-0.5',
                     step.priority === 'urgent'
-                      ? 'bg-[rgba(214,178,94,0.2)] text-gold'
+                      ? 'bg-[rgba(197,164,66,0.2)] text-gold'
                       : 'bg-muted text-muted-foreground'
                   )}
                 >
@@ -518,7 +518,7 @@ export default function Dashboard() {
               { title: 'Generate a personal statement', description: 'Create a compelling statement for your claim.', route: '/prep/personal-statement' },
             ].map((step, i) => (
               <div key={i} className="flex items-start gap-3">
-                <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold mt-0.5 bg-[rgba(214,178,94,0.2)] text-gold">
+                <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold mt-0.5 bg-[rgba(197,164,66,0.2)] text-gold">
                   {i + 1}
                 </span>
                 <div className="flex-1 min-w-0">

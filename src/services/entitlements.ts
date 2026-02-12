@@ -39,16 +39,20 @@ export function canAddHealthLog(currentCount: number): boolean {
   return currentCount < PREVIEW_LIMITS.maxHealthLogs;
 }
 
-// Stub for future IAP integration
+/**
+ * Purchase the lifetime entitlement. Currently a no-op stub that always returns
+ * false. When IAP is configured (RevenueCat or native StoreKit / Google Play
+ * Billing), this function should call the payment SDK, verify the receipt
+ * server-side, and update the profile store on success.
+ */
 export async function purchaseLifetime(): Promise<boolean> {
-  // TODO: Integrate with RevenueCat / native IAP
-  // IAP not yet configured — stub
   return false;
 }
 
-// Stub for restore purchases
+/**
+ * Restore previously purchased entitlements. Currently a no-op stub. Should be
+ * wired to RevenueCat's restorePurchases (or equivalent) once IAP is live.
+ */
 export async function restorePurchases(): Promise<boolean> {
-  // TODO: Integrate with RevenueCat
-  // Restore Purchases not yet configured — stub
   return false;
 }

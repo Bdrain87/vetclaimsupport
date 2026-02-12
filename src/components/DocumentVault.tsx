@@ -16,7 +16,7 @@ export const DocumentVault = () => {
       } as CredentialRequestOptions);
       if (cred) setIsUnlocked(true);
     } catch {
-      setIsUnlocked(true); // Fallback on error
+      // Biometric auth failed — do NOT unlock on error
     }
   };
 
@@ -24,7 +24,7 @@ export const DocumentVault = () => {
     <div className="p-4 sm:p-8 min-h-screen">
       {!isUnlocked ? (
         <div className="flex flex-col items-center justify-center mt-32 space-y-6">
-          <div className="p-10 rounded-full bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)] animate-pulse">
+          <div className="p-10 rounded-full bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.2)] animate-pulse">
             <ShieldCheck className="h-16 w-16 text-gold" />
           </div>
           <h2 className="text-2xl sm:text-3xl font-black italic">SECURE VAULT</h2>

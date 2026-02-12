@@ -142,10 +142,14 @@ function CopyButton({ text, label }: { text: string; label: string }) {
   const { toast } = useToast();
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
-    toast({ title: 'Copied!', description: `${label} copied to clipboard` });
-    setTimeout(() => setCopied(false), 2000);
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      toast({ title: 'Copied!', description: `${label} copied to clipboard` });
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast({ title: 'Copy failed', description: 'Unable to access clipboard.', variant: 'destructive' });
+    }
   };
 
   return (

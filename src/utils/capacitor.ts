@@ -11,8 +11,8 @@ export async function initNativeFeatures() {
     // Status bar - light text on dark background
     await StatusBar.setStyle({ style: Style.Dark });
     await StatusBar.setBackgroundColor({ color: '#000000' });
-  } catch (error) {
-    console.warn('StatusBar init error:', error);
+  } catch {
+    // StatusBar not available on this platform
   }
 
   try {
@@ -24,7 +24,7 @@ export async function initNativeFeatures() {
     await Keyboard.addListener('keyboardWillHide', () => {
       document.body.style.setProperty('--keyboard-height', '0px');
     });
-  } catch (error) {
-    console.warn('Keyboard init error:', error);
+  } catch {
+    // Keyboard plugin not available on this platform
   }
 }

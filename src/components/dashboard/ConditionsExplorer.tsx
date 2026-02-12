@@ -210,7 +210,6 @@ export function ConditionsExplorer({ claimConditions, onAddCondition }: Conditio
         description: `Found ${parsed!.suggestions?.length || 0} conditions based on your evidence.`,
       });
     } catch (err) {
-      console.error('Analysis error:', err);
       const errorMessage = err instanceof Error ? err.message : 'Failed to analyze data';
       setAnalysisError(errorMessage);
       toast({
@@ -346,9 +345,13 @@ export function ConditionsExplorer({ claimConditions, onAddCondition }: Conditio
                       key={idx}
                       className="border border-border rounded-lg overflow-hidden"
                     >
-                      <div 
+                      <div
                         className="flex items-center justify-between p-2 cursor-pointer hover:bg-muted/30"
+                        role="button"
+                        tabIndex={0}
                         onClick={() => setExpandedAISuggestion(expandedAISuggestion === idx ? null : idx)}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpandedAISuggestion(expandedAISuggestion === idx ? null : idx); } }}
+                        aria-expanded={expandedAISuggestion === idx}
                       >
                         <div className="flex items-center gap-2 min-w-0 flex-1">
                           <div className={cn(

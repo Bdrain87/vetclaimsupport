@@ -139,10 +139,10 @@ export function MOSCombobox({
   const getBranchColor = (branch: string) => {
     switch (branch) {
       case 'Army': return 'bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30';
-      case 'Air Force': return 'bg-[#D6B25E]/20 text-[#8A5A16] dark:text-[#F6E4AA] border-[#D6B25E]/30';
+      case 'Air Force': return 'bg-[#C5A442]/20 text-[#7A672A] dark:text-[#F5D680] border-[#C5A442]/30';
       case 'Navy': return 'bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 border-indigo-500/30';
       case 'Marines': return 'bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/30';
-      case 'Coast Guard': return 'bg-[#D6B25E]/20 text-[#8A5A16] dark:text-[#F6E4AA] border-[#D6B25E]/30';
+      case 'Coast Guard': return 'bg-[#C5A442]/20 text-[#7A672A] dark:text-[#F5D680] border-[#C5A442]/30';
       default: return 'bg-muted text-muted-foreground';
     }
   };
@@ -160,18 +160,26 @@ export function MOSCombobox({
           placeholder={placeholder}
           className="pl-10"
           autoComplete="off"
+          role="combobox"
+          aria-expanded={open && filteredJobs.length > 0}
+          aria-autocomplete="list"
+          aria-label="Search military job codes"
         />
       </div>
 
       {open && filteredJobs.length > 0 && (
         <div
           ref={listRef}
+          role="listbox"
+          aria-label="Job code suggestions"
           className="absolute z-[9999] w-full mt-1 bg-popover border border-border rounded-lg shadow-lg max-h-[400px] min-h-[200px] overflow-y-auto"
         >
           {filteredJobs.map((job, index) => (
             <div
               key={`${job.branch}-${job.code}`}
               data-item
+              role="option"
+              aria-selected={job.code === value}
               onClick={() => handleSelect(job)}
               className={cn(
                 "px-3 py-2 cursor-pointer flex items-start gap-3 border-b border-border/50 last:border-0",

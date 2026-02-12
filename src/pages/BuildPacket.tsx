@@ -240,8 +240,12 @@ export default function BuildPacket() {
         sections: getSectionMapping(),
       });
       if (result.content) {
-        await navigator.clipboard.writeText(result.content);
-        showMessage('Text copied to clipboard.');
+        try {
+          await navigator.clipboard.writeText(result.content);
+          showMessage('Text copied to clipboard.');
+        } catch {
+          showMessage('Unable to access clipboard.');
+        }
       } else {
         downloadExport(result);
       }
@@ -321,7 +325,7 @@ export default function BuildPacket() {
               evidenceScore >= 80
                 ? 'border-green-500/40 bg-green-500/10 text-green-400'
                 : evidenceScore >= 50
-                  ? 'border-[rgba(214,178,94,0.4)] bg-[rgba(214,178,94,0.1)] text-gold'
+                  ? 'border-[rgba(197,164,66,0.4)] bg-[rgba(197,164,66,0.1)] text-gold'
                   : 'border-red-500/40 bg-red-500/10 text-red-400',
             )}
           >
@@ -591,7 +595,7 @@ export default function BuildPacket() {
                             s.severity >= 7
                               ? 'bg-red-500/10 text-red-400'
                               : s.severity >= 4
-                                ? 'bg-[rgba(214,178,94,0.1)] text-gold'
+                                ? 'bg-[rgba(197,164,66,0.1)] text-gold'
                                 : '',
                           )}
                         >
@@ -726,7 +730,7 @@ export default function BuildPacket() {
                             b.statementStatus === 'Received' || b.statementStatus === 'Submitted'
                               ? 'border-green-500/40 text-green-400'
                               : b.statementStatus === 'Requested'
-                                ? 'border-[rgba(214,178,94,0.4)] text-gold'
+                                ? 'border-[rgba(197,164,66,0.4)] text-gold'
                                 : '',
                           )}
                         >
@@ -802,9 +806,9 @@ export default function BuildPacket() {
                           doc.status === 'Submitted'
                             ? 'border-green-500/40 text-green-400'
                             : doc.status === 'Obtained'
-                              ? 'border-[rgba(214,178,94,0.4)] text-gold'
+                              ? 'border-[rgba(197,164,66,0.4)] text-gold'
                               : doc.status === 'In Progress'
-                                ? 'border-[rgba(214,178,94,0.4)] text-gold'
+                                ? 'border-[rgba(197,164,66,0.4)] text-gold'
                                 : '',
                         )}
                       >

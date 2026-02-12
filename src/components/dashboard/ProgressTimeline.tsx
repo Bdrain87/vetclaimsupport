@@ -119,7 +119,7 @@ export function ProgressTimeline({ events, className }: ProgressTimelineProps) {
     if (!completed && type === 'goal') return 'bg-muted';
     switch (type) {
       case 'milestone':
-        return 'bg-[rgba(214,178,94,0.1)]';
+        return 'bg-[rgba(197,164,66,0.1)]';
       case 'activity':
         return 'bg-primary/10';
       case 'document':
@@ -183,7 +183,7 @@ export function ProgressTimeline({ events, className }: ProgressTimelineProps) {
                       {event.title}
                     </span>
                     {event.type === 'milestone' && event.completed && (
-                      <span className="text-xs bg-[rgba(214,178,94,0.2)] text-gold px-2 py-0.5 rounded-full whitespace-nowrap flex-shrink-0">
+                      <span className="text-xs bg-[rgba(197,164,66,0.2)] text-gold px-2 py-0.5 rounded-full whitespace-nowrap flex-shrink-0">
                         Milestone
                       </span>
                     )}

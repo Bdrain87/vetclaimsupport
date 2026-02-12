@@ -30,8 +30,8 @@ export default function ExportDataPage() {
 
       setExported(true);
       setTimeout(() => setExported(false), 3000);
-    } catch (err) {
-      console.error('Export failed:', err);
+    } catch {
+      // Export failed silently
     } finally {
       setExporting(false);
     }
@@ -50,7 +50,7 @@ export default function ExportDataPage() {
 
       {/* Header */}
       <div className="text-center space-y-3">
-        <div className="w-16 h-16 mx-auto rounded-full bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)] flex items-center justify-center">
+        <div className="w-16 h-16 mx-auto rounded-full bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.2)] flex items-center justify-center">
           <Download className="h-8 w-8 text-gold" />
         </div>
         <h1 className="text-2xl font-bold text-foreground">Export Your Data</h1>
@@ -60,7 +60,7 @@ export default function ExportDataPage() {
       </div>
 
       {/* Format info */}
-      <div className="flex flex-col items-center gap-2 p-4 rounded-xl border bg-[rgba(214,178,94,0.1)] border-[rgba(214,178,94,0.4)]">
+      <div className="flex flex-col items-center gap-2 p-4 rounded-xl border bg-[rgba(197,164,66,0.1)] border-[rgba(197,164,66,0.4)]">
         <FileText className="h-8 w-8 text-gold" />
         <span className="text-sm font-medium text-foreground">PDF Export</span>
         <span className="text-xs text-muted-foreground/70">Human-readable, ready for submission</span>

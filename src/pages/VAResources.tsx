@@ -294,7 +294,7 @@ export default function VAResources() {
 
                   {/* Agent Orange Conditions */}
                   <div className="p-4 bg-muted/30 rounded-lg border border-border">
-                    <h3 className="font-semibold text-[#D6B25E] mb-3">
+                    <h3 className="font-semibold text-[#C5A442] mb-3">
                       Agent Orange (Vietnam, Thailand, Korea)
                     </h3>
                     <ul className="text-sm text-muted-foreground space-y-1">

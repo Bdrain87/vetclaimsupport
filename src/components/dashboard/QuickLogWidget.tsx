@@ -155,6 +155,7 @@ export function QuickLogWidget() {
               value={flareUpNote}
               onChange={(e) => setFlareUpNote(e.target.value)}
               className="min-h-[80px] pr-12"
+              aria-label="Flare-up notes"
             />
             <div className="absolute right-2 top-2">
               <VoiceInputButton

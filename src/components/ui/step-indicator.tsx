@@ -59,6 +59,7 @@ const StepIndicator = React.forwardRef<HTMLDivElement, StepIndicatorProps>(
                     type="button"
                     onClick={() => handleStepClick(index)}
                     disabled={!isClickable}
+                    aria-label={`Step ${index + 1}: ${step.label}${status === 'completed' ? ' (completed)' : status === 'current' ? ' (current)' : ' (upcoming)'}`}
                     className={cn(
                       'relative z-10 flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all duration-300',
                       status === 'completed' &&
@@ -134,6 +135,7 @@ const StepIndicator = React.forwardRef<HTMLDivElement, StepIndicatorProps>(
                   type="button"
                   onClick={() => handleStepClick(index)}
                   disabled={!isClickable}
+                  aria-label={`Step ${index + 1}: ${step.label}${status === 'completed' ? ' (completed)' : status === 'current' ? ' (current)' : ' (upcoming)'}`}
                   className={cn(
                     'flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300',
                     status === 'completed' &&
@@ -199,6 +201,7 @@ const StepIndicator = React.forwardRef<HTMLDivElement, StepIndicatorProps>(
                   type="button"
                   onClick={() => handleStepClick(index)}
                   disabled={!isClickable}
+                  aria-label={`Step ${index + 1}: ${step.label}${status === 'completed' ? ' (completed)' : status === 'current' ? ' (current)' : ' (upcoming)'}`}
                   className={cn(
                     'relative z-10 flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all duration-300',
                     status === 'completed' &&

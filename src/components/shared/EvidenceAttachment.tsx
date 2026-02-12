@@ -143,6 +143,7 @@ export function EvidenceAttachment({
           multiple
           onChange={handleFileSelect}
           className="hidden"
+          aria-label="Choose evidence files"
         />
         <Button
           type="button"
@@ -335,6 +336,7 @@ export function EvidenceAttachment({
             multiple
             onChange={handleFileSelect}
             className="hidden"
+            aria-label="Choose evidence files"
           />
           <Button
             type="button"

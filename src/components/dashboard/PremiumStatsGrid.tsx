@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -14,8 +15,7 @@ export function PremiumStatsGrid() {
 
   const claimConditions = data.claimConditions || [];
 
-  // Calculate overall evidence score
-  const calculateOverallScore = () => {
+  const overallScore = useMemo(() => {
     if (claimConditions.length === 0) return 0;
 
     const totalScore = claimConditions.reduce((sum, condition) => {
@@ -28,10 +28,9 @@ export function PremiumStatsGrid() {
     }, 0);
 
     return Math.round(totalScore / claimConditions.length);
-  };
+  }, [claimConditions]);
 
-  // Calculate phase completion
-  const calculatePhaseProgress = () => {
+  const phaseProgress = useMemo(() => {
     let completedTasks = 0;
     const totalTasks = 12; // 3 phases × 4 tasks
 
@@ -55,22 +54,21 @@ export function PremiumStatsGrid() {
     if (claimConditions.some(c => c.linkedMedicalVisits.length > 0 || c.linkedSymptoms.length > 0)) completedTasks++;
 
     return Math.round((completedTasks / totalTasks) * 100);
-  };
+  }, [data, claimConditions]);
 
-  // Calculate days until separation (if applicable)
-  const getDaysUntilSeparation = () => {
+  const daysUntilSep = useMemo(() => {
     if (!data.separationDate) return null;
     const sepDate = new Date(data.separationDate);
     const today = new Date();
     const diffTime = sepDate.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays > 0 ? diffDays : null;
-  };
+  }, [data.separationDate]);
 
-  const overallScore = calculateOverallScore();
-  const phaseProgress = calculatePhaseProgress();
-  const daysUntilSep = getDaysUntilSeparation();
-  const totalEvidence = data.symptoms.length + data.medicalVisits.length + data.documents.filter(d => d.status === 'Obtained').length;
+  const totalEvidence = useMemo(() =>
+    data.symptoms.length + data.medicalVisits.length + data.documents.filter(d => d.status === 'Obtained').length,
+    [data.symptoms.length, data.medicalVisits.length, data.documents],
+  );
 
   const glassCard = "bg-white/[0.07] backdrop-blur-sm border border-white/[0.10] rounded-2xl p-4 transition-all duration-300 ease-out overflow-hidden";
 
@@ -80,14 +78,14 @@ export function PremiumStatsGrid() {
       <Link to="/claims" className="group">
         <div className={cn(
           glassCard,
-          "hover:scale-[1.02] hover:shadow-[0_12px_40px_var(--gold-glow)] hover:border-[rgba(214,178,94,0.3)]"
+          "hover:scale-[1.02] hover:shadow-[0_12px_40px_var(--gold-glow)] hover:border-[rgba(197,164,66,0.3)]"
         )}>
           <div className="flex items-center justify-center mb-2">
             <div className="relative w-16 h-16">
               <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
                 <circle cx="18" cy="18" r="15" fill="none" stroke="currentColor" className="text-white/[0.06]" strokeWidth="2.5" />
                 <motion.circle
-                  cx="18" cy="18" r="15" fill="none" stroke="var(--gold-md, #D6B25E)" strokeWidth="2.5"
+                  cx="18" cy="18" r="15" fill="none" stroke="var(--gold-md, #C5A442)" strokeWidth="2.5"
                   strokeLinecap="round"
                   initial={{ strokeDasharray: "0, 100" }}
                   animate={{ strokeDasharray: `${overallScore}, 100` }}
@@ -111,10 +109,10 @@ export function PremiumStatsGrid() {
       <Link to="/settings/journey" className="group">
         <div className={cn(
           glassCard,
-          "hover:scale-[1.02] hover:shadow-[0_12px_40px_var(--gold-glow)] hover:border-[rgba(214,178,94,0.3)]"
+          "hover:scale-[1.02] hover:shadow-[0_12px_40px_var(--gold-glow)] hover:border-[rgba(197,164,66,0.3)]"
         )}>
           <div className="flex items-start justify-between mb-2">
-            <div className="p-2 rounded-xl bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)]">
+            <div className="p-2 rounded-xl bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.2)]">
               <CheckCircle2 className="h-5 w-5 text-gold" />
             </div>
           </div>
@@ -131,10 +129,10 @@ export function PremiumStatsGrid() {
       <Link to="/claims" className="group">
         <div className={cn(
           glassCard,
-          "hover:scale-[1.02] hover:shadow-[0_12px_40px_var(--gold-glow)] hover:border-[rgba(214,178,94,0.2)]"
+          "hover:scale-[1.02] hover:shadow-[0_12px_40px_var(--gold-glow)] hover:border-[rgba(197,164,66,0.2)]"
         )}>
           <div className="flex items-start justify-between mb-2">
-            <div className="p-2 rounded-xl bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)]">
+            <div className="p-2 rounded-xl bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.2)]">
               <FileText className="h-5 w-5 text-gold" />
             </div>
           </div>
@@ -151,10 +149,10 @@ export function PremiumStatsGrid() {
       {daysUntilSep ? (
         <div className={cn(
           glassCard,
-          "border-[rgba(214,178,94,0.2)]"
+          "border-[rgba(197,164,66,0.2)]"
         )}>
           <div className="flex items-start justify-between mb-2">
-            <div className="p-2 rounded-xl bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)]">
+            <div className="p-2 rounded-xl bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.2)]">
               <Calendar className="h-5 w-5 text-gold" />
             </div>
           </div>
@@ -169,10 +167,10 @@ export function PremiumStatsGrid() {
         <Link to="/health/symptoms" className="group">
           <div className={cn(
             glassCard,
-            "hover:scale-[1.02] hover:shadow-[0_12px_40px_var(--gold-glow)] hover:border-[rgba(214,178,94,0.2)]"
+            "hover:scale-[1.02] hover:shadow-[0_12px_40px_var(--gold-glow)] hover:border-[rgba(197,164,66,0.2)]"
           )}>
             <div className="flex items-start justify-between mb-2">
-              <div className="p-2 rounded-xl bg-[rgba(214,178,94,0.1)] border border-[rgba(214,178,94,0.2)]">
+              <div className="p-2 rounded-xl bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.2)]">
                 <Activity className="h-5 w-5 text-gold" />
               </div>
             </div>

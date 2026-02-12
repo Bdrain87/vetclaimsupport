@@ -32,7 +32,7 @@ const getInitialReminderSettings = (): ReminderSettings => {
     try {
       return JSON.parse(stored);
     } catch {
-      console.error('Failed to parse reminder settings');
+      // Fall through to default settings
     }
   }
   return { enabled: false, frequency: 'daily', time: '09:00' };
@@ -178,8 +178,8 @@ export default function Settings() {
           variant: 'destructive',
         });
       }
-    } catch (error) {
-      console.error('Error requesting notification permission:', error);
+    } catch {
+      // Notification permission request failed
     }
   };
 

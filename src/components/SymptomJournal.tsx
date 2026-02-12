@@ -16,14 +16,14 @@ export const SymptomJournal = () => {
     <div className="glass-card p-8">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-xl font-black italic text-white uppercase tracking-tight">Symptom Journal</h3>
-        <button className="min-h-[44px] min-w-[44px] flex items-center justify-center text-white/40 hover:text-[#D6B25E] transition-colors" aria-label="View history"><History size={20} /></button>
+        <button className="min-h-[44px] min-w-[44px] flex items-center justify-center text-white/40 hover:text-[#C5A442] transition-colors" aria-label="View history"><History size={20} /></button>
       </div>
 
       <div className="relative">
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
-          className="w-full h-48 bg-navy-950/50 border border-white/10 rounded-2xl p-6 text-white placeholder:text-white/30 outline-none focus:border-[#D6B25E]/50 transition-all resize-none font-medium leading-relaxed"
+          className="w-full h-48 bg-navy-950/50 border border-white/10 rounded-2xl p-6 text-white placeholder:text-white/30 outline-none focus:border-[#C5A442]/50 transition-all resize-none font-medium leading-relaxed"
           placeholder="Describe your symptoms in plain language (e.g., 'Knees are popping and hurt while climbing stairs')..."
         />
 
@@ -31,7 +31,7 @@ export const SymptomJournal = () => {
           <button
             onClick={handlePolish}
             disabled={isLoading}
-            className="flex items-center gap-2 px-4 py-2 bg-[#D6B25E] text-[#000000] rounded-xl font-black text-[10px] uppercase tracking-tighter hover:scale-105 active:scale-95 transition-all shadow-lg disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-[#C5A442] text-[#000000] rounded-xl font-black text-[10px] uppercase tracking-tighter hover:scale-105 active:scale-95 transition-all shadow-lg disabled:opacity-50"
           >
             <Sparkles size={14} className={isLoading ? 'animate-spin' : ''} />
             {isLoading ? 'Processing...' : 'VA-Speak Polish'}

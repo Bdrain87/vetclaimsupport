@@ -180,7 +180,7 @@ export function ConditionAutocomplete({
               ref={i === highlightedIndex ? highlightRef : undefined}
               className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-colors duration-150 ${
                 i === highlightedIndex
-                  ? 'bg-[rgba(214,178,94,0.15)] text-foreground'
+                  ? 'bg-[rgba(197,164,66,0.15)] text-foreground'
                   : 'text-foreground/80 hover:bg-accent'
               } ${i > 0 ? 'border-t border-border/50' : ''}`}
               onClick={() => handleSelect(condition)}

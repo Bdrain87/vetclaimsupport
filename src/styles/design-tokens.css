@@ -25,13 +25,14 @@
   --color-success-100: #D1FAE5;
   --color-success-50:  #ECFDF5;
 
-  /* Gold Accent (Primary Interactive) */
-  --color-accent-700: #8A5A16;
-  --color-accent-600: #B8972E;
-  --color-accent-500: #D6B25E;
-  --color-accent-400: #F6E4AA;
-  --color-accent-200: rgba(214, 178, 94, 0.2);
-  --color-accent-100: rgba(214, 178, 94, 0.1);
+  /* METALLIC GOLD SYSTEM — rich, warm, premium */
+  --color-accent-700: #7A672A;
+  --color-accent-600: #A38A35;
+  --color-accent-500: #C5A442;
+  --color-accent-400: #E8C560;
+  --color-accent-300: #F5D680;
+  --color-accent-200: rgba(197, 164, 66, 0.2);
+  --color-accent-100: rgba(197, 164, 66, 0.1);
 
   /* Warning Orange */
   --color-warning-600: #D97706;
@@ -186,26 +187,27 @@
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
   /* Focus Rings */
-  --shadow-focus: 0 0 0 3px rgba(214, 178, 94, 0.4);
+  --shadow-focus: 0 0 0 3px rgba(197, 164, 66, 0.4);
   --shadow-focus-error: 0 0 0 3px rgba(239, 68, 68, 0.4);
 
   /* ═══════════════════════════════════════════════════════════════
      GOLD ACCENT SYSTEM — Metallic "Real Gold" Palette
      ═══════════════════════════════════════════════════════════════ */
 
-  /* Core gold tones */
-  --gold-hl: #F6E4AA;
-  --gold-md: #D6B25E;
-  --gold-dk: #8A5A16;
+  /* Core metallic gold tones */
+  --gold-hl: #F5D680;
+  --gold-md: #C5A442;
+  --gold-dk: #7A672A;
 
   /* Gold transparency variants */
-  --gold-glow: rgba(214, 178, 94, 0.28);
-  --gold-border: rgba(246, 228, 170, 0.16);
-  --gold-border-strong: rgba(214, 178, 94, 0.28);
+  --gold-glow: rgba(197, 164, 66, 0.28);
+  --gold-border: rgba(245, 214, 128, 0.16);
+  --gold-border-strong: rgba(197, 164, 66, 0.28);
 
-  /* Metallic gradient */
-  --gold-gradient: linear-gradient(135deg, var(--gold-hl) 0%, var(--gold-md) 45%, var(--gold-dk) 100%);
-  --gold-gradient-subtle: linear-gradient(135deg, rgba(246, 228, 170, 0.12) 0%, rgba(214, 178, 94, 0.06) 100%);
+  /* Metallic gradient — premium gold bar effect */
+  --gold-gradient: linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%);
+  --gold-gradient-subtle: linear-gradient(135deg, rgba(245, 214, 128, 0.12) 0%, rgba(197, 164, 66, 0.06) 100%);
+  --gold-gradient-shimmer: linear-gradient(90deg, transparent 0%, rgba(245, 214, 128, 0.4) 50%, transparent 100%);
 
   /* Gold focus ring */
   --shadow-focus-gold: 0 0 0 2px var(--gold-md), 0 0 12px var(--gold-glow);

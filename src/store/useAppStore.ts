@@ -326,7 +326,7 @@ const useAppStore = create<AppState>()(
 
       // Symptoms
       addSymptom: (symptom) => set((s) => ({
-        symptoms: [...s.symptoms, { ...symptom, id: generateId() }],
+        symptoms: [...s.symptoms, { id: generateId(), ...symptom }],
       })),
       updateSymptom: (id, symptom) => set((s) => ({
         symptoms: s.symptoms.map((sym) => sym.id === id ? { ...sym, ...symptom } : sym),
@@ -411,7 +411,7 @@ const useAppStore = create<AppState>()(
 
       // Migraines
       addMigraine: (migraine) => set((s) => ({
-        migraines: [...s.migraines, { ...migraine, id: generateId() }],
+        migraines: [...s.migraines, { id: generateId(), ...migraine }],
       })),
       updateMigraine: (id, migraine) => set((s) => ({
         migraines: s.migraines.map((m) => m.id === id ? { ...m, ...migraine } : m),
@@ -430,7 +430,7 @@ const useAppStore = create<AppState>()(
 
       // Sleep Entries
       addSleepEntry: (entry) => set((s) => ({
-        sleepEntries: [...(s.sleepEntries || []), { ...entry, id: generateId() }],
+        sleepEntries: [...(s.sleepEntries || []), { id: generateId(), ...entry }],
       })),
       updateSleepEntry: (id, entry) => set((s) => ({
         sleepEntries: (s.sleepEntries || []).map((e) => e.id === id ? { ...e, ...entry } : e),

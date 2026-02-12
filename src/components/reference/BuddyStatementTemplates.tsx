@@ -191,13 +191,17 @@ export function BuddyStatementTemplates() {
     });
   };
 
-  const copyToClipboard = () => {
+  const copyToClipboard = async () => {
     const content = currentTemplate.generateContent(currentValues);
-    navigator.clipboard.writeText(content);
-    toast({
-      title: 'Copied to Clipboard',
-      description: 'The statement has been copied.',
-    });
+    try {
+      await navigator.clipboard.writeText(content);
+      toast({
+        title: 'Copied to Clipboard',
+        description: 'The statement has been copied.',
+      });
+    } catch {
+      toast({ title: 'Copy failed', description: 'Unable to access clipboard.', variant: 'destructive' });
+    }
   };
 
   const resetForm = () => {

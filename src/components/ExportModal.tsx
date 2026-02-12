@@ -168,8 +168,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
       await shareExport(result);
       toast.success('Export shared successfully');
       onClose();
-    } catch (err) {
-      console.error('Export failed:', err);
+    } catch {
       setError('Something went wrong. Please try again or choose a different format.');
     } finally {
       setIsGenerating(false);
@@ -184,8 +183,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
       downloadExport(result);
       toast.success('Export saved to device');
       onClose();
-    } catch (err) {
-      console.error('Export failed:', err);
+    } catch {
       setError('Something went wrong. Please try again or choose a different format.');
     } finally {
       setIsGenerating(false);
@@ -204,8 +202,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
       } else {
         setError('Could not copy to clipboard. Try saving to device instead.');
       }
-    } catch (err) {
-      console.error('Copy failed:', err);
+    } catch {
       setError('Something went wrong. Please try again or choose a different format.');
     } finally {
       setIsGenerating(false);
@@ -232,13 +229,16 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="export-modal-title"
             className="relative w-full max-w-lg mx-4 my-8 sm:my-16 bg-[#111111] border border-white/[0.12] rounded-2xl shadow-2xl overflow-hidden"
           >
             {/* Header */}
             <div className="px-6 pt-6 pb-4 border-b border-white/[0.10]">
               <div className="flex items-start justify-between">
                 <div>
-                  <h2 className="text-lg font-bold text-[#F8FAFC]">Build Your Packet</h2>
+                  <h2 id="export-modal-title" className="text-lg font-bold text-[#F8FAFC]">Build Your Packet</h2>
                   <p className="text-sm text-[#94A3B8] mt-1">
                     Select what to include in your export
                   </p>
@@ -278,7 +278,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
                       onClick={() => toggleSection(item.key)}
                       className={`w-full flex items-start gap-3 p-3 rounded-xl border transition-all duration-150 text-left ${
                         checked
-                          ? 'border-[rgba(214,178,94,0.3)] bg-[rgba(214,178,94,0.06)]'
+                          ? 'border-[rgba(197,164,66,0.3)] bg-[rgba(197,164,66,0.06)]'
                           : 'border-white/[0.10] bg-white/[0.02] hover:bg-white/[0.07]'
                       }`}
                     >
@@ -322,7 +322,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
                       onClick={() => setFormat(option.value)}
                       className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all duration-150 text-left ${
                         format === option.value
-                          ? 'border-[rgba(214,178,94,0.3)] bg-[rgba(214,178,94,0.06)]'
+                          ? 'border-[rgba(197,164,66,0.3)] bg-[rgba(197,164,66,0.06)]'
                           : 'border-white/[0.10] bg-white/[0.02] hover:bg-white/[0.07]'
                       }`}
                     >
@@ -374,7 +374,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
                   <button
                     onClick={handleExportAndShare}
                     disabled={noneChecked}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gold hover:bg-gold-dk active:bg-[#B8962E] text-white font-medium text-sm transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gold hover:bg-gold-dk active:bg-[#A38A35] text-white font-medium text-sm transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     <Share2 size={18} />
                     Export & Share

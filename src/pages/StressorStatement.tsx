@@ -607,7 +607,7 @@ export default function StressorStatement() {
             </div>
 
             {filledSections < 5 && (
-              <Card className="border-[rgba(214,178,94,0.3)] bg-[rgba(214,178,94,0.05)]">
+              <Card className="border-[rgba(197,164,66,0.3)] bg-[rgba(197,164,66,0.05)]">
                 <CardContent className="pt-4">
                   <div className="flex items-start gap-2">
                     <AlertCircle className="h-5 w-5 text-gold mt-0.5 shrink-0" />

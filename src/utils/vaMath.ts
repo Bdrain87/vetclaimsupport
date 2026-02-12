@@ -13,7 +13,7 @@ export const calculatePlatinumRating = (ratings: number[], bilateral: number[]) 
 
   // 2. Combine all using VA Math descending order
   const all = bilateralBase > 0 ? [...ratings, bilateralBase] : [...ratings];
-  const sorted = all.sort((a, b) => b - a);
+  const sorted = [...all].sort((a, b) => b - a);
 
   let current = 100;
   sorted.forEach(r => {

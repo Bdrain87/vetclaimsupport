@@ -108,6 +108,7 @@ export function InlineDocumentUploader({
         capture="environment"
         className="hidden"
         onChange={handleFileSelect}
+        aria-label="Take a photo of document"
       />
       <input
         ref={fileInputRef}
@@ -115,6 +116,7 @@ export function InlineDocumentUploader({
         accept="image/*,.pdf"
         className="hidden"
         onChange={handleFileSelect}
+        aria-label="Choose document file"
       />
       
       {/* Inline Buttons */}

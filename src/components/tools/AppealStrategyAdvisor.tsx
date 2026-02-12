@@ -265,8 +265,7 @@ export function AppealStrategyAdvisor() {
         title: 'Text Extracted',
         description: `Extracted with ${Math.round(data.confidence)}% confidence`,
       });
-    } catch (error) {
-      console.error('OCR Error:', error);
+    } catch {
       toast({
         title: 'OCR Failed',
         description: 'Could not extract text. You can still type it manually.',
@@ -369,7 +368,7 @@ export function AppealStrategyAdvisor() {
             <Card className="border-muted bg-muted/30">
               <CardContent className="p-4 space-y-3">
                 <div className="flex items-start gap-2">
-                  <AlertTriangle className="h-5 w-5 text-[#D6B25E] shrink-0 mt-0.5" />
+                  <AlertTriangle className="h-5 w-5 text-[#C5A442] shrink-0 mt-0.5" />
                   <div>
                     <p className="font-medium">{selectedDenial.title}</p>
                     <p className="text-sm text-muted-foreground mt-1">{selectedDenial.explanation}</p>
@@ -404,6 +403,7 @@ export function AppealStrategyAdvisor() {
               capture="environment"
               className="hidden"
               onChange={handleFileSelect}
+              aria-label="Take a photo of denial letter"
             />
             <input
               ref={fileInputRef}
@@ -411,6 +411,7 @@ export function AppealStrategyAdvisor() {
               accept="image/*,.pdf"
               className="hidden"
               onChange={handleFileSelect}
+              aria-label="Choose denial letter file"
             />
 
             {!uploadedImage ? (
@@ -614,8 +615,8 @@ export function AppealStrategyAdvisor() {
               ))}
             </div>
             
-            <div className="mt-4 p-3 bg-[#D6B25E]/10 border border-[#D6B25E]/20 rounded-lg">
-              <p className="text-sm text-[#8A5A16] dark:text-[#F6E4AA] flex items-start gap-2">
+            <div className="mt-4 p-3 bg-[#C5A442]/10 border border-[#C5A442]/20 rounded-lg">
+              <p className="text-sm text-[#7A672A] dark:text-[#F5D680] flex items-start gap-2">
                 <Lightbulb className="h-4 w-4 shrink-0 mt-0.5" />
                 <span>
                   <strong>Pro Tip:</strong> A strong Nexus Letter from a qualified medical professional is often the single most important piece of evidence for overturning a denial.

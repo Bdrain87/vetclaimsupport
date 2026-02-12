@@ -345,7 +345,7 @@ export function EnhancedCPExamPrepGuide() {
               <AccordionItem value="symptom-tips" className="border rounded-lg px-4">
                 <AccordionTrigger className="hover:no-underline">
                   <div className="flex items-center gap-2">
-                    <Target className="h-4 w-4 text-[#D6B25E]" />
+                    <Target className="h-4 w-4 text-[#C5A442]" />
                     <span>How to Describe Your Symptoms</span>
                   </div>
                 </AccordionTrigger>
@@ -353,7 +353,7 @@ export function EnhancedCPExamPrepGuide() {
                   <ul className="space-y-2">
                     {selectedPrep.symptomTips.map((item, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm">
-                        <span className="text-[#D6B25E] mt-1">★</span>
+                        <span className="text-[#C5A442] mt-1">★</span>
                         <span>{item}</span>
                       </li>
                     ))}
@@ -361,8 +361,8 @@ export function EnhancedCPExamPrepGuide() {
                   
                   {/* User's logged symptom data */}
                   {relevantSymptoms.length > 0 && (
-                    <div className="mt-4 p-3 bg-[#D6B25E]/10 border border-[#D6B25E]/30 rounded-lg">
-                      <p className="text-sm font-medium text-[#8A5A16] dark:text-[#F6E4AA] mb-2">
+                    <div className="mt-4 p-3 bg-[#C5A442]/10 border border-[#C5A442]/30 rounded-lg">
+                      <p className="text-sm font-medium text-[#7A672A] dark:text-[#F5D680] mb-2">
                         <BarChart3 className="h-3 w-3 inline" /> Your Logged Symptom Data:
                       </p>
                       <ul className="text-xs space-y-1 text-muted-foreground">
@@ -375,7 +375,7 @@ export function EnhancedCPExamPrepGuide() {
                           <li className="text-primary">+ {relevantSymptoms.length - 3} more entries</li>
                         )}
                       </ul>
-                      <p className="text-xs text-[#8A5A16] dark:text-[#F6E4AA] mt-2">
+                      <p className="text-xs text-[#7A672A] dark:text-[#F5D680] mt-2">
                         <Lightbulb className="h-3 w-3 inline text-primary" /> Reference these specific dates during your exam!
                       </p>
                     </div>
@@ -387,7 +387,7 @@ export function EnhancedCPExamPrepGuide() {
               <AccordionItem value="documents" className="border rounded-lg px-4">
                 <AccordionTrigger className="hover:no-underline">
                   <div className="flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-[#D6B25E]" />
+                    <FileText className="h-4 w-4 text-[#C5A442]" />
                     <span>Documents to Bring</span>
                     <Badge variant="outline" className="ml-2 text-xs">
                       {checkedDocs.size}/{selectedPrep.documentsTouring.length}
@@ -473,7 +473,7 @@ export function EnhancedCPExamPrepGuide() {
             <AccordionItem value="general-tips" className="border rounded-lg px-4">
               <AccordionTrigger className="hover:no-underline">
                 <div className="flex items-center gap-2">
-                  <Lightbulb className="h-4 w-4 text-[#D6B25E]" />
+                  <Lightbulb className="h-4 w-4 text-[#C5A442]" />
                   <span>Pro Tips from Veterans</span>
                 </div>
               </AccordionTrigger>
@@ -481,7 +481,7 @@ export function EnhancedCPExamPrepGuide() {
                 <ul className="space-y-2">
                   {generalExamTips.proTips.map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm">
-                      <span className="text-[#D6B25E] mt-1">★</span>
+                      <span className="text-[#C5A442] mt-1">★</span>
                       <span>{item}</span>
                     </li>
                   ))}

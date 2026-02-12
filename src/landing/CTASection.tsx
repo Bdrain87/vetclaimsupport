@@ -11,8 +11,8 @@ export function CTASection() {
   return (
     <section ref={ref} className="py-24 sm:py-32 bg-gradient-to-b from-[#000000] via-[#050505] to-[#0a0a0a] relative overflow-hidden">
       {/* Ambient effects */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#D6B25E]/10 rounded-full blur-[150px]" />
-      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[#D6B25E]/10 rounded-full blur-[120px]" />
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#C5A442]/10 rounded-full blur-[150px]" />
+      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[#C5A442]/10 rounded-full blur-[120px]" />
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
         {/* Icon */}

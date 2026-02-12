@@ -19,6 +19,15 @@ interface Toast {
 
 export function PremiumToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = React.useState<Toast[]>([]);
+  const timersRef = React.useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
+
+  // Clean up all timers on unmount
+  React.useEffect(() => {
+    return () => {
+      timersRef.current.forEach((timer) => clearTimeout(timer));
+      timersRef.current.clear();
+    };
+  }, []);
 
   const addToast = React.useCallback((toast: Omit<Toast, 'id'>) => {
     const id = crypto.randomUUID();
@@ -26,18 +35,27 @@ export function PremiumToastProvider({ children }: { children: React.ReactNode }
 
     // Auto-dismiss
     const duration = toast.duration ?? (toast.type === 'error' ? 6000 : 4000);
-    setTimeout(() => {
+    const timer = setTimeout(() => {
+      timersRef.current.delete(id);
       setToasts((prev) => prev.filter((t) => t.id !== id));
     }, duration);
+    timersRef.current.set(id, timer);
 
     return id;
   }, []);
 
   const removeToast = React.useCallback((id: string) => {
+    const timer = timersRef.current.get(id);
+    if (timer) {
+      clearTimeout(timer);
+      timersRef.current.delete(id);
+    }
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
   const clearToasts = React.useCallback(() => {
+    timersRef.current.forEach((timer) => clearTimeout(timer));
+    timersRef.current.clear();
     setToasts([]);
   }, []);
 
@@ -77,10 +95,17 @@ interface ToastItemProps {
 
 function ToastItem({ toast, onDismiss, index }: ToastItemProps) {
   const [isExiting, setIsExiting] = React.useState(false);
+  const dismissTimerRef = React.useRef<ReturnType<typeof setTimeout>>();
+
+  React.useEffect(() => {
+    return () => {
+      clearTimeout(dismissTimerRef.current);
+    };
+  }, []);
 
   const handleDismiss = React.useCallback(() => {
     setIsExiting(true);
-    setTimeout(onDismiss, 200);
+    dismissTimerRef.current = setTimeout(onDismiss, 200);
   }, [onDismiss]);
 
   const icons = {
@@ -102,14 +127,14 @@ function ToastItem({ toast, onDismiss, index }: ToastItemProps) {
       icon: 'text-red-600 dark:text-red-500',
     },
     warning: {
-      bg: 'bg-[#D6B25E]/10 dark:bg-[#D6B25E]/20',
-      border: 'border-[#D6B25E]/30',
-      icon: 'text-[#B8972E] dark:text-[#D6B25E]',
+      bg: 'bg-[#C5A442]/10 dark:bg-[#C5A442]/20',
+      border: 'border-[#C5A442]/30',
+      icon: 'text-[#A38A35] dark:text-[#C5A442]',
     },
     info: {
-      bg: 'bg-[#D6B25E]/10 dark:bg-[#D6B25E]/20',
-      border: 'border-[#D6B25E]/30',
-      icon: 'text-[#B8972E] dark:text-[#D6B25E]',
+      bg: 'bg-[#C5A442]/10 dark:bg-[#C5A442]/20',
+      border: 'border-[#C5A442]/30',
+      icon: 'text-[#A38A35] dark:text-[#C5A442]',
     },
   };
 
@@ -155,6 +180,7 @@ function ToastItem({ toast, onDismiss, index }: ToastItemProps) {
       <button
         onClick={handleDismiss}
         className="flex-shrink-0 p-1 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+        aria-label="Dismiss notification"
       >
         <X className="h-4 w-4" />
       </button>

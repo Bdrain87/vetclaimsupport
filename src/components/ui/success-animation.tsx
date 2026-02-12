@@ -47,13 +47,16 @@ const SuccessAnimation = React.forwardRef<HTMLDivElement, SuccessAnimationProps>
     const config = sizeConfig[size];
 
     React.useEffect(() => {
+      let completeTimer: ReturnType<typeof setTimeout>;
+      let hideTimer: ReturnType<typeof setTimeout>;
+
       if (show) {
         setIsVisible(true);
 
         // Generate particles for celebration variant
         if (variant === 'celebration') {
           const colors = [
-            '#22c55e', '#D6B25E', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4'
+            '#22c55e', '#C5A442', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4'
           ];
           const newParticles = Array.from({ length: 24 }, (_, i) => ({
             id: i,
@@ -66,15 +69,20 @@ const SuccessAnimation = React.forwardRef<HTMLDivElement, SuccessAnimationProps>
         }
 
         if (onComplete) {
-          setTimeout(onComplete, 1000);
+          completeTimer = setTimeout(onComplete, 1000);
         }
 
         if (autoHide) {
-          setTimeout(() => setIsVisible(false), autoHideDelay);
+          hideTimer = setTimeout(() => setIsVisible(false), autoHideDelay);
         }
       } else {
         setIsVisible(false);
       }
+
+      return () => {
+        clearTimeout(completeTimer);
+        clearTimeout(hideTimer);
+      };
     }, [show, variant, onComplete, autoHide, autoHideDelay]);
 
     if (!isVisible) return null;

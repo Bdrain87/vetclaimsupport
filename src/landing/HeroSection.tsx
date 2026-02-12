@@ -29,8 +29,8 @@ export function HeroSection() {
       }} />
 
       {/* Ambient glow effects */}
-      <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[#D6B25E]/10 rounded-full blur-[150px]" />
-      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-[#D6B25E]/10 rounded-full blur-[120px]" />
+      <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[#C5A442]/10 rounded-full blur-[150px]" />
+      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-[#C5A442]/10 rounded-full blur-[120px]" />
 
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 py-20 lg:py-32">
         <motion.div

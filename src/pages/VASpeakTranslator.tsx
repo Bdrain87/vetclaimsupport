@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { PageContainer } from '@/components/PageContainer';
+import { useToast } from '@/hooks/use-toast';
 
 // ---------------------------------------------------------------------------
 // VA Glossary Data
@@ -182,9 +183,9 @@ const CATEGORY_LABELS: Record<GlossaryEntry['category'], string> = {
 };
 
 const CATEGORY_COLORS: Record<GlossaryEntry['category'], string> = {
-  'claims-process': 'bg-[#D6B25E]/10 text-[#F6E4AA] border-[#D6B25E]/20',
+  'claims-process': 'bg-[#C5A442]/10 text-[#F5D680] border-[#C5A442]/20',
   medical: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  legal: 'bg-[rgba(214,178,94,0.1)] text-gold border-[rgba(214,178,94,0.2)]',
+  legal: 'bg-[rgba(197,164,66,0.1)] text-gold border-[rgba(197,164,66,0.2)]',
   rating: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
   evidence: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
 };
@@ -195,6 +196,7 @@ const CATEGORY_COLORS: Record<GlossaryEntry['category'], string> = {
 
 export default function VASpeakTranslator() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { generate, isLoading, error } = useAIGenerate('VA_SPEAK_TRANSLATOR');
 
   // Translator state
@@ -239,7 +241,7 @@ export default function VASpeakTranslator() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Clipboard API may not be available in all contexts
+      toast({ title: 'Copy failed', description: 'Unable to access clipboard.', variant: 'destructive' });
     }
   }, [translatedText]);
 
@@ -294,8 +296,8 @@ export default function VASpeakTranslator() {
 
       {/* Page header */}
       <div className="flex items-center gap-3">
-        <div className="w-12 h-12 rounded-xl bg-[var(--interactive-primary,#D6B25E)]/10 border border-[var(--interactive-primary,#D6B25E)]/20 flex items-center justify-center shrink-0">
-          <Languages className="h-6 w-6 text-[var(--interactive-primary,#D6B25E)]" />
+        <div className="w-12 h-12 rounded-xl bg-[var(--interactive-primary,#C5A442)]/10 border border-[var(--interactive-primary,#C5A442)]/20 flex items-center justify-center shrink-0">
+          <Languages className="h-6 w-6 text-[var(--interactive-primary,#C5A442)]" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">VA-Speak Translator</h1>
@@ -314,7 +316,7 @@ export default function VASpeakTranslator() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
-            <Sparkles className="h-5 w-5 text-[var(--interactive-primary,#D6B25E)]" />
+            <Sparkles className="h-5 w-5 text-[var(--interactive-primary,#C5A442)]" />
             Translate Your Symptoms
           </CardTitle>
           <CardDescription>
@@ -421,7 +423,7 @@ export default function VASpeakTranslator() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
-            <BookOpen className="h-5 w-5 text-[var(--interactive-primary,#D6B25E)]" />
+            <BookOpen className="h-5 w-5 text-[var(--interactive-primary,#C5A442)]" />
             VA Terms Glossary
           </CardTitle>
           <CardDescription>
@@ -449,7 +451,7 @@ export default function VASpeakTranslator() {
                 onClick={() => setActiveCategory(cat)}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
                   activeCategory === cat
-                    ? 'bg-[var(--interactive-primary,#D6B25E)]/15 text-[var(--interactive-primary,#D6B25E)] border-[var(--interactive-primary,#D6B25E)]/40'
+                    ? 'bg-[var(--interactive-primary,#C5A442)]/15 text-[var(--interactive-primary,#C5A442)] border-[var(--interactive-primary,#C5A442)]/40'
                     : 'bg-muted/50 text-muted-foreground border-border hover:bg-muted'
                 }`}
               >
@@ -506,7 +508,7 @@ export default function VASpeakTranslator() {
       {/* ----------------------------------------------------------------- */}
       {/* Tips Card                                                          */}
       {/* ----------------------------------------------------------------- */}
-      <Card className="border-[rgba(214,178,94,0.2)] bg-[rgba(214,178,94,0.05)]">
+      <Card className="border-[rgba(197,164,66,0.2)] bg-[rgba(197,164,66,0.05)]">
         <CardContent className="pt-6 space-y-3">
           <h3 className="text-sm font-semibold text-foreground">
             Tips for Describing Your Symptoms

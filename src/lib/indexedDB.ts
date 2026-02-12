@@ -17,7 +17,6 @@ function openDB(): Promise<IDBDatabase> {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
 
     request.onerror = () => {
-      console.error('Failed to open IndexedDB:', request.error);
       // Clear the cached promise so future calls can retry
       dbPromise = null;
       reject(request.error);

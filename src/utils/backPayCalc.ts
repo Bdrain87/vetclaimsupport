@@ -76,10 +76,26 @@ export function calculateBackPay(
 } | null {
   if (newRating <= currentRating) return null;
 
-  const startDate = new Date(effectiveDate + 'T00:00:00');
-  const today = new Date();
+  const parsed = new Date(effectiveDate + 'T00:00:00Z');
 
-  if (isNaN(startDate.getTime()) || startDate > today) return null;
+  if (isNaN(parsed.getTime())) return null;
+
+  // Work in UTC so calendar-date strings (often produced via toISOString)
+  // are compared consistently regardless of the local timezone.
+  const startDate = new Date(
+    parsed.getUTCFullYear(),
+    parsed.getUTCMonth(),
+    parsed.getUTCDate()
+  );
+
+  const now = new Date();
+  const today = new Date(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate()
+  );
+
+  if (startDate > today) return null;
 
   const months = monthsBetween(startDate, today);
   const monthlyBefore = calculateMonthlyCompensation(currentRating, hasSpouse, dependentCount);

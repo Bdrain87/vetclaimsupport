@@ -26,8 +26,8 @@ interface PDFExportOptions {
 
 // Colors (matching the app's design tokens)
 const colors = {
-  primary: [26, 54, 93] as [number, number, number],      // #1a365d
-  secondary: [45, 55, 72] as [number, number, number],    // #2d3748
+  primary: [0, 0, 0] as [number, number, number],          // black
+  secondary: [30, 30, 30] as [number, number, number],    // near-black
   muted: [113, 128, 150] as [number, number, number],     // #718096
   success: [34, 84, 61] as [number, number, number],      // #22543d
   warning: [116, 66, 16] as [number, number, number],     // #744210

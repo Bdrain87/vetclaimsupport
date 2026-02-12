@@ -123,11 +123,15 @@ DISCLAIMER: This document is a template only and is not official VA documentatio
     if (result) setAiOutline(result);
   };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(generateLetter());
-    setCopied(true);
-    toast.success('Letter template copied to clipboard');
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(generateLetter());
+      setCopied(true);
+      toast.success('Letter template copied to clipboard');
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error('Copy failed — unable to access clipboard.');
+    }
   };
 
   const handleDownload = () => {
@@ -357,9 +361,13 @@ DISCLAIMER: This document is a template only and is not official VA documentatio
             </div>
             <Button
               variant="outline"
-              onClick={() => {
-                navigator.clipboard.writeText(aiOutline);
-                toast.success('AI outline copied to clipboard');
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(aiOutline);
+                  toast.success('AI outline copied to clipboard');
+                } catch {
+                  toast.error('Copy failed — unable to access clipboard.');
+                }
               }}
               className="w-full"
             >

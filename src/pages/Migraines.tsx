@@ -303,16 +303,16 @@ export default function Migraines() {
   const getSeverityColor = (severity: MigraineSeverity) => {
     switch (severity) {
       case 'Mild': return 'bg-green-500/10 text-green-500 border-green-500/20';
-      case 'Moderate': return 'bg-[#D6B25E]/10 text-[#B8972E] border-[#D6B25E]/20';
-      case 'Severe': return 'bg-[#D6B25E]/10 text-[#D6B25E] border-[#D6B25E]/20';
+      case 'Moderate': return 'bg-[#C5A442]/10 text-[#A38A35] border-[#C5A442]/20';
+      case 'Severe': return 'bg-[#C5A442]/10 text-[#C5A442] border-[#C5A442]/20';
       case 'Prostrating': return 'bg-red-500/10 text-red-500 border-red-500/20';
     }
   };
 
   const getRatingColor = (rating: number) => {
     if (rating >= 50) return 'text-green-500';
-    if (rating >= 30) return 'text-[#D6B25E]';
-    if (rating >= 10) return 'text-[#D6B25E]';
+    if (rating >= 30) return 'text-[#C5A442]';
+    if (rating >= 10) return 'text-[#C5A442]';
     return 'text-muted-foreground';
   };
 
@@ -325,8 +325,8 @@ export default function Migraines() {
       {/* Premium Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-[#D6B25E]/20 to-[#D6B25E]/5 shadow-[0_0_24px_rgba(214,178,94,0.2)]">
-            <Brain className="h-6 w-6 text-[#D6B25E] drop-shadow-[0_0_8px_rgba(214,178,94,0.5)]" />
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-[#C5A442]/20 to-[#C5A442]/5 shadow-[0_0_24px_rgba(197,164,66,0.2)]">
+            <Brain className="h-6 w-6 text-[#C5A442] drop-shadow-[0_0_8px_rgba(197,164,66,0.5)]" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground tracking-tight">Migraine Tracker</h1>
@@ -382,7 +382,7 @@ export default function Migraines() {
               </div>
               <div className="relative h-3 bg-muted rounded-full overflow-hidden">
                 <div 
-                  className="absolute h-full bg-gradient-to-r from-[#D6B25E]/60 via-[#D6B25E] to-[#F6E4AA] rounded-full transition-all duration-500"
+                  className="absolute h-full bg-gradient-to-r from-[#C5A442]/60 via-[#C5A442] to-[#F5D680] rounded-full transition-all duration-500"
                   style={{ width: `${Math.min(100, (stats.estimatedRating.rating / 50) * 100)}%` }}
                 />
                 {/* Threshold markers */}
@@ -397,14 +397,14 @@ export default function Migraines() {
                 <p className="text-xs text-muted-foreground">Prostrating/Month (avg)</p>
               </div>
               <div className="bg-muted/50 rounded-lg p-3">
-                <p className="text-2xl font-bold text-[#D6B25E]">{stats.totalHoursLost}</p>
+                <p className="text-2xl font-bold text-[#C5A442]">{stats.totalHoursLost}</p>
                 <p className="text-xs text-muted-foreground">Hours Lost (90 days)</p>
               </div>
             </div>
 
             {!stats.hasSignificantEconomicImpact && stats.prostratingPerMonth >= 2 && (
-              <Alert className="border-[#D6B25E]/50 bg-[#D6B25E]/10">
-                <DollarSign className="h-4 w-4 text-[#D6B25E]" />
+              <Alert className="border-[#C5A442]/50 bg-[#C5A442]/10">
+                <DollarSign className="h-4 w-4 text-[#C5A442]" />
                 <AlertDescription className="text-xs">
                   <strong>50% Rating Tip:</strong> Document economic impact (missed work, lost wages) to support the "severe economic inadaptability" criteria required for 50%.
                 </AlertDescription>
@@ -636,9 +636,9 @@ export default function Migraines() {
                   </Card>
 
                   {/* Economic Impact Section - Critical for 50% Rating */}
-                  <Card className="border-[#D6B25E]/30 bg-[#D6B25E]/5">
+                  <Card className="border-[#C5A442]/30 bg-[#C5A442]/5">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-semibold flex items-center gap-2 text-[#B8972E]">
+                      <CardTitle className="text-sm font-semibold flex items-center gap-2 text-[#A38A35]">
                         <Briefcase className="h-4 w-4" />
                         Economic Impact (Required for 50% Rating)
                       </CardTitle>
@@ -855,8 +855,8 @@ export default function Migraines() {
           <Card className="data-card">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-full bg-[#D6B25E]/10">
-                  <TrendingUp className="h-6 w-6 text-[#D6B25E]" />
+                <div className="p-3 rounded-full bg-[#C5A442]/10">
+                  <TrendingUp className="h-6 w-6 text-[#C5A442]" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.totalLast30Days}</p>
@@ -880,14 +880,14 @@ export default function Migraines() {
             </CardContent>
           </Card>
 
-          <Card className="data-card border-[#D6B25E]/30">
+          <Card className="data-card border-[#C5A442]/30">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-full bg-[#D6B25E]/10">
-                  <DollarSign className="h-6 w-6 text-[#D6B25E]" />
+                <div className="p-3 rounded-full bg-[#C5A442]/10">
+                  <DollarSign className="h-6 w-6 text-[#C5A442]" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-[#D6B25E]">{stats.economicImpactCount}</p>
+                  <p className="text-2xl font-bold text-[#C5A442]">{stats.economicImpactCount}</p>
                   <p className="text-sm text-muted-foreground">Work Impact (90 Days)</p>
                 </div>
               </div>
@@ -943,7 +943,7 @@ export default function Migraines() {
                       </Badge>
                     )}
                     {entry.economicImpact && entry.economicImpact !== 'none' && (
-                      <Badge variant="outline" className="border-[#D6B25E]/50 text-[#B8972E] gap-1">
+                      <Badge variant="outline" className="border-[#C5A442]/50 text-[#A38A35] gap-1">
                         <DollarSign className="h-3 w-3" />
                         Work Impact
                       </Badge>
@@ -997,7 +997,7 @@ export default function Migraines() {
                       </span>
                     )}
                     {entry.hoursLostToMigraine && entry.hoursLostToMigraine > 0 && (
-                      <span className="text-xs text-[#B8972E] flex items-center gap-1">
+                      <span className="text-xs text-[#A38A35] flex items-center gap-1">
                         <Clock className="h-3 w-3" /> {entry.hoursLostToMigraine}h lost
                       </span>
                     )}
