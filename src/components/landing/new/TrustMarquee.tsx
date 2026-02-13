@@ -71,7 +71,7 @@ export function TrustMarquee() {
 
   return (
     <section
-      className="py-6 overflow-hidden"
+      className="py-16 overflow-hidden"
       style={{
         backgroundColor: '#0a0a0a',
         borderTop: '1px solid rgba(255, 255, 255, 0.05)',
