@@ -9,8 +9,10 @@ import type { UserCondition } from '@/store/useAppStore';
 
 function calculateCombinedRating(conditions: UserCondition[]): number {
   const approvedRatings = conditions
-    .filter((c) => c.claimStatus === 'approved' && c.rating && c.rating > 0)
-    .map((c) => c.rating!)
+    .filter((c): c is UserCondition & { rating: number } =>
+      c.claimStatus === 'approved' && typeof c.rating === 'number' && c.rating > 0
+    )
+    .map((c) => c.rating)
     .sort((a, b) => b - a);
 
   if (approvedRatings.length === 0) return 0;

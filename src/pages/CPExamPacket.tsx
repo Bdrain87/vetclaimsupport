@@ -337,8 +337,10 @@ export default function CPExamPacket() {
           intentToFileDate: profile.intentToFileDate,
           currentRating: (() => {
             const ratings = userConditions
-              .filter(uc => uc.rating && uc.rating > 0)
-              .map(uc => uc.rating!)
+              .filter((uc): uc is typeof uc & { rating: number } =>
+                typeof uc.rating === 'number' && uc.rating > 0
+              )
+              .map(uc => uc.rating)
               .sort((a, b) => b - a);
             if (ratings.length === 0) return 0;
             let combined = 0;
@@ -452,9 +454,10 @@ export default function CPExamPacket() {
             <InfoRow label="Current VA Rating" value={
               (() => {
                 const ratings = userConditions
-                  .filter(c => c.claimStatus === 'approved')
+                  .filter((c): c is typeof c & { rating: number } =>
+                    c.claimStatus === 'approved' && typeof c.rating === 'number' && c.rating > 0
+                  )
                   .map(c => c.rating)
-                  .filter((r): r is number => r !== undefined && r > 0)
                   .sort((a, b) => b - a);
                 if (ratings.length === 0) return 'None on file';
                 let combined = 0;

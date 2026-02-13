@@ -1,19 +1,23 @@
 import { Link } from 'react-router-dom';
 
-const PRODUCT_LINKS = [
+type FooterLink =
+  | { label: string; href: string; to?: never; external?: boolean }
+  | { label: string; to: string; href?: never; external?: never };
+
+const PRODUCT_LINKS: FooterLink[] = [
   { label: 'Features', href: '#features' },
   { label: 'Pricing', href: '#pricing' },
   { label: 'Launch App', to: '/app' },
 ];
 
-const RESOURCE_LINKS = [
+const RESOURCE_LINKS: FooterLink[] = [
   { label: 'VA.gov', href: 'https://www.va.gov/', external: true },
   { label: 'FAQ', to: '/app/settings/faq' },
   { label: 'Privacy Policy', to: '/app/settings/privacy' },
   { label: 'Terms of Service', to: '/app/settings/terms' },
 ];
 
-const COMPANY_LINKS = [
+const COMPANY_LINKS: FooterLink[] = [
   { label: 'About', to: '/app/settings/about' },
 ];
 
@@ -47,7 +51,7 @@ export function LandingFooter() {
                 <li key={link.label}>
                   {link.href ? (
                     <button
-                      onClick={() => scrollTo(link.href!)}
+                      onClick={() => scrollTo(link.href)}
                       className="bg-transparent border-none cursor-pointer text-sm hover:text-[#BF953F] transition-colors p-0"
                       style={{ color: '#9CA3AF' }}
                     >
@@ -55,7 +59,7 @@ export function LandingFooter() {
                     </button>
                   ) : (
                     <Link
-                      to={link.to!}
+                      to={link.to}
                       className="text-sm no-underline hover:text-[#BF953F] transition-colors"
                       style={{ color: '#9CA3AF' }}
                     >
@@ -83,15 +87,15 @@ export function LandingFooter() {
                     >
                       {link.label}
                     </a>
-                  ) : (
+                  ) : link.to ? (
                     <Link
-                      to={link.to!}
+                      to={link.to}
                       className="text-sm no-underline hover:text-[#BF953F] transition-colors"
                       style={{ color: '#9CA3AF' }}
                     >
                       {link.label}
                     </Link>
-                  )}
+                  ) : null}
                 </li>
               ))}
             </ul>

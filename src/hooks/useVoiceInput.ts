@@ -32,6 +32,19 @@ interface UseVoiceInputOptions {
   language?: string;
 }
 
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onstart: ((event: Event) => void) | null;
+  onend: ((event: Event) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
+  onresult: ((event: SpeechRecognitionEventCustom) => void) | null;
+  start(): void;
+  stop(): void;
+  abort(): void;
+}
+
 interface UseVoiceInputReturn {
   isListening: boolean;
   isSupported: boolean;
@@ -51,8 +64,7 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}): UseVoiceInput
   const [interimTranscript, setInterimTranscript] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
   // Use refs for callbacks to avoid recreating SpeechRecognition on every render
   const onResultRef = useRef(onResult);
   const onInterimResultRef = useRef(onInterimResult);
