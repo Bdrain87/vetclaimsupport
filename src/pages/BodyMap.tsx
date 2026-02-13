@@ -366,7 +366,7 @@ export default function BodyMap() {
   // -------------------------------------------------------------------------
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background">
       <PageContainer className="py-6 space-y-6">
         {/* Back + Header */}
         <div>

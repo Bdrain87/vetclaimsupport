@@ -64,7 +64,7 @@ export default function TravelPayCalculator() {
   }, [oneWayMiles, tolls, parking, deductibleWaived, appointmentsPerMonth]);
 
   return (
-    <PageContainer className="min-h-screen py-6 sm:py-8 space-y-6">
+    <PageContainer className="py-6 sm:py-8 space-y-6">
       <Button
         variant="ghost"
         size="sm"

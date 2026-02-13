@@ -126,7 +126,7 @@ export default function IntentToFile() {
   const todayStr = new Date().toISOString().split('T')[0];
 
   return (
-    <PageContainer className="min-h-screen py-6 sm:py-8 space-y-6">
+    <PageContainer className="py-6 sm:py-8 space-y-6">
         {/* Back Navigation */}
         <Button
           variant="ghost"

@@ -157,7 +157,7 @@ export default function Dashboard() {
   }, [profile]);
 
   return (
-    <PageContainer className="space-y-4 animate-fade-in pb-8 md:pb-4 overflow-x-hidden">
+    <PageContainer className="space-y-4 animate-fade-in pb-4 overflow-x-hidden">
       {/* Intent to File Banner */}
       <IntentToFileBanner />
 

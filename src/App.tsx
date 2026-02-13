@@ -338,7 +338,7 @@ function AppContent() {
       <LiabilityAcceptanceScreen />
 <div className="flex-1 flex flex-col overflow-hidden">
         <MobileHeader />
-        <main id="main-content" className="flex-1 overflow-y-auto pt-14" style={{ paddingBottom: 'calc(56px + env(safe-area-inset-bottom, 0px) + 16px)' }}>
+        <main id="main-content" className="flex-1 overflow-y-auto" style={{ paddingTop: 'calc(56px + env(safe-area-inset-top, 0px))', paddingBottom: 'calc(56px + env(safe-area-inset-bottom, 0px) + 16px)' }}>
           <AnimatedRoutes />
         </main>
         <BottomTabBar />
