@@ -18,6 +18,9 @@ export default defineConfig({
         skipWaiting: true,
         clientsClaim: true,
 
+        // Allow larger files like body-silhouette.png (2.14 MB)
+        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3 MB
+
         // ── CRITICAL FIX ──────────────────────────────────────
         // Do NOT precache JS/CSS bundles. Vite already content-hashes
         // every filename (e.g. index-BQc-vCuz.js). Precaching them
