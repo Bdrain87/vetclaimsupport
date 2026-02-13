@@ -529,187 +529,247 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
 }
 
 /* ────────────────────────────────────────────────
- * Desktop Dual-Row Rotating Carousel
+ * 3D Looping Ferris Wheel — Desktop Carousel
  *
- * Two rows of scrolling cards with 3D rotation:
- * - Top row scrolls left continuously
- * - Bottom row scrolls right continuously
- * - All cards remain clickable for detail modal
+ * Cards rotate continuously in a vertical circle.
+ * Front card is prominent; cards recede with depth.
  * ──────────────────────────────────────────────── */
 
 const N = CARDS.length;
-
-const SCROLL_KEYFRAMES = `
-@keyframes scroll-left {
-  0% { transform: translateX(0) rotateY(0deg); }
-  100% { transform: translateX(-100%) rotateY(-15deg); }
-}
-
-@keyframes scroll-right {
-  0% { transform: translateX(-100%) rotateY(0deg); }
-  100% { transform: translateX(0) rotateY(15deg); }
-}
-`;
-
-function CardComponent({ card, onClick }: { card: CardData; onClick: () => void }) {
-  const Icon = card.icon;
-
-  return (
-    <div
-      className="inline-block mx-4 cursor-pointer"
-      style={{
-        width: '380px',
-        perspective: '1000px',
-      }}
-      onClick={onClick}
-    >
-      <div
-        className="rounded-2xl p-6 h-full transition-all duration-300 hover:scale-105"
-        style={{
-          background: SILVER_GRADIENT,
-          border: '1px solid rgba(255,255,255,0.3)',
-          boxShadow: CARD_SHADOW,
-          transformStyle: 'preserve-3d',
-        }}
-      >
-        {/* Top row: icon + category/title */}
-        <div className="flex items-start gap-4 mb-4">
-          <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{
-              backgroundColor: 'rgba(0,0,0,0.06)',
-              border: '1px solid rgba(0,0,0,0.06)',
-            }}
-          >
-            <Icon size={20} style={{ color: '#8B7332' }} />
-          </div>
-          <div className="min-w-0">
-            <span
-              className="text-[10px] font-semibold tracking-[0.15em] uppercase block mb-1"
-              style={{ color: '#8B7332' }}
-            >
-              {card.category}
-            </span>
-            <h4
-              className="text-lg font-semibold leading-tight"
-              style={{ color: '#0A0A0A', letterSpacing: '-0.02em' }}
-            >
-              {card.title}
-            </h4>
-          </div>
-        </div>
-
-        {/* Description */}
-        <p
-          className="text-sm leading-relaxed mb-4"
-          style={{ color: '#333' }}
-        >
-          {card.short}
-        </p>
-
-        {/* Footer */}
-        <div
-          className="flex items-center justify-between pt-3"
-          style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}
-        >
-          <span
-            className="inline-block rounded-full px-3 py-1 text-[10px] font-semibold"
-            style={{
-              backgroundColor:
-                card.plan === 'Free'
-                  ? 'rgba(0,0,0,0.06)'
-                  : 'rgba(139,115,50,0.12)',
-              color: card.plan === 'Free' ? '#444' : '#8B7332',
-            }}
-          >
-            {card.plan === 'Free' ? 'Free' : 'Launch Plan'}
-          </span>
-          <span
-            className="text-[10px] font-medium"
-            style={{ color: '#999' }}
-          >
-            Click to explore →
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ScrollingRow({
-  cards,
-  direction,
-  speed,
-  onSelectCard
-}: {
-  cards: CardData[];
-  direction: 'left' | 'right';
-  speed: number;
-  onSelectCard: (card: CardData) => void;
-}) {
-  // Duplicate cards for seamless infinite scroll
-  const duplicatedCards = [...cards, ...cards, ...cards];
-
-  return (
-    <div className="relative w-full overflow-hidden py-4">
-      <div
-        className="flex w-max"
-        style={{
-          animation: `scroll-${direction} ${speed}s linear infinite`,
-          willChange: 'transform',
-        }}
-      >
-        {duplicatedCards.map((card, i) => (
-          <CardComponent
-            key={`${card.title}-${i}`}
-            card={card}
-            onClick={() => onSelectCard(card)}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
+const DOM_SLOTS = 12;
+const WHEEL_RADIUS = 450;
+const ROTATION_INTERVAL = 3000;
+const PERSPECTIVE = 2500;
 
 function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => void }) {
-  const midpoint = Math.ceil(N / 2);
-  const topRowCards = CARDS.slice(0, midpoint);
-  const bottomRowCards = CARDS.slice(midpoint);
+  const [frontIndex, setFrontIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const dragRef = useRef({ x: 0, isDragging: false, velocity: 0 });
 
-  useEffect(() => {
-    const id = 'scroll-keyframes';
-    if (!document.getElementById(id)) {
-      const style = document.createElement('style');
-      style.id = id;
-      style.textContent = SCROLL_KEYFRAMES;
-      document.head.appendChild(style);
+  // Get visible cards (11 cards: frontIndex ± 5)
+  const getVisibleCards = useCallback(() => {
+    const visible = [];
+    for (let i = -5; i <= 5; i++) {
+      const cardIndex = ((frontIndex + i) % N + N) % N;
+      visible.push({ slotPosition: i, cardIndex, card: CARDS[cardIndex] });
     }
-  }, []);
+    return visible;
+  }, [frontIndex]);
+
+  // Calculate 3D transform for each slot position
+  const getCardTransform = (slotPosition: number) => {
+    const angle = slotPosition * (360 / DOM_SLOTS);
+    const radians = (angle * Math.PI) / 180;
+
+    const y = Math.sin(radians) * WHEEL_RADIUS;
+    const z = Math.cos(radians) * WHEEL_RADIUS - WHEEL_RADIUS;
+
+    const depthFactor = (z + WHEEL_RADIUS) / WHEEL_RADIUS;
+    const scale = 0.5 + 0.5 * depthFactor;
+    const opacity = Math.max(0, 0.15 + 0.85 * depthFactor);
+    const zIndex = Math.round(depthFactor * 100);
+
+    return { y, z, scale, opacity, zIndex };
+  };
+
+  // Auto-rotation
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      setFrontIndex((prev) => (prev + 1) % N);
+    }, ROTATION_INTERVAL);
+
+    return () => clearInterval(interval);
+  }, [isPaused]);
+
+  // GSAP animation for smooth card transitions
+  useEffect(() => {
+    const visible = getVisibleCards();
+
+    visible.forEach(({ slotPosition }, idx) => {
+      const cardEl = cardsRef.current[idx];
+      if (!cardEl) return;
+
+      const { y, z, scale, opacity, zIndex } = getCardTransform(slotPosition);
+
+      gsap.to(cardEl, {
+        y,
+        z,
+        scale,
+        opacity,
+        zIndex,
+        duration: 0.8,
+        ease: 'power2.out',
+      });
+    });
+  }, [frontIndex, getVisibleCards]);
+
+  // Drag-to-spin
+  const handlePointerDown = (e: React.PointerEvent) => {
+    dragRef.current = { x: e.clientX, isDragging: true, velocity: 0 };
+    setIsPaused(true);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!dragRef.current.isDragging) return;
+
+    const deltaX = e.clientX - dragRef.current.x;
+    dragRef.current.velocity = deltaX;
+    dragRef.current.x = e.clientX;
+
+    if (Math.abs(deltaX) > 15) {
+      const direction = deltaX > 0 ? -1 : 1;
+      setFrontIndex((prev) => (prev + direction + N) % N);
+    }
+  };
+
+  const handlePointerUp = () => {
+    dragRef.current.isDragging = false;
+
+    // Momentum
+    const velocity = dragRef.current.velocity;
+    if (Math.abs(velocity) > 25) {
+      const steps = Math.min(Math.floor(Math.abs(velocity) / 50), 3);
+      const direction = velocity > 0 ? -1 : 1;
+
+      for (let i = 1; i <= steps; i++) {
+        setTimeout(() => {
+          setFrontIndex((prev) => (prev + direction + N) % N);
+        }, i * 180);
+      }
+    }
+
+    setTimeout(() => setIsPaused(false), 800);
+  };
+
+  const visibleCards = getVisibleCards();
 
   return (
     <div
+      ref={containerRef}
       className="relative mx-auto"
       style={{
-        maxWidth: '100%',
-        perspective: '1500px',
-        perspectiveOrigin: 'center center',
+        maxWidth: '1200px',
+        height: '650px',
+        perspective: `${PERSPECTIVE}px`,
+        perspectiveOrigin: '50% 50%',
+        pointerEvents: 'none',
       }}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerLeave={() => {
+        if (dragRef.current.isDragging) handlePointerUp();
+      }}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
     >
-      {/* Top row - scrolls left */}
-      <ScrollingRow
-        cards={topRowCards}
-        direction="left"
-        speed={180}
-        onSelectCard={onSelectCard}
-      />
+      <div
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transformStyle: 'preserve-3d',
+          pointerEvents: 'none',
+        }}
+      >
+        {visibleCards.map(({ slotPosition, cardIndex, card }, idx) => {
+          const { y, z, scale, opacity, zIndex } = getCardTransform(slotPosition);
+          const Icon = card.icon;
+          const isFront = slotPosition === 0;
 
-      {/* Bottom row - scrolls right */}
-      <ScrollingRow
-        cards={bottomRowCards}
-        direction="right"
-        speed={190}
-        onSelectCard={onSelectCard}
-      />
+          return (
+            <div
+              key={`${cardIndex}-${slotPosition}`}
+              ref={(el) => (cardsRef.current[idx] = el)}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '480px',
+                height: '360px',
+                transform: `translate(-50%, -50%) translateY(${y}px) translateZ(${z}px) scale(${scale})`,
+                opacity,
+                zIndex,
+                pointerEvents: opacity > 0.2 ? 'auto' : 'none',
+                willChange: 'transform',
+              }}
+              onClick={() => {
+                setIsPaused(true);
+                onSelectCard(card);
+              }}
+            >
+              <div
+                className="rounded-2xl p-6 h-full cursor-pointer transition-all duration-300 hover:scale-105"
+                style={{
+                  background: SILVER_GRADIENT,
+                  border: isFront
+                    ? '1px solid rgba(197,164,66,0.35)'
+                    : '1px solid rgba(255,255,255,0.15)',
+                  boxShadow: isFront
+                    ? '0 0 30px rgba(191,149,63,0.2), ' + CARD_SHADOW
+                    : CARD_SHADOW,
+                  backdropFilter: isFront ? 'none' : 'blur(2px)',
+                }}
+              >
+                <div className="flex items-start gap-4 mb-4">
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                    style={{
+                      backgroundColor: 'rgba(0,0,0,0.06)',
+                      border: '1px solid rgba(0,0,0,0.06)',
+                    }}
+                  >
+                    <Icon size={20} style={{ color: '#8B7332' }} />
+                  </div>
+                  <div className="min-w-0">
+                    <span
+                      className="text-[10px] font-semibold tracking-[0.15em] uppercase block mb-1"
+                      style={{ color: '#8B7332' }}
+                    >
+                      {card.category}
+                    </span>
+                    <h4
+                      className="text-lg font-semibold leading-tight"
+                      style={{ color: '#0A0A0A', letterSpacing: '-0.02em' }}
+                    >
+                      {card.title}
+                    </h4>
+                  </div>
+                </div>
+
+                <p className="text-sm leading-relaxed mb-4" style={{ color: '#333' }}>
+                  {card.short}
+                </p>
+
+                <div
+                  className="flex items-center justify-between pt-3"
+                  style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}
+                >
+                  <span
+                    className="inline-block rounded-full px-3 py-1 text-[10px] font-semibold"
+                    style={{
+                      backgroundColor:
+                        card.plan === 'Free'
+                          ? 'rgba(0,0,0,0.06)'
+                          : 'rgba(139,115,50,0.12)',
+                      color: card.plan === 'Free' ? '#444' : '#8B7332',
+                    }}
+                  >
+                    {card.plan === 'Free' ? 'Free' : 'Launch Plan'}
+                  </span>
+                  <span className="text-[10px] font-medium" style={{ color: '#999' }}>
+                    Click to explore →
+                  </span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
