@@ -4,9 +4,11 @@ import { Download, FileText, Loader2, ChevronLeft, Check } from 'lucide-react';
 import { exportAllData } from '@/services/accountManagement';
 import { saveAs } from 'file-saver';
 import { PageContainer } from '@/components/PageContainer';
+import { useToast } from '@/hooks/use-toast';
 
 export default function ExportDataPage() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const format = 'pdf' as const;
   const [exporting, setExporting] = useState(false);
   const [exported, setExported] = useState(false);
@@ -30,8 +32,12 @@ export default function ExportDataPage() {
 
       setExported(true);
       setTimeout(() => setExported(false), 3000);
-    } catch {
-      // Export failed silently
+    } catch (err) {
+      toast({
+        title: 'Export Failed',
+        description: err instanceof Error ? err.message : 'Unable to generate export. Please try again.',
+        variant: 'destructive',
+      });
     } finally {
       setExporting(false);
     }
