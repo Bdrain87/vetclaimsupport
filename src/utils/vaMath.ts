@@ -7,8 +7,10 @@ export const calculatePlatinumRating = (ratings: number[], bilateral: number[]) 
   if (bilateral.length > 0) {
     const combined = bilateral.reduce((acc, r) => acc * (1 - r / 100), 1);
     bilateralBase = (1 - combined) * 100;
-    // The 10% "Bump"
+    // The 10% "Bump" per 38 CFR 4.26
     bilateralBase = bilateralBase + (bilateralBase * 0.1);
+    // Round bilateral value to nearest whole number before combining (VA procedure)
+    bilateralBase = Math.round(bilateralBase);
   }
 
   // 2. Combine all using VA Math descending order
