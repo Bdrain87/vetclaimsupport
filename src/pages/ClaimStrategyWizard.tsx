@@ -122,7 +122,7 @@ const steps = [
   { id: 2, title: 'Health Conditions', icon: Activity, description: 'Current conditions you want to claim' },
   { id: 3, title: 'Existing Ratings', icon: Shield, description: 'Any current VA ratings' },
   { id: 4, title: 'Evidence', icon: FileText, description: 'Documentation you have available' },
-  { id: 5, title: 'Strategy', icon: Sparkles, description: 'Your personalized claim strategy' },
+  { id: 5, title: 'Plan', icon: Sparkles, description: 'Your personalized claim preparation plan' },
 ];
 
 const commonConditions = [
@@ -257,7 +257,7 @@ export default function ClaimStrategyWizard() {
     setIsGenerating(true);
     setError(null);
 
-    const prompt = `You are an expert VA disability claims strategist. Based on the following veteran's information, provide a comprehensive claim strategy.
+    const prompt = `You are a VA disability claims preparation assistant. Based on the following veteran's information, provide a comprehensive claim preparation plan.
 
 VETERAN INFORMATION:
 - Branch: ${data.serviceInfo.branch}
