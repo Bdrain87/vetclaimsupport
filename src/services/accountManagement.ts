@@ -201,9 +201,16 @@ export async function deleteAccount(): Promise<void> {
     'conditions',
   ] as const;
 
+  const deleteErrors: string[] = [];
   for (const table of tables) {
     const { error: deleteError } = await supabase.from(table).delete().eq('user_id', userId);
-    if (deleteError) console.error(`[deleteAccount] failed to delete ${table}:`, deleteError.message);
+    if (deleteError) {
+      console.error(`[deleteAccount] failed to delete ${table}:`, deleteError.message);
+      deleteErrors.push(`${table}: ${deleteError.message}`);
+    }
+  }
+  if (deleteErrors.length > 0) {
+    throw new Error(`Failed to delete account data (${deleteErrors.join('; ')}). Please try again.`);
   }
 
   // 2. Delete files from Supabase Storage (list may be paginated; loop until empty)
@@ -226,15 +233,22 @@ export async function deleteAccount(): Promise<void> {
 
   // 3. Delete the profiles row (vault_passcode_hash goes with it)
   const { error: profileDeleteError } = await supabase.from('profiles').delete().eq('id', userId);
-  if (profileDeleteError) console.error('[deleteAccount] failed to delete profile:', profileDeleteError.message);
+  if (profileDeleteError) {
+    throw new Error(`Failed to delete profile: ${profileDeleteError.message}`);
+  }
 
   // 4. Delete auth user via Edge Function
   try {
-    await supabase.functions.invoke('delete-user', {
+    const { error: fnError } = await supabase.functions.invoke('delete-user', {
       body: { userId },
     });
-  } catch {
-    // Edge function may not be deployed yet; continue with sign-out
+    if (fnError) {
+      throw fnError;
+    }
+  } catch (err) {
+    throw new Error(
+      `Failed to delete auth user: ${err instanceof Error ? err.message : String(err)}`
+    );
   }
 
   // 5. Stop sync, sign out, and wipe local data
