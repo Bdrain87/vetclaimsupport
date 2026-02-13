@@ -343,12 +343,12 @@ function AppContent() {
       </a>
       <LiabilityAcceptanceScreen />
       {/* Desktop Sidebar */}
-      <div className="hidden md:block">
+      <div className="hidden">
         <AppSidebar />
       </div>
-      <div className={`flex-1 flex flex-col overflow-hidden transition-all duration-300 ${collapsed ? 'md:ml-16' : 'md:ml-64'}`}>
+      <div className="flex-1 flex flex-col overflow-hidden">
         <MobileHeader />
-        <main id="main-content" className="flex-1 overflow-y-auto pt-14 pb-20 md:pt-0 md:pb-0">
+        <main id="main-content" className="flex-1 overflow-y-auto pt-14 pb-20">
           <AnimatedRoutes />
         </main>
         <BottomTabBar />

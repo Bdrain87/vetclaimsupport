@@ -92,7 +92,7 @@ export function MobileHeader() {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50 md:hidden bg-background/80 backdrop-blur-xl border-b border-border/50"
+      className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50"
       style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
     >
       <div className="flex items-center justify-between px-3 h-14">

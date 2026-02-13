@@ -86,7 +86,7 @@ export function DashboardHeader() {
       </div>
       
       {/* Desktop: Full buttons */}
-      <div className="hidden md:flex items-center gap-2 flex-shrink-0">
+      <div className="hidden items-center gap-2 flex-shrink-0">
         <Button variant="outline" size="sm" onClick={handleNativeShare} disabled={isSharing} className="gap-2">
           <Share className="h-4 w-4" />
           Share
@@ -95,7 +95,7 @@ export function DashboardHeader() {
       </div>
       
       {/* Mobile: Prominent Export + Share dropdown */}
-      <div className="flex md:hidden items-center gap-2">
+      <div className="flex items-center gap-2">
         {/* Prominent Export Button */}
         <ExportButton />
         

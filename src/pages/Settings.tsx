@@ -553,7 +553,7 @@ export default function Settings() {
       </Card>
 
       {/* Export & Share - Mobile only */}
-      <Card className="md:hidden">
+      <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <FileDown className="h-5 w-5" />
