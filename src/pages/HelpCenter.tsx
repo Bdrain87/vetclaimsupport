@@ -81,7 +81,7 @@ const guideSections: GuideSection[] = [
     icon: <BookOpen className="h-5 w-5" />,
     description: 'Learn the basics of using Vet Claim Support',
     steps: [
-      { title: 'Accept the Terms', content: "When you first open the app, you'll see a liability acceptance screen. Read and accept to continue. This app is an educational tool - always consult with a VSO for official advice.", tip: 'The app works entirely offline after initial load. Your data never leaves your device.' },
+      { title: 'Accept the Terms', content: "When you first open the app, you'll see a liability acceptance screen. Read and accept to continue. This app is an educational tool - always consult with a VSO for official advice.", tip: 'The app works entirely offline after initial load. Your data is encrypted and stored on your device.' },
       { title: 'Complete the Onboarding', content: 'The onboarding wizard helps you set up your profile. You can add your service dates, primary conditions, and customize the app to your needs.', tip: 'You can always change these settings later in the Settings page.' },
       { title: 'Explore the Dashboard', content: 'Your dashboard shows a summary of your tracked data, quick actions, and your claim readiness score. Use the navigation menu to access different sections.' },
     ],
