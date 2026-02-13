@@ -86,15 +86,44 @@ export const encryptedStorage: StateStorage = {
     const ciphertext = raw.slice(ENCRYPTED_PREFIX.length);
     return decrypt(ciphertext, password)
       .catch(() => {
-        // Graceful degradation: return null so the store initialises with
-        // defaults instead of throwing.
+        // SECURITY NOTE: Decryption failed (wrong password, corrupted data, or
+        // crypto API error).  We return null so the store initialises with its
+        // defaults rather than crashing.  The app should prompt the user for
+        // their vault passcode and trigger a rehydrate.
+        console.warn(
+          '[encryptedStorage] Decryption failed for key:',
+          key,
+          '— returning null so the store falls back to defaults.',
+        );
         return null;
       });
   },
 
   setItem(key: string, value: string): void {
-    if (!isEncryptionEnabled() || !_sessionPassword) {
-      // Encryption not active or no password in memory -- write plaintext.
+    if (!isEncryptionEnabled()) {
+      // Encryption not active -- write plaintext.  This is the expected path
+      // for users who have not opted in to vault encryption.
+      localStorage.setItem(key, value);
+      return;
+    }
+
+    if (!_sessionPassword) {
+      // SECURITY NOTE – INTENTIONAL PLAINTEXT FALLBACK
+      // Encryption is enabled but the session password is not available (e.g.
+      // the user has not yet unlocked the vault this session, or the password
+      // was cleared on lock/logout).  We still write plaintext here to avoid
+      // data loss — the alternative is dropping the write entirely, which would
+      // silently discard user data and is arguably worse.
+      //
+      // This means sensitive data MAY be stored unencrypted in localStorage
+      // until the store is next written with a password available.  Callers
+      // that require confidentiality guarantees should check
+      // `getSessionPassword()` before persisting sensitive payloads.
+      console.warn(
+        '[encryptedStorage] Encryption is enabled but no session password is available. ' +
+        'Data for key "' + key + '" will be stored as PLAINTEXT. ' +
+        'Ensure the vault is unlocked before persisting sensitive data.',
+      );
       localStorage.setItem(key, value);
       return;
     }
@@ -109,9 +138,16 @@ export const encryptedStorage: StateStorage = {
         localStorage.setItem(key, ENCRYPTED_PREFIX + ciphertext);
       })
       .catch(() => {
-        // If encryption fails for any reason, fall back to plaintext so the
-        // user does not lose data.  Warn so the issue is visible in devtools.
-        console.warn('[encryptedStorage] Encryption failed — falling back to plaintext write for key:', key);
+        // SECURITY NOTE – INTENTIONAL PLAINTEXT FALLBACK
+        // If encryption fails for any reason (Web Crypto error, invalid key
+        // material, etc.) we fall back to plaintext so the user does not lose
+        // data.  This means the value will be readable in localStorage without
+        // decryption.  The console.warn below ensures the issue is visible in
+        // devtools so developers / QA can investigate.
+        console.warn(
+          '[encryptedStorage] Encryption failed for key "' + key + '" — ' +
+          'falling back to PLAINTEXT storage.  Sensitive data may be unencrypted.',
+        );
         localStorage.setItem(key, value);
       });
   },
