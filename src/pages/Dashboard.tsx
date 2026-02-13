@@ -29,6 +29,7 @@ import {
   Compass,
   Activity,
   Navigation,
+  PersonStanding,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { vcsSpring } from '@/constants/animations';
@@ -292,12 +293,12 @@ export default function Dashboard() {
             { name: 'VA-Speak Translator', icon: Languages, path: '/prep/va-speak' },
             { name: 'C&P Exam Prep', icon: ClipboardCheck, path: '/prep/exam' },
             { name: 'Doctor Summary', icon: FileSignature, path: '/prep/nexus-letter' },
+            { name: 'Body Map', icon: PersonStanding, path: '/claims/body-map' },
             { name: 'Stressor Statement', icon: Shield, path: '/prep/stressor' },
             { name: 'Buddy Statement', icon: Users, path: '/prep/buddy-statement' },
             { name: 'Back Pay Estimator', icon: DollarSign, path: '/prep/back-pay' },
             { name: 'Health Trackers', icon: Heart, path: '/health' },
             { name: 'DBQ Prep', icon: FileCheckIcon, path: '/prep/dbq' },
-            { name: 'Body Map', icon: Activity, path: '/claims/body-map' },
             { name: 'Travel Pay', icon: Navigation, path: '/prep/travel-pay' },
             { name: 'Claim Packet', icon: Package, path: '/prep/packet' },
           ].map((tool) => (
