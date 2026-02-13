@@ -820,7 +820,7 @@ export const exportBuddyContacts = async (contacts: BuddyContact[]) => {
 };
 
 // Comprehensive Evidence Export
-export const exportAllEvidence = async (data: ClaimsData) => {
+export const exportAllEvidence = async (data: ClaimsData, options?: { returnBlob?: boolean }) => {
   const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
 
@@ -910,6 +910,11 @@ export const exportAllEvidence = async (data: ClaimsData) => {
   }
   
   addPDFFooter(doc);
+
+  if (options?.returnBlob) {
+    return doc.output('blob') as Blob;
+  }
+
   doc.save('complete-evidence-package.pdf');
 };
 

@@ -4,156 +4,73 @@ import { useProfileStore } from '@/store/useProfileStore';
 import { useAICacheStore } from '@/store/useAICacheStore';
 import { stopSync } from '@/services/syncEngine';
 import { ALL_LOCAL_STORAGE_KEYS } from '@/services/auth';
+import { exportAllEvidence } from '@/utils/pdfExport';
+import type { ClaimsData } from '@/types/claims';
 
 export async function exportAllData(format: 'json' | 'pdf'): Promise<Blob> {
   const appState = useAppStore.getState();
   const profileState = useProfileStore.getState();
 
-  const exportData = {
-    exportedAt: new Date().toISOString(),
-    profile: {
-      firstName: profileState.firstName,
-      lastName: profileState.lastName,
-      branch: profileState.branch,
-      mosCode: profileState.mosCode,
-      mosTitle: profileState.mosTitle,
-      serviceDates: profileState.serviceDates,
-      claimType: profileState.claimType,
-      intentToFileFiled: profileState.intentToFileFiled,
-      intentToFileDate: profileState.intentToFileDate,
-    },
-    conditions: appState.claimConditions,
-    symptoms: appState.symptoms,
-    sleepEntries: appState.sleepEntries,
-    migraines: appState.migraines,
-    medications: appState.medications,
-    medicalVisits: appState.medicalVisits,
-    exposures: appState.exposures,
-    serviceHistory: appState.serviceHistory,
-    buddyContacts: appState.buddyContacts,
-    documents: appState.documents,
-    userConditions: appState.userConditions,
-  };
-
   if (format === 'json') {
+    const exportData = {
+      exportedAt: new Date().toISOString(),
+      profile: {
+        firstName: profileState.firstName,
+        lastName: profileState.lastName,
+        branch: profileState.branch,
+        mosCode: profileState.mosCode,
+        mosTitle: profileState.mosTitle,
+        serviceDates: profileState.serviceDates,
+        claimType: profileState.claimType,
+        intentToFileFiled: profileState.intentToFileFiled,
+        intentToFileDate: profileState.intentToFileDate,
+      },
+      conditions: appState.claimConditions,
+      symptoms: appState.symptoms,
+      sleepEntries: appState.sleepEntries,
+      migraines: appState.migraines,
+      medications: appState.medications,
+      medicalVisits: appState.medicalVisits,
+      exposures: appState.exposures,
+      serviceHistory: appState.serviceHistory,
+      buddyContacts: appState.buddyContacts,
+      documents: appState.documents,
+      userConditions: appState.userConditions,
+    };
+
     return new Blob([JSON.stringify(exportData, null, 2)], {
       type: 'application/json',
     });
   }
 
-  // PDF export
-  const { jsPDF } = await import('jspdf');
-  const doc = new jsPDF();
-  const margin = 20;
-  let y = margin;
-  const lineHeight = 7;
-  const pageWidth = doc.internal.pageSize.getWidth() - margin * 2;
-
-  const addLine = (text: string, fontSize = 10, bold = false) => {
-    if (y > 270) {
-      doc.addPage();
-      y = margin;
-    }
-    doc.setFontSize(fontSize);
-    if (bold) doc.setFont('helvetica', 'bold');
-    else doc.setFont('helvetica', 'normal');
-
-    const lines = doc.splitTextToSize(text, pageWidth);
-    doc.text(lines, margin, y);
-    y += lines.length * lineHeight;
+  // PDF export — delegate to the comprehensive exportAllEvidence generator
+  const claimsData: ClaimsData = {
+    medicalVisits: appState.medicalVisits,
+    exposures: appState.exposures,
+    symptoms: appState.symptoms,
+    medications: appState.medications,
+    serviceHistory: appState.serviceHistory,
+    combatHistory: appState.combatHistory,
+    majorEvents: appState.majorEvents,
+    deployments: appState.deployments,
+    buddyContacts: appState.buddyContacts,
+    documents: appState.documents,
+    migraines: appState.migraines,
+    sleepEntries: appState.sleepEntries,
+    ptsdSymptoms: appState.ptsdSymptoms,
+    separationDate: profileState.separationDate ?? null,
+    uploadedDocuments: appState.uploadedDocuments,
+    claimConditions: appState.claimConditions,
+    quickLogs: appState.quickLogs,
+    deadlines: appState.deadlines,
+    documentScanDisclaimerShown: appState.documentScanDisclaimerShown,
+    milestonesAchieved: appState.milestonesAchieved,
+    approvedConditions: appState.approvedConditions,
+    journeyProgress: appState.journeyProgress,
   };
 
-  addLine('Vet Claim Support - Data Export', 16, true);
-  addLine(`Exported: ${new Date().toLocaleDateString()}`, 10);
-  y += lineHeight;
-
-  addLine('Profile', 14, true);
-  addLine(`Name: ${profileState.firstName} ${profileState.lastName}`);
-  addLine(`Branch: ${profileState.branch || 'Not set'}`);
-  addLine(`MOS: ${profileState.mosCode || 'Not set'} ${profileState.mosTitle || ''}`);
-  y += lineHeight;
-
-  if (appState.claimConditions.length > 0) {
-    addLine('Conditions', 14, true);
-    appState.claimConditions.forEach((c) => {
-      addLine(`- ${c.name} (${c.status || 'active'})`);
-    });
-    y += lineHeight;
-  }
-
-  if (appState.symptoms.length > 0) {
-    addLine('Symptom Logs', 14, true);
-    appState.symptoms.forEach((s) => {
-      addLine(`- ${s.date || 'No date'}: ${s.name || s.condition || 'Entry'}`);
-    });
-    y += lineHeight;
-  }
-
-  if (appState.medications.length > 0) {
-    addLine('Medications', 14, true);
-    appState.medications.forEach((m) => {
-      addLine(`- ${m.name}: ${m.dosage || ''} ${m.frequency || ''}`);
-    });
-    y += lineHeight;
-  }
-
-  if (appState.medicalVisits.length > 0) {
-    addLine('Medical Visits', 14, true);
-    appState.medicalVisits.forEach((v) => {
-      addLine(`- ${v.date || 'No date'}: ${v.provider || 'Unknown provider'}`);
-    });
-    y += lineHeight;
-  }
-
-  if (appState.sleepEntries.length > 0) {
-    addLine('Sleep Entries', 14, true);
-    appState.sleepEntries.forEach((s) => {
-      addLine(`- ${s.date || 'No date'}: ${s.quality || 'No quality'} (${s.hours ?? '?'}h)`);
-    });
-    y += lineHeight;
-  }
-
-  if (appState.migraines.length > 0) {
-    addLine('Migraines', 14, true);
-    appState.migraines.forEach((m) => {
-      addLine(`- ${m.date || 'No date'}: severity ${m.severity ?? '?'}/10`);
-    });
-    y += lineHeight;
-  }
-
-  if (appState.exposures.length > 0) {
-    addLine('Exposures', 14, true);
-    appState.exposures.forEach((e) => {
-      addLine(`- ${e.type || e.name || 'Exposure'}: ${e.location || ''} ${e.duration || ''}`);
-    });
-    y += lineHeight;
-  }
-
-  if (appState.serviceHistory.length > 0) {
-    addLine('Service History', 14, true);
-    appState.serviceHistory.forEach((s) => {
-      addLine(`- ${s.branch || 'Unknown branch'}: ${s.startDate || '?'} - ${s.endDate || '?'}`);
-    });
-    y += lineHeight;
-  }
-
-  if (appState.buddyContacts.length > 0) {
-    addLine('Buddy Contacts', 14, true);
-    appState.buddyContacts.forEach((b) => {
-      addLine(`- ${b.name || 'Unknown'}: ${b.relationship || ''}`);
-    });
-    y += lineHeight;
-  }
-
-  if (appState.documents.length > 0) {
-    addLine('Documents', 14, true);
-    appState.documents.forEach((d) => {
-      addLine(`- ${d.name || 'Document'}: ${d.status || 'Unknown status'}`);
-    });
-    y += lineHeight;
-  }
-
-  return doc.output('blob');
+  const blob = await exportAllEvidence(claimsData, { returnBlob: true });
+  return blob as Blob;
 }
 
 export async function deleteCloudData(): Promise<void> {
