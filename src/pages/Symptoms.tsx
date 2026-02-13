@@ -25,6 +25,7 @@ const lazyExportSymptoms = async (...args: Parameters<typeof import('@/utils/pdf
 };
 import { VoiceInputButton } from '@/components/ui/voice-input-button';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
+import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import { lazy, Suspense } from 'react';
 const SeverityTrendChart = lazy(() => import('@/components/symptoms/SymptomCharts').then(m => ({ default: m.SeverityTrendChart })));
 const ConditionStatsChart = lazy(() => import('@/components/symptoms/SymptomCharts').then(m => ({ default: m.ConditionStatsChart })));
@@ -485,31 +486,18 @@ export default function Symptoms() {
                   <div className="flex-1 overflow-y-auto space-y-4 px-6 pb-4" style={{ scrollPaddingBottom: '350px' }}>
                     {/* Condition Title - REQUIRED and FIRST */}
                     <div className="space-y-2">
-                      <Label htmlFor="conditionTitle" className="flex items-center gap-1">
+                      <Label className="flex items-center gap-1">
                         <Target className="h-3 w-3" />
                         Condition Name *
                       </Label>
-                      <Input 
-                        id="conditionTitle" 
-                        placeholder="e.g., Tinnitus, Knee Pain, Sleep Apnea, Anxiety, PTSD"
-                        value={formData.conditionTitle}
-                        onChange={(e) => setFormData({ ...formData, conditionTitle: e.target.value })}
-                        required
-                        list="condition-suggestions"
-                        onFocus={(e) => {
-                          setTimeout(() => {
-                            e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                          }, 300);
-                        }}
+                      <ConditionAutocomplete
+                        placeholder="Search for a condition (e.g., Tinnitus, Knee Pain, PTSD)"
+                        onSelect={(condition) => setFormData({ ...formData, conditionTitle: condition.name })}
+                        initialValue={formData.conditionTitle}
+                        autoFocus={false}
                       />
-                      {/* Suggest existing conditions */}
-                      <datalist id="condition-suggestions">
-                        {uniqueConditions.map(c => (
-                          <option key={c} value={c} />
-                        ))}
-                      </datalist>
                       <p className="text-xs text-muted-foreground">
-                        Enter the name of the condition you're tracking (e.g., the VA disability you're claiming)
+                        Select the VA condition you're tracking symptoms for
                       </p>
                     </div>
 
