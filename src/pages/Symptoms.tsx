@@ -18,7 +18,11 @@ import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { exportSymptoms } from '@/utils/pdfExport';
+// Lazy-loaded to avoid bundling jsPDF + html2canvas eagerly (~370KB savings)
+const lazyExportSymptoms = async (...args: Parameters<typeof import('@/utils/pdfExport').exportSymptoms>) => {
+  const { exportSymptoms } = await import('@/utils/pdfExport');
+  return exportSymptoms(...args);
+};
 import { VoiceInputButton } from '@/components/ui/voice-input-button';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
@@ -328,7 +332,7 @@ export default function Symptoms() {
         </div>
 
         <div className="flex gap-2 flex-shrink-0">
-          <Button variant="outline" onClick={() => exportSymptoms(data.symptoms)} className="gap-2 hidden sm:flex border-border/50 hover:bg-muted">
+          <Button variant="outline" onClick={() => lazyExportSymptoms(data.symptoms)} className="gap-2 hidden sm:flex border-border/50 hover:bg-muted">
             <Download className="h-4 w-4" />
             Export PDF
           </Button>
