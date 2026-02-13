@@ -10,6 +10,7 @@ import { Pricing } from '@/components/landing/new/Pricing';
 import { FinalCTA } from '@/components/landing/new/FinalCTA';
 import { TrustMarquee } from '@/components/landing/new/TrustMarquee';
 import { LandingFooter } from '@/components/landing/new/LandingFooter';
+import { BuiltByVeteran } from '@/components/landing/new/BuiltByVeteran';
 import { LegalDisclaimer } from '@/components/landing/new/LegalDisclaimer';
 
 export default function LandingPage() {
@@ -47,6 +48,7 @@ export default function LandingPage() {
       <HowItWorks />
       <PrivacySection />
       <FinalCTA />
+      <BuiltByVeteran />
       <LegalDisclaimer />
       <LandingFooter />
     </div>

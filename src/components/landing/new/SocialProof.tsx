@@ -67,39 +67,36 @@ export function SocialProof() {
               <div className="flex items-center justify-center h-[36px] md:h-[40px]">
                 <svg width="48" height="32" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <defs>
-                    <linearGradient id="metallic-gold-flag" x1="0" y1="0" x2="60" y2="40" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stopColor="#BF953F"/>
-                      <stop offset="25%" stopColor="#FCF6BA"/>
-                      <stop offset="50%" stopColor="#B38728"/>
-                      <stop offset="75%" stopColor="#FBF5B7"/>
-                      <stop offset="100%" stopColor="#AA771C"/>
+                    <linearGradient id="gold-flag-light" x1="0" y1="0" x2="60" y2="40" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stopColor="#E8C560"/>
+                      <stop offset="100%" stopColor="#C5A442"/>
                     </linearGradient>
                   </defs>
-                  {/* Flag body */}
-                  <rect x="0" y="0" width="60" height="40" rx="3" fill="url(#metallic-gold-flag)" opacity="0.9"/>
-                  {/* Stripes */}
-                  <rect x="0" y="6.15" width="60" height="3.08" rx="0" fill="#0A0A0A" opacity="0.2"/>
-                  <rect x="0" y="12.3" width="60" height="3.08" rx="0" fill="#0A0A0A" opacity="0.2"/>
-                  <rect x="0" y="18.45" width="60" height="3.08" rx="0" fill="#0A0A0A" opacity="0.2"/>
-                  <rect x="0" y="24.6" width="60" height="3.08" rx="0" fill="#0A0A0A" opacity="0.2"/>
-                  <rect x="0" y="30.75" width="60" height="3.08" rx="0" fill="#0A0A0A" opacity="0.2"/>
-                  <rect x="0" y="36.9" width="60" height="3.1" rx="0" fill="#0A0A0A" opacity="0.2"/>
-                  {/* Star field */}
-                  <rect x="0" y="0" width="24" height="21.5" rx="2" fill="#0A0A0A" opacity="0.3"/>
-                  {/* Stars */}
-                  <circle cx="5" cy="4" r="1.2" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="12" cy="4" r="1.2" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="19" cy="4" r="1.2" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="8.5" cy="7.5" r="1.2" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="15.5" cy="7.5" r="1.2" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="5" cy="11" r="1.2" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="12" cy="11" r="1.2" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="19" cy="11" r="1.2" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="8.5" cy="14.5" r="1.2" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="15.5" cy="14.5" r="1.2" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="5" cy="18" r="1.2" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="12" cy="18" r="1.2" fill="url(#metallic-gold-flag)"/>
-                  <circle cx="19" cy="18" r="1.2" fill="url(#metallic-gold-flag)"/>
+                  {/* Flag body — light gold */}
+                  <rect x="0" y="0" width="60" height="40" rx="3" fill="url(#gold-flag-light)"/>
+                  {/* Stripes — alternating darker gold bands */}
+                  <rect x="0" y="6.15" width="60" height="3.08" fill="#A38A35"/>
+                  <rect x="0" y="12.3" width="60" height="3.08" fill="#A38A35"/>
+                  <rect x="0" y="18.45" width="60" height="3.08" fill="#A38A35"/>
+                  <rect x="0" y="24.6" width="60" height="3.08" fill="#A38A35"/>
+                  <rect x="0" y="30.75" width="60" height="3.08" fill="#A38A35"/>
+                  <rect x="0" y="36.9" width="60" height="3.1" fill="#A38A35"/>
+                  {/* Star field — solid dark gold */}
+                  <rect x="0" y="0" width="24" height="21.5" rx="2" fill="#A38A35"/>
+                  {/* Stars — lighter gold */}
+                  <circle cx="5" cy="4" r="1.2" fill="#E8C560"/>
+                  <circle cx="12" cy="4" r="1.2" fill="#E8C560"/>
+                  <circle cx="19" cy="4" r="1.2" fill="#E8C560"/>
+                  <circle cx="8.5" cy="7.5" r="1.2" fill="#E8C560"/>
+                  <circle cx="15.5" cy="7.5" r="1.2" fill="#E8C560"/>
+                  <circle cx="5" cy="11" r="1.2" fill="#E8C560"/>
+                  <circle cx="12" cy="11" r="1.2" fill="#E8C560"/>
+                  <circle cx="19" cy="11" r="1.2" fill="#E8C560"/>
+                  <circle cx="8.5" cy="14.5" r="1.2" fill="#E8C560"/>
+                  <circle cx="15.5" cy="14.5" r="1.2" fill="#E8C560"/>
+                  <circle cx="5" cy="18" r="1.2" fill="#E8C560"/>
+                  <circle cx="12" cy="18" r="1.2" fill="#E8C560"/>
+                  <circle cx="19" cy="18" r="1.2" fill="#E8C560"/>
                 </svg>
               </div>
             ) : (
