@@ -134,29 +134,129 @@ export function Hero() {
           </motion.button>
         </motion.div>
 
-        {/* Trust line */}
+        {/* Premium pricing animation */}
         <motion.div
-          className="inline-flex items-center gap-3 text-sm px-6 py-2.5 rounded-full"
-          style={{
-            border: '2px solid rgba(255,255,255,0.5)',
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 100%)',
-            boxShadow: '0 0 10px rgba(255,255,255,0.4), 0 0 25px rgba(255,255,255,0.25), 0 0 50px rgba(255,255,255,0.15), 0 0 100px rgba(255,255,255,0.08)',
-          }}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.9 }}
+          className="relative"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.9, type: 'spring', stiffness: 200 }}
         >
-          <span style={{ color: '#22C55E' }}>Explore free — upgrade anytime</span>
-          <span style={{ color: 'rgba(191,149,63,0.4)' }}>&bull;</span>
-          <span style={{ color: '#6B7280', textDecoration: 'line-through', fontWeight: 400 }}>$19.99/mo</span>
-          {' '}
-          <span style={{
-            background: 'linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            fontWeight: 600,
-          }}>$4.99/mo — limited launch price</span>
+          <motion.div
+            className="inline-flex flex-col items-center gap-2 px-8 py-4 rounded-2xl relative overflow-hidden"
+            style={{
+              background: 'linear-gradient(135deg, rgba(191,149,63,0.08) 0%, rgba(191,149,63,0.02) 100%)',
+              border: '1px solid rgba(191,149,63,0.2)',
+            }}
+            animate={{
+              boxShadow: [
+                '0 0 20px rgba(191,149,63,0.15), 0 0 40px rgba(191,149,63,0.08)',
+                '0 0 30px rgba(191,149,63,0.25), 0 0 60px rgba(191,149,63,0.12)',
+                '0 0 20px rgba(191,149,63,0.15), 0 0 40px rgba(191,149,63,0.08)',
+              ],
+            }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            {/* Animated glow background */}
+            <motion.div
+              className="absolute inset-0 rounded-2xl"
+              style={{
+                background: 'radial-gradient(circle at 50% 50%, rgba(191,149,63,0.1) 0%, transparent 70%)',
+              }}
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.3, 0.6, 0.3],
+              }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+            />
+
+            {/* Content */}
+            <div className="relative z-10 flex items-center gap-3">
+              <motion.span
+                className="text-sm font-medium"
+                style={{ color: '#D1D5DB' }}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 1.1 }}
+              >
+                Get Premium
+              </motion.span>
+              <motion.div
+                className="flex items-baseline gap-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 1.2 }}
+              >
+                {/* Strike-through price with animated line */}
+                <div className="relative">
+                  <span className="text-base font-medium" style={{ color: '#6B7280' }}>
+                    $19.99
+                  </span>
+                  <motion.div
+                    className="absolute top-1/2 left-0 right-0 h-[2px] bg-red-500"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 0.6, delay: 1.4, ease: 'easeOut' }}
+                    style={{ originX: 0 }}
+                  />
+                </div>
+
+                {/* Arrow */}
+                <motion.span
+                  className="text-lg"
+                  style={{ color: '#BF953F' }}
+                  initial={{ opacity: 0, x: -5 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: 1.6 }}
+                >
+                  →
+                </motion.span>
+
+                {/* New price with glow */}
+                <motion.span
+                  className="text-xl font-bold relative"
+                  style={{
+                    background: 'linear-gradient(135deg, #FCF6BA 0%, #BF953F 50%, #FCF6BA 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                  }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 1.7, type: 'spring', stiffness: 300 }}
+                >
+                  $4.99
+                  <motion.div
+                    className="absolute -inset-1 rounded-lg"
+                    style={{ background: 'rgba(191,149,63,0.2)', filter: 'blur(8px)', zIndex: -1 }}
+                    animate={{
+                      opacity: [0.3, 0.6, 0.3],
+                    }}
+                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                  />
+                </motion.span>
+              </motion.div>
+            </div>
+
+            {/* Launch price badge */}
+            <motion.div
+              className="relative z-10 flex items-center gap-2"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 1.9 }}
+            >
+              <span className="text-xs px-3 py-1 rounded-full" style={{
+                background: 'linear-gradient(135deg, rgba(191,149,63,0.2), rgba(191,149,63,0.05))',
+                border: '1px solid rgba(191,149,63,0.3)',
+                color: '#E8C560',
+                fontWeight: 600,
+              }}>
+                Limited Launch Price
+              </span>
+              <span className="text-xs" style={{ color: '#9CA3AF' }}>
+                • Free plan available
+              </span>
+            </motion.div>
+          </motion.div>
         </motion.div>
       </div>
     </section>
