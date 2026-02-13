@@ -12,7 +12,7 @@
 export interface BilateralPair {
   name: string;
   ids: [string, string];
-  type: 'Upper Extremity' | 'Lower Extremity';
+  type: 'Upper Extremity' | 'Lower Extremity' | 'Sensory';
   diagnosticCodes?: string[];
   description?: string;
 }
@@ -93,17 +93,19 @@ export const BILATERAL_PAIRS: BilateralPair[] = [
   },
 
   // ============ SENSORY ORGANS (Paired) ============
+  // NOTE: Eye ratings use the special combined vision table under 38 CFR 4.79,
+  // NOT the standard 10% bilateral factor from 38 CFR 4.26.
   {
     name: "Eyes (Visual Acuity)",
     ids: ["eye-left", "eye-right"],
-    type: "Upper Extremity",
+    type: "Sensory",
     diagnosticCodes: ["6061", "6062", "6063", "6064", "6065", "6066", "6070", "6071", "6072", "6073", "6074", "6075", "6076", "6077", "6078", "6079"],
     description: "Bilateral visual impairment rated under 38 CFR 4.79; note: eye ratings use a special combined table, not standard bilateral factor"
   },
   {
     name: "Ears / Hearing Loss",
     ids: ["ear-left", "ear-right"],
-    type: "Upper Extremity",
+    type: "Sensory",
     diagnosticCodes: ["6100", "6101", "6102", "6103", "6104", "6105", "6106", "6107", "6108", "6109", "6110", "6260"],
     description: "Bilateral hearing loss rated under 38 CFR 4.85-4.86; tinnitus (DC 6260) is typically rated as a single disability"
   }
