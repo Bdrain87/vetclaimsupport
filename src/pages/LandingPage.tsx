@@ -40,8 +40,8 @@ export default function LandingPage() {
     <div className="min-h-screen" style={{ backgroundColor: '#000000' }}>
       <StickyNav />
       <Hero />
-      <SocialProof />
       <TrustMarquee />
+      <SocialProof />
       <Pricing />
       <ValueProps />
       <FeatureBento />

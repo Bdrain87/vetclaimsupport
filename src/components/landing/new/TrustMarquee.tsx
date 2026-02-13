@@ -73,8 +73,8 @@ export function TrustMarquee() {
         borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
       }}
     >
-      <MarqueeRow direction="left" speed={35} />
-      <MarqueeRow direction="right" speed={42} />
+      <MarqueeRow direction="left" speed={45} />
+      <MarqueeRow direction="right" speed={52} />
     </section>
   );
 }
