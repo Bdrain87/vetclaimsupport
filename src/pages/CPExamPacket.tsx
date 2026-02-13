@@ -357,6 +357,8 @@ export default function CPExamPacket() {
         medications: medications.filter((m) => m.stillTaking),
         examQuestions,
       });
+    } catch (err) {
+      console.error('PDF export failed:', err);
     } finally {
       setPdfExporting(false);
     }

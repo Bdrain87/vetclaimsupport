@@ -133,7 +133,7 @@ export function DataBackup() {
     try {
       // Write to Zustand persist storage key and reload state
       const claimsData = pendingImportData.claimsData;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ state: claimsData, version: 1 }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ state: claimsData, version: 3 }));
 
       // Import IndexedDB files if present
       if (pendingImportData.indexedDBFiles && pendingImportData.indexedDBFiles.length > 0) {
