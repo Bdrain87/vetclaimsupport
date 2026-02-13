@@ -247,7 +247,7 @@ export default function Sleep() {
         <Button
           variant="outline"
           onClick={() => exportSleepLog(sleepEntries)}
-          className="gap-2 hidden sm:flex flex-shrink-0"
+          className="gap-2 flex-shrink-0"
           disabled={sleepEntries.length === 0}
         >
           <Download className="h-4 w-4" />

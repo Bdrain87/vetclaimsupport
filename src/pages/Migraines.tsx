@@ -440,11 +440,6 @@ export default function Migraines() {
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex gap-2 flex-shrink-0">
-          <Button variant="outline" onClick={handleExportPDF} className="gap-2 hidden sm:flex">
-            <Download className="h-4 w-4" />
-            Export PDF
-          </Button>
-          
           <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
             <DialogTrigger asChild>
               <Button className="gap-2">

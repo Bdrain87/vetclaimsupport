@@ -84,7 +84,7 @@ export default function Medications() {
         </div>
 
         <div className="flex gap-2 flex-shrink-0">
-          <Button variant="outline" onClick={() => exportMedications(data.medications)} className="gap-2 hidden sm:flex">
+          <Button variant="outline" onClick={() => exportMedications(data.medications)} className="gap-2">
             <Download className="h-4 w-4" />
             Export PDF
           </Button>

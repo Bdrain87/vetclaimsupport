@@ -332,7 +332,7 @@ export default function Symptoms() {
         </div>
 
         <div className="flex gap-2 flex-shrink-0">
-          <Button variant="outline" onClick={() => lazyExportSymptoms(data.symptoms)} className="gap-2 hidden sm:flex border-border/50 hover:bg-muted">
+          <Button variant="outline" onClick={() => lazyExportSymptoms(data.symptoms)} className="gap-2 border-border/50 hover:bg-muted">
             <Download className="h-4 w-4" />
             Export PDF
           </Button>

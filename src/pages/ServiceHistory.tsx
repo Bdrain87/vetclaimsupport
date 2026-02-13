@@ -256,7 +256,7 @@ export default function ServiceHistory() {
           </div>
         </div>
 
-        <Button variant="outline" onClick={() => exportServiceHistory(data.serviceHistory)} className="gap-2 hidden sm:flex flex-shrink-0">
+        <Button variant="outline" onClick={() => exportServiceHistory(data.serviceHistory)} className="gap-2 flex-shrink-0">
           <Download className="h-4 w-4" />
           Export PDF
         </Button>
