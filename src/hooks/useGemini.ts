@@ -16,6 +16,10 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
 
     setIsLoading(true);
     setError(null);
+
+    // Auto-abort after 30 seconds to prevent infinite loading
+    const timeoutId = setTimeout(() => controller.abort(), 30_000);
+
     try {
       const sanitizedInput = sanitizePHI(input);
       const { data, error: invokeError } = await supabase.functions.invoke('analyze-disabilities', {
@@ -40,6 +44,7 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
       return text;
     } catch (err: unknown) {
       if (err instanceof DOMException && err.name === 'AbortError') {
+        setError('Request timed out. Please try again.');
         return null;
       }
       if (controller.signal.aborted) return null;
@@ -47,6 +52,7 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
       setError(msg);
       return null;
     } finally {
+      clearTimeout(timeoutId);
       setIsLoading(false);
     }
   }, [persona]);
