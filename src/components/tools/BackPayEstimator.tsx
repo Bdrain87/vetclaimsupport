@@ -19,7 +19,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { DollarSign, Calendar, Info, AlertTriangle, TrendingUp, FileText, ArrowRight, Sparkles } from 'lucide-react';
-import { format, differenceInMonths, parseISO, addDays } from 'date-fns';
+import { format, differenceInMonths, parseISO, subYears } from 'date-fns';
 import { COMP_RATES_2026 } from '@/data/compRates2026';
 
 // Use the shared 2026 projected rates (single source of truth)
@@ -41,7 +41,7 @@ export function BackPayEstimator() {
   const itfDeadline = data.deadlines?.find(d => d.type === 'intent_to_file');
   // ITF deadline is 1 year from filing - calculate the filing date
   const itfDate = itfDeadline?.date 
-    ? format(addDays(parseISO(itfDeadline.date), -365), 'yyyy-MM-dd')
+    ? format(subYears(parseISO(itfDeadline.date), 1), 'yyyy-MM-dd')
     : null;
 
   const calculation = useMemo(() => {
