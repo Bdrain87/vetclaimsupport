@@ -539,7 +539,7 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
 
 const N = CARDS.length;
 const VISIBLE = 7; // cards rendered in the visible stack
-const SHUFFLE_MS = 1800; // time between shuffles
+const SHUFFLE_MS = 1000; // time between shuffles
 
 // Stack layout: isometric diagonal recession into the background
 const stackPos = (i: number) => ({
@@ -766,13 +766,6 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
         </div>
       </div>
 
-      {/* Card counter */}
-      <div
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs tabular-nums"
-        style={{ color: '#555' }}
-      >
-        {(offset % N) + 1} / {N}
-      </div>
     </div>
   );
 }
