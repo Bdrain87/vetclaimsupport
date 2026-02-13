@@ -87,7 +87,7 @@ export function ValueProps() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: EASE_SMOOTH }}
         >
-          Everything You Need to Prepare
+          Your Claim, Your Control
         </motion.h2>
         <motion.p
           className="text-center mb-16 text-lg max-w-2xl mx-auto"
@@ -97,7 +97,7 @@ export function ValueProps() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          Preparation tools, condition tracking, and document generators &mdash; all in one place.
+          Stop paying thousands to claim companies. Get professional-grade tools to build your strongest case &mdash; for less than a coffee.
         </motion.p>
 
         <motion.div
