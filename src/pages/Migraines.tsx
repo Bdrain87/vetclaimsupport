@@ -620,7 +620,7 @@ export default function Migraines() {
                           <span className="text-sm font-medium text-primary">{formData.functioningLevel}%</span>
                         </div>
                         <Slider
-                          value={[formData.functioningLevel || 50]}
+                          value={[formData.functioningLevel ?? 50]}
                           onValueChange={([value]) => setFormData({ ...formData, functioningLevel: value })}
                           max={100}
                           step={10}

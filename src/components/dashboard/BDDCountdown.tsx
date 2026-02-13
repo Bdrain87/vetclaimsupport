@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { format, differenceInDays, subDays, isWithinInterval, startOfDay } from 'date-fns';
+import { format, differenceInDays, subDays, startOfDay } from 'date-fns';
 import { Calendar, Clock, AlertCircle, CheckCircle2, XCircle, Info } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -25,9 +25,9 @@ export function BDDCountdown({ separationDate, onSeparationDateChange }: BDDCoun
     const bddWindowStart = subDays(sepDate, 180);
     const bddWindowEnd = subDays(sepDate, 90);
 
-    const isInBDDWindow = daysUntilSeparation > 0 && isWithinInterval(today, { start: bddWindowStart, end: bddWindowEnd });
-    const isTooEarly = today < bddWindowStart;
-    const isTooLate = today > bddWindowEnd && daysUntilSeparation > 0;
+    const isInBDDWindow = daysUntilSeparation > 90 && daysUntilSeparation <= 180;
+    const isTooEarly = daysUntilSeparation > 180;
+    const isTooLate = daysUntilSeparation > 0 && daysUntilSeparation <= 90;
     const isPastSeparation = daysUntilSeparation <= 0;
     const daysUntilWindowOpens = differenceInDays(bddWindowStart, today);
     const daysLeftInWindow = differenceInDays(bddWindowEnd, today);

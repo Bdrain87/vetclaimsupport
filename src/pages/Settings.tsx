@@ -707,7 +707,7 @@ export default function Settings() {
         </CardHeader>
         <CardContent className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            Your health data and claim information are encrypted and stored securely. Some features use cloud services to function.
+            Your health data and claim information are stored locally on your device.{profile.vaultPasscodeSet ? ' Data is encrypted with your vault passcode.' : ' Enable a vault passcode for encryption.'} Some features use cloud services to function.
           </p>
           <p className="text-sm text-muted-foreground">
             <strong className="text-foreground">AI Features:</strong> When you use AI-powered features, the specific information you choose to analyze is sent to third-party AI services for processing. This data is not permanently stored by these services but does leave your device during analysis. You control what gets analyzed.

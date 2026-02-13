@@ -304,7 +304,7 @@ export default function Exposures() {
         </Card>
       ) : (
         <div className="grid gap-4">
-          {data.exposures.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((exposure) => (
+          {[...data.exposures].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((exposure) => (
             <Card key={exposure.id} className="data-card">
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">

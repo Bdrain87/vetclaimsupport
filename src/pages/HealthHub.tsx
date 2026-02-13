@@ -38,10 +38,10 @@ export default function HealthHub() {
   const thirtyDayStats = useMemo(() => {
     const cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - 30);
-    const cutoffStr = cutoff.toISOString();
+    const cutoffStr = cutoff.toISOString().slice(0, 10);
 
     const recentSymptoms = (store.symptoms || []).filter(
-      (s) => (s.date || '') >= cutoffStr
+      (s) => (s.date || '').slice(0, 10) >= cutoffStr
     );
     const totalSymptoms = recentSymptoms.length;
 
@@ -54,7 +54,7 @@ export default function HealthHub() {
         : 0;
 
     const flareUps = (store.quickLogs || []).filter(
-      (q) => q.hadFlareUp && (q.date || q.createdAt || '') >= cutoffStr
+      (q) => q.hadFlareUp && (q.date || q.createdAt || '').slice(0, 10) >= cutoffStr
     ).length;
 
     return { totalSymptoms, avgPain, flareUps };

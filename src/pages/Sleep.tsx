@@ -798,7 +798,7 @@ export default function Sleep() {
         </Card>
       ) : (
         <div className="grid gap-4">
-          {sleepEntries
+          {[...sleepEntries]
             .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
             .map((entry) => (
             <Card key={entry.id} className="data-card">

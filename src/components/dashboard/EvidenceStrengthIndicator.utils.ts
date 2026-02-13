@@ -11,8 +11,8 @@ export function calculateEvidenceStrength(condition: ClaimCondition, data: Claim
 
   // Check if there are medications that might relate to this condition
   const hasMedications = data.medications.some(med =>
-    med.prescribedFor.toLowerCase().includes(condition.name.toLowerCase()) ||
-    condition.name.toLowerCase().includes(med.prescribedFor.toLowerCase())
+    (med.prescribedFor ?? '').toLowerCase().includes(condition.name.toLowerCase()) ||
+    condition.name.toLowerCase().includes((med.prescribedFor ?? '').toLowerCase())
   );
 
   if (hasSymptoms) score += 25;

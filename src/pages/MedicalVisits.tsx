@@ -294,7 +294,7 @@ export default function MedicalVisits() {
         </Card>
       ) : (
         <div className="grid gap-4">
-          {data.medicalVisits.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((visit, index) => (
+          {[...data.medicalVisits].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((visit, index) => (
             <Card key={visit.id} className="data-card group hover:border-primary/30 transition-all duration-300 animate-fade-in" style={{ animationDelay: `${index * 0.03}s` }}>
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">

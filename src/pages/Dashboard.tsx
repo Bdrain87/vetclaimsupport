@@ -386,11 +386,12 @@ export default function Dashboard() {
               );
             })}
             {/* Also show userConditions not in claimConditions */}
-            {userConditions.slice(0, Math.max(0, 5 - claimConditions.length)).map((uc) => {
+            {userConditions.filter((uc) => {
               const details = getConditionById(uc.conditionId);
-              if (!details) return null;
-              // Skip if already shown in claimConditions
-              if (claimConditions.some((cc) => cc.name.toLowerCase() === details.name.toLowerCase())) return null;
+              if (!details) return false;
+              return !claimConditions.some((cc) => cc.name.toLowerCase() === details.name.toLowerCase());
+            }).slice(0, Math.max(0, 5 - claimConditions.length)).map((uc) => {
+              const details = getConditionById(uc.conditionId)!;
               return (
                 <Link
                   key={uc.id}

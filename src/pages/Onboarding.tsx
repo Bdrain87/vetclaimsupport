@@ -1001,7 +1001,7 @@ export default function Onboarding() {
                     </div>
                   ))}
                 </div>
-                <p className="text-center text-white/30 text-xs break-words">By continuing, you agree to our <a href="/settings/terms" target="_blank" rel="noopener noreferrer" className="text-gold underline">Terms of Service</a> and <a href="/settings/privacy" target="_blank" rel="noopener noreferrer" className="text-gold underline">Privacy Policy</a>. This is a claim preparation tool &mdash; not a substitute for professional consultation with a VA-accredited representative.</p>
+                <p className="text-center text-white/30 text-xs break-words">By continuing, you agree to our <a href="/settings/terms" className="text-gold underline">Terms of Service</a> and <a href="/settings/privacy" className="text-gold underline">Privacy Policy</a>. This is a claim preparation tool &mdash; not a substitute for professional consultation with a VA-accredited representative.</p>
               </div>
             )}
 

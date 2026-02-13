@@ -201,8 +201,8 @@ export default function Conditions() {
 
   const conditionEvidenceChecks = useAppStore(s => s.conditionEvidenceChecks);
 
-  // Standard evidence items for calculating progress
-  const EVIDENCE_ITEMS = ['Medical Records', 'Personal Statement', 'Buddy Statement', 'Doctor Summary', 'C&P Exam Prep'];
+  // Must match the 10 items in ConditionDetail.tsx EVIDENCE_ITEMS
+  const EVIDENCE_TOTAL = 10;
 
   // Search and filter state
   const [searchQuery, setSearchQuery] = useState('');
@@ -457,7 +457,7 @@ export default function Conditions() {
                       hasSecondaries: secondaries.length > 0,
                       secondariesCount: secondaries.length,
                       evidenceChecked: checked.length,
-                      evidenceTotal: EVIDENCE_ITEMS.length,
+                      evidenceTotal: EVIDENCE_TOTAL,
                     }}
                     conditionDetails={details ?? null}
                     onView={() => handleViewCondition(uc.id)}
@@ -482,7 +482,7 @@ export default function Conditions() {
                               hasSecondaries: false,
                               secondariesCount: 0,
                               evidenceChecked: secChecked.length,
-                              evidenceTotal: EVIDENCE_ITEMS.length,
+                              evidenceTotal: EVIDENCE_TOTAL,
                             }}
                             conditionDetails={secDetails ?? null}
                             onView={() => handleViewCondition(sec.id)}
@@ -509,7 +509,7 @@ export default function Conditions() {
                     hasSecondaries: false,
                     secondariesCount: 0,
                     evidenceChecked: checked.length,
-                    evidenceTotal: EVIDENCE_ITEMS.length,
+                    evidenceTotal: EVIDENCE_TOTAL,
                   }}
                   conditionDetails={details ?? null}
                   onView={() => handleViewCondition(uc.id)}

@@ -544,11 +544,20 @@ const useAppStore = create<AppState>()(
 
       removeUserCondition: (id) => set((s) => {
         const conditionToRemove = s.userConditions.find((c) => c.id === id);
+        const idsToRemove = [id];
         if (conditionToRemove?.isPrimary) {
-          // Also remove linked secondary conditions
-          return { userConditions: s.userConditions.filter((c) => c.id !== id && c.linkedPrimaryId !== id) };
+          // Collect linked secondary condition IDs for cleanup
+          s.userConditions.forEach((c) => {
+            if (c.linkedPrimaryId === id) idsToRemove.push(c.id);
+          });
         }
-        return { userConditions: s.userConditions.filter((c) => c.id !== id) };
+        // Clean up conditionEvidenceChecks for removed conditions
+        const newChecks = { ...s.conditionEvidenceChecks };
+        idsToRemove.forEach((rid) => { delete newChecks[rid]; });
+        return {
+          userConditions: s.userConditions.filter((c) => !idsToRemove.includes(c.id)),
+          conditionEvidenceChecks: newChecks,
+        };
       }),
 
       updateUserCondition: (id, updates) => set((s) => ({

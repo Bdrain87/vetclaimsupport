@@ -359,7 +359,7 @@ export function ApprovedConditionsSection({ onNavigateToCalculator }: ApprovedCo
                         </Badge>
                       </div>
                       <p className="text-xs text-muted-foreground line-clamp-2">
-                        Secondary to <strong>{suggestion.primary}</strong>: {suggestion.connection.substring(0, 100)}...
+                        Secondary to <strong>{suggestion.primary}</strong>: {suggestion.connection.length > 100 ? suggestion.connection.substring(0, 100) + '...' : suggestion.connection}
                       </p>
                     </div>
                   ))}

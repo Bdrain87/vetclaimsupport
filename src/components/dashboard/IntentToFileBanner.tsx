@@ -63,7 +63,7 @@ export function IntentToFileBanner() {
           exit={{ opacity: 0, y: -20, height: 0 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
         >
-          <div className="rounded-xl border-2 border-[rgba(197,164,66,0.5)] bg-[#1a1a1a] p-4 relative overflow-hidden">
+          <div className="rounded-xl border-2 border-[rgba(197,164,66,0.5)] bg-card p-4 relative overflow-hidden">
             {/* Gold accent line (decorative) */}
             <div
               className="absolute top-0 left-0 right-0 h-1"
@@ -78,7 +78,7 @@ export function IntentToFileBanner() {
               className="absolute top-2 right-2 p-3 rounded-lg hover:bg-white/10 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
               aria-label="Dismiss intent to file banner"
             >
-              <X className="h-5 w-5 text-white/50 hover:text-white" />
+              <X className="h-5 w-5 text-muted-foreground hover:text-foreground" />
             </button>
 
             <div className="flex items-start gap-3 pr-8">
@@ -86,10 +86,10 @@ export function IntentToFileBanner() {
                 <Shield className="h-5 w-5 text-gold" />
               </div>
               <div className="flex-1 min-w-0 space-y-2">
-                <h3 className="text-sm font-bold text-white">
+                <h3 className="text-sm font-bold text-foreground">
                   Have you filed your Intent to File?
                 </h3>
-                <p className="text-xs text-[#D1D5DB] leading-relaxed">
+                <p className="text-xs text-muted-foreground leading-relaxed">
                   Filing an Intent to File (ITF) protects your effective date and gives you one year to submit your claim. This is one of the most important first steps.
                 </p>
                 <div className="flex flex-wrap gap-2 pt-1" role="group" aria-label="Intent to File actions">

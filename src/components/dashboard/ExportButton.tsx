@@ -96,7 +96,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
     // Helper to check page break
     const checkPageBreak = (neededHeight: number = 30): number => {
       const pageHeight = doc.internal.pageSize.getHeight();
-      if (yPos + neededHeight > pageHeight - 40) {
+      if (yPos + neededHeight > pageHeight - 50) {
         doc.addPage();
         return 20;
       }

@@ -104,9 +104,13 @@ export function SecondaryConditionSuggestions({
     return sortedSuggestions.slice(0, maxSuggestions);
   }, [currentConditionIds, hasCondition, maxSuggestions]);
 
-  // Handle adding a condition
-  const handleAddCondition = (conditionId: string) => {
-    const result = addCondition(conditionId);
+  // Handle adding a condition as secondary
+  const handleAddCondition = (conditionId: string, parentConditionId: string) => {
+    const parentUserCondition = userConditions.find(c => c.conditionId === parentConditionId);
+    const result = addCondition(conditionId, {
+      isPrimary: false,
+      linkedPrimaryId: parentUserCondition?.id,
+    });
     if (result) {
       setAddedIds(prev => new Set(prev).add(conditionId));
       // Reset after animation
@@ -149,7 +153,7 @@ export function SecondaryConditionSuggestions({
       </p>
 
       <div className="grid gap-2">
-        {suggestions.map(({ condition, parentCondition }) => {
+        {suggestions.map(({ condition, parentCondition, parentConditionId }) => {
           const isJustAdded = addedIds.has(condition.id);
           const isAlreadyAdded = hasCondition(condition.id);
 
@@ -189,7 +193,7 @@ export function SecondaryConditionSuggestions({
                   isJustAdded && "bg-green-500 hover:bg-green-600"
                 )}
                 disabled={isAlreadyAdded || isJustAdded}
-                onClick={() => handleAddCondition(condition.id)}
+                onClick={() => handleAddCondition(condition.id, parentConditionId)}
               >
                 {isJustAdded ? (
                   <>
