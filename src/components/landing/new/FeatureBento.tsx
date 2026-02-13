@@ -8,43 +8,19 @@ import {
   GOLD_GRADIENT_TEXT,
 } from '@/lib/landing-animations';
 import {
-  FileEdit,
-  Users,
-  AlertTriangle,
-  Scroll,
   Activity,
-  Moon,
-  Brain,
-  Pill,
   Heart,
-  Building2,
-  Clock,
-  MapPin,
-  Stethoscope,
-  FileBox,
-  BookMarked,
-  Calculator,
-  Percent,
-  DollarSign,
-  Car,
-  ClipboardCheck,
-  Map as MapIcon,
-  FolderOpen,
-  Package,
-  Lock,
-  Flag,
-  Briefcase,
-  Biohazard,
-  Wrench,
-  Landmark,
-  Search,
+  Brain,
+  Moon,
+  Pill as PillIcon,
+  Upload,
   Library,
-  Languages,
-  Scale,
-  FileText,
-  CalendarCheck,
-  BookOpenCheck,
-  Database,
+  Users,
+  Clock,
+  Stethoscope,
+  ClipboardCheck,
+  Briefcase,
+  TrendingUp,
   X,
   ChevronLeft,
   ChevronRight,
@@ -52,7 +28,7 @@ import {
 import type { LucideIcon } from 'lucide-react';
 
 /* ────────────────────────────────────────────────
- * Card Data — 37 Tools
+ * Card Data — 13 Core Tools (Live Site)
  * ──────────────────────────────────────────────── */
 
 interface CardData {
@@ -63,371 +39,136 @@ interface CardData {
   capabilities: string[];
   plan: string;
   category: string;
-  aiDisclaimer?: boolean;
 }
 
 const CARDS: CardData[] = [
-  /* ── Generators & Writers ── */
-  {
-    icon: FileEdit,
-    title: 'Personal Statement Writer',
-    short: 'Auto-generates your personal statement from your service and condition details',
-    detail: 'Generates structured draft personal statements using AI, aligned to VA rating criteria. Covers onset, frequency, severity, and impact on daily life.',
-    capabilities: ['Guided prompts for each condition', 'Outputs VA-formatted drafts', 'Covers onset, severity, and daily impact', 'Export as PDF'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'Generators & Writers',
-    aiDisclaimer: true,
-  },
-  {
-    icon: Users,
-    title: 'Buddy Statement Builder',
-    short: 'Creates structured buddy/lay statements for supporting evidence',
-    detail: 'AI-assisted tool that helps fellow service members, family, and friends write effective buddy statements with guided prompts.',
-    capabilities: ['Guided witness prompts', 'Structured output format', 'Multiple statement support', 'Print-ready formatting'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'Generators & Writers',
-    aiDisclaimer: true,
-  },
-  {
-    icon: AlertTriangle,
-    title: 'Stressor Statement Creator',
-    short: 'Builds PTSD stressor statements with guided prompts',
-    detail: 'AI-powered structured prompts specifically designed for PTSD and mental health stressor statements. Helps document events with the detail the VA requires.',
-    capabilities: ['PTSD-specific guided prompts', 'Structured event documentation', 'VA-required detail format', 'Sensitive content handling'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'Generators & Writers',
-    aiDisclaimer: true,
-  },
-  {
-    icon: Scroll,
-    title: 'Doctor Summary Builder',
-    short: 'Generates doctor summary templates to bring to your provider',
-    detail: 'AI-generated draft doctor summary templates with proper medical language connecting your condition to service. Share with your provider for review and signature.',
-    capabilities: ['Medical language templates', 'Condition-to-service connection', 'Doctor-ready format', 'Customizable per condition'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'Generators & Writers',
-    aiDisclaimer: true,
-  },
-
-  /* ── Health Tracking ── */
   {
     icon: Activity,
-    title: 'Symptom Tracker',
-    short: 'Log frequency, severity, and triggers for every condition',
-    detail: 'Track individual symptoms with frequency, severity, and duration. Generates reports showing trends that map to VA diagnostic codes.',
-    capabilities: ['Frequency and severity logging', 'Trigger identification', 'Trend reports over time', 'Maps to VA diagnostic codes'],
+    title: 'Symptom Checker',
+    short: 'Match symptoms to conditions and understand VA rating criteria',
+    detail: 'Interactive tool that helps you identify and document symptoms, matching them to specific VA disability conditions with rating criteria.',
+    capabilities: ['Symptom-to-condition matching', 'VA rating criteria', 'Severity tracking', 'Evidence guidance'],
     plan: 'Included in Launch Plan ($4.99/mo)',
     category: 'Health Tracking',
   },
   {
-    icon: Moon,
-    title: 'Sleep Tracker',
-    short: 'Track sleep quality, duration, and disturbances nightly',
-    detail: 'Log sleep quality, duration, disturbances, and nightmares. Useful for sleep apnea, PTSD, and insomnia documentation.',
-    capabilities: ['Nightly sleep quality logging', 'Disturbance tracking', 'Pattern visualization', 'Relevant to sleep apnea and PTSD'],
+    icon: Heart,
+    title: 'Symptom Journal',
+    short: 'Daily symptom logging with frequency and severity tracking',
+    detail: 'Track your symptoms daily with detailed logs of frequency, severity, triggers, and impact on daily activities.',
+    capabilities: ['Daily logging', 'Frequency tracking', 'Severity ratings', 'Trigger identification'],
     plan: 'Included in Launch Plan ($4.99/mo)',
     category: 'Health Tracking',
   },
   {
     icon: Brain,
     title: 'Migraine Log',
-    short: 'Document triggers, duration, and severity of migraines',
-    detail: 'Record migraine episodes with duration, severity, triggers, and prostrating status — the key metric for VA migraine ratings.',
-    capabilities: ['Episode logging with timestamps', 'Prostrating status tracking', 'Trigger documentation', 'VA rating criteria alignment'],
+    short: 'Document migraine episodes with triggers and duration',
+    detail: 'Specialized tracker for migraine episodes including prostrating status, triggers, duration, and severity—mapped to VA rating criteria.',
+    capabilities: ['Episode tracking', 'Prostrating status', 'Trigger documentation', 'Duration logging'],
     plan: 'Included in Launch Plan ($4.99/mo)',
     category: 'Health Tracking',
   },
   {
-    icon: Pill,
-    title: 'Medication Tracker',
-    short: 'Track prescriptions, dosages, and side effects',
-    detail: 'Track all medications, dosages, and side effects. Document how treatments affect your daily functioning and note any adverse reactions.',
-    capabilities: ['Prescription management', 'Dosage tracking', 'Side effect documentation', 'Treatment effectiveness notes'],
+    icon: Moon,
+    title: 'Sleep Tracker',
+    short: 'Track sleep quality, duration, and disturbances',
+    detail: 'Log nightly sleep quality, duration, disturbances, and nightmares. Essential for sleep apnea, PTSD, and insomnia claims.',
+    capabilities: ['Sleep quality logging', 'Disturbance tracking', 'Nightmare documentation', 'Pattern analysis'],
     plan: 'Included in Launch Plan ($4.99/mo)',
     category: 'Health Tracking',
   },
   {
-    icon: Heart,
-    title: 'Health Journal',
-    short: 'Daily health log connecting symptoms to conditions',
-    detail: 'A free-form journal for capturing how your conditions affect daily life. Write naturally — entries are tagged to relevant conditions automatically.',
-    capabilities: ['Daily free-form entries', 'Auto-tagged to conditions', 'Severity ratings', 'Maps to VA rating criteria'],
+    icon: PillIcon,
+    title: 'Medication Log',
+    short: 'Track prescriptions, dosages, and treatment history',
+    detail: 'Comprehensive medication tracker for prescriptions, dosages, side effects, and treatment effectiveness over time.',
+    capabilities: ['Prescription management', 'Dosage tracking', 'Side effect logging', 'Treatment history'],
     plan: 'Included in Launch Plan ($4.99/mo)',
     category: 'Health Tracking',
   },
   {
-    icon: Building2,
-    title: 'Medical Visit Log',
-    short: 'Record appointments, diagnoses, and treatment plans',
-    detail: 'Log every medical appointment with provider details, diagnoses, and follow-up notes. Creates a clear treatment history for your records.',
-    capabilities: ['Appointment logging', 'Provider and diagnosis tracking', 'Follow-up reminders', 'Treatment history timeline'],
+    icon: Upload,
+    title: 'Document Upload',
+    short: 'Securely upload and organize all your evidence files',
+    detail: 'Upload medical records, service documents, and supporting evidence. Everything encrypted and organized by condition.',
+    capabilities: ['Secure file upload', 'Document categorization', 'Evidence organization', 'AES-256 encryption'],
     plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'Health Tracking',
-  },
-  {
-    icon: Clock,
-    title: 'Medical Timeline',
-    short: 'Visual chronological view of your entire medical history',
-    detail: 'A chronological timeline of all medical events, treatments, and diagnoses. See your full health journey from service to present.',
-    capabilities: ['Chronological event view', 'Service-to-present timeline', 'Treatment and diagnosis tracking', 'Visual history overview'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'Health Tracking',
-  },
-  {
-    icon: MapPin,
-    title: 'Body Map',
-    short: 'Interactive body diagram to mark affected areas',
-    detail: 'Tap on a body diagram to pinpoint where you experience pain and symptoms. Visual evidence that shows the full scope of your conditions.',
-    capabilities: ['Interactive body diagram', 'Pinpoint pain locations', 'Track changes over time', 'Visual condition documentation'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'Health Tracking',
-  },
-
-  /* ── Exam Prep ── */
-  {
-    icon: Stethoscope,
-    title: 'C&P Exam Prep',
-    short: 'Know what to expect and how to prepare for every exam',
-    detail: 'Condition-specific prep guides covering what the examiner evaluates, common questions, range-of-motion tests, and tips for accurately representing your conditions.',
-    capabilities: ['Condition-specific guides', 'Common exam questions', 'Range-of-motion benchmarks', 'Exam day tips'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'Exam Prep',
-  },
-  {
-    icon: FileBox,
-    title: 'C&P Exam Packet',
-    short: 'Organized document packet to bring to your exam',
-    detail: 'Compile everything you need for exam day: condition summaries, medication lists, symptom logs, and key talking points in one printable packet.',
-    capabilities: ['Condition summary sheets', 'Medication and symptom lists', 'Key talking points', 'Print-ready PDF export'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'Exam Prep',
-  },
-  {
-    icon: BookMarked,
-    title: 'DBQ Reference',
-    short: 'Field-by-field breakdown of Disability Benefits Questionnaires',
-    detail: 'Review the Disability Benefits Questionnaires examiners use for your conditions. Know exactly what will be measured and documented.',
-    capabilities: ['Field-by-field DBQ breakdowns', 'Condition-specific forms', 'Understand what\'s measured', 'Examiner perspective'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'Exam Prep',
-  },
-
-  /* ── Calculators ── */
-  {
-    icon: Calculator,
-    title: 'Combined Rating Calculator',
-    short: 'Calculate your combined VA disability rating using VA math',
-    detail: 'Enter your individual ratings and instantly see your combined VA disability rating using the official VA math formula.',
-    capabilities: ['Official VA math formula', 'Unlimited rating inputs', 'Instant calculation', 'Bilateral factor support'],
-    plan: 'Free',
-    category: 'Calculators',
-  },
-  {
-    icon: Percent,
-    title: 'Bilateral Factor Calculator',
-    short: 'Compute bilateral adjustments for paired conditions',
-    detail: 'Calculate the bilateral factor for paired extremity conditions. Understand how bilateral conditions affect your combined rating.',
-    capabilities: ['Paired extremity calculations', 'Bilateral factor rules', 'Combined rating impact', 'Educational explanations'],
-    plan: 'Free',
-    category: 'Calculators',
-  },
-  {
-    icon: DollarSign,
-    title: 'Back Pay Estimator',
-    short: 'Estimate your potential retroactive compensation',
-    detail: 'Estimate potential back pay from your effective date based on rating, dependents, and timeline. For educational and informational purposes only.',
-    capabilities: ['Effective date calculations', 'Dependent adjustments', 'Monthly and total estimates', 'Educational purposes only'],
-    plan: 'Free',
-    category: 'Calculators',
-  },
-  {
-    icon: Car,
-    title: 'Travel Pay Calculator',
-    short: 'Calculate VA appointment travel reimbursement',
-    detail: 'Calculate mileage reimbursement for VA medical appointments. Enter your facility and get an estimate of what you can claim.',
-    capabilities: ['Mileage reimbursement rates', 'Facility distance lookup', 'Per-appointment estimates', 'Current VA rates'],
-    plan: 'Free',
-    category: 'Calculators',
-  },
-
-  /* ── Claim Organization ── */
-  {
-    icon: ClipboardCheck,
-    title: 'Claim Checklist',
-    short: 'Track every requirement for your claim submission',
-    detail: 'A comprehensive checklist that walks you through every step of preparing and filing a VA disability claim, ensuring nothing is missed.',
-    capabilities: ['Step-by-step filing guide', 'Progress tracking', 'Requirement checklists', 'Submission readiness check'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'Claim Organization',
-  },
-  {
-    icon: MapIcon,
-    title: 'Claim Journey',
-    short: 'Visual timeline of your claim through the VA system',
-    detail: 'Track your claim from Intent to File through decision with a visual timeline. Know exactly where you are in the process and what comes next.',
-    capabilities: ['Visual claim timeline', 'Status tracking', 'Next-step guidance', 'Milestone notifications'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'Claim Organization',
-  },
-  {
-    icon: FolderOpen,
-    title: 'Document Organizer',
-    short: 'Manage and organize all your evidence files',
-    detail: 'Keep every document organized by condition and type. Tag, search, and manage your medical records, service records, and supporting evidence.',
-    capabilities: ['Tag and categorize documents', 'Search by condition or type', 'Medical and service records', 'Evidence organization'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'Claim Organization',
-  },
-  {
-    icon: Package,
-    title: 'Evidence Packet Builder',
-    short: 'Compile everything into one submission-ready package',
-    detail: 'Compile all your evidence — statements, medical records, buddy letters, and supporting documents — into an organized packet ready for submission.',
-    capabilities: ['Compile all evidence types', 'Organized packet structure', 'PDF export', 'Submission-ready format'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'Claim Organization',
-  },
-  {
-    icon: Lock,
-    title: 'Document Vault',
-    short: 'Secure storage for all your claim documents',
-    detail: 'All data encrypted and stored securely. Your documents stay private and under your control.',
-    capabilities: ['AES-256 encryption', 'Secure storage', 'Privacy by default', 'Your data, your control'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'Claim Organization',
-  },
-  {
-    icon: Flag,
-    title: 'Intent to File Tracker',
-    short: 'Create and track your ITF with deadline alerts',
-    detail: 'Understand and track your Intent to File date. Protect your effective date while you gather evidence and prepare your claim.',
-    capabilities: ['ITF date tracking', 'Deadline countdown', 'Effective date protection', 'Filing reminders'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'Claim Organization',
-  },
-
-  /* ── Service History ── */
-  {
-    icon: Briefcase,
-    title: 'Service History Log',
-    short: 'Record deployments, stations, dates, and duties',
-    detail: 'Enter your duty stations, deployments, MOSs, and service dates. Automatically cross-references against known hazard exposures and presumptive conditions.',
-    capabilities: ['Deployment tracking', 'Duty station records', 'MOS documentation', 'Exposure cross-referencing'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'Service History',
-  },
-  {
-    icon: Biohazard,
-    title: 'Exposure Tracker',
-    short: 'Document burn pits, Agent Orange, radiation, and other exposures',
-    detail: 'Document your exposure to burn pits, Agent Orange, radiation, contaminated water, and other hazards. Maps exposures to presumptive conditions.',
-    capabilities: ['Burn pit documentation', 'Agent Orange tracking', 'Radiation exposure logs', 'Presumptive condition mapping'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'Service History',
-  },
-  {
-    icon: Wrench,
-    title: 'Equipment Tracker',
-    short: 'Track prosthetics and assistive devices',
-    detail: 'Log military equipment you operated and noise levels you were exposed to. Useful for hearing loss and tinnitus documentation.',
-    capabilities: ['Equipment operation logs', 'Noise exposure tracking', 'Hearing loss documentation', 'Tinnitus support'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'Service History',
-  },
-  {
-    icon: Landmark,
-    title: 'PACT Act Guide',
-    short: 'Check your eligibility under the PACT Act',
-    detail: 'Check which PACT Act provisions apply to your service era and locations. Understand new presumptive conditions and expanded eligibility.',
-    capabilities: ['Eligibility checker', 'Service era filtering', 'Presumptive condition lists', 'Latest PACT Act updates'],
-    plan: 'Free',
-    category: 'Service History',
-  },
-
-  /* ── VA Reference ── */
-  {
-    icon: Search,
-    title: 'Secondary Condition Finder',
-    short: 'Discover related conditions you may not know about',
-    detail: 'Search our database of conditions with mapped secondary connections. Discover conditions linked to your primary disabilities for further research.',
-    capabilities: ['Secondary condition database', 'Primary-to-secondary mapping', 'Research-grade connections', 'Condition search'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'VA Reference',
+    category: 'Documents',
   },
   {
     icon: Library,
-    title: 'VA Forms Library',
-    short: 'Every VA form with instructions and filing guidance',
-    detail: 'Search and browse VA forms with plain-English descriptions. Know which forms you need and when to use them.',
-    capabilities: ['Searchable form database', 'Plain-English descriptions', 'Filing instructions', 'Form selection guidance'],
-    plan: 'Free',
-    category: 'VA Reference',
-  },
-  {
-    icon: Languages,
-    title: 'VA-Speak Translator',
-    short: 'Decode VA jargon and abbreviations',
-    detail: 'Paste any VA letter, CFR section, or rating decision and get plain English instantly. Finally understand what they actually said.',
-    capabilities: ['VA letter translation', 'CFR section decoder', 'Rating decision interpreter', 'Plain English output'],
-    plan: 'Free',
-    category: 'VA Reference',
-  },
-  {
-    icon: Scale,
-    title: 'Decision Review Guide',
-    short: 'Understand your options after a VA decision',
-    detail: 'Compare Supplemental Claims, Higher-Level Reviews, and Board Appeals side by side. Know your deadlines and pick the best path forward.',
-    capabilities: ['Side-by-side comparison', 'Deadline tracking', 'Path selection guidance', 'Requirements overview'],
+    title: 'Evidence Library',
+    short: 'Centralized hub for all your claim documentation',
+    detail: 'Access all your uploaded documents, generated statements, and evidence in one organized library with powerful search.',
+    capabilities: ['Document library', 'Search and filter', 'Tag organization', 'Quick access'],
     plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'VA Reference',
+    category: 'Documents',
   },
   {
-    icon: FileText,
-    title: 'Appeals Guide',
-    short: 'Step-by-step walkthrough of the appeals process',
-    detail: 'Step-by-step guidance through the VA appeals process including timelines, evidence requirements, and what to expect at each stage.',
-    capabilities: ['Stage-by-stage guidance', 'Timeline expectations', 'Evidence requirements', 'Process overview'],
+    icon: Users,
+    title: 'Buddy Statements',
+    short: 'Create structured witness statements from friends and family',
+    detail: 'Guided tool for fellow service members, family, and friends to create effective buddy statements with proper structure.',
+    capabilities: ['Guided prompts', 'Structured format', 'Multiple statements', 'Print-ready output'],
     plan: 'Included in Launch Plan ($4.99/mo)',
-    category: 'VA Reference',
+    category: 'Evidence',
   },
   {
-    icon: CalendarCheck,
-    title: 'BDD Guide',
-    short: 'Benefits Delivery at Discharge for transitioning members',
-    detail: 'A complete guide to filing your claim 180–90 days before separation. Get your rating decision faster by filing before you leave service.',
-    capabilities: ['Pre-separation filing guide', '180–90 day timeline', 'BDD requirements', 'Transition checklist'],
-    plan: 'Free',
-    category: 'VA Reference',
+    icon: Clock,
+    title: 'Timeline Builder',
+    short: 'Visualize your medical and service history chronologically',
+    detail: 'Create a visual timeline connecting your service history to medical events, treatments, and symptoms over time.',
+    capabilities: ['Chronological view', 'Service connection', 'Medical event tracking', 'Visual history'],
+    plan: 'Included in Launch Plan ($4.99/mo)',
+    category: 'Organization',
   },
   {
-    icon: BookOpenCheck,
-    title: 'Condition Guides',
-    short: 'How the VA evaluates and rates each condition',
-    detail: 'In-depth guides for common VA conditions covering rating criteria, required evidence, C&P exam expectations, and secondary connections.',
-    capabilities: ['Rating criteria breakdowns', 'Required evidence lists', 'C&P exam expectations', 'Secondary connections'],
-    plan: 'Free',
-    category: 'VA Reference',
+    icon: Stethoscope,
+    title: 'C&P Exam Prep',
+    short: 'Condition-specific prep guides for your VA exam',
+    detail: 'Comprehensive preparation guides for your Compensation & Pension exam with condition-specific questions and tips.',
+    capabilities: ['Exam preparation', 'Condition-specific guides', 'Common questions', 'Day-of tips'],
+    plan: 'Included in Launch Plan ($4.99/mo)',
+    category: 'Exam Prep',
   },
   {
-    icon: Database,
-    title: 'Rating Criteria Reference',
-    short: 'VA regulations, rating schedules, and procedures',
-    detail: 'Search our database of 780+ conditions with diagnostic codes, rating criteria, and mapped secondary connections.',
-    capabilities: ['780+ conditions database', 'Diagnostic code lookup', 'Rating schedule reference', 'Secondary condition mapping'],
-    plan: 'Free',
-    category: 'VA Reference',
+    icon: ClipboardCheck,
+    title: 'Documents Checklist',
+    short: 'Track every required document for your claim',
+    detail: 'Comprehensive checklist of all documents needed for your claim with progress tracking and submission readiness.',
+    capabilities: ['Document requirements', 'Progress tracking', 'Submission checklist', 'Missing items alerts'],
+    plan: 'Included in Launch Plan ($4.99/mo)',
+    category: 'Organization',
+  },
+  {
+    icon: Briefcase,
+    title: 'Service History',
+    short: 'Document deployments, stations, and duty assignments',
+    detail: 'Complete service history tracker for duty stations, deployments, MOSs, and exposure to hazards during service.',
+    capabilities: ['Deployment tracking', 'Duty stations', 'MOS documentation', 'Hazard exposure'],
+    plan: 'Included in Launch Plan ($4.99/mo)',
+    category: 'Service',
+  },
+  {
+    icon: TrendingUp,
+    title: '4-Phase Progress',
+    short: 'Track your claim journey from start to decision',
+    detail: 'Visual progress tracker through all four phases of the VA claim process with milestone notifications and guidance.',
+    capabilities: ['Phase tracking', 'Milestone alerts', 'Progress visualization', 'Next-step guidance'],
+    plan: 'Included in Launch Plan ($4.99/mo)',
+    category: 'Organization',
   },
 ];
 
 /* ────────────────────────────────────────────────
- * Shared Styles
+ * Brand Styling — Navy/Charcoal Theme
  * ──────────────────────────────────────────────── */
 
-const SILVER_GRADIENT = 'linear-gradient(135deg, #E8E8E8 0%, #D0D0D0 25%, #B8B8B8 50%, #D0D0D0 75%, #E8E8E8 100%)';
-const SILVER_GRADIENT_LIGHT = 'linear-gradient(135deg, #F0F0F0 0%, #E0E0E0 25%, #CCCCCC 50%, #E0E0E0 75%, #F0F0F0 100%)';
-
-const CARD_SHADOW = '0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.15), 0 12px 24px -8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.4)';
-const CARD_SHADOW_ACTIVE = '0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.15), 0 12px 24px -8px rgba(0,0,0,0.2), 0 0 30px rgba(197,164,66,0.15), inset 0 1px 0 rgba(255,255,255,0.5)';
+const CARD_BG = 'rgba(15, 23, 42, 0.85)'; // #0F172A at 85% opacity
+const CARD_BORDER = '1px solid rgba(255, 255, 255, 1)'; // Crisp white border
+const CARD_SHADOW = '0 4px 16px rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.2)';
+const CARD_SHADOW_FRONT = '0 8px 24px rgba(0,0,0,0.4), 0 16px 48px rgba(0,0,0,0.3), 0 0 40px rgba(197,164,66,0.2)';
 
 /* ────────────────────────────────────────────────
  * Detail Modal
@@ -457,10 +198,9 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
       <motion.div
         className="relative z-10 w-[90%] max-w-[500px] rounded-3xl p-8 sm:p-10"
         style={{
-          background: SILVER_GRADIENT_LIGHT,
-          color: '#0A0A0A',
-          border: '1px solid rgba(255,255,255,0.4)',
-          boxShadow: '0 0 40px rgba(197,164,66,0.2), inset 0 1px 0 rgba(255,255,255,0.5)',
+          background: CARD_BG,
+          border: CARD_BORDER,
+          boxShadow: '0 0 60px rgba(197,164,66,0.3)',
         }}
         initial={{ scale: 0.9, y: 30, opacity: 0 }}
         animate={{ scale: 1, y: 0, opacity: 1 }}
@@ -469,45 +209,39 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center"
-          style={{ backgroundColor: 'rgba(0,0,0,0.06)', color: '#333' }}
+          className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+          style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#fff' }}
         >
           <X size={16} />
         </button>
 
         <div
           className="w-14 h-14 rounded-xl flex items-center justify-center mb-5"
-          style={{ backgroundColor: 'rgba(0,0,0,0.06)', border: '1px solid rgba(0,0,0,0.08)' }}
+          style={{ backgroundColor: 'rgba(197,164,66,0.15)', border: '1px solid rgba(197,164,66,0.3)' }}
         >
-          <Icon size={24} style={{ color: '#8B7332' }} />
+          <Icon size={24} style={{ color: '#C5A442' }} />
         </div>
 
-        <span className="text-[10px] font-medium tracking-widest uppercase" style={{ color: '#8B7332' }}>
+        <span className="text-[10px] font-medium tracking-widest uppercase" style={{ color: '#C5A442' }}>
           {card.category}
         </span>
 
-        <h3 className="text-xl font-semibold mt-1 mb-2" style={{ color: '#0A0A0A', letterSpacing: '-0.02em' }}>
+        <h3 className="text-xl font-semibold mt-1 mb-2" style={{ color: '#fff', letterSpacing: '-0.02em' }}>
           {card.title}
         </h3>
 
-        <p className="text-sm mb-5 leading-relaxed" style={{ color: '#333' }}>
+        <p className="text-sm mb-5 leading-relaxed" style={{ color: '#E2E8F0' }}>
           {card.detail}
         </p>
 
-        {card.aiDisclaimer && (
-          <p className="text-xs mb-4 italic" style={{ color: '#666' }}>
-            Content is AI-generated and should be reviewed for accuracy before use.
-          </p>
-        )}
-
         <div className="mb-5">
-          <h4 className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: '#555' }}>
+          <h4 className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: '#CBD5E1' }}>
             Key Capabilities
           </h4>
           <ul className="space-y-1.5">
             {card.capabilities.map((cap) => (
-              <li key={cap} className="flex items-start gap-2 text-sm" style={{ color: '#333' }}>
-                <span className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: '#8B7332' }} />
+              <li key={cap} className="flex items-start gap-2 text-sm" style={{ color: '#E2E8F0' }}>
+                <span className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: '#C5A442' }} />
                 {cap}
               </li>
             ))}
@@ -517,8 +251,8 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
         <div
           className="inline-block rounded-full px-4 py-1.5 text-xs font-semibold"
           style={{
-            backgroundColor: card.plan === 'Free' ? 'rgba(0,0,0,0.06)' : 'rgba(139,115,50,0.12)',
-            color: card.plan === 'Free' ? '#333' : '#8B7332',
+            backgroundColor: 'rgba(197,164,66,0.15)',
+            color: '#C5A442',
           }}
         >
           {card.plan}
@@ -529,16 +263,17 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
 }
 
 /* ────────────────────────────────────────────────
- * 3D Looping Ferris Wheel — Desktop Carousel
+ * 3D Ferris Wheel — Desktop Carousel
  *
- * Cards rotate continuously in a vertical circle.
- * Front card is prominent; cards recede with depth.
+ * Vertical circular path rotating toward viewer.
+ * Front: scale(1.0), 100% opacity
+ * Back: scale(0.55), 30% opacity
  * ──────────────────────────────────────────────── */
 
 const N = CARDS.length;
-const DOM_SLOTS = 12;
+const DOM_SLOTS = 10;
 const WHEEL_RADIUS = 450;
-const ROTATION_INTERVAL = 3000;
+const ROTATION_INTERVAL = 3500; // Slower for more cinematic feel
 const PERSPECTIVE = 2500;
 
 function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => void }) {
@@ -548,17 +283,17 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const dragRef = useRef({ x: 0, isDragging: false, velocity: 0 });
 
-  // Get visible cards (11 cards: frontIndex ± 5)
+  // Get visible cards (9 cards: frontIndex ± 4)
   const getVisibleCards = useCallback(() => {
     const visible = [];
-    for (let i = -5; i <= 5; i++) {
+    for (let i = -4; i <= 4; i++) {
       const cardIndex = ((frontIndex + i) % N + N) % N;
       visible.push({ slotPosition: i, cardIndex, card: CARDS[cardIndex] });
     }
     return visible;
   }, [frontIndex]);
 
-  // Calculate 3D transform for each slot position
+  // Calculate 3D transform - EXACT scaling per user spec
   const getCardTransform = (slotPosition: number) => {
     const angle = slotPosition * (360 / DOM_SLOTS);
     const radians = (angle * Math.PI) / 180;
@@ -567,8 +302,11 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
     const z = Math.cos(radians) * WHEEL_RADIUS - WHEEL_RADIUS;
 
     const depthFactor = (z + WHEEL_RADIUS) / WHEEL_RADIUS;
-    const scale = 0.5 + 0.5 * depthFactor;
-    const opacity = Math.max(0, 0.15 + 0.85 * depthFactor);
+
+    // Front: scale(1.0), opacity(1.0)
+    // Back: scale(0.55), opacity(0.3)
+    const scale = 0.55 + 0.45 * depthFactor; // 0.55 at back, 1.0 at front
+    const opacity = Math.max(0.3, 0.3 + 0.7 * depthFactor); // 0.3 at back, 1.0 at front
     const zIndex = Math.round(depthFactor * 100);
 
     return { y, z, scale, opacity, zIndex };
@@ -585,7 +323,7 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
     return () => clearInterval(interval);
   }, [isPaused]);
 
-  // GSAP animation for smooth card transitions
+  // GSAP animation for smooth transitions
   useEffect(() => {
     const visible = getVisibleCards();
 
@@ -601,13 +339,13 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
         scale,
         opacity,
         zIndex,
-        duration: 0.8,
+        duration: 1.0,
         ease: 'power2.out',
       });
     });
   }, [frontIndex, getVisibleCards]);
 
-  // Drag-to-spin
+  // Drag-to-spin with flick physics
   const handlePointerDown = (e: React.PointerEvent) => {
     dragRef.current = { x: e.clientX, isDragging: true, velocity: 0 };
     setIsPaused(true);
@@ -620,7 +358,7 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
     dragRef.current.velocity = deltaX;
     dragRef.current.x = e.clientX;
 
-    if (Math.abs(deltaX) > 15) {
+    if (Math.abs(deltaX) > 12) {
       const direction = deltaX > 0 ? -1 : 1;
       setFrontIndex((prev) => (prev + direction + N) % N);
     }
@@ -629,20 +367,20 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
   const handlePointerUp = () => {
     dragRef.current.isDragging = false;
 
-    // Momentum
+    // Momentum flick
     const velocity = dragRef.current.velocity;
-    if (Math.abs(velocity) > 25) {
-      const steps = Math.min(Math.floor(Math.abs(velocity) / 50), 3);
+    if (Math.abs(velocity) > 20) {
+      const steps = Math.min(Math.floor(Math.abs(velocity) / 40), 4);
       const direction = velocity > 0 ? -1 : 1;
 
       for (let i = 1; i <= steps; i++) {
         setTimeout(() => {
           setFrontIndex((prev) => (prev + direction + N) % N);
-        }, i * 180);
+        }, i * 150);
       }
     }
 
-    setTimeout(() => setIsPaused(false), 800);
+    setTimeout(() => setIsPaused(false), 1000);
   };
 
   const visibleCards = getVisibleCards();
@@ -690,11 +428,11 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
                 top: 0,
                 left: 0,
                 width: '480px',
-                height: '360px',
+                height: '340px',
                 transform: `translate(-50%, -50%) translateY(${y}px) translateZ(${z}px) scale(${scale})`,
                 opacity,
                 zIndex,
-                pointerEvents: opacity > 0.2 ? 'auto' : 'none',
+                pointerEvents: opacity > 0.35 ? 'auto' : 'none',
                 willChange: 'transform',
               }}
               onClick={() => {
@@ -705,63 +443,56 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
               <div
                 className="rounded-2xl p-6 h-full cursor-pointer transition-all duration-300 hover:scale-105"
                 style={{
-                  background: SILVER_GRADIENT,
-                  border: isFront
-                    ? '1px solid rgba(197,164,66,0.35)'
-                    : '1px solid rgba(255,255,255,0.15)',
-                  boxShadow: isFront
-                    ? '0 0 30px rgba(191,149,63,0.2), ' + CARD_SHADOW
-                    : CARD_SHADOW,
-                  backdropFilter: isFront ? 'none' : 'blur(2px)',
+                  background: CARD_BG,
+                  border: CARD_BORDER,
+                  boxShadow: isFront ? CARD_SHADOW_FRONT : CARD_SHADOW,
+                  backdropFilter: 'blur(8px)',
                 }}
               >
                 <div className="flex items-start gap-4 mb-4">
                   <div
                     className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
                     style={{
-                      backgroundColor: 'rgba(0,0,0,0.06)',
-                      border: '1px solid rgba(0,0,0,0.06)',
+                      backgroundColor: 'rgba(197,164,66,0.15)',
+                      border: '1px solid rgba(197,164,66,0.3)',
                     }}
                   >
-                    <Icon size={20} style={{ color: '#8B7332' }} />
+                    <Icon size={20} style={{ color: '#C5A442' }} />
                   </div>
                   <div className="min-w-0">
                     <span
                       className="text-[10px] font-semibold tracking-[0.15em] uppercase block mb-1"
-                      style={{ color: '#8B7332' }}
+                      style={{ color: '#C5A442' }}
                     >
                       {card.category}
                     </span>
                     <h4
                       className="text-lg font-semibold leading-tight"
-                      style={{ color: '#0A0A0A', letterSpacing: '-0.02em' }}
+                      style={{ color: '#fff', letterSpacing: '-0.02em' }}
                     >
                       {card.title}
                     </h4>
                   </div>
                 </div>
 
-                <p className="text-sm leading-relaxed mb-4" style={{ color: '#333' }}>
+                <p className="text-sm leading-relaxed mb-4" style={{ color: '#E2E8F0' }}>
                   {card.short}
                 </p>
 
                 <div
                   className="flex items-center justify-between pt-3"
-                  style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}
+                  style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}
                 >
                   <span
                     className="inline-block rounded-full px-3 py-1 text-[10px] font-semibold"
                     style={{
-                      backgroundColor:
-                        card.plan === 'Free'
-                          ? 'rgba(0,0,0,0.06)'
-                          : 'rgba(139,115,50,0.12)',
-                      color: card.plan === 'Free' ? '#444' : '#8B7332',
+                      backgroundColor: 'rgba(197,164,66,0.15)',
+                      color: '#C5A442',
                     }}
                   >
-                    {card.plan === 'Free' ? 'Free' : 'Launch Plan'}
+                    Launch Plan
                   </span>
-                  <span className="text-[10px] font-medium" style={{ color: '#999' }}>
+                  <span className="text-[10px] font-medium" style={{ color: '#94A3B8' }}>
                     Click to explore →
                   </span>
                 </div>
@@ -775,7 +506,7 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
 }
 
 /* ────────────────────────────────────────────────
- * Mobile Carousel — auto-cycling single card with swipe
+ * Mobile Carousel — Single card swipe
  * ──────────────────────────────────────────────── */
 
 function MobileCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => void }) {
@@ -787,7 +518,6 @@ function MobileCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => vo
     setCurrentIndex(((idx % N) + N) % N);
   }, []);
 
-  // Auto-advance every 3 seconds
   useEffect(() => {
     if (isPaused) return;
     timerRef.current = setTimeout(() => goTo(currentIndex + 1), 3000);
@@ -809,9 +539,9 @@ function MobileCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => vo
             key={currentIndex}
             className="cursor-pointer rounded-[20px] p-6"
             style={{
-              background: SILVER_GRADIENT,
-              border: '1px solid rgba(255,255,255,0.3)',
-              boxShadow: CARD_SHADOW_ACTIVE,
+              background: CARD_BG,
+              border: CARD_BORDER,
+              boxShadow: CARD_SHADOW_FRONT,
             }}
             initial={{ opacity: 0, x: 60 }}
             animate={{ opacity: 1, x: 0 }}
@@ -828,28 +558,27 @@ function MobileCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => vo
           >
             <div
               className="w-10 h-10 rounded-lg flex items-center justify-center mb-3"
-              style={{ backgroundColor: 'rgba(0,0,0,0.06)' }}
+              style={{ backgroundColor: 'rgba(197,164,66,0.15)' }}
             >
-              <Icon size={18} style={{ color: '#8B7332' }} />
+              <Icon size={18} style={{ color: '#C5A442' }} />
             </div>
-            <span className="text-[10px] font-medium tracking-widest uppercase" style={{ color: '#8B7332' }}>
+            <span className="text-[10px] font-medium tracking-widest uppercase" style={{ color: '#C5A442' }}>
               {card.category}
             </span>
-            <h4 className="text-base font-semibold mt-1 mb-2" style={{ color: '#0A0A0A', letterSpacing: '-0.02em' }}>
+            <h4 className="text-base font-semibold mt-1 mb-2" style={{ color: '#fff', letterSpacing: '-0.02em' }}>
               {card.title}
             </h4>
-            <p className="text-sm leading-relaxed" style={{ color: '#333' }}>
+            <p className="text-sm leading-relaxed" style={{ color: '#E2E8F0' }}>
               {card.short}
             </p>
           </motion.div>
         </AnimatePresence>
 
-        {/* Nav arrows */}
         <div className="flex items-center justify-between mt-4">
           <button
             onClick={() => goTo(currentIndex - 1)}
             className="w-10 h-10 rounded-full flex items-center justify-center"
-            style={{ backgroundColor: 'rgba(255,255,255,0.06)', color: '#9CA3AF' }}
+            style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#9CA3AF' }}
           >
             <ChevronLeft size={18} />
           </button>
@@ -861,7 +590,7 @@ function MobileCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => vo
           <button
             onClick={() => goTo(currentIndex + 1)}
             className="w-10 h-10 rounded-full flex items-center justify-center"
-            style={{ backgroundColor: 'rgba(255,255,255,0.06)', color: '#9CA3AF' }}
+            style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#9CA3AF' }}
           >
             <ChevronRight size={18} />
           </button>
@@ -913,7 +642,7 @@ export function FeatureBento() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.05, ease: EASE_SMOOTH }}
         >
-          45+ Tools That Help You{' '}
+          Core Tools That Help You{' '}
           <span style={GOLD_GRADIENT_TEXT}>Prepare</span>
         </motion.h2>
 
@@ -925,8 +654,7 @@ export function FeatureBento() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1, ease: EASE_SMOOTH }}
         >
-          From claim preparation to document generation, health tracking to C&P
-          exam prep — everything you need in one place.
+          From symptom tracking to exam prep, document management to timeline building — everything you need in one place.
         </motion.p>
       </div>
 
