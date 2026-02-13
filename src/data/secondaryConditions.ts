@@ -136,7 +136,7 @@ export const secondaryConditions: SecondaryConnection[] = [
   { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Erectile Dysfunction', medicalConnection: 'Nerve damage and blood vessel damage affect sexual function', category: 'Genitourinary' },
   { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Neurogenic Bladder', medicalConnection: 'Autonomic neuropathy affects bladder control', category: 'Genitourinary' },
   { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Urinary Incontinence', medicalConnection: 'Nerve damage impairs bladder sensation and control', category: 'Genitourinary' },
-  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Gastroparesis', medicalConnection: 'Vagus nerve damage slows stomach emptying', category: 'Digestive' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Gastroparesis', medicalConnection: 'Diabetic autonomic neuropathy damages stomach nerve control', category: 'Digestive' },
   { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Diabetic Diarrhea', medicalConnection: 'Autonomic neuropathy affects bowel motility', category: 'Digestive' },
   { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Constipation', medicalConnection: 'Autonomic dysfunction slows intestinal transit', category: 'Digestive' },
   { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Diabetic Foot Ulcers', medicalConnection: 'Neuropathy and poor circulation prevent wound healing', category: 'Skin' },
@@ -144,7 +144,7 @@ export const secondaryConditions: SecondaryConnection[] = [
   { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Necrobiosis Lipoidica', medicalConnection: 'Diabetic skin condition causing waxy patches', category: 'Skin' },
   { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Amputation', medicalConnection: 'Severe neuropathy and PAD can require limb amputation', category: 'Musculoskeletal' },
   { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Charcot Foot', medicalConnection: 'Neuropathy causes progressive bone/joint destruction', category: 'Musculoskeletal' },
-  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Frozen Shoulder', medicalConnection: 'Adhesive capsulitis more common in diabetics', category: 'Musculoskeletal' },
+  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Frozen Shoulder', medicalConnection: 'Glycation of collagen causes joint stiffness and adhesive capsulitis', category: 'Musculoskeletal' },
   { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Carpal Tunnel Syndrome', medicalConnection: 'Diabetic neuropathy and tissue changes compress median nerve', category: 'Neurological' },
   { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Major Depressive Disorder', medicalConnection: 'Chronic disease burden and glucose effects on brain', category: 'Mental Health' },
   { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Anxiety Disorder', medicalConnection: 'Disease management stress and fear of complications', category: 'Mental Health' },
@@ -217,13 +217,13 @@ export const secondaryConditions: SecondaryConnection[] = [
   { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Pulmonary Hypertension', medicalConnection: 'Chronic hypoxia causes pulmonary vasoconstriction', category: 'Cardiovascular' },
   { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Major Depressive Disorder', medicalConnection: 'Poor sleep quality and oxygen deprivation affect mood regulation', category: 'Mental Health' },
   { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Anxiety Disorder', medicalConnection: 'Sleep disruption and oxygen changes cause anxiety', category: 'Mental Health' },
-  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Cognitive Impairment', medicalConnection: 'Chronic oxygen deprivation affects brain function', category: 'Neurological' },
+  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Cognitive Impairment', medicalConnection: 'Chronic hypoxia and sleep fragmentation impair brain function', category: 'Neurological' },
   { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Memory Problems', medicalConnection: 'Sleep fragmentation impairs memory consolidation', category: 'Neurological' },
   { primaryCondition: 'Sleep Apnea', secondaryCondition: 'GERD', medicalConnection: 'Negative intrathoracic pressure during apneas pulls stomach acid up', category: 'Digestive' },
   { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Diabetes Type II', medicalConnection: 'Sleep disruption affects insulin sensitivity and glucose regulation', category: 'Endocrine' },
   { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Obesity', medicalConnection: 'Poor sleep affects metabolism and hunger hormones; bidirectional', category: 'Endocrine' },
   { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Erectile Dysfunction', medicalConnection: 'Reduced oxygen, hormonal changes, and fatigue', category: 'Genitourinary' },
-  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Nocturia', medicalConnection: 'Pressure changes increase urine production at night', category: 'Genitourinary' },
+  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Nocturia', medicalConnection: 'Increased atrial natriuretic peptide from chest pressure changes increases urine production at night', category: 'Genitourinary' },
   { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Chronic Fatigue', medicalConnection: 'Non-restorative sleep causes persistent fatigue', category: 'Systemic' },
   { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Morning Headaches', medicalConnection: 'Hypoxia and carbon dioxide retention cause headaches', category: 'Neurological' },
   { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Dry Mouth/Throat', medicalConnection: 'Mouth breathing during episodes', category: 'Dental' },
@@ -239,7 +239,6 @@ export const secondaryConditions: SecondaryConnection[] = [
   { primaryCondition: 'Tinnitus', secondaryCondition: 'Migraines', medicalConnection: 'Shared auditory and neurological pathways', category: 'Neurological' },
   { primaryCondition: 'Tinnitus', secondaryCondition: 'Vertigo', medicalConnection: 'Often co-occur due to inner ear damage', category: 'Neurological' },
   { primaryCondition: 'Tinnitus', secondaryCondition: 'Menieres Disease', medicalConnection: 'Inner ear dysfunction commonly causes both conditions', category: 'Ears' },
-  { primaryCondition: 'Tinnitus', secondaryCondition: 'Hearing Loss', medicalConnection: 'Same noise exposure or inner ear damage causes both', category: 'Ears' },
   { primaryCondition: 'Tinnitus', secondaryCondition: 'Hyperacusis', medicalConnection: 'Sound sensitivity often accompanies tinnitus', category: 'Ears' },
   { primaryCondition: 'Tinnitus', secondaryCondition: 'TMJ Disorder', medicalConnection: 'Jaw dysfunction can cause or worsen tinnitus', category: 'Dental' },
   { primaryCondition: 'Tinnitus', secondaryCondition: 'Cognitive Difficulties', medicalConnection: 'Constant distraction affects concentration and focus', category: 'Neurological' },
@@ -315,7 +314,7 @@ export const secondaryConditions: SecondaryConnection[] = [
   { primaryCondition: 'Flat Feet (Pes Planus)', secondaryCondition: 'Achilles Tendonitis', medicalConnection: 'Altered mechanics stress Achilles tendon', category: 'Musculoskeletal' },
   { primaryCondition: 'Flat Feet (Pes Planus)', secondaryCondition: 'Shin Splints', medicalConnection: 'Pronation stresses tibial muscles', category: 'Musculoskeletal' },
   { primaryCondition: 'Flat Feet (Pes Planus)', secondaryCondition: 'Bunions', medicalConnection: 'Abnormal weight distribution on forefoot', category: 'Musculoskeletal' },
-  { primaryCondition: 'Plantar Fasciitis', secondaryCondition: 'Heel Spurs', medicalConnection: 'Chronic inflammation causes bone formation', category: 'Musculoskeletal' },
+  { primaryCondition: 'Plantar Fasciitis', secondaryCondition: 'Heel Spurs', medicalConnection: 'Chronic inflammation causes bone spur formation', category: 'Musculoskeletal' },
   { primaryCondition: 'Plantar Fasciitis', secondaryCondition: 'Knee Condition', medicalConnection: 'Altered gait to avoid foot pain stresses knees', category: 'Musculoskeletal' },
   { primaryCondition: 'Plantar Fasciitis', secondaryCondition: 'Hip Condition', medicalConnection: 'Compensatory gait affects hips', category: 'Musculoskeletal' },
   { primaryCondition: 'Plantar Fasciitis', secondaryCondition: 'Lumbar Spine Condition', medicalConnection: 'Antalgic gait stresses lower back', category: 'Musculoskeletal' },
@@ -616,7 +615,7 @@ export const secondaryConditions: SecondaryConnection[] = [
   { primaryCondition: 'Agent Orange Exposure', secondaryCondition: 'Chronic B-cell Leukemia', medicalConnection: 'Presumptive blood cancer', category: 'Cancer' },
   { primaryCondition: 'Agent Orange Exposure', secondaryCondition: 'Multiple Myeloma', medicalConnection: 'Presumptive blood cancer', category: 'Cancer' },
   { primaryCondition: 'Agent Orange Exposure', secondaryCondition: 'Chloracne', medicalConnection: 'Skin condition from dioxin exposure', category: 'Skin' },
-  { primaryCondition: 'Agent Orange Exposure', secondaryCondition: 'Porphyria Cutanea Tarda', medicalConnection: 'Presumptive skin condition', category: 'Skin' },
+  { primaryCondition: 'Agent Orange Exposure', secondaryCondition: 'Porphyria Cutanea Tarda', medicalConnection: 'Liver disorder from herbicide exposure; presumptive condition', category: 'Skin' },
   { primaryCondition: 'Agent Orange Exposure', secondaryCondition: 'AL Amyloidosis', medicalConnection: 'Presumptive systemic condition', category: 'Systemic' },
   { primaryCondition: 'Agent Orange Exposure', secondaryCondition: 'Bladder Cancer', medicalConnection: 'Added presumptive under PACT Act', category: 'Cancer' },
   { primaryCondition: 'Agent Orange Exposure', secondaryCondition: 'Hypothyroidism', medicalConnection: 'Added presumptive under PACT Act', category: 'Endocrine' },
@@ -775,12 +774,7 @@ export const secondaryConditions: SecondaryConnection[] = [
   { primaryCondition: 'Right Ankle Condition', secondaryCondition: 'Right Knee Condition', medicalConnection: 'Altered foot strike transfers stress up kinetic chain', category: 'Musculoskeletal' },
   { primaryCondition: 'Right Ankle Condition', secondaryCondition: 'Left Ankle Condition', medicalConnection: 'Compensatory gait stresses opposite ankle', category: 'Musculoskeletal' },
   { primaryCondition: 'Right Ankle Condition', secondaryCondition: 'Plantar Fasciitis', medicalConnection: 'Altered foot mechanics stress plantar fascia', category: 'Musculoskeletal' },
-  { primaryCondition: 'Flat Feet (Pes Planus)', secondaryCondition: 'Plantar Fasciitis', medicalConnection: 'Loss of arch support strains plantar fascia', category: 'Musculoskeletal' },
-  { primaryCondition: 'Flat Feet (Pes Planus)', secondaryCondition: 'Knee Pain', medicalConnection: 'Poor foot alignment causes knee stress', category: 'Musculoskeletal' },
-  { primaryCondition: 'Flat Feet (Pes Planus)', secondaryCondition: 'Shin Splints', medicalConnection: 'Overpronation stresses tibial muscles', category: 'Musculoskeletal' },
-  { primaryCondition: 'Flat Feet (Pes Planus)', secondaryCondition: 'Hip Pain', medicalConnection: 'Biomechanical chain dysfunction', category: 'Musculoskeletal' },
   { primaryCondition: 'Flat Feet (Pes Planus)', secondaryCondition: 'Lower Back Pain', medicalConnection: 'Pelvic tilt from poor foot alignment', category: 'Musculoskeletal' },
-  { primaryCondition: 'Plantar Fasciitis', secondaryCondition: 'Heel Spurs', medicalConnection: 'Chronic inflammation causes bone spur formation', category: 'Musculoskeletal' },
   { primaryCondition: 'Plantar Fasciitis', secondaryCondition: 'Achilles Tendonitis', medicalConnection: 'Calf tightness contributes to both conditions', category: 'Musculoskeletal' },
   { primaryCondition: 'Plantar Fasciitis', secondaryCondition: 'Knee Pain', medicalConnection: 'Altered gait from foot pain stresses knee', category: 'Musculoskeletal' },
 
@@ -793,21 +787,11 @@ export const secondaryConditions: SecondaryConnection[] = [
   { primaryCondition: 'Right Shoulder Condition', secondaryCondition: 'Thoracic Outlet Syndrome', medicalConnection: 'Altered shoulder mechanics compress neurovascular bundle', category: 'Neurological' },
 
   // ========================================
-  // SLEEP APNEA COMPREHENSIVE CHAINS
+  // SLEEP APNEA COMPREHENSIVE CHAINS (unique entries not in main Sleep Apnea section)
   // ========================================
-  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Cognitive Impairment', medicalConnection: 'Chronic hypoxia and sleep fragmentation impair brain function', category: 'Neurological' },
   { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Memory Loss', medicalConnection: 'Disrupted sleep prevents memory consolidation', category: 'Neurological' },
-  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Diabetes Type II', medicalConnection: 'Sleep disruption causes insulin resistance and metabolic dysfunction', category: 'Endocrine' },
-  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Atrial Fibrillation', medicalConnection: 'Repeated oxygen desaturation stresses cardiac conduction system', category: 'Cardiovascular' },
-  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Heart Failure', medicalConnection: 'Chronic strain from repeated hypoxia damages heart muscle', category: 'Cardiovascular' },
-  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Stroke', medicalConnection: 'Increased risk from blood pressure fluctuations and clotting', category: 'Cardiovascular' },
-  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Pulmonary Hypertension', medicalConnection: 'Chronic hypoxia increases pulmonary vascular resistance', category: 'Respiratory' },
-  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Erectile Dysfunction', medicalConnection: 'Reduced oxygen and testosterone levels affect function', category: 'Genitourinary' },
   { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Low Testosterone', medicalConnection: 'Sleep disruption reduces testosterone production', category: 'Endocrine' },
-  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Morning Headaches', medicalConnection: 'CO2 retention during sleep causes vascular headaches', category: 'Neurological' },
   { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Gastroesophageal Reflux', medicalConnection: 'Negative intrathoracic pressure draws stomach acid up', category: 'Digestive' },
-  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Nocturia', medicalConnection: 'Increased atrial natriuretic peptide from chest pressure changes', category: 'Genitourinary' },
-  { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Chronic Fatigue', medicalConnection: 'Non-restorative sleep causes persistent exhaustion', category: 'Systemic' },
   { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Weight Gain', medicalConnection: 'Hormonal changes and fatigue reduce activity and increase appetite', category: 'Endocrine' },
   { primaryCondition: 'Sleep Apnea', secondaryCondition: 'Glaucoma', medicalConnection: 'Repeated hypoxia damages optic nerve', category: 'Eyes' },
 
@@ -853,26 +837,11 @@ export const secondaryConditions: SecondaryConnection[] = [
   { primaryCondition: 'Chronic Corticosteroid Use', secondaryCondition: 'Muscle Weakness', medicalConnection: 'Steroid myopathy from protein catabolism', category: 'Musculoskeletal' },
 
   // ========================================
-  // DIABETES COMPREHENSIVE COMPLICATIONS
+  // DIABETES COMPREHENSIVE COMPLICATIONS (unique entries not in main Diabetes section)
   // ========================================
-  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Gastroparesis', medicalConnection: 'Diabetic autonomic neuropathy damages stomach nerve control', category: 'Digestive' },
-  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Diabetic Retinopathy', medicalConnection: 'Microvascular damage to retinal blood vessels', category: 'Eyes' },
-  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Diabetic Macular Edema', medicalConnection: 'Fluid leakage from damaged retinal vessels', category: 'Eyes' },
-  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Cataracts', medicalConnection: 'High glucose causes lens protein damage', category: 'Eyes' },
-  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Glaucoma', medicalConnection: 'Increased eye pressure from diabetes', category: 'Eyes' },
-  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Diabetic Nephropathy', medicalConnection: 'Microvascular damage to kidney filtration units', category: 'Renal' },
-  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Chronic Kidney Disease', medicalConnection: 'Progressive kidney damage from hyperglycemia', category: 'Renal' },
   { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Peripheral Neuropathy', medicalConnection: 'High glucose damages nerve fibers', category: 'Neurological' },
   { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Autonomic Neuropathy', medicalConnection: 'Nerve damage affects automatic body functions', category: 'Neurological' },
-  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Hearing Loss', medicalConnection: 'Microvascular damage to inner ear', category: 'Ears' },
-  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Erectile Dysfunction', medicalConnection: 'Vascular and nerve damage affects function', category: 'Genitourinary' },
   { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Bladder Dysfunction', medicalConnection: 'Autonomic neuropathy affects bladder control', category: 'Genitourinary' },
-  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Coronary Artery Disease', medicalConnection: 'Accelerated atherosclerosis from metabolic dysfunction', category: 'Cardiovascular' },
-  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Peripheral Artery Disease', medicalConnection: 'Vascular damage to extremity blood vessels', category: 'Cardiovascular' },
-  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Diabetic Foot Ulcers', medicalConnection: 'Neuropathy and poor circulation cause non-healing wounds', category: 'Skin' },
-  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Skin Infections', medicalConnection: 'High glucose impairs immune function and wound healing', category: 'Skin' },
-  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Frozen Shoulder', medicalConnection: 'Glycation of collagen causes joint stiffness', category: 'Musculoskeletal' },
-  { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Carpal Tunnel Syndrome', medicalConnection: 'Neuropathy and tissue glycation compress median nerve', category: 'Neurological' },
   { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Depression', medicalConnection: 'Chronic disease burden and biological changes', category: 'Mental Health' },
   { primaryCondition: 'Diabetes Type II', secondaryCondition: 'Cognitive Decline', medicalConnection: 'Vascular damage and glucose toxicity affect brain', category: 'Neurological' },
 
@@ -909,18 +878,9 @@ export const secondaryConditions: SecondaryConnection[] = [
   { primaryCondition: 'Spondylolisthesis', secondaryCondition: 'Hamstring Tightness', medicalConnection: 'Pelvic compensation causes muscle tension', category: 'Musculoskeletal' },
 
   // ========================================
-  // CARDIOVASCULAR CHAINS
+  // CARDIOVASCULAR CHAINS (unique entries not in main sections)
   // ========================================
-  { primaryCondition: 'Hypertension', secondaryCondition: 'Left Ventricular Hypertrophy', medicalConnection: 'Heart muscle thickens from pumping against high pressure', category: 'Cardiovascular' },
-  { primaryCondition: 'Hypertension', secondaryCondition: 'Heart Failure', medicalConnection: 'Chronic strain weakens heart muscle', category: 'Cardiovascular' },
-  { primaryCondition: 'Hypertension', secondaryCondition: 'Atrial Fibrillation', medicalConnection: 'Elevated pressure causes atrial remodeling', category: 'Cardiovascular' },
-  { primaryCondition: 'Hypertension', secondaryCondition: 'Chronic Kidney Disease', medicalConnection: 'High pressure damages kidney blood vessels', category: 'Renal' },
   { primaryCondition: 'Hypertension', secondaryCondition: 'Retinopathy', medicalConnection: 'High pressure damages retinal blood vessels', category: 'Eyes' },
-  { primaryCondition: 'Hypertension', secondaryCondition: 'Stroke', medicalConnection: 'Vessel damage and increased clot risk', category: 'Cardiovascular' },
-  { primaryCondition: 'Hypertension', secondaryCondition: 'Peripheral Artery Disease', medicalConnection: 'Accelerated atherosclerosis', category: 'Cardiovascular' },
-  { primaryCondition: 'Hypertension', secondaryCondition: 'Erectile Dysfunction', medicalConnection: 'Vascular damage affects blood flow', category: 'Genitourinary' },
-  { primaryCondition: 'Hypertension', secondaryCondition: 'Vascular Dementia', medicalConnection: 'Chronic cerebrovascular damage', category: 'Neurological' },
-  { primaryCondition: 'Coronary Artery Disease', secondaryCondition: 'Heart Failure', medicalConnection: 'Reduced blood supply weakens heart muscle', category: 'Cardiovascular' },
   { primaryCondition: 'Coronary Artery Disease', secondaryCondition: 'Arrhythmia', medicalConnection: 'Ischemia affects electrical conduction', category: 'Cardiovascular' },
   { primaryCondition: 'Coronary Artery Disease', secondaryCondition: 'Depression', medicalConnection: 'Chronic illness and mortality awareness', category: 'Mental Health' },
   { primaryCondition: 'Coronary Artery Disease', secondaryCondition: 'Anxiety', medicalConnection: 'Fear of cardiac events', category: 'Mental Health' },
@@ -945,10 +905,8 @@ export const secondaryConditions: SecondaryConnection[] = [
   { primaryCondition: 'COPD', secondaryCondition: 'Weight Loss', medicalConnection: 'Increased work of breathing burns calories', category: 'Systemic' },
   { primaryCondition: 'COPD', secondaryCondition: 'Sleep Disorders', medicalConnection: 'Nocturnal hypoxia and breathing difficulty', category: 'Respiratory' },
   { primaryCondition: 'COPD', secondaryCondition: 'Cognitive Impairment', medicalConnection: 'Chronic hypoxia affects brain function', category: 'Neurological' },
-  { primaryCondition: 'Asthma', secondaryCondition: 'GERD', medicalConnection: 'Respiratory mechanics affect lower esophageal sphincter', category: 'Digestive' },
   { primaryCondition: 'Asthma', secondaryCondition: 'Anxiety', medicalConnection: 'Fear of asthma attacks', category: 'Mental Health' },
   { primaryCondition: 'Asthma', secondaryCondition: 'Sinusitis', medicalConnection: 'Unified airway inflammation', category: 'Respiratory' },
-  { primaryCondition: 'Asthma', secondaryCondition: 'Vocal Cord Dysfunction', medicalConnection: 'Irritant exposure affects vocal cords', category: 'Respiratory' },
   { primaryCondition: 'Asthma', secondaryCondition: 'Sleep Disorders', medicalConnection: 'Nocturnal symptoms disrupt sleep', category: 'Respiratory' },
   { primaryCondition: 'Pulmonary Fibrosis', secondaryCondition: 'Pulmonary Hypertension', medicalConnection: 'Fibrotic changes increase vascular resistance', category: 'Cardiovascular' },
   { primaryCondition: 'Pulmonary Fibrosis', secondaryCondition: 'Cor Pulmonale', medicalConnection: 'Right heart strain from lung disease', category: 'Cardiovascular' },
@@ -966,15 +924,12 @@ export const secondaryConditions: SecondaryConnection[] = [
   { primaryCondition: 'PTSD', secondaryCondition: 'Hair Loss (Alopecia)', medicalConnection: 'Chronic stress triggers telogen effluvium', category: 'Skin' },
   { primaryCondition: 'PTSD', secondaryCondition: 'Peripheral Neuropathy', medicalConnection: 'Stress and metabolic changes damage peripheral nerves', category: 'Neurological' },
   { primaryCondition: 'PTSD', secondaryCondition: 'Vertigo', medicalConnection: 'Anxiety and hypervigilance affect vestibular function', category: 'Neurological' },
-  { primaryCondition: 'PTSD', secondaryCondition: 'Chronic Sinusitis', medicalConnection: 'Immune dysfunction from chronic stress', category: 'Respiratory' },
   { primaryCondition: 'PTSD', secondaryCondition: 'Interstitial Cystitis', medicalConnection: 'Stress-related bladder inflammation', category: 'Genitourinary' },
 
   // ========================================
   // HEARING LOSS CHAINS
   // ========================================
-  { primaryCondition: 'Hearing Loss', secondaryCondition: 'Tinnitus', medicalConnection: 'Auditory system damage causes phantom sounds', category: 'Ears' },
   { primaryCondition: 'Hearing Loss', secondaryCondition: 'Depression', medicalConnection: 'Social isolation and communication difficulty', category: 'Mental Health' },
-  { primaryCondition: 'Hearing Loss', secondaryCondition: 'Cognitive Decline', medicalConnection: 'Reduced auditory stimulation affects brain', category: 'Neurological' },
   { primaryCondition: 'Hearing Loss', secondaryCondition: 'Social Anxiety', medicalConnection: 'Difficulty in social situations', category: 'Mental Health' },
   { primaryCondition: 'Hearing Loss', secondaryCondition: 'Balance Problems', medicalConnection: 'Inner ear damage affects vestibular system', category: 'Neurological' },
   { primaryCondition: 'Tinnitus', secondaryCondition: 'Sleep Disorders', medicalConnection: 'Constant noise interferes with sleep', category: 'Mental Health' },
@@ -990,11 +945,8 @@ export const secondaryConditions: SecondaryConnection[] = [
   // AUTOIMMUNE AND INFLAMMATORY CHAINS
   // ========================================
   { primaryCondition: 'Rheumatoid Arthritis', secondaryCondition: 'Sjogrens Syndrome', medicalConnection: 'Overlapping autoimmune conditions', category: 'Autoimmune' },
-  { primaryCondition: 'Rheumatoid Arthritis', secondaryCondition: 'Carpal Tunnel Syndrome', medicalConnection: 'Joint inflammation compresses median nerve', category: 'Neurological' },
-  { primaryCondition: 'Rheumatoid Arthritis', secondaryCondition: 'Interstitial Lung Disease', medicalConnection: 'Systemic inflammation affects lungs', category: 'Respiratory' },
   { primaryCondition: 'Rheumatoid Arthritis', secondaryCondition: 'Cervical Myelopathy', medicalConnection: 'Atlantoaxial instability from joint damage', category: 'Neurological' },
   { primaryCondition: 'Rheumatoid Arthritis', secondaryCondition: 'Peripheral Neuropathy', medicalConnection: 'Vasculitis damages peripheral nerves', category: 'Neurological' },
-  { primaryCondition: 'Rheumatoid Arthritis', secondaryCondition: 'Depression', medicalConnection: 'Chronic pain and disability', category: 'Mental Health' },
   { primaryCondition: 'Lupus (SLE)', secondaryCondition: 'Lupus Nephritis', medicalConnection: 'Autoimmune attack on kidneys', category: 'Renal' },
   { primaryCondition: 'Lupus (SLE)', secondaryCondition: 'Antiphospholipid Syndrome', medicalConnection: 'Associated autoantibody syndrome', category: 'Cardiovascular' },
   { primaryCondition: 'Lupus (SLE)', secondaryCondition: 'Pericarditis', medicalConnection: 'Inflammation of heart lining', category: 'Cardiovascular' },
@@ -1008,16 +960,10 @@ export const secondaryConditions: SecondaryConnection[] = [
   // ========================================
   // DIGESTIVE SYSTEM CHAINS
   // ========================================
-  { primaryCondition: 'GERD', secondaryCondition: 'Barretts Esophagus', medicalConnection: 'Chronic acid exposure causes cellular changes', category: 'Digestive' },
-  { primaryCondition: 'GERD', secondaryCondition: 'Esophageal Stricture', medicalConnection: 'Scarring from chronic inflammation', category: 'Digestive' },
-  { primaryCondition: 'GERD', secondaryCondition: 'Chronic Cough', medicalConnection: 'Acid irritation triggers cough reflex', category: 'Respiratory' },
   { primaryCondition: 'GERD', secondaryCondition: 'Laryngitis', medicalConnection: 'Acid damages vocal cords', category: 'Respiratory' },
-  { primaryCondition: 'GERD', secondaryCondition: 'Dental Erosion', medicalConnection: 'Acid damages tooth enamel', category: 'Dental' },
-  { primaryCondition: 'GERD', secondaryCondition: 'Asthma', medicalConnection: 'Microaspiration triggers bronchospasm', category: 'Respiratory' },
   { primaryCondition: 'GERD', secondaryCondition: 'Sleep Disorders', medicalConnection: 'Nocturnal reflux disrupts sleep', category: 'Mental Health' },
   { primaryCondition: 'IBS', secondaryCondition: 'Anxiety', medicalConnection: 'Gut-brain axis dysfunction', category: 'Mental Health' },
   { primaryCondition: 'IBS', secondaryCondition: 'Depression', medicalConnection: 'Chronic symptoms affect quality of life', category: 'Mental Health' },
-  { primaryCondition: 'IBS', secondaryCondition: 'Fibromyalgia', medicalConnection: 'Central sensitization syndromes overlap', category: 'Musculoskeletal' },
   { primaryCondition: 'IBS', secondaryCondition: 'Chronic Fatigue', medicalConnection: 'GI dysfunction affects nutrient absorption and energy', category: 'Systemic' },
   { primaryCondition: "Crohn's Disease", secondaryCondition: 'Fistulas', medicalConnection: 'Transmural inflammation creates abnormal connections', category: 'Digestive' },
   { primaryCondition: "Crohn's Disease", secondaryCondition: 'Kidney Stones', medicalConnection: 'Oxalate absorption increases with fat malabsorption', category: 'Renal' },
@@ -1035,12 +981,7 @@ export const secondaryConditions: SecondaryConnection[] = [
   // ========================================
   // GULF WAR / BURN PIT / TOXIC EXPOSURE
   // ========================================
-  { primaryCondition: 'Burn Pit Exposure', secondaryCondition: 'Chronic Bronchitis', medicalConnection: 'Inhalation of toxic smoke irritates airways', category: 'Respiratory' },
-  { primaryCondition: 'Burn Pit Exposure', secondaryCondition: 'Asthma', medicalConnection: 'Airway inflammation from toxic exposure', category: 'Respiratory' },
-  { primaryCondition: 'Burn Pit Exposure', secondaryCondition: 'COPD', medicalConnection: 'Chronic lung damage from toxic inhalation', category: 'Respiratory' },
-  { primaryCondition: 'Burn Pit Exposure', secondaryCondition: 'Pulmonary Fibrosis', medicalConnection: 'Scarring from toxic particle inhalation', category: 'Respiratory' },
   { primaryCondition: 'Burn Pit Exposure', secondaryCondition: 'Sinusitis', medicalConnection: 'Upper airway inflammation from smoke', category: 'Respiratory' },
-  { primaryCondition: 'Burn Pit Exposure', secondaryCondition: 'Rhinitis', medicalConnection: 'Nasal inflammation from toxic exposure', category: 'Respiratory' },
   { primaryCondition: 'Burn Pit Exposure', secondaryCondition: 'Skin Conditions', medicalConnection: 'Toxic exposure causes dermatological issues', category: 'Skin' },
   { primaryCondition: 'Burn Pit Exposure', secondaryCondition: 'Headaches', medicalConnection: 'Toxic exposure and sinus inflammation', category: 'Neurological' },
   { primaryCondition: 'Burn Pit Exposure', secondaryCondition: 'Fatigue', medicalConnection: 'Systemic effects of toxic exposure', category: 'Systemic' },
@@ -1050,12 +991,6 @@ export const secondaryConditions: SecondaryConnection[] = [
   { primaryCondition: 'Gulf War Syndrome', secondaryCondition: 'Cognitive Impairment', medicalConnection: 'Neurological effects of toxic exposure', category: 'Neurological' },
   { primaryCondition: 'Gulf War Syndrome', secondaryCondition: 'Joint Pain', medicalConnection: 'Widespread musculoskeletal symptoms', category: 'Musculoskeletal' },
   { primaryCondition: 'Gulf War Syndrome', secondaryCondition: 'Skin Conditions', medicalConnection: 'Dermatological manifestations', category: 'Skin' },
-  { primaryCondition: 'Agent Orange Exposure', secondaryCondition: 'Diabetes Type II', medicalConnection: 'Presumptive condition for Agent Orange exposure', category: 'Endocrine' },
-  { primaryCondition: 'Agent Orange Exposure', secondaryCondition: 'Ischemic Heart Disease', medicalConnection: 'Presumptive condition for Agent Orange exposure', category: 'Cardiovascular' },
-  { primaryCondition: 'Agent Orange Exposure', secondaryCondition: 'Parkinson Disease', medicalConnection: 'Presumptive condition for Agent Orange exposure', category: 'Neurological' },
-  { primaryCondition: 'Agent Orange Exposure', secondaryCondition: 'Peripheral Neuropathy', medicalConnection: 'Neurotoxic effects of dioxin exposure', category: 'Neurological' },
-  { primaryCondition: 'Agent Orange Exposure', secondaryCondition: 'Chloracne', medicalConnection: 'Skin manifestation of dioxin exposure', category: 'Skin' },
-  { primaryCondition: 'Agent Orange Exposure', secondaryCondition: 'Porphyria Cutanea Tarda', medicalConnection: 'Liver disorder from herbicide exposure', category: 'Digestive' },
   { primaryCondition: 'Camp Lejeune Water Contamination', secondaryCondition: 'Bladder Cancer', medicalConnection: 'Exposure to contaminated water supply', category: 'Genitourinary' },
   { primaryCondition: 'Camp Lejeune Water Contamination', secondaryCondition: 'Kidney Cancer', medicalConnection: 'Exposure to contaminated water supply', category: 'Renal' },
   { primaryCondition: 'Camp Lejeune Water Contamination', secondaryCondition: 'Liver Disease', medicalConnection: 'Toxic exposure from contaminated water', category: 'Digestive' },
