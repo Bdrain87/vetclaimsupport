@@ -75,6 +75,7 @@ export default function MedicalVisits() {
       gotAfterVisitSummary: visit.gotAfterVisitSummary,
       followUp: visit.followUp,
       notes: visit.notes,
+      relatedCondition: visit.relatedCondition || '',
     });
     setEditingId(visit.id);
     setIsOpen(true);

@@ -65,8 +65,9 @@ export default function Medications() {
     setIsOpen(true);
   };
 
-  const currentMeds = data.medications.filter(m => m.stillTaking);
-  const pastMeds = data.medications.filter(m => !m.stillTaking);
+  const sortByDate = (a: Medication, b: Medication) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
+  const currentMeds = data.medications.filter(m => m.stillTaking).sort(sortByDate);
+  const pastMeds = data.medications.filter(m => !m.stillTaking).sort(sortByDate);
 
   return (
     <PageContainer className="space-y-6 animate-fade-in overflow-x-hidden">
