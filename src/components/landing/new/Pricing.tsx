@@ -23,7 +23,7 @@ const PREMIUM_FEATURE_GROUPS: FeatureGroup[] = [
     category: 'Powered Claim Builders',
     features: [
       'Personal Statement Generator',
-      'Nexus Letter Builder',
+      'Doctor Summary Generator',
       'Buddy Statement Creator',
       'Stressor Statement Writer',
       'C&P Exam Prep Coach',
