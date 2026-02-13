@@ -180,7 +180,7 @@ _______________________________
     const prompt = createPersonalStatementPrompt({
       veteranName: veteranFullName || 'Veteran',
       condition: condition.name,
-      incidentDescription: condition.description || 'Symptoms began during military service.',
+      incidentDescription: condition.notes || 'Symptoms began during military service.',
       currentSymptoms: symptomNames.length > 0 ? symptomNames : ['Ongoing symptoms related to condition'],
       dailyImpact: impacts || 'This condition affects daily activities.',
       serviceInfo: {
