@@ -162,12 +162,12 @@ const CARDS: CardData[] = [
 ];
 
 /* ────────────────────────────────────────────────
- * Brand Styling
+ * Card Styling - Dark theme
  * ──────────────────────────────────────────────── */
 
-const CARD_BG = 'rgba(15, 23, 42, 0.85)';
-const CARD_BORDER = '1px solid rgba(255, 255, 255, 0.2)';
-const CARD_SHADOW = '0 4px 16px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3)';
+const CARD_BG = 'rgba(30, 30, 30, 0.95)'; // Very dark gray
+const CARD_BORDER = '1px solid rgba(255, 255, 255, 0.15)';
+const CARD_SHADOW = '0 8px 32px rgba(0,0,0,0.6)';
 
 /* ────────────────────────────────────────────────
  * Detail Modal
@@ -198,7 +198,7 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
         className="relative z-10 w-[90%] max-w-[500px] rounded-3xl p-8 sm:p-10"
         style={{
           background: CARD_BG,
-          border: '1px solid rgba(255, 255, 255, 0.3)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
           boxShadow: '0 0 60px rgba(197,164,66,0.3)',
         }}
         initial={{ scale: 0.9, y: 30, opacity: 0 }}
@@ -262,21 +262,19 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
 }
 
 /* ────────────────────────────────────────────────
- * 3D Stacked Cards — Compact Rotation
+ * Angled Card Stack - Multiple Visible
  *
- * Cards stack tightly in 3D space with small offsets.
- * Rotates through the stack smoothly.
+ * Cards fanned out at angles so you can see multiple
  * ──────────────────────────────────────────────── */
 
 const N = CARDS.length;
-const VISIBLE_CARDS = 5;
+const VISIBLE_CARDS = 6;
 
 function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => void }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Get visible cards
   const getVisibleCards = useCallback(() => {
     const visible = [];
     for (let i = 0; i < VISIBLE_CARDS; i++) {
@@ -286,23 +284,23 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
     return visible;
   }, [currentIndex]);
 
-  // Calculate compact 3D stack position
+  // Angled fan-out positioning
   const getCardTransform = (position: number) => {
-    const isFront = position === 0;
+    // Cards fan out with rotation
+    const baseRotate = -12; // Start angle
+    const rotateStep = 4; // Degrees per card
+    const rotate = baseRotate + (position * rotateStep);
 
-    // Tight stacking with small offsets
-    const x = position * 15; // Small horizontal offset
-    const y = position * -10; // Small vertical offset upward
-    const z = position * -80; // Depth spacing
-    const scale = 1 - position * 0.08; // Gradual scale reduction
-    const opacity = 1 - position * 0.15; // Gradual fade
-    const rotateY = position * 3; // Slight rotation for depth
+    const x = position * 40; // Horizontal spread
+    const y = Math.abs(position - 2.5) * 10; // Slight arc
+    const z = position * -60; // Depth
+    const scale = 1 - (position * 0.05);
+    const opacity = 1 - (position * 0.12);
     const zIndex = VISIBLE_CARDS - position;
 
-    return { x, y, z, scale, opacity, rotateY, zIndex, isFront };
+    return { x, y, z, scale, opacity, rotate, zIndex };
   };
 
-  // Auto-rotation
   useEffect(() => {
     if (isPaused) return;
     const interval = setInterval(() => {
@@ -311,14 +309,13 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
     return () => clearInterval(interval);
   }, [isPaused]);
 
-  // GSAP animation
   useEffect(() => {
     const visible = getVisibleCards();
     visible.forEach(({ position }, idx) => {
       const cardEl = cardsRef.current[idx];
       if (!cardEl) return;
 
-      const { x, y, z, scale, opacity, rotateY, zIndex } = getCardTransform(position);
+      const { x, y, z, scale, opacity, rotate, zIndex } = getCardTransform(position);
 
       gsap.to(cardEl, {
         x,
@@ -326,9 +323,9 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
         z,
         scale,
         opacity,
-        rotateY,
+        rotate,
         zIndex,
-        duration: 0.8,
+        duration: 0.7,
         ease: 'power2.out',
       });
     });
@@ -340,10 +337,10 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
     <div
       className="relative"
       style={{
-        width: '450px',
-        height: '500px',
-        perspective: '1500px',
-        perspectiveOrigin: 'center center',
+        width: '500px',
+        height: '550px',
+        perspective: '1200px',
+        perspectiveOrigin: '50% 50%',
       }}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
@@ -357,7 +354,6 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
         }}
       >
         {visibleCards.map(({ position, cardIndex, card }, idx) => {
-          const { isFront } = getCardTransform(position);
           const Icon = card.icon;
 
           return (
@@ -366,31 +362,33 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
               ref={(el) => (cardsRef.current[idx] = el)}
               style={{
                 position: 'absolute',
-                top: '50px',
-                left: 0,
-                width: '100%',
+                top: '60px',
+                left: '20px',
+                width: '420px',
                 transformStyle: 'preserve-3d',
+                transformOrigin: 'center bottom',
                 willChange: 'transform',
                 pointerEvents: 'auto',
+                cursor: 'pointer',
               }}
               onClick={() => onSelectCard(card)}
             >
               <div
-                className="rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:scale-105"
+                className="rounded-2xl p-6 transition-all duration-300 hover:scale-105"
                 style={{
                   background: CARD_BG,
                   border: CARD_BORDER,
                   boxShadow: CARD_SHADOW,
-                  backdropFilter: 'blur(10px)',
-                  minHeight: '380px',
+                  backdropFilter: 'blur(12px)',
+                  minHeight: '360px',
                 }}
               >
                 <div className="flex items-start gap-4 mb-4">
                   <div
                     className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
                     style={{
-                      backgroundColor: 'rgba(197,164,66,0.15)',
-                      border: '1px solid rgba(197,164,66,0.3)',
+                      backgroundColor: 'rgba(197,164,66,0.12)',
+                      border: '1px solid rgba(197,164,66,0.25)',
                     }}
                   >
                     <Icon size={20} style={{ color: '#C5A442' }} />
@@ -417,12 +415,12 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
 
                 <div
                   className="flex items-center justify-between pt-3 mt-auto"
-                  style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}
+                  style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}
                 >
                   <span
                     className="inline-block rounded-full px-3 py-1 text-[10px] font-semibold"
                     style={{
-                      backgroundColor: 'rgba(197,164,66,0.15)',
+                      backgroundColor: 'rgba(197,164,66,0.12)',
                       color: '#C5A442',
                     }}
                   >
@@ -538,7 +536,6 @@ function MobileCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => vo
 
 /* ────────────────────────────────────────────────
  * FeatureBento — Two Column Layout
- * Text Left, Cards Right
  * ──────────────────────────────────────────────── */
 
 export function FeatureBento() {
@@ -614,7 +611,7 @@ export function FeatureBento() {
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Left Column: Text */}
+          {/* Left: Text */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -646,7 +643,7 @@ export function FeatureBento() {
             </p>
           </motion.div>
 
-          {/* Right Column: 3D Card Stack */}
+          {/* Right: Angled Card Stack */}
           <motion.div
             className="flex justify-center lg:justify-end"
             initial={{ opacity: 0, x: 30 }}
