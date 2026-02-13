@@ -184,7 +184,7 @@ export function Pricing() {
   }, []);
 
   return (
-    <section id="pricing" className="py-20 px-4" style={{ backgroundColor: '#000000' }}>
+    <section id="pricing" className="py-12 px-4" style={{ backgroundColor: '#000000' }}>
       <div className="max-w-4xl mx-auto">
 
         <motion.h2

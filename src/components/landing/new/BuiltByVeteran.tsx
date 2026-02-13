@@ -3,7 +3,7 @@ import { GOLD_GRADIENT_TEXT, EASE_SMOOTH } from '@/lib/landing-animations';
 
 export function BuiltByVeteran() {
   return (
-    <section className="py-16 md:py-20 px-4" style={{ backgroundColor: '#0A0A0A' }}>
+    <section className="py-10 md:py-12 px-4" style={{ backgroundColor: '#0A0A0A' }}>
       <div className="mx-auto max-w-3xl">
         <motion.h2
           className="text-2xl md:text-3xl mb-8 text-center"

@@ -597,7 +597,7 @@ export function FeatureBento() {
     return (
       <section
         id="features"
-        className="relative py-16"
+        className="relative py-12"
         style={{ backgroundColor: '#000000', scrollMarginTop: '5rem' }}
       >
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -649,7 +649,7 @@ export function FeatureBento() {
   return (
     <section
       id="features"
-      className="relative py-20 lg:py-28"
+      className="relative py-12 lg:py-16"
       style={{ backgroundColor: '#000000', scrollMarginTop: '5rem' }}
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">

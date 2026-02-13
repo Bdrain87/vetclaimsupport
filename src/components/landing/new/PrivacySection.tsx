@@ -33,7 +33,7 @@ function ShieldIcon() {
 export function PrivacySection() {
   return (
     <section
-      className="py-12 md:py-16"
+      className="py-10 md:py-12"
       style={{
         background:
           'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
