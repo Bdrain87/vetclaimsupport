@@ -1726,15 +1726,15 @@ export const exportDoctorSummaryTemplate = async (statementText: string, conditi
   doc.save(`doctor-summary-template-${conditionName?.replace(/\s+/g, '-').toLowerCase() || 'condition'}.pdf`);
 };
 
-// Claim Strategy Export
+// Claim Preparation Export
 export const exportClaimStrategy = async (statementText: string) => {
   const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
 
   let yPos = addPDFHeader(doc, {
-    title: 'Claim Strategy Plan',
-    subtitle: 'Personalized VA Disability Claim Strategy'
+    title: 'Claim Preparation Plan',
+    subtitle: 'Personalized VA Disability Claim Preparation'
   });
 
   yPos = drawInfoBox(doc, 'This strategy plan is for personal planning purposes only. Consult with an accredited VSO before filing your claims.', yPos);

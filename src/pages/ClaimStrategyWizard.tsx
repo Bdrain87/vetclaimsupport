@@ -931,9 +931,9 @@ attorney for official guidance on your specific claim.
           <Wand2 className="h-5 w-5" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Claim Strategy Wizard</h1>
+          <h1 className="text-2xl font-bold text-foreground">Claim Preparation Wizard</h1>
           <p className="text-muted-foreground">
-            Get a personalized VA disability claim strategy powered by AI
+            Get a personalized VA disability claim preparation plan powered by AI
           </p>
         </div>
       </div>
