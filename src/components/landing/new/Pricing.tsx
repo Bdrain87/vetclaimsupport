@@ -295,7 +295,7 @@ export function Pricing() {
         </motion.div>
 
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-5"
+          className="space-y-5"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
@@ -303,23 +303,37 @@ export function Pricing() {
         >
           {/* Free plan */}
           <FreeCard>
-            <div className="p-6 flex flex-col h-full">
-              <h3 className="text-xl font-semibold text-white mb-1">Free</h3>
-              <div className="mb-5">
-                <span
-                  className="text-3xl font-bold"
+            <div className="p-6">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-1">Free</h3>
+                  <div className="mb-3 md:mb-0">
+                    <span
+                      className="text-3xl font-bold"
+                      style={{
+                        background: 'linear-gradient(135deg, #4ade80 0%, #22C55E 50%, #16a34a 100%)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundClip: 'text',
+                      }}
+                    >
+                      $0
+                    </span>
+                    <span className="text-sm ml-2" style={{ color: '#9CA3AF' }}>forever</span>
+                  </div>
+                </div>
+                <Link
+                  to="/app"
+                  className="block text-center rounded-full px-6 py-2.5 text-sm font-semibold no-underline whitespace-nowrap md:ml-6"
                   style={{
                     background: 'linear-gradient(135deg, #4ade80 0%, #22C55E 50%, #16a34a 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
+                    color: '#000000',
                   }}
                 >
-                  $0
-                </span>
-                <span className="text-sm ml-2" style={{ color: '#9CA3AF' }}>forever</span>
+                  Get Started Free
+                </Link>
               </div>
-              <ul className="space-y-2.5 mb-6">
+              <ul className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2">
                 {FREE_FEATURES.map((f) => (
                   <li key={f} className="flex items-center gap-2.5 text-sm">
                     <Check size={16} style={{ color: '#22C55E' }} className="shrink-0" />
@@ -327,22 +341,12 @@ export function Pricing() {
                   </li>
                 ))}
               </ul>
-              <Link
-                to="/app"
-                className="mt-auto block text-center rounded-full px-5 py-2.5 text-sm font-semibold no-underline"
-                style={{
-                  background: 'linear-gradient(135deg, #4ade80 0%, #22C55E 50%, #16a34a 100%)',
-                  color: '#000000',
-                }}
-              >
-                Get Started Free
-              </Link>
             </div>
           </FreeCard>
 
           {/* Premium plan */}
           <PremiumCard>
-            <div className="p-6 flex flex-col h-full relative">
+            <div className="p-6 relative">
               <div
                 className="absolute top-0 right-0 px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-bl-lg rounded-tr-[15px]"
                 style={{
@@ -366,28 +370,41 @@ export function Pricing() {
                 Launch Sale
               </motion.div>
 
-              <h3 className="text-xl font-semibold text-white mb-1 mt-1">Premium</h3>
-              <div className="mb-5">
-                <span
-                  className="text-base line-through mr-2"
-                  style={{ color: '#6B7280' }}
-                >
-                  $19.99
-                </span>
-                <span
-                  className="text-3xl font-bold"
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-1 mt-1">Premium</h3>
+                  <div className="mb-3 md:mb-0">
+                    <span
+                      className="text-base line-through mr-2"
+                      style={{ color: '#6B7280' }}
+                    >
+                      $19.99
+                    </span>
+                    <span
+                      className="text-3xl font-bold"
+                      style={{
+                        background: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundClip: 'text',
+                      }}
+                    >
+                      $4.99
+                    </span>
+                    <span className="text-sm ml-2" style={{ color: '#9CA3AF' }}>/mo</span>
+                  </div>
+                </div>
+                <Link
+                  to="/app"
+                  className="block text-center rounded-full px-6 py-2.5 text-sm font-semibold text-black no-underline whitespace-nowrap md:ml-6"
                   style={{
                     background: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
                   }}
                 >
-                  $4.99
-                </span>
-                <span className="text-sm ml-2" style={{ color: '#9CA3AF' }}>/mo</span>
+                  Go Premium — $4.99/mo
+                </Link>
               </div>
-              <div className="space-y-4 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                 {PREMIUM_FEATURE_GROUPS.map((group) => (
                   <div key={group.category}>
                     <p
@@ -407,15 +424,6 @@ export function Pricing() {
                   </div>
                 ))}
               </div>
-              <Link
-                to="/app"
-                className="mt-auto block text-center rounded-full px-5 py-2.5 text-sm font-semibold text-black no-underline"
-                style={{
-                  background: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
-                }}
-              >
-                Go Premium — $4.99/mo
-              </Link>
             </div>
           </PremiumCard>
         </motion.div>
