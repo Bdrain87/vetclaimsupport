@@ -93,9 +93,8 @@ export function PhotoAttachment({ photos, onPhotosChange, maxPhotos = 5 }: Photo
           {photos.map((photo, index) => (
             <Dialog key={index}>
               <DialogTrigger asChild>
-                <div 
+                <div
                   className="relative w-16 h-16 rounded-lg overflow-hidden cursor-pointer border border-border hover:border-primary transition-colors"
-                  onClick={() => setPreviewPhoto(photo)}
                 >
                   <img 
                     src={photo} 
