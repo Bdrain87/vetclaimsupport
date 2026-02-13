@@ -32,6 +32,10 @@ export const TravelCalculator = () => {
           <p className="text-white/60 font-bold uppercase text-xs tracking-tight">Estimated Reimbursement</p>
           <p className="text-2xl font-black text-emerald-400">${(miles * RATE_2026).toFixed(2)}</p>
         </div>
+
+        <p className="text-[10px] text-white/30 text-center">
+          Estimate only. Based on the $0.415/mile VA rate. Actual reimbursement may vary based on deductible waivers and VA policy changes.
+        </p>
       </div>
     </div>
   );
