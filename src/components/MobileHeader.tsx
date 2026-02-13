@@ -8,6 +8,7 @@ const ROOT_TAB_ROUTES = ['/', '/app', '/claims', '/health', '/prep', '/settings'
 
 const pageLabels: Record<string, string> = {
   '/': 'Dashboard',
+  '/app': 'Dashboard',
   '/claims': 'My Conditions',
   '/claims/strategy': 'Claim Preparation',
   '/claims/body-map': 'Body Map',
