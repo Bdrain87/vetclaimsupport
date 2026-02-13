@@ -243,7 +243,7 @@ export default function VASpeakTranslator() {
     } catch {
       toast({ title: 'Copy failed', description: 'Unable to access clipboard.', variant: 'destructive' });
     }
-  }, [translatedText]);
+  }, [translatedText, toast]);
 
   const handleClear = useCallback(() => {
     setInputText('');

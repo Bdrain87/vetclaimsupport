@@ -20,7 +20,6 @@ import {
   Sparkles,
   Loader2,
   FileCheck,
-  ChevronRight as ChevronRightIcon,
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -203,7 +202,7 @@ export default function CPExamPrepEnhanced() {
           <p className="text-sm font-semibold text-foreground">Ready for your exam? Build your packet</p>
           <p className="text-xs text-muted-foreground">Create a comprehensive C&P exam preparation document</p>
         </div>
-        <ChevronRightIcon className="h-4 w-4 text-muted-foreground shrink-0" />
+        <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
       </Link>
 
       {/* Tabs */}
@@ -478,7 +477,7 @@ export default function CPExamPrepEnhanced() {
                     </CardHeader>
                     <CardContent>
                       <ul className="space-y-2">
-                        {selectedPrepData.documentsTouring.map((item, i) => (
+                        {selectedPrepData.documentsToBring.map((item, i) => (
                           <li key={i} className="flex items-center gap-2 text-sm">
                             <Checkbox id={`doc-${i}`} />
                             <label htmlFor={`doc-${i}`}>{item}</label>

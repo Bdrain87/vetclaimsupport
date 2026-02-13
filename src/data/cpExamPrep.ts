@@ -11,7 +11,7 @@ export interface ExamPrepData {
   category: string;
   whatToExpect: string[];
   symptomTips: string[];
-  documentsTouring: string[];
+  documentsToBring: string[];
   mistakesToAvoid: string[];
   examinerQuestions: string[];
 }
@@ -80,7 +80,7 @@ export const examPrepData: Record<string, ExamPrepData> = {
       'Describe relationship impacts: isolation, irritability with family',
       'Include physical symptoms: sleep problems, startle response, hypervigilance',
     ],
-    documentsTouring: [
+    documentsToBring: [
       'Service treatment records documenting the stressor event',
       'Buddy statements from those who witnessed changes in you',
       'Mental health treatment records and therapy notes',
@@ -126,7 +126,7 @@ export const examPrepData: Record<string, ExamPrepData> = {
       'Explain occupational impact: missed work, reduced performance',
       'Describe social withdrawal and isolation patterns',
     ],
-    documentsTouring: [
+    documentsToBring: [
       'Mental health treatment records and therapy notes',
       'Prescription history for antidepressants',
       'Buddy statements describing changes they\'ve observed',
@@ -169,7 +169,7 @@ export const examPrepData: Record<string, ExamPrepData> = {
       'Describe impact on sleep and concentration',
       'Explain how anxiety affects work and relationships',
     ],
-    documentsTouring: [
+    documentsToBring: [
       'Mental health treatment records',
       'Prescription history for anti-anxiety medications',
       'Records of panic attacks or ER visits',
@@ -213,7 +213,7 @@ export const examPrepData: Record<string, ExamPrepData> = {
       'Include secondary symptoms: muscle spasms, numbness, tingling',
       'Mention if you use assistive devices (cane, brace, lumbar support)',
     ],
-    documentsTouring: [
+    documentsToBring: [
       'MRI or X-ray reports showing disc/spine issues',
       'Physical therapy records',
       'Chiropractic treatment records',
@@ -258,7 +258,7 @@ export const examPrepData: Record<string, ExamPrepData> = {
       'Describe flare-up frequency and what triggers them',
       'Mention any locking or clicking of the knee',
     ],
-    documentsTouring: [
+    documentsToBring: [
       'MRI reports showing ligament or cartilage damage',
       'X-rays showing arthritis or bone spurs',
       'Surgical records if applicable',
@@ -297,7 +297,7 @@ export const examPrepData: Record<string, ExamPrepData> = {
       'Include any dislocation or subluxation history',
       'Describe impact on work duties and daily activities',
     ],
-    documentsTouring: [
+    documentsToBring: [
       'MRI or X-ray reports',
       'Surgical records (rotator cuff repair, etc.)',
       'Physical therapy records',
@@ -336,7 +336,7 @@ export const examPrepData: Record<string, ExamPrepData> = {
       'Describe any related headaches or dizziness',
       'Connect it to noise exposure during service',
     ],
-    documentsTouring: [
+    documentsToBring: [
       'Service records showing noise exposure (MOS, weapon qualification)',
       'Audiograms from during and after service',
       'Buddy statements confirming noise exposure',
@@ -374,7 +374,7 @@ export const examPrepData: Record<string, ExamPrepData> = {
       'Include any use of hearing aids',
       'Explain impact on work and social situations',
     ],
-    documentsTouring: [
+    documentsToBring: [
       'Service audiograms (entrance and exit)',
       'Records of noise exposure during service',
       'Current audiograms',
@@ -413,7 +413,7 @@ export const examPrepData: Record<string, ExamPrepData> = {
       'Describe impact on work and daily life when untreated or non-compliant',
       'Include witness statements about snoring/breathing cessation',
     ],
-    documentsTouring: [
+    documentsToBring: [
       'Sleep study (polysomnography) report showing AHI',
       'CPAP prescription and compliance data',
       'Treatment records from sleep specialist',
@@ -452,7 +452,7 @@ export const examPrepData: Record<string, ExamPrepData> = {
       'Explain triggers and how they limit activities',
       'Include impact on exercise and physical activities',
     ],
-    documentsTouring: [
+    documentsToBring: [
       'Pulmonary function test results',
       'Prescription history for inhalers and steroids',
       'ER or hospital records for asthma attacks',
@@ -491,7 +491,7 @@ export const examPrepData: Record<string, ExamPrepData> = {
       'Explain work impact: missed days, reduced productivity',
       'Mention if you\'ve had to leave work during attacks',
     ],
-    documentsTouring: [
+    documentsToBring: [
       'Migraine diary/log showing frequency and severity',
       'Prescription history for migraine medications',
       'Treatment records from neurologist',
@@ -531,7 +531,7 @@ export const examPrepData: Record<string, ExamPrepData> = {
       'Mention physical symptoms: headaches, dizziness, light sensitivity',
       'Describe impact on work and relationships',
     ],
-    documentsTouring: [
+    documentsToBring: [
       'Service records documenting the TBI event',
       'Any imaging (CT, MRI) of the brain',
       'Neuropsychological testing results',
@@ -571,7 +571,7 @@ export const examPrepData: Record<string, ExamPrepData> = {
       'Explain dietary restrictions you follow',
       'Describe impact of symptoms on daily life',
     ],
-    documentsTouring: [
+    documentsToBring: [
       'Endoscopy or pH study results',
       'Prescription history for PPIs and other medications',
       'GI specialist treatment records',
@@ -605,7 +605,7 @@ export const examPrepData: Record<string, ExamPrepData> = {
       'Mention dietary restrictions and their limitations',
       'Include stress/anxiety connection if applicable',
     ],
-    documentsTouring: [
+    documentsToBring: [
       'GI specialist records and colonoscopy results',
       'Prescription history',
       'Diet logs showing restrictions',
@@ -641,7 +641,7 @@ export const examPrepData: Record<string, ExamPrepData> = {
       'Mention any complications: kidney issues, heart problems',
       'Describe side effects from medications',
     ],
-    documentsTouring: [
+    documentsToBring: [
       'Blood pressure logs',
       'Prescription history showing medication progression',
       'Lab results (kidney function, etc.)',
@@ -672,7 +672,7 @@ export const generalExamTips = {
     'The examiner may not have read your entire file',
     'You can bring someone for support but they usually can\'t speak for you',
   ],
-  documentsTouring: [
+  documentsToBring: [
     'Government-issued ID',
     'List of all current medications with dosages',
     'Copies of relevant medical records',

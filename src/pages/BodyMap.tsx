@@ -373,7 +373,7 @@ export default function BodyMap() {
           <Button
             variant="ghost"
             onClick={() => navigate('/claims')}
-            className="mb-2 -ml-2 text-slate-400 hover:text-white"
+            className="mb-2 -ml-2 text-muted-foreground hover:text-foreground"
           >
             <ChevronLeft className="h-4 w-4 mr-1" />
             Back to Claims
@@ -384,8 +384,8 @@ export default function BodyMap() {
               <Activity className="h-6 w-6 text-gold" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white">Body Map</h1>
-              <p className="text-slate-400 text-sm">
+              <h1 className="text-2xl font-bold text-foreground">Body Map</h1>
+              <p className="text-muted-foreground text-sm">
                 Tap a body region to view and select VA-ratable conditions
               </p>
             </div>
@@ -406,7 +406,7 @@ export default function BodyMap() {
           {/* SVG Body Diagram */}
           <Card className="bg-[rgba(197,164,66,0.08)] border-border">
             <CardHeader className="pb-2">
-              <CardTitle className="text-base text-slate-300">
+              <CardTitle className="text-base text-foreground">
                 Front View
               </CardTitle>
             </CardHeader>
@@ -418,7 +418,7 @@ export default function BodyMap() {
                 aria-label="Interactive body diagram — use Tab to navigate regions"
               >
                 {/* Body silhouette outline */}
-                <g fill="none" stroke="currentColor" className="text-slate-600" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <g fill="none" stroke="currentColor" className="text-border" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   {/* Head */}
                   <ellipse cx="100" cy="32" rx="18" ry="22" />
                   {/* Neck */}
@@ -564,7 +564,7 @@ export default function BodyMap() {
                 <Card className="bg-[rgba(197,164,66,0.08)] border-border">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg text-white flex items-center gap-2">
+                      <CardTitle className="text-lg text-foreground flex items-center gap-2">
                         <div className="h-2.5 w-2.5 rounded-full bg-gold" />
                         {activeRegion.label}
                       </CardTitle>
@@ -572,12 +572,12 @@ export default function BodyMap() {
                         variant="ghost"
                         size="sm"
                         onClick={() => setSelectedRegion(null)}
-                        className="text-slate-400 hover:text-white h-8 w-8 p-0"
+                        className="text-muted-foreground hover:text-foreground h-8 w-8 p-0"
                       >
                         <X className="h-4 w-4" />
                       </Button>
                     </div>
-                    <p className="text-sm text-slate-400">
+                    <p className="text-sm text-muted-foreground">
                       Select conditions that apply to your claim
                     </p>
                   </CardHeader>
@@ -596,7 +596,7 @@ export default function BodyMap() {
                           className={`w-full text-left rounded-lg border p-3 transition-all duration-200 ${
                             isAdded
                               ? 'bg-[rgba(197,164,66,0.15)] border-[rgba(197,164,66,0.4)] hover:bg-[rgba(197,164,66,0.2)]'
-                              : 'bg-white/[0.02] border-border hover:bg-white/[0.05] hover:border-slate-500/50'
+                              : 'bg-muted/30 border-border hover:bg-muted/50 hover:border-border'
                           }`}
                         >
                           <div className="flex items-start gap-3">
@@ -604,18 +604,18 @@ export default function BodyMap() {
                               className={`mt-0.5 flex-shrink-0 h-5 w-5 rounded-full border-2 flex items-center justify-center transition-colors ${
                                 isAdded
                                   ? 'bg-gold border-gold'
-                                  : 'border-slate-500'
+                                  : 'border-muted-foreground'
                               }`}
                             >
                               {isAdded && (
-                                <Check className="h-3 w-3 text-white" />
+                                <Check className="h-3 w-3 text-primary-foreground" />
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 flex-wrap">
                                 <span
                                   className={`font-medium text-sm ${
-                                    isAdded ? 'text-gold-hl' : 'text-slate-200'
+                                    isAdded ? 'text-gold-hl' : 'text-foreground'
                                   }`}
                                 >
                                   {condition.name}
@@ -623,13 +623,13 @@ export default function BodyMap() {
                                 {condition.diagnosticCode && (
                                   <Badge
                                     variant="outline"
-                                    className="text-[10px] px-1.5 py-0 h-4 border-slate-600 text-slate-400"
+                                    className="text-[10px] px-1.5 py-0 h-4 border-border text-muted-foreground"
                                   >
                                     DC {condition.diagnosticCode}
                                   </Badge>
                                 )}
                               </div>
-                              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                              <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
                                 {condition.description}
                               </p>
                             </div>
@@ -649,10 +649,10 @@ export default function BodyMap() {
                       <Info className="h-7 w-7 text-gold" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-white mb-1">
+                      <h3 className="font-semibold text-foreground mb-1">
                         Select a Body Region
                       </h3>
-                      <p className="text-sm text-slate-400 max-w-xs mx-auto leading-relaxed">
+                      <p className="text-sm text-muted-foreground max-w-xs mx-auto leading-relaxed">
                         Tap any highlighted area on the body diagram to see
                         common VA-ratable conditions for that region.
                       </p>
@@ -666,7 +666,7 @@ export default function BodyMap() {
             {totalSelected > 0 && (
               <Card className="bg-[rgba(197,164,66,0.08)] border-border">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-base text-slate-300 flex items-center gap-2">
+                  <CardTitle className="text-base text-foreground flex items-center gap-2">
                     <Plus className="h-4 w-4 text-gold" />
                     Selected Conditions ({totalSelected})
                   </CardTitle>
@@ -696,7 +696,7 @@ export default function BodyMap() {
                             <span className="max-w-[180px] truncate">
                               {label}
                             </span>
-                            <span className="text-[10px] text-slate-400 ml-0.5">
+                            <span className="text-[10px] text-muted-foreground ml-0.5">
                               ({regionLabel})
                             </span>
                             <X className="h-3 w-3 ml-0.5 flex-shrink-0" />

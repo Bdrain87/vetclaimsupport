@@ -229,7 +229,7 @@ export function CPExamPrepGuide({ initialCondition }: CPExamPrepGuideProps) {
                 </AccordionTrigger>
                 <AccordionContent>
                   <ul className="space-y-2">
-                    {selectedPrep.documentsTouring.map((item, i) => (
+                    {selectedPrep.documentsToBring.map((item, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm">
                         <Checkbox id={`doc-${i}`} className="mt-0.5" />
                         <label htmlFor={`doc-${i}`} className="cursor-pointer">{item}</label>
@@ -332,7 +332,7 @@ export function CPExamPrepGuide({ initialCondition }: CPExamPrepGuideProps) {
               </AccordionTrigger>
               <AccordionContent>
                 <ul className="space-y-2">
-                  {generalExamTips.documentsTouring.map((item, i) => (
+                  {generalExamTips.documentsToBring.map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm">
                       <Checkbox id={`gen-doc-${i}`} className="mt-0.5" />
                       <label htmlFor={`gen-doc-${i}`} className="cursor-pointer">{item}</label>

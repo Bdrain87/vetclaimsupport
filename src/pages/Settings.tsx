@@ -569,7 +569,7 @@ export default function Settings() {
         </CardContent>
       </Card>
 
-      {/* Export & Share - Mobile only */}
+      {/* Export & Share */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
