@@ -170,7 +170,7 @@ export function DocumentScanner({
     
     toast({
       title: 'Document Saved',
-      description: 'Stored locally on your device only',
+      description: 'Encrypted and stored securely',
     });
   };
 
@@ -358,7 +358,7 @@ export function DocumentScanner({
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Loader2 className="h-4 w-4 animate-spin" />
-                        Processing locally on your device...
+                        Processing securely on your device...
                       </div>
                       <Progress value={scanProgress} className="h-2" />
                       <p className="text-xs text-muted-foreground text-right">

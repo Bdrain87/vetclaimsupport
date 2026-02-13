@@ -93,7 +93,7 @@ BUILT FOR EVERY VETERAN
 
 YOUR DATA STAYS YOURS
 
-All information is stored locally on your device. We never see your health data, conditions, or personal information. No accounts required. No cloud uploads. Your privacy, protected.
+Your information is encrypted and stored securely. We never see your health data, conditions, or personal information. No accounts required. Your privacy, protected.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

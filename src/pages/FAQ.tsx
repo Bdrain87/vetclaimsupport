@@ -20,7 +20,7 @@ const faqData: FAQItem[] = [
   {
     category: 'app',
     question: 'Is my data backed up anywhere?',
-    answer: 'All data is stored locally on your device. We recommend using the Export Backup feature in Settings regularly to create a JSON backup file you can save to cloud storage or another device.',
+    answer: 'Your data is encrypted and stored securely. We recommend using the Export Backup feature in Settings regularly to create a backup file you can save for safekeeping.',
   },
   {
     category: 'app',
@@ -91,12 +91,12 @@ const faqData: FAQItem[] = [
   {
     category: 'privacy',
     question: 'Who can see my data?',
-    answer: 'Only you. All data is stored locally on your device and is never transmitted to our servers. We have no access to your health information.',
+    answer: 'Only you. Your data is encrypted and stored securely. We do not sell, share, or use your personal information for marketing or advertising.',
   },
   {
     category: 'privacy',
     question: 'What happens if I clear my browser data?',
-    answer: 'If you clear your browser data or storage, your app data will be deleted. Always maintain current backups using the Export Backup feature.',
+    answer: 'If you clear your browser data or storage, your local app data may be deleted. Always maintain current backups using the Export Backup feature in Settings.',
   },
   {
     category: 'privacy',

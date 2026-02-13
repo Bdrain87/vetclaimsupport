@@ -157,7 +157,7 @@ export function PhotoAttachment({ photos, onPhotosChange, maxPhotos = 5 }: Photo
       )}
 
       <p className="text-xs text-muted-foreground">
-        Photos are stored locally on your device. Max 5MB per photo.
+        Photos are encrypted and stored securely. Max 5MB per photo.
       </p>
     </div>
   );

@@ -1,7 +1,7 @@
 import { Shield } from 'lucide-react';
 
 const POLICIES = [
-  { title: "Local-First Storage", text: "Vet Claim Support stores your data locally on your device using browser storage (localStorage and IndexedDB). This is the primary data store and works offline." },
+  { title: "Encrypted Storage", text: "Vet Claim Support encrypts and securely stores your data. Set a vault passcode in Settings to enable full encryption." },
   { title: "Optional Cloud Sync", text: "If you create an account, data may be optionally synced to our cloud database for cross-device access. Cloud sync is not required to use the app." },
   { title: "Encryption", text: "Data in transit is encrypted via TLS. Cloud data at rest is encrypted on database servers. Row-level security ensures only you can access your data." },
   { title: "Data Deletion", text: "If you clear your browser cache without exporting, your local data will be permanently lost. Use the Export feature in Settings to back up your data." },

@@ -38,7 +38,7 @@ export const claimDocumentTypeShort: Record<ClaimDocumentType, string> = {
   'other': 'Other',
 };
 
-// A claim document stored locally
+// A claim document stored securely
 export interface ClaimDocument {
   id: string;
   fileName: string;

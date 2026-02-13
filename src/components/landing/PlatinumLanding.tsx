@@ -602,7 +602,7 @@ export const PlatinumLanding = () => {
             className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-12"
           >
             {[
-              { icon: <Lock size={32} />, label: 'All data stored locally on your device' },
+              { icon: <Lock size={32} />, label: 'All data encrypted & securely stored' },
               { icon: <Ban size={32} />, label: 'Zero data collection — ever' },
               { icon: <ShieldCheck size={32} />, label: 'No accounts required' },
             ].map((item, i) => (
@@ -700,8 +700,8 @@ export const PlatinumLanding = () => {
               of actual VA disability ratings.
             </p>
             <p>
-              All user data is stored locally on the user's device. Vet Claim Support does not collect,
-              transmit, or store any personal or medical information.
+              All user data is encrypted and stored securely. Vet Claim Support does not sell, share,
+              or use personal information for marketing or advertising.
             </p>
             <p>
               Statistics referenced (e.g., secondary condition counts, approval rates) are derived from

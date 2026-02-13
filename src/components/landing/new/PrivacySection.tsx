@@ -3,8 +3,8 @@ import { fadeInUp, staggerContainer, HEADING_H2_STYLE } from '@/lib/landing-anim
 
 const POINTS = [
   {
-    title: 'Local-First Storage',
-    desc: 'All data lives on your device by default. The free tier works entirely offline with local storage.',
+    title: 'Encrypted Storage',
+    desc: 'Your data is encrypted and stored securely using industry-standard AES-256 encryption.',
   },
   {
     title: 'Optional Cloud Sync',

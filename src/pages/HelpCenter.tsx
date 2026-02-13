@@ -31,7 +31,7 @@ interface FAQItem {
 
 const faqData: FAQItem[] = [
   { id: 'faq-1', category: 'app', question: 'How do I get started with Vet Claim Support?', answer: 'Start by adding your service history and separation date in Settings. Then begin logging your symptoms, medical visits, and any exposures you experienced during service. The app will guide you through building your evidence.' },
-  { id: 'faq-2', category: 'app', question: 'Is my data backed up anywhere?', answer: 'All data is stored locally on your device. We recommend using the Export Backup feature in Settings regularly to create a JSON backup file you can save to cloud storage or another device.' },
+  { id: 'faq-2', category: 'app', question: 'Is my data backed up anywhere?', answer: 'Your data is encrypted and stored securely. We recommend using the Export Backup feature in Settings regularly to create a backup file you can save for safekeeping.' },
   { id: 'faq-3', category: 'app', question: 'Can I use this app on multiple devices?', answer: "Yes, but data doesn't sync automatically. Use the Export Backup feature to create a backup on one device, then use Restore from Backup on another device to transfer your data." },
   { id: 'faq-4', category: 'app', question: 'How do I export my data for my VSO?', answer: 'Use the Export PDF feature on the Dashboard. You can customize which sections to include and generate a professional PDF summary of your evidence.' },
   { id: 'faq-5', category: 'app', question: 'What does the AI analysis feature do?', answer: 'The AI analysis reviews your logged symptoms, medical visits, and service history to suggest potential VA-ratable conditions you might qualify for. It also identifies secondary conditions that could increase your combined rating.' },
@@ -44,7 +44,7 @@ const faqData: FAQItem[] = [
   { id: 'faq-12', category: 'evidence', question: 'What is a buddy statement?', answer: 'A buddy statement is a written account from someone who witnessed your condition or symptoms during service. Fellow service members, family, or friends can provide these statements to support your claim.' },
   { id: 'faq-13', category: 'evidence', question: 'How often should I log my symptoms?', answer: 'Log symptoms as they occur for the most accurate record. At minimum, aim to log weekly. Consistent documentation over time shows the chronic nature of your conditions and their impact on daily life.' },
   { id: 'faq-14', category: 'evidence', question: 'What is a DBQ?', answer: 'Disability Benefits Questionnaire (DBQ) is a standardized form used by medical professionals to document the severity of your condition. Private doctors can complete DBQs to support your claim.' },
-  { id: 'faq-15', category: 'privacy', question: 'Who can see my data?', answer: 'Only you. All data is stored locally on your device and is never transmitted to our servers. We have no access to your health information.' },
+  { id: 'faq-15', category: 'privacy', question: 'Who can see my data?', answer: 'Only you. Your data is encrypted and only accessible with your credentials. We do not access your health information.' },
   { id: 'faq-16', category: 'privacy', question: 'What happens if I clear my browser data?', answer: 'If you clear your browser data or storage, your app data will be deleted. Always maintain current backups using the Export Backup feature.' },
   { id: 'faq-17', category: 'privacy', question: 'Is the AI analysis private?', answer: "When you use AI analysis, your data is sent to Google's Gemini API for processing. This is optional and only happens when you explicitly request analysis. We don't store or retain any data sent to or from the AI service." },
   { id: 'faq-18', category: 'privacy', question: 'Can I delete all my data?', answer: "Yes. Clear your browser's site data for this app, or use your browser's developer tools to clear localStorage and IndexedDB. This permanently removes all your data." },
@@ -151,7 +151,7 @@ const guideSections: GuideSection[] = [
     steps: [
       { title: 'Export Your Data', content: 'Use Settings > Data Backup to export all your data as a JSON file. This creates a complete backup you can restore later.', tip: 'Export before clearing browser data or switching devices.' },
       { title: 'Import/Restore', content: 'Restore a previous backup by importing the JSON file. This overwrites current data, so export first if needed.' },
-      { title: 'Privacy', content: 'All data is stored locally on your device. We never send your information to external servers (except optional AI features, which are clearly disclosed).' },
+      { title: 'Privacy', content: 'Your data is encrypted and stored securely. We never share your information with third parties (except optional AI features, which are clearly disclosed).' },
     ],
   },
 ];
@@ -403,7 +403,7 @@ export default function HelpCenter() {
               <CardContent className="space-y-6">
                 <p className="text-muted-foreground">
                   This app helps you document, organize, and prepare your VA disability claim evidence.
-                  Everything is stored locally on your device - your data never leaves your control.
+                  Your data is encrypted and securely stored — you stay in control.
                 </p>
 
                 <div className="grid sm:grid-cols-2 gap-4">

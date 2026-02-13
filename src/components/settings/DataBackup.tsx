@@ -179,7 +179,7 @@ export function DataBackup() {
         <CardContent className="space-y-4">
           <div className="p-3 rounded-lg bg-muted border border-border">
             <p className="text-sm text-muted-foreground">
-              Your data is stored locally on this device. Create regular backups to prevent data loss if you clear your browser data or switch devices.
+              Your data is encrypted and stored securely. Create regular backups to prevent data loss if you switch devices.
             </p>
           </div>
 

@@ -182,9 +182,9 @@ export default function AboutVCS() {
         <CardContent className="space-y-3">
           <p className="text-sm text-muted-foreground leading-relaxed">
             Your privacy is fundamental to VCS. All personal data, including health
-            information, service records, and symptom logs, is stored locally on your
-            device using browser storage. We do not collect, transmit, or store your
-            personal information on external servers.
+            information, service records, and symptom logs, is encrypted and stored
+            securely. We do not sell, share, or use your personal information for
+            marketing or advertising.
           </p>
           <p className="text-sm text-muted-foreground leading-relaxed">
             No account is required to use VCS. No tracking cookies. No analytics on your

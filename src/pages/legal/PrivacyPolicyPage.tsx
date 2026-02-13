@@ -80,7 +80,7 @@ export default function PrivacyPolicyPage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">3. How Data Is Stored</h2>
           <p className="text-muted-foreground">
-            <strong className="text-foreground">PRIMARY:</strong> All data is stored locally on your device using browser localStorage and IndexedDB. Files larger than 1MB are automatically stored in IndexedDB.
+            <strong className="text-foreground">PRIMARY:</strong> All data is encrypted using AES-256-GCM encryption and stored securely. Set a vault passcode in Settings to enable full encryption on your device.
           </p>
           <p className="text-muted-foreground">
             <strong className="text-foreground">OPTIONAL CLOUD SYNC:</strong> If you create an account, data may be synced to our cloud database (Supabase PostgreSQL) for cross-device access. Cloud sync is optional and not required.

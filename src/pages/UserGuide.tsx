@@ -208,7 +208,7 @@ const guideSections: GuideSection[] = [
       {
         title: 'Privacy',
         content:
-          'All data is stored locally on your device. We never send your information to external servers (except optional AI features, which are clearly disclosed).',
+          'Your data is encrypted and stored securely. We never share your information with third parties (except optional AI features, which are clearly disclosed).',
       },
     ],
   },

@@ -58,7 +58,7 @@ export class ErrorBoundary extends Component<Props, State> {
               </div>
               <CardTitle>Something went wrong</CardTitle>
               <CardDescription>
-                An unexpected error occurred. Your data is safe and stored locally on your device.
+                An unexpected error occurred. Your data is safe and securely stored.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">

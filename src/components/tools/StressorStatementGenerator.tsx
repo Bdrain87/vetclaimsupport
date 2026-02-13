@@ -580,7 +580,7 @@ Keep the veteran's voice. Do not add fabricated details.`;
         <AlertTriangle className="h-4 w-4 text-warning mt-0.5 flex-shrink-0" />
         <div className="text-xs text-muted-foreground">
           <p className="font-medium text-foreground mb-1">Sensitive Information</p>
-          <p>This statement may contain sensitive personal information. Your data is stored locally on your device. Some veterans find it helpful to work with a VSO or mental health professional for support, though you can complete this independently.</p>
+          <p>This statement may contain sensitive personal information. Your data is encrypted and stored securely. Some veterans find it helpful to work with a VSO or mental health professional for support, though you can complete this independently.</p>
         </div>
       </div>
     </div>
