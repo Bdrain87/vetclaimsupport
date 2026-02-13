@@ -102,7 +102,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          Evidence packets, statement builders, exam prep, symptom tracking, and VA math. 45+ tools in one place. One workflow. One system. Generate shareable PDF packets in a click.
+          You served your country. Preparing your claim shouldn't feel like a second battle.
         </motion.p>
 
         {/* CTAs */}
@@ -134,30 +134,6 @@ export function Hero() {
           </motion.button>
         </motion.div>
 
-        {/* Trust line */}
-        <motion.div
-          className="inline-flex items-center gap-3 text-sm px-6 py-2.5 rounded-full"
-          style={{
-            border: '2px solid rgba(255,255,255,0.5)',
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 100%)',
-            boxShadow: '0 0 10px rgba(255,255,255,0.4), 0 0 25px rgba(255,255,255,0.25), 0 0 50px rgba(255,255,255,0.15), 0 0 100px rgba(255,255,255,0.08)',
-          }}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.9 }}
-        >
-          <span style={{ color: '#22C55E' }}>Explore free — upgrade anytime</span>
-          <span style={{ color: 'rgba(191,149,63,0.4)' }}>&bull;</span>
-          <span style={{ color: '#6B7280', textDecoration: 'line-through', fontWeight: 400 }}>$19.99/mo</span>
-          {' '}
-          <span style={{
-            background: 'linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            fontWeight: 600,
-          }}>$4.99/mo — limited launch price</span>
-        </motion.div>
       </div>
     </section>
   );

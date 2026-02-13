@@ -22,7 +22,7 @@ const STEPS = [
   },
   {
     num: '02',
-    title: 'Organize Your Documentation',
+    title: 'Upload & Link Documentation',
     desc: 'For each condition, organize your medical records, buddy statements, and supporting documents in one place.',
   },
   {
@@ -76,8 +76,8 @@ export function HowItWorks() {
         viewport={{ once: true }}
         transition={{ duration: 0.7, ease: EASE_SMOOTH }}
       >
-        From Overwhelmed to{' '}
-        <span style={GOLD_GRADIENT_TEXT}>Organized</span>
+        From First Login to{' '}
+        <span style={GOLD_GRADIENT_TEXT}>Finished Packet</span>
       </motion.h2>
 
       <motion.p
@@ -88,7 +88,7 @@ export function HowItWorks() {
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.1, ease: EASE_SMOOTH }}
       >
-        Get organized before you even sit down with a representative.
+        Walk into your VSO meeting with everything ready.
       </motion.p>
 
       <motion.div

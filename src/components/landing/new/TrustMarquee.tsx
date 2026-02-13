@@ -2,9 +2,6 @@ import { useEffect } from 'react';
 import { MARQUEE_STYLES } from '@/lib/landing-animations';
 
 const TRUST_ITEMS = [
-  'Built by Veterans',
-  '45+ Tools',
-  '780+ Conditions',
   'C&P Exam Prep',
   'Statement Generators',
   'Health Trackers',
