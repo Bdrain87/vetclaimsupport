@@ -262,76 +262,116 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
 }
 
 /* ────────────────────────────────────────────────
- * Angled Card Stack - Multiple Visible
+ * Angled Card Stack - Smooth Rotation Animation
  *
- * Cards fanned out at angles so you can see multiple
+ * Professional-grade card carousel with elegant cycling
  * ──────────────────────────────────────────────── */
 
 const N = CARDS.length;
 const VISIBLE_CARDS = 6;
 
-function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => void }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+// Animation constants - tuned for smooth, elegant motion
+const ANIMATION_CONFIG = {
+  duration: 1.6,
+  stagger: 0.08,
+  ease: 'power3.inOut', // Smooth acceleration and deceleration
+  rotationInterval: 4000,
+} as const;
 
-  const getVisibleCards = useCallback(() => {
-    const visible = [];
-    for (let i = 0; i < VISIBLE_CARDS; i++) {
-      const cardIndex = (currentIndex + i) % N;
-      visible.push({ position: i, cardIndex, card: CARDS[cardIndex] });
-    }
-    return visible;
-  }, [currentIndex]);
+// Card transform calculation - defines the angled stack geometry
+function calculateCardTransform(stackPosition: number) {
+  const isVisible = stackPosition < VISIBLE_CARDS;
 
-  // Angled fan-out positioning
-  const getCardTransform = (position: number) => {
-    // Cards fan out with rotation
-    const baseRotate = -12; // Start angle
-    const rotateStep = 4; // Degrees per card
-    const rotate = baseRotate + (position * rotateStep);
+  // Angular fan-out
+  const baseAngle = -12;
+  const angleStep = 4;
+  const rotation = baseAngle + (stackPosition * angleStep);
 
-    const x = position * 40; // Horizontal spread
-    const y = Math.abs(position - 2.5) * 10; // Slight arc
-    const z = position * -60; // Depth
-    const scale = 1 - (position * 0.05);
-    const opacity = 1 - (position * 0.12);
-    const zIndex = VISIBLE_CARDS - position;
+  // Spatial positioning
+  const xOffset = stackPosition * 40;
+  const yOffset = Math.abs(stackPosition - 2.5) * 10; // Subtle arc
+  const zOffset = stackPosition * -60; // Depth layering
 
-    return { x, y, z, scale, opacity, rotate, zIndex };
+  // Visual properties
+  const scale = Math.max(0.7, 1 - (stackPosition * 0.05));
+  const opacity = isVisible ? Math.max(0.3, 1 - (stackPosition * 0.12)) : 0;
+  const zIndex = VISIBLE_CARDS - stackPosition;
+
+  return {
+    x: xOffset,
+    y: yOffset,
+    z: zOffset,
+    rotation,
+    scale,
+    opacity,
+    zIndex,
   };
+}
 
+function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => void }) {
+  const [rotationOffset, setRotationOffset] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const cardsRef = useRef<Map<number, HTMLDivElement>>(new Map());
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
+
+  // Auto-advance rotation
   useEffect(() => {
     if (isPaused) return;
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % N);
-    }, 3500);
-    return () => clearInterval(interval);
+
+    const timer = setInterval(() => {
+      setRotationOffset((prev) => (prev + 1) % N);
+    }, ANIMATION_CONFIG.rotationInterval);
+
+    return () => clearInterval(timer);
   }, [isPaused]);
 
+  // Orchestrate smooth card transitions
   useEffect(() => {
-    const visible = getVisibleCards();
-    visible.forEach(({ position }, idx) => {
-      const cardEl = cardsRef.current[idx];
-      if (!cardEl) return;
+    // Kill any existing animation
+    if (timelineRef.current) {
+      timelineRef.current.kill();
+    }
 
-      const { x, y, z, scale, opacity, rotate, zIndex } = getCardTransform(position);
+    // Create timeline for staggered, elegant motion
+    const tl = gsap.timeline();
 
-      gsap.to(cardEl, {
-        x,
-        y,
-        z,
-        scale,
-        opacity,
-        rotate,
-        zIndex,
-        duration: 0.7,
-        ease: 'power2.out',
-      });
+    CARDS.forEach((_, cardIndex) => {
+      const cardElement = cardsRef.current.get(cardIndex);
+      if (!cardElement) return;
+
+      // Calculate card's position in the visual stack
+      const stackPosition = (cardIndex - rotationOffset + N * 100) % N;
+      const transform = calculateCardTransform(stackPosition);
+      const isInteractive = stackPosition < VISIBLE_CARDS;
+
+      // Animate with stagger for cascade effect
+      tl.to(
+        cardElement,
+        {
+          x: transform.x,
+          y: transform.y,
+          z: transform.z,
+          rotateZ: transform.rotation,
+          scale: transform.scale,
+          opacity: transform.opacity,
+          zIndex: transform.zIndex,
+          duration: ANIMATION_CONFIG.duration,
+          ease: ANIMATION_CONFIG.ease,
+          onStart: () => {
+            // Update interactivity
+            cardElement.style.pointerEvents = isInteractive ? 'auto' : 'none';
+          },
+        },
+        cardIndex * ANIMATION_CONFIG.stagger // Stagger timing
+      );
     });
-  }, [currentIndex, getVisibleCards]);
 
-  const visibleCards = getVisibleCards();
+    timelineRef.current = tl;
+
+    return () => {
+      tl.kill();
+    };
+  }, [rotationOffset]);
 
   return (
     <div
@@ -353,13 +393,17 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
           transformStyle: 'preserve-3d',
         }}
       >
-        {visibleCards.map(({ position, cardIndex, card }, idx) => {
+        {CARDS.map((card, cardIndex) => {
           const Icon = card.icon;
+          const stackPosition = (cardIndex - rotationOffset + N * 100) % N;
+          const isInteractive = stackPosition < VISIBLE_CARDS;
 
           return (
             <div
-              key={`${cardIndex}-${position}`}
-              ref={(el) => (cardsRef.current[idx] = el)}
+              key={cardIndex}
+              ref={(el) => {
+                if (el) cardsRef.current.set(cardIndex, el);
+              }}
               style={{
                 position: 'absolute',
                 top: '60px',
@@ -367,11 +411,10 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
                 width: '420px',
                 transformStyle: 'preserve-3d',
                 transformOrigin: 'center bottom',
-                willChange: 'transform',
-                pointerEvents: 'auto',
-                cursor: 'pointer',
+                willChange: 'transform, opacity',
+                cursor: isInteractive ? 'pointer' : 'default',
               }}
-              onClick={() => onSelectCard(card)}
+              onClick={() => isInteractive && onSelectCard(card)}
             >
               <div
                 className="rounded-2xl p-6 transition-all duration-300 hover:scale-105"
@@ -588,7 +631,7 @@ export function FeatureBento() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1, ease: EASE_SMOOTH }}
           >
-            From symptom tracking to exam prep, document management to timeline building — everything you need in one place.
+            From symptom tracking to exam prep, document management to timeline building — 45+ specialized tools in one place.
           </motion.p>
 
           <MobileCarousel onSelectCard={setSelectedCard} />
@@ -639,7 +682,7 @@ export function FeatureBento() {
               className="text-base mt-4 leading-relaxed"
               style={{ color: '#6B7280' }}
             >
-              Track your health data, organize evidence, prepare for your C&P exam, and understand the VA claims process with 13 specialized tools designed specifically for veterans.
+              Track your health data, organize evidence, prepare for your C&P exam, and understand the VA claims process with 45+ specialized tools designed specifically for veterans.
             </p>
           </motion.div>
 
