@@ -3,8 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate, usePa
 import { motion, AnimatePresence } from 'framer-motion';
 import { MobileHeader } from './components/MobileHeader';
 import { BottomTabBar } from './components/BottomTabBar';
-import { AppSidebar } from './components/AppSidebar';
-import { useSidebarStore } from './store/useSidebarStore';
+
 import { ThemeProvider } from './context/ThemeContext';
 import { TooltipProvider } from './components/ui/tooltip';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -321,8 +320,6 @@ function AnimatedRoutes() {
 function AppContent() {
   const location = useLocation();
   const isLandingRoute = isWeb && location.pathname === '/';
-  const { collapsed } = useSidebarStore();
-
   // Web root — show landing page (users click through to /app)
   if (isLandingRoute) {
     return (
@@ -342,11 +339,7 @@ function AppContent() {
         Skip to main content
       </a>
       <LiabilityAcceptanceScreen />
-      {/* Desktop Sidebar */}
-      <div className="hidden">
-        <AppSidebar />
-      </div>
-      <div className="flex-1 flex flex-col overflow-hidden">
+<div className="flex-1 flex flex-col overflow-hidden">
         <MobileHeader />
         <main id="main-content" className="flex-1 overflow-y-auto pt-14 pb-20">
           <AnimatedRoutes />

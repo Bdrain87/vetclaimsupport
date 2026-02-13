@@ -51,7 +51,6 @@ const pages: Record<string, () => Promise<{ default: React.ComponentType }>> = {
   VAForms: () => import('@/pages/VAForms'),
   VAResources: () => import('@/pages/VAResources'),
   ServiceHistory: () => import('@/pages/ServiceHistory'),
-  Reference: () => import('@/pages/Reference'),
   Glossary: () => import('@/pages/Glossary'),
   Settings: () => import('@/pages/Settings'),
   FAQ: () => import('@/pages/FAQ'),
