@@ -5,21 +5,60 @@ import { fadeInUp, staggerContainer, GOLD_GRADIENT_TEXT } from '@/lib/landing-an
 import { Check, AlertTriangle } from 'lucide-react';
 
 const FREE_FEATURES = [
-  'Rating Calculator',
+  'VA Combined Rating Calculator',
   'VA-Speak Translator',
   'Claim Checklist',
-  'Basic Condition Tracking',
+  'Condition Tracking (up to 3)',
+  'VA Forms Reference Library',
+  'Glossary & FAQ',
 ];
 
-const PREMIUM_FEATURES = [
-  'Everything in Free',
-  'Unlimited Conditions',
-  'C&P Exam Prep',
-  'Doctor Summary Generator',
-  'Stressor Statement Builder',
-  'Export to PDF',
-  'Encrypted Cloud Sync',
-  'Priority Support',
+interface FeatureGroup {
+  category: string;
+  features: string[];
+}
+
+const PREMIUM_FEATURE_GROUPS: FeatureGroup[] = [
+  {
+    category: 'Powered Claim Builders',
+    features: [
+      'Personal Statement Generator',
+      'Nexus Letter Builder',
+      'Buddy Statement Creator',
+      'Stressor Statement Writer',
+      'C&P Exam Prep Coach',
+    ],
+  },
+  {
+    category: 'Medical Evidence Tracking',
+    features: [
+      'Interactive Body Map',
+      'PTSD & Spine Symptom Loggers',
+      'Sleep, Migraine & Medication Trackers',
+      'Medical Visit Logger with Provider Notes',
+      'Symptom Charts & Trend Analysis',
+    ],
+  },
+  {
+    category: 'Strategy & Calculators',
+    features: [
+      'Claim Strategy Wizard',
+      'Back Pay Estimator',
+      'Secondary Condition Finder',
+      'PACT Act Eligibility Checker',
+      'Evidence Gap Analysis',
+      'DBQ Rating Reference',
+    ],
+  },
+  {
+    category: 'Organize & Export',
+    features: [
+      'Full Claim Packet Builder',
+      'Document Scanner & Upload',
+      'PDF Export & VSO Sharing',
+      'Encrypted AES-256 Cloud Backup',
+    ],
+  },
 ];
 
 const SHIMMER_CSS = `
@@ -348,14 +387,26 @@ export function Pricing() {
                 </span>
                 <span className="text-sm ml-2" style={{ color: '#9CA3AF' }}>/mo</span>
               </div>
-              <ul className="space-y-2.5 mb-6">
-                {PREMIUM_FEATURES.map((f) => (
-                  <li key={f} className="flex items-center gap-2.5 text-sm">
-                    <Check size={16} style={{ color: '#BF953F' }} className="shrink-0" />
-                    <span style={{ color: '#D1D5DB' }}>{f}</span>
-                  </li>
+              <div className="space-y-4 mb-6">
+                {PREMIUM_FEATURE_GROUPS.map((group) => (
+                  <div key={group.category}>
+                    <p
+                      className="text-[10px] font-bold uppercase tracking-widest mb-2"
+                      style={{ color: '#C5A442' }}
+                    >
+                      {group.category}
+                    </p>
+                    <ul className="space-y-1.5">
+                      {group.features.map((f) => (
+                        <li key={f} className="flex items-center gap-2.5 text-sm">
+                          <Check size={14} style={{ color: '#BF953F' }} className="shrink-0" />
+                          <span style={{ color: '#D1D5DB' }}>{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 ))}
-              </ul>
+              </div>
               <Link
                 to="/app"
                 className="mt-auto block text-center rounded-full px-5 py-2.5 text-sm font-semibold text-black no-underline"
