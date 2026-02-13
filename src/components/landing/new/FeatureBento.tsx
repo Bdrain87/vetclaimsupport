@@ -539,7 +539,7 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
 
 const N = CARDS.length;
 const VISIBLE = 7; // cards rendered in the visible stack
-const SHUFFLE_MS = 1000; // time between shuffles
+const SHUFFLE_MS = 1400; // time between shuffles
 
 // Stack layout: isometric diagonal recession into the background
 const stackPos = (i: number) => ({
@@ -647,12 +647,6 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
     <div
       className="relative mx-auto flex items-center justify-center"
       style={{ height: '650px', maxWidth: '1200px' }}
-      onMouseEnter={() => {
-        isPaused.current = true;
-      }}
-      onMouseLeave={() => {
-        isPaused.current = false;
-      }}
     >
       {/* 3D perspective wrapper */}
       <div
