@@ -455,7 +455,7 @@ export function RatingIncreaseAnalyzer() {
               <Button variant="outline" size="sm" asChild>
                 <Link to="/prep/nexus-letter">
                   <FileText className="h-4 w-4 mr-2" />
-                  Get Nexus Letter
+                  Build Doctor Summary
                 </Link>
               </Button>
             </div>

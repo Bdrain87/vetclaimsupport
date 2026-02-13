@@ -28,7 +28,7 @@ import { cn } from '@/lib/utils';
 import { useClaims } from '@/hooks/useClaims';
 import { useProfileStore } from '@/store/useProfileStore';
 import { getAllBranchLabels } from '@/utils/veteranProfile';
-import { exportNexusLetterTemplate } from '@/utils/pdfExport';
+import { exportDoctorSummaryTemplate } from '@/utils/pdfExport';
 import { PageContainer } from '@/components/PageContainer';
 
 // Get all conditions for autocomplete
@@ -46,7 +46,7 @@ const allConditions = getAllConditions();
 
 type ConnectionType = 'secondary' | 'direct' | 'aggravation';
 
-interface NexusFormData {
+interface DoctorSummaryFormData {
   // Step 1: Condition
   primaryCondition: string;
   secondaryCondition: string;
@@ -100,7 +100,7 @@ export default function NexusLetterGenerator() {
   const fullName = `${profile.firstName} ${profile.lastName}`.trim();
 
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState<NexusFormData>({
+  const [formData, setFormData] = useState<DoctorSummaryFormData>({
     primaryCondition: searchParams.get('primary') || '',
     secondaryCondition: searchParams.get('secondary') || '',
     connectionType: 'secondary',
@@ -146,7 +146,7 @@ export default function NexusLetterGenerator() {
     ).slice(0, 50);
   }, [secondarySearch]);
 
-  const updateFormData = (field: keyof NexusFormData, value: string) => {
+  const updateFormData = (field: keyof DoctorSummaryFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -254,7 +254,7 @@ export default function NexusLetterGenerator() {
 
   const handleDownloadPDF = () => {
     const letterText = generateLetterText();
-    exportNexusLetterTemplate(letterText, formData.secondaryCondition);
+    exportDoctorSummaryTemplate(letterText, formData.secondaryCondition);
   };
 
   const generateLetterDate = () => {
@@ -662,7 +662,7 @@ export default function NexusLetterGenerator() {
           <div className="flex items-start gap-2">
             <Info className="h-5 w-5 text-primary mt-0.5 shrink-0 flex-shrink-0" />
             <p className="text-sm text-muted-foreground">
-              This tool helps you organize your information into a clear summary. A licensed medical professional must write the actual nexus letter. This summary is designed to help your doctor understand your condition and service connection.
+              This tool helps you organize your information into a clear summary. A licensed medical professional must write the actual doctor summary. This summary is designed to help your doctor understand your condition and service connection.
             </p>
           </div>
         </CardContent>

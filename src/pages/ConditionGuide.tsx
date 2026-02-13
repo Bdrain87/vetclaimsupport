@@ -39,7 +39,7 @@ const conditionGuides: ConditionGuide[] = [
     requiredEvidence: [
       'Current diagnosis from a mental health professional',
       'Evidence of in-service stressor (combat, MST, etc.)',
-      'Nexus statement connecting diagnosis to service',
+      'Doctor summary connecting diagnosis to service',
       'Buddy statements describing behavioral changes',
       'Treatment records showing ongoing symptoms',
     ],
@@ -117,7 +117,7 @@ const conditionGuides: ConditionGuide[] = [
       'MRI or X-ray showing spinal condition',
       'Range of motion measurements',
       'Service treatment records showing injury or complaints',
-      'Nexus letter from doctor',
+      'Doctor summary from physician',
       'Buddy statements about carrying heavy gear',
     ],
     commonSecondaries: [

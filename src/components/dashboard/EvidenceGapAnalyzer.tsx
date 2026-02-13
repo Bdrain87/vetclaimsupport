@@ -120,29 +120,30 @@ export function EvidenceGapAnalyzer() {
         isMet: hasBuddy,
       });
 
-      // Documents (nexus letter is key)
-      const hasNexusChecklist = data.documents.some(d =>
-        d.name.includes('Nexus') &&
+      // Documents (doctor summary is key)
+      const hasDoctorSummaryChecklist = data.documents.some(d =>
+        (d.name.includes('Nexus') || d.name.includes('Doctor Summar')) &&
         (d.status === 'Obtained' || d.status === 'Submitted')
       );
-      const hasNexusUploaded = (data.uploadedDocuments ?? []).some(doc =>
+      const hasDoctorSummaryUploaded = (data.uploadedDocuments ?? []).some(doc =>
         doc.documentType === 'nexus' ||
-        doc.title.toLowerCase().includes('nexus')
+        doc.title.toLowerCase().includes('nexus') ||
+        doc.title.toLowerCase().includes('doctor summar')
       );
-      const hasNexus = hasNexusChecklist || hasNexusUploaded;
-      if (hasNexus) {
+      const hasDoctorSummary = hasDoctorSummaryChecklist || hasDoctorSummaryUploaded;
+      if (hasDoctorSummary) {
         score += 15;
-        strengths.push('Nexus letter links condition to service');
+        strengths.push('Doctor summary links condition to service');
       }
       gaps.push({
         type: 'document',
-        label: 'Nexus Letter',
-        description: hasNexus
+        label: 'Doctor Summary',
+        description: hasDoctorSummary
           ? 'Medical opinion linking condition to service'
-          : 'A nexus letter from a doctor significantly increases approval odds',
+          : 'A doctor summary linking your condition to service significantly increases approval odds',
         link: '/settings/vault',
         icon: FileText,
-        isMet: hasNexus,
+        isMet: hasDoctorSummary,
       });
 
       return {

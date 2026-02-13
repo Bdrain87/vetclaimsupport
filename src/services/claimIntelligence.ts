@@ -1184,7 +1184,7 @@ export const ClaimIntelligence = {
         { type: 'medical_records', label: 'Service Treatment Records' },
         { type: 'buddy_statement', label: 'Buddy / Witness Statement' },
         { type: 'personal_statement', label: 'Personal Statement' },
-        { type: 'nexus_letter', label: 'Nexus Letter' },
+        { type: 'nexus_letter', label: 'Doctor Summary' },
         { type: 'supporting_docs', label: 'Supporting Photos / Documentation' },
       ];
 

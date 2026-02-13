@@ -53,7 +53,7 @@ const drawerSections = [
     items: [
       { title: 'Rating Calculator', path: '/claims/calculator', icon: Calculator },
       { title: 'Secondary Finder', path: '/claims/secondary-finder', icon: Search },
-      { title: 'Nexus Letter Generator', path: '/prep/nexus-letter', icon: FileSignature },
+      { title: 'Doctor Summary Builder', path: '/prep/nexus-letter', icon: FileSignature },
       { title: 'DBQ Prep Sheet', path: '/prep/dbq', icon: ClipboardList },
       { title: 'Strategy Wizard', path: '/claims/strategy', icon: Wand2 },
       { title: 'C&P Exam Prep', path: '/prep/exam', icon: ClipboardCheck },

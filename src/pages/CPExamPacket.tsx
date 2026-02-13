@@ -289,7 +289,7 @@ export default function CPExamPacket() {
       const gaps: string[] = [];
       if (medRecords === 0) gaps.push('Medical records');
       if (buddyCount === 0) gaps.push('Buddy statements');
-      if (!hasNexus) gaps.push('Nexus letter');
+      if (!hasNexus) gaps.push('Doctor summary');
       if (!hasPersonalStatement) gaps.push('Personal statement');
 
       return {
@@ -550,7 +550,7 @@ export default function CPExamPacket() {
                     <div className="grid grid-cols-2 gap-2 text-xs">
                       <EvidenceItem label="Medical Records" count={evidence.medRecords} />
                       <EvidenceItem label="Buddy Statements" count={evidence.buddyCount} />
-                      <EvidenceItem label="Nexus Letter" status={evidence.hasNexus} />
+                      <EvidenceItem label="Doctor Summary" status={evidence.hasNexus} />
                       <EvidenceItem label="Personal Statement" status={evidence.hasPersonalStatement} />
                     </div>
                     {evidence.gaps.length > 0 && (

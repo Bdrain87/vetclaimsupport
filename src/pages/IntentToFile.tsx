@@ -596,7 +596,7 @@ export default function IntentToFile() {
                   </h3>
                   <p className="text-sm text-muted-foreground mt-1">
                     Use the time to collect medical records, buddy statements,
-                    service treatment records, nexus letters, and other
+                    service treatment records, doctor summaries, and other
                     supporting evidence. A thorough claim takes time to prepare
                     properly.
                   </p>

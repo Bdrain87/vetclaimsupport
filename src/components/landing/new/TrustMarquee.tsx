@@ -9,7 +9,7 @@ const TRUST_ITEMS = [
   'Statement Generators',
   'Health Trackers',
   'Rating Calculator',
-  'Nexus Letter Generator',
+  'Doctor Summary Builder',
   'Body Map Explorer',
   'PACT Act Guide',
   'Sleep & Migraine Tracking',

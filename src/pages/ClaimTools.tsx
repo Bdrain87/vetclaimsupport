@@ -36,7 +36,7 @@ const tools: Tool[] = [
   { id: 'secondary-suggester', name: 'Secondary Finder', icon: Link2, description: 'Find linked conditions to strengthen your claim', category: 'Claim Strategy' },
   { id: 'statement', name: 'Personal Statement', icon: FileText, description: 'Generate a compelling personal statement for your claim', category: 'Documents' },
   { id: 'stressor', name: 'Stressor Statement', icon: ShieldAlert, description: 'Create a PTSD stressor statement (VA Form 21-0781)', category: 'Documents' },
-  { id: 'nexus', name: 'Nexus Letter Request', icon: FileSignature, description: 'Request a nexus letter template for your doctor', category: 'Documents' },
+  { id: 'nexus', name: 'Doctor Summary Builder', icon: FileSignature, description: 'Build a doctor summary template for your physician', category: 'Documents' },
   { id: 'dbq-summary', name: 'DBQ Summary', icon: Stethoscope, description: 'Generate a printable DBQ appointment summary', category: 'Documents' },
   { id: 'buddy', name: 'Buddy Statement', icon: Users, description: 'Generate a buddy statement template for witnesses', category: 'Documents' },
   { id: 'va-speak', name: 'VA-Speak Translator', icon: Languages, description: 'Translate plain English into VA clinical terminology', category: 'Documents' },

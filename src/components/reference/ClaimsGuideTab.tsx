@@ -177,7 +177,7 @@ export function ClaimsGuideTab() {
               </p>
             </div>
             <div className="border rounded-lg p-4">
-              <h4 className="font-medium text-foreground mb-2">Nexus Letters</h4>
+              <h4 className="font-medium text-foreground mb-2">Doctor Summaries</h4>
               <p className="text-sm text-muted-foreground">
                 Medical opinion linking your current condition to military service.
               </p>

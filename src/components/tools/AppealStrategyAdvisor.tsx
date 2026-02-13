@@ -619,7 +619,7 @@ export function AppealStrategyAdvisor() {
               <p className="text-sm text-[#7A672A] dark:text-[#F5D680] flex items-start gap-2">
                 <Lightbulb className="h-4 w-4 shrink-0 mt-0.5" />
                 <span>
-                  <strong>Pro Tip:</strong> A strong Nexus Letter from a qualified medical professional is often the single most important piece of evidence for overturning a denial.
+                  <strong>Pro Tip:</strong> A strong doctor summary from a qualified medical professional is often the single most important piece of evidence for overturning a denial. Use the Doctor Summary Builder to prepare one.
                 </span>
               </p>
             </div>
@@ -742,7 +742,7 @@ export function AppealStrategyAdvisor() {
             </div>
             <div>
               <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium">Supplemental with Nexus Letter</span>
+                <span className="text-sm font-medium">Supplemental with Doctor Summary</span>
                 <span className="text-sm text-muted-foreground">~50-60%</span>
               </div>
               <Progress value={55} className="h-2" />
@@ -751,7 +751,7 @@ export function AppealStrategyAdvisor() {
 
           <div className="p-3 bg-muted/50 rounded-lg">
             <p className="text-sm text-muted-foreground">
-              <strong>Key Insight:</strong> Veterans who obtain professional Nexus Letters and work with accredited VSOs or attorneys see significantly higher success rates on appeals. The quality of new evidence is the biggest factor in overturning denials.
+              <strong>Key Insight:</strong> Veterans who obtain professional doctor summaries and work with accredited VSOs or attorneys see significantly higher success rates on appeals. The quality of new evidence is the biggest factor in overturning denials.
             </p>
           </div>
         </CardContent>
@@ -782,7 +782,7 @@ export function AppealStrategyAdvisor() {
               </div>
               <div>
                 <p className="font-medium">Gather New Evidence</p>
-                <p className="text-sm text-muted-foreground">Focus on the specific gaps identified above. A Nexus Letter is often critical.</p>
+                <p className="text-sm text-muted-foreground">Focus on the specific gaps identified above. A doctor summary is often critical.</p>
               </div>
             </li>
             <li className="flex items-start gap-3">

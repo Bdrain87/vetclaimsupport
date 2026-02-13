@@ -53,7 +53,7 @@ const EVIDENCE_ITEMS = [
   { name: 'Service Treatment Records (STRs)', required: true, description: 'Records from your time in service' },
   { name: 'Post-service medical records', required: true, description: 'Civilian treatment records showing ongoing condition' },
   { name: 'Current diagnosis from healthcare provider', required: true, description: 'Formal diagnosis of the condition' },
-  { name: 'Nexus letter / Doctor summary', required: true, description: 'Medical opinion linking condition to service' },
+  { name: 'Doctor summary', required: true, description: 'Medical opinion linking condition to service' },
   { name: 'Buddy/Lay statements', required: false, description: 'Statements from people who witnessed your condition' },
   { name: 'Personal statement', required: false, description: 'Your account of symptoms and impact' },
   { name: 'VA C&P exam scheduled/completed', required: false, description: 'Compensation & Pension examination' },
@@ -318,7 +318,7 @@ EVIDENCE AVAILABLE:
 - Medical visits logged: ${(data.medicalVisits || []).length}
 - Symptoms logged: ${symptomNames.length > 0 ? symptomNames.slice(0, 5).join(', ') : 'None'}
 - Medications: ${medicationNames.length > 0 ? medicationNames.slice(0, 5).join(', ') : 'None'}
-- Nexus letter: ${hasNexus ? 'Yes' : 'No'}
+- Doctor summary: ${hasNexus ? 'Yes' : 'No'}
 - Buddy statements: ${hasBuddyStatements ? 'Yes' : 'No'}
 - Service history entries: ${(data.serviceHistory || []).length}
 
@@ -602,7 +602,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
           <Link2 className="h-3 w-3 mr-1" /> Find Secondaries
         </Button>
         <Button variant="outline" size="sm" onClick={() => navigate('/prep/nexus-letter')}>
-          <FileText className="h-3 w-3 mr-1" /> Nexus Letter
+          <FileText className="h-3 w-3 mr-1" /> Doctor Summary
         </Button>
         <Button variant="outline" size="sm" onClick={() => navigate('/prep/exam')}>
           <Stethoscope className="h-3 w-3 mr-1" /> Exam Prep

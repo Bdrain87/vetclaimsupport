@@ -157,7 +157,7 @@ export default function SecondaryFinder() {
             <Link to={`/prep/nexus-letter?primary=${encodeURIComponent(selectedPrimary)}`}>
               <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.3)] text-gold text-sm font-medium hover:bg-[rgba(197,164,66,0.2)] transition-colors whitespace-nowrap shrink-0">
                 <FileSignature className="h-4 w-4 shrink-0" />
-                <span className="hidden sm:inline">Generate</span> Nexus Letter
+                <span className="hidden sm:inline">Build</span> Doctor Summary
               </button>
             </Link>
           </div>
@@ -236,8 +236,8 @@ export default function SecondaryFinder() {
           <ol className="space-y-1.5 text-xs text-white/50">
             <li>1. Select your already service-connected (primary) condition</li>
             <li>2. Review secondary conditions that are medically linked</li>
-            <li>3. Get a nexus letter from your doctor establishing the connection</li>
-            <li>4. File the secondary claim with the nexus letter as evidence</li>
+            <li>3. Get a doctor summary establishing the connection</li>
+            <li>4. File the secondary claim with the doctor summary as evidence</li>
           </ol>
         </div>
       )}

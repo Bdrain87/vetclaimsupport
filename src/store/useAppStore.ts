@@ -45,7 +45,7 @@ const defaultDocuments: DocumentItem[] = [
   { id: '7', name: 'Awards/Decorations', description: 'Citations that may indicate hazardous duty', status: 'Not Started', notes: '', count: 0 },
   { id: '8', name: 'Buddy Statements', description: 'Witness statements from fellow service members', status: 'Not Started', notes: '', count: 0 },
   { id: '9', name: 'Private Medical Records', description: 'Post-service civilian medical records', status: 'Not Started', notes: '', count: 0 },
-  { id: '10', name: 'Nexus Letters', description: 'Doctor statements linking conditions to service', status: 'Not Started', notes: '', count: 0 },
+  { id: '10', name: 'Doctor Summaries', description: 'Doctor statements linking conditions to service', status: 'Not Started', notes: '', count: 0 },
 ];
 
 // ===== DUTY STATION TYPE =====

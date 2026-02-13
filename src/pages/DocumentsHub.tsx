@@ -81,7 +81,7 @@ const tabConfig = [
 // Document categories for evidence
 const documentCategories: { type: ClaimDocumentType; label: string; icon: React.ElementType; description: string }[] = [
   { type: 'dbq', label: 'DBQs', icon: ClipboardList, description: 'Disability Benefits Questionnaires' },
-  { type: 'nexus-letter', label: 'Nexus Letters', icon: FileCheck, description: 'Medical connection letters' },
+  { type: 'nexus-letter', label: 'Doctor Summaries', icon: FileCheck, description: 'Medical connection letters' },
   { type: 'buddy-statement', label: 'Buddy Statements', icon: Users, description: 'Witness statements' },
   { type: 'medical-records', label: 'Medical Records', icon: Stethoscope, description: 'Treatment documentation' },
   { type: 'service-records', label: 'Service Records', icon: Shield, description: 'Military service documents' },
@@ -101,7 +101,7 @@ const documentTypeMap: Record<string, DocumentTypeId> = {
   'DD-214': 'dd214',
   'Personnel Records': 'personnel',
   'Medical Records (Post-Service)': 'medical-records',
-  'Nexus Letters': 'nexus',
+  'Doctor Summaries': 'nexus',
   'Buddy Statements': 'buddy-statement',
 };
 
@@ -545,7 +545,7 @@ export default function DocumentsHub() {
                 <div>
                   <h3 className="font-semibold text-sm mb-1">Key Evidence for VA Claims</h3>
                   <p className="text-xs text-muted-foreground">
-                    <strong>Nexus Letters</strong> are often the most important evidence for service connection.
+                    <strong>Doctor summaries</strong> are often the most important evidence for service connection.
                     They should clearly state that your condition is "at least as likely as not" (50%+) related to service.
                     Get one for each condition you're claiming.
                   </p>
@@ -889,7 +889,7 @@ export default function DocumentsHub() {
               <p>• <strong>DD-214:</strong> If lost, request from eBenefits or NPRC (SF-180 form)</p>
               <p>• <strong>Personnel Records:</strong> Request via vMPF or AFPC</p>
               <p>• <strong>Buddy Statements:</strong> VA Form 21-10210 - collect multiple!</p>
-              <p>• <strong>Nexus Letters:</strong> Get one for each condition you're claiming</p>
+              <p>• <strong>Doctor Summaries:</strong> Get one for each condition you're claiming</p>
             </CardContent>
           </Card>
         </TabsContent>
@@ -1001,7 +1001,7 @@ export default function DocumentsHub() {
             <div className="space-y-2">
               <Label>Title (optional)</Label>
               <Input
-                placeholder="e.g., Nexus Letter from Dr. Smith"
+                placeholder="e.g., Doctor Summary from Dr. Smith"
                 value={uploadForm.title}
                 onChange={(e) => setUploadForm(p => ({ ...p, title: e.target.value }))}
               />

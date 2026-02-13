@@ -28,7 +28,7 @@ interface EvidenceStatus {
   buddyCount: number;
   hasExposures: boolean;
   exposureCount: number;
-  hasNexusLetter: boolean;
+  hasDoctorSummary: boolean;
   hasSleepStudy: boolean;
   usesCPAP: boolean;
   hasMigraineLog: boolean;
@@ -51,7 +51,7 @@ export function ConditionSpecificChecklist() {
         hasSymptoms: false, symptomCount: 0,
         hasBuddyStatements: false, buddyCount: 0,
         hasExposures: false, exposureCount: 0,
-        hasNexusLetter: false, hasSleepStudy: false,
+        hasDoctorSummary: false, hasSleepStudy: false,
         usesCPAP: false, hasMigraineLog: false, migraineCount: 0,
       };
     }
@@ -61,9 +61,9 @@ export function ConditionSpecificChecklist() {
     const linkedBuddies = condition.linkedBuddyContacts.length;
     const linkedExposures = condition.linkedExposures.length;
 
-    // Check for nexus letter
-    const hasNexus = data.documents.some(d => 
-      d.name.toLowerCase().includes('nexus') && 
+    // Check for doctor summary / nexus letter
+    const hasNexus = data.documents.some(d =>
+      (d.name.toLowerCase().includes('nexus') || d.name.toLowerCase().includes('doctor summar')) &&
       (d.status === 'Obtained' || d.status === 'Submitted')
     );
 
@@ -86,7 +86,7 @@ export function ConditionSpecificChecklist() {
       buddyCount: linkedBuddies,
       hasExposures: linkedExposures > 0,
       exposureCount: linkedExposures,
-      hasNexusLetter: hasNexus,
+      hasDoctorSummary: hasNexus,
       hasSleepStudy,
       usesCPAP,
       hasMigraineLog: migraineCount >= 5,
@@ -109,8 +109,8 @@ export function ConditionSpecificChecklist() {
     // Buddy statements (15 points)
     if (status.hasBuddyStatements) score += 15;
 
-    // Nexus letter (20 points)
-    if (status.hasNexusLetter) score += 20;
+    // Doctor summary (20 points)
+    if (status.hasDoctorSummary) score += 20;
 
     // Condition-specific (15 points)
     const name = checklist.name.toLowerCase();
@@ -260,12 +260,12 @@ export function ConditionSpecificChecklist() {
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      {evidenceStatus.hasNexusLetter ? (
+                      {evidenceStatus.hasDoctorSummary ? (
                         <CheckCircle2 className="h-4 w-4 text-success" />
                       ) : (
                         <XCircle className="h-4 w-4 text-muted-foreground" />
                       )}
-                      <span className="text-xs">Nexus Letter</span>
+                      <span className="text-xs">Doctor Summary</span>
                     </div>
                   </div>
 
@@ -303,8 +303,8 @@ export function ConditionSpecificChecklist() {
                           if (item.includes('buddy') || item.includes('statement')) {
                             return evidenceStatus.hasBuddyStatements;
                           }
-                          if (item.includes('nexus')) {
-                            return evidenceStatus.hasNexusLetter;
+                          if (item.includes('nexus') || item.includes('doctor summar')) {
+                            return evidenceStatus.hasDoctorSummary;
                           }
                           if (item.includes('cpap')) {
                             return evidenceStatus.usesCPAP;

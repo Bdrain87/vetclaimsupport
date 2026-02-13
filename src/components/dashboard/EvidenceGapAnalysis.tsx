@@ -88,18 +88,20 @@ const physicalRequirements: EvidenceRequirement[] = [
     },
   },
   {
-    id: 'nexus_letter',
-    label: 'Nexus Letter',
+    id: 'doctor_summary',
+    label: 'Doctor Summary',
     description: 'Medical opinion linking condition to service',
     isCritical: true,
     check: (condition, data) => {
-      // Check uploaded documents for nexus letters
-      const hasNexus = data.uploadedDocuments?.some(doc => 
+      // Check uploaded documents for doctor summaries / nexus letters
+      const hasDoctorSummary = data.uploadedDocuments?.some(doc =>
         doc.documentType === 'nexus' ||
         doc.title.toLowerCase().includes('nexus') ||
-        doc.description?.toLowerCase().includes('nexus')
+        doc.title.toLowerCase().includes('doctor summar') ||
+        doc.description?.toLowerCase().includes('nexus') ||
+        doc.description?.toLowerCase().includes('doctor summar')
       );
-      return { met: !!hasNexus };
+      return { met: !!hasDoctorSummary };
     },
   },
   {

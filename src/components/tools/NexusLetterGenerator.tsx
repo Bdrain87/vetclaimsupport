@@ -13,9 +13,9 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput.utils';
 import { DisclaimerNotice } from '@/components/shared/DisclaimerNotice';
-import { exportNexusLetterTemplate } from '@/utils/pdfExport';
+import { exportDoctorSummaryTemplate } from '@/utils/pdfExport';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
-import { createNexusLetterPrompt } from '@/lib/ai-prompts';
+import { createDoctorSummaryPrompt } from '@/lib/ai-prompts';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 
 export function NexusLetterGenerator() {
@@ -29,7 +29,7 @@ export function NexusLetterGenerator() {
   const [doctorCredentials, setDoctorCredentials] = useState('');
   const [additionalRationale, setAdditionalRationale] = useState('');
   const [copied, setCopied] = useState(false);
-  const { generate: aiGenerate, isLoading: aiLoading, error: aiError } = useAIGenerate('NEXUS_LOGIC');
+  const { generate: aiGenerate, isLoading: aiLoading, error: aiError } = useAIGenerate('DOCTOR_SUMMARY_LOGIC');
   const [aiOutline, setAiOutline] = useState<string | null>(null);
 
   // Get service dates from service history
@@ -60,7 +60,7 @@ export function NexusLetterGenerator() {
     const dcInfo = conditionName ? getDiagnosticCodeForCondition(conditionName) : null;
     const dcLine = dcInfo ? `\n    VA Diagnostic Code: DC ${dcInfo.code}` : '';
     
-    return `NEXUS LETTER
+    return `DOCTOR SUMMARY
 
 Date: ${today}
 
@@ -110,7 +110,7 @@ DISCLAIMER: This document is a template only and is not official VA documentatio
       ?.filter(s => linkedSymptoms.includes(s.id))
       .map(s => s.symptom) || [];
 
-    const prompt = createNexusLetterPrompt({
+    const prompt = createDoctorSummaryPrompt({
       veteranName: veteranName || 'Veteran',
       conditionName,
       serviceStart,
@@ -136,7 +136,7 @@ DISCLAIMER: This document is a template only and is not official VA documentatio
 
   const handleDownload = () => {
     const letter = generateLetter();
-    exportNexusLetterTemplate(letter, conditionName);
+    exportDoctorSummaryTemplate(letter, conditionName);
     toast.success('Letter template downloaded as PDF');
   };
 
@@ -150,7 +150,7 @@ DISCLAIMER: This document is a template only and is not official VA documentatio
               <Stethoscope className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <CardTitle className="text-lg">Nexus Letter Template Generator</CardTitle>
+              <CardTitle className="text-lg">Doctor Summary Builder</CardTitle>
               <CardDescription>
                 Generate a template with proper VA language for your doctor to complete
               </CardDescription>
@@ -162,7 +162,7 @@ DISCLAIMER: This document is a template only and is not official VA documentatio
             <AlertTriangle className="h-4 w-4 text-warning mt-0.5 flex-shrink-0" />
             <div className="text-sm text-muted-foreground">
               <p className="font-medium text-foreground mb-1">Important</p>
-              <p>This is a <strong>template only</strong>. Your doctor must review, modify as needed, and sign the final letter. The VA requires nexus letters from qualified medical professionals who have examined you.</p>
+              <p>This is a <strong>template only</strong>. Your doctor must review, modify as needed, and sign the final letter. The VA requires doctor summaries from qualified medical professionals who have examined you.</p>
             </div>
           </div>
           <DisclaimerNotice variant="inline" />
@@ -174,7 +174,7 @@ DISCLAIMER: This document is a template only and is not official VA documentatio
         <Card>
           <CardHeader>
             <CardTitle className="text-base">Letter Details</CardTitle>
-            <CardDescription>Fill in the information for your nexus letter template</CardDescription>
+            <CardDescription>Fill in the information for your doctor summary template</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Veteran Name */}
@@ -342,7 +342,7 @@ DISCLAIMER: This document is a template only and is not official VA documentatio
           <CardHeader className="pb-3">
             <CardTitle className="text-lg flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-primary" />
-              AI-Generated Nexus Outline
+              AI-Generated Doctor Summary Outline
               <Badge variant="destructive" className="text-xs ml-2">DRAFT</Badge>
             </CardTitle>
           </CardHeader>
@@ -381,7 +381,7 @@ DISCLAIMER: This document is a template only and is not official VA documentatio
       {/* Tips */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base">Tips for Getting an Effective Nexus Letter</CardTitle>
+          <CardTitle className="text-base">Tips for Getting an Effective Doctor Summary</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

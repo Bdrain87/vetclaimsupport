@@ -78,7 +78,7 @@ The symptom journal captures what the VA needs to see—flare-ups, bad days, and
 
 ORGANIZE YOUR EVIDENCE
 
-Track medical records, service treatment records, buddy statements, and nexus letters. Know exactly what evidence you have and what's missing before you file.
+Track medical records, service treatment records, buddy statements, and doctor summaries. Know exactly what evidence you have and what's missing before you file.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

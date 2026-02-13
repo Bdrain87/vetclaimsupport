@@ -36,7 +36,7 @@ export const DocumentVault = () => {
             <Unlock className="text-emerald-500" /> LOCAL EVIDENCE
           </h2>
           <div className="grid gap-4 mt-8">
-            {/* Folder structure for 21-4138, Nexus Letters, and DBQs */}
+            {/* Folder structure for 21-4138, Doctor Summaries, and DBQs */}
           </div>
         </div>
       )}

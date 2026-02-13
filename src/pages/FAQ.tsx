@@ -69,7 +69,7 @@ const faqData: FAQItem[] = [
   {
     category: 'evidence',
     question: 'What evidence do I need for my claim?',
-    answer: 'Key evidence includes: Service Treatment Records (STRs), current medical records showing diagnosis, nexus letters linking conditions to service, buddy statements from witnesses, and consistent symptom documentation.',
+    answer: 'Key evidence includes: Service Treatment Records (STRs), current medical records showing diagnosis, doctor summaries linking conditions to service, buddy statements from witnesses, and consistent symptom documentation.',
   },
   {
     category: 'evidence',

@@ -1697,14 +1697,14 @@ export const exportPersonalStatement = async (statementText: string, conditionNa
   doc.save(`personal-statement-${conditionName?.replace(/\s+/g, '-').toLowerCase() || 'claim'}.pdf`);
 };
 
-// Nexus Letter Template Export
-export const exportNexusLetterTemplate = async (statementText: string, conditionName?: string) => {
+// Doctor Summary Template Export
+export const exportDoctorSummaryTemplate = async (statementText: string, conditionName?: string) => {
   const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
 
   let yPos = addPDFHeader(doc, {
-    title: 'Nexus Letter Template',
+    title: 'Doctor Summary Template',
     subtitle: conditionName ? `Medical Opinion Template: ${conditionName}` : 'Medical Opinion Template for VA Claims'
   });
 
@@ -1723,7 +1723,7 @@ export const exportNexusLetterTemplate = async (statementText: string, condition
   });
 
   addPDFFooter(doc);
-  doc.save(`nexus-letter-template-${conditionName?.replace(/\s+/g, '-').toLowerCase() || 'condition'}.pdf`);
+  doc.save(`doctor-summary-template-${conditionName?.replace(/\s+/g, '-').toLowerCase() || 'condition'}.pdf`);
 };
 
 // Claim Strategy Export

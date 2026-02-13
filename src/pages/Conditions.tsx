@@ -202,7 +202,7 @@ export default function Conditions() {
   const conditionEvidenceChecks = useAppStore(s => s.conditionEvidenceChecks);
 
   // Standard evidence items for calculating progress
-  const EVIDENCE_ITEMS = ['Medical Records', 'Personal Statement', 'Buddy Statement', 'Nexus Letter', 'C&P Exam Prep'];
+  const EVIDENCE_ITEMS = ['Medical Records', 'Personal Statement', 'Buddy Statement', 'Doctor Summary', 'C&P Exam Prep'];
 
   // Search and filter state
   const [searchQuery, setSearchQuery] = useState('');

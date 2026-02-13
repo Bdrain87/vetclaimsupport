@@ -41,7 +41,7 @@ interface WitnessTemplateData {
 
 interface AssessmentState {
   hasRecordsDocumented: 'yes' | 'no' | 'unsure' | null;
-  hasNexusLetter: 'yes' | 'no' | 'unsure' | null;
+  hasDoctorSummary: 'yes' | 'no' | 'unsure' | null;
 }
 
 export function BuddyStatementGenerator() {
@@ -73,7 +73,7 @@ export function BuddyStatementGenerator() {
   });
   const [assessment, setAssessment] = useState<AssessmentState>({
     hasRecordsDocumented: null,
-    hasNexusLetter: null,
+    hasDoctorSummary: null,
   });
   const [witnessTemplate, setWitnessTemplate] = useState<WitnessTemplateData>({
     veteranName: veteranFullName,
@@ -89,13 +89,13 @@ export function BuddyStatementGenerator() {
 
   // Determine if buddy letters are needed based on assessment
   const getAssessmentResult = () => {
-    const { hasRecordsDocumented, hasNexusLetter } = assessment;
+    const { hasRecordsDocumented, hasDoctorSummary } = assessment;
     
-    if (hasRecordsDocumented === null || hasNexusLetter === null) {
+    if (hasRecordsDocumented === null || hasDoctorSummary === null) {
       return 'incomplete';
     }
     
-    if (hasRecordsDocumented === 'yes' && hasNexusLetter === 'yes') {
+    if (hasRecordsDocumented === 'yes' && hasDoctorSummary === 'yes') {
       return 'optional';
     }
     
@@ -438,13 +438,13 @@ Thank you for taking the time to help! Your statement could make a real differen
           {/* Question 2 */}
           <div className="space-y-3">
             <Label className="text-sm font-medium">
-              Do you have a medical nexus letter linking your condition to service?
+              Do you have a doctor summary linking your condition to service?
             </Label>
             <RadioGroup
-              value={assessment.hasNexusLetter || ''}
+              value={assessment.hasDoctorSummary || ''}
               onValueChange={(value) => setAssessment(prev => ({ 
                 ...prev, 
-                hasNexusLetter: value as 'yes' | 'no' | 'unsure' 
+                hasDoctorSummary: value as 'yes' | 'no' | 'unsure' 
               }))}
               className="flex flex-wrap gap-4"
             >
@@ -476,7 +476,7 @@ Thank you for taking the time to help! Your statement could make a real differen
                   <div>
                     <p className="font-medium text-success">Your documentation appears sufficient</p>
                     <p className="text-sm text-muted-foreground mt-1">
-                      With clear medical records and a nexus letter, buddy statements are <strong>optional</strong>. 
+                      With clear medical records and a doctor summary, buddy statements are <strong>optional</strong>. 
                       They can still add value but aren't critical for your claim.
                     </p>
                   </div>
@@ -520,7 +520,7 @@ Thank you for taking the time to help! Your statement could make a real differen
                 <div className="p-3 rounded-lg bg-success/5 border border-success/20">
                   <p className="font-medium text-sm text-success mb-2">✗ Buddy Letters Less Critical When:</p>
                   <ul className="text-xs text-muted-foreground space-y-1">
-                    <li>• Strong nexus letter from doctor</li>
+                    <li>• Strong doctor summary from physician</li>
                     <li>• Clear service treatment records</li>
                     <li>• Presumptive condition (PACT Act)</li>
                     <li>• Condition diagnosed during service</li>

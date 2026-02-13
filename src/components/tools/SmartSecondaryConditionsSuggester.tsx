@@ -325,11 +325,11 @@ export function SmartSecondaryConditionsSuggester() {
           <div className="flex gap-3">
             <Lightbulb className="h-5 w-5 text-primary flex-shrink-0" />
             <div className="text-sm">
-              <p className="font-medium text-foreground mb-1">Pro Tip: Nexus Letters Are Key</p>
+              <p className="font-medium text-foreground mb-1">Pro Tip: Doctor Summaries Are Key</p>
               <p className="text-muted-foreground">
-                For secondary claims, you need a doctor's nexus letter stating the connection 
-                is "at least as likely as not" (50% or greater probability). Use the Nexus Letter 
-                Generator in Claim Tools to create a template for your doctor.
+                For secondary claims, you need a doctor summary stating the connection
+                is "at least as likely as not" (50% or greater probability). Use the Doctor Summary
+                Builder in Claim Tools to create a template for your doctor.
               </p>
             </div>
           </div>
@@ -356,9 +356,9 @@ function generateActionableSteps(
     `Log symptoms daily in this app: when they started, severity (1-10), and how they affect daily activities.`
   );
 
-  // Step 3: Get nexus letter
+  // Step 3: Get doctor summary
   steps.push(
-    `Request a nexus letter from your doctor stating that your ${secondary.secondaryCondition} is "at least as likely as not" caused or aggravated by your ${primaryCondition}.`
+    `Request a doctor summary from your physician stating that your ${secondary.secondaryCondition} is "at least as likely as not" caused or aggravated by your ${primaryCondition}.`
   );
 
   // Step 4: Gather buddy statements
@@ -368,7 +368,7 @@ function generateActionableSteps(
 
   // Step 5: File claim
   steps.push(
-    `File VA Form 21-526EZ as a secondary claim. Attach your nexus letter, medical records, symptom log, and buddy statements.`
+    `File VA Form 21-526EZ as a secondary claim. Attach your doctor summary, medical records, symptom log, and buddy statements.`
   );
 
   return steps;

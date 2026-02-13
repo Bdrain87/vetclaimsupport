@@ -67,14 +67,14 @@ const journeyPhases: JourneyPhase[] = [
     description: 'Build the strongest possible case by gathering medical records, service records, buddy statements, and other supporting documentation.',
     tips: [
       'Request your complete STRs from the National Personnel Records Center',
-      'Get current diagnosis and nexus letters from your doctor',
+      'Get current diagnosis and doctor summaries from your physician',
       'Buddy statements can fill gaps in official records',
       'Document how conditions affect your daily life',
     ],
     checklist: [
       { id: 'str-requested', label: 'Service Treatment Records requested', description: 'From NPRC or VA' },
       { id: 'med-records', label: 'Current medical records gathered', description: 'Recent diagnoses and treatment' },
-      { id: 'nexus-letter', label: 'Nexus letter obtained', description: 'Links condition to service' },
+      { id: 'nexus-letter', label: 'Doctor summary obtained', description: 'Links condition to service' },
       { id: 'buddy-statements', label: 'Buddy statements collected', description: 'Witness accounts of condition' },
       { id: 'personal-statement', label: 'Personal statement written', description: 'Your account of events and impact' },
       { id: 'dbq-completed', label: 'DBQ completed (if using private doctor)', description: 'Disability Benefits Questionnaire' },

@@ -14,7 +14,7 @@ export type ClaimDocumentType =
 
 export const claimDocumentTypeLabels: Record<ClaimDocumentType, string> = {
   'dbq': 'DBQ (Disability Benefits Questionnaire)',
-  'nexus-letter': 'Nexus Letter',
+  'nexus-letter': 'Doctor Summary',
   'buddy-statement': 'Buddy Statement',
   'medical-records': 'Medical Records',
   'service-records': 'Service Records',
@@ -27,7 +27,7 @@ export const claimDocumentTypeLabels: Record<ClaimDocumentType, string> = {
 
 export const claimDocumentTypeShort: Record<ClaimDocumentType, string> = {
   'dbq': 'DBQ',
-  'nexus-letter': 'Nexus',
+  'nexus-letter': 'Dr. Summary',
   'buddy-statement': 'Buddy',
   'medical-records': 'Medical',
   'service-records': 'Service',

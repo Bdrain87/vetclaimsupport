@@ -1563,7 +1563,7 @@ export async function generateCPExamPacketPDF(data: CPExamPacketData): Promise<v
       doc.setTextColor(...PDF_COLORS.textDark);
       doc.text(`Medical Records: ${es.medRecords}`, margin + 8, y); y += 5;
       doc.text(`Buddy Statements: ${es.buddyCount}`, margin + 8, y); y += 5;
-      doc.text(`Nexus Letter: ${es.hasNexus ? 'Yes' : 'Missing'}`, margin + 8, y); y += 5;
+      doc.text(`Doctor Summary: ${es.hasNexus ? 'Yes' : 'Missing'}`, margin + 8, y); y += 5;
       doc.text(`Personal Statement: ${es.hasPersonalStatement ? 'Yes' : 'Missing'}`, margin + 8, y); y += 5;
 
       if (es.gaps.length > 0) {

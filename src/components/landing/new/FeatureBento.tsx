@@ -100,9 +100,9 @@ const CARDS: CardData[] = [
   },
   {
     icon: Scroll,
-    title: 'Nexus Letter Template',
-    short: 'Generates nexus letter templates to bring to your doctor',
-    detail: 'AI-generated draft nexus letter templates with proper medical-legal language connecting your condition to service. Share with your provider for review and signature.',
+    title: 'Doctor Summary Builder',
+    short: 'Generates doctor summary templates to bring to your provider',
+    detail: 'AI-generated draft doctor summary templates with proper medical language connecting your condition to service. Share with your provider for review and signature.',
     capabilities: ['Medical-legal language templates', 'Condition-to-service connection', 'Doctor-ready format', 'Customizable per condition'],
     plan: 'Included in Launch Plan ($4.99/mo)',
     category: 'Generators & Writers',

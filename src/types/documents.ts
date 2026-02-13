@@ -97,12 +97,12 @@ export const conditionDocumentRequirements: Record<string, MissingDocumentSugges
   ],
   'Back': [
     { documentType: 'Medical Imaging', priority: 'critical', description: 'X-rays, MRI, CT scans', category: 'medical-records' },
-    { documentType: 'Nexus Letter', priority: 'critical', description: 'Doctor linking condition to service', category: 'medical-records' },
+    { documentType: 'Doctor Summary', priority: 'critical', description: 'Doctor linking condition to service', category: 'medical-records' },
     { documentType: 'Treatment Records', priority: 'recommended', description: 'Physical therapy, medications', category: 'medical-records' },
     { documentType: 'Service Records', priority: 'recommended', description: 'Heavy lifting duties, injuries', category: 'service-documents' },
   ],
   'default': [
-    { documentType: 'Nexus Letter', priority: 'critical', description: 'Doctor statement linking to service', category: 'medical-records' },
+    { documentType: 'Doctor Summary', priority: 'critical', description: 'Doctor statement linking to service', category: 'medical-records' },
     { documentType: 'Treatment Records', priority: 'critical', description: 'Medical documentation', category: 'medical-records' },
     { documentType: 'Buddy Statements', priority: 'recommended', description: 'Witness statements', category: 'buddy-letters' },
     { documentType: 'Personal Statement', priority: 'recommended', description: 'Impact on daily life', category: 'personal-statements' },

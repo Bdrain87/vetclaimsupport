@@ -143,16 +143,16 @@ export function EnhancedEvidenceChecklist() {
         firstPersonTip: `Ask your buddy to write: "I served with [NAME] at [LOCATION] from [DATE] to [DATE]. I personally witnessed [SPECIFIC INCIDENT/SYMPTOMS]. I observed that [NAME] [SPECIFIC OBSERVATIONS]."`,
       });
 
-      // Nexus letter
-      const hasNexus = data.documents.some(d => 
-        d.name.toLowerCase().includes('nexus') && 
+      // Doctor summary
+      const hasNexus = data.documents.some(d =>
+        (d.name.toLowerCase().includes('nexus') || d.name.toLowerCase().includes('doctor summar')) &&
         (d.status === 'Obtained' || d.status === 'Submitted')
       );
       if (hasNexus) score += 15;
 
       items.push({
         id: 'nexus',
-        label: 'Nexus Letter',
+        label: 'Doctor Summary',
         description: hasNexus
           ? 'Medical opinion linking condition to service ✓'
           : 'Get a doctor\'s letter stating the connection is "at least as likely as not" related to service',

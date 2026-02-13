@@ -75,7 +75,7 @@ const SECTION_ITEMS: SectionItem[] = [
     key: 'generatedDocs',
     icon: <FileOutput size={20} />,
     label: 'Generated Documents',
-    description: 'Buddy statement drafts, nexus letter outlines, personal statements',
+    description: 'Buddy statement drafts, doctor summary outlines, personal statements',
   },
   {
     key: 'formDrafts',

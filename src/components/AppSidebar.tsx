@@ -61,7 +61,7 @@ const navGroups: NavGroup[] = [
       { to: '/claims/secondary-finder', icon: Search, label: 'Secondary Finder' },
       { to: '/claims/strategy', icon: Wand2, label: 'Strategy Wizard' },
       { to: '/prep/exam', icon: ClipboardCheck, label: 'C&P Exam Prep' },
-      { to: '/prep/nexus-letter', icon: FileSignature, label: 'Nexus Letter' },
+      { to: '/prep/nexus-letter', icon: FileSignature, label: 'Doctor Summary' },
       { to: '/prep/dbq', icon: ClipboardList, label: 'DBQ Prep' },
       { to: '/claims/body-map', icon: Activity, label: 'Body Map' },
     ],

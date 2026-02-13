@@ -63,7 +63,7 @@ export const conditionChecklists: Record<string, ConditionChecklist> = {
       { item: 'Service Treatment Records showing back complaints', required: true },
       { item: 'MRI or X-ray results', required: false, description: 'Shows structural abnormalities' },
       { item: 'Physical therapy records', required: false },
-      { item: 'Nexus letter from doctor', required: false, description: 'Crucial for service connection' },
+      { item: 'Doctor summary from physician', required: false, description: 'Crucial for service connection' },
       { item: 'Buddy statement about injury/symptoms', required: false },
       { item: 'Documentation of physical job duties in service', required: true },
     ],
@@ -146,7 +146,7 @@ export const conditionChecklists: Record<string, ConditionChecklist> = {
       { item: 'CPAP compliance data', required: false },
       { item: 'Buddy/spouse statement about snoring/apnea episodes', required: false },
       { item: 'In-service symptoms (snoring, fatigue complaints)', required: true },
-      { item: 'Nexus letter linking to service or secondary condition', required: false },
+      { item: 'Doctor summary linking to service or secondary condition', required: false },
     ],
     examQuestions: [
       'When were you first diagnosed?',

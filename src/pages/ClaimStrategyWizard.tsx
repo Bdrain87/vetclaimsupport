@@ -62,7 +62,7 @@ interface EvidenceAvailable {
   hasMedicalRecords: boolean;
   hasServiceRecords: boolean;
   hasBuddyStatements: boolean;
-  hasNexusLetter: boolean;
+  hasDoctorSummary: boolean;
   hasPrivateMedical: boolean;
   evidenceNotes: string;
 }
@@ -111,7 +111,7 @@ const initialData: WizardData = {
     hasMedicalRecords: false,
     hasServiceRecords: false,
     hasBuddyStatements: false,
-    hasNexusLetter: false,
+    hasDoctorSummary: false,
     hasPrivateMedical: false,
     evidenceNotes: '',
   },
@@ -177,7 +177,7 @@ export default function ClaimStrategyWizard() {
         hasMedicalRecords: hasMedVisits,
         hasServiceRecords: hasUploaded,
         hasBuddyStatements: hasBuddy,
-        hasNexusLetter: false,
+        hasDoctorSummary: false,
         hasPrivateMedical: hasMedVisits,
         evidenceNotes: initialData.evidence.evidenceNotes,
       },
@@ -280,7 +280,7 @@ EVIDENCE AVAILABLE:
 - VA/Military medical records: ${data.evidence.hasMedicalRecords ? 'Yes' : 'No'}
 - Private medical records: ${data.evidence.hasPrivateMedical ? 'Yes' : 'No'}
 - Buddy statements: ${data.evidence.hasBuddyStatements ? 'Yes' : 'No'}
-- Nexus letter(s): ${data.evidence.hasNexusLetter ? 'Yes' : 'No'}
+- Doctor summary/nexus letter(s): ${data.evidence.hasDoctorSummary ? 'Yes' : 'No'}
 ${data.evidence.evidenceNotes ? `Notes: ${data.evidence.evidenceNotes}` : ''}
 
 Provide a strategic claim analysis in the following JSON format:
@@ -332,9 +332,9 @@ Consider:
             reason: 'Evaluate based on service connection evidence',
             estimatedRating: 'TBD'
           })),
-          evidenceGaps: !data.evidence.hasNexusLetter ? ['Nexus letter recommended'] : [],
+          evidenceGaps: !data.evidence.hasDoctorSummary ? ['Doctor summary recommended'] : [],
           timeline: 'Standard processing: 3-6 months',
-          nextSteps: ['Gather all medical records', 'Obtain nexus letters', 'File claim on VA.gov'],
+          nextSteps: ['Gather all medical records', 'Obtain doctor summaries', 'File claim on VA.gov'],
           warnings: ['Consult with a VSO for personalized guidance']
         });
       }
@@ -356,14 +356,14 @@ Consider:
         evidenceGaps: [
           !data.evidence.hasServiceRecords ? 'Service treatment records' : '',
           !data.evidence.hasMedicalRecords ? 'Current medical records' : '',
-          !data.evidence.hasNexusLetter ? 'Medical nexus letter(s)' : '',
+          !data.evidence.hasDoctorSummary ? 'Doctor summary/nexus letter(s)' : '',
           !data.evidence.hasBuddyStatements ? 'Buddy/lay statements' : '',
         ].filter(Boolean),
         timeline: 'Typical processing: 3-6 months after submission',
         nextSteps: [
           'Request service treatment records from NPRC if not available',
           'Get current diagnoses for each condition',
-          'Obtain nexus letters connecting conditions to service',
+          'Obtain doctor summaries connecting conditions to service',
           'Gather buddy statements from fellow service members/family',
           'File claim online at VA.gov or with VSO help'
         ],
@@ -686,12 +686,12 @@ attorney for official guidance on your specific claim.
 
               <div className="flex items-center gap-3">
                 <Checkbox
-                  id="hasNexusLetter"
-                  checked={data.evidence.hasNexusLetter}
-                  onCheckedChange={(checked) => updateEvidence('hasNexusLetter', !!checked)}
+                  id="hasDoctorSummary"
+                  checked={data.evidence.hasDoctorSummary}
+                  onCheckedChange={(checked) => updateEvidence('hasDoctorSummary', !!checked)}
                 />
-                <label htmlFor="hasNexusLetter" className="text-sm">
-                  <span className="font-medium">Medical Nexus Letter(s)</span>
+                <label htmlFor="hasDoctorSummary" className="text-sm">
+                  <span className="font-medium">Doctor Summary / Nexus Letter(s)</span>
                   <p className="text-xs text-muted-foreground">Doctor's opinion connecting condition to service</p>
                 </label>
               </div>

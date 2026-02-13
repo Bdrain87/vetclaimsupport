@@ -50,7 +50,7 @@ export default function ClaimChecklist() {
       currentMeds,
       hasDD214: data.documents.some(d => d.name.includes('DD-214') && (d.status === 'Obtained' || d.status === 'Submitted')),
       hasSTRs: data.documents.some(d => d.name.includes('STR') && (d.status === 'Obtained' || d.status === 'Submitted')),
-      hasNexus: data.documents.some(d => d.name.includes('Nexus') && (d.status === 'Obtained' || d.status === 'Submitted')),
+      hasNexus: data.documents.some(d => (d.name.includes('Nexus') || d.name.includes('Doctor Summar')) && (d.status === 'Obtained' || d.status === 'Submitted')),
     };
   }, [data]);
 
@@ -168,15 +168,15 @@ export default function ClaimChecklist() {
       {
         id: 'nexus-letter',
         category: 'Medical Evidence',
-        title: 'Nexus Letter',
+        title: 'Doctor Summary',
         description: 'Medical opinion linking condition to service',
         isComplete: metrics.hasNexus,
         currentCount: metrics.hasNexus ? 1 : 0,
         recommendedCount: 1,
         progressText: metrics.hasNexus ? 'Obtained ✓' : 'Not obtained',
-        guidance: metrics.hasNexus 
-          ? 'Your nexus letter provides crucial medical opinion for service connection.'
-          : 'A nexus letter from your doctor can significantly strengthen claims. Ask your physician to write one.',
+        guidance: metrics.hasNexus
+          ? 'Your doctor summary provides crucial medical opinion for service connection.'
+          : 'A doctor summary from your physician can significantly strengthen claims. Use the Doctor Summary Builder to get started.',
         link: '/settings/vault',
         linkText: 'Update Status',
         priority: 'high',

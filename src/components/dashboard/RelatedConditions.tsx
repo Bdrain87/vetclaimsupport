@@ -16,27 +16,27 @@ interface RelatedConditionsProps {
 // Evidence requirements for common secondary conditions
 const evidenceRequirements: Record<string, { items: string[]; critical?: string }> = {
   'Sleep Apnea': {
-    items: ['Sleep study (polysomnogram)', 'Nexus letter linking to primary', 'CPAP prescription records'],
+    items: ['Sleep study (polysomnogram)', 'Doctor summary linking to primary', 'CPAP prescription records'],
     critical: 'Sleep study is required for diagnosis'
   },
   'GERD': {
-    items: ['Endoscopy results', 'PPI medication history', 'Nexus letter from GI doctor'],
+    items: ['Endoscopy results', 'PPI medication history', 'Doctor summary from GI doctor'],
   },
   'Migraines': {
-    items: ['Headache log showing frequency', 'Prostrating attack documentation', 'Nexus letter'],
+    items: ['Headache log showing frequency', 'Prostrating attack documentation', 'Doctor summary'],
     critical: 'Document prostrating attacks (bed rest required)'
   },
   'Hypertension': {
-    items: ['Blood pressure readings over time', 'Medication history', 'Nexus letter linking to primary'],
+    items: ['Blood pressure readings over time', 'Medication history', 'Doctor summary linking to primary'],
   },
   'Tinnitus': {
     items: ['Audiogram', 'Statement of constant ringing', 'Buddy statements about when noticed'],
   },
   'IBS': {
-    items: ['GI specialist diagnosis', 'Symptom log', 'Nexus letter linking to anxiety/stress'],
+    items: ['GI specialist diagnosis', 'Symptom log', 'Doctor summary linking to anxiety/stress'],
   },
   'Tension Headaches': {
-    items: ['Headache diary', 'Treatment records', 'Nexus letter'],
+    items: ['Headache diary', 'Treatment records', 'Doctor summary'],
   },
   'TMJ Disorder': {
     items: ['Dental exam records', 'X-rays or MRI of jaw', 'Documentation of bruxism'],
@@ -49,7 +49,7 @@ const evidenceRequirements: Record<string, { items: string[]; critical?: string 
     items: ['MRI of lumbar spine', 'Physical exam noting positive SLR test', 'Treatment records'],
   },
   'Erectile Dysfunction': {
-    items: ['Urologist diagnosis', 'Medication records (if any)', 'Nexus letter linking to primary'],
+    items: ['Urologist diagnosis', 'Medication records (if any)', 'Doctor summary linking to primary'],
   },
   'Hearing Loss': {
     items: ['Audiogram showing hearing thresholds', 'Noise exposure documentation', 'Buddy statements'],
@@ -62,7 +62,7 @@ const evidenceRequirements: Record<string, { items: string[]; critical?: string 
     items: ['Sleep study to rule out other causes', 'Medical records showing pattern', 'Functional impact statements'],
   },
   'Obesity': {
-    items: ['Weight records over time', 'Medical documentation of BMI', 'Nexus linking to medications/inactivity'],
+    items: ['Weight records over time', 'Medical documentation of BMI', 'Doctor summary linking to medications/inactivity'],
   },
   'Peripheral Neuropathy': {
     items: ['EMG/nerve conduction study', 'Neurologist diagnosis', 'Documentation of symptoms'],
@@ -72,10 +72,10 @@ const evidenceRequirements: Record<string, { items: string[]; critical?: string 
     items: ['Ophthalmologist exam', 'Retinal imaging', 'Visual acuity testing'],
   },
   'Hip Condition': {
-    items: ['X-rays or MRI of hip', 'Range of motion testing', 'Nexus linking to gait changes'],
+    items: ['X-rays or MRI of hip', 'Range of motion testing', 'Doctor summary linking to gait changes'],
   },
   'Lower Back Pain': {
-    items: ['Imaging (X-ray/MRI)', 'Range of motion with goniometer', 'Nexus letter'],
+    items: ['Imaging (X-ray/MRI)', 'Range of motion with goniometer', 'Doctor summary'],
   },
   'Knee Condition': {
     items: ['X-rays or MRI', 'Range of motion testing', 'Instability testing'],
@@ -84,7 +84,7 @@ const evidenceRequirements: Record<string, { items: string[]; critical?: string 
     items: ['Imaging of cervical spine', 'Range of motion testing', 'Treatment records'],
   },
   'Post-Traumatic Headaches': {
-    items: ['TBI diagnosis records', 'Headache frequency log', 'Nexus to head injury'],
+    items: ['TBI diagnosis records', 'Headache frequency log', 'Doctor summary linking to head injury'],
   },
   'Pituitary Dysfunction': {
     items: ['Hormone panel blood tests', 'Endocrinologist evaluation', 'MRI of pituitary'],
@@ -126,7 +126,7 @@ export function RelatedConditions({ conditionName, existingConditionNames }: Rel
 
   const getEvidenceForCondition = (name: string) => {
     return evidenceRequirements[name] || {
-      items: ['Medical diagnosis records', 'Nexus letter linking to primary condition', 'Treatment history']
+      items: ['Medical diagnosis records', 'Doctor summary linking to primary condition', 'Treatment history']
     };
   };
 

@@ -38,7 +38,7 @@ const form526EZ: FormGuideDefinition = {
     'Private medical records showing current diagnosis',
     'List of all conditions you are claiming',
     'Names and addresses of treatment providers',
-    'Any nexus letters from doctors',
+    'Any doctor summaries from physicians',
     'Buddy/lay statements supporting your claim',
     'Intent to File confirmation number (if filed VA Form 21-0966)',
   ],
@@ -135,8 +135,8 @@ const form526EZ: FormGuideDefinition = {
       fieldId: 'sec5_supporting_evidence',
       section: 'Section V — Supporting Evidence',
       label: 'Evidence Being Submitted',
-      explanation: 'List all supporting evidence you are including with your claim: nexus letters, buddy statements, private medical records, service records, etc. Check the box for each type you are submitting.',
-      placeholder: 'e.g., Nexus letter from Dr. Smith (attached)\nBuddy statement from SGT Jones (attached)\nPrivate orthopedic records 2019-2024 (attached)',
+      explanation: 'List all supporting evidence you are including with your claim: doctor summaries, buddy statements, private medical records, service records, etc. Check the box for each type you are submitting.',
+      placeholder: 'e.g., Doctor summary from Dr. Smith (attached)\nBuddy statement from SGT Jones (attached)\nPrivate orthopedic records 2019-2024 (attached)',
     },
     {
       fieldId: 'sec6_remarks',
@@ -289,7 +289,7 @@ const form4138: FormGuideDefinition = {
       section: 'Statement',
       label: 'Evidence References',
       explanation: 'Reference any documents you are submitting or that are already in your VA file. Name specific records, letters, or statements that support your claim.',
-      placeholder: 'e.g., See attached nexus letter from Dr. Smith dated 01/15/2024. See STR entry dated 06/20/2008 documenting back injury during PT.',
+      placeholder: 'e.g., See attached doctor summary from Dr. Smith dated 01/15/2024. See STR entry dated 06/20/2008 documenting back injury during PT.',
     },
   ],
 };
