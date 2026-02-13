@@ -699,7 +699,7 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
       <ScrollingRow
         cards={topRowCards}
         direction="left"
-        speed={60}
+        speed={180}
         onSelectCard={onSelectCard}
       />
 
@@ -707,7 +707,7 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
       <ScrollingRow
         cards={bottomRowCards}
         direction="right"
-        speed={65}
+        speed={190}
         onSelectCard={onSelectCard}
       />
     </div>
