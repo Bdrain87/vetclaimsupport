@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useClaims } from '@/hooks/useClaims';
+import useAppStore from '@/store/useAppStore';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -158,7 +159,8 @@ const journeyPhases: JourneyPhase[] = [
 ];
 
 export default function ClaimJourney() {
-  const { data, updateData } = useClaims();
+  const { data } = useClaims();
+  const setJourneyProgress = useAppStore((s) => s.setJourneyProgress);
   const [showCelebration, setShowCelebration] = useState(false);
   const [completedPhaseId, setCompletedPhaseId] = useState<string | null>(null);
   const [selectedPhase, setSelectedPhase] = useState<JourneyPhase | null>(null);
@@ -217,7 +219,7 @@ export default function ClaimJourney() {
             [phase.id]: new Date().toISOString(),
           },
         };
-        updateData({ journeyProgress: newProgress });
+        setJourneyProgress(newProgress);
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- Intentionally fires only on checklist changes. Adding `journeyProgress` would cause an extra re-fire after updateData modifies it; `updateData` stability from context is not guaranteed.
@@ -228,13 +230,11 @@ export default function ClaimJourney() {
       ...journeyProgress.completedChecklist,
       [itemId]: checked,
     };
-    updateData({
-      journeyProgress: {
-        ...journeyProgress,
-        completedChecklist: newChecklist,
-      },
+    setJourneyProgress({
+      ...journeyProgress,
+      completedChecklist: newChecklist,
     });
-  }, [journeyProgress, updateData]);
+  }, [journeyProgress, setJourneyProgress]);
 
   const getPhaseStatus = (index: number) => {
     if (phaseProgress[index] === 100) return 'completed';

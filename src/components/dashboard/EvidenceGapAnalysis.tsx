@@ -63,7 +63,7 @@ const ptsdRequirements: EvidenceRequirement[] = [
     label: 'Medications for Mental Health',
     description: 'Prescriptions for anxiety, depression, or sleep related to PTSD',
     isCritical: false,
-    check: (condition, data) => {
+    check: (_condition, data) => {
       const relatedMeds = data.medications.filter(med =>
         (med.prescribedFor ?? '').toLowerCase().includes('ptsd') ||
         (med.prescribedFor ?? '').toLowerCase().includes('anxiety') ||
@@ -92,7 +92,7 @@ const physicalRequirements: EvidenceRequirement[] = [
     label: 'Doctor Summary',
     description: 'Medical opinion linking condition to service',
     isCritical: true,
-    check: (condition, data) => {
+    check: (_condition, data) => {
       // Check uploaded documents for doctor summaries / nexus letters
       const hasDoctorSummary = data.uploadedDocuments?.some(doc =>
         doc.documentType === 'nexus' ||
@@ -166,7 +166,7 @@ const hearingRequirements: EvidenceRequirement[] = [
     label: 'Audiogram/Hearing Test',
     description: 'Current hearing test results',
     isCritical: true,
-    check: (condition, data) => {
+    check: (_condition, data) => {
       const hasAudiogram = data.uploadedDocuments?.some(doc =>
         doc.title.toLowerCase().includes('audiogram') ||
         doc.title.toLowerCase().includes('hearing test')
@@ -201,7 +201,7 @@ const hearingRequirements: EvidenceRequirement[] = [
     label: 'Service Job Code Evidence',
     description: 'Job code showing noise-hazardous duties',
     isCritical: false,
-    check: (condition, data) => {
+    check: (_condition, data) => {
       const hasServiceHistory = data.serviceHistory.length > 0;
       return { met: hasServiceHistory };
     },

@@ -23,7 +23,7 @@ export default function ExportDataPage() {
       // Try native share if available, otherwise download
       if (navigator.share && navigator.canShare?.({ files: [new File([blob], filename)] })) {
         const file = new File([blob], filename, {
-          type: format === 'json' ? 'application/json' : 'application/pdf',
+          type: 'application/pdf',
         });
         await navigator.share({ files: [file], title: 'Vet Claim Support Export' });
       } else {

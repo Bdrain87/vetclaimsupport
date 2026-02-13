@@ -304,7 +304,7 @@ export default function ConditionDetail() {
     const symptomNames = (data.symptoms || []).map(s => s.symptom);
     const medicationNames = (data.medications || []).map(m => m.name);
     const hasNexus = (data.uploadedDocuments || []).some(d =>
-      d.name?.toLowerCase().includes('nexus')
+      d.title?.toLowerCase().includes('nexus')
     );
     const hasBuddyStatements = (data.buddyContacts || []).length > 0;
 
@@ -339,10 +339,16 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
     if (result) setAiInsights(result);
   };
 
-  // Evidence completion percentage
-  const evidenceProgress = userCondition?.evidenceCount && userCondition?.totalEvidenceNeeded
-    ? (userCondition.evidenceCount / userCondition.totalEvidenceNeeded) * 100
+  // Evidence completion percentage — computed from linked items on the claim condition
+  const evidenceCount = claimCondition
+    ? (claimCondition.linkedMedicalVisits.length > 0 ? 1 : 0)
+      + (claimCondition.linkedSymptoms.length > 0 ? 1 : 0)
+      + (claimCondition.linkedExposures.length > 0 ? 1 : 0)
+      + (claimCondition.linkedDocuments.length > 0 ? 1 : 0)
+      + (claimCondition.linkedBuddyContacts.length > 0 ? 1 : 0)
     : 0;
+  const totalEvidenceNeeded = 5;
+  const evidenceProgress = (evidenceCount / totalEvidenceNeeded) * 100;
 
   return (
     <PageContainer className="py-6 space-y-6">
@@ -441,7 +447,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
               <div className="space-y-1">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">
-                    {userCondition.evidenceCount || 0} of {userCondition.totalEvidenceNeeded || 5} items
+                    {evidenceCount} of {totalEvidenceNeeded} items
                   </span>
                   <span className="font-medium">{Math.round(evidenceProgress)}%</span>
                 </div>

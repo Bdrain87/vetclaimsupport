@@ -101,7 +101,7 @@ export default function Settings() {
     profile.setLastName(profileForm.lastName);
 
     // Save separation date from form (consistent with other fields)
-    profile.setSeparationDate(profileForm.separationDate || undefined);
+    profile.setSeparationDate(profileForm.separationDate || '');
 
     // Save service periods
     profile.setServicePeriods(servicePeriods);

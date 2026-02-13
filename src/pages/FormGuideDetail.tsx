@@ -216,7 +216,7 @@ export default function FormGuideDetail() {
   const clearFormDraft = useAppStore((s) => s.clearFormDraft);
 
   const formDef = formId ? getFormGuideById(formId) : undefined;
-  const drafts = (formId && formDrafts[formId]) || {};
+  const drafts: Record<string, string> = (formId && formDrafts[formId]) || {};
 
   // Track which sections are expanded
   const sections = useMemo(() => {

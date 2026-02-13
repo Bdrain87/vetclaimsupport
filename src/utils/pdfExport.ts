@@ -76,7 +76,7 @@ const addPDFHeader = (doc: jsPDFType, options: PDFExportOptions, yPos: number = 
 };
 
 // Helper to add footer
-const addPDFFooter = (doc: jsPDF) => {
+const addPDFFooter = (doc: jsPDFType) => {
   const pageHeight = doc.internal.pageSize.getHeight();
   const pageWidth = doc.internal.pageSize.getWidth();
 
@@ -869,44 +869,34 @@ export const exportAllEvidence = async (data: ClaimsData, options?: { returnBlob
       doc.setFont('helvetica', 'bold');
       doc.text(`• ${condition.name}`, 25, yPos);
       
-      if (condition.claimType) {
+      if ((condition as unknown as Record<string, unknown>).claimType) {
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(8);
         doc.setTextColor(...colors.muted);
-        doc.text(` (${condition.claimType})`, 25 + doc.getTextWidth(`• ${condition.name}`) + 2, yPos);
+        doc.text(` (${(condition as unknown as Record<string, unknown>).claimType})`, 25 + doc.getTextWidth(`• ${condition.name}`) + 2, yPos);
       }
       yPos += 6;
     });
     yPos += 5;
   }
   
-  // Service info
-  if (data.veteranInfo) {
+  // Service info (separationDate lives on ClaimsData directly)
+  if (data.separationDate) {
     yPos = checkPageBreak(doc, yPos, 30);
     doc.setFontSize(12);
     doc.setTextColor(...colors.secondary);
     doc.setFont('helvetica', 'bold');
     doc.text('Veteran Information', 20, yPos);
     yPos += 8;
-    
+
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
-    
-    if (data.veteranInfo.separationDate) {
-      doc.setTextColor(...colors.muted);
-      doc.text('Separation Date:', 25, yPos);
-      doc.setTextColor(...colors.secondary);
-      doc.text(data.veteranInfo.separationDate, 70, yPos);
-      yPos += 5;
-    }
-    
-    if (data.veteranInfo.branch) {
-      doc.setTextColor(...colors.muted);
-      doc.text('Branch:', 25, yPos);
-      doc.setTextColor(...colors.secondary);
-      doc.text(data.veteranInfo.branch, 70, yPos);
-      yPos += 5;
-    }
+
+    doc.setTextColor(...colors.muted);
+    doc.text('Separation Date:', 25, yPos);
+    doc.setTextColor(...colors.secondary);
+    doc.text(data.separationDate, 70, yPos);
+    yPos += 5;
   }
   
   addPDFFooter(doc);
@@ -1544,7 +1534,7 @@ export const exportSleepLog = async (entries: SleepEntry[]) => {
     }
 
     // Gasping episodes
-    if (entry.timesWokeGasping > 0) {
+    if (entry.timesWokeGasping && entry.timesWokeGasping > 0) {
       doc.setTextColor(...colors.muted);
       doc.text('Woke Gasping:', 25, yPos);
       doc.setTextColor(...colors.danger);

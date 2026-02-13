@@ -33,7 +33,7 @@ const STEPS = [
   {
     num: '04',
     title: 'Export and Review',
-    desc: 'Export your organized notes, drafted statements, and tracked health data to review with an accredited representative before filing.',
+    desc: 'Export your organized notes, drafted statements, and tracked health data to review with a VA-accredited VSO or representative before filing.',
   },
 ];
 

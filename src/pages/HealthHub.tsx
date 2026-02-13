@@ -41,7 +41,7 @@ export default function HealthHub() {
     const cutoffStr = cutoff.toISOString();
 
     const recentSymptoms = (store.symptoms || []).filter(
-      (s) => (s.date || s.createdAt || '') >= cutoffStr
+      (s) => (s.date || '') >= cutoffStr
     );
     const totalSymptoms = recentSymptoms.length;
 

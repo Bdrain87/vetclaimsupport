@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import {
-  fadeInUp,
   staggerContainer,
   cardRevealScale,
   HEADING_H2_STYLE,

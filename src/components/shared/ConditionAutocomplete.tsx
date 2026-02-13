@@ -192,9 +192,9 @@ export function ConditionAutocomplete({
                   <span className="text-xs text-muted-foreground ml-2">DC {condition.diagnosticCode}</span>
                 )}
               </div>
-              {showBodySystem && (condition as Record<string, unknown>).bodySystem && (
+              {showBodySystem && 'bodySystem' in condition && (condition as unknown as { bodySystem: string }).bodySystem && (
                 <span className="text-xs text-gold/60 whitespace-nowrap flex-shrink-0 max-w-[100px] truncate">
-                  {String((condition as Record<string, unknown>).bodySystem)}
+                  {(condition as unknown as { bodySystem: string }).bodySystem}
                 </span>
               )}
             </button>

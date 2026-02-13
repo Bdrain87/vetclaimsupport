@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import {
   Search, ExternalLink, CheckCircle2, FileDown, Scale,
-  Clock, ArrowRight, BookOpen, Filter, X, AlertTriangle,
+  Clock, BookOpen, Filter, X, AlertTriangle,
   Gavel, ChevronDown, ChevronUp,
 } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -11,7 +11,6 @@ import { cn } from '@/lib/utils';
 import { PageContainer } from '@/components/PageContainer';
 import {
   appealLanes,
-  verifiedCases,
   searchCaseLaw,
   CASE_LAW_DISCLAIMER,
 } from '@/data/appealsData';
@@ -308,7 +307,7 @@ export default function AppealsGuide() {
   const [exporting, setExporting] = useState(false);
 
   const filteredCases = useMemo(
-    () => searchCaseLaw(searchQuery, activeTopic ?? undefined),
+    () => searchCaseLaw(searchQuery, activeTopic ? { topics: [activeTopic] } : undefined),
     [searchQuery, activeTopic]
   );
 

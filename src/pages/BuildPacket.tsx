@@ -239,7 +239,7 @@ export default function BuildPacket() {
         format: 'text',
         sections: getSectionMapping(),
       });
-      if (result.content) {
+      if (result.content && typeof result.content === 'string') {
         try {
           await navigator.clipboard.writeText(result.content);
           showMessage('Text copied to clipboard.');

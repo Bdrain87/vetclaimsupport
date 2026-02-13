@@ -103,7 +103,7 @@ const CARDS: CardData[] = [
     title: 'Doctor Summary Builder',
     short: 'Generates doctor summary templates to bring to your provider',
     detail: 'AI-generated draft doctor summary templates with proper medical language connecting your condition to service. Share with your provider for review and signature.',
-    capabilities: ['Medical-legal language templates', 'Condition-to-service connection', 'Doctor-ready format', 'Customizable per condition'],
+    capabilities: ['Medical language templates', 'Condition-to-service connection', 'Doctor-ready format', 'Customizable per condition'],
     plan: 'Included in Launch Plan ($4.99/mo)',
     category: 'Generators & Writers',
     aiDisclaimer: true,

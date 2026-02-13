@@ -225,8 +225,8 @@ export async function pullFromCloud(): Promise<void> {
           // Genuinely new — insert with cloud ID preserved.
           appStore.addSymptom({
             id: log.id,
-            ...(logData as Record<string, string | number>),
-          } as Parameters<typeof appStore.addSymptom>[0]);
+            ...logData,
+          } as unknown as Parameters<typeof appStore.addSymptom>[0]);
           break;
         }
         case 'sleep': {
@@ -246,8 +246,8 @@ export async function pullFromCloud(): Promise<void> {
 
           appStore.addSleepEntry({
             id: log.id,
-            ...(logData as Record<string, string | number>),
-          } as Parameters<typeof appStore.addSleepEntry>[0]);
+            ...logData,
+          } as unknown as Parameters<typeof appStore.addSleepEntry>[0]);
           break;
         }
         case 'migraine': {
@@ -267,8 +267,8 @@ export async function pullFromCloud(): Promise<void> {
 
           appStore.addMigraine({
             id: log.id,
-            ...(logData as Record<string, string | number>),
-          } as Parameters<typeof appStore.addMigraine>[0]);
+            ...logData,
+          } as unknown as Parameters<typeof appStore.addMigraine>[0]);
           break;
         }
       }

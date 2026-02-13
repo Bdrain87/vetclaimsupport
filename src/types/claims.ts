@@ -314,6 +314,8 @@ export interface QuickLogEntry {
   cpapUsed?: boolean;
   painLevel?: number;
   mood?: 'good' | 'okay' | 'bad';
+  condition?: string;
+  notes?: string;
   createdAt: string;
   conditionTags?: string[];
 }

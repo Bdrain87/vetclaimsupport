@@ -34,7 +34,7 @@ const pages: Record<string, () => Promise<{ default: React.ComponentType }>> = {
   ClaimChecklist: () => import('@/pages/ClaimChecklist'),
   ClaimJourney: () => import('@/pages/ClaimJourney'),
   ClaimStrategyWizard: () => import('@/pages/ClaimStrategyWizard'),
-  ClaimTools: () => import('@/pages/ClaimTools'),
+  PrepHub: () => import('@/pages/PrepHub'),
   Timeline: () => import('@/pages/Timeline'),
   HealthLog: () => import('@/pages/HealthLog'),
   Symptoms: () => import('@/pages/Symptoms'),

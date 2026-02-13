@@ -157,7 +157,7 @@ export default function NexusLetterGenerator() {
           ? formData.secondaryCondition.trim() !== ''
           : formData.primaryCondition.trim() !== '' && formData.secondaryCondition.trim() !== '';
       case 2:
-        return formData.connectionType !== '';
+        return formData.connectionType.length > 0;
       case 3:
         return formData.veteranName.trim() !== '' && formData.branchOfService.trim() !== '';
       case 4:

@@ -135,9 +135,9 @@ export function buildStressorPrefill(data: {
     result.howAffectedOngoing = ptsd
       .map(p => {
         const parts: string[] = [];
-        if ('symptom' in p && (p as Record<string, unknown>).symptom) parts.push(String((p as Record<string, unknown>).symptom));
-        if ('description' in p && (p as Record<string, unknown>).description) parts.push(String((p as Record<string, unknown>).description));
-        if ('notes' in p && (p as Record<string, unknown>).notes) parts.push(String((p as Record<string, unknown>).notes));
+        if ('symptom' in p && (p as unknown as Record<string, unknown>).symptom) parts.push(String((p as unknown as Record<string, unknown>).symptom));
+        if ('description' in p && (p as unknown as Record<string, unknown>).description) parts.push(String((p as unknown as Record<string, unknown>).description));
+        if ('notes' in p && (p as unknown as Record<string, unknown>).notes) parts.push(String((p as unknown as Record<string, unknown>).notes));
         return parts.join(': ');
       })
       .filter(Boolean)

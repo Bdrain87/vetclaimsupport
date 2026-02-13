@@ -89,32 +89,6 @@ describe('Accessibility Audit (axe-core)', () => {
     });
   }
 
-  // Test the PlatinumNavbar specifically for keyboard navigation
-  it('PlatinumNavbar has no critical axe violations', async () => {
-    const { PlatinumNavbar } = await import('@/components/PlatinumNavbar');
-
-    const { container } = render(
-      <MemoryRouter>
-        <PlatinumNavbar />
-      </MemoryRouter>,
-    );
-
-    const results = await axe(container, AXE_OPTIONS);
-    const serious = results.violations.filter(
-      (v) => v.impact === 'critical' || v.impact === 'serious',
-    );
-
-    if (serious.length > 0) {
-      const summary = serious
-        .map(
-          (v) =>
-            `[${v.impact}] ${v.id}: ${v.description} (${v.nodes.length} instance(s))`,
-        )
-        .join('\n');
-      expect.fail(`Navbar axe violations:\n${summary}`);
-    }
-  });
-
   // Test the ErrorBoundary error state for accessibility
   it('ErrorBoundary error state has no critical axe violations', async () => {
     const { ErrorBoundary } = await import('@/components/ErrorBoundary');

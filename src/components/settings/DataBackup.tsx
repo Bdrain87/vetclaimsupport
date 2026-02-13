@@ -63,7 +63,7 @@ export function DataBackup() {
       const backupData: BackupData = {
         version: '1.0.0',
         exportDate: new Date().toISOString(),
-        claimsData: data,
+        claimsData: data as unknown as Record<string, unknown>,
         indexedDBFiles,
       };
 

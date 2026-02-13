@@ -113,7 +113,7 @@ function translateText(input: string): { translated: string; matchedCategories: 
 
   for (const rule of TRANSLATION_RULES) {
     let matched = false;
-    result = result.replace(rule.pattern, (...args) => {
+    result = result.replace(rule.pattern, () => {
       matched = true;
       return rule.replacement;
     });

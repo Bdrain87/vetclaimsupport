@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   HelpCircle, Search, ChevronRight, BookOpen,
   MessageSquare, FileText, Shield, Clock, Users, Download, Activity,
-  Settings, CheckCircle, AlertCircle, ExternalLink, Mail, Sparkles,
+  Settings, CheckCircle, AlertCircle, Mail, Sparkles,
   Printer, X
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';

@@ -143,7 +143,7 @@ export const useProfileStore = create<ProfileState>()(
       version: 4,
       storage: createJSONStorage(() => encryptedStorage),
       onRehydrateStorage: () => {
-        return (state, error) => {
+        return (_state, error) => {
           if (error) {
             console.error('useProfileStore hydration failed:', error);
           }
@@ -198,7 +198,7 @@ export const useProfileStore = create<ProfileState>()(
             servicePeriods: periods,
           };
         }
-        return state as ProfileState;
+        return state as unknown as ProfileState;
       },
     }
   )

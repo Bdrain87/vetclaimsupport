@@ -781,7 +781,7 @@ const useAppStore = create<AppState>()(
         return state;
       },
       onRehydrateStorage: () => {
-        return (state, error) => {
+        return (_state, error) => {
           if (error) {
             console.error('useAppStore hydration failed:', error);
           }

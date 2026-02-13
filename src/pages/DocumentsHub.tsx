@@ -618,6 +618,9 @@ export default function DocumentsHub() {
             <p className="text-xs text-muted-foreground">
               Supports images, PDFs, and documents up to 15MB
             </p>
+            <p className="text-xs text-amber-500/80 mt-1">
+              Documents are stored locally on this device only and are not synced to the cloud. Use Settings &gt; Export Backup regularly.
+            </p>
           </div>
 
           {/* Search and Filter */}
