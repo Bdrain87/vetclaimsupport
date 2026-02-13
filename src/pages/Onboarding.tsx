@@ -140,6 +140,9 @@ function MOSAutocomplete({
           ))}
         </div>
       )}
+      {!isOpen && query.trim().length > 1 && results.length === 0 && (
+        <p className="text-white/40 text-xs mt-2">No results found. Try a different search or use &ldquo;I don&apos;t see my job&rdquo; below.</p>
+      )}
     </div>
   );
 }
@@ -203,7 +206,7 @@ export default function Onboarding() {
 
   useEffect(() => {
     if (profileStore.hasCompletedOnboarding) {
-      navigate('/', { replace: true });
+      navigate('/app', { replace: true });
     }
   }, [profileStore.hasCompletedOnboarding, navigate]);
 
@@ -309,7 +312,7 @@ export default function Onboarding() {
     }
 
     profileStore.completeOnboarding();
-    navigate('/', { replace: true });
+    navigate('/app', { replace: true });
   };
 
   const handleAddCondition = (condition: VACondition) => {

@@ -11,7 +11,7 @@ export default function DeleteAccountPage() {
   const [completed, setCompleted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const isConfirmed = confirmText === 'DELETE';
+  const isConfirmed = confirmText.trim().toUpperCase() === 'DELETE';
 
   const handleDelete = async () => {
     if (!isConfirmed) return;

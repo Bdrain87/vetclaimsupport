@@ -28,6 +28,7 @@ export function InlineDocumentUploader({
   const [description, setDescription] = useState('');
   const [customLabel, setCustomLabel] = useState('');
   const [selectedFile, setSelectedFile] = useState<{ name: string; type: string; size: number; dataUrl: string } | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
 
@@ -36,9 +37,10 @@ export function InlineDocumentUploader({
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setFileError(null);
 
     if (file.size > 10 * 1024 * 1024) {
-      alert('File size must be less than 10MB');
+      setFileError('File size must be less than 10MB');
       return;
     }
 
@@ -119,6 +121,11 @@ export function InlineDocumentUploader({
         aria-label="Choose document file"
       />
       
+      {/* File size error */}
+      {fileError && (
+        <p className="text-xs text-red-500">{fileError}</p>
+      )}
+
       {/* Inline Buttons */}
       <div className="flex items-center gap-1">
         <Button

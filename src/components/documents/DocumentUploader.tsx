@@ -21,6 +21,7 @@ export function DocumentUploader({ documents, category, onAdd, onDelete }: Docum
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedFile, setSelectedFile] = useState<{ name: string; type: string; size: number; dataUrl: string } | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
 
@@ -29,10 +30,11 @@ export function DocumentUploader({ documents, category, onAdd, onDelete }: Docum
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>, _source: 'file' | 'camera') => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setFileError(null);
 
     // Check file size (max 10MB)
     if (file.size > 10 * 1024 * 1024) {
-      alert('File size must be less than 10MB');
+      setFileError('File size must be less than 10MB');
       return;
     }
 
@@ -107,6 +109,11 @@ export function DocumentUploader({ documents, category, onAdd, onDelete }: Docum
         className="hidden"
         onChange={(e) => handleFileSelect(e, 'file')}
       />
+
+      {/* File size error */}
+      {fileError && (
+        <p className="text-sm text-red-500">{fileError}</p>
+      )}
 
       {/* Mobile-Optimized Upload Buttons - 48px min touch targets */}
       <div className="grid grid-cols-2 gap-3">

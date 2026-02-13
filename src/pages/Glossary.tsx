@@ -82,7 +82,7 @@ const glossaryData: GlossaryTerm[] = [
   {
     term: 'IMO',
     definition: 'Independent Medical Opinion. A medical opinion from a private doctor that can support service connection or increased rating.',
-    related: ['Nexus Letter'],
+    related: ['Doctor Summary'],
   },
   {
     term: 'Intent to File',

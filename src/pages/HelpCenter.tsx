@@ -178,7 +178,7 @@ const glossaryData: GlossaryTerm[] = [
   { term: 'Effective Date', definition: 'The date from which VA benefits begin. Usually the date of claim or the date entitlement arose, whichever is later.' },
   { term: 'Fully Developed Claim (FDC)', definition: 'A claim submitted with all necessary evidence, allowing for faster processing.' },
   { term: 'HLR', definition: 'Higher-Level Review. An appeal option where a senior reviewer examines the claim decision for errors.', related: ['Supplemental Claim'] },
-  { term: 'IMO', definition: 'Independent Medical Opinion. A medical opinion from a private doctor supporting service connection.', related: ['Nexus Letter'] },
+  { term: 'IMO', definition: 'Independent Medical Opinion. A medical opinion from a private doctor supporting service connection.', related: ['Doctor Summary', 'Nexus Letter'] },
   { term: 'Intent to File', definition: 'A notification to VA that you plan to file a claim, preserving your effective date for up to one year.' },
   { term: 'Lay Evidence', definition: 'Evidence from non-medical sources, such as personal statements or buddy statements.', related: ['Buddy Statement'] },
   { term: 'Nexus Letter', definition: 'A medical opinion stating that your disability is "at least as likely as not" connected to your service.', related: ['IMO'] },

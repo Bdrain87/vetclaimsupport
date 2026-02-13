@@ -166,15 +166,15 @@ function ConditionCard({ userCondition, conditionDetails, onView, onRemove, onNa
         >
           {conditionDetails && onNavigate && (
             <>
-              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate(`/dbq-prep?condition=${encodeURIComponent(conditionDetails.name)}`)}>
+              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate(`/prep/dbq?condition=${encodeURIComponent(conditionDetails.name)}`)}>
                 <FileText className="h-3 w-3 mr-1" />
                 DBQ
               </Button>
-              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate('/cp-exam-prep')}>
+              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate('/prep/exam')}>
                 <Stethoscope className="h-3 w-3 mr-1" />
                 C&P Prep
               </Button>
-              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate('/personal-statement')}>
+              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate('/prep/personal-statement')}>
                 <Edit className="h-3 w-3 mr-1" />
                 Statement
               </Button>

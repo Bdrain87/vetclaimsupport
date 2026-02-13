@@ -405,7 +405,7 @@ export function DBQGuidance() {
 
   const handleExportPDF = useCallback(async () => {
     if (conditionsWithDBQ.length === 0) {
-      alert('No conditions with DBQ guidance to export');
+      console.warn('No conditions with DBQ guidance to export');
       return;
     }
 

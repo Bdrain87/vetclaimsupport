@@ -725,8 +725,10 @@ export default function Settings() {
       <div className="flex justify-center pt-2 pb-4">
         <button
           onClick={() => {
-            profile.resetProfile();
-            navigate('/onboarding');
+            if (window.confirm('This will reset your profile and restart the onboarding process. Are you sure?')) {
+              profile.resetProfile();
+              navigate('/onboarding');
+            }
           }}
           className="text-muted-foreground hover:text-foreground text-sm underline"
         >
