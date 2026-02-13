@@ -27,6 +27,29 @@ export function onSyncStatusChange(listener: (status: SyncStatus) => void) {
   };
 }
 
+// ---------------------------------------------------------------------------
+// Helpers for content-based deduplication
+// ---------------------------------------------------------------------------
+
+/** Normalize a string for fuzzy comparison (trim, lowercase, collapse whitespace). */
+function norm(s: string | undefined | null): string {
+  return (s || '').trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+/**
+ * Return the newer ISO timestamp, or fallback to `b` when comparison is
+ * impossible (missing values).
+ */
+function newerTimestamp(a: string | undefined | null, b: string | undefined | null): string {
+  if (!a) return b || new Date().toISOString();
+  if (!b) return a;
+  return a > b ? a : b;
+}
+
+// ---------------------------------------------------------------------------
+// Pull
+// ---------------------------------------------------------------------------
+
 export async function pullFromCloud(): Promise<void> {
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) return;
@@ -58,8 +81,12 @@ export async function pullFromCloud(): Promise<void> {
     }
   }
 
-  // Pull conditions — match on id only (matching on name can cause false
-  // positives when two genuinely different conditions share a label).
+  // ------------------------------------------------------------------
+  // Pull conditions — deduplicate by ID *and* by normalized name so
+  // locally-created conditions (with a local UUID) don't produce
+  // duplicates when the cloud has the same condition under a different
+  // UUID.
+  // ------------------------------------------------------------------
   const { data: conditions, error: conditionsError } = await supabase
     .from('conditions')
     .select('*')
@@ -69,26 +96,98 @@ export async function pullFromCloud(): Promise<void> {
 
   if (conditions && conditions.length > 0) {
     const appStore = useAppStore.getState();
-    conditions.forEach((condition) => {
-      const existing = appStore.claimConditions.find(
-        (c) => c.id === condition.id
+
+    for (const cloudCondition of conditions) {
+      const cloudName = norm(cloudCondition.name);
+      const cloudUpdatedAt: string = cloudCondition.updated_at || cloudCondition.created_at || '';
+
+      // 1. Exact ID match — the ideal case.
+      const byId = appStore.claimConditions.find(
+        (c) => c.id === cloudCondition.id,
       );
-      if (!existing) {
-        appStore.addClaimCondition({
-          name: condition.name,
-          linkedMedicalVisits: [],
-          linkedExposures: [],
-          linkedSymptoms: [],
-          linkedDocuments: [],
-          linkedBuddyContacts: [],
-          notes: '',
-          createdAt: condition.created_at || new Date().toISOString(),
-        });
+
+      if (byId) {
+        // Already synced. If cloud is newer, update local fields.
+        const localUpdatedAt = byId.createdAt || '';
+        if (cloudUpdatedAt && cloudUpdatedAt > localUpdatedAt) {
+          appStore.updateClaimCondition(byId.id, {
+            name: cloudCondition.name,
+            notes: cloudCondition.service_connection_notes ?? byId.notes,
+          });
+        }
+        continue;
       }
-    });
+
+      // 2. Name match — local condition exists with a different UUID.
+      const byName = appStore.claimConditions.find(
+        (c) => norm(c.name) === cloudName,
+      );
+
+      if (byName) {
+        // Adopt the cloud ID so future syncs align, and merge any
+        // newer data from the cloud.
+        const merged = {
+          name: cloudCondition.name, // prefer cloud casing
+          notes: cloudCondition.service_connection_notes
+            ? cloudCondition.service_connection_notes
+            : byName.notes,
+          createdAt: newerTimestamp(cloudCondition.created_at, byName.createdAt),
+        };
+
+        // Remove the local-only entry and re-add with the cloud ID so
+        // that the store record carries the authoritative UUID.
+        appStore.deleteClaimCondition(byName.id);
+        // Re-read state after mutation to avoid stale references.
+        const freshStore = useAppStore.getState();
+        // Use set() directly via updateClaimCondition pathway:
+        // We add with cloud's data, but addClaimCondition generates a
+        // new id — so we add then immediately overwrite the id.
+        freshStore.addClaimCondition({
+          name: merged.name,
+          linkedMedicalVisits: byName.linkedMedicalVisits,
+          linkedExposures: byName.linkedExposures,
+          linkedSymptoms: byName.linkedSymptoms,
+          linkedDocuments: byName.linkedDocuments,
+          linkedBuddyContacts: byName.linkedBuddyContacts,
+          notes: merged.notes,
+          createdAt: merged.createdAt,
+        });
+        // The entry was just appended — overwrite its generated id with
+        // the cloud id so push will upsert correctly.
+        const afterAdd = useAppStore.getState();
+        const justAdded = afterAdd.claimConditions[afterAdd.claimConditions.length - 1];
+        if (justAdded) {
+          afterAdd.updateClaimCondition(justAdded.id, { id: cloudCondition.id });
+        }
+        continue;
+      }
+
+      // 3. No match at all — genuinely new cloud condition. Insert it
+      //    preserving the cloud UUID.
+      appStore.addClaimCondition({
+        name: cloudCondition.name,
+        linkedMedicalVisits: [],
+        linkedExposures: [],
+        linkedSymptoms: [],
+        linkedDocuments: [],
+        linkedBuddyContacts: [],
+        notes: cloudCondition.service_connection_notes || '',
+        createdAt: cloudCondition.created_at || new Date().toISOString(),
+      });
+      // Overwrite generated id with cloud id.
+      const afterInsert = useAppStore.getState();
+      const inserted = afterInsert.claimConditions[afterInsert.claimConditions.length - 1];
+      if (inserted) {
+        afterInsert.updateClaimCondition(inserted.id, { id: cloudCondition.id });
+      }
+    }
   }
 
-  // Pull health logs
+  // ------------------------------------------------------------------
+  // Pull health logs — deduplicate by ID and by content fingerprint
+  // (date + type-specific descriptor) to avoid duplicates when the
+  // local store used a different UUID.
+  // ------------------------------------------------------------------
   const { data: healthLogs, error: healthLogsError } = await supabase
     .from('health_logs')
     .select('*')
@@ -98,46 +197,91 @@ export async function pullFromCloud(): Promise<void> {
 
   if (healthLogs && healthLogs.length > 0) {
     const appStore = useAppStore.getState();
-    healthLogs.forEach((log) => {
-      const logData = log.data as Record<string, unknown>;
+
+    for (const log of healthLogs) {
+      const logData = log.data as Record<string, unknown> | null;
+      if (!logData) continue;
+
       switch (log.log_type) {
         case 'symptom': {
-          const existing = appStore.symptoms.find((s) => s.id === log.id);
-          if (!existing && logData) {
-            appStore.addSymptom({
-              id: log.id,
-              ...(logData as Record<string, string | number>),
-            } as Parameters<typeof appStore.addSymptom>[0]);
+          // Check by ID
+          const byId = appStore.symptoms.find((s) => s.id === log.id);
+          if (byId) break;
+
+          // Check by content: same date + same symptom description
+          const cloudDate = norm(logData.date as string);
+          const cloudSymptom = norm(logData.symptom as string);
+          const byContent = appStore.symptoms.find(
+            (s) => norm(s.date) === cloudDate && norm(s.symptom) === cloudSymptom,
+          );
+          if (byContent) {
+            // Adopt cloud ID so future syncs align.  If the cloud
+            // record carries newer / richer data we could merge here,
+            // but at minimum we unify the IDs.
+            appStore.updateSymptom(byContent.id, { id: log.id });
+            break;
           }
+
+          // Genuinely new — insert with cloud ID preserved.
+          appStore.addSymptom({
+            id: log.id,
+            ...(logData as Record<string, string | number>),
+          } as Parameters<typeof appStore.addSymptom>[0]);
           break;
         }
         case 'sleep': {
-          const existing = appStore.sleepEntries.find((s) => s.id === log.id);
-          if (!existing && logData) {
-            appStore.addSleepEntry({
-              id: log.id,
-              ...(logData as Record<string, string | number>),
-            } as Parameters<typeof appStore.addSleepEntry>[0]);
+          const byId = appStore.sleepEntries.find((s) => s.id === log.id);
+          if (byId) break;
+
+          // Content fingerprint: same date is unique enough for a
+          // single daily sleep entry.
+          const cloudDate = norm(logData.date as string);
+          const byContent = appStore.sleepEntries.find(
+            (s) => norm(s.date) === cloudDate,
+          );
+          if (byContent) {
+            appStore.updateSleepEntry(byContent.id, { id: log.id });
+            break;
           }
+
+          appStore.addSleepEntry({
+            id: log.id,
+            ...(logData as Record<string, string | number>),
+          } as Parameters<typeof appStore.addSleepEntry>[0]);
           break;
         }
         case 'migraine': {
-          const existing = appStore.migraines.find((m) => m.id === log.id);
-          if (!existing && logData) {
-            appStore.addMigraine({
-              id: log.id,
-              ...(logData as Record<string, string | number>),
-            } as Parameters<typeof appStore.addMigraine>[0]);
+          const byId = appStore.migraines.find((m) => m.id === log.id);
+          if (byId) break;
+
+          // Content fingerprint: date + time.
+          const cloudDate = norm(logData.date as string);
+          const cloudTime = norm(logData.time as string);
+          const byContent = appStore.migraines.find(
+            (m) => norm(m.date) === cloudDate && norm(m.time) === cloudTime,
+          );
+          if (byContent) {
+            appStore.updateMigraine(byContent.id, { id: log.id });
+            break;
           }
+
+          appStore.addMigraine({
+            id: log.id,
+            ...(logData as Record<string, string | number>),
+          } as Parameters<typeof appStore.addMigraine>[0]);
           break;
         }
       }
-    });
+    }
   }
 
   lastSyncedAt = new Date().toISOString();
   useProfileStore.getState().setLastSyncedAt(lastSyncedAt);
 }
+
+// ---------------------------------------------------------------------------
+// Push
+// ---------------------------------------------------------------------------
 
 export async function pushToCloud(): Promise<void> {
   const { data: { session } } = await supabase.auth.getSession();
@@ -164,16 +308,24 @@ export async function pushToCloud(): Promise<void> {
   });
   if (profilePushError) console.error('[sync] push profile failed:', profilePushError.message);
 
-  // Push conditions (upsert by id -- local state wins on conflict)
+  // ------------------------------------------------------------------
+  // Push conditions — upsert by primary key (id).
+  //
+  // Because pullFromCloud now unifies local UUIDs with cloud UUIDs,
+  // duplicate rows should not occur.  We still upsert on `id` so that
+  // re-pushes are idempotent.
+  // ------------------------------------------------------------------
   if (appState.claimConditions.length > 0) {
     const conditionRows = appState.claimConditions.map((c) => ({
       id: c.id,
       user_id: userId,
       name: c.name,
-      notes: c.notes || null,
+      service_connection_notes: c.notes || null,
       updated_at: new Date().toISOString(),
     }));
-    const { error } = await supabase.from('conditions').upsert(conditionRows);
+    const { error } = await supabase
+      .from('conditions')
+      .upsert(conditionRows, { onConflict: 'id' });
     if (error) console.error('[sync] push conditions failed:', error.message);
   }
 
@@ -186,7 +338,9 @@ export async function pushToCloud(): Promise<void> {
       data: s,
       logged_at: s.date || new Date().toISOString(),
     }));
-    const { error } = await supabase.from('health_logs').upsert(symptomRows);
+    const { error } = await supabase
+      .from('health_logs')
+      .upsert(symptomRows, { onConflict: 'id' });
     if (error) console.error('[sync] push symptoms failed:', error.message);
   }
 
@@ -199,7 +353,9 @@ export async function pushToCloud(): Promise<void> {
       data: s,
       logged_at: s.date || new Date().toISOString(),
     }));
-    const { error } = await supabase.from('health_logs').upsert(sleepRows);
+    const { error } = await supabase
+      .from('health_logs')
+      .upsert(sleepRows, { onConflict: 'id' });
     if (error) console.error('[sync] push sleep failed:', error.message);
   }
 
@@ -212,7 +368,9 @@ export async function pushToCloud(): Promise<void> {
       data: m,
       logged_at: m.date || new Date().toISOString(),
     }));
-    const { error } = await supabase.from('health_logs').upsert(migraineRows);
+    const { error } = await supabase
+      .from('health_logs')
+      .upsert(migraineRows, { onConflict: 'id' });
     if (error) console.error('[sync] push migraines failed:', error.message);
   }
 
