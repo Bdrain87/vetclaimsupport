@@ -25,7 +25,9 @@ const lazyExportSymptoms = async (...args: Parameters<typeof import('@/utils/pdf
 };
 import { VoiceInputButton } from '@/components/ui/voice-input-button';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { lazy, Suspense } from 'react';
+const SeverityTrendChart = lazy(() => import('@/components/symptoms/SymptomCharts').then(m => ({ default: m.SeverityTrendChart })));
+const ConditionStatsChart = lazy(() => import('@/components/symptoms/SymptomCharts').then(m => ({ default: m.ConditionStatsChart })));
 import { format, subDays, startOfDay, parseISO } from 'date-fns';
 import { PageContainer } from '@/components/PageContainer';
 import type { SymptomEntry, SymptomFrequency } from '@/types/claims';
@@ -357,28 +359,9 @@ export default function Symptoms() {
             </div>
             <div className="p-4">
               {severityTrendData.length > 0 ? (
-                <ResponsiveContainer width="100%" height={120}>
-                  <LineChart data={severityTrendData}>
-                    <XAxis dataKey="date" tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} interval="preserveStartEnd" />
-                    <YAxis domain={[0, 10]} tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} width={25} />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'hsl(var(--card))', 
-                        border: '1px solid hsl(var(--border))',
-                        borderRadius: '12px',
-                        boxShadow: '0 8px 24px rgba(0,0,0,0.3)'
-                      }} 
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="avgSeverity"
-                      stroke="#C5A442"
-                      strokeWidth={3}
-                      dot={{ fill: '#C5A442', strokeWidth: 0, r: 4 }}
-                      activeDot={{ r: 6, fill: '#C5A442', stroke: 'hsl(var(--background))', strokeWidth: 2 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                <Suspense fallback={<div className="h-[120px] flex items-center justify-center text-muted-foreground text-sm">Loading chart...</div>}>
+                  <SeverityTrendChart data={severityTrendData.map(d => ({ date: d.date, severity: d.avgSeverity }))} />
+                </Suspense>
               ) : (
                 <p className="text-sm text-muted-foreground text-center py-8">No data in selected range</p>
               )}
@@ -400,25 +383,9 @@ export default function Symptoms() {
             </div>
             <div className="p-4">
               {conditionStats.length > 0 ? (
-                <ResponsiveContainer width="100%" height={120}>
-                  <BarChart data={conditionStats} layout="vertical">
-                    <XAxis type="number" tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} />
-                    <YAxis type="category" dataKey="condition" tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} width={80} />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'hsl(var(--card))', 
-                        border: '1px solid hsl(var(--border))',
-                        borderRadius: '12px',
-                        boxShadow: '0 8px 24px rgba(0,0,0,0.3)'
-                      }}
-                      formatter={(value: number, name: string) => [
-                        name === 'count' ? `${value} entries` : `Avg: ${value}/10`,
-                        name === 'count' ? 'Frequency' : 'Severity'
-                      ]}
-                    />
-                    <Bar dataKey="count" fill="#C5A442" radius={[0, 6, 6, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
+                <Suspense fallback={<div className="h-[120px] flex items-center justify-center text-muted-foreground text-sm">Loading chart...</div>}>
+                  <ConditionStatsChart data={conditionStats.map(d => ({ name: d.condition, count: d.count }))} />
+                </Suspense>
               ) : (
                 <p className="text-sm text-muted-foreground text-center py-8">No data available</p>
               )}
