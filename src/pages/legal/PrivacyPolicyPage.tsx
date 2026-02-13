@@ -94,7 +94,7 @@ export default function PrivacyPolicyPage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">4. AI Data Processing</h2>
           <p className="text-muted-foreground">
-            When you use AI-powered features, the text you provide is sent to a third-party AI service for processing. This data is:
+            When you use AI-powered features, the text you provide is sent to Google Gemini for processing. This data is:
           </p>
           <ul className="space-y-1.5 text-muted-foreground">
             <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span>(a) Transmitted over encrypted connections (TLS)</li>
@@ -169,7 +169,7 @@ export default function PrivacyPolicyPage() {
           </p>
           <ul className="space-y-1.5 text-muted-foreground">
             <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span><strong className="text-foreground">Supabase</strong> (cloud database, optional)</li>
-            <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span><strong className="text-foreground">AI Service Provider</strong> (AI features, optional)</li>
+            <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span><strong className="text-foreground">Google Gemini</strong> (AI features, optional)</li>
           </ul>
           <p className="text-muted-foreground">
             Each third-party service has its own privacy policy.
