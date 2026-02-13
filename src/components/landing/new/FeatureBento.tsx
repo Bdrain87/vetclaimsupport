@@ -539,7 +539,7 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
 
 const N = CARDS.length;
 const VISIBLE = 7; // cards rendered in the visible stack
-const SHUFFLE_MS = 1400; // time between shuffles
+const SHUFFLE_MS = 2200; // time between shuffles
 
 // Stack layout: isometric diagonal recession into the background
 const stackPos = (i: number) => ({
