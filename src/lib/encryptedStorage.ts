@@ -62,7 +62,13 @@ const ENCRYPTED_PREFIX = '__encrypted__:';
  */
 export const encryptedStorage: StateStorage = {
   getItem(key: string): string | null | Promise<string | null> {
-    const raw = localStorage.getItem(key);
+    let raw: string | null;
+    try {
+      raw = localStorage.getItem(key);
+    } catch (error) {
+      console.warn('[encryptedStorage] localStorage.getItem failed:', error);
+      return null;
+    }
     if (raw === null) return null;
 
     // If the value does not carry our encrypted prefix it is plaintext --
@@ -103,7 +109,11 @@ export const encryptedStorage: StateStorage = {
     if (!isEncryptionEnabled()) {
       // Encryption not active -- write plaintext.  This is the expected path
       // for users who have not opted in to vault encryption.
-      localStorage.setItem(key, value);
+      try {
+        localStorage.setItem(key, value);
+      } catch (error) {
+        console.warn('[encryptedStorage] localStorage.setItem failed:', error);
+      }
       return;
     }
 
@@ -124,7 +134,11 @@ export const encryptedStorage: StateStorage = {
         'Data for key "' + key + '" will be stored as PLAINTEXT. ' +
         'Ensure the vault is unlocked before persisting sensitive data.',
       );
-      localStorage.setItem(key, value);
+      try {
+        localStorage.setItem(key, value);
+      } catch (error) {
+        console.warn('[encryptedStorage] localStorage.setItem failed:', error);
+      }
       return;
     }
 
@@ -135,7 +149,11 @@ export const encryptedStorage: StateStorage = {
     const password = _sessionPassword;
     encrypt(value, password)
       .then((ciphertext) => {
-        localStorage.setItem(key, ENCRYPTED_PREFIX + ciphertext);
+        try {
+          localStorage.setItem(key, ENCRYPTED_PREFIX + ciphertext);
+        } catch (error) {
+          console.warn('[encryptedStorage] localStorage.setItem failed:', error);
+        }
       })
       .catch(() => {
         // SECURITY NOTE – INTENTIONAL PLAINTEXT FALLBACK
@@ -148,11 +166,19 @@ export const encryptedStorage: StateStorage = {
           '[encryptedStorage] Encryption failed for key "' + key + '" — ' +
           'falling back to PLAINTEXT storage.  Sensitive data may be unencrypted.',
         );
-        localStorage.setItem(key, value);
+        try {
+          localStorage.setItem(key, value);
+        } catch (error) {
+          console.warn('[encryptedStorage] localStorage.setItem failed:', error);
+        }
       });
   },
 
   removeItem(key: string): void {
-    localStorage.removeItem(key);
+    try {
+      localStorage.removeItem(key);
+    } catch (error) {
+      console.warn('[encryptedStorage] localStorage.removeItem failed:', error);
+    }
   },
 };

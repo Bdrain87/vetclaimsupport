@@ -162,9 +162,12 @@ export function ApprovedConditionsSection({ onNavigateToCalculator }: ApprovedCo
   const handleAdd = () => {
     if (!newCondition.name || !newCondition.rating || !newCondition.effectiveDate) return;
 
+    const rating = parseInt(newCondition.rating);
+    if (isNaN(rating)) return;
+
     addApprovedCondition({
       name: newCondition.name,
-      rating: parseInt(newCondition.rating),
+      rating,
       effectiveDate: newCondition.effectiveDate,
       bodyPart: newCondition.bodyPart,
       createdAt: new Date().toISOString(),

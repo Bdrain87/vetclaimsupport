@@ -788,7 +788,10 @@ export function UnifiedRatingCalculator() {
                       <div className="flex items-center gap-2">
                         <Select
                           value={condition.rating.toString()}
-                          onValueChange={(value) => updateConditionRating(condition.id, parseInt(value))}
+                          onValueChange={(value) => {
+                            const rating = parseInt(value);
+                            if (!isNaN(rating)) updateConditionRating(condition.id, rating);
+                          }}
                         >
                           <SelectTrigger className="w-20 h-8">
                             <SelectValue />

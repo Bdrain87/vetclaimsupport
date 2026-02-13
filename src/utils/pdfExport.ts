@@ -133,6 +133,7 @@ const drawInfoBox = (doc: jsPDFType, text: string, yPos: number, type: 'info' | 
 
 // Helper to draw summary box
 const drawSummaryBox = (doc: jsPDFType, items: { value: string | number; label: string }[], yPos: number): number => {
+  if (items.length === 0) return yPos; // Guard against empty arrays
   const pageWidth = doc.internal.pageSize.getWidth();
   const boxWidth = (pageWidth - 50) / items.length;
   

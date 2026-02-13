@@ -174,8 +174,15 @@ export async function decryptObject<T>(
   encryptedData: string,
   password: string
 ): Promise<T> {
-  const jsonString = await decrypt(encryptedData, password);
-  return JSON.parse(jsonString) as T;
+  try {
+    const jsonString = await decrypt(encryptedData, password);
+    return JSON.parse(jsonString) as T;
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('Decryption failed')) {
+      throw error;
+    }
+    throw new Error('Decryption failed. Data is corrupted or not valid JSON.');
+  }
 }
 
 /**

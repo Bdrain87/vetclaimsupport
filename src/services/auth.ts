@@ -106,7 +106,11 @@ export async function signOut() {
   // Clear ALL local data before hitting the network so the UI resets even if
   // the signOut RPC fails (e.g. network error while already offline).
   for (const key of ALL_LOCAL_STORAGE_KEYS) {
-    localStorage.removeItem(key);
+    try {
+      localStorage.removeItem(key);
+    } catch (error) {
+      console.warn('[auth] localStorage.removeItem failed for key:', key, error);
+    }
   }
 
   const { error } = await supabase.auth.signOut();

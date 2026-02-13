@@ -257,8 +257,11 @@ export default function Conditions() {
   const handleAddCondition = useCallback(() => {
     if (!selectedCondition) return;
 
+    const parsedRating = newRating && newRating !== 'not-rated' ? parseInt(newRating) : undefined;
+    if (parsedRating !== undefined && isNaN(parsedRating)) return;
+
     addCondition(selectedCondition.id, {
-      rating: newRating && newRating !== 'not-rated' ? parseInt(newRating) : undefined,
+      rating: parsedRating,
       isPrimary: !isSecondary,
       linkedPrimaryId: isSecondary && linkedPrimaryId ? linkedPrimaryId : undefined,
     });

@@ -49,7 +49,8 @@ export function BackPayEstimator() {
 
     const currentRatingNum = parseInt(currentRating) || 0;
     const projectedRating = parseInt(expectedRating);
-    
+    if (isNaN(projectedRating)) return null;
+
     const currentMonthly = monthlyCompensation[currentRatingNum] || 0;
     const projectedMonthly = monthlyCompensation[projectedRating] || 0;
     const monthlyDifference = projectedMonthly - currentMonthly;
