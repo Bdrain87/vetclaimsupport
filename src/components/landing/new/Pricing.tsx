@@ -401,7 +401,7 @@ export function Pricing() {
                     background: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
                   }}
                 >
-                  Go Premium
+                  Get Started
                 </Link>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
