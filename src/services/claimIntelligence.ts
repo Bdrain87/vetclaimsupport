@@ -146,7 +146,7 @@ function getClaimsDataFromStore(): ClaimsData {
     migraines: s.migraines,
     sleepEntries: s.sleepEntries || [],
     ptsdSymptoms: s.ptsdSymptoms || [],
-    separationDate: s.separationDate,
+    separationDate: useProfileStore.getState().separationDate ?? null,
     uploadedDocuments: s.uploadedDocuments,
     claimConditions: s.claimConditions || [],
     quickLogs: s.quickLogs || [],

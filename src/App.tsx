@@ -12,9 +12,9 @@ import { SplashScreen } from './components/SplashScreen';
 import { useProfileStore } from './store/useProfileStore';
 import { migrateOldDataToAppStore } from './utils/migrateData';
 import { useSessionTimeout } from './hooks/useSessionTimeout';
+import { useHydration } from './hooks/useHydration';
 import { checkDataRetention } from './utils/dataRetention';
 import { isWeb } from './lib/platform';
-import useAppStore from './store/useAppStore';
 
 // Run migration before React renders (synchronous, runs once)
 try {
@@ -359,6 +359,7 @@ function AppContent() {
 
 function App() {
   useSessionTimeout();
+  const hydrated = useHydration();
   const [showSplash, setShowSplash] = useState(() => {
     // Skip splash on web landing page
     if (isWeb && window.location.pathname === '/') return false;
@@ -367,11 +368,6 @@ function App() {
 
   useEffect(() => {
     checkDataRetention();
-    // Sync separationDate from profile store → app store (single source of truth is profile)
-    const profileDate = useProfileStore.getState().separationDate;
-    if (profileDate) {
-      useAppStore.getState().setSeparationDate(profileDate);
-    }
   }, []);
 
   return (
@@ -379,7 +375,11 @@ function App() {
       <ThemeProvider>
         <TooltipProvider>
           {showSplash && (
-            <SplashScreen onComplete={() => setShowSplash(false)} minimumDuration={1800} />
+            <SplashScreen
+              onComplete={() => setShowSplash(false)}
+              minimumDuration={1800}
+              ready={hydrated}
+            />
           )}
           <BrowserRouter>
             <ScrollToTop />

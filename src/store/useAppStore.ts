@@ -74,7 +74,6 @@ interface AppState {
   migraines: MigraineEntry[];
   sleepEntries: SleepEntry[];
   ptsdSymptoms: PTSDSymptomEntry[];
-  separationDate: string | null;
   uploadedDocuments: UploadedDocument[];
   claimConditions: ClaimCondition[];
   quickLogs: QuickLogEntry[];
@@ -148,9 +147,6 @@ interface AppState {
 
   // Document checklist
   updateDocument: (id: string, doc: Partial<DocumentItem>) => void;
-
-  // Separation Date
-  setSeparationDate: (date: string | null) => void;
 
   // Migraines
   addMigraine: (migraine: Omit<MigraineEntry, 'id'>) => void;
@@ -264,7 +260,6 @@ const initialState = {
   migraines: [] as MigraineEntry[],
   sleepEntries: [] as SleepEntry[],
   ptsdSymptoms: [] as PTSDSymptomEntry[],
-  separationDate: null as string | null,
   uploadedDocuments: [] as UploadedDocument[],
   claimConditions: [] as ClaimCondition[],
   quickLogs: [] as QuickLogEntry[],
@@ -405,9 +400,6 @@ const useAppStore = create<AppState>()(
       updateDocument: (id, doc) => set((s) => ({
         documents: s.documents.map((d) => d.id === id ? { ...d, ...doc } : d),
       })),
-
-      // Separation Date
-      setSeparationDate: (date) => set({ separationDate: date }),
 
       // Migraines
       addMigraine: (migraine) => set((s) => ({
@@ -774,14 +766,26 @@ const useAppStore = create<AppState>()(
     }),
     {
       name: 'vcs-app-data',
-      version: 2,
+      version: 3,
       storage: createJSONStorage(() => encryptedStorage),
       migrate: (persistedState: unknown, version: number) => {
         const state = persistedState as Record<string, unknown>;
         if (version < 2) {
           return { ...state, formDrafts: {} };
         }
+        if (version < 3) {
+          // separationDate moved to useProfileStore as single source of truth
+          const { separationDate: _, ...rest } = state;
+          return rest;
+        }
         return state;
+      },
+      onRehydrateStorage: () => {
+        return (state, error) => {
+          if (error) {
+            console.error('useAppStore hydration failed:', error);
+          }
+        };
       },
       partialize: (state) => {
         // Strip non-serializable fields and large dataUrl from IndexedDB docs

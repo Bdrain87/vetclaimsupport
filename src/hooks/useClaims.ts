@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import useAppStore from '@/store/useAppStore';
+import { useProfileStore } from '@/store/useProfileStore';
 import type { ClaimsData } from '@/types/claims';
 
 /**
@@ -8,6 +9,7 @@ import type { ClaimsData } from '@/types/claims';
  */
 export function useClaims() {
   const store = useAppStore();
+  const separationDate = useProfileStore((s) => s.separationDate) ?? null;
 
   // Build the `data` object that matches the ClaimsData interface
   const data: ClaimsData = useMemo(() => ({
@@ -24,7 +26,7 @@ export function useClaims() {
     migraines: store.migraines,
     sleepEntries: store.sleepEntries,
     ptsdSymptoms: store.ptsdSymptoms,
-    separationDate: store.separationDate,
+    separationDate,
     uploadedDocuments: store.uploadedDocuments,
     claimConditions: store.claimConditions,
     quickLogs: store.quickLogs,
@@ -37,7 +39,7 @@ export function useClaims() {
     store.medicalVisits, store.exposures, store.symptoms, store.medications,
     store.serviceHistory, store.combatHistory, store.majorEvents, store.deployments,
     store.buddyContacts, store.documents, store.migraines, store.sleepEntries,
-    store.ptsdSymptoms, store.separationDate, store.uploadedDocuments,
+    store.ptsdSymptoms, separationDate, store.uploadedDocuments,
     store.claimConditions, store.quickLogs, store.deadlines,
     store.documentScanDisclaimerShown, store.milestonesAchieved,
     store.approvedConditions, store.journeyProgress,
@@ -83,8 +85,6 @@ export function useClaims() {
     deleteBuddyContact: store.deleteBuddyContact,
     // Documents checklist
     updateDocument: store.updateDocument,
-    // Separation Date
-    setSeparationDate: store.setSeparationDate,
     // Migraines
     addMigraine: store.addMigraine,
     updateMigraine: store.updateMigraine,

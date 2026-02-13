@@ -4,39 +4,54 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 interface SplashScreenProps {
   onComplete: () => void;
   minimumDuration?: number;
+  /**
+   * When provided, the splash screen will not dismiss until `ready` is true
+   * AND the minimum duration has elapsed.  This allows callers to gate
+   * dismissal on async work such as store rehydration.
+   */
+  ready?: boolean;
 }
 
 export function SplashScreen({
   onComplete,
-  minimumDuration = 1500
+  minimumDuration = 1500,
+  ready = true,
 }: SplashScreenProps) {
   const [isVisible, setIsVisible] = useState(true);
+  const [timerDone, setTimerDone] = useState(false);
   const prefersReducedMotion = useReducedMotion();
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
 
+  // Track when the minimum display time has elapsed.
   useEffect(() => {
-    let innerTimer: ReturnType<typeof setTimeout>;
     const displayTime = prefersReducedMotion
       ? Math.min(minimumDuration, 800)
       : minimumDuration;
 
-    const timer = setTimeout(() => {
-      setIsVisible(false);
-      // Wait for the exit animation to finish before unmounting
-      const exitDuration = prefersReducedMotion ? 300 : 600;
-      innerTimer = setTimeout(() => onCompleteRef.current(), exitDuration);
-    }, displayTime);
+    const timer = setTimeout(() => setTimerDone(true), displayTime);
 
-    // Safety timeout: force-complete after 5 seconds no matter what
-    const safety = setTimeout(() => onCompleteRef.current(), 5000);
-
-    return () => {
-      clearTimeout(timer);
-      clearTimeout(innerTimer);
-      clearTimeout(safety);
-    };
+    return () => clearTimeout(timer);
   }, [minimumDuration, prefersReducedMotion]);
+
+  // Dismiss only when both the timer has elapsed and the caller signals ready.
+  useEffect(() => {
+    if (!timerDone || !ready) return;
+
+    setIsVisible(false);
+
+    const exitDuration = prefersReducedMotion ? 300 : 600;
+    const innerTimer = setTimeout(() => onCompleteRef.current(), exitDuration);
+
+    return () => clearTimeout(innerTimer);
+  }, [timerDone, ready, prefersReducedMotion]);
+
+  // Safety timeout: force-complete after 8 seconds no matter what.
+  // (Raised from 5 s to accommodate slow decryption on cold boot.)
+  useEffect(() => {
+    const safety = setTimeout(() => onCompleteRef.current(), 8000);
+    return () => clearTimeout(safety);
+  }, []);
 
   return (
     <AnimatePresence>

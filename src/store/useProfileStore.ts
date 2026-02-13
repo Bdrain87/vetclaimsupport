@@ -142,6 +142,13 @@ export const useProfileStore = create<ProfileState>()(
       name: 'vet-user-profile',
       version: 4,
       storage: createJSONStorage(() => encryptedStorage),
+      onRehydrateStorage: () => {
+        return (state, error) => {
+          if (error) {
+            console.error('useProfileStore hydration failed:', error);
+          }
+        };
+      },
       migrate: (persistedState: unknown, version: number) => {
         const state = persistedState as Record<string, unknown>;
         if (version < 2) {

@@ -91,10 +91,6 @@ describe('useAppStore', () => {
       expect(docs.every((d) => d.status === 'Not Started')).toBe(true);
     });
 
-    it('starts with separationDate as null', () => {
-      expect(useAppStore.getState().separationDate).toBeNull();
-    });
-
     it('starts with documentScanDisclaimerShown as false', () => {
       expect(useAppStore.getState().documentScanDisclaimerShown).toBe(false);
     });
@@ -322,22 +318,6 @@ describe('useAppStore', () => {
   });
 
   // -------------------------------------------------------------------------
-  // Separation Date
-  // -------------------------------------------------------------------------
-  describe('setSeparationDate', () => {
-    it('sets the separation date', () => {
-      useAppStore.getState().setSeparationDate('2025-06-01');
-      expect(useAppStore.getState().separationDate).toBe('2025-06-01');
-    });
-
-    it('clears the separation date with null', () => {
-      useAppStore.getState().setSeparationDate('2025-06-01');
-      useAppStore.getState().setSeparationDate(null);
-      expect(useAppStore.getState().separationDate).toBeNull();
-    });
-  });
-
-  // -------------------------------------------------------------------------
   // Evidence Checklist
   // -------------------------------------------------------------------------
   describe('toggleEvidenceCheck', () => {
@@ -478,7 +458,6 @@ describe('useAppStore', () => {
       });
       useAppStore.getState().setFormDraft('f1', 'a', 'b');
       useAppStore.getState().addMilestone('test');
-      useAppStore.getState().setSeparationDate('2025-01-01');
 
       useAppStore.getState().resetAllData();
 
@@ -486,7 +465,6 @@ describe('useAppStore', () => {
       expect(s.symptoms).toEqual([]);
       expect(s.formDrafts).toEqual({});
       expect(s.milestonesAchieved).toEqual([]);
-      expect(s.separationDate).toBeNull();
       expect(s.documents.length).toBe(10);
     });
   });

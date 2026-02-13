@@ -97,7 +97,6 @@ export function migrateOldDataToAppStore(): void {
     migraines: Array.isArray(oldClaimsData.migraines) ? oldClaimsData.migraines : [],
     sleepEntries: Array.isArray(oldClaimsData.sleepEntries) ? oldClaimsData.sleepEntries : [],
     ptsdSymptoms: Array.isArray(oldClaimsData.ptsdSymptoms) ? oldClaimsData.ptsdSymptoms : [],
-    separationDate: oldClaimsData.separationDate ?? null,
     uploadedDocuments: Array.isArray(oldClaimsData.uploadedDocuments) ? oldClaimsData.uploadedDocuments : [],
     claimConditions: Array.isArray(oldClaimsData.claimConditions) ? oldClaimsData.claimConditions : [],
     quickLogs: Array.isArray(oldClaimsData.quickLogs) ? oldClaimsData.quickLogs : [],
