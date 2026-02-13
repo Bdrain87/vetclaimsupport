@@ -186,9 +186,7 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}): UseVoiceInput
 // Type declarations for Speech Recognition API
 declare global {
   interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    SpeechRecognition: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    webkitSpeechRecognition: any;
+    SpeechRecognition: typeof SpeechRecognition | undefined;
+    webkitSpeechRecognition: typeof SpeechRecognition | undefined;
   }
 }

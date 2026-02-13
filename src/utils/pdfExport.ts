@@ -869,11 +869,11 @@ export const exportAllEvidence = async (data: ClaimsData, options?: { returnBlob
       doc.setFont('helvetica', 'bold');
       doc.text(`• ${condition.name}`, 25, yPos);
       
-      if ((condition as unknown as Record<string, unknown>).claimType) {
+      if ('claimType' in condition && typeof condition.claimType === 'string') {
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(8);
         doc.setTextColor(...colors.muted);
-        doc.text(` (${(condition as unknown as Record<string, unknown>).claimType})`, 25 + doc.getTextWidth(`• ${condition.name}`) + 2, yPos);
+        doc.text(` (${condition.claimType})`, 25 + doc.getTextWidth(`• ${condition.name}`) + 2, yPos);
       }
       yPos += 6;
     });

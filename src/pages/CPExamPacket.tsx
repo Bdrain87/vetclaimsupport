@@ -723,7 +723,7 @@ export default function CPExamPacket() {
         <PacketSection title="Research Legal Precedent" icon={Scale} sectionNumber={7}>
           <div className="bg-[#7A672A]/30 border border-[#7A672A]/50 rounded-lg p-4">
             <h3 className="text-lg font-semibold text-[#F5D680] mb-2">Research Legal Precedent</h3>
-            <p className="text-sm text-slate-400 mb-3">
+            <p className="text-sm text-muted-foreground mb-3">
               Use these verified legal databases to find case law relevant to your claim:
             </p>
             <div className="space-y-2">

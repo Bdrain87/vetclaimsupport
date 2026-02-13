@@ -89,7 +89,7 @@ const VA_GLOSSARY: GlossaryEntry[] = [
     category: 'evidence',
   },
   {
-    term: 'Nexus Letter',
+    term: 'Doctor Summary (Nexus Letter)',
     definition:
       'A letter from a medical professional stating that your condition is "at least as likely as not" connected to your military service. Often the most critical piece of evidence.',
     category: 'evidence',

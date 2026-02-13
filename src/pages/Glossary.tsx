@@ -98,8 +98,8 @@ const glossaryData: GlossaryTerm[] = [
     definition: 'Military Sexual Trauma. Sexual assault or harassment experienced during military service, which can lead to PTSD and other conditions.',
   },
   {
-    term: 'Nexus Letter',
-    definition: 'A medical opinion stating that your current disability is "at least as likely as not" connected to your military service. Critical evidence for service connection.',
+    term: 'Doctor Summary (Nexus Letter)',
+    definition: 'A medical opinion from your doctor stating that your current disability is "at least as likely as not" connected to your military service. Critical evidence for service connection.',
     related: ['IMO', 'Service Connection'],
   },
   {

@@ -24,7 +24,7 @@ function getConnectionStrength(connection: SecondaryConnection): 'strong' | 'mod
 const strengthConfig = {
   strong: { label: 'Strong Connection', color: 'text-emerald-400', bg: 'bg-emerald-400/10 border-emerald-400/20', dot: 'bg-emerald-400' },
   moderate: { label: 'Moderate Connection', color: 'text-gold', bg: 'bg-[rgba(197,164,66,0.1)] border-[rgba(197,164,66,0.2)]', dot: 'bg-gold' },
-  possible: { label: 'Possible Connection', color: 'text-white/40', bg: 'bg-white/5 border-white/10', dot: 'bg-white/40' },
+  possible: { label: 'Possible Connection', color: 'text-muted-foreground', bg: 'bg-muted/30 border-border', dot: 'bg-muted-foreground' },
 };
 
 export default function SecondaryFinder() {
@@ -111,8 +111,8 @@ export default function SecondaryFinder() {
           <Link2 className="h-6 w-6 text-gold" />
         </div>
         <div className="min-w-0">
-          <h1 className="text-2xl font-bold text-white">Secondary Conditions Finder</h1>
-          <p className="text-white/50 text-sm">Discover conditions connected to your primary claims</p>
+          <h1 className="text-2xl font-bold text-foreground">Secondary Conditions Finder</h1>
+          <p className="text-muted-foreground text-sm">Discover conditions connected to your primary claims</p>
         </div>
       </div>
 
@@ -139,7 +139,7 @@ export default function SecondaryFinder() {
       {/* Claimed conditions chips */}
       {claimedConditions.length > 0 && (
         <div>
-          <p className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3">Your Claimed Conditions</p>
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Your Claimed Conditions</p>
           <div className="flex flex-wrap gap-2">
             {claimedConditions.map(c => (
               <button
@@ -148,7 +148,7 @@ export default function SecondaryFinder() {
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all max-w-full truncate ${
                   selectedPrimary === c.fullName
                     ? 'bg-[rgba(197,164,66,0.2)] text-gold border border-[rgba(197,164,66,0.4)]'
-                    : 'bg-white/[0.09] text-white/70 border border-white/[0.12] hover:border-[rgba(197,164,66,0.3)] hover:text-white'
+                    : 'bg-muted/50 text-muted-foreground border border-border hover:border-[rgba(197,164,66,0.3)] hover:text-foreground'
                 }`}
               >
                 <span className="truncate">{c.name}</span> <ArrowRight className="inline h-3 w-3 ml-1 shrink-0" />
@@ -163,10 +163,10 @@ export default function SecondaryFinder() {
         <div className="space-y-4">
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div className="min-w-0 flex-1">
-              <h2 className="text-lg font-bold text-white break-words">
+              <h2 className="text-lg font-bold text-foreground break-words">
                 Secondary Conditions for: <span className="text-gold">{selectedPrimary}</span>
               </h2>
-              <p className="text-white/40 text-sm">{currentSecondaries.length} connections found</p>
+              <p className="text-muted-foreground text-sm">{currentSecondaries.length} connections found</p>
             </div>
             <Link to={`/prep/nexus-letter?primary=${encodeURIComponent(selectedPrimary)}`}>
               <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.3)] text-gold text-sm font-medium hover:bg-[rgba(197,164,66,0.2)] transition-colors whitespace-nowrap shrink-0">
@@ -177,7 +177,7 @@ export default function SecondaryFinder() {
           </div>
 
           {currentSecondaries.length === 0 ? (
-            <div className="text-center py-12 text-white/40">
+            <div className="text-center py-12 text-muted-foreground">
               <Search className="h-8 w-8 mx-auto mb-3 opacity-50" />
               <p>No secondary connections found for this condition.</p>
               <p className="text-sm mt-1">Try searching for a different condition above.</p>
@@ -196,15 +196,15 @@ export default function SecondaryFinder() {
                     <div className="flex items-start gap-3 mb-3">
                       <div className={`w-3 h-3 rounded-full mt-1 shrink-0 ${cfg.dot}`} />
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-white text-sm break-words">{connection.secondaryCondition}</h3>
+                        <h3 className="font-bold text-foreground text-sm break-words">{connection.secondaryCondition}</h3>
                         <p className={`text-xs ${cfg.color} font-medium`}>{cfg.label}</p>
                       </div>
-                      <span className="text-[10px] font-semibold uppercase tracking-wider text-white/30 shrink-0 hidden sm:block">
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/50 shrink-0 hidden sm:block">
                         {connection.category}
                       </span>
                     </div>
 
-                    <p className="text-xs text-white/50 leading-relaxed mb-4">
+                    <p className="text-xs text-muted-foreground leading-relaxed mb-4">
                       {connection.medicalConnection}
                     </p>
 
@@ -233,11 +233,11 @@ export default function SecondaryFinder() {
       {/* Empty state when nothing selected */}
       {!selectedPrimary && claimedConditions.length === 0 && (
         <div className="text-center py-16">
-          <div className="w-16 h-16 rounded-2xl bg-white/[0.07] border border-white/[0.12] flex items-center justify-center mx-auto mb-4">
-            <Link2 className="h-8 w-8 text-white/20" />
+          <div className="w-16 h-16 rounded-2xl bg-muted/30 border border-border flex items-center justify-center mx-auto mb-4">
+            <Link2 className="h-8 w-8 text-muted-foreground/40" />
           </div>
-          <h3 className="text-white/70 font-semibold mb-2">Search for a condition to get started</h3>
-          <p className="text-white/40 text-sm max-w-md mx-auto">
+          <h3 className="text-foreground/70 font-semibold mb-2">Search for a condition to get started</h3>
+          <p className="text-muted-foreground text-sm max-w-md mx-auto">
             Type a condition name in the search bar above to discover secondary conditions you may be able to claim.
           </p>
         </div>
@@ -246,8 +246,8 @@ export default function SecondaryFinder() {
       {/* Info card */}
       {!selectedPrimary && (
         <div className="rounded-2xl p-5 bg-[rgba(197,164,66,0.05)] border border-[rgba(197,164,66,0.15)]">
-          <h3 className="text-white/90 font-semibold mb-2 text-sm">How Secondary Claims Work</h3>
-          <ol className="space-y-1.5 text-xs text-white/50">
+          <h3 className="text-foreground/90 font-semibold mb-2 text-sm">How Secondary Claims Work</h3>
+          <ol className="space-y-1.5 text-xs text-muted-foreground">
             <li>1. Select your already service-connected (primary) condition</li>
             <li>2. Review secondary conditions that are medically linked</li>
             <li>3. Get a doctor summary establishing the connection</li>

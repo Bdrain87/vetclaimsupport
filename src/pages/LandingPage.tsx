@@ -46,10 +46,10 @@ export default function LandingPage() {
       <ValueProps />
       <FeatureBento />
       <HowItWorks />
-      <PrivacySection />
       <FinalCTA />
       <BuiltByVeteran />
       <LegalDisclaimer />
+      <PrivacySection />
       <LandingFooter />
     </div>
   );

@@ -243,5 +243,5 @@ export const MARQUEE_STYLES = `
 `;
 
 // --- VIEWPORT PRESETS ---
-export const viewportOnce = { once: true, margin: '-80px' as any };
+export const viewportOnce: { once: true; margin: string } = { once: true, margin: '-80px' };
 export const viewportOnceEager = { once: true, amount: 0.2 };

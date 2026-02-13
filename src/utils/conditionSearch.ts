@@ -101,8 +101,9 @@ export function searchAllConditions(
   if (!query || query.trim().length < 1) {
     // If no query but category filter, return all in that category
     if (options?.category) {
+      const cat = options.category;
       return index
-        .filter(c => c.category.toLowerCase().includes(options.category!.toLowerCase()))
+        .filter(c => c.category.toLowerCase().includes(cat.toLowerCase()))
         .filter(c => !options?.excludeIds?.includes(c.id))
         .slice(0, limit);
     }
@@ -110,7 +111,8 @@ export function searchAllConditions(
     if (options?.includeSecondariesOf) {
       const primary = index.find(c => c.id === options.includeSecondariesOf);
       if (primary?.commonSecondaries) {
-        return index.filter(c => primary.commonSecondaries!.includes(c.id));
+        const secondaries = primary.commonSecondaries;
+        return index.filter(c => secondaries.includes(c.id));
       }
     }
     return [];

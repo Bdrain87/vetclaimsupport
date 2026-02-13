@@ -691,7 +691,7 @@ attorney for official guidance on your specific claim.
                   onCheckedChange={(checked) => updateEvidence('hasDoctorSummary', !!checked)}
                 />
                 <label htmlFor="hasDoctorSummary" className="text-sm">
-                  <span className="font-medium">Doctor Summary / Nexus Letter(s)</span>
+                  <span className="font-medium">Doctor Summary</span>
                   <p className="text-xs text-muted-foreground">Doctor's opinion connecting condition to service</p>
                 </label>
               </div>
@@ -880,7 +880,7 @@ attorney for official guidance on your specific claim.
                   </CardHeader>
                   <CardContent>
                     <div className="bg-[rgba(197,164,66,0.08)] border border-[rgba(197,164,66,0.2)] rounded-lg p-4">
-                      <p className="text-sm text-slate-400 mb-3">
+                      <p className="text-sm text-muted-foreground mb-3">
                         Use these verified legal databases to find case law relevant to your claim:
                       </p>
                       <div className="space-y-2 overflow-hidden">

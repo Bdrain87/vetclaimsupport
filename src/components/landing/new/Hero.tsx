@@ -49,7 +49,7 @@ export function Hero() {
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 text-center pt-32 pb-16">
+      <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 text-center pt-32 pb-8">
         {/* Intro line */}
         <motion.p
           className="uppercase tracking-[0.25em] text-sm font-medium mb-6"

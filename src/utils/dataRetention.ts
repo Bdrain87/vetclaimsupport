@@ -31,20 +31,3 @@ export function checkDataRetention(): void {
   localStorage.setItem(LAST_ACTIVITY_KEY, String(now));
 }
 
-/** Check if the user needs to confirm data retention. */
-export function isRetentionWarningPending(): boolean {
-  return localStorage.getItem(RETENTION_WARNING_KEY) === 'pending';
-}
-
-/** User confirmed they want to keep their data. */
-export function dismissRetentionWarning(): void {
-  localStorage.removeItem(RETENTION_WARNING_KEY);
-}
-
-/** User confirmed data purge. */
-export function purgeAppData(): void {
-  for (const key of APP_STORAGE_KEYS) {
-    localStorage.removeItem(key);
-  }
-  localStorage.removeItem(RETENTION_WARNING_KEY);
-}

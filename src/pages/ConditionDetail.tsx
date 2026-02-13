@@ -717,7 +717,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
         </CardHeader>
         <CardContent>
           <div className="bg-[rgba(197,164,66,0.08)] border border-[rgba(197,164,66,0.2)] rounded-lg p-4">
-            <p className="text-sm text-slate-400 mb-3">
+            <p className="text-sm text-muted-foreground mb-3">
               Use these verified legal databases to find case law relevant to your claim:
             </p>
             <div className="space-y-2 overflow-hidden">
@@ -815,7 +815,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                       <CardTitle className="text-lg flex items-center gap-2">
                         <Badge
                           className={
-                            level.percentage === 0 ? 'bg-gray-500' :
+                            level.percentage === 0 ? 'bg-muted-foreground' :
                             level.percentage <= 30 ? 'bg-gold' :
                             level.percentage <= 70 ? 'bg-gold' :
                             'bg-green-500'
