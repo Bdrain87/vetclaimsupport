@@ -31,7 +31,7 @@ export function LandingFooter() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <img src="/app-icon.png" alt="" width={28} height={28} style={{ borderRadius: 6 }} />
+              <img src="/app-icon.png" alt="Vet Claim Support" width={28} height={28} style={{ borderRadius: 6 }} />
               <span className="text-white font-semibold">Vet Claim Support</span>
             </div>
             <p className="text-sm leading-relaxed" style={{ color: '#9CA3AF' }}>

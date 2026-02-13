@@ -43,7 +43,7 @@ export function StickyNav() {
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="flex items-center gap-2.5 cursor-pointer bg-transparent border-none"
           >
-            <img src="/app-icon.png" alt="" width={32} height={32} style={{ borderRadius: 8 }} />
+            <img src="/app-icon.png" alt="Vet Claim Support" width={32} height={32} style={{ borderRadius: 8 }} />
             <span className="text-white font-semibold text-lg tracking-tight">
               Vet Claim Support
             </span>
