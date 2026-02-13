@@ -41,7 +41,7 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
 const STATS = [
   { value: 45, suffix: '+', label: 'Tools & Features' },
   { value: 780, suffix: '+', label: 'VA Conditions' },
-  { value: 256, suffix: '-bit', label: 'Encrypted & Secure' },
+  { value: 0, suffix: '', label: 'Encrypted & Secure', isText: true, textContent: '256-bit' },
   { value: 0, suffix: '', label: 'Veteran Founded', isText: true },
 ];
 
@@ -63,7 +63,21 @@ export function SocialProof() {
               i < STATS.length - 1 ? 'md:border-r md:border-gray-700' : ''
             }`}
           >
-            {stat.isText ? (
+            {stat.isText && stat.textContent ? (
+              <div className="flex items-center justify-center h-[36px] md:h-[40px]">
+                <span
+                  className="text-3xl md:text-4xl font-bold"
+                  style={{
+                    background: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                  }}
+                >
+                  {stat.textContent}
+                </span>
+              </div>
+            ) : stat.isText ? (
               <div className="flex items-center justify-center h-[36px] md:h-[40px]">
                 <svg width="48" height="32" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <defs>
