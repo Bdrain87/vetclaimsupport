@@ -28,6 +28,10 @@ import {
   Users, Heart, GraduationCap, UserPlus, DollarSign, AlertTriangle,
   RotateCcw, Sparkles, Link2, Check
 } from 'lucide-react';
+import { COMP_RATES_2026 } from '@/data/compRates2026';
+// 2024 rates retained only for dependent additions (spouse, children, parents)
+// because compRates2026 only contains base veteran rates. Replace once 2026
+// dependent rates are available.
 import { vaCompensationRates2024 } from '@/data/vaCompensationRates';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import {
@@ -260,8 +264,9 @@ function calculateCompensation(
   totalYearly: number;
   breakdown: { label: string; amount: number }[];
 } {
-  const rates = vaCompensationRates2024;
-  const baseRate = rates.base[rating] || 0;
+  const baseRate = COMP_RATES_2026[rating] || 0;
+  // Dependent additions still use 2024 rates until 2026 dependent rates are published
+  const depRates = vaCompensationRates2024;
 
   // Dependents only apply at 30%+
   if (rating < 30) {
@@ -283,10 +288,10 @@ function calculateCompensation(
   const childrenInSchool = dependents.filter(d => d.type === 'child_in_school').length;
   const dependentParents = dependents.filter(d => d.type === 'dependent_parent').length;
 
-  const spouseAddition = hasSpouse ? (rates.spouse[rating] || 0) : 0;
-  const childrenAddition = childrenUnder18 * (rates.childUnder18[rating] || 0);
-  const schoolChildrenAddition = childrenInSchool * (rates.childSchool[rating] || 0);
-  const parentsAddition = dependentParents * (rates.dependentParent[rating] || 0);
+  const spouseAddition = hasSpouse ? (depRates.spouse[rating] || 0) : 0;
+  const childrenAddition = childrenUnder18 * (depRates.childUnder18[rating] || 0);
+  const schoolChildrenAddition = childrenInSchool * (depRates.childSchool[rating] || 0);
+  const parentsAddition = dependentParents * (depRates.dependentParent[rating] || 0);
 
   const totalMonthly = baseRate + spouseAddition + childrenAddition + schoolChildrenAddition + parentsAddition;
 
