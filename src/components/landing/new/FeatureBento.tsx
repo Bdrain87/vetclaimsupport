@@ -529,237 +529,187 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
 }
 
 /* ────────────────────────────────────────────────
- * Desktop 3D Shuffling Card Deck (GSAP)
+ * Desktop Dual-Row Rotating Carousel
  *
- * A stack of large cards with 3D perspective. The front
- * card auto-pops out to the side and flies to the back
- * while the deck shuffles forward. Infinite loop.
- * Every card is clickable for detail modal.
+ * Two rows of scrolling cards with 3D rotation:
+ * - Top row scrolls left continuously
+ * - Bottom row scrolls right continuously
+ * - All cards remain clickable for detail modal
  * ──────────────────────────────────────────────── */
 
 const N = CARDS.length;
-const VISIBLE = 7; // cards rendered in the visible stack
-const SHUFFLE_MS = 2200; // time between shuffles
 
-// Stack layout: isometric diagonal recession into the background
-const stackPos = (i: number) => ({
-  y: i * 25,
-  x: i * 60,
-  scale: 1 - i * 0.06,
-  opacity: Math.max(0.15, 1 - i * 0.12),
-  rotateZ: 0,
-  rotateY: 0,
-  zIndex: VISIBLE - i,
-});
+const SCROLL_KEYFRAMES = `
+@keyframes scroll-left {
+  0% { transform: translateX(0) rotateY(0deg); }
+  100% { transform: translateX(-100%) rotateY(-15deg); }
+}
 
-function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => void }) {
-  // offset tracks which CARDS index is currently at the front of the stack
-  const [offset, setOffset] = useState(0);
-  const slotRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const isAnimating = useRef(false);
-  const isPaused = useRef(false);
-  const timerRef = useRef<ReturnType<typeof setInterval>>();
+@keyframes scroll-right {
+  0% { transform: translateX(-100%) rotateY(0deg); }
+  100% { transform: translateX(0) rotateY(15deg); }
+}
+`;
 
-  // Derive visible cards from offset
-  const getCard = (slotIdx: number) => CARDS[(offset + slotIdx) % N];
-
-  // Apply stack positions instantly (called after each shuffle completes)
-  const resetPositions = useCallback(() => {
-    slotRefs.current.forEach((el, i) => {
-      if (!el) return;
-      const p = stackPos(i);
-      gsap.set(el, {
-        x: p.x,
-        y: p.y,
-        scale: p.scale,
-        opacity: p.opacity,
-        rotateZ: p.rotateZ,
-        rotateY: 0,
-      });
-      el.style.zIndex = String(p.zIndex);
-    });
-  }, []);
-
-  // Set positions on mount and whenever offset changes (new cards in slots)
-  useEffect(() => {
-    resetPositions();
-  }, [offset, resetPositions]);
-
-  // The shuffle animation
-  const doShuffle = useCallback(() => {
-    if (isAnimating.current || isPaused.current) return;
-    isAnimating.current = true;
-
-    const frontEl = slotRefs.current[0];
-    if (!frontEl) {
-      isAnimating.current = false;
-      return;
-    }
-
-    const tl = gsap.timeline({
-      onComplete: () => {
-        // Advance the deck — front card's slot gets new data
-        setOffset((prev) => (prev + 1) % N);
-        isAnimating.current = false;
-      },
-    });
-
-    // Front card flies out to the left with rotation
-    tl.to(frontEl, {
-      x: -650,
-      rotateZ: -12,
-      rotateY: 25,
-      opacity: 0,
-      scale: 0.8,
-      duration: 0.75,
-      ease: 'power3.inOut',
-    });
-
-    // Simultaneously shift remaining cards forward one stack position
-    for (let i = 1; i < VISIBLE; i++) {
-      const el = slotRefs.current[i];
-      if (!el) continue;
-      const newPos = stackPos(i - 1);
-      tl.to(
-        el,
-        {
-          x: newPos.x,
-          y: newPos.y,
-          scale: newPos.scale,
-          opacity: newPos.opacity,
-          rotateZ: newPos.rotateZ,
-          zIndex: newPos.zIndex,
-          duration: 0.55,
-          ease: 'power2.out',
-        },
-        '<0.04',
-      );
-    }
-  }, []);
-
-  // Auto-shuffle timer
-  useEffect(() => {
-    timerRef.current = setInterval(doShuffle, SHUFFLE_MS);
-    return () => clearInterval(timerRef.current);
-  }, [doShuffle]);
+function CardComponent({ card, onClick }: { card: CardData; onClick: () => void }) {
+  const Icon = card.icon;
 
   return (
     <div
-      className="relative mx-auto flex items-center justify-center"
-      style={{ height: '650px', maxWidth: '1200px' }}
+      className="inline-block mx-4 cursor-pointer"
+      style={{
+        width: '380px',
+        perspective: '1000px',
+      }}
+      onClick={onClick}
     >
-      {/* 3D perspective wrapper */}
       <div
+        className="rounded-2xl p-6 h-full transition-all duration-300 hover:scale-105"
         style={{
-          perspective: '2000px',
-          perspectiveOrigin: '50% 45%',
+          background: SILVER_GRADIENT,
+          border: '1px solid rgba(255,255,255,0.3)',
+          boxShadow: CARD_SHADOW,
+          transformStyle: 'preserve-3d',
         }}
       >
-        {/* Isometric 3D tilt for diagonal stack */}
-        <div
-          style={{
-            position: 'relative',
-            width: '560px',
-            height: '400px',
-            transformStyle: 'preserve-3d',
-            transform: 'rotateX(10deg) rotateY(-25deg)',
-          }}
+        {/* Top row: icon + category/title */}
+        <div className="flex items-start gap-4 mb-4">
+          <div
+            className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+            style={{
+              backgroundColor: 'rgba(0,0,0,0.06)',
+              border: '1px solid rgba(0,0,0,0.06)',
+            }}
+          >
+            <Icon size={20} style={{ color: '#8B7332' }} />
+          </div>
+          <div className="min-w-0">
+            <span
+              className="text-[10px] font-semibold tracking-[0.15em] uppercase block mb-1"
+              style={{ color: '#8B7332' }}
+            >
+              {card.category}
+            </span>
+            <h4
+              className="text-lg font-semibold leading-tight"
+              style={{ color: '#0A0A0A', letterSpacing: '-0.02em' }}
+            >
+              {card.title}
+            </h4>
+          </div>
+        </div>
+
+        {/* Description */}
+        <p
+          className="text-sm leading-relaxed mb-4"
+          style={{ color: '#333' }}
         >
-          {Array.from({ length: VISIBLE }).map((_, slotIdx) => {
-            const card = getCard(slotIdx);
-            const Icon = card.icon;
-            const isFront = slotIdx === 0;
+          {card.short}
+        </p>
 
-            return (
-              <div
-                key={`slot-${slotIdx}`}
-                ref={(el) => {
-                  slotRefs.current[slotIdx] = el;
-                }}
-                className="absolute inset-0 rounded-2xl cursor-pointer"
-                style={{
-                  backfaceVisibility: 'hidden',
-                  pointerEvents: 'auto',
-                  willChange: 'transform, opacity',
-                }}
-                onClick={() => onSelectCard(card)}
-              >
-                <div
-                  className="w-full h-full rounded-2xl p-8 flex flex-col"
-                  style={{
-                    background: SILVER_GRADIENT,
-                    border: isFront
-                      ? '1px solid rgba(197,164,66,0.35)'
-                      : '1px solid rgba(255,255,255,0.25)',
-                    boxShadow: isFront ? CARD_SHADOW_ACTIVE : CARD_SHADOW,
-                  }}
-                >
-                  {/* Top row: icon + category/title */}
-                  <div className="flex items-start gap-5 mb-5">
-                    <div
-                      className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0"
-                      style={{
-                        backgroundColor: 'rgba(0,0,0,0.06)',
-                        border: '1px solid rgba(0,0,0,0.06)',
-                      }}
-                    >
-                      <Icon size={24} style={{ color: '#8B7332' }} />
-                    </div>
-                    <div className="min-w-0">
-                      <span
-                        className="text-[10px] font-semibold tracking-[0.15em] uppercase block mb-1"
-                        style={{ color: '#8B7332' }}
-                      >
-                        {card.category}
-                      </span>
-                      <h4
-                        className="text-xl font-semibold leading-tight"
-                        style={{ color: '#0A0A0A', letterSpacing: '-0.02em' }}
-                      >
-                        {card.title}
-                      </h4>
-                    </div>
-                  </div>
-
-                  {/* Description */}
-                  <p
-                    className="text-[15px] leading-relaxed flex-1"
-                    style={{ color: '#333' }}
-                  >
-                    {card.short}
-                  </p>
-
-                  {/* Footer */}
-                  <div
-                    className="flex items-center justify-between mt-4 pt-4"
-                    style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}
-                  >
-                    <span
-                      className="inline-block rounded-full px-3 py-1 text-[11px] font-semibold"
-                      style={{
-                        backgroundColor:
-                          card.plan === 'Free'
-                            ? 'rgba(0,0,0,0.06)'
-                            : 'rgba(139,115,50,0.12)',
-                        color: card.plan === 'Free' ? '#444' : '#8B7332',
-                      }}
-                    >
-                      {card.plan === 'Free' ? 'Free' : 'Launch Plan'}
-                    </span>
-                    <span
-                      className="text-[11px] font-medium"
-                      style={{ color: '#999' }}
-                    >
-                      Click to explore →
-                    </span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+        {/* Footer */}
+        <div
+          className="flex items-center justify-between pt-3"
+          style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}
+        >
+          <span
+            className="inline-block rounded-full px-3 py-1 text-[10px] font-semibold"
+            style={{
+              backgroundColor:
+                card.plan === 'Free'
+                  ? 'rgba(0,0,0,0.06)'
+                  : 'rgba(139,115,50,0.12)',
+              color: card.plan === 'Free' ? '#444' : '#8B7332',
+            }}
+          >
+            {card.plan === 'Free' ? 'Free' : 'Launch Plan'}
+          </span>
+          <span
+            className="text-[10px] font-medium"
+            style={{ color: '#999' }}
+          >
+            Click to explore →
+          </span>
         </div>
       </div>
+    </div>
+  );
+}
 
+function ScrollingRow({
+  cards,
+  direction,
+  speed,
+  onSelectCard
+}: {
+  cards: CardData[];
+  direction: 'left' | 'right';
+  speed: number;
+  onSelectCard: (card: CardData) => void;
+}) {
+  // Duplicate cards for seamless infinite scroll
+  const duplicatedCards = [...cards, ...cards, ...cards];
+
+  return (
+    <div className="relative w-full overflow-hidden py-4">
+      <div
+        className="flex w-max"
+        style={{
+          animation: `scroll-${direction} ${speed}s linear infinite`,
+          willChange: 'transform',
+        }}
+      >
+        {duplicatedCards.map((card, i) => (
+          <CardComponent
+            key={`${card.title}-${i}`}
+            card={card}
+            onClick={() => onSelectCard(card)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => void }) {
+  const midpoint = Math.ceil(N / 2);
+  const topRowCards = CARDS.slice(0, midpoint);
+  const bottomRowCards = CARDS.slice(midpoint);
+
+  useEffect(() => {
+    const id = 'scroll-keyframes';
+    if (!document.getElementById(id)) {
+      const style = document.createElement('style');
+      style.id = id;
+      style.textContent = SCROLL_KEYFRAMES;
+      document.head.appendChild(style);
+    }
+  }, []);
+
+  return (
+    <div
+      className="relative mx-auto"
+      style={{
+        maxWidth: '100%',
+        perspective: '1500px',
+        perspectiveOrigin: 'center center',
+      }}
+    >
+      {/* Top row - scrolls left */}
+      <ScrollingRow
+        cards={topRowCards}
+        direction="left"
+        speed={60}
+        onSelectCard={onSelectCard}
+      />
+
+      {/* Bottom row - scrolls right */}
+      <ScrollingRow
+        cards={bottomRowCards}
+        direction="right"
+        speed={65}
+        onSelectCard={onSelectCard}
+      />
     </div>
   );
 }
