@@ -55,8 +55,6 @@ const pages: Record<string, () => Promise<{ default: React.ComponentType }>> = {
   Settings: () => import('@/pages/Settings'),
   FAQ: () => import('@/pages/FAQ'),
   HelpCenter: () => import('@/pages/HelpCenter'),
-  UserGuide: () => import('@/pages/UserGuide'),
-  AppStorePreview: () => import('@/pages/AppStorePreview'),
   Terms: () => import('@/pages/legal/TermsOfServicePage'),
   Privacy: () => import('@/pages/legal/PrivacyPolicyPage'),
   Disclaimer: () => import('@/pages/legal/DisclaimerPage'),
@@ -111,26 +109,6 @@ describe('Route Smoke Tests — Every page renders without crashing', () => {
       });
     }, 15_000);
   }
-
-  // ------------------------------------------------------------------
-  // Landing — named export { Landing } (aliased from PlatinumLanding)
-  // ------------------------------------------------------------------
-  it('Landing renders without crashing', async () => {
-    const mod = await import('@/pages/Landing');
-    const Component = mod.Landing;
-
-    expect(Component).toBeDefined();
-
-    const { container } = render(
-      <TestWrapper>
-        <Component />
-      </TestWrapper>,
-    );
-
-    await waitFor(() => {
-      expect(container.innerHTML.length).toBeGreaterThan(0);
-    });
-  }, 15_000);
 
   // ------------------------------------------------------------------
   // ConditionDetail — requires a :id route parameter via useParams

@@ -1,9 +1,0 @@
-export { LandingPage } from './LandingPage';
-export { HeroSection } from './HeroSection';
-export { ProblemSection } from './ProblemSection';
-export { SolutionSection } from './SolutionSection';
-export { TestimonialsSection } from './TestimonialsSection';
-export { ComparisonSection } from './ComparisonSection';
-export { AudienceSection } from './AudienceSection';
-export { CTASection } from './CTASection';
-export { Footer } from './Footer';
