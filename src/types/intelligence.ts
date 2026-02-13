@@ -1,6 +1,6 @@
 /**
  * Type definitions for the ClaimIntelligence engine.
- * Used by claimIntelligence.ts, useIntelligence.ts, and consuming pages.
+ * Used by claimIntelligence.ts and consuming pages.
  */
 
 // Re-export hazard types from the data layer
