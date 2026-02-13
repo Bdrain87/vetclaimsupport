@@ -36,7 +36,12 @@ function MarqueeRow({ direction, speed }: { direction: 'left' | 'right'; speed: 
           <div key={i} className="flex items-center mx-5 md:mx-8 whitespace-nowrap">
             <span
               className="text-sm md:text-base font-medium tracking-wide"
-              style={{ color: 'rgba(191, 149, 63, 0.6)' }}
+              style={{
+                background: 'linear-gradient(135deg, #E8E8E8 0%, #B0B0B0 30%, #F0F0F0 50%, #A8A8A8 70%, #D0D0D0 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
             >
               {item}
             </span>
