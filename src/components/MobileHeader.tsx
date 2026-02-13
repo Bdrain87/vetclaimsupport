@@ -4,12 +4,12 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import useAppStore from '@/store/useAppStore';
 import { getConditionById } from '@/data/vaConditions';
 
-const ROOT_TAB_ROUTES = ['/', '/claims', '/health', '/prep', '/settings'];
+const ROOT_TAB_ROUTES = ['/', '/app', '/claims', '/health', '/prep', '/settings'];
 
 const pageLabels: Record<string, string> = {
   '/': 'Dashboard',
   '/claims': 'My Conditions',
-  '/claims/strategy': 'Claim Strategy',
+  '/claims/strategy': 'Claim Preparation',
   '/claims/body-map': 'Body Map',
   '/claims/calculator': 'Rating Calculator',
   '/claims/bilateral': 'Bilateral Calculator',
@@ -33,6 +33,8 @@ const pageLabels: Record<string, string> = {
   '/prep/dbq': 'DBQ Prep',
   '/prep/va-speak': 'VA-Speak Translator',
   '/prep/back-pay': 'Back Pay Estimator',
+  '/prep/travel-pay': 'Travel Pay Calculator',
+  '/prep/bdd-guide': 'BDD Guide',
   '/prep/packet': 'Claim Packet',
   '/prep/appeals': 'Appeals Guide',
   '/settings': 'Settings',

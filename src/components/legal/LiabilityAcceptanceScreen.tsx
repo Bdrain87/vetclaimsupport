@@ -210,7 +210,6 @@ export function LiabilityAcceptanceScreen() {
                   to="/settings/terms"
                   className="text-primary hover:underline"
                   onClick={(e) => e.stopPropagation()}
-                  target="_blank"
                 >
                   Terms of Service
                 </Link>{' '}
@@ -219,7 +218,6 @@ export function LiabilityAcceptanceScreen() {
                   to="/settings/privacy"
                   className="text-primary hover:underline"
                   onClick={(e) => e.stopPropagation()}
-                  target="_blank"
                 >
                   Privacy Policy
                 </Link>.

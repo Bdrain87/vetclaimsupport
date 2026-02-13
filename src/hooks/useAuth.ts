@@ -1,3 +1,8 @@
+/**
+ * AUTH HOOK — Reserved for future cloud sync feature.
+ * Currently NOT connected to any route guards or UI.
+ * The app works without authentication.
+ */
 import { useState, useEffect, useCallback } from 'react';
 import {
   signInWithEmail,

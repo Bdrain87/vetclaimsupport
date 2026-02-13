@@ -28,9 +28,13 @@ export function SplashScreen({
       innerTimer = setTimeout(() => onCompleteRef.current(), exitDuration);
     }, displayTime);
 
+    // Safety timeout: force-complete after 5 seconds no matter what
+    const safety = setTimeout(() => onCompleteRef.current(), 5000);
+
     return () => {
       clearTimeout(timer);
       clearTimeout(innerTimer);
+      clearTimeout(safety);
     };
   }, [minimumDuration, prefersReducedMotion]);
 

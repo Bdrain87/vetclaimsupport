@@ -54,13 +54,10 @@ window.addEventListener('unhandledrejection', (event) => {
 // SERVICE WORKER — instant updates on every deploy
 // ============================================================
 if ('serviceWorker' in navigator) {
-  // When a new SW takes control, reload so the user sees fresh content
-  let refreshing = false;
+  // When a new SW takes control, notify the user instead of auto-reloading
+  // (auto-reload destroys unsaved form data)
   navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (!refreshing) {
-      refreshing = true;
-      window.location.reload();
-    }
+    window.dispatchEvent(new CustomEvent('sw-update-available'));
   });
 
   // Purge old runtime caches that may hold stale JS/CSS from

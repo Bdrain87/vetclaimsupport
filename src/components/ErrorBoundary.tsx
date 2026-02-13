@@ -75,17 +75,9 @@ export class ErrorBoundary extends Component<Props, State> {
                   Reload Page
                 </Button>
               </div>
-              {this.state.error && (
-                <details className="mt-4 text-sm">
-                  <summary className="cursor-pointer text-muted-foreground hover:text-foreground">
-                    Error Details
-                  </summary>
-                  <pre className="mt-2 p-2 bg-muted rounded text-xs overflow-auto max-h-32">
-                    {this.state.error.toString()}
-                    {this.state.errorInfo?.componentStack}
-                  </pre>
-                </details>
-              )}
+              <p className="text-xs text-muted-foreground text-center">
+                If this keeps happening, try clearing your browser cache or contact support.
+              </p>
             </CardContent>
           </Card>
         </div>

@@ -14,6 +14,7 @@ import { migrateOldDataToAppStore } from './utils/migrateData';
 import { useSessionTimeout } from './hooks/useSessionTimeout';
 import { checkDataRetention } from './utils/dataRetention';
 import { isWeb } from './lib/platform';
+import useAppStore from './store/useAppStore';
 
 // Run migration before React renders (synchronous, runs once)
 migrateOldDataToAppStore();
@@ -136,7 +137,9 @@ function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    const main = document.querySelector('main');
+    if (main) main.scrollTop = 0;
+    else window.scrollTo(0, 0);
   }, [pathname]);
 
   return null;
@@ -341,7 +344,7 @@ function AppContent() {
       <LiabilityAcceptanceScreen />
 <div className="flex-1 flex flex-col overflow-hidden">
         <MobileHeader />
-        <main id="main-content" className="flex-1 overflow-y-auto pt-14 pb-20">
+        <main id="main-content" className="flex-1 overflow-y-auto pt-14" style={{ paddingBottom: 'calc(56px + env(safe-area-inset-bottom, 0px) + 16px)' }}>
           <AnimatedRoutes />
         </main>
         <BottomTabBar />
@@ -360,6 +363,11 @@ function App() {
 
   useEffect(() => {
     checkDataRetention();
+    // Sync separationDate from profile store → app store (single source of truth is profile)
+    const profileDate = useProfileStore.getState().separationDate;
+    if (profileDate) {
+      useAppStore.getState().setSeparationDate(profileDate);
+    }
   }, []);
 
   return (

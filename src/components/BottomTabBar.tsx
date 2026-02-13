@@ -1,9 +1,10 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Home, Shield, Heart, BookOpen, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { isWeb } from '@/lib/platform';
 
 const tabs = [
-  { to: '/', icon: Home, label: 'Home' },
+  { to: isWeb ? '/app' : '/', icon: Home, label: 'Home' },
   { to: '/claims', icon: Shield, label: 'Claims' },
   { to: '/health', icon: Heart, label: 'Health' },
   { to: '/prep', icon: BookOpen, label: 'Prep' },
@@ -11,7 +12,7 @@ const tabs = [
 ];
 
 const isTabActive = (tabPath: string, pathname: string) => {
-  if (tabPath === '/') return pathname === '/';
+  if (tabPath === '/' || tabPath === '/app') return pathname === '/' || pathname === '/app';
   return pathname === tabPath || pathname.startsWith(tabPath + '/');
 };
 
