@@ -28,7 +28,7 @@ import {
 import type { LucideIcon } from 'lucide-react';
 
 /* ────────────────────────────────────────────────
- * Card Data — 13 Core Tools (Live Site)
+ * Card Data — 13 Core Tools
  * ──────────────────────────────────────────────── */
 
 interface CardData {
@@ -162,13 +162,12 @@ const CARDS: CardData[] = [
 ];
 
 /* ────────────────────────────────────────────────
- * Brand Styling — Navy/Charcoal Theme
+ * Brand Styling
  * ──────────────────────────────────────────────── */
 
-const CARD_BG = 'rgba(15, 23, 42, 0.85)'; // #0F172A at 85% opacity
-const CARD_BORDER = '1px solid rgba(255, 255, 255, 1)'; // Crisp white border
-const CARD_SHADOW = '0 4px 16px rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.2)';
-const CARD_SHADOW_FRONT = '0 8px 24px rgba(0,0,0,0.4), 0 16px 48px rgba(0,0,0,0.3), 0 0 40px rgba(197,164,66,0.2)';
+const CARD_BG = 'rgba(15, 23, 42, 0.85)';
+const CARD_BORDER = '1px solid rgba(255, 255, 255, 0.2)';
+const CARD_SHADOW = '0 4px 16px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3)';
 
 /* ────────────────────────────────────────────────
  * Detail Modal
@@ -199,7 +198,7 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
         className="relative z-10 w-[90%] max-w-[500px] rounded-3xl p-8 sm:p-10"
         style={{
           background: CARD_BG,
-          border: CARD_BORDER,
+          border: '1px solid rgba(255, 255, 255, 0.3)',
           boxShadow: '0 0 60px rgba(197,164,66,0.3)',
         }}
         initial={{ scale: 0.9, y: 30, opacity: 0 }}
@@ -263,190 +262,127 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
 }
 
 /* ────────────────────────────────────────────────
- * 3D Ferris Wheel — Desktop Carousel
+ * 3D Stacked Cards — Compact Rotation
  *
- * Vertical circular path rotating toward viewer.
- * Front: scale(1.0), 100% opacity
- * Back: scale(0.55), 30% opacity
+ * Cards stack tightly in 3D space with small offsets.
+ * Rotates through the stack smoothly.
  * ──────────────────────────────────────────────── */
 
 const N = CARDS.length;
-const DOM_SLOTS = 10;
-const WHEEL_RADIUS = 450;
-const ROTATION_INTERVAL = 3500; // Slower for more cinematic feel
-const PERSPECTIVE = 2500;
+const VISIBLE_CARDS = 5;
 
 function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => void }) {
-  const [frontIndex, setFrontIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const dragRef = useRef({ x: 0, isDragging: false, velocity: 0 });
 
-  // Get visible cards (9 cards: frontIndex ± 4)
+  // Get visible cards
   const getVisibleCards = useCallback(() => {
     const visible = [];
-    for (let i = -4; i <= 4; i++) {
-      const cardIndex = ((frontIndex + i) % N + N) % N;
-      visible.push({ slotPosition: i, cardIndex, card: CARDS[cardIndex] });
+    for (let i = 0; i < VISIBLE_CARDS; i++) {
+      const cardIndex = (currentIndex + i) % N;
+      visible.push({ position: i, cardIndex, card: CARDS[cardIndex] });
     }
     return visible;
-  }, [frontIndex]);
+  }, [currentIndex]);
 
-  // Calculate 3D transform - EXACT scaling per user spec
-  const getCardTransform = (slotPosition: number) => {
-    const angle = slotPosition * (360 / DOM_SLOTS);
-    const radians = (angle * Math.PI) / 180;
+  // Calculate compact 3D stack position
+  const getCardTransform = (position: number) => {
+    const isFront = position === 0;
 
-    const y = Math.sin(radians) * WHEEL_RADIUS;
-    const z = Math.cos(radians) * WHEEL_RADIUS - WHEEL_RADIUS;
+    // Tight stacking with small offsets
+    const x = position * 15; // Small horizontal offset
+    const y = position * -10; // Small vertical offset upward
+    const z = position * -80; // Depth spacing
+    const scale = 1 - position * 0.08; // Gradual scale reduction
+    const opacity = 1 - position * 0.15; // Gradual fade
+    const rotateY = position * 3; // Slight rotation for depth
+    const zIndex = VISIBLE_CARDS - position;
 
-    const depthFactor = (z + WHEEL_RADIUS) / WHEEL_RADIUS;
-
-    // Front: scale(1.0), opacity(1.0)
-    // Back: scale(0.55), opacity(0.3)
-    const scale = 0.55 + 0.45 * depthFactor; // 0.55 at back, 1.0 at front
-    const opacity = Math.max(0.3, 0.3 + 0.7 * depthFactor); // 0.3 at back, 1.0 at front
-    const zIndex = Math.round(depthFactor * 100);
-
-    return { y, z, scale, opacity, zIndex };
+    return { x, y, z, scale, opacity, rotateY, zIndex, isFront };
   };
 
   // Auto-rotation
   useEffect(() => {
     if (isPaused) return;
-
     const interval = setInterval(() => {
-      setFrontIndex((prev) => (prev + 1) % N);
-    }, ROTATION_INTERVAL);
-
+      setCurrentIndex((prev) => (prev + 1) % N);
+    }, 3500);
     return () => clearInterval(interval);
   }, [isPaused]);
 
-  // GSAP animation for smooth transitions
+  // GSAP animation
   useEffect(() => {
     const visible = getVisibleCards();
-
-    visible.forEach(({ slotPosition }, idx) => {
+    visible.forEach(({ position }, idx) => {
       const cardEl = cardsRef.current[idx];
       if (!cardEl) return;
 
-      const { y, z, scale, opacity, zIndex } = getCardTransform(slotPosition);
+      const { x, y, z, scale, opacity, rotateY, zIndex } = getCardTransform(position);
 
       gsap.to(cardEl, {
+        x,
         y,
         z,
         scale,
         opacity,
+        rotateY,
         zIndex,
-        duration: 1.0,
+        duration: 0.8,
         ease: 'power2.out',
       });
     });
-  }, [frontIndex, getVisibleCards]);
-
-  // Drag-to-spin with flick physics
-  const handlePointerDown = (e: React.PointerEvent) => {
-    dragRef.current = { x: e.clientX, isDragging: true, velocity: 0 };
-    setIsPaused(true);
-  };
-
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (!dragRef.current.isDragging) return;
-
-    const deltaX = e.clientX - dragRef.current.x;
-    dragRef.current.velocity = deltaX;
-    dragRef.current.x = e.clientX;
-
-    if (Math.abs(deltaX) > 12) {
-      const direction = deltaX > 0 ? -1 : 1;
-      setFrontIndex((prev) => (prev + direction + N) % N);
-    }
-  };
-
-  const handlePointerUp = () => {
-    dragRef.current.isDragging = false;
-
-    // Momentum flick
-    const velocity = dragRef.current.velocity;
-    if (Math.abs(velocity) > 20) {
-      const steps = Math.min(Math.floor(Math.abs(velocity) / 40), 4);
-      const direction = velocity > 0 ? -1 : 1;
-
-      for (let i = 1; i <= steps; i++) {
-        setTimeout(() => {
-          setFrontIndex((prev) => (prev + direction + N) % N);
-        }, i * 150);
-      }
-    }
-
-    setTimeout(() => setIsPaused(false), 1000);
-  };
+  }, [currentIndex, getVisibleCards]);
 
   const visibleCards = getVisibleCards();
 
   return (
     <div
-      ref={containerRef}
-      className="relative mx-auto"
+      className="relative"
       style={{
-        maxWidth: '1200px',
-        height: '650px',
-        perspective: `${PERSPECTIVE}px`,
-        perspectiveOrigin: '50% 50%',
-        pointerEvents: 'none',
-      }}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerLeave={() => {
-        if (dragRef.current.isDragging) handlePointerUp();
+        width: '450px',
+        height: '500px',
+        perspective: '1500px',
+        perspectiveOrigin: 'center center',
       }}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
       <div
         style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
+          position: 'relative',
+          width: '100%',
+          height: '100%',
           transformStyle: 'preserve-3d',
-          pointerEvents: 'none',
         }}
       >
-        {visibleCards.map(({ slotPosition, cardIndex, card }, idx) => {
-          const { y, z, scale, opacity, zIndex } = getCardTransform(slotPosition);
+        {visibleCards.map(({ position, cardIndex, card }, idx) => {
+          const { isFront } = getCardTransform(position);
           const Icon = card.icon;
-          const isFront = slotPosition === 0;
 
           return (
             <div
-              key={`${cardIndex}-${slotPosition}`}
+              key={`${cardIndex}-${position}`}
               ref={(el) => (cardsRef.current[idx] = el)}
               style={{
                 position: 'absolute',
-                top: 0,
+                top: '50px',
                 left: 0,
-                width: '480px',
-                height: '340px',
-                transform: `translate(-50%, -50%) translateY(${y}px) translateZ(${z}px) scale(${scale})`,
-                opacity,
-                zIndex,
-                pointerEvents: opacity > 0.35 ? 'auto' : 'none',
+                width: '100%',
+                transformStyle: 'preserve-3d',
                 willChange: 'transform',
+                pointerEvents: 'auto',
               }}
-              onClick={() => {
-                setIsPaused(true);
-                onSelectCard(card);
-              }}
+              onClick={() => onSelectCard(card)}
             >
               <div
-                className="rounded-2xl p-6 h-full cursor-pointer transition-all duration-300 hover:scale-105"
+                className="rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:scale-105"
                 style={{
                   background: CARD_BG,
                   border: CARD_BORDER,
-                  boxShadow: isFront ? CARD_SHADOW_FRONT : CARD_SHADOW,
-                  backdropFilter: 'blur(8px)',
+                  boxShadow: CARD_SHADOW,
+                  backdropFilter: 'blur(10px)',
+                  minHeight: '380px',
                 }}
               >
                 <div className="flex items-start gap-4 mb-4">
@@ -480,7 +416,7 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
                 </p>
 
                 <div
-                  className="flex items-center justify-between pt-3"
+                  className="flex items-center justify-between pt-3 mt-auto"
                   style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}
                 >
                   <span
@@ -506,7 +442,7 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
 }
 
 /* ────────────────────────────────────────────────
- * Mobile Carousel — Single card swipe
+ * Mobile Carousel
  * ──────────────────────────────────────────────── */
 
 function MobileCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => void }) {
@@ -541,7 +477,7 @@ function MobileCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => vo
             style={{
               background: CARD_BG,
               border: CARD_BORDER,
-              boxShadow: CARD_SHADOW_FRONT,
+              boxShadow: CARD_SHADOW,
             }}
             initial={{ opacity: 0, x: 60 }}
             animate={{ opacity: 1, x: 0 }}
@@ -601,7 +537,8 @@ function MobileCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => vo
 }
 
 /* ────────────────────────────────────────────────
- * FeatureBento — Main Export
+ * FeatureBento — Two Column Layout
+ * Text Left, Cards Right
  * ──────────────────────────────────────────────── */
 
 export function FeatureBento() {
@@ -609,65 +546,119 @@ export function FeatureBento() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)');
+    const mq = window.matchMedia('(max-width: 1023px)');
     setIsMobile(mq.matches);
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, []);
 
+  if (isMobile) {
+    return (
+      <section
+        id="features"
+        className="relative py-16"
+        style={{ backgroundColor: '#000000', scrollMarginTop: '5rem' }}
+      >
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <motion.div
+            className="mb-4 text-center"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, ease: EASE_SMOOTH }}
+          >
+            <span style={PILL_STYLE}>Our Toolkit</span>
+          </motion.div>
+
+          <motion.h2
+            className="text-3xl md:text-4xl text-white mb-3 text-center"
+            style={HEADING_H2_STYLE}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.05, ease: EASE_SMOOTH }}
+          >
+            Core Tools That Help You{' '}
+            <span style={GOLD_GRADIENT_TEXT}>Prepare</span>
+          </motion.h2>
+
+          <motion.p
+            className="text-base max-w-xl mx-auto text-center mb-12"
+            style={{ color: '#9CA3AF' }}
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1, ease: EASE_SMOOTH }}
+          >
+            From symptom tracking to exam prep, document management to timeline building — everything you need in one place.
+          </motion.p>
+
+          <MobileCarousel onSelectCard={setSelectedCard} />
+        </div>
+
+        <AnimatePresence>
+          {selectedCard && (
+            <DetailModal card={selectedCard} onClose={() => setSelectedCard(null)} />
+          )}
+        </AnimatePresence>
+      </section>
+    );
+  }
+
   return (
     <section
       id="features"
-      className="relative"
+      className="relative py-20 lg:py-28"
       style={{ backgroundColor: '#000000', scrollMarginTop: '5rem' }}
     >
-      {/* Header */}
-      <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 pt-20 md:pt-28 pb-8 md:pb-12">
-        <motion.div
-          className="mb-4 text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: EASE_SMOOTH }}
-        >
-          <span style={PILL_STYLE}>Our Toolkit</span>
-        </motion.div>
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* Left Column: Text */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: EASE_SMOOTH }}
+          >
+            <span style={PILL_STYLE}>Our Toolkit</span>
 
-        <motion.h2
-          className="text-3xl md:text-5xl text-white mb-3 text-center"
-          style={HEADING_H2_STYLE}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.05, ease: EASE_SMOOTH }}
-        >
-          Core Tools That Help You{' '}
-          <span style={GOLD_GRADIENT_TEXT}>Prepare</span>
-        </motion.h2>
+            <h2
+              className="text-4xl lg:text-5xl xl:text-6xl text-white mt-6 mb-4"
+              style={HEADING_H2_STYLE}
+            >
+              Core Tools That Help You{' '}
+              <span style={GOLD_GRADIENT_TEXT}>Prepare</span>
+            </h2>
 
-        <motion.p
-          className="text-lg max-w-2xl mx-auto text-center"
-          style={{ color: '#9CA3AF' }}
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1, ease: EASE_SMOOTH }}
-        >
-          From symptom tracking to exam prep, document management to timeline building — everything you need in one place.
-        </motion.p>
+            <p
+              className="text-lg lg:text-xl leading-relaxed"
+              style={{ color: '#9CA3AF' }}
+            >
+              From symptom tracking to exam prep, document management to timeline building — everything you need to build your strongest VA disability claim.
+            </p>
+
+            <p
+              className="text-base mt-4 leading-relaxed"
+              style={{ color: '#6B7280' }}
+            >
+              Track your health data, organize evidence, prepare for your C&P exam, and understand the VA claims process with 13 specialized tools designed specifically for veterans.
+            </p>
+          </motion.div>
+
+          {/* Right Column: 3D Card Stack */}
+          <motion.div
+            className="flex justify-center lg:justify-end"
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: EASE_SMOOTH, delay: 0.2 }}
+          >
+            <DesktopCarousel onSelectCard={setSelectedCard} />
+          </motion.div>
+        </div>
       </div>
 
-      {/* Carousel */}
-      <div className="pb-16 md:pb-24">
-        {isMobile ? (
-          <MobileCarousel onSelectCard={setSelectedCard} />
-        ) : (
-          <DesktopCarousel onSelectCard={setSelectedCard} />
-        )}
-      </div>
-
-      {/* Detail Modal */}
       <AnimatePresence>
         {selectedCard && (
           <DetailModal card={selectedCard} onClose={() => setSelectedCard(null)} />
