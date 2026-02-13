@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import { Sparkles, Save, History } from 'lucide-react';
 import { useGemini } from '@/hooks/useGemini';
+import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 
 export const SymptomJournal = () => {
   const [text, setText] = useState('');
-  const { generate, isLoading } = useGemini('VA_SPEAK_TRANSLATOR');
+  const [isAIGenerated, setIsAIGenerated] = useState(false);
+  const { generate, isLoading, error } = useGemini('VA_SPEAK_TRANSLATOR');
 
   const handlePolish = async () => {
     if (!text.trim() || isLoading) return;
     const polished = await generate(text);
-    if (polished) setText(polished);
+    if (polished) {
+      setText(polished);
+      setIsAIGenerated(true);
+    }
   };
 
   return (
@@ -42,6 +47,16 @@ export const SymptomJournal = () => {
           </button>
         </div>
       </div>
+
+      {error && (
+        <p className="mt-2 text-xs text-red-400">AI suggestion unavailable. You can still write your response manually.</p>
+      )}
+
+      {isAIGenerated && (
+        <div className="mt-2">
+          <AIDisclaimer variant="banner" />
+        </div>
+      )}
 
       <div className="mt-6 grid grid-cols-2 gap-4">
         <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
