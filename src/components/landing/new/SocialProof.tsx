@@ -47,7 +47,7 @@ const STATS = [
 
 export function SocialProof() {
   return (
-    <section className="py-8" style={{ backgroundColor: '#111111' }}>
+    <section className="py-6" style={{ backgroundColor: '#111111' }}>
       <motion.div
         className="mx-auto max-w-5xl px-4 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0"
         variants={staggerContainer}
