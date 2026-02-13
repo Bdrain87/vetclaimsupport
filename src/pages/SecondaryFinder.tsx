@@ -6,6 +6,7 @@ import { useClaims } from '@/hooks/useClaims';
 import { secondaryConditions, type SecondaryConnection } from '@/data/secondaryConditions';
 import { vaConditions, type VACondition, getConditionById, searchConditions } from '@/data/vaConditions';
 import { Link } from 'react-router-dom';
+import { AlertTriangle } from 'lucide-react';
 import { PageContainer } from '@/components/PageContainer';
 
 // Connection strength heuristic based on data
@@ -112,6 +113,19 @@ export default function SecondaryFinder() {
         <div className="min-w-0">
           <h1 className="text-2xl font-bold text-white">Secondary Conditions Finder</h1>
           <p className="text-white/50 text-sm">Discover conditions connected to your primary claims</p>
+        </div>
+      </div>
+
+      {/* Disclaimer */}
+      <div className="rounded-xl p-4 flex items-start gap-3 bg-[rgba(197,164,66,0.08)] border border-[rgba(197,164,66,0.2)]">
+        <AlertTriangle className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
+        <div>
+          <p className="text-sm font-semibold text-foreground">Educational Tool Only</p>
+          <p className="text-xs text-muted-foreground mt-1">
+            Secondary conditions must be formally diagnosed by a medical professional before filing.
+            This tool is not medical advice. Always consult with a doctor and/or Veterans Service Organization (VSO)
+            before adding conditions to your claim.
+          </p>
         </div>
       </div>
 
