@@ -17,7 +17,11 @@ import { isWeb } from './lib/platform';
 import useAppStore from './store/useAppStore';
 
 // Run migration before React renders (synchronous, runs once)
-migrateOldDataToAppStore();
+try {
+  migrateOldDataToAppStore();
+} catch (e) {
+  console.error('Data migration failed:', e);
+}
 
 // Lazy-loaded route components for code splitting
 const Dashboard = lazy(() => import('./pages/Dashboard'));
