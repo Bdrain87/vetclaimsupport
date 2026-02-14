@@ -224,7 +224,7 @@ serve(async (req) => {
     try {
       console.log(`[${requestId}] Calling Gemini API for user ${user.id.substring(0, 8)}...`);
       const response = await fetch(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
         {
           method: "POST",
           headers: {
@@ -233,7 +233,11 @@ serve(async (req) => {
           },
           body: JSON.stringify({
             contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: { temperature: 0.7, maxOutputTokens: 2048 }
+            generationConfig: {
+              temperature: 0.7,
+              maxOutputTokens: 2048,
+              thinkingConfig: { thinkingBudget: 0 },
+            }
           }),
           signal: controller.signal,
         }
@@ -284,12 +288,13 @@ serve(async (req) => {
         });
       }
 
-      const analysisText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Unable to generate analysis';
+      const parts = data.candidates?.[0]?.content?.parts ?? [];
+      const analysisText = parts.filter((p: { thought?: boolean }) => !p.thought).map((p: { text?: string }) => p.text).join('') || 'Unable to generate analysis';
 
       console.log(`[${requestId}] Analysis completed successfully`);
       return new Response(JSON.stringify({
         analysis: analysisText,
-        model: 'gemini-2.0-flash',
+        model: 'gemini-2.5-flash',
         provider: 'google',
         requestId
       }), {
