@@ -195,6 +195,22 @@ function scoreCaseForContext(c: VerifiedCase, context: AppealContext): { score: 
     }
   }
 
+  if (context.conditionName) {
+    const nameTerms = context.conditionName
+      .toLowerCase()
+      .replace(/[()\[\]{}]/g, '')
+      .split(/\s+/)
+      .filter((t) => t.length >= 3);
+    const caseText = [...c.keywords, c.holding, ...c.relevantConditions, ...c.relevantTopics]
+      .join(' ')
+      .toLowerCase();
+    const nameHits = nameTerms.filter((term) => caseText.includes(term));
+    if (nameHits.length > 0) {
+      score += nameHits.length * 6;
+      reasons.push(`Related to ${context.conditionName}`);
+    }
+  }
+
   if (c.relevantConditions.includes('all')) {
     score += 2;
   }

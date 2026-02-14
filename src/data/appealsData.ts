@@ -1025,10 +1025,16 @@ export function searchCaseLaw(
   query: string,
   filters?: { conditions?: string[]; topics?: string[] }
 ): VerifiedCase[] {
-  const normalizedQuery = query.toLowerCase().trim();
+  const normalizedQuery = query
+    .toLowerCase()
+    .trim()
+    .replace(/[()\[\]{}]/g, '');
 
-  return verifiedCases.filter((c) => {
-    // Text matching: search across multiple fields
+  const queryTerms = normalizedQuery
+    .split(/\s+/)
+    .filter((t) => t.length >= 2);
+
+  const scored = verifiedCases.map((c) => {
     const searchableText = [
       c.caseName,
       c.holding,
@@ -1040,37 +1046,44 @@ export function searchCaseLaw(
       .join(' ')
       .toLowerCase();
 
-    const queryTerms = normalizedQuery.split(/\s+/);
-    const matchesQuery =
-      normalizedQuery === '' ||
-      queryTerms.every((term) => searchableText.includes(term));
+    let score = 0;
 
-    if (!matchesQuery) return false;
+    if (queryTerms.length > 0) {
+      const hits = queryTerms.filter((term) => searchableText.includes(term));
+      if (hits.length === 0) score = -1;
+      else score = hits.length;
+    }
 
-    // Apply condition filter if provided
     if (filters?.conditions && filters.conditions.length > 0) {
       const hasMatchingCondition =
         c.relevantConditions.includes('all') ||
         c.relevantConditions.some((cond) =>
           filters.conditions!.some(
-            (filterCond) => cond.toLowerCase() === filterCond.toLowerCase()
+            (filterCond) =>
+              cond.toLowerCase() === filterCond.toLowerCase() ||
+              cond.toLowerCase().includes(filterCond.toLowerCase()) ||
+              filterCond.toLowerCase().includes(cond.toLowerCase())
           )
         );
-      if (!hasMatchingCondition) return false;
+      if (!hasMatchingCondition) score = -1;
     }
 
-    // Apply topic filter if provided
     if (filters?.topics && filters.topics.length > 0) {
       const hasMatchingTopic = c.relevantTopics.some((topic) =>
         filters.topics!.some(
           (filterTopic) => topic.toLowerCase() === filterTopic.toLowerCase()
         )
       );
-      if (!hasMatchingTopic) return false;
+      if (!hasMatchingTopic) score = -1;
     }
 
-    return true;
+    return { caseItem: c, score };
   });
+
+  return scored
+    .filter((s) => s.score >= 0)
+    .sort((a, b) => b.score - a.score)
+    .map((s) => s.caseItem);
 }
 
 /**

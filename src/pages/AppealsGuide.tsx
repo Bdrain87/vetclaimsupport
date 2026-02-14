@@ -532,6 +532,7 @@ function MyAppealTab() {
   const [additionalContext, setAdditionalContext] = useState('');
   const [exporting, setExporting] = useState(false);
   const [manualCondition, setManualCondition] = useState('');
+  const [manualConditionCategory, setManualConditionCategory] = useState<ConditionCategory | undefined>(undefined);
   const [useManualEntry, setUseManualEntry] = useState(false);
 
   const conditionsWithDetails = useMemo(() =>
@@ -547,7 +548,9 @@ function MyAppealTab() {
     return conditionsWithDetails.find((c) => c.id === selectedConditionId) || null;
   }, [selectedConditionId, conditionsWithDetails]);
 
-  const conditionCategory = selectedCondition?.details?.category as ConditionCategory | undefined;
+  const conditionCategory = useManualEntry
+    ? manualConditionCategory
+    : (selectedCondition?.details?.category as ConditionCategory | undefined);
   const conditionName = useManualEntry
     ? manualCondition
     : (selectedCondition?.details?.name || selectedCondition?.conditionId || '');
@@ -662,9 +665,19 @@ function MyAppealTab() {
           </div>
         ) : (
           <div className="space-y-2">
-            <Input placeholder="Enter condition name (e.g., PTSD, Sleep Apnea, Lumbar Strain)" value={manualCondition} onChange={(e) => setManualCondition(e.target.value)} />
+            <ConditionAutocomplete
+              onSelect={(c) => {
+                setManualCondition(c.abbreviation || c.name);
+                setManualConditionCategory(c.category as ConditionCategory);
+              }}
+              placeholder="Search for a condition (e.g., PTSD, Sleep Apnea, Lumbar Strain)..."
+              showBodySystem
+            />
+            {manualCondition && (
+              <p className="text-xs text-gold">Selected: {manualCondition}</p>
+            )}
             {userConditions.length > 0 && (
-              <button onClick={() => { setUseManualEntry(false); setManualCondition(''); }} className="text-xs text-gold hover:text-gold/80 transition-colors">Select from your conditions instead</button>
+              <button onClick={() => { setUseManualEntry(false); setManualCondition(''); setManualConditionCategory(undefined); }} className="text-xs text-gold hover:text-gold/80 transition-colors">Select from your conditions instead</button>
             )}
           </div>
         )}
@@ -755,14 +768,18 @@ function MyAppealTab() {
 
 export default function AppealsGuide() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedConditionCategory, setSelectedConditionCategory] = useState<string | null>(null);
   const [activeTopic, setActiveTopic] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [exporting, setExporting] = useState(false);
 
-  const filteredCases = useMemo(
-    () => searchCaseLaw(searchQuery, activeTopic ? { topics: [activeTopic] } : undefined),
-    [searchQuery, activeTopic]
-  );
+  const filteredCases = useMemo(() => {
+    const filters: { conditions?: string[]; topics?: string[] } = {};
+    if (selectedConditionCategory) filters.conditions = [selectedConditionCategory];
+    if (activeTopic) filters.topics = [activeTopic];
+    const hasFilters = Object.keys(filters).length > 0;
+    return searchCaseLaw(searchQuery, hasFilters ? filters : undefined);
+  }, [searchQuery, selectedConditionCategory, activeTopic]);
 
   const handleExportPDF = useCallback(async () => {
     if (filteredCases.length === 0) return;
@@ -777,9 +794,10 @@ export default function AppealsGuide() {
   const clearFilters = () => {
     setSearchQuery('');
     setActiveTopic(null);
+    setSelectedConditionCategory(null);
   };
 
-  const hasActiveFilters = searchQuery.length > 0 || activeTopic !== null;
+  const hasActiveFilters = searchQuery.length > 0 || activeTopic !== null || selectedConditionCategory !== null;
 
   return (
     <PageContainer className="py-6 space-y-5">
@@ -847,7 +865,10 @@ export default function AppealsGuide() {
         <TabsContent value="caselaw" className="space-y-4">
           {/* Condition autocomplete - search by code, name, keyword */}
           <ConditionAutocomplete
-            onSelect={(c) => setSearchQuery(c.name)}
+            onSelect={(c) => {
+              setSearchQuery(c.abbreviation || c.name);
+              setSelectedConditionCategory(c.category || null);
+            }}
             placeholder="Search by condition code, name, or keyword..."
             showBodySystem
           />
