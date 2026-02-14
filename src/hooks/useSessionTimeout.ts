@@ -1,6 +1,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { toast } from '@/hooks/use-toast';
+import { clearLocalData } from '@/services/accountManagement';
 
 const TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
 const WARNING_MS = 25 * 60 * 1000; // 25 minutes (5 min before timeout)
@@ -36,6 +37,7 @@ export function useSessionTimeout() {
     } catch {
       // Sign-out best-effort; ignore network errors
     }
+    clearLocalData();
   }, [clearTimers]);
 
   const resetTimers = useCallback(() => {
