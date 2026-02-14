@@ -679,7 +679,7 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 200;
-  max-width: calc(100vw - var(--space-8));
+  max-width: calc(100% - var(--space-8));
 }
 
 /* Action grid for dashboard */
