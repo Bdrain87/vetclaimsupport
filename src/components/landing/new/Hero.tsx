@@ -252,9 +252,6 @@ export function Hero() {
               }}>
                 Limited Launch Price
               </span>
-              <span className="text-xs" style={{ color: '#9CA3AF' }}>
-                • Free plan available
-              </span>
             </motion.div>
           </motion.div>
         </motion.div>
