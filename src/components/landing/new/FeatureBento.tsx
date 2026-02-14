@@ -641,7 +641,7 @@ export function FeatureBento() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1, ease: EASE_SMOOTH }}
           >
-            From symptom tracking to exam prep, document management to timeline building — 45+ specialized tools in one place.
+            Every card below is a tool built for a specific part of your claim preparation. Tap to explore.
           </motion.p>
 
           <MobileCarousel onSelectCard={setSelectedCard} />
@@ -685,14 +685,7 @@ export function FeatureBento() {
               className="text-lg lg:text-xl leading-relaxed"
               style={{ color: '#9CA3AF' }}
             >
-              From symptom tracking to exam prep, document management to timeline building — everything you need to build your strongest VA disability claim.
-            </p>
-
-            <p
-              className="text-base mt-4 leading-relaxed"
-              style={{ color: '#6B7280' }}
-            >
-              Track your health data, organize evidence, prepare for your C&P exam, and understand the VA claims process with 45+ specialized tools designed specifically for veterans.
+              Every card below is a tool built for a specific part of your claim preparation. Tap to explore.
             </p>
           </motion.div>
 

@@ -199,7 +199,7 @@ export function Pricing() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          The VA Claims Industry
+          Know What You're Paying For
         </motion.h2>
         <motion.p
           className="text-center mb-12 text-lg"
@@ -209,7 +209,7 @@ export function Pricing() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          Many veterans pay thousands for services they may not need. Know your options.
+          Most veterans don't realize they have options. Here's how costs compare.
         </motion.p>
 
         {/* Competitor comparison cards */}

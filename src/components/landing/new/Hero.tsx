@@ -102,7 +102,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          Evidence packets, statement builders, exam prep, symptom tracking, and VA math. 45+ tools in one place. One workflow. One system. Generate shareable PDF packets in a click.
+          You served your country. Preparing your claim shouldn't feel like a second battle.
         </motion.p>
 
         {/* CTAs */}
@@ -134,60 +134,6 @@ export function Hero() {
           </motion.button>
         </motion.div>
 
-        {/* Premium pricing box with dual glow */}
-        <motion.div
-          className="relative inline-block"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.9, type: 'spring', stiffness: 200 }}
-        >
-          <motion.div
-            className="inline-flex flex-col items-center gap-2 px-8 py-4 rounded-2xl relative overflow-hidden"
-            style={{
-              background: 'linear-gradient(135deg, rgba(191,149,63,0.08) 0%, rgba(191,149,63,0.02) 100%)',
-              border: '1px solid rgba(191,149,63,0.2)',
-            }}
-            animate={{
-              boxShadow: [
-                '0 0 10px rgba(191,149,63,0.2), 0 0 25px rgba(191,149,63,0.12), 0 0 50px 8px rgba(255,255,255,0.04), 0 0 80px 16px rgba(255,255,255,0.02)',
-                '0 0 18px rgba(191,149,63,0.35), 0 0 40px rgba(191,149,63,0.18), 0 0 65px 12px rgba(255,255,255,0.08), 0 0 100px 24px rgba(255,255,255,0.04)',
-                '0 0 10px rgba(191,149,63,0.2), 0 0 25px rgba(191,149,63,0.12), 0 0 50px 8px rgba(255,255,255,0.04), 0 0 80px 16px rgba(255,255,255,0.02)',
-              ],
-            }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-          >
-            <div className="relative z-10 flex items-center gap-3">
-              <span className="text-sm font-medium" style={{ color: '#D1D5DB' }}>
-                Get Premium
-              </span>
-              <div className="flex items-baseline gap-2">
-                <span className="text-base font-medium line-through" style={{ color: '#6B7280', textDecorationColor: '#EF4444' }}>
-                  $19.99
-                </span>
-                <span className="text-lg" style={{ color: '#BF953F' }}>→</span>
-                <span
-                  className="text-xl font-bold"
-                  style={{
-                    background: 'linear-gradient(135deg, #FCF6BA 0%, #BF953F 50%, #FCF6BA 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                  }}
-                >
-                  $9.99
-                </span>
-              </div>
-            </div>
-            <span className="relative z-10 text-xs px-3 py-1 rounded-full" style={{
-              background: 'linear-gradient(135deg, rgba(191,149,63,0.2), rgba(191,149,63,0.05))',
-              border: '1px solid rgba(191,149,63,0.3)',
-              color: '#E2C468',
-              fontWeight: 600,
-            }}>
-              Limited Launch Price
-            </span>
-          </motion.div>
-        </motion.div>
       </div>
     </section>
   );

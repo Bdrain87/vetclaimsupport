@@ -49,7 +49,7 @@ function CalculatorIcon() {
 const PROPS = [
   {
     Icon: ClipboardIcon,
-    title: 'Organize Your Evidence',
+    title: 'Build Your Case',
     desc: 'Track your conditions, log symptoms daily, and keep your documentation organized. Built-in health trackers map directly to VA rating criteria.',
   },
   {
@@ -97,7 +97,7 @@ export function ValueProps() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          Stop paying thousands to claim companies. Get professional-grade tools to build your strongest case &mdash; for less than a coffee.
+          Three ways to take command of your claim preparation — on your schedule, at your pace.
         </motion.p>
 
         <motion.div

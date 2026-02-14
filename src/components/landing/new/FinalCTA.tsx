@@ -72,25 +72,14 @@ export function FinalCTA() {
         </motion.h2>
 
         <motion.p
-          className="text-lg md:text-xl mb-4 text-center"
+          className="text-lg md:text-xl mb-10 text-center"
           style={{ color: '#D1D5DB' }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1, ease: EASE_SMOOTH }}
         >
-          All the preparation tools you need. Zero upfront cost.
-        </motion.p>
-
-        <motion.p
-          className="text-sm mb-10 text-center"
-          style={{ color: '#6B7280' }}
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.15, ease: EASE_SMOOTH }}
-        >
-          Privacy-first &bull; Free plan available &bull; Veteran founded
+          Your strongest claim starts with preparation. Start building yours today.
         </motion.p>
 
         <motion.div
@@ -128,49 +117,6 @@ export function FinalCTA() {
           </motion.div>
         </motion.div>
 
-        <motion.div
-          className="flex items-center justify-center gap-2 flex-wrap mt-8"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.35 }}
-        >
-          <p className="text-sm text-center" style={{ color: '#6B7280' }}>
-            Premium from
-          </p>
-          <span className="text-sm" style={{ color: '#6B7280', textDecoration: 'line-through' }}>
-            $19.99
-          </span>
-          <span
-            className="text-sm font-semibold"
-            style={{
-              background: 'linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            $9.99
-          </span>
-          <motion.span
-            className="text-xs px-2 py-0.5 rounded-full"
-            style={{
-              background: 'linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05))',
-              border: '1px solid rgba(212,175,55,0.3)',
-              color: '#D4AF37',
-            }}
-            animate={{
-              boxShadow: [
-                '0 0 5px rgba(212,175,55,0.2)',
-                '0 0 15px rgba(212,175,55,0.5)',
-                '0 0 5px rgba(212,175,55,0.2)',
-              ],
-            }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          >
-            limited launch price
-          </motion.span>
-        </motion.div>
       </div>
     </section>
   );
