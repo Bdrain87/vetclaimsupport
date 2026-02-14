@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, ChevronLeft, X, Search, Shield, User, Briefcase, Stethoscope, Check, MapPin, Plane } from 'lucide-react';
+import { ChevronRight, ChevronLeft, X, Search, Shield, User, Briefcase, Stethoscope, Check, MapPin, Plane, ClipboardList, Activity, FileText, Users, Calculator } from 'lucide-react';
 import { useProfileStore, BRANCH_LABELS, BRANCH_COLORS, type Branch, type ClaimGoal } from '@/store/useProfileStore';
 import { searchMilitaryJobs, getCodeTypeForBranch, type MilitaryJobCode } from '@/data/militaryMOS';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
@@ -434,7 +434,7 @@ export default function Onboarding() {
   const STEP_LABELS = [
     'Welcome', 'Your Name', 'Branch of Service', 'Military Job',
     'Duty Stations', 'Deployments', 'Conditions', 'Existing Ratings',
-    'Claim Goal', 'Review', 'Complete',
+    'Claim Goal', 'Getting Started', 'Complete',
   ];
 
   const ProgressDots = () => {
@@ -1029,41 +1029,67 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 9: Feature Showcase */}
+            {/* Step 9: How to Get Results */}
             {step === 9 && (
               <div className="space-y-5">
                 <div className="text-center">
-                  <h2 className="text-xl font-bold text-white">Here's what's inside</h2>
-                  <p className="text-white/40 text-sm mt-1">Tools built to help you prepare your claim</p>
+                  <h2 className="text-xl font-bold text-white">How to Get Results</h2>
+                  <p className="text-white/40 text-sm mt-1">Follow these steps to build the strongest claim possible</p>
                 </div>
-                <div className="space-y-2 max-h-[50vh] overflow-y-auto pr-1">
+                <div className="space-y-3 max-h-[50vh] overflow-y-auto pr-1">
                   {[
-                    { title: 'Rating Calculator', desc: 'Calculate your combined VA disability rating using the bilateral factor formula' },
-                    { title: 'C&P Exam Prep', desc: 'Prepare for your compensation exam with condition-specific checklists' },
-                    { title: 'Personal Statement Generator', desc: 'Build a compelling personal statement step-by-step' },
-                    { title: 'Stressor Statement Builder', desc: 'Guided PTSD/MST stressor statement with who, what, when, where, and how' },
-                    { title: 'Secondary Condition Finder', desc: 'Discover conditions commonly secondary to your rated disabilities' },
-                    { title: 'DBQ Prep Sheet', desc: 'Condition-specific worksheet to organize symptoms, pain levels, and medications before your exam' },
-                    { title: 'Form Fill Guide', desc: 'Step-by-step help completing VA forms with auto-populated fields from your profile' },
-                    { title: 'Claims Journey Tracker', desc: 'Visual timeline showing where each claim stands and what to do next' },
-                    { title: 'Document Scanner', desc: 'Scan and organize your service records, medical documents, and buddy statements' },
-                    { title: 'Doctor Summary Builder', desc: 'Create a medical summary letter for your provider' },
-                    { title: 'Symptom & Sleep Tracking', desc: 'Log symptoms, sleep patterns, and medications to build your evidence trail' },
-                    { title: 'Buddy Statement Builder', desc: 'Draft lay statements from people who witnessed your condition' },
-                    { title: 'VA-Speak Translator', desc: 'Translate VA jargon and acronyms into plain English' },
-                    { title: 'Back Pay Estimator', desc: 'Estimate your potential retroactive compensation' },
-                    { title: 'Condition Explorer', desc: 'Discover conditions related to your MOS with rating criteria breakdowns' },
+                    {
+                      step: '1',
+                      icon: ClipboardList,
+                      title: 'File an Intent to File',
+                      desc: 'Lock in your effective date today. This preserves your right to back pay from the date you notify the VA. Go to the Prep Hub to get started.',
+                    },
+                    {
+                      step: '2',
+                      icon: Activity,
+                      title: 'Start Tracking Symptoms Now',
+                      desc: 'Log your symptoms, sleep issues, and migraines daily. The VA looks at frequency and severity over time. Consistent entries show your condition is ongoing, not a one-time event.',
+                    },
+                    {
+                      step: '3',
+                      icon: Stethoscope,
+                      title: 'Prepare Before Your C&P Exam',
+                      desc: 'Use the C&P Exam Prep tool to review what the examiner will ask for your specific conditions. Know your worst days, not your best. The DBQ Prep Sheet helps you organize your symptoms, severity, and medications beforehand.',
+                    },
+                    {
+                      step: '4',
+                      icon: FileText,
+                      title: 'Build Your Statements',
+                      desc: 'Write your Personal Statement describing how your conditions affect daily life and work. Use the Buddy Statement Builder to help people who witnessed your condition write their own supporting statements.',
+                    },
+                    {
+                      step: '5',
+                      icon: Users,
+                      title: 'Find Secondary Conditions',
+                      desc: 'If you already have a rated disability, use the Secondary Condition Finder to discover related conditions that may be connected. For example, chronic pain conditions often lead to sleep problems or mental health impacts.',
+                    },
+                    {
+                      step: '6',
+                      icon: Calculator,
+                      title: 'Understand Your Rating',
+                      desc: 'Use the Rating Calculator to see how VA math works. The VA combines ratings using a specific formula, not simple addition. Knowing this helps you set realistic expectations and identify where to focus.',
+                    },
                   ].map((card) => (
-                    <div key={card.title} className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.07] border border-white/[0.12]">
-                      <div className="w-1.5 h-1.5 rounded-full bg-gold mt-1.5 flex-shrink-0" />
+                    <div key={card.step} className="flex items-start gap-3 p-4 rounded-xl bg-white/[0.07] border border-white/[0.12]">
+                      <div className="w-10 h-10 rounded-lg bg-[rgba(197,164,66,0.12)] border border-[rgba(197,164,66,0.25)] flex items-center justify-center flex-shrink-0">
+                        <card.icon className="h-5 w-5 text-gold" />
+                      </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-white font-semibold text-sm">{card.title}</p>
-                        <p className="text-white/40 text-xs mt-0.5">{card.desc}</p>
+                        <p className="text-white font-semibold text-sm">Step {card.step}: {card.title}</p>
+                        <p className="text-white/50 text-xs mt-1 leading-relaxed">{card.desc}</p>
                       </div>
                     </div>
                   ))}
                 </div>
-                <p className="text-center text-white/30 text-xs break-words">By continuing, you agree to our <a href="/settings/terms" className="text-gold underline">Terms of Service</a> and <a href="/settings/privacy" className="text-gold underline">Privacy Policy</a>. This is a claim preparation tool &mdash; not a substitute for professional consultation with a VA-accredited representative.</p>
+                <div className="rounded-xl border border-[#2a2a2a] bg-white/[0.03] p-3">
+                  <p className="text-white/40 text-xs leading-relaxed text-center">This tool helps you organize and prepare your own claim. It does not file claims, provide legal or medical advice, or guarantee any outcome. Always consult a VA-accredited representative for guidance specific to your situation.</p>
+                </div>
+                <p className="text-center text-white/30 text-xs break-words">By continuing, you agree to our <a href="/settings/terms" className="text-gold underline">Terms of Service</a> and <a href="/settings/privacy" className="text-gold underline">Privacy Policy</a>.</p>
               </div>
             )}
 
