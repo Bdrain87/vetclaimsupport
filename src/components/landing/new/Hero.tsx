@@ -5,11 +5,9 @@ import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE } from '@/lib/landing-animations';
 
 const ROTATING_WORDS = ['Confidence', 'Clarity', 'Precision', 'Evidence'];
 const CYCLE_MS = 3000;
-const FLIP_MS = 3500;
 
 export function Hero() {
   const [index, setIndex] = useState(0);
-  const [flipped, setFlipped] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -26,11 +24,6 @@ export function Hero() {
     const timer = setInterval(advance, CYCLE_MS);
     return () => clearInterval(timer);
   }, [advance]);
-
-  useEffect(() => {
-    const timer = setInterval(() => setFlipped((f) => !f), FLIP_MS);
-    return () => clearInterval(timer);
-  }, []);
 
   const scrollToHowItWorks = () => {
     const el = document.getElementById('how-it-works');
@@ -141,114 +134,58 @@ export function Hero() {
           </motion.button>
         </motion.div>
 
-        {/* Premium pricing flip card */}
+        {/* Premium pricing box with dual glow */}
         <motion.div
           className="relative inline-block"
-          style={{ perspective: '800px' }}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.9, type: 'spring', stiffness: 200 }}
         >
-          {/* Outer white glow layer */}
           <motion.div
-            className="absolute rounded-2xl pointer-events-none"
-            style={{ inset: '-8px' }}
+            className="inline-flex flex-col items-center gap-2 px-8 py-4 rounded-2xl relative overflow-hidden"
+            style={{
+              background: 'linear-gradient(135deg, rgba(191,149,63,0.08) 0%, rgba(191,149,63,0.02) 100%)',
+              border: '1px solid rgba(191,149,63,0.2)',
+            }}
             animate={{
               boxShadow: [
-                '0 0 25px 8px rgba(255,255,255,0.08), 0 0 50px 15px rgba(255,255,255,0.04)',
-                '0 0 35px 12px rgba(255,255,255,0.14), 0 0 70px 20px rgba(255,255,255,0.06)',
-                '0 0 25px 8px rgba(255,255,255,0.08), 0 0 50px 15px rgba(255,255,255,0.04)',
+                '0 0 10px rgba(191,149,63,0.2), 0 0 25px rgba(191,149,63,0.12), 0 0 50px 8px rgba(255,255,255,0.04), 0 0 80px 16px rgba(255,255,255,0.02)',
+                '0 0 18px rgba(191,149,63,0.35), 0 0 40px rgba(191,149,63,0.18), 0 0 65px 12px rgba(255,255,255,0.08), 0 0 100px 24px rgba(255,255,255,0.04)',
+                '0 0 10px rgba(191,149,63,0.2), 0 0 25px rgba(191,149,63,0.12), 0 0 50px 8px rgba(255,255,255,0.04), 0 0 80px 16px rgba(255,255,255,0.02)',
               ],
             }}
             transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-          />
-
-          <motion.div
-            className="relative"
-            style={{ transformStyle: 'preserve-3d' }}
-            animate={{ rotateY: flipped ? 180 : 0 }}
-            transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
           >
-            {/* FRONT — pricing */}
-            <motion.div
-              className="inline-flex flex-col items-center gap-2 px-8 py-4 rounded-2xl relative overflow-hidden"
-              style={{
-                backfaceVisibility: 'hidden',
-                background: 'linear-gradient(135deg, rgba(191,149,63,0.08) 0%, rgba(191,149,63,0.02) 100%)',
-                border: '1px solid rgba(191,149,63,0.2)',
-              }}
-              animate={{
-                boxShadow: [
-                  '0 0 15px rgba(191,149,63,0.2), 0 0 30px rgba(191,149,63,0.1)',
-                  '0 0 25px rgba(191,149,63,0.35), 0 0 50px rgba(191,149,63,0.15)',
-                  '0 0 15px rgba(191,149,63,0.2), 0 0 30px rgba(191,149,63,0.1)',
-                ],
-              }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <div className="relative z-10 flex items-center gap-3">
-                <span className="text-sm font-medium" style={{ color: '#D1D5DB' }}>
-                  Get Premium
+            <div className="relative z-10 flex items-center gap-3">
+              <span className="text-sm font-medium" style={{ color: '#D1D5DB' }}>
+                Get Premium
+              </span>
+              <div className="flex items-baseline gap-2">
+                <span className="text-base font-medium line-through" style={{ color: '#6B7280', textDecorationColor: '#EF4444' }}>
+                  $19.99
                 </span>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-base font-medium line-through" style={{ color: '#6B7280', textDecorationColor: '#EF4444' }}>
-                    $19.99
-                  </span>
-                  <span className="text-lg" style={{ color: '#BF953F' }}>→</span>
-                  <span
-                    className="text-xl font-bold"
-                    style={{
-                      background: 'linear-gradient(135deg, #FCF6BA 0%, #BF953F 50%, #FCF6BA 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text',
-                    }}
-                  >
-                    $4.99
-                  </span>
-                </div>
+                <span className="text-lg" style={{ color: '#BF953F' }}>→</span>
+                <span
+                  className="text-xl font-bold"
+                  style={{
+                    background: 'linear-gradient(135deg, #FCF6BA 0%, #BF953F 50%, #FCF6BA 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                  }}
+                >
+                  $4.99
+                </span>
               </div>
-              <span className="relative z-10 text-xs px-3 py-1 rounded-full" style={{
-                background: 'linear-gradient(135deg, rgba(191,149,63,0.2), rgba(191,149,63,0.05))',
-                border: '1px solid rgba(191,149,63,0.3)',
-                color: '#E8C560',
-                fontWeight: 600,
-              }}>
-                Limited Launch Price
-              </span>
-            </motion.div>
-
-            {/* BACK — LAUNCH SALE */}
-            <motion.div
-              className="absolute inset-0 inline-flex items-center justify-center rounded-2xl overflow-hidden"
-              style={{
-                backfaceVisibility: 'hidden',
-                rotateY: 180,
-                background: 'linear-gradient(135deg, rgba(191,149,63,0.12) 0%, rgba(191,149,63,0.03) 100%)',
-                border: '1px solid rgba(191,149,63,0.3)',
-              }}
-              animate={{
-                boxShadow: [
-                  '0 0 15px rgba(191,149,63,0.2), 0 0 30px rgba(191,149,63,0.1)',
-                  '0 0 25px rgba(191,149,63,0.35), 0 0 50px rgba(191,149,63,0.15)',
-                  '0 0 15px rgba(191,149,63,0.2), 0 0 30px rgba(191,149,63,0.1)',
-                ],
-              }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <span
-                className="text-2xl font-black tracking-wider"
-                style={{
-                  background: 'linear-gradient(135deg, #FCF6BA 0%, #BF953F 30%, #FCF6BA 60%, #AA771C 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  textShadow: 'none',
-                }}
-              >
-                LAUNCH SALE!
-              </span>
-            </motion.div>
+            </div>
+            <span className="relative z-10 text-xs px-3 py-1 rounded-full" style={{
+              background: 'linear-gradient(135deg, rgba(191,149,63,0.2), rgba(191,149,63,0.05))',
+              border: '1px solid rgba(191,149,63,0.3)',
+              color: '#E8C560',
+              fontWeight: 600,
+            }}>
+              Limited Launch Price
+            </span>
           </motion.div>
         </motion.div>
       </div>
