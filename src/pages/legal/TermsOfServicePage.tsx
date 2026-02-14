@@ -189,7 +189,7 @@ export default function TermsOfServicePage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">13. Payment and Subscriptions</h2>
           <p className="text-muted-foreground">
-            VCS offers a free tier with limited features and a paid Premium tier available as a one-time lifetime purchase. Upon purchase, you receive permanent access to all Premium features. Pricing is subject to change; however, existing purchasers retain the features included at the time of their purchase.
+            VCS offers a free tier with limited features and a paid Premium tier. Premium access grants you the features available at the time of purchase. Future major updates or new feature additions may require a separate purchase. Pricing and feature availability are subject to change with reasonable notice.
           </p>
           <p className="text-muted-foreground">
             If the Service is discontinued, we will provide at least 30 days&apos; notice and data export capabilities. Payment is processed through our web payment processor. VCS does not directly collect or store your payment card information.
