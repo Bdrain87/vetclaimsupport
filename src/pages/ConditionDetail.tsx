@@ -607,7 +607,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
         <Button variant="outline" size="sm" onClick={() => navigate('/claims/secondary-finder')}>
           <Link2 className="h-3 w-3 mr-1" /> Find Secondaries
         </Button>
-        <Button variant="outline" size="sm" onClick={() => navigate('/prep/nexus-letter')}>
+        <Button variant="outline" size="sm" onClick={() => navigate('/prep/doctor-summary')}>
           <FileText className="h-3 w-3 mr-1" /> Doctor Summary
         </Button>
         <Button variant="outline" size="sm" onClick={() => navigate('/prep/exam')}>

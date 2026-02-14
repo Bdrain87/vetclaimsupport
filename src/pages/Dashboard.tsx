@@ -291,7 +291,7 @@ export default function Dashboard() {
             { name: 'Rating Calculator', icon: Calculator, path: '/claims/calculator' },
             { name: 'VA-Speak Translator', icon: Languages, path: '/prep/va-speak' },
             { name: 'C&P Exam Prep', icon: ClipboardCheck, path: '/prep/exam' },
-            { name: 'Doctor Summary', icon: FileSignature, path: '/prep/nexus-letter' },
+            { name: 'Doctor Summary', icon: FileSignature, path: '/prep/doctor-summary' },
             { name: 'Body Map', icon: PersonStanding, path: '/claims/body-map' },
             { name: 'Stressor Statement', icon: Shield, path: '/prep/stressor' },
             { name: 'Buddy Statement', icon: Users, path: '/prep/buddy-statement' },
