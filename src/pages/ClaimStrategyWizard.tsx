@@ -10,6 +10,7 @@ import {
   User,
   AlertCircle,
   CheckCircle2,
+  Info,
   Loader2,
   TrendingUp,
   Target,
@@ -188,6 +189,7 @@ export default function ClaimStrategyWizard() {
   const [data, setData] = useState<WizardData>(prePopulated);
   const [isGenerating, setIsGenerating] = useState(false);
   const [strategy, setStrategy] = useState<StrategyResult | null>(null);
+  const [isOfflineFallback, setIsOfflineFallback] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
@@ -322,8 +324,9 @@ Consider:
       if (jsonMatch) {
         const parsed = JSON.parse(jsonMatch[0]) as StrategyResult;
         setStrategy(parsed);
+        setIsOfflineFallback(false);
       } else {
-        // Fallback: create a structured response from text
+        setIsOfflineFallback(true);
         setStrategy({
           summary: responseText.slice(0, 500),
           filingType: 'Standard Claim - Review the full analysis for details',
@@ -340,8 +343,7 @@ Consider:
       }
     } catch {
       setError('Unable to generate strategy. Please try again or check your connection.');
-
-      // Provide a basic fallback strategy
+      setIsOfflineFallback(true);
       setStrategy({
         summary: 'Based on your information, you have a foundation for a VA disability claim. Review the recommendations below.',
         filingType: data.serviceInfo.endDate &&
@@ -392,6 +394,7 @@ Consider:
   const resetWizard = () => {
     setData(initialData);
     setStrategy(null);
+    setIsOfflineFallback(false);
     setError(null);
     setCurrentStep(1);
   };
@@ -740,7 +743,24 @@ attorney for official guidance on your specific claim.
 
             {strategy && !isGenerating && (
               <>
-                <AIDisclaimer variant="banner" />
+                {isOfflineFallback ? (
+                  <Card className="border-muted bg-muted/30">
+                    <CardContent className="pt-6">
+                      <div className="flex items-start gap-3">
+                        <Info className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+                        <div>
+                          <p className="font-medium text-sm">Offline Guidance</p>
+                          <p className="text-xs text-muted-foreground">
+                            This strategy was generated using general VA claim rules, not AI.
+                            Reconnect to the internet and retry for a personalized AI analysis.
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <AIDisclaimer variant="banner" />
+                )}
 
                 {/* Summary */}
                 <Card className="bg-primary/5 border-primary/30">

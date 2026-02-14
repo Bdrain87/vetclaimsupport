@@ -4,11 +4,11 @@ const RETENTION_MS = RETENTION_DAYS * 24 * 60 * 60 * 1000;
 const RETENTION_WARNING_KEY = '_retentionWarningShown';
 
 /** localStorage keys used by the app's Zustand stores */
-const _APP_STORAGE_KEYS = [
+export const APP_STORAGE_KEYS = [
   'vcs-app-data',
   'vet-user-profile',
   'vcs-ai-cache',
-];
+] as const;
 
 /**
  * Check whether app data has exceeded the retention period (365 days of
@@ -22,12 +22,35 @@ export function checkDataRetention(): void {
   if (lastActivityRaw) {
     const lastActivity = Number(lastActivityRaw);
     if (!Number.isNaN(lastActivity) && now - lastActivity > RETENTION_MS) {
-      // Do NOT auto-purge. Flag for user confirmation on next interaction.
       localStorage.setItem(RETENTION_WARNING_KEY, 'pending');
     }
   }
 
-  // Update the timestamp to now
   localStorage.setItem(LAST_ACTIVITY_KEY, String(now));
+}
+
+/**
+ * Returns true if a data retention warning is pending (user was inactive for
+ * 365+ days). The caller should surface a dialog/banner to the user.
+ */
+export function isRetentionWarningPending(): boolean {
+  return localStorage.getItem(RETENTION_WARNING_KEY) === 'pending';
+}
+
+/** Dismiss the retention warning after user has acknowledged it. */
+export function dismissRetentionWarning(): void {
+  localStorage.removeItem(RETENTION_WARNING_KEY);
+}
+
+/**
+ * Purge all app data from localStorage and IndexedDB.
+ * Called only after explicit user confirmation.
+ */
+export function purgeAppData(): void {
+  for (const key of APP_STORAGE_KEYS) {
+    localStorage.removeItem(key);
+  }
+  localStorage.removeItem(LAST_ACTIVITY_KEY);
+  localStorage.removeItem(RETENTION_WARNING_KEY);
 }
 

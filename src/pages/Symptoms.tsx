@@ -3,6 +3,7 @@ import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { useEvidence } from '@/hooks/useEvidence';
 import { getConditionById } from '@/data/vaConditions';
+import { useToast } from '@/hooks/use-toast';
 import {
   Activity, Plus, Trash2, Edit, Calendar, Download, Clock,
   TrendingUp, Filter, BarChart3, CalendarDays, List,
@@ -113,6 +114,7 @@ interface ExtendedSymptomForm {
 export default function Symptoms() {
   const { data, addSymptom, updateSymptom, deleteSymptom } = useClaims();
   const { documents, setAllDocuments } = useEvidence();
+  const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'list' | 'timeline'>('list');
@@ -298,7 +300,11 @@ export default function Symptoms() {
       setIsOpen(false);
       resetForm();
     } catch {
-      // Symptom save failed silently
+      toast({
+        title: 'Save Failed',
+        description: 'Could not save your symptom log. Please try again.',
+        variant: 'destructive',
+      });
     }
   };
 

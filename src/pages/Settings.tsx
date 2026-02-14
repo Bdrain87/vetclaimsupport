@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Scale, Shield, FileText, AlertTriangle, ChevronRight, User, Plus, Trash2, Briefcase, Info, HelpCircle, BookOpen } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
@@ -6,6 +6,17 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { useTheme } from '@/hooks/useTheme';
 import { useToast } from '@/hooks/use-toast';
 import { ShareWithVSO } from '@/components/dashboard/ShareWithVSO';
@@ -101,13 +112,10 @@ export default function Settings() {
     profile.setFirstName(profileForm.firstName);
     profile.setLastName(profileForm.lastName);
 
-    // Save separation date from form (consistent with other fields)
     profile.setSeparationDate(profileForm.separationDate || '');
 
-    // Save service periods
     profile.setServicePeriods(servicePeriods);
 
-    // Also keep legacy fields in sync with the first period for backward compat
     const first = servicePeriods[0];
     if (first) {
       if (first.branch) {
@@ -121,6 +129,17 @@ export default function Settings() {
 
     toast({ title: 'Profile Updated', description: 'Your profile has been saved.' });
   };
+
+  const separationAutoSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (separationAutoSaveTimer.current) clearTimeout(separationAutoSaveTimer.current);
+    separationAutoSaveTimer.current = setTimeout(() => {
+      profile.setSeparationDate(profileForm.separationDate || '');
+    }, 800);
+    return () => {
+      if (separationAutoSaveTimer.current) clearTimeout(separationAutoSaveTimer.current);
+    };
+  }, [profileForm.separationDate, profile]);
 
   const [reminderSettings, setReminderSettings] = useState<ReminderSettings>(getInitialReminderSettings);
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default');
@@ -398,6 +417,7 @@ export default function Settings() {
             />
             <p className="text-xs text-muted-foreground">
               Used to calculate your BDD filing window. Leave blank if you are already separated.
+              Auto-saved when changed.
             </p>
           </div>
           <div className="flex gap-2">
@@ -710,17 +730,34 @@ export default function Settings() {
 
       {/* Reset Onboarding */}
       <div className="flex justify-center pt-2 pb-4">
-        <button
-          onClick={() => {
-            if (window.confirm('This will reset your profile and restart the onboarding process. Are you sure?')) {
-              profile.resetProfile();
-              navigate('/onboarding');
-            }
-          }}
-          className="text-muted-foreground hover:text-foreground text-sm underline"
-        >
-          Reset Onboarding
-        </button>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <button className="text-muted-foreground hover:text-foreground text-sm underline">
+              Reset Onboarding
+            </button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Reset Onboarding?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This will reset your profile and restart the onboarding process.
+                Your claim data (symptoms, conditions, documents) will be preserved.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  profile.resetProfile();
+                  navigate('/onboarding');
+                }}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                Reset
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
 
     </PageContainer>

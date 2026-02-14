@@ -14,6 +14,7 @@ import { migrateOldDataToAppStore } from './utils/migrateData';
 import { useSessionTimeout } from './hooks/useSessionTimeout';
 import { useHydration } from './hooks/useHydration';
 import { checkDataRetention } from './utils/dataRetention';
+import { RetentionWarningBanner } from './components/RetentionWarningBanner';
 import { isWeb } from './lib/platform';
 
 // Run migration before React renders (synchronous, runs once)
@@ -374,6 +375,7 @@ function App() {
           )}
           <BrowserRouter>
             <ScrollToTop />
+            <RetentionWarningBanner />
             <AppContent />
           </BrowserRouter>
         </TooltipProvider>

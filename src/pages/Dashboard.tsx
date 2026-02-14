@@ -705,6 +705,11 @@ export default function Dashboard() {
             >
               Save Log
             </Button>
+            {!selectedMood && (
+              <p className="text-xs text-muted-foreground text-center">
+                Select a mood to save your log
+              </p>
+            )}
           </div>
         )}
       </motion.div>

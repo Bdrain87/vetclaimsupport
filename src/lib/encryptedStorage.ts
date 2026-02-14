@@ -40,6 +40,19 @@ export function clearSessionPassword(): void {
  */
 const ENCRYPTED_PREFIX = '__encrypted__:';
 
+// ---- write lock for serializing encrypted writes --------------------------
+
+const _writeLocks = new Map<string, Promise<void>>();
+
+function serializedWrite(key: string, fn: () => Promise<void>): void {
+  const prev = _writeLocks.get(key) ?? Promise.resolve();
+  const next = prev.then(fn, fn);
+  _writeLocks.set(key, next);
+  next.finally(() => {
+    if (_writeLocks.get(key) === next) _writeLocks.delete(key);
+  });
+}
+
 // ---- StateStorage implementation --------------------------------------------
 
 /**
@@ -128,23 +141,19 @@ export const encryptedStorage: StateStorage = {
 
     // Encrypt and write.  Because `encrypt` is async we cannot return
     // synchronously, but Zustand's persist middleware tolerates void return
-    // from setItem.  We fire-and-forget the write; the next `getItem` will
-    // always read the latest value from localStorage.
+    // from setItem.  Writes are serialized per-key so rapid successive
+    // writes resolve in order, preventing out-of-order overwrites.
     const password = _sessionPassword;
-    encrypt(value, password)
-      .then((ciphertext) => {
-        try {
-          localStorage.setItem(key, ENCRYPTED_PREFIX + ciphertext);
-        } catch (error) {
-          console.warn('[encryptedStorage] localStorage.setItem failed:', error);
-        }
-      })
-      .catch(() => {
+    serializedWrite(key, async () => {
+      try {
+        const ciphertext = await encrypt(value, password);
+        localStorage.setItem(key, ENCRYPTED_PREFIX + ciphertext);
+      } catch (error) {
         console.error(
-          '[encryptedStorage] Encryption failed for key "' + key + '" — ' +
-          'write was BLOCKED to prevent storing unencrypted data.',
+          '[encryptedStorage] Encryption/write failed for key "' + key + '":', error,
         );
-      });
+      }
+    });
   },
 
   removeItem(key: string): void {
