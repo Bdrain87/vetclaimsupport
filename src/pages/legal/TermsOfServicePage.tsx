@@ -48,7 +48,7 @@ export default function TermsOfServicePage() {
             <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span>Educational resources about VA benefits and processes</li>
             <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span>Health and symptom logging tools</li>
             <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span>Evidence organization and tracking</li>
-            <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span>VA form drafting assistance</li>
+            <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span>Educational templates and organizational worksheets (VCS does not prepare, present, or prosecute claims as defined under 38 C.F.R. &sect; 14.629)</li>
             <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span>AI-powered writing suggestions</li>
             <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span>Rating calculators and estimators</li>
             <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span>C&amp;P exam preparation materials</li>
@@ -60,7 +60,7 @@ export default function TermsOfServicePage() {
           <h2 className="text-lg font-semibold text-foreground">3. What VCS Is NOT &mdash; VA Accreditation Disclosure</h2>
           <div className="rounded-xl bg-red-500/5 border border-red-500/20 p-4">
             <p className="text-muted-foreground">
-              <strong className="text-foreground">IMPORTANT:</strong> Vet Claim Support is NOT affiliated with, endorsed by, or connected to the U.S. Department of Veterans Affairs (VA). VCS is NOT a VA-accredited representative, attorney, claims agent, or Veterans Service Organization (VSO) as defined under 38 U.S.C. &sect;&sect; 5901-5905 and 38 C.F.R. Part 14.
+              <strong className="text-foreground">IMPORTANT:</strong> Vet Claim Support is NOT affiliated with, endorsed by, or connected to the U.S. Department of Veterans Affairs (VA). VCS is NOT a VA-accredited representative, attorney, claims agent, or Veterans Service Organization (VSO) as defined under 38 U.S.C. &sect;&sect; 5901-5905 and 38 C.F.R. Part 14. VCS does not engage in the &quot;preparation, presentation, or prosecution&quot; of VA claims as those terms are defined under 38 C.F.R. &sect; 14.629.
             </p>
           </div>
           <p className="text-muted-foreground">
@@ -189,10 +189,10 @@ export default function TermsOfServicePage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">13. Payment and Subscriptions</h2>
           <p className="text-muted-foreground">
-            VCS offers a free tier with limited features and a paid Premium subscription. Premium subscriptions are billed monthly and may be cancelled at any time. Upon cancellation, you retain access to Premium features through the end of your current billing period, after which your account reverts to the free tier. Pricing is subject to change with 30 days&apos; notice to active subscribers.
+            VCS offers a free tier with limited features and a paid Premium tier available as a one-time lifetime purchase. Upon purchase, you receive permanent access to all Premium features. Pricing is subject to change; however, existing purchasers retain the features included at the time of their purchase.
           </p>
           <p className="text-muted-foreground">
-            If the Service is discontinued, we will provide at least 30 days&apos; notice and data export capabilities. Payment is processed through the platform where you subscribed (e.g., Apple App Store, Google Play Store, or web payment processor). VCS does not directly collect or store your payment card information.
+            If the Service is discontinued, we will provide at least 30 days&apos; notice and data export capabilities. Payment is processed through our web payment processor. VCS does not directly collect or store your payment card information.
           </p>
         </section>
 

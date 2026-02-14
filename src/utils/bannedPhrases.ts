@@ -15,6 +15,14 @@ const BANNED_PHRASES: string[] = [
   'license number',
   'npi',
   'respectfully submitted',
+  'independent medical examination',
+  'ime',
+  'medical nexus',
+  'within a reasonable degree of medical probability',
+  'board-certified',
+  'i have reviewed',
+  'based on my review',
+  'it is my professional opinion',
 ];
 
 const CONCLUSION_PHRASES: RegExp[] = [
