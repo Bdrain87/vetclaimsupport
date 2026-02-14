@@ -88,7 +88,7 @@ export function HowItWorks() {
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.1, ease: EASE_SMOOTH }}
       >
-        Your service history, your conditions, your claim — organized and ready.
+        A clear path from service history to claim-ready — no guesswork.
       </motion.p>
 
       <motion.div
