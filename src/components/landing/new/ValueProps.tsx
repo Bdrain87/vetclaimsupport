@@ -50,7 +50,7 @@ const PROPS = [
   {
     Icon: ClipboardIcon,
     title: 'Build Your Case',
-    desc: 'Track your conditions, log symptoms daily, and keep your documentation organized. Built-in health trackers map directly to VA rating criteria.',
+    desc: 'Track your conditions, log symptoms daily, and keep everything in one place. Built-in health trackers map directly to VA rating criteria.',
   },
   {
     Icon: TranslateIcon,
@@ -87,7 +87,7 @@ export function ValueProps() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: EASE_SMOOTH }}
         >
-          Your Claim, Your Control
+          Prepare With Confidence
         </motion.h2>
         <motion.p
           className="text-center mb-16 text-lg max-w-2xl mx-auto"
@@ -97,7 +97,7 @@ export function ValueProps() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          Three ways to take command of your claim preparation — on your schedule, at your pace.
+          Three ways to strengthen your claim — on your schedule, at your pace.
         </motion.p>
 
         <motion.div

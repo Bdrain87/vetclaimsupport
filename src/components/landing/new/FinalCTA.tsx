@@ -65,9 +65,9 @@ export function FinalCTA() {
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: EASE_SMOOTH }}
         >
-          Ready to Take Control{' '}
+          Start Building{' '}
           <span className="block md:inline" style={GOLD_GRADIENT_TEXT}>
-            of Your Claim?
+            Your Strongest Claim
           </span>
         </motion.h2>
 

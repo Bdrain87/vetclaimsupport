@@ -18,12 +18,12 @@ const STEPS = [
   {
     num: '01',
     title: 'Enter Your Service Details',
-    desc: 'Job codes, duty stations, deployments, combat zones, and exposures. We help you organize your service history and identify conditions you may want to research further.',
+    desc: 'Job codes, duty stations, deployments, combat zones, and exposures. We help you document your service history and identify conditions you may want to research further.',
   },
   {
     num: '02',
     title: 'Upload & Link Documentation',
-    desc: 'For each condition, organize your medical records, buddy statements, and supporting documents in one place.',
+    desc: 'For each condition, link your medical records, buddy statements, and supporting documents in one place.',
   },
   {
     num: '03',
@@ -33,7 +33,7 @@ const STEPS = [
   {
     num: '04',
     title: 'Export and Review',
-    desc: 'Export your organized notes, drafted statements, and tracked health data to review with a VA-accredited VSO or representative before filing.',
+    desc: 'Export your notes, drafted statements, and tracked health data. Review everything before you file.',
   },
 ];
 
@@ -88,7 +88,7 @@ export function HowItWorks() {
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.1, ease: EASE_SMOOTH }}
       >
-        Walk into your VSO meeting with everything ready.
+        Walk into your appointment with everything ready.
       </motion.p>
 
       <motion.div

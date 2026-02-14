@@ -89,9 +89,9 @@ const CARDS: CardData[] = [
   {
     icon: Upload,
     title: 'Document Upload',
-    short: 'Securely upload and organize all your evidence files',
-    detail: 'Upload medical records, service documents, and supporting evidence. Everything encrypted and organized by condition.',
-    capabilities: ['Secure file upload', 'Document categorization', 'Evidence organization', 'AES-256 encryption'],
+    short: 'Securely upload and store all your evidence files',
+    detail: 'Upload medical records, service documents, and supporting evidence. Everything encrypted and sorted by condition.',
+    capabilities: ['Secure file upload', 'Document categorization', 'Evidence management', 'AES-256 encryption'],
     plan: 'Included in Launch Plan ($9.99)',
     category: 'Documents',
   },
@@ -99,8 +99,8 @@ const CARDS: CardData[] = [
     icon: Library,
     title: 'Evidence Library',
     short: 'Centralized hub for all your claim documentation',
-    detail: 'Access all your uploaded documents, generated statements, and evidence in one organized library with powerful search.',
-    capabilities: ['Document library', 'Search and filter', 'Tag organization', 'Quick access'],
+    detail: 'Access all your uploaded documents, generated statements, and evidence in one searchable library.',
+    capabilities: ['Document library', 'Search and filter', 'Tag management', 'Quick access'],
     plan: 'Included in Launch Plan ($9.99)',
     category: 'Documents',
   },
@@ -120,7 +120,7 @@ const CARDS: CardData[] = [
     detail: 'Create a visual timeline connecting your service history to medical events, treatments, and symptoms over time.',
     capabilities: ['Chronological view', 'Service connection', 'Medical event tracking', 'Visual history'],
     plan: 'Included in Launch Plan ($9.99)',
-    category: 'Organization',
+    category: 'Workflow',
   },
   {
     icon: Stethoscope,
@@ -138,7 +138,7 @@ const CARDS: CardData[] = [
     detail: 'Comprehensive checklist of all documents needed for your claim with progress tracking and submission readiness.',
     capabilities: ['Document requirements', 'Progress tracking', 'Submission checklist', 'Missing items alerts'],
     plan: 'Included in Launch Plan ($9.99)',
-    category: 'Organization',
+    category: 'Checklist',
   },
   {
     icon: Briefcase,
@@ -156,7 +156,7 @@ const CARDS: CardData[] = [
     detail: 'Visual progress tracker through all four phases of the VA claim process with milestone notifications and guidance.',
     capabilities: ['Phase tracking', 'Milestone alerts', 'Progress visualization', 'Next-step guidance'],
     plan: 'Included in Launch Plan ($9.99)',
-    category: 'Organization',
+    category: 'Progress',
   },
 ];
 

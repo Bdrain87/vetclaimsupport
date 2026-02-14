@@ -50,11 +50,11 @@ const PREMIUM_FEATURE_GROUPS: FeatureGroup[] = [
     ],
   },
   {
-    category: 'Organize & Export',
+    category: 'Package & Export',
     features: [
       'Full Claim Packet Builder',
       'Document Scanner & Upload',
-      'PDF Export & VSO Sharing',
+      'PDF Export & Sharing',
       'Encrypted AES-256 Cloud Backup',
     ],
   },
