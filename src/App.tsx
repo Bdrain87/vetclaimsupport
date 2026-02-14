@@ -39,7 +39,7 @@ const Migraines = lazy(() => import('./pages/Migraines'));
 const MedicalVisits = lazy(() => import('./pages/MedicalVisits'));
 const Exposures = lazy(() => import('./pages/Exposures'));
 const BuddyStatements = lazy(() => import('./pages/BuddyStatements'));
-const NexusLetterGenerator = lazy(() => import('./pages/NexusLetterGenerator'));
+const DoctorSummaryOutline = lazy(() => import('./pages/DoctorSummaryOutline'));
 const DocumentsHub = lazy(() => import('./pages/DocumentsHub'));
 const CPExamPrepEnhanced = lazy(() => import('./pages/CPExamPrepEnhanced'));
 const DBQPrepSheet = lazy(() => import('./pages/DBQPrepSheet'));
@@ -205,7 +205,8 @@ function AnimatedRoutes() {
           <Route path="/prep/exam" element={<CPExamPrepEnhanced />} />
           <Route path="/prep/personal-statement" element={<PersonalStatement />} />
           <Route path="/prep/buddy-statement" element={<BuddyStatements />} />
-          <Route path="/prep/nexus-letter" element={<NexusLetterGenerator />} />
+          <Route path="/prep/doctor-summary" element={<DoctorSummaryOutline />} />
+          <Route path="/prep/nexus-letter" element={<Navigate to="/prep/doctor-summary" replace />} />
           <Route path="/prep/stressor" element={<StressorStatement />} />
           <Route path="/prep/form-guide" element={<FormGuide />} />
           <Route path="/prep/form-guide/:formId" element={<FormGuideDetail />} />
@@ -247,7 +248,7 @@ function AnimatedRoutes() {
           <Route path="/conditions/:id" element={<RedirectConditionToClaimsId />} />
           <Route path="/calculator" element={<Navigate to="/claims/calculator" replace />} />
           <Route path="/secondary-finder" element={<Navigate to="/claims/secondary-finder" replace />} />
-          <Route path="/nexus-letter" element={<Navigate to="/prep/nexus-letter" replace />} />
+          <Route path="/nexus-letter" element={<Navigate to="/prep/doctor-summary" replace />} />
           <Route path="/dbq-prep" element={<Navigate to="/prep/dbq" replace />} />
           <Route path="/cp-exam-prep" element={<Navigate to="/prep/exam" replace />} />
           <Route path="/claim-strategy" element={<Navigate to="/claims/strategy" replace />} />

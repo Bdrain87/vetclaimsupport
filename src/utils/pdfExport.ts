@@ -1,6 +1,7 @@
 // PDF Export Utilities for Vet Claim Support
 import type jsPDFType from 'jspdf';
 import type { ServiceEntry, MedicalVisit, SymptomEntry, Medication, Exposure, DocumentItem, BuddyContact, ClaimsData, ClaimCondition, MigraineEntry, SleepEntry } from '@/types/claims';
+import { DOCTOR_SUMMARY_DISCLAIMER } from '@/utils/bannedPhrases';
 
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import('jspdf');
@@ -2078,4 +2079,284 @@ export const exportBackPayEstimate = async (data: BackPayEstimateData) => {
 
   addPDFFooter(doc);
   doc.save('back-pay-estimate.pdf');
+};
+
+// ============================================================================
+// Doctor Summary Outline (Patient-Prepared) PDF Export
+// ============================================================================
+
+interface OutlineFormDataForPDF {
+  primaryCondition: string;
+  secondaryCondition: string;
+  veteranName: string;
+  serviceStartDate: string;
+  serviceEndDate: string;
+  branchOfService: string;
+  mosOrJobCode: string;
+  inServiceEvent: string;
+  onsetTimeline: string;
+  continuityDescription: string;
+  dutyContext: string;
+  symptomTiming: string;
+  medicationEffects: string;
+  flarePatterns: string;
+  functionalInterplay: string;
+  baselineSymptoms: string;
+  currentSymptoms: string;
+  worseningOverTime: string;
+  exposures: string[];
+  evidenceReferences: Array<{ type: string; date: string; provider: string; title: string }>;
+  personalStatementEnabled: boolean;
+  personalStatementTimeline: string;
+  personalStatementFrequency: string;
+  personalStatementFunctionalImpact: string;
+  personalStatementTreatmentResponse: string;
+  personalStatementTriggers: string;
+  personalStatementMissedWork: string;
+  personalStatementExamples: string;
+  currentSymptomsDetail: string;
+  symptomFrequency: string;
+  symptomSeverity: string;
+  symptomTriggers: string;
+  currentMedications: string;
+  medicationResponse: string;
+  functionalImpact: string;
+}
+
+const addOutlineDisclaimerFooter = (doc: jsPDFType) => {
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const pageWidth = doc.internal.pageSize.getWidth();
+
+  doc.setDrawColor(...colors.border);
+  doc.setLineWidth(0.3);
+  doc.line(20, pageHeight - 48, pageWidth - 20, pageHeight - 48);
+
+  doc.setFontSize(7);
+  doc.setTextColor(...colors.muted);
+  doc.setFont('helvetica', 'bold');
+  doc.text('DISCLAIMER', pageWidth / 2, pageHeight - 43, { align: 'center' });
+
+  doc.setFont('helvetica', 'normal');
+  const disclaimerLines = doc.splitTextToSize(DOCTOR_SUMMARY_DISCLAIMER, pageWidth - 40);
+  disclaimerLines.forEach((line: string, i: number) => {
+    doc.text(line, pageWidth / 2, pageHeight - 38 + (i * 4), { align: 'center' });
+  });
+};
+
+const addOutlineSection = (
+  doc: jsPDFType,
+  title: string,
+  fields: Array<{ label: string; value: string }>,
+  yPos: number,
+): number => {
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const filledFields = fields.filter(f => f.value.trim());
+  if (filledFields.length === 0) return yPos;
+
+  yPos = checkPageBreak(doc, yPos, 30);
+
+  doc.setFontSize(12);
+  doc.setTextColor(...colors.primary);
+  doc.setFont('helvetica', 'bold');
+  doc.text(title, 20, yPos);
+  yPos += 2;
+  doc.setDrawColor(...colors.primary);
+  doc.setLineWidth(0.4);
+  doc.line(20, yPos, pageWidth - 20, yPos);
+  yPos += 6;
+
+  for (const field of filledFields) {
+    yPos = checkPageBreak(doc, yPos, 15);
+
+    doc.setFontSize(9);
+    doc.setTextColor(...colors.muted);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`${field.label}:`, 24, yPos);
+    yPos += 5;
+
+    doc.setFontSize(9);
+    doc.setTextColor(...colors.secondary);
+    doc.setFont('helvetica', 'normal');
+    const valueLines = doc.splitTextToSize(field.value, pageWidth - 52);
+    for (const line of valueLines) {
+      yPos = checkPageBreak(doc, yPos, 8);
+      doc.text(line, 28, yPos);
+      yPos += 4;
+    }
+    yPos += 3;
+  }
+
+  return yPos;
+};
+
+export const exportDoctorSummaryOutlinePDF = async (data: OutlineFormDataForPDF) => {
+  const jsPDF = await loadJsPDF();
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageCount = { value: 1 };
+
+  let yPos = addPDFHeader(doc, {
+    title: 'Doctor Summary Outline (Patient-Prepared)',
+    subtitle: 'Structured information outline for clinical visit',
+  });
+
+  yPos = drawInfoBox(
+    doc,
+    'This document was prepared by the veteran to organize information for a clinical visit. It is not a medical opinion, clinician letter, or legal document. A licensed clinician must independently evaluate the veteran and author any clinical statements.',
+    yPos,
+  );
+
+  yPos = addOutlineSection(doc, 'Veteran and Service Details (Facts)', [
+    { label: 'Name', value: data.veteranName },
+    { label: 'Branch of Service', value: data.branchOfService },
+    { label: 'MOS / Job Code', value: data.mosOrJobCode },
+    {
+      label: 'Service Dates',
+      value:
+        data.serviceStartDate && data.serviceEndDate
+          ? `${new Date(data.serviceStartDate).toLocaleDateString()} - ${new Date(data.serviceEndDate).toLocaleDateString()}`
+          : '',
+    },
+  ], yPos);
+
+  const conditionLabels: string[] = [];
+  if (data.primaryCondition) conditionLabels.push(`Primary: ${data.primaryCondition}`);
+  if (data.secondaryCondition) conditionLabels.push(`Secondary: ${data.secondaryCondition}`);
+  if (conditionLabels.length > 0) {
+    yPos = addOutlineSection(doc, 'Conditions Selected (Labels)', [
+      { label: 'Conditions', value: conditionLabels.join('\n') },
+    ], yPos);
+  }
+
+  yPos = addOutlineSection(doc, 'Service History Context (Patient-Reported)', [
+    { label: 'In-service event / incident', value: data.inServiceEvent },
+    { label: 'Onset timeline', value: data.onsetTimeline },
+    { label: 'Continuity of symptoms', value: data.continuityDescription },
+    { label: 'Relevant duty / MOS context', value: data.dutyContext },
+  ], yPos);
+
+  yPos = addOutlineSection(doc, 'Relationship Context (Patient-Reported)', [
+    { label: 'Symptom timing', value: data.symptomTiming },
+    { label: 'Medication effects', value: data.medicationEffects },
+    { label: 'Flare patterns', value: data.flarePatterns },
+    { label: 'Functional interplay', value: data.functionalInterplay },
+  ], yPos);
+
+  yPos = addOutlineSection(doc, 'Worsening Over Time (Patient-Reported)', [
+    { label: 'Baseline symptoms', value: data.baselineSymptoms },
+    { label: 'Current symptoms', value: data.currentSymptoms },
+    { label: 'Progression over time', value: data.worseningOverTime },
+  ], yPos);
+
+  if (data.exposures.length > 0) {
+    yPos = addOutlineSection(doc, 'Exposures (Patient-Reported)', [
+      { label: 'Reported exposures', value: data.exposures.join(', ') },
+    ], yPos);
+  }
+
+  yPos = addOutlineSection(doc, 'Current Symptoms and Functional Impact (Patient-Reported)', [
+    { label: 'Current symptoms', value: data.currentSymptomsDetail },
+    { label: 'Frequency', value: data.symptomFrequency },
+    { label: 'Severity', value: data.symptomSeverity },
+    { label: 'Triggers', value: data.symptomTriggers },
+    { label: 'Current medications', value: data.currentMedications },
+    { label: 'Treatment response', value: data.medicationResponse },
+    { label: 'Functional impact', value: data.functionalImpact },
+  ], yPos);
+
+  yPos = addOutlineSection(doc, 'Treatment History and Response (Patient-Reported)', [
+    { label: 'Current medications', value: data.currentMedications },
+    { label: 'Treatment response', value: data.medicationResponse },
+  ], yPos);
+
+  if (data.evidenceReferences.length > 0) {
+    yPos = checkPageBreak(doc, yPos, 30);
+    doc.setFontSize(12);
+    doc.setTextColor(...colors.primary);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Evidence References (Dated List)', 20, yPos);
+    yPos += 2;
+    doc.setDrawColor(...colors.primary);
+    doc.setLineWidth(0.4);
+    doc.line(20, yPos, pageWidth - 20, yPos);
+    yPos += 6;
+
+    for (const ref of data.evidenceReferences) {
+      yPos = checkPageBreak(doc, yPos, 12);
+      doc.setFontSize(9);
+      doc.setTextColor(...colors.secondary);
+      doc.setFont('helvetica', 'normal');
+      const refLine = [
+        ref.type,
+        ref.date ? new Date(ref.date).toLocaleDateString() : '',
+        ref.provider,
+        ref.title,
+      ].filter(Boolean).join(' | ');
+      const refLines = doc.splitTextToSize(`- ${refLine}`, pageWidth - 48);
+      for (const line of refLines) {
+        yPos = checkPageBreak(doc, yPos, 6);
+        doc.text(line, 24, yPos);
+        yPos += 4;
+      }
+      yPos += 2;
+    }
+  }
+
+  yPos = checkPageBreak(doc, yPos, 40);
+  doc.setFontSize(12);
+  doc.setTextColor(...colors.primary);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Clinician Documentation Prompts (Optional)', 20, yPos);
+  yPos += 2;
+  doc.setDrawColor(...colors.primary);
+  doc.setLineWidth(0.4);
+  doc.line(20, yPos, pageWidth - 20, yPos);
+  yPos += 6;
+
+  doc.setFontSize(8);
+  doc.setTextColor(...colors.muted);
+  doc.setFont('helvetica', 'italic');
+  doc.text('These are neutral prompts for the clinician to consider. No conclusions are provided.', 24, yPos);
+  yPos += 6;
+
+  const clinicianPrompts = [
+    'What objective findings were observed during examination?',
+    'What diagnostic testing or imaging has been performed?',
+    'How frequently do symptoms occur based on clinical records?',
+    'What is the functional impact observed or reported?',
+    'How has the veteran responded to treatment?',
+    'Are there differential diagnostic considerations?',
+    'What is the current clinical status compared to prior visits?',
+  ];
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.setTextColor(...colors.secondary);
+  for (const prompt of clinicianPrompts) {
+    yPos = checkPageBreak(doc, yPos, 8);
+    doc.text(`- ${prompt}`, 24, yPos);
+    yPos += 5;
+  }
+  yPos += 4;
+
+  if (data.personalStatementEnabled) {
+    yPos = addOutlineSection(doc, 'Personal Statement Outline Prompts (Patient-Prepared)', [
+      { label: 'Timeline', value: data.personalStatementTimeline },
+      { label: 'Frequency / Severity', value: data.personalStatementFrequency },
+      { label: 'Functional impact', value: data.personalStatementFunctionalImpact },
+      { label: 'Treatment response', value: data.personalStatementTreatmentResponse },
+      { label: 'Triggers', value: data.personalStatementTriggers },
+      { label: 'Missed work / accommodations', value: data.personalStatementMissedWork },
+      { label: 'Dated examples', value: data.personalStatementExamples },
+    ], yPos);
+  }
+
+  const totalPages = doc.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    addOutlineDisclaimerFooter(doc);
+  }
+  void pageCount;
+
+  doc.save('doctor-summary-outline-patient-prepared.pdf');
 };

@@ -28,7 +28,7 @@ const pageLabels: Record<string, string> = {
   '/prep/exam': 'C&P Exam Prep',
   '/prep/personal-statement': 'Personal Statement',
   '/prep/buddy-statement': 'Buddy Statement',
-  '/prep/nexus-letter': 'Doctor Summary',
+  '/prep/doctor-summary': 'Doctor Summary',
   '/prep/stressor': 'Stressor Statement',
   '/prep/form-guide': 'VA Form Guide',
   '/prep/dbq': 'DBQ Prep',
