@@ -46,6 +46,8 @@ import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSear
 import { ExportButton } from '@/components/dashboard/ExportButton';
 import { IntentToFileBanner } from '@/components/dashboard/IntentToFileBanner';
 import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
+import { useStreakTracker } from '@/hooks/useStreakTracker';
+import { useSmartReminders } from '@/hooks/useSmartReminders';
 
 export default function Dashboard() {
   const { data } = useClaims();
@@ -53,6 +55,9 @@ export default function Dashboard() {
   const profile = useProfileStore();
   const addDashboardQuickLog = useAppStore((s) => s.addDashboardQuickLog);
   const navigate = useNavigate();
+
+  const streak = useStreakTracker();
+  const reminders = useSmartReminders();
 
   const claimConditions = useMemo(() => data.claimConditions || [], [data.claimConditions]);
 
@@ -277,6 +282,58 @@ export default function Dashboard() {
           </div>
         </motion.div>
       </Link>
+
+      {/* Streak & Smart Reminders */}
+      {(streak.currentStreak > 0 || reminders.length > 0) && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={vcsSpring}
+          className="rounded-xl bg-card border border-border p-4 shadow-sm space-y-3"
+        >
+          {streak.currentStreak > 0 && (
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.2)] flex items-center justify-center flex-shrink-0">
+                <span className="text-lg">&#x1F525;</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-foreground">
+                  {streak.currentStreak}-day logging streak
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {streak.totalLoggingDays} total days logged
+                  {streak.longestStreak > streak.currentStreak &&
+                    ` · Best: ${streak.longestStreak} days`}
+                </p>
+              </div>
+            </div>
+          )}
+          {reminders.slice(0, 3).map((r) => (
+            <div
+              key={r.id}
+              className={cn(
+                'flex items-start gap-3 p-3 rounded-lg border',
+                r.priority === 'high'
+                  ? 'border-[rgba(197,164,66,0.3)] bg-[rgba(197,164,66,0.05)]'
+                  : 'border-border bg-secondary',
+              )}
+            >
+              <AlertTriangle
+                className={cn(
+                  'h-4 w-4 flex-shrink-0 mt-0.5',
+                  r.priority === 'high' ? 'text-gold' : 'text-muted-foreground',
+                )}
+              />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground">{r.title}</p>
+                <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                  {r.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      )}
 
       {/* Tools & Features */}
       <motion.div
