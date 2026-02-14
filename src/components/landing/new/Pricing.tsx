@@ -390,7 +390,7 @@ export function Pricing() {
                     >
                       $9.99
                     </span>
-                    <span className="text-sm ml-2" style={{ color: '#9CA3AF' }}>/mo</span>
+                    <span className="text-sm ml-2" style={{ color: '#9CA3AF' }}>lifetime</span>
                   </div>
                 </div>
                 <Link

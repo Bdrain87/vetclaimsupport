@@ -139,7 +139,7 @@ export function FinalCTA() {
             Premium from
           </p>
           <span className="text-sm" style={{ color: '#6B7280', textDecoration: 'line-through' }}>
-            $19.99/mo
+            $19.99
           </span>
           <span
             className="text-sm font-semibold"
@@ -150,7 +150,7 @@ export function FinalCTA() {
               backgroundClip: 'text',
             }}
           >
-            $9.99/mo
+            $9.99
           </span>
           <motion.span
             className="text-xs px-2 py-0.5 rounded-full"
