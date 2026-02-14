@@ -33,38 +33,27 @@ function ShieldIcon() {
 export function PrivacySection() {
   return (
     <section
-      className="py-10 md:py-12"
+      className="py-5 md:py-6"
       style={{
         background:
           'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
       }}
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <motion.h2
-          className="text-2xl md:text-3xl text-black text-center mb-10"
-          style={HEADING_H2_STYLE}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          Your Privacy Comes First
-        </motion.h2>
-
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-60px' }}
         >
-          {POINTS.map((point) => (
-            <motion.div key={point.title} variants={fadeInUp} className="text-center">
-              <div className="flex justify-center mb-4">
-                <ShieldIcon />
+          {POINTS.map((point, i) => (
+            <motion.div key={point.title} variants={fadeInUp} className="flex items-center gap-2">
+              <ShieldIcon />
+              <div>
+                <span className="font-bold text-black text-sm">{point.title}</span>
+                {i < POINTS.length - 1 && <span className="hidden md:inline text-black/30 ml-6">|</span>}
               </div>
-              <h3 className="text-lg font-bold text-black mb-2">{point.title}</h3>
-              <p className="text-black/70 leading-relaxed">{point.desc}</p>
             </motion.div>
           ))}
         </motion.div>
