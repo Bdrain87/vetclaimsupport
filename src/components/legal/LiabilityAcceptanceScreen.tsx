@@ -104,7 +104,9 @@ export function LiabilityAcceptanceScreen() {
               <p className="text-sm text-muted-foreground leading-relaxed">
                 We are an independent application and are not affiliated with,
                 endorsed by, or connected to the U.S. Department of Veterans
-                Affairs.
+                Affairs. VCS is not a VA-accredited representative, attorney,
+                claims agent, or VSO as defined under 38 U.S.C. &sect;&sect; 5901-5905
+                and 38 C.F.R. Part 14. We do not file claims on your behalf.
               </p>
             </div>
 
@@ -119,9 +121,11 @@ export function LiabilityAcceptanceScreen() {
             <div>
               <h3 className="font-semibold text-foreground mb-2">AI-Assisted Features</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                This app uses AI to assist with claim preparation. AI can make
-                mistakes — always verify information before submitting anything
-                to the VA.
+                This app uses AI (Google Gemini) to assist with organizing
+                claim information. AI-generated content may contain errors,
+                inaccuracies, or fabricated information. AI-generated legal
+                citations have a documented hallucination rate of 50-88%.
+                You must independently verify all AI output before use.
               </p>
             </div>
 
@@ -163,7 +167,7 @@ export function LiabilityAcceptanceScreen() {
                 disabled={!hasScrolled}
               />
               <span className="text-sm text-muted-foreground leading-relaxed">
-                I understand this is an <span className="text-foreground font-medium">educational and organizational tool only</span>. It does not provide legal advice, medical advice, or VA-accredited representation.
+                I understand this is an <span className="text-foreground font-medium">educational and organizational tool only</span>. It does not provide legal advice, medical advice, or VA-accredited representation, and it does not file claims on my behalf.
               </span>
             </label>
 

@@ -80,7 +80,7 @@ export default function PrivacyPolicyPage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">3. How Data Is Stored</h2>
           <p className="text-muted-foreground">
-            <strong className="text-foreground">PRIMARY:</strong> All data is encrypted using AES-256-GCM encryption and stored securely. Set a vault passcode in Settings to enable full encryption on your device.
+            <strong className="text-foreground">PRIMARY:</strong> All data is encrypted using AES-256-GCM encryption and stored securely. Set a vault passcode in Settings to enable full encryption on your device. VCS is not a HIPAA-covered entity; however, we treat all health-related data with the same care and apply encryption at rest and in transit.
           </p>
           <p className="text-muted-foreground">
             <strong className="text-foreground">OPTIONAL CLOUD SYNC:</strong> If you create an account, data may be synced to our cloud database (Supabase PostgreSQL) for cross-device access. Cloud sync is optional and not required.
@@ -116,7 +116,7 @@ export default function PrivacyPolicyPage() {
             <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do NOT use your data for targeted advertising</li>
             <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do NOT use your data to train AI models</li>
             <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do NOT track your browsing activity</li>
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do NOT collect your Social Security Number, date of birth, or financial information</li>
+            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do not ask for or require your Social Security Number, date of birth, or financial information (if you voluntarily enter such data in free-text fields, you do so at your own risk)</li>
           </ul>
         </section>
 
@@ -140,7 +140,7 @@ export default function PrivacyPolicyPage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">7. Privacy Rights</h2>
           <p className="text-muted-foreground">
-            We strive to honor privacy rights under applicable laws, including those of California residents. We do not sell your data. You may exercise your privacy rights (access, deletion, portability) by using the Settings page or contacting{' '}
+            We strive to honor privacy rights under applicable laws. If you are a California resident, you have the right under the California Consumer Privacy Act (CCPA) to request disclosure of the categories and specific pieces of personal information we collect, to request deletion of your personal information, and to opt out of any sale of personal information. We do not sell your personal information. You may exercise your privacy rights (access, deletion, portability) by using the Settings page or contacting{' '}
             <a href="mailto:blakedrain@gmail.com" className="text-[#C5A442] hover:underline">blakedrain@gmail.com</a>.
           </p>
         </section>
@@ -170,6 +170,7 @@ export default function PrivacyPolicyPage() {
           <ul className="space-y-1.5 text-muted-foreground">
             <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span><strong className="text-foreground">Supabase</strong> (cloud database, optional)</li>
             <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span><strong className="text-foreground">Google Gemini</strong> (AI features, optional)</li>
+            <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span><strong className="text-foreground">Vercel</strong> (web hosting and deployment)</li>
           </ul>
           <p className="text-muted-foreground">
             Each third-party service has its own privacy policy.

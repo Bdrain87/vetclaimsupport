@@ -23,7 +23,7 @@ export default function DisclaimerPage() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Important Disclaimer</h1>
-          <p className="text-muted-foreground/70 text-sm mt-1">Vet Claim Support</p>
+          <p className="text-muted-foreground/70 text-sm mt-1">Vet Claim Support &mdash; Last updated: February 2026</p>
         </div>
       </div>
 
@@ -53,7 +53,8 @@ export default function DisclaimerPage() {
           <ul className="space-y-1.5 text-muted-foreground">
             <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>NOT legal advice</li>
             <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>NOT medical advice</li>
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>NOT a VA-accredited representative, attorney, claims agent, or VSO</li>
+            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>NOT a VA-accredited representative, attorney, claims agent, or VSO as defined under 38 U.S.C. &sect;&sect; 5901-5905 and 38 C.F.R. Part 14</li>
+            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>NOT a claims filing service &mdash; VCS does not prepare, present, or prosecute claims on your behalf (38 C.F.R. &sect; 14.629)</li>
             <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>NOT a substitute for professional consultation</li>
             <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>NOT a guarantee of any claim outcome</li>
           </ul>
