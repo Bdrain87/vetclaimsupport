@@ -539,7 +539,7 @@ export default function Conditions() {
 
       {/* Conditions List — grouped with primaries first, secondaries indented below */}
       {filteredConditions.length > 0 ? (
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Primary conditions */}
           {filteredConditions.filter(uc => uc.isPrimary).map(uc => {
             const details = getConditionDetails(uc);
@@ -547,7 +547,6 @@ export default function Conditions() {
             const checked = conditionEvidenceChecks[uc.id] || [];
             return (
               <div key={uc.id} className="space-y-2">
-                <div className="grid gap-4 sm:grid-cols-2">
                   <ConditionCard
                     userCondition={{
                       ...uc,
@@ -561,9 +560,8 @@ export default function Conditions() {
                     onRemove={() => handleRemoveCondition(uc.id)}
                     onNavigate={(path) => navigate(path)}
                   />
-                </div>
                 {secondaries.length > 0 && (
-                  <div className="ml-6 border-l-2 border-primary/20 pl-4 grid gap-3 sm:grid-cols-2">
+                  <div className="ml-6 border-l-2 border-primary/20 pl-4 space-y-3">
                     {secondaries.map(sec => {
                       const secDetails = getConditionDetails(sec);
                       const primaryDetails = getConditionDetails(uc);
@@ -599,8 +597,8 @@ export default function Conditions() {
             const details = getConditionDetails(uc);
             const checked = conditionEvidenceChecks[uc.id] || [];
             return (
-              <div key={uc.id} className="grid gap-4 sm:grid-cols-2">
                 <ConditionCard
+                  key={uc.id}
                   userCondition={{
                     ...uc,
                     hasSecondaries: false,
@@ -613,7 +611,6 @@ export default function Conditions() {
                   onRemove={() => handleRemoveCondition(uc.id)}
                   onNavigate={(path) => navigate(path)}
                 />
-              </div>
             );
           })}
         </div>
