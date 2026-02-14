@@ -1,14 +1,14 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Home, Shield, Heart, BookOpen, Settings } from 'lucide-react';
+import { Home, Shield, Activity, Wrench, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { isWeb } from '@/lib/platform';
 
 const tabs = [
   { to: isWeb ? '/app' : '/', icon: Home, label: 'Home' },
-  { to: '/claims', icon: Shield, label: 'Claims' },
-  { to: '/health', icon: Heart, label: 'Health' },
-  { to: '/prep', icon: BookOpen, label: 'Prep' },
-  { to: '/settings', icon: Settings, label: 'Settings' },
+  { to: '/claims', icon: Shield, label: 'My Claim' },
+  { to: '/health', icon: Activity, label: 'Track' },
+  { to: '/prep', icon: Wrench, label: 'Tools' },
+  { to: '/settings', icon: User, label: 'Me' },
 ];
 
 const isTabActive = (tabPath: string, pathname: string) => {
