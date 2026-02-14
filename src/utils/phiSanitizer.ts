@@ -17,6 +17,8 @@ const REDACTED = '[REDACTED]';
 const SSN_DASHED = /\b\d{3}-\d{2}-\d{4}\b/g;
 const SSN_SPACED = /\b\d{3}\s\d{2}\s\d{4}\b/g;
 const SSN_PLAIN  = /\b\d{9}\b/g;
+const SSN_DOTTED = /\b\d{3}\.\d{2}\.\d{4}\b/g;
+const SSN_LABEL  = /\b(?:SSN|Social\s*Security(?:\s*(?:Number|No\.?|#))?)\s*[:#]?\s*\S+/gi;
 
 // ---------------------------------------------------------------------------
 // 2. US phone numbers
@@ -24,7 +26,8 @@ const SSN_PLAIN  = /\b\d{9}\b/g;
 //    with optional +1 / 1- prefix
 // ---------------------------------------------------------------------------
 const PHONE =
-  /(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}\b/g;
+  /(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]\d{4}\b/g;
+const PHONE_PLAIN = /\b\d{10}\b/g;
 
 // ---------------------------------------------------------------------------
 // 3. Email addresses
@@ -76,13 +79,14 @@ export function sanitizePHI(text: string): string {
   // DOB (label-aware) — keep the label, replace the date
   result = result.replace(DOB, (_match, label: string) => `${label} ${REDACTED}`);
 
-  // SSN variants (dashed/spaced first so they don't partially match the plain one)
+  result = result.replace(SSN_LABEL, REDACTED);
   result = result.replace(SSN_DASHED, REDACTED);
   result = result.replace(SSN_SPACED, REDACTED);
+  result = result.replace(SSN_DOTTED, REDACTED);
   result = result.replace(SSN_PLAIN, REDACTED);
 
-  // Phone numbers
   result = result.replace(PHONE, REDACTED);
+  result = result.replace(PHONE_PLAIN, REDACTED);
 
   // Email
   result = result.replace(EMAIL, REDACTED);

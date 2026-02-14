@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { ShareWithVSO } from '@/components/dashboard/ShareWithVSO';
 import { ExportButton } from '@/components/dashboard/ExportButton';
 import { DataBackup } from '@/components/settings/DataBackup';
+import { VaultPasscode } from '@/components/settings/VaultPasscode';
 import { Link, useNavigate } from 'react-router-dom';
 import { useProfileStore, type Branch, type ServicePeriod } from '@/store/useProfileStore';
 import { PageContainer } from '@/components/PageContainer';
@@ -229,22 +230,8 @@ export default function Settings() {
         </div>
       </div>
 
-      {/* Encryption Warning */}
-      {!profile.vaultPasscodeSet && (
-        <Card className="border-[#C5A442]/30 bg-[#C5A442]/5">
-          <CardContent className="p-4">
-            <div className="flex items-start gap-3">
-              <Shield className="h-5 w-5 text-[#C5A442] flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-medium text-foreground">Your data is not encrypted</p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Set a vault passcode to encrypt your health and claim data on this device.
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      {/* Vault Passcode */}
+      <VaultPasscode />
 
       {/* Profile Section */}
       <Card>

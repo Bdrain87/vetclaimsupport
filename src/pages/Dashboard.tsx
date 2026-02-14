@@ -305,8 +305,9 @@ export default function Dashboard() {
               key={tool.path}
               to={tool.path}
               className="flex flex-col items-center gap-1.5 min-w-[76px] p-2 rounded-xl border border-border bg-secondary hover:bg-accent/50 transition-colors snap-start"
+              aria-label={tool.name}
             >
-              <tool.icon className="h-5 w-5 text-gold" />
+              <tool.icon className="h-5 w-5 text-gold" aria-hidden="true" />
               <span className="text-[10px] font-medium text-foreground text-center leading-tight">{tool.name}</span>
             </Link>
           ))}
@@ -336,7 +337,7 @@ export default function Dashboard() {
 
         {claimConditions.length === 0 && userConditions.length === 0 ? (
           <div className="px-4 pb-4 pt-2 text-center">
-            <button onClick={() => navigate('/claims')} className="text-sm text-muted-foreground mb-3 hover:text-primary transition-colors cursor-pointer">
+            <button onClick={() => navigate('/claims')} className="text-sm text-muted-foreground mb-3 hover:text-primary transition-colors cursor-pointer" aria-label="Add your first condition">
               No conditions yet — tap here to add your first condition.
             </button>
             <Button size="sm" variant="outline" onClick={() => navigate('/claims')}>
@@ -434,6 +435,7 @@ export default function Dashboard() {
               'bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.2)]',
               'hover:bg-[rgba(197,164,66,0.15)] transition-colors'
             )}
+            aria-label={`Evidence gaps found: ${evidenceGaps.length} conditions need more evidence`}
           >
             <div className="flex items-start gap-3">
               <AlertTriangle className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
@@ -476,6 +478,7 @@ export default function Dashboard() {
                   <button
                     className="min-w-0 flex-1 mr-3 text-left"
                     onClick={() => navigate(`/claims/${rec.conditionId}`)}
+                    aria-label={`View details for ${rec.conditionName}`}
                   >
                     <p className="text-sm font-medium text-foreground truncate">{rec.conditionName}</p>
                     {diagCode && (

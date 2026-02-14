@@ -118,27 +118,11 @@ export const encryptedStorage: StateStorage = {
     }
 
     if (!_sessionPassword) {
-      // SECURITY NOTE – INTENTIONAL PLAINTEXT FALLBACK
-      // Encryption is enabled but the session password is not available (e.g.
-      // the user has not yet unlocked the vault this session, or the password
-      // was cleared on lock/logout).  We still write plaintext here to avoid
-      // data loss — the alternative is dropping the write entirely, which would
-      // silently discard user data and is arguably worse.
-      //
-      // This means sensitive data MAY be stored unencrypted in localStorage
-      // until the store is next written with a password available.  Callers
-      // that require confidentiality guarantees should check
-      // `getSessionPassword()` before persisting sensitive payloads.
       console.warn(
         '[encryptedStorage] Encryption is enabled but no session password is available. ' +
-        'Data for key "' + key + '" will be stored as PLAINTEXT. ' +
-        'Ensure the vault is unlocked before persisting sensitive data.',
+        'Write for key "' + key + '" was BLOCKED to prevent storing unencrypted data. ' +
+        'Unlock the vault before persisting sensitive data.',
       );
-      try {
-        localStorage.setItem(key, value);
-      } catch (error) {
-        console.warn('[encryptedStorage] localStorage.setItem failed:', error);
-      }
       return;
     }
 
@@ -156,21 +140,10 @@ export const encryptedStorage: StateStorage = {
         }
       })
       .catch(() => {
-        // SECURITY NOTE – INTENTIONAL PLAINTEXT FALLBACK
-        // If encryption fails for any reason (Web Crypto error, invalid key
-        // material, etc.) we fall back to plaintext so the user does not lose
-        // data.  This means the value will be readable in localStorage without
-        // decryption.  The console.warn below ensures the issue is visible in
-        // devtools so developers / QA can investigate.
-        console.warn(
+        console.error(
           '[encryptedStorage] Encryption failed for key "' + key + '" — ' +
-          'falling back to PLAINTEXT storage.  Sensitive data may be unencrypted.',
+          'write was BLOCKED to prevent storing unencrypted data.',
         );
-        try {
-          localStorage.setItem(key, value);
-        } catch (error) {
-          console.warn('[encryptedStorage] localStorage.setItem failed:', error);
-        }
       });
   },
 

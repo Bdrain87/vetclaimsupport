@@ -25,15 +25,48 @@ const getCorsHeaders = (origin: string | null) => ({
 const MAX_PAYLOAD_SIZE = 500 * 1024;
 const REQUEST_TIMEOUT = 30000; // 30 seconds
 
-// In-memory rate limiter: max 10 requests per user per minute.
-// WARNING: This map resets on every cold start, so a fresh instance has no
-// memory of previous requests. For production scale, move rate-limit state
-// to Redis or a Supabase table so limits survive instance recycling.
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX = 10;
+
+async function checkRateLimit(userId: string): Promise<boolean> {
+  try {
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    if (!supabaseServiceKey) {
+      return checkRateLimitInMemory(userId);
+    }
+
+    const adminClient = createClient(supabaseUrl, supabaseServiceKey);
+    const windowStart = new Date(Date.now() - RATE_LIMIT_WINDOW_MS).toISOString();
+
+    const { count, error } = await adminClient
+      .from('rate_limits')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', userId)
+      .gte('requested_at', windowStart);
+
+    if (error) {
+      return checkRateLimitInMemory(userId);
+    }
+
+    if ((count ?? 0) >= RATE_LIMIT_MAX) {
+      return false;
+    }
+
+    await adminClient.from('rate_limits').insert({
+      user_id: userId,
+      requested_at: new Date().toISOString(),
+    });
+
+    return true;
+  } catch {
+    return checkRateLimitInMemory(userId);
+  }
+}
+
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 
-function checkRateLimit(userId: string): boolean {
+function checkRateLimitInMemory(userId: string): boolean {
   const now = Date.now();
   const entry = rateLimitMap.get(userId);
   if (!entry || now >= entry.resetAt) {
@@ -93,7 +126,7 @@ serve(async (req) => {
     }
 
     // --- Rate Limiting ---
-    if (!checkRateLimit(user.id)) {
+    if (!(await checkRateLimit(user.id))) {
       return new Response(JSON.stringify({
         error: 'Too many requests. Please wait a moment and try again.',
         code: 'RATE_LIMIT',
