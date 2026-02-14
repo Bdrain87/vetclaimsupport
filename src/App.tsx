@@ -328,7 +328,7 @@ function AppContent() {
 
   // App shell
   return (
-    <div className="h-screen overflow-hidden flex flex-row bg-background text-foreground break-words">
+    <div className="h-screen overflow-hidden flex flex-row bg-background text-foreground break-words w-full max-w-full">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:text-sm focus:font-medium"
@@ -338,7 +338,7 @@ function AppContent() {
       <LiabilityAcceptanceScreen />
 <div className="flex-1 flex flex-col overflow-hidden">
         <MobileHeader />
-        <main id="main-content" className="flex-1 overflow-y-auto">
+        <main id="main-content" className="flex-1 overflow-y-auto overflow-x-hidden">
           <AnimatedRoutes />
         </main>
         <BottomTabBar />
