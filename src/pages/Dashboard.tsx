@@ -27,7 +27,6 @@ import {
   Package,
   Search,
   Compass,
-  Activity,
   Navigation,
   PersonStanding,
 } from 'lucide-react';
