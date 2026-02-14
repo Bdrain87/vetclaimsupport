@@ -136,7 +136,7 @@ export function FinalCTA() {
           transition={{ duration: 0.5, delay: 0.35 }}
         >
           <p className="text-sm text-center" style={{ color: '#6B7280' }}>
-            Free plan available &bull; Premium from
+            Premium from
           </p>
           <span className="text-sm" style={{ color: '#6B7280', textDecoration: 'line-through' }}>
             $19.99/mo
