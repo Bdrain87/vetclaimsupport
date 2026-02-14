@@ -122,12 +122,15 @@ export default function MedicalVisits() {
             multiple
             onChange={(e) => {
               const files = e.target.files;
-              if (!files) return;
-              Array.from(files).forEach(file => {
+              if (!files || files.length === 0) return;
+              const fileArray = Array.from(files);
+              let pending = fileArray.length;
+              const newDocs: typeof documents = [];
+              fileArray.forEach(file => {
                 const reader = new FileReader();
                 reader.onload = (ev) => {
                   const dataUrl = ev.target?.result as string;
-                  const newDoc = {
+                  newDocs.push({
                     id: crypto.randomUUID(),
                     fileName: file.name,
                     fileType: file.type,
@@ -136,11 +139,14 @@ export default function MedicalVisits() {
                     uploadedAt: new Date().toISOString(),
                     category: 'medical-records' as const,
                     title: file.name.replace(/\.[^/.]+$/, ''),
-                    linkedEntries: [] as Array<{entryType: string; entryId: string; linkedAt: string}>,
+                    linkedEntries: [],
                     storageType: 'localStorage' as const,
                     ...(file.type.startsWith('image/') ? { thumbnailUrl: dataUrl } : {}),
-                  };
-                  setAllDocuments([...documents, newDoc as never]);
+                  } as (typeof documents)[number]);
+                  pending--;
+                  if (pending === 0) {
+                    setAllDocuments([...documents, ...newDocs]);
+                  }
                 };
                 reader.readAsDataURL(file);
               });
@@ -154,29 +160,27 @@ export default function MedicalVisits() {
             accept="image/*"
             capture="environment"
             onChange={(e) => {
-              const files = e.target.files;
-              if (!files) return;
-              Array.from(files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                  const dataUrl = ev.target?.result as string;
-                  const newDoc = {
-                    id: crypto.randomUUID(),
-                    fileName: file.name,
-                    fileType: file.type,
-                    fileSize: file.size,
-                    dataUrl,
-                    uploadedAt: new Date().toISOString(),
-                    category: 'medical-records' as const,
-                    title: `Photo ${new Date().toLocaleDateString()}`,
-                    linkedEntries: [] as Array<{entryType: string; entryId: string; linkedAt: string}>,
-                    storageType: 'localStorage' as const,
-                    thumbnailUrl: dataUrl,
-                  };
-                  setAllDocuments([...documents, newDoc as never]);
-                };
-                reader.readAsDataURL(file);
-              });
+              const file = e.target.files?.[0];
+              if (!file) return;
+              const reader = new FileReader();
+              reader.onload = (ev) => {
+                const dataUrl = ev.target?.result as string;
+                const newDoc = {
+                  id: crypto.randomUUID(),
+                  fileName: file.name,
+                  fileType: file.type,
+                  fileSize: file.size,
+                  dataUrl,
+                  uploadedAt: new Date().toISOString(),
+                  category: 'medical-records' as const,
+                  title: `Photo ${new Date().toLocaleDateString()}`,
+                  linkedEntries: [],
+                  storageType: 'localStorage' as const,
+                  thumbnailUrl: dataUrl,
+                } as (typeof documents)[number];
+                setAllDocuments([...documents, newDoc]);
+              };
+              reader.readAsDataURL(file);
               if (cameraRef.current) cameraRef.current.value = '';
             }}
             className="hidden"
