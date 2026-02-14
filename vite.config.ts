@@ -39,29 +39,27 @@ export default defineConfig({
         runtimeCaching: [
           {
             // HTML / navigation — ALWAYS hit the network first.
+            // No networkTimeoutSeconds — always wait for network.
             // Falls back to cache only when fully offline.
             urlPattern: ({ request }: { request: Request }) =>
               request.mode === 'navigate',
             handler: 'NetworkFirst',
             options: {
               cacheName: 'pages',
-              networkTimeoutSeconds: 3,
               cacheableResponse: { statuses: [0, 200] },
             },
           },
           {
-            // Hashed JS/CSS bundles — network first with fast fallback.
-            // These filenames change every build, so stale entries
-            // are harmless (they'll never be requested again).
+            // Hashed JS/CSS bundles — serve cached version immediately,
+            // fetch updated version in background for next load.
             urlPattern: /\/assets\/.*\.(?:js|css)$/,
-            handler: 'NetworkFirst',
+            handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'app-assets',
-              networkTimeoutSeconds: 3,
               cacheableResponse: { statuses: [0, 200] },
               expiration: {
                 maxEntries: 80,
-                maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days
+                maxAgeSeconds: 86400, // 1 day
               },
             },
           },
