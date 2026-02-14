@@ -40,6 +40,7 @@ import { getDBQByCondition } from '@/data/vaResources/dbqReference';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import useAppStore from '@/store/useAppStore';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import { PageContainer } from '@/components/PageContainer';
 
 // Lazy-load RatingGuidance so criteria data is not bundled until needed
@@ -926,11 +927,36 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
 
         {/* Evidence Tab */}
         <TabsContent value="evidence" className="space-y-4">
-          <EvidenceChecklistCard
-            conditionId={id || ''}
-            conditionName={conditionDetails.abbreviation || conditionDetails.name}
-            onNavigate={navigate}
-          />
+          {userCondition?.claimStatus === 'approved' ? (
+            <Card>
+              <CardContent className="py-8 text-center space-y-3">
+                <CheckCircle2 className="h-8 w-8 text-green-500 mx-auto" />
+                <h3 className="font-semibold text-foreground">Condition Already Approved</h3>
+                <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                  This condition is already service-connected and approved. Additional evidence collection is typically only needed if you are pursuing a rating increase.
+                </p>
+                <Button variant="outline" size="sm" onClick={() => {
+                  const el = document.getElementById('evidence-checklist-approved');
+                  if (el) el.classList.toggle('hidden');
+                }}>
+                  View Evidence Checklist Anyway
+                </Button>
+                <div id="evidence-checklist-approved" className="hidden pt-4">
+                  <EvidenceChecklistCard
+                    conditionId={id || ''}
+                    conditionName={conditionDetails.abbreviation || conditionDetails.name}
+                    onNavigate={navigate}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <EvidenceChecklistCard
+              conditionId={id || ''}
+              conditionName={conditionDetails.abbreviation || conditionDetails.name}
+              onNavigate={navigate}
+            />
+          )}
         </TabsContent>
 
         {/* C&P Exam Tab */}
@@ -1038,15 +1064,15 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
             </AlertDescription>
           </Alert>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Potential Secondary Conditions</CardTitle>
-              <CardDescription>
-                Common conditions linked to {conditionDetails.abbreviation || conditionDetails.name}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {conditionDetails.commonSecondaries && conditionDetails.commonSecondaries.length > 0 ? (
+          {conditionDetails.commonSecondaries && conditionDetails.commonSecondaries.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Common Secondary Conditions</CardTitle>
+                <CardDescription>
+                  Frequently linked to {conditionDetails.abbreviation || conditionDetails.name}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
                 <div className="space-y-2">
                   {conditionDetails.commonSecondaries.map((secondary, idx) => {
                     const secondaryDetails = getConditionById(secondary);
@@ -1063,12 +1089,28 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                     );
                   })}
                 </div>
-              ) : (
-                <p className="text-muted-foreground text-sm">
-                  We don't have specific secondary conditions mapped for {conditionDetails.abbreviation || conditionDetails.name} yet. Use the Secondary Condition Finder to explore potential secondary claims.
+              </CardContent>
+            </Card>
+          )}
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Search Secondary Conditions</CardTitle>
+              <CardDescription>
+                Search by diagnostic code, name, or keyword
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ConditionAutocomplete
+                onSelect={(c) => navigate(`/claims/${c.id}`)}
+                placeholder="Search by code, name, or keyword..."
+                showBodySystem
+              />
+              {!conditionDetails.commonSecondaries?.length && (
+                <p className="text-muted-foreground text-sm mt-3">
+                  We don't have specific secondary conditions mapped for {conditionDetails.abbreviation || conditionDetails.name} yet. Use the search above or the Secondary Condition Finder.
                 </p>
               )}
-
               <Button variant="outline" className="w-full mt-4" onClick={() => navigate('/claims/secondary-finder')}>
                 <Link2 className="h-4 w-4 mr-2" />
                 Explore Secondary Conditions Finder

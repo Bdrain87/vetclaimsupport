@@ -14,6 +14,40 @@ import { PageContainer } from '@/components/PageContainer';
 
 const TOTAL_STEPS = 11;
 
+const MONTHS = [
+  { value: '01', label: 'Jan' }, { value: '02', label: 'Feb' }, { value: '03', label: 'Mar' },
+  { value: '04', label: 'Apr' }, { value: '05', label: 'May' }, { value: '06', label: 'Jun' },
+  { value: '07', label: 'Jul' }, { value: '08', label: 'Aug' }, { value: '09', label: 'Sep' },
+  { value: '10', label: 'Oct' }, { value: '11', label: 'Nov' }, { value: '12', label: 'Dec' },
+];
+const YEARS = Array.from({ length: 80 }, (_, i) => String(new Date().getFullYear() - i));
+
+function MonthYearPicker({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder?: string }) {
+  const [year, month] = value ? value.split('-') : ['', ''];
+  const selectClass = 'h-12 px-3 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(197,164,66,0.4)] transition-all appearance-none';
+  const handleChange = (newMonth: string, newYear: string) => {
+    if (newMonth && newYear) onChange(`${newYear}-${newMonth}`);
+    else if (newYear && !newMonth) onChange(`${newYear}-01`);
+    else if (newMonth && !year) onChange(`${YEARS[0]}-${newMonth}`);
+    else onChange('');
+  };
+  return (
+    <div className="flex flex-col gap-1">
+      {placeholder && <label className="text-white/40 text-xs">{placeholder}</label>}
+      <div className="grid grid-cols-2 gap-2">
+        <select value={month} onChange={e => handleChange(e.target.value, year)} className={selectClass}>
+          <option value="" className="bg-[#000000]">Month</option>
+          {MONTHS.map(m => <option key={m.value} value={m.value} className="bg-[#000000]">{m.label}</option>)}
+        </select>
+        <select value={year} onChange={e => handleChange(month, e.target.value)} className={selectClass}>
+          <option value="" className="bg-[#000000]">Year</option>
+          {YEARS.map(y => <option key={y} value={y} className="bg-[#000000]">{y}</option>)}
+        </select>
+      </div>
+    </div>
+  );
+}
+
 const BRANCH_TO_MOS: Record<Branch, string> = {
   army: 'Army',
   marines: 'Marines',
@@ -676,20 +710,8 @@ export default function Onboarding() {
                       placeholder="Base/Installation name..."
                     />
                     <div className="grid grid-cols-2 gap-3">
-                      <input
-                        type="month"
-                        value={stationStart}
-                        onChange={e => setStationStart(e.target.value)}
-                        placeholder="Start"
-                        className="h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(197,164,66,0.4)] transition-all"
-                      />
-                      <input
-                        type="month"
-                        value={stationEnd}
-                        onChange={e => setStationEnd(e.target.value)}
-                        placeholder="End"
-                        className="h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(197,164,66,0.4)] transition-all"
-                      />
+                      <MonthYearPicker value={stationStart} onChange={setStationStart} placeholder="Start" />
+                      <MonthYearPicker value={stationEnd} onChange={setStationEnd} placeholder="End" />
                     </div>
                     <div className="flex gap-2">
                       <button
@@ -776,18 +798,8 @@ export default function Onboarding() {
                       placeholder="Location (e.g., Baghdad, Iraq)"
                     />
                     <div className="grid grid-cols-2 gap-3">
-                      <input
-                        type="month"
-                        value={deployStart}
-                        onChange={e => setDeployStart(e.target.value)}
-                        className="h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(197,164,66,0.4)] transition-all"
-                      />
-                      <input
-                        type="month"
-                        value={deployEnd}
-                        onChange={e => setDeployEnd(e.target.value)}
-                        className="h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(197,164,66,0.4)] transition-all"
-                      />
+                      <MonthYearPicker value={deployStart} onChange={setDeployStart} placeholder="Start" />
+                      <MonthYearPicker value={deployEnd} onChange={setDeployEnd} placeholder="End" />
                     </div>
                     <button
                       onClick={() => setDeployCombat(!deployCombat)}

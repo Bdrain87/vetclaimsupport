@@ -173,10 +173,9 @@ export default function BodyMap() {
             </CardHeader>
             <CardContent className="flex items-center justify-center pb-6">
               <div
-                className="relative w-full max-w-[300px] select-none"
+                className="relative w-full max-w-[260px] mx-auto select-none"
                 style={{
                   filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.15))',
-                  aspectRatio: '1 / 2.5',
                 }}
                 role="application"
                 aria-label="Interactive body diagram — tap regions to view conditions"

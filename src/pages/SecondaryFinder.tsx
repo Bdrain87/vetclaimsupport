@@ -29,6 +29,7 @@ const strengthConfig = {
 
 export default function SecondaryFinder() {
   const [selectedPrimary, setSelectedPrimary] = useState<string | null>(null);
+  const [disclaimerAcknowledged, setDisclaimerAcknowledged] = useState(false);
   const { conditions: userConditions, addCondition, hasCondition } = useUserConditions();
   const { data: claimsData } = useClaims();
 
@@ -117,17 +118,33 @@ export default function SecondaryFinder() {
       </div>
 
       {/* Disclaimer */}
-      <div className="rounded-xl p-4 flex items-start gap-3 bg-[rgba(197,164,66,0.08)] border border-[rgba(197,164,66,0.2)]">
-        <AlertTriangle className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
-        <div>
-          <p className="text-sm font-semibold text-foreground">Educational Tool Only</p>
-          <p className="text-xs text-muted-foreground mt-1">
-            Secondary conditions must be formally diagnosed by a medical professional before filing.
-            This tool is not medical advice. Always consult with a doctor and/or Veterans Service Organization (VSO)
-            before adding conditions to your claim.
-          </p>
+      {!disclaimerAcknowledged ? (
+        <div className="rounded-xl p-4 flex items-start gap-3 bg-[rgba(197,164,66,0.08)] border border-[rgba(197,164,66,0.2)]">
+          <AlertTriangle className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-foreground">Educational Tool Only</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Secondary conditions must be formally diagnosed by a medical professional before filing.
+              This tool is not medical advice. Always consult with a doctor and/or Veterans Service Organization (VSO)
+              before adding conditions to your claim.
+            </p>
+            <button
+              onClick={() => setDisclaimerAcknowledged(true)}
+              className="mt-2 px-3 py-1.5 rounded-md bg-[rgba(197,164,66,0.15)] text-gold text-xs font-medium hover:bg-[rgba(197,164,66,0.25)] transition-colors"
+            >
+              I Acknowledge
+            </button>
+          </div>
         </div>
-      </div>
+      ) : (
+        <button
+          onClick={() => setDisclaimerAcknowledged(false)}
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl border border-[rgba(197,164,66,0.15)] bg-[rgba(197,164,66,0.04)] text-xs text-muted-foreground hover:bg-[rgba(197,164,66,0.08)] transition-colors"
+        >
+          <AlertTriangle className="h-3.5 w-3.5 text-gold flex-shrink-0" />
+          <span>Educational tool disclaimer acknowledged — tap to review</span>
+        </button>
+      )}
 
       {/* Autocomplete search */}
       <ConditionAutocomplete
@@ -163,10 +180,10 @@ export default function SecondaryFinder() {
         <div className="space-y-4">
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div className="min-w-0 flex-1">
-              <h2 className="text-lg font-bold text-foreground break-words">
-                Secondary Conditions for: <span className="text-gold">{selectedPrimary}</span>
-              </h2>
-              <p className="text-muted-foreground text-sm">{currentSecondaries.length} connections found</p>
+                <h2 className="text-lg font-bold text-foreground break-words">
+                  Common Secondary Conditions for: <span className="text-gold">{selectedPrimary}</span>
+                </h2>
+                <p className="text-muted-foreground text-sm">{currentSecondaries.length} medically-linked conditions found</p>
             </div>
             <Link to={`/prep/doctor-summary?primary=${encodeURIComponent(selectedPrimary)}`}>
               <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.3)] text-gold text-sm font-medium hover:bg-[rgba(197,164,66,0.2)] transition-colors whitespace-nowrap shrink-0">
