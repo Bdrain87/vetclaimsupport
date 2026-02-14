@@ -900,7 +900,7 @@ export default function Symptoms() {
                             {format(parseISO(symptom.date), 'MMM d, yyyy')}
                           </span>
                         </div>
-                        <CardTitle className="text-base">{symptom.symptom}</CardTitle>
+                        <CardTitle className="text-base break-words">{symptom.symptom}</CardTitle>
                       </div>
                       <div className="flex items-center gap-1">
                         {expandedCards.has(symptom.id) ? (

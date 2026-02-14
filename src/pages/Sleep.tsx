@@ -370,12 +370,12 @@ export default function Sleep() {
 
                     {/* CPAP Section - CRITICAL for 50% rating */}
                     <div className={`rounded-lg border-2 p-4 ${formData.usesCPAP ? 'border-success bg-success/10' : 'border-warning bg-warning/10'}`}>
-                      <div className="flex items-center justify-between">
-                        <div className="space-y-1">
+                      <div className="flex items-center justify-between gap-3 flex-wrap">
+                        <div className="space-y-1 min-w-0 flex-1">
                           <Label className="text-base font-semibold">Do you use a CPAP/breathing device?</Label>
                           <p className="text-sm font-medium text-warning">⭐ Critical for 50% rating</p>
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 flex-shrink-0">
                           <Button
                             type="button"
                             size="sm"
@@ -400,8 +400,8 @@ export default function Sleep() {
 
                     {formData.usesCPAP && (
                       <div className="ml-4 space-y-3 border-l-2 border-[#C5A442]/30 pl-4">
-                        <div className="flex items-center justify-between rounded-lg border p-3 bg-muted/30">
-                          <div className="space-y-0.5">
+                        <div className="flex items-center justify-between gap-3 rounded-lg border p-3 bg-muted/30">
+                          <div className="space-y-0.5 min-w-0 flex-1">
                             <Label>Used CPAP Last Night?</Label>
                             <p className="text-xs text-muted-foreground">VA checks compliance</p>
                           </div>
@@ -433,8 +433,8 @@ export default function Sleep() {
                     <div className="space-y-3 p-3 rounded-lg border-2 border-destructive/50 bg-destructive/5">
                       <Label className="text-sm font-semibold text-destructive">100% Rating Criteria</Label>
                       
-                      <div className="flex items-center justify-between rounded-lg border p-3 bg-background/50">
-                        <div className="space-y-0.5">
+                      <div className="flex items-center justify-between gap-3 rounded-lg border p-3 bg-background/50">
+                        <div className="space-y-0.5 min-w-0 flex-1">
                           <Label className="text-sm">Chronic Respiratory Failure?</Label>
                           <p className="text-xs text-muted-foreground">With CO₂ retention or cor pulmonale</p>
                         </div>
@@ -444,8 +444,8 @@ export default function Sleep() {
                         />
                       </div>
                       
-                      <div className="flex items-center justify-between rounded-lg border p-3 bg-background/50">
-                        <div className="space-y-0.5">
+                      <div className="flex items-center justify-between gap-3 rounded-lg border p-3 bg-background/50">
+                        <div className="space-y-0.5 min-w-0 flex-1">
                           <Label className="text-sm">Requires Supplemental Oxygen?</Label>
                         </div>
                         <Switch 
@@ -469,8 +469,8 @@ export default function Sleep() {
                           onChange={(e) => setFormData({ ...formData, timesWokeGasping: parseInt(e.target.value) || 0 })}
                         />
                       </div>
-                      <div className="flex items-center justify-between rounded-lg border p-3">
-                        <div className="space-y-0.5">
+                      <div className="flex items-center justify-between gap-3 rounded-lg border p-3">
+                        <div className="space-y-0.5 min-w-0 flex-1">
                           <Label className="text-sm">Morning Headache?</Label>
                         </div>
                         <Switch 
@@ -480,8 +480,8 @@ export default function Sleep() {
                     </div>
 
                     {/* Spouse/Partner Observed */}
-                    <div className="flex items-center justify-between rounded-lg border p-3 border-purple-500/30 bg-purple-500/5">
-                      <div className="space-y-0.5">
+                    <div className="flex items-center justify-between gap-3 rounded-lg border p-3 border-purple-500/30 bg-purple-500/5">
+                      <div className="space-y-0.5 min-w-0 flex-1">
                         <Label className="text-sm">Spouse/Partner Observed Apnea?</Label>
                         <p className="text-xs text-muted-foreground">Supports buddy statement</p>
                       </div>
@@ -493,8 +493,8 @@ export default function Sleep() {
                     </div>
 
                     {/* Oxygen Desaturation */}
-                    <div className="flex items-center justify-between rounded-lg border p-3">
-                      <div className="space-y-0.5">
+                    <div className="flex items-center justify-between gap-3 rounded-lg border p-3">
+                      <div className="space-y-0.5 min-w-0 flex-1">
                         <Label className="text-sm">Oxygen Level Dropped?</Label>
                         <p className="text-xs text-muted-foreground">If using pulse oximeter</p>
                       </div>
@@ -539,8 +539,8 @@ export default function Sleep() {
                     </div>
 
                     {/* Felt Rested */}
-                    <div className="flex items-center justify-between rounded-lg border p-3">
-                      <div className="space-y-0.5">
+                    <div className="flex items-center justify-between gap-3 rounded-lg border p-3">
+                      <div className="space-y-0.5 min-w-0 flex-1">
                         <Label className="text-sm">Felt Rested Upon Waking?</Label>
                       </div>
                       <Switch 
@@ -580,8 +580,8 @@ export default function Sleep() {
                   <Separator />
 
                   {/* PTSD-Related */}
-                  <div className="flex items-center justify-between rounded-lg border p-4">
-                    <div className="space-y-0.5">
+                  <div className="flex items-center justify-between gap-3 rounded-lg border p-4">
+                    <div className="space-y-0.5 min-w-0 flex-1">
                       <Label className="text-base">Nightmares?</Label>
                       <p className="text-sm text-muted-foreground">Common with PTSD</p>
                     </div>
@@ -759,7 +759,7 @@ export default function Sleep() {
 
       {/* Additional Stats Row */}
       {(stats.nightmaresLast30Days > 0 || stats.severeSleepiness > 0 || stats.oxygenDrops > 0) && (
-        <div className="grid gap-4 grid-cols-3">
+        <div className="grid gap-4 grid-cols-3 sm:grid-cols-3">
           <Card className="data-card">
             <CardContent className="pt-4 pb-4">
               <div className="text-center">

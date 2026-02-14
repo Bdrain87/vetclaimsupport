@@ -377,8 +377,8 @@ export default function MedicalVisits() {
           {[...data.medicalVisits].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((visit, index) => (
             <Card key={visit.id} className="data-card group hover:border-primary/30 transition-all duration-300 animate-fade-in" style={{ animationDelay: `${index * 0.03}s` }}>
               <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3 flex-wrap min-w-0 flex-1">
                     <span className="inline-flex items-center rounded-md bg-medical/10 px-2.5 py-1 text-xs font-medium text-medical ring-1 ring-inset ring-medical/20">
                       {visit.visitType}
                     </span>
@@ -388,7 +388,7 @@ export default function MedicalVisits() {
                       </span>
                     )}
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 flex-shrink-0">
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(visit)} className="h-10 w-10 min-h-[44px] min-w-[44px]" aria-label="Edit visit">
                       <Edit className="h-4 w-4" />
                     </Button>
@@ -436,7 +436,7 @@ export default function MedicalVisits() {
                 {visit.notes && (
                   <div className="flex items-start gap-2 text-sm text-muted-foreground bg-muted/50 rounded-lg p-3">
                     <FileText className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                    <p>{visit.notes}</p>
+                    <p className="break-words min-w-0">{visit.notes}</p>
                   </div>
                 )}
 
