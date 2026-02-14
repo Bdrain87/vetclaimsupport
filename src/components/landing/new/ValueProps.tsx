@@ -87,7 +87,7 @@ export function ValueProps() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: EASE_SMOOTH }}
         >
-          Your Claim, Your Control
+          Prepare With Confidence
         </motion.h2>
         <motion.p
           className="text-center mb-16 text-lg max-w-2xl mx-auto"
