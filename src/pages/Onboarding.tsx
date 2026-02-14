@@ -23,7 +23,7 @@ const MONTHS = [
 const YEARS = Array.from({ length: 80 }, (_, i) => String(new Date().getFullYear() - i));
 
 function MonthYearPicker({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder?: string }) {
-  const [month, year] = value ? value.split('-') : ['', ''];
+  const [year, month] = value ? value.split('-') : ['', ''];
   const selectClass = 'h-12 px-3 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(197,164,66,0.4)] transition-all appearance-none';
   const handleChange = (newMonth: string, newYear: string) => {
     if (newMonth && newYear) onChange(`${newYear}-${newMonth}`);
