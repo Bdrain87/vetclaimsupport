@@ -24,7 +24,7 @@ const YEARS = Array.from({ length: 80 }, (_, i) => String(new Date().getFullYear
 
 function MonthYearPicker({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder?: string }) {
   const [year, month] = value ? value.split('-') : ['', ''];
-  const selectClass = 'h-12 px-3 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(197,164,66,0.4)] transition-all appearance-none';
+  const selectClass = 'h-12 px-3 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(212,175,55,0.4)] transition-all appearance-none';
   const handleChange = (newMonth: string, newYear: string) => {
     if (newMonth && newYear) onChange(`${newYear}-${newMonth}`);
     else if (newYear && !newMonth) onChange(`${newYear}-01`);
@@ -153,7 +153,7 @@ function MOSAutocomplete({
         onFocus={() => { if (results.length > 0) setIsOpen(true); }}
         onKeyDown={handleKeyDown}
         placeholder="Type your code or job title..."
-        className="w-full h-12 pl-10 pr-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(197,164,66,0.4)] focus:border-[rgba(197,164,66,0.5)] transition-all"
+        className="w-full h-12 pl-10 pr-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(212,175,55,0.4)] focus:border-[rgba(212,175,55,0.5)] transition-all"
       />
       {isOpen && (
         <div className="absolute top-full left-0 right-0 mt-1 z-50 bg-[#1a2d44] border border-white/10 rounded-xl shadow-2xl shadow-black/50 max-h-60 overflow-y-auto">
@@ -162,7 +162,7 @@ function MOSAutocomplete({
               key={`${job.code}-${job.branch}`}
               ref={i === highlightIdx ? highlightRef : undefined}
               className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-colors ${
-                i === highlightIdx ? 'bg-[rgba(197,164,66,0.15)] text-white' : 'text-white/80 hover:bg-white/5'
+                i === highlightIdx ? 'bg-[rgba(212,175,55,0.15)] text-white' : 'text-white/80 hover:bg-white/5'
               } ${i > 0 ? 'border-t border-white/[0.04]' : ''}`}
               onClick={() => handleSelect(job)}
               onMouseEnter={() => setHighlightIdx(i)}
@@ -521,7 +521,7 @@ export default function Onboarding() {
                       onBlur={() => { if (!firstName.trim()) setNameError('Please enter your first name'); }}
                       placeholder="First Name"
                       autoFocus
-                      className={`w-full h-12 px-4 bg-white/[0.09] border rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(197,164,66,0.4)] transition-all ${
+                      className={`w-full h-12 px-4 bg-white/[0.09] border rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(212,175,55,0.4)] transition-all ${
                         nameError ? 'border-red-400/50' : 'border-white/[0.14]'
                       }`}
                     />
@@ -532,7 +532,7 @@ export default function Onboarding() {
                     value={lastName}
                     onChange={e => setLastName(e.target.value)}
                     placeholder="Last Name (optional)"
-                    className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(197,164,66,0.4)] transition-all"
+                    className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(212,175,55,0.4)] transition-all"
                   />
                 </div>
               </div>
@@ -563,13 +563,13 @@ export default function Onboarding() {
                         }}
                         className={`w-full flex items-center gap-3 p-4 rounded-xl border transition-all ${
                           isSelected
-                            ? 'bg-[rgba(197,164,66,0.1)] border-[rgba(197,164,66,0.4)] text-white'
+                            ? 'bg-[rgba(212,175,55,0.1)] border-[rgba(212,175,55,0.4)] text-white'
                             : 'bg-white/[0.07] border-white/[0.12] text-white/70 hover:bg-white/[0.10]'
                         }`}
                       >
                         <div
                           className="w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0"
-                          style={{ borderColor: isSelected ? '#C5A442' : 'rgba(255,255,255,0.2)', background: isSelected ? '#C5A442' : 'transparent' }}
+                          style={{ borderColor: isSelected ? '#D4AF37' : 'rgba(255,255,255,0.2)', background: isSelected ? '#D4AF37' : 'transparent' }}
                         >
                           {isSelected && (
                             <Check className="w-3 h-3 text-white" />
@@ -638,7 +638,7 @@ export default function Onboarding() {
                         setMosCode(e.target.value);
                       }}
                       placeholder="Job Code (e.g., 11B)"
-                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(197,164,66,0.4)] transition-all"
+                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(212,175,55,0.4)] transition-all"
                     />
                     <input
                       type="text"
@@ -648,7 +648,7 @@ export default function Onboarding() {
                         setMosTitle(e.target.value);
                       }}
                       placeholder="Job Title (e.g., Infantryman)"
-                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(197,164,66,0.4)] transition-all"
+                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(212,175,55,0.4)] transition-all"
                     />
                     {manualCode && manualTitle && (
                       <div className="flex items-center gap-2 text-sm text-gold min-w-0">
@@ -732,7 +732,7 @@ export default function Onboarding() {
                 ) : (
                   <button
                     onClick={() => setShowStationForm(true)}
-                    className="w-full h-12 rounded-xl border border-dashed border-white/20 text-white/50 text-sm hover:border-[rgba(197,164,66,0.4)] hover:text-gold transition-all"
+                    className="w-full h-12 rounded-xl border border-dashed border-white/20 text-white/50 text-sm hover:border-[rgba(212,175,55,0.4)] hover:text-gold transition-all"
                   >
                     + Add Duty Station
                   </button>
@@ -784,7 +784,7 @@ export default function Onboarding() {
                     <select
                       value={deployOp}
                       onChange={e => setDeployOp(e.target.value)}
-                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(197,164,66,0.4)] transition-all"
+                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(212,175,55,0.4)] transition-all"
                     >
                       <option value="" className="bg-[#000000]">Select Operation/Theater...</option>
                       {OPERATIONS.map(op => (
@@ -831,7 +831,7 @@ export default function Onboarding() {
                 ) : (
                   <button
                     onClick={() => setShowDeployForm(true)}
-                    className="w-full h-12 rounded-xl border border-dashed border-white/20 text-white/50 text-sm hover:border-[rgba(197,164,66,0.4)] hover:text-gold transition-all"
+                    className="w-full h-12 rounded-xl border border-dashed border-white/20 text-white/50 text-sm hover:border-[rgba(212,175,55,0.4)] hover:text-gold transition-all"
                   >
                     + Add Deployment
                   </button>
@@ -867,7 +867,7 @@ export default function Onboarding() {
                       const c = getConditionById(id);
                       if (!c) return null;
                       return (
-                        <span key={id} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.3)] text-sm text-gold max-w-full">
+                        <span key={id} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[rgba(212,175,55,0.1)] border border-[rgba(212,175,55,0.3)] text-sm text-gold max-w-full">
                           <span className="truncate">{c.abbreviation || c.name}</span>
                           <button onClick={() => handleRemoveCondition(id)} className="ml-1 text-gold/60 hover:text-gold" aria-label={`Remove ${c.abbreviation || c.name}`}>
                             <X className="h-3 w-3" />
@@ -900,13 +900,13 @@ export default function Onboarding() {
                       onClick={() => setClaimGoal(option.value)}
                       className={`w-full flex items-start gap-3 p-4 rounded-xl border transition-all text-left ${
                         claimGoal === option.value
-                          ? 'bg-[rgba(197,164,66,0.1)] border-[rgba(197,164,66,0.4)] text-white'
+                          ? 'bg-[rgba(212,175,55,0.1)] border-[rgba(212,175,55,0.4)] text-white'
                           : 'bg-white/[0.07] border-white/[0.12] text-white/70 hover:bg-white/[0.10]'
                       }`}
                     >
                       <div
                         className="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5"
-                        style={{ borderColor: claimGoal === option.value ? '#C5A442' : 'rgba(255,255,255,0.2)' }}
+                        style={{ borderColor: claimGoal === option.value ? '#D4AF37' : 'rgba(255,255,255,0.2)' }}
                       >
                         {claimGoal === option.value && (
                           <div className="w-2.5 h-2.5 rounded-full bg-gold" />
@@ -935,7 +935,7 @@ export default function Onboarding() {
                     onClick={() => setHasExistingRated(true)}
                     className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${
                       hasExistingRated === true
-                        ? 'bg-[rgba(197,164,66,0.1)] border-[rgba(197,164,66,0.4)] text-white'
+                        ? 'bg-[rgba(212,175,55,0.1)] border-[rgba(212,175,55,0.4)] text-white'
                         : 'bg-white/[0.07] border-white/[0.12] text-white/70 hover:bg-white/[0.10]'
                     }`}
                   >
@@ -945,7 +945,7 @@ export default function Onboarding() {
                     onClick={() => { setHasExistingRated(false); setExistingRated([]); }}
                     className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${
                       hasExistingRated === false
-                        ? 'bg-[rgba(197,164,66,0.1)] border-[rgba(197,164,66,0.4)] text-white'
+                        ? 'bg-[rgba(212,175,55,0.1)] border-[rgba(212,175,55,0.4)] text-white'
                         : 'bg-white/[0.07] border-white/[0.12] text-white/70 hover:bg-white/[0.10]'
                     }`}
                   >
@@ -963,7 +963,7 @@ export default function Onboarding() {
                           placeholder="Search conditions (e.g. PTSD, Tinnitus)"
                         />
                       ) : (
-                        <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.3)]">
+                        <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-[rgba(212,175,55,0.1)] border border-[rgba(212,175,55,0.3)]">
                           <span className="flex-1 text-sm text-gold font-medium">{newRatedCondition}</span>
                           <button onClick={() => setNewRatedCondition('')} className="text-white/40 hover:text-white" aria-label="Change condition">
                             <X className="h-4 w-4" />
@@ -974,7 +974,7 @@ export default function Onboarding() {
                         <select
                           value={newRatedRating}
                           onChange={(e) => setNewRatedRating(Number(e.target.value))}
-                          className="flex-1 px-3 py-2.5 rounded-xl bg-white/[0.09] border border-white/[0.12] text-white text-sm focus:outline-none focus:border-[rgba(197,164,66,0.4)]"
+                          className="flex-1 px-3 py-2.5 rounded-xl bg-white/[0.09] border border-white/[0.12] text-white text-sm focus:outline-none focus:border-[rgba(212,175,55,0.4)]"
                         >
                           {[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map(v => (
                             <option key={v} value={v} className="bg-[#000000] text-white">{v}%</option>
@@ -984,7 +984,7 @@ export default function Onboarding() {
                           <button
                             onClick={() => setNewRatedType('primary')}
                             className={`px-3 py-2 text-xs font-medium transition-colors ${
-                              newRatedType === 'primary' ? 'bg-[rgba(197,164,66,0.2)] text-gold' : 'text-white/50 hover:text-white/80'
+                              newRatedType === 'primary' ? 'bg-[rgba(212,175,55,0.2)] text-gold' : 'text-white/50 hover:text-white/80'
                             }`}
                           >
                             Primary
@@ -992,7 +992,7 @@ export default function Onboarding() {
                           <button
                             onClick={() => setNewRatedType('secondary')}
                             className={`px-3 py-2 text-xs font-medium transition-colors ${
-                              newRatedType === 'secondary' ? 'bg-[rgba(197,164,66,0.2)] text-gold' : 'text-white/50 hover:text-white/80'
+                              newRatedType === 'secondary' ? 'bg-[rgba(212,175,55,0.2)] text-gold' : 'text-white/50 hover:text-white/80'
                             }`}
                           >
                             Secondary
@@ -1002,7 +1002,7 @@ export default function Onboarding() {
                       <button
                         onClick={handleAddExistingRated}
                         disabled={!newRatedCondition.trim()}
-                        className="w-full h-10 rounded-xl bg-[rgba(197,164,66,0.2)] text-gold text-sm font-medium hover:bg-[rgba(197,164,66,0.3)] disabled:opacity-40 transition-colors"
+                        className="w-full h-10 rounded-xl bg-[rgba(212,175,55,0.2)] text-gold text-sm font-medium hover:bg-[rgba(212,175,55,0.3)] disabled:opacity-40 transition-colors"
                       >
                         Add Condition
                       </button>

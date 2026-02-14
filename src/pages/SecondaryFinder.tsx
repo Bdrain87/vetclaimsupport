@@ -23,7 +23,7 @@ function getConnectionStrength(connection: SecondaryConnection): 'strong' | 'mod
 
 const strengthConfig = {
   strong: { label: 'Strong Connection', color: 'text-emerald-400', bg: 'bg-emerald-400/10 border-emerald-400/20', dot: 'bg-emerald-400' },
-  moderate: { label: 'Moderate Connection', color: 'text-gold', bg: 'bg-[rgba(197,164,66,0.1)] border-[rgba(197,164,66,0.2)]', dot: 'bg-gold' },
+  moderate: { label: 'Moderate Connection', color: 'text-gold', bg: 'bg-[rgba(212,175,55,0.1)] border-[rgba(212,175,55,0.2)]', dot: 'bg-gold' },
   possible: { label: 'Possible Connection', color: 'text-muted-foreground', bg: 'bg-muted/30 border-border', dot: 'bg-muted-foreground' },
 };
 
@@ -108,7 +108,7 @@ export default function SecondaryFinder() {
     <PageContainer className="py-6 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3 min-w-0">
-        <div className="w-12 h-12 rounded-xl bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.2)] flex items-center justify-center shrink-0">
+        <div className="w-12 h-12 rounded-xl bg-[rgba(212,175,55,0.1)] border border-[rgba(212,175,55,0.2)] flex items-center justify-center shrink-0">
           <Link2 className="h-6 w-6 text-gold" />
         </div>
         <div className="min-w-0">
@@ -119,7 +119,7 @@ export default function SecondaryFinder() {
 
       {/* Disclaimer */}
       {!disclaimerAcknowledged ? (
-        <div className="rounded-xl p-4 flex items-start gap-3 bg-[rgba(197,164,66,0.08)] border border-[rgba(197,164,66,0.2)]">
+        <div className="rounded-xl p-4 flex items-start gap-3 bg-[rgba(212,175,55,0.08)] border border-[rgba(212,175,55,0.2)]">
           <AlertTriangle className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-foreground">Educational Tool Only</p>
@@ -130,7 +130,7 @@ export default function SecondaryFinder() {
             </p>
             <button
               onClick={() => setDisclaimerAcknowledged(true)}
-              className="mt-2 px-3 py-1.5 rounded-md bg-[rgba(197,164,66,0.15)] text-gold text-xs font-medium hover:bg-[rgba(197,164,66,0.25)] transition-colors"
+              className="mt-2 px-3 py-1.5 rounded-md bg-[rgba(212,175,55,0.15)] text-gold text-xs font-medium hover:bg-[rgba(212,175,55,0.25)] transition-colors"
             >
               I Acknowledge
             </button>
@@ -139,7 +139,7 @@ export default function SecondaryFinder() {
       ) : (
         <button
           onClick={() => setDisclaimerAcknowledged(false)}
-          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl border border-[rgba(197,164,66,0.15)] bg-[rgba(197,164,66,0.04)] text-xs text-muted-foreground hover:bg-[rgba(197,164,66,0.08)] transition-colors"
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.04)] text-xs text-muted-foreground hover:bg-[rgba(212,175,55,0.08)] transition-colors"
         >
           <AlertTriangle className="h-3.5 w-3.5 text-gold flex-shrink-0" />
           <span>Educational tool disclaimer acknowledged — tap to review</span>
@@ -164,8 +164,8 @@ export default function SecondaryFinder() {
                 onClick={() => handleChipClick(c.fullName)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all max-w-full truncate ${
                   selectedPrimary === c.fullName
-                    ? 'bg-[rgba(197,164,66,0.2)] text-gold border border-[rgba(197,164,66,0.4)]'
-                    : 'bg-muted/50 text-muted-foreground border border-border hover:border-[rgba(197,164,66,0.3)] hover:text-foreground'
+                    ? 'bg-[rgba(212,175,55,0.2)] text-gold border border-[rgba(212,175,55,0.4)]'
+                    : 'bg-muted/50 text-muted-foreground border border-border hover:border-[rgba(212,175,55,0.3)] hover:text-foreground'
                 }`}
               >
                 <span className="truncate">{c.name}</span> <ArrowRight className="inline h-3 w-3 ml-1 shrink-0" />
@@ -186,7 +186,7 @@ export default function SecondaryFinder() {
                 <p className="text-muted-foreground text-sm">{currentSecondaries.length} medically-linked conditions found</p>
             </div>
             <Link to={`/prep/doctor-summary?primary=${encodeURIComponent(selectedPrimary)}`}>
-              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.3)] text-gold text-sm font-medium hover:bg-[rgba(197,164,66,0.2)] transition-colors whitespace-nowrap shrink-0">
+              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[rgba(212,175,55,0.1)] border border-[rgba(212,175,55,0.3)] text-gold text-sm font-medium hover:bg-[rgba(212,175,55,0.2)] transition-colors whitespace-nowrap shrink-0">
                 <FileSignature className="h-4 w-4 shrink-0" />
                 <span className="hidden sm:inline">Build</span> Doctor Summary
               </button>
@@ -262,7 +262,7 @@ export default function SecondaryFinder() {
 
       {/* Info card */}
       {!selectedPrimary && (
-        <div className="rounded-2xl p-5 bg-[rgba(197,164,66,0.05)] border border-[rgba(197,164,66,0.15)]">
+        <div className="rounded-2xl p-5 bg-[rgba(212,175,55,0.05)] border border-[rgba(212,175,55,0.15)]">
           <h3 className="text-foreground/90 font-semibold mb-2 text-sm">How Secondary Claims Work</h3>
           <ol className="space-y-1.5 text-xs text-muted-foreground">
             <li>1. Select your already service-connected (primary) condition</li>

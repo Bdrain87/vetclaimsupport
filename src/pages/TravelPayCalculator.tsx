@@ -83,7 +83,7 @@ export default function TravelPayCalculator() {
         className="space-y-2"
       >
         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.2)]">
+          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-[rgba(212,175,55,0.1)] border border-[rgba(212,175,55,0.2)]">
             <Navigation className="h-5 w-5 text-gold" />
           </div>
           <div>
@@ -211,7 +211,7 @@ export default function TravelPayCalculator() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.1 }}
       >
-        <Card className="border-[rgba(197,164,66,0.3)]">
+        <Card className="border-[rgba(212,175,55,0.3)]">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
               <DollarSign className="h-5 w-5 text-gold" />
@@ -252,7 +252,7 @@ export default function TravelPayCalculator() {
                 <span
                   className="text-xl font-bold"
                   style={{
-                    background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+                    background: 'linear-gradient(135deg, #E2C468 0%, #D4AF37 40%, #B38728 70%, #D4AF37 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                   }}
@@ -271,7 +271,7 @@ export default function TravelPayCalculator() {
                 <p
                   className="text-lg font-bold"
                   style={{
-                    background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+                    background: 'linear-gradient(135deg, #E2C468 0%, #D4AF37 40%, #B38728 70%, #D4AF37 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                   }}
@@ -284,7 +284,7 @@ export default function TravelPayCalculator() {
                 <p
                   className="text-lg font-bold"
                   style={{
-                    background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)',
+                    background: 'linear-gradient(135deg, #E2C468 0%, #D4AF37 40%, #B38728 70%, #D4AF37 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                   }}
@@ -384,7 +384,7 @@ export default function TravelPayCalculator() {
               href={BTSSS_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between p-3 rounded-lg bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.2)] group hover:bg-[rgba(197,164,66,0.15)] transition-colors"
+              className="flex items-center justify-between p-3 rounded-lg bg-[rgba(212,175,55,0.1)] border border-[rgba(212,175,55,0.2)] group hover:bg-[rgba(212,175,55,0.15)] transition-colors"
             >
               <div className="flex items-center gap-3">
                 <Navigation className="h-5 w-5 text-gold" />

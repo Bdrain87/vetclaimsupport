@@ -34,8 +34,8 @@ body {
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); }
-::-webkit-scrollbar-thumb { background: rgba(197, 164, 66, 0.2); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(197, 164, 66, 0.4); }
+::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.2); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(212, 175, 55, 0.4); }
 
 /* Vet Claim Support - Premium Dark Mode Design System */
 
@@ -53,7 +53,7 @@ body {
     --popover-foreground: 0 0% 98%;
 
     /* Primary Gold */
-    --primary: 43 64% 60%;
+    --primary: 46 65% 52%;
     --primary-foreground: 0 0% 100%;
 
     /* Secondary — charcoal surface */
@@ -63,7 +63,7 @@ body {
     --muted: 0 0% 16%;
     --muted-foreground: 0 0% 50%;
 
-    --accent: 43 64% 60%;
+    --accent: 46 65% 52%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
@@ -78,19 +78,19 @@ body {
 
     --border: 0 0% 18%;
     --input: 0 0% 13%;
-    --ring: 43 64% 60%;
+    --ring: 46 65% 52%;
 
     --radius: 1rem;
 
     /* Sidebar — slightly off-black */
     --sidebar-background: 0 0% 3%;
     --sidebar-foreground: 0 0% 55%;
-    --sidebar-primary: 43 64% 60%;
+    --sidebar-primary: 46 65% 52%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 0% 11%;
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 0 0% 14%;
-    --sidebar-ring: 43 64% 60%;
+    --sidebar-ring: 46 65% 52%;
     --sidebar-muted: 0 0% 45%;
 
     /* Section colors */
@@ -115,13 +115,13 @@ body {
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 11%;
     --popover-foreground: 0 0% 98%;
-    --primary: 43 64% 60%;
+    --primary: 46 65% 52%;
     --primary-foreground: 0 0% 100%;
     --secondary: 0 0% 13%;
     --secondary-foreground: 0 0% 85%;
     --muted: 0 0% 16%;
     --muted-foreground: 0 0% 50%;
-    --accent: 43 64% 60%;
+    --accent: 46 65% 52%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
@@ -131,15 +131,15 @@ body {
     --success-foreground: 0 0% 100%;
     --border: 0 0% 18%;
     --input: 0 0% 13%;
-    --ring: 43 64% 60%;
+    --ring: 46 65% 52%;
     --sidebar-background: 0 0% 3%;
     --sidebar-foreground: 0 0% 55%;
-    --sidebar-primary: 43 64% 60%;
+    --sidebar-primary: 46 65% 52%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 0% 11%;
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 0 0% 14%;
-    --sidebar-ring: 43 64% 60%;
+    --sidebar-ring: 46 65% 52%;
   }
 
   /* Light mode - Clean & Professional */
@@ -150,13 +150,13 @@ body {
     --card-foreground: 0 0% 10%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 10%;
-    --primary: 43 64% 45%;
+    --primary: 46 65% 40%;
     --primary-foreground: 0 0% 10%;
     --secondary: 0 0% 96%;
     --secondary-foreground: 0 0% 25%;
     --muted: 0 0% 95%;
     --muted-foreground: 0 0% 45%;
-    --accent: 43 64% 45%;
+    --accent: 46 65% 40%;
     --accent-foreground: 0 0% 10%;
     --destructive: 0 84% 55%;
     --destructive-foreground: 0 0% 100%;
@@ -166,15 +166,15 @@ body {
     --success-foreground: 0 0% 100%;
     --border: 0 0% 88%;
     --input: 0 0% 92%;
-    --ring: 43 64% 45%;
+    --ring: 46 65% 40%;
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 0 0% 35%;
-    --sidebar-primary: 43 64% 45%;
+    --sidebar-primary: 46 65% 40%;
     --sidebar-primary-foreground: 0 0% 10%;
-    --sidebar-accent: 43 64% 97%;
-    --sidebar-accent-foreground: 43 64% 35%;
+    --sidebar-accent: 46 65% 97%;
+    --sidebar-accent-foreground: 46 65% 35%;
     --sidebar-border: 0 0% 92%;
-    --sidebar-ring: 43 64% 45%;
+    --sidebar-ring: 46 65% 40%;
     --sidebar-muted: 0 0% 55%;
     --glass-bg: 0 0% 100% / 0.8;
     --glass-border: 0 0% 88% / 0.6;
@@ -270,7 +270,7 @@ body {
 
   /* Premium selection color — Gold accent */
   ::selection {
-    background: rgba(197, 164, 66, 0.25);
+    background: rgba(212, 175, 55, 0.25);
   }
 }
 
@@ -585,9 +585,9 @@ body {
   /* Primary gradient card - vivid gold gradient for info results */
   .gradient-card-primary {
     @apply relative overflow-hidden rounded-2xl p-6;
-    background: linear-gradient(135deg, #C5A442 0%, #7A672A 100%);
+    background: linear-gradient(135deg, #D4AF37 0%, #7B5E1A 100%);
     box-shadow:
-      0 8px 32px rgba(197, 164, 66, 0.35),
+      0 8px 32px rgba(212, 175, 55, 0.35),
       0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   }
 
@@ -648,8 +648,8 @@ body {
 
   .gradient-stat-primary {
     @apply relative overflow-hidden rounded-2xl p-5;
-    background: linear-gradient(135deg, #C5A442 0%, #7A672A 100%);
-    box-shadow: 0 8px 32px rgba(197, 164, 66, 0.3);
+    background: linear-gradient(135deg, #D4AF37 0%, #7B5E1A 100%);
+    box-shadow: 0 8px 32px rgba(212, 175, 55, 0.3);
   }
 
   .gradient-stat-warning {
@@ -710,9 +710,9 @@ body {
 
   .premium-badge-primary {
     @apply premium-badge;
-    background: rgba(197, 164, 66, 0.15);
-    color: #C5A442;
-    border: 1px solid rgba(197, 164, 66, 0.2);
+    background: rgba(212, 175, 55, 0.15);
+    color: #D4AF37;
+    border: 1px solid rgba(212, 175, 55, 0.2);
   }
 
   /* Success result card - subtle green background */
@@ -1220,7 +1220,7 @@ body {
 
   /* Apple text gradient */
   .text-gradient-blue {
-    @apply bg-gradient-to-r from-primary via-[#F5D680] to-cyan-400 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary via-[#F0D78C] to-cyan-400 bg-clip-text text-transparent;
   }
 
   .text-gradient-gold {
@@ -1400,7 +1400,7 @@ body {
   from {
     box-shadow:
       0 0 0 2px hsl(var(--background)),
-      0 0 0 2px rgba(197, 164, 66, 0);
+      0 0 0 2px rgba(212, 175, 55, 0);
   }
   to {
     box-shadow:
@@ -1656,7 +1656,7 @@ body {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: var(--gold-md, #C5A442);
+  background-color: var(--gold-md, #D4AF37);
   animation: loadingDotPulse 0.8s ease-in-out infinite;
 }
 

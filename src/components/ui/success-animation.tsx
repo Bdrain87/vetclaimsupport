@@ -56,7 +56,7 @@ const SuccessAnimation = React.forwardRef<HTMLDivElement, SuccessAnimationProps>
         // Generate particles for celebration variant
         if (variant === 'celebration') {
           const colors = [
-            '#22c55e', '#C5A442', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4'
+            '#22c55e', '#D4AF37', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4'
           ];
           const newParticles = Array.from({ length: 24 }, (_, i) => ({
             id: i,

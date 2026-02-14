@@ -30,9 +30,9 @@ export function FinalCTA() {
         style={{
           scale: bgScale,
           background: `
-            radial-gradient(ellipse at 50% 50%, rgba(197,164,66,0.1) 0%, transparent 50%),
-            radial-gradient(ellipse at 20% 80%, rgba(197,164,66,0.04) 0%, transparent 40%),
-            radial-gradient(ellipse at 80% 20%, rgba(197,164,66,0.04) 0%, transparent 40%)
+            radial-gradient(ellipse at 50% 50%, rgba(212,175,55,0.1) 0%, transparent 50%),
+            radial-gradient(ellipse at 20% 80%, rgba(212,175,55,0.04) 0%, transparent 40%),
+            radial-gradient(ellipse at 80% 20%, rgba(212,175,55,0.04) 0%, transparent 40%)
           `,
         }}
       />
@@ -41,7 +41,7 @@ export function FinalCTA() {
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full pointer-events-none"
         style={{
           opacity: glowOpacity,
-          background: 'radial-gradient(circle, rgba(197,164,66,0.06) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(212,175,55,0.06) 0%, transparent 70%)',
           filter: 'blur(40px)',
         }}
       />
@@ -103,14 +103,14 @@ export function FinalCTA() {
             className="inline-block"
             whileHover={{
               scale: 1.05,
-              boxShadow: '0 0 40px rgba(197, 164, 66, 0.35), 0 0 80px rgba(197, 164, 66, 0.15)',
+              boxShadow: '0 0 40px rgba(212, 175, 55, 0.35), 0 0 80px rgba(212, 175, 55, 0.15)',
             }}
             whileTap={{ scale: 0.97 }}
             animate={{
               boxShadow: [
-                '0 0 20px rgba(197, 164, 66, 0.08)',
-                '0 0 40px rgba(197, 164, 66, 0.2)',
-                '0 0 20px rgba(197, 164, 66, 0.08)',
+                '0 0 20px rgba(212, 175, 55, 0.08)',
+                '0 0 40px rgba(212, 175, 55, 0.2)',
+                '0 0 20px rgba(212, 175, 55, 0.08)',
               ],
             }}
             transition={{
@@ -155,15 +155,15 @@ export function FinalCTA() {
           <motion.span
             className="text-xs px-2 py-0.5 rounded-full"
             style={{
-              background: 'linear-gradient(135deg, rgba(197,164,66,0.15), rgba(197,164,66,0.05))',
-              border: '1px solid rgba(197,164,66,0.3)',
-              color: '#C5A442',
+              background: 'linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05))',
+              border: '1px solid rgba(212,175,55,0.3)',
+              color: '#D4AF37',
             }}
             animate={{
               boxShadow: [
-                '0 0 5px rgba(197,164,66,0.2)',
-                '0 0 15px rgba(197,164,66,0.5)',
-                '0 0 5px rgba(197,164,66,0.2)',
+                '0 0 5px rgba(212,175,55,0.2)',
+                '0 0 15px rgba(212,175,55,0.5)',
+                '0 0 5px rgba(212,175,55,0.2)',
               ],
             }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
