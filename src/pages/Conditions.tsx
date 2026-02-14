@@ -161,7 +161,7 @@ function ConditionCard({ userCondition, conditionDetails, onView, onRemove, onNa
 
         {/* Quick Actions + Remove */}
         <div
-          className="flex gap-1 mt-3 pt-3 border-t border-border flex-wrap opacity-0 group-hover:opacity-100 transition-opacity overflow-hidden"
+          className="flex gap-1 mt-3 pt-3 border-t border-border flex-wrap sm:opacity-0 sm:group-hover:opacity-100 transition-opacity overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           {conditionDetails && onNavigate && (
@@ -212,6 +212,7 @@ export default function Conditions() {
   // Add condition form state
   const [selectedCondition, setSelectedCondition] = useState<VACondition | null>(null);
   const [newRating, setNewRating] = useState('');
+  const [newClaimStatus, setNewClaimStatus] = useState<'pending' | 'approved'>('pending');
   const [isSecondary, setIsSecondary] = useState(false);
   const [linkedPrimaryId, setLinkedPrimaryId] = useState('');
 
@@ -262,6 +263,8 @@ export default function Conditions() {
 
     addCondition(selectedCondition.id, {
       rating: parsedRating,
+      claimStatus: newClaimStatus,
+      serviceConnected: newClaimStatus === 'approved',
       isPrimary: !isSecondary,
       linkedPrimaryId: isSecondary && linkedPrimaryId ? linkedPrimaryId : undefined,
     });
@@ -269,6 +272,7 @@ export default function Conditions() {
     // Reset form
     setSelectedCondition(null);
     setNewRating('');
+    setNewClaimStatus('pending');
     setIsSecondary(false);
     setLinkedPrimaryId('');
     setShowAddDialog(false);
@@ -388,9 +392,32 @@ export default function Conditions() {
                 </div>
               )}
 
+              {/* Claim Status */}
+              <div className="space-y-2">
+                <Label>Claim Status</Label>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant={newClaimStatus === 'pending' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setNewClaimStatus('pending')}
+                  >
+                    New / Pending
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={newClaimStatus === 'approved' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setNewClaimStatus('approved')}
+                  >
+                    Already Approved
+                  </Button>
+                </div>
+              </div>
+
               {/* Rating Selection */}
               <div className="space-y-2">
-                <Label htmlFor="rating">Current/Claimed Rating (optional)</Label>
+                <Label htmlFor="rating">{newClaimStatus === 'approved' ? 'Current VA Rating' : 'Claimed Rating (optional)'}</Label>
                 <Select value={newRating} onValueChange={setNewRating}>
                   <SelectTrigger id="rating">
                     <SelectValue placeholder="Select rating" />

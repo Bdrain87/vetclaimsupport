@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import gsap from 'gsap';
 import {
   HEADING_H2_STYLE,
   PILL_STYLE,
@@ -312,7 +311,16 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
   const [rotationOffset, setRotationOffset] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const cardsRef = useRef<Map<number, HTMLDivElement>>(new Map());
-  const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const gsapRef = useRef<typeof import('gsap')['default'] | null>(null);
+  const timelineRef = useRef<ReturnType<typeof import('gsap')['default']['timeline']> | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    import('gsap').then((mod) => {
+      if (mounted) gsapRef.current = mod.default;
+    });
+    return () => { mounted = false; };
+  }, []);
 
   // Auto-advance rotation
   useEffect(() => {
@@ -332,7 +340,9 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
       timelineRef.current.kill();
     }
 
-    // Create timeline for staggered, elegant motion
+    const gsap = gsapRef.current;
+    if (!gsap) return;
+
     const tl = gsap.timeline();
 
     CARDS.forEach((_, cardIndex) => {

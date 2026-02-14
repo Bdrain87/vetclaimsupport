@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect } from 'react';
+import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft, X, Search, Shield, User, Briefcase, Stethoscope, Check, MapPin, Plane } from 'lucide-react';
@@ -155,21 +155,29 @@ export default function Onboarding() {
   const appStore = useAppStore();
   const { addCondition, removeCondition, conditions: userConditions } = useUserConditions();
 
-  const [step, setStep] = useState(0);
-  const [firstName, setFirstName] = useState(profileStore.firstName);
-  const [lastName, setLastName] = useState(profileStore.lastName);
-  const [branch, setBranch] = useState<Branch | ''>(profileStore.branch);
+  const savedProgress = useRef(() => {
+    try {
+      const raw = localStorage.getItem('vcs_onboarding_progress');
+      return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+  });
+  const cached = savedProgress.current();
+
+  const [step, setStep] = useState(cached?.step ?? 0);
+  const [firstName, setFirstName] = useState(cached?.firstName ?? profileStore.firstName);
+  const [lastName, setLastName] = useState(cached?.lastName ?? profileStore.lastName);
+  const [branch, setBranch] = useState<Branch | ''>(cached?.branch ?? profileStore.branch);
   const [selectedBranches, setSelectedBranches] = useState<Branch[]>(
-    profileStore.branch ? [profileStore.branch] : []
+    cached?.selectedBranches ?? (profileStore.branch ? [profileStore.branch] : [])
   );
-  const [mosCode, setMosCode] = useState(profileStore.mosCode);
-  const [mosTitle, setMosTitle] = useState(profileStore.mosTitle);
-  const [addedConditions, setAddedConditions] = useState<string[]>([]);
-  const [claimGoal, setClaimGoal] = useState<ClaimGoal | ''>('');
+  const [mosCode, setMosCode] = useState(cached?.mosCode ?? profileStore.mosCode);
+  const [mosTitle, setMosTitle] = useState(cached?.mosTitle ?? profileStore.mosTitle);
+  const [addedConditions, setAddedConditions] = useState<string[]>(cached?.addedConditions ?? []);
+  const [claimGoal, setClaimGoal] = useState<ClaimGoal | ''>(cached?.claimGoal ?? '');
   const [nameError, setNameError] = useState('');
   const [showManualMOS, setShowManualMOS] = useState(false);
-  const [manualCode, setManualCode] = useState('');
-  const [manualTitle, setManualTitle] = useState('');
+  const [manualCode, setManualCode] = useState(cached?.manualCode ?? '');
+  const [manualTitle, setManualTitle] = useState(cached?.manualTitle ?? '');
 
   // Duty Stations
   const [dutyStations, setDutyStations] = useState<Omit<DutyStation, 'id'>[]>([]);
@@ -204,8 +212,22 @@ export default function Onboarding() {
   const [newRatedRating, setNewRatedRating] = useState(0);
   const [newRatedType, setNewRatedType] = useState<'primary' | 'secondary'>('primary');
 
+  const persistProgress = useCallback(() => {
+    try {
+      localStorage.setItem('vcs_onboarding_progress', JSON.stringify({
+        step, firstName, lastName, branch, selectedBranches,
+        mosCode, mosTitle, addedConditions, claimGoal, manualCode, manualTitle,
+      }));
+    } catch { /* quota exceeded — ignore */ }
+  }, [step, firstName, lastName, branch, selectedBranches, mosCode, mosTitle, addedConditions, claimGoal, manualCode, manualTitle]);
+
+  useEffect(() => {
+    persistProgress();
+  }, [persistProgress]);
+
   useEffect(() => {
     if (profileStore.hasCompletedOnboarding) {
+      localStorage.removeItem('vcs_onboarding_progress');
       navigate('/app', { replace: true });
     }
   }, [profileStore.hasCompletedOnboarding, navigate]);
@@ -375,18 +397,33 @@ export default function Onboarding() {
     setDeployments(prev => prev.filter((_, i) => i !== idx));
   };
 
+  const STEP_LABELS = [
+    'Welcome', 'Your Name', 'Branch of Service', 'Military Job',
+    'Duty Stations', 'Deployments', 'Conditions', 'Existing Ratings',
+    'Claim Goal', 'Review', 'Complete',
+  ];
+
   const ProgressDots = () => {
     if (step === TOTAL_STEPS - 1) return null;
     return (
-      <div className="flex justify-center gap-2">
+      <div
+        className="flex justify-center gap-2"
+        role="progressbar"
+        aria-valuenow={step + 1}
+        aria-valuemin={1}
+        aria-valuemax={TOTAL_STEPS}
+        aria-label={`Step ${step + 1} of ${TOTAL_STEPS}: ${STEP_LABELS[step] || ''}`}
+      >
         {Array.from({ length: TOTAL_STEPS - 1 }).map((_, i) => (
           <div
             key={i}
             className={`h-2 rounded-full transition-all duration-300 ${
               i === step ? 'w-8 bg-[image:var(--gold-gradient)]' : i < step ? 'w-2 bg-[var(--gold-md)]/50' : 'w-2 bg-white/10'
             }`}
+            aria-hidden="true"
           />
         ))}
+        <span className="sr-only">Step {step + 1} of {TOTAL_STEPS}: {STEP_LABELS[step]}</span>
       </div>
     );
   };

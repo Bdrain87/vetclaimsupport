@@ -7,6 +7,7 @@ import { BottomTabBar } from './components/BottomTabBar';
 import { ThemeProvider } from './context/ThemeContext';
 import { TooltipProvider } from './components/ui/tooltip';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { RouteErrorBoundary } from './components/RouteErrorBoundary';
 import { LiabilityAcceptanceScreen } from './components/legal/LiabilityAcceptanceScreen';
 import { SplashScreen } from './components/SplashScreen';
 import { useProfileStore } from './store/useProfileStore';
@@ -15,6 +16,9 @@ import { useSessionTimeout } from './hooks/useSessionTimeout';
 import { useHydration } from './hooks/useHydration';
 import { checkDataRetention } from './utils/dataRetention';
 import { RetentionWarningBanner } from './components/RetentionWarningBanner';
+import { AriaLiveAnnouncer } from './components/AriaLiveAnnouncer';
+import { QuickAddFAB } from './components/QuickAddFAB';
+import { OfflineIndicator } from './components/OfflineIndicator';
 import { isWeb } from './lib/platform';
 
 // Run migration before React renders (synchronous, runs once)
@@ -33,6 +37,7 @@ const BilateralCalculator = lazy(() => import('./pages/BilateralCalculator'));
 const ClaimChecklist = lazy(() => import('./pages/ClaimChecklist'));
 const ClaimStrategyWizard = lazy(() => import('./pages/ClaimStrategyWizard'));
 const Timeline = lazy(() => import('./pages/Timeline'));
+const UnifiedTimeline = lazy(() => import('./pages/UnifiedTimeline'));
 const Symptoms = lazy(() => import('./pages/Symptoms'));
 const Sleep = lazy(() => import('./pages/Sleep'));
 const Medications = lazy(() => import('./pages/Medications'));
@@ -170,6 +175,7 @@ function AnimatedRoutes() {
 
   return (
     <div key={location.pathname} className="animate-fade-in">
+      <RouteErrorBoundary>
       <Suspense fallback={<LoadingFallback />}>
         <Routes location={location}>
           {/* === ROOT TABS === */}
@@ -200,6 +206,7 @@ function AnimatedRoutes() {
           <Route path="/health/visits" element={<MedicalVisits />} />
           <Route path="/health/exposures" element={<Exposures />} />
           <Route path="/health/summary" element={<HealthLog />} />
+          <Route path="/health/timeline" element={<UnifiedTimeline />} />
 
           {/* === PREP === */}
           <Route path="/prep" element={<PrepHub />} />
@@ -312,6 +319,7 @@ function AnimatedRoutes() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
+      </RouteErrorBoundary>
     </div>
   );
 }
@@ -341,8 +349,10 @@ function AppContent() {
 <div className="flex-1 flex flex-col overflow-hidden">
         <MobileHeader />
         <main id="main-content" className="flex-1 overflow-y-auto overflow-x-hidden">
+          <OfflineIndicator />
           <AnimatedRoutes />
         </main>
+        <QuickAddFAB />
         <BottomTabBar />
       </div>
     </div>
@@ -366,18 +376,20 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider>
         <TooltipProvider>
-          {showSplash && (
-            <SplashScreen
-              onComplete={() => setShowSplash(false)}
-              minimumDuration={1800}
-              ready={hydrated}
-            />
-          )}
-          <BrowserRouter>
-            <ScrollToTop />
-            <RetentionWarningBanner />
-            <AppContent />
-          </BrowserRouter>
+          <AriaLiveAnnouncer>
+            {showSplash && (
+              <SplashScreen
+                onComplete={() => setShowSplash(false)}
+                minimumDuration={1800}
+                ready={hydrated}
+              />
+            )}
+            <BrowserRouter>
+              <ScrollToTop />
+              <RetentionWarningBanner />
+              <AppContent />
+            </BrowserRouter>
+          </AriaLiveAnnouncer>
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

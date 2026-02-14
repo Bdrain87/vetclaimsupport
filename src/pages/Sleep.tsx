@@ -3,7 +3,7 @@ import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { useEvidence } from '@/hooks/useEvidence';
 import { getConditionById } from '@/data/vaConditions';
-import { Moon, Plus, Trash2, Edit, Calendar, Clock, CheckCircle2, TrendingUp, Wind, Zap, Download, Tag } from 'lucide-react';
+import { Moon, Plus, Trash2, Edit, Calendar, Clock, CheckCircle2, TrendingUp, Wind, Zap, Download, Tag, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -14,6 +14,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
@@ -435,7 +436,13 @@ export default function Sleep() {
                       
                       <div className="flex items-center justify-between rounded-lg border p-3 bg-background/50">
                         <div className="space-y-0.5">
-                          <Label className="text-sm">Chronic Respiratory Failure?</Label>
+                          <Label className="text-sm flex items-center gap-1">
+                            Chronic Respiratory Failure?
+                            <Tooltip>
+                              <TooltipTrigger asChild><HelpCircle className="h-3.5 w-3.5 text-muted-foreground" /></TooltipTrigger>
+                              <TooltipContent className="max-w-xs">When your lungs can't remove enough CO2 from your blood (CO2 retention) or your heart weakens from lung disease (cor pulmonale). Requires medical diagnosis.</TooltipContent>
+                            </Tooltip>
+                          </Label>
                           <p className="text-xs text-muted-foreground">With CO₂ retention or cor pulmonale</p>
                         </div>
                         <Switch 
@@ -495,7 +502,13 @@ export default function Sleep() {
                     {/* Oxygen Desaturation */}
                     <div className="flex items-center justify-between rounded-lg border p-3">
                       <div className="space-y-0.5">
-                        <Label className="text-sm">Oxygen Level Dropped?</Label>
+                        <Label className="text-sm flex items-center gap-1">
+                          Oxygen Level Dropped?
+                          <Tooltip>
+                            <TooltipTrigger asChild><HelpCircle className="h-3.5 w-3.5 text-muted-foreground" /></TooltipTrigger>
+                            <TooltipContent className="max-w-xs">Oxygen desaturation means your blood oxygen drops below normal (usually below 90%). Measured with a pulse oximeter. Levels below 88% during sleep strongly support a higher VA rating.</TooltipContent>
+                          </Tooltip>
+                        </Label>
                         <p className="text-xs text-muted-foreground">If using pulse oximeter</p>
                       </div>
                       <Switch 

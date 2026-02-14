@@ -29,6 +29,7 @@ import {
   Compass,
   Navigation,
   PersonStanding,
+  Target,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { vcsSpring } from '@/constants/animations';
@@ -60,6 +61,22 @@ export default function Dashboard() {
   const reminders = useSmartReminders();
 
   const claimConditions = useMemo(() => data.claimConditions || [], [data.claimConditions]);
+
+  const readinessScore = useMemo(
+    () => ClaimIntelligence.getOverallReadiness(userConditions, data, profile),
+    [userConditions, data, profile]
+  );
+
+  const evidenceCompleteness = useMemo(() => {
+    const total = userConditions.length;
+    if (total === 0) return null;
+    const incomplete = claimConditions.filter((c) => {
+      const score = getEvidenceScore(c);
+      return score < 75;
+    }).length;
+    const complete = total - incomplete;
+    return { total, complete, incomplete };
+  }, [userConditions.length, claimConditions]);
 
   const nextSteps = useMemo(
     () => ClaimIntelligence.getNextSteps(profile, userConditions, data),
@@ -332,6 +349,51 @@ export default function Dashboard() {
               </div>
             </div>
           ))}
+        </motion.div>
+      )}
+
+      {/* Claim Readiness Score */}
+      {userConditions.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={vcsSpring}
+        >
+          <Link to="/claims" className="block">
+            <div className="rounded-xl bg-card border border-border p-4 shadow-sm hover:bg-accent/30 transition-colors">
+              <div className="flex items-center gap-4">
+                <div className="relative w-14 h-14 flex-shrink-0">
+                  <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90" role="img" aria-label={`Claim readiness: ${readinessScore} percent`}>
+                    <circle cx="18" cy="18" r="15" fill="none" stroke="currentColor" className="text-muted/30" strokeWidth="3" />
+                    <motion.circle
+                      cx="18" cy="18" r="15" fill="none"
+                      stroke={readinessScore >= 70 ? '#22c55e' : readinessScore >= 40 ? '#C5A442' : '#ef4444'}
+                      strokeWidth="3" strokeLinecap="round"
+                      strokeDasharray={`${readinessScore}, 100`}
+                      initial={{ strokeDasharray: '0, 100' }}
+                      animate={{ strokeDasharray: `${readinessScore}, 100` }}
+                      transition={{ duration: 1.5, ease: 'easeOut' }}
+                    />
+                  </svg>
+                  <span className="absolute inset-0 flex items-center justify-center">
+                    <Target className="h-5 w-5 text-foreground" />
+                  </span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-foreground">Claim Readiness: {readinessScore}%</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    {readinessScore >= 70 ? 'Strong position — consider filing soon' : readinessScore >= 40 ? 'Building evidence — keep logging' : 'Early stage — add conditions and evidence'}
+                  </p>
+                  {evidenceCompleteness && evidenceCompleteness.incomplete > 0 && (
+                    <p className="text-xs text-gold mt-0.5">
+                      {evidenceCompleteness.incomplete} of {evidenceCompleteness.total} conditions need more evidence
+                    </p>
+                  )}
+                </div>
+                <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+              </div>
+            </div>
+          </Link>
         </motion.div>
       )}
 
