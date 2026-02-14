@@ -248,12 +248,12 @@ We're sorry you experienced this issue. Please contact us at support@vetclaimsup
 
 ### Veterans Day (November)
 ```
-This Veterans Day, take control of your claim. Updated with 2026 compensation rates and PACT Act conditions. Thank you for your service.
+This Veterans Day, get your claim organized. Updated with 2026 compensation rates and PACT Act conditions. Thank you for your service.
 ```
 
 ### New Year (January)
 ```
-New year, new claim strategy. Start 2026 with the tools to get the rating you earned. Updated compensation rates now available.
+New year, new claim strategy. Start 2026 organized with the right tools and updated compensation rates.
 ```
 
 ### PACT Act Anniversary
