@@ -77,12 +77,20 @@ serve(async (req: Request) => {
     // rows are not left behind.  If your schema already uses CASCADE FKs
     // for every table that references auth.users(id), you can remove these
     // calls, but keeping them is a safe belt-and-suspenders approach.
-    const tablesToClean = ['profiles', 'claims', 'documents', 'analyses'];
-    for (const table of tablesToClean) {
+    const tablesToClean = [
+      { table: 'entitlements', column: 'user_id' },
+      { table: 'form_drafts', column: 'user_id' },
+      { table: 'documents', column: 'user_id' },
+      { table: 'evidence', column: 'user_id' },
+      { table: 'health_logs', column: 'user_id' },
+      { table: 'conditions', column: 'user_id' },
+      { table: 'profiles', column: 'id' },
+    ];
+    for (const { table, column } of tablesToClean) {
       const { error: cleanupError } = await adminClient
         .from(table)
         .delete()
-        .eq('user_id', userId);
+        .eq(column, userId);
       if (cleanupError) {
         console.error(`Failed to clean up ${table} for user ${userId}: ${cleanupError.message}`);
         // Non-fatal — continue with the rest; the auth deletion is the

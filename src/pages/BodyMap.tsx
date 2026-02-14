@@ -7,7 +7,6 @@ import {
   X,
   Activity,
   Info,
-  Brain,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -372,21 +371,21 @@ export default function BodyMap() {
   }, [userConditions]);
 
   // Helper to get fill/stroke for regions
-  const getRegionFill = (regionId: string) => {
+  const _getRegionFill = (regionId: string) => {
     if (selectedRegion === regionId) return 'url(#goldGradient)';
     if (regionCounts[regionId]) return 'rgba(197,164,66,0.4)';
     if (hoveredRegion === regionId) return 'rgba(197,164,66,0.25)';
     return '#9CA3AF';
   };
 
-  const getRegionStroke = (regionId: string) => {
+  const _getRegionStroke = (regionId: string) => {
     if (selectedRegion === regionId || regionCounts[regionId] || hoveredRegion === regionId) {
       return '#C5A442';
     }
     return '#6B7280';
   };
 
-  const getRegionStrokeWidth = (regionId: string) => {
+  const _getRegionStrokeWidth = (regionId: string) => {
     return selectedRegion === regionId || regionCounts[regionId] ? 2.5 : 1;
   };
 

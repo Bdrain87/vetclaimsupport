@@ -4,7 +4,7 @@ const RETENTION_MS = RETENTION_DAYS * 24 * 60 * 60 * 1000;
 const RETENTION_WARNING_KEY = '_retentionWarningShown';
 
 /** localStorage keys used by the app's Zustand stores */
-const APP_STORAGE_KEYS = [
+const _APP_STORAGE_KEYS = [
   'vcs-app-data',
   'vet-user-profile',
   'vcs-ai-cache',

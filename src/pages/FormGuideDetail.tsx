@@ -56,7 +56,7 @@ function FieldCard({ field, formId: _formId, savedValue, onSave }: FieldCardProp
     } catch {
       toast({ title: 'Copy failed', description: 'Unable to access clipboard.', variant: 'destructive' });
     }
-  }, [value]);
+  }, [value, toast]);
 
   const handleAIHelper = useCallback(async () => {
     if (!value.trim() && !field.aiHelpPrompt) return;

@@ -132,17 +132,24 @@ export async function deleteAccount(): Promise<void> {
 
   // 2. Delete files from Supabase Storage (list may be paginated; loop until empty)
   try {
+    const MAX_STORAGE_PAGES = 50;
     let hasMore = true;
-    while (hasMore) {
+    let page = 0;
+    while (hasMore && page < MAX_STORAGE_PAGES) {
       const { data: files } = await supabase.storage
         .from('user-files')
         .list(userId, { limit: 100 });
       if (files && files.length > 0) {
         const paths = files.map((f) => `${userId}/${f.name}`);
-        await supabase.storage.from('user-files').remove(paths);
+        const { error: removeError } = await supabase.storage.from('user-files').remove(paths);
+        if (removeError) {
+          console.error('[deleteAccount] storage remove failed:', removeError.message);
+          break;
+        }
       } else {
         hasMore = false;
       }
+      page++;
     }
   } catch {
     // Storage bucket may not exist yet -- non-fatal
