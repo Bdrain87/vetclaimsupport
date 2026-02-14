@@ -93,13 +93,16 @@ export async function deleteCloudData(): Promise<void> {
   const errors: string[] = [];
   for (const table of tables) {
     const { error } = await supabase.from(table).delete().eq('user_id', userId);
-    if (error) errors.push(`${table}: ${error.message}`);
+    if (error) errors.push(table);
   }
   if (errors.length > 0) {
     throw new Error('Some cloud data could not be deleted. Please try again.');
   }
 
-  // Keep profile and auth account intact
+  const { error: profileError } = await supabase.from('profiles').delete().eq('id', userId);
+  if (profileError) {
+    throw new Error(`Failed to delete profile: ${profileError.message}`);
+  }
 }
 
 export async function deleteAccount(): Promise<void> {
@@ -122,12 +125,12 @@ export async function deleteAccount(): Promise<void> {
   for (const table of tables) {
     const { error: deleteError } = await supabase.from(table).delete().eq('user_id', userId);
     if (deleteError) {
-      console.error(`[deleteAccount] failed to delete ${table}:`, deleteError.message);
-      deleteErrors.push(`${table}: ${deleteError.message}`);
+      console.error('[deleteAccount] failed to delete data');
+      deleteErrors.push(table);
     }
   }
   if (deleteErrors.length > 0) {
-    throw new Error(`Failed to delete account data (${deleteErrors.join('; ')}). Please try again.`);
+    throw new Error('Failed to delete all account data. Please try again.');
   }
 
   // 2. Delete files from Supabase Storage (list may be paginated; loop until empty)
@@ -143,7 +146,7 @@ export async function deleteAccount(): Promise<void> {
         const paths = files.map((f) => `${userId}/${f.name}`);
         const { error: removeError } = await supabase.storage.from('user-files').remove(paths);
         if (removeError) {
-          console.error('[deleteAccount] storage remove failed:', removeError.message);
+          console.error('[deleteAccount] storage remove failed');
           break;
         }
       } else {

@@ -1,6 +1,50 @@
 import { supabase } from '@/lib/supabase';
 import useAppStore from '@/store/useAppStore';
 import { useProfileStore } from '@/store/useProfileStore';
+import { sanitizePHI } from '@/utils/phiSanitizer';
+
+function isNonNullObject(v: unknown): v is Record<string, unknown> {
+  return typeof v === 'object' && v !== null && !Array.isArray(v);
+}
+
+function hasString(obj: Record<string, unknown>, key: string): boolean {
+  return typeof obj[key] === 'string';
+}
+
+function isValidConditionRow(row: unknown): row is { id: string; name: string; created_at?: string; updated_at?: string; service_connection_notes?: string } {
+  if (!isNonNullObject(row)) return false;
+  return hasString(row, 'id') && hasString(row, 'name');
+}
+
+function isValidHealthLogRow(row: unknown): row is { id: string; log_type: string; data: Record<string, unknown> } {
+  if (!isNonNullObject(row)) return false;
+  if (!hasString(row, 'id') || !hasString(row, 'log_type')) return false;
+  return isNonNullObject(row.data);
+}
+
+function isValidHealthLogData(logType: string, data: Record<string, unknown>): boolean {
+  switch (logType) {
+    case 'symptom':
+      return hasString(data, 'date') && hasString(data, 'symptom');
+    case 'sleep':
+      return hasString(data, 'date') && typeof data.hoursSlept === 'number';
+    case 'migraine':
+      return hasString(data, 'date');
+    default:
+      return false;
+  }
+}
+
+function sanitizeRecord<T extends Record<string, unknown>>(record: T): T {
+  const sanitized = { ...record };
+  for (const key of Object.keys(sanitized)) {
+    const val = sanitized[key];
+    if (typeof val === 'string') {
+      (sanitized as Record<string, unknown>)[key] = sanitizePHI(val);
+    }
+  }
+  return sanitized;
+}
 
 export type SyncStatus = 'synced' | 'syncing' | 'offline' | 'error';
 
@@ -92,12 +136,17 @@ export async function pullFromCloud(): Promise<void> {
     .select('*')
     .eq('user_id', userId);
 
-  if (conditionsError) console.error('[sync] pull conditions failed:', conditionsError.message);
+  if (conditionsError) console.error('[sync] pull conditions failed');
 
   if (conditions && conditions.length > 0) {
     const appStore = useAppStore.getState();
 
-    for (const cloudCondition of conditions) {
+    for (const rawCondition of conditions) {
+      if (!isValidConditionRow(rawCondition)) {
+        console.warn('[sync] Skipping invalid condition row from cloud');
+        continue;
+      }
+      const cloudCondition = rawCondition;
       const cloudName = norm(cloudCondition.name);
       const cloudUpdatedAt: string = cloudCondition.updated_at || cloudCondition.created_at || '';
 
@@ -193,14 +242,22 @@ export async function pullFromCloud(): Promise<void> {
     .select('*')
     .eq('user_id', userId);
 
-  if (healthLogsError) console.error('[sync] pull health_logs failed:', healthLogsError.message);
+  if (healthLogsError) console.error('[sync] pull health logs failed');
 
   if (healthLogs && healthLogs.length > 0) {
     const appStore = useAppStore.getState();
 
-    for (const log of healthLogs) {
-      const logData = log.data as Record<string, unknown> | null;
-      if (!logData) continue;
+    for (const rawLog of healthLogs) {
+      if (!isValidHealthLogRow(rawLog)) {
+        console.warn('[sync] Skipping invalid health log row from cloud');
+        continue;
+      }
+      const log = rawLog;
+      const logData = log.data;
+      if (!isValidHealthLogData(log.log_type, logData)) {
+        console.warn('[sync] Skipping health log with invalid data shape');
+        continue;
+      }
 
       switch (log.log_type) {
         case 'symptom': {
@@ -306,7 +363,7 @@ export async function pushToCloud(): Promise<void> {
     display_name: [profileState.firstName, profileState.lastName].filter(Boolean).join(' ') || null,
     updated_at: new Date().toISOString(),
   });
-  if (profilePushError) console.error('[sync] push profile failed:', profilePushError.message);
+  if (profilePushError) console.error('[sync] push profile failed');
 
   // ------------------------------------------------------------------
   // Push conditions — upsert by primary key (id).
@@ -320,13 +377,13 @@ export async function pushToCloud(): Promise<void> {
       id: c.id,
       user_id: userId,
       name: c.name,
-      service_connection_notes: c.notes || null,
+      service_connection_notes: c.notes ? sanitizePHI(c.notes) : null,
       updated_at: new Date().toISOString(),
     }));
     const { error } = await supabase
       .from('conditions')
       .upsert(conditionRows, { onConflict: 'id' });
-    if (error) console.error('[sync] push conditions failed:', error.message);
+    if (error) console.error('[sync] push conditions failed');
   }
 
   // Push symptoms as health logs
@@ -335,13 +392,13 @@ export async function pushToCloud(): Promise<void> {
       id: s.id,
       user_id: userId,
       log_type: 'symptom' as const,
-      data: s,
+      data: sanitizeRecord(s as unknown as Record<string, unknown>),
       logged_at: s.date || new Date().toISOString(),
     }));
     const { error } = await supabase
       .from('health_logs')
       .upsert(symptomRows, { onConflict: 'id' });
-    if (error) console.error('[sync] push symptoms failed:', error.message);
+    if (error) console.error('[sync] push symptoms failed');
   }
 
   // Push sleep entries as health logs
@@ -350,13 +407,13 @@ export async function pushToCloud(): Promise<void> {
       id: s.id,
       user_id: userId,
       log_type: 'sleep' as const,
-      data: s,
+      data: sanitizeRecord(s as unknown as Record<string, unknown>),
       logged_at: s.date || new Date().toISOString(),
     }));
     const { error } = await supabase
       .from('health_logs')
       .upsert(sleepRows, { onConflict: 'id' });
-    if (error) console.error('[sync] push sleep failed:', error.message);
+    if (error) console.error('[sync] push sleep failed');
   }
 
   // Push migraines as health logs
@@ -365,13 +422,13 @@ export async function pushToCloud(): Promise<void> {
       id: m.id,
       user_id: userId,
       log_type: 'migraine' as const,
-      data: m,
+      data: sanitizeRecord(m as unknown as Record<string, unknown>),
       logged_at: m.date || new Date().toISOString(),
     }));
     const { error } = await supabase
       .from('health_logs')
       .upsert(migraineRows, { onConflict: 'id' });
-    if (error) console.error('[sync] push migraines failed:', error.message);
+    if (error) console.error('[sync] push migraines failed');
   }
 
   lastSyncedAt = new Date().toISOString();
@@ -398,11 +455,11 @@ export async function syncNow(): Promise<void> {
       await pullFromCloud();
       await pushToCloud();
       setStatus('synced');
-    } catch (err) {
+    } catch {
       // Network errors, auth expiry, or unexpected failures. Individual
       // push/pull operations log their own granular errors above; this catch
       // handles truly fatal issues (e.g. no network mid-sync).
-      console.error('[sync] syncNow failed:', err);
+      console.error('[sync] syncNow failed');
       setStatus('error');
     }
   };
