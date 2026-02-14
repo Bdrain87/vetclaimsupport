@@ -5,7 +5,6 @@ import { getAllBranchLabels } from '@/utils/veteranProfile';
 import useAppStore from '@/store/useAppStore';
 import { ClaimIntelligence } from '@/services/claimIntelligence';
 import {
-  Plus,
   ChevronRight,
   Zap,
   AlertTriangle,
@@ -15,20 +14,6 @@ import {
   Check,
   Pencil,
   User,
-  Calculator,
-  Heart,
-  Languages,
-  ClipboardCheck,
-  FileSignature,
-  Shield,
-  Users,
-  DollarSign,
-  FileCheck as FileCheckIcon,
-  Package,
-  Search,
-  Compass,
-  Navigation,
-  PersonStanding,
   Target,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -43,7 +28,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useState, useMemo, useCallback } from 'react';
 import { getConditionById } from '@/data/vaConditions';
-import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput.utils';
 import { ExportButton } from '@/components/dashboard/ExportButton';
 import { IntentToFileBanner } from '@/components/dashboard/IntentToFileBanner';
 import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
@@ -52,15 +36,13 @@ import { useSmartReminders } from '@/hooks/useSmartReminders';
 
 export default function Dashboard() {
   const { data } = useClaims();
-  const { conditions: userConditions, addCondition } = useUserConditions();
+  const { conditions: userConditions } = useUserConditions();
   const profile = useProfileStore();
   const addDashboardQuickLog = useAppStore((s) => s.addDashboardQuickLog);
   const navigate = useNavigate();
 
   const streak = useStreakTracker();
   const reminders = useSmartReminders();
-
-  const claimConditions = useMemo(() => data.claimConditions || [], [data.claimConditions]);
 
   const readinessScore = useMemo(
     () => ClaimIntelligence.getOverallReadiness(userConditions, data, profile),
@@ -70,38 +52,23 @@ export default function Dashboard() {
   const evidenceCompleteness = useMemo(() => {
     const total = userConditions.length;
     if (total === 0) return null;
+    const claimConditions = data.claimConditions || [];
     const incomplete = claimConditions.filter((c) => {
-      const score = getEvidenceScore(c);
+      let score = 0;
+      if (c.linkedMedicalVisits.length > 0) score += 25;
+      if (c.linkedExposures.length > 0) score += 25;
+      if (c.linkedSymptoms.length > 0) score += 25;
+      if (c.linkedBuddyContacts.length > 0) score += 25;
       return score < 75;
     }).length;
     const complete = total - incomplete;
     return { total, complete, incomplete };
-  }, [userConditions.length, claimConditions]);
+  }, [userConditions.length, data.claimConditions]);
 
   const nextSteps = useMemo(
     () => ClaimIntelligence.getNextSteps(profile, userConditions, data),
     [profile, userConditions, data]
   );
-
-  const recommendations = useMemo(
-    () => ClaimIntelligence.getRecommendations(profile, userConditions, data),
-    [profile, userConditions, data]
-  );
-
-  // Evidence gaps: count conditions missing evidence
-  const evidenceGaps = useMemo(() => {
-    const gaps: { conditionName: string; missing: string[]; conditionId?: string }[] = [];
-    claimConditions.forEach((c) => {
-      const missing: string[] = [];
-      if (c.linkedMedicalVisits.length === 0) missing.push('Medical records');
-      if (c.linkedSymptoms.length === 0) missing.push('Symptom logs');
-      if (c.linkedBuddyContacts.length === 0) missing.push('Buddy statements');
-      if (missing.length > 0) {
-        gaps.push({ conditionName: c.name, missing, conditionId: c.id });
-      }
-    });
-    return gaps;
-  }, [claimConditions]);
 
   // Calculate combined VA rating using VA math (approved conditions only, round to nearest 10)
   const combinedRating = useMemo(() => {
@@ -146,12 +113,7 @@ export default function Dashboard() {
     setLogDate(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`);
   }, [painLevel, selectedMood, logCondition, logNotes, logDate, addDashboardQuickLog]);
 
-  // Handle adding a recommended condition
-  const handleAddRecommendation = useCallback((conditionId: string) => {
-    addCondition(conditionId);
-  }, [addCondition]);
-
-  const displayName = profile.firstName
+  const displayName =profile.firstName
     ? `${profile.firstName}${profile.lastName ? ' ' + profile.lastName : ''}`
     : 'Veteran';
   const branchLabel = getAllBranchLabels(profile);
@@ -397,245 +359,6 @@ export default function Dashboard() {
         </motion.div>
       )}
 
-      {/* Tools & Features */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ ...vcsSpring, delay: 0.05 }}
-        className="rounded-xl bg-card border border-border p-4 shadow-sm"
-      >
-        <h3 className="font-bold text-sm text-foreground mb-3">Tools & Features</h3>
-        <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 snap-x snap-mandatory scrollbar-hide">
-          {[
-            { name: 'Rating Calculator', icon: Calculator, path: '/claims/calculator' },
-            { name: 'VA-Speak Translator', icon: Languages, path: '/prep/va-speak' },
-            { name: 'C&P Exam Prep', icon: ClipboardCheck, path: '/prep/exam' },
-            { name: 'Doctor Summary', icon: FileSignature, path: '/prep/doctor-summary' },
-            { name: 'Body Map', icon: PersonStanding, path: '/claims/body-map' },
-            { name: 'Stressor Statement', icon: Shield, path: '/prep/stressor' },
-            { name: 'Buddy Statement', icon: Users, path: '/prep/buddy-statement' },
-            { name: 'Back Pay Estimator', icon: DollarSign, path: '/prep/back-pay' },
-            { name: 'Health Trackers', icon: Heart, path: '/health' },
-            { name: 'DBQ Prep', icon: FileCheckIcon, path: '/prep/dbq' },
-            { name: 'Travel Pay', icon: Navigation, path: '/prep/travel-pay' },
-            { name: 'Claim Packet', icon: Package, path: '/prep/packet' },
-          ].map((tool) => (
-            <Link
-              key={tool.path}
-              to={tool.path}
-              className="flex flex-col items-center gap-1.5 min-w-[76px] p-2 rounded-xl border border-border bg-secondary hover:bg-accent/50 transition-colors snap-start"
-              aria-label={tool.name}
-            >
-              <tool.icon className="h-5 w-5 text-gold" aria-hidden="true" />
-              <span className="text-[10px] font-medium text-foreground text-center leading-tight">{tool.name}</span>
-            </Link>
-          ))}
-        </div>
-      </motion.div>
-
-      {/* Active Conditions List */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ ...vcsSpring, delay: 0.1 }}
-        className="rounded-xl bg-card border border-border shadow-sm overflow-hidden"
-      >
-        <div className="flex items-center justify-between p-4 pb-2">
-          <div className="flex items-center gap-2">
-            <h2 className="font-bold text-foreground">Your Conditions</h2>
-            {claimConditions.length > 0 && (
-              <span className="text-xs bg-muted px-2 py-0.5 rounded-full text-muted-foreground font-medium">
-                {claimConditions.length}
-              </span>
-            )}
-          </div>
-          <Link to="/claims" className="text-xs text-primary hover:underline">
-            View all
-          </Link>
-        </div>
-
-        {claimConditions.length === 0 && userConditions.length === 0 ? (
-          <div className="px-4 pb-4 pt-2 text-center">
-            <button onClick={() => navigate('/claims')} className="text-sm text-muted-foreground mb-3 hover:text-primary transition-colors cursor-pointer" aria-label="Add your first condition">
-              No conditions yet — tap here to add your first condition.
-            </button>
-            <Button size="sm" variant="outline" onClick={() => navigate('/claims')}>
-              <Plus className="h-4 w-4 mr-1" />
-              Add Condition
-            </Button>
-          </div>
-        ) : (
-          <div className="px-4 pb-4 space-y-2">
-            {claimConditions.slice(0, 5).map((condition) => {
-              const evidenceCount =
-                condition.linkedMedicalVisits.length +
-                condition.linkedSymptoms.length +
-                condition.linkedExposures.length +
-                condition.linkedBuddyContacts.length;
-              const score = getEvidenceScore(condition);
-              const diagResult = getDiagnosticCodeForCondition(condition.name);
-              const diagCode = diagResult?.code;
-
-              return (
-                <Link
-                  key={condition.id}
-                  to={`/claims/${condition.id}`}
-                  className={cn(
-                    'flex items-center gap-3 p-3 rounded-xl',
-                    'bg-secondary border border-border',
-                    'hover:bg-accent/50 transition-colors',
-                    'active:scale-[0.99]'
-                  )}
-                >
-                  <div
-                    className={cn(
-                      'w-2.5 h-2.5 rounded-full flex-shrink-0',
-                      score >= 75 ? 'bg-emerald-500' : score >= 50 ? 'bg-gold' : 'bg-muted-foreground/40'
-                    )}
-                    role="img"
-                    aria-label={score >= 75 ? 'Strong evidence' : score >= 50 ? 'Moderate evidence' : 'Needs more evidence'}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-foreground truncate">{condition.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {diagCode ? `DC ${diagCode} · ` : ''}{evidenceCount} evidence item{evidenceCount !== 1 ? 's' : ''}
-                    </p>
-                  </div>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                </Link>
-              );
-            })}
-            {/* Also show userConditions not in claimConditions */}
-            {userConditions.filter((uc) => {
-              const details = getConditionById(uc.conditionId);
-              if (!details) return false;
-              return !claimConditions.some((cc) => cc.name.toLowerCase() === details.name.toLowerCase());
-            }).slice(0, Math.max(0, 5 - claimConditions.length)).map((uc) => {
-              const details = getConditionById(uc.conditionId)!;
-              return (
-                <Link
-                  key={uc.id}
-                  to={`/claims/${uc.id}`}
-                  className={cn(
-                    'flex items-center gap-3 p-3 rounded-xl',
-                    'bg-secondary border border-border',
-                    'hover:bg-accent/50 transition-colors'
-                  )}
-                >
-                  <div className="w-2.5 h-2.5 rounded-full bg-muted-foreground/40 flex-shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-foreground truncate">{details.abbreviation || details.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {details.diagnosticCode ? `DC ${details.diagnosticCode}` : 'Tracking'}
-                    </p>
-                  </div>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                </Link>
-              );
-            })}
-          </div>
-        )}
-      </motion.div>
-
-      {/* Evidence Gaps Alert */}
-      {evidenceGaps.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...vcsSpring, delay: 0.15 }}
-        >
-          <button
-            onClick={() => {
-              const firstGap = evidenceGaps[0];
-              if (firstGap?.conditionId) navigate(`/claims/${firstGap.conditionId}`);
-            }}
-            className={cn(
-              'w-full rounded-xl p-4 text-left',
-              'bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.2)]',
-              'hover:bg-[rgba(197,164,66,0.15)] transition-colors'
-            )}
-            aria-label={`Evidence gaps found: ${evidenceGaps.length} conditions need more evidence`}
-          >
-            <div className="flex items-start gap-3">
-              <AlertTriangle className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-foreground">
-                  Evidence Gaps Found ({evidenceGaps.length})
-                </p>
-                <p className="text-xs text-muted-foreground mt-1 truncate">
-                  {evidenceGaps[0]?.conditionName}: missing {evidenceGaps[0]?.missing.join(', ')}
-                  {evidenceGaps.length > 1 && ` (+${evidenceGaps.length - 1} more)`}
-                </p>
-              </div>
-              <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-1" />
-            </div>
-          </button>
-        </motion.div>
-      )}
-
-      {/* Conditions to Explore — always rendered */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ ...vcsSpring, delay: 0.2 }}
-        className="rounded-xl bg-card border border-border p-4 shadow-sm"
-      >
-        <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
-          <Compass className="w-4 h-4 text-gold" />
-          Conditions You May Want to Consider
-        </h3>
-        {recommendations.length > 0 ? (
-          <div className="space-y-2">
-            {recommendations.slice(0, 4).map((rec, i) => {
-              const diagResult = getDiagnosticCodeForCondition(rec.conditionName);
-              const diagCode = diagResult?.code;
-              return (
-                <div
-                  key={rec.conditionId + i}
-                  className="flex items-center justify-between p-3 rounded-xl bg-secondary border border-border overflow-hidden"
-                >
-                  <button
-                    className="min-w-0 flex-1 mr-3 text-left"
-                    onClick={() => navigate(`/claims/${rec.conditionId}`)}
-                    aria-label={`View details for ${rec.conditionName}`}
-                  >
-                    <p className="text-sm font-medium text-foreground truncate">{rec.conditionName}</p>
-                    {diagCode && (
-                      <p className="text-xs text-muted-foreground">DC {diagCode}</p>
-                    )}
-                    <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{rec.reason}</p>
-                  </button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="shrink-0 text-xs h-8"
-                    onClick={() => handleAddRecommendation(rec.conditionId)}
-                  >
-                    <Plus className="h-3 w-3 mr-1" />
-                    Add
-                  </Button>
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="text-center py-4">
-            <Search className="h-6 w-6 text-muted-foreground/40 mx-auto mb-2" />
-            <p className="text-sm text-muted-foreground">
-              Add your MOS and conditions to see personalized suggestions.
-            </p>
-            <Button
-              size="sm"
-              variant="outline"
-              className="mt-2"
-              onClick={() => navigate('/claims/secondary-finder')}
-            >
-              Explore Conditions
-            </Button>
-          </div>
-        )}
-      </motion.div>
-
       {/* Next Steps — always rendered */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -837,16 +560,3 @@ export default function Dashboard() {
 }
 
 // Helper to score evidence completeness for a claim condition
-function getEvidenceScore(condition: {
-  linkedMedicalVisits: string[];
-  linkedExposures: string[];
-  linkedSymptoms: string[];
-  linkedBuddyContacts: string[];
-}) {
-  let score = 0;
-  if (condition.linkedMedicalVisits.length > 0) score += 25;
-  if (condition.linkedExposures.length > 0) score += 25;
-  if (condition.linkedSymptoms.length > 0) score += 25;
-  if (condition.linkedBuddyContacts.length > 0) score += 25;
-  return score;
-}

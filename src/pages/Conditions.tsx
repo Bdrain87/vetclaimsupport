@@ -24,13 +24,19 @@ import { Label } from '@/components/ui/label';
 import {
   Search, Plus, ChevronRight, AlertCircle, ClipboardList,
   Activity, Link2, Trash2, Edit, Filter, Shield, FileText,
-  Stethoscope, Calendar
+  Stethoscope, Calendar, PersonStanding, Compass, Calculator,
+  Zap, AlertTriangle,
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 import { useUserConditions } from '@/hooks/useUserConditions';
+import { useClaims } from '@/hooks/useClaims';
+import { useProfileStore } from '@/store/useProfileStore';
+import { ClaimIntelligence } from '@/services/claimIntelligence';
 import useAppStore from '@/store/useAppStore';
 import { PageContainer } from '@/components/PageContainer';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
+import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput.utils';
 import {
   type VACondition,
   getConditionById,
@@ -190,6 +196,13 @@ function ConditionCard({ userCondition, conditionDetails, onView, onRemove, onNa
   );
 }
 
+const CLAIM_TOOLS = [
+  { label: 'Body Map', icon: PersonStanding, route: '/claims/body-map' },
+  { label: 'Secondary Finder', icon: Compass, route: '/claims/secondary-finder' },
+  { label: 'Rating Calculator', icon: Calculator, route: '/claims/calculator' },
+  { label: 'Claim Strategy', icon: Zap, route: '/claims/strategy' },
+];
+
 export default function Conditions() {
   const navigate = useNavigate();
   const {
@@ -198,8 +211,30 @@ export default function Conditions() {
     removeCondition,
     getConditionDetails,
   } = useUserConditions();
+  const { data } = useClaims();
+  const profile = useProfileStore();
 
   const conditionEvidenceChecks = useAppStore(s => s.conditionEvidenceChecks);
+
+  const recommendations = useMemo(
+    () => ClaimIntelligence.getRecommendations(profile, userConditions, data),
+    [profile, userConditions, data]
+  );
+
+  const evidenceGaps = useMemo(() => {
+    const claimConditions = data.claimConditions || [];
+    const gaps: { conditionName: string; missing: string[]; conditionId?: string }[] = [];
+    claimConditions.forEach((c) => {
+      const missing: string[] = [];
+      if (c.linkedMedicalVisits.length === 0) missing.push('Medical records');
+      if (c.linkedSymptoms.length === 0) missing.push('Symptom logs');
+      if (c.linkedBuddyContacts.length === 0) missing.push('Buddy statements');
+      if (missing.length > 0) {
+        gaps.push({ conditionName: c.name, missing, conditionId: c.id });
+      }
+    });
+    return gaps;
+  }, [data.claimConditions]);
 
   // Must match the 10 items in ConditionDetail.tsx EVIDENCE_ITEMS
   const EVIDENCE_TOTAL = 10;
@@ -307,142 +342,174 @@ export default function Conditions() {
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-primary/10">
-            <ClipboardList className="h-6 w-6 text-primary" />
+            <Shield className="h-6 w-6 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold">My Conditions</h1>
+            <h1 className="text-2xl font-bold">My Claim</h1>
             <p className="text-muted-foreground text-sm">
               {userConditions.length} condition{userConditions.length !== 1 ? 's' : ''} tracked
             </p>
           </div>
         </div>
 
-        {userConditions.length > 0 && (
-          <Button onClick={() => setShowAddDialog(true)}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add Condition
-          </Button>
-        )}
+        <Button onClick={() => setShowAddDialog(true)}>
+          <Plus className="h-4 w-4 mr-2" />
+          Add Condition
+        </Button>
+      </div>
 
-        <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle>Add Condition</DialogTitle>
-              <DialogDescription>
-                Search for a VA-recognized condition to add to your claim.
-              </DialogDescription>
-            </DialogHeader>
+      {/* Quick Claim Tools */}
+      <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">
+        {CLAIM_TOOLS.map((tool) => (
+          <Link
+            key={tool.route}
+            to={tool.route}
+            className="flex flex-col items-center gap-1.5 min-w-[72px] p-2.5 rounded-xl border border-border bg-card hover:bg-accent/50 transition-colors text-center"
+          >
+            <tool.icon className="h-5 w-5 text-gold" />
+            <span className="text-[10px] font-medium text-foreground leading-tight">{tool.label}</span>
+          </Link>
+        ))}
+      </div>
 
-            <div className="space-y-4 py-4">
-              {/* Condition Search with Autocomplete */}
-              <div className="space-y-2">
-                <Label>Condition Name</Label>
-                <ConditionAutocomplete
-                  onSelect={(condition) => setSelectedCondition(condition)}
-                  placeholder="Search conditions (e.g., PTSD, Tinnitus)"
-                  excludeIds={userConditions.map(c => c.conditionId)}
-                  autoFocus
-                />
-                {selectedCondition && (
-                  <Badge className="mt-1 bg-green-500">
-                    Selected: {selectedCondition.abbreviation}
-                  </Badge>
-                )}
-              </div>
+      {/* Evidence Gaps Alert */}
+      {evidenceGaps.length > 0 && (
+        <button
+          onClick={() => {
+            const firstGap = evidenceGaps[0];
+            if (firstGap?.conditionId) navigate(`/claims/${firstGap.conditionId}`);
+          }}
+          className="w-full rounded-xl p-3 text-left bg-[rgba(197,164,66,0.08)] border border-[rgba(197,164,66,0.2)] hover:bg-[rgba(197,164,66,0.12)] transition-colors"
+        >
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="h-4 w-4 text-gold flex-shrink-0 mt-0.5" />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-foreground">
+                {evidenceGaps.length} condition{evidenceGaps.length !== 1 ? 's' : ''} need more evidence
+              </p>
+              <p className="text-xs text-muted-foreground mt-0.5 truncate">
+                {evidenceGaps[0]?.conditionName}: missing {evidenceGaps[0]?.missing.join(', ')}
+              </p>
+            </div>
+            <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+          </div>
+        </button>
+      )}
 
-              {/* Primary/Secondary Toggle */}
-              {selectedCondition && primaryConditions.length > 0 && (
-                <div className="space-y-2">
-                  <Label>Is this secondary to another condition?</Label>
-                  <div className="flex gap-2">
-                    <Button
-                      type="button"
-                      variant={!isSecondary ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => { setIsSecondary(false); setLinkedPrimaryId(''); }}
-                    >
-                      Primary
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={isSecondary ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setIsSecondary(true)}
-                    >
-                      Secondary
-                    </Button>
-                  </div>
-                  {isSecondary && (
-                    <Select value={linkedPrimaryId} onValueChange={setLinkedPrimaryId}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select primary condition..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {primaryConditions.map(pc => {
-                          const details = getConditionDetails(pc);
-                          return (
-                            <SelectItem key={pc.id} value={pc.id}>
-                              {details?.abbreviation || details?.name || pc.conditionId}
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
-                    </Select>
-                  )}
-                </div>
+      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Add Condition</DialogTitle>
+            <DialogDescription>
+              Search for a VA-recognized condition to add to your claim.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Condition Name</Label>
+              <ConditionAutocomplete
+                onSelect={(condition) => setSelectedCondition(condition)}
+                placeholder="Search conditions (e.g., PTSD, Tinnitus)"
+                excludeIds={userConditions.map(c => c.conditionId)}
+                autoFocus
+              />
+              {selectedCondition && (
+                <Badge className="mt-1 bg-green-500">
+                  Selected: {selectedCondition.abbreviation}
+                </Badge>
               )}
+            </div>
 
-              {/* Claim Status */}
+            {selectedCondition && primaryConditions.length > 0 && (
               <div className="space-y-2">
-                <Label>Claim Status</Label>
+                <Label>Is this secondary to another condition?</Label>
                 <div className="flex gap-2">
                   <Button
                     type="button"
-                    variant={newClaimStatus === 'pending' ? 'default' : 'outline'}
+                    variant={!isSecondary ? 'default' : 'outline'}
                     size="sm"
-                    onClick={() => setNewClaimStatus('pending')}
+                    onClick={() => { setIsSecondary(false); setLinkedPrimaryId(''); }}
                   >
-                    New / Pending
+                    Primary
                   </Button>
                   <Button
                     type="button"
-                    variant={newClaimStatus === 'approved' ? 'default' : 'outline'}
+                    variant={isSecondary ? 'default' : 'outline'}
                     size="sm"
-                    onClick={() => setNewClaimStatus('approved')}
+                    onClick={() => setIsSecondary(true)}
                   >
-                    Already Approved
+                    Secondary
                   </Button>
                 </div>
+                {isSecondary && (
+                  <Select value={linkedPrimaryId} onValueChange={setLinkedPrimaryId}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select primary condition..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {primaryConditions.map(pc => {
+                        const details = getConditionDetails(pc);
+                        return (
+                          <SelectItem key={pc.id} value={pc.id}>
+                            {details?.abbreviation || details?.name || pc.conditionId}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                )}
               </div>
+            )}
 
-              {/* Rating Selection */}
-              <div className="space-y-2">
-                <Label htmlFor="rating">{newClaimStatus === 'approved' ? 'Current VA Rating' : 'Claimed Rating (optional)'}</Label>
-                <Select value={newRating} onValueChange={setNewRating}>
-                  <SelectTrigger id="rating">
-                    <SelectValue placeholder="Select rating" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="not-rated">Not yet rated</SelectItem>
-                    {[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map(r => (
-                      <SelectItem key={r} value={r.toString()}>{r}%</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+            <div className="space-y-2">
+              <Label>Claim Status</Label>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant={newClaimStatus === 'pending' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setNewClaimStatus('pending')}
+                >
+                  New / Pending
+                </Button>
+                <Button
+                  type="button"
+                  variant={newClaimStatus === 'approved' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setNewClaimStatus('approved')}
+                >
+                  Already Approved
+                </Button>
               </div>
             </div>
 
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setShowAddDialog(false)}>
-                Cancel
-              </Button>
-              <Button onClick={handleAddCondition} disabled={!selectedCondition}>
-                Add Condition
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </div>
+            <div className="space-y-2">
+              <Label htmlFor="rating">{newClaimStatus === 'approved' ? 'Current VA Rating' : 'Claimed Rating (optional)'}</Label>
+              <Select value={newRating} onValueChange={setNewRating}>
+                <SelectTrigger id="rating">
+                  <SelectValue placeholder="Select rating" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="not-rated">Not yet rated</SelectItem>
+                  {[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map(r => (
+                    <SelectItem key={r} value={r.toString()}>{r}%</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowAddDialog(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleAddCondition} disabled={!selectedCondition}>
+              Add Condition
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Search and Filter Bar */}
       <div className="flex flex-col sm:flex-row gap-3">
@@ -552,22 +619,32 @@ export default function Conditions() {
         </div>
       ) : userConditions.length === 0 ? (
         /* Empty State */
-        <Card className="border-dashed">
-          <CardContent className="py-12">
-            <div className="text-center space-y-4">
-              <div className="mx-auto w-12 h-12 rounded-full bg-muted flex items-center justify-center">
-                <Activity className="h-6 w-6 text-muted-foreground" />
+        <Card className="border-dashed border-gold/30">
+          <CardContent className="py-10">
+            <div className="text-center space-y-5">
+              <div className="mx-auto w-14 h-14 rounded-2xl bg-gold/10 flex items-center justify-center">
+                <Shield className="h-7 w-7 text-gold" />
               </div>
               <div>
-                <h3 className="font-semibold mb-1">No conditions yet</h3>
-                <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-                  Add your first condition to start tracking evidence and preparing for your C&P exams.
+                <h3 className="text-lg font-semibold mb-1">Start Building Your Claim</h3>
+                <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+                  Add conditions you want to claim. We&apos;ll help you track evidence, prepare for C&P exams, and build the strongest case possible.
                 </p>
               </div>
-              <Button onClick={() => setShowAddDialog(true)}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Your First Condition
-              </Button>
+              <div className="flex flex-col gap-2 items-center">
+                <Button onClick={() => setShowAddDialog(true)} className="w-full max-w-[240px]">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add a Condition
+                </Button>
+                <Button variant="outline" onClick={() => navigate('/claims/body-map')} className="w-full max-w-[240px]">
+                  <PersonStanding className="h-4 w-4 mr-2" />
+                  Explore Body Map
+                </Button>
+                <Button variant="ghost" onClick={() => navigate('/claims/secondary-finder')} className="w-full max-w-[240px] text-muted-foreground">
+                  <Compass className="h-4 w-4 mr-2" />
+                  Find Secondary Conditions
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -592,12 +669,12 @@ export default function Conditions() {
       {userConditions.length > 0 && (
         <Card className="bg-muted/50">
           <CardContent className="py-4">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+            <div className="grid grid-cols-3 gap-4 text-center">
               <div>
                 <div className="text-2xl font-bold text-primary">
                   {userConditions.length}
                 </div>
-                <div className="text-xs text-muted-foreground">Total Conditions</div>
+                <div className="text-xs text-muted-foreground">Conditions</div>
               </div>
               <div>
                 <div className="text-2xl font-bold text-green-600">
@@ -614,6 +691,38 @@ export default function Conditions() {
             </div>
           </CardContent>
         </Card>
+      )}
+
+      {/* Recommended Conditions to Explore */}
+      {recommendations.length > 0 && (
+        <div className="space-y-3">
+          <h2 className="text-base font-semibold text-foreground flex items-center gap-2">
+            <Compass className="h-4 w-4 text-gold" />
+            Conditions to Explore
+          </h2>
+          <div className="space-y-2">
+            {recommendations.slice(0, 4).map((rec) => {
+              const diagnosticCode = getDiagnosticCodeForCondition(rec.conditionId);
+              return (
+                <button
+                  key={rec.conditionId}
+                  onClick={() => {
+                    addCondition(rec.conditionId);
+                  }}
+                  className="w-full flex items-center justify-between p-3 rounded-xl border border-border bg-card hover:border-gold/30 transition-colors text-left"
+                >
+                  <div className="flex-1 min-w-0 mr-3">
+                    <p className="text-sm font-medium text-foreground truncate">{rec.name}</p>
+                    <p className="text-xs text-muted-foreground truncate">
+                      {diagnosticCode ? `DC ${diagnosticCode} · ` : ''}{rec.reason}
+                    </p>
+                  </div>
+                  <Plus className="h-4 w-4 text-gold flex-shrink-0" />
+                </button>
+              );
+            })}
+          </div>
+        </div>
       )}
       {/* Add from VA Database */}
       {databaseResults.length > 0 && (

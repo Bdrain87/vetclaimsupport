@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Activity, Moon, Brain, Pill, Stethoscope, AlertTriangle, BarChart3, PersonStanding } from 'lucide-react';
+import { Activity, Moon, Brain, Pill, Stethoscope, AlertTriangle, BarChart3, PersonStanding, Clock } from 'lucide-react';
 import useAppStore from '@/store/useAppStore';
 import { PageContainer } from '@/components/PageContainer';
 
@@ -64,8 +64,8 @@ export default function HealthHub() {
   return (
     <PageContainer className="py-6 space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Health Tracking</h1>
-        <p className="text-muted-foreground text-sm mt-1">Track your health for stronger VA evidence.</p>
+        <h1 className="text-2xl font-bold text-foreground">Track</h1>
+        <p className="text-muted-foreground text-sm mt-1">Log health data to strengthen your VA evidence.</p>
       </div>
 
       {/* 30-Day Summary Card */}
@@ -92,6 +92,20 @@ export default function HealthHub() {
             <p className="text-lg font-bold text-foreground">{thirtyDayStats.flareUps}</p>
             <p className="text-xs text-muted-foreground">Flare-Ups</p>
           </div>
+        </div>
+      </button>
+
+      {/* Unified Timeline Link */}
+      <button
+        onClick={() => navigate('/health/timeline')}
+        className="w-full flex items-center gap-3 p-3 rounded-xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
+      >
+        <div className="p-2 rounded-lg bg-gold/10">
+          <Clock className="h-5 w-5 text-gold" />
+        </div>
+        <div className="flex-1">
+          <span className="text-sm font-medium text-foreground">Unified Timeline</span>
+          <span className="text-xs text-muted-foreground block">See all your health data in one place</span>
         </div>
       </button>
 
