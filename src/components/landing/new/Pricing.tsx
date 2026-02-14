@@ -8,7 +8,6 @@ const FREE_FEATURES = [
   'VA Combined Rating Calculator',
   'VA-Speak Translator',
   'Claim Checklist',
-  'Condition Tracking (up to 3)',
   'VA Forms Reference Library',
   'Glossary & FAQ',
 ];
