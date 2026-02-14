@@ -174,7 +174,7 @@ export function Hero() {
                     backgroundClip: 'text',
                   }}
                 >
-                  $4.99
+                  $9.99
                 </span>
               </div>
             </div>

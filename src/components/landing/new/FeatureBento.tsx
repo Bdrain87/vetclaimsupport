@@ -48,7 +48,7 @@ const CARDS: CardData[] = [
     short: 'Match symptoms to conditions and understand VA rating criteria',
     detail: 'Interactive tool that helps you identify and document symptoms, matching them to specific VA disability conditions with rating criteria.',
     capabilities: ['Symptom-to-condition matching', 'VA rating criteria', 'Severity tracking', 'Evidence guidance'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
+    plan: 'Included in Launch Plan ($9.99/mo)',
     category: 'Health Tracking',
   },
   {
@@ -57,7 +57,7 @@ const CARDS: CardData[] = [
     short: 'Daily symptom logging with frequency and severity tracking',
     detail: 'Track your symptoms daily with detailed logs of frequency, severity, triggers, and impact on daily activities.',
     capabilities: ['Daily logging', 'Frequency tracking', 'Severity ratings', 'Trigger identification'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
+    plan: 'Included in Launch Plan ($9.99/mo)',
     category: 'Health Tracking',
   },
   {
@@ -66,7 +66,7 @@ const CARDS: CardData[] = [
     short: 'Document migraine episodes with triggers and duration',
     detail: 'Specialized tracker for migraine episodes including prostrating status, triggers, duration, and severity—mapped to VA rating criteria.',
     capabilities: ['Episode tracking', 'Prostrating status', 'Trigger documentation', 'Duration logging'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
+    plan: 'Included in Launch Plan ($9.99/mo)',
     category: 'Health Tracking',
   },
   {
@@ -75,7 +75,7 @@ const CARDS: CardData[] = [
     short: 'Track sleep quality, duration, and disturbances',
     detail: 'Log nightly sleep quality, duration, disturbances, and nightmares. Essential for sleep apnea, PTSD, and insomnia claims.',
     capabilities: ['Sleep quality logging', 'Disturbance tracking', 'Nightmare documentation', 'Pattern analysis'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
+    plan: 'Included in Launch Plan ($9.99/mo)',
     category: 'Health Tracking',
   },
   {
@@ -84,7 +84,7 @@ const CARDS: CardData[] = [
     short: 'Track prescriptions, dosages, and treatment history',
     detail: 'Comprehensive medication tracker for prescriptions, dosages, side effects, and treatment effectiveness over time.',
     capabilities: ['Prescription management', 'Dosage tracking', 'Side effect logging', 'Treatment history'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
+    plan: 'Included in Launch Plan ($9.99/mo)',
     category: 'Health Tracking',
   },
   {
@@ -93,7 +93,7 @@ const CARDS: CardData[] = [
     short: 'Securely upload and organize all your evidence files',
     detail: 'Upload medical records, service documents, and supporting evidence. Everything encrypted and organized by condition.',
     capabilities: ['Secure file upload', 'Document categorization', 'Evidence organization', 'AES-256 encryption'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
+    plan: 'Included in Launch Plan ($9.99/mo)',
     category: 'Documents',
   },
   {
@@ -102,7 +102,7 @@ const CARDS: CardData[] = [
     short: 'Centralized hub for all your claim documentation',
     detail: 'Access all your uploaded documents, generated statements, and evidence in one organized library with powerful search.',
     capabilities: ['Document library', 'Search and filter', 'Tag organization', 'Quick access'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
+    plan: 'Included in Launch Plan ($9.99/mo)',
     category: 'Documents',
   },
   {
@@ -111,7 +111,7 @@ const CARDS: CardData[] = [
     short: 'Create structured witness statements from friends and family',
     detail: 'Guided tool for fellow service members, family, and friends to create effective buddy statements with proper structure.',
     capabilities: ['Guided prompts', 'Structured format', 'Multiple statements', 'Print-ready output'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
+    plan: 'Included in Launch Plan ($9.99/mo)',
     category: 'Evidence',
   },
   {
@@ -120,7 +120,7 @@ const CARDS: CardData[] = [
     short: 'Visualize your medical and service history chronologically',
     detail: 'Create a visual timeline connecting your service history to medical events, treatments, and symptoms over time.',
     capabilities: ['Chronological view', 'Service connection', 'Medical event tracking', 'Visual history'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
+    plan: 'Included in Launch Plan ($9.99/mo)',
     category: 'Organization',
   },
   {
@@ -129,7 +129,7 @@ const CARDS: CardData[] = [
     short: 'Condition-specific prep guides for your VA exam',
     detail: 'Comprehensive preparation guides for your Compensation & Pension exam with condition-specific questions and tips.',
     capabilities: ['Exam preparation', 'Condition-specific guides', 'Common questions', 'Day-of tips'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
+    plan: 'Included in Launch Plan ($9.99/mo)',
     category: 'Exam Prep',
   },
   {
@@ -138,7 +138,7 @@ const CARDS: CardData[] = [
     short: 'Track every required document for your claim',
     detail: 'Comprehensive checklist of all documents needed for your claim with progress tracking and submission readiness.',
     capabilities: ['Document requirements', 'Progress tracking', 'Submission checklist', 'Missing items alerts'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
+    plan: 'Included in Launch Plan ($9.99/mo)',
     category: 'Organization',
   },
   {
@@ -147,7 +147,7 @@ const CARDS: CardData[] = [
     short: 'Document deployments, stations, and duty assignments',
     detail: 'Complete service history tracker for duty stations, deployments, MOSs, and exposure to hazards during service.',
     capabilities: ['Deployment tracking', 'Duty stations', 'MOS documentation', 'Hazard exposure'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
+    plan: 'Included in Launch Plan ($9.99/mo)',
     category: 'Service',
   },
   {
@@ -156,7 +156,7 @@ const CARDS: CardData[] = [
     short: 'Track your claim journey from start to decision',
     detail: 'Visual progress tracker through all four phases of the VA claim process with milestone notifications and guidance.',
     capabilities: ['Phase tracking', 'Milestone alerts', 'Progress visualization', 'Next-step guidance'],
-    plan: 'Included in Launch Plan ($4.99/mo)',
+    plan: 'Included in Launch Plan ($9.99/mo)',
     category: 'Organization',
   },
 ];

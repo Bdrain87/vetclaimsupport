@@ -150,7 +150,7 @@ export function FinalCTA() {
               backgroundClip: 'text',
             }}
           >
-            $4.99/mo
+            $9.99/mo
           </span>
           <motion.span
             className="text-xs px-2 py-0.5 rounded-full"

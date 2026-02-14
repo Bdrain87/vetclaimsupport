@@ -388,7 +388,7 @@ export function Pricing() {
                         backgroundClip: 'text',
                       }}
                     >
-                      $4.99
+                      $9.99
                     </span>
                     <span className="text-sm ml-2" style={{ color: '#9CA3AF' }}>/mo</span>
                   </div>
