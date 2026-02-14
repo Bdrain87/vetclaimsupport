@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Stethoscope,
@@ -99,6 +99,7 @@ export default function CPExamPrepEnhanced() {
 
 
   const [selectedCondition, setSelectedCondition] = useState<string | null>(null);
+  const conditionDetailRef = useRef<HTMLDivElement>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const { generate: aiGenerate, isLoading: aiLoading, error: aiError } = useAIGenerate('EXAMINER_PERSONA');
   const [aiQuestions, setAiQuestions] = useState<string[]>([]);
@@ -388,7 +389,12 @@ export default function CPExamPrepEnhanced() {
                           .map((condition) => (
                             <button
                               key={condition}
-                              onClick={() => setSelectedCondition(condition)}
+                              onClick={() => {
+                                setSelectedCondition(condition);
+                                setTimeout(() => {
+                                  conditionDetailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                }, 100);
+                              }}
                               className={`w-full text-left p-2 rounded-lg text-sm transition-colors truncate ${
                                 selectedCondition === condition
                                   ? 'bg-primary/10 text-primary font-medium'
@@ -406,7 +412,7 @@ export default function CPExamPrepEnhanced() {
             </div>
 
             {/* Condition Details */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2" ref={conditionDetailRef}>
               {selectedPrepData ? (
                 <div className="space-y-4">
                   <h2 className="text-xl font-bold text-foreground break-words">{selectedCondition}</h2>

@@ -63,6 +63,39 @@ const durationOptions = [
   'Ongoing/Constant',
 ];
 
+const commonSymptomsByCondition: Record<string, string[]> = {
+  'PTSD': ['Nightmares', 'Flashbacks', 'Hypervigilance', 'Difficulty sleeping', 'Irritability', 'Anxiety', 'Emotional numbness', 'Avoidance of triggers', 'Difficulty concentrating', 'Exaggerated startle response'],
+  'Tinnitus': ['Ringing in ears', 'Buzzing sound', 'Difficulty hearing conversations', 'Sleep disruption', 'Difficulty concentrating', 'Headaches', 'Ear pressure', 'Dizziness'],
+  'Hearing Loss': ['Difficulty hearing conversations', 'Asking others to repeat themselves', 'Turning up volume', 'Ringing in ears', 'Muffled hearing', 'Difficulty on phone calls'],
+  'Sleep Apnea': ['Excessive daytime sleepiness', 'Loud snoring', 'Gasping during sleep', 'Morning headaches', 'Difficulty concentrating', 'Irritability', 'Dry mouth on waking', 'Falling asleep while driving'],
+  'Migraines': ['Throbbing headache', 'Nausea', 'Light sensitivity', 'Sound sensitivity', 'Visual aura', 'Vomiting', 'Dizziness', 'Prostrating pain'],
+  'Lumbar Strain': ['Lower back pain', 'Stiffness', 'Muscle spasms', 'Pain radiating to legs', 'Difficulty bending', 'Difficulty sitting for long periods', 'Pain with lifting', 'Reduced range of motion'],
+  'Knee': ['Pain with walking', 'Swelling', 'Stiffness', 'Locking or catching', 'Instability', 'Difficulty with stairs', 'Grinding or popping', 'Reduced range of motion'],
+  'Shoulder': ['Pain with overhead movement', 'Limited range of motion', 'Weakness', 'Stiffness', 'Popping or clicking', 'Night pain', 'Difficulty reaching behind back'],
+  'Anxiety': ['Excessive worry', 'Restlessness', 'Fatigue', 'Difficulty concentrating', 'Irritability', 'Muscle tension', 'Sleep disturbance', 'Panic attacks'],
+  'Depression': ['Persistent sadness', 'Loss of interest', 'Fatigue', 'Sleep changes', 'Appetite changes', 'Difficulty concentrating', 'Feelings of worthlessness', 'Social withdrawal'],
+  'TBI': ['Headaches', 'Memory problems', 'Difficulty concentrating', 'Dizziness', 'Balance problems', 'Mood changes', 'Light sensitivity', 'Fatigue'],
+  'Plantar Fasciitis': ['Heel pain', 'Pain worse in morning', 'Pain after standing', 'Foot stiffness', 'Arch pain', 'Pain after exercise'],
+  'Radiculopathy': ['Radiating pain', 'Numbness', 'Tingling', 'Weakness in extremities', 'Burning sensation', 'Muscle spasms'],
+  'Flat Feet': ['Foot pain', 'Arch pain', 'Heel pain', 'Swelling along inner ankle', 'Pain when standing', 'Knee pain', 'Back pain'],
+  'Sciatica': ['Shooting pain down leg', 'Numbness in leg', 'Tingling', 'Weakness in leg', 'Pain worse when sitting', 'Burning sensation'],
+  'GERD': ['Heartburn', 'Acid reflux', 'Chest pain', 'Difficulty swallowing', 'Regurgitation', 'Nausea', 'Chronic cough', 'Hoarseness'],
+  'Sinusitis': ['Facial pain', 'Nasal congestion', 'Headaches', 'Post-nasal drip', 'Reduced sense of smell', 'Cough', 'Ear pressure'],
+  'Asthma': ['Shortness of breath', 'Wheezing', 'Chest tightness', 'Coughing', 'Exercise intolerance', 'Night coughing'],
+  'Eczema': ['Itching', 'Dry skin', 'Redness', 'Cracking', 'Scaling', 'Thickened skin', 'Sleep disruption from itching'],
+};
+
+function getCommonSymptoms(conditionTitle: string): string[] {
+  if (!conditionTitle) return [];
+  const lower = conditionTitle.toLowerCase();
+  for (const [key, symptoms] of Object.entries(commonSymptomsByCondition)) {
+    if (lower.includes(key.toLowerCase()) || key.toLowerCase().includes(lower)) {
+      return symptoms;
+    }
+  }
+  return [];
+}
+
 // Extended symptom form data
 interface ExtendedSymptomForm {
   date: string;
@@ -552,6 +585,23 @@ export default function Symptoms() {
                           }, 300);
                         }}
                       />
+                      {formData.conditionTitle && getCommonSymptoms(formData.conditionTitle).length > 0 && (
+                        <div className="space-y-1">
+                          <p className="text-xs text-muted-foreground">Common symptoms:</p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {getCommonSymptoms(formData.conditionTitle).map((s) => (
+                              <button
+                                key={s}
+                                type="button"
+                                onClick={() => setFormData({ ...formData, symptom: s })}
+                                className="px-2 py-0.5 text-xs rounded-full border border-border bg-muted/50 text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-colors"
+                              >
+                                {s}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     {/* Severity Slider */}

@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Activity, Moon, Brain, Pill, Stethoscope, AlertTriangle, BarChart3 } from 'lucide-react';
+import { Activity, Moon, Brain, Pill, Stethoscope, AlertTriangle, BarChart3, PersonStanding } from 'lucide-react';
 import useAppStore from '@/store/useAppStore';
 import { PageContainer } from '@/components/PageContainer';
 
 const healthCards = [
   { label: 'Symptoms', icon: Activity, route: '/health/symptoms', storeKey: 'symptoms' as const },
+  { label: 'Body Map', icon: PersonStanding, route: '/claims/body-map', storeKey: 'userConditions' as const },
   { label: 'Sleep', icon: Moon, route: '/health/sleep', storeKey: 'sleepEntries' as const },
   { label: 'Migraines', icon: Brain, route: '/health/migraines', storeKey: 'migraines' as const },
   { label: 'Medications', icon: Pill, route: '/health/medications', storeKey: 'medications' as const },

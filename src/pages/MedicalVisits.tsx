@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useEvidence } from '@/hooks/useEvidence';
-import { Stethoscope, Plus, Trash2, Edit, Calendar, MapPin, User, FileText, AlertTriangle, Download } from 'lucide-react';
+import { Stethoscope, Plus, Trash2, Edit, Calendar, MapPin, User, FileText, AlertTriangle, Download, Camera, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -23,6 +23,8 @@ export default function MedicalVisits() {
   const { documents, setAllDocuments } = useEvidence();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const importFileRef = useRef<HTMLInputElement>(null);
+  const cameraRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState<Omit<MedicalVisit, 'id'>>({
     date: '',
     visitType: 'Sick Call',
@@ -112,7 +114,81 @@ export default function MedicalVisits() {
           </div>
         </div>
 
-        <div className="flex gap-2 flex-shrink-0">
+        <div className="flex gap-2 flex-shrink-0 flex-wrap">
+          <input
+            ref={importFileRef}
+            type="file"
+            accept=".pdf,image/*"
+            multiple
+            onChange={(e) => {
+              const files = e.target.files;
+              if (!files) return;
+              Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                  const dataUrl = ev.target?.result as string;
+                  const newDoc = {
+                    id: crypto.randomUUID(),
+                    fileName: file.name,
+                    fileType: file.type,
+                    fileSize: file.size,
+                    dataUrl,
+                    uploadedAt: new Date().toISOString(),
+                    category: 'medical-records' as const,
+                    title: file.name.replace(/\.[^/.]+$/, ''),
+                    linkedEntries: [] as Array<{entryType: string; entryId: string; linkedAt: string}>,
+                    storageType: 'localStorage' as const,
+                    ...(file.type.startsWith('image/') ? { thumbnailUrl: dataUrl } : {}),
+                  };
+                  setAllDocuments([...documents, newDoc as never]);
+                };
+                reader.readAsDataURL(file);
+              });
+              if (importFileRef.current) importFileRef.current.value = '';
+            }}
+            className="hidden"
+          />
+          <input
+            ref={cameraRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            onChange={(e) => {
+              const files = e.target.files;
+              if (!files) return;
+              Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                  const dataUrl = ev.target?.result as string;
+                  const newDoc = {
+                    id: crypto.randomUUID(),
+                    fileName: file.name,
+                    fileType: file.type,
+                    fileSize: file.size,
+                    dataUrl,
+                    uploadedAt: new Date().toISOString(),
+                    category: 'medical-records' as const,
+                    title: `Photo ${new Date().toLocaleDateString()}`,
+                    linkedEntries: [] as Array<{entryType: string; entryId: string; linkedAt: string}>,
+                    storageType: 'localStorage' as const,
+                    thumbnailUrl: dataUrl,
+                  };
+                  setAllDocuments([...documents, newDoc as never]);
+                };
+                reader.readAsDataURL(file);
+              });
+              if (cameraRef.current) cameraRef.current.value = '';
+            }}
+            className="hidden"
+          />
+          <Button variant="outline" onClick={() => importFileRef.current?.click()} className="gap-2">
+            <Upload className="h-4 w-4" />
+            Import PDF
+          </Button>
+          <Button variant="outline" onClick={() => cameraRef.current?.click()} className="gap-2">
+            <Camera className="h-4 w-4" />
+            Photo
+          </Button>
           <Button variant="outline" onClick={() => exportMedicalVisits(data.medicalVisits)} className="gap-2">
             <Download className="h-4 w-4" />
             Export PDF

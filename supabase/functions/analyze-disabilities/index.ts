@@ -191,7 +191,7 @@ serve(async (req) => {
     try {
       console.log(`[${requestId}] Calling Gemini API for user ${user.id.substring(0, 8)}...`);
       const response = await fetch(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
         {
           method: "POST",
           headers: {
@@ -256,7 +256,7 @@ serve(async (req) => {
       console.log(`[${requestId}] Analysis completed successfully`);
       return new Response(JSON.stringify({
         analysis: analysisText,
-        model: 'gemini-1.5-flash',
+        model: 'gemini-2.0-flash',
         provider: 'google',
         requestId
       }), {
