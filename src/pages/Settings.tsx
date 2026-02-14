@@ -448,8 +448,8 @@ export default function Settings() {
           <CardDescription>Control how the app looks</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
+          <div className="flex items-center justify-between gap-3">
+            <div className="space-y-0.5 min-w-0 flex-1">
               <Label htmlFor="dark-mode" className="text-base">Dark Mode</Label>
               <p className="text-sm text-muted-foreground">
                 {theme === 'dark' ? 'Dark theme is active' : 'Light theme is active'}
@@ -499,8 +499,8 @@ export default function Settings() {
           )}
 
           {/* Reminder Toggle */}
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
+          <div className="flex items-center justify-between gap-3">
+            <div className="space-y-0.5 min-w-0 flex-1">
               <Label htmlFor="reminders" className="text-base">Enable Reminders</Label>
               <p className="text-sm text-muted-foreground">
                 Receive notifications to log symptoms

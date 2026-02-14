@@ -348,7 +348,7 @@ function AppContent() {
         Skip to main content
       </a>
       <LiabilityAcceptanceScreen />
-<div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         <MobileHeader />
         <main id="main-content" className="flex-1 overflow-y-auto overflow-x-hidden">
           <OfflineIndicator />

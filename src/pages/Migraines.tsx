@@ -350,16 +350,16 @@ export default function Migraines() {
       {(data.migraines?.length || 0) > 0 && (
         <div className="rounded-2xl bg-card border border-border overflow-hidden shadow-lg" style={{ boxShadow: '0 8px 32px rgba(0, 0, 0, 0.25)' }}>
           <div className="p-4 border-b border-border/50 bg-gradient-to-r from-primary/10 via-transparent to-transparent">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex-shrink-0">
                 <Target className="h-5 w-5 text-primary" />
               </div>
-              <h3 className="text-lg font-bold text-foreground tracking-tight">Estimated VA Rating (DC 8100)</h3>
+              <h3 className="text-lg font-bold text-foreground tracking-tight truncate">Estimated VA Rating (DC 8100)</h3>
             </div>
           </div>
           <CardContent className="p-5 space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
+            <div className="flex items-center justify-between gap-3">
+              <div className="min-w-0 flex-1">
                 <p className={`text-4xl font-bold ${getRatingColor(stats.estimatedRating.rating)}`}>
                   {stats.estimatedRating.rating}%
                 </p>
@@ -367,7 +367,7 @@ export default function Migraines() {
                   {stats.estimatedRating.description}
                 </p>
               </div>
-              <Badge variant="outline" className="text-xs">
+              <Badge variant="outline" className="text-xs flex-shrink-0">
                 {stats.estimatedRating.confidence}
               </Badge>
             </div>
@@ -923,8 +923,8 @@ export default function Migraines() {
           ).map((entry) => (
             <Card key={entry.id} className="data-card">
               <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2 flex-wrap min-w-0 flex-1">
                     <Badge variant="outline" className={getSeverityColor(entry.severity)}>
                       {entry.severity}
                     </Badge>
@@ -955,20 +955,20 @@ export default function Migraines() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4" />
+                <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap min-w-0">
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <Calendar className="h-4 w-4 flex-shrink-0" />
                     {new Date(entry.date).toLocaleDateString()}
                   </div>
                   {entry.time && (
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4" />
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <Clock className="h-4 w-4 flex-shrink-0" />
                       {entry.time}
                     </div>
                   )}
-                  <div className="flex items-center gap-2">
-                    <AlertTriangle className="h-4 w-4" />
-                    {entry.impacts?.length ? entry.impacts.join(', ') : entry.impact}
+                  <div className="flex items-center gap-2 min-w-0">
+                    <AlertTriangle className="h-4 w-4 flex-shrink-0" />
+                    <span className="truncate">{entry.impacts?.length ? entry.impacts.join(', ') : entry.impact}</span>
                   </div>
                   {entry.functioningLevel !== undefined && entry.functioningLevel < 50 && (
                     <div className="flex items-center gap-2">
@@ -1010,16 +1010,16 @@ export default function Migraines() {
                 )}
 
                 {entry.triggers.length > 0 && (
-                  <div>
+                  <div className="min-w-0">
                     <span className="text-xs text-muted-foreground">Triggers: </span>
                     <span className="text-sm">{entry.triggers.join(', ')}</span>
                   </div>
                 )}
 
                 {entry.treatment && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-muted-foreground">Treatment: </span>
-                    <span className="text-sm">{entry.treatment}</span>
+                  <div className="flex items-center gap-2 flex-wrap min-w-0">
+                    <span className="text-xs text-muted-foreground flex-shrink-0">Treatment: </span>
+                    <span className="text-sm truncate min-w-0">{entry.treatment}</span>
                     {entry.medicationEffective !== undefined && (
                       <Badge variant="outline" className={entry.medicationEffective ? 'text-green-500 border-green-500/50' : 'text-red-500 border-red-500/50'}>
                         {entry.medicationEffective ? 'Effective' : 'Not Effective'}
