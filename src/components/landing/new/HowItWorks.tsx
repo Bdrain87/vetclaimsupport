@@ -18,7 +18,7 @@ const STEPS = [
   {
     num: '01',
     title: 'Enter Your Service Details',
-    desc: 'MOS, duty stations, deployments, combat zones, and exposures. We help you organize your service history and identify conditions you may want to research further.',
+    desc: 'Job codes, duty stations, deployments, combat zones, and exposures. We help you organize your service history and identify conditions you may want to research further.',
   },
   {
     num: '02',
@@ -88,7 +88,7 @@ export function HowItWorks() {
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.1, ease: EASE_SMOOTH }}
       >
-        Get organized before you even sit down with a representative.
+        Everything you need to take control of your claim — all in one place.
       </motion.p>
 
       <motion.div
