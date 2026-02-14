@@ -56,7 +56,7 @@ export default function ExportDataPage() {
 
       {/* Header */}
       <div className="text-center space-y-3">
-        <div className="w-16 h-16 mx-auto rounded-full bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.2)] flex items-center justify-center">
+        <div className="w-16 h-16 mx-auto rounded-full bg-[rgba(212,175,55,0.1)] border border-[rgba(212,175,55,0.2)] flex items-center justify-center">
           <Download className="h-8 w-8 text-gold" />
         </div>
         <h1 className="text-2xl font-bold text-foreground">Export Your Data</h1>
@@ -66,7 +66,7 @@ export default function ExportDataPage() {
       </div>
 
       {/* Format info */}
-      <div className="flex flex-col items-center gap-2 p-4 rounded-xl border bg-[rgba(197,164,66,0.1)] border-[rgba(197,164,66,0.4)]">
+      <div className="flex flex-col items-center gap-2 p-4 rounded-xl border bg-[rgba(212,175,55,0.1)] border-[rgba(212,175,55,0.4)]">
         <FileText className="h-8 w-8 text-gold" />
         <span className="text-sm font-medium text-foreground">PDF Export</span>
         <span className="text-xs text-muted-foreground/70">Human-readable, ready for submission</span>

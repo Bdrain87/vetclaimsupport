@@ -112,18 +112,18 @@ const statementTemplates = [
     title: 'Personal Statement',
     description: 'Describe your condition and its impact on your life',
     icon: MessageSquare,
-    gradient: 'from-[#C5A442]/20 to-[#F5D680]/10',
-    borderColor: 'border-[#C5A442]/30',
-    iconColor: 'text-[#F5D680]',
+    gradient: 'from-[#D4AF37]/20 to-[#F0D78C]/10',
+    borderColor: 'border-[#D4AF37]/30',
+    iconColor: 'text-[#F0D78C]',
   },
   {
     id: 'buddy-request',
     title: 'Buddy Statement Request',
     description: 'Email template to request statements from witnesses',
     icon: Users,
-    gradient: 'from-[#C5A442]/20 to-[#C5A442]/10',
-    borderColor: 'border-[#C5A442]/30',
-    iconColor: 'text-[#F5D680]',
+    gradient: 'from-[#D4AF37]/20 to-[#D4AF37]/10',
+    borderColor: 'border-[#D4AF37]/30',
+    iconColor: 'text-[#F0D78C]',
   },
   {
     id: 'stressor',
@@ -399,10 +399,10 @@ export default function DocumentsHub() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <button
               onClick={() => setActiveTab('my-docs')}
-              className="group p-4 rounded-2xl bg-gradient-to-br from-[#C5A442]/20 to-[#F5D680]/10 border border-[#C5A442]/30 hover:scale-[1.02] transition-all text-left"
+              className="group p-4 rounded-2xl bg-gradient-to-br from-[#D4AF37]/20 to-[#F0D78C]/10 border border-[#D4AF37]/30 hover:scale-[1.02] transition-all text-left"
             >
               <div className="flex items-center gap-3 mb-2">
-                <Upload className="h-5 w-5 text-[#F5D680]" />
+                <Upload className="h-5 w-5 text-[#F0D78C]" />
                 <ChevronRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity ml-auto" />
               </div>
               <h3 className="font-semibold text-sm">Upload Document</h3>
@@ -423,10 +423,10 @@ export default function DocumentsHub() {
 
             <button
               onClick={() => setActiveTab('templates')}
-              className="group p-4 rounded-2xl bg-gradient-to-br from-[#C5A442]/20 to-[#C5A442]/10 border border-[#C5A442]/30 hover:scale-[1.02] transition-all text-left"
+              className="group p-4 rounded-2xl bg-gradient-to-br from-[#D4AF37]/20 to-[#D4AF37]/10 border border-[#D4AF37]/30 hover:scale-[1.02] transition-all text-left"
             >
               <div className="flex items-center gap-3 mb-2">
-                <FileSpreadsheet className="h-5 w-5 text-[#F5D680]" />
+                <FileSpreadsheet className="h-5 w-5 text-[#F0D78C]" />
                 <ChevronRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity ml-auto" />
               </div>
               <h3 className="font-semibold text-sm">Templates</h3>

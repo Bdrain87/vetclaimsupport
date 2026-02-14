@@ -183,9 +183,9 @@ const CATEGORY_LABELS: Record<GlossaryEntry['category'], string> = {
 };
 
 const CATEGORY_COLORS: Record<GlossaryEntry['category'], string> = {
-  'claims-process': 'bg-[#C5A442]/10 text-[#F5D680] border-[#C5A442]/20',
+  'claims-process': 'bg-[#D4AF37]/10 text-[#F0D78C] border-[#D4AF37]/20',
   medical: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  legal: 'bg-[rgba(197,164,66,0.1)] text-gold border-[rgba(197,164,66,0.2)]',
+  legal: 'bg-[rgba(212,175,55,0.1)] text-gold border-[rgba(212,175,55,0.2)]',
   rating: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
   evidence: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
 };
@@ -296,8 +296,8 @@ export default function VASpeakTranslator() {
 
       {/* Page header */}
       <div className="flex items-center gap-3">
-        <div className="w-12 h-12 rounded-xl bg-[var(--interactive-primary,#C5A442)]/10 border border-[var(--interactive-primary,#C5A442)]/20 flex items-center justify-center shrink-0">
-          <Languages className="h-6 w-6 text-[var(--interactive-primary,#C5A442)]" />
+        <div className="w-12 h-12 rounded-xl bg-[var(--interactive-primary,#D4AF37)]/10 border border-[var(--interactive-primary,#D4AF37)]/20 flex items-center justify-center shrink-0">
+          <Languages className="h-6 w-6 text-[var(--interactive-primary,#D4AF37)]" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">VA-Speak Translator</h1>
@@ -316,7 +316,7 @@ export default function VASpeakTranslator() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
-            <Sparkles className="h-5 w-5 text-[var(--interactive-primary,#C5A442)]" />
+            <Sparkles className="h-5 w-5 text-[var(--interactive-primary,#D4AF37)]" />
             Translate Your Symptoms
           </CardTitle>
           <CardDescription>
@@ -423,7 +423,7 @@ export default function VASpeakTranslator() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
-            <BookOpen className="h-5 w-5 text-[var(--interactive-primary,#C5A442)]" />
+            <BookOpen className="h-5 w-5 text-[var(--interactive-primary,#D4AF37)]" />
             VA Terms Glossary
           </CardTitle>
           <CardDescription>
@@ -451,7 +451,7 @@ export default function VASpeakTranslator() {
                 onClick={() => setActiveCategory(cat)}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
                   activeCategory === cat
-                    ? 'bg-[var(--interactive-primary,#C5A442)]/15 text-[var(--interactive-primary,#C5A442)] border-[var(--interactive-primary,#C5A442)]/40'
+                    ? 'bg-[var(--interactive-primary,#D4AF37)]/15 text-[var(--interactive-primary,#D4AF37)] border-[var(--interactive-primary,#D4AF37)]/40'
                     : 'bg-muted/50 text-muted-foreground border-border hover:bg-muted'
                 }`}
               >
@@ -508,7 +508,7 @@ export default function VASpeakTranslator() {
       {/* ----------------------------------------------------------------- */}
       {/* Tips Card                                                          */}
       {/* ----------------------------------------------------------------- */}
-      <Card className="border-[rgba(197,164,66,0.2)] bg-[rgba(197,164,66,0.05)]">
+      <Card className="border-[rgba(212,175,55,0.2)] bg-[rgba(212,175,55,0.05)]">
         <CardContent className="pt-6 space-y-3">
           <h3 className="text-sm font-semibold text-foreground">
             Tips for Describing Your Symptoms

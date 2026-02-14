@@ -127,16 +127,16 @@ export default function Exposures() {
 
   const getExposureColor = (type: string) => {
     const colors: Record<string, string> = {
-      'Burn pit': 'bg-[#C5A442]/10 text-[#A38A35] ring-[#C5A442]/20',
+      'Burn pit': 'bg-[#D4AF37]/10 text-[#B38728] ring-[#D4AF37]/20',
       'Jet fuel': 'bg-purple-500/10 text-purple-600 ring-purple-500/20',
       'Chemicals': 'bg-red-500/10 text-red-600 ring-red-500/20',
-      'Noise': 'bg-[#C5A442]/10 text-[#A38A35] ring-[#C5A442]/20',
-      'Radiation': 'bg-[#C5A442]/10 text-[#A38A35] ring-[#C5A442]/20',
+      'Noise': 'bg-[#D4AF37]/10 text-[#B38728] ring-[#D4AF37]/20',
+      'Radiation': 'bg-[#D4AF37]/10 text-[#B38728] ring-[#D4AF37]/20',
       'Asbestos': 'bg-gray-500/10 text-gray-600 ring-gray-500/20',
       'Extreme temps': 'bg-cyan-500/10 text-cyan-600 ring-cyan-500/20',
       'Diesel exhaust': 'bg-stone-500/10 text-stone-600 ring-stone-500/20',
-      'Depleted uranium': 'bg-[#C5A442]/10 text-[#A38A35] ring-[#C5A442]/20',
-      'Sand/dust': 'bg-[#A38A35]/10 text-[#7A672A] ring-[#A38A35]/20',
+      'Depleted uranium': 'bg-[#D4AF37]/10 text-[#B38728] ring-[#D4AF37]/20',
+      'Sand/dust': 'bg-[#B38728]/10 text-[#7B5E1A] ring-[#B38728]/20',
       'Contaminated water (Camp Lejeune)': 'bg-teal-500/10 text-teal-600 ring-teal-500/20',
       'Contaminated water': 'bg-teal-500/10 text-teal-600 ring-teal-500/20',
       'Herbicides': 'bg-green-500/10 text-green-600 ring-green-500/20',

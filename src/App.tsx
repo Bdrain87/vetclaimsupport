@@ -114,7 +114,7 @@ function LoadingFallback() {
             className="absolute inset-0"
             style={{
               borderRadius: 18,
-              border: '2px solid rgba(197, 164, 66, 0.3)',
+              border: '2px solid rgba(212, 175, 55, 0.3)',
               animation: 'pulse-ring 2s ease-in-out infinite',
             }}
           />
@@ -127,7 +127,7 @@ function LoadingFallback() {
           <div
             className="h-full rounded-full"
             style={{
-              background: 'var(--gold-gradient, linear-gradient(135deg, #F5D680 0%, #C5A442 45%, #7A672A 100%))',
+              background: 'var(--gold-gradient, linear-gradient(135deg, #F0D78C 0%, #D4AF37 45%, #7B5E1A 100%))',
               animation: 'gradient-slide 1.2s ease-in-out infinite',
             }}
           />

@@ -106,14 +106,14 @@ export default function BodyMap() {
   // Helper to get fill/stroke for regions
   const _getRegionFill = (regionId: string) => {
     if (selectedRegion === regionId) return 'url(#goldGradient)';
-    if (regionCounts[regionId]) return 'rgba(197,164,66,0.4)';
-    if (hoveredRegion === regionId) return 'rgba(197,164,66,0.25)';
+    if (regionCounts[regionId]) return 'rgba(212,175,55,0.4)';
+    if (hoveredRegion === regionId) return 'rgba(212,175,55,0.25)';
     return '#9CA3AF';
   };
 
   const _getRegionStroke = (regionId: string) => {
     if (selectedRegion === regionId || regionCounts[regionId] || hoveredRegion === regionId) {
-      return '#C5A442';
+      return '#D4AF37';
     }
     return '#6B7280';
   };
@@ -141,7 +141,7 @@ export default function BodyMap() {
           </Button>
 
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.2)]">
+            <div className="p-2.5 rounded-xl bg-[rgba(212,175,55,0.1)] border border-[rgba(212,175,55,0.2)]">
               <Activity className="h-6 w-6 text-gold" />
             </div>
             <div>
@@ -156,7 +156,7 @@ export default function BodyMap() {
         {/* Summary Badge */}
         {totalSelected > 0 && (
           <div className="flex items-center gap-2">
-            <Badge className="bg-[rgba(197,164,66,0.2)] text-gold border border-[rgba(197,164,66,0.3)] hover:bg-[rgba(197,164,66,0.3)]">
+            <Badge className="bg-[rgba(212,175,55,0.2)] text-gold border border-[rgba(212,175,55,0.3)] hover:bg-[rgba(212,175,55,0.3)]">
               {totalSelected} condition{totalSelected !== 1 ? 's' : ''} selected
             </Badge>
           </div>
@@ -165,7 +165,7 @@ export default function BodyMap() {
         {/* Main layout: body diagram + condition panel */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Body Diagram with PNG Image */}
-          <Card className="bg-[rgba(197,164,66,0.08)] border-border">
+          <Card className="bg-[rgba(212,175,55,0.08)] border-border">
             <CardHeader className="pb-2">
               <CardTitle className="text-base text-foreground">
                 Front View
@@ -210,7 +210,7 @@ export default function BodyMap() {
                     }
                     .region-badge {
                       position: absolute;
-                      background: #C5A442;
+                      background: #D4AF37;
                       color: white;
                       border-radius: 50%;
                       width: 24px;
@@ -234,10 +234,10 @@ export default function BodyMap() {
                     left: '39%',
                     width: '22%',
                     height: '11%',
-                    backgroundColor: selectedRegion === 'head' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['head'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'head' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'head' || regionCounts['head'] || hoveredRegion === 'head') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'head' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['head'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'head' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'head' || regionCounts['head'] || hoveredRegion === 'head') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'head' ? null : 'head')}
                   onMouseEnter={() => setHoveredRegion('head')}
@@ -255,10 +255,10 @@ export default function BodyMap() {
                     left: '43%',
                     width: '14%',
                     height: '6%',
-                    backgroundColor: selectedRegion === 'mental' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['mental'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'mental' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'mental' || regionCounts['mental'] || hoveredRegion === 'mental') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'mental' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['mental'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'mental' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'mental' || regionCounts['mental'] || hoveredRegion === 'mental') ? '#D4AF37' : 'transparent',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -282,10 +282,10 @@ export default function BodyMap() {
                     left: '40%',
                     width: '20%',
                     height: '6%',
-                    backgroundColor: selectedRegion === 'face-jaw' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['face-jaw'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'face-jaw' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'face-jaw' || regionCounts['face-jaw'] || hoveredRegion === 'face-jaw') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'face-jaw' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['face-jaw'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'face-jaw' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'face-jaw' || regionCounts['face-jaw'] || hoveredRegion === 'face-jaw') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'face-jaw' ? null : 'face-jaw')}
                   onMouseEnter={() => setHoveredRegion('face-jaw')}
@@ -303,10 +303,10 @@ export default function BodyMap() {
                     left: '40%',
                     width: '20%',
                     height: '3%',
-                    backgroundColor: selectedRegion === 'eyes' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['eyes'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'eyes' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'eyes' || regionCounts['eyes'] || hoveredRegion === 'eyes') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'eyes' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['eyes'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'eyes' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'eyes' || regionCounts['eyes'] || hoveredRegion === 'eyes') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'eyes' ? null : 'eyes')}
                   onMouseEnter={() => setHoveredRegion('eyes')}
@@ -324,10 +324,10 @@ export default function BodyMap() {
                     left: '34%',
                     width: '7%',
                     height: '5%',
-                    backgroundColor: selectedRegion === 'ears' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['ears'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'ears' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'ears' || regionCounts['ears'] || hoveredRegion === 'ears') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'ears' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['ears'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'ears' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'ears' || regionCounts['ears'] || hoveredRegion === 'ears') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'ears' ? null : 'ears')}
                   onMouseEnter={() => setHoveredRegion('ears')}
@@ -343,10 +343,10 @@ export default function BodyMap() {
                     left: '59%',
                     width: '7%',
                     height: '5%',
-                    backgroundColor: selectedRegion === 'ears' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['ears'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'ears' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'ears' || regionCounts['ears'] || hoveredRegion === 'ears') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'ears' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['ears'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'ears' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'ears' || regionCounts['ears'] || hoveredRegion === 'ears') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'ears' ? null : 'ears')}
                   onMouseEnter={() => setHoveredRegion('ears')}
@@ -364,10 +364,10 @@ export default function BodyMap() {
                     left: '42%',
                     width: '16%',
                     height: '6%',
-                    backgroundColor: selectedRegion === 'neck' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['neck'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'neck' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'neck' || regionCounts['neck'] || hoveredRegion === 'neck') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'neck' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['neck'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'neck' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'neck' || regionCounts['neck'] || hoveredRegion === 'neck') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'neck' ? null : 'neck')}
                   onMouseEnter={() => setHoveredRegion('neck')}
@@ -385,10 +385,10 @@ export default function BodyMap() {
                     left: '27%',
                     width: '14%',
                     height: '8%',
-                    backgroundColor: selectedRegion === 'left-shoulder' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['left-shoulder'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'left-shoulder' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'left-shoulder' || regionCounts['left-shoulder'] || hoveredRegion === 'left-shoulder') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'left-shoulder' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['left-shoulder'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'left-shoulder' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'left-shoulder' || regionCounts['left-shoulder'] || hoveredRegion === 'left-shoulder') ? '#D4AF37' : 'transparent',
                     borderRadius: '50%',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'left-shoulder' ? null : 'left-shoulder')}
@@ -407,10 +407,10 @@ export default function BodyMap() {
                     left: '59%',
                     width: '14%',
                     height: '8%',
-                    backgroundColor: selectedRegion === 'right-shoulder' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['right-shoulder'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'right-shoulder' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'right-shoulder' || regionCounts['right-shoulder'] || hoveredRegion === 'right-shoulder') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'right-shoulder' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['right-shoulder'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'right-shoulder' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'right-shoulder' || regionCounts['right-shoulder'] || hoveredRegion === 'right-shoulder') ? '#D4AF37' : 'transparent',
                     borderRadius: '50%',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'right-shoulder' ? null : 'right-shoulder')}
@@ -429,10 +429,10 @@ export default function BodyMap() {
                     left: '39%',
                     width: '22%',
                     height: '14%',
-                    backgroundColor: selectedRegion === 'chest' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['chest'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'chest' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'chest' || regionCounts['chest'] || hoveredRegion === 'chest') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'chest' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['chest'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'chest' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'chest' || regionCounts['chest'] || hoveredRegion === 'chest') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'chest' ? null : 'chest')}
                   onMouseEnter={() => setHoveredRegion('chest')}
@@ -450,10 +450,10 @@ export default function BodyMap() {
                     left: '39%',
                     width: '22%',
                     height: '10%',
-                    backgroundColor: selectedRegion === 'upper-back' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['upper-back'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'upper-back' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'upper-back' || regionCounts['upper-back'] || hoveredRegion === 'upper-back') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'upper-back' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['upper-back'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'upper-back' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'upper-back' || regionCounts['upper-back'] || hoveredRegion === 'upper-back') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'upper-back' ? null : 'upper-back')}
                   onMouseEnter={() => setHoveredRegion('upper-back')}
@@ -471,10 +471,10 @@ export default function BodyMap() {
                     left: '39%',
                     width: '22%',
                     height: '10%',
-                    backgroundColor: selectedRegion === 'abdomen' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['abdomen'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'abdomen' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'abdomen' || regionCounts['abdomen'] || hoveredRegion === 'abdomen') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'abdomen' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['abdomen'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'abdomen' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'abdomen' || regionCounts['abdomen'] || hoveredRegion === 'abdomen') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'abdomen' ? null : 'abdomen')}
                   onMouseEnter={() => setHoveredRegion('abdomen')}
@@ -492,10 +492,10 @@ export default function BodyMap() {
                     left: '40%',
                     width: '20%',
                     height: '7%',
-                    backgroundColor: selectedRegion === 'lower-back' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['lower-back'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'lower-back' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'lower-back' || regionCounts['lower-back'] || hoveredRegion === 'lower-back') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'lower-back' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['lower-back'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'lower-back' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'lower-back' || regionCounts['lower-back'] || hoveredRegion === 'lower-back') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'lower-back' ? null : 'lower-back')}
                   onMouseEnter={() => setHoveredRegion('lower-back')}
@@ -513,10 +513,10 @@ export default function BodyMap() {
                     left: '25%',
                     width: '10%',
                     height: '12%',
-                    backgroundColor: selectedRegion === 'left-upper-arm' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['left-upper-arm'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'left-upper-arm' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'left-upper-arm' || regionCounts['left-upper-arm'] || hoveredRegion === 'left-upper-arm') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'left-upper-arm' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['left-upper-arm'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'left-upper-arm' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'left-upper-arm' || regionCounts['left-upper-arm'] || hoveredRegion === 'left-upper-arm') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'left-upper-arm' ? null : 'left-upper-arm')}
                   onMouseEnter={() => setHoveredRegion('left-upper-arm')}
@@ -534,10 +534,10 @@ export default function BodyMap() {
                     left: '65%',
                     width: '10%',
                     height: '12%',
-                    backgroundColor: selectedRegion === 'right-upper-arm' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['right-upper-arm'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'right-upper-arm' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'right-upper-arm' || regionCounts['right-upper-arm'] || hoveredRegion === 'right-upper-arm') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'right-upper-arm' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['right-upper-arm'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'right-upper-arm' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'right-upper-arm' || regionCounts['right-upper-arm'] || hoveredRegion === 'right-upper-arm') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'right-upper-arm' ? null : 'right-upper-arm')}
                   onMouseEnter={() => setHoveredRegion('right-upper-arm')}
@@ -555,10 +555,10 @@ export default function BodyMap() {
                     left: '22%',
                     width: '9%',
                     height: '14%',
-                    backgroundColor: selectedRegion === 'left-forearm' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['left-forearm'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'left-forearm' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'left-forearm' || regionCounts['left-forearm'] || hoveredRegion === 'left-forearm') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'left-forearm' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['left-forearm'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'left-forearm' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'left-forearm' || regionCounts['left-forearm'] || hoveredRegion === 'left-forearm') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'left-forearm' ? null : 'left-forearm')}
                   onMouseEnter={() => setHoveredRegion('left-forearm')}
@@ -576,10 +576,10 @@ export default function BodyMap() {
                     left: '69%',
                     width: '9%',
                     height: '14%',
-                    backgroundColor: selectedRegion === 'right-forearm' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['right-forearm'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'right-forearm' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'right-forearm' || regionCounts['right-forearm'] || hoveredRegion === 'right-forearm') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'right-forearm' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['right-forearm'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'right-forearm' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'right-forearm' || regionCounts['right-forearm'] || hoveredRegion === 'right-forearm') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'right-forearm' ? null : 'right-forearm')}
                   onMouseEnter={() => setHoveredRegion('right-forearm')}
@@ -597,10 +597,10 @@ export default function BodyMap() {
                     left: '20%',
                     width: '10%',
                     height: '7%',
-                    backgroundColor: selectedRegion === 'left-hand' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['left-hand'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'left-hand' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'left-hand' || regionCounts['left-hand'] || hoveredRegion === 'left-hand') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'left-hand' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['left-hand'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'left-hand' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'left-hand' || regionCounts['left-hand'] || hoveredRegion === 'left-hand') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'left-hand' ? null : 'left-hand')}
                   onMouseEnter={() => setHoveredRegion('left-hand')}
@@ -618,10 +618,10 @@ export default function BodyMap() {
                     left: '70%',
                     width: '10%',
                     height: '7%',
-                    backgroundColor: selectedRegion === 'right-hand' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['right-hand'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'right-hand' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'right-hand' || regionCounts['right-hand'] || hoveredRegion === 'right-hand') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'right-hand' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['right-hand'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'right-hand' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'right-hand' || regionCounts['right-hand'] || hoveredRegion === 'right-hand') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'right-hand' ? null : 'right-hand')}
                   onMouseEnter={() => setHoveredRegion('right-hand')}
@@ -639,10 +639,10 @@ export default function BodyMap() {
                     left: '38%',
                     width: '12%',
                     height: '7%',
-                    backgroundColor: selectedRegion === 'left-hip' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['left-hip'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'left-hip' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'left-hip' || regionCounts['left-hip'] || hoveredRegion === 'left-hip') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'left-hip' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['left-hip'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'left-hip' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'left-hip' || regionCounts['left-hip'] || hoveredRegion === 'left-hip') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'left-hip' ? null : 'left-hip')}
                   onMouseEnter={() => setHoveredRegion('left-hip')}
@@ -660,10 +660,10 @@ export default function BodyMap() {
                     left: '50%',
                     width: '12%',
                     height: '7%',
-                    backgroundColor: selectedRegion === 'right-hip' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['right-hip'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'right-hip' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'right-hip' || regionCounts['right-hip'] || hoveredRegion === 'right-hip') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'right-hip' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['right-hip'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'right-hip' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'right-hip' || regionCounts['right-hip'] || hoveredRegion === 'right-hip') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'right-hip' ? null : 'right-hip')}
                   onMouseEnter={() => setHoveredRegion('right-hip')}
@@ -681,10 +681,10 @@ export default function BodyMap() {
                     left: '39%',
                     width: '10%',
                     height: '16%',
-                    backgroundColor: selectedRegion === 'left-upper-leg' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['left-upper-leg'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'left-upper-leg' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'left-upper-leg' || regionCounts['left-upper-leg'] || hoveredRegion === 'left-upper-leg') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'left-upper-leg' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['left-upper-leg'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'left-upper-leg' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'left-upper-leg' || regionCounts['left-upper-leg'] || hoveredRegion === 'left-upper-leg') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'left-upper-leg' ? null : 'left-upper-leg')}
                   onMouseEnter={() => setHoveredRegion('left-upper-leg')}
@@ -702,10 +702,10 @@ export default function BodyMap() {
                     left: '51%',
                     width: '10%',
                     height: '16%',
-                    backgroundColor: selectedRegion === 'right-upper-leg' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['right-upper-leg'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'right-upper-leg' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'right-upper-leg' || regionCounts['right-upper-leg'] || hoveredRegion === 'right-upper-leg') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'right-upper-leg' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['right-upper-leg'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'right-upper-leg' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'right-upper-leg' || regionCounts['right-upper-leg'] || hoveredRegion === 'right-upper-leg') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'right-upper-leg' ? null : 'right-upper-leg')}
                   onMouseEnter={() => setHoveredRegion('right-upper-leg')}
@@ -723,10 +723,10 @@ export default function BodyMap() {
                     left: '38.5%',
                     width: '11%',
                     height: '6%',
-                    backgroundColor: selectedRegion === 'left-knee' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['left-knee'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'left-knee' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'left-knee' || regionCounts['left-knee'] || hoveredRegion === 'left-knee') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'left-knee' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['left-knee'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'left-knee' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'left-knee' || regionCounts['left-knee'] || hoveredRegion === 'left-knee') ? '#D4AF37' : 'transparent',
                     borderRadius: '50%',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'left-knee' ? null : 'left-knee')}
@@ -745,10 +745,10 @@ export default function BodyMap() {
                     left: '50.5%',
                     width: '11%',
                     height: '6%',
-                    backgroundColor: selectedRegion === 'right-knee' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['right-knee'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'right-knee' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'right-knee' || regionCounts['right-knee'] || hoveredRegion === 'right-knee') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'right-knee' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['right-knee'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'right-knee' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'right-knee' || regionCounts['right-knee'] || hoveredRegion === 'right-knee') ? '#D4AF37' : 'transparent',
                     borderRadius: '50%',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'right-knee' ? null : 'right-knee')}
@@ -767,10 +767,10 @@ export default function BodyMap() {
                     left: '39%',
                     width: '10%',
                     height: '16%',
-                    backgroundColor: selectedRegion === 'left-lower-leg' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['left-lower-leg'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'left-lower-leg' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'left-lower-leg' || regionCounts['left-lower-leg'] || hoveredRegion === 'left-lower-leg') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'left-lower-leg' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['left-lower-leg'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'left-lower-leg' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'left-lower-leg' || regionCounts['left-lower-leg'] || hoveredRegion === 'left-lower-leg') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'left-lower-leg' ? null : 'left-lower-leg')}
                   onMouseEnter={() => setHoveredRegion('left-lower-leg')}
@@ -788,10 +788,10 @@ export default function BodyMap() {
                     left: '51%',
                     width: '10%',
                     height: '16%',
-                    backgroundColor: selectedRegion === 'right-lower-leg' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['right-lower-leg'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'right-lower-leg' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'right-lower-leg' || regionCounts['right-lower-leg'] || hoveredRegion === 'right-lower-leg') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'right-lower-leg' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['right-lower-leg'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'right-lower-leg' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'right-lower-leg' || regionCounts['right-lower-leg'] || hoveredRegion === 'right-lower-leg') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'right-lower-leg' ? null : 'right-lower-leg')}
                   onMouseEnter={() => setHoveredRegion('right-lower-leg')}
@@ -809,10 +809,10 @@ export default function BodyMap() {
                     left: '37%',
                     width: '11%',
                     height: '8%',
-                    backgroundColor: selectedRegion === 'left-foot' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['left-foot'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'left-foot' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'left-foot' || regionCounts['left-foot'] || hoveredRegion === 'left-foot') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'left-foot' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['left-foot'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'left-foot' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'left-foot' || regionCounts['left-foot'] || hoveredRegion === 'left-foot') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'left-foot' ? null : 'left-foot')}
                   onMouseEnter={() => setHoveredRegion('left-foot')}
@@ -830,10 +830,10 @@ export default function BodyMap() {
                     left: '52%',
                     width: '11%',
                     height: '8%',
-                    backgroundColor: selectedRegion === 'right-foot' ? 'rgba(197,164,66,0.4)' :
-                                    regionCounts['right-foot'] ? 'rgba(197,164,66,0.3)' :
-                                    hoveredRegion === 'right-foot' ? 'rgba(197,164,66,0.25)' : 'transparent',
-                    borderColor: (selectedRegion === 'right-foot' || regionCounts['right-foot'] || hoveredRegion === 'right-foot') ? '#C5A442' : 'transparent',
+                    backgroundColor: selectedRegion === 'right-foot' ? 'rgba(212,175,55,0.4)' :
+                                    regionCounts['right-foot'] ? 'rgba(212,175,55,0.3)' :
+                                    hoveredRegion === 'right-foot' ? 'rgba(212,175,55,0.25)' : 'transparent',
+                    borderColor: (selectedRegion === 'right-foot' || regionCounts['right-foot'] || hoveredRegion === 'right-foot') ? '#D4AF37' : 'transparent',
                   }}
                   onClick={() => setSelectedRegion(selectedRegion === 'right-foot' ? null : 'right-foot')}
                   onMouseEnter={() => setHoveredRegion('right-foot')}
@@ -901,7 +901,7 @@ export default function BodyMap() {
             {activeRegion ? (
               <>
                 {/* Region header */}
-                <Card className="bg-[rgba(197,164,66,0.08)] border-border">
+                <Card className="bg-[rgba(212,175,55,0.08)] border-border">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-lg text-foreground flex items-center gap-2">
@@ -935,7 +935,7 @@ export default function BodyMap() {
                           }
                           className={`w-full text-left rounded-lg border p-3 transition-all duration-200 ${
                             isAdded
-                              ? 'bg-[rgba(197,164,66,0.15)] border-[rgba(197,164,66,0.4)] hover:bg-[rgba(197,164,66,0.2)]'
+                              ? 'bg-[rgba(212,175,55,0.15)] border-[rgba(212,175,55,0.4)] hover:bg-[rgba(212,175,55,0.2)]'
                               : 'bg-muted/30 border-border hover:bg-muted/50 hover:border-border'
                           }`}
                         >
@@ -982,10 +982,10 @@ export default function BodyMap() {
               </>
             ) : (
               /* Empty state when no region is selected */
-              <Card className="bg-[rgba(197,164,66,0.08)] border-border">
+              <Card className="bg-[rgba(212,175,55,0.08)] border-border">
                 <CardContent className="py-16">
                   <div className="text-center space-y-4">
-                    <div className="mx-auto w-14 h-14 rounded-full bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.2)] flex items-center justify-center">
+                    <div className="mx-auto w-14 h-14 rounded-full bg-[rgba(212,175,55,0.1)] border border-[rgba(212,175,55,0.2)] flex items-center justify-center">
                       <Info className="h-7 w-7 text-gold" />
                     </div>
                     <div>
@@ -1004,7 +1004,7 @@ export default function BodyMap() {
 
             {/* Selected conditions summary */}
             {totalSelected > 0 && (
-              <Card className="bg-[rgba(197,164,66,0.08)] border-border">
+              <Card className="bg-[rgba(212,175,55,0.08)] border-border">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base text-foreground flex items-center gap-2">
                     <Plus className="h-4 w-4 text-gold" />
@@ -1029,7 +1029,7 @@ export default function BodyMap() {
                         return (
                           <Badge
                             key={uc.id}
-                            className="bg-[rgba(197,164,66,0.15)] text-gold-hl border border-[rgba(197,164,66,0.3)] hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30 cursor-pointer transition-colors gap-1 pr-1.5"
+                            className="bg-[rgba(212,175,55,0.15)] text-gold-hl border border-[rgba(212,175,55,0.3)] hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30 cursor-pointer transition-colors gap-1 pr-1.5"
                             onClick={() => removeUserCondition(uc.id)}
                             title={`${label} (${regionLabel}) — click to remove`}
                           >

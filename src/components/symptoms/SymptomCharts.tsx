@@ -40,7 +40,7 @@ export function SeverityTrendChart({ data }: SeverityTrendChartProps) {
             color: 'hsl(var(--popover-foreground))',
           }}
         />
-        <Line type="monotone" dataKey="severity" stroke="#C5A442" strokeWidth={2} dot={{ fill: '#C5A442' }} />
+        <Line type="monotone" dataKey="severity" stroke="#D4AF37" strokeWidth={2} dot={{ fill: '#D4AF37' }} />
       </LineChart>
     </ResponsiveContainer>
   );
@@ -66,7 +66,7 @@ export function ConditionStatsChart({ data }: ConditionStatsChartProps) {
             color: 'hsl(var(--popover-foreground))',
           }}
         />
-        <Bar dataKey="count" fill="#C5A442" />
+        <Bar dataKey="count" fill="#D4AF37" />
       </BarChart>
     </ResponsiveContainer>
   );

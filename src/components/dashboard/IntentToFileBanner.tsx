@@ -63,11 +63,11 @@ export function IntentToFileBanner() {
           exit={{ opacity: 0, y: -20, height: 0 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
         >
-          <div className="rounded-xl border-2 border-[rgba(197,164,66,0.5)] bg-card p-4 relative overflow-hidden">
+          <div className="rounded-xl border-2 border-[rgba(212,175,55,0.5)] bg-card p-4 relative overflow-hidden">
             {/* Gold accent line (decorative) */}
             <div
               className="absolute top-0 left-0 right-0 h-1"
-              style={{ background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)' }}
+              style={{ background: 'linear-gradient(135deg, #E2C468 0%, #D4AF37 40%, #B38728 70%, #D4AF37 100%)' }}
               aria-hidden="true"
             />
 
@@ -82,7 +82,7 @@ export function IntentToFileBanner() {
             </button>
 
             <div className="flex items-start gap-3 pr-8">
-              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-[rgba(197,164,66,0.15)] border border-[rgba(197,164,66,0.3)] flex-shrink-0">
+              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-[rgba(212,175,55,0.15)] border border-[rgba(212,175,55,0.3)] flex-shrink-0">
                 <Shield className="h-5 w-5 text-gold" />
               </div>
               <div className="flex-1 min-w-0 space-y-2">
@@ -96,7 +96,7 @@ export function IntentToFileBanner() {
                   <Link
                     to="/settings/itf"
                     className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-xs font-semibold transition-colors min-h-[44px]"
-                    style={{ background: 'linear-gradient(135deg, #E8C560 0%, #C5A442 40%, #A38A35 70%, #C5A442 100%)', color: '#000' }}
+                    style={{ background: 'linear-gradient(135deg, #E2C468 0%, #D4AF37 40%, #B38728 70%, #D4AF37 100%)', color: '#000' }}
                   >
                     Learn How to File
                     <ChevronRight className="h-3 w-3" />
@@ -105,7 +105,7 @@ export function IntentToFileBanner() {
                     href="https://www.va.gov/disability/how-to-file-claim/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg border border-[rgba(197,164,66,0.4)] text-gold text-xs font-semibold hover:bg-[rgba(197,164,66,0.1)] transition-colors min-h-[44px]"
+                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg border border-[rgba(212,175,55,0.4)] text-gold text-xs font-semibold hover:bg-[rgba(212,175,55,0.1)] transition-colors min-h-[44px]"
                   >
                     File Now on VA.gov
                     <ExternalLink className="h-3 w-3" />

@@ -396,7 +396,7 @@ export function Pricing() {
                   <div key={group.category}>
                     <p
                       className="text-[10px] font-bold uppercase tracking-widest mb-2"
-                      style={{ color: '#C5A442' }}
+                      style={{ color: '#D4AF37' }}
                     >
                       {group.category}
                     </p>

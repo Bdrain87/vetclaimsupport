@@ -65,8 +65,8 @@ const PTSD_SYMPTOM_CATEGORIES = {
   },
   severe: {
     label: '70% Criteria',
-    color: 'text-[#C5A442]',
-    bgColor: 'bg-[#C5A442]/10',
+    color: 'text-[#D4AF37]',
+    bgColor: 'bg-[#D4AF37]/10',
     symptoms: [
       { id: 'suicidal_ideation', label: 'Suicidal ideation' },
       { id: 'obsessional_rituals', label: 'Obsessional rituals interfering with routine activities' },
@@ -229,7 +229,7 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
     );
 
     if (has100) return { rating: '100%', color: 'text-destructive' };
-    if (has70) return { rating: '70%', color: 'text-[#C5A442]' };
+    if (has70) return { rating: '70%', color: 'text-[#D4AF37]' };
     if (has50) return { rating: '50%', color: 'text-warning' };
     if (hasMild) return { rating: '10-30%', color: 'text-success' };
     return { rating: '0%', color: 'text-muted-foreground' };
@@ -238,14 +238,14 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
   const getSeverityLabel = (severity: number) => {
     if (severity <= 3) return { label: 'Mild', color: 'text-success' };
     if (severity <= 5) return { label: 'Moderate', color: 'text-warning' };
-    if (severity <= 7) return { label: 'Moderately Severe', color: 'text-[#C5A442]' };
+    if (severity <= 7) return { label: 'Moderately Severe', color: 'text-[#D4AF37]' };
     return { label: 'Severe', color: 'text-destructive' };
   };
 
   const getFrequencyBadgeColor = (frequency: PTSDSymptomFrequency) => {
     switch (frequency) {
       case 'Daily': return 'bg-destructive/20 text-destructive';
-      case 'Several times/week': return 'bg-[#C5A442]/20 text-[#C5A442]';
+      case 'Several times/week': return 'bg-[#D4AF37]/20 text-[#D4AF37]';
       case 'Weekly': return 'bg-warning/20 text-warning';
       case 'Monthly': return 'bg-success/20 text-success';
       case 'Occasional': return 'bg-muted text-muted-foreground';

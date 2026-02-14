@@ -18,8 +18,8 @@ export default function PrivacyPolicyPage() {
 
       {/* Header */}
       <div className="flex items-start gap-4">
-        <div className="p-3 rounded-xl bg-[#C5A442]/10 shrink-0">
-          <Shield className="h-6 w-6 text-[#C5A442]" />
+        <div className="p-3 rounded-xl bg-[#D4AF37]/10 shrink-0">
+          <Shield className="h-6 w-6 text-[#D4AF37]" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Privacy Policy</h1>
@@ -46,31 +46,31 @@ export default function PrivacyPolicyPage() {
           </p>
           <ul className="space-y-2 text-muted-foreground">
             <li className="flex items-start gap-2">
-              <span className="text-[#C5A442] mt-0.5">&#x2022;</span>
+              <span className="text-[#D4AF37] mt-0.5">&#x2022;</span>
               <span><strong className="text-foreground">Profile Information:</strong> Name, military branch, MOS/AFSC/Rating/NEC/SFSC, service dates, claim type</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#C5A442] mt-0.5">&#x2022;</span>
+              <span className="text-[#D4AF37] mt-0.5">&#x2022;</span>
               <span><strong className="text-foreground">Service History:</strong> Deployments, duty stations, combat history, major events</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#C5A442] mt-0.5">&#x2022;</span>
+              <span className="text-[#D4AF37] mt-0.5">&#x2022;</span>
               <span><strong className="text-foreground">Health Data:</strong> Symptoms (severity, frequency, body area), sleep logs, migraine logs, medications, medical visits, exposures, PTSD symptoms</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#C5A442] mt-0.5">&#x2022;</span>
+              <span className="text-[#D4AF37] mt-0.5">&#x2022;</span>
               <span><strong className="text-foreground">Claims Data:</strong> Conditions being claimed, ratings, evidence status, buddy contact info</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#C5A442] mt-0.5">&#x2022;</span>
+              <span className="text-[#D4AF37] mt-0.5">&#x2022;</span>
               <span><strong className="text-foreground">Documents:</strong> User-uploaded evidence files, generated PDFs, form drafts</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#C5A442] mt-0.5">&#x2022;</span>
+              <span className="text-[#D4AF37] mt-0.5">&#x2022;</span>
               <span><strong className="text-foreground">AI Interaction Data:</strong> Prompts sent to AI features and responses received (processed in real-time, not stored on our servers)</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#C5A442] mt-0.5">&#x2022;</span>
+              <span className="text-[#D4AF37] mt-0.5">&#x2022;</span>
               <span><strong className="text-foreground">Operational Data:</strong> Minimal crash/performance metrics, device/OS type (no PII)</span>
             </li>
           </ul>
@@ -97,10 +97,10 @@ export default function PrivacyPolicyPage() {
             When you use AI-powered features, the text you provide is sent to Google Gemini for processing. This data is:
           </p>
           <ul className="space-y-1.5 text-muted-foreground">
-            <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span>(a) Transmitted over encrypted connections (TLS)</li>
-            <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span>(b) Processed in real-time and not stored by VCS on any server</li>
-            <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span>(c) Subject to the AI provider&apos;s own data handling policies</li>
-            <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span>(d) Never used by VCS for AI model training</li>
+            <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span>(a) Transmitted over encrypted connections (TLS)</li>
+            <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span>(b) Processed in real-time and not stored by VCS on any server</li>
+            <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span>(c) Subject to the AI provider&apos;s own data handling policies</li>
+            <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span>(d) Never used by VCS for AI model training</li>
           </ul>
           <p className="text-muted-foreground">
             AI features are entirely optional. The app functions fully without an AI API key.
@@ -132,7 +132,7 @@ export default function PrivacyPolicyPage() {
           </ul>
           <p className="text-muted-foreground">
             To exercise these rights, use the Settings page or contact{' '}
-            <a href="mailto:blakedrain@gmail.com" className="text-[#C5A442] hover:underline">blakedrain@gmail.com</a>.
+            <a href="mailto:blakedrain@gmail.com" className="text-[#D4AF37] hover:underline">blakedrain@gmail.com</a>.
           </p>
         </section>
 
@@ -141,7 +141,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-lg font-semibold text-foreground">7. Privacy Rights</h2>
           <p className="text-muted-foreground">
             We strive to honor privacy rights under applicable laws. If you are a California resident, you have the right under the California Consumer Privacy Act (CCPA) to request disclosure of the categories and specific pieces of personal information we collect, to request deletion of your personal information, and to opt out of any sale of personal information. We do not sell your personal information. You may exercise your privacy rights (access, deletion, portability) by using the Settings page or contacting{' '}
-            <a href="mailto:blakedrain@gmail.com" className="text-[#C5A442] hover:underline">blakedrain@gmail.com</a>.
+            <a href="mailto:blakedrain@gmail.com" className="text-[#D4AF37] hover:underline">blakedrain@gmail.com</a>.
           </p>
         </section>
 
@@ -168,9 +168,9 @@ export default function PrivacyPolicyPage() {
             The Service uses:
           </p>
           <ul className="space-y-1.5 text-muted-foreground">
-            <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span><strong className="text-foreground">Supabase</strong> (cloud database, optional)</li>
-            <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span><strong className="text-foreground">Google Gemini</strong> (AI features, optional)</li>
-            <li className="flex items-start gap-2"><span className="text-[#C5A442] mt-0.5">&#x2022;</span><strong className="text-foreground">Vercel</strong> (web hosting and deployment)</li>
+            <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Supabase</strong> (cloud database, optional)</li>
+            <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Google Gemini</strong> (AI features, optional)</li>
+            <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Vercel</strong> (web hosting and deployment)</li>
           </ul>
           <p className="text-muted-foreground">
             Each third-party service has its own privacy policy.
@@ -198,7 +198,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-lg font-semibold text-foreground">13. Contact</h2>
           <p className="text-muted-foreground">
             Privacy questions:{' '}
-            <a href="mailto:blakedrain@gmail.com" className="text-[#C5A442] hover:underline">
+            <a href="mailto:blakedrain@gmail.com" className="text-[#D4AF37] hover:underline">
               blakedrain@gmail.com
             </a>
           </p>

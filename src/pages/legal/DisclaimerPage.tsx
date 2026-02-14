@@ -18,7 +18,7 @@ export default function DisclaimerPage() {
 
       {/* Header */}
       <div className="flex items-start gap-4">
-        <div className="p-3 rounded-xl bg-[rgba(197,164,66,0.1)] shrink-0">
+        <div className="p-3 rounded-xl bg-[rgba(212,175,55,0.1)] shrink-0">
           <AlertTriangle className="h-6 w-6 text-gold" />
         </div>
         <div>
@@ -63,7 +63,7 @@ export default function DisclaimerPage() {
         {/* Your Responsibility */}
         <div className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">Your Responsibility</h2>
-          <div className="rounded-xl bg-[#C5A442]/5 border border-[#C5A442]/20 p-4">
+          <div className="rounded-xl bg-[#D4AF37]/5 border border-[#D4AF37]/20 p-4">
             <p className="text-muted-foreground">
               You are solely responsible for the accuracy of all information you enter. You must review and verify ALL content before submitting anything to the VA &mdash; especially AI-generated content. False or misleading statements in VA claims may constitute federal fraud.
             </p>
@@ -73,7 +73,7 @@ export default function DisclaimerPage() {
         {/* AI-Generated Content Warning */}
         <div className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">AI-Generated Content Warning</h2>
-          <div className="rounded-xl bg-[rgba(197,164,66,0.05)] border border-[rgba(197,164,66,0.2)] p-4 space-y-3">
+          <div className="rounded-xl bg-[rgba(212,175,55,0.05)] border border-[rgba(212,175,55,0.2)] p-4 space-y-3">
             <p className="text-muted-foreground">
               This app uses artificial intelligence (Google Gemini) to generate suggestions and content. AI-generated content may be inaccurate, incomplete, or fabricated. AI-generated case law citations have a documented hallucination rate of 50-88%. <strong className="text-gold">NEVER submit AI-generated legal citations without independent verification.</strong> You assume all risk for reliance on AI-generated content.
             </p>
@@ -92,7 +92,7 @@ export default function DisclaimerPage() {
               href="https://www.va.gov/ogc/apps/accreditation"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#C5A442] hover:underline"
+              className="text-[#D4AF37] hover:underline"
             >
               va.gov/ogc/apps/accreditation
             </a>.

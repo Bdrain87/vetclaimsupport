@@ -717,7 +717,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="bg-[rgba(197,164,66,0.08)] border border-[rgba(197,164,66,0.2)] rounded-lg p-4">
+          <div className="bg-[rgba(212,175,55,0.08)] border border-[rgba(212,175,55,0.2)] rounded-lg p-4">
             <p className="text-sm text-muted-foreground mb-3">
               Use these verified legal databases to find case law relevant to your claim:
             </p>

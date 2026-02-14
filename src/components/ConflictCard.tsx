@@ -24,7 +24,7 @@ export function ConflictCard({ conflict, onClick, isSelected }: ConflictCardProp
       <CardContent className="p-4">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-[rgba(197,164,66,0.1)] border border-[rgba(197,164,66,0.2)] flex-shrink-0" role="img" aria-label={conflict.name}>
+            <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-[rgba(212,175,55,0.1)] border border-[rgba(212,175,55,0.2)] flex-shrink-0" role="img" aria-label={conflict.name}>
               {(() => { const Icon = conflictIconMap[conflict.icon]; return Icon ? <Icon className="h-5 w-5 text-gold" /> : null; })()}
             </div>
             <div className="min-w-0">

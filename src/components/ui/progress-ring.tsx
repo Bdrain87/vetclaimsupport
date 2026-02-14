@@ -97,9 +97,9 @@ const ProgressRing = React.forwardRef<HTMLDivElement, ProgressRingProps>(
         text: 'text-green-600 dark:text-green-500',
       },
       warning: {
-        track: 'stroke-[#C5A442]/20',
-        progress: 'stroke-[#C5A442]',
-        text: 'text-[#A38A35] dark:text-[#C5A442]',
+        track: 'stroke-[#D4AF37]/20',
+        progress: 'stroke-[#D4AF37]',
+        text: 'text-[#B38728] dark:text-[#D4AF37]',
       },
       danger: {
         track: 'stroke-red-500/20',
@@ -205,7 +205,7 @@ const ProgressRingIcon = React.forwardRef<HTMLDivElement, ProgressRingIconProps>
       default: 'text-foreground',
       primary: 'text-primary',
       success: 'text-green-600 dark:text-green-500',
-      warning: 'text-[#A38A35] dark:text-[#C5A442]',
+      warning: 'text-[#B38728] dark:text-[#D4AF37]',
       danger: 'text-red-600 dark:text-red-500',
       gold: 'text-[var(--gold-md)]',
     };
