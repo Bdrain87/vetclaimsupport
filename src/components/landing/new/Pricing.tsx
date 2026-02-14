@@ -346,22 +346,11 @@ export function Pricing() {
           {/* Premium plan */}
           <PremiumCard>
             <div className="p-6 relative">
-              <div
-                className="absolute top-0 right-0 px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-bl-lg rounded-tr-[15px]"
-                style={{
-                  background: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
-                  color: '#000000',
-                }}
-              >
-                Best Value
-              </div>
-
               <motion.div
-                className="absolute top-3 left-0 px-2.5 py-0.5 text-[10px] font-bold uppercase"
+                className="absolute top-0 right-0 px-4 py-1.5 text-xs font-bold uppercase tracking-wider rounded-bl-lg rounded-tr-[15px]"
                 style={{
                   background: '#EF4444',
                   color: '#FFFFFF',
-                  borderRadius: '0 4px 4px 0',
                 }}
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
