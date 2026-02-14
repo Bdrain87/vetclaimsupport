@@ -225,6 +225,11 @@ export default function Conditions() {
     const claimConditions = data.claimConditions || [];
     const gaps: { conditionName: string; missing: string[]; conditionId?: string }[] = [];
     claimConditions.forEach((c) => {
+      const matchingUserCondition = userConditions.find(uc => {
+        const details = getConditionDetails(uc);
+        return details?.name.toLowerCase() === c.name.toLowerCase() || uc.conditionId === c.id;
+      });
+      if (matchingUserCondition?.claimStatus === 'approved') return;
       const missing: string[] = [];
       if (c.linkedMedicalVisits.length === 0) missing.push('Medical records');
       if (c.linkedSymptoms.length === 0) missing.push('Symptom logs');
@@ -234,7 +239,7 @@ export default function Conditions() {
       }
     });
     return gaps;
-  }, [data.claimConditions]);
+  }, [data.claimConditions, userConditions, getConditionDetails]);
 
   // Must match the 10 items in ConditionDetail.tsx EVIDENCE_ITEMS
   const EVIDENCE_TOTAL = 10;
@@ -702,7 +707,7 @@ export default function Conditions() {
           </h2>
           <div className="space-y-2">
             {recommendations.slice(0, 4).map((rec) => {
-              const diagnosticCode = getDiagnosticCodeForCondition(rec.conditionId);
+              const diagnosticCodeResult = getDiagnosticCodeForCondition(rec.conditionId);
               return (
                 <button
                   key={rec.conditionId}
@@ -713,8 +718,8 @@ export default function Conditions() {
                 >
                   <div className="flex-1 min-w-0 mr-3">
                     <p className="text-sm font-medium text-foreground truncate">{rec.name}</p>
-                    <p className="text-xs text-muted-foreground truncate">
-                      {diagnosticCode ? `DC ${diagnosticCode} · ` : ''}{rec.reason}
+                    <p className="text-xs text-muted-foreground line-clamp-2 break-words">
+                      {diagnosticCodeResult ? `DC ${diagnosticCodeResult.code} · ` : ''}{rec.reason}
                     </p>
                   </div>
                   <Plus className="h-4 w-4 text-gold flex-shrink-0" />

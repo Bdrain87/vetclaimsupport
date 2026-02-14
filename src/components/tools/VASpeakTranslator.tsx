@@ -253,7 +253,7 @@ export function VASpeakTranslator() {
               38 CFR nomenclature standards.
             </AlertDescription>
           </Alert>
-          <DisclaimerNotice variant="inline" />
+          <DisclaimerNotice variant="inline" dismissible />
         </CardContent>
       </Card>
 

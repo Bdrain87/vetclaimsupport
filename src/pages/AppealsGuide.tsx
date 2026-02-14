@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { PageContainer } from '@/components/PageContainer';
+import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import {
   appealLanes,
   searchCaseLaw,
@@ -287,16 +288,38 @@ async function exportPersonalizedAppealPDF(
 // ── Sub-components ──────────────────────────────────────────────────────
 
 function DisclaimerBanner() {
+  const [acknowledged, setAcknowledged] = useState(false);
+
+  if (acknowledged) {
+    return (
+      <button
+        onClick={() => setAcknowledged(false)}
+        className="w-full flex items-center gap-2 px-3 py-2 rounded-xl border border-amber-500/20 bg-amber-500/5 text-xs text-amber-300/70 hover:bg-amber-500/10 transition-colors"
+      >
+        <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
+        <span>Legal disclaimer acknowledged — tap to review</span>
+      </button>
+    );
+  }
+
   return (
     <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 backdrop-blur-sm p-4 flex gap-3 items-start">
       <AlertTriangle className="h-5 w-5 text-amber-400 mt-0.5 shrink-0" />
-      <div className="space-y-1">
+      <div className="space-y-1 flex-1 min-w-0">
         <p className="text-sm text-amber-200/90 font-medium leading-relaxed">
           {CASE_LAW_DISCLAIMER}
         </p>
-        <div className="flex items-center gap-1.5 pt-1">
-          <CheckCircle2 className="h-3.5 w-3.5 text-gold" />
-          <span className="text-xs text-gold font-medium">Only verified sources shown</span>
+        <div className="flex items-center justify-between gap-2 pt-2">
+          <div className="flex items-center gap-1.5">
+            <CheckCircle2 className="h-3.5 w-3.5 text-gold" />
+            <span className="text-xs text-gold font-medium">Only verified sources shown</span>
+          </div>
+          <button
+            onClick={() => setAcknowledged(true)}
+            className="px-3 py-1.5 rounded-md bg-amber-500/20 text-amber-200 text-xs font-medium hover:bg-amber-500/30 transition-colors flex-shrink-0"
+          >
+            I Acknowledge
+          </button>
         </div>
       </div>
     </div>
@@ -822,7 +845,14 @@ export default function AppealsGuide() {
 
         {/* ── Case Law Search Tab ──────────────────────────────────────── */}
         <TabsContent value="caselaw" className="space-y-4">
-          {/* Search bar */}
+          {/* Condition autocomplete - search by code, name, keyword */}
+          <ConditionAutocomplete
+            onSelect={(c) => setSearchQuery(c.name)}
+            placeholder="Search by condition code, name, or keyword..."
+            showBodySystem
+          />
+
+          {/* Text search bar */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
