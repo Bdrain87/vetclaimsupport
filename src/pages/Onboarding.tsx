@@ -7,7 +7,7 @@ import { searchMilitaryJobs, getCodeTypeForBranch, type MilitaryJobCode } from '
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import { LocationAutocomplete } from '@/components/shared/LocationAutocomplete';
 import { useUserConditions } from '@/hooks/useUserConditions';
-import { type VACondition, getConditionById } from '@/data/vaConditions';
+import { type VACondition, getConditionById, searchConditions } from '@/data/vaConditions';
 import useAppStore, { type DutyStation } from '@/store/useAppStore';
 import { SuccessAnimation } from '@/components/ui/success-animation';
 import { PageContainer } from '@/components/PageContainer';
@@ -297,7 +297,7 @@ export default function Onboarding() {
       });
     }
 
-    // Save existing rated conditions as claim conditions
+    // Save existing rated conditions as claim conditions AND as approved user conditions
     for (const rated of existingRated) {
       appStore.addClaimCondition({
         name: rated.conditionName,
@@ -308,6 +308,19 @@ export default function Onboarding() {
         linkedBuddyContacts: [],
         notes: `Existing rated condition: ${rated.rating}% (${rated.type})`,
         createdAt: new Date().toISOString(),
+      });
+
+      const matchingConditions = searchConditions(rated.conditionName);
+      const matchedCondition = matchingConditions.length > 0 ? matchingConditions[0] : null;
+
+      appStore.addUserCondition({
+        id: crypto.randomUUID(),
+        conditionId: matchedCondition ? matchedCondition.id : rated.conditionName.toLowerCase().replace(/\s+/g, '-'),
+        rating: rated.rating,
+        serviceConnected: true,
+        claimStatus: 'approved',
+        isPrimary: rated.type === 'primary',
+        dateAdded: new Date().toISOString(),
       });
     }
 

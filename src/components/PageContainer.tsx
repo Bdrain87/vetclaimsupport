@@ -10,7 +10,7 @@ export function PageContainer({ children, className, noPadding = false }: PageCo
   return (
     <div
       className={cn(
-        'w-full max-w-2xl mx-auto',
+        'w-full max-w-2xl mx-auto overflow-x-hidden',
         !noPadding && 'px-4',
         className
       )}
