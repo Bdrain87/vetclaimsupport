@@ -20,6 +20,7 @@ import { AriaLiveAnnouncer } from './components/AriaLiveAnnouncer';
 import { QuickAddFAB } from './components/QuickAddFAB';
 import { OfflineIndicator } from './components/OfflineIndicator';
 import { isWeb } from './lib/platform';
+import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 
 // Run migration before React renders (synchronous, runs once)
 try {
@@ -172,6 +173,7 @@ function AnimatedRoutes() {
   const location = useLocation();
 
   useFirstTimeRedirect();
+  useKeyboardShortcuts();
 
   return (
     <div key={location.pathname} className="animate-fade-in">

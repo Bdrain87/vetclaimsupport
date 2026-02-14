@@ -276,7 +276,7 @@ export default function Conditions() {
     setIsSecondary(false);
     setLinkedPrimaryId('');
     setShowAddDialog(false);
-  }, [selectedCondition, newRating, isSecondary, linkedPrimaryId, addCondition]);
+  }, [selectedCondition, newRating, newClaimStatus, isSecondary, linkedPrimaryId, addCondition]);
 
   // Confirm remove state
   const [removeTarget, setRemoveTarget] = useState<{ id: string; name: string } | null>(null);
