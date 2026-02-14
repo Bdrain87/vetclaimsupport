@@ -16,7 +16,6 @@ const BANNED_PHRASES: string[] = [
   'npi',
   'respectfully submitted',
   'independent medical examination',
-  'ime',
   'medical nexus',
   'within a reasonable degree of medical probability',
   'board-certified',
