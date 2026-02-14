@@ -44,7 +44,7 @@ const pages: Record<string, () => Promise<{ default: React.ComponentType }>> = {
   MedicalVisits: () => import('@/pages/MedicalVisits'),
   Exposures: () => import('@/pages/Exposures'),
   BuddyStatements: () => import('@/pages/BuddyStatements'),
-  NexusLetterGenerator: () => import('@/pages/NexusLetterGenerator'),
+  DoctorSummaryOutline: () => import('@/pages/DoctorSummaryOutline'),
   DocumentsHub: () => import('@/pages/DocumentsHub'),
   CPExamPrepEnhanced: () => import('@/pages/CPExamPrepEnhanced'),
   DBQPrepSheet: () => import('@/pages/DBQPrepSheet'),

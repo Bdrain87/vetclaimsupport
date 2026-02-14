@@ -1694,34 +1694,6 @@ export const exportPersonalStatement = async (statementText: string, conditionNa
   doc.save(`personal-statement-${conditionName?.replace(/\s+/g, '-').toLowerCase() || 'claim'}.pdf`);
 };
 
-// Doctor Summary Template Export
-export const exportDoctorSummaryTemplate = async (statementText: string, conditionName?: string) => {
-  const jsPDF = await loadJsPDF();
-  const doc = new jsPDF();
-  const pageWidth = doc.internal.pageSize.getWidth();
-
-  let yPos = addPDFHeader(doc, {
-    title: 'Doctor Summary Template',
-    subtitle: conditionName ? `Medical Opinion Template: ${conditionName}` : 'Medical Opinion Template for VA Claims'
-  });
-
-  yPos = drawInfoBox(doc, 'IMPORTANT: This is a TEMPLATE only. A licensed medical professional must review, customize, and sign this letter on their letterhead for it to be valid for VA claims.', yPos);
-
-  doc.setFontSize(10);
-  doc.setTextColor(...colors.secondary);
-  doc.setFont('helvetica', 'normal');
-
-  const lines = doc.splitTextToSize(statementText, pageWidth - 40);
-
-  lines.forEach((line: string) => {
-    yPos = checkPageBreak(doc, yPos, 8);
-    doc.text(line, 20, yPos);
-    yPos += 5;
-  });
-
-  addPDFFooter(doc);
-  doc.save(`doctor-summary-template-${conditionName?.replace(/\s+/g, '-').toLowerCase() || 'condition'}.pdf`);
-};
 
 // Claim Preparation Export
 export const exportClaimStrategy = async (statementText: string) => {
