@@ -34,7 +34,7 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex items-center justify-center overflow-hidden"
+      className="relative flex flex-col items-center justify-center overflow-hidden"
       style={{ backgroundColor: '#000000' }}
     >
       {/* Parallax background */}
@@ -193,7 +193,9 @@ export function Hero() {
       </div>
 
       {/* Ticker / Social Proof — directly below Hero */}
-      <SocialProof />
+      <div className="w-full">
+        <SocialProof />
+      </div>
     </section>
   );
 }
