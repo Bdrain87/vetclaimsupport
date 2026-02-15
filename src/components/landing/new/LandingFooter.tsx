@@ -12,13 +12,13 @@ const PRODUCT_LINKS: FooterLink[] = [
 
 const RESOURCE_LINKS: FooterLink[] = [
   { label: 'VA.gov', href: 'https://www.va.gov/', external: true },
-  { label: 'FAQ', to: '/app/settings/faq' },
-  { label: 'Privacy Policy', to: '/app/settings/privacy' },
-  { label: 'Terms of Service', to: '/app/settings/terms' },
+  { label: 'FAQ', to: '/settings/faq' },
+  { label: 'Privacy Policy', to: '/settings/privacy' },
+  { label: 'Terms of Service', to: '/settings/terms' },
 ];
 
 const COMPANY_LINKS: FooterLink[] = [
-  { label: 'About', to: '/app/settings/about' },
+  { label: 'About', to: '/settings/about' },
 ];
 
 export function LandingFooter() {
