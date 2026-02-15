@@ -72,7 +72,7 @@ export function StickyNav() {
               )
             ))}
             <Link
-              to="/app"
+              to="/login"
               className="rounded-full px-6 py-2 text-sm font-semibold text-black no-underline"
               style={{
                 background:
@@ -125,7 +125,7 @@ export function StickyNav() {
               )
             ))}
             <Link
-              to="/app"
+              to="/login"
               onClick={() => setMobileOpen(false)}
               className="rounded-full px-8 py-3 text-lg font-semibold text-black no-underline mt-4"
               style={{
