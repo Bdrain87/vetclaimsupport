@@ -54,17 +54,20 @@ window.addEventListener('unhandledrejection', (event) => {
 // SERVICE WORKER — instant updates on every deploy
 // ============================================================
 if ('serviceWorker' in navigator) {
-  // When a new SW takes control, notify the user instead of auto-reloading
-  // (auto-reload destroys unsaved form data)
+  // When a new SW takes control, reload so the user gets fresh code.
+  // This fires after skipWaiting + clientsClaim on a new deployment.
+  let swRefreshing = false;
   navigator.serviceWorker.addEventListener('controllerchange', () => {
-    window.dispatchEvent(new CustomEvent('sw-update-available'));
+    if (swRefreshing) return;
+    swRefreshing = true;
+    window.location.reload();
   });
 
   // Purge old runtime caches that may hold stale JS/CSS from
   // previous builds. The SW handles its own precache cleanup,
   // but runtime caches (pages, app-assets) from older SW versions
   // can linger. Delete any cache name we no longer use.
-  const VALID_CACHES = ['pages', 'app-assets', 'google-fonts-cache', 'google-fonts-webfonts'];
+  const VALID_CACHES = ['pages', 'google-fonts-cache', 'google-fonts-webfonts'];
   caches.keys().then((names) => {
     names.forEach((name) => {
       if (!VALID_CACHES.includes(name)) {

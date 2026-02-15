@@ -49,21 +49,10 @@ export default defineConfig({
               cacheableResponse: { statuses: [0, 200] },
             },
           },
-          {
-            // Hashed JS/CSS bundles — always fetch from network first
-            // so deployments (e.g. paywall) take effect immediately.
-            // Falls back to cache only when offline.
-            urlPattern: /\/assets\/.*\.(?:js|css)$/,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'app-assets',
-              cacheableResponse: { statuses: [0, 200] },
-              expiration: {
-                maxEntries: 80,
-                maxAgeSeconds: 86400, // 1 day
-              },
-            },
-          },
+          // JS/CSS bundles are NOT cached by the SW. Vite content-hashes
+          // every filename and Vercel serves them with immutable headers.
+          // The browser HTTP cache handles this perfectly — SW caching
+          // only causes stale code on deploy.
           {
             // Google Fonts — immutable, cache-first is fine
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
