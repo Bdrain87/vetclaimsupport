@@ -1,0 +1,48 @@
+import { useState, useEffect, type ReactNode } from 'react';
+import { hasPremiumAccess, ensureFreshEntitlement } from '@/services/entitlements';
+import { UpgradeModal } from '@/components/UpgradeModal';
+
+interface PremiumGuardProps {
+  featureName: string;
+  children: ReactNode;
+}
+
+export function PremiumGuard({ featureName, children }: PremiumGuardProps) {
+  const [state, setState] = useState<'loading' | 'granted' | 'blocked'>('loading');
+
+  useEffect(() => {
+    let cancelled = false;
+
+    // Quick local check first
+    if (hasPremiumAccess()) {
+      setState('granted');
+      return;
+    }
+
+    // Not premium locally — verify with server
+    ensureFreshEntitlement().then((status) => {
+      if (cancelled) return;
+      const isPremium = status === 'premium' || status === 'lifetime';
+      setState(isPremium ? 'granted' : 'blocked');
+    });
+
+    return () => { cancelled = true; };
+  }, []);
+
+  if (state === 'loading') {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-10 h-10 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+          <p className="text-sm text-muted-foreground">Checking access...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (state === 'blocked') {
+    return <UpgradeModal featureName={featureName} />;
+  }
+
+  return <>{children}</>;
+}

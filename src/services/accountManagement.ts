@@ -82,6 +82,8 @@ export async function deleteCloudData(): Promise<void> {
   // Delete all user data from cloud tables (order matters for FK constraints).
   // Each call is checked individually so partial failures are surfaced.
   const tables = [
+    'subscriptions',
+    'user_entitlements',
     'entitlements',
     'form_drafts',
     'documents',
@@ -113,6 +115,8 @@ export async function deleteAccount(): Promise<void> {
 
   // 1. Delete all data rows (order matters for FK constraints).
   const tables = [
+    'subscriptions',
+    'user_entitlements',
     'entitlements',
     'form_drafts',
     'documents',

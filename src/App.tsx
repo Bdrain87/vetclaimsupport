@@ -21,6 +21,9 @@ import { QuickAddFAB } from './components/QuickAddFAB';
 import { OfflineIndicator } from './components/OfflineIndicator';
 import { isWeb } from './lib/platform';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
+import { PremiumGuard } from './components/PremiumGuard';
+import { ensureFreshEntitlement } from './services/entitlements';
+import { supabase } from './lib/supabase';
 
 // Run migration before React renders (synchronous, runs once)
 try {
@@ -191,42 +194,42 @@ function AnimatedRoutes() {
 
           {/* === CLAIMS === */}
           <Route path="/claims" element={<Conditions />} />
-          <Route path="/claims/strategy" element={<ClaimStrategyWizard />} />
-          <Route path="/claims/body-map" element={<BodyMap />} />
+          <Route path="/claims/strategy" element={<PremiumGuard featureName="Claim Strategy Wizard"><ClaimStrategyWizard /></PremiumGuard>} />
+          <Route path="/claims/body-map" element={<PremiumGuard featureName="Body Map"><BodyMap /></PremiumGuard>} />
           <Route path="/claims/calculator" element={<Combination />} />
-          <Route path="/claims/bilateral" element={<BilateralCalculator />} />
-          <Route path="/claims/secondary-finder" element={<SecondaryFinder />} />
+          <Route path="/claims/bilateral" element={<PremiumGuard featureName="Bilateral Calculator"><BilateralCalculator /></PremiumGuard>} />
+          <Route path="/claims/secondary-finder" element={<PremiumGuard featureName="Secondary Condition Finder"><SecondaryFinder /></PremiumGuard>} />
           <Route path="/claims/checklist" element={<ClaimChecklist />} />
           <Route path="/claims/:id" element={<ConditionDetail />} />
 
           {/* === HEALTH === */}
           <Route path="/health" element={<HealthHub />} />
-          <Route path="/health/symptoms" element={<Symptoms />} />
-          <Route path="/health/sleep" element={<Sleep />} />
-          <Route path="/health/migraines" element={<Migraines />} />
-          <Route path="/health/medications" element={<Medications />} />
-          <Route path="/health/visits" element={<MedicalVisits />} />
-          <Route path="/health/exposures" element={<Exposures />} />
-          <Route path="/health/summary" element={<HealthLog />} />
-          <Route path="/health/timeline" element={<UnifiedTimeline />} />
+          <Route path="/health/symptoms" element={<PremiumGuard featureName="Symptom Tracker"><Symptoms /></PremiumGuard>} />
+          <Route path="/health/sleep" element={<PremiumGuard featureName="Sleep Tracker"><Sleep /></PremiumGuard>} />
+          <Route path="/health/migraines" element={<PremiumGuard featureName="Migraine Tracker"><Migraines /></PremiumGuard>} />
+          <Route path="/health/medications" element={<PremiumGuard featureName="Medication Tracker"><Medications /></PremiumGuard>} />
+          <Route path="/health/visits" element={<PremiumGuard featureName="Medical Visits"><MedicalVisits /></PremiumGuard>} />
+          <Route path="/health/exposures" element={<PremiumGuard featureName="Exposure Tracker"><Exposures /></PremiumGuard>} />
+          <Route path="/health/summary" element={<PremiumGuard featureName="Health Summary"><HealthLog /></PremiumGuard>} />
+          <Route path="/health/timeline" element={<PremiumGuard featureName="Health Timeline"><UnifiedTimeline /></PremiumGuard>} />
 
           {/* === PREP === */}
           <Route path="/prep" element={<PrepHub />} />
-          <Route path="/prep/exam" element={<CPExamPrepEnhanced />} />
-          <Route path="/prep/personal-statement" element={<PersonalStatement />} />
-          <Route path="/prep/buddy-statement" element={<BuddyStatements />} />
-          <Route path="/prep/doctor-summary" element={<DoctorSummaryOutline />} />
+          <Route path="/prep/exam" element={<PremiumGuard featureName="C&P Exam Prep"><CPExamPrepEnhanced /></PremiumGuard>} />
+          <Route path="/prep/personal-statement" element={<PremiumGuard featureName="Personal Statement Builder"><PersonalStatement /></PremiumGuard>} />
+          <Route path="/prep/buddy-statement" element={<PremiumGuard featureName="Buddy Statement Builder"><BuddyStatements /></PremiumGuard>} />
+          <Route path="/prep/doctor-summary" element={<PremiumGuard featureName="Doctor Summary Outline"><DoctorSummaryOutline /></PremiumGuard>} />
           <Route path="/prep/nexus-letter" element={<Navigate to="/prep/doctor-summary" replace />} />
-          <Route path="/prep/stressor" element={<StressorStatement />} />
+          <Route path="/prep/stressor" element={<PremiumGuard featureName="Stressor Statement"><StressorStatement /></PremiumGuard>} />
           <Route path="/prep/form-guide" element={<FormGuide />} />
           <Route path="/prep/form-guide/:formId" element={<FormGuideDetail />} />
-          <Route path="/prep/dbq" element={<DBQPrepSheet />} />
+          <Route path="/prep/dbq" element={<PremiumGuard featureName="DBQ Prep Sheet"><DBQPrepSheet /></PremiumGuard>} />
           <Route path="/prep/va-speak" element={<VASpeakTranslator />} />
-          <Route path="/prep/back-pay" element={<BackPayEstimator />} />
+          <Route path="/prep/back-pay" element={<PremiumGuard featureName="Back Pay Estimator"><BackPayEstimator /></PremiumGuard>} />
           <Route path="/prep/travel-pay" element={<TravelPayCalculator />} />
           <Route path="/prep/bdd-guide" element={<BDDGuide />} />
-          <Route path="/prep/packet" element={<BuildPacket />} />
-          <Route path="/prep/appeals" element={<AppealsGuide />} />
+          <Route path="/prep/packet" element={<PremiumGuard featureName="Claim Packet Builder"><BuildPacket /></PremiumGuard>} />
+          <Route path="/prep/appeals" element={<PremiumGuard featureName="Appeals Guide"><AppealsGuide /></PremiumGuard>} />
           <Route path="/cp-exam-packet" element={<CPExamPacket />} />
 
           {/* === REFERENCE === */}
@@ -237,7 +240,7 @@ function AnimatedRoutes() {
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/settings/edit-profile" element={<SettingsPage />} />
           <Route path="/settings/service-history" element={<ServiceHistory />} />
-          <Route path="/settings/vault" element={<DocumentsHub />} />
+          <Route path="/settings/vault" element={<PremiumGuard featureName="Document Vault"><DocumentsHub /></PremiumGuard>} />
           <Route path="/settings/journey" element={<ClaimJourney />} />
           <Route path="/settings/itf" element={<IntentToFile />} />
           <Route path="/settings/timeline" element={<Timeline />} />
@@ -372,6 +375,17 @@ function App() {
 
   useEffect(() => {
     checkDataRetention();
+  }, []);
+
+  // Refresh entitlement on startup and auth state changes
+  useEffect(() => {
+    ensureFreshEntitlement();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        ensureFreshEntitlement();
+      }
+    });
+    return () => subscription.unsubscribe();
   }, []);
 
   return (

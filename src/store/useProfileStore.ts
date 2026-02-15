@@ -48,7 +48,7 @@ export interface UserProfile {
   intentToFileFiled?: boolean;
   intentToFileDate?: string;
   separationDate?: string;
-  entitlement: 'preview' | 'lifetime';
+  entitlement: 'preview' | 'premium' | 'lifetime';
   vaultPasscodeSet: boolean;
   lastSyncedAt: string | null;
 }
@@ -67,7 +67,7 @@ interface ProfileState extends UserProfile {
   setClaimGoal: (goal: ClaimGoal) => void;
   setIntentToFile: (filed: boolean, date?: string) => void;
   setSeparationDate: (date: string) => void;
-  setEntitlement: (entitlement: 'preview' | 'lifetime') => void;
+  setEntitlement: (entitlement: 'preview' | 'premium' | 'lifetime') => void;
   setVaultPasscodeSet: (set: boolean) => void;
   setLastSyncedAt: (date: string | null) => void;
   completeOnboarding: () => void;
@@ -140,7 +140,7 @@ export const useProfileStore = create<ProfileState>()(
     }),
     {
       name: 'vet-user-profile',
-      version: 4,
+      version: 5,
       storage: createJSONStorage(() => encryptedStorage),
       onRehydrateStorage: () => {
         return (_state, error) => {
@@ -197,6 +197,10 @@ export const useProfileStore = create<ProfileState>()(
             ...state,
             servicePeriods: periods,
           };
+        }
+        if (version < 5) {
+          // v5: added 'premium' entitlement type — existing value is preserved as-is
+          return state as unknown as ProfileState;
         }
         return state as unknown as ProfileState;
       },

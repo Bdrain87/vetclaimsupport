@@ -1,6 +1,7 @@
 import { useProfileStore } from '@/store/useProfileStore';
+import { supabase } from '@/lib/supabase';
 
-export type EntitlementStatus = 'preview' | 'lifetime';
+export type EntitlementStatus = 'preview' | 'premium' | 'lifetime';
 
 export const PREVIEW_LIMITS = {
   maxConditions: 1,
@@ -11,14 +12,52 @@ export const PREVIEW_LIMITS = {
   formGuideDraftingEnabled: false,
 } as const;
 
+/** Routes that require premium or lifetime access. */
+export const PREMIUM_ROUTES = [
+  // Claims
+  '/claims/strategy',
+  '/claims/body-map',
+  '/claims/bilateral',
+  '/claims/secondary-finder',
+  // Health
+  '/health/symptoms',
+  '/health/sleep',
+  '/health/migraines',
+  '/health/medications',
+  '/health/visits',
+  '/health/exposures',
+  '/health/summary',
+  '/health/timeline',
+  // Prep
+  '/prep/personal-statement',
+  '/prep/buddy-statement',
+  '/prep/doctor-summary',
+  '/prep/stressor',
+  '/prep/exam',
+  '/prep/dbq',
+  '/prep/back-pay',
+  '/prep/packet',
+  '/prep/appeals',
+  // Settings
+  '/settings/vault',
+] as const;
+
+export function isPremiumRoute(pathname: string): boolean {
+  return (PREMIUM_ROUTES as readonly string[]).includes(pathname);
+}
+
 export function checkEntitlement(): EntitlementStatus {
   const entitlement = useProfileStore.getState().entitlement;
   return entitlement || 'preview';
 }
 
-export function isFeatureAvailable(feature: keyof typeof PREVIEW_LIMITS): boolean {
+export function hasPremiumAccess(): boolean {
   const status = checkEntitlement();
-  if (status === 'lifetime') return true;
+  return status === 'premium' || status === 'lifetime';
+}
+
+export function isFeatureAvailable(feature: keyof typeof PREVIEW_LIMITS): boolean {
+  if (hasPremiumAccess()) return true;
 
   const limit = PREVIEW_LIMITS[feature];
   if (typeof limit === 'boolean') return limit;
@@ -28,38 +67,82 @@ export function isFeatureAvailable(feature: keyof typeof PREVIEW_LIMITS): boolea
 }
 
 export function canAddCondition(currentCount: number): boolean {
-  const status = checkEntitlement();
-  if (status === 'lifetime') return true;
+  if (hasPremiumAccess()) return true;
   return currentCount < PREVIEW_LIMITS.maxConditions;
 }
 
 export function canAddHealthLog(currentCount: number): boolean {
-  const status = checkEntitlement();
-  if (status === 'lifetime') return true;
+  if (hasPremiumAccess()) return true;
   return currentCount < PREVIEW_LIMITS.maxHealthLogs;
 }
 
+// --- Server-side entitlement refresh ---
+
+const ENTITLEMENT_TTL_MS = 5 * 60 * 1000; // 5 minutes
+let lastRefreshAt = 0;
+
 /**
- * Purchase the lifetime entitlement.
- *
- * When IAP is configured (RevenueCat or native StoreKit / Google Play
- * Billing), this function should call the payment SDK, verify the receipt
- * server-side, and update the profile store on success.
+ * Query the user_entitlements table and update the Zustand store.
+ * Returns the new entitlement status.
  */
-export async function purchaseLifetime(): Promise<boolean> {
-  throw new Error(
-    'In-app purchases are not yet configured. Lifetime access cannot be purchased at this time.',
-  );
+export async function refreshEntitlementFromServer(): Promise<EntitlementStatus> {
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return checkEntitlement();
+
+    const { data } = await supabase
+      .from('user_entitlements')
+      .select('entitled, source')
+      .eq('user_id', session.user.id)
+      .single();
+
+    let status: EntitlementStatus = 'preview';
+    if (data?.entitled) {
+      status = data.source === 'lifetime' ? 'lifetime' : 'premium';
+    }
+
+    useProfileStore.getState().setEntitlement(status);
+    lastRefreshAt = Date.now();
+    return status;
+  } catch {
+    // Offline or error — keep current cached value
+    return checkEntitlement();
+  }
 }
 
 /**
- * Restore previously purchased entitlements.
- *
- * Should be wired to RevenueCat's restorePurchases (or equivalent) once IAP is
- * live.
+ * Refresh entitlement from server if the TTL has expired.
+ * Falls back to the cached value if offline.
  */
-export async function restorePurchases(): Promise<boolean> {
-  throw new Error(
-    'In-app purchases are not yet configured. Purchase restoration is unavailable.',
-  );
+export async function ensureFreshEntitlement(): Promise<EntitlementStatus> {
+  if (Date.now() - lastRefreshAt < ENTITLEMENT_TTL_MS) {
+    return checkEntitlement();
+  }
+  return refreshEntitlementFromServer();
+}
+
+// --- Stripe checkout & portal ---
+
+/**
+ * Invoke the create-checkout-session Edge Function.
+ * Returns the Stripe Checkout URL for redirect.
+ */
+export async function startCheckout(): Promise<string> {
+  const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+    body: {},
+  });
+  if (error) throw new Error('Failed to start checkout. Please try again.');
+  return data.url;
+}
+
+/**
+ * Invoke the create-portal-session Edge Function.
+ * Returns the Stripe Billing Portal URL for redirect.
+ */
+export async function openBillingPortal(): Promise<string> {
+  const { data, error } = await supabase.functions.invoke('create-portal-session', {
+    body: {},
+  });
+  if (error) throw new Error('Failed to open billing portal. Please try again.');
+  return data.url;
 }

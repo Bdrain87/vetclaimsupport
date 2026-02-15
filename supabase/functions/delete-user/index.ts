@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import Stripe from "https://esm.sh/stripe@14?target=deno";
 
 // Production-only origins — no localhost allowed
 const ALLOWED_ORIGINS = [
@@ -70,14 +71,36 @@ serve(async (req: Request) => {
     // Use the service role key for privileged operations
     const adminClient = createClient(supabaseUrl, supabaseServiceKey);
 
+    // --- Cancel active Stripe subscription before deletion ---
+    const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
+    if (stripeSecretKey) {
+      try {
+        const { data: profile } = await adminClient
+          .from('profiles')
+          .select('stripe_customer_id')
+          .eq('id', userId)
+          .single();
+
+        if (profile?.stripe_customer_id) {
+          const stripe = new Stripe(stripeSecretKey, { apiVersion: '2023-10-16' });
+          const subscriptions = await stripe.subscriptions.list({
+            customer: profile.stripe_customer_id,
+            status: 'active',
+          });
+          for (const sub of subscriptions.data) {
+            await stripe.subscriptions.cancel(sub.id);
+          }
+        }
+      } catch (err) {
+        console.error(`Failed to cancel Stripe subscriptions for user ${userId}:`, err);
+        // Non-fatal — continue with account deletion
+      }
+    }
+
     // --- Cascade: clean up user-owned rows BEFORE deleting the auth user ---
-    // supabase auth.admin.deleteUser does NOT cascade to app tables unless
-    // you have ON DELETE CASCADE foreign-key constraints pointing at
-    // auth.users.  Explicitly delete known app-level data here so orphan
-    // rows are not left behind.  If your schema already uses CASCADE FKs
-    // for every table that references auth.users(id), you can remove these
-    // calls, but keeping them is a safe belt-and-suspenders approach.
     const tablesToClean = [
+      { table: 'subscriptions', column: 'user_id' },
+      { table: 'user_entitlements', column: 'user_id' },
       { table: 'entitlements', column: 'user_id' },
       { table: 'form_drafts', column: 'user_id' },
       { table: 'documents', column: 'user_id' },

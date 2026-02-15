@@ -23,7 +23,9 @@ import { ShareWithVSO } from '@/components/dashboard/ShareWithVSO';
 import { ExportButton } from '@/components/dashboard/ExportButton';
 import { DataBackup } from '@/components/settings/DataBackup';
 import { VaultPasscode } from '@/components/settings/VaultPasscode';
-import { Link, useNavigate } from 'react-router-dom';
+import { SubscriptionCard } from '@/components/settings/SubscriptionCard';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { refreshEntitlementFromServer } from '@/services/entitlements';
 import { useProfileStore, type Branch, type ServicePeriod } from '@/store/useProfileStore';
 import { PageContainer } from '@/components/PageContainer';
 
@@ -141,6 +143,24 @@ export default function Settings() {
     };
   }, [profileForm.separationDate, profile]);
 
+  // Post-checkout success handling
+  const [searchParams, setSearchParams] = useSearchParams();
+  useEffect(() => {
+    const sessionId = searchParams.get('session_id');
+    if (sessionId) {
+      // Force refresh entitlement from server after successful checkout
+      refreshEntitlementFromServer().then(() => {
+        toast({
+          title: 'Welcome to Premium!',
+          description: 'You now have full access to all features.',
+        });
+      });
+      // Clean URL
+      searchParams.delete('session_id');
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const [reminderSettings, setReminderSettings] = useState<ReminderSettings>(getInitialReminderSettings);
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default');
 
@@ -251,6 +271,9 @@ export default function Settings() {
 
       {/* Vault Passcode */}
       <VaultPasscode />
+
+      {/* Subscription */}
+      <SubscriptionCard />
 
       {/* Profile Section */}
       <Card>
