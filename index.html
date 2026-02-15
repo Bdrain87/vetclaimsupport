@@ -31,6 +31,31 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Cache-bust: nuke old service workers and caches when deploy version changes.
+      // This runs before any bundled JS so stale SW can't serve old code.
+      // Bump this number on breaking deploys that require a clean slate.
+      (function(){
+        var V='vcs_deploy_v',C='2';
+        try{
+          if(localStorage.getItem(V)!==C){
+            localStorage.setItem(V,C);
+            if('serviceWorker'in navigator){
+              navigator.serviceWorker.getRegistrations().then(function(regs){
+                regs.forEach(function(r){r.unregister()});
+              });
+            }
+            if('caches'in window){
+              caches.keys().then(function(names){
+                names.forEach(function(n){caches.delete(n)});
+              });
+            }
+            // Small delay for unregister/cache-clear to take effect, then reload
+            setTimeout(function(){location.reload()},100);
+          }
+        }catch(e){}
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
