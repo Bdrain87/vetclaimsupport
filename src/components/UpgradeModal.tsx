@@ -27,9 +27,8 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
       // Check if user is logged in
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        // Store intended destination so onboarding can redirect back
         sessionStorage.setItem('post_login_redirect', window.location.pathname);
-        navigate('/login');
+        navigate('/auth');
         return;
       }
 

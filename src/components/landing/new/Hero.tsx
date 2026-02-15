@@ -114,7 +114,7 @@ export function Hero() {
         >
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
             <Link
-              to="/login"
+              to="/auth"
               className="inline-block rounded-full px-8 py-3 text-lg font-semibold text-black no-underline"
               style={{
                 background:
