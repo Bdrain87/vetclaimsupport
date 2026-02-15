@@ -10,6 +10,7 @@ const FREE_FEATURES = [
   'Claim Checklist',
   'VA Forms Reference Library',
   'Glossary & FAQ',
+  '800+ Condition Database',
 ];
 
 interface FeatureGroup {
@@ -36,6 +37,7 @@ const PREMIUM_FEATURE_GROUPS: FeatureGroup[] = [
       'Sleep, Migraine & Medication Trackers',
       'Medical Visit Logger with Provider Notes',
       'Symptom Charts & Trend Analysis',
+      'Exposure & Hazard Tracker',
     ],
   },
   {
@@ -43,6 +45,7 @@ const PREMIUM_FEATURE_GROUPS: FeatureGroup[] = [
     features: [
       'Claim Strategy Wizard',
       'Back Pay Estimator',
+      'Bilateral Factor Calculator',
       'Secondary Condition Finder',
       'PACT Act Eligibility Checker',
       'Evidence Gap Analysis',
@@ -56,6 +59,7 @@ const PREMIUM_FEATURE_GROUPS: FeatureGroup[] = [
       'Document Scanner & Upload',
       'PDF Export & Sharing',
       'Encrypted AES-256 Cloud Backup',
+      'Appeals & Decision Review Guide',
     ],
   },
 ];

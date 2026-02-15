@@ -39,8 +39,8 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
 }
 
 const STATS = [
-  { value: 45, suffix: '+', label: 'Tools & Features' },
-  { value: 780, suffix: '+', label: 'VA Conditions' },
+  { value: 50, suffix: '+', label: 'Tools & Features' },
+  { value: 800, suffix: '+', label: 'VA Conditions' },
   { value: 100, suffix: '%', label: 'Encrypted & Secure' },
   { value: 0, suffix: '', label: 'Veteran Founded', isText: true },
 ];
