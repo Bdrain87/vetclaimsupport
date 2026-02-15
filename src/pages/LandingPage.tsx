@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { StickyNav } from '@/components/landing/new/StickyNav';
 import { Hero } from '@/components/landing/new/Hero';
-import { SocialProof } from '@/components/landing/new/SocialProof';
+
 import { ValueProps } from '@/components/landing/new/ValueProps';
 import { FeatureBento } from '@/components/landing/new/FeatureBento';
 import { PrivacySection } from '@/components/landing/new/PrivacySection';
@@ -40,7 +40,6 @@ export default function LandingPage() {
     <div className="min-h-screen" style={{ backgroundColor: '#000000' }}>
       <StickyNav />
       <Hero />
-      <SocialProof />
       <ValueProps />
       <HowItWorks />
       <TrustMarquee />
