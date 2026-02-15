@@ -13,13 +13,12 @@ export function PremiumGuard({ featureName, children }: PremiumGuardProps) {
   useEffect(() => {
     let cancelled = false;
 
-    // Quick local check first
-    if (hasPremiumAccess()) {
-      setState('granted');
-      return;
-    }
+// Show content immediately for known premium users (avoids flash)
+        if (hasPremiumAccess()) {
+                setState('granted');
+        }
 
-    // Not premium locally — verify with server
+        // ALWAYS verify with server — never trust local cache alone
     ensureFreshEntitlement().then((status) => {
       if (cancelled) return;
       const isPremium = status === 'premium' || status === 'lifetime';
