@@ -21,6 +21,15 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
     const timeoutId = setTimeout(() => controller.abort(), 30_000);
 
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        const { error: anonError } = await supabase.auth.signInAnonymously();
+        if (anonError) {
+          setError('Please sign in to use AI features.');
+          return null;
+        }
+      }
+
       const sanitizedInput = sanitizePHI(input);
       const { data, error: invokeError } = await supabase.functions.invoke('analyze-disabilities', {
         body: {
