@@ -3,6 +3,18 @@ import { AI_CONFIG } from '@/lib/ai-prompts';
 import { supabase } from '@/lib/supabase';
 import { sanitizePHI } from '@/utils/phiSanitizer';
 
+async function ensureSession() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) return true;
+
+  const { data, error } = await supabase.auth.signInAnonymously();
+  if (error || !data.session) return false;
+
+  // Wait briefly for the client to store the new session
+  await new Promise((r) => setTimeout(r, 100));
+  return true;
+}
+
 export const useGemini = (persona: keyof typeof AI_CONFIG) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -22,13 +34,10 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
 
     try {
       // Ensure we have a valid session (anonymous sign-in if needed)
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        const { error: anonError } = await supabase.auth.signInAnonymously();
-        if (anonError) {
-          setError('Unable to authenticate. Please try again.');
-          return null;
-        }
+      const hasSession = await ensureSession();
+      if (!hasSession) {
+        setError('Unable to authenticate. Please try again.');
+        return null;
       }
 
       const sanitizedInput = sanitizePHI(input);
@@ -41,16 +50,36 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
       if (controller.signal.aborted) return null;
 
       if (invokeError) {
-        let msg = invokeError.message || 'AI service request failed';
+        // In supabase-js v2, the actual error body may be in data or invokeError.context
+        let msg = 'AI service request failed';
+
+        // Try reading the error from the response context
         try {
-          const body = await invokeError.context?.json();
-          if (body?.error) {
-            msg = body.error;
+          if (invokeError.context instanceof Response) {
+            const body = await invokeError.context.json();
+            if (body?.error) msg = body.error;
           }
         } catch {
-          // context may not be readable
+          // context may already be consumed
         }
+
+        // Fallback: check if data has the error (some versions put parsed body in data)
+        if (msg === 'AI service request failed' && data?.error) {
+          msg = data.error;
+        }
+
+        // Last resort: use the invokeError message if it's not the generic one
+        if (msg === 'AI service request failed' && invokeError.message && !invokeError.message.includes('non-2xx')) {
+          msg = invokeError.message;
+        }
+
         setError(msg);
+        return null;
+      }
+
+      // Check if the response is actually an error (non-2xx returns can still populate data)
+      if (data?.error) {
+        setError(data.error);
         return null;
       }
 
