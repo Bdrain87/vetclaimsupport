@@ -307,6 +307,12 @@ Consider:
 - PACT Act benefits if applicable`;
 
     try {
+      // Ensure we have a valid session (anonymous sign-in if needed)
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        await supabase.auth.signInAnonymously();
+      }
+
       const sanitizedPrompt = sanitizePHI(prompt);
       const { data: result, error: apiError } = await supabase.functions.invoke('analyze-disabilities', {
         body: { prompt: sanitizedPrompt },
