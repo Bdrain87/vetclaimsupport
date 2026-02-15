@@ -200,6 +200,7 @@ function AnimatedRoutes() {
           <Route path="/claims/strategy" element={<PremiumGuard featureName="Claim Strategy Wizard"><ClaimStrategyWizard /></PremiumGuard>} />
           <Route path="/claims/body-map" element={<PremiumGuard featureName="Body Map"><BodyMap /></PremiumGuard>} />
           <Route path="/claims/calculator" element={<Combination />} />
+                        <Route path="/auth" element={<Navigate to="/login" replace />} />
           <Route path="/claims/bilateral" element={<PremiumGuard featureName="Bilateral Calculator"><BilateralCalculator /></PremiumGuard>} />
           <Route path="/claims/secondary-finder" element={<PremiumGuard featureName="Secondary Condition Finder"><SecondaryFinder /></PremiumGuard>} />
           <Route path="/claims/checklist" element={<ClaimChecklist />} />
