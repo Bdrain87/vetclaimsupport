@@ -368,16 +368,27 @@ export default function Onboarding() {
 
       const matchingConditions = searchConditions(rated.conditionName);
       const matchedCondition = matchingConditions.length > 0 ? matchingConditions[0] : null;
+      const resolvedId = matchedCondition ? matchedCondition.id : rated.conditionName.toLowerCase().replace(/\s+/g, '-');
 
-      appStore.addUserCondition({
-        id: crypto.randomUUID(),
-        conditionId: matchedCondition ? matchedCondition.id : rated.conditionName.toLowerCase().replace(/\s+/g, '-'),
-        rating: rated.rating,
-        serviceConnected: true,
-        claimStatus: 'approved',
-        isPrimary: rated.type === 'primary',
-        dateAdded: new Date().toISOString(),
-      });
+      const existing = appStore.userConditions.find((c) => c.conditionId === resolvedId);
+      if (existing) {
+        appStore.updateUserCondition(existing.id, {
+          rating: rated.rating,
+          serviceConnected: true,
+          claimStatus: 'approved',
+          isPrimary: rated.type === 'primary',
+        });
+      } else {
+        appStore.addUserCondition({
+          id: crypto.randomUUID(),
+          conditionId: resolvedId,
+          rating: rated.rating,
+          serviceConnected: true,
+          claimStatus: 'approved',
+          isPrimary: rated.type === 'primary',
+          dateAdded: new Date().toISOString(),
+        });
+      }
     }
 
     profileStore.completeOnboarding();
