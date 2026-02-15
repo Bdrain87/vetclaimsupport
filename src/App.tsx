@@ -335,11 +335,20 @@ function AnimatedRoutes() {
 function AppContent() {
   const location = useLocation();
   const isLandingRoute = isWeb && location.pathname === '/';
+  const isLoginRoute = location.pathname === '/login';
   // Web root — show landing page (users click through to /app)
   if (isLandingRoute) {
     return (
       <Suspense fallback={<LoadingFallback />}>
         <LandingPage />
+      </Suspense>
+    );
+  }
+
+  if (isLoginRoute) {
+    return (
+      <Suspense fallback={<LoadingFallback />}>
+        <Login />
       </Suspense>
     );
   }
