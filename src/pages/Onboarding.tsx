@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft, X, Search, Shield, User, Briefcase, Stethoscope, Check, MapPin, Plane, ClipboardList, Activity, FileText, Users, Calculator } from 'lucide-react';
 import { useProfileStore, BRANCH_LABELS, BRANCH_COLORS, type Branch, type ClaimGoal } from '@/store/useProfileStore';
@@ -500,6 +500,12 @@ export default function Onboarding() {
                   <Shield className="h-4 w-4 text-emerald-400" />
                   <span className="text-xs text-emerald-400 font-medium">Your data is encrypted in transit and at rest. You control your data, including export and deletion.</span>
                 </div>
+                <p className="text-white/40 text-sm">
+                  Already have an account?{' '}
+                  <Link to="/login" className="text-[var(--gold-md)] hover:underline font-medium">
+                    Sign In
+                  </Link>
+                </p>
               </div>
             )}
 

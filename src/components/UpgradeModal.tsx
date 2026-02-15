@@ -29,7 +29,7 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
       if (!session) {
         // Store intended destination so onboarding can redirect back
         sessionStorage.setItem('post_login_redirect', window.location.pathname);
-        navigate('/onboarding');
+        navigate('/login');
         return;
       }
 

@@ -7,7 +7,7 @@ type FooterLink =
 const PRODUCT_LINKS: FooterLink[] = [
   { label: 'Features', href: '#features' },
   { label: 'Pricing', href: '#pricing' },
-  { label: 'Launch App', to: '/app' },
+  { label: 'Launch App', to: '/login' },
 ];
 
 const RESOURCE_LINKS: FooterLink[] = [

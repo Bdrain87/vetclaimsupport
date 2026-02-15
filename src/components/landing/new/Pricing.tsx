@@ -326,7 +326,7 @@ export function Pricing() {
                   </div>
                 </div>
                 <Link
-                  to="/app"
+                  to="/login"
                   className="block text-center rounded-full px-6 py-2.5 text-sm font-semibold no-underline whitespace-nowrap md:ml-6"
                   style={{
                     background: 'linear-gradient(135deg, #4ade80 0%, #22C55E 50%, #16a34a 100%)',
@@ -386,7 +386,7 @@ export function Pricing() {
                   </div>
                 </div>
                 <Link
-                  to="/app"
+                  to="/login"
                   className="block text-center rounded-full px-6 py-2.5 text-sm font-semibold text-black no-underline whitespace-nowrap md:ml-6"
                   style={{
                     background: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',

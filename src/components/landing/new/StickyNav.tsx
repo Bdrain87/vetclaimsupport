@@ -7,6 +7,7 @@ const NAV_LINKS = [
   { label: 'Features', href: '#features' },
   { label: 'How It Works', href: '#how-it-works' },
   { label: 'Pricing', href: '#pricing' },
+  { label: 'Sign In', href: '/login', isRoute: true },
 ];
 
 export function StickyNav() {
@@ -52,16 +53,26 @@ export function StickyNav() {
           {/* Desktop links */}
           <div className="hidden md:flex items-center gap-8">
             {NAV_LINKS.map((link) => (
-              <button
-                key={link.href}
-                onClick={() => scrollTo(link.href)}
-                className="bg-transparent border-none text-white/80 hover:text-[#BF953F] transition-colors text-sm font-medium cursor-pointer"
-              >
-                {link.label}
-              </button>
+              'isRoute' in link && link.isRoute ? (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className="text-white/80 hover:text-[#BF953F] transition-colors text-sm font-medium no-underline"
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <button
+                  key={link.href}
+                  onClick={() => scrollTo(link.href)}
+                  className="bg-transparent border-none text-white/80 hover:text-[#BF953F] transition-colors text-sm font-medium cursor-pointer"
+                >
+                  {link.label}
+                </button>
+              )
             ))}
             <Link
-              to="/app"
+              to="/login"
               className="rounded-full px-6 py-2 text-sm font-semibold text-black no-underline"
               style={{
                 background:
@@ -94,16 +105,27 @@ export function StickyNav() {
             transition={{ duration: 0.2 }}
           >
             {NAV_LINKS.map((link) => (
-              <button
-                key={link.href}
-                onClick={() => scrollTo(link.href)}
-                className="bg-transparent border-none text-white text-2xl font-medium cursor-pointer hover:text-[#BF953F] transition-colors"
-              >
-                {link.label}
-              </button>
+              'isRoute' in link && link.isRoute ? (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="text-white text-2xl font-medium hover:text-[#BF953F] transition-colors no-underline"
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <button
+                  key={link.href}
+                  onClick={() => scrollTo(link.href)}
+                  className="bg-transparent border-none text-white text-2xl font-medium cursor-pointer hover:text-[#BF953F] transition-colors"
+                >
+                  {link.label}
+                </button>
+              )
             ))}
             <Link
-              to="/app"
+              to="/login"
               onClick={() => setMobileOpen(false)}
               className="rounded-full px-8 py-3 text-lg font-semibold text-black no-underline mt-4"
               style={{
