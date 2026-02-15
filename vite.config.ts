@@ -50,10 +50,11 @@ export default defineConfig({
             },
           },
           {
-            // Hashed JS/CSS bundles — serve cached version immediately,
-            // fetch updated version in background for next load.
+            // Hashed JS/CSS bundles — always fetch from network first
+            // so deployments (e.g. paywall) take effect immediately.
+            // Falls back to cache only when offline.
             urlPattern: /\/assets\/.*\.(?:js|css)$/,
-            handler: 'StaleWhileRevalidate',
+            handler: 'NetworkFirst',
             options: {
               cacheName: 'app-assets',
               cacheableResponse: { statuses: [0, 200] },
