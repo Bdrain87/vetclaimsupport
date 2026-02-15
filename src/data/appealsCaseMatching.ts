@@ -198,7 +198,7 @@ function scoreCaseForContext(c: VerifiedCase, context: AppealContext): { score: 
   if (context.conditionName) {
     const nameTerms = context.conditionName
       .toLowerCase()
-      .replace(/[()\[\]{}]/g, '')
+      .replace(/[()[\]{}]/g, '')
       .split(/\s+/)
       .filter((t) => t.length >= 3);
     const caseText = [...c.keywords, c.holding, ...c.relevantConditions, ...c.relevantTopics]

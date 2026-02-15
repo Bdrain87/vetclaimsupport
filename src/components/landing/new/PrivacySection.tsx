@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { fadeInUp, staggerContainer, HEADING_H2_STYLE } from '@/lib/landing-animations';
+import { fadeInUp, staggerContainer } from '@/lib/landing-animations';
 
 const POINTS = [
   {

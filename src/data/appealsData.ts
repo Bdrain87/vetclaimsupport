@@ -1028,7 +1028,7 @@ export function searchCaseLaw(
   const normalizedQuery = query
     .toLowerCase()
     .trim()
-    .replace(/[()\[\]{}]/g, '');
+    .replace(/[()[\]{}]/g, '');
 
   const queryTerms = normalizedQuery
     .split(/\s+/)
