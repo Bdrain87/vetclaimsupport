@@ -40,7 +40,6 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
 
 const STATS = [
   { value: 780, suffix: '+', label: 'VA Conditions Covered' },
-  { value: 0, suffix: '', label: 'Works Offline — No Connection Needed', isText: true },
   { value: 0, suffix: '', label: 'Your Data Never Sold. Ever.', isText: true },
   { value: 0, suffix: '', label: 'Free Tier — No Account Required', isText: true },
 ];
@@ -49,7 +48,7 @@ export function SocialProof() {
   return (
     <section className="py-6" style={{ backgroundColor: '#111111' }}>
       <motion.div
-        className="mx-auto max-w-5xl px-4 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0"
+        className="mx-auto max-w-5xl px-4 grid grid-cols-3 gap-6 md:gap-0"
         variants={staggerContainer}
         initial="hidden"
         whileInView="visible"
