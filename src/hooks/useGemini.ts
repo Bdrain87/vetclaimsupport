@@ -31,7 +31,15 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
       if (controller.signal.aborted) return null;
 
       if (invokeError) {
-        const msg = data?.error || invokeError.message || 'AI service request failed';
+        let msg = invokeError.message || 'AI service request failed';
+        try {
+          const body = await invokeError.context?.json();
+          if (body?.error) {
+            msg = body.error;
+          }
+        } catch {
+          // context may not be readable
+        }
         setError(msg);
         return null;
       }
