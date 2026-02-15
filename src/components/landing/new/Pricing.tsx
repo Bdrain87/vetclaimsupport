@@ -370,7 +370,7 @@ export function Pricing() {
                       className="text-base line-through mr-2"
                       style={{ color: '#6B7280' }}
                     >
-                      $19.99
+                      $19.99/mo
                     </span>
                     <span
                       className="text-3xl font-bold"
@@ -381,7 +381,7 @@ export function Pricing() {
                         backgroundClip: 'text',
                       }}
                     >
-                      $9.99
+                      $9.99<span className="text-base font-normal" style={{ WebkitTextFillColor: '#9CA3AF' }}>/mo</span>
                     </span>
                   </div>
                 </div>

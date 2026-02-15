@@ -162,7 +162,7 @@ export function Hero() {
               </span>
               <div className="flex items-baseline gap-2">
                 <span className="text-base font-medium line-through" style={{ color: '#6B7280', textDecorationColor: '#EF4444' }}>
-                  $19.99
+                  $19.99/mo
                 </span>
                 <span className="text-lg" style={{ color: '#BF953F' }}>→</span>
                 <span
@@ -174,7 +174,7 @@ export function Hero() {
                     backgroundClip: 'text',
                   }}
                 >
-                  $9.99
+                  $9.99/mo
                 </span>
               </div>
             </div>
