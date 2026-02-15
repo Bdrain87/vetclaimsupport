@@ -146,7 +146,7 @@ export default function PrivacyPolicyPage() {
           </ul>
           <p className="text-muted-foreground">
             To exercise these rights, use the Settings page or contact{' '}
-            <a href="mailto:blakedrain@gmail.com" className="text-[#D4AF37] hover:underline">blakedrain@gmail.com</a>.
+            <a href="mailto:Admin@vetclaimsupport.com" className="text-[#D4AF37] hover:underline">Admin@vetclaimsupport.com</a>.
           </p>
         </section>
 
@@ -155,7 +155,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-lg font-semibold text-foreground">8. Privacy Rights</h2>
           <p className="text-muted-foreground">
             We strive to honor privacy rights under applicable laws. If you are a California resident, you have the right under the California Consumer Privacy Act (CCPA) to request disclosure of the categories and specific pieces of personal information we collect, to request deletion of your personal information, and to opt out of any sale of personal information. We do not sell your personal information. You may exercise your privacy rights (access, deletion, portability) by using the Settings page or contacting{' '}
-            <a href="mailto:blakedrain@gmail.com" className="text-[#D4AF37] hover:underline">blakedrain@gmail.com</a>.
+            <a href="mailto:Admin@vetclaimsupport.com" className="text-[#D4AF37] hover:underline">Admin@vetclaimsupport.com</a>.
           </p>
         </section>
 
@@ -215,8 +215,8 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-lg font-semibold text-foreground">14. Contact</h2>
           <p className="text-muted-foreground">
             Privacy questions:{' '}
-            <a href="mailto:blakedrain@gmail.com" className="text-[#D4AF37] hover:underline">
-              blakedrain@gmail.com
+            <a href="mailto:Admin@vetclaimsupport.com" className="text-[#D4AF37] hover:underline">
+              Admin@vetclaimsupport.com
             </a>
           </p>
         </section>
