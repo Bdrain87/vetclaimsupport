@@ -50,7 +50,8 @@ export default function Dashboard() {
   );
 
   const evidenceCompleteness = useMemo(() => {
-    const total = userConditions.length;
+    const claimableConditions = userConditions.filter((uc) => uc.claimStatus !== 'approved');
+    const total = claimableConditions.length;
     if (total === 0) return null;
     const claimConditions = data.claimConditions || [];
     const incomplete = claimConditions.filter((c) => {
@@ -63,7 +64,7 @@ export default function Dashboard() {
     }).length;
     const complete = total - incomplete;
     return { total, complete, incomplete };
-  }, [userConditions.length, data.claimConditions]);
+  }, [userConditions, data.claimConditions]);
 
   const nextSteps = useMemo(
     () => ClaimIntelligence.getNextSteps(profile, userConditions, data),
@@ -314,8 +315,8 @@ export default function Dashboard() {
         </motion.div>
       )}
 
-      {/* Claim Readiness Score */}
-      {userConditions.length > 0 && (
+      {/* Claim Readiness Score — only show if there are non-approved conditions */}
+      {userConditions.some((uc) => uc.claimStatus !== 'approved') && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

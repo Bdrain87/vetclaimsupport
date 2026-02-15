@@ -335,7 +335,8 @@ export const ClaimIntelligence = {
       });
     }
 
-    // --- No symptoms logged in last 30 days ---
+    // --- No symptoms logged in last 30 days (only prompt if there are non-approved conditions) ---
+    const pendingConditions = userConditions.filter((uc) => uc.claimStatus !== 'approved');
     const recentSymptoms = claimsData.symptoms.filter((s) => isWithinDays(s.date, 30));
     const recentQuickLogs = claimsData.quickLogs.filter((q) => isWithinDays(q.date, 30));
     const recentMigraines = claimsData.migraines.filter((m) => isWithinDays(m.date, 30));
@@ -349,7 +350,7 @@ export const ClaimIntelligence = {
       recentSleep.length > 0 ||
       recentPtsd.length > 0;
 
-    if (!hasRecentLogs && userConditions.length > 0) {
+    if (!hasRecentLogs && pendingConditions.length > 0) {
       steps.push({
         id: nextId(),
         title: 'Log your symptoms',
@@ -361,8 +362,10 @@ export const ClaimIntelligence = {
       });
     }
 
-    // --- Conditions with low evidence ---
+    // --- Conditions with low evidence (skip already-approved conditions) ---
     for (const uc of userConditions) {
+      if (uc.claimStatus === 'approved') continue;
+
       const vaCondition = resolveVACondition(uc);
       const condName = vaCondition?.abbreviation ?? uc.conditionId;
 
@@ -406,8 +409,8 @@ export const ClaimIntelligence = {
       }
     }
 
-    // --- No buddy contacts ---
-    if (claimsData.buddyContacts.length === 0 && userConditions.length > 0) {
+    // --- No buddy contacts (only prompt if there are non-approved conditions) ---
+    if (claimsData.buddyContacts.length === 0 && pendingConditions.length > 0) {
       steps.push({
         id: nextId(),
         title: 'Add buddy / witness contacts',
@@ -460,13 +463,19 @@ export const ClaimIntelligence = {
     claimsData: ClaimsData,
     profile?: UserProfile,
   ): number {
+    // Only score readiness for non-approved conditions
+    const claimableConditions = userConditions.filter((uc) => uc.claimStatus !== 'approved');
+
+    // If user only has approved conditions, readiness is not applicable — return 100
+    if (claimableConditions.length === 0 && userConditions.length > 0) return 100;
+
     // Weights: hasConditions(15), hasEvidence(25), hasLogs(20),
     //          hasStatements(15), profileComplete(10), formsIdentified(15)
     let score = 0;
 
     // --- hasConditions (15) ---
-    if (userConditions.length > 0) {
-      score += Math.min(15, userConditions.length * 5);
+    if (claimableConditions.length > 0) {
+      score += Math.min(15, claimableConditions.length * 5);
     }
 
     // --- hasEvidence (25) ---
@@ -483,7 +492,7 @@ export const ClaimIntelligence = {
 
     if (totalEvidenceLinks > 0) {
       // Scale: 1-4 links = partial, 5+ = good, 10+ per condition = excellent
-      const target = Math.max(userConditions.length * 3, 1);
+      const target = Math.max(claimableConditions.length * 3, 1);
       score += Math.min(25, Math.round((totalEvidenceLinks / target) * 25));
     }
 
@@ -524,10 +533,10 @@ export const ClaimIntelligence = {
     }
 
     // --- formsIdentified (15) ---
-    // Check if each user condition has at least one matching DBQ form key
-    if (userConditions.length > 0) {
+    // Check if each non-approved user condition has at least one matching DBQ form key
+    if (claimableConditions.length > 0) {
       let conditionsWithForms = 0;
-      for (const uc of userConditions) {
+      for (const uc of claimableConditions) {
         const vaCondition = resolveVACondition(uc);
         if (vaCondition) {
           const condId = vaCondition.id.toLowerCase().replace(/-/g, '_');
@@ -537,7 +546,7 @@ export const ClaimIntelligence = {
           }
         }
       }
-      const formRatio = conditionsWithForms / userConditions.length;
+      const formRatio = conditionsWithForms / claimableConditions.length;
       score += Math.round(formRatio * 15);
     }
 
