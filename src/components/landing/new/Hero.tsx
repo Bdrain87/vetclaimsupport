@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE } from '@/lib/landing-animations';
-import { SocialProof } from './SocialProof';
 
 const ROTATING_WORDS = ['Confidence', 'Clarity', 'Precision', 'Evidence'];
 const CYCLE_MS = 3000;
@@ -189,11 +188,6 @@ export function Hero() {
             </span>
           </motion.div>
         </motion.div>
-
-        {/* Ticker / Social Proof — directly under pricing */}
-        <div className="mt-10 w-full">
-          <SocialProof />
-        </div>
 
       </div>
     </section>
