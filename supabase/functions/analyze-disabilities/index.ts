@@ -236,7 +236,6 @@ serve(async (req) => {
             generationConfig: {
               temperature: 0.7,
               maxOutputTokens: 2048,
-              thinkingConfig: { thinkingBudget: 0 },
             }
           }),
           signal: controller.signal,
@@ -246,8 +245,8 @@ serve(async (req) => {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        await response.text();
-        console.error(`[${requestId}] Gemini API error: ${response.status}`);
+        const errorBody = await response.text();
+        console.error(`[${requestId}] Gemini API error: ${response.status} - ${errorBody}`);
 
         // Parse specific error codes
         let userMessage = 'AI analysis could not be completed. Please try again.';
