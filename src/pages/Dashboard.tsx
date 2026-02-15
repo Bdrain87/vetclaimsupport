@@ -54,16 +54,23 @@ export default function Dashboard() {
     const total = claimableConditions.length;
     if (total === 0) return null;
     const claimConditions = data.claimConditions || [];
-    const incomplete = claimConditions.filter((c) => {
-      let score = 0;
-      if (c.linkedMedicalVisits.length > 0) score += 25;
-      if (c.linkedExposures.length > 0) score += 25;
-      if (c.linkedSymptoms.length > 0) score += 25;
-      if (c.linkedBuddyContacts.length > 0) score += 25;
-      return score < 75;
-    }).length;
-    const complete = total - incomplete;
-    return { total, complete, incomplete };
+    let complete = 0;
+    for (const uc of claimableConditions) {
+      const details = getConditionById(uc.conditionId);
+      const name = details?.name?.toLowerCase();
+      const match = name
+        ? claimConditions.find((c) => c.name.toLowerCase() === name)
+        : undefined;
+      if (match) {
+        let score = 0;
+        if (match.linkedMedicalVisits.length > 0) score += 25;
+        if (match.linkedExposures.length > 0) score += 25;
+        if (match.linkedSymptoms.length > 0) score += 25;
+        if (match.linkedBuddyContacts.length > 0) score += 25;
+        if (score >= 75) complete++;
+      }
+    }
+    return { total, complete, incomplete: total - complete };
   }, [userConditions, data.claimConditions]);
 
   const nextSteps = useMemo(
