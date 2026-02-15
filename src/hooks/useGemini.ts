@@ -58,6 +58,7 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
           if (invokeError.context instanceof Response) {
             const body = await invokeError.context.json();
             if (body?.error) msg = body.error;
+            else if (body?.message) msg = body.message;
           }
         } catch {
           // context may already be consumed
