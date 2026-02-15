@@ -18,7 +18,7 @@ export function SubscriptionCard() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         sessionStorage.setItem('post_login_redirect', '/settings');
-        navigate('/onboarding');
+        navigate('/login');
         return;
       }
       const url = await startCheckout();

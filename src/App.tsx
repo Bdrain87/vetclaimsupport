@@ -95,6 +95,7 @@ const DisclaimerPage = lazy(() => import('./pages/legal/DisclaimerPage'));
 
 // Landing page (web only)
 const LandingPage = lazy(() => import('./pages/LandingPage'));
+const Login = lazy(() => import('./pages/Login'));
 
 function LoadingFallback() {
   return (
@@ -165,8 +166,9 @@ function useFirstTimeRedirect() {
   useEffect(() => {
     const isOnboardingPage = location.pathname === '/onboarding';
     const isLegalPage = ['/terms', '/privacy', '/disclaimer', '/settings/privacy', '/settings/terms', '/settings/disclaimer', '/profile/privacy', '/profile/terms', '/profile/disclaimer'].includes(location.pathname);
+    const isLoginPage = location.pathname === '/login';
 
-    if (!hasOnboarded && !isOnboardingPage && !isLegalPage) {
+    if (!hasOnboarded && !isOnboardingPage && !isLegalPage && !isLoginPage) {
       navigate('/onboarding', { replace: true });
     }
   }, [location.pathname, navigate, hasOnboarded]);
@@ -191,6 +193,7 @@ function AnimatedRoutes() {
           )}
           <Route path="/app" element={<Dashboard />} />
           <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/login" element={<Login />} />
 
           {/* === CLAIMS === */}
           <Route path="/claims" element={<Conditions />} />

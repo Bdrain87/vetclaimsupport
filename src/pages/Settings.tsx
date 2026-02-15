@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Scale, Shield, FileText, AlertTriangle, ChevronRight, User, Plus, Trash2, Briefcase, Info, HelpCircle, BookOpen } from 'lucide-react';
+import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Scale, Shield, FileText, AlertTriangle, ChevronRight, User, Plus, Trash2, Briefcase, Info, HelpCircle, BookOpen, LogIn, LogOut } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -28,6 +28,9 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { refreshEntitlementFromServer } from '@/services/entitlements';
 import { useProfileStore, type Branch, type ServicePeriod } from '@/store/useProfileStore';
 import { PageContainer } from '@/components/PageContainer';
+import { supabase } from '@/lib/supabase';
+import { signOut } from '@/services/auth';
+import type { Session } from '@supabase/supabase-js';
 
 const REMINDER_SETTINGS_KEY = 'va-claims-reminder-settings';
 
@@ -57,6 +60,19 @@ export default function Settings() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const profile = useProfileStore();
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session: s } }) => setSession(s));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => setSession(s));
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    await signOut();
+    setSession(null);
+    toast({ title: 'Signed Out', description: 'You have been signed out.' });
+  };
   const [profileForm, setProfileForm] = useState({
     firstName: profile.firstName || '',
     lastName: profile.lastName || '',
@@ -268,6 +284,32 @@ export default function Settings() {
           <p className="text-muted-foreground">Customize your app experience</p>
         </div>
       </div>
+
+      {/* Account */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <User className="h-5 w-5" />
+            Account
+          </CardTitle>
+          <CardDescription>
+            {session ? session.user.email : 'Sign in to access premium features and sync your data'}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {session ? (
+            <Button onClick={handleSignOut} variant="outline" className="w-full">
+              <LogOut className="h-4 w-4 mr-2" />
+              Sign Out
+            </Button>
+          ) : (
+            <Button onClick={() => navigate('/login')} className="w-full">
+              <LogIn className="h-4 w-4 mr-2" />
+              Sign In
+            </Button>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Vault Passcode */}
       <VaultPasscode />
