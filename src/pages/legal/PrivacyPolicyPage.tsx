@@ -107,9 +107,23 @@ export default function PrivacyPolicyPage() {
           </p>
         </section>
 
-        {/* Section 5: What We Do NOT Do */}
+        {/* Section 5: Payment Processing */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-foreground">5. What We Do NOT Do</h2>
+          <h2 className="text-lg font-semibold text-foreground">5. Payment Processing</h2>
+          <p className="text-muted-foreground">
+            Premium subscriptions ($9.99/month) are processed by <strong className="text-foreground">Stripe, Inc.</strong> When you subscribe, Stripe collects and processes your payment information directly. VCS does <strong className="text-foreground">not</strong> collect, store, or have access to your full credit card number, debit card number, or bank account details.
+          </p>
+          <p className="text-muted-foreground">
+            The data shared with Stripe includes your email address and a VCS user identifier to link your subscription to your account. Stripe may collect additional information as described in their <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-[#D4AF37] hover:underline">Privacy Policy</a>.
+          </p>
+          <p className="text-muted-foreground">
+            We store the following subscription-related data in our database: your Stripe customer ID, subscription ID, subscription status, and billing period dates. This data is used solely to determine your access level and is deleted when you delete your account.
+          </p>
+        </section>
+
+        {/* Section 6: What We Do NOT Do */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-foreground">6. What We Do NOT Do</h2>
           <ul className="space-y-1.5 text-muted-foreground">
             <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do NOT sell your data to anyone</li>
             <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do NOT share your data with third parties for marketing</li>
@@ -120,9 +134,9 @@ export default function PrivacyPolicyPage() {
           </ul>
         </section>
 
-        {/* Section 6: Your Rights */}
+        {/* Section 7: Your Rights */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-foreground">6. Your Rights</h2>
+          <h2 className="text-lg font-semibold text-foreground">7. Your Rights</h2>
           <p className="text-muted-foreground">You have the right to:</p>
           <ul className="space-y-1.5 text-muted-foreground">
             <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span><strong className="text-foreground">ACCESS</strong> all your data via the Export feature in Settings</li>
@@ -136,40 +150,41 @@ export default function PrivacyPolicyPage() {
           </p>
         </section>
 
-        {/* Section 7: Privacy Rights */}
+        {/* Section 8: Privacy Rights */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-foreground">7. Privacy Rights</h2>
+          <h2 className="text-lg font-semibold text-foreground">8. Privacy Rights</h2>
           <p className="text-muted-foreground">
             We strive to honor privacy rights under applicable laws. If you are a California resident, you have the right under the California Consumer Privacy Act (CCPA) to request disclosure of the categories and specific pieces of personal information we collect, to request deletion of your personal information, and to opt out of any sale of personal information. We do not sell your personal information. You may exercise your privacy rights (access, deletion, portability) by using the Settings page or contacting{' '}
             <a href="mailto:blakedrain@gmail.com" className="text-[#D4AF37] hover:underline">blakedrain@gmail.com</a>.
           </p>
         </section>
 
-        {/* Section 8: Children's Privacy */}
+        {/* Section 9: Children's Privacy */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-foreground">8. Children&apos;s Privacy</h2>
+          <h2 className="text-lg font-semibold text-foreground">9. Children&apos;s Privacy</h2>
           <p className="text-muted-foreground">
             The Service is not intended for use by anyone under the age of 18. We do not knowingly collect data from children under 18.
           </p>
         </section>
 
-        {/* Section 9: Data Retention */}
+        {/* Section 10: Data Retention */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-foreground">9. Data Retention</h2>
+          <h2 className="text-lg font-semibold text-foreground">10. Data Retention</h2>
           <p className="text-muted-foreground">
             Local data persists on your device until you delete it. Cloud data persists until you delete your account. Upon account deletion, data is removed from active systems immediately. Encrypted backup remnants may persist for up to 30 days in provider backup systems before automatic purge.
           </p>
         </section>
 
-        {/* Section 10: Third-Party Services */}
+        {/* Section 11: Third-Party Services */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-foreground">10. Third-Party Services</h2>
+          <h2 className="text-lg font-semibold text-foreground">11. Third-Party Services</h2>
           <p className="text-muted-foreground">
             The Service uses:
           </p>
           <ul className="space-y-1.5 text-muted-foreground">
             <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Supabase</strong> (cloud database, optional)</li>
             <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Google Gemini</strong> (AI features, optional)</li>
+            <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Stripe</strong> (payment processing for Premium subscriptions)</li>
             <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Vercel</strong> (web hosting and deployment)</li>
           </ul>
           <p className="text-muted-foreground">
@@ -177,25 +192,25 @@ export default function PrivacyPolicyPage() {
           </p>
         </section>
 
-        {/* Section 11: Data Breach Notification */}
+        {/* Section 12: Data Breach Notification */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-foreground">11. Data Breach Notification</h2>
+          <h2 className="text-lg font-semibold text-foreground">12. Data Breach Notification</h2>
           <p className="text-muted-foreground">
             In the event of a data breach affecting your personal information, we will notify affected users as soon as reasonably practicable, in accordance with applicable state laws.
           </p>
         </section>
 
-        {/* Section 12: Changes to This Policy */}
+        {/* Section 13: Changes to This Policy */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-foreground">12. Changes to This Policy</h2>
+          <h2 className="text-lg font-semibold text-foreground">13. Changes to This Policy</h2>
           <p className="text-muted-foreground">
             We may update this Privacy Policy. Material changes will be communicated through the app. Continued use constitutes acceptance.
           </p>
         </section>
 
-        {/* Section 13: Contact */}
+        {/* Section 14: Contact */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-foreground">13. Contact</h2>
+          <h2 className="text-lg font-semibold text-foreground">14. Contact</h2>
           <p className="text-muted-foreground">
             Privacy questions:{' '}
             <a href="mailto:blakedrain@gmail.com" className="text-[#D4AF37] hover:underline">
