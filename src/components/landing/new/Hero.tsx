@@ -190,11 +190,11 @@ export function Hero() {
           </motion.div>
         </motion.div>
 
-      </div>
+        {/* Ticker / Social Proof — directly under pricing */}
+        <div className="mt-10 w-full">
+          <SocialProof />
+        </div>
 
-      {/* Ticker / Social Proof — directly below Hero */}
-      <div className="w-full">
-        <SocialProof />
       </div>
     </section>
   );
