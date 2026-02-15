@@ -186,6 +186,8 @@ export default function PrivacyPolicyPage() {
             <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Google Gemini</strong> (AI features, optional)</li>
             <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Stripe</strong> (payment processing for Premium subscriptions)</li>
             <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Vercel</strong> (web hosting and deployment)</li>
+                            <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Apple Sign-In</strong> (authentication, optional)</li>
+                          <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Google Sign-In</strong> (authentication, optional)</li>
           </ul>
           <p className="text-muted-foreground">
             Each third-party service has its own privacy policy.
