@@ -248,8 +248,8 @@ export default function TermsOfServicePage() {
           <h2 className="text-lg font-semibold text-foreground">18. Contact</h2>
           <p className="text-muted-foreground">
             Questions about these Terms:{' '}
-            <a href="mailto:blakedrain@gmail.com" className="text-[#D4AF37] hover:underline">
-              blakedrain@gmail.com
+            <a href="mailto:Admin@vetclaimsupport.com" className="text-[#D4AF37] hover:underline">
+              Admin@vetclaimsupport.com
             </a>
           </p>
         </section>
