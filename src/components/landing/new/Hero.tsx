@@ -162,7 +162,7 @@ export function Hero() {
               </span>
               <div className="flex items-baseline gap-2">
                 <span className="text-base font-medium line-through" style={{ color: '#6B7280', textDecorationColor: '#EF4444' }}>
-                  $19.99/mo
+                  $19.99
                 </span>
                 <span className="text-lg" style={{ color: '#BF953F' }}>→</span>
                 <span
@@ -174,14 +174,14 @@ export function Hero() {
                     backgroundClip: 'text',
                   }}
                 >
-                  $9.99/mo
+                  $9.99 one-time
                 </span>
               </div>
             </div>
             <span className="relative z-10 text-xs px-3 py-1 rounded-full" style={{
               background: 'linear-gradient(135deg, rgba(191,149,63,0.2), rgba(191,149,63,0.05))',
               border: '1px solid rgba(191,149,63,0.3)',
-              color: '#E2C468',
+              color: '#FFD700',
               fontWeight: 600,
             }}>
               Limited Launch Price

@@ -22,8 +22,8 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import {
-  Search, Plus, ChevronRight, AlertCircle, ClipboardList,
-  Activity, Link2, Trash2, Edit, Filter, Shield, FileText,
+  Search, Plus, ChevronRight, AlertCircle,
+  Link2, Trash2, Edit, Filter, Shield, FileText,
   Stethoscope, Calendar, PersonStanding, Compass, Calculator,
   Zap, AlertTriangle,
 } from 'lucide-react';

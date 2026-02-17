@@ -188,26 +188,26 @@ export default function TermsOfServicePage() {
           </p>
         </section>
 
-        {/* Section 13: Payment and Subscriptions */}
+        {/* Section 13: Payment and Premium Access */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-foreground">13. Payment and Subscriptions</h2>
+          <h2 className="text-lg font-semibold text-foreground">13. Payment and Premium Access</h2>
           <p className="text-muted-foreground">
-            VCS offers a free tier with limited features and a paid <strong className="text-foreground">Premium</strong> subscription at <strong className="text-foreground">$9.99/month</strong> (introductory launch price; regular price $19.99/month). The Premium subscription is billed monthly on a recurring basis starting from the date of purchase.
+            VCS offers a free tier with limited features and a paid <strong className="text-foreground">Premium</strong> tier available as a <strong className="text-foreground">one-time purchase of $9.99</strong> (introductory launch price; regular price $19.99). Premium access is permanent and does not require a recurring subscription.
           </p>
           <p className="text-muted-foreground">
-            <strong className="text-foreground">Recurring Billing.</strong> By subscribing to Premium, you authorize us to charge your chosen payment method on a monthly recurring basis until you cancel. Your subscription will automatically renew at the end of each billing period unless you cancel before the renewal date.
+            <strong className="text-foreground">One-Time Payment.</strong> By purchasing Premium, you make a single payment that grants you permanent access to all current Premium features. There are no recurring charges, monthly fees, or automatic renewals.
           </p>
           <p className="text-muted-foreground">
-            <strong className="text-foreground">Cancellation.</strong> You may cancel your subscription at any time through the &quot;Manage Subscription&quot; option in Settings, which opens the Stripe Billing Portal. Upon cancellation, you will retain Premium access through the end of your current paid billing period. No partial refunds are issued for unused time within a billing cycle.
+            <strong className="text-foreground">Refund Policy.</strong> You may request a full refund within <strong className="text-foreground">7 days</strong> of purchase by contacting <a href="mailto:Admin@vetclaimsupport.com" className="text-primary underline">Admin@vetclaimsupport.com</a>. After 7 days, all sales are final. Upon refund, your Premium access will be revoked.
           </p>
           <p className="text-muted-foreground">
             <strong className="text-foreground">Payment Processing.</strong> All payments are processed securely by <strong className="text-foreground">Stripe, Inc.</strong> VCS does not directly collect, store, or have access to your full payment card information. Your use of Stripe&apos;s services is subject to <a href="https://stripe.com/legal" target="_blank" rel="noopener noreferrer" className="text-primary underline">Stripe&apos;s Terms of Service</a> and <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-primary underline">Privacy Policy</a>.
           </p>
           <p className="text-muted-foreground">
-            <strong className="text-foreground">Price Changes.</strong> We reserve the right to change subscription pricing with at least 30 days&apos; notice. Price changes will take effect at the start of your next billing cycle following the notice period. If you do not agree to the new pricing, you may cancel before the change takes effect.
+            <strong className="text-foreground">Feature Scope.</strong> Your purchase grants access to all Premium features available at the time of purchase. Future features or major new modules may be offered separately and are not guaranteed to be included in your existing purchase.
           </p>
           <p className="text-muted-foreground">
-            <strong className="text-foreground">Service Discontinuation.</strong> If the Service is discontinued, we will provide at least 30 days&apos; notice, data export capabilities, and a prorated refund for any remaining prepaid subscription period.
+            <strong className="text-foreground">Service Discontinuation.</strong> If the Service is discontinued, we will provide at least 30 days&apos; notice and data export capabilities.
           </p>
         </section>
 

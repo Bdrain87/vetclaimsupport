@@ -1,14 +1,10 @@
-import { createContext, useContext, useCallback, useRef, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useRef, useState, type ReactNode } from 'react';
 
 interface AnnouncerContextType {
   announce: (message: string, priority?: 'polite' | 'assertive') => void;
 }
 
 const AnnouncerContext = createContext<AnnouncerContextType>({ announce: () => {} });
-
-export function useAnnounce() {
-  return useContext(AnnouncerContext);
-}
 
 export function AriaLiveAnnouncer({ children }: { children: ReactNode }) {
   const [politeMessage, setPoliteMessage] = useState('');

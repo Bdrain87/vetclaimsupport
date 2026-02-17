@@ -18,7 +18,6 @@ const SSN_DASHED = /\b\d{3}-\d{2}-\d{4}\b/g;
 const SSN_SPACED = /\b\d{3}\s\d{2}\s\d{4}\b/g;
 const SSN_PLAIN  = /\b\d{9}\b/g;
 const SSN_DOTTED = /\b\d{3}\.\d{2}\.\d{4}\b/g;
-const SSN_LABEL  = /\b(?:SSN|Social\s*Security(?:\s*(?:Number|No\.?|#))?)\s*[:#]?\s*\S+/gi;
 
 // ---------------------------------------------------------------------------
 // 2. US phone numbers
@@ -79,7 +78,6 @@ export function sanitizePHI(text: string): string {
   // DOB (label-aware) — keep the label, replace the date
   result = result.replace(DOB, (_match, label: string) => `${label} ${REDACTED}`);
 
-  result = result.replace(SSN_LABEL, REDACTED);
   result = result.replace(SSN_DASHED, REDACTED);
   result = result.replace(SSN_SPACED, REDACTED);
   result = result.replace(SSN_DOTTED, REDACTED);

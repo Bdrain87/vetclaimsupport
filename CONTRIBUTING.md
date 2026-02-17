@@ -19,8 +19,8 @@ This project is dedicated to helping veterans. Please be respectful and construc
 1. Fork the repository
 2. Clone your fork:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/service-evidence.git
-   cd service-evidence
+   git clone https://github.com/YOUR_USERNAME/vetclaimsupport.git
+   cd vetclaimsupport
    ```
 
 3. Install dependencies:

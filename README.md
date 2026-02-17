@@ -62,8 +62,8 @@ We prioritize privacy and security:
 
 ```bash
 # Clone the repository
-git clone https://github.com/Bdrain87/service-evidence.git
-cd service-evidence
+git clone https://github.com/Bdrain87/vetclaimsupport.git
+cd vetclaimsupport
 
 # Install dependencies
 npm install

@@ -54,21 +54,22 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
               Premium Feature
             </h2>
             <p className="text-sm text-muted-foreground">
-              <span className="font-medium text-foreground">{featureName}</span> requires a Premium subscription.
+              <span className="font-medium text-foreground">{featureName}</span> requires Premium access.
             </p>
           </div>
 
           {/* Pricing */}
           <div className="text-center space-y-1">
             <div className="inline-flex items-center gap-2">
-              <span className="text-sm line-through text-muted-foreground">$19.99/mo</span>
+              <span className="text-sm line-through text-muted-foreground">$19.99</span>
               <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-primary/20 text-primary">
                 Launch Sale
               </span>
             </div>
             <p className="text-3xl font-bold text-foreground">
-              $9.99<span className="text-base font-normal text-muted-foreground">/mo</span>
+              $9.99<span className="text-base font-normal text-muted-foreground"> one-time</span>
             </p>
+            <p className="text-xs text-muted-foreground">Pay once, yours forever. No subscription.</p>
           </div>
 
           {/* Feature highlights */}

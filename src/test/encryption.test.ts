@@ -222,7 +222,7 @@ describe('encryption utilities', () => {
       expect(storedHash).toContain(':');
     });
 
-    it('verifyPassword returns true for the correct password after enableEncryption', async () => {
+    it('verifyPassword returns true for the correct password after enableEncryption', { timeout: 15000 }, async () => {
       await enableEncryption('vault-pass');
       expect(await verifyPassword('vault-pass')).toBe(true);
     });

@@ -5,7 +5,7 @@ import Stripe from "https://esm.sh/stripe@14?target=deno";
 const ALLOWED_ORIGINS = [
   'https://vetclaimsupport.com',
   'https://www.vetclaimsupport.com',
-  'https://service-evidence.vercel.app',
+  'https://vetclaimsupport.vercel.app',
 ];
 
 const getAllowedOrigin = (origin: string | null): string => {
@@ -47,7 +47,6 @@ serve(async (req: Request) => {
     const userClient = createClient(supabaseUrl, supabaseAnonKey, {
       global: { headers: { Authorization: authHeader } },
     });
-
     const { data: { user }, error: userError } = await userClient.auth.getUser();
     if (userError || !user) {
       return new Response(
@@ -75,7 +74,6 @@ serve(async (req: Request) => {
         metadata: { supabase_user_id: user.id },
       });
       stripeCustomerId = customer.id;
-
       // Store customer ID on profile
       await adminClient
         .from('profiles')
@@ -88,15 +86,15 @@ serve(async (req: Request) => {
       ? origin
       : ALLOWED_ORIGINS[0];
 
-    // Create Checkout Session
+    // Create ONE-TIME payment Checkout Session (not subscription)
     const session = await stripe.checkout.sessions.create({
       customer: stripeCustomerId,
-      mode: 'subscription',
+      mode: 'payment',
       line_items: [{ price: stripePriceId, quantity: 1 }],
       success_url: `${requestOrigin}/settings?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${requestOrigin}/settings`,
       metadata: { supabase_user_id: user.id },
-      subscription_data: {
+      payment_intent_data: {
         metadata: { supabase_user_id: user.id },
       },
     });

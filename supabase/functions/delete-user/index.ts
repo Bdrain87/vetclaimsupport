@@ -6,7 +6,7 @@ import Stripe from "https://esm.sh/stripe@14?target=deno";
 const ALLOWED_ORIGINS = [
   'https://vetclaimsupport.com',
   'https://www.vetclaimsupport.com',
-  'https://service-evidence.vercel.app',
+  'https://vetclaimsupport.vercel.app',
 ];
 
 const getAllowedOrigin = (origin: string | null): string => {

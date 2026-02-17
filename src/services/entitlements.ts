@@ -121,7 +121,7 @@ export async function ensureFreshEntitlement(): Promise<EntitlementStatus> {
   return refreshEntitlementFromServer();
 }
 
-// --- Stripe checkout & portal ---
+// --- Stripe checkout ---
 
 /**
  * Invoke the create-checkout-session Edge Function.
@@ -132,17 +132,5 @@ export async function startCheckout(): Promise<string> {
     body: {},
   });
   if (error) throw new Error('Failed to start checkout. Please try again.');
-  return data.url;
-}
-
-/**
- * Invoke the create-portal-session Edge Function.
- * Returns the Stripe Billing Portal URL for redirect.
- */
-export async function openBillingPortal(): Promise<string> {
-  const { data, error } = await supabase.functions.invoke('create-portal-session', {
-    body: {},
-  });
-  if (error) throw new Error('Failed to open billing portal. Please try again.');
   return data.url;
 }

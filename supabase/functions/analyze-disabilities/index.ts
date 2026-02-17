@@ -5,7 +5,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const ALLOWED_ORIGINS = [
   'https://vetclaimsupport.com',
   'https://www.vetclaimsupport.com',
-  'https://service-evidence.vercel.app',
+  'https://vetclaimsupport.vercel.app',
 ];
 
 const getAllowedOrigin = (origin: string | null): string => {

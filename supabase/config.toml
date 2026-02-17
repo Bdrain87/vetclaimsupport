@@ -9,5 +9,5 @@ verify_jwt = true
 [functions.stripe-webhook]
 verify_jwt = false
 
-[functions.create-portal-session]
+[functions.delete-user]
 verify_jwt = true

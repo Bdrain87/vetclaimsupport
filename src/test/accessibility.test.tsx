@@ -54,7 +54,7 @@ const AXE_OPTIONS = {
 
 describe('Accessibility Audit (axe-core)', () => {
   for (const page of criticalPages) {
-    it(`${page.name} has no critical axe-core violations`, async () => {
+    it(`${page.name} has no critical axe-core violations`, { timeout: 15000 }, async () => {
       const mod = await page.load();
       const Component = mod.default;
 

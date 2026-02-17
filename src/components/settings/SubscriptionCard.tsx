@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Crown, ExternalLink, Award } from 'lucide-react';
+import { Crown, Award } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useProfileStore } from '@/store/useProfileStore';
 import { supabase } from '@/lib/supabase';
-import { startCheckout, openBillingPortal } from '@/services/entitlements';
+import { startCheckout } from '@/services/entitlements';
 import { useNavigate } from 'react-router-dom';
 
 export function SubscriptionCard() {
@@ -30,27 +30,15 @@ export function SubscriptionCard() {
     }
   };
 
-  const handleManage = async () => {
-    setLoading(true);
-    try {
-      const url = await openBillingPortal();
-      window.location.href = url;
-    } catch (err) {
-      console.error('Portal failed:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Crown className="h-5 w-5" />
-          Subscription
+          Premium Access
         </CardTitle>
         <CardDescription>
-          {entitlement === 'preview' && 'Upgrade to unlock all premium features'}
+          {entitlement === 'preview' && 'One-time purchase, yours forever'}
           {entitlement === 'premium' && 'You have full access to all premium features'}
           {entitlement === 'lifetime' && 'You have lifetime access to all features'}
         </CardDescription>
@@ -58,15 +46,15 @@ export function SubscriptionCard() {
       <CardContent>
         {entitlement === 'preview' && (
           <Button onClick={handleUpgrade} disabled={loading} className="w-full">
-            {loading ? 'Redirecting...' : 'Upgrade to Premium — $9.99/mo'}
+            {loading ? 'Redirecting...' : 'Get Premium — $9.99 One-Time'}
           </Button>
         )}
 
         {entitlement === 'premium' && (
-          <Button onClick={handleManage} disabled={loading} variant="outline" className="w-full">
-            <ExternalLink className="h-4 w-4 mr-2" />
-            {loading ? 'Opening...' : 'Manage Subscription'}
-          </Button>
+          <div className="flex items-center gap-2 p-3 rounded-lg bg-primary/10 border border-primary/20">
+            <Award className="h-5 w-5 text-primary" />
+            <span className="text-sm font-medium text-foreground">Premium Access — Yours Forever</span>
+          </div>
         )}
 
         {entitlement === 'lifetime' && (

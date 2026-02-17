@@ -49,8 +49,8 @@ export const colors = {
   // === BRAND MARK ONLY — NOT for UI elements ===
   brand: {
     gold: '#D4AF37',        // Brand mark icon ONLY
-    goldLight: '#E2C468',   // Brand mark gradient light
-    goldDark: '#B38728',    // Brand mark gradient dark
+    goldLight: '#FFD700',   // Brand mark gradient light
+    goldDark: '#B8860B',    // Brand mark gradient dark
   },
 
   // === LIGHT MODE COUNTERPARTS ===

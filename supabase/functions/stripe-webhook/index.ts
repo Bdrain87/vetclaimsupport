@@ -32,33 +32,24 @@ serve(async (req: Request) => {
       return new Response('Invalid signature', { status: 400 });
     }
 
-    // Handle events
+    // Handle one-time payment completion
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
         const userId = session.metadata?.supabase_user_id;
-        if (!userId || !session.subscription) break;
 
-        const subscriptionId = typeof session.subscription === 'string'
-          ? session.subscription
-          : session.subscription.id;
+        if (!userId) {
+          console.error('No supabase_user_id in checkout session metadata');
+          break;
+        }
 
-        // Retrieve the full subscription to get period dates
-        const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+        // For one-time payments, session.payment_status should be 'paid'
+        if (session.payment_status !== 'paid') {
+          console.log('Payment not yet complete, waiting for async payment');
+          break;
+        }
 
-        // Upsert subscriptions row
-        await adminClient.from('subscriptions').upsert({
-          user_id: userId,
-          stripe_customer_id: session.customer as string,
-          stripe_subscription_id: subscriptionId,
-          status: subscription.status,
-          current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-          current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-          cancel_at_period_end: subscription.cancel_at_period_end,
-          updated_at: new Date().toISOString(),
-        }, { onConflict: 'stripe_subscription_id' });
-
-        // Set user_entitlements
+        // Grant permanent premium access — no subscription, no expiry
         await adminClient.from('user_entitlements').upsert({
           user_id: userId,
           entitled: true,
@@ -68,7 +59,34 @@ serve(async (req: Request) => {
           updated_at: new Date().toISOString(),
         }, { onConflict: 'user_id' });
 
-        // Set profiles.entitlement = 'premium'
+        // Set profiles.entitlement = 'premium' (permanent)
+        await adminClient
+          .from('profiles')
+          .update({
+            entitlement: 'premium',
+            stripe_customer_id: session.customer as string,
+          })
+          .eq('id', userId);
+
+        console.log('Premium access granted for user:', userId);
+        break;
+      }
+
+      // Handle async payment completion (e.g., bank transfers)
+      case 'checkout.session.async_payment_succeeded': {
+        const session = event.data.object as Stripe.Checkout.Session;
+        const userId = session.metadata?.supabase_user_id;
+        if (!userId) break;
+
+        await adminClient.from('user_entitlements').upsert({
+          user_id: userId,
+          entitled: true,
+          source: 'stripe',
+          purchased_at: new Date().toISOString(),
+          revoked_at: null,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: 'user_id' });
+
         await adminClient
           .from('profiles')
           .update({ entitlement: 'premium' })
@@ -77,72 +95,13 @@ serve(async (req: Request) => {
         break;
       }
 
-      case 'customer.subscription.updated': {
-        const subscription = event.data.object as Stripe.Subscription;
-        const userId = subscription.metadata?.supabase_user_id;
+      // Handle failed async payment
+      case 'checkout.session.async_payment_failed': {
+        const session = event.data.object as Stripe.Checkout.Session;
+        const userId = session.metadata?.supabase_user_id;
         if (!userId) break;
-
-        // Update subscription row
-        await adminClient.from('subscriptions').upsert({
-          user_id: userId,
-          stripe_customer_id: subscription.customer as string,
-          stripe_subscription_id: subscription.id,
-          status: subscription.status,
-          current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-          current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-          cancel_at_period_end: subscription.cancel_at_period_end,
-          updated_at: new Date().toISOString(),
-        }, { onConflict: 'stripe_subscription_id' });
-
-        // Determine entitlement based on status
-        const isEntitled = ['active', 'trialing'].includes(subscription.status);
-
-        await adminClient.from('user_entitlements').upsert({
-          user_id: userId,
-          entitled: isEntitled,
-          source: 'stripe',
-          revoked_at: isEntitled ? null : new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        }, { onConflict: 'user_id' });
-
-        await adminClient
-          .from('profiles')
-          .update({ entitlement: isEntitled ? 'premium' : 'preview' })
-          .eq('id', userId);
-
-        break;
-      }
-
-      case 'customer.subscription.deleted': {
-        const subscription = event.data.object as Stripe.Subscription;
-        const userId = subscription.metadata?.supabase_user_id;
-        if (!userId) break;
-
-        // Update subscription status
-        await adminClient
-          .from('subscriptions')
-          .update({
-            status: 'canceled',
-            cancel_at_period_end: false,
-            updated_at: new Date().toISOString(),
-          })
-          .eq('stripe_subscription_id', subscription.id);
-
-        // Revoke entitlement
-        await adminClient.from('user_entitlements').upsert({
-          user_id: userId,
-          entitled: false,
-          source: 'stripe',
-          revoked_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        }, { onConflict: 'user_id' });
-
-        // Revert profile to preview
-        await adminClient
-          .from('profiles')
-          .update({ entitlement: 'preview' })
-          .eq('id', userId);
-
+        console.log('Async payment failed for user:', userId);
+        // Do not grant access — user can retry
         break;
       }
     }

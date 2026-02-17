@@ -111,13 +111,13 @@ export default function PrivacyPolicyPage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">5. Payment Processing</h2>
           <p className="text-muted-foreground">
-            Premium subscriptions ($9.99/month) are processed by <strong className="text-foreground">Stripe, Inc.</strong> When you subscribe, Stripe collects and processes your payment information directly. VCS does <strong className="text-foreground">not</strong> collect, store, or have access to your full credit card number, debit card number, or bank account details.
+            Premium access ($9.99 one-time purchase) is processed by <strong className="text-foreground">Stripe, Inc.</strong> When you purchase Premium, Stripe collects and processes your payment information directly. VCS does <strong className="text-foreground">not</strong> collect, store, or have access to your full credit card number, debit card number, or bank account details.
           </p>
           <p className="text-muted-foreground">
-            The data shared with Stripe includes your email address and a VCS user identifier to link your subscription to your account. Stripe may collect additional information as described in their <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-[#D4AF37] hover:underline">Privacy Policy</a>.
+            The data shared with Stripe includes your email address and a VCS user identifier to link your purchase to your account. Stripe may collect additional information as described in their <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-[#D4AF37] hover:underline">Privacy Policy</a>.
           </p>
           <p className="text-muted-foreground">
-            We store the following subscription-related data in our database: your Stripe customer ID, subscription ID, subscription status, and billing period dates. This data is used solely to determine your access level and is deleted when you delete your account.
+            We store the following payment-related data in our database: your Stripe customer ID, purchase date, and entitlement status. This data is used solely to determine your access level and is deleted when you delete your account.
           </p>
         </section>
 
@@ -184,7 +184,7 @@ export default function PrivacyPolicyPage() {
           <ul className="space-y-1.5 text-muted-foreground">
             <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Supabase</strong> (cloud database, optional)</li>
             <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Google Gemini</strong> (AI features, optional)</li>
-            <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Stripe</strong> (payment processing for Premium subscriptions)</li>
+            <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Stripe</strong> (payment processing for Premium purchases)</li>
             <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Vercel</strong> (web hosting and deployment)</li>
                             <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Apple Sign-In</strong> (authentication, optional)</li>
                           <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Google Sign-In</strong> (authentication, optional)</li>
