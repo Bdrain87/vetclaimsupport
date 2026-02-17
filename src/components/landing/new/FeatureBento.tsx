@@ -158,7 +158,7 @@ const CARDS: CardData[] = [
     short: 'Generate a compelling personal statement for your claim',
     detail: 'Guided builder that helps you write an effective personal statement connecting your service to your conditions.',
     capabilities: ['Guided prompts', 'Nexus language help', 'Condition-specific templates', 'Export-ready output'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Document Builders',
   },
   {
@@ -167,7 +167,7 @@ const CARDS: CardData[] = [
     short: 'Create structured witness statements',
     detail: 'Help fellow service members, family, and friends write effective buddy/lay statements with proper structure and language.',
     capabilities: ['Guided prompts', 'Structured format', 'Multiple statements', 'Print-ready output'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Document Builders',
   },
   {
@@ -176,7 +176,7 @@ const CARDS: CardData[] = [
     short: 'Organize what to discuss with your clinician',
     detail: 'Create a structured outline for your doctor to help them understand your conditions and provide supporting documentation.',
     capabilities: ['Clinician-friendly format', 'Condition summaries', 'Treatment history', 'Nexus support'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Document Builders',
   },
   {
@@ -185,7 +185,7 @@ const CARDS: CardData[] = [
     short: 'Document PTSD stressor events for your claim',
     detail: 'Guided tool for documenting in-service stressor events with the detail and structure required for PTSD claims.',
     capabilities: ['Event documentation', 'Timeline structure', 'Detail prompts', 'VA-compliant format'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Document Builders',
   },
   // ── Premium: Health & Symptom Tracking ──────────
@@ -195,7 +195,7 @@ const CARDS: CardData[] = [
     short: 'Log symptoms with frequency and severity over time',
     detail: 'Track your symptoms daily with detailed logs of frequency, severity, triggers, and impact on daily activities.',
     capabilities: ['Daily logging', 'Severity ratings', 'Trigger identification', 'Trend analysis'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Health Tracking',
   },
   {
@@ -204,7 +204,7 @@ const CARDS: CardData[] = [
     short: 'Track sleep quality, duration, and disturbances',
     detail: 'Log nightly sleep quality, duration, disturbances, and nightmares—essential for sleep apnea, PTSD, and insomnia claims.',
     capabilities: ['Sleep quality logging', 'Disturbance tracking', 'Nightmare documentation', 'Pattern analysis'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Health Tracking',
   },
   {
@@ -213,7 +213,7 @@ const CARDS: CardData[] = [
     short: 'Document migraine episodes with triggers and duration',
     detail: 'Specialized tracker for migraine episodes including prostrating status, triggers, duration, and severity—mapped to VA rating criteria.',
     capabilities: ['Episode tracking', 'Prostrating status', 'Trigger documentation', 'Duration logging'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Health Tracking',
   },
   {
@@ -222,7 +222,7 @@ const CARDS: CardData[] = [
     short: 'Track prescriptions, dosages, and side effects',
     detail: 'Comprehensive medication tracker for prescriptions, dosages, side effects, and treatment effectiveness over time.',
     capabilities: ['Prescription management', 'Dosage tracking', 'Side effect logging', 'Treatment history'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Health Tracking',
   },
   {
@@ -231,7 +231,7 @@ const CARDS: CardData[] = [
     short: 'Record appointments and provider notes',
     detail: 'Log every medical visit with provider details, notes, and outcomes to build a strong treatment history.',
     capabilities: ['Visit logging', 'Provider tracking', 'Notes and outcomes', 'Treatment timeline'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Health Tracking',
   },
   {
@@ -240,7 +240,7 @@ const CARDS: CardData[] = [
     short: 'Document environmental and toxic exposures',
     detail: 'Track exposure to hazardous substances, burn pits, chemicals, and other environmental hazards during service.',
     capabilities: ['Exposure documentation', 'Location tracking', 'Duration logging', 'PACT Act relevance'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Health Tracking',
   },
   {
@@ -249,7 +249,7 @@ const CARDS: CardData[] = [
     short: 'Generate a complete health overview from your logs',
     detail: 'Automatically compile all your tracked health data into a comprehensive summary with charts and trend analysis.',
     capabilities: ['Auto-generated summaries', 'Trend charts', 'Symptom patterns', 'Export-ready reports'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Health Tracking',
   },
   {
@@ -258,7 +258,7 @@ const CARDS: CardData[] = [
     short: 'Unified chronological view of all health events',
     detail: 'See every symptom log, medical visit, medication change, and health event on a single timeline.',
     capabilities: ['Chronological view', 'Cross-tracker integration', 'Event filtering', 'Visual history'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Health Tracking',
   },
   {
@@ -267,7 +267,7 @@ const CARDS: CardData[] = [
     short: 'Visually map conditions to affected body areas',
     detail: 'Tap on body regions to document affected areas and link them to specific conditions and symptoms.',
     capabilities: ['Visual body mapping', 'Condition linking', 'Area-specific notes', 'Pain documentation'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Health Tracking',
   },
   // ── Premium: Strategy & Exam Prep ───────────────
@@ -277,7 +277,7 @@ const CARDS: CardData[] = [
     short: 'Get a personalized claim filing strategy',
     detail: 'Answer guided questions about your conditions and service to receive a tailored strategy for how to approach your claim.',
     capabilities: ['Personalized strategy', 'Filing order guidance', 'Secondary condition tips', 'Priority recommendations'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Strategy',
   },
   {
@@ -286,7 +286,7 @@ const CARDS: CardData[] = [
     short: 'Condition-specific prep for your VA exam',
     detail: 'Comprehensive preparation guides for your Compensation & Pension exam with condition-specific questions and what to expect.',
     capabilities: ['Exam preparation', 'Condition-specific guides', 'Common questions', 'Day-of tips'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Strategy',
   },
   {
@@ -295,7 +295,7 @@ const CARDS: CardData[] = [
     short: 'Prepare for Disability Benefits Questionnaires',
     detail: 'Review the key criteria your examiner will evaluate on the DBQ so you can communicate your symptoms effectively.',
     capabilities: ['DBQ criteria review', 'Rating level breakdowns', 'Symptom communication', 'Condition-specific prep'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Strategy',
   },
   {
@@ -304,7 +304,7 @@ const CARDS: CardData[] = [
     short: 'Discover conditions secondary to your rated disabilities',
     detail: 'Find medically recognized secondary conditions linked to your already service-connected disabilities.',
     capabilities: ['Secondary connections', 'Medical research links', 'Claim strategy tips', 'Condition pairing'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Strategy',
   },
   {
@@ -313,7 +313,7 @@ const CARDS: CardData[] = [
     short: 'Calculate the bilateral factor for paired conditions',
     detail: 'When you have disabilities affecting both sides of the body, the bilateral factor can increase your combined rating.',
     capabilities: ['Bilateral math', 'Paired condition detection', 'Rating impact preview', 'VA formula explanation'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Calculators',
   },
   {
@@ -322,7 +322,7 @@ const CARDS: CardData[] = [
     short: 'Estimate your potential retroactive VA payment',
     detail: 'Calculate how much back pay you could receive based on your expected rating, effective date, and dependents.',
     capabilities: ['Retroactive estimates', 'Dependent adjustments', 'Effective date scenarios', 'Monthly breakdowns'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Calculators',
   },
   // ── Premium: Package & Export ────────────────────
@@ -332,7 +332,7 @@ const CARDS: CardData[] = [
     short: 'Compile your complete claim package for submission',
     detail: 'Gather all your statements, evidence, and documents into a single organized claim packet ready for submission.',
     capabilities: ['Document compilation', 'Organized sections', 'Submission checklist', 'PDF export'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Package & Export',
   },
   {
@@ -341,7 +341,7 @@ const CARDS: CardData[] = [
     short: 'Securely store and organize all your evidence',
     detail: 'Upload medical records, service documents, and supporting evidence—encrypted and sorted by condition.',
     capabilities: ['AES-256 encryption', 'Document categorization', 'Evidence management', 'Secure storage'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Package & Export',
   },
   {
@@ -350,7 +350,7 @@ const CARDS: CardData[] = [
     short: 'Navigate the appeals process after a denial',
     detail: 'Comprehensive guide to supplemental claims, higher-level reviews, and Board of Veterans Appeals with case law references.',
     capabilities: ['Appeal lane guidance', 'Deadline tracking', 'Case law references', 'Evidence tips'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Package & Export',
   },
   // ── Premium: Claim Management ───────────────────
@@ -360,7 +360,7 @@ const CARDS: CardData[] = [
     short: 'Document deployments, stations, and duty assignments',
     detail: 'Complete service history tracker for duty stations, deployments, MOSs, and exposure to hazards during service.',
     capabilities: ['Deployment tracking', 'Duty stations', 'MOS documentation', 'Hazard exposure'],
-    plan: 'Premium ($9.99)',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Claim Management',
   },
   {
