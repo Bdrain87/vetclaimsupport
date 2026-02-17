@@ -94,7 +94,7 @@ All information is stored locally on your device. We never see your health data,
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-$4.99. No subscriptions. No hidden fees.
+$9.99 one-time. No subscriptions. No hidden fees.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -189,7 +189,7 @@ Thank you for your service. We're committed to helping you get the rating you ea
 2. **Tap into C&P Exam Prep** → Show Exam Companion generating (4s)
 3. **Open Calculator** → Enter ratings → Show combined result (4s)
 4. **Browse secondary conditions finder** (3s)
-5. **End card:** "Get the rating you earned. $4.99" (2s)
+5. **End card:** "Get the rating you earned. $9.99 one-time" (2s)
 
 ---
 
@@ -294,7 +294,7 @@ PACT Act expanded benefits for millions. Check if your conditions qualify for pr
 - [ ] Verify all URLs work (privacy, support, marketing)
 - [ ] Test app on all supported devices
 - [ ] Review all text for typos
-- [ ] Confirm pricing is set correctly ($4.99)
+- [ ] Confirm pricing is set correctly ($9.99 one-time)
 - [ ] Submit for review
 
 ---
