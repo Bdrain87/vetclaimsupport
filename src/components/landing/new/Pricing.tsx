@@ -6,11 +6,13 @@ import { Check, AlertTriangle } from 'lucide-react';
 
 const FREE_FEATURES = [
   'VA Combined Rating Calculator',
-  'VA-Speak Translator',
   'Claim Checklist',
-  'VA Forms Reference Library',
+  'VA-Speak Translator',
+  'VA Form Guide',
+  'Intent to File Guide',
   'Glossary & FAQ',
   '800+ Condition Database',
+  'Travel Pay Calculator',
 ];
 
 interface FeatureGroup {
@@ -20,45 +22,43 @@ interface FeatureGroup {
 
 const PREMIUM_FEATURE_GROUPS: FeatureGroup[] = [
   {
-    category: 'Powered Claim Builders',
+    category: 'Document Builders',
     features: [
-      'Personal Statement Generator',
-      'Doctor Summary Generator',
-      'Buddy Statement Creator',
+      'Personal Statement Builder',
+      'Buddy Statement Builder',
+      'Doctor Summary Outline',
       'Stressor Statement Writer',
-      'C&P Exam Prep Coach',
     ],
   },
   {
-    category: 'Medical Evidence Tracking',
+    category: 'Health & Symptom Tracking',
     features: [
-      'Interactive Body Map',
-      'PTSD & Spine Symptom Loggers',
-      'Sleep, Migraine & Medication Trackers',
-      'Medical Visit Logger with Provider Notes',
-      'Symptom Charts & Trend Analysis',
+      'Symptom Tracker',
+      'Sleep Tracker',
+      'Migraine Tracker',
+      'Medication Tracker',
+      'Medical Visit Logger',
       'Exposure & Hazard Tracker',
     ],
   },
   {
-    category: 'Strategy & Calculators',
+    category: 'Strategy & Exam Prep',
     features: [
       'Claim Strategy Wizard',
-      'Back Pay Estimator',
-      'Bilateral Factor Calculator',
+      'C&P Exam Prep',
+      'DBQ Prep Sheet',
       'Secondary Condition Finder',
-      'PACT Act Eligibility Checker',
-      'Evidence Gap Analysis',
-      'DBQ Rating Reference',
+      'Bilateral Factor Calculator',
+      'Back Pay Estimator',
     ],
   },
   {
     category: 'Package & Export',
     features: [
       'Full Claim Packet Builder',
-      'Document Scanner & Upload',
-      'PDF Export & Sharing',
-      'Encrypted AES-256 Cloud Backup',
+      'Document Vault',
+      'Health Summary & Timeline',
+      'Interactive Body Map',
       'Appeals & Decision Review Guide',
     ],
   },
@@ -239,13 +239,13 @@ export function Pricing() {
               </div>
               <ul className="space-y-1.5">
                 <li className="flex items-center gap-2 text-sm" style={{ color: '#9CA3AF' }}>
-                  <span style={{ color: '#EF4444' }}>&#10005;</span> May not be VA-accredited
-                </li>
-                <li className="flex items-center gap-2 text-sm" style={{ color: '#9CA3AF' }}>
                   <span style={{ color: '#EF4444' }}>&#10005;</span> Large upfront fees
                 </li>
                 <li className="flex items-center gap-2 text-sm" style={{ color: '#9CA3AF' }}>
                   <span style={{ color: '#EF4444' }}>&#10005;</span> No guaranteed outcomes
+                </li>
+                <li className="flex items-center gap-2 text-sm" style={{ color: '#9CA3AF' }}>
+                  <span style={{ color: '#EF4444' }}>&#10005;</span> Unregulated industry
                 </li>
               </ul>
             </div>
@@ -272,7 +272,7 @@ export function Pricing() {
                   <span style={{ color: '#EF4444' }}>&#10005;</span> Can total thousands of dollars
                 </li>
                 <li className="flex items-center gap-2 text-sm" style={{ color: '#9CA3AF' }}>
-                  <span style={{ color: '#EF4444' }}>&#10005;</span> You still do the preparation work
+                  <span style={{ color: '#EF4444' }}>&#10005;</span> Minimal help organizing your evidence
                 </li>
               </ul>
             </div>
