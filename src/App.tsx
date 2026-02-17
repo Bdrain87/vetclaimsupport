@@ -290,10 +290,37 @@ function AnimatedRoutes() {
           <Route path="/symptoms" element={<Navigate to="/health/symptoms" replace />} />
           <Route path="/sleep" element={<Navigate to="/health/sleep" replace />} />
           <Route path="/medications" element={<Navigate to="/health/medications" replace />} />
+          <Route path="/health/body-map" element={<Navigate to="/claims/body-map" replace />} />
+          <Route path="/body-map" element={<Navigate to="/claims/body-map" replace />} />
           <Route path="/bilateral-calculator" element={<Navigate to="/claims/bilateral" replace />} />
           <Route path="/exam-prep" element={<Navigate to="/prep/exam" replace />} />
           <Route path="/claim-tools" element={<Navigate to="/prep" replace />} />
           <Route path="/tools" element={<Navigate to="/prep" replace />} />
+          <Route path="/tools/calculator" element={<Navigate to="/claims/calculator" replace />} />
+          <Route path="/tools/secondary" element={<Navigate to="/claims/secondary-finder" replace />} />
+          <Route path="/tools/secondary-finder" element={<Navigate to="/claims/secondary-finder" replace />} />
+          <Route path="/tools/strategy" element={<Navigate to="/claims/strategy" replace />} />
+          <Route path="/tools/body-map" element={<Navigate to="/claims/body-map" replace />} />
+          <Route path="/tools/documents" element={<Navigate to="/claims/checklist" replace />} />
+          <Route path="/tools/checklist" element={<Navigate to="/claims/checklist" replace />} />
+          <Route path="/tools/export" element={<Navigate to="/prep/packet" replace />} />
+          <Route path="/tools/packet" element={<Navigate to="/prep/packet" replace />} />
+          <Route path="/tools/buddy-statement" element={<Navigate to="/prep/buddy-statement" replace />} />
+          <Route path="/tools/nexus" element={<Navigate to="/prep/doctor-summary" replace />} />
+          <Route path="/tools/nexus-letter" element={<Navigate to="/prep/doctor-summary" replace />} />
+          <Route path="/tools/doctor-summary" element={<Navigate to="/prep/doctor-summary" replace />} />
+          <Route path="/tools/personal-statement" element={<Navigate to="/prep/personal-statement" replace />} />
+          <Route path="/tools/stressor" element={<Navigate to="/prep/stressor" replace />} />
+          <Route path="/tools/exam" element={<Navigate to="/prep/exam" replace />} />
+          <Route path="/tools/dbq" element={<Navigate to="/prep/dbq" replace />} />
+          <Route path="/tools/va-speak" element={<Navigate to="/prep/va-speak" replace />} />
+          <Route path="/tools/back-pay" element={<Navigate to="/prep/back-pay" replace />} />
+          <Route path="/tools/travel-pay" element={<Navigate to="/prep/travel-pay" replace />} />
+          <Route path="/tools/form-guide" element={<Navigate to="/prep/form-guide" replace />} />
+          <Route path="/tools/appeals" element={<Navigate to="/prep/appeals" replace />} />
+          <Route path="/tools/bdd-guide" element={<Navigate to="/prep/bdd-guide" replace />} />
+          <Route path="/tools/bilateral" element={<Navigate to="/claims/bilateral" replace />} />
+          <Route path="/tools/*" element={<Navigate to="/prep" replace />} />
           <Route path="/va-forms" element={<Navigate to="/prep/form-guide" replace />} />
           <Route path="/form-guide" element={<Navigate to="/prep/form-guide" replace />} />
           <Route path="/build-packet" element={<Navigate to="/prep/packet" replace />} />
