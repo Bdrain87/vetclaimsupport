@@ -16,12 +16,12 @@ const categoryFilters: { value: VAFormEntry['category'] | 'all'; label: string }
 ];
 
 const categoryColors: Record<string, string> = {
-  filing: 'bg-[#D4AF37]/15 text-[#B38728] border-[#D4AF37]/30',
+  filing: 'bg-gold/15 text-gold-dk border-gold/30',
   evidence: 'bg-emerald-500/15 text-emerald-600 border-emerald-500/30',
-  appeal: 'bg-[#D4AF37]/15 text-[#B38728] border-[#D4AF37]/30',
+  appeal: 'bg-gold/15 text-gold-dk border-gold/30',
   special: 'bg-purple-500/15 text-purple-600 border-purple-500/30',
   medical: 'bg-red-500/15 text-red-600 border-red-500/30',
-  employment: 'bg-[#D4AF37]/15 text-[#B38728] border-[#D4AF37]/30',
+  employment: 'bg-gold/15 text-gold-dk border-gold/30',
 };
 
 export function VAFormsTab() {

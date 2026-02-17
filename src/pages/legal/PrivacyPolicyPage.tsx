@@ -18,8 +18,8 @@ export default function PrivacyPolicyPage() {
 
       {/* Header */}
       <div className="flex items-start gap-4">
-        <div className="p-3 rounded-xl bg-[#D4AF37]/10 shrink-0">
-          <Shield className="h-6 w-6 text-[#D4AF37]" />
+        <div className="p-3 rounded-xl bg-gold/10 shrink-0">
+          <Shield className="h-6 w-6 text-gold" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Privacy Policy</h1>
@@ -46,31 +46,31 @@ export default function PrivacyPolicyPage() {
           </p>
           <ul className="space-y-2 text-muted-foreground">
             <li className="flex items-start gap-2">
-              <span className="text-[#D4AF37] mt-0.5">&#x2022;</span>
+              <span className="text-gold mt-0.5">&#x2022;</span>
               <span><strong className="text-foreground">Profile Information:</strong> Name, military branch, MOS/AFSC/Rating/NEC/SFSC, service dates, claim type</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#D4AF37] mt-0.5">&#x2022;</span>
+              <span className="text-gold mt-0.5">&#x2022;</span>
               <span><strong className="text-foreground">Service History:</strong> Deployments, duty stations, combat history, major events</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#D4AF37] mt-0.5">&#x2022;</span>
+              <span className="text-gold mt-0.5">&#x2022;</span>
               <span><strong className="text-foreground">Health Data:</strong> Symptoms (severity, frequency, body area), sleep logs, migraine logs, medications, medical visits, exposures, PTSD symptoms</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#D4AF37] mt-0.5">&#x2022;</span>
+              <span className="text-gold mt-0.5">&#x2022;</span>
               <span><strong className="text-foreground">Claims Data:</strong> Conditions being claimed, ratings, evidence status, buddy contact info</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#D4AF37] mt-0.5">&#x2022;</span>
+              <span className="text-gold mt-0.5">&#x2022;</span>
               <span><strong className="text-foreground">Documents:</strong> User-uploaded evidence files, generated PDFs, form drafts</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#D4AF37] mt-0.5">&#x2022;</span>
+              <span className="text-gold mt-0.5">&#x2022;</span>
               <span><strong className="text-foreground">AI Interaction Data:</strong> Prompts sent to AI features and responses received (processed in real-time, not stored on our servers)</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#D4AF37] mt-0.5">&#x2022;</span>
+              <span className="text-gold mt-0.5">&#x2022;</span>
               <span><strong className="text-foreground">Operational Data:</strong> Minimal crash/performance metrics, device/OS type (no PII)</span>
             </li>
           </ul>
@@ -97,10 +97,10 @@ export default function PrivacyPolicyPage() {
             When you use AI-powered features, the text you provide is sent to Google Gemini for processing. This data is:
           </p>
           <ul className="space-y-1.5 text-muted-foreground">
-            <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span>(a) Transmitted over encrypted connections (TLS)</li>
-            <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span>(b) Processed in real-time and not stored by VCS on any server</li>
-            <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span>(c) Subject to the AI provider&apos;s own data handling policies</li>
-            <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span>(d) Never used by VCS for AI model training</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(a) Transmitted over encrypted connections (TLS)</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(b) Processed in real-time and not stored by VCS on any server</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(c) Subject to the AI provider&apos;s own data handling policies</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(d) Never used by VCS for AI model training</li>
           </ul>
           <p className="text-muted-foreground">
             AI features are entirely optional. The app functions fully without an AI API key.
@@ -114,7 +114,7 @@ export default function PrivacyPolicyPage() {
             Premium access ($9.99 one-time purchase) is processed by <strong className="text-foreground">Stripe, Inc.</strong> When you purchase Premium, Stripe collects and processes your payment information directly. VCS does <strong className="text-foreground">not</strong> collect, store, or have access to your full credit card number, debit card number, or bank account details.
           </p>
           <p className="text-muted-foreground">
-            The data shared with Stripe includes your email address and a VCS user identifier to link your purchase to your account. Stripe may collect additional information as described in their <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-[#D4AF37] hover:underline">Privacy Policy</a>.
+            The data shared with Stripe includes your email address and a VCS user identifier to link your purchase to your account. Stripe may collect additional information as described in their <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline">Privacy Policy</a>.
           </p>
           <p className="text-muted-foreground">
             We store the following payment-related data in our database: your Stripe customer ID, purchase date, and entitlement status. This data is used solely to determine your access level and is deleted when you delete your account.
@@ -146,7 +146,7 @@ export default function PrivacyPolicyPage() {
           </ul>
           <p className="text-muted-foreground">
             To exercise these rights, use the Settings page or contact{' '}
-            <a href="mailto:Admin@vetclaimsupport.com" className="text-[#D4AF37] hover:underline">Admin@vetclaimsupport.com</a>.
+            <a href="mailto:Admin@vetclaimsupport.com" className="text-gold hover:underline">Admin@vetclaimsupport.com</a>.
           </p>
         </section>
 
@@ -155,7 +155,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-lg font-semibold text-foreground">8. Privacy Rights</h2>
           <p className="text-muted-foreground">
             We strive to honor privacy rights under applicable laws. If you are a California resident, you have the right under the California Consumer Privacy Act (CCPA) to request disclosure of the categories and specific pieces of personal information we collect, to request deletion of your personal information, and to opt out of any sale of personal information. We do not sell your personal information. You may exercise your privacy rights (access, deletion, portability) by using the Settings page or contacting{' '}
-            <a href="mailto:Admin@vetclaimsupport.com" className="text-[#D4AF37] hover:underline">Admin@vetclaimsupport.com</a>.
+            <a href="mailto:Admin@vetclaimsupport.com" className="text-gold hover:underline">Admin@vetclaimsupport.com</a>.
           </p>
         </section>
 
@@ -182,12 +182,12 @@ export default function PrivacyPolicyPage() {
             The Service uses:
           </p>
           <ul className="space-y-1.5 text-muted-foreground">
-            <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Supabase</strong> (cloud database, optional)</li>
-            <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Google Gemini</strong> (AI features, optional)</li>
-            <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Stripe</strong> (payment processing for Premium purchases)</li>
-            <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Vercel</strong> (web hosting and deployment)</li>
-                            <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Apple Sign-In</strong> (authentication, optional)</li>
-                          <li className="flex items-start gap-2"><span className="text-[#D4AF37] mt-0.5">&#x2022;</span><strong className="text-foreground">Google Sign-In</strong> (authentication, optional)</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Supabase</strong> (cloud database, optional)</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Google Gemini</strong> (AI features, optional)</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Stripe</strong> (payment processing for Premium purchases)</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Vercel</strong> (web hosting and deployment)</li>
+                            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Apple Sign-In</strong> (authentication, optional)</li>
+                          <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Google Sign-In</strong> (authentication, optional)</li>
           </ul>
           <p className="text-muted-foreground">
             Each third-party service has its own privacy policy.
@@ -215,7 +215,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-lg font-semibold text-foreground">14. Contact</h2>
           <p className="text-muted-foreground">
             Privacy questions:{' '}
-            <a href="mailto:Admin@vetclaimsupport.com" className="text-[#D4AF37] hover:underline">
+            <a href="mailto:Admin@vetclaimsupport.com" className="text-gold hover:underline">
               Admin@vetclaimsupport.com
             </a>
           </p>

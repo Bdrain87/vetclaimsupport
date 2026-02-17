@@ -136,7 +136,7 @@ export function SecondaryConditionSuggestions({
   const content = (
     <div className="space-y-3">
       {/* Disclaimer */}
-      <div className="rounded-xl p-4 flex items-start gap-3 bg-[rgba(212,175,55,0.08)] border border-[rgba(212,175,55,0.2)]">
+      <div className="rounded-xl p-4 flex items-start gap-3 bg-[rgba(212,175,55,0.08)] border border-gold/20">
         <AlertTriangle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
         <div>
           <p className="text-sm font-semibold text-foreground">Educational Tool Only</p>

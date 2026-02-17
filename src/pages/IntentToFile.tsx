@@ -162,7 +162,7 @@ export default function IntentToFile() {
               timeRemaining.isExpired
                 ? 'border-red-500/30'
                 : timeRemaining.isExpiringSoon
-                ? 'border-[rgba(212,175,55,0.3)]'
+                ? 'border-gold/30'
                 : 'border-emerald-500/30'
             }`}
           >
@@ -183,7 +183,7 @@ export default function IntentToFile() {
                     timeRemaining.isExpired
                       ? 'border-red-500/50 text-red-400'
                       : timeRemaining.isExpiringSoon
-                      ? 'border-[rgba(212,175,55,0.5)] text-gold'
+                      ? 'border-gold/50 text-gold'
                       : 'border-emerald-500/50 text-emerald-400'
                   }`}
                 >
@@ -266,7 +266,7 @@ export default function IntentToFile() {
 
               {/* Urgency Warning */}
               {timeRemaining.isExpiringSoon && !timeRemaining.isExpired && (
-                <div className="mt-4 flex items-start gap-3 p-3 rounded-lg bg-[rgba(212,175,55,0.1)] border border-[rgba(212,175,55,0.2)]">
+                <div className="mt-4 flex items-start gap-3 p-3 rounded-lg bg-gold/10 border border-gold/20">
                   <AlertCircle className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="text-sm font-medium text-gold">

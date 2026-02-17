@@ -51,7 +51,7 @@ const bodySystems = [
 ];
 
 const STATUS_COLORS: Record<string, string> = {
-  pending: 'bg-[rgba(212,175,55,0.2)] text-gold-dk border-[rgba(212,175,55,0.3)]',
+  pending: 'bg-gold/20 text-gold-dk border-gold/30',
   approved: 'bg-green-500/20 text-green-600 border-green-500/30',
   denied: 'bg-red-500/20 text-red-600 border-red-500/30',
   appeal: 'bg-purple-500/20 text-purple-600 border-purple-500/30',
@@ -108,7 +108,7 @@ function ConditionCard({ userCondition, conditionDetails, onView, onRemove, onNa
                 </Badge>
               )}
               {userCondition.serviceConnected && (
-                <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-[rgba(212,175,55,0.1)] text-gold border-[rgba(212,175,55,0.3)] flex-shrink-0">
+                <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-gold/10 text-gold border-gold/30 flex-shrink-0">
                   <Shield className="h-2.5 w-2.5 mr-0.5" />
                   SC
                 </Badge>
@@ -384,7 +384,7 @@ export default function Conditions() {
             const firstGap = evidenceGaps[0];
             if (firstGap?.conditionId) navigate(`/claims/${firstGap.conditionId}`);
           }}
-          className="w-full rounded-xl p-3 text-left bg-[rgba(212,175,55,0.08)] border border-[rgba(212,175,55,0.2)] hover:bg-[rgba(212,175,55,0.12)] transition-colors"
+          className="w-full rounded-xl p-3 text-left bg-[rgba(212,175,55,0.08)] border border-gold/20 hover:bg-[rgba(212,175,55,0.12)] transition-colors"
         >
           <div className="flex items-start gap-3">
             <AlertTriangle className="h-4 w-4 text-gold flex-shrink-0 mt-0.5" />

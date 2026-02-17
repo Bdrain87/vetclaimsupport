@@ -456,7 +456,7 @@ export function VASpeakTranslator() {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <Lightbulb className="h-4 w-4 text-[#D4AF37]" />
+            <Lightbulb className="h-4 w-4 text-gold" />
             Translation Examples
           </CardTitle>
           <CardDescription>

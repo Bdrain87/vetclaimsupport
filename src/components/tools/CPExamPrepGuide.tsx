@@ -203,7 +203,7 @@ export function CPExamPrepGuide({ initialCondition }: CPExamPrepGuideProps) {
               <AccordionItem value="symptom-tips" className="border rounded-lg px-4">
                 <AccordionTrigger className="hover:no-underline">
                   <div className="flex items-center gap-2">
-                    <Lightbulb className="h-4 w-4 text-[#D4AF37]" />
+                    <Lightbulb className="h-4 w-4 text-gold" />
                     <span>Tips for Describing Symptoms</span>
                   </div>
                 </AccordionTrigger>
@@ -211,7 +211,7 @@ export function CPExamPrepGuide({ initialCondition }: CPExamPrepGuideProps) {
                   <ul className="space-y-2">
                     {selectedPrep.symptomTips.map((item, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm">
-                        <span className="text-[#D4AF37] mt-1">★</span>
+                        <span className="text-gold mt-1">★</span>
                         <span>{item}</span>
                       </li>
                     ))}
@@ -223,7 +223,7 @@ export function CPExamPrepGuide({ initialCondition }: CPExamPrepGuideProps) {
               <AccordionItem value="documents" className="border rounded-lg px-4">
                 <AccordionTrigger className="hover:no-underline">
                   <div className="flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-[#D4AF37]" />
+                    <FileText className="h-4 w-4 text-gold" />
                     <span>Documents to Bring</span>
                   </div>
                 </AccordionTrigger>
@@ -326,7 +326,7 @@ export function CPExamPrepGuide({ initialCondition }: CPExamPrepGuideProps) {
             <AccordionItem value="general-docs" className="border rounded-lg px-4">
               <AccordionTrigger className="hover:no-underline">
                 <div className="flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-[#D4AF37]" />
+                  <FileText className="h-4 w-4 text-gold" />
                   <span>Essential Documents Checklist</span>
                 </div>
               </AccordionTrigger>
@@ -366,7 +366,7 @@ export function CPExamPrepGuide({ initialCondition }: CPExamPrepGuideProps) {
             <AccordionItem value="pro-tips" className="border rounded-lg px-4">
               <AccordionTrigger className="hover:no-underline">
                 <div className="flex items-center gap-2">
-                  <Lightbulb className="h-4 w-4 text-[#D4AF37]" />
+                  <Lightbulb className="h-4 w-4 text-gold" />
                   <span>Pro Tips from Veterans</span>
                 </div>
               </AccordionTrigger>
@@ -374,7 +374,7 @@ export function CPExamPrepGuide({ initialCondition }: CPExamPrepGuideProps) {
                 <ul className="space-y-2">
                   {generalExamTips.proTips.map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm">
-                      <span className="text-[#D4AF37] mt-1">★</span>
+                      <span className="text-gold mt-1">★</span>
                       <span>{item}</span>
                     </li>
                   ))}

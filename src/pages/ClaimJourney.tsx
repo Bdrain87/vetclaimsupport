@@ -407,13 +407,13 @@ export default function ClaimJourney() {
           {/* Tips */}
           <div>
             <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-[#D4AF37]" />
+              <Sparkles className="h-4 w-4 text-gold" />
               Tips for Success
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {currentPhase.tips.map((tip, i) => (
-                <div key={i} className="flex items-start gap-2 p-3 rounded-xl bg-[#D4AF37]/5 border border-[#D4AF37]/20">
-                  <CheckCircle className="h-4 w-4 text-[#B38728] mt-0.5 flex-shrink-0" />
+                <div key={i} className="flex items-start gap-2 p-3 rounded-xl bg-gold/5 border border-gold/20">
+                  <CheckCircle className="h-4 w-4 text-gold-dk mt-0.5 flex-shrink-0" />
                   <span className="text-sm text-muted-foreground">{tip}</span>
                 </div>
               ))}

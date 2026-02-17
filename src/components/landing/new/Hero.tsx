@@ -181,7 +181,7 @@ export function Hero() {
             <span className="relative z-10 text-xs px-3 py-1 rounded-full" style={{
               background: 'linear-gradient(135deg, rgba(191,149,63,0.2), rgba(191,149,63,0.05))',
               border: '1px solid rgba(191,149,63,0.3)',
-              color: '#FFD700',
+              color: 'var(--gold-hl)',
               fontWeight: 600,
             }}>
               Limited Launch Price

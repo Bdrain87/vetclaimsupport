@@ -535,11 +535,11 @@ Thank you for taking the time to help! Your statement could make a real differen
       </Card>
 
       {/* Share Template with Witness Card */}
-      <Card className="border-[#D4AF37]/30 bg-[#D4AF37]/5">
+      <Card className="border-gold/30 bg-gold/5">
         <CardHeader className="pb-3">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#D4AF37]/10">
-              <MessageSquare className="h-5 w-5 text-[#B38728]" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gold/10">
+              <MessageSquare className="h-5 w-5 text-gold-dk" />
             </div>
             <div>
               <CardTitle className="text-lg">Share Template with Witness</CardTitle>
@@ -750,9 +750,9 @@ Thank you for taking the time to help! Your statement could make a real differen
             {aiDraft && (
               <div className="space-y-3">
                 <AIDisclaimer variant="banner" />
-                <div className="p-3 rounded-lg bg-[#D4AF37]/10 border border-[#D4AF37]/30">
+                <div className="p-3 rounded-lg bg-gold/10 border border-gold/30">
                   <div className="flex items-start gap-2">
-                    <AlertTriangle className="h-4 w-4 text-[#B38728] mt-0.5 flex-shrink-0" />
+                    <AlertTriangle className="h-4 w-4 text-gold-dk mt-0.5 flex-shrink-0" />
                     <p className="text-xs text-muted-foreground">
                       <strong>Important:</strong> This outline helps your buddy understand what to include. They must write the final statement themselves in their own words based on what they personally observed.
                     </p>

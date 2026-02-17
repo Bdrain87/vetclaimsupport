@@ -431,10 +431,10 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
           className="w-14 h-14 rounded-xl flex items-center justify-center mb-5"
           style={{ backgroundColor: 'rgba(212,175,55,0.15)', border: '1px solid rgba(212,175,55,0.3)' }}
         >
-          <Icon size={24} style={{ color: '#D4AF37' }} />
+          <Icon size={24} style={{ color: 'var(--gold-md)' }} />
         </div>
 
-        <span className="text-[10px] font-medium tracking-widest uppercase" style={{ color: '#D4AF37' }}>
+        <span className="text-[10px] font-medium tracking-widest uppercase" style={{ color: 'var(--gold-md)' }}>
           {card.category}
         </span>
 
@@ -453,7 +453,7 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
           <ul className="space-y-1.5">
             {card.capabilities.map((cap) => (
               <li key={cap} className="flex items-start gap-2 text-sm" style={{ color: '#E2E8F0' }}>
-                <span className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: '#D4AF37' }} />
+                <span className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: 'var(--gold-md)' }} />
                 {cap}
               </li>
             ))}
@@ -464,7 +464,7 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
           className="inline-block rounded-full px-4 py-1.5 text-xs font-semibold"
           style={{
             backgroundColor: 'rgba(212,175,55,0.15)',
-            color: '#D4AF37',
+            color: 'var(--gold-md)',
           }}
         >
           {card.plan}
@@ -658,12 +658,12 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
                       border: '1px solid rgba(212,175,55,0.25)',
                     }}
                   >
-                    <Icon size={20} style={{ color: '#D4AF37' }} />
+                    <Icon size={20} style={{ color: 'var(--gold-md)' }} />
                   </div>
                   <div className="min-w-0">
                     <span
                       className="text-[10px] font-semibold tracking-[0.15em] uppercase block mb-1"
-                      style={{ color: '#D4AF37' }}
+                      style={{ color: 'var(--gold-md)' }}
                     >
                       {card.category}
                     </span>
@@ -765,9 +765,9 @@ function MobileCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => vo
               className="w-10 h-10 rounded-lg flex items-center justify-center mb-3"
               style={{ backgroundColor: 'rgba(212,175,55,0.15)' }}
             >
-              <Icon size={18} style={{ color: '#D4AF37' }} />
+              <Icon size={18} style={{ color: 'var(--gold-md)' }} />
             </div>
-            <span className="text-[10px] font-medium tracking-widest uppercase" style={{ color: '#D4AF37' }}>
+            <span className="text-[10px] font-medium tracking-widest uppercase" style={{ color: 'var(--gold-md)' }}>
               {card.category}
             </span>
             <h4 className="text-base font-semibold mt-1 mb-2" style={{ color: '#fff', letterSpacing: '-0.02em' }}>

@@ -117,10 +117,10 @@ function PacketSection({
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center gap-3 p-4 text-left hover:bg-accent/30 transition-colors"
       >
-        <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#D4AF37]/10 text-[#D4AF37] text-sm font-bold shrink-0">
+        <span className="flex items-center justify-center w-7 h-7 rounded-full bg-gold/10 text-gold text-sm font-bold shrink-0">
           {sectionNumber}
         </span>
-        <Icon className="h-5 w-5 text-[#D4AF37] shrink-0" />
+        <Icon className="h-5 w-5 text-gold shrink-0" />
         <span className="flex-1 font-semibold text-foreground text-base">{title}</span>
         <ChevronDown
           className={cn(
@@ -396,8 +396,8 @@ export default function CPExamPacket() {
 
       {/* Header */}
       <div className="flex items-start gap-4">
-        <div className="p-3 rounded-xl bg-[#D4AF37]/10 shrink-0">
-          <FileCheck className="h-6 w-6 text-[#D4AF37]" />
+        <div className="p-3 rounded-xl bg-gold/10 shrink-0">
+          <FileCheck className="h-6 w-6 text-gold" />
         </div>
         <div className="flex-1 min-w-0">
           <h1 className="text-2xl font-bold text-foreground">C&P Exam Packet</h1>
@@ -507,8 +507,8 @@ export default function CPExamPacket() {
                           condition.claimType === 'secondary'
                             ? 'bg-purple-500/20 text-purple-400 border-purple-500/30'
                             : condition.claimType === 'increase'
-                            ? 'bg-[rgba(212,175,55,0.2)] text-gold border-[rgba(212,175,55,0.3)]'
-                            : 'bg-[#D4AF37]/20 text-[#F0D78C] border-[#D4AF37]/30'
+                            ? 'bg-gold/20 text-gold border-gold/30'
+                            : 'bg-gold/20 text-gold-hl border-gold/30'
                         )}
                       >
                         {condition.claimType}
@@ -525,7 +525,7 @@ export default function CPExamPacket() {
                         <ul className="space-y-0.5">
                           {specificReminders.slice(0, 2).map((r, i) => (
                             <li key={i} className="flex items-start gap-1.5">
-                              <span className="text-[#D4AF37] mt-0.5">&#x2022;</span>
+                              <span className="text-gold mt-0.5">&#x2022;</span>
                               {r}
                             </li>
                           ))}
@@ -559,7 +559,7 @@ export default function CPExamPacket() {
                       <EvidenceItem label="Personal Statement" status={evidence.hasPersonalStatement} />
                     </div>
                     {evidence.gaps.length > 0 && (
-                      <div className="flex items-start gap-2 p-2 rounded-lg bg-[rgba(212,175,55,0.1)] border border-[rgba(212,175,55,0.2)]">
+                      <div className="flex items-start gap-2 p-2 rounded-lg bg-gold/10 border border-gold/20">
                         <AlertTriangle className="h-3.5 w-3.5 text-gold mt-0.5 shrink-0" />
                         <p className="text-xs text-gold">
                           Missing: {evidence.gaps.join(', ')}
@@ -641,7 +641,7 @@ export default function CPExamPacket() {
                   'Be specific with numbers (e.g., "3-4 times per week")',
                 ].map((point, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-foreground">
-                    <span className="text-[#D4AF37] font-bold mt-0.5 shrink-0">&#x2022;</span>
+                    <span className="text-gold font-bold mt-0.5 shrink-0">&#x2022;</span>
                     {point}
                   </li>
                 ))}
@@ -725,25 +725,25 @@ export default function CPExamPacket() {
       <div id="legal-research">
         <PacketSection title="Research Legal Precedent" icon={Scale} sectionNumber={7}>
           <div className="bg-[#7B5E1A]/30 border border-[#7B5E1A]/50 rounded-lg p-4">
-            <h3 className="text-lg font-semibold text-[#F0D78C] mb-2">Research Legal Precedent</h3>
+            <h3 className="text-lg font-semibold text-gold-hl mb-2">Research Legal Precedent</h3>
             <p className="text-sm text-muted-foreground mb-3">
               Use these verified legal databases to find case law relevant to your claim:
             </p>
             <div className="space-y-2">
               <a href="https://www.va.gov/vbs/bva/" target="_blank" rel="noopener noreferrer"
-                 className="flex items-center gap-2 text-[#F0D78C] hover:text-[#F0D78C] text-sm">
+                 className="flex items-center gap-2 text-gold-hl hover:text-gold-hl text-sm">
                 Board of Veterans' Appeals (BVA) Decisions
               </a>
               <a href="https://www.uscourts.cavc.gov/decisions.php" target="_blank" rel="noopener noreferrer"
-                 className="flex items-center gap-2 text-[#F0D78C] hover:text-[#F0D78C] text-sm">
+                 className="flex items-center gap-2 text-gold-hl hover:text-gold-hl text-sm">
                 Court of Appeals for Veterans Claims (CAVC)
               </a>
               <a href="https://scholar.google.com/" target="_blank" rel="noopener noreferrer"
-                 className="flex items-center gap-2 text-[#F0D78C] hover:text-[#F0D78C] text-sm">
+                 className="flex items-center gap-2 text-gold-hl hover:text-gold-hl text-sm">
                 Google Scholar — Legal Opinions
               </a>
               <a href="https://www.law.cornell.edu/uscode/text/38" target="_blank" rel="noopener noreferrer"
-                 className="flex items-center gap-2 text-[#F0D78C] hover:text-[#F0D78C] text-sm">
+                 className="flex items-center gap-2 text-gold-hl hover:text-gold-hl text-sm">
                 38 U.S.C. — Veterans' Benefits (Cornell Law)
               </a>
             </div>

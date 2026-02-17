@@ -547,7 +547,7 @@ export default function PersonalStatement() {
             </div>
 
             {filledSections < 5 && (
-              <Card className="border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.05)]">
+              <Card className="border-gold/30 bg-[rgba(212,175,55,0.05)]">
                 <CardContent className="pt-4">
                   <div className="flex items-start gap-2">
                     <AlertCircle className="h-5 w-5 text-gold mt-0.5 shrink-0" />
@@ -657,8 +657,8 @@ export default function PersonalStatement() {
     <PageContainer className="space-y-6 animate-fade-in overflow-x-hidden">
       {/* Header */}
       <div className="section-header mb-0">
-        <div className="section-icon bg-[#D4AF37]/10">
-          <FileText className="h-5 w-5 text-[#D4AF37]" />
+        <div className="section-icon bg-gold/10">
+          <FileText className="h-5 w-5 text-gold" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Personal Statement Builder</h1>

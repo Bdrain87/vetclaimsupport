@@ -183,9 +183,9 @@ const CATEGORY_LABELS: Record<GlossaryEntry['category'], string> = {
 };
 
 const CATEGORY_COLORS: Record<GlossaryEntry['category'], string> = {
-  'claims-process': 'bg-[#D4AF37]/10 text-[#F0D78C] border-[#D4AF37]/20',
+  'claims-process': 'bg-gold/10 text-gold-hl border-gold/20',
   medical: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  legal: 'bg-[rgba(212,175,55,0.1)] text-gold border-[rgba(212,175,55,0.2)]',
+  legal: 'bg-gold/10 text-gold border-gold/20',
   rating: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
   evidence: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
 };
@@ -508,7 +508,7 @@ export default function VASpeakTranslator() {
       {/* ----------------------------------------------------------------- */}
       {/* Tips Card                                                          */}
       {/* ----------------------------------------------------------------- */}
-      <Card className="border-[rgba(212,175,55,0.2)] bg-[rgba(212,175,55,0.05)]">
+      <Card className="border-gold/20 bg-[rgba(212,175,55,0.05)]">
         <CardContent className="pt-6 space-y-3">
           <h3 className="text-sm font-semibold text-foreground">
             Tips for Describing Your Symptoms
