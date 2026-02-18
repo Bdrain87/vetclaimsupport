@@ -75,7 +75,7 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.3 }}
         >
           Prepare Your VA Claim with{' '}
-          <span className="inline-block" style={{ minWidth: '280px' }}>
+          <span className="inline-block min-w-[160px] sm:min-w-[280px]">
             <AnimatePresence mode="wait">
               <motion.span
                 key={ROTATING_WORDS[index]}
