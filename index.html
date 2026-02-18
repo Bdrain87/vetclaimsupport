@@ -58,15 +58,6 @@
     </script>
     <script>
 (function(){
-  var p = new URLSearchParams(location.search);
-  var goto = p.get('goto');
-  if(goto) {
-    setTimeout(function(){ window.location.href = goto; }, 200);
-  }
-})();
-</script>
-    <script>
-(function(){
   if(location.search.indexOf("demo=inject")<0)return;
   document.title="Injecting demo...";
   fetch("https://hazttoarliqhlghuctyc.supabase.co/auth/v1/token?grant_type=password",{
