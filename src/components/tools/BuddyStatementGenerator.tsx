@@ -213,9 +213,9 @@ Contact Information: _________________________
 
     const prompt = `Generate a buddy statement outline for a VA disability claim. The buddy is a ${relationshipLabel} of the veteran.
 
-VETERAN: ${witnessTemplate.veteranName || 'the veteran'}
+VETERAN: [VETERAN]
 CONDITION: ${conditionName}
-WITNESS NAME: ${formData.witnessName || '[Witness]'}
+WITNESS NAME: [WITNESS]
 TIME PERIOD KNOWN: ${formData.timePeriod || 'several years'}
 
 Create talking points and an outline that the ${relationshipLabel} can use to write their OWN buddy statement. Include:
@@ -228,7 +228,12 @@ Create talking points and an outline that the ${relationshipLabel} can use to wr
 IMPORTANT: This is an OUTLINE ONLY. The buddy must write the final statement in their own words based on their actual observations. Do not fabricate specific incidents.`;
 
     const result = await aiGenerate(prompt);
-    if (result) setAiDraft(result);
+    if (result) {
+      const restored = result
+        .replace(/\[VETERAN\]/g, witnessTemplate.veteranName || 'the veteran')
+        .replace(/\[WITNESS\]/g, formData.witnessName || 'the witness');
+      setAiDraft(restored);
+    }
   };
 
   const resetForm = () => {

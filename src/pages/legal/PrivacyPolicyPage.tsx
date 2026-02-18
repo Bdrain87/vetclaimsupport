@@ -23,7 +23,7 @@ export default function PrivacyPolicyPage() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Privacy Policy</h1>
-          <p className="text-muted-foreground/70 text-sm mt-1">Vet Claim Support &mdash; Last updated: February 2026</p>
+          <p className="text-muted-foreground/70 text-sm mt-1">Vet Claim Support &mdash; Version 1.1 &mdash; Effective February 18, 2026</p>
         </div>
       </div>
 
@@ -80,7 +80,7 @@ export default function PrivacyPolicyPage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">3. How Data Is Stored</h2>
           <p className="text-muted-foreground">
-            <strong className="text-foreground">PRIMARY:</strong> All data is encrypted using AES-256-GCM encryption and stored securely. Set a vault passcode in Settings to enable full encryption on your device. VCS is not a HIPAA-covered entity; however, we treat all health-related data with the same care and apply encryption at rest and in transit.
+            <strong className="text-foreground">PRIMARY:</strong> All data is encrypted using AES-256-GCM encryption and stored securely. Set a vault passcode in Settings to enable full encryption on your device. VCS is not a healthcare provider, health plan, or healthcare clearinghouse as defined by HIPAA, and is therefore not a HIPAA-covered entity or business associate. However, because our users entrust us with health-related information, we voluntarily follow industry-standard security practices including encryption at rest and in transit, role-based access controls, and audit logging.
           </p>
           <p className="text-muted-foreground">
             <strong className="text-foreground">OPTIONAL CLOUD SYNC:</strong> If you create an account, data may be synced to our cloud database (Supabase PostgreSQL) for cross-device access. Cloud sync is optional and not required.
@@ -99,11 +99,18 @@ export default function PrivacyPolicyPage() {
           <ul className="space-y-1.5 text-muted-foreground">
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(a) Transmitted over encrypted connections (TLS)</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(b) Processed in real-time and not stored by VCS on any server</li>
-            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(c) Subject to the AI provider&apos;s own data handling policies</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(c) Subject to <a href="https://ai.google.dev/terms" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline">Google&apos;s Gemini API Terms of Service</a></li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(d) Never used by VCS for AI model training</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(e) Under Google&apos;s paid API terms, your data is not used by Google to train or improve their AI models</li>
           </ul>
           <p className="text-muted-foreground">
-            AI features are entirely optional. The app functions fully without an AI API key.
+            <strong className="text-foreground">PHI SAFEGUARDS:</strong> Before sending text to Google Gemini, VCS automatically strips detectable personally identifiable information (SSNs, phone numbers, email addresses, dates of birth, and street addresses) using pattern-based sanitization. Veteran names are replaced with placeholders before transmission and restored client-side. However, free-text fields may contain information that automated sanitization cannot detect. You should avoid entering sensitive PII in free-text AI prompts.
+          </p>
+          <p className="text-muted-foreground">
+            <strong className="text-foreground">ANONYMOUS USAGE:</strong> If you use AI features without creating an account, an anonymous session is created. Because anonymous sessions are not linked to a known identity, data deletion requests cannot retroactively cover anonymous AI usage. To ensure full control over your data, we recommend creating an account before using AI features.
+          </p>
+          <p className="text-muted-foreground">
+            AI features are entirely optional. The app functions fully without them.
           </p>
         </section>
 
@@ -171,7 +178,7 @@ export default function PrivacyPolicyPage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">10. Data Retention</h2>
           <p className="text-muted-foreground">
-            Local data persists on your device until you delete it. Cloud data persists until you delete your account. Upon account deletion, data is removed from active systems immediately. Encrypted backup remnants may persist for up to 30 days in provider backup systems before automatic purge.
+            Local data persists on your device until you delete it. Cloud data persists until you delete your account. Upon account deletion, data is removed from active systems immediately. Encrypted backup remnants may persist for up to 30 days in provider backup systems before automatic purge. Cloud data for accounts inactive for more than 365 days may be automatically deleted as part of our data retention practices.
           </p>
         </section>
 
@@ -186,8 +193,8 @@ export default function PrivacyPolicyPage() {
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Google Gemini</strong> (AI features, optional)</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Stripe</strong> (payment processing for Premium purchases)</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Vercel</strong> (web hosting and deployment)</li>
-                            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Apple Sign-In</strong> (authentication, optional)</li>
-                          <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Google Sign-In</strong> (authentication, optional)</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Apple Sign-In</strong> (authentication, optional)</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Google Sign-In</strong> (authentication, optional)</li>
           </ul>
           <p className="text-muted-foreground">
             Each third-party service has its own privacy policy.
@@ -198,21 +205,40 @@ export default function PrivacyPolicyPage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">12. Data Breach Notification</h2>
           <p className="text-muted-foreground">
-            In the event of a data breach affecting your personal information, we will notify affected users as soon as reasonably practicable, in accordance with applicable state laws.
+            In the event of a data breach affecting your personal information, we will:
           </p>
-        </section>
-
-        {/* Section 13: Changes to This Policy */}
-        <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-foreground">13. Changes to This Policy</h2>
+          <ul className="space-y-1.5 text-muted-foreground">
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(a) Investigate the scope and nature of the breach promptly</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(b) Notify affected users without unreasonable delay via email and/or in-app notification</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(c) Provide details about what information was affected and steps you can take to protect yourself</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(d) Report to relevant state authorities as required by applicable breach notification laws, including the Michigan Identity Theft Protection Act</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(e) Document the incident and remediation steps taken</li>
+          </ul>
           <p className="text-muted-foreground">
-            We may update this Privacy Policy. Material changes will be communicated through the app. Continued use constitutes acceptance.
+            To report a suspected security incident, contact{' '}
+            <a href="mailto:Admin@vetclaimsupport.com" className="text-gold hover:underline">Admin@vetclaimsupport.com</a>.
           </p>
         </section>
 
-        {/* Section 14: Contact */}
+        {/* Section 13: Local Storage and Cookies */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold text-foreground">14. Contact</h2>
+          <h2 className="text-lg font-semibold text-foreground">13. Local Storage and Cookies</h2>
+          <p className="text-muted-foreground">
+            VCS uses browser localStorage and IndexedDB to store your data locally on your device. This is essential for the app to function. We do not use tracking cookies, advertising cookies, or third-party analytics cookies. The local storage is used solely to persist your entered data between sessions. By using the app, you consent to this use of local storage as described in this policy.
+          </p>
+        </section>
+
+        {/* Section 14: Changes to This Policy */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-foreground">14. Changes to This Policy</h2>
+          <p className="text-muted-foreground">
+            We may update this Privacy Policy. Each version will be identified by a version number and effective date at the top of this page. Material changes will be communicated through the app and may require re-acceptance of terms. Continued use after notification constitutes acceptance.
+          </p>
+        </section>
+
+        {/* Section 15: Contact */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-foreground">15. Contact</h2>
           <p className="text-muted-foreground">
             Privacy questions:{' '}
             <a href="mailto:Admin@vetclaimsupport.com" className="text-gold hover:underline">

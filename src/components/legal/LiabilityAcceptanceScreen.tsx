@@ -6,8 +6,10 @@ import { ShieldAlert, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { cn } from '@/lib/utils';
+import { supabase } from '@/lib/supabase';
 
 const LIABILITY_ACCEPTED_KEY = 'liabilityAccepted';
+const TERMS_VERSION = '1.1';
 
 export function LiabilityAcceptanceScreen() {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,12 +37,30 @@ export function LiabilityAcceptanceScreen() {
   };
 
   const handleContinue = () => {
+    const timestamp = new Date().toISOString();
     try {
       localStorage.setItem(LIABILITY_ACCEPTED_KEY, 'true');
-      localStorage.setItem('consentTimestamp', new Date().toISOString());
+      localStorage.setItem('consentTimestamp', timestamp);
+      localStorage.setItem('consentTermsVersion', TERMS_VERSION);
     } catch {
       // Storage full or unavailable
     }
+
+    (async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          await supabase.from('consent_log').insert({
+            user_id: session.user.id,
+            terms_version: TERMS_VERSION,
+            accepted_at: timestamp,
+          });
+        }
+      } catch {
+        // Non-fatal: local consent is still recorded
+      }
+    })();
+
     setIsOpen(false);
   };
 

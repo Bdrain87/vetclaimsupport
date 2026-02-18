@@ -244,7 +244,7 @@ export function createDoctorSummaryPrompt(params: {
   return `Generate a doctor summary template for the following veteran data.
 
 <veteran_data>
-VETERAN: ${params.veteranName}
+VETERAN: [VETERAN]
 CONDITION: ${params.conditionName}
 ${isSecondary ? `PRIMARY CONDITION (for secondary claim): ${params.primaryCondition}` : ''}
 SERVICE DATES: ${params.serviceStart} to ${params.serviceEnd}
@@ -290,7 +290,7 @@ export function createPersonalStatementPrompt(params: {
   return `Help write a personal statement for a VA disability claim using the data below.
 
 <veteran_data>
-VETERAN: ${params.veteranName}
+VETERAN: [VETERAN]
 CONDITION: ${params.condition}
 BRANCH: ${params.serviceInfo.branch}
 ${params.serviceInfo.mos ? `MOS: ${params.serviceInfo.mos}` : ''}
