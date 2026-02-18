@@ -80,7 +80,7 @@ export default function PrivacyPolicyPage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">3. How Data Is Stored</h2>
           <p className="text-muted-foreground">
-            <strong className="text-foreground">PRIMARY:</strong> All data is encrypted using AES-256-GCM encryption and stored securely. Set a vault passcode in Settings to enable full encryption on your device. VCS is not a healthcare provider, health plan, or healthcare clearinghouse as defined by HIPAA, and is therefore not a HIPAA-covered entity. However, we implement security practices aligned with HIPAA administrative, technical, and physical safeguard requirements as a best practice, including encryption at rest and in transit, access controls, and audit logging.
+            <strong className="text-foreground">PRIMARY:</strong> All data is encrypted using AES-256-GCM encryption and stored securely. Set a vault passcode in Settings to enable full encryption on your device. VCS is not a healthcare provider, health plan, or healthcare clearinghouse as defined by HIPAA, and is therefore not a HIPAA-covered entity or business associate. However, because our users entrust us with health-related information, we voluntarily follow industry-standard security practices including encryption at rest and in transit, role-based access controls, and audit logging.
           </p>
           <p className="text-muted-foreground">
             <strong className="text-foreground">OPTIONAL CLOUD SYNC:</strong> If you create an account, data may be synced to our cloud database (Supabase PostgreSQL) for cross-device access. Cloud sync is optional and not required.
@@ -178,7 +178,7 @@ export default function PrivacyPolicyPage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">10. Data Retention</h2>
           <p className="text-muted-foreground">
-            Local data persists on your device until you delete it. Cloud data persists until you delete your account. Upon account deletion, data is removed from active systems immediately. Encrypted backup remnants may persist for up to 30 days in provider backup systems before automatic purge.
+            Local data persists on your device until you delete it. Cloud data persists until you delete your account. Upon account deletion, data is removed from active systems immediately. Encrypted backup remnants may persist for up to 30 days in provider backup systems before automatic purge. Cloud data for accounts inactive for more than 365 days may be automatically deleted as part of our data retention practices.
           </p>
         </section>
 
@@ -193,8 +193,8 @@ export default function PrivacyPolicyPage() {
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Google Gemini</strong> (AI features, optional)</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Stripe</strong> (payment processing for Premium purchases)</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Vercel</strong> (web hosting and deployment)</li>
-                            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Apple Sign-In</strong> (authentication, optional)</li>
-                          <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Google Sign-In</strong> (authentication, optional)</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Apple Sign-In</strong> (authentication, optional)</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Google Sign-In</strong> (authentication, optional)</li>
           </ul>
           <p className="text-muted-foreground">
             Each third-party service has its own privacy policy.

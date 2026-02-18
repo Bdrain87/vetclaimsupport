@@ -13,7 +13,7 @@ Vet Claim Support
 
 ### Subtitle (30 characters max)
 ```
-Prepare Your VA Disability Claim
+Prepare Your VA Claim
 ```
 
 ### Promotional Text (170 characters max)
@@ -90,7 +90,7 @@ BUILT FOR EVERY VETERAN
 
 YOUR DATA STAYS YOURS
 
-All information is stored locally on your device. We never see your health data, conditions, or personal information. No accounts required. No cloud uploads. Your privacy, protected.
+All information is stored locally on your device by default. Cloud sync and accounts are optional. AI features process text securely and do not store your data. Your privacy, protected.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -149,7 +149,7 @@ Thank you for your service. We're committed to helping you get the rating you ea
 - **Key Elements:** Condition cards, rating percentages, connection indicators
 
 ### Screenshot 3: Exam Prep
-- **Caption:** `Dominate your C&P exam`
+- **Caption:** `Prepare for your C&P exam`
 - **Visual:** Exam Companion document with condition-specific prep
 - **Key Elements:** Talking points, examiner tips, common mistakes
 
