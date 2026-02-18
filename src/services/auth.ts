@@ -27,7 +27,7 @@ export async function signInWithApple() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'apple',
     options: {
-      redirectTo: window.location.origin,
+      redirectTo: `${window.location.origin}/auth`,
     },
   });
   if (error) throw sanitizeAuthError(error);
@@ -38,7 +38,7 @@ export async function signInWithGoogle() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: window.location.origin,
+      redirectTo: `${window.location.origin}/auth`,
     },
   });
   if (error) throw sanitizeAuthError(error);

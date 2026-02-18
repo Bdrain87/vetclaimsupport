@@ -7,7 +7,7 @@ const NAV_LINKS = [
   { label: 'Features', href: '#features' },
   { label: 'How It Works', href: '#how-it-works' },
   { label: 'Pricing', href: '#pricing' },
-  { label: 'Sign In', href: '/login', isRoute: true },
+  { label: 'Sign In', href: '/auth', isRoute: true },
 ];
 
 export function StickyNav() {
@@ -72,7 +72,7 @@ export function StickyNav() {
               )
             ))}
             <Link
-              to="/login"
+              to="/auth"
               className="rounded-full px-6 py-2 text-sm font-semibold text-black no-underline"
               style={{
                 background:
@@ -125,7 +125,7 @@ export function StickyNav() {
               )
             ))}
             <Link
-              to="/login"
+              to="/auth"
               onClick={() => setMobileOpen(false)}
               className="rounded-full px-8 py-3 text-lg font-semibold text-black no-underline mt-4"
               style={{

@@ -97,6 +97,9 @@ const DisclaimerPage = lazy(() => import('./pages/legal/DisclaimerPage'));
 const LandingPage = lazy(() => import('./pages/LandingPage'));
 const Login = lazy(() => import('./pages/Login'));
 
+// Auth page
+const AuthPage = lazy(() => import('./pages/AuthPage'));
+
 function LoadingFallback() {
   return (
     <div
@@ -360,11 +363,39 @@ function AnimatedRoutes() {
   );
 }
 
+function AuthGuard({ children }: { children: React.ReactNode }) {
+  const [state, setState] = useState<'loading' | 'authed' | 'unauthed'>('loading');
+  const location = useLocation();
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setState(session ? 'authed' : 'unauthed');
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setState(session ? 'authed' : 'unauthed');
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (state === 'loading') {
+    return <LoadingFallback />;
+  }
+
+  if (state === 'unauthed') {
+    sessionStorage.setItem('post_login_redirect', location.pathname);
+    return <Navigate to="/auth" replace />;
+  }
+
+  return <>{children}</>;
+}
+
 function AppContent() {
   const location = useLocation();
   const isLandingRoute = isWeb && location.pathname === '/';
   const isLoginRoute = location.pathname === '/login';
-  // Web root — show landing page (users click through to /app)
+  const isAuthRoute = location.pathname === '/auth';
+
   if (isLandingRoute) {
     return (
       <Suspense fallback={<LoadingFallback />}>
@@ -381,8 +412,16 @@ function AppContent() {
     );
   }
 
-  // App shell
-  return (
+  if (isAuthRoute) {
+    return (
+      <Suspense fallback={<LoadingFallback />}>
+        <AuthPage />
+      </Suspense>
+    );
+  }
+
+  // App shell — requires authentication on web
+  const appShell = (
     <div className="h-screen overflow-hidden flex flex-row bg-background text-foreground break-words w-full max-w-full">
       <a
         href="#main-content"
@@ -402,14 +441,19 @@ function AppContent() {
       </div>
     </div>
   );
+
+  if (isWeb) {
+    return <AuthGuard>{appShell}</AuthGuard>;
+  }
+
+  return appShell;
 }
 
 function App() {
   useSessionTimeout();
   const hydrated = useHydration();
   const [showSplash, setShowSplash] = useState(() => {
-    // Skip splash on web landing page
-    if (isWeb && window.location.pathname === '/') return false;
+    if (isWeb && (window.location.pathname === '/' || window.location.pathname === '/auth')) return false;
     return true;
   });
 

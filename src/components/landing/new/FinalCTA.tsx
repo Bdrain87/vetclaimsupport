@@ -108,7 +108,7 @@ export function FinalCTA() {
             style={{ borderRadius: '9999px' }}
           >
             <Link
-              to="/login"
+              to="/auth"
               className="inline-block px-12 py-4 text-lg font-semibold text-black no-underline"
               style={{ background: GOLD_GRADIENT, borderRadius: '9999px' }}
             >
