@@ -23,7 +23,7 @@ export default function TermsOfServicePage() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Terms of Service</h1>
-          <p className="text-muted-foreground/70 text-sm mt-1">Vet Claim Support &mdash; Last updated: February 2026</p>
+          <p className="text-muted-foreground/70 text-sm mt-1">Vet Claim Support &mdash; Version 1.1 &mdash; Effective February 18, 2026</p>
         </div>
       </div>
 

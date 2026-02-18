@@ -5,6 +5,7 @@ import { useAICacheStore } from '@/store/useAICacheStore';
 import { stopSync } from '@/services/syncEngine';
 import { ALL_LOCAL_STORAGE_KEYS } from '@/services/auth';
 import { exportAllEvidence } from '@/utils/pdfExport';
+import { logAuditEvent } from '@/services/auditLog';
 import type { ClaimsData } from '@/types/claims';
 
 export async function exportAllData(format: 'json' | 'pdf'): Promise<Blob> {
@@ -70,6 +71,7 @@ export async function exportAllData(format: 'json' | 'pdf'): Promise<Blob> {
   };
 
   const blob = await exportAllEvidence(claimsData, { returnBlob: true });
+  await logAuditEvent('data_export', `format=${format}`);
   return blob as Blob;
 }
 

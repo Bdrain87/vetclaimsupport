@@ -80,6 +80,7 @@ export const ALL_LOCAL_STORAGE_KEYS = [
   'hasSeenOnboarding',
   'vcs_first_launch',
   'consentTimestamp',
+  'consentTermsVersion',
   // UI state
   'va-claims-theme',
   'cpExamChecklist',

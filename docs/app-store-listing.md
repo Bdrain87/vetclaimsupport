@@ -13,7 +13,7 @@ Vet Claim Support
 
 ### Subtitle (30 characters max)
 ```
-Win Your VA Disability Claim
+Prepare Your VA Disability Claim
 ```
 
 ### Promotional Text (170 characters max)
@@ -27,7 +27,7 @@ New: PACT Act presumptive conditions database. Know if your condition qualifies 
 ## Description (4000 characters max)
 
 ```
-Get the VA rating you earned.
+Organize your VA disability claim.
 
 Every year, thousands of veterans are underrated or denied because they didn't know what the VA was looking for. Claim consultants charge $10,000+ for information that should be free.
 
@@ -41,7 +41,7 @@ See the exact criteria the VA uses to rate your conditions. The same DBQ forms a
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-DOMINATE YOUR C&P EXAM
+PREPARE FOR YOUR C&P EXAM
 
 Your Compensation & Pension exam is the most important 30 minutes of your claim. Generate a personalized Exam Companion document with:
 - Key symptoms to describe for each condition
@@ -196,8 +196,8 @@ Thank you for your service. We're committed to helping you get the rating you ea
 ## App Store Connect Settings
 
 ### Category
-- **Primary:** Medical
-- **Secondary:** Utilities
+- **Primary:** Education
+- **Secondary:** Productivity
 
 ### Age Rating
 - **Rating:** 17+
@@ -214,14 +214,22 @@ Thank you for your service. We're committed to helping you get the rating you ea
 
 ## Privacy Nutrition Label
 
-### Data Not Collected
-- We do not collect any data from this app
-
 ### Data Linked to You
-- None
+- Contact Info (email address — only if you create an account)
+- Health & Fitness (symptom logs, medical visit records, medication tracking — only data you choose to enter)
+- Identifiers (user ID — only if you create an account)
 
 ### Data Not Linked to You
-- Analytics (anonymized crash reports, usage statistics)
+- Diagnostics (anonymized crash reports, performance metrics)
+
+### Data Used to Track You
+- None — we do not track users across apps or websites
+
+### Notes
+- All health data is stored locally on your device by default
+- Cloud sync is optional and requires account creation
+- AI features send text to Google Gemini for processing (not stored by VCS)
+- Payment processing is handled by Stripe (VCS does not store payment details)
 
 ---
 

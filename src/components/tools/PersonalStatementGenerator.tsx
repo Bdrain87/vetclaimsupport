@@ -194,7 +194,8 @@ _______________________________
 
     const result = await aiGenerate(prompt);
     if (result) {
-      setAiDraft(result);
+      const nameRestored = result.replace(/\[VETERAN\]/g, veteranFullName || 'Veteran');
+      setAiDraft(nameRestored);
       setDraftMode('ai');
     }
   };
