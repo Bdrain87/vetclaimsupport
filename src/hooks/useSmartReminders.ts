@@ -34,10 +34,14 @@ export function useSmartReminders(): SmartReminder[] {
   return useMemo(() => {
     const reminders: SmartReminder[] = [];
 
+    const pendingConditions = userConditions.filter(
+      (c) => c.claimStatus !== 'approved',
+    );
+
     const lastSymptom = symptoms.length
       ? symptoms.reduce((a, b) => (a.date > b.date ? a : b))
       : null;
-    if (!lastSymptom || daysSince(lastSymptom.date) > 7) {
+    if (pendingConditions.length > 0 && (!lastSymptom || daysSince(lastSymptom.date) > 7)) {
       reminders.push({
         id: 'symptom-gap',
         title: 'Log your symptoms',
@@ -52,7 +56,7 @@ export function useSmartReminders(): SmartReminder[] {
     const lastSleep = sleepEntries.length
       ? sleepEntries.reduce((a, b) => (a.date > b.date ? a : b))
       : null;
-    const hasSleepCondition = userConditions.some(
+    const hasSleepCondition = pendingConditions.some(
       (c) => c.conditionId.includes('sleep') || c.conditionId.includes('apnea'),
     );
     if (hasSleepCondition && (!lastSleep || daysSince(lastSleep.date) > 3)) {
@@ -65,7 +69,7 @@ export function useSmartReminders(): SmartReminder[] {
       });
     }
 
-    const hasMigraineCondition = userConditions.some(
+    const hasMigraineCondition = pendingConditions.some(
       (c) => c.conditionId.includes('migraine') || c.conditionId.includes('headache'),
     );
     const lastMigraine = migraines.length
@@ -125,7 +129,7 @@ export function useSmartReminders(): SmartReminder[] {
     const missingDocs = documents.filter(
       (d) => d.status === 'Not Started' || d.status === 'In Progress',
     );
-    if (missingDocs.length > 0 && userConditions.length > 0) {
+    if (missingDocs.length > 0 && pendingConditions.length > 0) {
       reminders.push({
         id: 'missing-docs',
         title: `${missingDocs.length} documents need attention`,
@@ -138,7 +142,7 @@ export function useSmartReminders(): SmartReminder[] {
     const lastVisit = medicalVisits.length
       ? medicalVisits.reduce((a, b) => (a.date > b.date ? a : b))
       : null;
-    if (userConditions.length > 0 && (!lastVisit || daysSince(lastVisit.date) > 90)) {
+    if (pendingConditions.length > 0 && (!lastVisit || daysSince(lastVisit.date) > 90)) {
       reminders.push({
         id: 'medical-visit',
         title: 'Schedule a medical visit',

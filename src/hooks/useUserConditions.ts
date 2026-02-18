@@ -46,7 +46,11 @@ export function useUserConditions() {
 
       const existingWithSameId = current.filter((c) => c.conditionId === conditionId);
       if (existingWithSameId.length > 0 && !options?.bodyPart) {
-        // Condition already added
+        if (options && (options.claimStatus !== undefined || options.rating !== undefined)) {
+          const existing = existingWithSameId[0];
+          store.updateUserCondition(existing.id, options);
+          return { ...existing, ...options };
+        }
         return null;
       }
 
