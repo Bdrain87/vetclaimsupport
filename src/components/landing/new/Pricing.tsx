@@ -6,13 +6,8 @@ import { Check, AlertTriangle } from 'lucide-react';
 
 const FREE_FEATURES = [
   'VA Combined Rating Calculator',
-  'Claim Checklist',
-  'VA-Speak Translator',
-  'VA Form Guide',
-  'Intent to File Guide',
-  'Glossary & FAQ',
   '800+ Condition Database',
-  'Travel Pay Calculator',
+  'Glossary & FAQ',
 ];
 
 interface FeatureGroup {
@@ -21,6 +16,16 @@ interface FeatureGroup {
 }
 
 const PREMIUM_FEATURE_GROUPS: FeatureGroup[] = [
+  {
+    category: 'Guides & Tools',
+    features: [
+      'Claim Checklist',
+      'VA Form Guide',
+      'Intent to File Guide',
+      'Travel Pay Calculator',
+      'VA-Speak Translator',
+    ],
+  },
   {
     category: 'Document Builders',
     features: [
