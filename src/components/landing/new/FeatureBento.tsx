@@ -76,7 +76,7 @@ const CARDS: CardData[] = [
     short: 'Track every step of your claim preparation',
     detail: 'Comprehensive checklist that walks you through each phase of the VA claim process so nothing gets missed.',
     capabilities: ['Step-by-step tracking', 'Progress indicators', 'Phase organization', 'Completion status'],
-    plan: 'Free Forever',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Claim Management',
   },
   {
@@ -85,7 +85,7 @@ const CARDS: CardData[] = [
     short: 'Decode VA jargon into plain English',
     detail: 'Paste any VA letter, decision, or notice and get a clear explanation of what it actually means.',
     capabilities: ['Plain English translations', 'Decision letter decoding', 'VA acronym lookup', 'Context explanations'],
-    plan: 'Free Forever',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Reference',
   },
   {
@@ -94,7 +94,7 @@ const CARDS: CardData[] = [
     short: 'Step-by-step help filling out VA forms',
     detail: 'Interactive guides for the most common VA forms with field-by-field instructions and tips for each section.',
     capabilities: ['Field-by-field guidance', 'Common mistake warnings', 'Form selection help', 'Submission tips'],
-    plan: 'Free Forever',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Reference',
   },
   {
@@ -103,7 +103,7 @@ const CARDS: CardData[] = [
     short: 'Protect your effective date before you\'re ready',
     detail: 'Learn how to lock in your effective date with an Intent to File, giving you up to a year to complete your claim.',
     capabilities: ['Effective date protection', 'Filing instructions', 'Deadline tracking', 'Back pay implications'],
-    plan: 'Free Forever',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Reference',
   },
   {
@@ -112,7 +112,7 @@ const CARDS: CardData[] = [
     short: 'Pre-discharge filing guide for active duty',
     detail: 'Step-by-step guide for Benefits Delivery at Discharge—file your claim 180–90 days before separation.',
     capabilities: ['Timeline guidance', 'Eligibility check', 'Required documents', 'Process walkthrough'],
-    plan: 'Free Forever',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Reference',
   },
   {
@@ -121,7 +121,7 @@ const CARDS: CardData[] = [
     short: 'Estimate your VA travel reimbursement',
     detail: 'Calculate mileage reimbursement for VA medical appointments based on distance and current reimbursement rates.',
     capabilities: ['Mileage calculation', 'Current VA rates', 'Appointment tracking', 'Reimbursement estimates'],
-    plan: 'Free Forever',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Calculators',
   },
   {
@@ -148,7 +148,7 @@ const CARDS: CardData[] = [
     short: 'Find conditions common to your era of service',
     detail: 'Reference guide linking military conflicts and service eras to commonly associated VA disability conditions.',
     capabilities: ['Era-specific conditions', 'Conflict mapping', 'Exposure risks', 'Common claims by era'],
-    plan: 'Free Forever',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Reference',
   },
   // ── Premium: Document Builders ──────────────────
@@ -369,7 +369,7 @@ const CARDS: CardData[] = [
     short: 'Track your claim progress from start to decision',
     detail: 'Visual progress tracker through each phase of the VA claim process with milestone tracking and next-step guidance.',
     capabilities: ['Phase tracking', 'Milestone alerts', 'Progress visualization', 'Next-step guidance'],
-    plan: 'Free Forever',
+    plan: 'Premium ($9.99 one-time)',
     category: 'Claim Management',
   },
 ];
