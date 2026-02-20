@@ -223,7 +223,7 @@ export default function TermsOfServicePage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">15. Dispute Resolution and Governing Law</h2>
           <p className="text-muted-foreground">
-            These Terms are governed by the laws of the State of Michigan, without regard to conflict of law principles. Any dispute arising from these Terms or your use of the Service shall be resolved through binding arbitration in accordance with the rules of the American Arbitration Association, conducted in the State of Michigan. You agree to waive any right to participate in a class action lawsuit or class-wide arbitration against VCS.
+            These Terms are governed by the laws of the State of Michigan, without regard to conflict of law principles. Any dispute arising from these Terms or your use of the Service shall be resolved through binding arbitration in accordance with the rules of the American Arbitration Association, conducted in the State of Michigan. Either party may bring an individual action in small claims court in lieu of arbitration, provided the claim falls within the court&apos;s jurisdictional limits. You agree to waive any right to participate in a class action lawsuit or class-wide arbitration against VCS.
           </p>
         </section>
 
