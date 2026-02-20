@@ -97,7 +97,7 @@ export default function PrivacyPolicyPage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">4. AI Data Processing</h2>
           <p className="text-muted-foreground">
-            When you use AI-powered features, the text you provide is sent to Google Gemini for processing. This data is:
+            When you use AI-powered features, the text you provide is sent to a third-party AI service provider (currently Google Gemini) for processing. This data is:
           </p>
           <ul className="space-y-1.5 text-muted-foreground">
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(a) Transmitted over encrypted connections (TLS)</li>
@@ -193,7 +193,7 @@ export default function PrivacyPolicyPage() {
           </p>
           <ul className="space-y-1.5 text-muted-foreground">
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Supabase</strong> (cloud database, optional)</li>
-            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Google Gemini</strong> (AI features, optional)</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Third-party AI service provider</strong> (currently Google Gemini — AI features, optional)</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Stripe</strong> (payment processing for Premium purchases)</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Vercel</strong> (web hosting and deployment)</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Apple Sign-In</strong> (authentication, optional)</li>

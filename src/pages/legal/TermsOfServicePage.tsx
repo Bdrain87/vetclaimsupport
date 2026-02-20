@@ -105,14 +105,14 @@ export default function TermsOfServicePage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">6. Artificial Intelligence Disclosure</h2>
           <p className="text-muted-foreground">
-            The Service uses Google Gemini artificial intelligence to generate suggestions, templates, and content enhancements. BY USING AI FEATURES, YOU ACKNOWLEDGE AND AGREE THAT:
+            The Service uses a third-party AI service provider (currently Google Gemini) to generate suggestions, templates, and content enhancements. BY USING AI FEATURES, YOU ACKNOWLEDGE AND AGREE THAT:
           </p>
           <ul className="space-y-1.5 text-muted-foreground">
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(a) AI-generated content may contain errors, inaccuracies, omissions, or fabricated information</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(b) AI-generated case law citations, legal references, and court decisions have a documented hallucination rate of 50-88% and may be completely fabricated &mdash; you MUST independently verify ALL legal citations using official databases (Google Scholar, VA Board of Veterans&apos; Appeals decisions, or legal research services) before relying on them</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(c) AI-generated content is NOT a substitute for professional legal, medical, or claims advice</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(d) You are responsible for reviewing and verifying ALL AI-generated content before use</li>
-            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(e) Information you submit to AI features is processed by Google&apos;s Gemini API &mdash; we do not retain this data, but Google&apos;s own terms of service apply to their processing</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(e) Information you submit to AI features is processed by our third-party AI service provider (currently Google&apos;s Gemini API) &mdash; we do not retain this data, but the provider&apos;s own terms of service apply to their processing</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(f) AI features are optional and the app functions fully without them</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(g) VCS makes no warranty as to the accuracy, completeness, or reliability of any AI-generated content</li>
           </ul>
@@ -126,7 +126,7 @@ export default function TermsOfServicePage() {
               <strong className="text-foreground">Verified Case Law Database:</strong> The Appeals Guide&apos;s &quot;My Appeal&quot; and &quot;Case Law&quot; tabs retrieve citations from a curated database of real BVA, CAVC, Federal Circuit, and Supreme Court decisions. These citations include source URLs to official court records. However, case law summaries have been simplified and may not capture every nuance of a ruling. Laws, regulations, and case interpretations can change over time.
             </p>
             <p className="text-muted-foreground">
-              <strong className="text-foreground">AI-Generated Content:</strong> Other AI-powered features in this Service use Google Gemini, which may fabricate case names, citation numbers, holdings, and legal reasoning. AI-generated case law citations have a documented hallucination rate of 50&ndash;88% and <strong className="text-gold">ARE NOT VERIFIED</strong>.
+              <strong className="text-foreground">AI-Generated Content:</strong> Other AI-powered features in this Service use a third-party AI service provider (currently Google Gemini), which may fabricate case names, citation numbers, holdings, and legal reasoning. AI-generated case law citations have a documented hallucination rate of 50&ndash;88% and <strong className="text-gold">ARE NOT VERIFIED</strong>.
             </p>
           </div>
           <p className="text-muted-foreground">

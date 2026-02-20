@@ -75,7 +75,7 @@ export default function DisclaimerPage() {
           <h2 className="text-lg font-semibold text-foreground">AI-Generated Content Warning</h2>
           <div className="rounded-xl bg-[rgba(212,175,55,0.05)] border border-gold/20 p-4 space-y-3">
             <p className="text-muted-foreground">
-              This app uses artificial intelligence (Google Gemini) to generate suggestions and content. AI-generated content may be inaccurate, incomplete, or fabricated. AI-generated case law citations have a documented hallucination rate of 50-88%. <strong className="text-gold">NEVER submit AI-generated legal citations without independent verification.</strong> You assume all risk for reliance on AI-generated content.
+              This app uses a third-party AI service provider (currently Google Gemini) to generate suggestions and content. AI-generated content may be inaccurate, incomplete, or fabricated. AI-generated case law citations have a documented hallucination rate of 50-88%. <strong className="text-gold">NEVER submit AI-generated legal citations without independent verification.</strong> You assume all risk for reliance on AI-generated content.
             </p>
             <p className="text-muted-foreground">
               The Appeals Guide&apos;s case law database uses curated, verified citations from real court decisions &mdash; not AI-generated content. However, case summaries are simplified and may not reflect every nuance. You must still verify all citations independently and read the full opinion before relying on any case in a filing.
