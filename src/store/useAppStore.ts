@@ -494,7 +494,9 @@ const useAppStore = create<AppState>()(
 
       // Milestones
       addMilestone: (milestone) => set((s) => ({
-        milestonesAchieved: [...new Set([...s.milestonesAchieved, milestone])],
+        milestonesAchieved: s.milestonesAchieved.includes(milestone)
+          ? s.milestonesAchieved
+          : [...s.milestonesAchieved, milestone],
       })),
 
       // Approved Conditions

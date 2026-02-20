@@ -71,6 +71,8 @@ export function useEvidence() {
     [store._evidenceLoading],
   );
 
+  const isHydrating = store._evidenceLoading.size > 0;
+
   return {
     documents: store.evidenceDocuments,
     addDocument: store.addEvidenceDocument,
@@ -85,5 +87,6 @@ export function useEvidence() {
     getCategoryCounts,
     setAllDocuments: store.setAllEvidenceDocuments,
     isFileLoading,
+    isHydrating,
   };
 }

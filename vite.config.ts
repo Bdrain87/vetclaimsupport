@@ -84,6 +84,14 @@ export default defineConfig({
   build: {
     reportCompressedSize: false,
     chunkSizeWarningLimit: 1000,
+    // Strip console.log and console.debug in production builds.
+    // console.warn and console.error are kept for runtime diagnostics.
+    minify: 'esbuild',
+    target: 'esnext',
+    esbuild: {
+      drop: ['debugger'],
+      pure: ['console.log', 'console.debug'],
+    },
     rollupOptions: {
       output: {
         manualChunks: {

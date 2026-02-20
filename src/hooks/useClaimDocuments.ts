@@ -57,6 +57,8 @@ export function useClaimDocuments() {
     [store._claimDocLoading],
   );
 
+  const isHydrating = store._claimDocLoading.size > 0;
+
   return {
     documents: store.claimDocuments,
     addDocument: store.addClaimDocument,
@@ -66,5 +68,6 @@ export function useClaimDocuments() {
     getDocumentsByType,
     searchDocuments,
     isFileLoading,
+    isHydrating,
   };
 }

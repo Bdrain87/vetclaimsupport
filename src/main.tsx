@@ -45,9 +45,17 @@ window.addEventListener('error', (event) => {
   showFatalError('Uncaught Error', event.error ?? event.message);
 });
 
-// Catch unhandled promise rejections
+// Catch unhandled promise rejections — log them but don't nuke the UI.
+// Async failures (failed fetches, expired tokens, etc.) should not
+// replace the entire app with a red error screen. The ErrorBoundary
+// and component-level error handling cover user-facing recovery.
 window.addEventListener('unhandledrejection', (event) => {
-  showFatalError('Unhandled Promise Rejection', event.reason);
+  const reason = event.reason;
+  console.error(
+    '[unhandledrejection]',
+    reason instanceof Error ? reason.message : String(reason),
+    reason instanceof Error ? reason.stack : '',
+  );
 });
 
 // ============================================================

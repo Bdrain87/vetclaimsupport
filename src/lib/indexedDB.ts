@@ -43,10 +43,33 @@ function openDB(): Promise<IDBDatabase> {
   return dbPromise;
 }
 
+// Minimum free space required before writing (5 MB)
+const MIN_FREE_SPACE_BYTES = 5 * 1024 * 1024;
+
+/**
+ * Check if there is enough storage quota to write `bytesNeeded`.
+ * Returns true if quota info is unavailable (optimistic fallback).
+ */
+async function hasQuota(bytesNeeded: number): Promise<boolean> {
+  if (!('storage' in navigator) || !('estimate' in navigator.storage)) return true;
+  try {
+    const { usage = 0, quota = 0 } = await navigator.storage.estimate();
+    const available = quota - usage;
+    return available > bytesNeeded + MIN_FREE_SPACE_BYTES;
+  } catch {
+    return true; // Optimistic if estimate fails
+  }
+}
+
 // Store large file data in IndexedDB
 export async function storeFileData(id: string, dataUrl: string): Promise<void> {
+  const ok = await hasQuota(dataUrl.length * 2); // UTF-16 ≈ 2 bytes/char
+  if (!ok) {
+    throw new Error('Insufficient storage quota. Free up space and try again.');
+  }
+
   const db = await openDB();
-  
+
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, 'readwrite');
     const store = transaction.objectStore(STORE_NAME);

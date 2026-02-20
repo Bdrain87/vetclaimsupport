@@ -354,8 +354,10 @@ export async function pushToCloud(): Promise<void> {
   const userId = session.user.id;
   const profileState = useProfileStore.getState();
   const appState = useAppStore.getState();
+  const pushErrors: string[] = [];
 
-  // Push profile (upsert by id -- local state wins on conflict)
+  // Push profile (upsert by id -- local state wins on conflict).
+  // Profile is critical — if it fails, abort the entire push.
   const { error: profilePushError } = await supabase.from('profiles').upsert({
     id: userId,
     email: session.user.email,
@@ -381,6 +383,9 @@ export async function pushToCloud(): Promise<void> {
   // Because pullFromCloud now unifies local UUIDs with cloud UUIDs,
   // duplicate rows should not occur.  We still upsert on `id` so that
   // re-pushes are idempotent.
+  //
+  // Non-critical entity pushes continue on failure so that partial
+  // sync is better than no sync.
   // ------------------------------------------------------------------
   if (appState.claimConditions.length > 0) {
     const conditionRows = appState.claimConditions.map((c) => ({
@@ -395,7 +400,7 @@ export async function pushToCloud(): Promise<void> {
       .upsert(conditionRows, { onConflict: 'id' });
     if (error) {
       console.error('[sync] push conditions failed', error);
-      throw error;
+      pushErrors.push('conditions');
     }
   }
 
@@ -413,7 +418,7 @@ export async function pushToCloud(): Promise<void> {
       .upsert(symptomRows, { onConflict: 'id' });
     if (error) {
       console.error('[sync] push symptoms failed', error);
-      throw error;
+      pushErrors.push('symptoms');
     }
   }
 
@@ -431,7 +436,7 @@ export async function pushToCloud(): Promise<void> {
       .upsert(sleepRows, { onConflict: 'id' });
     if (error) {
       console.error('[sync] push sleep failed', error);
-      throw error;
+      pushErrors.push('sleep');
     }
   }
 
@@ -449,12 +454,16 @@ export async function pushToCloud(): Promise<void> {
       .upsert(migraineRows, { onConflict: 'id' });
     if (error) {
       console.error('[sync] push migraines failed', error);
-      throw error;
+      pushErrors.push('migraines');
     }
   }
 
   lastSyncedAt = new Date().toISOString();
   useProfileStore.getState().setLastSyncedAt(lastSyncedAt);
+
+  if (pushErrors.length > 0) {
+    throw new Error(`Partial sync failure: could not push ${pushErrors.join(', ')}`);
+  }
 }
 
 export async function syncNow(): Promise<void> {
