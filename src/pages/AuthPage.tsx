@@ -9,6 +9,16 @@ import { useToast } from '@/hooks/use-toast';
 const GOLD_GRADIENT =
   'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)';
 
+/** Only allow relative paths starting with / (no protocol-relative // or external URLs). */
+function getSafeRedirect(): string {
+  const redirect = sessionStorage.getItem('post_login_redirect');
+  sessionStorage.removeItem('post_login_redirect');
+  if (redirect && redirect.startsWith('/') && !redirect.startsWith('//')) {
+    return redirect;
+  }
+  return '/app';
+}
+
 export default function AuthPage() {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -23,9 +33,7 @@ export default function AuthPage() {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        const redirect = sessionStorage.getItem('post_login_redirect') || '/app';
-        sessionStorage.removeItem('post_login_redirect');
-        navigate(redirect, { replace: true });
+        navigate(getSafeRedirect(), { replace: true });
       }
     });
   }, [navigate]);
@@ -52,18 +60,14 @@ export default function AuthPage() {
     try {
       if (mode === 'signin') {
         await signInWithEmail(email, password);
-        const redirect = sessionStorage.getItem('post_login_redirect') || '/app';
-        sessionStorage.removeItem('post_login_redirect');
-        navigate(redirect, { replace: true });
+        navigate(getSafeRedirect(), { replace: true });
       } else {
         const data = await signUpWithEmail(email, password);
         if (data.user && !data.session) {
           toast({ title: 'Check your email', description: 'We sent you a confirmation link. Please verify your email to continue.' });
           setMode('signin');
         } else {
-          const redirect = sessionStorage.getItem('post_login_redirect') || '/app';
-          sessionStorage.removeItem('post_login_redirect');
-          navigate(redirect, { replace: true });
+          navigate(getSafeRedirect(), { replace: true });
         }
       }
     } catch (err) {

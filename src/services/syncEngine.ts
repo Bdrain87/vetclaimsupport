@@ -136,7 +136,10 @@ export async function pullFromCloud(): Promise<void> {
     .select('*')
     .eq('user_id', userId);
 
-  if (conditionsError) console.error('[sync] pull conditions failed');
+  if (conditionsError) {
+    console.error('[sync] pull conditions failed', conditionsError);
+    throw conditionsError;
+  }
 
   if (conditions && conditions.length > 0) {
     const appStore = useAppStore.getState();
@@ -242,7 +245,10 @@ export async function pullFromCloud(): Promise<void> {
     .select('*')
     .eq('user_id', userId);
 
-  if (healthLogsError) console.error('[sync] pull health logs failed');
+  if (healthLogsError) {
+    console.error('[sync] pull health logs failed', healthLogsError);
+    throw healthLogsError;
+  }
 
   if (healthLogs && healthLogs.length > 0) {
     const appStore = useAppStore.getState();
@@ -363,7 +369,10 @@ export async function pushToCloud(): Promise<void> {
     display_name: [profileState.firstName, profileState.lastName].filter(Boolean).join(' ') || null,
     updated_at: new Date().toISOString(),
   });
-  if (profilePushError) console.error('[sync] push profile failed');
+  if (profilePushError) {
+    console.error('[sync] push profile failed', profilePushError);
+    throw profilePushError;
+  }
 
   // ------------------------------------------------------------------
   // Push conditions — upsert by primary key (id).
@@ -383,7 +392,10 @@ export async function pushToCloud(): Promise<void> {
     const { error } = await supabase
       .from('conditions')
       .upsert(conditionRows, { onConflict: 'id' });
-    if (error) console.error('[sync] push conditions failed');
+    if (error) {
+      console.error('[sync] push conditions failed', error);
+      throw error;
+    }
   }
 
   // Push symptoms as health logs
@@ -398,7 +410,10 @@ export async function pushToCloud(): Promise<void> {
     const { error } = await supabase
       .from('health_logs')
       .upsert(symptomRows, { onConflict: 'id' });
-    if (error) console.error('[sync] push symptoms failed');
+    if (error) {
+      console.error('[sync] push symptoms failed', error);
+      throw error;
+    }
   }
 
   // Push sleep entries as health logs
@@ -413,7 +428,10 @@ export async function pushToCloud(): Promise<void> {
     const { error } = await supabase
       .from('health_logs')
       .upsert(sleepRows, { onConflict: 'id' });
-    if (error) console.error('[sync] push sleep failed');
+    if (error) {
+      console.error('[sync] push sleep failed', error);
+      throw error;
+    }
   }
 
   // Push migraines as health logs
@@ -428,7 +446,10 @@ export async function pushToCloud(): Promise<void> {
     const { error } = await supabase
       .from('health_logs')
       .upsert(migraineRows, { onConflict: 'id' });
-    if (error) console.error('[sync] push migraines failed');
+    if (error) {
+      console.error('[sync] push migraines failed', error);
+      throw error;
+    }
   }
 
   lastSyncedAt = new Date().toISOString();
@@ -474,11 +495,11 @@ export function startSync(): void {
   if (syncInterval) return;
 
   // Initial sync
-  syncNow();
+  syncNow().catch(() => { /* handled inside syncNow */ });
 
   // Set up debounced interval
   syncInterval = setInterval(() => {
-    syncNow();
+    syncNow().catch(() => { /* handled inside syncNow */ });
   }, SYNC_DEBOUNCE_MS);
 
   // Listen for online/offline events
@@ -497,7 +518,7 @@ export function stopSync(): void {
 }
 
 function handleOnline() {
-  syncNow();
+  syncNow().catch(() => { /* handled inside syncNow */ });
 }
 
 function handleOffline() {

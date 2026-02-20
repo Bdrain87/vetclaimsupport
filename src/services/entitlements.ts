@@ -132,5 +132,15 @@ export async function startCheckout(): Promise<string> {
     body: {},
   });
   if (error) throw new Error('Failed to start checkout. Please try again.');
-  return data.url;
+
+  const url = data.url;
+  try {
+    const parsed = new URL(url);
+    if (!parsed.hostname.endsWith('stripe.com')) {
+      throw new Error('Invalid checkout URL');
+    }
+  } catch {
+    throw new Error('Invalid checkout URL received. Please try again.');
+  }
+  return url;
 }

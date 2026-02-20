@@ -5,6 +5,16 @@ import { signInWithEmail, signUpWithEmail, signInWithGoogle, signInWithApple } f
 import { supabase } from '@/lib/supabase';
 import { PageContainer } from '@/components/PageContainer';
 
+/** Only allow relative paths starting with / (no protocol-relative // or external URLs). */
+function getSafeRedirect(): string {
+  const redirect = sessionStorage.getItem('post_login_redirect');
+  sessionStorage.removeItem('post_login_redirect');
+  if (redirect && redirect.startsWith('/') && !redirect.startsWith('//')) {
+    return redirect;
+  }
+  return '/app';
+}
+
 export default function Login() {
   const navigate = useNavigate();
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
@@ -18,9 +28,7 @@ export default function Login() {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        const redirect = sessionStorage.getItem('post_login_redirect');
-        sessionStorage.removeItem('post_login_redirect');
-        navigate(redirect || '/app', { replace: true });
+        navigate(getSafeRedirect(), { replace: true });
       }
     });
   }, [navigate]);
@@ -43,9 +51,7 @@ export default function Login() {
         setMode('signin');
       } else {
         await signInWithEmail(email, password);
-        const redirect = sessionStorage.getItem('post_login_redirect');
-        sessionStorage.removeItem('post_login_redirect');
-        navigate(redirect || '/app', { replace: true });
+        navigate(getSafeRedirect(), { replace: true });
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong.');
