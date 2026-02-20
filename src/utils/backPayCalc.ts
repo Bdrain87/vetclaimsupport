@@ -38,9 +38,21 @@ export function monthsBetween(start: Date, end: Date): number {
   const years = end.getFullYear() - start.getFullYear();
   const months = end.getMonth() - start.getMonth();
   const totalMonths = years * 12 + months;
-  // Include partial month if the end day is past the start day
-  const partialAdjust = end.getDate() >= start.getDate() ? 0 : -1;
-  return Math.max(0, totalMonths + partialAdjust);
+
+  // If end day >= start day, a full month has elapsed — no adjustment.
+  if (end.getDate() >= start.getDate()) {
+    return Math.max(0, totalMonths);
+  }
+
+  // End-of-month edge case: if the end date is the last day of its month
+  // and the start date's day exceeds the number of days in the end month,
+  // treat it as a full month (e.g. Jan 31 → Feb 28 = 1 month).
+  const lastDayOfEndMonth = new Date(end.getFullYear(), end.getMonth() + 1, 0).getDate();
+  if (end.getDate() === lastDayOfEndMonth && start.getDate() > lastDayOfEndMonth) {
+    return Math.max(0, totalMonths);
+  }
+
+  return Math.max(0, totalMonths - 1);
 }
 
 export function formatCurrency(amount: number): string {

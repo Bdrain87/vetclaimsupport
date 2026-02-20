@@ -243,6 +243,10 @@ interface AppState {
 
 const generateId = () => crypto.randomUUID();
 
+// Hydration guards to prevent concurrent _hydrateXxx calls
+let _evidenceHydrating = false;
+let _claimDocHydrating = false;
+
 // ===== INITIAL STATE =====
 
 const initialState = {
@@ -354,35 +358,35 @@ const useAppStore = create<AppState>()(
 
       // Combat History
       addCombatEntry: (entry) => set((s) => ({
-        combatHistory: [...(s.combatHistory || []), { ...entry, id: generateId() }],
+        combatHistory: [...s.combatHistory, { ...entry, id: generateId() }],
       })),
       updateCombatEntry: (id, entry) => set((s) => ({
-        combatHistory: (s.combatHistory || []).map((c) => c.id === id ? { ...c, ...entry } : c),
+        combatHistory: s.combatHistory.map((c) => c.id === id ? { ...c, ...entry } : c),
       })),
       deleteCombatEntry: (id) => set((s) => ({
-        combatHistory: (s.combatHistory || []).filter((c) => c.id !== id),
+        combatHistory: s.combatHistory.filter((c) => c.id !== id),
       })),
 
       // Major Events
       addMajorEvent: (event) => set((s) => ({
-        majorEvents: [...(s.majorEvents || []), { ...event, id: generateId() }],
+        majorEvents: [...s.majorEvents, { ...event, id: generateId() }],
       })),
       updateMajorEvent: (id, event) => set((s) => ({
-        majorEvents: (s.majorEvents || []).map((e) => e.id === id ? { ...e, ...event } : e),
+        majorEvents: s.majorEvents.map((e) => e.id === id ? { ...e, ...event } : e),
       })),
       deleteMajorEvent: (id) => set((s) => ({
-        majorEvents: (s.majorEvents || []).filter((e) => e.id !== id),
+        majorEvents: s.majorEvents.filter((e) => e.id !== id),
       })),
 
       // Deployments
       addDeployment: (deployment) => set((s) => ({
-        deployments: [...(s.deployments || []), { ...deployment, id: generateId() }],
+        deployments: [...s.deployments, { ...deployment, id: generateId() }],
       })),
       updateDeployment: (id, deployment) => set((s) => ({
-        deployments: (s.deployments || []).map((d) => d.id === id ? { ...d, ...deployment } : d),
+        deployments: s.deployments.map((d) => d.id === id ? { ...d, ...deployment } : d),
       })),
       deleteDeployment: (id) => set((s) => ({
-        deployments: (s.deployments || []).filter((d) => d.id !== id),
+        deployments: s.deployments.filter((d) => d.id !== id),
       })),
 
       // Buddy Contacts
@@ -422,35 +426,48 @@ const useAppStore = create<AppState>()(
 
       // Sleep Entries
       addSleepEntry: (entry) => set((s) => ({
-        sleepEntries: [...(s.sleepEntries || []), { id: generateId(), ...entry }],
+        sleepEntries: [...s.sleepEntries, { id: generateId(), ...entry }],
       })),
       updateSleepEntry: (id, entry) => set((s) => ({
-        sleepEntries: (s.sleepEntries || []).map((e) => e.id === id ? { ...e, ...entry } : e),
+        sleepEntries: s.sleepEntries.map((e) => e.id === id ? { ...e, ...entry } : e),
       })),
       deleteSleepEntry: (id) => set((s) => ({
-        sleepEntries: (s.sleepEntries || []).filter((e) => e.id !== id),
+        sleepEntries: s.sleepEntries.filter((e) => e.id !== id),
       })),
 
       // PTSD Symptoms
       addPTSDSymptom: (symptom) => set((s) => ({
-        ptsdSymptoms: [...(s.ptsdSymptoms || []), { ...symptom, id: generateId() }],
+        ptsdSymptoms: [...s.ptsdSymptoms, { ...symptom, id: generateId() }],
       })),
       updatePTSDSymptom: (id, symptom) => set((s) => ({
-        ptsdSymptoms: (s.ptsdSymptoms || []).map((p) => p.id === id ? { ...p, ...symptom } : p),
+        ptsdSymptoms: s.ptsdSymptoms.map((p) => p.id === id ? { ...p, ...symptom } : p),
       })),
       deletePTSDSymptom: (id) => set((s) => ({
-        ptsdSymptoms: (s.ptsdSymptoms || []).filter((p) => p.id !== id),
+        ptsdSymptoms: s.ptsdSymptoms.filter((p) => p.id !== id),
       })),
 
       // Claim Conditions
-      addClaimCondition: (condition) => set((s) => ({
-        claimConditions: [...(s.claimConditions || []), { ...condition, id: generateId() }],
-      })),
-      updateClaimCondition: (id, condition) => set((s) => ({
-        claimConditions: (s.claimConditions || []).map((c) => c.id === id ? { ...c, ...condition } : c),
-      })),
+      addClaimCondition: (condition) => {
+        if (!condition.name || typeof condition.name !== 'string' || !condition.name.trim()) {
+          console.warn('[useAppStore] addClaimCondition called with empty name — skipping');
+          return;
+        }
+        set((s) => ({
+          claimConditions: [...s.claimConditions, { ...condition, name: condition.name.trim(), id: generateId() }],
+        }));
+      },
+      updateClaimCondition: (id, condition) => {
+        if (!id || typeof id !== 'string') return;
+        if (condition.name !== undefined && (!condition.name || !condition.name.trim())) {
+          console.warn('[useAppStore] updateClaimCondition called with empty name — skipping');
+          return;
+        }
+        set((s) => ({
+          claimConditions: s.claimConditions.map((c) => c.id === id ? { ...c, ...condition } : c),
+        }));
+      },
       deleteClaimCondition: (id) => set((s) => ({
-        claimConditions: (s.claimConditions || []).filter((c) => c.id !== id),
+        claimConditions: s.claimConditions.filter((c) => c.id !== id),
       })),
 
       // Document scan disclaimer
@@ -458,50 +475,50 @@ const useAppStore = create<AppState>()(
 
       // Quick Logs
       addQuickLog: (log) => set((s) => ({
-        quickLogs: [...(s.quickLogs || []), { ...log, id: generateId() }],
+        quickLogs: [...s.quickLogs, { ...log, id: generateId() }],
       })),
       deleteQuickLog: (id) => set((s) => ({
-        quickLogs: (s.quickLogs || []).filter((l) => l.id !== id),
+        quickLogs: s.quickLogs.filter((l) => l.id !== id),
       })),
 
       // Deadlines
       addDeadline: (deadline) => set((s) => ({
-        deadlines: [...(s.deadlines || []), { ...deadline, id: generateId() }],
+        deadlines: [...s.deadlines, { ...deadline, id: generateId() }],
       })),
       updateDeadline: (id, deadline) => set((s) => ({
-        deadlines: (s.deadlines || []).map((d) => d.id === id ? { ...d, ...deadline } : d),
+        deadlines: s.deadlines.map((d) => d.id === id ? { ...d, ...deadline } : d),
       })),
       deleteDeadline: (id) => set((s) => ({
-        deadlines: (s.deadlines || []).filter((d) => d.id !== id),
+        deadlines: s.deadlines.filter((d) => d.id !== id),
       })),
 
       // Milestones
       addMilestone: (milestone) => set((s) => ({
-        milestonesAchieved: [...new Set([...(s.milestonesAchieved || []), milestone])],
+        milestonesAchieved: [...new Set([...s.milestonesAchieved, milestone])],
       })),
 
       // Approved Conditions
       addApprovedCondition: (condition) => set((s) => ({
-        approvedConditions: [...(s.approvedConditions || []), { ...condition, id: generateId() }],
+        approvedConditions: [...s.approvedConditions, { ...condition, id: generateId() }],
       })),
       updateApprovedCondition: (id, condition) => set((s) => ({
-        approvedConditions: (s.approvedConditions || []).map((c) => c.id === id ? { ...c, ...condition } : c),
+        approvedConditions: s.approvedConditions.map((c) => c.id === id ? { ...c, ...condition } : c),
       })),
       deleteApprovedCondition: (id) => set((s) => ({
-        approvedConditions: (s.approvedConditions || []).filter((c) => c.id !== id),
+        approvedConditions: s.approvedConditions.filter((c) => c.id !== id),
       })),
 
       // Journey Progress
       setJourneyProgress: (progress) => set((s) => ({
-        journeyProgress: { ...(s.journeyProgress || { currentPhase: 0, completedChecklist: {} }), ...progress },
+        journeyProgress: { ...s.journeyProgress, ...progress },
       })),
 
       // Duty Stations
       addDutyStation: (station) => set((s) => ({
-        dutyStations: [...(s.dutyStations || []), { ...station, id: generateId() }],
+        dutyStations: [...s.dutyStations, { ...station, id: generateId() }],
       })),
       removeDutyStation: (id) => set((s) => ({
-        dutyStations: (s.dutyStations || []).filter((d) => d.id !== id),
+        dutyStations: s.dutyStations.filter((d) => d.id !== id),
       })),
 
       // Form Guide Drafts
@@ -522,7 +539,7 @@ const useAppStore = create<AppState>()(
 
       // Dashboard Quick Log (convenience)
       addDashboardQuickLog: (pain, mood, condition, notes, date) => set((s) => ({
-        quickLogs: [...(s.quickLogs || []), {
+        quickLogs: [...s.quickLogs, {
           id: generateId(),
           date: date || new Date().toISOString(),
           overallFeeling: pain,
@@ -666,33 +683,39 @@ const useAppStore = create<AppState>()(
       setAllEvidenceDocuments: (docs) => set({ evidenceDocuments: docs }),
 
       _hydrateEvidenceDocuments: async () => {
-        const { evidenceDocuments } = get();
-        const docsNeedingData = evidenceDocuments.filter(
-          (doc) => doc.storageType === 'indexedDB' && !doc.dataUrl,
-        );
+        if (_evidenceHydrating) return;
+        _evidenceHydrating = true;
+        try {
+          const { evidenceDocuments } = get();
+          const docsNeedingData = evidenceDocuments.filter(
+            (doc) => doc.storageType === 'indexedDB' && !doc.dataUrl,
+          );
 
-        if (docsNeedingData.length === 0) return;
+          if (docsNeedingData.length === 0) return;
 
-        const ids = new Set(docsNeedingData.map((d) => d.id));
-        set({ _evidenceLoading: ids });
+          const ids = new Set(docsNeedingData.map((d) => d.id));
+          set({ _evidenceLoading: ids });
 
-        const updates: Record<string, string> = {};
-        for (const doc of docsNeedingData) {
-          const data = await getFileData(doc.id);
-          if (data) {
-            updates[doc.id] = data;
+          const updates: Record<string, string> = {};
+          for (const doc of docsNeedingData) {
+            const data = await getFileData(doc.id);
+            if (data) {
+              updates[doc.id] = data;
+            }
           }
-        }
 
-        if (Object.keys(updates).length > 0) {
-          set((s) => ({
-            evidenceDocuments: s.evidenceDocuments.map((doc) =>
-              updates[doc.id] ? { ...doc, dataUrl: updates[doc.id] } : doc,
-            ),
-          }));
-        }
+          if (Object.keys(updates).length > 0) {
+            set((s) => ({
+              evidenceDocuments: s.evidenceDocuments.map((doc) =>
+                updates[doc.id] ? { ...doc, dataUrl: updates[doc.id] } : doc,
+              ),
+            }));
+          }
 
-        set({ _evidenceLoading: new Set() });
+          set({ _evidenceLoading: new Set() });
+        } finally {
+          _evidenceHydrating = false;
+        }
       },
 
       // ========== CLAIM DOCUMENT METHODS ==========
@@ -735,33 +758,39 @@ const useAppStore = create<AppState>()(
       },
 
       _hydrateClaimDocuments: async () => {
-        const { claimDocuments } = get();
-        const docsNeedingData = claimDocuments.filter(
-          (doc) => doc.storageType === 'indexedDB' && !doc.dataUrl,
-        );
+        if (_claimDocHydrating) return;
+        _claimDocHydrating = true;
+        try {
+          const { claimDocuments } = get();
+          const docsNeedingData = claimDocuments.filter(
+            (doc) => doc.storageType === 'indexedDB' && !doc.dataUrl,
+          );
 
-        if (docsNeedingData.length === 0) return;
+          if (docsNeedingData.length === 0) return;
 
-        const ids = new Set(docsNeedingData.map((d) => d.id));
-        set({ _claimDocLoading: ids });
+          const ids = new Set(docsNeedingData.map((d) => d.id));
+          set({ _claimDocLoading: ids });
 
-        const updates: Record<string, string> = {};
-        for (const doc of docsNeedingData) {
-          const data = await getFileData(doc.id);
-          if (data) {
-            updates[doc.id] = data;
+          const updates: Record<string, string> = {};
+          for (const doc of docsNeedingData) {
+            const data = await getFileData(doc.id);
+            if (data) {
+              updates[doc.id] = data;
+            }
           }
-        }
 
-        if (Object.keys(updates).length > 0) {
-          set((s) => ({
-            claimDocuments: s.claimDocuments.map((doc) =>
-              updates[doc.id] ? { ...doc, dataUrl: updates[doc.id] } : doc,
-            ),
-          }));
-        }
+          if (Object.keys(updates).length > 0) {
+            set((s) => ({
+              claimDocuments: s.claimDocuments.map((doc) =>
+                updates[doc.id] ? { ...doc, dataUrl: updates[doc.id] } : doc,
+              ),
+            }));
+          }
 
-        set({ _claimDocLoading: new Set() });
+          set({ _claimDocLoading: new Set() });
+        } finally {
+          _claimDocHydrating = false;
+        }
       },
 
       // ========== EVIDENCE CHECKLIST ==========

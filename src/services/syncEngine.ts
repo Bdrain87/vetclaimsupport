@@ -2,6 +2,7 @@ import { supabase } from '@/lib/supabase';
 import useAppStore from '@/store/useAppStore';
 import { useProfileStore } from '@/store/useProfileStore';
 import { sanitizePHI } from '@/utils/phiSanitizer';
+import { toast } from '@/hooks/use-toast';
 
 function isNonNullObject(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null && !Array.isArray(v);
@@ -9,6 +10,12 @@ function isNonNullObject(v: unknown): v is Record<string, unknown> {
 
 function hasString(obj: Record<string, unknown>, key: string): boolean {
   return typeof obj[key] === 'string';
+}
+
+/** Type-safe string extraction from a validated record (avoids `as string` casts). */
+function getString(obj: Record<string, unknown>, key: string): string {
+  const val = obj[key];
+  return typeof val === 'string' ? val : '';
 }
 
 function isValidConditionRow(row: unknown): row is { id: string; name: string; created_at?: string; updated_at?: string; service_connection_notes?: string } {
@@ -266,8 +273,8 @@ export async function pullFromCloud(): Promise<void> {
           if (byId) break;
 
           // Check by content: same date + same symptom description
-          const cloudDate = norm(logData.date as string);
-          const cloudSymptom = norm(logData.symptom as string);
+          const cloudDate = norm(getString(logData, 'date'));
+          const cloudSymptom = norm(getString(logData, 'symptom'));
           const byContent = appStore.symptoms.find(
             (s) => norm(s.date) === cloudDate && norm(s.symptom) === cloudSymptom,
           );
@@ -292,7 +299,7 @@ export async function pullFromCloud(): Promise<void> {
 
           // Content fingerprint: same date is unique enough for a
           // single daily sleep entry.
-          const cloudDate = norm(logData.date as string);
+          const cloudDate = norm(getString(logData, 'date'));
           const byContent = appStore.sleepEntries.find(
             (s) => norm(s.date) === cloudDate,
           );
@@ -312,8 +319,8 @@ export async function pullFromCloud(): Promise<void> {
           if (byId) break;
 
           // Content fingerprint: date + time.
-          const cloudDate = norm(logData.date as string);
-          const cloudTime = norm(logData.time as string);
+          const cloudDate = norm(getString(logData, 'date'));
+          const cloudTime = norm(getString(logData, 'time'));
           const byContent = appStore.migraines.find(
             (m) => norm(m.date) === cloudDate && norm(m.time) === cloudTime,
           );
@@ -476,6 +483,11 @@ export async function syncNow(): Promise<void> {
       // handles truly fatal issues (e.g. no network mid-sync).
       console.error('[sync] syncNow failed');
       setStatus('error');
+      toast({
+        title: 'Sync failed',
+        description: 'Your data could not be synced. Changes are saved locally and will sync when connectivity is restored.',
+        variant: 'destructive',
+      });
     }
   };
 
