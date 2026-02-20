@@ -571,10 +571,15 @@ const useAppStore = create<AppState>()(
       addEvidenceDocument: async (doc) => {
         const id = generateId();
         const fileSize = doc.dataUrl.length;
-        const useIndexedDB = isIndexedDBAvailable() && fileSize > INDEXEDDB_THRESHOLD;
+        let useIndexedDB = isIndexedDBAvailable() && fileSize > INDEXEDDB_THRESHOLD;
 
         if (useIndexedDB) {
-          await storeFileData(id, doc.dataUrl);
+          try {
+            await storeFileData(id, doc.dataUrl);
+          } catch (error) {
+            console.error('[addEvidenceDocument] IndexedDB write failed, falling back to localStorage:', error);
+            useIndexedDB = false;
+          }
         }
 
         const newDoc: EvidenceDocument = {
@@ -695,10 +700,15 @@ const useAppStore = create<AppState>()(
       addClaimDocument: async (doc) => {
         const id = generateId();
         const fileSize = doc.dataUrl.length;
-        const useIndexedDB = isIndexedDBAvailable() && fileSize > INDEXEDDB_THRESHOLD;
+        let useIndexedDB = isIndexedDBAvailable() && fileSize > INDEXEDDB_THRESHOLD;
 
         if (useIndexedDB) {
-          await storeFileData(id, doc.dataUrl);
+          try {
+            await storeFileData(id, doc.dataUrl);
+          } catch (error) {
+            console.error('[addClaimDocument] IndexedDB write failed, falling back to localStorage:', error);
+            useIndexedDB = false;
+          }
         }
 
         const newDoc: ClaimDocument = {

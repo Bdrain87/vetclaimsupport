@@ -186,52 +186,46 @@ export async function pullFromCloud(): Promise<void> {
           createdAt: newerTimestamp(cloudCondition.created_at, byName.createdAt),
         };
 
-        // Remove the local-only entry and re-add with the cloud ID so
-        // that the store record carries the authoritative UUID.
-        appStore.deleteClaimCondition(byName.id);
-        // Re-read state after mutation to avoid stale references.
-        const freshStore = useAppStore.getState();
-        // Use set() directly via updateClaimCondition pathway:
-        // We add with cloud's data, but addClaimCondition generates a
-        // new id — so we add then immediately overwrite the id.
-        freshStore.addClaimCondition({
-          name: merged.name,
-          linkedMedicalVisits: byName.linkedMedicalVisits,
-          linkedExposures: byName.linkedExposures,
-          linkedSymptoms: byName.linkedSymptoms,
-          linkedDocuments: byName.linkedDocuments,
-          linkedBuddyContacts: byName.linkedBuddyContacts,
-          notes: merged.notes,
-          createdAt: merged.createdAt,
-        });
-        // The entry was just appended — overwrite its generated id with
-        // the cloud id so push will upsert correctly.
-        const afterAdd = useAppStore.getState();
-        const justAdded = afterAdd.claimConditions[afterAdd.claimConditions.length - 1];
-        if (justAdded) {
-          afterAdd.updateClaimCondition(justAdded.id, { id: cloudCondition.id });
-        }
+        // Remove the local-only entry and atomically insert a
+        // replacement that carries the cloud UUID — avoids the race
+        // condition of add-then-lookup-by-array-index.
+        useAppStore.setState((s) => ({
+          claimConditions: [
+            ...s.claimConditions.filter((c) => c.id !== byName.id),
+            {
+              id: cloudCondition.id,
+              name: merged.name,
+              linkedMedicalVisits: byName.linkedMedicalVisits,
+              linkedExposures: byName.linkedExposures,
+              linkedSymptoms: byName.linkedSymptoms,
+              linkedDocuments: byName.linkedDocuments,
+              linkedBuddyContacts: byName.linkedBuddyContacts,
+              notes: merged.notes || '',
+              createdAt: merged.createdAt,
+            },
+          ],
+        }));
         continue;
       }
 
-      // 3. No match at all — genuinely new cloud condition. Insert it
-      //    preserving the cloud UUID.
-      appStore.addClaimCondition({
-        name: cloudCondition.name,
-        linkedMedicalVisits: [],
-        linkedExposures: [],
-        linkedSymptoms: [],
-        linkedDocuments: [],
-        linkedBuddyContacts: [],
-        notes: cloudCondition.service_connection_notes || '',
-        createdAt: cloudCondition.created_at || new Date().toISOString(),
-      });
-      // Overwrite generated id with cloud id.
-      const afterInsert = useAppStore.getState();
-      const inserted = afterInsert.claimConditions[afterInsert.claimConditions.length - 1];
-      if (inserted) {
-        afterInsert.updateClaimCondition(inserted.id, { id: cloudCondition.id });
-      }
+      // 3. No match at all — genuinely new cloud condition. Insert
+      //    atomically with the cloud UUID to avoid race conditions.
+      useAppStore.setState((s) => ({
+        claimConditions: [
+          ...s.claimConditions,
+          {
+            id: cloudCondition.id,
+            name: cloudCondition.name,
+            linkedMedicalVisits: [],
+            linkedExposures: [],
+            linkedSymptoms: [],
+            linkedDocuments: [],
+            linkedBuddyContacts: [],
+            notes: cloudCondition.service_connection_notes || '',
+            createdAt: cloudCondition.created_at || new Date().toISOString(),
+          },
+        ],
+      }));
     }
   }
 

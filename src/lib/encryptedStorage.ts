@@ -131,11 +131,18 @@ export const encryptedStorage: StateStorage = {
     }
 
     if (!_sessionPassword) {
+      // Encryption is enabled but no session password is available.
+      // Fall back to plaintext to prevent silent data loss — the next
+      // setItem call after the user unlocks the vault will re-encrypt.
       console.warn(
-        '[encryptedStorage] Encryption is enabled but no session password is available. ' +
-        'Write for key "' + key + '" was BLOCKED to prevent storing unencrypted data. ' +
-        'Unlock the vault before persisting sensitive data.',
+        '[encryptedStorage] Encryption enabled but vault is locked. ' +
+        'Writing plaintext for key "' + key + '" to prevent data loss.',
       );
+      try {
+        localStorage.setItem(key, value);
+      } catch (error) {
+        console.error('[encryptedStorage] Plaintext fallback write failed:', error);
+      }
       return;
     }
 
