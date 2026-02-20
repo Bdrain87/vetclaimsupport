@@ -35,3 +35,9 @@ coverage
 # Screenshots & scripts (dev tooling)
 screenshots/
 screenshot*.mjs
+
+# Non-code project assets (marketing, ads, planning, website assets)
+marketing/
+ads/
+website-assets/
+planning/
