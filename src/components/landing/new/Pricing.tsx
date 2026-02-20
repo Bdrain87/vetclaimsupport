@@ -302,6 +302,17 @@ export function Pricing() {
           <div className="h-px flex-1 max-w-[100px]" style={{ background: 'linear-gradient(to left, transparent, #BF953F)' }} />
         </motion.div>
 
+        <motion.p
+          className="text-center text-sm mb-10"
+          style={{ color: '#9CA3AF' }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          Unlike claim companies and attorneys, VCS is a self-service educational tool — you prepare your own claim, we provide the resources and organization.
+        </motion.p>
+
         <motion.div
           className="space-y-5"
           variants={staggerContainer}
@@ -426,8 +437,8 @@ export function Pricing() {
         </motion.div>
 
         <motion.p
-          className="text-center text-xs mt-6"
-          style={{ color: '#4B5563' }}
+          className="text-center text-[13px] mt-6"
+          style={{ color: '#6B7280' }}
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -437,7 +448,7 @@ export function Pricing() {
           VCS is an educational and organizational tool, not a law firm, claims agent, or filing service.
           We do not file claims on your behalf and do not guarantee any outcomes.
           Free VA-accredited VSOs are available at{' '}
-          <a href="https://www.va.gov/vso" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: '#6B7280' }}>va.gov/vso</a>.
+          <a href="https://www.va.gov/vso" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: '#9CA3AF' }}>va.gov/vso</a>.
         </motion.p>
 
       </div>
