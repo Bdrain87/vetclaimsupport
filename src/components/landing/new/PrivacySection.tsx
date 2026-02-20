@@ -7,8 +7,8 @@ const POINTS = [
     desc: 'Your data is encrypted and stored securely using industry-standard AES-256 encryption.',
   },
   {
-    title: 'Optional Cloud Sync',
-    desc: 'Create an account to sync across devices. Your data is secured using industry-standard practices.',
+    title: 'Encrypted Cloud Storage',
+    desc: 'Your data is stored securely in our cloud database, encrypted at rest and in transit.',
   },
   {
     title: 'No Data Sales',
