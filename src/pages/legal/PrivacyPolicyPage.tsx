@@ -80,13 +80,13 @@ export default function PrivacyPolicyPage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">3. How Data Is Stored</h2>
           <p className="text-muted-foreground">
-            <strong className="text-foreground">PRIMARY:</strong> All data is encrypted using AES-256-GCM encryption and stored securely. Set a vault passcode in Settings to enable full encryption on your device. VCS is not a healthcare provider, health plan, or healthcare clearinghouse as defined by HIPAA, and is therefore not a HIPAA-covered entity or business associate. However, because our users entrust us with health-related information, we voluntarily follow industry-standard security practices including encryption at rest and in transit, role-based access controls, and audit logging.
+            <strong className="text-foreground">CLOUD STORAGE:</strong> Your data is stored in our secure cloud database (Supabase PostgreSQL), encrypted at rest and in transit. When you create an account, your data is saved to the cloud to enable cross-device access and reliable data persistence. Access controls are in place to ensure only you can access your data.
           </p>
           <p className="text-muted-foreground">
-            <strong className="text-foreground">OPTIONAL CLOUD SYNC:</strong> If you create an account, data may be synced to our cloud database (Supabase PostgreSQL) for cross-device access. Cloud sync is optional and not required.
+            <strong className="text-foreground">LOCAL CACHING:</strong> VCS may cache data locally on your device using browser localStorage and IndexedDB to improve performance and enable offline access. Local data is encrypted using AES-256-GCM encryption when a vault passcode is set in Settings. Local caching supplements cloud storage but is not the primary storage method.
           </p>
           <p className="text-muted-foreground">
-            <strong className="text-foreground">ENCRYPTION:</strong> Data in transit is encrypted via TLS. Cloud data at rest is encrypted on database servers. Access controls are in place to ensure only you can access your data.
+            <strong className="text-foreground">ENCRYPTION:</strong> Data in transit is encrypted via TLS. Cloud data at rest is encrypted on database servers. You may additionally enable client-side encryption by setting a vault passcode in Settings.
           </p>
         </section>
 
