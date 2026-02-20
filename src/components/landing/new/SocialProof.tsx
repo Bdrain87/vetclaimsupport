@@ -5,10 +5,11 @@ import { fadeInUp, staggerContainer } from '@/lib/landing-animations';
 function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
-  const [display, setDisplay] = useState(0);
+  const [display, setDisplay] = useState(value);
 
   useEffect(() => {
     if (!isInView) return;
+    setDisplay(0);
     const duration = 1800;
     const startTime = Date.now();
     const tick = () => {
@@ -32,7 +33,7 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
           backgroundClip: 'text',
         }}
       >
-        {isInView ? display : 0}{suffix}
+        {display}{suffix}
       </span>
     </div>
   );
@@ -41,7 +42,7 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
 const STATS = [
   { value: 50, suffix: '+', label: 'Tools & Features' },
   { value: 800, suffix: '+', label: 'VA Conditions' },
-  { value: 256, suffix: '-bit', label: 'AES Encryption' },
+  { value: 256, suffix: '-bit', label: 'Encryption' },
   { value: 0, suffix: '', label: 'Veteran Founded', isText: true },
 ];
 
