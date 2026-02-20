@@ -23,7 +23,7 @@ export default function PrivacyPolicyPage() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Privacy Policy</h1>
-          <p className="text-muted-foreground/70 text-sm mt-1">Vet Claim Support &mdash; Version 1.1 &mdash; Effective February 18, 2026</p>
+          <p className="text-muted-foreground/70 text-sm mt-1">Vet Claim Support &mdash; Version 1.2 &mdash; Effective February 19, 2026</p>
         </div>
       </div>
 
@@ -192,7 +192,7 @@ export default function PrivacyPolicyPage() {
             The Service uses:
           </p>
           <ul className="space-y-1.5 text-muted-foreground">
-            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Supabase</strong> (cloud database, optional)</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Supabase</strong> (cloud database and authentication)</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Third-party AI service provider</strong> (currently Google Gemini — AI features, optional)</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Stripe</strong> (payment processing for Premium purchases)</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Vercel</strong> (web hosting and deployment)</li>
