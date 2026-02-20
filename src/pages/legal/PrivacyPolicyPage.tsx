@@ -88,6 +88,9 @@ export default function PrivacyPolicyPage() {
           <p className="text-muted-foreground">
             <strong className="text-foreground">ENCRYPTION:</strong> Data in transit is encrypted via TLS. Cloud data at rest is encrypted on database servers. You may additionally enable client-side encryption by setting a vault passcode in Settings.
           </p>
+          <p className="text-muted-foreground">
+            <strong className="text-foreground">HIPAA NOTICE:</strong> VCS is not a HIPAA-covered entity and does not claim compliance with the Health Insurance Portability and Accountability Act (HIPAA). VCS is not a healthcare provider, health plan, or healthcare clearinghouse as defined by HIPAA. While we implement strong security measures including encryption at rest and in transit, role-based access controls, and audit logging, VCS is a self-service educational tool, not a healthcare provider or claims processor. Do not use VCS as your sole repository for protected health information.
+          </p>
         </section>
 
         {/* Section 4: AI Data Processing */}
