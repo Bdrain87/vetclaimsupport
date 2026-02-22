@@ -837,6 +837,7 @@ const useAppStore = create<AppState>()(
           }
         };
       },
+      skipHydration: true,
       partialize: (state) => {
         // Strip non-serializable fields and large dataUrl from IndexedDB docs
         const { _evidenceLoading, _claimDocLoading, ...rest } = state;

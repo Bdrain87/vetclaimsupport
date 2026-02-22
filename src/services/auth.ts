@@ -75,6 +75,8 @@ export const ALL_LOCAL_STORAGE_KEYS = [
   // Encryption
   'vet-claim-encryption-enabled',
   'vet-claim-password-hash',
+  '_vcs_web_enc_key',
+  'vcs-encrypted-migration-v2',
   // First-run / onboarding
   'liabilityAccepted',
   'hasSeenOnboarding',

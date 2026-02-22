@@ -142,6 +142,7 @@ export const useProfileStore = create<ProfileState>()(
       name: 'vet-user-profile',
       version: 5,
       storage: createJSONStorage(() => encryptedStorage),
+      skipHydration: true,
       onRehydrateStorage: () => {
         return (_state, error) => {
           if (error) {

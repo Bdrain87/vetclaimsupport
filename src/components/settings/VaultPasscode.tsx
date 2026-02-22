@@ -8,12 +8,11 @@ import { useToast } from '@/hooks/use-toast';
 import { useProfileStore } from '@/store/useProfileStore';
 import {
   enableEncryption,
-  disableEncryption,
   verifyPassword,
   isEncryptionEnabled,
   validatePasswordStrength,
 } from '@/utils/encryption';
-import { setSessionPassword, clearSessionPassword } from '@/lib/encryptedStorage';
+import { setSessionPassword } from '@/lib/encryptedStorage';
 
 export function VaultPasscode() {
   const { toast } = useToast();
@@ -108,13 +107,14 @@ export function VaultPasscode() {
 
     setIsProcessing(true);
     try {
-      disableEncryption();
-      clearSessionPassword();
+      // Remove the Layer 2 passcode hash but keep the password-hash key
+      // cleared.  Base-layer encryption (Layer 1) remains always on.
+      localStorage.removeItem('vet-claim-password-hash');
       profile.setVaultPasscodeSet(false);
-      toast({ title: 'Vault Disabled', description: 'Encryption has been removed. Your data is stored as plaintext.' });
+      toast({ title: 'Passcode Removed', description: 'Your additional passcode has been removed. Your data remains automatically encrypted.' });
       resetForm();
     } catch {
-      toast({ title: 'Error', description: 'Failed to disable encryption.', variant: 'destructive' });
+      toast({ title: 'Error', description: 'Failed to remove passcode.', variant: 'destructive' });
     } finally {
       setIsProcessing(false);
     }
@@ -129,8 +129,8 @@ export function VaultPasscode() {
         </CardTitle>
         <CardDescription>
           {isEnabled
-            ? 'Your data is encrypted with a vault passcode.'
-            : 'Set a passcode to encrypt your health and claim data on this device.'}
+            ? 'Your data is automatically encrypted. An additional vault passcode is active for extra protection.'
+            : 'Your data is automatically encrypted. Set an additional passcode for extra protection.'}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -300,7 +300,7 @@ export function VaultPasscode() {
           <div className="space-y-3">
             <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20">
               <p className="text-sm text-destructive font-medium">
-                Removing the vault passcode will store your data as unencrypted plaintext.
+                Removing the additional passcode will remove the extra protection layer. Your data will remain automatically encrypted.
               </p>
             </div>
             <div className="space-y-1.5">
@@ -326,7 +326,7 @@ export function VaultPasscode() {
             <div className="flex gap-2">
               <Button variant="outline" onClick={resetForm} className="flex-1">Cancel</Button>
               <Button variant="destructive" onClick={handleRemovePasscode} disabled={isProcessing} className="flex-1">
-                {isProcessing ? 'Removing...' : 'Remove Encryption'}
+                {isProcessing ? 'Removing...' : 'Remove Passcode'}
               </Button>
             </div>
           </div>

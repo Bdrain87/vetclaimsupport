@@ -1,5 +1,9 @@
 // IndexedDB wrapper for storing large files locally
 // This keeps all veteran data 100% on-device for privacy
+// All stored data is encrypted at rest using the device encryption key.
+
+import { encryptWithRawKey, decryptWithRawKey } from '@/utils/encryption';
+import { getCachedKey } from '@/lib/keyManager';
 
 const DB_NAME = 'va-claims-evidence-db';
 const DB_VERSION = 1;
@@ -61,11 +65,17 @@ async function hasQuota(bytesNeeded: number): Promise<boolean> {
   }
 }
 
-// Store large file data in IndexedDB
+// Store large file data in IndexedDB (encrypted at rest)
 export async function storeFileData(id: string, dataUrl: string): Promise<void> {
   const ok = await hasQuota(dataUrl.length * 2); // UTF-16 ≈ 2 bytes/char
   if (!ok) {
     throw new Error('Insufficient storage quota. Free up space and try again.');
+  }
+
+  const key = getCachedKey();
+  let storedValue = dataUrl;
+  if (key) {
+    storedValue = await encryptWithRawKey(dataUrl, key);
   }
 
   const db = await openDB();
@@ -73,42 +83,84 @@ export async function storeFileData(id: string, dataUrl: string): Promise<void> 
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, 'readwrite');
     const store = transaction.objectStore(STORE_NAME);
-    
-    const request = store.put({ id, dataUrl, storedAt: new Date().toISOString() });
-    
+
+    const request = store.put({
+      id,
+      dataUrl: storedValue,
+      encrypted: !!key,
+      storedAt: new Date().toISOString(),
+    });
+
     request.onsuccess = () => resolve();
     request.onerror = () => reject(request.error);
   });
 }
 
-// Retrieve file data from IndexedDB
+// Retrieve file data from IndexedDB (decrypts if encrypted)
 export async function getFileData(id: string): Promise<string | null> {
   const db = await openDB();
-  
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction(STORE_NAME, 'readonly');
-    const store = transaction.objectStore(STORE_NAME);
-    
-    const request = store.get(id);
-    
-    request.onsuccess = () => {
-      const result = request.result;
-      resolve(result?.dataUrl || null);
-    };
-    request.onerror = () => reject(request.error);
-  });
+
+  const result = await new Promise<{ dataUrl: string; encrypted?: boolean } | undefined>(
+    (resolve, reject) => {
+      const transaction = db.transaction(STORE_NAME, 'readonly');
+      const store = transaction.objectStore(STORE_NAME);
+
+      const request = store.get(id);
+
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    },
+  );
+
+  if (!result?.dataUrl) return null;
+
+  // Decrypt if the record was stored encrypted
+  if (result.encrypted) {
+    const key = getCachedKey();
+    if (!key) {
+      console.error('[indexedDB] No encryption key available to decrypt record:', id);
+      return null;
+    }
+    try {
+      return await decryptWithRawKey(result.dataUrl, key);
+    } catch {
+      console.error('[indexedDB] Decryption failed for record:', id);
+      return null;
+    }
+  }
+
+  // Unencrypted legacy record — migrate it to encrypted on read
+  const key = getCachedKey();
+  if (key) {
+    try {
+      const encrypted = await encryptWithRawKey(result.dataUrl, key);
+      const writeDb = await openDB();
+      const tx = writeDb.transaction(STORE_NAME, 'readwrite');
+      tx.objectStore(STORE_NAME).put({
+        id,
+        dataUrl: encrypted,
+        encrypted: true,
+        storedAt: new Date().toISOString(),
+      });
+    } catch {
+      // Migration failure is non-fatal — data is still readable
+      console.warn('[indexedDB] Failed to migrate record to encrypted:', id);
+    }
+  }
+
+  return result.dataUrl;
 }
 
 // Delete file data from IndexedDB
 export async function deleteFileData(id: string): Promise<void> {
   const db = await openDB();
-  
+
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, 'readwrite');
     const store = transaction.objectStore(STORE_NAME);
-    
+
     const request = store.delete(id);
-    
+
     request.onsuccess = () => resolve();
     request.onerror = () => reject(request.error);
   });
@@ -117,13 +169,13 @@ export async function deleteFileData(id: string): Promise<void> {
 // Get all stored file IDs
 export async function getAllFileIds(): Promise<string[]> {
   const db = await openDB();
-  
+
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, 'readonly');
     const store = transaction.objectStore(STORE_NAME);
-    
+
     const request = store.getAllKeys();
-    
+
     request.onsuccess = () => {
       resolve(request.result as string[]);
     };

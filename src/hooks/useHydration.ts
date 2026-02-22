@@ -1,45 +1,80 @@
 import { useState, useEffect } from 'react';
 import useAppStore from '@/store/useAppStore';
 import { useProfileStore } from '@/store/useProfileStore';
+import { useAICacheStore } from '@/store/useAICacheStore';
+import { initEncryptionKey } from '@/lib/keyManager';
+import { setSessionPassword } from '@/lib/encryptedStorage';
+
+const MIGRATION_FLAG = 'vcs-encrypted-migration-v2';
 
 /**
- * Returns `true` once both useAppStore and useProfileStore have finished
- * rehydrating from encryptedStorage.  Components that depend on persisted
- * state should gate their rendering on this value to avoid reading
- * stale/default store data before async decryption completes.
+ * Orchestrates encryption key initialisation and store rehydration.
+ *
+ * 1. Generates / retrieves the device encryption key.
+ * 2. Loads it into encryptedStorage as the session password.
+ * 3. Marks encryption as enabled (for any legacy code that checks the flag).
+ * 4. Manually triggers rehydration of all three stores.
+ * 5. Migrates existing plaintext data to encrypted format.
+ *
+ * Returns `true` once all stores have finished rehydrating and data is ready.
  */
 export function useHydration(): boolean {
-  const [hydrated, setHydrated] = useState(
-    () =>
-      useAppStore.persist.hasHydrated() &&
-      useProfileStore.persist.hasHydrated(),
-  );
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    // If already hydrated on mount, nothing to subscribe to.
-    if (hydrated) return;
+    let cancelled = false;
 
-    function check() {
-      if (
-        useAppStore.persist.hasHydrated() &&
-        useProfileStore.persist.hasHydrated()
-      ) {
+    async function boot() {
+      try {
+        // Step 1: init encryption key (generates on first launch, retrieves after)
+        const key = await initEncryptionKey();
+
+        // Step 2: load key into encryptedStorage as raw-mode session password
+        setSessionPassword(key, 'raw');
+
+        // Step 3: mark encryption as enabled (legacy compat flag)
+        localStorage.setItem('vet-claim-encryption-enabled', 'true');
+      } catch (error) {
+        // Safety net: if key init fails, still allow rehydration with
+        // whatever state is available (plaintext reads still work).
+        console.error('[useHydration] Encryption key init failed:', error);
+      }
+
+      if (cancelled) return;
+
+      // Step 4: manually trigger rehydration for all stores
+      await Promise.all([
+        useAppStore.persist.rehydrate(),
+        useProfileStore.persist.rehydrate(),
+        useAICacheStore.persist.rehydrate(),
+      ]);
+
+      if (cancelled) return;
+
+      // Step 5: migrate existing plaintext data to encrypted format
+      try {
+        if (!localStorage.getItem(MIGRATION_FLAG)) {
+          // Force a write-back which will re-encrypt via setItem
+          useAppStore.setState({ ...useAppStore.getState() });
+          useProfileStore.setState({ ...useProfileStore.getState() });
+          useAICacheStore.setState({ ...useAICacheStore.getState() });
+          localStorage.setItem(MIGRATION_FLAG, 'true');
+        }
+      } catch (error) {
+        console.error('[useHydration] Migration failed:', error);
+      }
+
+      if (!cancelled) {
         setHydrated(true);
       }
     }
 
-    const unsub1 = useAppStore.persist.onFinishHydration(() => check());
-    const unsub2 = useProfileStore.persist.onFinishHydration(() => check());
-
-    // Re-check in case hydration finished between the useState initialiser
-    // and this effect running (React 18 concurrent mode edge case).
-    check();
+    boot();
 
     return () => {
-      unsub1();
-      unsub2();
+      cancelled = true;
     };
-  }, [hydrated]);
+  }, []);
 
   return hydrated;
 }

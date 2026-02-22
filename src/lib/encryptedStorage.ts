@@ -1,46 +1,63 @@
 /**
  * Encrypted storage adapter for Zustand persist middleware.
  *
- * When encryption is enabled (user has set a vault passcode), data written to
- * localStorage is encrypted with AES-256-GCM via the Web Crypto API.
- * When encryption is not enabled, data passes through to localStorage as
- * plaintext, preserving full backwards compatibility.
+ * Layer 1 (mandatory, zero-friction): All store data is encrypted at rest
+ * using a device-generated 256-bit AES key (raw-key path, ~5ms per write).
+ * The key is auto-generated on first launch and stored in the iOS Keychain
+ * (native) or localStorage (web).
  *
- * The user's vault password is held in a module-scoped variable for the
- * duration of the browser session.  It is never persisted to disk.
+ * Layer 2 (opt-in VaultPasscode): Users can additionally set a vault passcode
+ * which uses PBKDF2-derived keys (600k iterations) for extra protection.
+ *
+ * The session password is held in a module-scoped variable for the duration of
+ * the browser session.  It is never persisted to disk.
  */
 
 import type { StateStorage } from 'zustand/middleware';
-import { encrypt, decrypt, isEncryptionEnabled } from '@/utils/encryption';
+import {
+  encrypt,
+  decrypt,
+  encryptWithRawKey,
+  decryptWithRawKey,
+} from '@/utils/encryption';
 
 // ---- session-scoped password ------------------------------------------------
 
 let _sessionPassword: string | null = null;
+let _encryptionMode: 'raw' | 'pbkdf2' = 'raw';
 
-/** Store the vault password in memory for the current session. */
-export function setSessionPassword(password: string): void {
+/**
+ * Store the encryption password/key in memory for the current session.
+ * @param password  The raw key (base64) or vault passcode.
+ * @param mode      'raw' for device key (Layer 1), 'pbkdf2' for vault passcode (Layer 2).
+ */
+export function setSessionPassword(
+  password: string,
+  mode: 'raw' | 'pbkdf2' = 'pbkdf2',
+): void {
   _sessionPassword = password;
+  _encryptionMode = mode;
 }
 
-/** Retrieve the vault password held in memory (null if not set). */
+/** Retrieve the session password/key held in memory (null if not set). */
 export function getSessionPassword(): string | null {
   return _sessionPassword;
 }
 
-/** Clear the vault password from memory (e.g. on lock / logout). */
+/** Clear the session password/key from memory (e.g. on lock / logout). */
 export function clearSessionPassword(): void {
   _sessionPassword = null;
 }
 
-// ---- encrypted storage prefix -----------------------------------------------
+// ---- encrypted storage prefixes ---------------------------------------------
 
-/**
- * Encrypted values are stored with this prefix so that `getItem` can
- * distinguish them from legacy plaintext values.
- */
+/** Legacy PBKDF2-encrypted values (VaultPasscode / Layer 2). */
 const ENCRYPTED_PREFIX = '__encrypted__:';
 
-// ---- write lock for serializing encrypted writes --------------------------
+/** Raw-key encrypted values (Layer 1 — mandatory). */
+const ENCRYPTED_V2_PREFIX = '__encrypted_v2__:';
+
+// ---- write lock for serializing encrypted writes ----------------------------
 
 const _writeLocks = new Map<string, Promise<void>>();
 
@@ -56,22 +73,13 @@ function serializedWrite(key: string, fn: () => Promise<void>): void {
 // ---- StateStorage implementation --------------------------------------------
 
 /**
- * A Zustand `StateStorage` that transparently encrypts / decrypts values when
- * the user has enabled vault encryption.
+ * A Zustand `StateStorage` that transparently encrypts / decrypts all values.
  *
- * Implements the contract:
- *   getItem(key)          -> string | null | Promise<string | null>
- *   setItem(key, value)   -> void
- *   removeItem(key)       -> void
- *
- * Encryption is opt-in:
- *   - If `isEncryptionEnabled()` returns false, all operations are plain
- *     localStorage pass-throughs.
- *   - If encryption is enabled but no session password is available, `setItem`
- *     falls back to plaintext (to avoid data loss), and `getItem` attempts
- *     plaintext parsing.
- *   - Decryption failures (wrong password, corrupted data) are caught and
- *     return `null` so the store can rehydrate with defaults rather than crash.
+ * Encryption is mandatory — all writes are encrypted.  Reads handle three
+ * formats for backwards compatibility:
+ *   1. `__encrypted_v2__:` — raw-key AES-256-GCM (Layer 1)
+ *   2. `__encrypted__:`    — PBKDF2 AES-256-GCM (Layer 2 / legacy)
+ *   3. No prefix           — plaintext (legacy migration path, read as-is)
  */
 export const encryptedStorage: StateStorage = {
   getItem(key: string): string | null | Promise<string | null> {
@@ -84,59 +92,59 @@ export const encryptedStorage: StateStorage = {
     }
     if (raw === null) return null;
 
-    // If the value does not carry our encrypted prefix it is plaintext --
-    // return it directly regardless of encryption settings.  This is the
-    // backwards-compatibility path for users who have not yet enabled
-    // encryption or for data that was written before encryption was turned on.
-    if (!raw.startsWith(ENCRYPTED_PREFIX)) {
-      return raw;
-    }
-
-    // The value is encrypted.  We need the session password to decrypt.
-    const password = _sessionPassword;
-    if (!password) {
-      // No password available -- we cannot decrypt.  Return null so the store
-      // falls back to its initial state.  The app should prompt the user for
-      // their vault passcode and then trigger a rehydrate.
-      return null;
-    }
-
-    // decrypt is async (Web Crypto), so we return a Promise here.
-    const ciphertext = raw.slice(ENCRYPTED_PREFIX.length);
-    return decrypt(ciphertext, password)
-      .catch(() => {
-        // SECURITY NOTE: Decryption failed (wrong password, corrupted data, or
-        // crypto API error).  We return null so the store initialises with its
-        // defaults rather than crashing.  The app should prompt the user for
-        // their vault passcode and trigger a rehydrate.
-        console.warn(
-          '[encryptedStorage] Decryption failed for key:',
+    // --- Format 1: raw-key encrypted (v2) ---
+    if (raw.startsWith(ENCRYPTED_V2_PREFIX)) {
+      const password = _sessionPassword;
+      if (!password) {
+        console.error(
+          '[encryptedStorage] No encryption key available for key:',
           key,
-          '— returning null so the store falls back to defaults.',
+          '— this should not happen after init.',
+        );
+        return null;
+      }
+
+      const ciphertext = raw.slice(ENCRYPTED_V2_PREFIX.length);
+      return decryptWithRawKey(ciphertext, password).catch(() => {
+        console.warn(
+          '[encryptedStorage] v2 decryption failed for key:',
+          key,
+          '— returning null.',
         );
         return null;
       });
+    }
+
+    // --- Format 2: PBKDF2 encrypted (legacy / Layer 2) ---
+    if (raw.startsWith(ENCRYPTED_PREFIX)) {
+      const password = _sessionPassword;
+      if (!password) {
+        return null;
+      }
+
+      const ciphertext = raw.slice(ENCRYPTED_PREFIX.length);
+      return decrypt(ciphertext, password).catch(() => {
+        console.warn(
+          '[encryptedStorage] PBKDF2 decryption failed for key:',
+          key,
+          '— returning null.',
+        );
+        return null;
+      });
+    }
+
+    // --- Format 3: plaintext (legacy — read as-is for migration) ---
+    return raw;
   },
 
   setItem(key: string, value: string): void {
-    if (!isEncryptionEnabled()) {
-      // Encryption not active -- write plaintext.  This is the expected path
-      // for users who have not opted in to vault encryption.
-      try {
-        localStorage.setItem(key, value);
-      } catch (error) {
-        console.warn('[encryptedStorage] localStorage.setItem failed:', error);
-      }
-      return;
-    }
-
     if (!_sessionPassword) {
-      // Encryption is enabled but no session password is available.
-      // Fall back to plaintext to prevent silent data loss — the next
-      // setItem call after the user unlocks the vault will re-encrypt.
-      console.warn(
-        '[encryptedStorage] Encryption enabled but vault is locked. ' +
-        'Writing plaintext for key "' + key + '" to prevent data loss.',
+      // Should not happen after boot — log error but write plaintext to
+      // prevent data loss.
+      console.error(
+        '[encryptedStorage] No encryption key available during write for key:',
+        key,
+        '— writing plaintext as safety fallback.',
       );
       try {
         localStorage.setItem(key, value);
@@ -146,18 +154,23 @@ export const encryptedStorage: StateStorage = {
       return;
     }
 
-    // Encrypt and write.  Because `encrypt` is async we cannot return
-    // synchronously, but Zustand's persist middleware tolerates void return
-    // from setItem.  Writes are serialized per-key so rapid successive
-    // writes resolve in order, preventing out-of-order overwrites.
+    // Always encrypt.  Use the active encryption mode.
     const password = _sessionPassword;
+    const mode = _encryptionMode;
+
     serializedWrite(key, async () => {
       try {
-        const ciphertext = await encrypt(value, password);
-        localStorage.setItem(key, ENCRYPTED_PREFIX + ciphertext);
+        if (mode === 'raw') {
+          const ciphertext = await encryptWithRawKey(value, password);
+          localStorage.setItem(key, ENCRYPTED_V2_PREFIX + ciphertext);
+        } else {
+          const ciphertext = await encrypt(value, password);
+          localStorage.setItem(key, ENCRYPTED_PREFIX + ciphertext);
+        }
       } catch (error) {
         console.error(
-          '[encryptedStorage] Encryption/write failed for key "' + key + '":', error,
+          '[encryptedStorage] Encryption/write failed for key "' + key + '":',
+          error,
         );
       }
     });

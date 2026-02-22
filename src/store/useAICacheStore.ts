@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { encryptedStorage } from '@/lib/encryptedStorage';
 
 interface AICacheEntry {
   result: string;
@@ -40,6 +41,10 @@ export const useAICacheStore = create<AICacheState>()(
       },
       clearCache: () => set({ cache: {} }),
     }),
-    { name: 'vcs-ai-cache' }
+    {
+      name: 'vcs-ai-cache',
+      storage: createJSONStorage(() => encryptedStorage),
+      skipHydration: true,
+    }
   )
 );

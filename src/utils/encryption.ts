@@ -330,6 +330,85 @@ export function validatePasswordStrength(password: string): {
   };
 }
 
+// ---- Raw-key fast path (no PBKDF2) ------------------------------------------
+
+/**
+ * Import a raw 256-bit AES-GCM key from a base64-encoded string.
+ * This is ~100x faster than PBKDF2 key derivation.
+ */
+async function importRawKey(rawKeyBase64: string): Promise<CryptoKey> {
+  const keyBytes = base64ToBuffer(rawKeyBase64);
+  return crypto.subtle.importKey(
+    'raw',
+    keyBytes,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt', 'decrypt'],
+  );
+}
+
+/**
+ * Encrypt data using a pre-generated raw AES-256-GCM key.
+ * Format: base64(iv + ciphertext)  — no salt needed since key isn't derived.
+ */
+export async function encryptWithRawKey(
+  data: string,
+  rawKeyBase64: string,
+): Promise<string> {
+  if (!isEncryptionSupported()) {
+    throw new Error('Web Crypto API is not supported in this environment');
+  }
+
+  const encoder = new TextEncoder();
+  const dataBuffer = encoder.encode(data);
+  const iv = generateIV();
+  const key = await importRawKey(rawKeyBase64);
+
+  const encryptedBuffer = await crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv },
+    key,
+    dataBuffer,
+  );
+
+  // iv (12 bytes) + ciphertext
+  const combined = new Uint8Array(iv.length + encryptedBuffer.byteLength);
+  combined.set(iv, 0);
+  combined.set(new Uint8Array(encryptedBuffer), iv.length);
+
+  return bufferToBase64(combined.buffer);
+}
+
+/**
+ * Decrypt data using a pre-generated raw AES-256-GCM key.
+ * Expects format: base64(iv + ciphertext).
+ */
+export async function decryptWithRawKey(
+  encryptedData: string,
+  rawKeyBase64: string,
+): Promise<string> {
+  if (!isEncryptionSupported()) {
+    throw new Error('Web Crypto API is not supported in this environment');
+  }
+
+  try {
+    const combined = base64ToBuffer(encryptedData);
+    const iv = combined.slice(0, IV_LENGTH);
+    const encryptedBuffer = combined.slice(IV_LENGTH);
+    const key = await importRawKey(rawKeyBase64);
+
+    const decryptedBuffer = await crypto.subtle.decrypt(
+      { name: 'AES-GCM', iv },
+      key,
+      encryptedBuffer,
+    );
+
+    const decoder = new TextDecoder();
+    return decoder.decode(decryptedBuffer);
+  } catch {
+    throw new Error('Decryption failed. Invalid key or corrupted data.');
+  }
+}
+
 // Storage key for encrypted data settings
 const ENCRYPTION_ENABLED_KEY = 'vet-claim-encryption-enabled';
 const PASSWORD_HASH_KEY = 'vet-claim-password-hash';
