@@ -9,6 +9,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ═══ METALLIC GOLD TEXT ═══
+   Auto-apply gradient-clip to gold text on inline text elements.
+   SVGs and elements with gold backgrounds are excluded. */
+
+:is(span, p, h1, h2, h3, h4, h5, h6, a, label, strong, em, small, b, dt, dd, th, td, figcaption, blockquote, legend, summary):is(.text-gold, .text-gold-hl) {
+  background: var(--gold-gradient) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
 /* Platinum Root — prevent white flash */
 :root {
   color-scheme: dark;
@@ -53,7 +64,7 @@ body {
     --popover-foreground: 0 0% 98%;
 
     /* Primary Gold */
-    --primary: 46 65% 52%;
+    --primary: 46 76% 58%;
     --primary-foreground: 0 0% 100%;
 
     /* Secondary — charcoal surface */
@@ -63,7 +74,7 @@ body {
     --muted: 0 0% 16%;
     --muted-foreground: 0 0% 50%;
 
-    --accent: 46 65% 52%;
+    --accent: 46 76% 58%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
@@ -78,19 +89,19 @@ body {
 
     --border: 0 0% 18%;
     --input: 0 0% 13%;
-    --ring: 46 65% 52%;
+    --ring: 46 76% 58%;
 
     --radius: 1rem;
 
     /* Sidebar — slightly off-black */
     --sidebar-background: 0 0% 3%;
     --sidebar-foreground: 0 0% 55%;
-    --sidebar-primary: 46 65% 52%;
+    --sidebar-primary: 46 76% 58%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 0% 11%;
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 0 0% 14%;
-    --sidebar-ring: 46 65% 52%;
+    --sidebar-ring: 46 76% 58%;
     --sidebar-muted: 0 0% 45%;
 
     /* Section colors */
@@ -115,13 +126,13 @@ body {
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 11%;
     --popover-foreground: 0 0% 98%;
-    --primary: 46 65% 52%;
+    --primary: 46 76% 58%;
     --primary-foreground: 0 0% 100%;
     --secondary: 0 0% 13%;
     --secondary-foreground: 0 0% 85%;
     --muted: 0 0% 16%;
     --muted-foreground: 0 0% 50%;
-    --accent: 46 65% 52%;
+    --accent: 46 76% 58%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
@@ -131,15 +142,15 @@ body {
     --success-foreground: 0 0% 100%;
     --border: 0 0% 18%;
     --input: 0 0% 13%;
-    --ring: 46 65% 52%;
+    --ring: 46 76% 58%;
     --sidebar-background: 0 0% 3%;
     --sidebar-foreground: 0 0% 55%;
-    --sidebar-primary: 46 65% 52%;
+    --sidebar-primary: 46 76% 58%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 0% 11%;
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 0 0% 14%;
-    --sidebar-ring: 46 65% 52%;
+    --sidebar-ring: 46 76% 58%;
   }
 
   /* Light mode - Clean & Professional */
@@ -150,13 +161,13 @@ body {
     --card-foreground: 0 0% 10%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 10%;
-    --primary: 46 65% 40%;
+    --primary: 46 76% 44%;
     --primary-foreground: 0 0% 10%;
     --secondary: 0 0% 96%;
     --secondary-foreground: 0 0% 25%;
     --muted: 0 0% 95%;
     --muted-foreground: 0 0% 45%;
-    --accent: 46 65% 40%;
+    --accent: 46 76% 44%;
     --accent-foreground: 0 0% 10%;
     --destructive: 0 84% 55%;
     --destructive-foreground: 0 0% 100%;
@@ -166,15 +177,15 @@ body {
     --success-foreground: 0 0% 100%;
     --border: 0 0% 88%;
     --input: 0 0% 92%;
-    --ring: 46 65% 40%;
+    --ring: 46 76% 44%;
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 0 0% 35%;
-    --sidebar-primary: 46 65% 40%;
+    --sidebar-primary: 46 76% 44%;
     --sidebar-primary-foreground: 0 0% 10%;
-    --sidebar-accent: 46 65% 97%;
-    --sidebar-accent-foreground: 46 65% 35%;
+    --sidebar-accent: 46 76% 97%;
+    --sidebar-accent-foreground: 46 76% 35%;
     --sidebar-border: 0 0% 92%;
-    --sidebar-ring: 46 65% 40%;
+    --sidebar-ring: 46 76% 44%;
     --sidebar-muted: 0 0% 55%;
     --glass-bg: 0 0% 100% / 0.8;
     --glass-border: 0 0% 88% / 0.6;

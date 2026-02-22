@@ -753,16 +753,20 @@
    Makes all gold elements look premium metallic instead of flat
    ═══════════════════════════════════════════════════════════════ */
 
-/* Gold SVG icons — add subtle glow for metallic feel */
+/* Gold SVG icons — prominent metallic glow */
 .text-gold svg,
 .text-primary svg,
 [class*='text-gold'] svg {
-  filter: drop-shadow(0 0 3px rgba(212, 175, 55, 0.35));
+  filter: drop-shadow(0 0 6px rgba(226, 192, 76, 0.6))
+          drop-shadow(0 0 2px rgba(255, 215, 0, 0.4))
+          drop-shadow(0 0 12px rgba(212, 175, 55, 0.25));
 }
 
 /* Active bottom tab icons — enhanced metallic glow */
 nav[role='tablist'] button[aria-selected='true'] svg {
-  filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.5)) drop-shadow(0 0 2px rgba(255, 215, 0, 0.3));
+  filter: drop-shadow(0 0 8px rgba(226, 192, 76, 0.7))
+          drop-shadow(0 0 3px rgba(255, 215, 0, 0.5))
+          drop-shadow(0 0 16px rgba(212, 175, 55, 0.3));
 }
 
 /* Active bottom tab text — gradient gold */
