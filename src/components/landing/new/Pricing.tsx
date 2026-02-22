@@ -424,7 +424,7 @@ export function Pricing() {
                     <ul className="space-y-1.5">
                       {group.features.map((f) => (
                         <li key={f} className="flex items-center gap-2.5 text-sm">
-                          <Check size={14} style={{ color: '#BF953F' }} className="shrink-0" />
+                          <Check size={14} className="shrink-0 text-gold" />
                           <span style={{ color: '#D1D5DB' }}>{f}</span>
                         </li>
                       ))}

@@ -164,7 +164,7 @@ export function Hero() {
                 <span className="text-base font-medium line-through" style={{ color: '#6B7280', textDecorationColor: '#EF4444' }}>
                   $19.99
                 </span>
-                <span className="text-lg" style={{ color: '#BF953F' }}>→</span>
+                <span className="text-lg text-gold">→</span>
                 <span
                   className="text-xl font-bold"
                   style={{

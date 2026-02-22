@@ -131,7 +131,7 @@ export function HowItWorks() {
                     border: '1px solid rgba(191, 149, 63, 0.2)',
                   }}
                 >
-                  <span className="text-sm font-semibold" style={{ color: '#BF953F' }}>
+                  <span className="text-sm font-semibold" style={{ background: 'var(--gold-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                     {step.num}
                   </span>
                 </div>

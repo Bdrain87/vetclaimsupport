@@ -52,7 +52,7 @@ export function LandingFooter() {
                   {link.href ? (
                     <button
                       onClick={() => scrollTo(link.href)}
-                      className="bg-transparent border-none cursor-pointer text-sm hover:text-[#BF953F] transition-colors p-0"
+                      className="bg-transparent border-none cursor-pointer text-sm hover:text-gold transition-colors p-0"
                       style={{ color: '#9CA3AF' }}
                     >
                       {link.label}
@@ -60,7 +60,7 @@ export function LandingFooter() {
                   ) : (
                     <Link
                       to={link.to}
-                      className="text-sm no-underline hover:text-[#BF953F] transition-colors"
+                      className="text-sm no-underline hover:text-gold transition-colors"
                       style={{ color: '#9CA3AF' }}
                     >
                       {link.label}
@@ -82,7 +82,7 @@ export function LandingFooter() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm no-underline hover:text-[#BF953F] transition-colors"
+                      className="text-sm no-underline hover:text-gold transition-colors"
                       style={{ color: '#9CA3AF' }}
                     >
                       {link.label}
@@ -90,7 +90,7 @@ export function LandingFooter() {
                   ) : link.to ? (
                     <Link
                       to={link.to}
-                      className="text-sm no-underline hover:text-[#BF953F] transition-colors"
+                      className="text-sm no-underline hover:text-gold transition-colors"
                       style={{ color: '#9CA3AF' }}
                     >
                       {link.label}
@@ -109,7 +109,7 @@ export function LandingFooter() {
                 <li key={link.label}>
                   <Link
                     to={link.to}
-                    className="text-sm no-underline hover:text-[#BF953F] transition-colors"
+                    className="text-sm no-underline hover:text-gold transition-colors"
                     style={{ color: '#9CA3AF' }}
                   >
                     {link.label}

@@ -57,7 +57,7 @@ export function StickyNav() {
                 <Link
                   key={link.href}
                   to={link.href}
-                  className="text-white/80 hover:text-[#BF953F] transition-colors text-sm font-medium no-underline"
+                  className="text-white/80 hover:text-gold transition-colors text-sm font-medium no-underline"
                 >
                   {link.label}
                 </Link>
@@ -65,7 +65,7 @@ export function StickyNav() {
                 <button
                   key={link.href}
                   onClick={() => scrollTo(link.href)}
-                  className="bg-transparent border-none text-white/80 hover:text-[#BF953F] transition-colors text-sm font-medium cursor-pointer"
+                  className="bg-transparent border-none text-white/80 hover:text-gold transition-colors text-sm font-medium cursor-pointer"
                 >
                   {link.label}
                 </button>
@@ -110,7 +110,7 @@ export function StickyNav() {
                   key={link.href}
                   to={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="text-white text-2xl font-medium hover:text-[#BF953F] transition-colors no-underline"
+                  className="text-white text-2xl font-medium hover:text-gold transition-colors no-underline"
                 >
                   {link.label}
                 </Link>
@@ -118,7 +118,7 @@ export function StickyNav() {
                 <button
                   key={link.href}
                   onClick={() => scrollTo(link.href)}
-                  className="bg-transparent border-none text-white text-2xl font-medium cursor-pointer hover:text-[#BF953F] transition-colors"
+                  className="bg-transparent border-none text-white text-2xl font-medium cursor-pointer hover:text-gold transition-colors"
                 >
                   {link.label}
                 </button>

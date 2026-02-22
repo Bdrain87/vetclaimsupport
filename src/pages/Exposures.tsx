@@ -136,7 +136,7 @@ export default function Exposures() {
       'Extreme temps': 'bg-cyan-500/10 text-cyan-600 ring-cyan-500/20',
       'Diesel exhaust': 'bg-stone-500/10 text-stone-600 ring-stone-500/20',
       'Depleted uranium': 'bg-gold/10 text-gold-dk ring-gold/20',
-      'Sand/dust': 'bg-[#B38728]/10 text-[#7B5E1A] ring-[#B38728]/20',
+      'Sand/dust': 'bg-gold/10 text-gold-dk ring-gold/20',
       'Contaminated water (Camp Lejeune)': 'bg-teal-500/10 text-teal-600 ring-teal-500/20',
       'Contaminated water': 'bg-teal-500/10 text-teal-600 ring-teal-500/20',
       'Herbicides': 'bg-green-500/10 text-green-600 ring-green-500/20',

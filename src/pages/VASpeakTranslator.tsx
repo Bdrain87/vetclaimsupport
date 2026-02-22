@@ -296,8 +296,8 @@ export default function VASpeakTranslator() {
 
       {/* Page header */}
       <div className="flex items-center gap-3">
-        <div className="w-12 h-12 rounded-xl bg-[var(--interactive-primary,#D4AF37)]/10 border border-[var(--interactive-primary,#D4AF37)]/20 flex items-center justify-center shrink-0">
-          <Languages className="h-6 w-6 text-[var(--interactive-primary,#D4AF37)]" />
+        <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
+          <Languages className="h-6 w-6 text-primary" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">VA-Speak Translator</h1>
@@ -316,7 +316,7 @@ export default function VASpeakTranslator() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
-            <Sparkles className="h-5 w-5 text-[var(--interactive-primary,#D4AF37)]" />
+            <Sparkles className="h-5 w-5 text-primary" />
             Translate Your Symptoms
           </CardTitle>
           <CardDescription>
@@ -423,7 +423,7 @@ export default function VASpeakTranslator() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
-            <BookOpen className="h-5 w-5 text-[var(--interactive-primary,#D4AF37)]" />
+            <BookOpen className="h-5 w-5 text-primary" />
             VA Terms Glossary
           </CardTitle>
           <CardDescription>
@@ -451,7 +451,7 @@ export default function VASpeakTranslator() {
                 onClick={() => setActiveCategory(cat)}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
                   activeCategory === cat
-                    ? 'bg-[var(--interactive-primary,#D4AF37)]/15 text-[var(--interactive-primary,#D4AF37)] border-[var(--interactive-primary,#D4AF37)]/40'
+                    ? 'bg-primary/15 text-primary border-primary/40'
                     : 'bg-muted/50 text-muted-foreground border-border hover:bg-muted'
                 }`}
               >

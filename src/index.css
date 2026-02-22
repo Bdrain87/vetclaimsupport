@@ -13,7 +13,7 @@
    Auto-apply gradient-clip to gold text on inline text elements.
    SVGs and elements with gold backgrounds are excluded. */
 
-:is(span, p, h1, h2, h3, h4, h5, h6, a, label, strong, em, small, b, dt, dd, th, td, figcaption, blockquote, legend, summary):is(.text-gold, .text-gold-hl) {
+:is(span, p, h1, h2, h3, h4, h5, h6, a, label, strong, em, small, b, dt, dd, th, td, figcaption, blockquote, legend, summary):is(.text-gold, .text-gold-hl, .text-primary) {
   background: var(--gold-gradient) !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
@@ -722,8 +722,15 @@ body {
   .premium-badge-primary {
     @apply premium-badge;
     background: rgba(212, 175, 55, 0.15);
-    color: #D4AF37;
     border: 1px solid rgba(212, 175, 55, 0.2);
+  }
+
+  .premium-badge-primary span,
+  .premium-badge-primary {
+    background-image: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   /* Success result card - subtle green background */

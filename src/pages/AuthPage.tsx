@@ -266,8 +266,7 @@ export default function AuthPage() {
                 Don&apos;t have an account?{' '}
                 <button
                   onClick={() => { setMode('signup'); setConfirmPassword(''); }}
-                  className="bg-transparent border-none cursor-pointer font-medium transition-colors"
-                  style={{ color: '#BF953F' }}
+                  className="bg-transparent border-none cursor-pointer font-medium transition-colors text-gold"
                 >
                   Sign Up
                 </button>
@@ -277,8 +276,7 @@ export default function AuthPage() {
                 Already have an account?{' '}
                 <button
                   onClick={() => setMode('signin')}
-                  className="bg-transparent border-none cursor-pointer font-medium transition-colors"
-                  style={{ color: '#BF953F' }}
+                  className="bg-transparent border-none cursor-pointer font-medium transition-colors text-gold"
                 >
                   Sign In
                 </button>

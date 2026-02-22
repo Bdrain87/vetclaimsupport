@@ -693,9 +693,14 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
                       backgroundColor: card.plan.startsWith('Free')
                         ? 'rgba(34,197,94,0.12)'
                         : 'rgba(212,175,55,0.12)',
-                      color: card.plan.startsWith('Free')
-                        ? '#22C55E'
-                        : '#D4AF37',
+                      ...(card.plan.startsWith('Free')
+                        ? { color: '#22C55E' }
+                        : {
+                            backgroundImage: 'var(--gold-gradient)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            backgroundClip: 'text',
+                          }),
                     }}
                   >
                     {card.plan.startsWith('Free') ? 'Free' : 'Premium'}

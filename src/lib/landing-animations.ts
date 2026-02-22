@@ -183,9 +183,11 @@ export const SECTION_TOP_GLOW_GOLD = 'linear-gradient(180deg, rgba(191,149,63,0.
 
 // --- PILL LABEL STYLE ---
 export const PILL_STYLE = {
-  background: 'rgba(191, 149, 63, 0.1)',
-  color: '#BF953F',
-  border: '1px solid rgba(191, 149, 63, 0.15)',
+  background: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  backgroundClip: 'text' as const,
+  border: '1px solid rgba(191, 149, 63, 0.25)',
   borderRadius: '9999px',
   fontSize: '13px',
   fontWeight: 500,
