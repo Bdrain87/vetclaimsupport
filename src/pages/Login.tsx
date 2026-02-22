@@ -30,7 +30,7 @@ export default function Login() {
       if (session) {
         navigate(getSafeRedirect(), { replace: true });
       }
-    });
+    }).catch(() => { /* session check failed — stay on login */ });
   }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {

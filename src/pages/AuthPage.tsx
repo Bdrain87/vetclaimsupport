@@ -35,7 +35,7 @@ export default function AuthPage() {
       if (session) {
         navigate(getSafeRedirect(), { replace: true });
       }
-    });
+    }).catch(() => { /* session check failed — stay on auth */ });
   }, [navigate]);
 
   const handleEmailAuth = async (e: React.FormEvent) => {

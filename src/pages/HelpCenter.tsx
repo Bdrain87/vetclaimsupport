@@ -326,10 +326,10 @@ export default function HelpCenter() {
                     <h3 className="text-sm font-semibold text-muted-foreground mb-2">FAQ ({searchResults.faqs.length})</h3>
                     <div className="space-y-2">
                       {searchResults.faqs.slice(0, 3).map(({ data }) => (
-                        <div key={data.id} className="p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors cursor-pointer" onClick={() => { setGlobalSearch(''); setActiveTab('faq'); }}>
+                        <button key={data.id} className="w-full text-left p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors cursor-pointer" onClick={() => { setGlobalSearch(''); setActiveTab('faq'); }}>
                           <p className="font-medium text-sm">{data.question}</p>
                           <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{data.answer}</p>
-                        </div>
+                        </button>
                       ))}
                     </div>
                   </div>
@@ -339,10 +339,10 @@ export default function HelpCenter() {
                     <h3 className="text-sm font-semibold text-muted-foreground mb-2">Guides ({searchResults.guides.length})</h3>
                     <div className="space-y-2">
                       {searchResults.guides.slice(0, 3).map(({ data }, i) => (
-                        <div key={i} className="p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors cursor-pointer" onClick={() => { setGlobalSearch(''); setActiveTab('guides'); }}>
+                        <button key={i} className="w-full text-left p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors cursor-pointer" onClick={() => { setGlobalSearch(''); setActiveTab('guides'); }}>
                           <p className="font-medium text-sm">{data.step.title}</p>
                           <p className="text-xs text-muted-foreground mt-1">{data.section.title}</p>
-                        </div>
+                        </button>
                       ))}
                     </div>
                   </div>
@@ -352,10 +352,10 @@ export default function HelpCenter() {
                     <h3 className="text-sm font-semibold text-muted-foreground mb-2">Glossary ({searchResults.terms.length})</h3>
                     <div className="space-y-2">
                       {searchResults.terms.slice(0, 3).map(({ data }) => (
-                        <div key={data.term} className="p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors cursor-pointer" onClick={() => { setGlobalSearch(''); setActiveTab('glossary'); }}>
+                        <button key={data.term} className="w-full text-left p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors cursor-pointer" onClick={() => { setGlobalSearch(''); setActiveTab('glossary'); }}>
                           <p className="font-medium text-sm">{data.term}</p>
                           <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{data.definition}</p>
-                        </div>
+                        </button>
                       ))}
                     </div>
                   </div>
