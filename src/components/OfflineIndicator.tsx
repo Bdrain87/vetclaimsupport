@@ -31,7 +31,7 @@ export function OfflineIndicator() {
           initial={{ y: -40, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -40, opacity: 0 }}
-          className="fixed top-0 left-0 right-0 z-[60] flex items-center justify-center gap-2 py-2 px-4 bg-amber-900/90 backdrop-blur-sm text-amber-100 text-xs font-medium"
+          className="fixed top-0 left-0 right-0 z-[60] flex items-center justify-center gap-2 py-2 px-4 bg-navy-900/90 backdrop-blur-sm text-gold-hl text-xs font-medium"
           role="status"
           aria-live="polite"
         >

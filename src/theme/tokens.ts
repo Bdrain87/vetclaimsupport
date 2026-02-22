@@ -49,7 +49,7 @@ export const colors = {
   // === BRAND MARK ONLY — NOT for UI elements ===
   brand: {
     gold: '#D4AF37',        // Brand mark icon ONLY
-    goldLight: '#FFD700',   // Brand mark gradient light
+    goldLight: '#F0D78C',   // Brand mark gradient light (metallic gold highlight)
     goldDark: '#B8860B',    // Brand mark gradient dark
   },
 

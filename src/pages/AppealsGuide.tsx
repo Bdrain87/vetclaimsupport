@@ -39,7 +39,7 @@ const courtLabels: Record<string, string> = {
 const courtColors: Record<string, string> = {
   BVA: 'bg-gold/20 text-gold-hl border-gold/30',
   CAVC: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
-  FedCir: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+  FedCir: 'bg-gold/20 text-gold border-gold/30',
   SupCt: 'bg-red-500/20 text-red-400 border-red-500/30',
 };
 
@@ -294,7 +294,7 @@ function DisclaimerBanner() {
     return (
       <button
         onClick={() => setAcknowledged(false)}
-        className="w-full flex items-center gap-2 px-3 py-2 rounded-xl border border-amber-500/20 bg-amber-500/5 text-xs text-amber-300/70 hover:bg-amber-500/10 transition-colors"
+        className="w-full flex items-center gap-2 px-3 py-2 rounded-xl border border-gold/20 bg-gold/5 text-xs text-gold/70 hover:bg-gold/10 transition-colors"
       >
         <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
         <span>Legal disclaimer acknowledged — tap to review</span>
@@ -303,10 +303,10 @@ function DisclaimerBanner() {
   }
 
   return (
-    <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 backdrop-blur-sm p-4 flex gap-3 items-start">
-      <AlertTriangle className="h-5 w-5 text-amber-400 mt-0.5 shrink-0" />
+    <div className="rounded-xl border border-gold/30 bg-gold/10 backdrop-blur-sm p-4 flex gap-3 items-start">
+      <AlertTriangle className="h-5 w-5 text-gold mt-0.5 shrink-0" />
       <div className="space-y-1 flex-1 min-w-0">
-        <p className="text-sm text-amber-200/90 font-medium leading-relaxed">
+        <p className="text-sm text-gold-hl/90 font-medium leading-relaxed">
           {CASE_LAW_DISCLAIMER}
         </p>
         <div className="flex items-center justify-between gap-2 pt-2">
@@ -316,7 +316,7 @@ function DisclaimerBanner() {
           </div>
           <button
             onClick={() => setAcknowledged(true)}
-            className="px-3 py-1.5 rounded-md bg-amber-500/20 text-amber-200 text-xs font-medium hover:bg-amber-500/30 transition-colors flex-shrink-0"
+            className="px-3 py-1.5 rounded-md bg-gold/20 text-gold-hl text-xs font-medium hover:bg-gold/30 transition-colors flex-shrink-0"
           >
             I Acknowledge
           </button>
@@ -346,7 +346,7 @@ function AppealLaneCard({ lane }: { lane: typeof appealLanes[number] }) {
         <p className="text-sm text-muted-foreground leading-relaxed">{lane.description}</p>
 
         {/* Time limit */}
-        <div className="flex items-center gap-1.5 text-xs text-amber-400/90">
+        <div className="flex items-center gap-1.5 text-xs text-gold/90">
           <Clock className="h-3.5 w-3.5" />
           <span className="font-medium">{lane.timeLimit}</span>
         </div>
@@ -657,7 +657,7 @@ function MyAppealTab() {
                   </div>
                   {!uc.isPrimary && <Badge variant="outline" className="text-[9px] shrink-0">Secondary</Badge>}
                   {uc.claimStatus === 'denied' && <Badge className="text-[9px] bg-red-500/20 text-red-400 border-red-500/30 shrink-0">Denied</Badge>}
-                  {uc.claimStatus === 'appeal' && <Badge className="text-[9px] bg-amber-500/20 text-amber-400 border-amber-500/30 shrink-0">Appeal</Badge>}
+                  {uc.claimStatus === 'appeal' && <Badge className="text-[9px] bg-gold/20 text-gold border-gold/30 shrink-0">Appeal</Badge>}
                 </button>
               ))}
             </div>

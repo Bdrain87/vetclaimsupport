@@ -252,7 +252,7 @@ export default function TravelPayCalculator() {
                 <span
                   className="text-xl font-bold"
                   style={{
-                    background: 'linear-gradient(135deg, #FFD700 0%, #D4AF37 40%, #B38728 70%, #D4AF37 100%)',
+                    background: 'linear-gradient(135deg, #B8860B 0%, #D4AF37 25%, #F0D78C 50%, #D4AF37 75%, #B8860B 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                   }}
@@ -271,7 +271,7 @@ export default function TravelPayCalculator() {
                 <p
                   className="text-lg font-bold"
                   style={{
-                    background: 'linear-gradient(135deg, #FFD700 0%, #D4AF37 40%, #B38728 70%, #D4AF37 100%)',
+                    background: 'linear-gradient(135deg, #B8860B 0%, #D4AF37 25%, #F0D78C 50%, #D4AF37 75%, #B8860B 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                   }}
@@ -284,7 +284,7 @@ export default function TravelPayCalculator() {
                 <p
                   className="text-lg font-bold"
                   style={{
-                    background: 'linear-gradient(135deg, #FFD700 0%, #D4AF37 40%, #B38728 70%, #D4AF37 100%)',
+                    background: 'linear-gradient(135deg, #B8860B 0%, #D4AF37 25%, #F0D78C 50%, #D4AF37 75%, #B8860B 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                   }}
