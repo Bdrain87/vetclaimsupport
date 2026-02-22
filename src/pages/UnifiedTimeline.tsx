@@ -23,7 +23,7 @@ const TYPE_META: Record<TimelineEvent['type'], { icon: typeof Activity; color: s
   migraine: { icon: Brain, color: 'text-purple-400', label: 'Migraine' },
   medication: { icon: Pill, color: 'text-emerald-400', label: 'Medication' },
   visit: { icon: Stethoscope, color: 'text-blue-400', label: 'Visit' },
-  exposure: { icon: AlertTriangle, color: 'text-amber-400', label: 'Exposure' },
+  exposure: { icon: AlertTriangle, color: 'text-gold', label: 'Exposure' },
 };
 
 export default function UnifiedTimeline() {
@@ -190,7 +190,7 @@ export default function UnifiedTimeline() {
                           <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{ev.detail}</p>
                         </div>
                         {ev.severity !== undefined && (
-                          <span className={`text-xs font-bold flex-shrink-0 ${ev.severity >= 7 ? 'text-red-400' : ev.severity >= 4 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                          <span className={`text-xs font-bold flex-shrink-0 ${ev.severity >= 7 ? 'text-red-400' : ev.severity >= 4 ? 'text-gold' : 'text-emerald-400'}`}>
                             {ev.severity}/10
                           </span>
                         )}

@@ -9,7 +9,7 @@ const actions = [
   { label: 'Log Sleep', icon: Moon, path: '/health/sleep', color: 'text-blue-400' },
   { label: 'Log Migraine', icon: Brain, path: '/health/migraines', color: 'text-purple-400' },
   { label: 'Log Medication', icon: Pill, path: '/health/medications', color: 'text-green-400' },
-  { label: 'Medical Visit', icon: Stethoscope, path: '/health/visits', color: 'text-amber-400' },
+  { label: 'Medical Visit', icon: Stethoscope, path: '/health/visits', color: 'text-gold' },
   { label: 'Quick Note', icon: FileText, path: '/health/summary', color: 'text-muted-foreground' },
 ];
 
