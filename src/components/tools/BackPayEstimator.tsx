@@ -204,7 +204,7 @@ export function BackPayEstimator() {
           {/* Effective Date Type */}
           <div className="space-y-3">
             <Label className="text-sm font-medium">Effective Date Source</Label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Button
                 type="button"
                 variant={effectiveDateType === 'itf' ? 'default' : 'outline'}
@@ -314,7 +314,7 @@ export function BackPayEstimator() {
               <DollarSign className="h-4 w-4" />
               <span className="text-sm font-semibold">Estimated Back Pay</span>
             </div>
-            <p className="text-5xl sm:text-6xl font-bold tracking-tight number-animate" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>
+            <p className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight number-animate break-words" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>
               {formatCurrency(calculation.estimatedBackPay)}
             </p>
             <p className="text-sm mt-4 max-w-xs mx-auto opacity-90">

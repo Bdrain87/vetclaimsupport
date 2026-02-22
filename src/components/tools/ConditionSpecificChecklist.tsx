@@ -270,22 +270,22 @@ export function ConditionSpecificChecklist() {
                   </div>
 
                   <Tabs defaultValue="evidence">
-                    <TabsList className="w-full grid grid-cols-4">
-                      <TabsTrigger value="evidence" className="text-xs">
+                    <TabsList className="w-full grid grid-cols-4 overflow-hidden">
+                      <TabsTrigger value="evidence" className="text-xs px-1 sm:px-3">
                         <FolderOpen className="h-3 w-3 mr-1 hidden sm:inline" />
-                        Evidence
+                        <span className="truncate">Evidence</span>
                       </TabsTrigger>
-                      <TabsTrigger value="forms" className="text-xs">
+                      <TabsTrigger value="forms" className="text-xs px-1 sm:px-3">
                         <FileText className="h-3 w-3 mr-1 hidden sm:inline" />
-                        Forms
+                        <span className="truncate">Forms</span>
                       </TabsTrigger>
-                      <TabsTrigger value="questions" className="text-xs">
+                      <TabsTrigger value="questions" className="text-xs px-1 sm:px-3">
                         <MessageSquare className="h-3 w-3 mr-1 hidden sm:inline" />
-                        Exam
+                        <span className="truncate">Exam</span>
                       </TabsTrigger>
-                      <TabsTrigger value="secondary" className="text-xs">
+                      <TabsTrigger value="secondary" className="text-xs px-1 sm:px-3">
                         <Link2 className="h-3 w-3 mr-1 hidden sm:inline" />
-                        Secondary
+                        <span className="truncate">2nd</span>
                       </TabsTrigger>
                     </TabsList>
 

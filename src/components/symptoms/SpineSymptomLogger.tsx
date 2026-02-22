@@ -983,14 +983,14 @@ export function SpineSymptomLogger() {
             return (
               <Card key={symptom.id} className="data-card">
                 <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <span className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${getSeverityColor(symptom.severity)}`}>
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-2 min-w-0 flex-wrap">
+                      <span className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium shrink-0 ${getSeverityColor(symptom.severity)}`}>
                         {symptom.severity}/10
                       </span>
                       <span className="text-sm text-muted-foreground">{symptom.bodyArea}</span>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 shrink-0">
                       {spineData && (
                         <Button variant="ghost" size="icon" onClick={() => handleEdit(symptom)} aria-label="Edit spine symptom">
                           <Edit className="h-4 w-4" />

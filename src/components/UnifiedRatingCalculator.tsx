@@ -650,10 +650,10 @@ export function UnifiedRatingCalculator() {
                                 isAlreadyAdded ? 'opacity-50 cursor-not-allowed' : ''
                               }`}
                             >
-                              <div className="flex items-center justify-between">
-                                <div>
+                              <div className="flex items-center justify-between gap-2">
+                                <div className="min-w-0 flex-1">
                                   <span className="font-medium">{condition.abbreviation}</span>
-                                  <span className="text-muted-foreground text-sm ml-2">
+                                  <span className="text-muted-foreground text-sm ml-2 break-words">
                                     {condition.name !== condition.abbreviation && condition.name}
                                   </span>
                                 </div>
@@ -754,17 +754,17 @@ export function UnifiedRatingCalculator() {
                   return (
                     <div
                       key={condition.id}
-                      className={`flex items-center justify-between p-3 rounded-lg border ${
+                      className={`flex items-center justify-between gap-2 p-3 rounded-lg border ${
                         isBilateral
                           ? 'border-gold/50 bg-gold/5'
                           : 'border-border bg-muted/30'
                       }`}
                     >
-                      <div className="flex items-center gap-3">
-                        <div className="flex flex-col">
+                      <div className="flex items-center gap-2 min-w-0 flex-1 flex-wrap">
+                        <div className="flex flex-col min-w-0">
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <span className="font-medium cursor-default">{displayName}</span>
+                              <span className="font-medium cursor-default truncate">{displayName}</span>
                             </TooltipTrigger>
                             {displayName !== fullName && (
                               <TooltipContent>
@@ -772,20 +772,20 @@ export function UnifiedRatingCalculator() {
                               </TooltipContent>
                             )}
                           </Tooltip>
-                          <span className="text-xs text-muted-foreground">{bodyPartLabel}</span>
+                          <span className="text-xs text-muted-foreground truncate">{bodyPartLabel}</span>
                         </div>
                         {isBilateral && (
-                          <Badge variant="outline" className="border-gold text-gold-dk text-xs">
+                          <Badge variant="outline" className="border-gold text-gold-dk text-xs shrink-0">
                             Bilateral
                           </Badge>
                         )}
                         {condition.conditionId && (
-                          <Badge variant="outline" className="border-green-500/50 text-green-600 text-xs">
+                          <Badge variant="outline" className="border-green-500/50 text-green-600 text-xs shrink-0">
                             <Link2 className="h-3 w-3" />
                           </Badge>
                         )}
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 shrink-0">
                         <Select
                           value={condition.rating.toString()}
                           onValueChange={(value) => {

@@ -696,8 +696,8 @@ export function DBQGuidance() {
               <div key={condition.id} className="border rounded-lg overflow-hidden">
                 <div className="p-4 bg-muted/30">
                   <div className="flex items-start justify-between flex-wrap gap-2">
-                    <div>
-                      <h4 className="font-medium text-foreground">{condition.name}</h4>
+                    <div className="min-w-0 flex-1">
+                      <h4 className="font-medium text-foreground break-words">{condition.name}</h4>
                       <p className="text-xs text-muted-foreground mt-1">
                         Form: {dbqInfo?.formNumber}
                       </p>

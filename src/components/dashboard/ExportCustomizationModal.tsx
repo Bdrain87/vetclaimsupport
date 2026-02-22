@@ -295,11 +295,11 @@ export function ExportCustomizationModal({
                     onCheckedChange={() => toggleSection(config.key)}
                     className="pointer-events-none"
                   />
-                  <div className="flex-1 flex items-center gap-2">
-                    <span className="text-muted-foreground">{config.icon}</span>
+                  <div className="flex-1 flex items-center gap-2 min-w-0">
+                    <span className="text-muted-foreground shrink-0">{config.icon}</span>
                     <Label
                       htmlFor={config.key}
-                      className={`flex-1 cursor-pointer text-sm ${isDisabled ? 'text-muted-foreground' : ''}`}
+                      className={`flex-1 cursor-pointer text-sm min-w-0 truncate ${isDisabled ? 'text-muted-foreground' : ''}`}
                     >
                       {config.label}
                     </Label>

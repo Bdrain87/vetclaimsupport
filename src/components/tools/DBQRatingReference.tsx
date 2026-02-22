@@ -88,14 +88,14 @@ export function DBQRatingReference() {
           return (
           <div key={condition.id} className="border rounded-lg overflow-hidden">
             <div className="p-4 bg-muted/30">
-              <div className="flex items-start justify-between">
-                <div>
+              <div className="flex items-start justify-between gap-2 flex-wrap">
+                <div className="min-w-0 flex-1">
                   <h4 className="font-medium text-foreground">{dbq.name}</h4>
                   <p className="text-xs text-muted-foreground mt-1">
                     Diagnostic Code: {dbq.diagnosticCode}
                   </p>
                 </div>
-                <Badge variant="outline">
+                <Badge variant="outline" className="shrink-0">
                   {dbq.ratings.map(r => `${r.percentage}%`).join(' / ')}
                 </Badge>
               </div>

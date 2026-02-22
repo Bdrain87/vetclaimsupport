@@ -309,9 +309,9 @@ function DisclaimerBanner() {
         <p className="text-sm text-gold-hl/90 font-medium leading-relaxed">
           {CASE_LAW_DISCLAIMER}
         </p>
-        <div className="flex items-center justify-between gap-2 pt-2">
-          <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="h-3.5 w-3.5 text-gold" />
+        <div className="flex items-center justify-between gap-2 pt-2 flex-wrap">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <CheckCircle2 className="h-3.5 w-3.5 text-gold shrink-0" />
             <span className="text-xs text-gold font-medium">Only verified sources shown</span>
           </div>
           <button
@@ -820,21 +820,23 @@ export default function AppealsGuide() {
         <TabsList className="w-full grid grid-cols-3 bg-muted/50 border border-border/50">
           <TabsTrigger
             value="my-appeal"
-            className="data-[state=active]:bg-gold/15 data-[state=active]:text-gold text-sm"
+            className="data-[state=active]:bg-gold/15 data-[state=active]:text-gold text-xs sm:text-sm"
           >
-            <Crosshair className="h-4 w-4 mr-1.5" />
-            My Appeal
+            <Crosshair className="h-4 w-4 sm:mr-1.5 shrink-0" />
+            <span className="hidden sm:inline">My Appeal</span>
+            <span className="sm:hidden">Appeal</span>
           </TabsTrigger>
           <TabsTrigger
             value="overview"
-            className="data-[state=active]:bg-gold/15 data-[state=active]:text-gold text-sm"
+            className="data-[state=active]:bg-gold/15 data-[state=active]:text-gold text-xs sm:text-sm"
           >
-            <BookOpen className="h-4 w-4 mr-1.5" />
-            Appeal Lanes
+            <BookOpen className="h-4 w-4 sm:mr-1.5 shrink-0" />
+            <span className="hidden sm:inline">Appeal Lanes</span>
+            <span className="sm:hidden">Lanes</span>
           </TabsTrigger>
           <TabsTrigger
             value="caselaw"
-            className="data-[state=active]:bg-gold/15 data-[state=active]:text-gold text-sm"
+            className="data-[state=active]:bg-gold/15 data-[state=active]:text-gold text-xs sm:text-sm"
           >
             <Gavel className="h-4 w-4 mr-1.5" />
             Case Law

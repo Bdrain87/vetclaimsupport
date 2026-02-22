@@ -601,7 +601,8 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
     <div
       className="relative"
       style={{
-        width: '500px',
+        width: '100%',
+        maxWidth: '500px',
         height: '550px',
         perspective: '1200px',
         perspectiveOrigin: '50% 50%',
@@ -615,6 +616,7 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
           width: '100%',
           height: '100%',
           transformStyle: 'preserve-3d',
+          overflow: 'hidden',
         }}
       >
         {CARDS.map((card, cardIndex) => {
@@ -632,7 +634,8 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
                 position: 'absolute',
                 top: '60px',
                 left: '20px',
-                width: '420px',
+                width: 'calc(100% - 40px)',
+                maxWidth: '420px',
                 transformStyle: 'preserve-3d',
                 transformOrigin: 'center bottom',
                 willChange: 'transform, opacity',

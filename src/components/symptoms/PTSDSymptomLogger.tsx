@@ -259,17 +259,18 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
   return (
     <div className="space-y-4">
       {/* Header with Add Button */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Brain className="h-5 w-5 text-purple-500" />
+      <div className="flex items-center justify-between gap-2 flex-wrap">
+        <div className="flex items-center gap-2 min-w-0 flex-wrap">
+          <Brain className="h-5 w-5 text-purple-500 shrink-0" />
           <h3 className="font-semibold">PTSD Symptom Log</h3>
           <Badge variant="outline" className="text-xs">
             DC 9411 • 38 CFR 4.130
           </Badge>
         </div>
-        <Button onClick={() => setIsOpen(true)} size="sm" className="gap-2">
+        <Button onClick={() => setIsOpen(true)} size="sm" className="gap-2 shrink-0">
           <Plus className="h-4 w-4" />
-          Log PTSD Episode
+          <span className="hidden sm:inline">Log PTSD Episode</span>
+          <span className="sm:hidden">Log</span>
         </Button>
       </div>
 
@@ -356,9 +357,9 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
               return (
                 <Card key={entry.id} className="data-card">
                   <CardHeader className="pb-2">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-muted-foreground" />
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2 min-w-0 flex-wrap">
+                        <Calendar className="h-4 w-4 text-muted-foreground shrink-0" />
                         <span className="text-sm font-medium">
                           {new Date(entry.date).toLocaleDateString()}
                         </span>
@@ -366,7 +367,7 @@ export function PTSDSymptomLogger({ onEntryAdded }: PTSDSymptomLoggerProps) {
                           {entry.overallSeverity}/10 - {severityInfo.label}
                         </Badge>
                       </div>
-                      <div className="flex gap-1">
+                      <div className="flex gap-1 shrink-0">
                         <Button variant="ghost" size="icon" onClick={() => handleEdit(entry)} aria-label="Edit PTSD symptom entry">
                           <Edit className="h-4 w-4" />
                         </Button>

@@ -380,7 +380,7 @@ _______________________________
         </div>
 
         {/* Data Stats */}
-        <div className="grid grid-cols-3 gap-2 pt-2 border-t">
+        <div className="grid grid-cols-3 gap-2 pt-2 border-t text-center">
           <div className="text-center">
             <p className="text-lg font-bold text-foreground">
               {data.medicalVisits.length}
