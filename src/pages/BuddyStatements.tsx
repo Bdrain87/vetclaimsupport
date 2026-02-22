@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useProfileStore } from '@/store/useProfileStore';
-import { Users, Plus, Trash2, Edit, Phone, Mail, FileText, CheckCircle, Clock, Send, Download, Camera, Copy, Check, ChevronRight, ChevronLeft, HelpCircle } from 'lucide-react';
+import { Users, Plus, Trash2, Edit, Phone, Mail, FileText, CheckCircle, Clock, Send, Download, Camera, Copy, Check, ChevronRight, ChevronLeft, HelpCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -15,6 +15,7 @@ import { DocumentUploader } from '@/components/documents/DocumentUploader';
 import { useToast } from '@/hooks/use-toast';
 import type { BuddyContact } from '@/types/claims';
 import { PageContainer } from '@/components/PageContainer';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 
 const statementStatuses = ['Not Requested', 'Requested', 'Received', 'Submitted'] as const;
 
@@ -61,6 +62,9 @@ export default function BuddyStatements() {
   const profile = useProfileStore();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('contacts');
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
+  const [exportingStatement, setExportingStatement] = useState(false);
 
   // Build condition-aware description for pre-fill
   const conditionSummary = useMemo(() => {
@@ -224,10 +228,15 @@ Date: ${today}`;
     }
   };
 
-  const downloadAsPDF = () => {
-    const statement = generateStatement();
-    exportBuddyStatement(statement, statementData.witnessName);
-    toast({ title: 'Downloaded', description: 'Statement saved as PDF.' });
+  const downloadAsPDF = async () => {
+    setExportingStatement(true);
+    try {
+      const statement = generateStatement();
+      await exportBuddyStatement(statement, statementData.witnessName);
+      toast({ title: 'Downloaded', description: 'Statement saved as PDF.' });
+    } finally {
+      setExportingStatement(false);
+    }
   };
 
   const renderStep = () => {
@@ -407,9 +416,9 @@ Date: ${today}`;
                 {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                 {copied ? 'Copied!' : 'Copy to Clipboard'}
               </Button>
-              <Button variant="outline" onClick={downloadAsPDF} className="flex-1 gap-2">
-                <Download className="h-4 w-4" />
-                Download PDF
+              <Button variant="outline" disabled={exportingStatement} onClick={downloadAsPDF} className="flex-1 gap-2">
+                {exportingStatement ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+                {exportingStatement ? 'Exporting...' : 'Download PDF'}
               </Button>
             </div>
           </div>
@@ -431,9 +440,12 @@ Date: ${today}`;
           </div>
         </div>
 
-        <Button variant="outline" onClick={() => exportBuddyContacts(data.buddyContacts)} className="gap-2 flex-shrink-0">
-          <Download className="h-4 w-4" />
-          Export PDF
+        <Button variant="outline" disabled={exporting} onClick={async () => {
+          setExporting(true);
+          try { await exportBuddyContacts(data.buddyContacts); } finally { setExporting(false); }
+        }} className="gap-2 flex-shrink-0">
+          {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+          {exporting ? 'Exporting...' : 'Export PDF'}
         </Button>
       </div>
 
@@ -575,7 +587,7 @@ Date: ${today}`;
                         <Button variant="ghost" size="icon" className="h-8 w-8 min-h-[44px] min-w-[44px]" onClick={() => handleEdit(contact)} aria-label="Edit contact">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 min-h-[44px] min-w-[44px]" onClick={() => deleteBuddyContact(contact.id)} aria-label="Delete contact">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 min-h-[44px] min-w-[44px]" onClick={() => setDeleteTarget(contact.id)} aria-label="Delete contact">
                           <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>
                       </div>
@@ -719,6 +731,15 @@ Date: ${today}`;
           </div>
         </TabsContent>
       </Tabs>
+      <ConfirmDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => { if (!open) setDeleteTarget(null); }}
+        title="Delete Buddy Contact?"
+        description="This action cannot be undone. This will permanently delete this buddy contact and their statement."
+        confirmText="Delete"
+        variant="destructive"
+        onConfirm={() => { if (deleteTarget) deleteBuddyContact(deleteTarget); }}
+      />
     </PageContainer>
   );
 }

@@ -169,7 +169,7 @@ export default function Glossary() {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredTerms = useMemo(() => {
-    if (!searchTerm) return glossaryData;
+    if (!searchTerm.trim()) return glossaryData;
     const lower = searchTerm.toLowerCase();
     return glossaryData.filter(
       (item) =>
@@ -221,7 +221,7 @@ export default function Glossary() {
       </Card>
 
       {/* Letter Navigation */}
-      {!searchTerm && (
+      {!searchTerm.trim() && (
         <Card>
           <CardContent className="pt-6">
             <div className="flex flex-wrap gap-2">

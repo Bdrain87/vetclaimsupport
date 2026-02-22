@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Download, FileText, Users } from 'lucide-react';
+import { Download, FileText, Users, Loader2 } from 'lucide-react';
 import { exportBuddyStatementTemplate } from '@/utils/pdfExport';
 
 const templateContent = `BUDDY/LAY STATEMENT
@@ -110,8 +111,15 @@ NOTE: This statement may be submitted with the veteran's VA disability claim.
 `;
 
 export function BuddyStatementTemplate() {
-  const handleDownloadPDF = () => {
-    exportBuddyStatementTemplate(templateContent, 'General Template');
+  const [exporting, setExporting] = useState(false);
+
+  const handleDownloadPDF = async () => {
+    setExporting(true);
+    try {
+      await exportBuddyStatementTemplate(templateContent, 'General Template');
+    } finally {
+      setExporting(false);
+    }
   };
 
   return (
@@ -176,9 +184,9 @@ export function BuddyStatementTemplate() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3">
-          <Button onClick={handleDownloadPDF} className="flex-1">
-            <Download className="h-4 w-4 mr-2" />
-            Download Template (PDF)
+          <Button disabled={exporting} onClick={handleDownloadPDF} className="flex-1">
+            {exporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
+            {exporting ? 'Exporting...' : 'Download Template (PDF)'}
           </Button>
         </div>
 

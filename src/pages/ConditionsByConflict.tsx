@@ -173,7 +173,7 @@ export default function ConditionsByConflict() {
         </Card>
       )}
 
-      {searchResults && searchResults.length === 0 && searchQuery && (
+      {searchResults && searchResults.length === 0 && searchQuery.trim() && (
         <Card>
           <CardContent className="p-8 text-center">
             <p className="text-muted-foreground">
@@ -200,7 +200,7 @@ export default function ConditionsByConflict() {
       )}
 
       {/* Conflict Grid */}
-      {!selectedConflict && !searchQuery && (
+      {!selectedConflict && !searchQuery.trim() && (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredConflicts.map((conflict) => (
             <ConflictCard

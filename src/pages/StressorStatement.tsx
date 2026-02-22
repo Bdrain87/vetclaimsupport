@@ -15,6 +15,7 @@ import {
   Heart,
   Shield,
   Lightbulb,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -156,6 +157,7 @@ export default function StressorStatement() {
     ...prefilledData,
   });
   const [copied, setCopied] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
   const updateField = useCallback(
     (field: keyof StressorFormData, value: string) => {
@@ -267,9 +269,14 @@ export default function StressorStatement() {
     return sections.join('\n');
   }, [formData]);
 
-  const handleDownload = useCallback(() => {
-    const statement = generateStatement();
-    exportStressorStatement(statement);
+  const handleDownload = useCallback(async () => {
+    setExporting(true);
+    try {
+      const statement = generateStatement();
+      await exportStressorStatement(statement);
+    } finally {
+      setExporting(false);
+    }
   }, [generateStatement]);
 
   const handleCopy = useCallback(async () => {
@@ -641,9 +648,9 @@ export default function StressorStatement() {
                 {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                 {copied ? 'Copied!' : 'Copy to Clipboard'}
               </Button>
-              <Button variant="outline" onClick={handleDownload} className="flex-1 gap-2">
-                <Download className="h-4 w-4" />
-                Download PDF
+              <Button variant="outline" disabled={exporting} onClick={handleDownload} className="flex-1 gap-2">
+                {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+                {exporting ? 'Exporting...' : 'Download PDF'}
               </Button>
             </div>
           </div>

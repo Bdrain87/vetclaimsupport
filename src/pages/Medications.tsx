@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useEvidence } from '@/hooks/useEvidence';
-import { Pill, Plus, Trash2, Edit, Calendar, AlertCircle, Download } from 'lucide-react';
+import { Pill, Plus, Trash2, Edit, Calendar, AlertCircle, Download, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -13,13 +13,17 @@ import { MedicationCombobox } from '@/components/ui/medication-combobox';
 import { exportMedications } from '@/utils/pdfExport';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import { PageContainer } from '@/components/PageContainer';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import type { Medication } from '@/types/claims';
 
 export default function Medications() {
+  const today = new Date().toISOString().split('T')[0];
   const { data, addMedication, updateMedication, deleteMedication } = useClaims();
   const { documents, setAllDocuments } = useEvidence();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
   const [formData, setFormData] = useState<Omit<Medication, 'id'>>({
     startDate: '',
     endDate: '',
@@ -84,9 +88,12 @@ export default function Medications() {
         </div>
 
         <div className="flex gap-2 flex-shrink-0">
-          <Button variant="outline" onClick={() => exportMedications(data.medications)} className="gap-2">
-            <Download className="h-4 w-4" />
-            Export PDF
+          <Button variant="outline" disabled={exporting} onClick={async () => {
+            setExporting(true);
+            try { await exportMedications(data.medications); } finally { setExporting(false); }
+          }} className="gap-2">
+            {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+            {exporting ? 'Exporting...' : 'Export PDF'}
           </Button>
           
           <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
@@ -135,9 +142,11 @@ export default function Medications() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="startDate">Start Date</Label>
-                  <Input 
-                    id="startDate" 
-                    type="date" 
+                  <Input
+                    id="startDate"
+                    type="date"
+                    min="1940-01-01"
+                    max={today}
                     value={formData.startDate}
                     onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
                     required
@@ -145,9 +154,10 @@ export default function Medications() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="endDate">End Date</Label>
-                  <Input 
-                    id="endDate" 
-                    type="date" 
+                  <Input
+                    id="endDate"
+                    type="date"
+                    min="1940-01-01"
                     value={formData.endDate}
                     onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
                     disabled={formData.stillTaking}
@@ -226,7 +236,7 @@ export default function Medications() {
                       <Button variant="ghost" size="icon" className="h-8 w-8 min-h-[44px] min-w-[44px]" onClick={() => handleEdit(med)} aria-label="Edit medication">
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 min-h-[44px] min-w-[44px]" onClick={() => deleteMedication(med.id)} aria-label="Delete medication">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 min-h-[44px] min-w-[44px]" onClick={() => setDeleteTarget(med.id)} aria-label="Delete medication">
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
                     </div>
@@ -275,7 +285,7 @@ export default function Medications() {
                       <Button variant="ghost" size="icon" className="h-8 w-8 min-h-[44px] min-w-[44px]" onClick={() => handleEdit(med)} aria-label="Edit medication">
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 min-h-[44px] min-w-[44px]" onClick={() => deleteMedication(med.id)} aria-label="Delete medication">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 min-h-[44px] min-w-[44px]" onClick={() => setDeleteTarget(med.id)} aria-label="Delete medication">
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
                     </div>
@@ -318,6 +328,15 @@ export default function Medications() {
           </CardContent>
         </Card>
       )}
+      <ConfirmDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => { if (!open) setDeleteTarget(null); }}
+        title="Delete Medication?"
+        description="This action cannot be undone. This will permanently delete this medication record."
+        confirmText="Delete"
+        variant="destructive"
+        onConfirm={() => { if (deleteTarget) deleteMedication(deleteTarget); }}
+      />
     </PageContainer>
   );
 }

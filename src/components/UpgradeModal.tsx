@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { supabase } from '@/lib/supabase';
 import { startCheckout } from '@/services/entitlements';
+import { useToast } from '@/hooks/use-toast';
 
 interface UpgradeModalProps {
   featureName: string;
@@ -20,6 +21,7 @@ const PREMIUM_HIGHLIGHTS = [
 export function UpgradeModal({ featureName }: UpgradeModalProps) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   const handleGetPremium = async () => {
     setLoading(true);
@@ -36,6 +38,11 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
       window.location.href = url;
     } catch (err) {
       console.error('Checkout failed:', err);
+      toast({
+        title: 'Checkout failed',
+        description: err instanceof Error ? err.message : 'Something went wrong. Please try again.',
+        variant: 'destructive',
+      });
       setLoading(false);
     }
   };

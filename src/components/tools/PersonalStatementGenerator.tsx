@@ -33,6 +33,7 @@ export function PersonalStatementGenerator() {
   const branchLabel = getAllBranchLabels(profile);
   const [activeTab, setActiveTab] = useState('preview');
   const [customEdits, setCustomEdits] = useState('');
+  const [exporting, setExporting] = useState(false);
   const [selectedCondition, setSelectedCondition] = useState<string | null>(null);
   const { generate: aiGenerate, isLoading: aiLoading, error: aiError } = useAIGenerate('VA_SPEAK_TRANSLATOR');
   const [aiDraft, setAiDraft] = useState<string | null>(null);
@@ -213,17 +214,22 @@ _______________________________
     }
   };
 
-  const handleDownload = () => {
-    const content = customEdits || generateStatement.full;
-    const condition = selectedCondition
-      ? claimConditions.find(c => c.id === selectedCondition)
-      : claimConditions[0];
-    exportPersonalStatement(content, condition?.name);
+  const handleDownload = async () => {
+    setExporting(true);
+    try {
+      const content = customEdits || generateStatement.full;
+      const condition = selectedCondition
+        ? claimConditions.find(c => c.id === selectedCondition)
+        : claimConditions[0];
+      await exportPersonalStatement(content, condition?.name);
 
-    toast({
-      title: 'Statement Downloaded',
-      description: 'Your personal statement has been saved as PDF',
-    });
+      toast({
+        title: 'Statement Downloaded',
+        description: 'Your personal statement has been saved as PDF',
+      });
+    } finally {
+      setExporting(false);
+    }
   };
 
   if (claimConditions.length === 0) {
@@ -373,9 +379,9 @@ _______________________________
             <Copy className="h-4 w-4" />
             Copy to Clipboard
           </Button>
-          <Button onClick={handleDownload} className="flex-1 gap-2">
-            <Download className="h-4 w-4" />
-            Download Statement
+          <Button disabled={exporting} onClick={handleDownload} className="flex-1 gap-2">
+            {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+            {exporting ? 'Exporting...' : 'Download Statement'}
           </Button>
         </div>
 

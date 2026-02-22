@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useEvidence } from '@/hooks/useEvidence';
-import { Stethoscope, Plus, Trash2, Edit, Calendar, MapPin, User, FileText, AlertTriangle, Download, Camera, Upload } from 'lucide-react';
+import { Stethoscope, Plus, Trash2, Edit, Calendar, MapPin, User, FileText, AlertTriangle, Download, Camera, Upload, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { exportMedicalVisits } from '@/utils/pdfExport';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import { PageContainer } from '@/components/PageContainer';
@@ -19,10 +20,13 @@ import type { MedicalVisit } from '@/types/claims';
 const visitTypes = ['Sick Call', 'ER', 'Mental Health', 'PT', 'Dental', 'Specialist'] as const;
 
 export default function MedicalVisits() {
+  const today = new Date().toISOString().split('T')[0];
   const { data, addMedicalVisit, updateMedicalVisit, deleteMedicalVisit } = useClaims();
   const { documents, setAllDocuments } = useEvidence();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
   const importFileRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState<Omit<MedicalVisit, 'id'>>({
@@ -193,9 +197,12 @@ export default function MedicalVisits() {
             <Camera className="h-4 w-4" />
             Photo
           </Button>
-          <Button variant="outline" onClick={() => exportMedicalVisits(data.medicalVisits)} className="gap-2">
-            <Download className="h-4 w-4" />
-            Export PDF
+          <Button variant="outline" disabled={exporting} onClick={async () => {
+            setExporting(true);
+            try { await exportMedicalVisits(data.medicalVisits); } finally { setExporting(false); }
+          }} className="gap-2">
+            {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+            {exporting ? 'Exporting...' : 'Export PDF'}
           </Button>
           
           <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
@@ -214,9 +221,11 @@ export default function MedicalVisits() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="date">Date</Label>
-                  <Input 
-                    id="date" 
-                    type="date" 
+                  <Input
+                    id="date"
+                    type="date"
+                    min="1940-01-01"
+                    max={today}
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                     required
@@ -392,7 +401,7 @@ export default function MedicalVisits() {
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(visit)} className="h-10 w-10 min-h-[44px] min-w-[44px]" aria-label="Edit visit">
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => deleteMedicalVisit(visit.id)} className="h-10 w-10 min-h-[44px] min-w-[44px]" aria-label="Delete visit">
+                    <Button variant="ghost" size="icon" onClick={() => setDeleteTarget(visit.id)} className="h-10 w-10 min-h-[44px] min-w-[44px]" aria-label="Delete visit">
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
@@ -451,6 +460,15 @@ export default function MedicalVisits() {
           ))}
         </div>
       )}
+      <ConfirmDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => { if (!open) setDeleteTarget(null); }}
+        title="Delete Medical Visit?"
+        description="This action cannot be undone. This will permanently delete this medical visit record."
+        confirmText="Delete"
+        variant="destructive"
+        onConfirm={() => { if (deleteTarget) deleteMedicalVisit(deleteTarget); }}
+      />
     </PageContainer>
   );
 }

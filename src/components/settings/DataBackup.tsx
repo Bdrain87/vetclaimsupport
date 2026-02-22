@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { useClaims } from '@/hooks/useClaims';
-import { getAllFileIds, getFileData } from '@/lib/indexedDB';
+import { getAllFileIds, getFileData, restoreFiles } from '@/lib/indexedDB';
 
 const STORAGE_KEY = 'vcs-app-data';
 
@@ -135,29 +135,29 @@ export function DataBackup() {
       const claimsData = pendingImportData.claimsData;
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ state: claimsData, version: 3 }));
 
-      // Import IndexedDB files if present
+      // Import IndexedDB files if present, waiting for the full transaction
+      // to commit so data is durably written before we reload the page.
       if (pendingImportData.indexedDBFiles && pendingImportData.indexedDBFiles.length > 0) {
-        const { storeFileData } = await import('@/lib/indexedDB');
-        for (const file of pendingImportData.indexedDBFiles) {
-          await storeFileData(file.id, file.dataUrl);
-        }
+        await restoreFiles(pendingImportData.indexedDBFiles);
       }
 
-      // Reload the page to rehydrate Zustand from the updated localStorage
+      // Reload the page to rehydrate Zustand from the updated localStorage.
+      // All IndexedDB writes are fully committed at this point.
       toast({
         title: 'Restore Complete',
         description: `Data restored from backup dated ${new Date(pendingImportData.exportDate).toLocaleDateString()}. Reloading...`,
       });
 
       // Small delay to show toast before reload
-      setTimeout(() => window.location.reload(), 500);
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      window.location.reload();
+      return; // Skip finally cleanup — page is reloading
     } catch {
       toast({
         title: 'Restore Failed',
         description: 'Failed to restore your data. Please try again.',
         variant: 'destructive',
       });
-    } finally {
       setIsImporting(false);
       setShowImportConfirm(false);
       setPendingImportData(null);

@@ -24,7 +24,7 @@ export function SecondaryConditionsTab() {
   const filteredConditions = useMemo(() => {
     let results = secondaryConditions;
 
-    if (searchTerm) {
+    if (searchTerm.trim()) {
       const lower = searchTerm.toLowerCase();
       results = results.filter(
         (c) =>

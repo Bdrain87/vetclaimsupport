@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useEvidence } from '@/hooks/useEvidence';
-import { AlertTriangle, Plus, Trash2, Edit, Calendar, MapPin, Shield, Users, Download } from 'lucide-react';
+import { AlertTriangle, Plus, Trash2, Edit, Calendar, MapPin, Shield, Users, Download, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { exportExposures } from '@/utils/pdfExport';
 import { BranchExposuresSelector } from '@/components/exposures/BranchExposuresSelector';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
@@ -43,6 +44,8 @@ export default function Exposures() {
   const { documents, setAllDocuments } = useEvidence();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
   const [formData, setFormData] = useState<Omit<Exposure, 'id'>>({
     date: '',
     type: 'Burn pit',
@@ -162,9 +165,12 @@ export default function Exposures() {
         </div>
 
         <div className="flex gap-2 flex-shrink-0">
-          <Button variant="outline" onClick={() => exportExposures(data.exposures)} className="gap-2">
-            <Download className="h-4 w-4" />
-            Export PDF
+          <Button variant="outline" disabled={exporting} onClick={async () => {
+            setExporting(true);
+            try { await exportExposures(data.exposures); } finally { setExporting(false); }
+          }} className="gap-2">
+            {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+            {exporting ? 'Exporting...' : 'Export PDF'}
           </Button>
           
           <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
@@ -322,7 +328,7 @@ export default function Exposures() {
                     <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => handleEdit(exposure)} aria-label="Edit exposure">
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => deleteExposure(exposure.id)} aria-label="Delete exposure">
+                    <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => setDeleteTarget(exposure.id)} aria-label="Delete exposure">
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
@@ -370,6 +376,15 @@ export default function Exposures() {
           ))}
         </div>
       )}
+      <ConfirmDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => { if (!open) setDeleteTarget(null); }}
+        title="Delete Exposure?"
+        description="This action cannot be undone. This will permanently delete this exposure record."
+        confirmText="Delete"
+        variant="destructive"
+        onConfirm={() => { if (deleteTarget) deleteExposure(deleteTarget); }}
+      />
     </PageContainer>
   );
 }

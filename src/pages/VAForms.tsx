@@ -181,7 +181,7 @@ export default function VAForms() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
   const filteredForms = vaForms.filter((form) => {
-    const matchesSearch = searchTerm === '' ||
+    const matchesSearch = !searchTerm.trim() ||
       form.number.toLowerCase().includes(searchTerm.toLowerCase()) ||
       form.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       form.description.toLowerCase().includes(searchTerm.toLowerCase());

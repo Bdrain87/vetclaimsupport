@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -16,6 +16,7 @@ import {
   Printer,
   HelpCircle,
   Lightbulb,
+  Loader2,
 } from 'lucide-react';
 interface DBQFormInfo {
   formNumber: string;
@@ -399,6 +400,8 @@ export function DBQGuidance() {
     return claimConditions.filter(condition => !getDBQTypeForCondition(condition.name));
   }, [claimConditions]);
 
+  const [exporting, setExporting] = useState(false);
+
   const handlePrint = useCallback(() => {
     window.print();
   }, []);
@@ -408,7 +411,8 @@ export function DBQGuidance() {
       console.warn('No conditions with DBQ guidance to export');
       return;
     }
-
+    setExporting(true);
+    try {
     const { default: jsPDF } = await import('jspdf');
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -577,6 +581,9 @@ export function DBQGuidance() {
     doc.text(lines, pageWidth / 2, pageHeight - 22, { align: 'center' });
 
     doc.save('dbq-guidance.pdf');
+    } finally {
+      setExporting(false);
+    }
   }, [conditionsWithDBQ]);
 
   if (claimConditions.length === 0) {
@@ -658,10 +665,11 @@ export function DBQGuidance() {
               <Button
                 variant="outline"
                 className="flex-1"
+                disabled={exporting}
                 onClick={handleExportPDF}
               >
-                <Download className="h-4 w-4 mr-2" />
-                Export PDF
+                {exporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
+                {exporting ? 'Exporting...' : 'Export PDF'}
               </Button>
               <Button
                 variant="outline"

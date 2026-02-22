@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useEvidence } from '@/hooks/useEvidence';
-import { Shield, Plus, Trash2, Edit, Calendar, MapPin, Briefcase, AlertTriangle, Download, Sword, Star, Plane } from 'lucide-react';
+import { Shield, Plus, Trash2, Edit, Calendar, MapPin, Briefcase, AlertTriangle, Download, Sword, Star, Plane, Loader2 } from 'lucide-react';
 import { getSavedServiceDates, saveServiceDates } from '@/utils/veteranProfile';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,13 +20,15 @@ import { AwardsCombobox } from '@/components/ui/awards-combobox';
 import { LocationAutocomplete } from '@/components/shared/LocationAutocomplete';
 import type { ServiceEntry, CombatEntry, MajorEvent, DeploymentEntry, MajorEventType } from '@/types/claims';
 import { PageContainer } from '@/components/PageContainer';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 
 const COMBAT_ZONE_TYPES = ['Combat Zone', 'Hostile Fire Area', 'Imminent Danger Area', 'Hazardous Duty'] as const;
 const MAJOR_EVENT_TYPES: MajorEventType[] = ['Injury', 'Accident', 'Assault/MST', 'Award/Decoration', 'TBI Event', 'Traumatic Event', 'Line of Duty Investigation', 'Other'];
 
 export default function ServiceHistory() {
-  const { 
-    data, 
+  const today = new Date().toISOString().split('T')[0];
+  const {
+    data,
     addServiceEntry, updateServiceEntry, deleteServiceEntry,
     addCombatEntry, updateCombatEntry, deleteCombatEntry,
     addMajorEvent, updateMajorEvent, deleteMajorEvent,
@@ -35,7 +37,9 @@ export default function ServiceHistory() {
   const { documents, setAllDocuments } = useEvidence();
   
   const [activeTab, setActiveTab] = useState('duty-stations');
-  
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string; type: 'service' | 'combat' | 'event' | 'deployment'; label: string } | null>(null);
+  const [exporting, setExporting] = useState(false);
+
   // Duty Station form state
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -238,6 +242,16 @@ export default function ServiceHistory() {
     setIsDeployOpen(true);
   };
 
+  const handleDeleteConfirm = () => {
+    if (!deleteTarget) return;
+    switch (deleteTarget.type) {
+      case 'service': deleteServiceEntry(deleteTarget.id); break;
+      case 'combat': deleteCombatEntry(deleteTarget.id); break;
+      case 'event': deleteMajorEvent(deleteTarget.id); break;
+      case 'deployment': deleteDeployment(deleteTarget.id); break;
+    }
+  };
+
   const combatHistory = data.combatHistory || [];
   const majorEvents = data.majorEvents || [];
   const deployments = data.deployments || [];
@@ -256,9 +270,12 @@ export default function ServiceHistory() {
           </div>
         </div>
 
-        <Button variant="outline" onClick={() => exportServiceHistory(data.serviceHistory)} className="gap-2 flex-shrink-0">
-          <Download className="h-4 w-4" />
-          Export PDF
+        <Button variant="outline" disabled={exporting} onClick={async () => {
+          setExporting(true);
+          try { await exportServiceHistory(data.serviceHistory); } finally { setExporting(false); }
+        }} className="gap-2 flex-shrink-0">
+          {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+          {exporting ? 'Exporting...' : 'Export PDF'}
         </Button>
       </div>
 
@@ -308,11 +325,11 @@ export default function ServiceHistory() {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
                         <Label htmlFor="startDate">Start Date</Label>
-                        <Input id="startDate" type="date" value={formData.startDate} onChange={(e) => setFormData({ ...formData, startDate: e.target.value })} required />
+                        <Input id="startDate" type="date" min="1940-01-01" max={today} value={formData.startDate} onChange={(e) => setFormData({ ...formData, startDate: e.target.value })} required />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="endDate">End Date</Label>
-                        <Input id="endDate" type="date" value={formData.endDate} onChange={(e) => setFormData({ ...formData, endDate: e.target.value })} />
+                        <Input id="endDate" type="date" min="1940-01-01" max={today} value={formData.endDate} onChange={(e) => setFormData({ ...formData, endDate: e.target.value })} />
                       </div>
                     </div>
                     <div className="grid gap-4 sm:grid-cols-2">
@@ -437,7 +454,7 @@ export default function ServiceHistory() {
                       </div>
                       <div className="flex gap-2">
                         <Button variant="ghost" size="icon" onClick={() => handleEdit(entry)} aria-label="Edit duty station"><Edit className="h-4 w-4" /></Button>
-                        <Button variant="ghost" size="icon" onClick={() => deleteServiceEntry(entry.id)} aria-label="Delete duty station"><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                        <Button variant="ghost" size="icon" onClick={() => setDeleteTarget({ id: entry.id, type: 'service', label: 'duty station' })} aria-label="Delete duty station"><Trash2 className="h-4 w-4 text-destructive" /></Button>
                       </div>
                     </div>
                     <CardTitle className="text-lg mt-2 flex items-center gap-2">
@@ -484,11 +501,11 @@ export default function ServiceHistory() {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
                         <Label>Start Date</Label>
-                        <Input type="date" value={combatForm.startDate} onChange={(e) => setCombatForm({ ...combatForm, startDate: e.target.value })} required />
+                        <Input type="date" min="1940-01-01" max={today} value={combatForm.startDate} onChange={(e) => setCombatForm({ ...combatForm, startDate: e.target.value })} required />
                       </div>
                       <div className="space-y-2">
                         <Label>End Date</Label>
-                        <Input type="date" value={combatForm.endDate} onChange={(e) => setCombatForm({ ...combatForm, endDate: e.target.value })} />
+                        <Input type="date" min="1940-01-01" max={today} value={combatForm.endDate} onChange={(e) => setCombatForm({ ...combatForm, endDate: e.target.value })} />
                       </div>
                     </div>
                     <div className="grid gap-4 sm:grid-cols-2">
@@ -583,7 +600,7 @@ export default function ServiceHistory() {
                       </div>
                       <div className="flex gap-2">
                         <Button variant="ghost" size="icon" onClick={() => handleEditCombat(entry)} aria-label="Edit combat entry"><Edit className="h-4 w-4" /></Button>
-                        <Button variant="ghost" size="icon" onClick={() => deleteCombatEntry(entry.id)} aria-label="Delete combat entry"><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                        <Button variant="ghost" size="icon" onClick={() => setDeleteTarget({ id: entry.id, type: 'combat', label: 'combat entry' })} aria-label="Delete combat entry"><Trash2 className="h-4 w-4 text-destructive" /></Button>
                       </div>
                     </div>
                     <CardTitle className="text-lg mt-2 flex items-center gap-2 flex-wrap">
@@ -627,7 +644,7 @@ export default function ServiceHistory() {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
                         <Label>Date</Label>
-                        <Input type="date" value={eventForm.date} onChange={(e) => setEventForm({ ...eventForm, date: e.target.value })} required />
+                        <Input type="date" min="1940-01-01" max={today} value={eventForm.date} onChange={(e) => setEventForm({ ...eventForm, date: e.target.value })} required />
                       </div>
                       <div className="space-y-2">
                         <Label>Event Type</Label>
@@ -709,7 +726,7 @@ export default function ServiceHistory() {
                       </div>
                       <div className="flex gap-2">
                         <Button variant="ghost" size="icon" onClick={() => handleEditEvent(entry)} aria-label="Edit event"><Edit className="h-4 w-4" /></Button>
-                        <Button variant="ghost" size="icon" onClick={() => deleteMajorEvent(entry.id)} aria-label="Delete event"><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                        <Button variant="ghost" size="icon" onClick={() => setDeleteTarget({ id: entry.id, type: 'event', label: 'major event' })} aria-label="Delete event"><Trash2 className="h-4 w-4 text-destructive" /></Button>
                       </div>
                     </div>
                     <CardTitle className="text-lg mt-2 flex items-center gap-2">
@@ -749,11 +766,11 @@ export default function ServiceHistory() {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
                         <Label>Start Date</Label>
-                        <Input type="date" value={deployForm.startDate} onChange={(e) => setDeployForm({ ...deployForm, startDate: e.target.value })} required />
+                        <Input type="date" min="1940-01-01" max={today} value={deployForm.startDate} onChange={(e) => setDeployForm({ ...deployForm, startDate: e.target.value })} required />
                       </div>
                       <div className="space-y-2">
                         <Label>End Date</Label>
-                        <Input type="date" value={deployForm.endDate} onChange={(e) => setDeployForm({ ...deployForm, endDate: e.target.value })} />
+                        <Input type="date" min="1940-01-01" max={today} value={deployForm.endDate} onChange={(e) => setDeployForm({ ...deployForm, endDate: e.target.value })} />
                       </div>
                     </div>
                     <div className="grid gap-4 sm:grid-cols-2">
@@ -835,7 +852,7 @@ export default function ServiceHistory() {
                       </div>
                       <div className="flex gap-2">
                         <Button variant="ghost" size="icon" onClick={() => handleEditDeploy(entry)} aria-label="Edit deployment"><Edit className="h-4 w-4" /></Button>
-                        <Button variant="ghost" size="icon" onClick={() => deleteDeployment(entry.id)} aria-label="Delete deployment"><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                        <Button variant="ghost" size="icon" onClick={() => setDeleteTarget({ id: entry.id, type: 'deployment', label: 'deployment' })} aria-label="Delete deployment"><Trash2 className="h-4 w-4 text-destructive" /></Button>
                       </div>
                     </div>
                     <CardTitle className="text-lg mt-2 flex items-center gap-2 flex-wrap">
@@ -864,6 +881,16 @@ export default function ServiceHistory() {
           )}
         </TabsContent>
       </Tabs>
+
+      <ConfirmDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => { if (!open) setDeleteTarget(null); }}
+        title={`Delete ${deleteTarget?.label}?`}
+        description={`This action cannot be undone. This will permanently delete this ${deleteTarget?.label ?? 'entry'}.`}
+        confirmText="Delete"
+        variant="destructive"
+        onConfirm={handleDeleteConfirm}
+      />
     </PageContainer>
   );
 }

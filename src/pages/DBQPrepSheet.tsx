@@ -15,6 +15,7 @@ import {
   ChevronDown,
   ChevronRight,
   Check,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -140,6 +141,7 @@ export default function DBQPrepSheet() {
   const { conditions: userConditions } = useUserConditions();
   const [conditionSearch, setConditionSearch] = useState('');
   const [showConditionDropdown, setShowConditionDropdown] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     symptoms: true,
     flareups: true,
@@ -203,7 +205,7 @@ export default function DBQPrepSheet() {
   }, [data.claimConditions, userConditions]);
 
   const filteredConditions = useMemo(() => {
-    if (!conditionSearch) {
+    if (!conditionSearch.trim()) {
       // Show user's tracked conditions first, then general list
       return [...userConditionNames, ...allConditions.filter(c => !userConditionNames.includes(c))].slice(0, 50);
     }
@@ -347,8 +349,13 @@ export default function DBQPrepSheet() {
     window.print();
   };
 
-  const handleDownloadPDF = () => {
-    exportDBQPrepSheet(formData);
+  const handleDownloadPDF = async () => {
+    setExporting(true);
+    try {
+      await exportDBQPrepSheet(formData);
+    } finally {
+      setExporting(false);
+    }
   };
 
   const generateDate = () => {
@@ -798,9 +805,9 @@ export default function DBQPrepSheet() {
           <Printer className="h-4 w-4" />
           Print Prep Sheet
         </Button>
-        <Button variant="outline" onClick={handleDownloadPDF} className="gap-2">
-          <Download className="h-4 w-4" />
-          Download PDF
+        <Button variant="outline" disabled={exporting} onClick={handleDownloadPDF} className="gap-2">
+          {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+          {exporting ? 'Exporting...' : 'Download PDF'}
         </Button>
       </div>
 

@@ -7,7 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import {
   Activity, Plus, Trash2, Edit, Calendar, Download, Clock,
   TrendingUp, Filter, BarChart3, CalendarDays, List,
-  ChevronDown, ChevronUp, Zap, Target, Search, Tag
+  ChevronDown, ChevronUp, Zap, Target, Search, Tag, Loader2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -26,6 +26,7 @@ const lazyExportSymptoms = async (...args: Parameters<typeof import('@/utils/pdf
 };
 import { VoiceInputButton } from '@/components/ui/voice-input-button';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import { lazy, Suspense } from 'react';
 const SeverityTrendChart = lazy(() => import('@/components/symptoms/SymptomCharts').then(m => ({ default: m.SeverityTrendChart })));
@@ -112,6 +113,7 @@ interface ExtendedSymptomForm {
 }
 
 export default function Symptoms() {
+  const today = new Date().toISOString().split('T')[0];
   const { data, addSymptom, updateSymptom, deleteSymptom } = useClaims();
   const { documents, setAllDocuments } = useEvidence();
   const { toast } = useToast();
@@ -122,7 +124,9 @@ export default function Symptoms() {
   const [dateRange, setDateRange] = useState<'7' | '30' | '90' | 'all'>('30');
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
-  
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
+
   const [formData, setFormData] = useState<ExtendedSymptomForm>({
     date: '',
     timeOfDay: '',
@@ -374,9 +378,12 @@ export default function Symptoms() {
         </div>
 
         <div className="flex gap-2 flex-shrink-0">
-          <Button variant="outline" onClick={() => lazyExportSymptoms(data.symptoms)} className="gap-2 border-border/50 hover:bg-muted">
-            <Download className="h-4 w-4" />
-            Export PDF
+          <Button variant="outline" disabled={exporting} onClick={async () => {
+            setExporting(true);
+            try { await lazyExportSymptoms(data.symptoms); } finally { setExporting(false); }
+          }} className="gap-2 border-border/50 hover:bg-muted">
+            {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+            {exporting ? 'Exporting...' : 'Export PDF'}
           </Button>
         </div>
       </div>
@@ -544,9 +551,11 @@ export default function Symptoms() {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
                         <Label htmlFor="date">Date *</Label>
-                        <Input 
-                          id="date" 
-                          type="date" 
+                        <Input
+                          id="date"
+                          type="date"
+                          min="1940-01-01"
+                          max={today}
                           value={formData.date}
                           onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                           required
@@ -860,7 +869,7 @@ export default function Symptoms() {
                           <Button variant="ghost" size="icon" className="h-10 w-10 min-h-[44px] min-w-[44px]" onClick={() => handleEdit(symptom)} aria-label="Edit symptom">
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon" className="h-10 w-10 min-h-[44px] min-w-[44px]" onClick={() => deleteSymptom(symptom.id)} aria-label="Delete symptom">
+                          <Button variant="ghost" size="icon" className="h-10 w-10 min-h-[44px] min-w-[44px]" onClick={() => setDeleteTarget(symptom.id)} aria-label="Delete symptom">
                             <Trash2 className="h-4 w-4 text-destructive" />
                           </Button>
                         </div>
@@ -948,7 +957,7 @@ export default function Symptoms() {
                         <Edit className="h-4 w-4 mr-1" />
                         Edit
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => deleteSymptom(symptom.id)} className="h-10 min-h-[44px]">
+                      <Button variant="outline" size="sm" onClick={() => setDeleteTarget(symptom.id)} className="h-10 min-h-[44px]">
                         <Trash2 className="h-4 w-4 mr-1 text-destructive" />
                         Delete
                       </Button>
@@ -960,6 +969,15 @@ export default function Symptoms() {
           ))}
         </div>
       )}
+      <ConfirmDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => { if (!open) setDeleteTarget(null); }}
+        title="Delete Symptom?"
+        description="This action cannot be undone. This will permanently delete this symptom record."
+        confirmText="Delete"
+        variant="destructive"
+        onConfirm={() => { if (deleteTarget) deleteSymptom(deleteTarget); }}
+      />
     </PageContainer>
   );
 }

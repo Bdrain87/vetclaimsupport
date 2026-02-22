@@ -151,6 +151,59 @@ export async function getFileData(id: string): Promise<string | null> {
   return result.dataUrl;
 }
 
+// Restore multiple files in a single transaction, resolving only once the
+// transaction has fully committed.  This prevents the race condition where
+// window.location.reload() could fire before IndexedDB has durably written
+// all restored records.
+export async function restoreFiles(
+  files: Array<{ id: string; dataUrl: string }>,
+): Promise<void> {
+  if (files.length === 0) return;
+
+  const key = getCachedKey();
+
+  // Pre-encrypt all values before opening the transaction so the transaction
+  // does not go inactive while we await crypto operations.
+  const prepared: Array<{
+    id: string;
+    dataUrl: string;
+    encrypted: boolean;
+  }> = [];
+
+  for (const file of files) {
+    let storedValue = file.dataUrl;
+    let encrypted = false;
+    if (key) {
+      storedValue = await encryptWithRawKey(file.dataUrl, key);
+      encrypted = true;
+    }
+    prepared.push({ id: file.id, dataUrl: storedValue, encrypted });
+  }
+
+  const db = await openDB();
+
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORE_NAME, 'readwrite');
+    const store = transaction.objectStore(STORE_NAME);
+
+    for (const item of prepared) {
+      store.put({
+        id: item.id,
+        dataUrl: item.dataUrl,
+        encrypted: item.encrypted,
+        storedAt: new Date().toISOString(),
+      });
+    }
+
+    // Resolve on transaction.oncomplete — not request.onsuccess — so we
+    // know all writes have been durably committed to disk.
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => reject(transaction.error);
+    transaction.onabort = () =>
+      reject(transaction.error ?? new Error('IndexedDB transaction aborted'));
+  });
+}
+
 // Delete file data from IndexedDB
 export async function deleteFileData(id: string): Promise<void> {
   const db = await openDB();

@@ -3,7 +3,7 @@ import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { useEvidence } from '@/hooks/useEvidence';
 import { getConditionById } from '@/data/vaConditions';
-import { Moon, Plus, Trash2, Edit, Calendar, Clock, CheckCircle2, TrendingUp, Wind, Zap, Download, Tag, HelpCircle } from 'lucide-react';
+import { Moon, Plus, Trash2, Edit, Calendar, Clock, CheckCircle2, TrendingUp, Wind, Zap, Download, Tag, HelpCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -18,6 +18,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { PageContainer } from '@/components/PageContainer';
 import type { SleepEntry, SleepQuality, DaytimeSleepiness } from '@/types/claims';
 import { exportSleepLog } from '@/utils/pdfExport';
@@ -39,12 +40,15 @@ const daytimeSleepinessOptions: { value: DaytimeSleepiness; label: string }[] = 
 ];
 
 export default function Sleep() {
+  const today = new Date().toISOString().split('T')[0];
   const { data, addSleepEntry, updateSleepEntry, deleteSleepEntry } = useClaims();
   const { conditions: userConditions } = useUserConditions();
   const { documents, setAllDocuments } = useEvidence();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [selectedConditionTags, setSelectedConditionTags] = useState<string[]>([]);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
 
   const claimConditions = useMemo(() => data.claimConditions || [], [data.claimConditions]);
   const allConditionNames = useMemo(() => {
@@ -247,12 +251,15 @@ export default function Sleep() {
         </div>
         <Button
           variant="outline"
-          onClick={() => exportSleepLog(sleepEntries)}
+          onClick={async () => {
+            setExporting(true);
+            try { await exportSleepLog(sleepEntries); } finally { setExporting(false); }
+          }}
           className="gap-2 flex-shrink-0"
-          disabled={sleepEntries.length === 0}
+          disabled={sleepEntries.length === 0 || exporting}
         >
-          <Download className="h-4 w-4" />
-          Export PDF
+          {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+          {exporting ? 'Exporting...' : 'Export PDF'}
         </Button>
       </div>
 
@@ -307,9 +314,11 @@ export default function Sleep() {
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
                       <Label htmlFor="date">Date</Label>
-                      <Input 
-                        id="date" 
-                        type="date" 
+                      <Input
+                        id="date"
+                        type="date"
+                        min="1940-01-01"
+                        max={today}
                         value={formData.date}
                         onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                         required
@@ -850,7 +859,7 @@ export default function Sleep() {
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(entry)} aria-label="Edit sleep entry">
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => deleteSleepEntry(entry.id)} aria-label="Delete sleep entry">
+                    <Button variant="ghost" size="icon" onClick={() => setDeleteTarget(entry.id)} aria-label="Delete sleep entry">
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
@@ -909,6 +918,15 @@ export default function Sleep() {
           ))}
         </div>
       )}
+      <ConfirmDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => { if (!open) setDeleteTarget(null); }}
+        title="Delete Sleep Entry?"
+        description="This action cannot be undone. This will permanently delete this sleep record."
+        confirmText="Delete"
+        variant="destructive"
+        onConfirm={() => { if (deleteTarget) deleteSleepEntry(deleteTarget); }}
+      />
     </PageContainer>
   );
 }

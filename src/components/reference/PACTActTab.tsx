@@ -53,7 +53,7 @@ export function PACTActTab() {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredConditions = useMemo(() => {
-    if (!searchTerm) return pactActConditions;
+    if (!searchTerm.trim()) return pactActConditions;
     const lower = searchTerm.toLowerCase();
     return pactActConditions.filter(
       (c) => c.condition.toLowerCase().includes(lower) || c.category.toLowerCase().includes(lower)

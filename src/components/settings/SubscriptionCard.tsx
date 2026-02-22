@@ -6,11 +6,13 @@ import { useProfileStore } from '@/store/useProfileStore';
 import { supabase } from '@/lib/supabase';
 import { startCheckout } from '@/services/entitlements';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 export function SubscriptionCard() {
   const entitlement = useProfileStore((s) => s.entitlement);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   const handleUpgrade = async () => {
     setLoading(true);
@@ -25,6 +27,11 @@ export function SubscriptionCard() {
       window.location.href = url;
     } catch (err) {
       console.error('Checkout failed:', err);
+      toast({
+        title: 'Checkout failed',
+        description: err instanceof Error ? err.message : 'Something went wrong. Please try again.',
+        variant: 'destructive',
+      });
     } finally {
       setLoading(false);
     }

@@ -3,10 +3,10 @@ import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { useEvidence } from '@/hooks/useEvidence';
 import { getConditionById } from '@/data/vaConditions';
-import { 
+import {
   Brain, Plus, Trash2, Edit, Calendar, Clock, AlertTriangle,
   Download, Info, TrendingUp, Zap, DollarSign, Target, BedDouble,
-  Briefcase, Activity, Tag
+  Briefcase, Activity, Tag, Loader2
 } from 'lucide-react';
 import { exportMigraines } from '@/utils/pdfExport';
 import { Button } from '@/components/ui/button';
@@ -22,6 +22,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Slider } from '@/components/ui/slider';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { PageContainer } from '@/components/PageContainer';
 import type {
   MigraineEntry, MigraineSeverity, MigraineDuration,
@@ -92,12 +93,15 @@ interface MigraineFormData extends Omit<MigraineEntry, 'id'> {
 }
 
 export default function Migraines() {
+  const today = new Date().toISOString().split('T')[0];
   const { data, addMigraine, updateMigraine, deleteMigraine } = useClaims();
   const { conditions: userConditions } = useUserConditions();
   const { documents, setAllDocuments } = useEvidence();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [selectedConditionTags, setSelectedConditionTags] = useState<string[]>([]);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
   const modalContentRef = useRef<HTMLDivElement>(null);
 
   const claimConditions = useMemo(() => data.claimConditions || [], [data.claimConditions]);
@@ -316,8 +320,13 @@ export default function Migraines() {
     return 'text-muted-foreground';
   };
 
-  const handleExportPDF = () => {
-    exportMigraines(data.migraines || [], stats);
+  const handleExportPDF = async () => {
+    setExporting(true);
+    try {
+      await exportMigraines(data.migraines || [], stats);
+    } finally {
+      setExporting(false);
+    }
   };
 
   return (
@@ -333,9 +342,9 @@ export default function Migraines() {
             <p className="text-muted-foreground text-sm">Aligned with VA rating criteria DC 8100</p>
           </div>
         </div>
-        <Button onClick={handleExportPDF} variant="outline" className="gap-2 border-border/50 hover:bg-muted">
-          <Download className="h-4 w-4" />
-          Export PDF
+        <Button onClick={handleExportPDF} disabled={exporting} variant="outline" className="gap-2 border-border/50 hover:bg-muted">
+          {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+          {exporting ? 'Exporting...' : 'Export PDF'}
         </Button>
       </div>
 
@@ -461,9 +470,11 @@ export default function Migraines() {
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
                       <Label htmlFor="date">Date</Label>
-                      <Input 
-                        id="date" 
-                        type="date" 
+                      <Input
+                        id="date"
+                        type="date"
+                        min="1940-01-01"
+                        max={today}
                         value={formData.date}
                         onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                         onFocus={handleInputFocus}
@@ -948,7 +959,7 @@ export default function Migraines() {
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(entry)} aria-label="Edit migraine">
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => deleteMigraine(entry.id)} aria-label="Delete migraine">
+                    <Button variant="ghost" size="icon" onClick={() => setDeleteTarget(entry.id)} aria-label="Delete migraine">
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
@@ -1044,6 +1055,15 @@ export default function Migraines() {
           ))}
         </div>
       )}
+      <ConfirmDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => { if (!open) setDeleteTarget(null); }}
+        title="Delete Migraine Entry?"
+        description="This action cannot be undone. This will permanently delete this migraine record."
+        confirmText="Delete"
+        variant="destructive"
+        onConfirm={() => { if (deleteTarget) deleteMigraine(deleteTarget); }}
+      />
     </PageContainer>
   );
 }

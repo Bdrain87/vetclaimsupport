@@ -191,6 +191,7 @@ export default function ClaimStrategyWizard() {
   const [strategy, setStrategy] = useState<StrategyResult | null>(null);
   const [isOfflineFallback, setIsOfflineFallback] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [exportingStrategy, setExportingStrategy] = useState(false);
   const { toast } = useToast();
 
   // Sync form data when profile/claims load asynchronously, but only while
@@ -405,7 +406,7 @@ Consider:
     setCurrentStep(1);
   };
 
-  const downloadStrategy = () => {
+  const downloadStrategy = async () => {
     if (!strategy) return;
 
     const content = `
@@ -443,8 +444,13 @@ Consult with an accredited Veterans Service Officer (VSO) or VA-accredited
 attorney for official guidance on your specific claim.
     `.trim();
 
-    exportClaimStrategy(content);
-    toast({ title: 'Strategy downloaded as PDF', description: 'Check your downloads folder.' });
+    setExportingStrategy(true);
+    try {
+      await exportClaimStrategy(content);
+      toast({ title: 'Strategy downloaded as PDF', description: 'Check your downloads folder.' });
+    } finally {
+      setExportingStrategy(false);
+    }
   };
 
   const renderStep = () => {
@@ -933,9 +939,9 @@ attorney for official guidance on your specific claim.
 
                 {/* Actions */}
                 <div className="flex flex-wrap gap-3">
-                  <Button onClick={downloadStrategy} className="gap-2">
-                    <Download className="h-4 w-4" />
-                    Download Strategy
+                  <Button onClick={downloadStrategy} disabled={exportingStrategy} className="gap-2">
+                    {exportingStrategy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+                    {exportingStrategy ? 'Exporting...' : 'Download Strategy'}
                   </Button>
                   <Button variant="outline" onClick={resetWizard} className="gap-2">
                     <RefreshCw className="h-4 w-4" />

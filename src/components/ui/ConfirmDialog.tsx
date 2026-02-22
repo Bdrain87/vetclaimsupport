@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,7 +20,7 @@ interface ConfirmDialogProps {
   description: string;
   confirmText?: string;
   cancelText?: string;
-  onConfirm: () => void;
+  onConfirm: () => void | Promise<void>;
   onCancel?: () => void;
   variant?: ConfirmDialogVariant;
   icon?: React.ReactNode;
@@ -37,17 +38,26 @@ export function ConfirmDialog({
   onCancel,
   variant = 'default',
   icon,
-  loading = false,
+  loading: externalLoading = false,
 }: ConfirmDialogProps) {
+  const [internalLoading, setInternalLoading] = useState(false);
+  const loading = externalLoading || internalLoading;
+
   const handleCancel = () => {
     onCancel?.();
     onOpenChange(false);
   };
 
-  const handleConfirm = () => {
-    onConfirm();
-    if (!loading) {
+  const handleConfirm = async () => {
+    try {
+      setInternalLoading(true);
+      await onConfirm();
       onOpenChange(false);
+    } catch {
+      // Close dialog on error so it doesn't get stuck
+      onOpenChange(false);
+    } finally {
+      setInternalLoading(false);
     }
   };
 

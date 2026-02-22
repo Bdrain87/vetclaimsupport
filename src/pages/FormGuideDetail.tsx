@@ -233,6 +233,7 @@ export default function FormGuideDetail() {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
     () => new Set(sections.map((s) => s.name))
   );
+  const [exporting, setExporting] = useState(false);
 
   const toggleSection = useCallback((name: string) => {
     setExpandedSections((prev) => {
@@ -252,12 +253,17 @@ export default function FormGuideDetail() {
 
   const handleExportPDF = useCallback(async () => {
     if (!formDef || !formId) return;
-    await generateFormGuidePDF(
-      formDef.formId,
-      formDef.formTitle,
-      formDef.fields.map((f) => ({ section: f.section, label: f.label, fieldId: f.fieldId })),
-      drafts as Record<string, string>
-    );
+    setExporting(true);
+    try {
+      await generateFormGuidePDF(
+        formDef.formId,
+        formDef.formTitle,
+        formDef.fields.map((f) => ({ section: f.section, label: f.label, fieldId: f.fieldId })),
+        drafts as Record<string, string>
+      );
+    } finally {
+      setExporting(false);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formDef, formId, formDrafts]);
 
@@ -340,9 +346,9 @@ export default function FormGuideDetail() {
 
       {/* Export + Clear Buttons */}
       <div className="flex flex-col sm:flex-row gap-3 pt-2 pb-4">
-        <Button className="flex-1 gap-2" onClick={handleExportPDF}>
-          <Download className="h-4 w-4" />
-          <span className="truncate">Export Draft Worksheet</span>
+        <Button className="flex-1 gap-2" disabled={exporting} onClick={handleExportPDF}>
+          {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+          <span className="truncate">{exporting ? 'Exporting...' : 'Export Draft Worksheet'}</span>
         </Button>
         <Button
           variant="outline"

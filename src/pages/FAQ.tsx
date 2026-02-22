@@ -123,7 +123,7 @@ export default function FAQ() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
   const filteredFAQ = faqData.filter((item) => {
-    const matchesSearch = searchTerm === '' ||
+    const matchesSearch = !searchTerm.trim() ||
       item.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.answer.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;

@@ -24,7 +24,7 @@ export function DisabilitiesTab() {
   const filteredDisabilities = useMemo(() => {
     let results = allVADisabilities;
 
-    if (searchTerm) {
+    if (searchTerm.trim()) {
       const lower = searchTerm.toLowerCase();
       results = results.filter(
         (d) =>

@@ -27,6 +27,7 @@ import {
   Clock,
   CheckSquare,
   Square,
+  Loader2,
 } from 'lucide-react';
 import { useClaims } from '@/hooks/useClaims';
 import type { ClaimsData, SymptomEntry } from '@/types/claims';
@@ -47,7 +48,7 @@ export interface ExportSections {
 interface ExportCustomizationModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onExport: (sections: ExportSections) => void;
+  onExport: (sections: ExportSections) => void | Promise<void>;
 }
 
 interface SectionConfig {
@@ -222,9 +223,16 @@ export function ExportCustomizationModal({
     return `~${count}`;
   };
 
-  const handleExport = () => {
-    onExport(sections);
-    onOpenChange(false);
+  const [exporting, setExporting] = useState(false);
+
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      await onExport(sections);
+      onOpenChange(false);
+    } finally {
+      setExporting(false);
+    }
   };
 
   return (
@@ -332,13 +340,13 @@ export function ExportCustomizationModal({
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button 
-            onClick={handleExport} 
-            disabled={noneSelected}
+          <Button
+            onClick={handleExport}
+            disabled={noneSelected || exporting}
             className="gap-2"
           >
-            <FileDown className="h-4 w-4" />
-            Export PDF
+            {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileDown className="h-4 w-4" />}
+            {exporting ? 'Exporting...' : 'Export PDF'}
           </Button>
         </DialogFooter>
       </DialogContent>

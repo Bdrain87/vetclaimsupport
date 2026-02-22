@@ -124,6 +124,7 @@ export default function PersonalStatement() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<PersonalStatementFormData>(initialFormData);
   const [copied, setCopied] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const [polishedStatement, setPolishedStatement] = useState<string | null>(null);
   const [prefilled, setPrefilled] = useState<Record<string, boolean>>({});
   const { generate: aiPolish, isLoading: isPolishing, error: aiError } = useAIGenerate('VA_SPEAK_TRANSLATOR');
@@ -238,10 +239,15 @@ export default function PersonalStatement() {
     return sections.join('\n');
   }, [formData, firstName, lastName]);
 
-  const handleDownload = useCallback(() => {
-    const statement = polishedStatement || generateStatement();
-    const conditionName = formData.condition?.name;
-    exportPersonalStatement(statement, conditionName);
+  const handleDownload = useCallback(async () => {
+    setExporting(true);
+    try {
+      const statement = polishedStatement || generateStatement();
+      const conditionName = formData.condition?.name;
+      await exportPersonalStatement(statement, conditionName);
+    } finally {
+      setExporting(false);
+    }
   }, [generateStatement, polishedStatement, formData.condition]);
 
   const handleCopy = useCallback(async () => {
@@ -640,9 +646,9 @@ export default function PersonalStatement() {
                 {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                 {copied ? 'Copied!' : 'Copy to Clipboard'}
               </Button>
-              <Button variant="outline" onClick={handleDownload} className="flex-1 gap-2">
-                <Download className="h-4 w-4" />
-                Download PDF
+              <Button variant="outline" disabled={exporting} onClick={handleDownload} className="flex-1 gap-2">
+                {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+                {exporting ? 'Exporting...' : 'Download PDF'}
               </Button>
             </div>
           </div>

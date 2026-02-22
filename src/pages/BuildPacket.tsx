@@ -18,6 +18,7 @@ import {
   Shield,
   FileJson,
   Copy,
+  Loader2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
@@ -58,6 +59,9 @@ export default function BuildPacket() {
   });
 
   const [exportMessage, setExportMessage] = useState<string | null>(null);
+  const [exportingPDF, setExportingPDF] = useState(false);
+  const [exportingText, setExportingText] = useState(false);
+  const [exportingJSON, setExportingJSON] = useState(false);
 
   // --------------- derived counts ---------------
 
@@ -169,6 +173,7 @@ export default function BuildPacket() {
   };
 
   const handleGeneratePDF = async () => {
+    setExportingPDF(true);
     try {
       const result = await generateExport({
         format: 'pdf',
@@ -178,6 +183,8 @@ export default function BuildPacket() {
     } catch {
       showMessage('Unable to generate PDF. Opening print dialog instead.');
       setTimeout(() => window.print(), 600);
+    } finally {
+      setExportingPDF(false);
     }
   };
 
@@ -234,6 +241,7 @@ export default function BuildPacket() {
   });
 
   const handleExportText = async () => {
+    setExportingText(true);
     try {
       const result = await generateExport({
         format: 'text',
@@ -251,10 +259,13 @@ export default function BuildPacket() {
       }
     } catch {
       showMessage('Unable to generate text export.');
+    } finally {
+      setExportingText(false);
     }
   };
 
   const handleExportJSON = async () => {
+    setExportingJSON(true);
     try {
       const result = await generateExport({
         format: 'json',
@@ -263,6 +274,8 @@ export default function BuildPacket() {
       downloadExport(result);
     } catch {
       showMessage('Unable to generate JSON export.');
+    } finally {
+      setExportingJSON(false);
     }
   };
 
@@ -433,29 +446,29 @@ export default function BuildPacket() {
             <div className="grid grid-cols-3 gap-3 mb-3">
               <Button
                 onClick={handleGeneratePDF}
-                disabled={selectedCount === 0}
+                disabled={selectedCount === 0 || exportingPDF}
                 className="h-auto flex-col gap-2 py-4 primary-button"
               >
-                <Download className="h-5 w-5" />
-                <span className="text-xs font-semibold">PDF</span>
+                {exportingPDF ? <Loader2 className="h-5 w-5 animate-spin" /> : <Download className="h-5 w-5" />}
+                <span className="text-xs font-semibold">{exportingPDF ? 'Exporting...' : 'PDF'}</span>
               </Button>
               <Button
                 variant="outline"
                 onClick={handleExportText}
-                disabled={selectedCount === 0}
+                disabled={selectedCount === 0 || exportingText}
                 className="h-auto flex-col gap-2 py-4"
               >
-                <Copy className="h-5 w-5" />
-                <span className="text-xs">Text</span>
+                {exportingText ? <Loader2 className="h-5 w-5 animate-spin" /> : <Copy className="h-5 w-5" />}
+                <span className="text-xs">{exportingText ? 'Exporting...' : 'Text'}</span>
               </Button>
               <Button
                 variant="outline"
                 onClick={handleExportJSON}
-                disabled={selectedCount === 0}
+                disabled={selectedCount === 0 || exportingJSON}
                 className="h-auto flex-col gap-2 py-4"
               >
-                <FileJson className="h-5 w-5" />
-                <span className="text-xs">JSON</span>
+                {exportingJSON ? <Loader2 className="h-5 w-5 animate-spin" /> : <FileJson className="h-5 w-5" />}
+                <span className="text-xs">{exportingJSON ? 'Exporting...' : 'JSON'}</span>
               </Button>
             </div>
             <div className="grid grid-cols-3 gap-3">

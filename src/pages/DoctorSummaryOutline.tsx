@@ -17,6 +17,7 @@ import {
   X,
   ChevronDown,
   ChevronUp,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -146,6 +147,7 @@ export default function DoctorSummaryOutline() {
 
   const [currentStep, setCurrentStep] = useState(1);
   const [exportError, setExportError] = useState('');
+  const [exporting, setExporting] = useState(false);
   const [primarySearch, setPrimarySearch] = useState(searchParams.get('primary') || '');
   const [secondarySearch, setSecondarySearch] = useState(searchParams.get('secondary') || '');
   const [showPrimaryDropdown, setShowPrimaryDropdown] = useState(false);
@@ -192,14 +194,14 @@ export default function DoctorSummaryOutline() {
   });
 
   const filteredPrimary = useMemo(() => {
-    if (!primarySearch) return allConditions.slice(0, 50);
+    if (!primarySearch.trim()) return allConditions.slice(0, 50);
     return allConditions.filter(c =>
       c.toLowerCase().includes(primarySearch.toLowerCase())
     ).slice(0, 50);
   }, [primarySearch]);
 
   const filteredSecondary = useMemo(() => {
-    if (!secondarySearch) return allConditions.slice(0, 50);
+    if (!secondarySearch.trim()) return allConditions.slice(0, 50);
     return allConditions.filter(c =>
       c.toLowerCase().includes(secondarySearch.toLowerCase())
     ).slice(0, 50);
@@ -280,7 +282,7 @@ export default function DoctorSummaryOutline() {
       .join(' ');
   };
 
-  const handleExport = () => {
+  const handleExport = async () => {
     setExportError('');
     const allText = collectAllText();
     if (containsBannedPhrases(allText)) {
@@ -288,8 +290,13 @@ export default function DoctorSummaryOutline() {
       toast.error('Export blocked: contains prohibited language.');
       return;
     }
-    exportDoctorSummaryOutlinePDF(formData);
-    toast.success('PDF exported successfully.');
+    setExporting(true);
+    try {
+      await exportDoctorSummaryOutlinePDF(formData);
+      toast.success('PDF exported successfully.');
+    } finally {
+      setExporting(false);
+    }
   };
 
   const renderConditionSearch = (
@@ -1013,9 +1020,9 @@ export default function DoctorSummaryOutline() {
               </Card>
             )}
 
-            <Button onClick={handleExport} className="w-full gap-2" size="lg">
-              <Download className="h-5 w-5" />
-              Export PDF Outline
+            <Button onClick={handleExport} disabled={exporting} className="w-full gap-2" size="lg">
+              {exporting ? <Loader2 className="h-5 w-5 animate-spin" /> : <Download className="h-5 w-5" />}
+              {exporting ? 'Exporting...' : 'Export PDF Outline'}
             </Button>
           </div>
         );

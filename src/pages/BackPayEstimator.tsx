@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, Calculator, DollarSign, Calendar, Users, Info, Download } from 'lucide-react';
+import { ChevronLeft, Calculator, DollarSign, Calendar, Users, Info, Download, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -35,6 +35,7 @@ export default function BackPayEstimator() {
   const [newRating, setNewRating] = useState<string>('');
   const [hasSpouse, setHasSpouse] = useState(false);
   const [dependentCount, setDependentCount] = useState<string>('0');
+  const [exporting, setExporting] = useState(false);
 
   // Derived calculations
   const calculation = useMemo(() => {
@@ -321,25 +322,31 @@ export default function BackPayEstimator() {
               <Button
                 variant="outline"
                 className="gap-2"
-                onClick={() => {
+                disabled={exporting}
+                onClick={async () => {
                   if (calculation) {
-                    exportBackPayEstimate({
-                      currentRating: parseInt(currentRating, 10),
-                      newRating: parseInt(newRating, 10),
-                      effectiveDate,
-                      hasSpouse,
-                      dependentCount: parseInt(dependentCount, 10) || 0,
-                      monthlyBefore: calculation.monthlyBefore,
-                      monthlyAfter: calculation.monthlyAfter,
-                      monthlyDifference: calculation.monthlyDifference,
-                      totalBackPay: calculation.totalBackPay,
-                      months: calculation.months,
-                    });
+                    setExporting(true);
+                    try {
+                      await exportBackPayEstimate({
+                        currentRating: parseInt(currentRating, 10),
+                        newRating: parseInt(newRating, 10),
+                        effectiveDate,
+                        hasSpouse,
+                        dependentCount: parseInt(dependentCount, 10) || 0,
+                        monthlyBefore: calculation.monthlyBefore,
+                        monthlyAfter: calculation.monthlyAfter,
+                        monthlyDifference: calculation.monthlyDifference,
+                        totalBackPay: calculation.totalBackPay,
+                        months: calculation.months,
+                      });
+                    } finally {
+                      setExporting(false);
+                    }
                   }
                 }}
               >
-                <Download className="h-4 w-4" />
-                Download PDF
+                {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+                {exporting ? 'Exporting...' : 'Download PDF'}
               </Button>
             </div>
 
