@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, X, Activity, Moon, Brain, Pill, Stethoscope, FileText } from 'lucide-react';
 import { impactLight } from '@/lib/haptics';
+import { useProfileStore } from '@/store/useProfileStore';
 
 const actions = [
   { label: 'Log Symptom', icon: Activity, path: '/health/symptoms', color: 'text-red-400' },
@@ -16,6 +17,9 @@ const actions = [
 export function QuickAddFAB() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const hasOnboarded = useProfileStore((s) => s.hasCompletedOnboarding);
+
+  if (!hasOnboarded) return null;
 
   const handleAction = (path: string) => {
     impactLight();
