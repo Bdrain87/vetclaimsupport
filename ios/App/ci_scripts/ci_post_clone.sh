@@ -1,7 +1,7 @@
 #!/bin/sh
-set -e
+set -eo pipefail
 
-echo "=== Auto-incrementing build number ==="
+echo "=== [1/5] Auto-incrementing build number ==="
 if [ -n "$CI_BUILD_NUMBER" ]; then
   echo "Setting build number to Xcode Cloud CI_BUILD_NUMBER: $CI_BUILD_NUMBER"
   cd "$CI_PRIMARY_REPOSITORY_PATH/ios/App"
@@ -11,10 +11,13 @@ else
   echo "Not running in Xcode Cloud, skipping build number increment"
 fi
 
-echo "=== Capacitor: Installing Node.js dependencies and building web app ==="
-
-if ! command -v node > /dev/null 2>&1; then
+echo "=== [2/5] Ensuring Node.js is available ==="
+if command -v node > /dev/null 2>&1; then
+  echo "Node.js already available: $(node --version)"
+else
   echo "Node.js not found, installing via Homebrew..."
+  export HOMEBREW_NO_AUTO_UPDATE=1
+  export HOMEBREW_NO_INSTALL_CLEANUP=1
   brew install node
 fi
 
@@ -23,13 +26,13 @@ echo "npm version: $(npm --version)"
 
 cd "$CI_PRIMARY_REPOSITORY_PATH"
 
-echo "Installing npm dependencies..."
-npm ci
+echo "=== [3/5] Installing npm dependencies ==="
+npm ci --prefer-offline || npm ci
 
-echo "Building web app..."
+echo "=== [4/5] Building web app ==="
 npm run build
 
-echo "Syncing Capacitor iOS project..."
+echo "=== [5/5] Syncing Capacitor iOS project ==="
 npx cap sync ios
 
 echo "=== Capacitor: iOS project ready for archive ==="
