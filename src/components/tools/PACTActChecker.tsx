@@ -195,7 +195,7 @@ export function PACTActChecker() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="service-start">Start Date</Label>
               <Input
@@ -287,14 +287,14 @@ export function PACTActChecker() {
                 <h4 className="text-sm font-medium text-foreground mb-3">
                   Presumptive Conditions ({result.eligibleConditions.length})
                 </h4>
-                <div className="grid gap-2 max-h-[300px] overflow-y-auto pr-2">
+                <div className="grid gap-2 max-h-[300px] overflow-y-auto overflow-x-hidden pr-2">
                   {result.eligibleConditions.map(condition => (
                     <div
                       key={condition.id}
-                      className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border border-border"
+                      className="flex items-center justify-between gap-2 p-3 bg-muted/50 rounded-lg border border-border"
                     >
-                      <div>
-                        <span className="font-medium text-foreground">{condition.condition}</span>
+                      <div className="min-w-0 flex-1">
+                        <span className="font-medium text-foreground break-words">{condition.condition}</span>
                         {condition.description && (
                           <p className="text-xs text-muted-foreground mt-0.5">{condition.description}</p>
                         )}

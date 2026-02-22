@@ -348,7 +348,7 @@ export default function DocumentsHub() {
       {/* Premium Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="relative">
+          <div className="relative overflow-hidden">
             <div className="absolute inset-0 bg-primary/30 blur-2xl rounded-full scale-150 opacity-50" />
             <div className="relative p-3.5 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 shadow-lg shadow-primary/10">
               <FolderOpen className="h-7 w-7 text-primary" />
@@ -635,7 +635,7 @@ export default function DocumentsHub() {
               />
             </div>
             <Select value={filterDocType} onValueChange={setFilterDocType}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="All Types" />
               </SelectTrigger>
               <SelectContent>
@@ -819,7 +819,7 @@ export default function DocumentsHub() {
                         </div>
                       </div>
 
-                      <div className="flex flex-col sm:flex-row gap-3 lg:items-center">
+                      <div className="flex flex-col sm:flex-row gap-3 lg:items-center flex-wrap">
                         <DocumentScanner
                           documents={data.uploadedDocuments}
                           documentType={docTypeId}
@@ -858,7 +858,7 @@ export default function DocumentsHub() {
                           value={doc.status}
                           onValueChange={(value: typeof statuses[number]) => updateDocument(doc.id, { status: value })}
                         >
-                          <SelectTrigger className="w-[130px]">
+                          <SelectTrigger className="w-full sm:w-[130px]">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -1039,7 +1039,7 @@ export default function DocumentsHub() {
 
       {/* Document Preview Dialog */}
       <Dialog open={!!selectedDoc} onOpenChange={() => setSelectedDoc(null)}>
-        <DialogContent className="max-w-2xl max-h-[90vh]">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{selectedDoc?.title || selectedDoc?.fileName}</DialogTitle>
           </DialogHeader>

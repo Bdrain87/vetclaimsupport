@@ -627,12 +627,12 @@ Thank you for taking the time to help! Your statement could make a real differen
           </Collapsible>
 
           {/* Action Buttons */}
-          <div className="flex gap-3">
-            <Button onClick={copyWitnessTemplate} className="flex-1">
-              <Copy className="h-4 w-4 mr-2" />
-              Copy Template to Send
+          <div className="flex gap-3 flex-wrap">
+            <Button onClick={copyWitnessTemplate} className="flex-1 min-w-0">
+              <Copy className="h-4 w-4 mr-2 shrink-0" />
+              <span className="truncate">Copy Template to Send</span>
             </Button>
-            <Button onClick={shareWitnessTemplate} variant="outline">
+            <Button onClick={shareWitnessTemplate} variant="outline" className="shrink-0">
               <Share2 className="h-4 w-4 mr-2" />
               Share
             </Button>

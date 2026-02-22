@@ -285,14 +285,14 @@ export function ApprovedConditionsSection({ onNavigateToCalculator }: ApprovedCo
           <>
             {/* Current Combined Rating Summary */}
             <div className="grid grid-cols-2 gap-3">
-              <div className="text-center p-4 bg-success/10 rounded-xl border border-success/20">
+              <div className="text-center p-3 sm:p-4 bg-success/10 rounded-xl border border-success/20 overflow-hidden">
                 <p className="text-xs text-muted-foreground mb-1">Combined Rating</p>
-                <p className="text-3xl font-bold text-success">{official}%</p>
+                <p className="text-2xl sm:text-3xl font-bold text-success">{official}%</p>
                 <p className="text-xs text-muted-foreground">Exact: {exact.toFixed(1)}%</p>
               </div>
-              <div className="text-center p-4 bg-primary/10 rounded-xl border border-primary/20">
+              <div className="text-center p-3 sm:p-4 bg-primary/10 rounded-xl border border-primary/20 overflow-hidden">
                 <p className="text-xs text-muted-foreground mb-1">Monthly Payment</p>
-                <p className="text-2xl font-bold text-primary">{formatCurrency(monthlyAmount)}</p>
+                <p className="text-xl sm:text-2xl font-bold text-primary">{formatCurrency(monthlyAmount)}</p>
                 <p className="text-xs text-muted-foreground">2026 rates</p>
               </div>
             </div>
