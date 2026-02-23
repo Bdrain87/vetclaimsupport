@@ -1,6 +1,7 @@
 import { useState, useEffect, type ReactNode } from 'react';
 import { hasPremiumAccess, ensureFreshEntitlement } from '@/services/entitlements';
 import { UpgradeModal } from '@/components/UpgradeModal';
+import { isNativeApp } from '@/lib/platform';
 
 interface PremiumGuardProps {
   featureName: string;
@@ -8,17 +9,22 @@ interface PremiumGuardProps {
 }
 
 export function PremiumGuard({ featureName, children }: PremiumGuardProps) {
-  const [state, setState] = useState<'loading' | 'granted' | 'blocked'>('loading');
+  // Bypass paywall on native (iOS/simulator) — payments handled via App Store
+  const [state, setState] = useState<'loading' | 'granted' | 'blocked'>(
+    isNativeApp ? 'granted' : 'loading'
+  );
 
   useEffect(() => {
+    if (isNativeApp) return;
+
     let cancelled = false;
 
-// Show content immediately for known premium users (avoids flash)
-        if (hasPremiumAccess()) {
-                setState('granted');
-        }
+    // Show content immediately for known premium users (avoids flash)
+    if (hasPremiumAccess()) {
+      setState('granted');
+    }
 
-        // ALWAYS verify with server — never trust local cache alone
+    // ALWAYS verify with server — never trust local cache alone
     ensureFreshEntitlement().then((status) => {
       if (cancelled) return;
       const isPremium = status === 'premium' || status === 'lifetime';
