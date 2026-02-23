@@ -59,9 +59,23 @@ window.addEventListener('unhandledrejection', (event) => {
 });
 
 // ============================================================
-// SERVICE WORKER — instant updates on every deploy
+// SERVICE WORKER — web only (native app doesn't need PWA caching)
 // ============================================================
-if ('serviceWorker' in navigator) {
+import { Capacitor } from '@capacitor/core';
+const isNative = Capacitor.isNativePlatform();
+
+// On native, unregister any existing SW and clear caches so the
+// webview always fetches fresh content from the server.
+if (isNative && 'serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then((regs) => {
+    regs.forEach((r) => r.unregister());
+  });
+  if ('caches' in window) {
+    caches.keys().then((names) => names.forEach((n) => caches.delete(n)));
+  }
+}
+
+if (!isNative && 'serviceWorker' in navigator) {
   // When a new SW takes control, reload so the user gets fresh code.
   // This fires after skipWaiting + clientsClaim on a new deployment.
   let swRefreshing = false;
