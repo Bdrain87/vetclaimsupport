@@ -3,9 +3,17 @@ set -eo pipefail
 
 echo "=== [1/5] Auto-incrementing build number ==="
 if [ -n "$CI_BUILD_NUMBER" ]; then
-  echo "Setting build number to Xcode Cloud CI_BUILD_NUMBER: $CI_BUILD_NUMBER"
   cd "$CI_PRIMARY_REPOSITORY_PATH/ios/App"
-  agvtool new-version -all "$CI_BUILD_NUMBER"
+  # Use whichever is higher: Xcode Cloud's CI_BUILD_NUMBER or the repo's current value.
+  # This prevents failures when manual uploads have pushed the number past CI's counter.
+  REPO_BUILD=$(agvtool what-version -terse 2>/dev/null || echo "0")
+  if [ "$CI_BUILD_NUMBER" -gt "$REPO_BUILD" ] 2>/dev/null; then
+    BUILD_NUM="$CI_BUILD_NUMBER"
+  else
+    BUILD_NUM=$((REPO_BUILD + 1))
+  fi
+  echo "Setting build number to $BUILD_NUM (CI=$CI_BUILD_NUMBER, repo=$REPO_BUILD)"
+  agvtool new-version -all "$BUILD_NUM"
   cd "$CI_PRIMARY_REPOSITORY_PATH"
 else
   echo "Not running in Xcode Cloud, skipping build number increment"
