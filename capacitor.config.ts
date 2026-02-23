@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'Vet Claim Support',
   webDir: 'dist',
   server: {
-    url: `https://vetclaimsupport.com?_b=${Date.now()}`,
+    url: 'https://vetclaimsupport.com',
     cleartext: false,
   },
   ios: {
