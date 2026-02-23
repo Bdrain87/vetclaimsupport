@@ -9,6 +9,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var steps: [(String, String, String, Double)] = []
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // Clear WKWebView cache on every launch so the app always fetches
+        // fresh content from the remote server URL. Without this, WKWebView
+        // aggressively caches old JS/CSS and ignores HTTP cache headers.
+        let dataStore = WKWebsiteDataStore.default()
+        let allTypes = WKWebsiteDataStore.allWebsiteDataTypes()
+        dataStore.removeData(ofTypes: allTypes, modifiedSince: .distantPast) { }
+
         let args = ProcessInfo.processInfo.arguments
 
         if args.contains("--dark-capture") {
