@@ -76,7 +76,7 @@ export function StickyNav() {
               className="rounded-full px-6 py-2 text-sm font-semibold text-black no-underline"
               style={{
                 background:
-                  'linear-gradient(90deg, #D4AA40 0%, #F0D050 25%, #FFD700 50%, #F0D050 75%, #D4AA40 100%)',
+                  'linear-gradient(90deg, #D4AA40 0%, #D4A843 25%, #E8C060 50%, #D4A843 75%, #D4AA40 100%)',
               }}
             >
               Launch App
@@ -130,7 +130,7 @@ export function StickyNav() {
               className="rounded-full px-8 py-3 text-lg font-semibold text-black no-underline mt-4"
               style={{
                 background:
-                  'linear-gradient(90deg, #D4AA40 0%, #F0D050 25%, #FFD700 50%, #F0D050 75%, #D4AA40 100%)',
+                  'linear-gradient(90deg, #D4AA40 0%, #D4A843 25%, #E8C060 50%, #D4A843 75%, #D4AA40 100%)',
               }}
             >
               Launch App

@@ -225,7 +225,7 @@ export default function Dashboard() {
                 />
                 <motion.circle
                   cx="18" cy="18" r="15" fill="none"
-                  stroke="var(--gold-md, #ECC840)" strokeWidth="3"
+                  stroke="var(--gold-md, #D4A843)" strokeWidth="3"
                   strokeLinecap="round"
                   strokeDasharray={`${combinedRating}, 100`}
                   initial={{ strokeDasharray: '0, 100' }}
@@ -450,16 +450,16 @@ export default function Dashboard() {
             <span className="text-sm font-medium">Logged</span>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-3 min-w-0 w-full">
             {/* Date Selector */}
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 min-w-0">
               <label htmlFor="quick-log-date" className="text-xs text-muted-foreground">Date</label>
               <Input
                 id="quick-log-date"
                 type="date"
                 value={logDate}
                 onChange={(e) => setLogDate(e.target.value)}
-                className="h-10"
+                className="h-10 w-full max-w-full"
               />
             </div>
 

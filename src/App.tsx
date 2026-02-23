@@ -134,7 +134,7 @@ function LoadingFallback() {
           <div
             className="h-full rounded-full"
             style={{
-              background: 'var(--gold-gradient, linear-gradient(90deg, #D4AA40 0%, #F0D050 30%, #FFD700 50%, #F0D050 70%, #D4AA40 100%))',
+              background: 'var(--gold-gradient, linear-gradient(90deg, #D4AA40 0%, #D4A843 30%, #E8C060 50%, #D4A843 70%, #D4AA40 100%))',
               animation: 'gradient-slide 1.2s ease-in-out infinite',
             }}
           />

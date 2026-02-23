@@ -292,14 +292,14 @@ export function Pricing() {
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
         >
-          <div className="h-px flex-1 max-w-[100px]" style={{ background: 'linear-gradient(to right, transparent, #D4AC30)' }} />
+          <div className="h-px flex-1 max-w-[100px]" style={{ background: 'linear-gradient(to right, transparent, #BF9930)' }} />
           <span
             className="text-lg font-semibold px-3"
             style={GOLD_GRADIENT_TEXT}
           >
             &mdash; OR &mdash;
           </span>
-          <div className="h-px flex-1 max-w-[100px]" style={{ background: 'linear-gradient(to left, transparent, #D4AC30)' }} />
+          <div className="h-px flex-1 max-w-[100px]" style={{ background: 'linear-gradient(to left, transparent, #BF9930)' }} />
         </motion.div>
 
         <motion.p
@@ -391,7 +391,7 @@ export function Pricing() {
                     <span
                       className="text-3xl font-bold"
                       style={{
-                        background: 'linear-gradient(90deg, #D4AA40 0%, #F0D050 25%, #FFD700 50%, #F0D050 75%, #D4AA40 100%)',
+                        background: 'linear-gradient(90deg, #D4AA40 0%, #D4A843 25%, #E8C060 50%, #D4A843 75%, #D4AA40 100%)',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
                         backgroundClip: 'text',
@@ -406,7 +406,7 @@ export function Pricing() {
                   to="/auth"
                   className="block text-center rounded-full px-6 py-2.5 text-sm font-semibold text-black no-underline whitespace-nowrap md:ml-6"
                   style={{
-                    background: 'linear-gradient(90deg, #D4AA40 0%, #F0D050 25%, #FFD700 50%, #F0D050 75%, #D4AA40 100%)',
+                    background: 'linear-gradient(90deg, #D4AA40 0%, #D4A843 25%, #E8C060 50%, #D4A843 75%, #D4AA40 100%)',
                   }}
                 >
                   Get Started

@@ -297,7 +297,7 @@ export default function Sleep() {
       {/* Add Log Button */}
       <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
         <DialogTrigger asChild>
-          <Button className="gap-2 bg-gold hover:bg-[#D4AC30] text-[#000000] shadow-[0_4px_16px_rgba(236,200,64,0.3)]">
+          <Button className="gap-2 bg-gold hover:bg-[#BF9930] text-[#000000] shadow-[0_4px_16px_rgba(236,200,64,0.3)]">
             <Plus className="h-4 w-4" />
             Log Sleep
           </Button>

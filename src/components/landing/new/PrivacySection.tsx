@@ -36,7 +36,7 @@ export function PrivacySection() {
       className="py-5 md:py-6"
       style={{
         background:
-          'linear-gradient(90deg, #D4AA40 0%, #F0D050 25%, #FFD700 50%, #F0D050 75%, #D4AA40 100%)',
+          'linear-gradient(90deg, #D4AA40 0%, #D4A843 25%, #E8C060 50%, #D4A843 75%, #D4AA40 100%)',
       }}
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">

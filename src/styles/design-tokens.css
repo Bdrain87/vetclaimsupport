@@ -25,12 +25,12 @@
   --color-success-100: #D1FAE5;
   --color-success-50:  #ECFDF5;
 
-  /* METALLIC GOLD SYSTEM — bright, warm, premium */
-  --color-accent-700: #A88828;
-  --color-accent-600: #D4AC30;
-  --color-accent-500: #ECC840;
-  --color-accent-400: #F2D560;
-  --color-accent-300: #F8E48A;
+  /* METALLIC GOLD SYSTEM — warm amber gold, not yellow */
+  --color-accent-700: #9E7C1A;
+  --color-accent-600: #BF9930;
+  --color-accent-500: #D4A843;
+  --color-accent-400: #E0BF60;
+  --color-accent-300: #EEDFA0;
   --color-accent-200: rgba(236, 200, 64, 0.2);
   --color-accent-100: rgba(236, 200, 64, 0.1);
 
@@ -194,19 +194,19 @@
      GOLD ACCENT SYSTEM — Metallic "Real Gold" Palette
      ═══════════════════════════════════════════════════════════════ */
 
-  /* Core metallic gold tones — bright, clean */
-  --gold-hl: #FFF3C7;
-  --gold-md: #ECC840;
-  --gold-dk: #B8922A;
+  /* Core metallic gold tones — warm amber, not yellow */
+  --gold-hl: #F0DDA0;
+  --gold-md: #D4A843;
+  --gold-dk: #A68520;
 
   /* Gold transparency variants */
-  --gold-glow: rgba(236, 200, 64, 0.35);
-  --gold-border: rgba(248, 228, 138, 0.16);
-  --gold-border-strong: rgba(236, 200, 64, 0.32);
+  --gold-glow: rgba(212, 168, 67, 0.35);
+  --gold-border: rgba(224, 191, 96, 0.16);
+  --gold-border-strong: rgba(212, 168, 67, 0.32);
 
-  /* Metallic gradient — horizontal sheen, no diagonal stripe */
-  --gold-gradient: linear-gradient(90deg, #D4AA40 0%, #F0D050 30%, #FFD700 50%, #F0D050 70%, #D4AA40 100%);
-  --gold-gradient-subtle: linear-gradient(90deg, rgba(212, 170, 64, 0.12) 0%, rgba(255, 215, 0, 0.08) 50%, rgba(212, 170, 64, 0.06) 100%);
+  /* Metallic gradient — warm gold horizontal sheen */
+  --gold-gradient: linear-gradient(90deg, #BF9930 0%, #D4A843 30%, #E8C060 50%, #D4A843 70%, #BF9930 100%);
+  --gold-gradient-subtle: linear-gradient(90deg, rgba(191, 153, 48, 0.12) 0%, rgba(212, 168, 67, 0.08) 50%, rgba(191, 153, 48, 0.06) 100%);
   --gold-gradient-shimmer: linear-gradient(90deg, transparent 0%, rgba(248, 228, 138, 0.4) 50%, transparent 100%);
 
   /* Gold focus ring */
@@ -326,12 +326,12 @@
 .gold-shimmer {
   background: linear-gradient(
     90deg,
-    #D4AA40 0%,
-    #F0D050 20%,
-    #FFD700 40%,
-    #F0D050 60%,
-    #D4AA40 80%,
-    #F0D050 100%
+    #BF9930 0%,
+    #D4A843 20%,
+    #E8C060 40%,
+    #D4A843 60%,
+    #BF9930 80%,
+    #D4A843 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
