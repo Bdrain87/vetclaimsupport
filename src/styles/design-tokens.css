@@ -204,9 +204,9 @@
   --gold-border: rgba(248, 228, 138, 0.16);
   --gold-border-strong: rgba(236, 200, 64, 0.32);
 
-  /* Metallic gradient — premium gold bar effect */
-  --gold-gradient: linear-gradient(135deg, #CCA530 0%, #E8C03A 20%, #FFD700 45%, #FFF4D0 50%, #FFD700 55%, #E8C03A 80%, #CCA530 100%);
-  --gold-gradient-subtle: linear-gradient(135deg, rgba(204, 165, 48, 0.12) 0%, rgba(236, 200, 64, 0.08) 50%, rgba(255, 215, 0, 0.06) 100%);
+  /* Metallic gradient — horizontal sheen, no diagonal stripe */
+  --gold-gradient: linear-gradient(90deg, #D4AA40 0%, #F0D050 30%, #FFD700 50%, #F0D050 70%, #D4AA40 100%);
+  --gold-gradient-subtle: linear-gradient(90deg, rgba(212, 170, 64, 0.12) 0%, rgba(255, 215, 0, 0.08) 50%, rgba(212, 170, 64, 0.06) 100%);
   --gold-gradient-shimmer: linear-gradient(90deg, transparent 0%, rgba(248, 228, 138, 0.4) 50%, transparent 100%);
 
   /* Gold focus ring */
@@ -326,12 +326,12 @@
 .gold-shimmer {
   background: linear-gradient(
     90deg,
-    #CCA530 0%,
-    #ECC840 20%,
+    #D4AA40 0%,
+    #F0D050 20%,
     #FFD700 40%,
-    #ECC840 60%,
-    #CCA530 80%,
-    #ECC840 100%
+    #F0D050 60%,
+    #D4AA40 80%,
+    #F0D050 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;

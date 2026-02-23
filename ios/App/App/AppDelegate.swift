@@ -9,9 +9,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var steps: [(String, String, String, Double)] = []
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Clear WKWebView cache on every launch so the app always fetches
-        // fresh content from the remote server URL. Without this, WKWebView
-        // aggressively caches old JS/CSS and ignores HTTP cache headers.
+        // Synchronously clear the shared URL cache BEFORE the WKWebView loads.
+        // This is the only way to guarantee fresh content from the remote URL,
+        // because WKWebsiteDataStore.removeData is async and loses the race.
+        URLCache.shared.removeAllCachedResponses()
+        URLCache.shared = URLCache(memoryCapacity: 0, diskCapacity: 0, diskPath: nil)
+
+        // Also clear WKWebView's own data store (async, belt-and-suspenders)
         let dataStore = WKWebsiteDataStore.default()
         let allTypes = WKWebsiteDataStore.allWebsiteDataTypes()
         dataStore.removeData(ofTypes: allTypes, modifiedSince: .distantPast) { }

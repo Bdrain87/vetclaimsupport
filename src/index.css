@@ -598,7 +598,7 @@ body {
   /* Primary gradient card - vivid gold gradient for info results */
   .gradient-card-primary {
     @apply relative overflow-hidden rounded-2xl p-6;
-    background: linear-gradient(135deg, #ECC840 0%, #A88828 100%);
+    background: linear-gradient(90deg, #ECC840 0%, #A88828 100%);
     box-shadow:
       0 8px 32px rgba(212, 175, 55, 0.35),
       0 0 0 1px rgba(255, 255, 255, 0.1) inset;
@@ -661,7 +661,7 @@ body {
 
   .gradient-stat-primary {
     @apply relative overflow-hidden rounded-2xl p-5;
-    background: linear-gradient(135deg, #ECC840 0%, #A88828 100%);
+    background: linear-gradient(90deg, #ECC840 0%, #A88828 100%);
     box-shadow: 0 8px 32px rgba(212, 175, 55, 0.3);
   }
 
