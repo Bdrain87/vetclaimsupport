@@ -9,7 +9,7 @@ import {
 
 function ClipboardIcon() {
   return (
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#BF953F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#D4AC30" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
       <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
     </svg>
@@ -18,7 +18,7 @@ function ClipboardIcon() {
 
 function TranslateIcon() {
   return (
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#BF953F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#D4AC30" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M5 8l6 6" />
       <path d="M4 14l6-6 2-3" />
       <path d="M2 5h12" />
@@ -31,7 +31,7 @@ function TranslateIcon() {
 
 function CalculatorIcon() {
   return (
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#BF953F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#D4AC30" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <rect x="4" y="2" width="16" height="20" rx="2" />
       <line x1="8" y1="6" x2="16" y2="6" />
       <line x1="16" y1="14" x2="16" y2="18" />

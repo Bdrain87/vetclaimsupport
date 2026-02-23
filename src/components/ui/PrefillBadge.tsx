@@ -16,7 +16,7 @@ export function PrefillBadge({ onClear }: PrefillBadgeProps) {
       <button
         type="button"
         onClick={(e) => { e.stopPropagation(); onClear(); }}
-        className="ml-0.5 hover:text-[#7B5E1A] transition-colors"
+        className="ml-0.5 hover:text-[#A88828] transition-colors"
         aria-label="Clear pre-filled data"
       >
         <X className="h-2.5 w-2.5" />

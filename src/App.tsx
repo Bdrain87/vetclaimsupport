@@ -134,7 +134,7 @@ function LoadingFallback() {
           <div
             className="h-full rounded-full"
             style={{
-              background: 'var(--gold-gradient, linear-gradient(135deg, #F0D78C 0%, #D4AF37 45%, #7B5E1A 100%))',
+              background: 'var(--gold-gradient, linear-gradient(135deg, #F8E48A 0%, #ECC840 45%, #A88828 100%))',
               animation: 'gradient-slide 1.2s ease-in-out infinite',
             }}
           />
@@ -432,7 +432,7 @@ function AppContent() {
       <LiabilityAcceptanceScreen />
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         <MobileHeader />
-        <main id="main-content" className="flex-1 overflow-y-auto overflow-x-hidden">
+        <main id="main-content" className="flex-1 overflow-y-auto overflow-x-hidden max-w-full">
           <OfflineIndicator />
           <AnimatedRoutes />
         </main>

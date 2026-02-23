@@ -711,7 +711,7 @@ export function UnifiedRatingCalculator() {
               {wouldBeBilateral(newConditionBodyPart) && (
                 <Alert className="border-gold/50 bg-gold/10">
                   <Sparkles className="h-4 w-4 text-gold" />
-                  <AlertDescription className="text-[#7B5E1A] dark:text-gold-hl">
+                  <AlertDescription className="text-[#A88828] dark:text-gold-hl">
                     This will create a bilateral pair! The 10% bilateral factor will be automatically applied.
                   </AlertDescription>
                 </Alert>
@@ -850,7 +850,7 @@ export function UnifiedRatingCalculator() {
                   {result.officialRating < 30 && (
                     <Alert className="border-gold/50 bg-gold/10">
                       <Info className="h-4 w-4 text-gold" />
-                      <AlertDescription className="text-[#7B5E1A] dark:text-gold-hl">
+                      <AlertDescription className="text-[#A88828] dark:text-gold-hl">
                         Dependent benefits require a combined rating of 30% or higher.
                       </AlertDescription>
                     </Alert>
@@ -960,7 +960,7 @@ export function UnifiedRatingCalculator() {
               {result.hasBilateral && (
                 <Alert className="border-gold/50 bg-gold/10 mt-4">
                   <Sparkles className="h-4 w-4 text-gold" />
-                  <AlertDescription className="text-[#7B5E1A] dark:text-gold-hl text-sm">
+                  <AlertDescription className="text-[#A88828] dark:text-gold-hl text-sm">
                     <strong>Bilateral Factor Applied!</strong>
                     <br />
                     Combined bilateral: {result.bilateralExact.toFixed(1)}%

@@ -7,7 +7,7 @@ export const badgeVariants = cva(
       variant: {
         default: [
           "border-0 bg-primary/15 text-primary",
-          "shadow-[inset_0_0_0_1px_hsl(43_64%_60%/0.2)]",
+          "shadow-[inset_0_0_0_1px_hsl(48_82%_59%/0.2)]",
         ],
         secondary: [
           "border-0 bg-black/10 dark:bg-white/10 text-foreground",

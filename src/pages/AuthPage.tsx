@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
 
 const GOLD_GRADIENT =
-  'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)';
+  'linear-gradient(135deg, #D4AC30 0%, #FCF6BA 25%, #D4AC30 50%, #FBF5B7 75%, #B8922A 100%)';
 
 /** Only allow relative paths starting with / (no protocol-relative // or external URLs). */
 function getSafeRedirect(): string {
@@ -110,7 +110,7 @@ export default function AuthPage() {
   };
 
   const inputClass =
-    'w-full h-12 pl-11 pr-4 bg-white/[0.07] border border-white/[0.12] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(212,175,55,0.4)] focus:border-[rgba(212,175,55,0.5)] transition-all';
+    'w-full h-12 pl-11 pr-4 bg-white/[0.07] border border-white/[0.12] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(236,200,64,0.4)] focus:border-[rgba(236,200,64,0.5)] transition-all';
 
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#000000' }}>

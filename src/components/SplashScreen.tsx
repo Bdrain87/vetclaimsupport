@@ -183,7 +183,7 @@ function LoadingDots() {
         <motion.span
           key={i}
           className="w-2 h-2 rounded-full"
-          style={{ backgroundColor: 'var(--gold-md, #D4AF37)' }}
+          style={{ backgroundColor: 'var(--gold-md, #ECC840)' }}
           animate={{
             scale: [1, 1.3, 1],
             opacity: [0.5, 1, 0.5]

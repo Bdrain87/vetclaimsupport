@@ -17,12 +17,12 @@ export const colors = {
 
   // === GOLD ACCENT (Primary Interactive) ===
   blue: {
-    500: '#D4AF37',    // Primary buttons, links, active nav, focus rings
-    600: '#B38728',    // Hover state for primary buttons
-    700: '#7B5E1A',    // Active/pressed state
-    400: '#F0D78C',    // Light accent (tags, badges, subtle highlights)
-    100: 'rgba(212, 175, 55, 0.1)',  // Tinted backgrounds
-    200: 'rgba(212, 175, 55, 0.2)',  // Slightly more visible tinted bg
+    500: '#ECC840',    // Primary buttons, links, active nav, focus rings
+    600: '#D4AC30',    // Hover state for primary buttons
+    700: '#A88828',    // Active/pressed state
+    400: '#F8E48A',    // Light accent (tags, badges, subtle highlights)
+    100: 'rgba(236, 200, 64, 0.1)',  // Tinted backgrounds
+    200: 'rgba(236, 200, 64, 0.2)',  // Slightly more visible tinted bg
   },
 
   // === TEXT HIERARCHY (Platinum/Silver) ===
@@ -48,9 +48,9 @@ export const colors = {
 
   // === BRAND MARK ONLY — NOT for UI elements ===
   brand: {
-    gold: '#D4AF37',        // Brand mark icon ONLY
-    goldLight: '#F0D78C',   // Brand mark gradient light (metallic gold highlight)
-    goldDark: '#B8860B',    // Brand mark gradient dark
+    gold: '#ECC840',        // Brand mark icon ONLY
+    goldLight: '#F8E48A',   // Brand mark gradient light (metallic gold highlight)
+    goldDark: '#CCA530',    // Brand mark gradient dark
   },
 
   // === LIGHT MODE COUNTERPARTS ===

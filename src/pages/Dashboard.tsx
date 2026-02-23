@@ -149,7 +149,7 @@ export default function Dashboard() {
   }, [profile]);
 
   return (
-    <PageContainer className="space-y-4 animate-fade-in pb-4 overflow-x-hidden">
+    <PageContainer className="space-y-4 animate-fade-in pb-4">
       {/* Intent to File Banner */}
       <IntentToFileBanner />
 
@@ -168,7 +168,7 @@ export default function Dashboard() {
       )}
 
       {/* Profile Card */}
-      <div className="rounded-xl border border-border bg-card overflow-hidden">
+      <div className="rounded-xl border border-border bg-card overflow-hidden max-w-full">
         <div className="p-4 flex items-center gap-4">
           <div className="h-12 w-12 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center flex-shrink-0">
             <User className="h-6 w-6 text-gold" />
@@ -213,7 +213,7 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={vcsSpring}
-          className="rounded-xl bg-card border border-border p-4 shadow-sm hover:bg-accent/30 transition-colors cursor-pointer"
+          className="rounded-xl bg-card border border-border p-4 shadow-sm hover:bg-accent/30 transition-colors cursor-pointer overflow-hidden max-w-full"
         >
           <div className="flex items-center gap-4">
             <div className="relative w-16 h-16 flex-shrink-0">
@@ -225,7 +225,7 @@ export default function Dashboard() {
                 />
                 <motion.circle
                   cx="18" cy="18" r="15" fill="none"
-                  stroke="var(--gold-md, #D4AF37)" strokeWidth="3"
+                  stroke="var(--gold-md, #ECC840)" strokeWidth="3"
                   strokeLinecap="round"
                   strokeDasharray={`${combinedRating}, 100`}
                   initial={{ strokeDasharray: '0, 100' }}
@@ -276,7 +276,7 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={vcsSpring}
-          className="rounded-xl bg-card border border-border p-4 shadow-sm space-y-3"
+          className="rounded-xl bg-card border border-border p-4 shadow-sm space-y-3 overflow-hidden max-w-full"
         >
           {streak.currentStreak > 0 && (
             <div className="flex items-center gap-3">
@@ -330,7 +330,7 @@ export default function Dashboard() {
           transition={vcsSpring}
         >
           <Link to="/claims" className="block">
-            <div className="rounded-xl bg-card border border-border p-4 shadow-sm hover:bg-accent/30 transition-colors">
+            <div className="rounded-xl bg-card border border-border p-4 shadow-sm hover:bg-accent/30 transition-colors overflow-hidden max-w-full">
               <div className="flex items-center gap-4">
                 <div className="relative w-14 h-14 flex-shrink-0">
                   <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90" role="img" aria-label={`Claim readiness: ${readinessScore} percent`}>
@@ -372,7 +372,7 @@ export default function Dashboard() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ ...vcsSpring, delay: 0.25 }}
-        className="rounded-xl bg-card border border-border p-4 shadow-sm"
+        className="rounded-xl bg-card border border-border p-4 shadow-sm overflow-hidden max-w-full"
       >
         <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
           <Zap className="w-4 h-4 text-gold" />
@@ -441,7 +441,7 @@ export default function Dashboard() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ ...vcsSpring, delay: 0.3 }}
-        className="rounded-xl bg-card border border-border p-4 shadow-sm"
+        className="rounded-xl bg-card border border-border p-4 shadow-sm overflow-hidden max-w-full"
       >
         <h3 className="font-bold text-sm text-foreground mb-3">Quick Daily Log</h3>
         {logSaved ? (

@@ -146,7 +146,7 @@ export const hoverGlow = (color: string = 'rgba(191,149,63,0.3)') => ({
 });
 
 // --- METALLIC GOLD GRADIENT CONSTANTS ---
-export const GOLD_GRADIENT = 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)';
+export const GOLD_GRADIENT = 'linear-gradient(135deg, #D4AC30 0%, #FCF6BA 25%, #D4AC30 50%, #FBF5B7 75%, #B8922A 100%)';
 export const GOLD_GRADIENT_TEXT = {
   background: GOLD_GRADIENT,
   WebkitBackgroundClip: 'text',
@@ -183,7 +183,7 @@ export const SECTION_TOP_GLOW_GOLD = 'linear-gradient(180deg, rgba(191,149,63,0.
 
 // --- PILL LABEL STYLE ---
 export const PILL_STYLE = {
-  background: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)',
+  background: 'linear-gradient(135deg, #D4AC30 0%, #FCF6BA 25%, #D4AC30 50%, #FBF5B7 75%, #B8922A 100%)',
   WebkitBackgroundClip: 'text',
   WebkitTextFillColor: 'transparent',
   backgroundClip: 'text' as const,
