@@ -36,7 +36,7 @@
       // This runs before any bundled JS so stale SW can't serve old code.
       // Bump this number on breaking deploys that require a clean slate.
       (function(){
-        var V='vcs_deploy_v',C='4';
+        var V='vcs_deploy_v',C='5';
         try{
           if(localStorage.getItem(V)!==C){
             localStorage.setItem(V,C);
