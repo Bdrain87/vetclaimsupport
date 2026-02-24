@@ -25,7 +25,7 @@ export function BuiltByVeteran() {
           className="relative pl-6 md:pl-8"
           style={{
             borderLeft: '3px solid transparent',
-            borderImage: 'linear-gradient(180deg, #E0BF60, #D4A843, #BF9930, #D4A843, #E0BF60) 1',
+            borderImage: 'linear-gradient(180deg, #FFE060, #ECC840, #D4B030, #ECC840, #FFE060) 1',
           }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

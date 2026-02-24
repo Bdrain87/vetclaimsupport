@@ -67,7 +67,7 @@ export function IntentToFileBanner() {
             {/* Gold accent line (decorative) */}
             <div
               className="absolute top-0 left-0 right-0 h-1"
-              style={{ background: 'linear-gradient(90deg, #D4AA40 0%, #D4A843 25%, #E8C060 50%, #D4A843 75%, #D4AA40 100%)' }}
+              style={{ background: 'linear-gradient(90deg, #C8A020 0%, #ECC440 20%, #FFE566 50%, #ECC440 80%, #C8A020 100%)' }}
               aria-hidden="true"
             />
 
@@ -96,7 +96,7 @@ export function IntentToFileBanner() {
                   <Link
                     to="/settings/itf"
                     className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-xs font-semibold transition-colors min-h-[44px]"
-                    style={{ background: 'linear-gradient(90deg, #D4AA40 0%, #D4A843 25%, #E8C060 50%, #D4A843 75%, #D4AA40 100%)', color: '#000' }}
+                    style={{ background: 'linear-gradient(90deg, #C8A020 0%, #ECC440 20%, #FFE566 50%, #ECC440 80%, #C8A020 100%)', color: '#000' }}
                   >
                     Learn How to File
                     <ChevronRight className="h-3 w-3" />

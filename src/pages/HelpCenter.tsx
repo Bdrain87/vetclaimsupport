@@ -512,7 +512,7 @@ export default function HelpCenter() {
                                 <p className="font-medium">{step.title}</p>
                                 <p className="text-sm text-muted-foreground mt-1">{step.content}</p>
                                 {step.tip && (
-                                  <div className="flex items-start gap-2 mt-2 p-2 rounded-lg bg-gold/10 text-[#9E7C1A] dark:text-gold">
+                                  <div className="flex items-start gap-2 mt-2 p-2 rounded-lg bg-gold/10 text-[#C8A020] dark:text-gold">
                                     <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
                                     <p className="text-xs">{step.tip}</p>
                                   </div>
