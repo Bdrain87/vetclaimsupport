@@ -86,7 +86,6 @@ export const ALL_LOCAL_STORAGE_KEYS = [
   'consentTermsVersion',
   // UI state
   'va-claims-theme',
-  'cpExamChecklist',
   'cp-exam-checklist',
   'bodymap-pain-levels',
   'vet-claim-unified-calculator',

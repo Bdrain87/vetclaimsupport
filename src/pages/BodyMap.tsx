@@ -960,7 +960,7 @@ export default function BodyMap() {
                             }
                             className={`w-full text-left rounded-lg border p-3 transition-all duration-200 ${
                               isAdded
-                                ? `bg-[rgba(212,175,55,0.15)] border-[rgba(212,175,55,0.4)] hover:bg-gold/20 ${painLevel > 0 ? 'rounded-b-none border-b-0' : ''}`
+                                ? `bg-[rgba(212,175,55,0.15)] border-[rgba(212,175,55,0.4)] hover:bg-gold/20 ${showPainTracking && painLevel > 0 ? 'rounded-b-none border-b-0' : ''}`
                                 : 'bg-muted/30 border-border hover:bg-muted/50 hover:border-border'
                             }`}
                           >
@@ -993,7 +993,7 @@ export default function BodyMap() {
                                       DC {condition.diagnosticCode}
                                     </Badge>
                                   )}
-                                  {isAdded && painLevel > 0 && (
+                                  {isAdded && showPainTracking && painLevel > 0 && (
                                     <Badge
                                       variant="outline"
                                       className={`text-[10px] px-1.5 py-0 h-4 gap-0.5 ${
@@ -1113,12 +1113,12 @@ export default function BodyMap() {
                             key={uc.id}
                             className="bg-[rgba(212,175,55,0.15)] text-gold-hl border border-gold/30 hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30 cursor-pointer transition-colors gap-1 pr-1.5"
                             onClick={() => removeUserCondition(uc.id)}
-                            title={`${label} (${regionLabel})${pain > 0 ? ` — Pain: ${pain}/10` : ''} — click to remove`}
+                            title={`${label} (${regionLabel})${showPainTracking && pain > 0 ? ` — Pain: ${pain}/10` : ''} — click to remove`}
                           >
                             <span className="max-w-[180px] truncate">
                               {label}
                             </span>
-                            {pain > 0 && (
+                            {showPainTracking && pain > 0 && (
                               <span className={`text-[10px] font-bold ${
                                 pain >= 7 ? 'text-red-400' : pain >= 4 ? 'text-yellow-400' : 'text-emerald-400'
                               }`}>
