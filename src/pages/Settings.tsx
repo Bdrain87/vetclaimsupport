@@ -808,11 +808,9 @@ export default function Settings() {
                   {auditEntries.map((entry) => (
                     <div key={entry.id} className="p-3 rounded-lg bg-muted/50 border border-border text-sm space-y-1">
                       <p className="text-foreground font-medium">
-                        {new Date(entry.timestamp).toLocaleString()}
+                        {AI_COPY.auditLogEntry(new Date(entry.timestamp).toLocaleString(), entry.redactionMode)}
                       </p>
                       <p className="text-muted-foreground">
-                        Redaction mode: <span className="font-medium text-foreground">{entry.redactionMode}</span>
-                        {' · '}
                         Redactions: <span className="font-medium text-foreground">{entry.redactionCount}</span>
                       </p>
                     </div>

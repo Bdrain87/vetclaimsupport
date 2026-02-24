@@ -184,6 +184,7 @@ export function RedactionPreview({ originalText, onConfirm, onCancel }: Redactio
       <div className="space-y-2 text-xs text-muted-foreground">
         <p><strong className="text-foreground">What gets sent:</strong> {AI_COPY.whatGetsSent}</p>
         <p><strong className="text-foreground">Your control:</strong> {AI_COPY.yourControl}</p>
+        <p>{AI_COPY.defaultOffPerUpload}</p>
         <p>{AI_COPY.noTelemetry}</p>
       </div>
 

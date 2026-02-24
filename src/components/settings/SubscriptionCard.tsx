@@ -139,7 +139,7 @@ export function SubscriptionCard() {
         )}
 
         <p className="text-[11px] text-muted-foreground/70 text-center">
-          {PREMIUM_COPY.accountNote}
+          {PREMIUM_COPY.accountNote} {PREMIUM_COPY.signInNote}
         </p>
 
         <p className="text-[11px] text-muted-foreground/60 text-center">

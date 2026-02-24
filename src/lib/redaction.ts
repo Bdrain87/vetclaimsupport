@@ -188,8 +188,8 @@ export function redactPII(text: string, level: RedactionLevel = 'standard'): Red
 
   // High-privacy mode: additional aggressive patterns
   if (level === 'high') {
-    replaceAndCount(NAME_LABELED, '[NAME_REDACTED]');
-    replaceAndCount(GENERIC_ID, '[ID_REDACTED]');
+    replaceAndCount(NAME_LABELED, REDACTION_TOKENS.NAME);
+    replaceAndCount(GENERIC_ID, REDACTION_TOKENS.ID);
   }
 
   const totalRedactions = Object.values(counts).reduce((a, b) => a + b, 0);
