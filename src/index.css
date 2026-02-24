@@ -261,7 +261,17 @@ body {
   input, textarea, select {
     font-size: 16px !important;
     max-width: 100% !important;
+    width: 100% !important;
     box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  /* Force all card children to stay within bounds */
+  [class*="rounded-xl"],
+  [class*="rounded-2xl"] {
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
   }
 
   /* Mobile keyboard scroll fix */

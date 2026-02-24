@@ -11,12 +11,11 @@ export function PageContainer({ children, className, noPadding = false }: PageCo
     <div
       className={cn(
         'w-full mx-auto overflow-x-hidden',
+        !noPadding && 'px-4',
         className
       )}
       style={{
-        maxWidth: 'min(42rem, 100%)',
-        paddingLeft: noPadding ? undefined : 'max(1rem, env(safe-area-inset-left, 1rem))',
-        paddingRight: noPadding ? undefined : 'max(1rem, env(safe-area-inset-right, 1rem))',
+        maxWidth: '100%',
         boxSizing: 'border-box',
       }}
     >
