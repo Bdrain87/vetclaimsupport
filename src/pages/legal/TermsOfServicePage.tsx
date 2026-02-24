@@ -1,6 +1,7 @@
-import { FileText, ChevronLeft } from 'lucide-react';
+import { FileText, ChevronLeft, Mail } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { PageContainer } from '@/components/PageContainer';
+import { LEGAL_VERSIONS, formatLegalDate, ADMIN_EMAIL } from '@/data/legalCopy';
 
 export default function TermsOfServicePage() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function TermsOfServicePage() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Terms of Service</h1>
-          <p className="text-muted-foreground/70 text-sm mt-1">Vet Claim Support &mdash; Version 1.2 &mdash; Effective February 19, 2026</p>
+          <p className="text-muted-foreground/70 text-sm mt-1">Vet Claim Support &mdash; Version {LEGAL_VERSIONS.terms.version} &mdash; Effective {formatLegalDate(LEGAL_VERSIONS.terms.effectiveDate)}</p>
         </div>
       </div>
 
@@ -109,7 +110,7 @@ export default function TermsOfServicePage() {
           </p>
           <ul className="space-y-1.5 text-muted-foreground">
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(a) AI-generated content may contain errors, inaccuracies, omissions, or fabricated information</li>
-            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(b) AI-generated case law citations, legal references, and court decisions have a documented hallucination rate of 50-88% and may be completely fabricated &mdash; you MUST independently verify ALL legal citations using official databases (Google Scholar, VA Board of Veterans&apos; Appeals decisions, or legal research services) before relying on them</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(b) AI output can be inaccurate or fabricated. AI-generated case law citations, legal references, and court decisions are frequently fabricated and may be completely fabricated &mdash; you MUST independently verify ALL legal citations using official databases (Google Scholar, VA Board of Veterans&apos; Appeals decisions, or legal research services) before relying on them</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(c) AI-generated content is NOT a substitute for professional legal, medical, or claims advice</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(d) You are responsible for reviewing and verifying ALL AI-generated content before use</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(e) Information you submit to AI features is processed by our third-party AI service provider (currently Google&apos;s Gemini API) &mdash; we do not retain this data, but the provider&apos;s own terms of service apply to their processing</li>
@@ -127,7 +128,7 @@ export default function TermsOfServicePage() {
               <strong className="text-foreground">Verified Case Law Database:</strong> The Appeals Guide&apos;s &quot;My Appeal&quot; and &quot;Case Law&quot; tabs retrieve citations from a curated database of real BVA, CAVC, Federal Circuit, and Supreme Court decisions. These citations include source URLs to official court records. However, case law summaries have been simplified and may not capture every nuance of a ruling. Laws, regulations, and case interpretations can change over time.
             </p>
             <p className="text-muted-foreground">
-              <strong className="text-foreground">AI-Generated Content:</strong> Other AI-powered features in this Service use a third-party AI service provider (currently Google Gemini), which may fabricate case names, citation numbers, holdings, and legal reasoning. AI-generated case law citations have a documented hallucination rate of 50&ndash;88% and <strong className="text-gold">ARE NOT VERIFIED</strong>.
+              <strong className="text-foreground">AI-Generated Content:</strong> Other AI-powered features in this Service use a third-party AI service provider (currently Google Gemini), which may fabricate case names, citation numbers, holdings, and legal reasoning. AI-generated case law citations are frequently fabricated and <strong className="text-gold">ARE NOT VERIFIED</strong>.
             </p>
           </div>
           <p className="text-muted-foreground">
@@ -199,7 +200,7 @@ export default function TermsOfServicePage() {
             <strong className="text-foreground">One-Time Payment.</strong> By purchasing Premium, you make a single payment that grants you permanent access to all current Premium features. There are no recurring charges, monthly fees, or automatic renewals.
           </p>
           <p className="text-muted-foreground">
-            <strong className="text-foreground">Refund Policy.</strong> You may request a full refund within <strong className="text-foreground">7 days</strong> of purchase by contacting <a href="mailto:Admin@vetclaimsupport.com" className="text-primary underline">Admin@vetclaimsupport.com</a>. After 7 days, all sales are final. Upon refund, your Premium access will be revoked.
+            <strong className="text-foreground">Refund Policy.</strong> You may request a full refund within <strong className="text-foreground">7 days</strong> of purchase by contacting <a href={`mailto:${ADMIN_EMAIL}`} className="text-primary underline">{ADMIN_EMAIL}</a>. After 7 days, all sales are final. Upon refund, your Premium access will be revoked.
           </p>
           <p className="text-muted-foreground">
             <strong className="text-foreground">Payment Processing.</strong> All payments are processed securely by <strong className="text-foreground">Stripe, Inc.</strong> VCS does not directly collect, store, or have access to your full payment card information. Your use of Stripe&apos;s services is subject to <a href="https://stripe.com/legal" target="_blank" rel="noopener noreferrer" className="text-primary underline">Stripe&apos;s Terms of Service</a> and <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-primary underline">Privacy Policy</a>.
@@ -249,11 +250,22 @@ export default function TermsOfServicePage() {
           <h2 className="text-lg font-semibold text-foreground">18. Contact</h2>
           <p className="text-muted-foreground">
             Questions about these Terms:{' '}
-            <a href="mailto:Admin@vetclaimsupport.com" className="text-gold hover:underline">
-              Admin@vetclaimsupport.com
+            <a href={`mailto:${ADMIN_EMAIL}`} className="text-gold hover:underline">
+              {ADMIN_EMAIL}
             </a>
           </p>
         </section>
+
+        {/* Last Updated */}
+        <div className="space-y-3 pt-4 border-t border-border">
+          <p className="text-muted-foreground/70 text-xs">
+            Last updated: {formatLegalDate(LEGAL_VERSIONS.terms.effectiveDate)}
+          </p>
+          <p className="text-muted-foreground/70 text-xs flex items-center gap-1">
+            <Mail className="h-3 w-3" />
+            For legal requests: <a href={`mailto:${ADMIN_EMAIL}`} className="text-gold hover:underline">{ADMIN_EMAIL}</a>
+          </p>
+        </div>
       </div>
     </PageContainer>
   );

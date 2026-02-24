@@ -110,7 +110,7 @@ const CARDS: CardData[] = [
     icon: BookOpen,
     title: 'BDD Guide',
     short: 'Pre-discharge filing guide for active duty',
-    detail: 'Step-by-step guide for Benefits Delivery at Discharge—file your claim 180–90 days before separation.',
+    detail: 'Step-by-step guide for Benefits Delivery at Discharge — prepare your claim 180–90 days before separation.',
     capabilities: ['Timeline guidance', 'Eligibility check', 'Required documents', 'Process walkthrough'],
     plan: 'Premium ($9.99 one-time)',
     category: 'Reference',

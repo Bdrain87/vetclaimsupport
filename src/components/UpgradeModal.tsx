@@ -75,7 +75,7 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
             <p className="text-3xl font-bold text-foreground">
               $9.99<span className="text-base font-normal text-muted-foreground"> one-time</span>
             </p>
-            <p className="text-xs text-muted-foreground">Pay once, yours forever. No subscription.</p>
+            <p className="text-xs text-muted-foreground">One-time purchase (intro price). No subscription.</p>
           </div>
 
           {/* Feature highlights */}

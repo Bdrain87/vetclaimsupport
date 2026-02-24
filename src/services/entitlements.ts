@@ -2,6 +2,7 @@ import { useProfileStore } from '@/store/useProfileStore';
 import { supabase } from '@/lib/supabase';
 
 export type EntitlementStatus = 'preview' | 'premium' | 'lifetime';
+export type EntitlementSource = 'apple' | 'stripe' | 'lifetime';
 
 export const PREVIEW_LIMITS = {
   maxConditions: 1,
@@ -121,11 +122,17 @@ export async function ensureFreshEntitlement(): Promise<EntitlementStatus> {
   return refreshEntitlementFromServer();
 }
 
-// --- Stripe checkout ---
+// --- Stripe checkout (web) ---
 
 /**
  * Invoke the create-checkout-session Edge Function.
  * Returns the Stripe Checkout URL for redirect.
+ *
+ * Stripe payment verification flow:
+ *   1. User completes Stripe Checkout
+ *   2. Stripe webhook calls our verify-stripe-payment Edge Function
+ *   3. Edge Function writes to user_entitlements: { entitled: true, source: 'stripe', purchase_id }
+ *   4. Client calls refreshEntitlementFromServer() to pick up the new status
  */
 export async function startCheckout(): Promise<string> {
   const { data, error } = await supabase.functions.invoke('create-checkout-session', {
@@ -143,4 +150,34 @@ export async function startCheckout(): Promise<string> {
     throw new Error('Invalid checkout URL received. Please try again.');
   }
   return url;
+}
+
+// --- Apple IAP (iOS) ---
+
+/**
+ * Apple receipt verification flow (future implementation):
+ *   1. User completes StoreKit purchase on iOS
+ *   2. Client sends receipt to verify-apple-receipt Edge Function
+ *   3. Edge Function validates with Apple's servers
+ *   4. Edge Function writes to user_entitlements: { entitled: true, source: 'apple', purchase_id }
+ *   5. Client calls refreshEntitlementFromServer() to pick up the new status
+ */
+export async function verifyAppleReceipt(receiptData: string): Promise<EntitlementStatus> {
+  const { error } = await supabase.functions.invoke('verify-apple-receipt', {
+    body: { receiptData },
+  });
+  if (error) throw new Error('Apple receipt verification failed.');
+
+  return refreshEntitlementFromServer();
+}
+
+// --- Restore Purchases ---
+
+/**
+ * Restore purchases — checks the server for an existing entitlement.
+ * Works for both Apple IAP restores and Stripe payment restores.
+ * Call this from "Restore Purchases" button.
+ */
+export async function restorePurchases(): Promise<EntitlementStatus> {
+  return refreshEntitlementFromServer();
 }

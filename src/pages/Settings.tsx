@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Scale, Shield, FileText, AlertTriangle, ChevronRight, User, Plus, Trash2, Briefcase, Info, HelpCircle, BookOpen, LogIn, LogOut } from 'lucide-react';
+import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Scale, Shield, FileText, AlertTriangle, ChevronRight, User, Plus, Trash2, Briefcase, Info, HelpCircle, BookOpen, LogIn, LogOut, Calendar, Database } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -30,6 +30,8 @@ import { useProfileStore, type Branch, type ServicePeriod } from '@/store/usePro
 import { PageContainer } from '@/components/PageContainer';
 import { supabase } from '@/lib/supabase';
 import { signOut } from '@/services/auth';
+import { isNativeApp } from '@/lib/platform';
+import { NOTIFICATION_COPY, DATA_PRIVACY_COPY, AI_COPY, CLAIM_DATES_COPY, LEGAL_VERSIONS, formatLegalDate } from '@/data/legalCopy';
 import type { Session } from '@supabase/supabase-js';
 
 const REMINDER_SETTINGS_KEY = 'va-claims-reminder-settings';
@@ -61,6 +63,7 @@ export default function Settings() {
   const navigate = useNavigate();
   const profile = useProfileStore();
   const [session, setSession] = useState<Session | null>(null);
+  const [showSyncModal, setShowSyncModal] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session: s } }) => setSession(s));
@@ -127,6 +130,18 @@ export default function Settings() {
   };
 
   const handleSaveProfile = () => {
+    // Validate: end date cannot be before start date for any period
+    for (const period of servicePeriods) {
+      if (period.startDate && period.endDate && period.endDate < period.startDate) {
+        toast({
+          title: 'Invalid Dates',
+          description: `Service Period: End Date cannot be before Start Date.`,
+          variant: 'destructive',
+        });
+        return;
+      }
+    }
+
     profile.setFirstName(profileForm.firstName);
     profile.setLastName(profileForm.lastName);
 
@@ -145,9 +160,10 @@ export default function Settings() {
       }
     }
 
-    toast({ title: 'Profile Updated', description: 'Your profile has been saved.' });
+    toast({ title: 'Profile Saved', description: 'Your profile has been updated.' });
   };
 
+  // Auto-save separation date with debounce
   const separationAutoSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     if (separationAutoSaveTimer.current) clearTimeout(separationAutoSaveTimer.current);
@@ -164,14 +180,12 @@ export default function Settings() {
   useEffect(() => {
     const sessionId = searchParams.get('session_id');
     if (sessionId) {
-      // Force refresh entitlement from server after successful checkout
       refreshEntitlementFromServer().then(() => {
         toast({
           title: 'Welcome to Premium!',
           description: 'You now have full access to all features.',
         });
       });
-      // Clean URL
       searchParams.delete('session_id');
       setSearchParams(searchParams, { replace: true });
     }
@@ -187,7 +201,6 @@ export default function Settings() {
   }, []);
 
   const scheduleReminder = useCallback(() => {
-    // Clear any existing scheduled notifications
     if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
       navigator.serviceWorker.controller.postMessage({
         type: 'SCHEDULE_REMINDER',
@@ -203,7 +216,6 @@ export default function Settings() {
       // Storage full or unavailable
     }
 
-    // Schedule notifications if enabled
     if (reminderSettings.enabled && notificationPermission === 'granted') {
       scheduleReminder();
     }
@@ -213,7 +225,7 @@ export default function Settings() {
     if (!('Notification' in window)) {
       toast({
         title: 'Not Supported',
-        description: 'Your browser does not support notifications.',
+        description: isNativeApp ? 'Notification support requires a future app update.' : 'Your browser does not support notifications.',
         variant: 'destructive',
       });
       return;
@@ -222,13 +234,12 @@ export default function Settings() {
     try {
       const permission = await Notification.requestPermission();
       setNotificationPermission(permission);
-      
+
       if (permission === 'granted') {
         toast({
           title: 'Notifications Enabled',
           description: 'You will receive reminders to log your symptoms.',
         });
-        // Show a test notification
         new Notification('Vet Claim Support', {
           body: 'Reminder notifications are now enabled!',
           icon: '/pwa-icons/icon-192x192.png',
@@ -236,7 +247,9 @@ export default function Settings() {
       } else if (permission === 'denied') {
         toast({
           title: 'Notifications Blocked',
-          description: 'Please enable notifications in your browser settings.',
+          description: isNativeApp
+            ? 'Open iOS Settings to enable notifications for VCS.'
+            : 'Please enable notifications in your browser settings.',
           variant: 'destructive',
         });
       }
@@ -272,6 +285,8 @@ export default function Settings() {
     }
   };
 
+  const platformCopy = isNativeApp ? NOTIFICATION_COPY.ios : NOTIFICATION_COPY.web;
+
   return (
     <PageContainer className="space-y-8 animate-fade-in">
       {/* Header */}
@@ -285,7 +300,7 @@ export default function Settings() {
         </div>
       </div>
 
-      {/* Account */}
+      {/* Account — Phase 1D */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -293,10 +308,12 @@ export default function Settings() {
             Account
           </CardTitle>
           <CardDescription>
-            {session ? session.user.email : 'Sign in to access premium features and sync your data'}
+            {session
+              ? session.user.email
+              : DATA_PRIVACY_COPY.localDefault}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-3">
           {session ? (
             <Button onClick={handleSignOut} variant="outline" className="w-full">
               <LogOut className="h-4 w-4 mr-2" />
@@ -308,16 +325,57 @@ export default function Settings() {
               Sign In
             </Button>
           )}
+
+          <button
+            onClick={() => setShowSyncModal(true)}
+            className="flex items-center gap-1.5 text-xs text-gold hover:text-gold/80 transition-colors w-full justify-center"
+          >
+            <Database className="h-3 w-3" />
+            What gets synced?
+          </button>
         </CardContent>
       </Card>
 
-      {/* Vault Passcode */}
+      {/* What Gets Synced Modal — Phase 1D */}
+      <AlertDialog open={showSyncModal} onOpenChange={setShowSyncModal}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>What Gets Synced</AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div className="space-y-4 text-sm">
+                <div>
+                  <p className="font-medium text-foreground mb-1.5">Stays on your device (local only)</p>
+                  <ul className="space-y-1 text-muted-foreground">
+                    <li className="flex items-start gap-2"><span className="text-emerald-400">&#x2713;</span>Health data & symptom logs</li>
+                    <li className="flex items-start gap-2"><span className="text-emerald-400">&#x2713;</span>Documents & vault contents</li>
+                    <li className="flex items-start gap-2"><span className="text-emerald-400">&#x2713;</span>Claim preparation data</li>
+                    <li className="flex items-start gap-2"><span className="text-emerald-400">&#x2713;</span>AI-generated drafts</li>
+                    <li className="flex items-start gap-2"><span className="text-emerald-400">&#x2713;</span>Service history & medications</li>
+                  </ul>
+                </div>
+                <div>
+                  <p className="font-medium text-foreground mb-1.5">Syncs when signed in</p>
+                  <ul className="space-y-1 text-muted-foreground">
+                    <li className="flex items-start gap-2"><span className="text-gold">&#x21C4;</span>Premium entitlement</li>
+                    <li className="flex items-start gap-2"><span className="text-gold">&#x21C4;</span>Account profile (email)</li>
+                  </ul>
+                </div>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Close</AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Vault Passcode — Phase 1D */}
       <VaultPasscode />
 
-      {/* Subscription */}
+      {/* Subscription — Phase 1A (compact banner) */}
       <SubscriptionCard />
 
-      {/* Profile Section */}
+      {/* Profile Section — Phase 1B */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -334,7 +392,7 @@ export default function Settings() {
                 id="firstName"
                 value={profileForm.firstName}
                 onChange={(e) => setProfileForm(prev => ({ ...prev, firstName: e.target.value }))}
-                placeholder="First name"
+                placeholder="First Name"
               />
             </div>
             <div className="space-y-1.5">
@@ -343,14 +401,14 @@ export default function Settings() {
                 id="lastName"
                 value={profileForm.lastName}
                 onChange={(e) => setProfileForm(prev => ({ ...prev, lastName: e.target.value }))}
-                placeholder="Last name"
+                placeholder="Last Name"
               />
             </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Service History */}
+      {/* Service History — Phase 1B + 1C */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -404,8 +462,11 @@ export default function Settings() {
                     id={`mos-${period.id}`}
                     value={period.mos}
                     onChange={(e) => handleUpdateServicePeriod(period.id, 'mos', e.target.value)}
-                    placeholder="e.g., 11B"
+                    placeholder="e.g., 11B, 3E7X1"
                   />
+                  <p className="text-[11px] text-muted-foreground">
+                    Army: MOS (e.g., 11B) · Navy: Rating (e.g., HM) · Air Force: AFSC (e.g., 3E7X1)
+                  </p>
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor={`jobTitle-${period.id}`}>Job Title</Label>
@@ -420,7 +481,10 @@ export default function Settings() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1.5">
-                  <Label htmlFor={`startDate-${period.id}`}>Start Date</Label>
+                  <Label htmlFor={`startDate-${period.id}`} className="flex items-center gap-1.5">
+                    <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
+                    Start Date
+                  </Label>
                   <Input
                     id={`startDate-${period.id}`}
                     type="date"
@@ -429,13 +493,19 @@ export default function Settings() {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor={`endDate-${period.id}`}>End Date</Label>
+                  <Label htmlFor={`endDate-${period.id}`} className="flex items-center gap-1.5">
+                    <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
+                    End Date
+                  </Label>
                   <Input
                     id={`endDate-${period.id}`}
                     type="date"
                     value={period.endDate}
                     onChange={(e) => handleUpdateServicePeriod(period.id, 'endDate', e.target.value)}
                   />
+                  {period.startDate && period.endDate && period.endDate < period.startDate && (
+                    <p className="text-[11px] text-destructive">End Date cannot be before Start Date.</p>
+                  )}
                 </div>
               </div>
 
@@ -462,7 +532,7 @@ export default function Settings() {
         </CardContent>
       </Card>
 
-      {/* Separation Date & Intent to File */}
+      {/* Separation Date & Intent to File — Phase 1H */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -473,7 +543,10 @@ export default function Settings() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="separationDate">Separation Date (ETS/DOS)</Label>
+            <Label htmlFor="separationDate" className="flex items-center gap-1.5">
+              <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
+              Separation Date (ETS/DOS)
+            </Label>
             <Input
               id="separationDate"
               type="date"
@@ -481,25 +554,23 @@ export default function Settings() {
               onChange={(e) => setProfileForm(prev => ({ ...prev, separationDate: e.target.value }))}
             />
             <p className="text-xs text-muted-foreground">
-              Used to calculate your BDD filing window. Leave blank if you are already separated.
-              Auto-saved when changed.
+              {CLAIM_DATES_COPY.etsDefinition} Used to calculate your BDD filing window. Leave blank if already separated. {CLAIM_DATES_COPY.autoSaveLabel}
             </p>
           </div>
           <div className="flex gap-2">
             <Link to="/prep/bdd-guide" className="flex-1">
               <Button variant="outline" className="w-full text-sm">
-                BDD Guide
+                <BookOpen className="h-4 w-4 mr-1.5" />
+                Learn: BDD Guide
               </Button>
             </Link>
             <Link to="/settings/itf" className="flex-1">
               <Button variant="outline" className="w-full text-sm">
-                Intent to File
+                <Info className="h-4 w-4 mr-1.5" />
+                Learn: Intent to File
               </Button>
             </Link>
           </div>
-          <p className="text-xs text-muted-foreground">
-            Separation date is saved when you click &quot;Save Profile&quot; above.
-          </p>
         </CardContent>
       </Card>
 
@@ -529,7 +600,7 @@ export default function Settings() {
         </CardContent>
       </Card>
 
-      {/* Notifications */}
+      {/* Notifications — Phase 1E */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -547,7 +618,7 @@ export default function Settings() {
                 <span className="text-sm font-medium">Notifications are blocked</span>
               </div>
               <p className="text-xs text-muted-foreground mt-1">
-                Enable notifications in your browser settings to receive reminders.
+                {platformCopy.denied}
               </p>
             </div>
           )}
@@ -555,7 +626,7 @@ export default function Settings() {
           {notificationPermission === 'default' && (
             <div className="p-3 rounded-lg bg-muted border border-border">
               <p className="text-sm text-muted-foreground mb-3">
-                Enable browser notifications to receive symptom logging reminders.
+                {platformCopy.enable}
               </p>
               <Button onClick={requestNotificationPermission} size="sm">
                 Enable Notifications
@@ -568,7 +639,9 @@ export default function Settings() {
             <div className="space-y-0.5 min-w-0 flex-1">
               <Label htmlFor="reminders" className="text-base">Enable Reminders</Label>
               <p className="text-sm text-muted-foreground">
-                Receive notifications to log symptoms
+                {reminderSettings.enabled
+                  ? 'Receiving notifications to log symptoms'
+                  : NOTIFICATION_COPY.disabledHelper}
               </p>
             </div>
             <Switch
@@ -584,12 +657,12 @@ export default function Settings() {
             <Label htmlFor="reminder-frequency">Reminder Frequency</Label>
             <Select
               value={reminderSettings.frequency}
-              onValueChange={(value: 'daily' | 'weekly') => 
+              onValueChange={(value: 'daily' | 'weekly') =>
                 setReminderSettings(prev => ({ ...prev, frequency: value }))
               }
               disabled={!reminderSettings.enabled}
             >
-              <SelectTrigger className="w-full" id="reminder-frequency" aria-label="Reminder frequency">
+              <SelectTrigger className={`w-full ${!reminderSettings.enabled ? 'opacity-50' : ''}`} id="reminder-frequency" aria-label="Reminder frequency">
                 <SelectValue placeholder="Select frequency" />
               </SelectTrigger>
               <SelectContent>
@@ -607,12 +680,12 @@ export default function Settings() {
             </Label>
             <Select
               value={reminderSettings.time}
-              onValueChange={(value) => 
+              onValueChange={(value) =>
                 setReminderSettings(prev => ({ ...prev, time: value }))
               }
               disabled={!reminderSettings.enabled}
             >
-              <SelectTrigger className="w-full" aria-label="Reminder time">
+              <SelectTrigger className={`w-full ${!reminderSettings.enabled ? 'opacity-50' : ''}`} aria-label="Reminder time">
                 <SelectValue placeholder="Select time" />
               </SelectTrigger>
               <SelectContent>
@@ -630,8 +703,8 @@ export default function Settings() {
 
           {/* Test Button */}
           {notificationPermission === 'granted' && (
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={testNotification}
               className="w-full"
             >
@@ -641,23 +714,64 @@ export default function Settings() {
         </CardContent>
       </Card>
 
-      {/* Export & Share */}
+      {/* Export & Share — Phase 1F */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <FileDown className="h-5 w-5" />
             Export & Share
           </CardTitle>
-          <CardDescription>Share your evidence with your VSO or export as PDF</CardDescription>
+          <CardDescription>Export your evidence as PDF or share with your VSO</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          <ShareWithVSO />
+          <div className="p-3 rounded-lg bg-gold/5 border border-gold/20">
+            <p className="text-xs text-muted-foreground">
+              <AlertTriangle className="h-3 w-3 inline mr-1 text-gold" />
+              Exported PDFs may contain sensitive health information. Review before sharing.
+            </p>
+          </div>
           <ExportButton />
+          <ShareWithVSO />
         </CardContent>
       </Card>
 
-      {/* Data Backup */}
+      {/* Data Backup — Phase 1F */}
       <DataBackup />
+
+      {/* Data Privacy — Phase 1G */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Shield className="h-5 w-5" />
+            Data Privacy
+          </CardTitle>
+          <CardDescription>How your data is handled</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-sm text-muted-foreground">
+            <strong className="text-foreground">Local Storage:</strong>{' '}
+            {DATA_PRIVACY_COPY.whatStaysLocal}
+            {profile.vaultPasscodeSet ? ' Data is encrypted with your vault passcode.' : ' Enable a vault passcode for additional encryption.'}
+          </p>
+          <p className="text-sm text-muted-foreground">
+            <strong className="text-foreground">AI Features:</strong>{' '}
+            {AI_COPY.scopeStatement}{' '}
+            {AI_COPY.localVsCloud}
+          </p>
+          <p className="text-sm text-muted-foreground">
+            <strong className="text-foreground">Cloud Sync:</strong>{' '}
+            {DATA_PRIVACY_COPY.whatSyncs} See our{' '}
+            <Link to="/settings/privacy" className="text-gold underline">Privacy Policy</Link> and{' '}
+            <Link to="/settings/terms" className="text-gold underline">Terms of Service</Link> for full details.
+          </p>
+          <p className="text-sm text-muted-foreground">
+            {DATA_PRIVACY_COPY.exportWarning}
+          </p>
+          <p className="text-sm font-medium text-muted-foreground">
+            {DATA_PRIVACY_COPY.noTracking}
+          </p>
+        </CardContent>
+      </Card>
 
       {/* Legal Section */}
       <Card>
@@ -675,7 +789,10 @@ export default function Settings() {
           >
             <div className="flex items-center gap-3">
               <Shield className="h-5 w-5 text-primary" />
-              <span className="font-medium text-foreground">Privacy Policy</span>
+              <div>
+                <span className="font-medium text-foreground">Privacy Policy</span>
+                <p className="text-[11px] text-muted-foreground">v{LEGAL_VERSIONS.privacy.version} · {formatLegalDate(LEGAL_VERSIONS.privacy.effectiveDate)}</p>
+              </div>
             </div>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </Link>
@@ -686,7 +803,10 @@ export default function Settings() {
           >
             <div className="flex items-center gap-3">
               <FileText className="h-5 w-5 text-primary" />
-              <span className="font-medium text-foreground">Terms of Service</span>
+              <div>
+                <span className="font-medium text-foreground">Terms of Service</span>
+                <p className="text-[11px] text-muted-foreground">v{LEGAL_VERSIONS.terms.version} · {formatLegalDate(LEGAL_VERSIONS.terms.effectiveDate)}</p>
+              </div>
             </div>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </Link>
@@ -697,21 +817,24 @@ export default function Settings() {
           >
             <div className="flex items-center gap-3">
               <AlertTriangle className="h-5 w-5 text-warning" />
-              <span className="font-medium text-foreground">Disclaimer</span>
+              <div>
+                <span className="font-medium text-foreground">Disclaimer</span>
+                <p className="text-[11px] text-muted-foreground">v{LEGAL_VERSIONS.disclaimer.version} · {formatLegalDate(LEGAL_VERSIONS.disclaimer.effectiveDate)}</p>
+              </div>
             </div>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </Link>
         </CardContent>
       </Card>
 
-      {/* More Pages */}
+      {/* More Pages — Phase 1I */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Info className="h-5 w-5" />
             More
           </CardTitle>
-          <CardDescription>Additional resources and account management</CardDescription>
+          <CardDescription>Additional resources</CardDescription>
         </CardHeader>
         <CardContent className="space-y-2">
           <Link
@@ -721,28 +844,6 @@ export default function Settings() {
             <div className="flex items-center gap-3">
               <Info className="h-5 w-5 text-primary" />
               <span className="font-medium text-foreground">About VCS</span>
-            </div>
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-          </Link>
-
-          <Link
-            to="/settings/export-data"
-            className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
-          >
-            <div className="flex items-center gap-3">
-              <FileDown className="h-5 w-5 text-primary" />
-              <span className="font-medium text-foreground">Export Data</span>
-            </div>
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-          </Link>
-
-          <Link
-            to="/settings/delete-account"
-            className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
-          >
-            <div className="flex items-center gap-3">
-              <Trash2 className="h-5 w-5 text-destructive" />
-              <span className="font-medium text-foreground">Delete Account</span>
             </div>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </Link>
@@ -771,25 +872,26 @@ export default function Settings() {
         </CardContent>
       </Card>
 
-      {/* Data Info */}
-      <Card>
+      {/* Danger Zone — Phase 1I (Delete Account separated) */}
+      <Card className="border-destructive/30">
         <CardHeader>
-          <CardTitle>Data Privacy</CardTitle>
-          <CardDescription>How your data is handled</CardDescription>
+          <CardTitle className="flex items-center gap-2 text-destructive">
+            <AlertTriangle className="h-5 w-5" />
+            Danger Zone
+          </CardTitle>
+          <CardDescription>Irreversible actions</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <p className="text-sm text-muted-foreground">
-            Your health data and claim information are stored locally on your device.{profile.vaultPasscodeSet ? ' Data is encrypted with your vault passcode.' : ' Enable a vault passcode for encryption.'} Some features use cloud services to function.
-          </p>
-          <p className="text-sm text-muted-foreground">
-            <strong className="text-foreground">AI Features:</strong> When you use AI-powered features, the specific information you choose to analyze is sent to third-party AI services for processing. This data is not permanently stored by these services but does leave your device during analysis. You control what gets analyzed.
-          </p>
-          <p className="text-sm text-muted-foreground">
-            <strong className="text-foreground">Cloud Sync:</strong> If you use account or sync features, some data may be transmitted to our cloud infrastructure. See our <Link to="/settings/privacy" className="text-gold underline">Privacy Policy</Link> and <Link to="/settings/terms" className="text-gold underline">Terms of Service</Link> for full details on what data is collected, how it is used, and your rights.
-          </p>
-          <p className="text-sm text-muted-foreground">
-            We are committed to minimizing data collection and giving you control over your information.
-          </p>
+        <CardContent className="space-y-2">
+          <Link
+            to="/settings/delete-account"
+            className="flex items-center justify-between p-3 rounded-lg bg-destructive/5 hover:bg-destructive/10 border border-destructive/20 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <Trash2 className="h-5 w-5 text-destructive" />
+              <span className="font-medium text-destructive">Delete Account & Data</span>
+            </div>
+            <ChevronRight className="h-4 w-4 text-destructive/60" />
+          </Link>
         </CardContent>
       </Card>
 

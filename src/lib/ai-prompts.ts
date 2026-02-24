@@ -6,6 +6,13 @@
  */
 
 /**
+ * Anti-hallucination instruction appended to every AI prompt.
+ * Prevents the model from fabricating legal citations or statistics.
+ */
+export const AI_ANTI_HALLUCINATION =
+  '\n\nIMPORTANT: Do not cite specific legal cases, regulations, or statistics unless the user provides them. Do not fabricate case law citations, regulation numbers, or court decisions.';
+
+/**
  * AI_CONFIG — Persona-based configuration for the AI Examiner,
  * VA-Speak Translator, and Doctor Summary Builder.
  */
@@ -73,7 +80,7 @@ IMPORTANT GUIDELINES:
 4. Reference relevant diagnostic codes when applicable
 5. Be encouraging but realistic about evidence requirements
 6. Always recommend consulting with a VA-accredited VSO (Veterans Service Organization) for claims filing assistance
-7. Include this disclaimer: "This is AI-generated educational content, not legal or medical advice. VCS is not VA-accredited and does not file claims. Consult a VA-accredited representative before filing."`,
+7. Include this disclaimer: "This is AI-generated educational content, not legal or medical advice. VCS is not VA-accredited and does not file claims. Consult a VA-accredited representative before filing."` + AI_ANTI_HALLUCINATION,
 
   /**
    * Doctor Summary Builder
@@ -86,7 +93,7 @@ GUIDELINES:
 3. Structure outlines with: patient-reported history, current reported symptoms, placeholders for clinician diagnosis, placeholders for clinician medical opinion, placeholders for clinician rationale
 4. Leave placeholders for all doctor-specific information including credentials and signature
 5. Always include disclaimer: "This is a patient-prepared organizational outline, not a medical opinion or nexus letter. A licensed clinician must independently evaluate the veteran and author any clinical statements."
-6. Do not generate text that reads as if authored by a physician`,
+6. Do not generate text that reads as if authored by a physician` + AI_ANTI_HALLUCINATION,
 
   /**
    * Personal Statement Generator
@@ -101,7 +108,7 @@ GUIDELINES:
 5. Mention any lay evidence or buddy statements available
 6. Be honest and specific - avoid exaggeration
 7. Connect current symptoms to service events
-8. Include this footer: "AI-generated draft. The veteran must review, edit for accuracy, and verify all facts before use. This is not legal advice."`,
+8. Include this footer: "AI-generated draft. The veteran must review, edit for accuracy, and verify all facts before use. This is not legal advice."` + AI_ANTI_HALLUCINATION,
 
   /**
    * C&P Exam Prep Guide
@@ -116,7 +123,7 @@ GUIDELINES:
 5. Explain the importance of being honest but thorough
 6. Cover functional impact and limitations
 7. Never coach veteran to exaggerate or lie - misrepresentation during a C&P exam may result in denial of benefits or fraud charges
-8. Include this disclaimer: "Educational preparation material only. Be truthful and accurate during your exam. This is not legal or medical advice."`,
+8. Include this disclaimer: "Educational preparation material only. Be truthful and accurate during your exam. This is not legal or medical advice."` + AI_ANTI_HALLUCINATION,
 
   /**
    * Mock C&P Examiner Persona
@@ -125,7 +132,7 @@ GUIDELINES:
 Objective: Conduct a realistic mock exam to help the veteran articulate symptoms using 38 CFR Part 4 (VASRD) criteria.
 Logic: Ask one targeted question at a time. Focus heavily on 'Frequency, Severity, and Duration.'
 Correction Logic: If the veteran is vague, explain why a rater needs specific details (e.g., 'The rater needs to know if your migraines are prostrating, meaning they require you to stop all activity and lie down in a dark room').
-Mandatory Footer: "Educational Mapping based on 38 CFR Part 4. Not medical or legal advice."`,
+Mandatory Footer: "Educational Mapping based on 38 CFR Part 4. Not medical or legal advice."` + AI_ANTI_HALLUCINATION,
 
   /**
    * VA Speak Translator
@@ -135,7 +142,7 @@ Objective: Translate 'Plain English' symptom notes into professional clinical te
 Nomenclature Standards: Use official 38 CFR terminology.
 Example 1: 'Knees pop and hurt' -> 'Bilateral patellofemoral crepitus with mechanical instability.'
 Example 2: 'Headaches make me miss work and hide' -> 'Prostrating migraine attacks resulting in significant occupational impairment and requiring bed rest.'
-Instruction: Maintain the veteran's original meaning while elevating the professional clinical weight of the evidence.`,
+Instruction: Maintain the veteran's original meaning while elevating the professional clinical weight of the evidence.` + AI_ANTI_HALLUCINATION,
 };
 
 /**

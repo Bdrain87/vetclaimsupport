@@ -5,8 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { PageContainer } from '@/components/PageContainer';
-
-const APP_VERSION = '1.0.0';
+import { CORE_DISCLAIMERS, ABOUT_COPY, LEGAL_VERSIONS, ADMIN_EMAIL } from '@/data/legalCopy';
 
 export default function AboutVCS() {
   const navigate = useNavigate();
@@ -30,15 +29,15 @@ export default function AboutVCS() {
         <div>
           <div className="flex items-center gap-3 flex-wrap">
             <h1 className="text-2xl font-bold text-foreground">About Vet Claim Support</h1>
-            <Badge variant="secondary">v{APP_VERSION}</Badge>
+            <Badge variant="secondary">v{LEGAL_VERSIONS.app}</Badge>
           </div>
           <p className="text-muted-foreground text-sm mt-1">
-            Helping veterans organize and prepare their VA disability claim evidence
+            {ABOUT_COPY.tagline}
           </p>
         </div>
       </div>
 
-      {/* Mission Statement */}
+      {/* Mission — 3 short blocks with subheads */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -46,24 +45,17 @@ export default function AboutVCS() {
             Our Mission
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            Vet Claim Support (VCS) was created with a single purpose: to help veterans
-            organize and prepare the evidence needed for their VA disability claims. We
-            believe that every veteran who served our country deserves access to the
-            benefits they earned, and that the claims process should not be a barrier to
-            receiving them.
-          </p>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            Filing a VA disability claim can be overwhelming. Between gathering medical
-            records, documenting symptoms, understanding rating criteria, and preparing
-            for C&P exams, there is a lot to keep track of. VCS provides a structured,
-            guided approach to help you stay organized and informed throughout the process.
-          </p>
+        <CardContent className="space-y-5">
+          {ABOUT_COPY.missionBlocks.map((block) => (
+            <div key={block.heading}>
+              <h3 className="text-sm font-semibold text-foreground mb-1">{block.heading}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{block.body}</p>
+            </div>
+          ))}
         </CardContent>
       </Card>
 
-      {/* What VCS Does */}
+      {/* What VCS Does — no "submit" or "file" verbs */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -74,33 +66,15 @@ export default function AboutVCS() {
         <CardContent className="space-y-3">
           <p className="text-sm text-muted-foreground leading-relaxed">
             VCS is an <strong className="text-foreground">educational and organizational tool</strong> designed
-            to assist veterans in preparing their VA disability claim evidence. The app helps you:
+            to assist veterans in preparing their VA disability claim evidence:
           </p>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li className="flex items-start gap-2">
-              <span className="text-emerald-400 mt-0.5 shrink-0">&#x2713;</span>
-              Track and document symptoms, medical visits, medications, and sleep patterns over time
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-emerald-400 mt-0.5 shrink-0">&#x2713;</span>
-              Organize your service history, exposures, and condition-specific evidence
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-emerald-400 mt-0.5 shrink-0">&#x2713;</span>
-              Learn about VA rating criteria, DBQ forms, and the claims process
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-emerald-400 mt-0.5 shrink-0">&#x2713;</span>
-              Prepare for C&P examinations with condition-specific guidance
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-emerald-400 mt-0.5 shrink-0">&#x2713;</span>
-              Generate exportable summaries to share with your VSO, attorney, or medical provider
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-emerald-400 mt-0.5 shrink-0">&#x2713;</span>
-              Identify potential secondary conditions related to your service-connected disabilities
-            </li>
+            {ABOUT_COPY.whatVCSDoes.map((item) => (
+              <li key={item} className="flex items-start gap-2">
+                <span className="text-emerald-400 mt-0.5 shrink-0">&#x2713;</span>
+                {item}
+              </li>
+            ))}
           </ul>
         </CardContent>
       </Card>
@@ -116,10 +90,7 @@ export default function AboutVCS() {
         <CardContent className="space-y-4">
           <div className="rounded-lg bg-destructive/10 border border-destructive/20 p-4">
             <p className="text-sm text-foreground font-medium leading-relaxed">
-              Vet Claim Support is an independent educational and organizational tool.
-              It does not file claims on your behalf, and using this app does not
-              establish any professional relationship. Always consult with a qualified
-              professional for advice specific to your situation.
+              {CORE_DISCLAIMERS.mainDisclaimer}
             </p>
           </div>
 
@@ -131,23 +102,21 @@ export default function AboutVCS() {
                 <span>
                   <strong className="text-foreground">Not VA-accredited.</strong> VCS is not a VA-accredited
                   claims agent, attorney, or Veterans Service Organization (VSO). We cannot
-                  represent you before the VA or file claims on your behalf.
+                  represent you before the VA.
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-red-400 mt-0.5 shrink-0">&#x2717;</span>
                 <span>
                   <strong className="text-foreground">Not legal advice.</strong> Nothing in this app
-                  constitutes legal advice. For legal guidance regarding your VA claim,
-                  consult a VA-accredited attorney or claims agent.
+                  constitutes legal advice.
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-red-400 mt-0.5 shrink-0">&#x2717;</span>
                 <span>
                   <strong className="text-foreground">Not medical advice.</strong> VCS does not diagnose
-                  conditions or recommend treatments. Information provided is educational
-                  only. Always consult your healthcare provider for medical decisions.
+                  conditions or recommend treatments.
                 </span>
               </li>
               <li className="flex items-start gap-2">
@@ -155,15 +124,13 @@ export default function AboutVCS() {
                 <span>
                   <strong className="text-foreground">Not affiliated with the VA.</strong> This app is not
                   affiliated with, endorsed by, or connected to the U.S. Department of
-                  Veterans Affairs or any government agency.
+                  Veterans Affairs.
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-red-400 mt-0.5 shrink-0">&#x2717;</span>
                 <span>
-                  <strong className="text-foreground">Not a guarantee of outcomes.</strong> Using this app
-                  does not guarantee any particular result for your VA disability claim.
-                  Claim decisions are made solely by the VA.
+                  <strong className="text-foreground">Not a guarantee of outcomes.</strong> {CORE_DISCLAIMERS.estimateDisclaimer}
                 </span>
               </li>
             </ul>
@@ -183,13 +150,11 @@ export default function AboutVCS() {
           <p className="text-sm text-muted-foreground leading-relaxed">
             Your privacy is fundamental to VCS. All personal data, including health
             information, service records, and symptom logs, is encrypted and stored
-            securely. We do not sell, share, or use your personal information for
+            locally on your device. We do not sell, share, or use your personal information for
             marketing or advertising.
           </p>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            No account is required to use VCS. No tracking cookies. No analytics on your
-            health data. You maintain full ownership and control of your information at
-            all times.
+            No tracking. No ads. No selling data.
           </p>
         </CardContent>
       </Card>
@@ -248,16 +213,14 @@ export default function AboutVCS() {
         </CardHeader>
         <CardContent className="space-y-3">
           <p className="text-sm text-muted-foreground leading-relaxed">
-            If you encounter a bug, have a feature request, or need help using VCS,
-            please visit our GitHub Issues page. We actively monitor and respond to
-            community feedback.
+            If you encounter a bug, have a feature request, or need help, contact us.
           </p>
           <Button
             variant="outline"
             className="w-full sm:w-auto"
             asChild
           >
-            <a href="mailto:support@vetclaimsupport.com">
+            <a href={`mailto:${ADMIN_EMAIL}`}>
               <ExternalLink className="h-4 w-4 mr-2" />
               Contact Support
             </a>
@@ -275,8 +238,7 @@ export default function AboutVCS() {
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground leading-relaxed">
-            VCS is built with care for the veteran community. We are grateful to
-            everyone who has contributed to making this tool better.
+            VCS is built with care for the veteran community.
           </p>
 
           <Separator />
@@ -285,25 +247,15 @@ export default function AboutVCS() {
             <div>
               <h3 className="text-sm font-semibold text-foreground">Open Source Technologies</h3>
               <p className="text-xs text-muted-foreground mt-1">
-                Built with React, TypeScript, TailwindCSS, and other open source libraries
-                that make modern web development possible.
+                Built with React, TypeScript, TailwindCSS, and other open source libraries.
               </p>
             </div>
 
             <div>
               <h3 className="text-sm font-semibold text-foreground">VA Public Data</h3>
               <p className="text-xs text-muted-foreground mt-1">
-                Rating criteria, DBQ references, and claims process information are derived
-                from publicly available VA resources including 38 CFR (Code of Federal
-                Regulations) and official VA publications.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-sm font-semibold text-foreground">Veteran Community</h3>
-              <p className="text-xs text-muted-foreground mt-1">
-                Thank you to the veterans, VSOs, and advocates who have provided feedback,
-                reported issues, and helped shape VCS into a more useful tool.
+                Rating criteria and claims process information are derived
+                from publicly available VA resources including 38 CFR and official VA publications.
               </p>
             </div>
           </div>
@@ -311,7 +263,7 @@ export default function AboutVCS() {
           <Separator />
 
           <p className="text-xs text-muted-foreground text-center">
-            Vet Claim Support v{APP_VERSION}
+            Vet Claim Support v{LEGAL_VERSIONS.app}
           </p>
         </CardContent>
       </Card>

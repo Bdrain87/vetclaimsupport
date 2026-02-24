@@ -1,20 +1,34 @@
 import { useState } from 'react';
-import { Crown, Award } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Crown, Award, RefreshCw } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useProfileStore } from '@/store/useProfileStore';
 import { supabase } from '@/lib/supabase';
-import { startCheckout } from '@/services/entitlements';
+import { startCheckout, refreshEntitlementFromServer } from '@/services/entitlements';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { isNativeApp } from '@/lib/platform';
+import { PREMIUM_COPY } from '@/data/legalCopy';
 
 export function SubscriptionCard() {
   const entitlement = useProfileStore((s) => s.entitlement);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [restoring, setRestoring] = useState(false);
   const { toast } = useToast();
 
+  const isPremium = entitlement === 'premium' || entitlement === 'lifetime';
+
   const handleUpgrade = async () => {
+    if (isNativeApp) {
+      // On iOS, purchases go through StoreKit (not yet implemented)
+      toast({
+        title: 'Coming Soon',
+        description: 'In-app purchases will be available in a future update.',
+      });
+      return;
+    }
+
     setLoading(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
@@ -37,39 +51,96 @@ export function SubscriptionCard() {
     }
   };
 
+  const handleRestore = async () => {
+    setRestoring(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast({
+          title: 'Sign In Required',
+          description: 'Sign in to restore your premium access.',
+          variant: 'destructive',
+        });
+        return;
+      }
+      const status = await refreshEntitlementFromServer();
+      if (status === 'premium' || status === 'lifetime') {
+        toast({ title: 'Premium Restored', description: 'Welcome back! Premium access is active.' });
+      } else {
+        toast({
+          title: 'No Purchase Found',
+          description: 'No premium purchase was found for this account.',
+          variant: 'destructive',
+        });
+      }
+    } catch {
+      toast({
+        title: 'Restore Failed',
+        description: 'Could not check your purchase status. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setRestoring(false);
+    }
+  };
+
+  if (isPremium) {
+    return (
+      <Card>
+        <CardContent className="flex items-center gap-3 py-4">
+          <div className="p-2 rounded-lg bg-primary/10">
+            <Award className="h-5 w-5 text-primary" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-foreground">{PREMIUM_COPY.activeLabel}</p>
+            <p className="text-xs text-muted-foreground">Full access to all features</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Crown className="h-5 w-5" />
-          Premium Access
-        </CardTitle>
-        <CardDescription>
-          {entitlement === 'preview' && 'One-time purchase, yours forever'}
-          {entitlement === 'premium' && 'You have full access to all premium features'}
-          {entitlement === 'lifetime' && 'You have lifetime access to all features'}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {entitlement === 'preview' && (
-          <Button onClick={handleUpgrade} disabled={loading} className="w-full">
-            {loading ? 'Redirecting...' : 'Get Premium — $9.99 One-Time'}
+      <CardContent className="py-4 space-y-3">
+        <div className="flex items-start gap-3">
+          <div className="p-2 rounded-lg bg-gold/10 shrink-0">
+            <Crown className="h-5 w-5 text-gold" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-foreground">Premium Access</p>
+            <p className="text-xs text-muted-foreground">{PREMIUM_COPY.subtext}</p>
+          </div>
+        </div>
+
+        <div className="text-xs text-muted-foreground">
+          {PREMIUM_COPY.priceDisplay}
+        </div>
+
+        {!isNativeApp && (
+          <Button onClick={handleUpgrade} disabled={loading} className="w-full" size="sm">
+            {loading ? 'Redirecting...' : PREMIUM_COPY.ctaLabel}
           </Button>
         )}
 
-        {entitlement === 'premium' && (
-          <div className="flex items-center gap-2 p-3 rounded-lg bg-primary/10 border border-primary/20">
-            <Award className="h-5 w-5 text-primary" />
-            <span className="text-sm font-medium text-foreground">Premium Access — Yours Forever</span>
-          </div>
+        {isNativeApp && (
+          <Button onClick={handleUpgrade} disabled={loading} className="w-full" size="sm">
+            {loading ? 'Loading...' : PREMIUM_COPY.ctaLabel}
+          </Button>
         )}
 
-        {entitlement === 'lifetime' && (
-          <div className="flex items-center gap-2 p-3 rounded-lg bg-primary/10 border border-primary/20">
-            <Award className="h-5 w-5 text-primary" />
-            <span className="text-sm font-medium text-foreground">Lifetime Access</span>
-          </div>
-        )}
+        <p className="text-[11px] text-muted-foreground/70 text-center">
+          {PREMIUM_COPY.accountNote}
+        </p>
+
+        <button
+          onClick={handleRestore}
+          disabled={restoring}
+          className="flex items-center justify-center gap-1.5 text-xs text-gold hover:text-gold/80 transition-colors w-full"
+        >
+          <RefreshCw className={`h-3 w-3 ${restoring ? 'animate-spin' : ''}`} />
+          {restoring ? 'Checking...' : isNativeApp ? PREMIUM_COPY.restorePurchasesLabel : PREMIUM_COPY.restorePremiumLabel}
+        </button>
       </CardContent>
     </Card>
   );

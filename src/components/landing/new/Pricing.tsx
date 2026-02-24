@@ -429,7 +429,7 @@ export function Pricing() {
                     >
                       $9.99<span className="text-base font-normal" style={{ WebkitTextFillColor: '#9CA3AF' }}> one-time</span>
                     </span>
-                    <p className="text-xs mt-1" style={{ color: '#9CA3AF' }}>Pay once, yours forever</p>
+                    <p className="text-xs mt-1" style={{ color: '#9CA3AF' }}>One-time purchase (intro price). No subscription.</p>
                   </div>
                 </div>
                 <Link

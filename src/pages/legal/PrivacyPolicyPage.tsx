@@ -1,6 +1,7 @@
-import { Shield, ChevronLeft } from 'lucide-react';
+import { Shield, ChevronLeft, Mail } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { PageContainer } from '@/components/PageContainer';
+import { LEGAL_VERSIONS, formatLegalDate, ADMIN_EMAIL } from '@/data/legalCopy';
 
 export default function PrivacyPolicyPage() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function PrivacyPolicyPage() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Privacy Policy</h1>
-          <p className="text-muted-foreground/70 text-sm mt-1">Vet Claim Support &mdash; Version 1.2 &mdash; Effective February 19, 2026</p>
+          <p className="text-muted-foreground/70 text-sm mt-1">Vet Claim Support &mdash; Version {LEGAL_VERSIONS.privacy.version} &mdash; Effective {formatLegalDate(LEGAL_VERSIONS.privacy.effectiveDate)}</p>
         </div>
       </div>
 
@@ -156,7 +157,7 @@ export default function PrivacyPolicyPage() {
           </ul>
           <p className="text-muted-foreground">
             To exercise these rights, use the Settings page or contact{' '}
-            <a href="mailto:Admin@vetclaimsupport.com" className="text-gold hover:underline">Admin@vetclaimsupport.com</a>.
+            <a href={`mailto:${ADMIN_EMAIL}`} className="text-gold hover:underline">{ADMIN_EMAIL}</a>.
           </p>
         </section>
 
@@ -165,7 +166,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-lg font-semibold text-foreground">8. Privacy Rights</h2>
           <p className="text-muted-foreground">
             We strive to honor privacy rights under applicable laws. If you are a California resident, you have the right under the California Consumer Privacy Act (CCPA) to request disclosure of the categories and specific pieces of personal information we collect, to request deletion of your personal information, and to opt out of any sale of personal information. We do not sell your personal information. You may exercise your privacy rights (access, deletion, portability) by using the Settings page or contacting{' '}
-            <a href="mailto:Admin@vetclaimsupport.com" className="text-gold hover:underline">Admin@vetclaimsupport.com</a>.
+            <a href={`mailto:${ADMIN_EMAIL}`} className="text-gold hover:underline">{ADMIN_EMAIL}</a>.
           </p>
         </section>
 
@@ -219,7 +220,7 @@ export default function PrivacyPolicyPage() {
           </ul>
           <p className="text-muted-foreground">
             To report a suspected security incident, contact{' '}
-            <a href="mailto:Admin@vetclaimsupport.com" className="text-gold hover:underline">Admin@vetclaimsupport.com</a>.
+            <a href={`mailto:${ADMIN_EMAIL}`} className="text-gold hover:underline">{ADMIN_EMAIL}</a>.
           </p>
         </section>
 
@@ -244,11 +245,22 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-lg font-semibold text-foreground">15. Contact</h2>
           <p className="text-muted-foreground">
             Privacy questions:{' '}
-            <a href="mailto:Admin@vetclaimsupport.com" className="text-gold hover:underline">
-              Admin@vetclaimsupport.com
+            <a href={`mailto:${ADMIN_EMAIL}`} className="text-gold hover:underline">
+              {ADMIN_EMAIL}
             </a>
           </p>
         </section>
+
+        {/* Last Updated */}
+        <div className="space-y-3 pt-4 border-t border-border">
+          <p className="text-muted-foreground/70 text-xs">
+            Last updated: {formatLegalDate(LEGAL_VERSIONS.privacy.effectiveDate)}
+          </p>
+          <p className="text-muted-foreground/70 text-xs flex items-center gap-1">
+            <Mail className="h-3 w-3" />
+            For legal requests: <a href={`mailto:${ADMIN_EMAIL}`} className="text-gold hover:underline">{ADMIN_EMAIL}</a>
+          </p>
+        </div>
       </div>
     </PageContainer>
   );
