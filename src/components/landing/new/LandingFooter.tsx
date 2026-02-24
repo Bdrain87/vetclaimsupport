@@ -52,7 +52,7 @@ export function LandingFooter() {
                   {link.href ? (
                     <button
                       onClick={() => scrollTo(link.href)}
-                      className="bg-transparent border-none cursor-pointer text-sm hover:text-gold transition-colors p-0"
+                      className="bg-transparent border-none cursor-pointer text-sm hover:text-white transition-colors p-0"
                       style={{ color: '#9CA3AF' }}
                     >
                       {link.label}
@@ -60,7 +60,7 @@ export function LandingFooter() {
                   ) : (
                     <Link
                       to={link.to}
-                      className="text-sm no-underline hover:text-gold transition-colors"
+                      className="text-sm no-underline hover:text-white transition-colors"
                       style={{ color: '#9CA3AF' }}
                     >
                       {link.label}
@@ -82,7 +82,7 @@ export function LandingFooter() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm no-underline hover:text-gold transition-colors"
+                      className="text-sm no-underline hover:text-white transition-colors"
                       style={{ color: '#9CA3AF' }}
                     >
                       {link.label}
@@ -90,7 +90,7 @@ export function LandingFooter() {
                   ) : link.to ? (
                     <Link
                       to={link.to}
-                      className="text-sm no-underline hover:text-gold transition-colors"
+                      className="text-sm no-underline hover:text-white transition-colors"
                       style={{ color: '#9CA3AF' }}
                     >
                       {link.label}
@@ -109,7 +109,7 @@ export function LandingFooter() {
                 <li key={link.label}>
                   <Link
                     to={link.to}
-                    className="text-sm no-underline hover:text-gold transition-colors"
+                    className="text-sm no-underline hover:text-white transition-colors"
                     style={{ color: '#9CA3AF' }}
                   >
                     {link.label}
@@ -120,7 +120,7 @@ export function LandingFooter() {
           </div>
         </div>
 
-        {/* Bottom */}
+        {/* Bottom bar */}
         <div
           className="border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-3"
           style={{ borderColor: '#374151' }}
@@ -133,15 +133,27 @@ export function LandingFooter() {
           </p>
         </div>
 
-        {/* Legal disclaimer — required */}
+        {/* Consolidated legal disclaimer — single instance */}
         <p className="text-xs mt-6 text-center leading-relaxed" style={{ color: '#4B5563' }}>
-          Vet Claim Support is an educational and organizational tool and is NOT affiliated with,
-          endorsed by, or connected to the U.S. Department of Veterans Affairs or any government agency.
-          VCS is NOT a VA-accredited representative, attorney, claims agent, or Veterans Service Organization (VSO).
-          VCS does NOT provide legal advice, medical advice, or professional claims filing services.
-          VCS does NOT file claims on your behalf and does NOT guarantee any claim outcomes.
-          AI-generated content may contain errors and must be independently verified.
-          Free VA-accredited Veterans Service Organizations (VSOs) are available at va.gov/vso to help with claims filing.
+          Vet Claim Support is an educational and organizational tool designed to help veterans prepare and organize
+          information related to VA disability claims. VCS is <strong>NOT</strong> affiliated with, endorsed by, or
+          connected to the U.S. Department of Veterans Affairs or any government agency. VCS is <strong>NOT</strong> a
+          VA-accredited representative, attorney, claims agent, or Veterans Service Organization (VSO). VCS does{' '}
+          <strong>NOT</strong> provide legal advice, medical advice, or professional claims representation. VCS does{' '}
+          <strong>NOT</strong> file claims on your behalf and does <strong>NOT</strong> guarantee any claim outcomes.
+          Pricing shown reflects typical industry ranges based on publicly available information. AI-generated content
+          may contain errors and must be independently verified before use. Free VA-accredited Veterans Service
+          Organizations (VSOs) are available at{' '}
+          <a
+            href="https://www.va.gov/vso"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+            style={{ color: '#6B7280' }}
+          >
+            va.gov/vso
+          </a>{' '}
+          to help with claims filing.
         </p>
       </div>
     </footer>

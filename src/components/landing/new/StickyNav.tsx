@@ -10,6 +10,26 @@ const NAV_LINKS = [
   { label: 'Sign In', href: '/auth', isRoute: true },
 ];
 
+function AppStoreBadge() {
+  return (
+    <a
+      href="https://apps.apple.com/us/app/vet-claim-support/id6744254580"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center"
+    >
+      <svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
+        <rect width="120" height="40" rx="6" fill="#000" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+        <g fill="#fff">
+          <path d="M24.769 20.3a4.949 4.949 0 0 1 2.356-4.152 5.066 5.066 0 0 0-3.99-2.158c-1.68-.176-3.308 1.005-4.164 1.005-.872 0-2.19-.988-3.608-.958a5.315 5.315 0 0 0-4.473 2.728c-1.934 3.348-.491 8.269 1.361 10.976.927 1.325 2.01 2.805 3.428 2.753 1.387-.058 1.905-.885 3.58-.885 1.658 0 2.144.885 3.59.852 1.489-.025 2.426-1.332 3.32-2.669a10.962 10.962 0 0 0 1.52-3.092 4.782 4.782 0 0 1-2.92-4.4zM22.037 12.21a4.872 4.872 0 0 0 1.115-3.49 4.957 4.957 0 0 0-3.208 1.66 4.636 4.636 0 0 0-1.144 3.36 4.1 4.1 0 0 0 3.237-1.53z" />
+          <text x="38" y="15" fontSize="8" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="400" fill="rgba(255,255,255,0.8)" letterSpacing="0.03em">Download on the</text>
+          <text x="38" y="28" fontSize="14" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="600" letterSpacing="-0.01em">App Store</text>
+        </g>
+      </svg>
+    </a>
+  );
+}
+
 export function StickyNav() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -30,11 +50,11 @@ export function StickyNav() {
   return (
     <>
       <motion.nav
-        className="fixed top-0 left-0 right-0 z-50 transition-colors duration-300"
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
         style={{
           backgroundColor: scrolled ? 'rgba(10,10,10,0.8)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(20px)' : 'none',
-          WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
+          backdropFilter: scrolled ? 'blur(20px) saturate(180%)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(20px) saturate(180%)' : 'none',
           borderBottom: scrolled ? '1px solid rgba(255,255,255,0.06)' : '1px solid transparent',
         }}
       >
@@ -51,13 +71,13 @@ export function StickyNav() {
           </button>
 
           {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6">
             {NAV_LINKS.map((link) => (
               'isRoute' in link && link.isRoute ? (
                 <Link
                   key={link.href}
                   to={link.href}
-                  className="text-white/80 hover:text-gold transition-colors text-sm font-medium no-underline"
+                  className="text-white/80 hover:text-white transition-colors text-sm font-medium no-underline"
                 >
                   {link.label}
                 </Link>
@@ -65,15 +85,18 @@ export function StickyNav() {
                 <button
                   key={link.href}
                   onClick={() => scrollTo(link.href)}
-                  className="bg-transparent border-none text-white/80 hover:text-gold transition-colors text-sm font-medium cursor-pointer"
+                  className="bg-transparent border-none text-white/80 hover:text-white transition-colors text-sm font-medium cursor-pointer"
                 >
                   {link.label}
                 </button>
               )
             ))}
+            <div className="hidden lg:block">
+              <AppStoreBadge />
+            </div>
             <Link
               to="/auth"
-              className="rounded-full px-6 py-2 text-sm font-semibold text-black no-underline"
+              className="rounded-full px-5 py-2 text-sm font-semibold text-black no-underline transition-shadow hover:shadow-[0_0_20px_rgba(236,196,64,0.3)]"
               style={{
                 background:
                   'linear-gradient(90deg, #C8A020 0%, #ECC440 20%, #FFE566 50%, #ECC440 80%, #C8A020 100%)',
@@ -110,7 +133,7 @@ export function StickyNav() {
                   key={link.href}
                   to={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="text-white text-2xl font-medium hover:text-gold transition-colors no-underline"
+                  className="text-white text-2xl font-medium hover:text-white/80 transition-colors no-underline"
                 >
                   {link.label}
                 </Link>
@@ -118,7 +141,7 @@ export function StickyNav() {
                 <button
                   key={link.href}
                   onClick={() => scrollTo(link.href)}
-                  className="bg-transparent border-none text-white text-2xl font-medium cursor-pointer hover:text-gold transition-colors"
+                  className="bg-transparent border-none text-white text-2xl font-medium cursor-pointer hover:text-white/80 transition-colors"
                 >
                   {link.label}
                 </button>
@@ -135,6 +158,9 @@ export function StickyNav() {
             >
               Launch App
             </Link>
+            <div className="mt-2">
+              <AppStoreBadge />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
