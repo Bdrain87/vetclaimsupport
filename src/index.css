@@ -45,8 +45,8 @@ body {
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); }
-::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.2); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(212, 175, 55, 0.4); }
+::-webkit-scrollbar-thumb { background: rgba(240, 200, 64, 0.25); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(240, 200, 64, 0.45); }
 
 /* Vet Claim Support - Premium Dark Mode Design System */
 
@@ -63,9 +63,9 @@ body {
     --popover: 0 0% 11%;
     --popover-foreground: 0 0% 98%;
 
-    /* Primary Gold */
-    --primary: 43 63% 54%;
-    --primary-foreground: 0 0% 100%;
+    /* Primary Gold — bright metallic */
+    --primary: 47 82% 59%;
+    --primary-foreground: 0 0% 0%;
 
     /* Secondary — charcoal surface */
     --secondary: 0 0% 13%;
@@ -74,8 +74,8 @@ body {
     --muted: 0 0% 16%;
     --muted-foreground: 0 0% 55%;
 
-    --accent: 43 63% 54%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 47 82% 59%;
+    --accent-foreground: 0 0% 0%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
@@ -89,19 +89,19 @@ body {
 
     --border: 0 0% 18%;
     --input: 0 0% 13%;
-    --ring: 43 63% 54%;
+    --ring: 47 82% 59%;
 
     --radius: 1rem;
 
     /* Sidebar — slightly off-black */
     --sidebar-background: 0 0% 3%;
     --sidebar-foreground: 0 0% 55%;
-    --sidebar-primary: 43 63% 54%;
-    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-primary: 47 82% 59%;
+    --sidebar-primary-foreground: 0 0% 0%;
     --sidebar-accent: 0 0% 11%;
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 0 0% 14%;
-    --sidebar-ring: 43 63% 54%;
+    --sidebar-ring: 47 82% 59%;
     --sidebar-muted: 0 0% 45%;
 
     /* Section colors */
@@ -126,14 +126,14 @@ body {
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 11%;
     --popover-foreground: 0 0% 98%;
-    --primary: 43 63% 54%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 47 82% 59%;
+    --primary-foreground: 0 0% 0%;
     --secondary: 0 0% 13%;
     --secondary-foreground: 0 0% 85%;
     --muted: 0 0% 16%;
     --muted-foreground: 0 0% 55%;
-    --accent: 43 63% 54%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 47 82% 59%;
+    --accent-foreground: 0 0% 0%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     --warning: 38 92% 50%;
@@ -142,15 +142,15 @@ body {
     --success-foreground: 0 0% 100%;
     --border: 0 0% 18%;
     --input: 0 0% 13%;
-    --ring: 43 63% 54%;
+    --ring: 47 82% 59%;
     --sidebar-background: 0 0% 3%;
     --sidebar-foreground: 0 0% 55%;
-    --sidebar-primary: 43 63% 54%;
-    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-primary: 47 82% 59%;
+    --sidebar-primary-foreground: 0 0% 0%;
     --sidebar-accent: 0 0% 11%;
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 0 0% 14%;
-    --sidebar-ring: 43 63% 54%;
+    --sidebar-ring: 47 82% 59%;
   }
 
   /* Light mode - Clean & Professional */
@@ -161,14 +161,14 @@ body {
     --card-foreground: 0 0% 10%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 10%;
-    --primary: 43 55% 42%;
-    --primary-foreground: 0 0% 10%;
+    --primary: 47 75% 42%;
+    --primary-foreground: 0 0% 100%;
     --secondary: 0 0% 96%;
     --secondary-foreground: 0 0% 25%;
     --muted: 0 0% 95%;
     --muted-foreground: 0 0% 45%;
-    --accent: 43 55% 42%;
-    --accent-foreground: 0 0% 10%;
+    --accent: 47 75% 42%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 55%;
     --destructive-foreground: 0 0% 100%;
     --warning: 38 92% 45%;
@@ -177,15 +177,15 @@ body {
     --success-foreground: 0 0% 100%;
     --border: 0 0% 88%;
     --input: 0 0% 92%;
-    --ring: 43 55% 42%;
+    --ring: 47 75% 42%;
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 0 0% 35%;
-    --sidebar-primary: 43 55% 42%;
-    --sidebar-primary-foreground: 0 0% 10%;
-    --sidebar-accent: 43 64% 95%;
-    --sidebar-accent-foreground: 43 64% 30%;
+    --sidebar-primary: 47 75% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 47 64% 95%;
+    --sidebar-accent-foreground: 47 64% 30%;
     --sidebar-border: 0 0% 92%;
-    --sidebar-ring: 43 55% 42%;
+    --sidebar-ring: 47 75% 42%;
     --sidebar-muted: 0 0% 55%;
     --glass-bg: 0 0% 100% / 0.8;
     --glass-border: 0 0% 88% / 0.6;
@@ -266,12 +266,31 @@ body {
     overflow: hidden !important;
   }
 
+  /* Date inputs — constrain native picker chrome */
+  input[type="date"],
+  input[type="datetime-local"],
+  input[type="time"] {
+    -webkit-min-logical-width: 0 !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    clip: auto;
+  }
+
   /* Force all card children to stay within bounds */
   [class*="rounded-xl"],
   [class*="rounded-2xl"] {
     max-width: 100%;
     box-sizing: border-box;
     overflow: hidden;
+  }
+
+  /* Ensure all direct children of the page container stay within bounds */
+  .space-y-4 > * {
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   /* Mobile keyboard scroll fix */
@@ -295,7 +314,7 @@ body {
 
   /* Premium selection color — Gold accent */
   ::selection {
-    background: rgba(212, 175, 55, 0.25);
+    background: rgba(240, 200, 64, 0.25);
   }
 }
 
@@ -610,14 +629,14 @@ body {
   /* Primary gradient card - vivid gold gradient for info results */
   .gradient-card-primary {
     @apply relative overflow-hidden rounded-2xl p-6;
-    background: linear-gradient(90deg, #D4A843 0%, #9E7C1A 100%);
+    background: linear-gradient(90deg, #ECC840 0%, #C8A020 100%);
     box-shadow:
-      0 8px 32px rgba(212, 175, 55, 0.35),
+      0 8px 32px rgba(240, 200, 64, 0.35),
       0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   }
 
   .gradient-card-primary * {
-    color: white !important;
+    color: black !important;
   }
 
   /* Warning gradient card */
@@ -673,8 +692,8 @@ body {
 
   .gradient-stat-primary {
     @apply relative overflow-hidden rounded-2xl p-5;
-    background: linear-gradient(90deg, #D4A843 0%, #9E7C1A 100%);
-    box-shadow: 0 8px 32px rgba(212, 175, 55, 0.3);
+    background: linear-gradient(90deg, #ECC840 0%, #C8A020 100%);
+    box-shadow: 0 8px 32px rgba(240, 200, 64, 0.3);
   }
 
   .gradient-stat-warning {
@@ -735,8 +754,8 @@ body {
 
   .premium-badge-primary {
     @apply premium-badge;
-    background: rgba(212, 175, 55, 0.15);
-    border: 1px solid rgba(212, 175, 55, 0.2);
+    background: rgba(240, 200, 64, 0.15);
+    border: 1px solid rgba(240, 200, 64, 0.2);
   }
 
   .premium-badge-primary span,
@@ -1432,7 +1451,7 @@ body {
   from {
     box-shadow:
       0 0 0 2px hsl(var(--background)),
-      0 0 0 2px rgba(212, 175, 55, 0);
+      0 0 0 2px rgba(240, 200, 64, 0);
   }
   to {
     box-shadow:

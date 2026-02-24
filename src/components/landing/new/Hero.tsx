@@ -54,7 +54,7 @@ export function Hero() {
         <motion.p
           className="uppercase tracking-[0.25em] text-sm font-medium mb-6"
           style={{
-            background: 'linear-gradient(90deg, #D4AA40 0%, #D4A843 30%, #E8C060 50%, #D4A843 70%, #D4AA40 100%)',
+            background: 'linear-gradient(90deg, #C8A020 0%, #ECC440 20%, #FFE566 50%, #ECC440 80%, #C8A020 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
@@ -118,7 +118,7 @@ export function Hero() {
               className="inline-block rounded-full px-8 py-3 text-lg font-semibold text-black no-underline"
               style={{
                 background:
-                  'linear-gradient(90deg, #D4AA40 0%, #D4A843 30%, #E8C060 50%, #D4A843 70%, #D4AA40 100%)',
+                  'linear-gradient(90deg, #C8A020 0%, #ECC440 20%, #FFE566 50%, #ECC440 80%, #C8A020 100%)',
               }}
             >
               Get Started Free
@@ -168,7 +168,7 @@ export function Hero() {
                 <span
                   className="text-xl font-bold"
                   style={{
-                    background: 'linear-gradient(90deg, #D4AA40 0%, #E8C060 50%, #D4AA40 100%)',
+                    background: 'linear-gradient(90deg, #E0B830 0%, #FFE566 50%, #E0B830 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
