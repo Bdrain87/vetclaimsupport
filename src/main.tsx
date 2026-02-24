@@ -89,7 +89,7 @@ if (!isNative && 'serviceWorker' in navigator) {
   // previous builds. The SW handles its own precache cleanup,
   // but runtime caches (pages, app-assets) from older SW versions
   // can linger. Delete any cache name we no longer use.
-  const VALID_CACHES = ['pages', 'google-fonts-cache', 'google-fonts-webfonts'];
+  const VALID_CACHES = ['google-fonts-cache', 'google-fonts-webfonts'];
   caches.keys().then((names) => {
     names.forEach((name) => {
       if (!VALID_CACHES.includes(name)) {

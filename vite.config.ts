@@ -37,22 +37,11 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
 
         runtimeCaching: [
-          {
-            // HTML / navigation — ALWAYS hit the network first.
-            // No networkTimeoutSeconds — always wait for network.
-            // Falls back to cache only when fully offline.
-            urlPattern: ({ request }: { request: Request }) =>
-              request.mode === 'navigate',
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'pages',
-              cacheableResponse: { statuses: [0, 200] },
-            },
-          },
-          // JS/CSS bundles are NOT cached by the SW. Vite content-hashes
-          // every filename and Vercel serves them with immutable headers.
-          // The browser HTTP cache handles this perfectly — SW caching
-          // only causes stale code on deploy.
+          // HTML / navigation is NOT cached by the SW. Vercel serves
+          // index.html with no-cache headers, so the browser always
+          // fetches the latest HTML which references the correct
+          // content-hashed JS/CSS bundles. SW caching navigation
+          // requests is the root cause of the "must clear cache" bug.
           {
             // Google Fonts — immutable, cache-first is fine
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
