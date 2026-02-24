@@ -441,6 +441,59 @@ export default function Symptoms() {
         </div>
       )}
 
+      {/* VA Rating Guidance — Severity-to-Rating Context */}
+      {data.symptoms.length >= 3 && (
+        <Collapsible>
+          <div className="rounded-2xl bg-card border border-border overflow-hidden">
+            <CollapsibleTrigger className="w-full p-4 flex items-center justify-between hover:bg-accent/30 transition-colors">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5">
+                  <Target className="h-5 w-5 text-primary" />
+                </div>
+                <div className="text-left">
+                  <h3 className="text-sm font-bold text-foreground">How Your Logs Support Your Rating</h3>
+                  <p className="text-xs text-muted-foreground">VA rating criteria reference</p>
+                </div>
+              </div>
+              <ChevronDown className="h-4 w-4 text-muted-foreground" />
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <div className="px-4 pb-4 space-y-3 border-t border-border/50 pt-3">
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <div className="rounded-lg border border-border p-3 space-y-1">
+                    <p className="text-xs font-semibold text-foreground">Severity 7–10 (High)</p>
+                    <p className="text-[11px] text-muted-foreground leading-relaxed">
+                      Frequent high-severity entries strengthen claims for higher ratings (50%+). Document specific functional limitations — what you cannot do.
+                    </p>
+                  </div>
+                  <div className="rounded-lg border border-border p-3 space-y-1">
+                    <p className="text-xs font-semibold text-foreground">Frequency: Daily/Constant</p>
+                    <p className="text-[11px] text-muted-foreground leading-relaxed">
+                      Consistent daily logs showing chronic symptoms are key evidence. The VA looks for patterns, not one-off entries.
+                    </p>
+                  </div>
+                  <div className="rounded-lg border border-border p-3 space-y-1">
+                    <p className="text-xs font-semibold text-foreground">Work/Life Impact</p>
+                    <p className="text-[11px] text-muted-foreground leading-relaxed">
+                      Always describe how symptoms affect employment, daily activities, and relationships. This drives "occupational impairment" criteria.
+                    </p>
+                  </div>
+                  <div className="rounded-lg border border-border p-3 space-y-1">
+                    <p className="text-xs font-semibold text-foreground">Flare-Ups & Duration</p>
+                    <p className="text-[11px] text-muted-foreground leading-relaxed">
+                      Document flare-up duration and recovery time. Longer episodes support higher incapacitation ratings.
+                    </p>
+                  </div>
+                </div>
+                <p className="text-[10px] text-muted-foreground italic">
+                  For educational reference only. Your actual rating is determined by the VA based on your C&P exam and medical evidence.
+                </p>
+              </div>
+            </CollapsibleContent>
+          </div>
+        </Collapsible>
+      )}
+
       {/* Search & Filter Controls */}
       <div className="flex flex-col gap-3">
         {/* Search Bar */}

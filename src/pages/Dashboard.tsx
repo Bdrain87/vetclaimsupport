@@ -15,6 +15,13 @@ import {
   Pencil,
   User,
   Target,
+  Compass,
+  Brain,
+  Moon,
+  Ear,
+  Bone,
+  FileText,
+  Shield,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { vcsSpring } from '@/constants/animations';
@@ -31,6 +38,7 @@ import { getConditionById } from '@/data/vaConditions';
 import { ExportButton } from '@/components/dashboard/ExportButton';
 import { IntentToFileBanner } from '@/components/dashboard/IntentToFileBanner';
 import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
+import { ClaimReadiness } from '@/components/dashboard/ClaimReadiness';
 import { useStreakTracker } from '@/hooks/useStreakTracker';
 import { useSmartReminders } from '@/hooks/useSmartReminders';
 
@@ -77,6 +85,72 @@ export default function Dashboard() {
     () => ClaimIntelligence.getNextSteps(profile, userConditions, data),
     [profile, userConditions, data]
   );
+
+  // B-2: Condition-driven tool recommendations
+  const conditionRecommendations = useMemo(() => {
+    if (userConditions.length === 0) return [];
+    const recs: { icon: typeof Brain; label: string; route: string; reason: string }[] = [];
+    const added = new Set<string>();
+
+    for (const uc of userConditions) {
+      const details = getConditionById(uc.conditionId);
+      const cat = details?.category ?? '';
+      const name = (details?.name ?? uc.conditionId).toLowerCase();
+
+      if (cat === 'mental-health' || name.includes('ptsd') || name.includes('anxiety') || name.includes('depression')) {
+        if (!added.has('symptoms')) {
+          recs.push({ icon: Brain, label: 'PTSD / Mental Health Logger', route: '/health/symptoms', reason: 'Track symptoms for your mental health claim' });
+          added.add('symptoms');
+        }
+        if (!added.has('stressor')) {
+          recs.push({ icon: FileText, label: 'Stressor Statement', route: '/prep/stressor', reason: 'Document your stressor events' });
+          added.add('stressor');
+        }
+      }
+
+      if (name.includes('migraine') || name.includes('headache')) {
+        if (!added.has('migraines')) {
+          recs.push({ icon: Brain, label: 'Migraine Tracker', route: '/health/migraines', reason: 'Log prostrating attacks for DC 8100' });
+          added.add('migraines');
+        }
+      }
+
+      if (name.includes('sleep') || name.includes('apnea') || name.includes('insomnia')) {
+        if (!added.has('sleep')) {
+          recs.push({ icon: Moon, label: 'Sleep Tracker', route: '/health/sleep', reason: 'Document CPAP usage & sleep quality' });
+          added.add('sleep');
+        }
+      }
+
+      if (cat === 'ear' || name.includes('tinnitus') || name.includes('hearing')) {
+        if (!added.has('exposures')) {
+          recs.push({ icon: Ear, label: 'Noise Exposure Logger', route: '/health/exposures', reason: 'Document in-service noise exposure' });
+          added.add('exposures');
+        }
+      }
+
+      if (cat === 'musculoskeletal' || name.includes('back') || name.includes('knee') || name.includes('spine') || name.includes('shoulder')) {
+        if (!added.has('bodymap')) {
+          recs.push({ icon: Bone, label: 'Body Map', route: '/claims/body-map', reason: 'Map pain points & range of motion' });
+          added.add('bodymap');
+        }
+      }
+    }
+
+    // Always recommend personal statement & C&P prep if there are pending conditions
+    if (userConditions.some(uc => uc.claimStatus !== 'approved')) {
+      if (!added.has('statement')) {
+        recs.push({ icon: FileText, label: 'Personal Statement', route: '/prep/personal-statement', reason: 'Build your statement for each condition' });
+        added.add('statement');
+      }
+      if (!added.has('cpexam')) {
+        recs.push({ icon: Shield, label: 'C&P Exam Prep', route: '/prep/exam', reason: 'Prepare for your compensation exam' });
+        added.add('cpexam');
+      }
+    }
+
+    return recs.slice(0, 6);
+  }, [userConditions]);
 
   // Calculate combined VA rating using VA math (approved conditions only, round to nearest 10)
   const combinedRating = useMemo(() => {
@@ -364,6 +438,45 @@ export default function Dashboard() {
               </div>
             </div>
           </Link>
+          {/* Per-condition readiness breakdown */}
+          <div className="mt-2">
+            <ClaimReadiness userConditions={userConditions} claimsData={data} />
+          </div>
+        </motion.div>
+      )}
+
+      {/* Recommended for Your Claims */}
+      {conditionRecommendations.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ ...vcsSpring, delay: 0.2 }}
+          className="rounded-xl bg-card border border-border p-4 shadow-sm overflow-hidden max-w-full"
+        >
+          <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
+            <Compass className="w-4 h-4 text-gold" />
+            Recommended for Your Claims
+          </h3>
+          <div className="grid grid-cols-2 gap-2">
+            {conditionRecommendations.map((rec) => {
+              const Icon = rec.icon;
+              return (
+                <Link
+                  key={rec.route}
+                  to={rec.route}
+                  className="flex items-start gap-2.5 p-2.5 rounded-lg border border-border bg-secondary/50 hover:bg-accent/50 transition-colors"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0">
+                    <Icon className="h-4 w-4 text-gold" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-medium text-foreground truncate">{rec.label}</p>
+                    <p className="text-[10px] text-muted-foreground line-clamp-2 mt-0.5">{rec.reason}</p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         </motion.div>
       )}
 

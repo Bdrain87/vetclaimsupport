@@ -208,29 +208,168 @@ const hearingRequirements: EvidenceRequirement[] = [
   },
 ];
 
-function getConditionType(conditionName: string): 'ptsd' | 'hearing' | 'physical' {
+// Sleep/respiratory condition requirements (sleep apnea, etc.)
+const sleepRequirements: EvidenceRequirement[] = [
+  {
+    id: 'sleep_study',
+    label: 'Sleep Study / Polysomnography',
+    description: 'Official sleep study confirming diagnosis',
+    isCritical: true,
+    check: (_condition, data) => {
+      const hasSleepStudy = data.uploadedDocuments?.some(doc =>
+        doc.title.toLowerCase().includes('sleep study') ||
+        doc.title.toLowerCase().includes('polysomnography') ||
+        doc.title.toLowerCase().includes('psg')
+      );
+      return { met: !!hasSleepStudy };
+    },
+  },
+  {
+    id: 'cpap_records',
+    label: 'CPAP Usage Records',
+    description: 'Documentation of prescribed CPAP/BiPAP device usage',
+    isCritical: true,
+    check: (_condition, data) => {
+      const hasCpap = data.uploadedDocuments?.some(doc =>
+        doc.title.toLowerCase().includes('cpap') ||
+        doc.title.toLowerCase().includes('bipap') ||
+        doc.description?.toLowerCase().includes('cpap')
+      );
+      return { met: !!hasCpap };
+    },
+  },
+  {
+    id: 'medical_records',
+    label: 'Medical Records',
+    description: 'Treatment records showing diagnosis and management',
+    isCritical: true,
+    check: (condition) => {
+      const count = condition.linkedMedicalVisits.length;
+      return { met: count > 0, count };
+    },
+  },
+  {
+    id: 'buddy_statements',
+    label: 'Buddy/Spouse Statements',
+    description: 'Witnesses to snoring, breathing cessation, or daytime sleepiness',
+    isCritical: false,
+    check: (condition) => {
+      const count = condition.linkedBuddyContacts.length;
+      return { met: count >= 1, count, required: 1 };
+    },
+  },
+  {
+    id: 'symptom_logs',
+    label: 'Sleep Quality Logs',
+    description: 'Regular tracking of sleep quality, CPAP compliance, daytime drowsiness',
+    isCritical: false,
+    check: (condition) => {
+      const count = condition.linkedSymptoms.length;
+      return { met: count >= 3, count, required: 3 };
+    },
+  },
+];
+
+// Migraine/headache condition requirements
+const migraineRequirements: EvidenceRequirement[] = [
+  {
+    id: 'migraine_logs',
+    label: 'Migraine Attack Logs (3+ months)',
+    description: 'Consistent documentation of frequency, severity, and prostrating attacks',
+    isCritical: true,
+    check: (condition) => {
+      const count = condition.linkedSymptoms.length;
+      return { met: count >= 5, count, required: 5 };
+    },
+  },
+  {
+    id: 'medical_records',
+    label: 'Neurology / Primary Care Records',
+    description: 'Medical records documenting migraine diagnosis and treatment',
+    isCritical: true,
+    check: (condition) => {
+      const count = condition.linkedMedicalVisits.length;
+      return { met: count > 0, count };
+    },
+  },
+  {
+    id: 'economic_impact',
+    label: 'Economic Impact Documentation',
+    description: 'Evidence of missed work, lost wages, or reduced productivity (needed for 50% rating)',
+    isCritical: false,
+    check: (_condition, data) => {
+      const hasEconomicDocs = data.uploadedDocuments?.some(doc =>
+        doc.title.toLowerCase().includes('work') ||
+        doc.title.toLowerCase().includes('employer') ||
+        doc.title.toLowerCase().includes('fmla') ||
+        doc.description?.toLowerCase().includes('missed work')
+      );
+      return { met: !!hasEconomicDocs };
+    },
+  },
+  {
+    id: 'buddy_statements',
+    label: 'Buddy Statements',
+    description: 'Witnesses who observed your debilitating migraine attacks',
+    isCritical: false,
+    check: (condition) => {
+      const count = condition.linkedBuddyContacts.length;
+      return { met: count >= 1, count, required: 1 };
+    },
+  },
+  {
+    id: 'medications',
+    label: 'Medication Records',
+    description: 'Prescriptions for migraine treatment and their effectiveness',
+    isCritical: false,
+    check: (_condition, data) => {
+      const meds = data.medications.filter(m =>
+        (m.prescribedFor ?? '').toLowerCase().includes('migraine') ||
+        (m.prescribedFor ?? '').toLowerCase().includes('headache')
+      );
+      return { met: meds.length > 0, count: meds.length };
+    },
+  },
+];
+
+type ConditionType = 'ptsd' | 'hearing' | 'physical' | 'sleep' | 'migraine';
+
+function getConditionType(conditionName: string): ConditionType {
   const lowerName = conditionName.toLowerCase();
-  
-  if (lowerName.includes('ptsd') || lowerName.includes('anxiety') || 
+
+  if (lowerName.includes('ptsd') || lowerName.includes('anxiety') ||
       lowerName.includes('depression') || lowerName.includes('mental health') ||
       lowerName.includes('mst') || lowerName.includes('trauma')) {
     return 'ptsd';
   }
-  
+
   if (lowerName.includes('tinnitus') || lowerName.includes('hearing') ||
       lowerName.includes('ear')) {
     return 'hearing';
   }
-  
+
+  if (lowerName.includes('sleep') || lowerName.includes('apnea') ||
+      lowerName.includes('insomnia')) {
+    return 'sleep';
+  }
+
+  if (lowerName.includes('migraine') || lowerName.includes('headache')) {
+    return 'migraine';
+  }
+
   return 'physical';
 }
 
-function getRequirements(conditionType: 'ptsd' | 'hearing' | 'physical'): EvidenceRequirement[] {
+function getRequirements(conditionType: ConditionType): EvidenceRequirement[] {
   switch (conditionType) {
     case 'ptsd':
       return ptsdRequirements;
     case 'hearing':
       return hearingRequirements;
+    case 'sleep':
+      return sleepRequirements;
+    case 'migraine':
+      return migraineRequirements;
     default:
       return physicalRequirements;
   }
@@ -363,7 +502,7 @@ export function EvidenceGapAnalysis({ condition, data }: EvidenceGapAnalysisProp
       {/* Condition Type Tag */}
       <div className="flex justify-end">
         <span className="text-[9px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground capitalize">
-          {analysis.conditionType === 'ptsd' ? 'Mental Health' : analysis.conditionType} condition
+          {analysis.conditionType === 'ptsd' ? 'Mental Health' : analysis.conditionType === 'sleep' ? 'Sleep / Respiratory' : analysis.conditionType} condition
         </span>
       </div>
     </div>
