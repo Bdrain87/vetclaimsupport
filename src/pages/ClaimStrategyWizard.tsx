@@ -35,6 +35,7 @@ import { exportClaimStrategy } from '@/utils/pdfExport';
 import { useClaims } from '@/hooks/useClaims';
 import { PageContainer } from '@/components/PageContainer';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { useProfileStore } from '@/store/useProfileStore';
 import { getAllBranchLabels } from '@/utils/veteranProfile';
 
@@ -773,6 +774,8 @@ attorney for official guidance on your specific claim.
                 ) : (
                   <AIDisclaimer variant="banner" />
                 )}
+
+                <AIContentBadge timestamp={new Date().toISOString()} />
 
                 {/* Summary */}
                 <Card className="bg-primary/5 border-primary/30">

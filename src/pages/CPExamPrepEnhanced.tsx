@@ -35,6 +35,7 @@ import { useClaims } from '@/hooks/useClaims';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { createCPExamPrepPrompt } from '@/lib/ai-prompts';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { PageContainer } from '@/components/PageContainer';
 import { getConditionSymptoms, getConditionMedications } from '@/utils/prefillHelpers';
 
@@ -549,6 +550,7 @@ export default function CPExamPrepEnhanced() {
                       ) : (
                         <>
                           <AIDisclaimer variant="banner" />
+                          <AIContentBadge timestamp={new Date().toISOString()} />
                           <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
                             <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
                               <Badge variant="outline">

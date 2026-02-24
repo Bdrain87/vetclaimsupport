@@ -115,6 +115,7 @@ export default function TermsOfServicePage() {
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(e) Information you submit to AI features is processed by our third-party AI service provider (currently Google&apos;s Gemini API) &mdash; we do not retain this data, but the provider&apos;s own terms of service apply to their processing</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(f) AI features are optional and the app functions fully without them</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(g) VCS makes no warranty as to the accuracy, completeness, or reliability of any AI-generated content</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(h) AI-generated content should NOT be submitted to the VA or any other party without thorough personal review and editing &mdash; all AI outputs are drafts intended as starting points, not finished documents</li>
           </ul>
         </section>
 

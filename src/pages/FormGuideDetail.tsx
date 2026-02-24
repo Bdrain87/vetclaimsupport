@@ -14,6 +14,7 @@ import { useClaims } from '@/hooks/useClaims';
 import { useGemini } from '@/hooks/useGemini';
 import { generateFormGuidePDF } from '@/services/exportEngine';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { PageContainer } from '@/components/PageContainer';
 import { useToast } from '@/hooks/use-toast';
 
@@ -181,6 +182,7 @@ function FieldCard({ field, formId: _formId, savedValue, onSave }: FieldCardProp
           {aiSuggestion && (
             <>
               <AIDisclaimer variant="banner" className="mb-2" />
+              <AIContentBadge timestamp={new Date().toISOString()} />
               <p className="text-xs text-foreground whitespace-pre-wrap">{aiSuggestion}</p>
               <div className="flex gap-2">
                 <Button size="sm" className="text-xs h-8" onClick={handleUseAI}>

@@ -19,6 +19,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { useProfileStore } from '@/store/useProfileStore';
 import { getAllBranchLabels } from '@/utils/veteranProfile';
 import useAppStore from '@/store/useAppStore';
@@ -701,9 +702,12 @@ export default function CPExamPacket() {
                     )}
                   </div>
                   {examQuestions[condition.name] ? (
+                    <>
+                    <AIContentBadge timestamp={new Date().toISOString()} />
                     <div className="p-3 rounded-lg bg-muted/30 border text-sm whitespace-pre-wrap leading-relaxed">
                       {examQuestions[condition.name]}
                     </div>
+                    </>
                   ) : loadingQuestions.has(condition.name) ? (
                     <div className="flex items-center gap-2 py-4 justify-center text-muted-foreground">
                       <Loader2 className="h-4 w-4 animate-spin" />

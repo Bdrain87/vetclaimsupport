@@ -14,6 +14,7 @@ import { useClaims } from '@/hooks/useClaims';
 import { useProfileStore } from '@/store/useProfileStore';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { AIContentBadge } from '@/components/ui/AIContentBadge';
 
 const relationshipOptions = [
   { value: 'fellow-service-member', label: 'Fellow Service Member' },
@@ -755,6 +756,7 @@ Thank you for taking the time to help! Your statement could make a real differen
             {aiDraft && (
               <div className="space-y-3">
                 <AIDisclaimer variant="banner" />
+                <AIContentBadge timestamp={new Date().toISOString()} />
                 <div className="p-3 rounded-lg bg-gold/10 border border-gold/30">
                   <div className="flex items-start gap-2">
                     <AlertTriangle className="h-4 w-4 text-gold-dk mt-0.5 flex-shrink-0" />

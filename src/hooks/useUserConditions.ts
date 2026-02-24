@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import useAppStore from '@/store/useAppStore';
 import { getConditionById } from '@/data/vaConditions';
 import type { VACondition } from '@/data/vaConditions';
@@ -119,6 +119,30 @@ export function useUserConditions() {
     },
     [],
   );
+
+  // Sync userConditions → claimConditions so legacy components see the same data
+  useEffect(() => {
+    const state = useAppStore.getState();
+    const existingNames = new Set(state.claimConditions.map((c) => c.name.toLowerCase()));
+    for (const uc of conditions) {
+      const details = getConditionById(uc.conditionId);
+      const name = details?.name ?? uc.conditionId;
+      if (!existingNames.has(name.toLowerCase())) {
+        state.addClaimCondition({
+          id: uc.id,
+          name,
+          linkedMedicalVisits: [],
+          linkedExposures: [],
+          linkedSymptoms: [],
+          linkedDocuments: [],
+          linkedBuddyContacts: [],
+          notes: uc.notes ?? '',
+          createdAt: uc.dateAdded,
+        });
+        existingNames.add(name.toLowerCase());
+      }
+    }
+  }, [conditions]);
 
   const totalRating = useMemo(() => calculateCombinedRating(conditions), [conditions]);
   const approvedConditionsCount = useMemo(

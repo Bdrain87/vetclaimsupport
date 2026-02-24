@@ -23,6 +23,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { PageContainer } from '@/components/PageContainer';
@@ -583,6 +584,9 @@ export default function PersonalStatement() {
                 </div>
               </CardHeader>
               <CardContent>
+                {polishedStatement && (
+                  <AIContentBadge timestamp={new Date().toISOString()} className="mb-3" />
+                )}
                 <pre className="whitespace-pre-wrap text-sm font-mono text-foreground overflow-auto max-h-96 leading-relaxed break-words">
                   {polishedStatement || generateStatement()}
                 </pre>

@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { fadeInUp, staggerContainer, GOLD_GRADIENT_TEXT } from '@/lib/landing-animations';
-import { Check, AlertTriangle } from 'lucide-react';
+import { fadeInUp, staggerContainer, GOLD_GRADIENT_TEXT, GOLD_GRADIENT } from '@/lib/landing-animations';
+import { Check, AlertTriangle, Shield } from 'lucide-react';
 
 const FREE_FEATURES = [
   'VA Combined Rating Calculator',
@@ -221,9 +221,9 @@ export function Pricing() {
           Most veterans don't realize they have options. Here's how costs compare.
         </motion.p>
 
-        {/* Competitor comparison cards */}
+        {/* Three-card comparison: Competitors vs. VCS */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10"
+          className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
@@ -235,9 +235,6 @@ export function Pricing() {
                 <AlertTriangle size={18} style={{ color: '#EF4444' }} />
                 <h3 className="text-base font-semibold" style={{ color: '#EF4444' }}>Claim Companies</h3>
               </div>
-              <p className="text-sm mb-3" style={{ color: '#9CA3AF' }}>
-                Third-party companies that charge veterans for claim preparation assistance.
-              </p>
               <div className="mb-3">
                 <span className="text-2xl font-bold text-white">$4,000–$6,000</span>
                 <span className="text-xs ml-2" style={{ color: '#9CA3AF' }}>typical cost</span>
@@ -256,15 +253,66 @@ export function Pricing() {
             </div>
           </RedCard>
 
+          {/* VCS Card — highlighted */}
+          <PremiumCard>
+            <div className="p-6 relative">
+              <motion.div
+                className="absolute top-0 right-0 px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-bl-lg rounded-tr-[15px]"
+                style={{ background: GOLD_GRADIENT, color: '#000' }}
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                Best Value
+              </motion.div>
+              <div className="flex items-center gap-2 mb-3">
+                <Shield size={18} style={{ color: '#D4AF37' }} />
+                <h3 className="text-base font-semibold" style={GOLD_GRADIENT_TEXT}>Vet Claim Support</h3>
+              </div>
+              <div className="mb-3">
+                <span
+                  className="text-2xl font-bold"
+                  style={GOLD_GRADIENT_TEXT}
+                >
+                  $9.99
+                </span>
+                <span className="text-xs ml-2" style={{ color: '#9CA3AF' }}>one-time</span>
+              </div>
+              <ul className="space-y-1.5 mb-4">
+                <li className="flex items-center gap-2 text-sm" style={{ color: '#D1D5DB' }}>
+                  <Check size={14} className="shrink-0 text-gold" /> 800+ VA conditions
+                </li>
+                <li className="flex items-center gap-2 text-sm" style={{ color: '#D1D5DB' }}>
+                  <Check size={14} className="shrink-0 text-gold" /> AI-assisted statements
+                </li>
+                <li className="flex items-center gap-2 text-sm" style={{ color: '#D1D5DB' }}>
+                  <Check size={14} className="shrink-0 text-gold" /> Document vault
+                </li>
+                <li className="flex items-center gap-2 text-sm" style={{ color: '#D1D5DB' }}>
+                  <Check size={14} className="shrink-0 text-gold" /> Symptom trackers
+                </li>
+                <li className="flex items-center gap-2 text-sm" style={{ color: '#D1D5DB' }}>
+                  <Check size={14} className="shrink-0 text-gold" /> No subscription
+                </li>
+                <li className="flex items-center gap-2 text-sm" style={{ color: '#D1D5DB' }}>
+                  <Check size={14} className="shrink-0 text-gold" /> No data sold
+                </li>
+              </ul>
+              <Link
+                to="/auth"
+                className="block text-center rounded-full px-6 py-2.5 text-sm font-semibold text-black no-underline"
+                style={{ background: GOLD_GRADIENT }}
+              >
+                Get Started — $9.99
+              </Link>
+            </div>
+          </PremiumCard>
+
           <RedCard>
             <div className="p-6">
               <div className="flex items-center gap-2 mb-3">
                 <AlertTriangle size={18} style={{ color: '#EF4444' }} />
                 <h3 className="text-base font-semibold" style={{ color: '#EF4444' }}>Private Attorneys</h3>
               </div>
-              <p className="text-sm mb-3" style={{ color: '#9CA3AF' }}>
-                Attorneys who typically take a percentage of retroactive back pay after approval.
-              </p>
               <div className="mb-3">
                 <span className="text-2xl font-bold text-white">20–33%</span>
                 <span className="text-xs ml-2" style={{ color: '#9CA3AF' }}>of back pay</span>
@@ -277,29 +325,11 @@ export function Pricing() {
                   <span style={{ color: '#EF4444' }}>&#10005;</span> Can total thousands of dollars
                 </li>
                 <li className="flex items-center gap-2 text-sm" style={{ color: '#9CA3AF' }}>
-                  <span style={{ color: '#EF4444' }}>&#10005;</span> Minimal help organizing your evidence
+                  <span style={{ color: '#EF4444' }}>&#10005;</span> Minimal help organizing evidence
                 </li>
               </ul>
             </div>
           </RedCard>
-        </motion.div>
-
-        {/* OR divider */}
-        <motion.div
-          className="flex items-center justify-center gap-4 mb-10"
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
-        >
-          <div className="h-px flex-1 max-w-[100px]" style={{ background: 'linear-gradient(to right, transparent, #D4B030)' }} />
-          <span
-            className="text-lg font-semibold px-3"
-            style={GOLD_GRADIENT_TEXT}
-          >
-            &mdash; OR &mdash;
-          </span>
-          <div className="h-px flex-1 max-w-[100px]" style={{ background: 'linear-gradient(to left, transparent, #D4B030)' }} />
         </motion.div>
 
         <motion.p
@@ -409,7 +439,7 @@ export function Pricing() {
                     background: 'linear-gradient(90deg, #C8A020 0%, #ECC440 20%, #FFE566 50%, #ECC440 80%, #C8A020 100%)',
                   }}
                 >
-                  Get Started
+                  Get Started — $9.99
                 </Link>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">

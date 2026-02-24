@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { PageContainer } from '@/components/PageContainer';
 import { useToast } from '@/hooks/use-toast';
 
@@ -391,6 +392,7 @@ export default function VASpeakTranslator() {
                 </Badge>
               </div>
 
+              <AIContentBadge timestamp={new Date().toISOString()} />
               <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-4">
                 <p className="text-sm font-medium leading-relaxed whitespace-pre-wrap">
                   {translatedText}

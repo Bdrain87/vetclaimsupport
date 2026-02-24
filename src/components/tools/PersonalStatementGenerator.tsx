@@ -24,6 +24,7 @@ import { exportPersonalStatement } from '@/utils/pdfExport';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { createPersonalStatementPrompt } from '@/lib/ai-prompts';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { AIContentBadge } from '@/components/ui/AIContentBadge';
 
 export function PersonalStatementGenerator() {
   const { data } = useClaims();
@@ -339,7 +340,10 @@ _______________________________
         )}
 
         {draftMode === 'ai' && aiDraft && (
-          <AIDisclaimer variant="banner" />
+          <>
+            <AIDisclaimer variant="banner" />
+            <AIContentBadge timestamp={new Date().toISOString()} />
+          </>
         )}
 
         {/* Tabs for Preview/Edit */}

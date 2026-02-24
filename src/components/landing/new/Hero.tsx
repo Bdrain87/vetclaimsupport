@@ -1,10 +1,17 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE } from '@/lib/landing-animations';
+import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE, GOLD_GRADIENT } from '@/lib/landing-animations';
 
-const ROTATING_WORDS = ['Confidence', 'Clarity', 'Precision', 'Evidence'];
+const ROTATING_WORDS = ['Organized', 'Documented', 'Prepared', 'Ready'];
 const CYCLE_MS = 3000;
+
+const TRUST_ITEMS = [
+  'Built by a 100% P&T Veteran',
+  '800+ VA Conditions Covered',
+  'Bank-Level Encryption',
+  'No Data Sold',
+];
 
 export function Hero() {
   const [index, setIndex] = useState(0);
@@ -66,7 +73,7 @@ export function Hero() {
           Built for Those Who Served
         </motion.p>
 
-        {/* Main heading */}
+        {/* Main heading — outcome-driven */}
         <motion.h1
           className="text-4xl md:text-6xl leading-tight text-white mb-6"
           style={HEADING_H1_STYLE}
@@ -74,8 +81,10 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          Prepare Your VA Claim with{' '}
-          <span className="inline-block min-w-[160px] sm:min-w-[280px]">
+          Organize Your Evidence.{' '}
+          <br className="hidden sm:inline" />
+          File Your Claim{' '}
+          <span className="inline-block min-w-[160px] sm:min-w-[220px]">
             <AnimatePresence mode="wait">
               <motion.span
                 key={ROTATING_WORDS[index]}
@@ -94,7 +103,7 @@ export function Hero() {
           </span>
         </motion.h1>
 
-        {/* Subtitle */}
+        {/* Subtitle — contrasts VCS against $4K–$6K claim companies */}
         <motion.p
           className="text-lg md:text-xl max-w-2xl mx-auto mb-10"
           style={{ color: '#D1D5DB' }}
@@ -102,7 +111,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          You served your country. Preparing your claim shouldn't feel like a second battle.
+          Track symptoms, generate statements, and build your claim packet — for $9.99 instead of the $4,000–$6,000 that claim companies charge.
         </motion.p>
 
         {/* CTAs */}
@@ -124,12 +133,11 @@ export function Hero() {
               to="/auth"
               className="inline-block rounded-full px-10 py-4 text-lg font-semibold text-black no-underline"
               style={{
-                background:
-                  'linear-gradient(90deg, #C8A020 0%, #ECC440 20%, #FFE566 50%, #ECC440 80%, #C8A020 100%)',
+                background: GOLD_GRADIENT,
                 boxShadow: '0 0 20px rgba(236,196,64,0.3)',
               }}
             >
-              Get Started Free
+              Get Started — $9.99
             </Link>
           </motion.div>
           <motion.button
@@ -142,61 +150,25 @@ export function Hero() {
           </motion.button>
         </motion.div>
 
-        {/* Premium pricing box with dual gold + white glow */}
+        {/* Trust Bar */}
         <motion.div
-          className="relative inline-block"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.9, type: 'spring', stiffness: 200 }}
+          className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 mt-6"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1 }}
         >
-          <motion.div
-            className="inline-flex flex-col items-center gap-2 px-8 py-4 rounded-2xl relative overflow-hidden"
-            style={{
-              background: 'linear-gradient(135deg, rgba(191,149,63,0.08) 0%, rgba(191,149,63,0.02) 100%)',
-              border: '1px solid rgba(191,149,63,0.2)',
-            }}
-            animate={{
-              boxShadow: [
-                '0 0 10px rgba(191,149,63,0.2), 0 0 25px rgba(191,149,63,0.12), 0 0 50px 8px rgba(255,255,255,0.06), 0 0 80px 16px rgba(255,255,255,0.03)',
-                '0 0 18px rgba(191,149,63,0.35), 0 0 40px rgba(191,149,63,0.18), 0 0 65px 12px rgba(255,255,255,0.1), 0 0 100px 24px rgba(255,255,255,0.06)',
-                '0 0 10px rgba(191,149,63,0.2), 0 0 25px rgba(191,149,63,0.12), 0 0 50px 8px rgba(255,255,255,0.06), 0 0 80px 16px rgba(255,255,255,0.03)',
-              ],
-            }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-          >
-            <div className="relative z-10 flex items-center gap-3">
-              <span className="text-sm font-medium" style={{ color: '#D1D5DB' }}>
-                Get Premium
-              </span>
-              <div className="flex items-baseline gap-2">
-                <span className="text-base font-medium line-through" style={{ color: '#6B7280', textDecorationColor: '#EF4444' }}>
-                  $19.99
-                </span>
-                <span className="text-lg text-gold">→</span>
+          {TRUST_ITEMS.map((item, i) => (
+            <span key={item} className="flex items-center gap-2 text-xs sm:text-sm" style={{ color: '#9CA3AF' }}>
+              {i > 0 && (
                 <span
-                  className="text-xl font-bold"
-                  style={{
-                    background: 'linear-gradient(90deg, #E0B830 0%, #FFE566 50%, #E0B830 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                  }}
-                >
-                  $9.99 one-time
-                </span>
-              </div>
-            </div>
-            <span className="relative z-10 text-xs px-3 py-1 rounded-full" style={{
-              background: 'linear-gradient(135deg, rgba(191,149,63,0.2), rgba(191,149,63,0.05))',
-              border: '1px solid rgba(191,149,63,0.3)',
-              color: 'var(--gold-hl)',
-              fontWeight: 600,
-            }}>
-              Limited Launch Price
+                  className="hidden sm:inline-block w-1 h-1 rounded-full"
+                  style={{ backgroundColor: '#D4AF37' }}
+                />
+              )}
+              {item}
             </span>
-          </motion.div>
+          ))}
         </motion.div>
-
       </div>
     </section>
   );

@@ -40,6 +40,7 @@ import { getDBQByCondition } from '@/data/vaResources/dbqReference';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import useAppStore from '@/store/useAppStore';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import { PageContainer } from '@/components/PageContainer';
 
@@ -682,6 +683,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
               ) : (
                 <div className="space-y-3">
                   <AIDisclaimer variant="banner" />
+                  <AIContentBadge timestamp={new Date().toISOString()} />
                   <div className="p-4 rounded-lg bg-muted/30 border text-sm whitespace-pre-wrap max-h-[400px] overflow-y-auto overflow-x-hidden leading-relaxed break-words">
                     {aiInsights}
                   </div>

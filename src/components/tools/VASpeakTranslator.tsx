@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { DisclaimerNotice } from '@/components/shared/DisclaimerNotice';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import {
   Languages,
   Copy,
@@ -420,6 +421,7 @@ export function VASpeakTranslator() {
           </CardHeader>
           <CardContent className="space-y-3">
             <AIDisclaimer variant="banner" />
+            <AIContentBadge timestamp={new Date().toISOString()} />
             <div className="p-4 bg-background border rounded-lg">
               <p className="text-sm leading-relaxed whitespace-pre-wrap">{aiResult}</p>
             </div>

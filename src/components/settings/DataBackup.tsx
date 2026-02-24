@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { z } from 'zod';
-import { Download, Upload, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { Download, Upload, AlertTriangle, CheckCircle2, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { useClaims } from '@/hooks/useClaims';
-import { getAllFileIds, getFileData, restoreFiles } from '@/lib/indexedDB';
+import { getAllFileIds, getFileData, deleteFileData, restoreFiles } from '@/lib/indexedDB';
 
 const STORAGE_KEY = 'vcs-app-data';
 
@@ -43,7 +43,9 @@ export function DataBackup() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [showImportConfirm, setShowImportConfirm] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [pendingImportData, setPendingImportData] = useState<BackupData | null>(null);
 
   const exportData = async () => {
@@ -164,6 +166,43 @@ export function DataBackup() {
     }
   };
 
+  const confirmDeleteAll = async () => {
+    setIsDeleting(true);
+    try {
+      // Clear all localStorage keys used by VCS
+      const keysToRemove: string[] = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key) keysToRemove.push(key);
+      }
+      for (const key of keysToRemove) {
+        localStorage.removeItem(key);
+      }
+
+      // Clear all IndexedDB documents
+      const fileIds = await getAllFileIds();
+      for (const id of fileIds) {
+        await deleteFileData(id);
+      }
+
+      toast({
+        title: 'All Data Deleted',
+        description: 'Your data has been permanently deleted. Redirecting...',
+      });
+
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      window.location.href = '/';
+    } catch {
+      toast({
+        title: 'Delete Failed',
+        description: 'Failed to delete all data. Please try again.',
+        variant: 'destructive',
+      });
+      setIsDeleting(false);
+      setShowDeleteConfirm(false);
+    }
+  };
+
   return (
     <>
       <Card>
@@ -212,6 +251,18 @@ export function DataBackup() {
               aria-label="Select backup file to restore"
             />
           </div>
+
+          <div className="pt-3 border-t border-border">
+            <Button
+              variant="destructive"
+              onClick={() => setShowDeleteConfirm(true)}
+              disabled={isDeleting}
+              className="w-full sm:w-auto"
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              {isDeleting ? 'Deleting...' : 'Delete All My Data'}
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
@@ -241,6 +292,35 @@ export function DataBackup() {
             <AlertDialogAction onClick={confirmImport}>
               <CheckCircle2 className="mr-2 h-4 w-4" />
               Restore Data
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2 text-destructive">
+              <Trash2 className="h-5 w-5" />
+              Delete All My Data
+            </AlertDialogTitle>
+            <AlertDialogDescription className="space-y-2">
+              <p>
+                This will permanently delete all your claim preparation data including conditions, documents, symptom logs, AI-generated drafts, and settings.
+              </p>
+              <p className="text-destructive font-semibold">
+                This cannot be undone. Are you sure?
+              </p>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDeleteAll}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Delete Everything
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
