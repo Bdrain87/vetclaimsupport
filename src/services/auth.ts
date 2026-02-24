@@ -72,6 +72,7 @@ export const ALL_LOCAL_STORAGE_KEYS = [
   'vcs-app-data',
   'vet-user-profile',
   'vcs-ai-cache',
+  'vcs-feature-flags',
   // Encryption
   'vet-claim-encryption-enabled',
   'vet-claim-password-hash',
@@ -87,6 +88,7 @@ export const ALL_LOCAL_STORAGE_KEYS = [
   'va-claims-theme',
   'cpExamChecklist',
   'cp-exam-checklist',
+  'bodymap-pain-levels',
   'vet-claim-unified-calculator',
   'va-claims-reminder-settings',
   'itf-popup-dismissed',

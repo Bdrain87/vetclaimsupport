@@ -8,6 +8,7 @@ export const APP_STORAGE_KEYS = [
   'vcs-app-data',
   'vet-user-profile',
   'vcs-ai-cache',
+  'vcs-feature-flags',
 ] as const;
 
 /**

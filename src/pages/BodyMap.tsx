@@ -17,6 +17,7 @@ import { PageContainer } from '@/components/PageContainer';
 import type { UserCondition } from '@/store/useAppStore';
 import { BODY_REGIONS } from '@/data/bodyRegions';
 import type { BodyRegion, RegionCondition } from '@/data/bodyRegions';
+import { useFeatureFlag } from '@/store/useFeatureFlagStore';
 
 // ---------------------------------------------------------------------------
 // Helper: build a unique condition key that accounts for bilateral regions
@@ -41,6 +42,7 @@ export default function BodyMap() {
   // UI state
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
+  const showPainTracking = useFeatureFlag('bodyMapLinking');
 
   // Pain intensity tracking (persisted to localStorage)
   const [painLevels, setPainLevels] = useState<Record<string, number>>(() => {
@@ -1011,8 +1013,8 @@ export default function BodyMap() {
                               </div>
                             </div>
                           </button>
-                          {/* Pain intensity scale — shown when condition is added */}
-                          {isAdded && (
+                          {/* Pain intensity scale — shown when condition is added and flag enabled */}
+                          {isAdded && showPainTracking && (
                             <div
                               className="bg-[rgba(212,175,55,0.08)] border border-[rgba(212,175,55,0.4)] border-t-0 rounded-b-lg px-3 py-2"
                               onClick={(e) => e.stopPropagation()}

@@ -199,6 +199,43 @@ const secondaryConditionsMap: Record<string, { secondary: string; link: string }
     { secondary: 'Migraines', link: 'Cervicogenic headaches from neck pathology' },
     { secondary: 'Shoulder Condition', link: 'Compensatory changes and shared nerve pathways' },
   ],
+  'Anxiety': [
+    { secondary: 'Insomnia', link: 'Anxiety-driven hyperarousal disrupts sleep onset and maintenance' },
+    { secondary: 'GERD', link: 'Stress and anxiety increase gastric acid production' },
+    { secondary: 'Migraines', link: 'Tension-type headaches commonly co-occur with anxiety disorders' },
+    { secondary: 'Depression', link: 'Anxiety and depression frequently co-occur as comorbid conditions' },
+  ],
+  'Hearing Loss': [
+    { secondary: 'Tinnitus', link: 'Almost always co-occurs with sensorineural hearing loss' },
+    { secondary: 'Depression', link: 'Social isolation from hearing impairment linked to depression' },
+  ],
+  'Shoulder Condition': [
+    { secondary: 'Neck Pain', link: 'Shared cervical nerve pathways and compensatory posture changes' },
+    { secondary: 'Radiculopathy', link: 'Nerve impingement radiating from cervical spine to shoulder' },
+  ],
+  'Hip Condition': [
+    { secondary: 'Lower Back Pain', link: 'Altered biomechanics from hip dysfunction stress the lumbar spine' },
+    { secondary: 'Knee Condition', link: 'Compensatory gait changes transfer stress to the knee' },
+  ],
+  'Ankle Condition': [
+    { secondary: 'Knee Condition', link: 'Altered gait from ankle instability impacts knee joints' },
+    { secondary: 'Plantar Fasciitis', link: 'Ankle dysfunction changes foot mechanics and weight distribution' },
+  ],
+  'Radiculopathy': [
+    { secondary: 'Peripheral Neuropathy', link: 'Chronic nerve root compression leads to distal nerve damage' },
+  ],
+  'GERD': [
+    { secondary: 'Asthma', link: 'Acid reflux can trigger or worsen asthma symptoms (reflux-induced bronchoconstriction)' },
+    { secondary: 'Sinusitis', link: 'Acid reflux reaching the nasopharynx contributes to chronic sinusitis' },
+  ],
+  'Sinusitis': [
+    { secondary: 'Allergic Rhinitis', link: 'Chronic nasal inflammation and shared mucosal pathway' },
+    { secondary: 'Migraines', link: 'Sinus pressure and inflammation can trigger migraine episodes' },
+  ],
+  'Asthma': [
+    { secondary: 'GERD', link: 'Bronchodilator medications and hyperinflation worsen acid reflux' },
+    { secondary: 'Sinusitis', link: 'Shared airway inflammation and nasal-bronchial reflex' },
+  ],
 };
 
 const combatZones = [
@@ -258,6 +295,7 @@ export default function ClaimStrategyWizard() {
   const [isOfflineFallback, setIsOfflineFallback] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const showSecondarySuggestions = useFeatureFlag('secondaryConditionSuggestions');
+  const aiStrategyEnabled = useFeatureFlag('aiClaimStrategy');
   const [exportingStrategy, setExportingStrategy] = useState(false);
   const { toast } = useToast();
 
@@ -395,6 +433,10 @@ Consider:
 - PACT Act benefits if applicable`;
 
     try {
+      if (!aiStrategyEnabled) {
+        throw new Error('AI strategy generation is disabled');
+      }
+
       // Ensure we have a valid session (anonymous sign-in if needed)
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {

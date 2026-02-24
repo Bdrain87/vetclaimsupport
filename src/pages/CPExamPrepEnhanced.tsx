@@ -39,6 +39,7 @@ import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { PageContainer } from '@/components/PageContainer';
 import { getConditionSymptoms, getConditionMedications } from '@/utils/prefillHelpers';
+import { useFeatureFlag } from '@/store/useFeatureFlagStore';
 
 interface ChecklistItem {
   id: string;
@@ -175,6 +176,97 @@ const ratingCriteriaMap: Record<string, { dc: string; levels: { rating: string; 
       { rating: '0-100%', criteria: 'Based on puretone threshold average and speech discrimination scores using Table VI/VIA and Table VII' },
     ],
   },
+  'Shoulder Condition': {
+    dc: 'DC 5201',
+    levels: [
+      { rating: '20%', criteria: 'Arm motion limited to shoulder level (dominant or non-dominant)' },
+      { rating: '30%', criteria: 'Arm motion limited to midway between side and shoulder level (dominant)' },
+      { rating: '40%', criteria: 'Arm motion limited to 25° from side (dominant)' },
+    ],
+  },
+  'Neck Pain': {
+    dc: 'DC 5237',
+    levels: [
+      { rating: '10%', criteria: 'Forward flexion greater than 30° but not greater than 40°, or combined ROM greater than 170° but not greater than 335°' },
+      { rating: '20%', criteria: 'Forward flexion greater than 15° but not greater than 30°, or combined ROM not greater than 170°' },
+      { rating: '30%', criteria: 'Forward flexion 15° or less, or favorable ankylosis of the entire cervical spine' },
+      { rating: '40%', criteria: 'Unfavorable ankylosis of the entire cervical spine' },
+      { rating: '100%', criteria: 'Unfavorable ankylosis of the entire spine' },
+    ],
+  },
+  'Hip Condition': {
+    dc: 'DC 5252',
+    levels: [
+      { rating: '10%', criteria: 'Flexion limited to 45°' },
+      { rating: '20%', criteria: 'Flexion limited to 30°' },
+      { rating: '30%', criteria: 'Flexion limited to 20°' },
+      { rating: '40%', criteria: 'Flexion limited to 10°' },
+    ],
+  },
+  'Hypertension': {
+    dc: 'DC 7101',
+    levels: [
+      { rating: '10%', criteria: 'Diastolic pressure predominantly 100 or more, or systolic predominantly 160 or more, or continuous medication required' },
+      { rating: '20%', criteria: 'Diastolic pressure predominantly 110 or more, or systolic predominantly 200 or more' },
+      { rating: '40%', criteria: 'Diastolic pressure predominantly 120 or more' },
+      { rating: '60%', criteria: 'Diastolic pressure predominantly 130 or more' },
+    ],
+  },
+  'Asthma': {
+    dc: 'DC 6602',
+    levels: [
+      { rating: '10%', criteria: 'FEV-1 71-80% predicted, or FEV-1/FVC 71-80%, or intermittent inhalational or oral bronchodilator therapy' },
+      { rating: '30%', criteria: 'FEV-1 56-70% predicted, or FEV-1/FVC 56-70%, or daily inhalational or oral bronchodilator therapy' },
+      { rating: '60%', criteria: 'FEV-1 40-55% predicted, or FEV-1/FVC 40-55%, or at least monthly visits to a physician for required care of exacerbations' },
+      { rating: '100%', criteria: 'FEV-1 less than 40% predicted, or more than one attack per week with episodes of respiratory failure, or requires daily use of systemic corticosteroids' },
+    ],
+  },
+  'IBS': {
+    dc: 'DC 7319',
+    levels: [
+      { rating: '0%', criteria: 'Mild disturbances of bowel function with occasional episodes of abdominal distress' },
+      { rating: '10%', criteria: 'Moderate — frequent episodes of bowel disturbance with abdominal distress' },
+      { rating: '30%', criteria: 'Severe — diarrhea or alternating diarrhea and constipation, with more or less constant abdominal distress' },
+    ],
+  },
+  'TBI': {
+    dc: 'DC 8045',
+    levels: [
+      { rating: '0%', criteria: 'No residuals or subjective complaints only' },
+      { rating: '10%', criteria: 'Residuals rated on 3 or fewer facets at level 1' },
+      { rating: '40%', criteria: 'Residuals rated at level 2 on one or more facets' },
+      { rating: '70%', criteria: 'Residuals rated at level 3 on one or more facets' },
+      { rating: '100%', criteria: 'Total impairment of one or more facets' },
+    ],
+  },
+  'Radiculopathy': {
+    dc: 'DC 8520',
+    levels: [
+      { rating: '10%', criteria: 'Mild incomplete paralysis of the sciatic nerve' },
+      { rating: '20%', criteria: 'Moderate incomplete paralysis' },
+      { rating: '40%', criteria: 'Moderately severe incomplete paralysis' },
+      { rating: '60%', criteria: 'Severe incomplete paralysis with marked muscular atrophy' },
+      { rating: '80%', criteria: 'Complete paralysis of the sciatic nerve' },
+    ],
+  },
+  'Sinusitis': {
+    dc: 'DC 6513',
+    levels: [
+      { rating: '0%', criteria: 'Detected by X-ray only' },
+      { rating: '10%', criteria: 'One or two incapacitating episodes per year requiring prolonged antibiotic treatment, or three to six non-incapacitating episodes per year' },
+      { rating: '30%', criteria: 'Three or more incapacitating episodes per year requiring prolonged antibiotic treatment, or more than six non-incapacitating episodes per year' },
+      { rating: '50%', criteria: 'Following radical surgery with chronic osteomyelitis, or near-constant sinusitis with headaches, pain, and purulent discharge' },
+    ],
+  },
+  'Peripheral Neuropathy': {
+    dc: 'DC 8521',
+    levels: [
+      { rating: '10%', criteria: 'Mild incomplete paralysis' },
+      { rating: '20%', criteria: 'Moderate incomplete paralysis' },
+      { rating: '30%', criteria: 'Severe incomplete paralysis' },
+      { rating: '40%', criteria: 'Complete paralysis' },
+    ],
+  },
 };
 
 const dontsList = [
@@ -197,6 +289,7 @@ export default function CPExamPrepEnhanced() {
   const [selectedCondition, setSelectedCondition] = useState<string | null>(null);
   const conditionDetailRef = useRef<HTMLDivElement>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const showAIPractice = useFeatureFlag('aiPracticeQuestions');
   const { generate: aiGenerate, isLoading: aiLoading, error: aiError } = useAIGenerate('EXAMINER_PERSONA');
   const [aiQuestions, setAiQuestions] = useState<string[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -646,7 +739,7 @@ export default function CPExamPrepEnhanced() {
                   </Card>
 
                   {/* AI Practice Questions */}
-                  <Card className="border-primary/20">
+                  {showAIPractice && <Card className="border-primary/20">
                     <CardHeader>
                       <CardTitle className="text-lg flex items-center gap-2">
                         <Sparkles className="h-5 w-5 text-primary" />
@@ -759,7 +852,7 @@ export default function CPExamPrepEnhanced() {
                         </>
                       )}
                     </CardContent>
-                  </Card>
+                  </Card>}
                 </div>
               ) : (
                 <Card className="h-full flex items-center justify-center min-h-[400px]">
