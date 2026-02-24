@@ -1,13 +1,10 @@
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   GOLD_GRADIENT_TEXT,
   HEADING_H2_STYLE,
   HEADING_H3_STYLE,
-  PILL_STYLE,
   CARD_STYLE,
   CARD_SHADOW,
-  SECTION_TOP_GLOW_GOLD,
   EASE_SMOOTH,
   cardRevealRotate,
   staggerContainerSlow,
@@ -38,38 +35,14 @@ const STEPS = [
 ];
 
 export function HowItWorks() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end start'],
-  });
-
-  const bgNumY = useTransform(scrollYProgress, [0, 1], [60, -60]);
-
   return (
     <section
       id="how-it-works"
-      ref={containerRef}
-      className="relative py-12 md:py-16 overflow-hidden"
+      className="relative py-[120px] overflow-hidden"
       style={{ backgroundColor: '#000000', scrollMarginTop: '5rem' }}
     >
-      <div
-        className="absolute inset-x-0 top-0 h-[200px] pointer-events-none"
-        style={{ background: SECTION_TOP_GLOW_GOLD }}
-      />
-
-      <motion.div
-        className="relative z-10 text-center mb-6"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, ease: EASE_SMOOTH }}
-      >
-        <span style={PILL_STYLE}>How It Works</span>
-      </motion.div>
-
       <motion.h2
-        className="relative z-10 text-4xl md:text-5xl lg:text-6xl text-white text-center mb-4"
+        className="relative z-10 text-4xl md:text-5xl lg:text-6xl text-white text-center mb-16 px-4"
         style={HEADING_H2_STYLE}
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -79,17 +52,6 @@ export function HowItWorks() {
         From First Login to{' '}
         <span style={GOLD_GRADIENT_TEXT}>Finished Packet</span>
       </motion.h2>
-
-      <motion.p
-        className="relative z-10 text-center text-lg md:text-xl mb-20 max-w-2xl mx-auto px-4"
-        style={{ color: '#9CA3AF' }}
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.1, ease: EASE_SMOOTH }}
-      >
-        Walk into your appointment with everything ready.
-      </motion.p>
 
       <motion.div
         className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-6"
@@ -111,21 +73,10 @@ export function HowItWorks() {
               boxShadow: CARD_SHADOW,
             }}
           >
-            <motion.span
-              className="absolute -right-2 -top-4 text-[120px] md:text-[150px] font-black leading-none pointer-events-none select-none"
-              style={{
-                color: 'transparent',
-                WebkitTextStroke: '1px rgba(255, 255, 255, 0.04)',
-                y: bgNumY,
-              }}
-            >
-              {step.num}
-            </motion.span>
-
             <div className="relative z-10">
               <div className="flex items-center gap-4 mb-6">
                 <div
-                  className="w-12 h-12 rounded-full flex items-center justify-center"
+                  className="w-10 h-10 rounded-full flex items-center justify-center"
                   style={{
                     background: 'rgba(191, 149, 63, 0.1)',
                     border: '1px solid rgba(191, 149, 63, 0.2)',
@@ -135,12 +86,6 @@ export function HowItWorks() {
                     {step.num}
                   </span>
                 </div>
-                <span
-                  className="text-xs font-medium tracking-widest uppercase"
-                  style={{ color: 'rgba(255, 255, 255, 0.4)' }}
-                >
-                  Step {step.num}
-                </span>
               </div>
 
               <h3

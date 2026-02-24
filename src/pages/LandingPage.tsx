@@ -1,17 +1,11 @@
 import { useEffect } from 'react';
 import { StickyNav } from '@/components/landing/new/StickyNav';
 import { Hero } from '@/components/landing/new/Hero';
-import { SocialProof } from '@/components/landing/new/SocialProof';
-import { ValueProps } from '@/components/landing/new/ValueProps';
-import { FeatureBento } from '@/components/landing/new/FeatureBento';
-import { PrivacySection } from '@/components/landing/new/PrivacySection';
 import { HowItWorks } from '@/components/landing/new/HowItWorks';
-import { Pricing } from '@/components/landing/new/Pricing';
-import { FinalCTA } from '@/components/landing/new/FinalCTA';
-import { TrustMarquee } from '@/components/landing/new/TrustMarquee';
-import { LandingFooter } from '@/components/landing/new/LandingFooter';
 import { BuiltByVeteran } from '@/components/landing/new/BuiltByVeteran';
-import { LegalDisclaimer } from '@/components/landing/new/LegalDisclaimer';
+import { ProductShowcase } from '@/components/landing/new/ProductShowcase';
+import { Pricing } from '@/components/landing/new/Pricing';
+import { LandingFooter } from '@/components/landing/new/LandingFooter';
 
 export default function LandingPage() {
   useEffect(() => {
@@ -44,16 +38,10 @@ export default function LandingPage() {
     <div className="min-h-screen" style={{ backgroundColor: '#000000' }}>
       <StickyNav />
       <Hero />
-      <TrustMarquee />
-      <SocialProof />
-      <ValueProps />
       <HowItWorks />
-      <FeatureBento />
       <BuiltByVeteran />
+      <ProductShowcase />
       <Pricing />
-      <PrivacySection />
-      <FinalCTA />
-      <LegalDisclaimer />
       <LandingFooter />
     </div>
   );
