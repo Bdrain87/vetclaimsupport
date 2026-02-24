@@ -32,6 +32,7 @@ export interface ServicePeriod {
   startDate: string;
   endDate: string;
   dutyStation?: string;
+  currentlyServing?: boolean;
 }
 
 export interface UserProfile {

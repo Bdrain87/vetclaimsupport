@@ -1,10 +1,11 @@
 import { useState, useMemo } from 'react';
-import { Shield, Send, ArrowLeft, Eye } from 'lucide-react';
+import { Shield, Send, ArrowLeft, Eye, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { redactPII, REDACTION_TOKENS } from '@/lib/redaction';
+import { redactPII, REDACTION_TOKENS, type RedactionLevel } from '@/lib/redaction';
 import { AI_COPY } from '@/data/legalCopy';
+import { logAISend } from '@/services/aiAuditLog';
 
 interface RedactionPreviewProps {
   originalText: string;
@@ -24,7 +25,7 @@ const TOKEN_COLORS: Record<string, string> = {
 };
 
 function highlightRedactions(text: string): React.ReactNode[] {
-  const tokenPattern = /\[(SSN|DOB|ADDRESS|PHONE|EMAIL|CLAIM_NUMBER|SERVICE_NUMBER|MRN)_REDACTED\]/g;
+  const tokenPattern = /\[(SSN|DOB|ADDRESS|PHONE|EMAIL|CLAIM_NUMBER|SERVICE_NUMBER|MRN|NAME|ID)_REDACTED\]/g;
   const parts: React.ReactNode[] = [];
   let lastIndex = 0;
   let match: RegExpExecArray | null;
@@ -34,7 +35,7 @@ function highlightRedactions(text: string): React.ReactNode[] {
       parts.push(text.slice(lastIndex, match.index));
     }
     const token = match[0];
-    const colorClass = TOKEN_COLORS[token] || 'bg-muted text-foreground';
+    const colorClass = TOKEN_COLORS[token] || 'bg-muted text-foreground border-border';
     parts.push(
       <span key={match.index} className={`inline-block px-1.5 py-0.5 rounded text-xs font-mono border ${colorClass}`}>
         {token}
@@ -49,9 +50,20 @@ function highlightRedactions(text: string): React.ReactNode[] {
 }
 
 export function RedactionPreview({ originalText, onConfirm, onCancel }: RedactionPreviewProps) {
-  const [showOriginal, setShowOriginal] = useState(false);
+  const [redactionLevel, setRedactionLevel] = useState<RedactionLevel>('standard');
+  const [sideBySide, setSideBySide] = useState(true);
 
-  const result = useMemo(() => redactPII(originalText), [originalText]);
+  const result = useMemo(() => redactPII(originalText, redactionLevel), [originalText, redactionLevel]);
+
+  const handleConfirm = () => {
+    // Log to local AI audit log (no PII stored)
+    logAISend({
+      redactionMode: redactionLevel,
+      redactionCount: result.redactionCount,
+      textLengthSent: result.redactedText.length,
+    });
+    onConfirm(result.redactedText);
+  };
 
   return (
     <div className="space-y-4">
@@ -67,6 +79,39 @@ export function RedactionPreview({ originalText, onConfirm, onCancel }: Redactio
           </p>
         </div>
       </div>
+
+      {/* Redaction Strictness Toggle */}
+      <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/30 border border-border">
+        <Lock className="h-4 w-4 text-gold shrink-0" />
+        <div className="flex-1">
+          <p className="text-xs font-medium text-foreground">Redaction level</p>
+        </div>
+        <div className="flex rounded-lg overflow-hidden border border-border">
+          <button
+            onClick={() => setRedactionLevel('standard')}
+            className={`px-3 py-1.5 text-xs font-medium transition-colors ${
+              redactionLevel === 'standard'
+                ? 'bg-gold/20 text-gold'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            Standard
+          </button>
+          <button
+            onClick={() => setRedactionLevel('high')}
+            className={`px-3 py-1.5 text-xs font-medium transition-colors ${
+              redactionLevel === 'high'
+                ? 'bg-gold/20 text-gold'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            High privacy
+          </button>
+        </div>
+      </div>
+      <p className="text-[11px] text-muted-foreground/60 -mt-2 ml-1">
+        {redactionLevel === 'high' ? AI_COPY.redactionStrictness.high : AI_COPY.redactionStrictness.standard}
+      </p>
 
       {/* Redaction Summary */}
       {result.redactionCount > 0 && (
@@ -87,30 +132,53 @@ export function RedactionPreview({ originalText, onConfirm, onCancel }: Redactio
         </div>
       )}
 
-      {/* Preview */}
-      <Card>
-        <CardHeader className="py-3">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-sm">
-              {showOriginal ? 'Original Text' : 'This is what will be sent to AI'}
-            </CardTitle>
-            <button
-              onClick={() => setShowOriginal(!showOriginal)}
-              className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <Eye className="h-3 w-3" />
-              {showOriginal ? 'Show redacted' : 'Show original'}
-            </button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="max-h-64 overflow-y-auto rounded-lg bg-muted/30 p-3 text-sm leading-relaxed whitespace-pre-wrap">
-            {showOriginal
-              ? originalText
-              : highlightRedactions(result.redactedText)}
-          </div>
-        </CardContent>
-      </Card>
+      {/* View Toggle */}
+      <div className="flex items-center justify-end">
+        <button
+          onClick={() => setSideBySide(!sideBySide)}
+          className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <Eye className="h-3 w-3" />
+          {sideBySide ? 'Single view' : 'Side-by-side'}
+        </button>
+      </div>
+
+      {/* Side-by-side Preview */}
+      {sideBySide ? (
+        <div className="grid grid-cols-2 gap-3">
+          <Card>
+            <CardHeader className="py-2 px-3">
+              <CardTitle className="text-xs text-muted-foreground">Original</CardTitle>
+            </CardHeader>
+            <CardContent className="px-3 pb-3">
+              <div className="max-h-48 overflow-y-auto rounded-lg bg-muted/20 p-2 text-xs leading-relaxed whitespace-pre-wrap text-muted-foreground/70">
+                {originalText}
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="py-2 px-3">
+              <CardTitle className="text-xs text-foreground">Redacted (sent to AI)</CardTitle>
+            </CardHeader>
+            <CardContent className="px-3 pb-3">
+              <div className="max-h-48 overflow-y-auto rounded-lg bg-muted/30 p-2 text-xs leading-relaxed whitespace-pre-wrap">
+                {highlightRedactions(result.redactedText)}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      ) : (
+        <Card>
+          <CardHeader className="py-3">
+            <CardTitle className="text-sm">This is what will be sent to AI</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="max-h-64 overflow-y-auto rounded-lg bg-muted/30 p-3 text-sm leading-relaxed whitespace-pre-wrap">
+              {highlightRedactions(result.redactedText)}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Info sections */}
       <div className="space-y-2 text-xs text-muted-foreground">
@@ -125,7 +193,7 @@ export function RedactionPreview({ originalText, onConfirm, onCancel }: Redactio
           <ArrowLeft className="h-4 w-4 mr-2" />
           Go back
         </Button>
-        <Button onClick={() => onConfirm(result.redactedText)} className="flex-1">
+        <Button onClick={handleConfirm} className="flex-1">
           <Send className="h-4 w-4 mr-2" />
           Send to AI
         </Button>

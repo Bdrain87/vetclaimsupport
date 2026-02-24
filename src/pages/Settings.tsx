@@ -32,6 +32,7 @@ import { supabase } from '@/lib/supabase';
 import { signOut } from '@/services/auth';
 import { isNativeApp } from '@/lib/platform';
 import { NOTIFICATION_COPY, DATA_PRIVACY_COPY, AI_COPY, CLAIM_DATES_COPY, LEGAL_VERSIONS, formatLegalDate } from '@/data/legalCopy';
+import { getAIAuditLog, clearAIAuditLog, type AIAuditEntry } from '@/services/aiAuditLog';
 import type { Session } from '@supabase/supabase-js';
 
 const REMINDER_SETTINGS_KEY = 'va-claims-reminder-settings';
@@ -64,6 +65,8 @@ export default function Settings() {
   const profile = useProfileStore();
   const [session, setSession] = useState<Session | null>(null);
   const [showSyncModal, setShowSyncModal] = useState(false);
+  const [auditLogOpen, setAuditLogOpen] = useState(false);
+  const [auditEntries, setAuditEntries] = useState<AIAuditEntry[]>(() => getAIAuditLog().slice(0, 10));
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session: s } }) => setSession(s));
@@ -771,6 +774,66 @@ export default function Settings() {
             {DATA_PRIVACY_COPY.noTracking}
           </p>
         </CardContent>
+      </Card>
+
+      {/* AI Usage Log — Audit Trail */}
+      <Card>
+        <CardHeader>
+          <button
+            onClick={() => {
+              if (!auditLogOpen) {
+                setAuditEntries(getAIAuditLog().slice(0, 10));
+              }
+              setAuditLogOpen(prev => !prev);
+            }}
+            className="flex items-center justify-between w-full text-left"
+          >
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                AI Usage Log
+              </CardTitle>
+              <CardDescription>Review recent AI data sends</CardDescription>
+            </div>
+            <ChevronRight className={`h-5 w-5 text-muted-foreground transition-transform ${auditLogOpen ? 'rotate-90' : ''}`} />
+          </button>
+        </CardHeader>
+        {auditLogOpen && (
+          <CardContent className="space-y-3">
+            {auditEntries.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No AI sends recorded</p>
+            ) : (
+              <>
+                <div className="space-y-2">
+                  {auditEntries.map((entry) => (
+                    <div key={entry.id} className="p-3 rounded-lg bg-muted/50 border border-border text-sm space-y-1">
+                      <p className="text-foreground font-medium">
+                        {new Date(entry.timestamp).toLocaleString()}
+                      </p>
+                      <p className="text-muted-foreground">
+                        Redaction mode: <span className="font-medium text-foreground">{entry.redactionMode}</span>
+                        {' · '}
+                        Redactions: <span className="font-medium text-foreground">{entry.redactionCount}</span>
+                      </p>
+                    </div>
+                  ))}
+                </div>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => {
+                    clearAIAuditLog();
+                    setAuditEntries([]);
+                    toast({ title: 'Log Cleared', description: 'AI usage log has been cleared.' });
+                  }}
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Clear Log
+                </Button>
+              </>
+            )}
+          </CardContent>
+        )}
       </Card>
 
       {/* Legal Section */}

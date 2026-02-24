@@ -117,6 +117,15 @@ export function SubscriptionCard() {
           {PREMIUM_COPY.priceDisplay}
         </div>
 
+        <ul className="space-y-1 text-xs text-muted-foreground">
+          {PREMIUM_COPY.whatYouGet.map((item) => (
+            <li key={item} className="flex items-start gap-1.5">
+              <span className="text-emerald-400 mt-0.5 shrink-0">✓</span>
+              {item}
+            </li>
+          ))}
+        </ul>
+
         {!isNativeApp && (
           <Button onClick={handleUpgrade} disabled={loading} className="w-full" size="sm">
             {loading ? 'Redirecting...' : PREMIUM_COPY.ctaLabel}
@@ -131,6 +140,10 @@ export function SubscriptionCard() {
 
         <p className="text-[11px] text-muted-foreground/70 text-center">
           {PREMIUM_COPY.accountNote}
+        </p>
+
+        <p className="text-[11px] text-muted-foreground/60 text-center">
+          {PREMIUM_COPY.alreadyPurchased}
         </p>
 
         <button

@@ -52,6 +52,7 @@ export default function ServiceHistory() {
     duties: '',
     hazards: '',
   });
+  const [currentlyServing, setCurrentlyServing] = useState(false);
   const [suggestedHazards, setSuggestedHazards] = useState<string[]>([]);
   const [selectedHazards, setSelectedHazards] = useState<string[]>([]);
   const [customHazard, setCustomHazard] = useState('');
@@ -122,6 +123,7 @@ export default function ServiceHistory() {
   const resetForm = () => {
     setFormData({ startDate: '', endDate: '', base: '', unit: '', afsc: '', duties: '', hazards: '' });
     setEditingId(null);
+    setCurrentlyServing(false);
     setSuggestedHazards([]);
     setSelectedHazards([]);
     setCustomHazard('');
@@ -152,11 +154,23 @@ export default function ServiceHistory() {
     }
   };
 
+  // Date validation helper
+  const dateError = (() => {
+    if (!currentlyServing && formData.startDate && formData.endDate) {
+      if (formData.endDate < formData.startDate) {
+        return 'End date cannot be before start date.';
+      }
+    }
+    return null;
+  })();
+
   // Combine selected hazards into the form data on submit
   const handleSubmitWithHazards = (e: React.FormEvent) => {
     e.preventDefault();
+    if (dateError) return;
     const combinedHazards = selectedHazards.join(', ');
     const finalData = { ...formData, hazards: combinedHazards || formData.hazards };
+    if (currentlyServing) finalData.endDate = '';
     if (editingId) {
       updateServiceEntry(editingId, finalData);
     } else {
@@ -329,9 +343,19 @@ export default function ServiceHistory() {
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="endDate">End Date</Label>
-                        <Input id="endDate" type="date" min="1940-01-01" max={today} value={formData.endDate} onChange={(e) => setFormData({ ...formData, endDate: e.target.value })} />
+                        <Input id="endDate" type="date" min="1940-01-01" max={today} value={formData.endDate} onChange={(e) => setFormData({ ...formData, endDate: e.target.value })} disabled={currentlyServing} className={currentlyServing ? 'opacity-40' : ''} />
                       </div>
                     </div>
+                    <div className="flex items-center gap-2">
+                      <Checkbox id="currentlyServing" checked={currentlyServing} onCheckedChange={(checked) => { setCurrentlyServing(!!checked); if (checked) setFormData({ ...formData, endDate: '' }); }} />
+                      <Label htmlFor="currentlyServing" className="text-sm text-muted-foreground cursor-pointer">Currently Serving (no end date)</Label>
+                    </div>
+                    {dateError && (
+                      <p className="text-xs text-red-400 flex items-center gap-1">
+                        <AlertTriangle className="h-3 w-3" />
+                        {dateError}
+                      </p>
+                    )}
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
                         <Label htmlFor="base">Base/Location</Label>

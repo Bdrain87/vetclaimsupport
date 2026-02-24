@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, X, Activity, Moon, Brain, Pill, Stethoscope, FileText } from 'lucide-react';
 import { impactLight } from '@/lib/haptics';
@@ -14,12 +14,28 @@ const actions = [
   { label: 'Quick Note', icon: FileText, path: '/health/summary', color: 'text-muted-foreground' },
 ];
 
+/** Paths where the FAB should appear — only screens where adding entries makes sense */
+const FAB_VISIBLE_PREFIXES = [
+  '/health',
+  '/claims',
+];
+
+/** Exact paths where the FAB should also appear */
+const FAB_VISIBLE_EXACT = ['/app', '/'];
+
+function shouldShowFAB(pathname: string): boolean {
+  if (FAB_VISIBLE_EXACT.includes(pathname)) return true;
+  return FAB_VISIBLE_PREFIXES.some((p) => pathname.startsWith(p));
+}
+
 export function QuickAddFAB() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const hasOnboarded = useProfileStore((s) => s.hasCompletedOnboarding);
 
   if (!hasOnboarded) return null;
+  if (!shouldShowFAB(location.pathname)) return null;
 
   const handleAction = (path: string) => {
     impactLight();

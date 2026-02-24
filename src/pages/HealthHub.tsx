@@ -113,19 +113,29 @@ export default function HealthHub() {
         {healthCards.map((card) => {
           const entries = (store[card.storeKey] || []) as { date?: string; createdAt?: string; startDate?: string }[];
           const count = entries.length;
-          const lastEntry = formatLastEntry(entries);
+          const isEmpty = count === 0;
+          const lastEntry = isEmpty ? null : formatLastEntry(entries);
           return (
             <button
               key={card.route}
               onClick={() => navigate(card.route)}
               className="flex flex-col items-center gap-2 p-4 rounded-xl border border-border bg-card hover:bg-accent/50 transition-colors text-center"
             >
-              <card.icon className="h-8 w-8 text-gold" />
+              <card.icon className={`h-8 w-8 ${isEmpty ? 'text-muted-foreground/40' : 'text-gold'}`} />
               <span className="text-sm font-medium text-foreground">{card.label}</span>
-              <span className="text-xs text-muted-foreground">
-                {count} {count === 1 ? 'entry' : 'entries'}
-              </span>
-              <span className="text-[10px] text-muted-foreground/70">{lastEntry}</span>
+              {isEmpty ? (
+                <>
+                  <span className="text-xs text-muted-foreground/60">No entries yet</span>
+                  <span className="text-[10px] text-gold">Tap to start logging</span>
+                </>
+              ) : (
+                <>
+                  <span className="text-xs text-muted-foreground">
+                    {count} {count === 1 ? 'entry' : 'entries'}
+                  </span>
+                  {lastEntry && <span className="text-[10px] text-muted-foreground/70">{lastEntry}</span>}
+                </>
+              )}
             </button>
           );
         })}

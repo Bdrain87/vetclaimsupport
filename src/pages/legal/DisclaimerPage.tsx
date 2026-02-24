@@ -17,6 +17,11 @@ export default function DisclaimerPage() {
         Back
       </button>
 
+      {/* Effective Date Banner */}
+      <div className="rounded-lg bg-gold/5 border border-gold/20 px-4 py-2 text-xs text-muted-foreground">
+        <span className="font-semibold text-foreground">Effective:</span> {formatLegalDate(LEGAL_VERSIONS.disclaimer.effectiveDate)} &middot; Version {LEGAL_VERSIONS.disclaimer.version}
+      </div>
+
       {/* Header */}
       <div className="flex items-start gap-4">
         <div className="p-3 rounded-xl bg-gold/10 shrink-0">

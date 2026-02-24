@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { z } from 'zod';
-import { Download, Upload, AlertTriangle, CheckCircle2, Trash2, Shield } from 'lucide-react';
+import { Download, Upload, AlertTriangle, CheckCircle2, Trash2, Shield, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -17,10 +17,38 @@ import { useToast } from '@/hooks/use-toast';
 import { useClaims } from '@/hooks/useClaims';
 import { getAllFileIds, getFileData, deleteFileData, restoreFiles } from '@/lib/indexedDB';
 import { isEncryptionEnabled } from '@/utils/encryption';
-import { DATA_PRIVACY_COPY } from '@/data/legalCopy';
+import { DATA_PRIVACY_COPY, BACKUP_COPY } from '@/data/legalCopy';
 
 const STORAGE_KEY = 'vcs-app-data';
 const BACKUP_VERSION = '2.0.0';
+const LAST_BACKUP_KEY = 'vcs-last-backup-date';
+
+function getLastBackupDate(): string | null {
+  try {
+    return localStorage.getItem(LAST_BACKUP_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function setLastBackupDate(): void {
+  try {
+    localStorage.setItem(LAST_BACKUP_KEY, new Date().toISOString());
+  } catch {
+    // Non-fatal
+  }
+}
+
+function formatBackupDate(iso: string): string {
+  const d = new Date(iso);
+  const now = new Date();
+  const diffMs = now.getTime() - d.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  if (diffDays === 0) return 'Today';
+  if (diffDays === 1) return 'Yesterday';
+  if (diffDays < 7) return `${diffDays} days ago`;
+  return d.toLocaleDateString();
+}
 
 // Zod schema for validating imported backup data
 const backupDataSchema = z.object({
@@ -52,6 +80,7 @@ export function DataBackup() {
   const [pendingImportData, setPendingImportData] = useState<BackupData | null>(null);
 
   const encrypted = isEncryptionEnabled();
+  const lastBackup = getLastBackupDate();
 
   const exportData = async () => {
     setIsExporting(true);
@@ -84,6 +113,7 @@ export function DataBackup() {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
+      setLastBackupDate();
       toast({
         title: 'Backup Created',
         description: 'Your data has been exported successfully.',
@@ -215,6 +245,22 @@ export function DataBackup() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* Backup Health Indicator */}
+          <div className="flex items-center justify-between p-3 rounded-lg border border-border bg-card">
+            <div className="flex items-center gap-2">
+              <Clock className={`h-4 w-4 ${lastBackup ? 'text-emerald-400' : 'text-yellow-400'}`} />
+              <div>
+                <p className="text-xs font-medium text-foreground">{BACKUP_COPY.healthIndicatorLabel}</p>
+                <p className="text-[11px] text-muted-foreground">
+                  {lastBackup ? formatBackupDate(lastBackup) : BACKUP_COPY.neverBacked}
+                </p>
+              </div>
+            </div>
+            <Button size="sm" variant="outline" onClick={exportData} disabled={isExporting} className="text-xs h-8">
+              {BACKUP_COPY.backupNow}
+            </Button>
+          </div>
+
           <div className="p-3 rounded-lg bg-muted border border-border space-y-2">
             <p className="text-sm text-muted-foreground">
               Your data is stored locally on your device. Create regular backups to prevent data loss.
@@ -227,6 +273,9 @@ export function DataBackup() {
             </div>
             <p className="text-xs text-muted-foreground/70">
               {DATA_PRIVACY_COPY.backupWarning}
+            </p>
+            <p className="text-xs text-muted-foreground/70">
+              {BACKUP_COPY.storageNote}
             </p>
           </div>
 

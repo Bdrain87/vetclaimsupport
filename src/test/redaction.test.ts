@@ -154,6 +154,25 @@ describe('redactPII', () => {
     expect(redactionCount).toBe(0);
   });
 
+  // --- High privacy mode ---
+  it('redacts labeled names in high mode', () => {
+    const { redactedText } = redactPII('Patient: John Smith', 'high');
+    expect(redactedText).toContain('[NAME_REDACTED]');
+    expect(redactedText).not.toContain('John Smith');
+  });
+
+  it('redacts labeled IDs in high mode', () => {
+    const { redactedText } = redactPII('ID: ABC12345', 'high');
+    expect(redactedText).toContain('[ID_REDACTED]');
+    expect(redactedText).not.toContain('ABC12345');
+  });
+
+  it('does not apply high-mode patterns in standard mode', () => {
+    const text = 'Patient: John Smith';
+    const { redactedText } = redactPII(text, 'standard');
+    expect(redactedText).not.toContain('[NAME_REDACTED]');
+  });
+
   // --- Complex document ---
   it('handles a complex document with multiple patterns', () => {
     const text = [

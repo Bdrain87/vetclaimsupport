@@ -17,6 +17,11 @@
  */
 
 // ---------------------------------------------------------------------------
+// Redaction strictness
+// ---------------------------------------------------------------------------
+export type RedactionLevel = 'standard' | 'high';
+
+// ---------------------------------------------------------------------------
 // Replacement tokens
 // ---------------------------------------------------------------------------
 export const REDACTION_TOKENS = {
@@ -28,6 +33,8 @@ export const REDACTION_TOKENS = {
   CLAIM_NUMBER: '[CLAIM_NUMBER_REDACTED]',
   SERVICE_NUMBER: '[SERVICE_NUMBER_REDACTED]',
   MRN: '[MRN_REDACTED]',
+  NAME: '[NAME_REDACTED]',
+  ID: '[ID_REDACTED]',
 } as const;
 
 // ---------------------------------------------------------------------------
@@ -103,6 +110,12 @@ const VA_CLAIM_NUMBER = /(?:\b(?:claim\s*(?:number|no\.?|#)|file\s*(?:number|no\
 const PATIENT_ID = /\b(?:patient\s*(?:ID|number|no\.?|#)|member\s*(?:ID|number))\s*[:#]?\s*[A-Za-z0-9]{4,15}\b/gi;
 
 // ---------------------------------------------------------------------------
+// 10. High-privacy patterns (aggressive)
+// ---------------------------------------------------------------------------
+const NAME_LABELED = /\b(?:name|patient|veteran|applicant|claimant)\s*[:#]?\s*[A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2}/gi;
+const GENERIC_ID = /\b(?:ID|account|case)\s*[:#]?\s*[A-Za-z0-9]{4,15}\b/gi;
+
+// ---------------------------------------------------------------------------
 // Exported redaction function
 // ---------------------------------------------------------------------------
 export interface RedactionResult {
@@ -111,7 +124,7 @@ export interface RedactionResult {
   redactionsByType: Record<string, number>;
 }
 
-export function redactPII(text: string): RedactionResult {
+export function redactPII(text: string, level: RedactionLevel = 'standard'): RedactionResult {
   let result = text;
   const counts: Record<string, number> = {};
 
@@ -172,6 +185,12 @@ export function redactPII(text: string): RedactionResult {
 
   // Patient ID
   replaceAndCount(PATIENT_ID, REDACTION_TOKENS.MRN);
+
+  // High-privacy mode: additional aggressive patterns
+  if (level === 'high') {
+    replaceAndCount(NAME_LABELED, '[NAME_REDACTED]');
+    replaceAndCount(GENERIC_ID, '[ID_REDACTED]');
+  }
 
   const totalRedactions = Object.values(counts).reduce((a, b) => a + b, 0);
 

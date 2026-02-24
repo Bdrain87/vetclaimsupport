@@ -97,6 +97,17 @@ export const AI_COPY = {
     'Only the redacted text you approve is sent. We do not upload your original PDF or images.',
   yourControl:
     'You can skip AI entirely. The app works without it.',
+
+  redactionStrictness: {
+    high: 'High privacy — aggressively strips anything that looks like a name, number, or identifier.',
+    standard: 'Standard — removes known patterns like SSN, DOB, phone, email.',
+  },
+
+  auditLogEntry: (date: string, mode: string) =>
+    `Sent to AI on ${date} with ${mode} redaction mode`,
+
+  defaultOffPerUpload:
+    'AI analysis is off by default. You must opt in for each document.',
 } as const;
 
 // ---------------------------------------------------------------------------
@@ -113,6 +124,15 @@ export const PREMIUM_COPY = {
   activeLabel: 'Premium Active',
   restorePurchasesLabel: 'Restore Purchases',
   restorePremiumLabel: 'Restore Premium',
+  whatYouGet: [
+    'PDF claim packet export',
+    'Advanced personal statement templates',
+    'AI-assisted document analysis',
+    'Body map PDF export',
+    'Full health tracking suite',
+  ],
+  alreadyPurchased: 'Already purchased? Tap Restore below.',
+  signInNote: 'Sign in to sync across devices.',
 } as const;
 
 // ---------------------------------------------------------------------------
@@ -187,6 +207,17 @@ export const CLAIM_DATES_COPY = {
   autoSaveLabel: 'Saved automatically.',
   bddGuideTitle: 'BDD Guide',
   itfTitle: 'Intent to File',
+} as const;
+
+// ---------------------------------------------------------------------------
+// Backup copy
+// ---------------------------------------------------------------------------
+export const BACKUP_COPY = {
+  healthIndicatorLabel: 'Last backup',
+  neverBacked: 'Never backed up',
+  backupNow: 'Back up now',
+  storageNote:
+    'Backups are saved to your device (Files app / iCloud / Drive). VCS cannot recover data if you lose your device and never exported a backup.',
 } as const;
 
 // ---------------------------------------------------------------------------

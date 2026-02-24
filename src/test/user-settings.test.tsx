@@ -208,7 +208,7 @@ describe('ExportDataPage User Interactions', () => {
     });
   });
 
-  it('has an export PDF button', async () => {
+  it('has distinct PDF and Data export options', async () => {
     render(
       <TestWrapper>
         <ExportDataPage />
@@ -216,11 +216,10 @@ describe('ExportDataPage User Interactions', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('PDF Export')).toBeInTheDocument();
+      expect(screen.getByText('PDF Claim Packet')).toBeInTheDocument();
     });
 
-    // Should have a button that exports
-    const exportButton = screen.getByRole('button', { name: /export\s+pdf/i });
-    expect(exportButton).toBeInTheDocument();
+    // Should have both export option cards
+    expect(screen.getByText('Data Export (JSON)')).toBeInTheDocument();
   });
 });
