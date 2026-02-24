@@ -41,6 +41,7 @@ import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
 import { ClaimReadiness } from '@/components/dashboard/ClaimReadiness';
 import { useStreakTracker } from '@/hooks/useStreakTracker';
 import { useSmartReminders } from '@/hooks/useSmartReminders';
+import { useFeatureFlag } from '@/store/useFeatureFlagStore';
 
 export default function Dashboard() {
   const { data } = useClaims();
@@ -51,6 +52,8 @@ export default function Dashboard() {
 
   const streak = useStreakTracker();
   const reminders = useSmartReminders();
+  const showReadiness = useFeatureFlag('dashboardConditionReadiness');
+  const showRecommendations = useFeatureFlag('dashboardRecommendations');
 
   const readinessScore = useMemo(
     () => ClaimIntelligence.getOverallReadiness(userConditions, data, profile),
@@ -439,14 +442,16 @@ export default function Dashboard() {
             </div>
           </Link>
           {/* Per-condition readiness breakdown */}
-          <div className="mt-2">
-            <ClaimReadiness userConditions={userConditions} claimsData={data} />
-          </div>
+          {showReadiness && (
+            <div className="mt-2">
+              <ClaimReadiness userConditions={userConditions} claimsData={data} />
+            </div>
+          )}
         </motion.div>
       )}
 
       {/* Recommended for Your Claims */}
-      {conditionRecommendations.length > 0 && (
+      {showRecommendations && conditionRecommendations.length > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

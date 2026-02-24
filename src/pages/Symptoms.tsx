@@ -3,6 +3,7 @@ import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { useEvidence } from '@/hooks/useEvidence';
 import { getConditionById } from '@/data/vaConditions';
+import { useFeatureFlag } from '@/store/useFeatureFlagStore';
 import { useToast } from '@/hooks/use-toast';
 import {
   Activity, Plus, Trash2, Edit, Calendar, Download, Clock,
@@ -117,6 +118,7 @@ export default function Symptoms() {
   const { data, addSymptom, updateSymptom, deleteSymptom } = useClaims();
   const { documents, setAllDocuments } = useEvidence();
   const { toast } = useToast();
+  const showRatingGuidance = useFeatureFlag('symptomRatingGuidance');
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'list' | 'timeline'>('list');
@@ -442,7 +444,7 @@ export default function Symptoms() {
       )}
 
       {/* VA Rating Guidance — Severity-to-Rating Context */}
-      {data.symptoms.length >= 3 && (
+      {showRatingGuidance && data.symptoms.length >= 3 && (
         <Collapsible>
           <div className="rounded-2xl bg-card border border-border overflow-hidden">
             <CollapsibleTrigger className="w-full p-4 flex items-center justify-between hover:bg-accent/30 transition-colors">

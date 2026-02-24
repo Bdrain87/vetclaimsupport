@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useFeatureFlag } from '@/store/useFeatureFlagStore';
 import {
   Dialog,
   DialogContent,
@@ -150,6 +151,7 @@ export function ExportCustomizationModal({
   onExport,
 }: ExportCustomizationModalProps) {
   const { data } = useClaims();
+  const showPacketCheck = useFeatureFlag('exportPacketCheck');
   
   const [sections, setSections] = useState<ExportSections>({
     personalStatement: true,
@@ -263,7 +265,7 @@ export function ExportCustomizationModal({
         </DialogHeader>
 
         {/* Packet Completeness Check */}
-        <div className="rounded-lg border border-border bg-muted/30 p-3 space-y-2">
+        {showPacketCheck && <div className="rounded-lg border border-border bg-muted/30 p-3 space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-foreground">Packet Completeness</span>
             <Badge variant={packetChecks.completedCount === packetChecks.total ? 'default' : 'secondary'} className="font-mono text-[10px]">
@@ -277,7 +279,7 @@ export function ExportCustomizationModal({
               </span>
             ))}
           </div>
-        </div>
+        </div>}
 
         {/* Select All / Deselect All */}
         <div className="flex items-center justify-between py-2">

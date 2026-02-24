@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ChevronLeft,
@@ -7,6 +7,7 @@ import {
   X,
   Activity,
   Info,
+  Flame,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,6 +16,7 @@ import useAppStore from '@/store/useAppStore';
 import { PageContainer } from '@/components/PageContainer';
 import type { UserCondition } from '@/store/useAppStore';
 import { BODY_REGIONS } from '@/data/bodyRegions';
+import type { BodyRegion, RegionCondition } from '@/data/bodyRegions';
 
 // ---------------------------------------------------------------------------
 // Helper: build a unique condition key that accounts for bilateral regions
@@ -39,6 +41,26 @@ export default function BodyMap() {
   // UI state
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
+
+  // Pain intensity tracking (persisted to localStorage)
+  const [painLevels, setPainLevels] = useState<Record<string, number>>(() => {
+    try {
+      const saved = localStorage.getItem('bodymap-pain-levels');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('bodymap-pain-levels', JSON.stringify(painLevels));
+    } catch { /* storage full */ }
+  }, [painLevels]);
+
+  const setPainLevel = useCallback((key: string, level: number) => {
+    setPainLevels(prev => ({ ...prev, [key]: level }));
+  }, []);
 
   // Derive which condition keys are already stored
   const addedConditionKeys = useMemo(() => {
@@ -925,56 +947,112 @@ export default function BodyMap() {
                     {activeRegion.conditions.map((condition) => {
                       const key = conditionKey(activeRegion.id, condition.id);
                       const isAdded = addedConditionKeys.has(key);
+                      const painLevel = painLevels[key] ?? 0;
 
                       return (
-                        <button
-                          key={condition.id}
-                          type="button"
-                          onClick={() =>
-                            toggleCondition(activeRegion, condition)
-                          }
-                          className={`w-full text-left rounded-lg border p-3 transition-all duration-200 ${
-                            isAdded
-                              ? 'bg-[rgba(212,175,55,0.15)] border-[rgba(212,175,55,0.4)] hover:bg-gold/20'
-                              : 'bg-muted/30 border-border hover:bg-muted/50 hover:border-border'
-                          }`}
-                        >
-                          <div className="flex items-start gap-3">
-                            <div
-                              className={`mt-0.5 flex-shrink-0 h-5 w-5 rounded-full border-2 flex items-center justify-center transition-colors ${
-                                isAdded
-                                  ? 'bg-gold border-gold'
-                                  : 'border-muted-foreground'
-                              }`}
-                            >
-                              {isAdded && (
-                                <Check className="h-3 w-3 text-primary-foreground" />
-                              )}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 flex-wrap">
-                                <span
-                                  className={`font-medium text-sm ${
-                                    isAdded ? 'text-gold-hl' : 'text-foreground'
-                                  }`}
-                                >
-                                  {condition.name}
-                                </span>
-                                {condition.diagnosticCode && (
-                                  <Badge
-                                    variant="outline"
-                                    className="text-[10px] px-1.5 py-0 h-4 border-border text-muted-foreground"
-                                  >
-                                    DC {condition.diagnosticCode}
-                                  </Badge>
+                        <div key={condition.id} className="space-y-0">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              toggleCondition(activeRegion, condition)
+                            }
+                            className={`w-full text-left rounded-lg border p-3 transition-all duration-200 ${
+                              isAdded
+                                ? `bg-[rgba(212,175,55,0.15)] border-[rgba(212,175,55,0.4)] hover:bg-gold/20 ${painLevel > 0 ? 'rounded-b-none border-b-0' : ''}`
+                                : 'bg-muted/30 border-border hover:bg-muted/50 hover:border-border'
+                            }`}
+                          >
+                            <div className="flex items-start gap-3">
+                              <div
+                                className={`mt-0.5 flex-shrink-0 h-5 w-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+                                  isAdded
+                                    ? 'bg-gold border-gold'
+                                    : 'border-muted-foreground'
+                                }`}
+                              >
+                                {isAdded && (
+                                  <Check className="h-3 w-3 text-primary-foreground" />
                                 )}
                               </div>
-                              <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                                {condition.description}
-                              </p>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span
+                                    className={`font-medium text-sm ${
+                                      isAdded ? 'text-gold-hl' : 'text-foreground'
+                                    }`}
+                                  >
+                                    {condition.name}
+                                  </span>
+                                  {condition.diagnosticCode && (
+                                    <Badge
+                                      variant="outline"
+                                      className="text-[10px] px-1.5 py-0 h-4 border-border text-muted-foreground"
+                                    >
+                                      DC {condition.diagnosticCode}
+                                    </Badge>
+                                  )}
+                                  {isAdded && painLevel > 0 && (
+                                    <Badge
+                                      variant="outline"
+                                      className={`text-[10px] px-1.5 py-0 h-4 gap-0.5 ${
+                                        painLevel >= 7 ? 'border-red-500/40 text-red-400' :
+                                        painLevel >= 4 ? 'border-yellow-500/40 text-yellow-400' :
+                                        'border-emerald-500/40 text-emerald-400'
+                                      }`}
+                                    >
+                                      <Flame className="h-2.5 w-2.5" />
+                                      {painLevel}/10
+                                    </Badge>
+                                  )}
+                                </div>
+                                <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                                  {condition.description}
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                        </button>
+                          </button>
+                          {/* Pain intensity scale — shown when condition is added */}
+                          {isAdded && (
+                            <div
+                              className="bg-[rgba(212,175,55,0.08)] border border-[rgba(212,175,55,0.4)] border-t-0 rounded-b-lg px-3 py-2"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <div className="flex items-center gap-2 mb-1.5">
+                                <Flame className="h-3 w-3 text-muted-foreground" />
+                                <span className="text-[11px] text-muted-foreground font-medium">
+                                  Pain / Severity on worst days
+                                </span>
+                                <span className={`text-[11px] font-bold ml-auto ${
+                                  painLevel >= 7 ? 'text-red-400' :
+                                  painLevel >= 4 ? 'text-yellow-400' :
+                                  painLevel > 0 ? 'text-emerald-400' :
+                                  'text-muted-foreground'
+                                }`}>
+                                  {painLevel > 0 ? `${painLevel}/10` : 'Not set'}
+                                </span>
+                              </div>
+                              <div className="flex gap-1">
+                                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((level) => (
+                                  <button
+                                    key={level}
+                                    type="button"
+                                    onClick={() => setPainLevel(key, painLevel === level ? 0 : level)}
+                                    className={`flex-1 h-5 rounded-sm text-[9px] font-bold transition-all ${
+                                      level <= painLevel
+                                        ? level >= 7 ? 'bg-red-500/70 text-white'
+                                          : level >= 4 ? 'bg-yellow-500/60 text-white'
+                                          : 'bg-emerald-500/60 text-white'
+                                        : 'bg-muted/60 text-muted-foreground hover:bg-muted'
+                                    }`}
+                                    aria-label={`Pain level ${level}`}
+                                  >
+                                    {level}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       );
                     })}
                   </CardContent>
@@ -1025,17 +1103,26 @@ export default function BodyMap() {
                         const label =
                           condition?.name || uc.notes || uc.conditionId;
                         const regionLabel = region?.label || uc.bodyPart;
+                        const key = uc.bodyPart ? conditionKey(uc.bodyPart, uc.conditionId) : '';
+                        const pain = painLevels[key] ?? 0;
 
                         return (
                           <Badge
                             key={uc.id}
                             className="bg-[rgba(212,175,55,0.15)] text-gold-hl border border-gold/30 hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30 cursor-pointer transition-colors gap-1 pr-1.5"
                             onClick={() => removeUserCondition(uc.id)}
-                            title={`${label} (${regionLabel}) — click to remove`}
+                            title={`${label} (${regionLabel})${pain > 0 ? ` — Pain: ${pain}/10` : ''} — click to remove`}
                           >
                             <span className="max-w-[180px] truncate">
                               {label}
                             </span>
+                            {pain > 0 && (
+                              <span className={`text-[10px] font-bold ${
+                                pain >= 7 ? 'text-red-400' : pain >= 4 ? 'text-yellow-400' : 'text-emerald-400'
+                              }`}>
+                                {pain}/10
+                              </span>
+                            )}
                             <span className="text-[10px] text-muted-foreground ml-0.5">
                               ({regionLabel})
                             </span>

@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useEvidence } from '@/hooks/useEvidence';
+import { useFeatureFlag } from '@/store/useFeatureFlagStore';
 import { Pill, Plus, Trash2, Edit, Calendar, AlertCircle, Download, Loader2, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -24,6 +25,7 @@ export default function Medications() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
+  const showSideEffectStats = useFeatureFlag('medicationSideEffectStats');
   const [formData, setFormData] = useState<Omit<Medication, 'id'>>({
     startDate: '',
     endDate: '',
@@ -232,7 +234,7 @@ export default function Medications() {
       </div>
 
       {/* Side Effects Summary & VA Guidance */}
-      {data.medications.length > 0 && (
+      {showSideEffectStats && data.medications.length > 0 && (
         <div className="space-y-4">
           {/* Side Effect Summary Cards */}
           <div className="grid grid-cols-3 gap-3">

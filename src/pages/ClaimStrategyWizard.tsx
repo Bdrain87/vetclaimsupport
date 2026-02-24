@@ -19,6 +19,7 @@ import {
   Download,
   RefreshCw,
   Scale,
+  Link2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -37,6 +38,7 @@ import { PageContainer } from '@/components/PageContainer';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { useProfileStore } from '@/store/useProfileStore';
+import { useFeatureFlag } from '@/store/useFeatureFlagStore';
 import { getAllBranchLabels } from '@/utils/veteranProfile';
 
 interface ServiceInfo {
@@ -136,6 +138,69 @@ const commonConditions = [
   'Diabetes', 'Peripheral Neuropathy', 'Scars', 'Skin Condition',
 ];
 
+// Common secondary conditions linked to primary conditions
+const secondaryConditionsMap: Record<string, { secondary: string; link: string }[]> = {
+  'PTSD': [
+    { secondary: 'Depression', link: 'Commonly co-occurs with PTSD and may be rated separately' },
+    { secondary: 'Insomnia', link: 'Sleep disturbance secondary to PTSD is well-established' },
+    { secondary: 'Migraines', link: 'Tension headaches frequently secondary to PTSD/stress' },
+    { secondary: 'GERD', link: 'Stress-related gastrointestinal issues linked to mental health conditions' },
+    { secondary: 'Erectile Dysfunction', link: 'Often secondary to PTSD medications (SSRIs)' },
+  ],
+  'Depression': [
+    { secondary: 'Insomnia', link: 'Sleep difficulties commonly co-occur with depression' },
+    { secondary: 'GERD', link: 'Stress-induced digestive issues' },
+    { secondary: 'Erectile Dysfunction', link: 'Side effect of antidepressant medications' },
+  ],
+  'Lower Back Pain': [
+    { secondary: 'Radiculopathy', link: 'Nerve root compression from spinal condition' },
+    { secondary: 'Peripheral Neuropathy', link: 'Nerve damage secondary to spinal pathology' },
+    { secondary: 'Hip Condition', link: 'Altered gait from back pain causes hip deterioration' },
+    { secondary: 'Knee Condition', link: 'Compensatory weight-bearing changes affect knees' },
+    { secondary: 'Erectile Dysfunction', link: 'Nerve damage or pain medication side effect' },
+  ],
+  'Knee Condition': [
+    { secondary: 'Hip Condition', link: 'Altered gait and compensatory biomechanics' },
+    { secondary: 'Lower Back Pain', link: 'Changed movement patterns stress the lumbar spine' },
+    { secondary: 'Ankle Condition', link: 'Compensatory gait changes affect ankle joints' },
+  ],
+  'Sleep Apnea': [
+    { secondary: 'Hypertension', link: 'Sleep apnea is a well-known cause of secondary hypertension' },
+    { secondary: 'Depression', link: 'Chronic sleep disruption contributes to depression' },
+    { secondary: 'GERD', link: 'Apneic events increase acid reflux' },
+    { secondary: 'Migraines', link: 'Morning headaches from oxygen desaturation during sleep' },
+  ],
+  'Migraines': [
+    { secondary: 'Depression', link: 'Chronic pain and disability from migraines' },
+    { secondary: 'Insomnia', link: 'Pain disrupts sleep patterns' },
+  ],
+  'Tinnitus': [
+    { secondary: 'Insomnia', link: 'Ringing prevents ability to fall/stay asleep' },
+    { secondary: 'Depression', link: 'Chronic tinnitus associated with depressive episodes' },
+    { secondary: 'Migraines', link: 'Auditory disturbance triggering headaches' },
+  ],
+  'TBI': [
+    { secondary: 'Migraines', link: 'Post-traumatic headaches are very common after TBI' },
+    { secondary: 'Depression', link: 'Mood changes secondary to brain injury' },
+    { secondary: 'Tinnitus', link: 'Auditory nerve damage from blast/impact injury' },
+    { secondary: 'Insomnia', link: 'Sleep disturbance from neurological disruption' },
+    { secondary: 'Vertigo', link: 'Vestibular damage from traumatic brain injury' },
+  ],
+  'Diabetes': [
+    { secondary: 'Peripheral Neuropathy', link: 'Nerve damage from chronic elevated blood sugar' },
+    { secondary: 'Hypertension', link: 'Vascular damage associated with diabetes' },
+    { secondary: 'Erectile Dysfunction', link: 'Vascular and nerve damage from diabetes' },
+  ],
+  'Hypertension': [
+    { secondary: 'Heart Condition', link: 'Chronic hypertension leads to cardiac complications' },
+  ],
+  'Neck Pain': [
+    { secondary: 'Radiculopathy', link: 'Cervical nerve root compression' },
+    { secondary: 'Migraines', link: 'Cervicogenic headaches from neck pathology' },
+    { secondary: 'Shoulder Condition', link: 'Compensatory changes and shared nerve pathways' },
+  ],
+};
+
 const combatZones = [
   'Vietnam', 'Iraq (OIF)', 'Afghanistan (OEF)', 'Persian Gulf', 'Korea (DMZ)',
   'Somalia', 'Bosnia', 'Kosovo', 'Syria', 'Other',
@@ -192,6 +257,7 @@ export default function ClaimStrategyWizard() {
   const [strategy, setStrategy] = useState<StrategyResult | null>(null);
   const [isOfflineFallback, setIsOfflineFallback] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const showSecondarySuggestions = useFeatureFlag('secondaryConditionSuggestions');
   const [exportingStrategy, setExportingStrategy] = useState(false);
   const { toast } = useToast();
 
@@ -202,6 +268,26 @@ export default function ClaimStrategyWizard() {
       setData(prePopulated);
     }
   }, [prePopulated, currentStep]);
+
+  // Compute secondary condition suggestions based on selected conditions
+  const secondarySuggestions = useMemo(() => {
+    const selectedConditions = data.healthConditions.conditions;
+    const suggestions: { primary: string; secondary: string; link: string }[] = [];
+    const alreadyClaimed = new Set(selectedConditions.map(c => c.toLowerCase()));
+    const alreadySuggested = new Set<string>();
+
+    for (const condition of selectedConditions) {
+      const secondaries = secondaryConditionsMap[condition];
+      if (!secondaries) continue;
+      for (const s of secondaries) {
+        if (!alreadyClaimed.has(s.secondary.toLowerCase()) && !alreadySuggested.has(s.secondary.toLowerCase())) {
+          alreadySuggested.add(s.secondary.toLowerCase());
+          suggestions.push({ primary: condition, secondary: s.secondary, link: s.link });
+        }
+      }
+    }
+    return suggestions;
+  }, [data.healthConditions.conditions]);
 
   const updateServiceInfo = useCallback((field: keyof ServiceInfo, value: string | string[]) => {
     setData(prev => ({
@@ -824,6 +910,39 @@ attorney for official guidance on your specific claim.
                     </div>
                   </CardContent>
                 </Card>
+
+                {/* Secondary Condition Suggestions */}
+                {showSecondarySuggestions && secondarySuggestions.length > 0 && (
+                  <Card className="border-primary/20 bg-primary/5">
+                    <CardHeader>
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <Link2 className="h-5 w-5 text-primary" />
+                        Secondary Conditions to Consider
+                      </CardTitle>
+                      <CardDescription>
+                        Conditions commonly linked to your claimed conditions that may qualify for secondary service connection
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        {secondarySuggestions.slice(0, 8).map((s, i) => (
+                          <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-background/60 border border-border/50">
+                            <Badge variant="secondary" className="shrink-0 mt-0.5">{s.secondary}</Badge>
+                            <div className="min-w-0">
+                              <p className="text-sm text-muted-foreground">{s.link}</p>
+                              <p className="text-xs text-muted-foreground/70 mt-0.5">
+                                Secondary to: <span className="font-medium text-foreground/70">{s.primary}</span>
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-3 italic">
+                        Secondary service connection requires a medical nexus linking the secondary condition to your service-connected primary condition.
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
 
                 {/* Evidence Gaps */}
                 {strategy.evidenceGaps.length > 0 && (

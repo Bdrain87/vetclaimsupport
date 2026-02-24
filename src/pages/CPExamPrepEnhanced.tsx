@@ -20,6 +20,7 @@ import {
   Sparkles,
   Loader2,
   FileCheck,
+  BarChart3,
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -81,6 +82,100 @@ const dosList = [
   'Demonstrate actual limitations during physical exams',
   'Mention if you\'re having a good or bad day',
 ];
+
+// VA rating criteria by condition — helps veterans understand what examiners evaluate
+const ratingCriteriaMap: Record<string, { dc: string; levels: { rating: string; criteria: string }[] }> = {
+  'PTSD': {
+    dc: 'DC 9411',
+    levels: [
+      { rating: '0%', criteria: 'Diagnosed but symptoms not severe enough to interfere with functioning' },
+      { rating: '10%', criteria: 'Mild symptoms controlled with medication' },
+      { rating: '30%', criteria: 'Occupational and social impairment with occasional decrease in work efficiency' },
+      { rating: '50%', criteria: 'Reduced reliability and productivity — flattened affect, panic attacks weekly, difficulty understanding complex commands' },
+      { rating: '70%', criteria: 'Deficiencies in most areas — suicidal ideation, near-continuous panic, inability to maintain relationships' },
+      { rating: '100%', criteria: 'Total occupational and social impairment — persistent danger, memory loss, gross impairment in thought processes' },
+    ],
+  },
+  'Depression': {
+    dc: 'DC 9434',
+    levels: [
+      { rating: '0%', criteria: 'Diagnosed but symptoms controlled' },
+      { rating: '30%', criteria: 'Occasional decrease in work efficiency from depressed mood, anxiety, or sleep disturbance' },
+      { rating: '50%', criteria: 'Reduced reliability — disturbances of motivation/mood, difficulty establishing relationships' },
+      { rating: '70%', criteria: 'Deficiencies in most areas — suicidal ideation, neglect of hygiene, inability to maintain relationships' },
+      { rating: '100%', criteria: 'Total impairment — persistent delusions, memory loss for close relatives, gross behavioral issues' },
+    ],
+  },
+  'Anxiety': {
+    dc: 'DC 9400',
+    levels: [
+      { rating: '0%', criteria: 'Diagnosed but symptoms controlled' },
+      { rating: '30%', criteria: 'Occasional decrease in work efficiency' },
+      { rating: '50%', criteria: 'Reduced reliability — panic attacks more than weekly, difficulty with relationships' },
+      { rating: '70%', criteria: 'Deficiencies in most areas' },
+      { rating: '100%', criteria: 'Total occupational and social impairment' },
+    ],
+  },
+  'Migraines': {
+    dc: 'DC 8100',
+    levels: [
+      { rating: '0%', criteria: 'Less frequent attacks' },
+      { rating: '10%', criteria: 'Characteristic prostrating attacks averaging one in 2 months' },
+      { rating: '30%', criteria: 'Characteristic prostrating attacks averaging once a month' },
+      { rating: '50%', criteria: 'Very frequent, completely prostrating and prolonged attacks productive of severe economic inadaptability' },
+    ],
+  },
+  'Sleep Apnea': {
+    dc: 'DC 6847',
+    levels: [
+      { rating: '0%', criteria: 'Asymptomatic but documented sleep disorder' },
+      { rating: '30%', criteria: 'Persistent daytime hypersomnolence' },
+      { rating: '50%', criteria: 'Requires use of CPAP machine' },
+      { rating: '100%', criteria: 'Chronic respiratory failure with carbon dioxide retention, cor pulmonale, or requires tracheostomy' },
+    ],
+  },
+  'Tinnitus': {
+    dc: 'DC 6260',
+    levels: [
+      { rating: '10%', criteria: 'Recurrent tinnitus (maximum schedular rating)' },
+    ],
+  },
+  'Lower Back Pain': {
+    dc: 'DC 5237',
+    levels: [
+      { rating: '10%', criteria: 'Forward flexion greater than 60° but not greater than 85°, or combined ROM greater than 120° but not greater than 235°' },
+      { rating: '20%', criteria: 'Forward flexion greater than 30° but not greater than 60°, or combined ROM not greater than 120°' },
+      { rating: '40%', criteria: 'Forward flexion 30° or less, or favorable ankylosis of the entire thoracolumbar spine' },
+      { rating: '50%', criteria: 'Unfavorable ankylosis of the entire thoracolumbar spine' },
+      { rating: '100%', criteria: 'Unfavorable ankylosis of the entire spine' },
+    ],
+  },
+  'Knee Condition': {
+    dc: 'DC 5260/5261',
+    levels: [
+      { rating: '0%', criteria: 'Flexion limited to 60° or extension limited to 5°' },
+      { rating: '10%', criteria: 'Flexion limited to 45° or extension limited to 10°' },
+      { rating: '20%', criteria: 'Flexion limited to 30° or extension limited to 15°' },
+      { rating: '30%', criteria: 'Flexion limited to 15° or extension limited to 20°' },
+      { rating: '40%', criteria: 'Extension limited to 30°' },
+      { rating: '50%', criteria: 'Extension limited to 45°' },
+    ],
+  },
+  'GERD': {
+    dc: 'DC 7346',
+    levels: [
+      { rating: '10%', criteria: 'Two or more symptoms of less severity than 30% rating' },
+      { rating: '30%', criteria: 'Persistently recurrent epigastric distress with substernal pain, regurgitation, and considerable impairment of health' },
+      { rating: '60%', criteria: 'Symptoms of pain, vomiting, material weight loss and hematemesis or melena with moderate anemia, or other symptom combinations productive of severe impairment of health' },
+    ],
+  },
+  'Hearing Loss': {
+    dc: 'DC 6100',
+    levels: [
+      { rating: '0-100%', criteria: 'Based on puretone threshold average and speech discrimination scores using Table VI/VIA and Table VII' },
+    ],
+  },
+};
 
 const dontsList = [
   'Don\'t say "I\'m fine" or minimize symptoms',
@@ -436,6 +531,43 @@ export default function CPExamPrepEnhanced() {
                       </ul>
                     </CardContent>
                   </Card>
+
+                  {/* VA Rating Criteria Card */}
+                  {selectedCondition && ratingCriteriaMap[selectedCondition] && (
+                    <Card className="border-primary/20">
+                      <CardHeader>
+                        <CardTitle className="text-lg flex items-center gap-2">
+                          <BarChart3 className="h-5 w-5 text-primary" />
+                          VA Rating Criteria
+                        </CardTitle>
+                        <CardDescription>
+                          {ratingCriteriaMap[selectedCondition].dc} — What the VA evaluates for this condition
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-2">
+                          {ratingCriteriaMap[selectedCondition].levels.map((level, i) => (
+                            <div key={i} className="flex items-start gap-3 p-2 rounded-lg bg-muted/40">
+                              <Badge
+                                variant={
+                                  level.rating === '100%' ? 'destructive' :
+                                  parseInt(level.rating) >= 50 ? 'default' :
+                                  'secondary'
+                                }
+                                className="font-mono text-xs shrink-0 mt-0.5 min-w-[40px] justify-center"
+                              >
+                                {level.rating}
+                              </Badge>
+                              <span className="text-sm text-muted-foreground">{level.criteria}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-3 italic">
+                          Describe your worst days to the examiner. The rating is based on the severity and frequency of your symptoms, not how you present on exam day.
+                        </p>
+                      </CardContent>
+                    </Card>
+                  )}
 
                   <Card>
                     <CardHeader>
