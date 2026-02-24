@@ -266,17 +266,29 @@ body {
     overflow: hidden !important;
   }
 
-  /* Date inputs — constrain native picker chrome */
+  /* Date inputs — strip native chrome, force rounded corners */
   input[type="date"],
   input[type="datetime-local"],
   input[type="time"] {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
     -webkit-min-logical-width: 0 !important;
     min-width: 0 !important;
     max-width: 100% !important;
     width: 100% !important;
     box-sizing: border-box !important;
     overflow: hidden !important;
-    clip: auto;
+    border-radius: 0.75rem !important;
+  }
+
+  /* Ensure date input inner elements don't break rounding */
+  input[type="date"]::-webkit-date-and-time-value {
+    text-align: left;
+  }
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0.5;
+    cursor: pointer;
   }
 
   /* Force all card children to stay within bounds */
