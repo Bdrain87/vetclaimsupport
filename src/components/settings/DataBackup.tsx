@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { z } from 'zod';
-import { Download, Upload, AlertTriangle, CheckCircle2, Trash2 } from 'lucide-react';
+import { Download, Upload, AlertTriangle, CheckCircle2, Trash2, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -16,8 +16,11 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { useClaims } from '@/hooks/useClaims';
 import { getAllFileIds, getFileData, deleteFileData, restoreFiles } from '@/lib/indexedDB';
+import { isEncryptionEnabled } from '@/utils/encryption';
+import { DATA_PRIVACY_COPY } from '@/data/legalCopy';
 
 const STORAGE_KEY = 'vcs-app-data';
+const BACKUP_VERSION = '2.0.0';
 
 // Zod schema for validating imported backup data
 const backupDataSchema = z.object({
@@ -48,6 +51,8 @@ export function DataBackup() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [pendingImportData, setPendingImportData] = useState<BackupData | null>(null);
 
+  const encrypted = isEncryptionEnabled();
+
   const exportData = async () => {
     setIsExporting(true);
     try {
@@ -63,7 +68,7 @@ export function DataBackup() {
       }
 
       const backupData: BackupData = {
-        version: '1.0.0',
+        version: BACKUP_VERSION,
         exportDate: new Date().toISOString(),
         claimsData: data as unknown as Record<string, unknown>,
         indexedDBFiles,
@@ -115,7 +120,7 @@ export function DataBackup() {
       } catch {
         toast({
           title: 'Invalid File',
-          description: 'The selected file is not a valid backup file.',
+          description: 'Backup file not recognized. Export a new backup from your old device.',
           variant: 'destructive',
         });
       }
@@ -137,23 +142,19 @@ export function DataBackup() {
       const claimsData = pendingImportData.claimsData;
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ state: claimsData, version: 3 }));
 
-      // Import IndexedDB files if present, waiting for the full transaction
-      // to commit so data is durably written before we reload the page.
+      // Import IndexedDB files if present
       if (pendingImportData.indexedDBFiles && pendingImportData.indexedDBFiles.length > 0) {
         await restoreFiles(pendingImportData.indexedDBFiles);
       }
 
-      // Reload the page to rehydrate Zustand from the updated localStorage.
-      // All IndexedDB writes are fully committed at this point.
       toast({
         title: 'Restore Complete',
         description: `Data restored from backup dated ${new Date(pendingImportData.exportDate).toLocaleDateString()}. Reloading...`,
       });
 
-      // Small delay to show toast before reload
       await new Promise((resolve) => setTimeout(resolve, 500));
       window.location.reload();
-      return; // Skip finally cleanup — page is reloading
+      return;
     } catch {
       toast({
         title: 'Restore Failed',
@@ -169,7 +170,6 @@ export function DataBackup() {
   const confirmDeleteAll = async () => {
     setIsDeleting(true);
     try {
-      // Clear all localStorage keys used by VCS
       const keysToRemove: string[] = [];
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
@@ -179,7 +179,6 @@ export function DataBackup() {
         localStorage.removeItem(key);
       }
 
-      // Clear all IndexedDB documents
       const fileIds = await getAllFileIds();
       for (const id of fileIds) {
         await deleteFileData(id);
@@ -216,9 +215,18 @@ export function DataBackup() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="p-3 rounded-lg bg-muted border border-border">
+          <div className="p-3 rounded-lg bg-muted border border-border space-y-2">
             <p className="text-sm text-muted-foreground">
-              Your data is stored locally on your device. Create regular backups to prevent data loss if you switch devices.
+              Your data is stored locally on your device. Create regular backups to prevent data loss.
+            </p>
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Shield className="h-3 w-3 shrink-0" />
+              <span>
+                Format: JSON file · {encrypted ? 'Vault passcode required to decrypt on restore' : 'Not encrypted — vault passcode not set'}
+              </span>
+            </div>
+            <p className="text-xs text-muted-foreground/70">
+              {DATA_PRIVACY_COPY.backupWarning}
             </p>
           </div>
 
@@ -266,6 +274,7 @@ export function DataBackup() {
         </CardContent>
       </Card>
 
+      {/* Restore Confirmation */}
       <AlertDialog open={showImportConfirm} onOpenChange={setShowImportConfirm}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -273,18 +282,23 @@ export function DataBackup() {
               <AlertTriangle className="h-5 w-5 text-warning" />
               Confirm Data Restore
             </AlertDialogTitle>
-            <AlertDialogDescription className="space-y-2">
-              <p>
-                This will replace all your current data with the backup from{' '}
-                <strong>
-                  {pendingImportData?.exportDate
-                    ? new Date(pendingImportData.exportDate).toLocaleString()
-                    : 'unknown date'}
-                </strong>.
-              </p>
-              <p className="text-warning font-medium">
-                This action cannot be undone. Make sure to export your current data first if needed.
-              </p>
+            <AlertDialogDescription asChild>
+              <div className="space-y-2">
+                <p>
+                  This will <strong>replace all your current data</strong> with the backup from{' '}
+                  <strong>
+                    {pendingImportData?.exportDate
+                      ? new Date(pendingImportData.exportDate).toLocaleString()
+                      : 'unknown date'}
+                  </strong>.
+                </p>
+                <p className="text-warning font-medium">
+                  This action cannot be undone. Export your current data first if needed.
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Backup version: {pendingImportData?.version || 'unknown'}
+                </p>
+              </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -297,6 +311,7 @@ export function DataBackup() {
         </AlertDialogContent>
       </AlertDialog>
 
+      {/* Delete All Confirmation */}
       <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -304,13 +319,15 @@ export function DataBackup() {
               <Trash2 className="h-5 w-5" />
               Delete All My Data
             </AlertDialogTitle>
-            <AlertDialogDescription className="space-y-2">
-              <p>
-                This will permanently delete all your claim preparation data including conditions, documents, symptom logs, AI-generated drafts, and settings.
-              </p>
-              <p className="text-destructive font-semibold">
-                This cannot be undone. Are you sure?
-              </p>
+            <AlertDialogDescription asChild>
+              <div className="space-y-2">
+                <p>
+                  This will permanently delete all your claim preparation data including conditions, documents, symptom logs, AI-generated drafts, and settings.
+                </p>
+                <p className="text-destructive font-semibold">
+                  This cannot be undone. Are you sure?
+                </p>
+              </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

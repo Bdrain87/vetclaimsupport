@@ -298,9 +298,14 @@ export function VaultPasscode() {
 
         {mode === 'remove' && (
           <div className="space-y-3">
-            <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20">
+            <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 space-y-2">
               <p className="text-sm text-destructive font-medium">
-                Removing the additional passcode will remove the extra protection layer. Your data will remain automatically encrypted.
+                This is a security action.
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Removing the additional passcode will remove the extra protection layer.
+                Your data will remain automatically encrypted (Layer 1). Your device is still
+                protected by iOS passcode/Face ID.
               </p>
             </div>
             <div className="space-y-1.5">

@@ -83,7 +83,7 @@ export function Hero() {
         >
           Organize Your Evidence.{' '}
           <br className="hidden sm:inline" />
-          File Your Claim{' '}
+          Prepare Your Claim{' '}
           <span className="inline-block min-w-[160px] sm:min-w-[220px]">
             <AnimatePresence mode="wait">
               <motion.span
