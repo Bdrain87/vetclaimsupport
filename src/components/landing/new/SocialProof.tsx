@@ -4,7 +4,7 @@ import { fadeInUp, staggerContainer } from '@/lib/landing-animations';
 
 function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 });
+  const isInView = useInView(ref, { once: true, amount: 0.05 });
   const [display, setDisplay] = useState(value);
 
   useEffect(() => {
@@ -48,13 +48,13 @@ const STATS = [
 
 export function SocialProof() {
   return (
-    <section className="py-6" style={{ backgroundColor: '#111111' }}>
+    <section className="py-8 md:py-10" style={{ backgroundColor: '#111111', borderTop: '1px solid rgba(191,149,63,0.15)', borderBottom: '1px solid rgba(191,149,63,0.15)' }}>
       <motion.div
         className="mx-auto max-w-5xl px-4 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0"
         variants={staggerContainer}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.05 }}
       >
         {STATS.map((stat, i) => (
           <motion.div

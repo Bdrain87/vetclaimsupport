@@ -644,11 +644,11 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
               onClick={() => isInteractive && onSelectCard(card)}
             >
               <div
-                className="rounded-2xl p-6 transition-all duration-300 hover:scale-105"
+                className="rounded-2xl p-6 transition-all duration-300 hover:scale-[1.03]"
                 style={{
                   background: CARD_BG,
-                  border: CARD_BORDER,
-                  boxShadow: CARD_SHADOW,
+                  border: isInteractive ? '1px solid rgba(212,175,55,0.25)' : CARD_BORDER,
+                  boxShadow: isInteractive ? `${CARD_SHADOW}, 0 0 15px rgba(212,175,55,0.08)` : CARD_SHADOW,
                   backdropFilter: 'blur(12px)',
                   minHeight: '360px',
                 }}
@@ -705,8 +705,8 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
                   >
                     {card.plan.startsWith('Free') ? 'Free' : 'Premium'}
                   </span>
-                  <span className="text-[10px] font-medium" style={{ color: '#94A3B8' }}>
-                    Click to explore →
+                  <span className="text-[11px] font-semibold transition-colors duration-200" style={{ color: 'var(--gold-md, #D4AF37)' }}>
+                    Tap to explore →
                   </span>
                 </div>
               </div>

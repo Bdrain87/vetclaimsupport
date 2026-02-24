@@ -110,15 +110,23 @@ export function Hero() {
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
         >
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
+          <motion.div
+            whileHover={{
+              scale: 1.05,
+              boxShadow: '0 0 30px rgba(236,196,64,0.5), 0 0 60px rgba(236,196,64,0.2)',
+            }}
+            whileTap={{ scale: 0.97 }}
+            style={{ borderRadius: '9999px' }}
+          >
             <Link
               to="/auth"
-              className="inline-block rounded-full px-8 py-3 text-lg font-semibold text-black no-underline"
+              className="inline-block rounded-full px-10 py-4 text-lg font-semibold text-black no-underline"
               style={{
                 background:
                   'linear-gradient(90deg, #C8A020 0%, #ECC440 20%, #FFE566 50%, #ECC440 80%, #C8A020 100%)',
+                boxShadow: '0 0 20px rgba(236,196,64,0.3)',
               }}
             >
               Get Started Free
@@ -126,7 +134,7 @@ export function Hero() {
           </motion.div>
           <motion.button
             onClick={scrollToHowItWorks}
-            className="inline-block rounded-full px-8 py-3 text-lg font-semibold text-white bg-transparent border border-white/30 cursor-pointer hover:border-white/60 transition-colors"
+            className="inline-block rounded-full px-8 py-4 text-lg font-semibold text-white bg-transparent border border-white/30 cursor-pointer hover:border-white/60 transition-colors"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}
           >

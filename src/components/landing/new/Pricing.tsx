@@ -227,7 +227,7 @@ export function Pricing() {
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
+          viewport={{ once: true, amount: 0.05 }}
         >
           <RedCard>
             <div className="p-6">
@@ -318,7 +318,7 @@ export function Pricing() {
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
+          viewport={{ once: true, amount: 0.05 }}
         >
           {/* Free plan */}
           <FreeCard>

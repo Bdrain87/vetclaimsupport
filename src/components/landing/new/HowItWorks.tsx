@@ -96,7 +96,7 @@ export function HowItWorks() {
         variants={staggerContainerSlow}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: '-80px' }}
+        viewport={{ once: true, amount: 0.05 }}
       >
         {STEPS.map((step) => (
           <motion.div

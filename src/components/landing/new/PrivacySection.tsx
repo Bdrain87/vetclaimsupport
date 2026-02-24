@@ -45,7 +45,7 @@ export function PrivacySection() {
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
+          viewport={{ once: true, amount: 0.05 }}
         >
           {POINTS.map((point, i) => (
             <motion.div key={point.title} variants={fadeInUp} className="flex items-center gap-2">

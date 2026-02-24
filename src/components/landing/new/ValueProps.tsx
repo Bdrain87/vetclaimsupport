@@ -105,7 +105,7 @@ export function ValueProps() {
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-80px' }}
+          viewport={{ once: true, amount: 0.05 }}
         >
           {PROPS.map(({ Icon, title, desc }) => (
             <motion.div
