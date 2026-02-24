@@ -142,10 +142,10 @@ export function LiabilityAcceptanceScreen() {
               <h3 className="font-semibold text-foreground mb-2">AI-Assisted Features</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 This app uses AI (Google Gemini) to assist with organizing
-                claim information. AI-generated content may contain errors,
-                inaccuracies, or fabricated information. AI-generated legal
-                citations have a documented hallucination rate of 50-88%.
-                You must independently verify all AI output before use.
+                claim information. AI output can be inaccurate or fabricated.
+                Verify any legal citations using official sources before
+                relying on them. You must independently verify all AI output
+                before use.
               </p>
             </div>
 
