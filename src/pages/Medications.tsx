@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useEvidence } from '@/hooks/useEvidence';
-import { Pill, Plus, Trash2, Edit, Calendar, AlertCircle, Download, Loader2 } from 'lucide-react';
+import { Pill, Plus, Trash2, Edit, Calendar, AlertCircle, Download, Loader2, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -72,6 +72,17 @@ export default function Medications() {
   const sortByDate = (a: Medication, b: Medication) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
   const currentMeds = data.medications.filter(m => m.stillTaking).sort(sortByDate);
   const pastMeds = data.medications.filter(m => !m.stillTaking).sort(sortByDate);
+
+  // Side-effect summary stats
+  const sideEffectStats = useMemo(() => {
+    const withSideEffects = data.medications.filter(m => m.sideEffects && m.sideEffects.trim().length > 0);
+    const currentWithSideEffects = currentMeds.filter(m => m.sideEffects && m.sideEffects.trim().length > 0);
+    return {
+      total: data.medications.length,
+      withSideEffects: withSideEffects.length,
+      currentWithSideEffects: currentWithSideEffects.length,
+    };
+  }, [data.medications, currentMeds]);
 
   return (
     <PageContainer className="space-y-6 animate-fade-in overflow-x-hidden">
@@ -179,12 +190,17 @@ export default function Medications() {
 
               <div className="space-y-2">
                 <Label htmlFor="sideEffects">Side Effects</Label>
-                <Textarea 
-                  id="sideEffects" 
-                  placeholder="Any side effects experienced..."
+                <Textarea
+                  id="sideEffects"
+                  placeholder="e.g., Drowsiness (daily, moderate), stomach upset (after doses), weight gain (10 lbs since starting)..."
                   value={formData.sideEffects}
                   onChange={(e) => setFormData({ ...formData, sideEffects: e.target.value })}
+                  className="min-h-[80px]"
                 />
+                <p className="text-[11px] text-muted-foreground">
+                  Include severity (mild/moderate/severe), frequency, and when side effects started.
+                  Side effects may qualify as secondary conditions for VA claims.
+                </p>
               </div>
 
               {/* Evidence Attachments - only show when editing */}
@@ -214,6 +230,54 @@ export default function Medications() {
           </Dialog>
         </div>
       </div>
+
+      {/* Side Effects Summary & VA Guidance */}
+      {data.medications.length > 0 && (
+        <div className="space-y-4">
+          {/* Side Effect Summary Cards */}
+          <div className="grid grid-cols-3 gap-3">
+            <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
+              <CardContent className="p-3 text-center">
+                <p className="text-2xl font-bold">{sideEffectStats.total}</p>
+                <p className="text-[11px] text-muted-foreground">Total Meds</p>
+              </CardContent>
+            </Card>
+            <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/20">
+              <CardContent className="p-3 text-center">
+                <p className="text-2xl font-bold text-destructive">{sideEffectStats.withSideEffects}</p>
+                <p className="text-[11px] text-muted-foreground">With Side Effects</p>
+              </CardContent>
+            </Card>
+            <Card className="bg-gradient-to-br from-gold/10 to-gold/5 border-gold/20">
+              <CardContent className="p-3 text-center">
+                <p className="text-2xl font-bold text-gold">{sideEffectStats.currentWithSideEffects}</p>
+                <p className="text-[11px] text-muted-foreground">Active + Side Effects</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* VA Claims Guidance */}
+          <Card className="border-primary/20 bg-primary/5">
+            <CardContent className="p-4">
+              <div className="flex items-start gap-3">
+                <Info className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                <div className="space-y-1.5">
+                  <h3 className="font-semibold text-sm">Why Side Effects Matter for VA Claims</h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Medication side effects can support <strong>secondary service connection</strong> claims.
+                    If a VA-prescribed medication causes a new condition (e.g., GERD from NSAIDs, erectile dysfunction from antidepressants),
+                    you may be able to claim the side effect as a secondary condition.
+                  </p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    <strong>Document everything:</strong> Record specific side effects, when they started, severity, and impact on daily life.
+                    This creates an evidence trail for secondary claims.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       {/* Current Medications */}
       {currentMeds.length > 0 && (

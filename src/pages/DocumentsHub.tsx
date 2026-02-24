@@ -151,6 +151,7 @@ export default function DocumentsHub() {
   const [activeTab, setActiveTab] = useState('overview');
   const [searchQuery, setSearchQuery] = useState('');
   const [filterDocType, setFilterDocType] = useState<string>('all');
+  const [filterCondition, setFilterCondition] = useState<string>('all');
   const [selectedDoc, setSelectedDoc] = useState<typeof claimDocuments[0] | null>(null);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -181,6 +182,15 @@ export default function DocumentsHub() {
     return Array.from(names).sort();
   }, [data.symptoms, data.claimConditions, userConditions]);
 
+  // Unique conditions from uploaded documents
+  const documentConditions = useMemo(() => {
+    const conditions = new Set<string>();
+    claimDocuments.forEach((doc) => {
+      if (doc.condition) conditions.add(doc.condition);
+    });
+    return Array.from(conditions).sort();
+  }, [claimDocuments]);
+
   // Filter documents
   const filteredDocuments = useMemo(() => {
     return claimDocuments.filter((doc) => {
@@ -194,9 +204,12 @@ export default function DocumentsHub() {
       const matchesDocType =
         filterDocType === 'all' || doc.documentType === filterDocType;
 
-      return matchesSearch && matchesDocType;
+      const matchesCondition =
+        filterCondition === 'all' || doc.condition === filterCondition;
+
+      return matchesSearch && matchesDocType && matchesCondition;
     });
-  }, [claimDocuments, searchQuery, filterDocType]);
+  }, [claimDocuments, searchQuery, filterDocType, filterCondition]);
 
   // Calculate stats
   const stats = useMemo(() => {
@@ -640,7 +653,7 @@ export default function DocumentsHub() {
               />
             </div>
             <Select value={filterDocType} onValueChange={setFilterDocType}>
-              <SelectTrigger className="w-full sm:w-[180px]">
+              <SelectTrigger className="w-full sm:w-[160px]">
                 <SelectValue placeholder="All Types" />
               </SelectTrigger>
               <SelectContent>
@@ -650,8 +663,21 @@ export default function DocumentsHub() {
                 ))}
               </SelectContent>
             </Select>
-            {filterDocType !== 'all' && (
-              <Button variant="ghost" size="icon" onClick={() => setFilterDocType('all')} aria-label="Clear filter">
+            {documentConditions.length > 0 && (
+              <Select value={filterCondition} onValueChange={setFilterCondition}>
+                <SelectTrigger className="w-full sm:w-[160px]">
+                  <SelectValue placeholder="All Conditions" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Conditions</SelectItem>
+                  {documentConditions.map((cond) => (
+                    <SelectItem key={cond} value={cond}>{cond}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+            {(filterDocType !== 'all' || filterCondition !== 'all') && (
+              <Button variant="ghost" size="icon" onClick={() => { setFilterDocType('all'); setFilterCondition('all'); }} aria-label="Clear filters">
                 <X className="h-4 w-4" />
               </Button>
             )}

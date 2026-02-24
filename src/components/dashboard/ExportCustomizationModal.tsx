@@ -223,6 +223,20 @@ export function ExportCustomizationModal({
     return `~${count}`;
   };
 
+  // Packet completeness check
+  const packetChecks = useMemo(() => {
+    const checks = [
+      { label: 'Personal statement', ok: (data.claimConditions?.some(c => c.notes && c.notes.trim().length > 50)) || false },
+      { label: 'Medical records', ok: (data.medicalVisits?.length ?? 0) > 0 },
+      { label: 'Service history', ok: (data.serviceHistory?.length ?? 0) > 0 },
+      { label: 'Symptom logs (5+)', ok: (data.symptoms?.length ?? 0) >= 5 },
+      { label: 'Buddy statements', ok: (data.buddyContacts?.length ?? 0) > 0 },
+      { label: 'Medication list', ok: (data.medications?.length ?? 0) > 0 },
+    ];
+    const completedCount = checks.filter(c => c.ok).length;
+    return { checks, completedCount, total: checks.length };
+  }, [data]);
+
   const [exporting, setExporting] = useState(false);
 
   const handleExport = async () => {
@@ -247,6 +261,23 @@ export function ExportCustomizationModal({
             Select which sections to include in your evidence report
           </DialogDescription>
         </DialogHeader>
+
+        {/* Packet Completeness Check */}
+        <div className="rounded-lg border border-border bg-muted/30 p-3 space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-medium text-foreground">Packet Completeness</span>
+            <Badge variant={packetChecks.completedCount === packetChecks.total ? 'default' : 'secondary'} className="font-mono text-[10px]">
+              {packetChecks.completedCount}/{packetChecks.total}
+            </Badge>
+          </div>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+            {packetChecks.checks.map((check) => (
+              <span key={check.label} className={`text-[11px] flex items-center gap-1.5 ${check.ok ? 'text-emerald-500' : 'text-muted-foreground'}`}>
+                {check.ok ? '✓' : '○'} {check.label}
+              </span>
+            ))}
+          </div>
+        </div>
 
         {/* Select All / Deselect All */}
         <div className="flex items-center justify-between py-2">
