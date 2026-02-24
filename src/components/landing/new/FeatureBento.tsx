@@ -496,17 +496,17 @@ function calculateCardTransform(stackPosition: number) {
   const isVisible = stackPosition < VISIBLE_CARDS;
 
   // Angular fan-out
-  const baseAngle = -12;
-  const angleStep = 4;
+  const baseAngle = -8;
+  const angleStep = 3;
   const rotation = baseAngle + (stackPosition * angleStep);
 
-  // Spatial positioning
-  const xOffset = stackPosition * 40;
-  const yOffset = Math.abs(stackPosition - 2.5) * 10; // Subtle arc
-  const zOffset = stackPosition * -60; // Depth layering
+  // Spatial positioning - keep cards within container bounds
+  const xOffset = stackPosition * 18;
+  const yOffset = Math.abs(stackPosition - 2.5) * 8; // Subtle arc
+  const zOffset = stackPosition * -50; // Depth layering
 
   // Visual properties
-  const scale = Math.max(0.7, 1 - (stackPosition * 0.05));
+  const scale = Math.max(0.75, 1 - (stackPosition * 0.04));
   const opacity = isVisible ? Math.max(0.3, 1 - (stackPosition * 0.12)) : 0;
   const zIndex = VISIBLE_CARDS - stackPosition;
 
@@ -633,9 +633,9 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
               style={{
                 position: 'absolute',
                 top: '60px',
-                left: '20px',
-                width: 'calc(100% - 40px)',
-                maxWidth: '420px',
+                left: '10px',
+                width: 'calc(100% - 100px)',
+                maxWidth: '380px',
                 transformStyle: 'preserve-3d',
                 transformOrigin: 'center bottom',
                 willChange: 'transform, opacity',
