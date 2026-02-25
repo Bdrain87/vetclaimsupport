@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { fadeInUp, staggerContainer, GOLD_GRADIENT_TEXT, GOLD_GRADIENT, EASE_SMOOTH, HEADING_H2_STYLE } from '@/lib/landing-animations';
@@ -26,6 +26,116 @@ const INCLUDED_FEATURES = [
     features: ['Full Claim Packet Builder', 'Document Vault', 'Health Summary & Timeline', 'Interactive Body Map', 'Appeals & Decision Review Guide'],
   },
 ];
+
+/**
+ * Animated rotating conic-gradient border for the featured card.
+ * Uses CSS @property for smooth angle animation via requestAnimationFrame.
+ */
+function RotatingBorderCard({ children }: { children: React.ReactNode }) {
+  const borderRef = useRef<HTMLDivElement>(null);
+  const angleRef = useRef(0);
+
+  useEffect(() => {
+    let raf: number;
+    const tick = () => {
+      angleRef.current = (angleRef.current + 0.4) % 360;
+      if (borderRef.current) {
+        borderRef.current.style.background = `conic-gradient(from ${angleRef.current}deg, rgba(191,149,63,0.05), rgba(212,175,55,0.7), rgba(255,215,0,0.9), rgba(212,175,55,0.7), rgba(191,149,63,0.05), rgba(191,149,63,0.02), rgba(191,149,63,0.05))`;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  return (
+    <motion.div
+      variants={fadeInUp}
+      whileHover={{
+        y: -8,
+        transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
+      }}
+      className="relative rounded-2xl"
+    >
+      {/* Outer glow */}
+      <motion.div
+        className="absolute -inset-1 rounded-3xl pointer-events-none"
+        animate={{
+          opacity: [0.4, 0.7, 0.4],
+        }}
+        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        style={{
+          background: 'radial-gradient(ellipse at center, rgba(212,175,55,0.15), transparent 70%)',
+          filter: 'blur(20px)',
+        }}
+      />
+      {/* Rotating border */}
+      <div
+        ref={borderRef}
+        className="relative rounded-2xl p-[1.5px]"
+      >
+        {/* Inner card */}
+        <div className="relative rounded-[15px] overflow-hidden" style={{ backgroundColor: '#0F0F0F' }}>
+          {children}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function CompetitorCard({
+  title,
+  price,
+  priceLabel,
+  items,
+}: {
+  title: string;
+  price: string;
+  priceLabel: string;
+  items: string[];
+}) {
+  return (
+    <motion.div
+      variants={fadeInUp}
+      whileHover={{
+        y: -4,
+        transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
+      }}
+      className="group relative rounded-2xl p-[1px]"
+      style={{
+        background: 'linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02), rgba(255,255,255,0.05))',
+      }}
+    >
+      {/* Hover border brighten */}
+      <motion.div
+        className="absolute inset-0 rounded-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{
+          background: 'linear-gradient(160deg, rgba(255,255,255,0.15), rgba(255,255,255,0.03), rgba(255,255,255,0.10))',
+        }}
+      />
+      <div
+        className="relative rounded-[15px] h-full p-7"
+        style={{
+          backgroundColor: '#0F0F0F',
+        }}
+      >
+        <h3 className="text-base font-semibold mb-4" style={{ color: '#6B7280' }}>{title}</h3>
+        <div className="mb-5">
+          <span className="text-3xl font-bold text-white">{price}</span>
+          <span className="text-xs ml-2" style={{ color: '#6B7280' }}>{priceLabel}</span>
+        </div>
+        <ul className="space-y-2.5">
+          {items.map((item) => (
+            <li key={item} className="flex items-start gap-2.5 text-sm" style={{ color: '#6B7280' }}>
+              <span className="mt-0.5 text-xs" style={{ color: '#4B5563' }}>&#10005;</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </motion.div>
+  );
+}
 
 export function Pricing() {
   const [showFeatures, setShowFeatures] = useState(false);
@@ -56,139 +166,108 @@ export function Pricing() {
 
         {/* Three-column comparison */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12"
+          className="grid grid-cols-1 md:grid-cols-3 gap-5 md:items-center mb-12"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.05 }}
         >
           {/* Claim Companies */}
-          <motion.div
-            variants={fadeInUp}
-            whileHover={{ y: -4 }}
-            className="rounded-2xl p-px"
-            style={{
-              background: 'linear-gradient(135deg, rgba(107,114,128,0.3), rgba(107,114,128,0.08), rgba(107,114,128,0.3))',
-            }}
-          >
-            <div className="rounded-[15px] h-full p-6" style={{ backgroundColor: '#111111' }}>
-              <h3 className="text-base font-semibold mb-3" style={{ color: '#6B7280' }}>Claim Companies</h3>
-              <div className="mb-3">
-                <span className="text-2xl font-bold text-white">$4,000–$6,000</span>
-                <span className="text-xs ml-2" style={{ color: '#6B7280' }}>typical cost</span>
-              </div>
-              <ul className="space-y-1.5">
-                <li className="flex items-center gap-2 text-sm" style={{ color: '#6B7280' }}>
-                  <span style={{ color: '#6B7280' }}>&#10005;</span> Large upfront fees
-                </li>
-                <li className="flex items-center gap-2 text-sm" style={{ color: '#6B7280' }}>
-                  <span style={{ color: '#6B7280' }}>&#10005;</span> No guaranteed outcomes
-                </li>
-                <li className="flex items-center gap-2 text-sm" style={{ color: '#6B7280' }}>
-                  <span style={{ color: '#6B7280' }}>&#10005;</span> Unregulated industry
-                </li>
-              </ul>
-            </div>
-          </motion.div>
+          <CompetitorCard
+            title="Claim Companies"
+            price="$4,000–$6,000"
+            priceLabel="typical cost"
+            items={[
+              'Large upfront fees',
+              'No guaranteed outcomes',
+              'Unregulated industry',
+            ]}
+          />
 
-          {/* VCS — highlighted center */}
-          <motion.div
-            variants={fadeInUp}
-            whileHover={{
-              y: -6,
-              boxShadow: '0 0 30px rgba(191,149,63,0.4), 0 0 60px rgba(191,149,63,0.2)',
-            }}
-            className="relative rounded-2xl p-px overflow-hidden"
-            style={{
-              background: 'linear-gradient(135deg, rgba(191,149,63,0.6), rgba(191,149,63,0.15), rgba(191,149,63,0.6))',
-            }}
-          >
-            <motion.div
-              className="absolute -inset-px rounded-2xl pointer-events-none"
-              animate={{
-                boxShadow: [
-                  '0 0 15px rgba(191,149,63,0.2), 0 0 35px rgba(191,149,63,0.08)',
-                  '0 0 25px rgba(191,149,63,0.4), 0 0 60px rgba(191,149,63,0.15)',
-                  '0 0 15px rgba(191,149,63,0.2), 0 0 35px rgba(191,149,63,0.08)',
-                ],
-              }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-            />
-            <div className="relative rounded-[15px] h-full p-6" style={{ backgroundColor: '#111111' }}>
+          {/* VCS — highlighted center with rotating border */}
+          <RotatingBorderCard>
+            <div className="relative p-7">
+              {/* Best Value badge */}
               <div
-                className="absolute top-0 right-0 px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-bl-lg rounded-tr-[15px]"
+                className="absolute top-0 right-0 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-bl-xl"
                 style={{ background: GOLD_GRADIENT, color: '#000' }}
               >
                 Best Value
               </div>
-              <div className="flex items-center gap-2 mb-3">
-                <Shield size={18} style={{ color: '#D4AF37' }} />
+
+              <div className="flex items-center gap-2.5 mb-4">
+                <div
+                  className="w-8 h-8 rounded-lg flex items-center justify-center"
+                  style={{
+                    background: 'rgba(191, 149, 63, 0.12)',
+                    border: '1px solid rgba(191, 149, 63, 0.2)',
+                  }}
+                >
+                  <Shield size={16} style={{ color: '#D4AF37' }} />
+                </div>
                 <h3 className="text-base font-semibold" style={GOLD_GRADIENT_TEXT}>Vet Claim Support</h3>
               </div>
-              <div className="mb-3">
+
+              <div className="mb-5">
                 <span
-                  className="text-2xl font-bold"
+                  className="text-4xl font-bold"
                   style={GOLD_GRADIENT_TEXT}
                 >
                   $9.99
                 </span>
                 <span className="text-xs ml-2" style={{ color: '#9CA3AF' }}>one-time</span>
               </div>
-              <ul className="space-y-1.5 mb-5">
-                <li className="flex items-center gap-2 text-sm" style={{ color: '#D1D5DB' }}>
-                  <Check size={14} className="shrink-0" style={{ color: '#D4AF37' }} /> 800+ VA conditions
-                </li>
-                <li className="flex items-center gap-2 text-sm" style={{ color: '#D1D5DB' }}>
-                  <Check size={14} className="shrink-0" style={{ color: '#D4AF37' }} /> Guided statements
-                </li>
-                <li className="flex items-center gap-2 text-sm" style={{ color: '#D1D5DB' }}>
-                  <Check size={14} className="shrink-0" style={{ color: '#D4AF37' }} /> Document vault
-                </li>
-                <li className="flex items-center gap-2 text-sm" style={{ color: '#D1D5DB' }}>
-                  <Check size={14} className="shrink-0" style={{ color: '#D4AF37' }} /> Symptom trackers
-                </li>
-                <li className="flex items-center gap-2 text-sm" style={{ color: '#D1D5DB' }}>
-                  <Check size={14} className="shrink-0" style={{ color: '#D4AF37' }} /> No subscription required
-                </li>
+
+              <ul className="space-y-2.5 mb-6">
+                {[
+                  '800+ VA conditions',
+                  'Guided statements',
+                  'Document vault',
+                  'Symptom trackers',
+                  'No subscription required',
+                ].map((feature) => (
+                  <li key={feature} className="flex items-center gap-2.5 text-sm" style={{ color: '#E5E7EB' }}>
+                    <div
+                      className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0"
+                      style={{
+                        background: 'rgba(191, 149, 63, 0.15)',
+                      }}
+                    >
+                      <Check size={10} style={{ color: '#D4AF37' }} />
+                    </div>
+                    {feature}
+                  </li>
+                ))}
               </ul>
-              <Link
-                to="/auth"
-                className="block text-center rounded-full px-6 py-2.5 text-sm font-semibold text-black no-underline"
-                style={{ background: GOLD_GRADIENT }}
+
+              <motion.div
+                whileHover={{
+                  boxShadow: '0 4px 20px rgba(212,175,55,0.35)',
+                }}
+                style={{ borderRadius: '9999px' }}
               >
-                Get Started — $9.99
-              </Link>
+                <Link
+                  to="/auth"
+                  className="block text-center rounded-full px-6 py-3 text-sm font-semibold text-black no-underline"
+                  style={{ background: GOLD_GRADIENT }}
+                >
+                  Get Started — $9.99
+                </Link>
+              </motion.div>
             </div>
-          </motion.div>
+          </RotatingBorderCard>
 
           {/* Private Attorneys */}
-          <motion.div
-            variants={fadeInUp}
-            whileHover={{ y: -4 }}
-            className="rounded-2xl p-px"
-            style={{
-              background: 'linear-gradient(135deg, rgba(107,114,128,0.3), rgba(107,114,128,0.08), rgba(107,114,128,0.3))',
-            }}
-          >
-            <div className="rounded-[15px] h-full p-6" style={{ backgroundColor: '#111111' }}>
-              <h3 className="text-base font-semibold mb-3" style={{ color: '#6B7280' }}>Private Attorneys</h3>
-              <div className="mb-3">
-                <span className="text-2xl font-bold text-white">20–33%</span>
-                <span className="text-xs ml-2" style={{ color: '#6B7280' }}>of back pay</span>
-              </div>
-              <ul className="space-y-1.5">
-                <li className="flex items-center gap-2 text-sm" style={{ color: '#6B7280' }}>
-                  <span style={{ color: '#6B7280' }}>&#10005;</span> Contingency fees from your award
-                </li>
-                <li className="flex items-center gap-2 text-sm" style={{ color: '#6B7280' }}>
-                  <span style={{ color: '#6B7280' }}>&#10005;</span> Can total thousands of dollars
-                </li>
-                <li className="flex items-center gap-2 text-sm" style={{ color: '#6B7280' }}>
-                  <span style={{ color: '#6B7280' }}>&#10005;</span> Minimal help organizing evidence
-                </li>
-              </ul>
-            </div>
-          </motion.div>
+          <CompetitorCard
+            title="Private Attorneys"
+            price="20–33%"
+            priceLabel="of back pay"
+            items={[
+              'Contingency fees from your award',
+              'Can total thousands of dollars',
+              'Minimal help organizing evidence',
+            ]}
+          />
         </motion.div>
 
         {/* Expandable feature list */}
