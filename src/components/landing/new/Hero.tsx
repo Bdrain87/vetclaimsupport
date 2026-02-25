@@ -112,8 +112,8 @@ export function Hero() {
         style={{
           y: bgY,
           background: `
-            radial-gradient(ellipse at 20% 50%, rgba(191,149,63,0.08) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 20%, rgba(191,149,63,0.05) 0%, transparent 50%),
+            radial-gradient(ellipse at 20% 50%, rgba(197,165,90,0.08) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 20%, rgba(197,165,90,0.05) 0%, transparent 50%),
             #0A0A0A
           `,
         }}
@@ -124,7 +124,7 @@ export function Hero() {
         <motion.p
           className="uppercase tracking-[0.25em] text-sm font-medium mb-6"
           style={{
-            background: 'linear-gradient(90deg, #C8A020 0%, #ECC440 20%, #FFE566 50%, #ECC440 80%, #C8A020 100%)',
+            background: 'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
@@ -153,17 +153,17 @@ export function Hero() {
           Claims Built for Those Who Served.{' '}
           <br className="hidden sm:inline" />
           Be{' '}
-          <span className="inline-block min-w-[160px] sm:min-w-[220px]">
-            <AnimatePresence mode="wait">
+          <span className="relative inline-block w-[160px] sm:w-[220px] text-left align-baseline">
+            <AnimatePresence mode="popLayout">
               <motion.span
                 key={ROTATING_WORDS[index]}
                 style={{
                   display: 'inline-block',
                   ...GOLD_GRADIENT_TEXT,
                 }}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
+                exit={{ opacity: 0, y: -24, position: 'absolute', left: 0 }}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
               >
                 {ROTATING_WORDS[index]}
@@ -197,7 +197,7 @@ export function Hero() {
           <motion.div
             whileHover={{
               y: -2,
-              boxShadow: '0 8px 24px rgba(232, 212, 139, 0.35)',
+              boxShadow: '0 8px 24px rgba(197, 165, 90, 0.35)',
             }}
             whileTap={{ y: 0 }}
             style={{ borderRadius: '12px' }}
@@ -206,7 +206,7 @@ export function Hero() {
               to="/auth"
               className="inline-block px-8 py-3.5 text-base font-semibold text-black no-underline"
               style={{
-                background: 'linear-gradient(135deg, #C9B458, #E0CC7A, #E8D48B, #F0DFA0, #E8D48B, #E0CC7A, #C9B458)',
+                background: 'linear-gradient(135deg, #A68B3C, #C5A55A, #D9BE6C, #C5A55A, #A68B3C)',
                 borderRadius: '12px',
               }}
             >

@@ -56,7 +56,7 @@ function MarqueeRow({ items, direction, speed }: { items: string[]; direction: '
           <span
             className="font-medium"
             style={{
-              color: '#E8D48B',
+              color: '#C5A55A',
               fontSize: '1rem',
               fontWeight: 500,
               letterSpacing: '0.01em',
@@ -67,7 +67,7 @@ function MarqueeRow({ items, direction, speed }: { items: string[]; direction: '
           {i < duplicated.length - 1 && (
             <span
               style={{
-                color: 'rgba(232, 212, 139, 0.6)',
+                color: 'rgba(197, 165, 90, 0.6)',
                 fontSize: '0.625rem',
               }}
             >

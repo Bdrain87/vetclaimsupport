@@ -9,7 +9,7 @@ import {
 
 function ClipboardIcon() {
   return (
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#D4B030" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C5A55A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
       <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
     </svg>
@@ -18,7 +18,7 @@ function ClipboardIcon() {
 
 function TranslateIcon() {
   return (
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#D4B030" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C5A55A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M5 8l6 6" />
       <path d="M4 14l6-6 2-3" />
       <path d="M2 5h12" />
@@ -31,7 +31,7 @@ function TranslateIcon() {
 
 function CalculatorIcon() {
   return (
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#D4B030" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C5A55A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <rect x="4" y="2" width="16" height="20" rx="2" />
       <line x1="8" y1="6" x2="16" y2="6" />
       <line x1="16" y1="14" x2="16" y2="18" />
@@ -114,12 +114,12 @@ export function ValueProps() {
               whileHover={{
                 y: -6,
                 scale: 1.02,
-                boxShadow: '0 0 30px rgba(191, 149, 63, 0.12), 0 15px 40px rgba(0, 0, 0, 0.3)',
+                boxShadow: '0 0 30px rgba(197, 165, 90, 0.12), 0 15px 40px rgba(0, 0, 0, 0.3)',
               }}
               className="relative text-center rounded-2xl p-8 overflow-hidden group"
               style={{
                 backgroundColor: '#1a1a1a',
-                border: '1px solid rgba(191, 149, 63, 0.1)',
+                border: '1px solid rgba(197, 165, 90, 0.1)',
               }}
             >
               <div className="relative z-10">
@@ -127,14 +127,14 @@ export function ValueProps() {
                   <div
                     className="w-14 h-14 rounded-2xl flex items-center justify-center"
                     style={{
-                      background: 'rgba(191, 149, 63, 0.1)',
-                      border: '1px solid rgba(191, 149, 63, 0.2)',
+                      background: 'rgba(197, 165, 90, 0.1)',
+                      border: '1px solid rgba(197, 165, 90, 0.2)',
                     }}
                   >
                     <Icon />
                   </div>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#FCF6BA] transition-colors duration-300">{title}</h3>
+                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#D9BE6C] transition-colors duration-300">{title}</h3>
                 <p className="text-sm leading-relaxed" style={{ color: '#9CA3AF' }}>
                   {desc}
                 </p>
@@ -143,7 +143,7 @@ export function ValueProps() {
               <div
                 className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                 style={{
-                  background: 'radial-gradient(ellipse at 50% 100%, rgba(191, 149, 63, 0.06) 0%, transparent 60%)',
+                  background: 'radial-gradient(ellipse at 50% 100%, rgba(197, 165, 90, 0.06) 0%, transparent 60%)',
                 }}
               />
             </motion.div>

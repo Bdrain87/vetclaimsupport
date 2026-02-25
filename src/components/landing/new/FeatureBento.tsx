@@ -412,7 +412,7 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
         style={{
           background: CARD_BG,
           border: '1px solid rgba(255, 255, 255, 0.2)',
-          boxShadow: '0 0 60px rgba(212,175,55,0.3)',
+          boxShadow: '0 0 60px rgba(197,165,90,0.3)',
         }}
         initial={{ scale: 0.9, y: 30, opacity: 0 }}
         animate={{ scale: 1, y: 0, opacity: 1 }}
@@ -429,12 +429,12 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
 
         <div
           className="w-14 h-14 rounded-xl flex items-center justify-center mb-5"
-          style={{ backgroundColor: 'rgba(212,175,55,0.15)', border: '1px solid rgba(212,175,55,0.3)' }}
+          style={{ backgroundColor: 'rgba(197,165,90,0.15)', border: '1px solid rgba(197,165,90,0.3)' }}
         >
-          <Icon size={24} style={{ color: 'var(--gold-md)' }} />
+          <Icon size={24} style={{ color: '#C5A55A' }} />
         </div>
 
-        <span className="text-[10px] font-medium tracking-widest uppercase" style={{ color: 'var(--gold-md)' }}>
+        <span className="text-[10px] font-medium tracking-widest uppercase" style={{ color: '#C5A55A' }}>
           {card.category}
         </span>
 
@@ -453,7 +453,7 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
           <ul className="space-y-1.5">
             {card.capabilities.map((cap) => (
               <li key={cap} className="flex items-start gap-2 text-sm" style={{ color: '#E2E8F0' }}>
-                <span className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: 'var(--gold-md)' }} />
+                <span className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: '#C5A55A' }} />
                 {cap}
               </li>
             ))}
@@ -463,8 +463,8 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
         <div
           className="inline-block rounded-full px-4 py-1.5 text-xs font-semibold"
           style={{
-            backgroundColor: 'rgba(212,175,55,0.15)',
-            color: 'var(--gold-md)',
+            backgroundColor: 'rgba(197,165,90,0.15)',
+            color: '#C5A55A',
           }}
         >
           {card.plan}
@@ -647,8 +647,8 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
                 className="rounded-2xl p-6 transition-all duration-300 hover:scale-[1.03]"
                 style={{
                   background: CARD_BG,
-                  border: isInteractive ? '1px solid rgba(212,175,55,0.25)' : CARD_BORDER,
-                  boxShadow: isInteractive ? `${CARD_SHADOW}, 0 0 15px rgba(212,175,55,0.08)` : CARD_SHADOW,
+                  border: isInteractive ? '1px solid rgba(197,165,90,0.25)' : CARD_BORDER,
+                  boxShadow: isInteractive ? `${CARD_SHADOW}, 0 0 15px rgba(197,165,90,0.08)` : CARD_SHADOW,
                   backdropFilter: 'blur(12px)',
                   minHeight: '360px',
                 }}
@@ -657,16 +657,16 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
                   <div
                     className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
                     style={{
-                      backgroundColor: 'rgba(212,175,55,0.12)',
-                      border: '1px solid rgba(212,175,55,0.25)',
+                      backgroundColor: 'rgba(197,165,90,0.12)',
+                      border: '1px solid rgba(197,165,90,0.25)',
                     }}
                   >
-                    <Icon size={20} style={{ color: 'var(--gold-md)' }} />
+                    <Icon size={20} style={{ color: '#C5A55A' }} />
                   </div>
                   <div className="min-w-0">
                     <span
                       className="text-[10px] font-semibold tracking-[0.15em] uppercase block mb-1"
-                      style={{ color: 'var(--gold-md)' }}
+                      style={{ color: '#C5A55A' }}
                     >
                       {card.category}
                     </span>
@@ -692,11 +692,11 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
                     style={{
                       backgroundColor: card.plan.startsWith('Free')
                         ? 'rgba(34,197,94,0.12)'
-                        : 'rgba(212,175,55,0.12)',
+                        : 'rgba(197,165,90,0.12)',
                       ...(card.plan.startsWith('Free')
                         ? { color: '#22C55E' }
                         : {
-                            backgroundImage: 'var(--gold-gradient)',
+                            backgroundImage: 'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)',
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent',
                             backgroundClip: 'text',
@@ -705,7 +705,7 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
                   >
                     {card.plan.startsWith('Free') ? 'Free' : 'Premium'}
                   </span>
-                  <span className="text-[11px] font-semibold transition-colors duration-200" style={{ color: 'var(--gold-md, #E8D48B)' }}>
+                  <span className="text-[11px] font-semibold transition-colors duration-200" style={{ color: '#C5A55A' }}>
                     Tap to explore →
                   </span>
                 </div>
@@ -771,11 +771,11 @@ function MobileCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => vo
           >
             <div
               className="w-10 h-10 rounded-lg flex items-center justify-center mb-3"
-              style={{ backgroundColor: 'rgba(212,175,55,0.15)' }}
+              style={{ backgroundColor: 'rgba(197,165,90,0.15)' }}
             >
-              <Icon size={18} style={{ color: 'var(--gold-md)' }} />
+              <Icon size={18} style={{ color: '#C5A55A' }} />
             </div>
-            <span className="text-[10px] font-medium tracking-widest uppercase" style={{ color: 'var(--gold-md)' }}>
+            <span className="text-[10px] font-medium tracking-widest uppercase" style={{ color: '#C5A55A' }}>
               {card.category}
             </span>
             <h4 className="text-base font-semibold mt-1 mb-2" style={{ color: '#fff', letterSpacing: '-0.02em' }}>

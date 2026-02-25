@@ -9,7 +9,7 @@ export function BuiltByVeteran() {
           className="relative pl-6 md:pl-8"
           style={{
             borderLeft: '3px solid transparent',
-            borderImage: 'linear-gradient(180deg, #FFE060, #ECC840, #D4B030, #ECC840, #FFE060) 1',
+            borderImage: 'linear-gradient(180deg, #D9BE6C, #C5A55A, #A68B3C, #C5A55A, #D9BE6C) 1',
           }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

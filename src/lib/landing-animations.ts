@@ -139,14 +139,19 @@ export const hoverLift = {
 
 export const hoverTap = { scale: 0.98 };
 
-export const hoverGlow = (color: string = 'rgba(191,149,63,0.3)') => ({
+export const hoverGlow = (color: string = 'rgba(197,165,90,0.3)') => ({
   y: -4,
   boxShadow: `0 0 30px ${color}, 0 0 60px ${color}`,
   transition: { duration: 0.3 },
 });
 
-// --- METALLIC GOLD GRADIENT CONSTANTS ---
-export const GOLD_GRADIENT = 'linear-gradient(90deg, #C8A020 0%, #ECC440 20%, #FFE566 50%, #ECC440 80%, #C8A020 100%)';
+// --- LUXURY GOLD PALETTE ---
+// Dark: #A68B3C | Primary: #C5A55A | Light: #D9BE6C
+// RGBA base: rgba(197, 165, 90, opacity)
+export const GOLD = '#C5A55A';
+export const GOLD_DARK = '#A68B3C';
+export const GOLD_LIGHT = '#D9BE6C';
+export const GOLD_GRADIENT = 'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)';
 export const GOLD_GRADIENT_TEXT = {
   background: GOLD_GRADIENT,
   WebkitBackgroundClip: 'text',
@@ -173,21 +178,21 @@ export const CARD_SHADOW = '0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.1
 
 export const CARD_STYLE_GOLD = {
   backgroundColor: '#111111',
-  border: '1px solid rgba(191, 149, 63, 0.12)',
+  border: '1px solid rgba(197, 165, 90, 0.12)',
   borderRadius: '24px',
 } as React.CSSProperties;
 
 // --- SECTION BACKGROUND OVERLAYS ---
 export const SECTION_TOP_GLOW = 'linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 30%)';
-export const SECTION_TOP_GLOW_GOLD = 'linear-gradient(180deg, rgba(191,149,63,0.04) 0%, transparent 30%)';
+export const SECTION_TOP_GLOW_GOLD = 'linear-gradient(180deg, rgba(197,165,90,0.04) 0%, transparent 30%)';
 
 // --- PILL LABEL STYLE ---
 export const PILL_STYLE = {
-  background: 'linear-gradient(90deg, #C8A020 0%, #ECC440 20%, #FFE566 50%, #ECC440 80%, #C8A020 100%)',
+  background: 'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)',
   WebkitBackgroundClip: 'text',
   WebkitTextFillColor: 'transparent',
   backgroundClip: 'text' as const,
-  border: '1px solid rgba(191, 149, 63, 0.25)',
+  border: '1px solid rgba(197, 165, 90, 0.25)',
   borderRadius: '9999px',
   fontSize: '13px',
   fontWeight: 500,
@@ -239,8 +244,8 @@ export const MARQUEE_STYLES = `
   100% { background-position: 200% center; }
 }
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(191,149,63,0.1); }
-  50% { box-shadow: 0 0 40px rgba(191,149,63,0.25); }
+  0%, 100% { box-shadow: 0 0 20px rgba(197,165,90,0.1); }
+  50% { box-shadow: 0 0 40px rgba(197,165,90,0.25); }
 }
 
 /* Pause ticker on hover */

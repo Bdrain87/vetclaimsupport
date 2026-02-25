@@ -87,18 +87,18 @@ export function HowItWorks() {
                 <div
                   className="w-10 h-10 rounded-full flex items-center justify-center"
                   style={{
-                    background: 'rgba(191, 149, 63, 0.1)',
-                    border: '1px solid rgba(191, 149, 63, 0.2)',
+                    background: 'rgba(197, 165, 90, 0.1)',
+                    border: '1px solid rgba(197, 165, 90, 0.2)',
                   }}
                 >
-                  <span className="text-sm font-semibold" style={{ background: 'var(--gold-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                  <span className="text-sm font-semibold" style={{ background: 'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                     {step.num}
                   </span>
                 </div>
               </div>
 
               <h3
-                className="text-xl md:text-2xl text-white mb-3 group-hover:text-[#FCF6BA] transition-colors duration-300"
+                className="text-xl md:text-2xl text-white mb-3 group-hover:text-[#D9BE6C] transition-colors duration-300"
                 style={HEADING_H3_STYLE}
               >
                 {step.title}
@@ -110,14 +110,14 @@ export function HowItWorks() {
 
             <div
               className="absolute bottom-0 left-0 right-0 h-px"
-              style={{ background: 'linear-gradient(90deg, transparent, rgba(191, 149, 63, 0.2), transparent)' }}
+              style={{ background: 'linear-gradient(90deg, transparent, rgba(197, 165, 90, 0.2), transparent)' }}
             />
 
             <div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
               style={{
                 borderRadius: '16px',
-                background: 'radial-gradient(ellipse at 50% 100%, rgba(191, 149, 63, 0.04) 0%, transparent 60%)',
+                background: 'radial-gradient(ellipse at 50% 100%, rgba(197, 165, 90, 0.04) 0%, transparent 60%)',
               }}
             />
           </motion.div>

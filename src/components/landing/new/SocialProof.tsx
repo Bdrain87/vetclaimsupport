@@ -27,7 +27,7 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
       <span
         className="block text-3xl md:text-4xl font-bold"
         style={{
-          background: 'linear-gradient(90deg, #C8A020 0%, #ECC440 20%, #FFE566 50%, #ECC440 80%, #C8A020 100%)',
+          background: 'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',
@@ -48,7 +48,7 @@ const STATS = [
 
 export function SocialProof() {
   return (
-    <section className="py-8 md:py-10" style={{ backgroundColor: '#111111', borderTop: '1px solid rgba(191,149,63,0.15)', borderBottom: '1px solid rgba(191,149,63,0.15)' }}>
+    <section className="py-8 md:py-10" style={{ backgroundColor: '#111111', borderTop: '1px solid rgba(197,165,90,0.15)', borderBottom: '1px solid rgba(197,165,90,0.15)' }}>
       <motion.div
         className="mx-auto max-w-5xl px-4 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0"
         variants={staggerContainer}
@@ -69,8 +69,8 @@ export function SocialProof() {
                 <svg width="52" height="36" viewBox="-2 -2 64 44" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <defs>
                     <linearGradient id="gold-flag-light" x1="0" y1="0" x2="60" y2="40" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stopColor="#FFE060"/>
-                      <stop offset="100%" stopColor="#ECC840"/>
+                      <stop offset="0%" stopColor="#D9BE6C"/>
+                      <stop offset="100%" stopColor="#C5A55A"/>
                     </linearGradient>
                     <linearGradient id="silver-border" x1="0" y1="0" x2="60" y2="40" gradientUnits="userSpaceOnUse">
                       <stop offset="0%" stopColor="#E8E8E8"/>
@@ -85,28 +85,28 @@ export function SocialProof() {
                   {/* Flag body — light gold */}
                   <rect x="0" y="0" width="60" height="40" rx="3" fill="url(#gold-flag-light)"/>
                   {/* Stripes — alternating darker gold bands */}
-                  <rect x="0" y="6.15" width="60" height="3.08" fill="#D4B030"/>
-                  <rect x="0" y="12.3" width="60" height="3.08" fill="#D4B030"/>
-                  <rect x="0" y="18.45" width="60" height="3.08" fill="#D4B030"/>
-                  <rect x="0" y="24.6" width="60" height="3.08" fill="#D4B030"/>
-                  <rect x="0" y="30.75" width="60" height="3.08" fill="#D4B030"/>
-                  <rect x="0" y="36.9" width="60" height="3.1" fill="#D4B030"/>
+                  <rect x="0" y="6.15" width="60" height="3.08" fill="#A68B3C"/>
+                  <rect x="0" y="12.3" width="60" height="3.08" fill="#A68B3C"/>
+                  <rect x="0" y="18.45" width="60" height="3.08" fill="#A68B3C"/>
+                  <rect x="0" y="24.6" width="60" height="3.08" fill="#A68B3C"/>
+                  <rect x="0" y="30.75" width="60" height="3.08" fill="#A68B3C"/>
+                  <rect x="0" y="36.9" width="60" height="3.1" fill="#A68B3C"/>
                   {/* Star field — solid dark gold */}
-                  <rect x="0" y="0" width="24" height="21.5" rx="2" fill="#D4B030"/>
+                  <rect x="0" y="0" width="24" height="21.5" rx="2" fill="#A68B3C"/>
                   {/* Stars — lighter gold */}
-                  <circle cx="5" cy="4" r="1.2" fill="#ECC840"/>
-                  <circle cx="12" cy="4" r="1.2" fill="#ECC840"/>
-                  <circle cx="19" cy="4" r="1.2" fill="#ECC840"/>
-                  <circle cx="8.5" cy="7.5" r="1.2" fill="#ECC840"/>
-                  <circle cx="15.5" cy="7.5" r="1.2" fill="#ECC840"/>
-                  <circle cx="5" cy="11" r="1.2" fill="#ECC840"/>
-                  <circle cx="12" cy="11" r="1.2" fill="#ECC840"/>
-                  <circle cx="19" cy="11" r="1.2" fill="#ECC840"/>
-                  <circle cx="8.5" cy="14.5" r="1.2" fill="#ECC840"/>
-                  <circle cx="15.5" cy="14.5" r="1.2" fill="#ECC840"/>
-                  <circle cx="5" cy="18" r="1.2" fill="#ECC840"/>
-                  <circle cx="12" cy="18" r="1.2" fill="#ECC840"/>
-                  <circle cx="19" cy="18" r="1.2" fill="#ECC840"/>
+                  <circle cx="5" cy="4" r="1.2" fill="#C5A55A"/>
+                  <circle cx="12" cy="4" r="1.2" fill="#C5A55A"/>
+                  <circle cx="19" cy="4" r="1.2" fill="#C5A55A"/>
+                  <circle cx="8.5" cy="7.5" r="1.2" fill="#C5A55A"/>
+                  <circle cx="15.5" cy="7.5" r="1.2" fill="#C5A55A"/>
+                  <circle cx="5" cy="11" r="1.2" fill="#C5A55A"/>
+                  <circle cx="12" cy="11" r="1.2" fill="#C5A55A"/>
+                  <circle cx="19" cy="11" r="1.2" fill="#C5A55A"/>
+                  <circle cx="8.5" cy="14.5" r="1.2" fill="#C5A55A"/>
+                  <circle cx="15.5" cy="14.5" r="1.2" fill="#C5A55A"/>
+                  <circle cx="5" cy="18" r="1.2" fill="#C5A55A"/>
+                  <circle cx="12" cy="18" r="1.2" fill="#C5A55A"/>
+                  <circle cx="19" cy="18" r="1.2" fill="#C5A55A"/>
                 </svg>
               </div>
             ) : (
