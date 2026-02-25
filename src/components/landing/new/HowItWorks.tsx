@@ -38,7 +38,7 @@ export function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="relative py-[120px] overflow-hidden"
+      className="relative py-16 md:py-24 overflow-hidden"
       style={{ backgroundColor: '#0A0A0A', scrollMarginTop: '5rem' }}
     >
       <motion.h2

@@ -141,7 +141,7 @@ export function Pricing() {
   const [showFeatures, setShowFeatures] = useState(false);
 
   return (
-    <section id="pricing" className="py-[120px] px-4" style={{ backgroundColor: '#0A0A0A' }}>
+    <section id="pricing" className="py-16 md:py-24 px-4" style={{ backgroundColor: '#0A0A0A' }}>
       <div className="max-w-4xl mx-auto">
         <motion.h2
           className="text-center text-3xl md:text-5xl text-white mb-4"

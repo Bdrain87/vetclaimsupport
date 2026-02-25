@@ -66,7 +66,7 @@ const PROPS = [
 
 export function ValueProps() {
   return (
-    <section className="py-20 md:py-28" style={{ backgroundColor: '#111111' }}>
+    <section className="py-16 md:py-24" style={{ backgroundColor: '#111111' }}>
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
         {/* Pill label */}
         <motion.div

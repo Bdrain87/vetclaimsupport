@@ -51,7 +51,7 @@ function GoldFlag() {
 
 export function BuiltByVeteran() {
   return (
-    <section className="py-[120px] px-4" style={{ backgroundColor: '#0A0A0A' }}>
+    <section className="py-16 md:py-24 px-4" style={{ backgroundColor: '#0A0A0A' }}>
       <div className="mx-auto max-w-3xl">
         {/* Gold flag */}
         <motion.div
