@@ -14,6 +14,7 @@ import { useProfileStore } from './store/useProfileStore';
 import { migrateOldDataToAppStore } from './utils/migrateData';
 import { useSessionTimeout } from './hooks/useSessionTimeout';
 import { useHydration } from './hooks/useHydration';
+import { Toaster } from './components/ui/toaster';
 import { checkDataRetention } from './utils/dataRetention';
 import { RetentionWarningBanner } from './components/RetentionWarningBanner';
 import { AriaLiveAnnouncer } from './components/AriaLiveAnnouncer';
@@ -488,6 +489,7 @@ function App() {
               <ScrollToTop />
               <RetentionWarningBanner />
               <AppContent />
+              <Toaster />
             </BrowserRouter>
           </AriaLiveAnnouncer>
         </TooltipProvider>
