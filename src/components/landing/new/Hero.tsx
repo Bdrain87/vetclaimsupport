@@ -10,7 +10,7 @@ const TRUST_ITEMS = [
   'YOUR DATA STAYS PRIVATE',
   'VETERAN-BUILT',
   '50+ CLAIM TOOLS',
-  'CANCEL ANYTIME',
+  'ONE-TIME PURCHASE',
 ];
 
 function AppStoreBadge() {
