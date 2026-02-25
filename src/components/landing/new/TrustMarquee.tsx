@@ -60,6 +60,8 @@ function MarqueeRow({ items, direction, speed }: { items: string[]; direction: '
               fontSize: '1rem',
               fontWeight: 500,
               letterSpacing: '0.01em',
+              WebkitTextStroke: '0.5px rgba(255, 255, 255, 0.35)',
+              paintOrder: 'stroke fill',
             }}
           >
             {item}
@@ -109,10 +111,10 @@ export function TrustMarquee() {
         }}
       >
         <div className="py-2">
-          <MarqueeRow items={ROW_1_ITEMS} direction="left" speed={55} />
+          <MarqueeRow items={ROW_1_ITEMS} direction="left" speed={90} />
         </div>
         <div className="py-2" style={{ marginTop: '12px' }}>
-          <MarqueeRow items={ROW_2_ITEMS} direction="right" speed={55} />
+          <MarqueeRow items={ROW_2_ITEMS} direction="right" speed={90} />
         </div>
       </div>
     </section>
