@@ -455,10 +455,23 @@ Consider:
       // Parse the response
       const responseText = result?.analysis || result?.response || '';
 
-      // Try to extract JSON from the response
-      const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        const parsed = JSON.parse(jsonMatch[0]) as StrategyResult;
+      // Try to parse the response as JSON — first try the whole text, then extract
+      let parsed: StrategyResult | null = null;
+      try {
+        parsed = JSON.parse(responseText) as StrategyResult;
+      } catch {
+        // Response has surrounding text; extract the outermost JSON object
+        const start = responseText.indexOf('{');
+        const end = responseText.lastIndexOf('}');
+        if (start !== -1 && end > start) {
+          try {
+            parsed = JSON.parse(responseText.slice(start, end + 1)) as StrategyResult;
+          } catch {
+            parsed = null;
+          }
+        }
+      }
+      if (parsed && parsed.summary && Array.isArray(parsed.nextSteps)) {
         setStrategy(parsed);
         setIsOfflineFallback(false);
       } else {
@@ -482,10 +495,15 @@ Consider:
       setIsOfflineFallback(true);
       setStrategy({
         summary: 'Based on your information, you have a foundation for a VA disability claim. Review the recommendations below.',
-        filingType: data.serviceInfo.endDate &&
-          new Date(data.serviceInfo.endDate) > new Date(Date.now() - 180 * 24 * 60 * 60 * 1000)
-            ? 'Benefits Delivery at Discharge (BDD) - File 180-90 days before discharge'
-            : 'Standard Claim - File through VA.gov or with VSO assistance',
+        filingType: (() => {
+          const endDate = data.serviceInfo.endDate ? new Date(data.serviceInfo.endDate) : null;
+          const now = Date.now();
+          const msPerDay = 24 * 60 * 60 * 1000;
+          if (endDate && endDate.getTime() > now && endDate.getTime() <= now + 180 * msPerDay) {
+            return 'Benefits Delivery at Discharge (BDD) - File 180-90 days before discharge';
+          }
+          return 'Standard Claim - File through VA.gov or with VSO assistance';
+        })(),
         priorityConditions: data.healthConditions.conditions.slice(0, 5).map(c => ({
           condition: c,
           reason: 'Document service connection and current severity',
@@ -517,6 +535,19 @@ Consider:
   };
 
   const handleNext = () => {
+    // Validate service dates before proceeding past step 1
+    if (currentStep === 1) {
+      const { startDate, endDate } = data.serviceInfo;
+      if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
+        toast({ title: 'Invalid dates', description: 'Service end date cannot be before start date.', variant: 'destructive' });
+        return;
+      }
+    }
+    // Require at least one condition before proceeding past step 2
+    if (currentStep === 2 && data.healthConditions.conditions.length === 0 && !data.healthConditions.customConditions.trim()) {
+      toast({ title: 'No conditions selected', description: 'Select at least one condition or enter a custom condition.', variant: 'destructive' });
+      return;
+    }
     if (currentStep === 4) {
       generateStrategy();
     }
@@ -528,7 +559,7 @@ Consider:
   };
 
   const resetWizard = () => {
-    setData(initialData);
+    setData(prePopulated);
     setStrategy(null);
     setIsOfflineFallback(false);
     setError(null);

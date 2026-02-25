@@ -392,7 +392,7 @@ export function EvidenceGapAnalysis({ condition, data }: EvidenceGapAnalysisProp
     
     const metCount = results.filter(r => r.result.met).length;
     const totalCount = results.length;
-    const score = Math.round((metCount / totalCount) * 100);
+    const score = totalCount > 0 ? Math.round((metCount / totalCount) * 100) : 0;
     
     const criticalMissing = results.filter(r => r.isCritical && !r.result.met);
     
