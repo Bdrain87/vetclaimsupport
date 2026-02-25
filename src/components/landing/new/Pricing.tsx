@@ -31,7 +31,7 @@ export function Pricing() {
   const [showFeatures, setShowFeatures] = useState(false);
 
   return (
-    <section id="pricing" className="py-[120px] px-4" style={{ backgroundColor: '#000000' }}>
+    <section id="pricing" className="py-[120px] px-4" style={{ backgroundColor: '#0A0A0A' }}>
       <div className="max-w-4xl mx-auto">
         <motion.h2
           className="text-center text-3xl md:text-5xl text-white mb-4"
@@ -132,14 +132,14 @@ export function Pricing() {
                 >
                   $9.99
                 </span>
-                <span className="text-xs ml-2" style={{ color: '#9CA3AF' }}>one-time</span>
+                <span className="text-xs ml-2" style={{ color: '#9CA3AF' }}>/mo</span>
               </div>
               <ul className="space-y-1.5 mb-5">
                 <li className="flex items-center gap-2 text-sm" style={{ color: '#D1D5DB' }}>
                   <Check size={14} className="shrink-0" style={{ color: '#D4AF37' }} /> 800+ VA conditions
                 </li>
                 <li className="flex items-center gap-2 text-sm" style={{ color: '#D1D5DB' }}>
-                  <Check size={14} className="shrink-0" style={{ color: '#D4AF37' }} /> AI-assisted statements
+                  <Check size={14} className="shrink-0" style={{ color: '#D4AF37' }} /> Guided statements
                 </li>
                 <li className="flex items-center gap-2 text-sm" style={{ color: '#D1D5DB' }}>
                   <Check size={14} className="shrink-0" style={{ color: '#D4AF37' }} /> Document vault
@@ -148,7 +148,7 @@ export function Pricing() {
                   <Check size={14} className="shrink-0" style={{ color: '#D4AF37' }} /> Symptom trackers
                 </li>
                 <li className="flex items-center gap-2 text-sm" style={{ color: '#D1D5DB' }}>
-                  <Check size={14} className="shrink-0" style={{ color: '#D4AF37' }} /> No subscription
+                  <Check size={14} className="shrink-0" style={{ color: '#D4AF37' }} /> Cancel anytime
                 </li>
               </ul>
               <Link
@@ -156,7 +156,7 @@ export function Pricing() {
                 className="block text-center rounded-full px-6 py-2.5 text-sm font-semibold text-black no-underline"
                 style={{ background: GOLD_GRADIENT }}
               >
-                Get Started — $9.99
+                Get Started — $9.99/mo
               </Link>
             </div>
           </motion.div>

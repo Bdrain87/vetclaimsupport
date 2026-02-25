@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { MARQUEE_STYLES } from '@/lib/landing-animations';
 
-const TRUST_ITEMS = [
+const ROW_1_ITEMS = [
   'VA Combined Rating Calculator',
   'Personal Statement Builder',
   'Symptom Tracker',
@@ -18,6 +18,9 @@ const TRUST_ITEMS = [
   'Doctor Summary Outline',
   'Medication Tracker',
   'Claim Packet Builder',
+];
+
+const ROW_2_ITEMS = [
   'Medical Visit Logger',
   'DBQ Prep Sheet',
   'Exposure Tracker',
@@ -33,42 +36,46 @@ const TRUST_ITEMS = [
   'BDD Guide',
   'Service History',
   'Intent to File Guide',
+  'Claim Journey',
 ];
 
-function MarqueeRow({ direction, speed }: { direction: 'left' | 'right'; speed: number }) {
-  const items = [...TRUST_ITEMS, ...TRUST_ITEMS];
+function MarqueeRow({ items, direction, speed }: { items: string[]; direction: 'left' | 'right'; speed: number }) {
+  const duplicated = [...items, ...items];
 
   return (
-    <div className="relative w-full overflow-hidden py-3">
-      <div
-        className="flex w-max"
-        style={{
-          animation: `marquee-${direction} ${speed}s linear infinite`,
-          willChange: 'transform',
-        }}
-      >
-        {items.map((item, i) => (
-          <div key={i} className="flex items-center mx-5 md:mx-8 whitespace-nowrap">
+    <div
+      className="flex w-max ticker-row"
+      style={{
+        animation: `marquee-${direction} ${speed}s linear infinite`,
+        willChange: 'transform',
+        gap: '48px',
+      }}
+    >
+      {duplicated.map((item, i) => (
+        <div key={i} className="flex items-center whitespace-nowrap" style={{ gap: '48px' }}>
+          <span
+            className="font-medium"
+            style={{
+              color: '#D4AF37',
+              fontSize: '1rem',
+              fontWeight: 500,
+              letterSpacing: '0.01em',
+            }}
+          >
+            {item}
+          </span>
+          {i < duplicated.length - 1 && (
             <span
-              className="text-sm md:text-base font-medium tracking-wide"
               style={{
-                background: 'linear-gradient(135deg, #E8E8E8 0%, #B0B0B0 30%, #F0F0F0 50%, #A8A8A8 70%, #D0D0D0 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
+                color: 'rgba(212, 175, 55, 0.6)',
+                fontSize: '0.625rem',
               }}
-            >
-              {item}
-            </span>
-            <span
-              className="ml-5 md:ml-8 text-[10px]"
-              style={{ color: 'rgba(255, 255, 255, 0.1)' }}
             >
               ◆
             </span>
-          </div>
-        ))}
-      </div>
+          )}
+        </div>
+      ))}
     </div>
   );
 }
@@ -86,15 +93,28 @@ export function TrustMarquee() {
 
   return (
     <section
-      className="py-8 overflow-hidden"
+      className="py-8"
       style={{
-        backgroundColor: '#0a0a0a',
+        backgroundColor: '#0A0A0A',
         borderTop: '1px solid rgba(255, 255, 255, 0.05)',
         borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
       }}
     >
-      <MarqueeRow direction="left" speed={45} />
-      <MarqueeRow direction="right" speed={52} />
+      <div
+        className="ticker-container"
+        style={{
+          overflow: 'hidden',
+          maskImage: 'linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)',
+        }}
+      >
+        <div className="py-2">
+          <MarqueeRow items={ROW_1_ITEMS} direction="left" speed={35} />
+        </div>
+        <div className="py-2" style={{ marginTop: '12px' }}>
+          <MarqueeRow items={ROW_2_ITEMS} direction="right" speed={35} />
+        </div>
+      </div>
     </section>
   );
 }

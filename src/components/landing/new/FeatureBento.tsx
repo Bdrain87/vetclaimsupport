@@ -834,7 +834,7 @@ export function FeatureBento() {
       <section
         id="features"
         className="relative py-12"
-        style={{ backgroundColor: '#000000', scrollMarginTop: '5rem' }}
+        style={{ backgroundColor: '#0A0A0A', scrollMarginTop: '5rem' }}
       >
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <motion.div
@@ -886,7 +886,7 @@ export function FeatureBento() {
     <section
       id="features"
       className="relative py-12 lg:py-16"
-      style={{ backgroundColor: '#000000', scrollMarginTop: '5rem' }}
+      style={{ backgroundColor: '#0A0A0A', scrollMarginTop: '5rem' }}
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">

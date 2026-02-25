@@ -29,7 +29,7 @@ const FEATURES: Feature[] = [
   },
   {
     icon: FileText,
-    title: 'AI-Assisted Document Builder',
+    title: 'Guided Document Builder',
     description: 'Generate personal statements, buddy letters, and doctor summaries.',
     details: [
       'Personal statement builder with guided prompts',
@@ -76,40 +76,23 @@ function FeatureIcon({ icon: Icon }: { icon: LucideIcon }) {
   );
 }
 
-function FeaturePlaceholder({ feature }: { feature: Feature }) {
-  const Icon = feature.icon;
-  return (
-    <div
-      className="w-full rounded-2xl flex items-center justify-center"
-      style={{
-        backgroundColor: '#111111',
-        border: '1px solid rgba(255, 255, 255, 0.06)',
-        aspectRatio: '4 / 3',
-        maxHeight: '360px',
-      }}
-    >
-      <div className="text-center p-8">
-        <Icon size={48} style={{ color: 'rgba(212, 175, 55, 0.3)' }} className="mx-auto mb-4" />
-        <p className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.2)' }}>
-          App screenshot
-        </p>
-      </div>
-    </div>
-  );
-}
-
 export function ProductShowcase() {
   return (
     <section
       id="features"
       className="py-[120px]"
-      style={{ backgroundColor: '#000000', scrollMarginTop: '5rem' }}
+      style={{ backgroundColor: '#0A0A0A', scrollMarginTop: '5rem' }}
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         {/* Section header */}
         <motion.h2
-          className="text-4xl md:text-5xl lg:text-6xl text-white text-center mb-20 px-4"
-          style={HEADING_H2_STYLE}
+          className="text-white text-center mb-20 px-4"
+          style={{
+            ...HEADING_H2_STYLE,
+            fontSize: 'clamp(2rem, 4vw, 3.5rem)',
+            lineHeight: 1.1,
+            letterSpacing: '-0.02em',
+          }}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -118,74 +101,65 @@ export function ProductShowcase() {
           Everything you need to prepare
         </motion.h2>
 
-        {/* Feature sections — alternating left/right layout */}
+        {/* Feature sections — single column, text-only (no placeholder boxes) */}
         <div className="space-y-24 md:space-y-32">
-          {FEATURES.map((feature, i) => {
-            const isReversed = i % 2 === 1;
-            return (
-              <motion.div
-                key={feature.title}
-                className={`grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center ${
-                  isReversed ? 'md:[direction:rtl]' : ''
-                }`}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.7, ease: EASE_SMOOTH }}
+          {FEATURES.map((feature) => (
+            <motion.div
+              key={feature.title}
+              className="max-w-3xl mx-auto"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.7, ease: EASE_SMOOTH }}
+            >
+              <FeatureIcon icon={feature.icon} />
+              <h3
+                className="text-2xl md:text-3xl text-white mt-5 mb-3"
+                style={HEADING_H3_STYLE}
               >
-                {/* Text content */}
-                <div className={isReversed ? 'md:[direction:ltr]' : ''}>
-                  <FeatureIcon icon={feature.icon} />
-                  <h3
-                    className="text-2xl md:text-3xl text-white mt-5 mb-3"
-                    style={HEADING_H3_STYLE}
+                {feature.title}
+              </h3>
+              <p
+                className="text-lg mb-6 leading-relaxed"
+                style={{ color: 'rgba(255, 255, 255, 0.80)' }}
+              >
+                {feature.description}
+              </p>
+              <ul className="space-y-3">
+                {feature.details.map((detail) => (
+                  <li
+                    key={detail}
+                    className="flex items-start gap-3 text-[15px]"
+                    style={{ color: 'rgba(255, 255, 255, 0.80)' }}
                   >
-                    {feature.title}
-                  </h3>
-                  <p
-                    className="text-lg mb-6 leading-relaxed"
-                    style={{ color: '#9CA3AF' }}
-                  >
-                    {feature.description}
-                  </p>
-                  <ul className="space-y-3">
-                    {feature.details.map((detail) => (
-                      <li
-                        key={detail}
-                        className="flex items-start gap-3 text-[15px]"
-                        style={{ color: '#D1D5DB' }}
-                      >
-                        <span
-                          className="mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0"
-                          style={{ backgroundColor: '#D4AF37' }}
-                        />
-                        {detail}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Screenshot placeholder */}
-                <div className={isReversed ? 'md:[direction:ltr]' : ''}>
-                  <FeaturePlaceholder feature={feature} />
-                </div>
-              </motion.div>
-            );
-          })}
+                    <span
+                      className="mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: '#D4AF37' }}
+                    />
+                    {detail}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          ))}
         </div>
 
         {/* "See all features" link */}
         <motion.p
-          className="text-center mt-20 text-lg"
-          style={{ color: '#9CA3AF' }}
+          className="text-center mt-20"
+          style={{
+            color: 'rgba(255, 255, 255, 0.80)',
+            fontSize: 'clamp(1rem, 1.125vw, 1.125rem)',
+            lineHeight: 1.6,
+          }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: EASE_SMOOTH }}
         >
-          50+ tools included — from calculators to trackers to exam prep.{' '}
+          50+ tools designed for your claim.{' '}
           <Link
-            to="/features"
+            to="/auth"
             className="no-underline font-medium transition-colors"
             style={{ color: '#D4AF37' }}
           >

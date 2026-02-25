@@ -14,23 +14,23 @@ import {
 const STEPS = [
   {
     num: '01',
-    title: 'Enter Your Service Details',
-    desc: 'Job codes, duty stations, deployments, combat zones, and exposures. We help you document your service history and identify conditions you may want to research further.',
+    title: 'Map Your Service',
+    desc: 'Enter your service history, conditions, and exposures. Document duty stations, deployments, and job codes in one place.',
   },
   {
     num: '02',
-    title: 'Upload & Link Documentation',
-    desc: 'For each condition, link your medical records, buddy statements, and supporting documents in one place.',
+    title: 'Build Your Case',
+    desc: 'Your evidence is organized by condition with supporting documentation. Link medical records, buddy statements, and personal statements.',
   },
   {
     num: '03',
-    title: 'Prep, Track & Generate',
-    desc: 'Use health trackers to log symptoms mapped to rating criteria. Generate supporting documents and statements. Prepare for your C&P exam.',
+    title: 'Prepare for the C&P Exam',
+    desc: 'Practice questions, know what to expect, walk in confident. Use health trackers to log symptoms mapped to rating criteria.',
   },
   {
     num: '04',
-    title: 'Export and Review',
-    desc: 'Export your notes, drafted statements, and tracked health data. Review everything before you file.',
+    title: 'File Your Claim',
+    desc: 'Everything organized, nothing missed. You file on your terms. Export your complete packet and review before you submit.',
   },
 ];
 
@@ -39,11 +39,16 @@ export function HowItWorks() {
     <section
       id="how-it-works"
       className="relative py-[120px] overflow-hidden"
-      style={{ backgroundColor: '#000000', scrollMarginTop: '5rem' }}
+      style={{ backgroundColor: '#0A0A0A', scrollMarginTop: '5rem' }}
     >
       <motion.h2
-        className="relative z-10 text-4xl md:text-5xl lg:text-6xl text-white text-center mb-16 px-4"
-        style={HEADING_H2_STYLE}
+        className="relative z-10 text-white text-center mb-16 px-4"
+        style={{
+          ...HEADING_H2_STYLE,
+          fontSize: 'clamp(2rem, 4vw, 3.5rem)',
+          lineHeight: 1.1,
+          letterSpacing: '-0.02em',
+        }}
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -69,8 +74,12 @@ export function HowItWorks() {
             className="relative overflow-hidden cursor-default group"
             style={{
               ...CARD_STYLE,
+              background: '#161616',
+              border: '1px solid rgba(255, 255, 255, 0.06)',
+              borderRadius: '16px',
               padding: '32px',
               boxShadow: CARD_SHADOW,
+              transition: 'border-color 200ms ease-out, transform 200ms ease-out, box-shadow 200ms ease-out',
             }}
           >
             <div className="relative z-10">
@@ -94,7 +103,7 @@ export function HowItWorks() {
               >
                 {step.title}
               </h3>
-              <p className="text-[15px] leading-relaxed" style={{ color: '#9CA3AF' }}>
+              <p className="text-[15px] leading-relaxed" style={{ color: 'rgba(255, 255, 255, 0.80)' }}>
                 {step.desc}
               </p>
             </div>
@@ -107,7 +116,7 @@ export function HowItWorks() {
             <div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
               style={{
-                borderRadius: '24px',
+                borderRadius: '16px',
                 background: 'radial-gradient(ellipse at 50% 100%, rgba(191, 149, 63, 0.04) 0%, transparent 60%)',
               }}
             />

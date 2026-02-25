@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { StickyNav } from '@/components/landing/new/StickyNav';
 import { Hero } from '@/components/landing/new/Hero';
+import { TrustMarquee } from '@/components/landing/new/TrustMarquee';
 import { HowItWorks } from '@/components/landing/new/HowItWorks';
 import { BuiltByVeteran } from '@/components/landing/new/BuiltByVeteran';
 import { ProductShowcase } from '@/components/landing/new/ProductShowcase';
@@ -35,9 +36,10 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#000000' }}>
+    <div className="min-h-screen" style={{ backgroundColor: '#0A0A0A' }}>
       <StickyNav />
       <Hero />
+      <TrustMarquee />
       <HowItWorks />
       <BuiltByVeteran />
       <ProductShowcase />

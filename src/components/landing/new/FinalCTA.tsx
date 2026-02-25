@@ -23,7 +23,7 @@ export function FinalCTA() {
     <section
       ref={sectionRef}
       className="relative py-12 md:py-16 overflow-hidden"
-      style={{ backgroundColor: '#000000' }}
+      style={{ backgroundColor: '#0A0A0A' }}
     >
       <motion.div
         className="absolute inset-0 pointer-events-none"

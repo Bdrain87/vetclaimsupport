@@ -228,10 +228,10 @@ export const HEADING_H3_STYLE = {
 export const MARQUEE_STYLES = `
 @keyframes marquee-left {
   0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  100% { transform: translateX(calc(-50% - 24px)); }
 }
 @keyframes marquee-right {
-  0% { transform: translateX(-50%); }
+  0% { transform: translateX(calc(-50% - 24px)); }
   100% { transform: translateX(0); }
 }
 @keyframes shimmer {
@@ -241,6 +241,16 @@ export const MARQUEE_STYLES = `
 @keyframes pulse-glow {
   0%, 100% { box-shadow: 0 0 20px rgba(191,149,63,0.1); }
   50% { box-shadow: 0 0 40px rgba(191,149,63,0.25); }
+}
+
+/* Pause ticker on hover */
+.ticker-container:hover .ticker-row {
+  animation-play-state: paused;
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .ticker-row { animation: none !important; }
 }
 `;
 

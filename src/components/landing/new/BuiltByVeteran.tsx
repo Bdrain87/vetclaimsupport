@@ -3,7 +3,7 @@ import { EASE_SMOOTH } from '@/lib/landing-animations';
 
 export function BuiltByVeteran() {
   return (
-    <section className="py-[120px] px-4" style={{ backgroundColor: '#000000' }}>
+    <section className="py-[120px] px-4" style={{ backgroundColor: '#0A0A0A' }}>
       <div className="mx-auto max-w-3xl">
         <motion.blockquote
           className="relative pl-6 md:pl-8"

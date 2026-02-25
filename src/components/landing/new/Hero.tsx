@@ -1,16 +1,16 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE, GOLD_GRADIENT } from '@/lib/landing-animations';
+import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE } from '@/lib/landing-animations';
 
-const ROTATING_WORDS = ['Organized', 'Documented', 'Prepared', 'Ready'];
+const ROTATING_WORDS = ['Organized', 'Prepared', 'Confident', 'Ready'];
 const CYCLE_MS = 3000;
 
 const TRUST_ITEMS = [
-  'Built by a 100% P&T Veteran',
-  '800+ VA Conditions',
-  'Your Data Stays Private',
-  'No Subscriptions, Ever',
+  'YOUR DATA STAYS PRIVATE',
+  'VETERAN-BUILT',
+  '50+ CLAIM TOOLS',
+  'CANCEL ANYTIME',
 ];
 
 function AppStoreBadge() {
@@ -29,6 +29,33 @@ function AppStoreBadge() {
           <text x="38" y="28" fontSize="14" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="600" letterSpacing="-0.01em">App Store</text>
         </g>
       </svg>
+    </a>
+  );
+}
+
+function GooglePlayBadge() {
+  return (
+    <a
+      href="/auth"
+      className="inline-flex flex-col items-center opacity-70 hover:opacity-100 transition-opacity"
+    >
+      <svg width="135" height="40" viewBox="0 0 135 40" xmlns="http://www.w3.org/2000/svg">
+        <rect width="135" height="40" rx="6" fill="#000" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+        <g>
+          <path d="M21.2 18.07l-7.49-7.52a1.61 1.61 0 0 0-.47 1.14v16.62a1.6 1.6 0 0 0 .47 1.14l.08.07 8.38-8.38v-.2l-.97-.87z" fill="#4285F4" />
+          <path d="M24.37 21.24l-3.17-3.17v-.2l3.17-3.17.07.04 3.76 2.13c1.07.61 1.07 1.61 0 2.22l-3.76 2.13-.07.02z" fill="#FBBC04" />
+          <path d="M24.44 21.22l-3.24-3.24-7.96 7.96c.35.38.93.42 1.59.05l9.61-4.77" fill="#EA4335" />
+          <path d="M24.44 14.74l-9.61-4.77c-.66-.37-1.24-.33-1.59.05l7.96 7.96 3.24-3.24z" fill="#34A853" />
+          <text x="42" y="15" fontSize="7" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="400" fill="rgba(255,255,255,0.8)" letterSpacing="0.03em">GET IT ON</text>
+          <text x="42" y="28" fontSize="13" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="600" fill="#fff" letterSpacing="-0.01em">Google Play</text>
+        </g>
+      </svg>
+      <span
+        className="text-[10px] mt-1"
+        style={{ color: 'rgba(255,255,255,0.4)' }}
+      >
+        Also on web
+      </span>
     </a>
   );
 }
@@ -61,7 +88,7 @@ export function Hero() {
     <section
       ref={sectionRef}
       className="relative flex flex-col items-center justify-center overflow-hidden"
-      style={{ backgroundColor: '#000000' }}
+      style={{ backgroundColor: '#0A0A0A' }}
     >
       {/* Parallax background */}
       <motion.div
@@ -71,7 +98,7 @@ export function Hero() {
           background: `
             radial-gradient(ellipse at 20% 50%, rgba(191,149,63,0.08) 0%, transparent 50%),
             radial-gradient(ellipse at 80% 20%, rgba(191,149,63,0.05) 0%, transparent 50%),
-            #000000
+            #0A0A0A
           `,
         }}
       />
@@ -93,17 +120,23 @@ export function Hero() {
           Built for Those Who Served
         </motion.p>
 
-        {/* Main heading */}
+        {/* Main heading — Option A */}
         <motion.h1
-          className="text-4xl md:text-6xl leading-tight text-white mb-6"
-          style={HEADING_H1_STYLE}
+          className="text-white mb-6"
+          style={{
+            ...HEADING_H1_STYLE,
+            fontSize: 'clamp(2.75rem, 5.5vw, 5.375rem)',
+            lineHeight: 1.05,
+            letterSpacing: '-0.03em',
+            fontWeight: 700,
+          }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          Organize Your Evidence.{' '}
+          Claims Built for Those Who Served.{' '}
           <br className="hidden sm:inline" />
-          File Your Claim{' '}
+          Be{' '}
           <span className="inline-block min-w-[160px] sm:min-w-[220px]">
             <AnimatePresence mode="wait">
               <motion.span
@@ -125,13 +158,17 @@ export function Hero() {
 
         {/* Subtitle */}
         <motion.p
-          className="text-lg md:text-xl max-w-2xl mx-auto mb-10"
-          style={{ color: '#D1D5DB' }}
+          className="max-w-2xl mx-auto mb-10"
+          style={{
+            color: 'rgba(255, 255, 255, 0.80)',
+            fontSize: 'clamp(1.125rem, 1.5vw, 1.375rem)',
+            lineHeight: 1.6,
+          }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          Track symptoms, generate statements, and build your claim packet — for $9.99 instead of the $4,000–$6,000 that claim companies charge.
+          Organize your evidence. Build your case. Be prepared.
         </motion.p>
 
         {/* CTAs */}
@@ -143,28 +180,36 @@ export function Hero() {
         >
           <motion.div
             whileHover={{
-              scale: 1.05,
-              boxShadow: '0 0 30px rgba(236,196,64,0.5), 0 0 60px rgba(236,196,64,0.2)',
+              y: -2,
+              boxShadow: '0 8px 24px rgba(212, 175, 55, 0.35)',
             }}
-            whileTap={{ scale: 0.97 }}
-            style={{ borderRadius: '9999px' }}
+            whileTap={{ y: 0 }}
+            style={{ borderRadius: '12px' }}
           >
             <Link
               to="/auth"
-              className="inline-block rounded-full px-10 py-4 text-lg font-semibold text-black no-underline"
+              className="inline-block px-8 py-3.5 text-base font-semibold text-black no-underline"
               style={{
-                background: GOLD_GRADIENT,
-                boxShadow: '0 0 20px rgba(236,196,64,0.3)',
+                background: 'linear-gradient(135deg, #B8860B, #D4AF37, #FFD700, #D4AF37, #B8860B)',
+                borderRadius: '12px',
               }}
             >
-              Get Started — $9.99
+              Get Started — $9.99/mo
             </Link>
           </motion.div>
           <motion.button
             onClick={scrollToHowItWorks}
-            className="inline-block rounded-full px-8 py-4 text-lg font-semibold text-white bg-transparent border border-white/30 cursor-pointer hover:border-white/60 transition-colors"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.97 }}
+            className="inline-block px-8 py-3.5 text-base font-semibold text-white bg-transparent cursor-pointer"
+            style={{
+              borderRadius: '12px',
+              border: '1px solid rgba(255, 255, 255, 0.20)',
+              transition: 'border-color 150ms ease-out',
+            }}
+            whileHover={{
+              y: -2,
+              borderColor: 'rgba(255, 255, 255, 0.40)',
+            }}
+            whileTap={{ y: 0 }}
           >
             See How It Works
           </motion.button>
@@ -178,26 +223,36 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 1 }}
         >
           {TRUST_ITEMS.map((item, i) => (
-            <span key={item} className="flex items-center gap-2 text-xs sm:text-sm" style={{ color: '#9CA3AF' }}>
+            <span
+              key={item}
+              className="flex items-center gap-2"
+              style={{
+                color: 'rgba(255, 255, 255, 0.55)',
+                fontSize: '0.8125rem',
+                lineHeight: 1.4,
+                letterSpacing: '0.04em',
+                fontWeight: 500,
+              }}
+            >
               {i > 0 && (
-                <span
-                  className="hidden sm:inline-block w-1 h-1 rounded-full"
-                  style={{ backgroundColor: '#D4AF37' }}
-                />
+                <span style={{ color: 'rgba(255, 255, 255, 0.55)' }}>
+                  &middot;
+                </span>
               )}
               {item}
             </span>
           ))}
         </motion.div>
 
-        {/* App Store Badge */}
+        {/* App Store Badges */}
         <motion.div
-          className="flex justify-center mt-8"
+          className="flex items-center justify-center gap-3 mt-8"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.2 }}
         >
           <AppStoreBadge />
+          <GooglePlayBadge />
         </motion.div>
       </div>
     </section>
