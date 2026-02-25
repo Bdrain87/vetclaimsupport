@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { Link2, Plus, Check, FileSignature, Search, ArrowRight } from 'lucide-react';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
+import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { useClaims } from '@/hooks/useClaims';
 import { secondaryConditions, type SecondaryConnection } from '@/data/secondaryConditions';
@@ -147,10 +148,15 @@ export default function SecondaryFinder() {
       )}
 
       {/* Autocomplete search */}
-      <ConditionAutocomplete
-        onSelect={handleAutocompleteSelect}
+      <ConditionSelector
+        onSelect={(selected) => {
+          const vaCondition = getConditionById(selected.conditionId);
+          if (vaCondition) {
+            handleAutocompleteSelect(vaCondition);
+          }
+        }}
+        label="Search for a primary condition"
         placeholder="Search any condition..."
-        showBodySystem
       />
 
       {/* Claimed conditions chips */}

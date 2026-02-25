@@ -154,12 +154,26 @@ export function useUserConditions() {
     [conditions],
   );
 
+  const incrementUsage = useCallback(
+    (id: string) => {
+      store.incrementConditionUsage(id);
+    },
+    [store],
+  );
+
+  /** Conditions sorted by usage count (most-used first) for ConditionSelector */
+  const conditionsByUsage = useMemo(() => {
+    return [...conditions].sort((a, b) => (b.usageCount ?? 0) - (a.usageCount ?? 0));
+  }, [conditions]);
+
   return {
     conditions,
+    conditionsByUsage,
     addCondition,
     removeCondition: store.removeUserCondition,
     updateCondition: store.updateUserCondition,
     clearAllConditions: store.clearAllUserConditions,
+    incrementUsage,
     hasCondition,
     getCondition,
     getConditionsByStatus,

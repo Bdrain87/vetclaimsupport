@@ -38,6 +38,7 @@ import { createCPExamPrepPrompt } from '@/lib/ai-prompts';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { PageContainer } from '@/components/PageContainer';
+import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import { getConditionSymptoms, getConditionMedications } from '@/utils/prefillHelpers';
 import { useFeatureFlag } from '@/store/useFeatureFlagStore';
 

@@ -15,6 +15,7 @@ import { DocumentUploader } from '@/components/documents/DocumentUploader';
 import { useToast } from '@/hooks/use-toast';
 import type { BuddyContact } from '@/types/claims';
 import { PageContainer } from '@/components/PageContainer';
+import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 
 const statementStatuses = ['Not Requested', 'Requested', 'Received', 'Submitted'] as const;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useEvidence } from '@/hooks/useEvidence';
-import { Shield, Plus, Trash2, Edit, Calendar, MapPin, Briefcase, AlertTriangle, Download, Sword, Star, Plane, Loader2 } from 'lucide-react';
+import { Shield, Plus, Trash2, Edit, Calendar, MapPin, Briefcase, AlertTriangle, Download, Sword, Star, Plane, Loader2, Globe } from 'lucide-react';
 import { getSavedServiceDates, saveServiceDates } from '@/utils/veteranProfile';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,9 +21,36 @@ import { LocationAutocomplete } from '@/components/shared/LocationAutocomplete';
 import type { ServiceEntry, CombatEntry, MajorEvent, DeploymentEntry, MajorEventType } from '@/types/claims';
 import { PageContainer } from '@/components/PageContainer';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { ConflictSelector } from '@/components/shared/ConflictSelector';
+import { DeploymentLocationPicker } from '@/components/shared/DeploymentLocationPicker';
+import { PresumptiveConditionSuggestions } from '@/components/shared/PresumptiveConditionSuggestions';
+import { MOSConditionSuggestions } from '@/components/shared/MOSConditionSuggestions';
+import useAppStore from '@/store/useAppStore';
 
 const COMBAT_ZONE_TYPES = ['Combat Zone', 'Hostile Fire Area', 'Imminent Danger Area', 'Hazardous Duty'] as const;
 const MAJOR_EVENT_TYPES: MajorEventType[] = ['Injury', 'Accident', 'Assault/MST', 'Award/Decoration', 'TBI Event', 'Traumatic Event', 'Line of Duty Investigation', 'Other'];
+
+/** Extracted sub-component to use hooks properly */
+function ConflictsTabContent() {
+  const selectedConflicts = useAppStore((s) => s.selectedConflicts);
+
+  return (
+    <TabsContent value="conflicts" className="space-y-6 mt-4">
+      <ConflictSelector />
+
+      {selectedConflicts.length > 0 && (
+        <div className="space-y-6">
+          {selectedConflicts.map((conflictId) => (
+            <DeploymentLocationPicker key={conflictId} conflictId={conflictId} />
+          ))}
+        </div>
+      )}
+
+      <PresumptiveConditionSuggestions />
+      <MOSConditionSuggestions />
+    </TabsContent>
+  );
+}
 
 export default function ServiceHistory() {
   const today = new Date().toISOString().split('T')[0];
@@ -296,11 +323,16 @@ export default function ServiceHistory() {
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
-          <TabsList className="flex flex-wrap w-full sm:grid sm:w-full sm:grid-cols-4 h-auto gap-1">
+          <TabsList className="flex flex-wrap w-full sm:grid sm:w-full sm:grid-cols-5 h-auto gap-1">
             <TabsTrigger value="duty-stations" className="text-xs sm:text-sm py-2 px-2 sm:px-3 whitespace-nowrap flex-shrink-0">
               <MapPin className="h-4 w-4 sm:mr-1" />
               <span className="hidden sm:inline">Duty Stations</span>
               <span className="sm:hidden">Stations</span>
+            </TabsTrigger>
+            <TabsTrigger value="conflicts" className="text-xs sm:text-sm py-2 px-2 sm:px-3 whitespace-nowrap flex-shrink-0">
+              <Globe className="h-4 w-4 sm:mr-1" />
+              <span className="hidden sm:inline">Conflicts</span>
+              <span className="sm:hidden">Conflicts</span>
             </TabsTrigger>
             <TabsTrigger value="combat" className="text-xs sm:text-sm py-2 px-2 sm:px-3 whitespace-nowrap flex-shrink-0">
               <Sword className="h-4 w-4 sm:mr-1" />
@@ -505,6 +537,10 @@ export default function ServiceHistory() {
             </div>
           )}
         </TabsContent>
+
+        {/* CONFLICTS & DEPLOYMENTS TAB */}
+        <ConflictsTabContent />
+
 
         {/* COMBAT TAB */}
         <TabsContent value="combat" className="space-y-4 mt-4">

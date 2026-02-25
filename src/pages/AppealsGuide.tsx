@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { PageContainer } from '@/components/PageContainer';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
+import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import {
   appealLanes,
   searchCaseLaw,
@@ -665,13 +666,16 @@ function MyAppealTab() {
           </div>
         ) : (
           <div className="space-y-2">
-            <ConditionAutocomplete
-              onSelect={(c) => {
-                setManualCondition(c.abbreviation || c.name);
-                setManualConditionCategory(c.category as ConditionCategory);
+            <ConditionSelector
+              onSelect={(selected) => {
+                const vaCondition = getConditionById(selected.conditionId);
+                if (vaCondition) {
+                  setManualCondition(vaCondition.abbreviation || vaCondition.name);
+                  setManualConditionCategory(vaCondition.category as ConditionCategory);
+                }
               }}
+              label="Search for a condition"
               placeholder="Search for a condition (e.g., PTSD, Sleep Apnea, Lumbar Strain)..."
-              showBodySystem
             />
             {manualCondition && (
               <p className="text-xs text-gold">Selected: {manualCondition}</p>
@@ -866,13 +870,16 @@ export default function AppealsGuide() {
         {/* ── Case Law Search Tab ──────────────────────────────────────── */}
         <TabsContent value="caselaw" className="space-y-4">
           {/* Condition autocomplete - search by code, name, keyword */}
-          <ConditionAutocomplete
-            onSelect={(c) => {
-              setSearchQuery(c.abbreviation || c.name);
-              setSelectedConditionCategory(c.category || null);
+          <ConditionSelector
+            onSelect={(selected) => {
+              const vaCondition = getConditionById(selected.conditionId);
+              if (vaCondition) {
+                setSearchQuery(vaCondition.abbreviation || vaCondition.name);
+                setSelectedConditionCategory(vaCondition.category || null);
+              }
             }}
+            label="Search by condition"
             placeholder="Search by condition code, name, or keyword..."
-            showBodySystem
           />
 
           {/* Text search bar */}

@@ -1,0 +1,1107 @@
+{
+  "conflicts": [
+    {
+      "conflictId": "oif_iraq",
+      "name": "OIF — Iraq",
+      "dateRange": "2003–2011",
+      "defaultExposures": ["burn_pit"],
+      "regions": [
+        {
+          "name": "Iraq — Camps",
+          "locations": [
+            { "name": "Camp Abu Naji", "alternateNames": ["FOB Garry Owen"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Adder", "alternateNames": ["Tallil", "Ali Air Base"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Al Adala", "alternateNames": ["Camp Justice", "Camp Bonzai"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Al Amal", "alternateNames": ["Camp Hope"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Al Asad", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Al-Hurya Al-Awal", "alternateNames": ["Camp Freedom I", "Camp Warhorse"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Al-Hurya Al-Thani", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Al-Isdehar", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Al-Istiglal", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Al-Nasr", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Al Qa'im", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Al-Saqr", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Al-Sharaf", "alternateNames": ["Camp Honor"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Al-Tadamum", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Al-Tahreer", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Al-Tawheed Al-Awal", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Al-Tawheef Al-Thani", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Al Watani", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Anaconda", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Anah", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Andaluz", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Anderson", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Apache", "alternateNames": ["Camp Gunner Main"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Arkansas", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Arrow", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Ashraf", "alternateNames": ["Camp New Iraq"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Avalanche", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Babylon", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Baharia", "alternateNames": ["Camp Dreamland", "Camp Volturno"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Balad", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Basilone", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Basrah", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Bastard", "alternateNames": ["Camp Ellis"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Black Jack", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Blue Diamond", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Bonzai", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Boom", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Brassfield Mora", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Bristol", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Bucca", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Buffalo", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Bulldog", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Bushmaster", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Bushwaker", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Buzz", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Caldwell", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Cedar", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Cedar II", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Champion Main", "alternateNames": ["Camp Hurricane Point"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Chesty", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Chindit", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Clairborne", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Cobra", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Cold Steel", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Condor", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Cooke", "alternateNames": ["Camp Taji"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Cougar", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Cropper", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Cuervo", "alternateNames": ["Camp Rustamiyah"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Dahuk", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Daniels", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Dakota", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Diamondback", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Dogwood", "alternateNames": ["FOB Chosin"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Dracula", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Dragoon", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Duke", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Eagle", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Eagle III", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Eden", "alternateNames": ["Camp Hit"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Edson", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Endurance", "alternateNames": ["Q-West"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Falcon", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Fallujah", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Fenway", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Ferrin-Huggins", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Freedom", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Freedom I", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Freedom II", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Ganci", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Geiger", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Gilligan", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Golf", "alternateNames": ["Camp Baker"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Graceland", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Greywolf", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Griffin", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Gunslinger", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Headhunter", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Honor", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Hope", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Hotel", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Hurricane Point", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Hurriya", "alternateNames": ["Camp Liberty"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Husaybah", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Independence", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp India", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Iron Horse", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Ironhorse", "alternateNames": ["FOB Danger"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Jennings", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Junction City", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Justice", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Kalsu", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Klecker", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Knott", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Korean Village", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Lancer", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Leader", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Libeccio", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Liberty", "alternateNames": ["Camp Hurriya"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Lima", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Manhattan", "alternateNames": ["Camp Habbaniyah"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Marez", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Malboro", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Mercury", "alternateNames": ["Camp Abu Ghurayb"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Minden", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Muleskinner", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Nakamura", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Nama", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Normandy", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Outlaw", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Pacemaker", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Pacesetter", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Paladin", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Paliwoda", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Packhorse", "alternateNames": ["FOB Remagen"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Parsons", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Performance", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Patriot", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Prosperity", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Qayyarah", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Raider", "alternateNames": ["FOB Dagger"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Ramadi", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Reasoner II", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Red Knight", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Redcatcher", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Redemption", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Renegade", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Ridgeway", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Roach", "alternateNames": ["Camp Hadithah"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Rustamiyah", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Sather", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Scania", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Shield", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Slayer", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Smitty", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Snake Pit", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Solidarity", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Speicher", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp St. Mere", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Steel Dragon", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Steel Falcon", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Stone", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Strike", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Striker", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Sullivan", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Sustainer", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Sycamore", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Taji", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Taqaddum", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Thunder", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Top Gun", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Trebil", "alternateNames": ["Camp Gibbons"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Twin Tower", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Ultimo", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Union I", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Union II", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Victory", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Victory North", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Victory 51 Papa", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Vigilant", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Viper", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Volturno", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Volunteer", "alternateNames": ["Camp Provider"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp War Eagle", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp War Horse", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Warrior", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Whitehorse", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Whitford", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Wolf", "alternateNames": ["Camp Miller"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Wolfpack", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Zadan", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Zaytun", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Zulu", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "Iraq — FOBs",
+          "locations": [
+            { "name": "FOB Abu Ghraib", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Aggie", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Al Asad", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Al Kut", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Al-Tawheed Al-Thalith", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Animal House", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Arrow", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Atlas", "alternateNames": ["Hellhound"], "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Baharia", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Bandit Island", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Bernstein", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Blue Diamond", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Black", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Blickenstaff", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Brassfield-Mora", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Broomhead", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Byers", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Caldwell", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Callahan", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Carpenter", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Champion Main", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Chosin", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Cobra", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Comanche", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Constitution", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Cooke", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Courage", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Corregidor", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Crossbow", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Dagger", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Danger", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB David", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Delta", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Duke", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Dibbis", "alternateNames": ["Camp Dibis"], "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Eagle", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Echo", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Eden", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Edge", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Endurance", "alternateNames": ["Q-West"], "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Falcon", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Fallujah", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Faylok", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Ferrin-Huggins", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Fortitude", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Freedom", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Fulda", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Gabe", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Gaines Mills", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Garry Owen", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Ghost", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Givens", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Glory", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Gold", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Grant", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Grizzly", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Guardian City", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Gunner", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Hammer", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Hawk", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Headhunter", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Hellhound", "alternateNames": ["Atlas"], "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Hit", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Honor", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Hopping", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Hotel", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Hunter", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Hurricane", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB India", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Independence", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Ironhorse", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Iskandariyah", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Junction City", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Justice", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Kalsu", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Latham", "alternateNames": ["Al Walid"], "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Laurie", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Loyalty", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Lion", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Manhattan", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Mac Henry", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB MacKenzie", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Marez", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Melody", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Mercury", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Miller", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Morgan", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Muleskinner", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Musan", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Nimur", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Normandy", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Omaha", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB O'Ryan", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Pacesetter", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Packhorse", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Paliden Base", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Paliwoda", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Pasab", "alternateNames": ["Wilson"], "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Patriot", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Phoenix", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Prosperity", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Q-West", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Quinn", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Raider", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Reaper", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Red Lion", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Regulars", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Remagen", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Ridgeway", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Roundtop", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Rough Rider", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Rustamiyah", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Sabre", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Scania", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Saint Mere", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Saint Michael", "alternateNames": ["Al Mahmudiyah"], "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Shakoosh", "alternateNames": ["Hammer"], "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Shield", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Spartan", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Speicher", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Steel Dragon", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Stone", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Sykes", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Summerall", "alternateNames": ["Stoddard"], "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Sword", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Taji", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Tiger", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Tinderbox", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Trojan Horse", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Trotter", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Union III", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Volturno", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Vanguard", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB War Eagle", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Warhorse", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Warrior", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Webster", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Wilson", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Wyatt", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Yankee", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Yusufiyah", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Zulu", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "Iraq — COPs",
+          "locations": [
+            { "name": "COP Amanche", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Anah", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Annihilator", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Apache", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Assassin", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Attack", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Ayres", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Aztec", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Bama", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Banchee", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Battle", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Beretta", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Blackfoot", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Blickenstaff", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Blue Babe Bridge", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Bone Zulu", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Cahill", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Callahan", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Carver", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Cashe", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Cashe South", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Casino", "alternateNames": ["COP Wildcard"], "exposureFlags": ["burn_pit"] },
+            { "name": "COP Chaos", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Cleary", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Corregidor", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Dragon", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Ellis", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Falcon", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Ford", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Gator", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Grant", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Haditha Dam", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Hatoon", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Hutal", "alternateNames": ["COP Rath"], "exposureFlags": ["burn_pit"] },
+            { "name": "COP Iron", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Khatoon", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Meade", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Murray", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Old Mod", "exposureFlags": ["burn_pit"] },
+            { "name": "COP North", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Norris", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Ocotal", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Old Baqubah", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Old Mob", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Rabiy", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Rawah", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Remagan", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Resolve", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Rock", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Romeo", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Ruger", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Salie", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Shan", "exposureFlags": ["burn_pit"] },
+            { "name": "COP South", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Shocker", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Spear", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Summers", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Tampa", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Tehrir", "alternateNames": ["Tahrir"], "exposureFlags": ["burn_pit"] },
+            { "name": "COP Texas", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Tripoli", "exposureFlags": ["burn_pit"] },
+            { "name": "COP War Eagle", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Wildcard", "exposureFlags": ["burn_pit"] },
+            { "name": "COP 102", "exposureFlags": ["burn_pit"] },
+            { "name": "COP 402", "exposureFlags": ["burn_pit"] },
+            { "name": "COP 727", "exposureFlags": ["burn_pit"] },
+            { "name": "COP 821", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "Iraq — Other",
+          "locations": [
+            { "name": "Victory Base Complex", "exposureFlags": ["burn_pit"] },
+            { "name": "Al-Faw Palace", "exposureFlags": ["burn_pit"] },
+            { "name": "Firebase Morehead", "exposureFlags": ["burn_pit"] },
+            { "name": "Sather Air Base", "exposureFlags": ["burn_pit"] },
+            { "name": "Logistics Base Seitz", "exposureFlags": ["burn_pit"] },
+            { "name": "Victory Fuel Point", "exposureFlags": ["burn_pit"] }
+          ]
+        }
+      ]
+    },
+    {
+      "conflictId": "oef_afghanistan",
+      "name": "OEF — Afghanistan",
+      "dateRange": "2001–2021",
+      "defaultExposures": ["burn_pit"],
+      "regions": [
+        {
+          "name": "RC-Capital",
+          "locations": [
+            { "name": "Camp KAIA", "alternateNames": ["Kabul International Airport"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Phoenix", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Eggers", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Julien", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Warehouse", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Souter", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Dubs", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-East — Parwan",
+          "locations": [
+            { "name": "Bagram Airfield", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-East — Nangarhar",
+          "locations": [
+            { "name": "Jalalabad Airfield", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Fenty", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Torkham", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Connolly", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-East — Khost",
+          "locations": [
+            { "name": "FOB Salerno", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Chapman", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Sabari", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Chamkani", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Wilderness", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-East — Paktika",
+          "locations": [
+            { "name": "FOB Sharana", "alternateNames": ["Camp Kearney"], "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Orgun-E", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Bermel", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Tillman", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Zormat", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Margah", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Zerok", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-East — Paktia",
+          "locations": [
+            { "name": "FOB Gardez", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Shank", "alternateNames": ["Logar/Paktia border"], "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Lightning", "alternateNames": ["Advising Platform Lightning"], "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Thunder", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Zurmat", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Herrera", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-East — Ghazni",
+          "locations": [
+            { "name": "FOB Ghazni", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Vulcan", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Andar", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-East — Kunar",
+          "locations": [
+            { "name": "FOB Joyce", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Blessing", "alternateNames": ["Camp Blessing"], "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Wright", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Monti", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Asadabad", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Nangalam", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Able Main", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Monti", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Honaker-Miracle", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Michigan", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Penich", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Fortress", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Nangalam", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-East — Nuristan",
+          "locations": [
+            { "name": "FOB Kalagush", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Bostick", "alternateNames": ["formerly FOB Naray"], "exposureFlags": ["burn_pit"] },
+            { "name": "COP Keating", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Lowell", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Fritsche", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-East — Laghman",
+          "locations": [
+            { "name": "FOB Mehtar Lam", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Najil", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-East — Kapisa",
+          "locations": [
+            { "name": "FOB Tagab", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Kutschbach", "notes": "German", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-East — Logar",
+          "locations": [
+            { "name": "FOB Shank", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Altimur", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Maiwand", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Dahlke", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-East — Wardak",
+          "locations": [
+            { "name": "FOB Airborne", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Nerkh", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Sayedabad", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Carwile", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Tangi", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-South — Kandahar",
+          "locations": [
+            { "name": "Kandahar Airfield", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Wilson", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Walton", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Pasab", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Sperwan Ghar", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Zhari", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Panjwai", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Mushan", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Nejat", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Talokan", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Zangabad", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-South — Uruzgan",
+          "locations": [
+            { "name": "Multi-National Base Tarin Kowt", "alternateNames": ["MNBTK"], "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Ripley", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Cobra", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Hadrian", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-South — Zabul",
+          "locations": [
+            { "name": "FOB Lagman", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Wolverine", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Mizan", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-Southwest — Helmand",
+          "locations": [
+            { "name": "Camp Leatherneck", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Bastion", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Shorabak", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Dwyer", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Edinburgh", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Inkerman", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Robinson", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Delhi", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Nolay", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Geronimo", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Zeebrugge", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Marjah", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Jackson", "alternateNames": ["FOB Sabit Qadam"], "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Shukvani", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB White House", "alternateNames": ["Kajaki"], "exposureFlags": ["burn_pit"] },
+            { "name": "COP Sangin", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Musa Qala", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Now Zad", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Garmsir", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Kajaki", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Nawa", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Kuchinay", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Ricketts", "exposureFlags": ["burn_pit"] },
+            { "name": "COP Metro", "exposureFlags": ["burn_pit"] },
+            { "name": "PB Deh Mezong", "exposureFlags": ["burn_pit"] },
+            { "name": "PB Marjah", "exposureFlags": ["burn_pit"] },
+            { "name": "PB Nad-e Ali", "exposureFlags": ["burn_pit"] },
+            { "name": "PB Khan-e Shin", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-Southwest — Nimruz",
+          "locations": [
+            { "name": "FOB Delaram", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Delaram II", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-West — Herat",
+          "locations": [
+            { "name": "Camp Arena", "exposureFlags": ["burn_pit"] },
+            { "name": "Shindand Air Base", "alternateNames": ["Camp Estelle"], "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Adraskan", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Todd", "alternateNames": ["Bala Morghab"], "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-West — Farah",
+          "locations": [
+            { "name": "FOB Farah", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Stone", "exposureFlags": ["burn_pit"] },
+            { "name": "FOB Dimonios", "notes": "Italian", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-West — Badghis",
+          "locations": [
+            { "name": "PRT Qala-i-Naw", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-North — Balkh",
+          "locations": [
+            { "name": "Camp Marmal", "alternateNames": ["Mazar-i-Sharif"], "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-North — Kunduz",
+          "locations": [
+            { "name": "PRT Kunduz", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-North — Badakhshan",
+          "locations": [
+            { "name": "PRT Feyzabad", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-North — Baghlan",
+          "locations": [
+            { "name": "PRT Pol-e Khumri", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "RC-North — Faryab",
+          "locations": [
+            { "name": "PRT Maimana", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "Early",
+          "locations": [
+            { "name": "Camp Rhino", "notes": "First ground base, Nov 2001", "exposureFlags": ["burn_pit"] }
+          ]
+        }
+      ]
+    },
+    {
+      "conflictId": "gulf_war",
+      "name": "Gulf War",
+      "dateRange": "1990–1991",
+      "defaultExposures": ["oil_well_fire", "depleted_uranium"],
+      "regions": [
+        {
+          "name": "Saudi Arabia — Air Bases",
+          "locations": [
+            { "name": "Dhahran Air Base", "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "King Fahd International Airport", "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "King Abdul Aziz Air Base", "alternateNames": ["Dhahran"], "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "King Khalid Military City", "alternateNames": ["KKMC"], "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Prince Sultan Air Base", "alternateNames": ["Al Kharj"], "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Riyadh Air Base", "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "King Khalid International Airport", "alternateNames": ["Riyadh"], "exposureFlags": ["oil_well_fire", "depleted_uranium"] }
+          ]
+        },
+        {
+          "name": "Saudi Arabia — Ground/Logistics",
+          "locations": [
+            { "name": "Camp Eagle II", "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Cement Factory", "alternateNames": ["Tactical Assembly Area"], "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Hafar Al-Batin", "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Log Base Alpha", "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Log Base Charlie", "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Log Base Echo", "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Tactical Assembly Area Thompson", "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Tactical Assembly Area Roosevelt", "exposureFlags": ["oil_well_fire", "depleted_uranium"] }
+          ]
+        },
+        {
+          "name": "Saudi Arabia — Ports",
+          "locations": [
+            { "name": "Al Jubayl", "alternateNames": ["Jubail"], "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Ad Dammam", "alternateNames": ["Dammam"], "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Jeddah", "exposureFlags": ["oil_well_fire", "depleted_uranium"] }
+          ]
+        },
+        {
+          "name": "Kuwait",
+          "locations": [
+            { "name": "Kuwait City", "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Kuwait International Airport", "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Ali Al Salem Air Base", "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Camp Doha", "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Camp Arifjan", "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Ahmed Al Jaber Air Base", "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Burgan Oil Field", "exposureFlags": ["oil_well_fire", "depleted_uranium"] }
+          ]
+        },
+        {
+          "name": "Oman",
+          "locations": [
+            { "name": "Masirah Island", "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Thumrait Air Base", "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Seeb International Airport", "alternateNames": ["Muscat"], "exposureFlags": ["oil_well_fire", "depleted_uranium"] }
+          ]
+        },
+        {
+          "name": "UAE",
+          "locations": [
+            { "name": "Al Dhafra Air Base", "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Jebel Ali", "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Sharjah", "exposureFlags": ["oil_well_fire", "depleted_uranium"] }
+          ]
+        },
+        {
+          "name": "Bahrain",
+          "locations": [
+            { "name": "Naval Support Activity Bahrain", "alternateNames": ["NSA Bahrain"], "exposureFlags": ["oil_well_fire", "depleted_uranium"] },
+            { "name": "Shaikh Isa Air Base", "exposureFlags": ["oil_well_fire", "depleted_uranium"] }
+          ]
+        },
+        {
+          "name": "Diego Garcia",
+          "locations": [
+            { "name": "Naval Support Facility Diego Garcia", "exposureFlags": ["oil_well_fire", "depleted_uranium"] }
+          ]
+        },
+        {
+          "name": "Navy",
+          "locations": [
+            { "name": "Persian Gulf naval operations", "notes": "All vessels operating in Persian Gulf, Gulf of Oman, and Red Sea", "exposureFlags": ["oil_well_fire", "depleted_uranium"] }
+          ]
+        }
+      ]
+    },
+    {
+      "conflictId": "vietnam",
+      "name": "Vietnam War",
+      "dateRange": "1962–1975",
+      "defaultExposures": ["agent_orange"],
+      "regions": [
+        {
+          "name": "USAF Air Bases",
+          "locations": [
+            { "name": "Bien Hoa Air Base", "exposureFlags": ["agent_orange", "high_dioxin"], "notes": "High dioxin contamination site — heavily sprayed and stored Agent Orange" },
+            { "name": "Da Nang Air Base", "exposureFlags": ["agent_orange", "high_dioxin"], "notes": "High dioxin contamination site — major Agent Orange storage and handling facility" },
+            { "name": "Phu Cat Air Base", "exposureFlags": ["agent_orange", "high_dioxin"], "notes": "High dioxin contamination site — Agent Orange perimeter spraying documented" },
+            { "name": "Tan Son Nhut Air Base", "exposureFlags": ["agent_orange"] },
+            { "name": "Cam Ranh Bay Air Base", "exposureFlags": ["agent_orange"] },
+            { "name": "Nha Trang Air Base", "exposureFlags": ["agent_orange"] },
+            { "name": "Pleiku Air Base", "exposureFlags": ["agent_orange"] },
+            { "name": "Phan Rang Air Base", "exposureFlags": ["agent_orange"] },
+            { "name": "Tuy Hoa Air Base", "exposureFlags": ["agent_orange"] }
+          ]
+        },
+        {
+          "name": "Army Bases",
+          "locations": [
+            { "name": "Long Binh Post", "exposureFlags": ["agent_orange"] },
+            { "name": "Cu Chi Base Camp", "alternateNames": ["25th Infantry Division"], "exposureFlags": ["agent_orange"] },
+            { "name": "Dau Tieng Base Camp", "exposureFlags": ["agent_orange"] },
+            { "name": "Lai Khe Base Camp", "alternateNames": ["1st Infantry Division"], "exposureFlags": ["agent_orange"] },
+            { "name": "Di An Base Camp", "exposureFlags": ["agent_orange"] },
+            { "name": "Phuoc Vinh Base Camp", "alternateNames": ["1st Cavalry Division"], "exposureFlags": ["agent_orange"] },
+            { "name": "Tay Ninh Base Camp", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Enari", "alternateNames": ["Pleiku", "4th Infantry Division"], "exposureFlags": ["agent_orange"] },
+            { "name": "An Khe Base Camp", "alternateNames": ["Camp Radcliff"], "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Evans", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Eagle", "alternateNames": ["101st Airborne Division"], "exposureFlags": ["agent_orange"] },
+            { "name": "Phu Bai Combat Base", "exposureFlags": ["agent_orange"] },
+            { "name": "Dong Ha Combat Base", "exposureFlags": ["agent_orange"] },
+            { "name": "Quang Tri Combat Base", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Holloway", "alternateNames": ["Pleiku"], "exposureFlags": ["agent_orange"] },
+            { "name": "Qui Nhon", "exposureFlags": ["agent_orange"] },
+            { "name": "Duc Pho Base Camp", "alternateNames": ["LZ Bronco"], "exposureFlags": ["agent_orange"] }
+          ]
+        },
+        {
+          "name": "Marine Bases",
+          "locations": [
+            { "name": "Da Nang", "exposureFlags": ["agent_orange", "high_dioxin"], "notes": "High dioxin contamination site" },
+            { "name": "Chu Lai", "exposureFlags": ["agent_orange"] },
+            { "name": "Khe Sanh Combat Base", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Carroll", "exposureFlags": ["agent_orange"] },
+            { "name": "The Rockpile", "exposureFlags": ["agent_orange"] },
+            { "name": "Con Thien", "exposureFlags": ["agent_orange"] },
+            { "name": "Gio Linh", "exposureFlags": ["agent_orange"] },
+            { "name": "Vandegrift Combat Base", "exposureFlags": ["agent_orange"] },
+            { "name": "An Hoa Combat Base", "exposureFlags": ["agent_orange"] },
+            { "name": "Liberty Bridge", "exposureFlags": ["agent_orange"] },
+            { "name": "Hill 327", "alternateNames": ["Division Ridge"], "exposureFlags": ["agent_orange"] },
+            { "name": "Hill 55", "exposureFlags": ["agent_orange"] },
+            { "name": "Hill 10", "exposureFlags": ["agent_orange"] }
+          ]
+        },
+        {
+          "name": "Navy",
+          "locations": [
+            { "name": "Cam Ranh Bay Naval Base", "exposureFlags": ["agent_orange"] },
+            { "name": "Saigon River patrols", "alternateNames": ["Brown Water Navy"], "exposureFlags": ["agent_orange"] },
+            { "name": "Mekong Delta riverine operations", "exposureFlags": ["agent_orange"] },
+            { "name": "Coastal Surveillance Force", "alternateNames": ["Operation Market Time"], "exposureFlags": ["agent_orange"] },
+            { "name": "Da Nang Harbor", "exposureFlags": ["agent_orange"] },
+            { "name": "Vung Tau", "exposureFlags": ["agent_orange"] }
+          ]
+        }
+      ]
+    },
+    {
+      "conflictId": "thailand_vietnam_era",
+      "name": "Thailand — Vietnam Era",
+      "dateRange": "1961–1976",
+      "defaultExposures": ["agent_orange"],
+      "regions": [
+        {
+          "name": "Royal Thai Air Force Bases",
+          "locations": [
+            { "name": "Takhli RTAFB", "exposureFlags": ["agent_orange"] },
+            { "name": "Korat RTAFB", "alternateNames": ["Nakhon Ratchasima"], "exposureFlags": ["agent_orange"] },
+            { "name": "Nakhon Phanom RTAFB", "alternateNames": ["NKP"], "exposureFlags": ["agent_orange"] },
+            { "name": "U-Tapao RTAFB", "exposureFlags": ["agent_orange"] },
+            { "name": "Udorn RTAFB", "alternateNames": ["Udon Thani"], "exposureFlags": ["agent_orange"] },
+            { "name": "Don Muang RTAFB", "alternateNames": ["Bangkok"], "exposureFlags": ["agent_orange"] },
+            { "name": "Nam Phong RTAFB", "exposureFlags": ["agent_orange"] },
+            { "name": "Ubon RTAFB", "exposureFlags": ["agent_orange"] },
+            { "name": "Ramasun Station", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Samae San", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Vayama", "exposureFlags": ["agent_orange"] }
+          ]
+        }
+      ]
+    },
+    {
+      "conflictId": "korea",
+      "name": "Korea",
+      "dateRange": "1950–1971",
+      "defaultExposures": [],
+      "regions": [
+        {
+          "name": "Korean War (1950–1953)",
+          "locations": [
+            { "name": "Pusan Perimeter bases", "exposureFlags": [] },
+            { "name": "Inchon", "exposureFlags": [] },
+            { "name": "Seoul", "exposureFlags": [] },
+            { "name": "Chosin Reservoir area", "exposureFlags": [] },
+            { "name": "Heartbreak Ridge area", "exposureFlags": [] },
+            { "name": "Pork Chop Hill area", "exposureFlags": [] }
+          ]
+        },
+        {
+          "name": "DMZ Service (1967–1971)",
+          "locations": [
+            { "name": "Camp Bonifas", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Casey", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Castle", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Edwards", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Giant", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Greaves", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Guard", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Hovey", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Howze", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Humphreys", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Kaiser", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Kim", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Kyle", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Liberty Bell", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Long", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Market", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Mercer", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Mobile", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Nimble", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Page", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Pelham", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Red Cloud", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Sears", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Stanley", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Stanton", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp St. Barbara", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Essayons", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp Jackson", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp LaGuardia", "exposureFlags": ["agent_orange"] },
+            { "name": "Camp McNab", "exposureFlags": ["agent_orange"] }
+          ]
+        }
+      ]
+    },
+    {
+      "conflictId": "gwot_other",
+      "name": "GWOT — Other",
+      "dateRange": "2001–present",
+      "defaultExposures": ["burn_pit"],
+      "regions": [
+        {
+          "name": "Kuwait",
+          "locations": [
+            { "name": "Camp Arifjan", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Buehring", "alternateNames": ["Camp Udairi"], "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Doha", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Patriot", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Virginia", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp New York", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Pennsylvania", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp Spearhead", "exposureFlags": ["burn_pit"] },
+            { "name": "Ali Al Salem Air Base", "exposureFlags": ["burn_pit"] },
+            { "name": "Ahmed Al Jaber Air Base", "exposureFlags": ["burn_pit"] },
+            { "name": "Kuwait Naval Base", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "Qatar",
+          "locations": [
+            { "name": "Al Udeid Air Base", "exposureFlags": ["burn_pit"] },
+            { "name": "Camp As Sayliyah", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "Bahrain",
+          "locations": [
+            { "name": "Naval Support Activity Bahrain", "alternateNames": ["NSA Bahrain"], "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "UAE",
+          "locations": [
+            { "name": "Al Dhafra Air Base", "exposureFlags": ["burn_pit"] },
+            { "name": "Jebel Ali", "exposureFlags": ["burn_pit"] },
+            { "name": "Fujairah Naval Base", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "Oman",
+          "locations": [
+            { "name": "Masirah Air Base", "exposureFlags": ["burn_pit"] },
+            { "name": "Thumrait Air Base", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "Djibouti",
+          "locations": [
+            { "name": "Camp Lemonnier", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "Jordan",
+          "locations": [
+            { "name": "Muwaffaq Salti Air Base", "exposureFlags": ["burn_pit"] },
+            { "name": "Joint Training Center", "alternateNames": ["JRTC"], "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "Syria",
+          "locations": [
+            { "name": "Al-Tanf garrison", "exposureFlags": ["burn_pit"] },
+            { "name": "Kobani Landing Zone", "exposureFlags": ["burn_pit"] },
+            { "name": "Rmeilan Air Base", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "Somalia",
+          "locations": [
+            { "name": "Mogadishu", "exposureFlags": ["burn_pit"] },
+            { "name": "Baledogle Airfield", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "Philippines",
+          "locations": [
+            { "name": "Joint Special Operations Task Force — Philippines", "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "Niger",
+          "locations": [
+            { "name": "Niamey Air Base", "alternateNames": ["Air Base 101"], "exposureFlags": ["burn_pit"] },
+            { "name": "Agadez", "alternateNames": ["Air Base 201"], "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "Uzbekistan",
+          "locations": [
+            { "name": "Karshi-Khanabad Air Base", "alternateNames": ["K2"], "exposureFlags": ["burn_pit"], "notes": "Known toxic exposure site" }
+          ]
+        },
+        {
+          "name": "Kyrgyzstan",
+          "locations": [
+            { "name": "Manas Air Base", "alternateNames": ["Transit Center at Manas"], "exposureFlags": ["burn_pit"] }
+          ]
+        },
+        {
+          "name": "Pakistan",
+          "locations": [
+            { "name": "Shamsi Airfield", "exposureFlags": ["burn_pit"] },
+            { "name": "Jacobabad Air Base", "exposureFlags": ["burn_pit"] }
+          ]
+        }
+      ]
+    },
+    {
+      "conflictId": "camp_lejeune",
+      "name": "Camp Lejeune",
+      "dateRange": "1953–1987",
+      "defaultExposures": ["contaminated_water"],
+      "regions": [
+        {
+          "name": "Camp Lejeune, North Carolina",
+          "locations": [
+            { "name": "Camp Lejeune", "exposureFlags": ["contaminated_water"], "notes": "Minimum 30 days stationed required" },
+            { "name": "MCAS New River", "exposureFlags": ["contaminated_water"], "notes": "Minimum 30 days stationed required" }
+          ]
+        }
+      ]
+    },
+    {
+      "conflictId": "nuclear_radiation",
+      "name": "Nuclear/Radiation",
+      "dateRange": "1945–1992",
+      "defaultExposures": ["radiation"],
+      "regions": [
+        {
+          "name": "Continental United States",
+          "locations": [
+            { "name": "Nevada Test Site", "alternateNames": ["NTS"], "exposureFlags": ["radiation"] }
+          ]
+        },
+        {
+          "name": "Marshall Islands",
+          "locations": [
+            { "name": "Bikini Atoll", "exposureFlags": ["radiation"] },
+            { "name": "Enewetak Atoll", "exposureFlags": ["radiation"] }
+          ]
+        },
+        {
+          "name": "Japan",
+          "locations": [
+            { "name": "Hiroshima occupation zone", "exposureFlags": ["radiation"] },
+            { "name": "Nagasaki occupation zone", "exposureFlags": ["radiation"] }
+          ]
+        },
+        {
+          "name": "Cleanup Operations",
+          "locations": [
+            { "name": "Palomares", "notes": "Spain — 1966 cleanup", "exposureFlags": ["radiation"] },
+            { "name": "Thule Air Base", "notes": "Greenland — 1968 cleanup", "exposureFlags": ["radiation"] }
+          ]
+        },
+        {
+          "name": "Pacific Nuclear Test Sites",
+          "locations": [
+            { "name": "Christmas Island", "exposureFlags": ["radiation"] },
+            { "name": "Johnston Atoll", "exposureFlags": ["radiation"] }
+          ]
+        }
+      ]
+    }
+  ]
+}

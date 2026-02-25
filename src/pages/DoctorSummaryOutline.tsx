@@ -32,6 +32,7 @@ import { useProfileStore } from '@/store/useProfileStore';
 import { getAllBranchLabels } from '@/utils/veteranProfile';
 import { vaDisabilitiesBySystem } from '@/data/vaDisabilities';
 import { PageContainer } from '@/components/PageContainer';
+import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import { exportDoctorSummaryOutlinePDF } from '@/utils/pdfExport';
 import { containsBannedPhrases, EXPORT_BLOCKED_MESSAGE } from '@/utils/bannedPhrases';
 import { conditionRatingCriteria } from '@/data/ratingCriteria';

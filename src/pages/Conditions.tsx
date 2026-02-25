@@ -36,6 +36,7 @@ import { ClaimIntelligence } from '@/services/claimIntelligence';
 import useAppStore from '@/store/useAppStore';
 import { PageContainer } from '@/components/PageContainer';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
+import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput.utils';
 import {
   type VACondition,
@@ -412,12 +413,16 @@ export default function Conditions() {
 
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>Condition Name</Label>
-              <ConditionAutocomplete
-                onSelect={(condition) => setSelectedCondition(condition)}
+              <ConditionSelector
+                onSelect={(selected) => {
+                  const vaCondition = getConditionById(selected.conditionId);
+                  if (vaCondition) {
+                    setSelectedCondition(vaCondition);
+                  }
+                }}
+                label="Condition Name"
                 placeholder="Search conditions (e.g., PTSD, Tinnitus)"
                 excludeIds={userConditions.map(c => c.conditionId)}
-                autoFocus
               />
               {selectedCondition && (
                 <Badge className="mt-1 bg-green-500">

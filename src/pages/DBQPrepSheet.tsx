@@ -28,6 +28,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { vaDisabilitiesBySystem } from '@/data/vaDisabilities';
 import { getConditionById } from '@/data/conditions';
+import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import { cn } from '@/lib/utils';
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';

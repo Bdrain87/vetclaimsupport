@@ -25,6 +25,7 @@ import { Progress } from '@/components/ui/progress';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
+import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { PageContainer } from '@/components/PageContainer';
 import { useProfileStore } from '@/store/useProfileStore';
@@ -40,6 +41,7 @@ import {
   buildFunctionalImpactSummary,
 } from '@/utils/prefillHelpers';
 import type { VACondition } from '@/data/vaConditions';
+import { getConditionById } from '@/data/vaConditions';
 
 interface PersonalStatementFormData {
   condition: VACondition | null;
@@ -315,11 +317,15 @@ export default function PersonalStatement() {
         return (
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label>Search for your condition</Label>
-              <ConditionAutocomplete
-                onSelect={handleConditionSelect}
+              <ConditionSelector
+                onSelect={(selected) => {
+                  const vaCondition = getConditionById(selected.conditionId);
+                  if (vaCondition) {
+                    handleConditionSelect(vaCondition);
+                  }
+                }}
+                label="Select your condition"
                 placeholder="Type to search conditions (e.g., tinnitus, PTSD, sleep apnea)..."
-                autoFocus
               />
               {formData.condition && (
                 <div className="mt-3 p-3 rounded-lg border border-green-500/30 bg-green-500/5">

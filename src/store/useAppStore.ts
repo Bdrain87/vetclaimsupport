@@ -23,6 +23,8 @@ import {
 export interface UserCondition {
   id: string;
   conditionId: string;
+  /** Display name override (for conditions not in VA database) */
+  displayName?: string;
   rating?: number;
   serviceConnected: boolean;
   claimStatus: 'pending' | 'approved' | 'denied' | 'appeal';
@@ -31,6 +33,22 @@ export interface UserCondition {
   notes?: string;
   dateAdded: string;
   bodyPart?: string;
+  /** ICD-10 code if known */
+  icd10Code?: string;
+  /** VA diagnostic code */
+  vaDiagnosticCode?: string;
+  /** How the condition is connected to service */
+  connectionType?: 'direct' | 'secondary' | 'presumptive' | 'aggravation';
+  /** Linked exposure type (burn_pit, agent_orange, etc.) */
+  linkedExposure?: string;
+  /** Linked conflict ID */
+  linkedConflict?: string;
+  /** ID of primary condition if secondary */
+  secondaryTo?: string;
+  /** Number of times condition has been selected/used across tools */
+  usageCount?: number;
+  /** Last time this condition was selected in any tool */
+  lastUsed?: string;
 }
 
 // ===== DEFAULT DOCUMENTS CHECKLIST =====
@@ -89,6 +107,11 @@ interface AppState {
 
   // --- User Conditions (from UserConditionsContext) ---
   userConditions: UserCondition[];
+
+  // --- Conflict & Deployment Selections ---
+  selectedConflicts: string[];          // conflict IDs from deployment-locations.json
+  selectedLocations: string[];          // "conflictId::locationName" composite keys
+  customLocations: string[];            // free-text "other" locations
 
   // --- Evidence Documents (from useEvidenceDocuments) ---
   evidenceDocuments: EvidenceDocument[];
@@ -212,6 +235,16 @@ interface AppState {
   removeUserCondition: (id: string) => void;
   updateUserCondition: (id: string, updates: Partial<UserCondition>) => void;
   clearAllUserConditions: () => void;
+  incrementConditionUsage: (id: string) => void;
+
+  // ========== CONFLICT & DEPLOYMENT METHODS ==========
+
+  toggleConflict: (conflictId: string) => void;
+  setSelectedConflicts: (conflictIds: string[]) => void;
+  toggleLocation: (conflictId: string, locationName: string) => void;
+  setSelectedLocations: (locationKeys: string[]) => void;
+  addCustomLocation: (location: string) => void;
+  removeCustomLocation: (location: string) => void;
 
   // ========== EVIDENCE DOCUMENT METHODS ==========
 
@@ -279,6 +312,11 @@ const initialState = {
 
   // User conditions
   userConditions: [] as UserCondition[],
+
+  // Conflict & deployment selections
+  selectedConflicts: [] as string[],
+  selectedLocations: [] as string[],
+  customLocations: [] as string[],
 
   // Evidence documents
   evidenceDocuments: [] as EvidenceDocument[],
@@ -584,6 +622,45 @@ const useAppStore = create<AppState>()(
       })),
 
       clearAllUserConditions: () => set({ userConditions: [] }),
+
+      incrementConditionUsage: (id) => set((s) => ({
+        userConditions: s.userConditions.map((c) =>
+          c.id === id
+            ? { ...c, usageCount: (c.usageCount ?? 0) + 1, lastUsed: new Date().toISOString() }
+            : c
+        ),
+      })),
+
+      // ========== CONFLICT & DEPLOYMENT METHODS ==========
+
+      toggleConflict: (conflictId) => set((s) => ({
+        selectedConflicts: s.selectedConflicts.includes(conflictId)
+          ? s.selectedConflicts.filter((id) => id !== conflictId)
+          : [...s.selectedConflicts, conflictId],
+      })),
+
+      setSelectedConflicts: (conflictIds) => set({ selectedConflicts: conflictIds }),
+
+      toggleLocation: (conflictId, locationName) => {
+        const key = `${conflictId}::${locationName}`;
+        set((s) => ({
+          selectedLocations: s.selectedLocations.includes(key)
+            ? s.selectedLocations.filter((k) => k !== key)
+            : [...s.selectedLocations, key],
+        }));
+      },
+
+      setSelectedLocations: (locationKeys) => set({ selectedLocations: locationKeys }),
+
+      addCustomLocation: (location) => set((s) => ({
+        customLocations: s.customLocations.includes(location)
+          ? s.customLocations
+          : [...s.customLocations, location],
+      })),
+
+      removeCustomLocation: (location) => set((s) => ({
+        customLocations: s.customLocations.filter((l) => l !== location),
+      })),
 
       // ========== EVIDENCE DOCUMENT METHODS ==========
 
