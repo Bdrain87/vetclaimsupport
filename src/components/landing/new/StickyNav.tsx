@@ -30,24 +30,23 @@ function AppStoreBadge() {
   );
 }
 
-function GooglePlayBadge() {
+function WebAppBadge() {
   return (
-    <a
-      href="/auth"
-      className="inline-flex items-center"
+    <Link
+      to="/auth"
+      className="inline-flex items-center no-underline"
     >
-      <svg width="135" height="40" viewBox="0 0 135 40" xmlns="http://www.w3.org/2000/svg">
-        <rect width="135" height="40" rx="6" fill="#000" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
-        <g>
-          <path d="M21.2 18.07l-7.49-7.52a1.61 1.61 0 0 0-.47 1.14v16.62a1.6 1.6 0 0 0 .47 1.14l.08.07 8.38-8.38v-.2l-.97-.87z" fill="#4285F4" />
-          <path d="M24.37 21.24l-3.17-3.17v-.2l3.17-3.17.07.04 3.76 2.13c1.07.61 1.07 1.61 0 2.22l-3.76 2.13-.07.02z" fill="#FBBC04" />
-          <path d="M24.44 21.22l-3.24-3.24-7.96 7.96c.35.38.93.42 1.59.05l9.61-4.77" fill="#EA4335" />
-          <path d="M24.44 14.74l-9.61-4.77c-.66-.37-1.24-.33-1.59.05l7.96 7.96 3.24-3.24z" fill="#34A853" />
-          <text x="42" y="15" fontSize="7" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="400" fill="rgba(255,255,255,0.8)" letterSpacing="0.03em">GET IT ON</text>
-          <text x="42" y="28" fontSize="13" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="600" fill="#fff" letterSpacing="-0.01em">Google Play</text>
+      <svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
+        <rect width="120" height="40" rx="6" fill="#000" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+        <g fill="#fff">
+          <circle cx="22" cy="20" r="9" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" />
+          <ellipse cx="22" cy="20" rx="4" ry="9" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" />
+          <line x1="13" y1="20" x2="31" y2="20" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" />
+          <text x="38" y="15" fontSize="8" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="400" fill="rgba(255,255,255,0.8)" letterSpacing="0.03em">Available on the</text>
+          <text x="38" y="28" fontSize="14" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="600" letterSpacing="-0.01em">Web</text>
         </g>
       </svg>
-    </a>
+    </Link>
   );
 }
 
@@ -115,7 +114,7 @@ export function StickyNav() {
             ))}
             <div className="hidden lg:flex items-center gap-3">
               <AppStoreBadge />
-              <GooglePlayBadge />
+              <WebAppBadge />
             </div>
             <Link
               to="/auth"
@@ -183,7 +182,7 @@ export function StickyNav() {
             </Link>
             <div className="mt-2 flex items-center gap-3">
               <AppStoreBadge />
-              <GooglePlayBadge />
+              <WebAppBadge />
             </div>
           </motion.div>
         )}
