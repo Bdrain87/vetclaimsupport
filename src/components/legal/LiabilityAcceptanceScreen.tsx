@@ -20,10 +20,23 @@ export function LiabilityAcceptanceScreen() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const hasAccepted = localStorage.getItem(LIABILITY_ACCEPTED_KEY);
-    if (!hasAccepted) {
+    // Check localStorage first (fast), then Supabase (authoritative)
+    const localAccepted = localStorage.getItem(LIABILITY_ACCEPTED_KEY);
+    if (localAccepted) return; // Already accepted locally
+
+    (async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user?.user_metadata?.liability_accepted) {
+          // They accepted before — restore localStorage and skip modal
+          localStorage.setItem(LIABILITY_ACCEPTED_KEY, 'true');
+          return;
+        }
+      } catch {
+        // Fall through to show modal
+      }
       setIsOpen(true);
-    }
+    })();
   }, []);
 
   const handleScroll = () => {
@@ -50,6 +63,11 @@ export function LiabilityAcceptanceScreen() {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         if (session) {
+          // Save to user metadata so it persists across sign-outs
+          await supabase.auth.updateUser({
+            data: { liability_accepted: true, liability_accepted_at: timestamp, liability_terms_version: TERMS_VERSION },
+          });
+          // Also log to consent_log table
           await supabase.from('consent_log').insert({
             user_id: session.user.id,
             terms_version: TERMS_VERSION,
