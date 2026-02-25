@@ -60,8 +60,8 @@ function MarqueeRow({ items, direction, speed }: { items: string[]; direction: '
               fontSize: '1rem',
               fontWeight: 500,
               letterSpacing: '0.01em',
-              WebkitTextStroke: '0.5px rgba(255, 255, 255, 0.35)',
-              paintOrder: 'stroke fill',
+              textShadow:
+                '-0.6px -0.6px 0 rgba(255,255,255,0.45), 0.6px -0.6px 0 rgba(255,255,255,0.45), -0.6px 0.6px 0 rgba(255,255,255,0.45), 0.6px 0.6px 0 rgba(255,255,255,0.45)',
             }}
           >
             {item}
