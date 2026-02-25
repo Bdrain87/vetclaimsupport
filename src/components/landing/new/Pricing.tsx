@@ -132,7 +132,7 @@ export function Pricing() {
                 >
                   $9.99
                 </span>
-                <span className="text-xs ml-2" style={{ color: '#9CA3AF' }}>/mo</span>
+                <span className="text-xs ml-2" style={{ color: '#9CA3AF' }}>one-time</span>
               </div>
               <ul className="space-y-1.5 mb-5">
                 <li className="flex items-center gap-2 text-sm" style={{ color: '#D1D5DB' }}>
@@ -148,7 +148,7 @@ export function Pricing() {
                   <Check size={14} className="shrink-0" style={{ color: '#D4AF37' }} /> Symptom trackers
                 </li>
                 <li className="flex items-center gap-2 text-sm" style={{ color: '#D1D5DB' }}>
-                  <Check size={14} className="shrink-0" style={{ color: '#D4AF37' }} /> Cancel anytime
+                  <Check size={14} className="shrink-0" style={{ color: '#D4AF37' }} /> No subscription required
                 </li>
               </ul>
               <Link
@@ -156,7 +156,7 @@ export function Pricing() {
                 className="block text-center rounded-full px-6 py-2.5 text-sm font-semibold text-black no-underline"
                 style={{ background: GOLD_GRADIENT }}
               >
-                Get Started — $9.99/mo
+                Get Started — $9.99
               </Link>
             </div>
           </motion.div>

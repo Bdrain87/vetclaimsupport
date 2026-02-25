@@ -194,7 +194,7 @@ export function Hero() {
                 borderRadius: '12px',
               }}
             >
-              Get Started — $9.99/mo
+              Get Started — $9.99
             </Link>
           </motion.div>
           <motion.button
