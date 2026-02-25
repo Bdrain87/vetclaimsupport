@@ -672,6 +672,10 @@ function MyAppealTab() {
                 if (vaCondition) {
                   setManualCondition(vaCondition.abbreviation || vaCondition.name);
                   setManualConditionCategory(vaCondition.category as ConditionCategory);
+                } else {
+                  // Fallback for non-DB conditions (MOS/presumptive)
+                  setManualCondition(selected.name);
+                  setManualConditionCategory(undefined);
                 }
               }}
               label="Search for a condition"
@@ -876,6 +880,10 @@ export default function AppealsGuide() {
               if (vaCondition) {
                 setSearchQuery(vaCondition.abbreviation || vaCondition.name);
                 setSelectedConditionCategory(vaCondition.category || null);
+              } else {
+                // Fallback for non-DB conditions (MOS/presumptive)
+                setSearchQuery(selected.name);
+                setSelectedConditionCategory(null);
               }
             }}
             label="Search by condition"

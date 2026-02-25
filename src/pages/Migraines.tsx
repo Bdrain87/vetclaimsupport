@@ -23,7 +23,6 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { Slider } from '@/components/ui/slider';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import { PageContainer } from '@/components/PageContainer';
 import type {
   MigraineEntry, MigraineSeverity, MigraineDuration,

@@ -153,6 +153,9 @@ export default function SecondaryFinder() {
           const vaCondition = getConditionById(selected.conditionId);
           if (vaCondition) {
             handleAutocompleteSelect(vaCondition);
+          } else {
+            // Fallback for non-DB conditions (MOS/presumptive)
+            setSelectedPrimary(selected.name);
           }
         }}
         label="Search for a primary condition"

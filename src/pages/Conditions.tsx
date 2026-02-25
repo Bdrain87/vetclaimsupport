@@ -418,6 +418,9 @@ export default function Conditions() {
                   const vaCondition = getConditionById(selected.conditionId);
                   if (vaCondition) {
                     setSelectedCondition(vaCondition);
+                  } else {
+                    // Fallback for non-DB conditions (MOS/presumptive)
+                    setSelectedCondition({ id: selected.conditionId || selected.name, name: selected.name, abbreviation: selected.name, category: 'other', diagnosticCode: '', typicalRatings: '', description: '', commonSecondaries: [], keywords: [], bodySystem: '' } as VACondition);
                   }
                 }}
                 label="Condition Name"

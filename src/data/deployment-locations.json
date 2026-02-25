@@ -892,9 +892,9 @@
       ]
     },
     {
-      "conflictId": "korea",
-      "name": "Korea",
-      "dateRange": "1950–1971",
+      "conflictId": "korea_war",
+      "name": "Korean War",
+      "dateRange": "1950–1953",
       "defaultExposures": [],
       "regions": [
         {
@@ -907,7 +907,15 @@
             { "name": "Heartbreak Ridge area", "exposureFlags": [] },
             { "name": "Pork Chop Hill area", "exposureFlags": [] }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "conflictId": "korea_dmz",
+      "name": "Korea — DMZ Service",
+      "dateRange": "1967–1971",
+      "defaultExposures": ["agent_orange"],
+      "regions": [
         {
           "name": "DMZ Service (1967–1971)",
           "locations": [

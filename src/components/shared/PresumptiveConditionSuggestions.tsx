@@ -7,6 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import useAppStore from '@/store/useAppStore';
 import presumptiveData from '@/data/presumptive-conditions.json';
+import deploymentData from '@/data/deployment-locations.json';
 
 interface PresumptiveCondition {
   name: string;
@@ -24,6 +25,37 @@ interface ExposureGroup {
 }
 
 const data = presumptiveData as { exposureGroups: ExposureGroup[] };
+
+interface DeploymentLocation {
+  name: string;
+  exposureFlags: string[];
+  alternateNames?: string[];
+}
+
+interface DeploymentRegion {
+  name: string;
+  locations: DeploymentLocation[];
+}
+
+interface DeploymentConflict {
+  conflictId: string;
+  regions: DeploymentRegion[];
+}
+
+const deployments = deploymentData as { conflicts: DeploymentConflict[] };
+
+/** Build a lookup: "conflictId::locationName" → exposure flags */
+function getExposureFlagsForLocation(locationKey: string): string[] {
+  const [conflictId, locationName] = locationKey.split('::');
+  if (!conflictId || !locationName) return [];
+  const conflict = deployments.conflicts.find((c) => c.conflictId === conflictId);
+  if (!conflict) return [];
+  for (const region of conflict.regions) {
+    const loc = region.locations.find((l) => l.name === locationName);
+    if (loc) return loc.exposureFlags;
+  }
+  return [];
+}
 
 /** Map exposure flags from deployment locations to presumptive exposure IDs */
 const EXPOSURE_FLAG_TO_GROUP: Record<string, string> = {
@@ -78,8 +110,17 @@ export function PresumptiveConditionSuggestions({
       if (mapped) mapped.forEach((id) => ids.add(id));
     }
 
+    // From selected locations' exposure flags
+    for (const locationKey of selectedLocations) {
+      const flags = getExposureFlagsForLocation(locationKey);
+      for (const flag of flags) {
+        const groupId = EXPOSURE_FLAG_TO_GROUP[flag];
+        if (groupId) ids.add(groupId);
+      }
+    }
+
     return ids;
-  }, [exposureIds, selectedConflicts]);
+  }, [exposureIds, selectedConflicts, selectedLocations]);
 
   const relevantGroups = useMemo(() => {
     return data.exposureGroups.filter((g) => relevantGroupIds.has(g.exposureId));
@@ -122,6 +163,7 @@ export function PresumptiveConditionSuggestions({
             const result = addCondition(condition.conditionId, {
               connectionType: 'presumptive',
               linkedExposure: group.exposureId,
+              displayName: conditionName,
             });
             if (result) newlyAdded.add(key);
           } else {

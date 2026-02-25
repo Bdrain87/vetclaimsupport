@@ -595,9 +595,7 @@ export default function Symptoms() {
                       <ConditionSelector
                         onSelect={(selected) => {
                           const vaCondition = getConditionById(selected.conditionId);
-                          if (vaCondition) {
-                            setFormData({ ...formData, conditionTitle: vaCondition.name });
-                          }
+                          setFormData({ ...formData, conditionTitle: vaCondition?.name || selected.name });
                         }}
                         label="Condition Name"
                         placeholder="Search for a condition (e.g., Tinnitus, Knee Pain, PTSD)"

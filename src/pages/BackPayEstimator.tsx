@@ -9,7 +9,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { exportBackPayEstimate } from '@/utils/pdfExport';
 import { PageContainer } from '@/components/PageContainer';
-import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import {
   BASE_RATES,
   SPOUSE_ADDITION,

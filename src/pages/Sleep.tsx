@@ -19,7 +19,6 @@ import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import { PageContainer } from '@/components/PageContainer';
 import type { SleepEntry, SleepQuality, DaytimeSleepiness } from '@/types/claims';
 import { exportSleepLog } from '@/utils/pdfExport';

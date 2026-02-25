@@ -322,6 +322,10 @@ export default function PersonalStatement() {
                   const vaCondition = getConditionById(selected.conditionId);
                   if (vaCondition) {
                     handleConditionSelect(vaCondition);
+                  } else {
+                    // Fallback for non-DB conditions (MOS/presumptive)
+                    setFormData((prev) => ({ ...prev, condition: { id: selected.conditionId || selected.name, name: selected.name, abbreviation: selected.name, category: 'other', diagnosticCode: '', typicalRatings: '', description: '', commonSecondaries: [], keywords: [], bodySystem: '' } as VACondition }));
+                    setPolishedStatement(null);
                   }
                 }}
                 label="Select your condition"

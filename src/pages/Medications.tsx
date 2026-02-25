@@ -14,7 +14,6 @@ import { MedicationCombobox } from '@/components/ui/medication-combobox';
 import { exportMedications } from '@/utils/pdfExport';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import { PageContainer } from '@/components/PageContainer';
-import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import type { Medication } from '@/types/claims';
 
