@@ -120,14 +120,14 @@ export function createMockEntitlementRecord(
 // User state helpers
 // ---------------------------------------------------------------------------
 
-export function simulatePremiumUser() {
-  const { useProfileStore } = require('@/store/useProfileStore');
-  useProfileStore.setState({ entitlement: 'premium' });
+export async function simulatePremiumUser() {
+  const mod = await import('@/store/useProfileStore');
+  mod.useProfileStore.setState({ entitlement: 'premium' });
 }
 
-export function simulateFreeUser() {
-  const { useProfileStore } = require('@/store/useProfileStore');
-  useProfileStore.setState({ entitlement: 'preview' });
+export async function simulateFreeUser() {
+  const mod = await import('@/store/useProfileStore');
+  mod.useProfileStore.setState({ entitlement: 'preview' });
 }
 
 // ---------------------------------------------------------------------------

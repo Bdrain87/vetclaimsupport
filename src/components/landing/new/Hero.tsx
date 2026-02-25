@@ -197,7 +197,7 @@ export function Hero() {
           <motion.div
             whileHover={{
               y: -2,
-              boxShadow: '0 8px 24px rgba(212, 175, 55, 0.35)',
+              boxShadow: '0 8px 24px rgba(232, 212, 139, 0.35)',
             }}
             whileTap={{ y: 0 }}
             style={{ borderRadius: '12px' }}
@@ -206,7 +206,7 @@ export function Hero() {
               to="/auth"
               className="inline-block px-8 py-3.5 text-base font-semibold text-black no-underline"
               style={{
-                background: 'linear-gradient(135deg, #B8860B, #D4AF37, #FFD700, #D4AF37, #B8860B)',
+                background: 'linear-gradient(135deg, #C9B458, #E0CC7A, #E8D48B, #F0DFA0, #E8D48B, #E0CC7A, #C9B458)',
                 borderRadius: '12px',
               }}
             >

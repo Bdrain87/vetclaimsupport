@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { redactPII, REDACTION_TOKENS, type RedactionLevel, type RedactionResult } from '@/lib/redaction';
+import { redactPII, REDACTION_TOKENS, type RedactionLevel } from '@/lib/redaction';
 
 // ---------------------------------------------------------------------------
 // Helpers

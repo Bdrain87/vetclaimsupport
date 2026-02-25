@@ -90,13 +90,13 @@ describe('Accessibility — ARIA and Labels', () => {
 describe('Accessibility — Hit Targets', () => {
   it('no extremely small button styles in CSS', () => {
     const cssFiles = getAllCssFiles(SRC_DIR);
-    let tinyButtonCount = 0;
+    let _tinyButtonCount = 0;
 
     for (const file of cssFiles) {
       const content = fs.readFileSync(file, 'utf-8');
       // Check for height or width less than 44px on button-like elements
       const tinyMatches = content.match(/(?:min-)?(?:height|width)\s*:\s*(?:[12]\d|3[0-3])px/g) || [];
-      tinyButtonCount += tinyMatches.length;
+      _tinyButtonCount += tinyMatches.length;
     }
 
     // Informational — Tailwind handles most sizing

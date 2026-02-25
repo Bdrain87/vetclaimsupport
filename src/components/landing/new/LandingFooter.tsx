@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { Globe } from 'lucide-react';
 
 type FooterLink =
   | { label: string; href: string; to?: never; external?: boolean }

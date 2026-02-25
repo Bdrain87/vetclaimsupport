@@ -29,8 +29,8 @@ const STEPS = [
   },
   {
     num: '04',
-    title: 'File Your Claim',
-    desc: 'Everything organized, nothing missed. You file on your terms. Export your complete packet and review before you submit.',
+    title: 'Export Your Packet',
+    desc: 'Everything organized, nothing missed. Export your complete packet and review it before bringing it to your VSO or representative.',
   },
 ];
 

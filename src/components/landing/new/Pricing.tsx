@@ -40,7 +40,7 @@ function RotatingBorderCard({ children }: { children: React.ReactNode }) {
     const tick = () => {
       angleRef.current = (angleRef.current + 0.4) % 360;
       if (borderRef.current) {
-        borderRef.current.style.background = `conic-gradient(from ${angleRef.current}deg, rgba(191,149,63,0.05), rgba(212,175,55,0.7), rgba(255,215,0,0.9), rgba(212,175,55,0.7), rgba(191,149,63,0.05), rgba(191,149,63,0.02), rgba(191,149,63,0.05))`;
+        borderRef.current.style.background = `conic-gradient(from ${angleRef.current}deg, rgba(201,180,88,0.05), rgba(224,204,122,0.7), rgba(232,212,139,0.9), rgba(224,204,122,0.7), rgba(201,180,88,0.05), rgba(201,180,88,0.02), rgba(201,180,88,0.05))`;
       }
       raf = requestAnimationFrame(tick);
     };
@@ -65,7 +65,7 @@ function RotatingBorderCard({ children }: { children: React.ReactNode }) {
         }}
         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
         style={{
-          background: 'radial-gradient(ellipse at center, rgba(212,175,55,0.15), transparent 70%)',
+          background: 'radial-gradient(ellipse at center, rgba(232,212,139,0.15), transparent 70%)',
           filter: 'blur(20px)',
         }}
       />
@@ -203,7 +203,7 @@ export function Pricing() {
                     border: '1px solid rgba(191, 149, 63, 0.2)',
                   }}
                 >
-                  <Shield size={16} style={{ color: '#D4AF37' }} />
+                  <Shield size={16} style={{ color: '#E8D48B' }} />
                 </div>
                 <h3 className="text-base font-semibold" style={GOLD_GRADIENT_TEXT}>Vet Claim Support</h3>
               </div>
@@ -233,7 +233,7 @@ export function Pricing() {
                         background: 'rgba(191, 149, 63, 0.15)',
                       }}
                     >
-                      <Check size={10} style={{ color: '#D4AF37' }} />
+                      <Check size={10} style={{ color: '#E8D48B' }} />
                     </div>
                     {feature}
                   </li>
@@ -242,7 +242,7 @@ export function Pricing() {
 
               <motion.div
                 whileHover={{
-                  boxShadow: '0 4px 20px rgba(212,175,55,0.35)',
+                  boxShadow: '0 4px 20px rgba(232,212,139,0.35)',
                 }}
                 style={{ borderRadius: '9999px' }}
               >
@@ -281,7 +281,7 @@ export function Pricing() {
           <button
             onClick={() => setShowFeatures(!showFeatures)}
             className="inline-flex items-center gap-2 bg-transparent border-none cursor-pointer text-sm font-medium transition-colors"
-            style={{ color: '#D4AF37' }}
+            style={{ color: '#E8D48B' }}
           >
             What's included in Premium?
             <motion.span
@@ -306,14 +306,14 @@ export function Pricing() {
                     <div key={group.category}>
                       <p
                         className="text-[10px] font-bold uppercase tracking-widest mb-2"
-                        style={{ color: '#D4AF37' }}
+                        style={{ color: '#E8D48B' }}
                       >
                         {group.category}
                       </p>
                       <ul className="space-y-1.5">
                         {group.features.map((f) => (
                           <li key={f} className="flex items-center gap-2.5 text-sm">
-                            <Check size={14} className="shrink-0" style={{ color: '#D4AF37' }} />
+                            <Check size={14} className="shrink-0" style={{ color: '#E8D48B' }} />
                             <span style={{ color: '#D1D5DB' }}>{f}</span>
                           </li>
                         ))}

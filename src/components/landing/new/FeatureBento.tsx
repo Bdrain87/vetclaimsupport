@@ -705,7 +705,7 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
                   >
                     {card.plan.startsWith('Free') ? 'Free' : 'Premium'}
                   </span>
-                  <span className="text-[11px] font-semibold transition-colors duration-200" style={{ color: 'var(--gold-md, #D4AF37)' }}>
+                  <span className="text-[11px] font-semibold transition-colors duration-200" style={{ color: 'var(--gold-md, #E8D48B)' }}>
                     Tap to explore →
                   </span>
                 </div>

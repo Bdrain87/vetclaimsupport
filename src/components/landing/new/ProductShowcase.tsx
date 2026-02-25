@@ -180,7 +180,7 @@ export function ProductShowcase() {
                   backgroundColor: isActive
                     ? 'rgba(191, 149, 63, 0.15)'
                     : 'rgba(255, 255, 255, 0.04)',
-                  color: isActive ? '#D4AF37' : '#9CA3AF',
+                  color: isActive ? '#E8D48B' : '#9CA3AF',
                   border: isActive
                     ? '1px solid rgba(191, 149, 63, 0.3)'
                     : '1px solid rgba(255, 255, 255, 0.06)',
@@ -226,7 +226,7 @@ export function ProductShowcase() {
                       border: '1px solid rgba(191, 149, 63, 0.2)',
                     }}
                   >
-                    <ActiveIcon size={22} style={{ color: '#D4AF37' }} />
+                    <ActiveIcon size={22} style={{ color: '#E8D48B' }} />
                   </div>
                   <h3
                     className="text-2xl md:text-3xl text-white mb-4"
@@ -243,7 +243,7 @@ export function ProductShowcase() {
                   <Link
                     to="/auth"
                     className="inline-flex items-center gap-2 text-sm font-semibold no-underline"
-                    style={{ color: '#D4AF37' }}
+                    style={{ color: '#E8D48B' }}
                   >
                     Get started <ChevronRight size={16} />
                   </Link>
@@ -269,7 +269,7 @@ export function ProductShowcase() {
                       >
                         <span
                           className="mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0"
-                          style={{ backgroundColor: '#D4AF37' }}
+                          style={{ backgroundColor: '#E8D48B' }}
                         />
                         <span
                           className="text-[15px] leading-relaxed"
