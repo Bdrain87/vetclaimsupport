@@ -38,6 +38,8 @@ import { createCPExamPrepPrompt } from '@/lib/ai-prompts';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { PageContainer } from '@/components/PageContainer';
+import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
+import { useToolDraft } from '@/hooks/useToolDraft';
 import { getConditionSymptoms, getConditionMedications } from '@/utils/prefillHelpers';
 import { useFeatureFlag } from '@/store/useFeatureFlagStore';
 
@@ -286,14 +288,25 @@ export default function CPExamPrepEnhanced() {
   const { data: claimsData } = useClaims();
 
 
-  const [selectedCondition, setSelectedCondition] = useState<string | null>(null);
+  const {
+    formData: cpDraft, updateField: updateCpField,
+    draftRestored, clearDraft, lastSaved,
+  } = useToolDraft({
+    toolId: 'tool:cp-exam-prep',
+    initialData: { selectedCondition: null as string | null, userAnswer: '' },
+  });
+
+  const selectedCondition = cpDraft.selectedCondition;
+  const setSelectedCondition = (value: string | null) => updateCpField('selectedCondition', value);
+  const userAnswer = cpDraft.userAnswer;
+  const setUserAnswer = (value: string) => updateCpField('userAnswer', value);
+
   const conditionDetailRef = useRef<HTMLDivElement>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const showAIPractice = useFeatureFlag('aiPracticeQuestions');
   const { generate: aiGenerate, isLoading: aiLoading, error: aiError } = useAIGenerate('EXAMINER_PERSONA');
   const [aiQuestions, setAiQuestions] = useState<string[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [userAnswer, setUserAnswer] = useState('');
   const [showSuggestion, setShowSuggestion] = useState(false);
   const [checkedItems, setCheckedItems] = useState<Set<string>>(() => {
     try {
@@ -381,6 +394,10 @@ export default function CPExamPrepEnhanced() {
           </p>
         </div>
       </div>
+
+      {draftRestored && lastSaved && (
+        <DraftRestoredBanner lastSaved={lastSaved} onStartFresh={clearDraft} />
+      )}
 
       {/* Exam Packet CTA */}
       <Link

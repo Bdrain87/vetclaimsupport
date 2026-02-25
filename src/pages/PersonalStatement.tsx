@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
@@ -33,6 +33,8 @@ import { useClaims } from '@/hooks/useClaims';
 import { cn } from '@/lib/utils';
 import { exportPersonalStatement } from '@/utils/pdfExport';
 import { PrefillBadge } from '@/components/ui/PrefillBadge';
+import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
+import { useToolDraft } from '@/hooks/useToolDraft';
 import {
   getConditionSymptoms,
   getConditionMedications,
@@ -124,8 +126,13 @@ function GuidanceTip({ tips }: GuidanceTipProps) {
 export default function PersonalStatement() {
   const { firstName, lastName } = useProfileStore();
   const { data: claimsData } = useClaims();
-  const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState<PersonalStatementFormData>(initialFormData);
+  const {
+    formData, updateField: _draftUpdateField, setFormData, currentStep, setCurrentStep,
+    draftRestored, clearDraft, lastSaved,
+  } = useToolDraft({
+    toolId: 'tool:personal-statement',
+    initialData: initialFormData,
+  });
   const [copied, setCopied] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [polishedStatement, setPolishedStatement] = useState<string | null>(null);
@@ -134,14 +141,14 @@ export default function PersonalStatement() {
 
   const updateField = useCallback(
     <K extends keyof PersonalStatementFormData>(field: K, value: PersonalStatementFormData[K]) => {
-      setFormData((prev) => ({ ...prev, [field]: value }));
+      _draftUpdateField(field, value);
       setPolishedStatement(null);
       // Clear prefill badge for this field if user manually changes it
       if (typeof value === 'string') {
         setPrefilled((prev) => ({ ...prev, [field]: false }));
       }
     },
-    []
+    [_draftUpdateField]
   );
 
   // Pre-fill from store when a condition is selected
@@ -687,6 +694,10 @@ export default function PersonalStatement() {
           </p>
         </div>
       </div>
+
+      {draftRestored && lastSaved && (
+        <DraftRestoredBanner lastSaved={lastSaved} onStartFresh={clearDraft} />
+      )}
 
       {/* AI Disclaimer Banner */}
       <AIDisclaimer variant="banner" />

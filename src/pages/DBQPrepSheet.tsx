@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useCallback } from 'react';
 import {
   ClipboardList,
   Search,
@@ -34,6 +34,9 @@ import { useUserConditions } from '@/hooks/useUserConditions';
 import { exportDBQPrepSheet } from '@/utils/pdfExport';
 import { PageContainer } from '@/components/PageContainer';
 import { PrefillBadge } from '@/components/ui/PrefillBadge';
+import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
+import { useToolDraft } from '@/hooks/useToolDraft';
+import useAppStore from '@/store/useAppStore';
 import { getConditionSymptoms, getConditionMedications } from '@/utils/prefillHelpers';
 
 // Get all conditions
@@ -139,7 +142,10 @@ export default function DBQPrepSheet() {
   const printRef = useRef<HTMLDivElement>(null);
   const { data } = useClaims();
   const { conditions: userConditions } = useUserConditions();
-  const [conditionSearch, setConditionSearch] = useState('');
+  const [conditionSearch, setConditionSearch] = useState(() => {
+    const draft = useAppStore.getState().formDrafts['tool:dbq-prep'];
+    return draft?.condition || '';
+  });
   const [showConditionDropdown, setShowConditionDropdown] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
@@ -166,7 +172,7 @@ export default function DBQPrepSheet() {
       .join('\n');
   }, [data.medications]);
 
-  const [formData, setFormData] = useState<PrepFormData>({
+  const dbqInitial = useMemo<PrepFormData>(() => ({
     condition: '',
     appointmentType: 'cp_exam',
     appointmentDate: '',
@@ -190,6 +196,15 @@ export default function DBQPrepSheet() {
     currentMedications: storedMedicationsText,
     sideEffects: storedSideEffectsText,
     additionalNotes: '',
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), []);
+
+  const {
+    formData, updateField: draftUpdateField, setFormData,
+    draftRestored, clearDraft, lastSaved,
+  } = useToolDraft({
+    toolId: 'tool:dbq-prep',
+    initialData: dbqInitial,
   });
 
   // Combine user's tracked conditions with the full VA conditions list for search
@@ -263,12 +278,12 @@ export default function DBQPrepSheet() {
 
   const [prefilled, setPrefilled] = useState<Record<string, boolean>>({});
 
-  const updateFormData = <K extends keyof PrepFormData>(field: K, value: PrepFormData[K]) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const updateFormData = useCallback(<K extends keyof PrepFormData>(field: K, value: PrepFormData[K]) => {
+    draftUpdateField(field, value);
     if (typeof value === 'string') {
       setPrefilled(prev => ({ ...prev, [field]: false }));
     }
-  };
+  }, [draftUpdateField]);
 
   // Auto-prefill symptoms and pain when condition is selected
   const handleConditionSelect = (conditionName: string) => {
@@ -380,6 +395,10 @@ export default function DBQPrepSheet() {
           </p>
         </div>
       </div>
+
+      {draftRestored && lastSaved && (
+        <DraftRestoredBanner lastSaved={lastSaved} onStartFresh={clearDraft} />
+      )}
 
       {/* Condition Selection */}
       <Card>

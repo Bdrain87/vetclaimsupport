@@ -36,6 +36,8 @@ import { exportDoctorSummaryOutlinePDF } from '@/utils/pdfExport';
 import { containsBannedPhrases, EXPORT_BLOCKED_MESSAGE } from '@/utils/bannedPhrases';
 import { conditionRatingCriteria } from '@/data/ratingCriteria';
 import { toast } from 'sonner';
+import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
+import { useToolDraft } from '@/hooks/useToolDraft';
 
 const getAllConditions = (): string[] => {
   const conditions = new Set<string>();
@@ -145,16 +147,7 @@ export default function DoctorSummaryOutline() {
       .join('; ');
   };
 
-  const [currentStep, setCurrentStep] = useState(1);
-  const [exportError, setExportError] = useState('');
-  const [exporting, setExporting] = useState(false);
-  const [primarySearch, setPrimarySearch] = useState(searchParams.get('primary') || '');
-  const [secondarySearch, setSecondarySearch] = useState(searchParams.get('secondary') || '');
-  const [showPrimaryDropdown, setShowPrimaryDropdown] = useState(false);
-  const [showSecondaryDropdown, setShowSecondaryDropdown] = useState(false);
-  const [expandedRating, setExpandedRating] = useState<string | null>(null);
-
-  const [formData, setFormData] = useState<OutlineFormData>({
+  const outlineInitial = useMemo<OutlineFormData>(() => ({
     primaryCondition: searchParams.get('primary') || '',
     secondaryCondition: searchParams.get('secondary') || '',
     veteranName: fullName,
@@ -191,7 +184,24 @@ export default function DoctorSummaryOutline() {
     currentMedications: '',
     medicationResponse: '',
     functionalImpact: '',
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), []);
+
+  const {
+    formData, updateField: draftUpdateField, setFormData, currentStep, setCurrentStep,
+    draftRestored, clearDraft, lastSaved,
+  } = useToolDraft({
+    toolId: 'tool:doctor-summary',
+    initialData: outlineInitial,
   });
+
+  const [exportError, setExportError] = useState('');
+  const [exporting, setExporting] = useState(false);
+  const [primarySearch, setPrimarySearch] = useState(formData.primaryCondition || searchParams.get('primary') || '');
+  const [secondarySearch, setSecondarySearch] = useState(formData.secondaryCondition || searchParams.get('secondary') || '');
+  const [showPrimaryDropdown, setShowPrimaryDropdown] = useState(false);
+  const [showSecondaryDropdown, setShowSecondaryDropdown] = useState(false);
+  const [expandedRating, setExpandedRating] = useState<string | null>(null);
 
   const filteredPrimary = useMemo(() => {
     if (!primarySearch.trim()) return allConditions.slice(0, 50);
@@ -207,9 +217,7 @@ export default function DoctorSummaryOutline() {
     ).slice(0, 50);
   }, [secondarySearch]);
 
-  const updateField = <K extends keyof OutlineFormData>(field: K, value: OutlineFormData[K]) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
+  const updateField = draftUpdateField;
 
   const addEvidenceReference = () => {
     updateField('evidenceReferences', [
@@ -1045,6 +1053,10 @@ export default function DoctorSummaryOutline() {
           </p>
         </div>
       </div>
+
+      {draftRestored && lastSaved && (
+        <DraftRestoredBanner lastSaved={lastSaved} onStartFresh={clearDraft} />
+      )}
 
       <Card className="border-primary/30 bg-primary/5">
         <CardContent className="pt-4">

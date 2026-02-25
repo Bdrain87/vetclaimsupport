@@ -37,6 +37,8 @@ import { useClaims } from '@/hooks/useClaims';
 import { PageContainer } from '@/components/PageContainer';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
+import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
+import { useToolDraft } from '@/hooks/useToolDraft';
 import { useProfileStore } from '@/store/useProfileStore';
 import { useFeatureFlag } from '@/store/useFeatureFlagStore';
 import { getAllBranchLabels } from '@/utils/veteranProfile';
@@ -288,8 +290,13 @@ export default function ClaimStrategyWizard() {
     };
   }, [claimsData, profile, branchLabel]);
 
-  const [currentStep, setCurrentStep] = useState(1);
-  const [data, setData] = useState<WizardData>(prePopulated);
+  const {
+    formData: data, setFormData: setData, currentStep, setCurrentStep,
+    draftRestored, clearDraft, lastSaved,
+  } = useToolDraft({
+    toolId: 'tool:claim-strategy',
+    initialData: prePopulated,
+  });
   const [isGenerating, setIsGenerating] = useState(false);
   const [strategy, setStrategy] = useState<StrategyResult | null>(null);
   const [isOfflineFallback, setIsOfflineFallback] = useState(false);
@@ -300,12 +307,13 @@ export default function ClaimStrategyWizard() {
   const { toast } = useToast();
 
   // Sync form data when profile/claims load asynchronously, but only while
-  // the user hasn't advanced past the first step (avoid clobbering edits).
+  // the user hasn't advanced past the first step and no draft was restored.
   useEffect(() => {
-    if (currentStep === 1) {
+    if (currentStep === 1 && !draftRestored) {
       setData(prePopulated);
     }
-  }, [prePopulated, currentStep]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prePopulated, currentStep, draftRestored]);
 
   // Compute secondary condition suggestions based on selected conditions
   const secondarySuggestions = useMemo(() => {
@@ -1164,6 +1172,10 @@ attorney for official guidance on your specific claim.
           </p>
         </div>
       </div>
+
+      {draftRestored && lastSaved && (
+        <DraftRestoredBanner lastSaved={lastSaved} onStartFresh={clearDraft} />
+      )}
 
       {/* Progress Steps */}
       <div className="flex items-center overflow-x-auto pb-2 gap-0">

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ChevronLeft,
@@ -28,6 +28,8 @@ import { exportStressorStatement } from '@/utils/pdfExport';
 import { PageContainer } from '@/components/PageContainer';
 import { useClaims } from '@/hooks/useClaims';
 import { PrefillBadge } from '@/components/ui/PrefillBadge';
+import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
+import { useToolDraft } from '@/hooks/useToolDraft';
 import { buildStressorPrefill } from '@/utils/prefillHelpers';
 
 interface StressorFormData {
@@ -151,20 +153,20 @@ export default function StressorStatement() {
     return result;
   });
 
-  const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState<StressorFormData>({
+  const mergedInitial = useMemo(() => ({
     ...initialFormData,
     ...prefilledData,
+  }), [prefilledData]);
+
+  const {
+    formData, updateField, setFormData, currentStep, setCurrentStep,
+    draftRestored, clearDraft, lastSaved,
+  } = useToolDraft({
+    toolId: 'tool:stressor-statement',
+    initialData: mergedInitial,
   });
   const [copied, setCopied] = useState(false);
   const [exporting, setExporting] = useState(false);
-
-  const updateField = useCallback(
-    (field: keyof StressorFormData, value: string) => {
-      setFormData((prev) => ({ ...prev, [field]: value }));
-    },
-    []
-  );
 
   const generateStatement = useCallback((): string => {
     const today = new Date().toLocaleDateString('en-US', {
@@ -681,6 +683,10 @@ export default function StressorStatement() {
           </p>
         </div>
       </div>
+
+      {draftRestored && lastSaved && (
+        <DraftRestoredBanner lastSaved={lastSaved} onStartFresh={clearDraft} />
+      )}
 
       {/* AI Disclaimer Banner */}
       <AIDisclaimer variant="banner" />

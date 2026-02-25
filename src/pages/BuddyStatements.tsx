@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useProfileStore } from '@/store/useProfileStore';
 import { Users, Plus, Trash2, Edit, Phone, Mail, FileText, CheckCircle, Clock, Send, Download, Camera, Copy, Check, ChevronRight, ChevronLeft, HelpCircle, Loader2 } from 'lucide-react';
@@ -16,6 +16,8 @@ import { useToast } from '@/hooks/use-toast';
 import type { BuddyContact } from '@/types/claims';
 import { PageContainer } from '@/components/PageContainer';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
+import { useToolDraft } from '@/hooks/useToolDraft';
 
 const statementStatuses = ['Not Requested', 'Requested', 'Received', 'Submitted'] as const;
 
@@ -86,12 +88,19 @@ export default function BuddyStatements() {
   // Pre-populate statement with veteran name and conditions
   const fullName = `${profile.firstName} ${profile.lastName}`.trim();
 
-  // Statement generator state
-  const [currentStep, setCurrentStep] = useState(1);
-  const [statementData, setStatementData] = useState<StatementData>({
+  // Statement generator state — draft persisted
+  const statementInitial = useMemo(() => ({
     ...initialStatementData,
     veteranName: fullName,
     conditionWitnessed: conditionSummary,
+  }), [fullName, conditionSummary]);
+
+  const {
+    formData: statementData, updateField: updateStatementField, setFormData: setStatementData,
+    currentStep, setCurrentStep, draftRestored, clearDraft, lastSaved,
+  } = useToolDraft({
+    toolId: 'tool:buddy-statement',
+    initialData: statementInitial,
   });
   const [copied, setCopied] = useState(false);
 
@@ -151,9 +160,9 @@ export default function BuddyStatements() {
   };
 
   // Statement generator functions
-  const updateField = (field: keyof StatementData, value: string) => {
-    setStatementData((prev) => ({ ...prev, [field]: value }));
-  };
+  const updateField = useCallback((field: keyof StatementData, value: string) => {
+    updateStatementField(field, value);
+  }, [updateStatementField]);
 
   const canProceed = (): boolean => {
     switch (currentStep) {
@@ -648,6 +657,10 @@ Date: ${today}`;
 
         {/* STATEMENT WRITER TAB */}
         <TabsContent value="generator" className="space-y-4 mt-4">
+          {draftRestored && lastSaved && (
+            <DraftRestoredBanner lastSaved={lastSaved} onStartFresh={clearDraft} />
+          )}
+
           {/* Info Card */}
           <Card className="bg-primary/5 border-primary/30">
             <CardContent className="pt-6 flex items-start gap-3">
