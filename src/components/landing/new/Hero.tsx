@@ -159,6 +159,8 @@ export function Hero() {
                 key={ROTATING_WORDS[index]}
                 style={{
                   display: 'inline-block',
+                  lineHeight: 1.3,
+                  paddingBottom: '0.15em',
                   ...GOLD_GRADIENT_TEXT,
                 }}
                 initial={{ opacity: 0, y: 24 }}
