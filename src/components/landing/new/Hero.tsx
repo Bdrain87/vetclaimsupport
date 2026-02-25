@@ -153,8 +153,8 @@ export function Hero() {
           Claims Built for Those Who Served.{' '}
           <br className="hidden sm:inline" />
           Be{' '}
-          <span className="relative inline-block w-[160px] sm:w-[220px] text-left align-baseline" style={{ paddingBottom: '0.1em' }}>
-            <AnimatePresence mode="popLayout">
+          <span className="relative inline-block w-[160px] sm:w-[220px] text-left align-baseline" style={{ lineHeight: 1.25 }}>
+            <AnimatePresence mode="wait">
               <motion.span
                 key={ROTATING_WORDS[index]}
                 style={{
@@ -163,7 +163,7 @@ export function Hero() {
                 }}
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -24, position: 'absolute', left: 0 }}
+                exit={{ opacity: 0, y: -24 }}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
               >
                 {ROTATING_WORDS[index]}
