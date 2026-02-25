@@ -109,10 +109,10 @@ export function TrustMarquee() {
         }}
       >
         <div className="py-2">
-          <MarqueeRow items={ROW_1_ITEMS} direction="left" speed={35} />
+          <MarqueeRow items={ROW_1_ITEMS} direction="left" speed={55} />
         </div>
         <div className="py-2" style={{ marginTop: '12px' }}>
-          <MarqueeRow items={ROW_2_ITEMS} direction="right" speed={35} />
+          <MarqueeRow items={ROW_2_ITEMS} direction="right" speed={55} />
         </div>
       </div>
     </section>
