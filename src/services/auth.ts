@@ -78,12 +78,9 @@ export const ALL_LOCAL_STORAGE_KEYS = [
   'vet-claim-password-hash',
   '_vcs_web_enc_key',
   'vcs-encrypted-migration-v2',
-  // First-run / onboarding
-  'liabilityAccepted',
+  // First-run / onboarding (liabilityAccepted persisted in Supabase user_metadata)
   'hasSeenOnboarding',
   'vcs_first_launch',
-  'consentTimestamp',
-  'consentTermsVersion',
   // UI state
   'va-claims-theme',
   'cp-exam-checklist',

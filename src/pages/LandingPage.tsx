@@ -38,12 +38,14 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#0A0A0A' }}>
       <StickyNav />
-      <Hero />
-      <TrustMarquee />
-      <HowItWorks />
-      <BuiltByVeteran />
-      <ProductShowcase />
-      <Pricing />
+      <main>
+        <Hero />
+        <TrustMarquee />
+        <HowItWorks />
+        <BuiltByVeteran />
+        <ProductShowcase />
+        <Pricing />
+      </main>
       <LandingFooter />
     </div>
   );
