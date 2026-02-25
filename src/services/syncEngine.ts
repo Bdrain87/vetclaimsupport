@@ -128,7 +128,7 @@ export async function pullFromCloud(): Promise<void> {
       profileStore.setIntentToFile(true, profile.intent_to_file_date);
     }
     if (profile.entitlement) {
-      profileStore.setEntitlement(profile.entitlement as 'preview' | 'lifetime');
+      profileStore.setEntitlement(profile.entitlement as 'preview' | 'premium' | 'lifetime');
     }
   }
 

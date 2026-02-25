@@ -3,9 +3,28 @@
   "short_name": "VetClaim",
   "description": "Tools to support your VA disability claim",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
+  "categories": ["medical", "productivity"],
   "theme_color": "#000000",
   "background_color": "#000000",
+  "screenshots": [
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Vet Claim Support - Organize your VA disability claim"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Vet Claim Support - 50+ tools for your VA claim"
+    }
+  ],
   "icons": [
     {
       "src": "/icon-72x72.png",
