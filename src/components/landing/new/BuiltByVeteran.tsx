@@ -4,47 +4,47 @@ import { EASE_SMOOTH } from '@/lib/landing-animations';
 function GoldFlag() {
   return (
     <svg
-      width="80"
-      height="54"
-      viewBox="0 0 80 54"
+      width="72"
+      height="48"
+      viewBox="0 0 72 48"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      style={{ opacity: 0.35 }}
     >
       <defs>
-        <linearGradient id="flag-gold" x1="0" y1="0" x2="80" y2="54" gradientUnits="userSpaceOnUse">
+        <linearGradient id="flag-stroke" x1="0" y1="0" x2="72" y2="48" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor="#D9BE6C" />
           <stop offset="50%" stopColor="#C5A55A" />
           <stop offset="100%" stopColor="#A68B3C" />
         </linearGradient>
-        <linearGradient id="flag-gold-dark" x1="0" y1="0" x2="80" y2="54" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#A68B3C" />
-          <stop offset="50%" stopColor="#8B7530" />
-          <stop offset="100%" stopColor="#A68B3C" />
-        </linearGradient>
       </defs>
-      {/* Flag body */}
-      <rect width="80" height="54" rx="2" fill="url(#flag-gold)" />
-      {/* Stripes — darker gold bands */}
-      <rect y="8.3" width="80" height="4.15" fill="url(#flag-gold-dark)" />
-      <rect y="16.6" width="80" height="4.15" fill="url(#flag-gold-dark)" />
-      <rect y="24.9" width="80" height="4.15" fill="url(#flag-gold-dark)" />
-      <rect y="33.2" width="80" height="4.15" fill="url(#flag-gold-dark)" />
-      <rect y="41.5" width="80" height="4.15" fill="url(#flag-gold-dark)" />
-      <rect y="49.8" width="80" height="4.2" fill="url(#flag-gold-dark)" />
-      {/* Star field */}
-      <rect width="32" height="29" rx="1" fill="url(#flag-gold-dark)" />
-      {/* Stars — 5 rows */}
-      {[3.5, 10, 16.5, 23].map((cy) =>
-        [5, 12, 19, 26].map((cx) => (
-          <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="1.3" fill="url(#flag-gold)" />
-        ))
-      )}
-      {[6.75, 13.25, 19.75].map((cy) =>
-        [8.5, 15.5, 22.5].map((cx) => (
-          <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="1.3" fill="url(#flag-gold)" />
-        ))
-      )}
+      {/* Outer border */}
+      <rect x="0.5" y="0.5" width="71" height="47" rx="1.5" stroke="url(#flag-stroke)" strokeWidth="1" />
+      {/* 13 stripes as lines */}
+      {[3.7, 7.4, 11.1, 14.8, 18.5, 22.2, 25.9, 29.6, 33.3, 37, 40.7, 44.4].map((y, i) => (
+        <line key={i} x1={i < 6 ? 29 : 2} y1={y} x2={70} y2={y} stroke="url(#flag-stroke)" strokeWidth="0.6" strokeOpacity={0.5} />
+      ))}
+      {/* Star field box */}
+      <rect x="2" y="2" width="26" height="22" rx="0.5" stroke="url(#flag-stroke)" strokeWidth="0.6" strokeOpacity={0.6} fill="none" />
+      {/* Stars — row 1 (5 stars) */}
+      {[6, 11.5, 17, 22.5].map((cx) => (
+        <circle key={`r1-${cx}`} cx={cx} cy={5.5} r="0.9" fill="url(#flag-stroke)" fillOpacity={0.7} />
+      ))}
+      {/* Stars — row 2 (4 stars, offset) */}
+      {[8.75, 14.25, 19.75].map((cx) => (
+        <circle key={`r2-${cx}`} cx={cx} cy={9} r="0.9" fill="url(#flag-stroke)" fillOpacity={0.7} />
+      ))}
+      {/* Stars — row 3 */}
+      {[6, 11.5, 17, 22.5].map((cx) => (
+        <circle key={`r3-${cx}`} cx={cx} cy={12.5} r="0.9" fill="url(#flag-stroke)" fillOpacity={0.7} />
+      ))}
+      {/* Stars — row 4 */}
+      {[8.75, 14.25, 19.75].map((cx) => (
+        <circle key={`r4-${cx}`} cx={cx} cy={16} r="0.9" fill="url(#flag-stroke)" fillOpacity={0.7} />
+      ))}
+      {/* Stars — row 5 */}
+      {[6, 11.5, 17, 22.5].map((cx) => (
+        <circle key={`r5-${cx}`} cx={cx} cy={19.5} r="0.9" fill="url(#flag-stroke)" fillOpacity={0.7} />
+      ))}
     </svg>
   );
 }
