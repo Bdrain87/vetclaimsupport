@@ -3,10 +3,28 @@ import { AI_CONFIG } from '@/lib/ai-prompts';
 import { supabase } from '@/lib/supabase';
 import { sanitizePHI } from '@/utils/phiSanitizer';
 
-async function ensureSession() {
+async function ensureSession(): Promise<boolean> {
+  // 1. Check for a cached session
   const { data: { session } } = await supabase.auth.getSession();
-  if (session) return true;
 
+  if (session) {
+    // If the access token is expiring within 30 seconds, proactively refresh
+    const expiresAt = session.expires_at; // unix seconds
+    if (expiresAt && expiresAt < Math.floor(Date.now() / 1000) + 30) {
+      const { data: refreshed } = await supabase.auth.refreshSession();
+      if (refreshed.session) return true;
+      // Refresh failed — session is stale. Fall through to anonymous sign-in.
+    } else {
+      return true;
+    }
+  }
+
+  // 2. No valid session — try refreshing (handles cases where getSession
+  //    returned null but a refresh token still exists in storage)
+  const { data: refreshed } = await supabase.auth.refreshSession();
+  if (refreshed.session) return true;
+
+  // 3. Last resort — anonymous sign-in
   const { data, error } = await supabase.auth.signInAnonymously();
   if (error || !data.session) return false;
 
@@ -36,18 +54,38 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
       // Ensure we have a valid session (anonymous sign-in if needed)
       const hasSession = await ensureSession();
       if (!hasSession) {
-        setError('Unable to authenticate. Please try again.');
+        setError('Unable to authenticate. Please sign in and try again.');
         return null;
       }
 
       const sanitizedInput = sanitizePHI(input);
-      const { data, error: invokeError } = await supabase.functions.invoke('analyze-disabilities', {
-        body: {
-          prompt: `${AI_CONFIG[persona]}\n\nInput: ${sanitizedInput}`,
-        },
-      });
+      const body = {
+        prompt: `${AI_CONFIG[persona]}\n\nInput: ${sanitizedInput}`,
+      };
+
+      let result = await supabase.functions.invoke('analyze-disabilities', { body });
 
       if (controller.signal.aborted) return null;
+
+      // If we got a 401 (token expired/invalid), refresh the session and retry once
+      if (result.error) {
+        let status: number | undefined;
+        try {
+          if (result.error.context instanceof Response) {
+            status = result.error.context.status;
+          }
+        } catch { /* ignore */ }
+
+        if (status === 401) {
+          const { data: refreshed } = await supabase.auth.refreshSession();
+          if (refreshed.session) {
+            result = await supabase.functions.invoke('analyze-disabilities', { body });
+            if (controller.signal.aborted) return null;
+          }
+        }
+      }
+
+      const { data, error: invokeError } = result;
 
       if (invokeError) {
         // In supabase-js v2, the actual error body may be in data or invokeError.context
@@ -56,9 +94,9 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
         // Try reading the error from the response context
         try {
           if (invokeError.context instanceof Response) {
-            const body = await invokeError.context.json();
-            if (body?.error) msg = body.error;
-            else if (body?.message) msg = body.message;
+            const errBody = await invokeError.context.json();
+            if (errBody?.error) msg = errBody.error;
+            else if (errBody?.message) msg = errBody.message;
           }
         } catch {
           // context may already be consumed
