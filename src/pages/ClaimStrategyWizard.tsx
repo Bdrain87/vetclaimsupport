@@ -445,10 +445,17 @@ Consider:
         throw new Error('AI strategy generation is disabled');
       }
 
-      // Ensure we have a valid session (anonymous sign-in if needed)
+      // Ensure we have a valid session (refresh or anonymous sign-in)
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        await supabase.auth.signInAnonymously();
+        // Try refreshing first (handles expired access token with valid refresh token)
+        const { data: refreshed } = await supabase.auth.refreshSession();
+        if (!refreshed.session) {
+          const { error: anonError } = await supabase.auth.signInAnonymously();
+          if (anonError) {
+            throw new Error('Unable to authenticate. Please sign in and try again.');
+          }
+        }
       }
 
       const sanitizedPrompt = sanitizePHI(prompt);
