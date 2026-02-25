@@ -1,0 +1,191 @@
+{
+  "mosCategories": [
+    {
+      "mosCategory": "infantry",
+      "label": "Infantry / Ground Combat",
+      "matchPatterns": ["11B", "11C", "0311", "0331", "0341", "0351", "0352", "0369", "18", "19D"],
+      "conditions": [
+        "TBI",
+        "Hearing Loss",
+        "Tinnitus",
+        "Knee — DJD",
+        "Lumbar Spine — DDD",
+        "Shoulder Injuries",
+        "PTSD",
+        "Ankle Injuries",
+        "Plantar Fasciitis",
+        "Sleep Apnea",
+        "Cervical Spine",
+        "Hip Conditions",
+        "Migraines"
+      ]
+    },
+    {
+      "mosCategory": "artillery",
+      "label": "Artillery / Fire Support",
+      "matchPatterns": ["13", "0811", "0842", "0844", "0861"],
+      "conditions": [
+        "Hearing Loss",
+        "Tinnitus",
+        "TBI (Blast)",
+        "Shoulder/Neck Injuries",
+        "Lumbar Spine Conditions",
+        "PTSD",
+        "Sleep Apnea"
+      ]
+    },
+    {
+      "mosCategory": "aviation",
+      "label": "Aviation / Aircrew",
+      "matchPatterns": ["15", "1A", "6320", "6330", "7300", "73"],
+      "conditions": [
+        "Hearing Loss",
+        "Tinnitus",
+        "Cervical/Lumbar Spine Compression",
+        "Chemical/Fuel Exposure",
+        "Vestibular Disorders",
+        "Vision Conditions",
+        "Sleep Apnea",
+        "PTSD"
+      ]
+    },
+    {
+      "mosCategory": "navy_submarine",
+      "label": "Navy — Submarine Service",
+      "matchPatterns": ["STS", "FT", "MT", "MM-SUB", "ET-SUB", "SECF"],
+      "conditions": [
+        "Asbestos Exposure",
+        "Hearing Loss",
+        "Tinnitus",
+        "Mesothelioma",
+        "Respiratory Conditions",
+        "Sleep Apnea",
+        "Vision Conditions"
+      ]
+    },
+    {
+      "mosCategory": "navy_surface",
+      "label": "Navy — Surface Warfare",
+      "matchPatterns": ["BM", "OS", "QM", "FC", "GM", "HT", "DC", "EN", "MM", "GSM"],
+      "conditions": [
+        "Hearing Loss",
+        "Tinnitus",
+        "Asbestos Exposure",
+        "Knee/Back (Ladder Wells)",
+        "Sleep Apnea",
+        "PTSD"
+      ]
+    },
+    {
+      "mosCategory": "combat_engineer",
+      "label": "Combat Engineer / EOD",
+      "matchPatterns": ["12", "1371", "2311", "89D"],
+      "conditions": [
+        "TBI (Blast)",
+        "Hearing Loss",
+        "Tinnitus",
+        "Toxic Exposure",
+        "Respiratory Conditions",
+        "Musculoskeletal Injuries",
+        "PTSD"
+      ]
+    },
+    {
+      "mosCategory": "medical",
+      "label": "Medical / Healthcare",
+      "matchPatterns": ["68", "HM", "4N", "4A", "46"],
+      "conditions": [
+        "PTSD",
+        "Hearing Loss",
+        "Back/Knee (Patient Lifting)",
+        "Needlestick Exposure",
+        "Chemical Exposure",
+        "Sleep Apnea",
+        "Depression/Anxiety"
+      ]
+    },
+    {
+      "mosCategory": "motor_transport",
+      "label": "Motor Transport / Vehicle Operations",
+      "matchPatterns": ["88M", "3531", "2T1", "2T0"],
+      "conditions": [
+        "Hearing Loss",
+        "Tinnitus",
+        "Lumbar Spine (Whole Body Vibration)",
+        "Knee/Hip",
+        "TBI (IED)",
+        "PTSD (Convoy Ops)",
+        "Sleep Apnea"
+      ]
+    },
+    {
+      "mosCategory": "special_operations",
+      "label": "Special Operations",
+      "matchPatterns": ["18", "0321", "0372", "8541", "1C2", "SEAL", "SWCC", "PJ", "CCT", "75B"],
+      "conditions": [
+        "TBI",
+        "Hearing Loss",
+        "Tinnitus",
+        "PTSD",
+        "Lumbar/Cervical Spine",
+        "Knee — DJD",
+        "Shoulder Injuries",
+        "Sleep Apnea",
+        "Migraines",
+        "Traumatic Arthritis"
+      ]
+    },
+    {
+      "mosCategory": "military_police",
+      "label": "Military Police / Law Enforcement",
+      "matchPatterns": ["31B", "31E", "5811", "3P0", "MA"],
+      "conditions": [
+        "PTSD",
+        "Hearing Loss",
+        "Tinnitus",
+        "Knee/Back",
+        "Sleep Apnea",
+        "Migraines",
+        "TBI"
+      ]
+    },
+    {
+      "mosCategory": "communications",
+      "label": "Communications / IT",
+      "matchPatterns": ["25", "0621", "0651", "3D0", "3D1", "IT", "CTR", "CTT"],
+      "conditions": [
+        "Hearing Loss",
+        "Tinnitus",
+        "Carpal Tunnel",
+        "Cervical/Lumbar Spine (Sitting)",
+        "Migraines",
+        "Vision Conditions"
+      ]
+    },
+    {
+      "mosCategory": "maintenance_mechanic",
+      "label": "Maintenance / Mechanic",
+      "matchPatterns": ["91", "63", "2F0", "3E", "AS", "AD", "AM", "AE", "AT", "1341", "3521"],
+      "conditions": [
+        "Hearing Loss",
+        "Tinnitus",
+        "Toxic Exposure (Solvents/Fuels)",
+        "Respiratory Conditions",
+        "Musculoskeletal (Shoulders/Back/Knees)",
+        "Skin Conditions (Dermatitis)"
+      ]
+    },
+    {
+      "mosCategory": "supply_logistics",
+      "label": "Supply / Logistics",
+      "matchPatterns": ["92", "0431", "2S0", "LS", "SK"],
+      "conditions": [
+        "Lumbar Spine (Heavy Lifting)",
+        "Knee Conditions",
+        "Shoulder Injuries",
+        "Hearing Loss",
+        "Sleep Apnea"
+      ]
+    }
+  ]
+}

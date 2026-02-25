@@ -1,0 +1,131 @@
+{
+  "exposureGroups": [
+    {
+      "exposureId": "gulf_war_illness",
+      "name": "Gulf War Illness",
+      "cfrCitation": "38 CFR 3.317",
+      "eligibility": "Gulf War era service (Aug 2, 1990 — present)",
+      "deadline": "Symptoms must manifest by December 31, 2026",
+      "conditions": [
+        { "name": "Myalgic Encephalomyelitis / Chronic Fatigue Syndrome (ME/CFS)", "conditionId": "chronic-fatigue" },
+        { "name": "Fibromyalgia", "conditionId": "fibromyalgia" },
+        { "name": "Irritable Bowel Syndrome (IBS)", "conditionId": "ibs" },
+        { "name": "Functional Dyspepsia" },
+        { "name": "Functional Abdominal Pain Syndrome" },
+        { "name": "Other Functional Gastrointestinal Disorders" },
+        { "name": "Undiagnosed Chronic Multi-Symptom Illness", "conditionId": "gulf-war-syndrome" }
+      ]
+    },
+    {
+      "exposureId": "burn_pit",
+      "name": "Burn Pit / PACT Act",
+      "cfrCitation": "38 CFR 3.320",
+      "eligibility": "OIF/OEF/GWOT deployments",
+      "conditions": [
+        { "name": "Brain Cancer", "category": "cancer" },
+        { "name": "Gastrointestinal Cancer", "conditionId": "gi-cancer", "category": "cancer" },
+        { "name": "Glioblastoma", "conditionId": "glioblastoma", "category": "cancer" },
+        { "name": "Head/Neck Cancer", "conditionId": "head-cancer", "category": "cancer" },
+        { "name": "Kidney Cancer", "conditionId": "kidney-cancer", "category": "cancer" },
+        { "name": "Lymphoma (Hodgkin's and Non-Hodgkin's)", "category": "cancer" },
+        { "name": "Melanoma", "conditionId": "melanoma", "category": "cancer" },
+        { "name": "Pancreatic Cancer", "conditionId": "pancreatic-cancer", "category": "cancer" },
+        { "name": "Reproductive Cancer", "conditionId": "reproductive-cancer", "category": "cancer" },
+        { "name": "Respiratory Cancer (Lung/Bronchus/Larynx/Trachea)", "conditionId": "lung-cancer", "category": "cancer" },
+        { "name": "Bladder/Ureter Cancer (Jan 2025)", "category": "cancer" },
+        { "name": "Leukemia — Acute and Chronic (Jan 2025)", "category": "cancer" },
+        { "name": "Multiple Myeloma (Jan 2025)", "conditionId": "multiple-myeloma", "category": "cancer" },
+        { "name": "Myelodysplastic Syndromes (Jan 2025)", "category": "cancer" },
+        { "name": "Myelofibrosis (Jan 2025)", "category": "cancer" },
+        { "name": "Asthma (diagnosed after service)", "conditionId": "asthma", "category": "respiratory" },
+        { "name": "Constrictive/Obliterative Bronchiolitis", "conditionId": "constrictive-bronchiolitis", "category": "respiratory" },
+        { "name": "Chronic Bronchitis", "category": "respiratory" },
+        { "name": "COPD", "conditionId": "copd", "category": "respiratory" },
+        { "name": "Chronic Rhinitis", "conditionId": "rhinitis", "category": "respiratory" },
+        { "name": "Chronic Sinusitis", "conditionId": "sinusitis", "category": "respiratory" },
+        { "name": "Emphysema", "category": "respiratory" },
+        { "name": "Granulomatous Disease", "category": "respiratory" },
+        { "name": "Interstitial Lung Disease", "category": "respiratory" },
+        { "name": "Pleuritis", "category": "respiratory" },
+        { "name": "Pulmonary Fibrosis", "conditionId": "pulmonary-fibrosis", "category": "respiratory" },
+        { "name": "Sarcoidosis", "conditionId": "sarcoidosis", "category": "respiratory" }
+      ]
+    },
+    {
+      "exposureId": "agent_orange",
+      "name": "Agent Orange / Herbicide Exposure",
+      "cfrCitation": "38 CFR 3.309(e)",
+      "eligibility": "Vietnam, Thailand bases, Korea DMZ (Sep 1967 — Aug 1971)",
+      "conditions": [
+        { "name": "Bladder Cancer", "conditionId": "bladder-cancer", "category": "cancer" },
+        { "name": "Chronic B-Cell Leukemia", "conditionId": "chronic-b-cell-leukemia", "category": "cancer" },
+        { "name": "Hodgkin's Disease", "conditionId": "hodgkins-disease", "category": "cancer" },
+        { "name": "Lung Cancer", "conditionId": "lung-cancer", "category": "cancer" },
+        { "name": "Multiple Myeloma", "conditionId": "multiple-myeloma", "category": "cancer" },
+        { "name": "Non-Hodgkin's Lymphoma", "conditionId": "non-hodgkins-lymphoma", "category": "cancer" },
+        { "name": "Prostate Cancer", "conditionId": "prostate-condition", "category": "cancer" },
+        { "name": "Soft Tissue Sarcomas", "conditionId": "soft-tissue-sarcoma", "category": "cancer" },
+        { "name": "Stomach Cancer", "category": "cancer" },
+        { "name": "Colon Cancer", "category": "cancer" },
+        { "name": "Liver Cancer (Hepatocellular)", "category": "cancer" },
+        { "name": "Thyroid Cancer", "category": "cancer" },
+        { "name": "Pancreatic Cancer", "conditionId": "pancreatic-cancer", "category": "cancer" },
+        { "name": "Kidney Cancer", "conditionId": "kidney-cancer", "category": "cancer" },
+        { "name": "Breast Cancer — Male (2025)", "category": "cancer" },
+        { "name": "Urethral Cancer (2025)", "category": "cancer" },
+        { "name": "Urogenital Cancer (2025)", "category": "cancer" },
+        { "name": "Type 2 Diabetes", "conditionId": "diabetes", "category": "other" },
+        { "name": "Ischemic Heart Disease", "conditionId": "heart-disease", "category": "other" },
+        { "name": "Parkinson's Disease / Parkinsonism", "conditionId": "parkinsons", "category": "other" },
+        { "name": "Peripheral Neuropathy (Early Onset)", "conditionId": "peripheral-neuropathy", "category": "other" },
+        { "name": "Chloracne", "conditionId": "chloracne", "category": "other" },
+        { "name": "Porphyria Cutanea Tarda", "conditionId": "porphyria-cutanea-tarda", "category": "other" },
+        { "name": "AL Amyloidosis", "conditionId": "al-amyloidosis", "category": "other" },
+        { "name": "Hypertension (Jan 2025)", "conditionId": "hypertension", "category": "other" },
+        { "name": "MGUS (Jan 2025)", "conditionId": "mgus", "category": "other" }
+      ]
+    },
+    {
+      "exposureId": "contaminated_water",
+      "name": "Camp Lejeune Water Contamination",
+      "cfrCitation": "38 CFR 3.309(f)",
+      "eligibility": "Stationed 1953–1987, minimum 30 days",
+      "conditions": [
+        { "name": "Adult Leukemia" },
+        { "name": "Aplastic Anemia / Myelodysplastic Syndromes" },
+        { "name": "Bladder Cancer", "conditionId": "bladder-cancer" },
+        { "name": "Kidney Cancer", "conditionId": "kidney-cancer" },
+        { "name": "Liver Cancer" },
+        { "name": "Multiple Myeloma", "conditionId": "multiple-myeloma" },
+        { "name": "Non-Hodgkin's Lymphoma", "conditionId": "non-hodgkins-lymphoma" },
+        { "name": "Parkinson's Disease", "conditionId": "parkinsons" }
+      ]
+    },
+    {
+      "exposureId": "radiation",
+      "name": "Radiation Exposure",
+      "cfrCitation": "38 CFR 3.309(d), 38 CFR 3.311",
+      "eligibility": "Atomic veterans, nuclear weapons testing, Hiroshima/Nagasaki occupation",
+      "conditions": [
+        { "name": "Bile Duct Cancer" },
+        { "name": "Bone Cancer" },
+        { "name": "Brain Cancer" },
+        { "name": "Breast Cancer" },
+        { "name": "Colon Cancer" },
+        { "name": "Esophageal Cancer" },
+        { "name": "Gallbladder Cancer" },
+        { "name": "Leukemia (all types except CLL)" },
+        { "name": "Liver Cancer" },
+        { "name": "Lung Cancer", "conditionId": "lung-cancer" },
+        { "name": "Ovarian Cancer" },
+        { "name": "Pancreatic Cancer", "conditionId": "pancreatic-cancer" },
+        { "name": "Pharynx Cancer" },
+        { "name": "Salivary Gland Cancer" },
+        { "name": "Small Intestine Cancer" },
+        { "name": "Stomach Cancer" },
+        { "name": "Thyroid Cancer" },
+        { "name": "Urinary Tract Cancer" }
+      ]
+    }
+  ]
+}

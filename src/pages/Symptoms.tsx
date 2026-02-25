@@ -29,6 +29,7 @@ import { VoiceInputButton } from '@/components/ui/voice-input-button';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
+import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import { lazy, Suspense } from 'react';
 const SeverityTrendChart = lazy(() => import('@/components/symptoms/SymptomCharts').then(m => ({ default: m.SeverityTrendChart })));
 const ConditionStatsChart = lazy(() => import('@/components/symptoms/SymptomCharts').then(m => ({ default: m.ConditionStatsChart })));
@@ -591,11 +592,13 @@ export default function Symptoms() {
                         <Target className="h-3 w-3" />
                         Condition Name *
                       </Label>
-                      <ConditionAutocomplete
+                      <ConditionSelector
+                        onSelect={(selected) => {
+                          const vaCondition = getConditionById(selected.conditionId);
+                          setFormData({ ...formData, conditionTitle: vaCondition?.name || selected.name });
+                        }}
+                        label="Condition Name"
                         placeholder="Search for a condition (e.g., Tinnitus, Knee Pain, PTSD)"
-                        onSelect={(condition) => setFormData({ ...formData, conditionTitle: condition.name })}
-                        initialValue={formData.conditionTitle}
-                        autoFocus={false}
                       />
                       <p className="text-xs text-muted-foreground">
                         Select the VA condition you're tracking symptoms for

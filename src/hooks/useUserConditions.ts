@@ -37,8 +37,8 @@ export function useUserConditions() {
   const addCondition = useCallback(
     (conditionId: string, options?: Partial<UserCondition>): UserCondition | null => {
       const vaCondition = getConditionById(conditionId);
-      if (!vaCondition) {
-        // Condition not found in database
+      if (!vaCondition && !options?.displayName) {
+        // Condition not found in database and no displayName fallback provided
         return null;
       }
 
@@ -126,7 +126,7 @@ export function useUserConditions() {
     const existingNames = new Set(state.claimConditions.map((c) => c.name.toLowerCase()));
     for (const uc of conditions) {
       const details = getConditionById(uc.conditionId);
-      const name = details?.name ?? uc.conditionId;
+      const name = uc.displayName || details?.name || uc.conditionId;
       if (!existingNames.has(name.toLowerCase())) {
         state.addClaimCondition({
           id: uc.id,
@@ -154,12 +154,26 @@ export function useUserConditions() {
     [conditions],
   );
 
+  const incrementUsage = useCallback(
+    (id: string) => {
+      store.incrementConditionUsage(id);
+    },
+    [store],
+  );
+
+  /** Conditions sorted by usage count (most-used first) for ConditionSelector */
+  const conditionsByUsage = useMemo(() => {
+    return [...conditions].sort((a, b) => (b.usageCount ?? 0) - (a.usageCount ?? 0));
+  }, [conditions]);
+
   return {
     conditions,
+    conditionsByUsage,
     addCondition,
     removeCondition: store.removeUserCondition,
     updateCondition: store.updateUserCondition,
     clearAllConditions: store.clearAllUserConditions,
+    incrementUsage,
     hasCondition,
     getCondition,
     getConditionsByStatus,
