@@ -7,7 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import useAppStore from '@/store/useAppStore';
 import presumptiveData from '@/data/presumptive-conditions.json';
-import deploymentData from '@/data/deployment-locations.json';
+import { getLegacyDeploymentData } from '@/data/deployment-locations';
 
 interface PresumptiveCondition {
   name: string;
@@ -42,7 +42,7 @@ interface DeploymentConflict {
   regions: DeploymentRegion[];
 }
 
-const deployments = deploymentData as { conflicts: DeploymentConflict[] };
+const deployments = getLegacyDeploymentData() as { conflicts: DeploymentConflict[] };
 
 /** Build a lookup: "conflictId::locationName" → exposure flags */
 function getExposureFlagsForLocation(locationKey: string): string[] {
@@ -66,6 +66,13 @@ const EXPOSURE_FLAG_TO_GROUP: Record<string, string> = {
   radiation: 'radiation',
   oil_well_fire: 'gulf_war_illness',
   depleted_uranium: 'gulf_war_illness',
+  pfas: 'pfas',
+  chemical: 'chemical_exposure',
+  asbestos: 'burn_pit',
+  lead: 'chemical_exposure',
+  jet_fuel: 'chemical_exposure',
+  munitions: 'chemical_exposure',
+  noise: 'noise',
 };
 
 /** Map conflict IDs to default exposure group IDs */
@@ -79,6 +86,8 @@ const CONFLICT_TO_EXPOSURE: Record<string, string[]> = {
   camp_lejeune: ['contaminated_water'],
   nuclear_radiation: ['radiation'],
   thailand_vietnam_era: ['agent_orange'],
+  cold_war_europe: ['chemical_exposure'],
+  domestic_toxic: ['pfas', 'chemical_exposure'],
 };
 
 interface PresumptiveConditionSuggestionsProps {

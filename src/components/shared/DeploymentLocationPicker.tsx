@@ -5,7 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import useAppStore from '@/store/useAppStore';
-import deploymentData from '@/data/deployment-locations.json';
+import { getLegacyDeploymentData, HAZARD_LABELS } from '@/data/deployment-locations';
 
 // ===== Types =====
 
@@ -36,17 +36,9 @@ interface DeploymentLocationPickerProps {
 
 // ===== Constants =====
 
-const EXPOSURE_LABELS: Record<string, string> = {
-  burn_pit: 'Burn Pit',
-  agent_orange: 'Agent Orange',
-  high_dioxin: 'HIGH DIOXIN',
-  radiation: 'Radiation',
-  contaminated_water: 'Contaminated Water',
-  oil_well_fire: 'Oil Well Fire',
-  depleted_uranium: 'Depleted Uranium',
-};
+const EXPOSURE_LABELS: Record<string, string> = HAZARD_LABELS;
 
-const data = deploymentData as { conflicts: ConflictData[] };
+const data = getLegacyDeploymentData() as { conflicts: ConflictData[] };
 
 // ===== Component =====
 

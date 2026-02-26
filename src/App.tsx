@@ -86,6 +86,7 @@ const BDDGuide = lazy(() => import('./pages/BDDGuide'));
 const AboutVCS = lazy(() => import('./pages/AboutVCS'));
 const ConditionsByConflict = lazy(() => import('./pages/ConditionsByConflict'));
 const ConditionGuide = lazy(() => import('./pages/ConditionGuide'));
+const DeploymentLocations = lazy(() => import('./pages/DeploymentLocations'));
 
 // Account & Legal pages
 const DeleteAccountPage = lazy(() => import('./pages/account/DeleteAccountPage'));
@@ -243,6 +244,7 @@ function AnimatedRoutes() {
           {/* === REFERENCE === */}
           <Route path="/reference/conditions-by-conflict" element={<ConditionsByConflict />} />
           <Route path="/reference/condition-guide" element={<ConditionGuide />} />
+          <Route path="/reference/deployment-locations" element={<DeploymentLocations />} />
 
           {/* === SETTINGS (formerly Profile) === */}
           <Route path="/settings" element={<SettingsPage />} />

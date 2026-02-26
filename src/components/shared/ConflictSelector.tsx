@@ -15,6 +15,8 @@ const CONFLICTS = [
   { id: 'camp_lejeune', name: 'Camp Lejeune', dateRange: 'Stationed 1953–1987' },
   { id: 'nuclear_radiation', name: 'Nuclear/Radiation Exposure', dateRange: '' },
   { id: 'thailand_vietnam_era', name: 'Thailand — Military Bases', dateRange: 'Vietnam era' },
+  { id: 'cold_war_europe', name: 'Cold War — European Bases', dateRange: '1945–1991' },
+  { id: 'domestic_toxic', name: 'Domestic — Toxic Exposure Sites', dateRange: 'PFAS, chemical, asbestos' },
   { id: 'other', name: 'Other / Not listed', dateRange: '' },
 ] as const;
 

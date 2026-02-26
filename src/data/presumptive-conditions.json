@@ -126,6 +126,44 @@
         { "name": "Thyroid Cancer" },
         { "name": "Urinary Tract Cancer" }
       ]
+    },
+    {
+      "exposureId": "pfas",
+      "name": "PFAS / AFFF Exposure",
+      "cfrCitation": "Emerging — PACT Act review",
+      "eligibility": "Service at bases with PFAS-contaminated water",
+      "conditions": [
+        { "name": "Kidney Cancer", "conditionId": "kidney-cancer", "category": "cancer" },
+        { "name": "Testicular Cancer", "category": "cancer" },
+        { "name": "Thyroid Disease", "conditionId": "thyroid-condition", "category": "other" },
+        { "name": "Ulcerative Colitis", "category": "other" },
+        { "name": "High Cholesterol / Dyslipidemia", "category": "other" },
+        { "name": "Preeclampsia / Pregnancy-Induced Hypertension", "category": "other" }
+      ]
+    },
+    {
+      "exposureId": "chemical_exposure",
+      "name": "Chemical / Industrial Exposure",
+      "cfrCitation": "38 CFR 3.311a (various)",
+      "eligibility": "Service at bases with documented chemical contamination",
+      "conditions": [
+        { "name": "Peripheral Neuropathy", "conditionId": "peripheral-neuropathy" },
+        { "name": "Chronic Respiratory Disease", "conditionId": "copd" },
+        { "name": "Liver Disease" },
+        { "name": "Skin Conditions / Dermatitis", "conditionId": "skin-condition" },
+        { "name": "Neurological Disorders" },
+        { "name": "Reproductive Issues" }
+      ]
+    },
+    {
+      "exposureId": "noise",
+      "name": "Noise / Hearing Exposure",
+      "cfrCitation": "38 CFR 4.85–4.87",
+      "eligibility": "Military occupational noise exposure",
+      "conditions": [
+        { "name": "Tinnitus", "conditionId": "tinnitus" },
+        { "name": "Bilateral Hearing Loss", "conditionId": "hearing-loss" }
+      ]
     }
   ]
 }
