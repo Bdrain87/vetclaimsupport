@@ -156,7 +156,7 @@ function MOSAutocomplete({
         className="w-full h-12 pl-10 pr-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(212,175,55,0.4)] focus:border-gold/50 transition-all"
       />
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-1 z-50 bg-[#1a2d44] border border-white/10 rounded-xl shadow-2xl shadow-black/50 max-h-60 overflow-y-auto">
+        <div className="absolute top-full left-0 right-0 mt-1 z-50 bg-[#111111] border border-white/[0.14] rounded-xl shadow-2xl shadow-black/50 max-h-60 overflow-y-auto">
           {results.map((job, i) => (
             <button
               key={`${job.code}-${job.branch}`}
