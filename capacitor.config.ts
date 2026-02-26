@@ -4,10 +4,6 @@ const config: CapacitorConfig = {
   appId: 'com.vetclaimsupport',
   appName: 'Vet Claim Support',
   webDir: 'dist',
-  server: {
-    url: 'https://vetclaimsupport.com',
-    cleartext: false,
-  },
   ios: {
     contentInset: 'never',
     backgroundColor: '#000000',
