@@ -1082,7 +1082,7 @@ export default function Onboarding() {
                         disabled={!newRatedCondition.trim()}
                         className="w-full h-10 rounded-xl bg-gold/20 text-gold text-sm font-medium hover:bg-gold/30 disabled:opacity-40 transition-colors"
                       >
-                        Add Condition
+                        Save
                       </button>
                     </div>
 
