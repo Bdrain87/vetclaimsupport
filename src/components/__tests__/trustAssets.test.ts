@@ -63,7 +63,6 @@ describe('Trust Assets — Premium Card', () => {
 
   it('price is displayed', () => {
     expect(PREMIUM_COPY.priceDisplay).toContain('$9.99');
-    expect(PREMIUM_COPY.priceDisplay).toContain('$19.99');
   });
 
   it('already purchased text exists', () => {

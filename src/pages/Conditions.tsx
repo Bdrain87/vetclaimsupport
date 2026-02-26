@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import {
-  Search, Plus, ChevronRight, AlertCircle,
+  Search, Plus, ChevronRight, AlertCircle, Info,
   Link2, Trash2, Edit, Filter, Shield, FileText,
   Stethoscope, Calendar, PersonStanding, Compass, Calculator,
   Zap, AlertTriangle,
@@ -32,7 +32,7 @@ import { Link } from 'react-router-dom';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { useClaims } from '@/hooks/useClaims';
 import { useProfileStore } from '@/store/useProfileStore';
-import { ClaimIntelligence } from '@/services/claimIntelligence';
+import { ClaimIntelligence, type Recommendation } from '@/services/claimIntelligence';
 import useAppStore from '@/store/useAppStore';
 import { PageContainer } from '@/components/PageContainer';
 import { ConditionSelector } from '@/components/shared/ConditionSelector';
@@ -323,6 +323,8 @@ export default function Conditions() {
 
   // Confirm remove state
   const [removeTarget, setRemoveTarget] = useState<{ id: string; name: string } | null>(null);
+  const [previewRec, setPreviewRec] = useState<Recommendation | null>(null);
+  const previewCondition = previewRec ? getConditionById(previewRec.conditionId) : null;
 
   // Handle view/edit condition
   const handleViewCondition = (conditionId: string) => {
@@ -719,18 +721,16 @@ export default function Conditions() {
               return (
                 <button
                   key={rec.conditionId}
-                  onClick={() => {
-                    addCondition(rec.conditionId);
-                  }}
+                  onClick={() => setPreviewRec(rec)}
                   className="w-full flex items-center justify-between p-3 rounded-xl border border-border bg-card hover:border-gold/30 transition-colors text-left"
                 >
                   <div className="flex-1 min-w-0 mr-3">
-                    <p className="text-sm font-medium text-foreground truncate">{rec.name}</p>
+                    <p className="text-sm font-medium text-foreground truncate">{rec.conditionName}</p>
                     <p className="text-xs text-muted-foreground line-clamp-2 break-words">
                       {diagnosticCodeResult ? `DC ${diagnosticCodeResult.code} · ` : ''}{rec.reason}
                     </p>
                   </div>
-                  <Plus className="h-4 w-4 text-gold flex-shrink-0" />
+                  <ChevronRight className="h-4 w-4 text-gold flex-shrink-0" />
                 </button>
               );
             })}
@@ -779,6 +779,63 @@ export default function Conditions() {
           </CardContent>
         </Card>
       )}
+
+      {/* Condition Preview Dialog */}
+      <Dialog open={!!previewRec} onOpenChange={(open) => { if (!open) setPreviewRec(null); }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{previewRec?.conditionName}</DialogTitle>
+            <DialogDescription>
+              {previewCondition?.description || previewRec?.reason}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3 text-sm">
+            {previewCondition?.diagnosticCode && (
+              <div className="flex items-center gap-2">
+                <Badge variant="outline">DC {previewCondition.diagnosticCode}</Badge>
+                {previewCondition.typicalRatings && (
+                  <Badge variant="outline">{previewCondition.typicalRatings}</Badge>
+                )}
+              </div>
+            )}
+            {previewCondition?.bodySystem && (
+              <p className="text-muted-foreground">
+                <span className="font-medium text-foreground">Body System:</span> {previewCondition.bodySystem}
+              </p>
+            )}
+            {previewRec?.reason && (
+              <p className="text-muted-foreground">
+                <span className="font-medium text-foreground">Why consider this:</span> {previewRec.reason}
+              </p>
+            )}
+            {previewCondition?.commonSecondaries && previewCondition.commonSecondaries.length > 0 && (
+              <div>
+                <p className="font-medium text-foreground mb-1">Common Secondaries:</p>
+                <div className="flex flex-wrap gap-1">
+                  {previewCondition.commonSecondaries.slice(0, 5).map(s => {
+                    const sec = getConditionById(s);
+                    return (
+                      <Badge key={s} variant="secondary" className="text-xs">
+                        {sec?.name || s}
+                      </Badge>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPreviewRec(null)}>Not Now</Button>
+            <Button onClick={() => {
+              if (previewRec) addCondition(previewRec.conditionId);
+              setPreviewRec(null);
+            }}>
+              <Plus className="h-4 w-4 mr-1" />
+              Add to My Claim
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Remove Condition Confirmation Dialog */}
       <Dialog open={!!removeTarget} onOpenChange={(open) => { if (!open) setRemoveTarget(null); }}>

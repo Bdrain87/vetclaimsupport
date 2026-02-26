@@ -296,7 +296,6 @@ body {
   [class*="rounded-2xl"] {
     max-width: 100%;
     box-sizing: border-box;
-    overflow: hidden;
   }
 
   /* Ensure all direct children of the page container stay within bounds */

@@ -36,6 +36,7 @@ export function LocationAutocomplete({
 }: LocationAutocompleteProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const justSelected = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const highlightRef = useRef<HTMLButtonElement>(null);
@@ -71,8 +72,12 @@ export function LocationAutocomplete({
     return [...prefixMatches, ...containsMatches].slice(0, 15);
   }, [value]);
 
-  // Open dropdown when there are results
+  // Open dropdown when there are results (but not right after a selection)
   useEffect(() => {
+    if (justSelected.current) {
+      justSelected.current = false;
+      return;
+    }
     if (results.length > 0 && value.trim().length >= 1) {
       setIsOpen(true);
       setHighlightedIndex(0);
@@ -98,6 +103,7 @@ export function LocationAutocomplete({
   }, []);
 
   const handleSelect = useCallback((location: string) => {
+    justSelected.current = true;
     onChange(location);
     onSelect?.(location);
     setIsOpen(false);

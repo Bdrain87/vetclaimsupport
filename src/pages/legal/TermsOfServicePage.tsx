@@ -199,7 +199,7 @@ export default function TermsOfServicePage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">13. Payment and Premium Access</h2>
           <p className="text-muted-foreground">
-            VCS offers a free tier with limited features and a paid <strong className="text-foreground">Premium</strong> tier available as a <strong className="text-foreground">one-time purchase of $9.99</strong> (introductory launch price; regular price $19.99). Premium access is permanent and does not require a recurring subscription.
+            VCS offers a free tier with limited features and a paid <strong className="text-foreground">Premium</strong> tier available as a <strong className="text-foreground">one-time purchase of $9.99</strong>. Premium access is permanent and does not require a recurring subscription.
           </p>
           <p className="text-muted-foreground">
             <strong className="text-foreground">One-Time Payment.</strong> By purchasing Premium, you make a single payment that grants you permanent access to all current Premium features. There are no recurring charges, monthly fees, or automatic renewals.

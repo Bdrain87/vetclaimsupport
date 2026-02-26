@@ -116,11 +116,11 @@ export const AI_COPY = {
 export const PREMIUM_COPY = {
   ctaLabel: 'Unlock Premium · $9.99 one-time',
   subtext: 'Export PDFs, advanced templates, and deeper tracking.',
-  priceDisplay: '$9.99 launch price (regular $19.99)',
+  priceDisplay: '$9.99 one-time',
   accountNote:
     'Premium follows your account on iPhone and web when signed in.',
   cardPromise:
-    'One-time purchase (intro price). Premium unlocks on this device and your signed-in account.',
+    'One-time purchase. Premium unlocks on this device and your signed-in account.',
   activeLabel: 'Premium Active',
   restorePurchasesLabel: 'Restore Purchases',
   restorePremiumLabel: 'Restore Premium',

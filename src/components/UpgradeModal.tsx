@@ -66,16 +66,10 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
 
           {/* Pricing */}
           <div className="text-center space-y-1">
-            <div className="inline-flex items-center gap-2">
-              <span className="text-sm line-through text-muted-foreground">$19.99</span>
-              <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-primary/20 text-primary">
-                Launch Sale
-              </span>
-            </div>
             <p className="text-3xl font-bold text-foreground">
               $9.99<span className="text-base font-normal text-muted-foreground"> one-time</span>
             </p>
-            <p className="text-xs text-muted-foreground">One-time purchase (intro price). No subscription.</p>
+            <p className="text-xs text-muted-foreground">One-time purchase. No subscription.</p>
           </div>
 
           {/* Feature highlights */}
