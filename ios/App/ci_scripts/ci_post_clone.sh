@@ -24,6 +24,14 @@ echo "=== [2/4] Installing npm dependencies ==="
 npm ci --prefer-offline || npm ci
 
 echo "=== [3/4] Building web app ==="
+# Verify Supabase env vars are set — without these the iOS app shows a
+# black screen because supabase.ts throws at import time.
+if [ -z "$VITE_SUPABASE_URL" ] || [ -z "$VITE_SUPABASE_PUBLISHABLE_KEY" ]; then
+  echo "ERROR: VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY must be set"
+  echo "       in Xcode Cloud environment variables. Without them the app"
+  echo "       will crash on launch with a black screen."
+  exit 1
+fi
 npm run build
 
 echo "=== [4/4] Syncing Capacitor iOS project ==="
