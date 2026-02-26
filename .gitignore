@@ -33,6 +33,9 @@ coverage
 *.sw?
 .vercel
 
+# iOS build artifacts
+build/
+
 # Screenshots & scripts (dev tooling)
 screenshots/
 screenshot*.mjs
