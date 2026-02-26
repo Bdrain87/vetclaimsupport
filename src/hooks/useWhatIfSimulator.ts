@@ -33,7 +33,7 @@ export function useWhatIfSimulator() {
   const baseConditions: SimulatedCondition[] = useMemo(() => {
     const fromApproved = approvedConditions.map((c) => ({
       id: c.id,
-      name: c.conditionName,
+      name: c.name,
       currentRating: c.rating,
       simulatedRating: c.rating,
       bodyPart: c.bodyPart,
