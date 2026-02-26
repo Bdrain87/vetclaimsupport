@@ -157,17 +157,21 @@ export function ConditionAutocomplete({
           type="text"
           value={query}
           onChange={e => setQuery(e.target.value)}
-          onFocus={() => { if (results.length > 0) setIsOpen(true); }}
+          onFocus={() => {
+            if (results.length > 0) setIsOpen(true);
+            // Scroll input above keyboard on mobile
+            setTimeout(() => inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+          }}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           autoFocus={autoFocus}
-          className="w-full h-12 pl-10 pr-4 bg-secondary border border-border rounded-xl text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[var(--gold-md)]/40 focus:border-[var(--gold-md)]/50 transition-all"
+          className="w-full h-12 pl-10 pr-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[rgba(212,175,55,0.4)] focus:border-[rgba(212,175,55,0.5)] transition-all"
         />
       </div>
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-1 z-[100] overflow-hidden bg-popover border border-border rounded-xl shadow-2xl shadow-black/20 backdrop-blur-xl max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+        <div className="absolute top-full left-0 right-0 mt-1 z-[100] overflow-hidden bg-popover border border-white/[0.14] rounded-xl shadow-2xl shadow-black/20 backdrop-blur-xl max-h-48 sm:max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
           {results.length === 0 && query.length > 1 && (
             <div className="px-4 py-8 text-center text-muted-foreground text-sm">
               No conditions found for &ldquo;{query}&rdquo;
