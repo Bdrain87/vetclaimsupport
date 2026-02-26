@@ -130,6 +130,16 @@ export async function pullFromCloud(): Promise<void> {
     if (profile.entitlement) {
       profileStore.setEntitlement(profile.entitlement as 'preview' | 'premium' | 'lifetime');
     }
+    // Restore name from display_name
+    if (profile.display_name) {
+      const parts = profile.display_name.split(' ');
+      profileStore.setFirstName(parts[0] || '');
+      if (parts.length > 1) profileStore.setLastName(parts.slice(1).join(' '));
+    }
+    // Restore onboarding status — allows returning users to skip onboarding after sign-in
+    if (profile.onboarding_completed) {
+      profileStore.completeOnboarding();
+    }
   }
 
   // ------------------------------------------------------------------

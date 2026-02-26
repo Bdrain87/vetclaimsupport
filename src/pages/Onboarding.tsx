@@ -235,6 +235,10 @@ export default function Onboarding() {
   const [deployEnd, setDeployEnd] = useState('');
   const [deployCombat, setDeployCombat] = useState(false);
 
+  // BDD (Benefits Delivery at Discharge)
+  const [stillActiveDuty, setStillActiveDuty] = useState<boolean | null>(null);
+  const [separationDate, setSeparationDate] = useState('');
+
   // Existing rated conditions
   const [hasExistingRated, setHasExistingRated] = useState<boolean | null>(null);
   const [existingRated, setExistingRated] = useState<Array<{
@@ -325,6 +329,7 @@ export default function Onboarding() {
     if (branch) profileStore.setBranch(branch);
     if (mosCode) profileStore.setMOS(mosCode, mosTitle);
     if (claimGoal) profileStore.setClaimGoal(claimGoal);
+    if (separationDate) profileStore.setSeparationDate(separationDate);
 
     // Save service periods from selected branches
     const periods = selectedBranches.map((b, i) => ({
@@ -936,6 +941,62 @@ export default function Onboarding() {
                     </button>
                   ))}
                 </div>
+
+                {/* BDD: Active duty + separation date */}
+                {claimGoal === 'initial' && (
+                  <div className="space-y-3 pt-2">
+                    <p className="text-white/60 text-sm font-medium">Are you still on active duty?</p>
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => setStillActiveDuty(true)}
+                        className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${
+                          stillActiveDuty === true
+                            ? 'bg-gold/10 border-gold/40 text-white'
+                            : 'bg-white/[0.07] border-white/[0.12] text-white/70 hover:bg-white/[0.10]'
+                        }`}
+                      >
+                        Yes
+                      </button>
+                      <button
+                        onClick={() => { setStillActiveDuty(false); setSeparationDate(''); }}
+                        className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${
+                          stillActiveDuty === false
+                            ? 'bg-gold/10 border-gold/40 text-white'
+                            : 'bg-white/[0.07] border-white/[0.12] text-white/70 hover:bg-white/[0.10]'
+                        }`}
+                      >
+                        No
+                      </button>
+                    </div>
+                    {stillActiveDuty && (
+                      <div className="space-y-2">
+                        <p className="text-white/50 text-xs">Expected separation / ETS date</p>
+                        <input
+                          type="date"
+                          value={separationDate}
+                          onChange={e => setSeparationDate(e.target.value)}
+                          className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(212,175,55,0.4)] focus:border-gold/50 transition-all [color-scheme:dark]"
+                        />
+                        {separationDate && (() => {
+                          const daysOut = Math.round((new Date(separationDate).getTime() - Date.now()) / 86400000);
+                          if (daysOut >= 90 && daysOut <= 180) {
+                            return (
+                              <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-400/10 border border-emerald-400/20">
+                                <Shield className="h-4 w-4 text-emerald-400 shrink-0" />
+                                <span className="text-xs text-emerald-400">You may be eligible for BDD (Benefits Delivery at Discharge). File 90–180 days before separation to get your rating faster.</span>
+                              </div>
+                            );
+                          } else if (daysOut > 0 && daysOut < 90) {
+                            return (
+                              <p className="text-xs text-amber-400/80 px-1">Your separation is less than 90 days out — standard filing recommended.</p>
+                            );
+                          }
+                          return null;
+                        })()}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             )}
 
