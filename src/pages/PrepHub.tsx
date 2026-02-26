@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   ClipboardCheck, FileText, Users, FileSignature, AlertTriangle,
   BookOpen, ClipboardList, Languages, DollarSign, Package, FileCheck,
-  Calculator, Scale, Navigation, Clock, Shield, Wrench,
+  Calculator, Scale, Navigation, Clock, Shield, Wrench, Share2, TrendingUp,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PageContainer } from '@/components/PageContainer';
@@ -51,9 +51,17 @@ const toolCategories: { title: string; tools: ToolItem[] }[] = [
     ],
   },
   {
+    title: 'Analysis',
+    tools: [
+      { label: 'Rating Upgrade Paths', icon: TrendingUp, route: '/claims/upgrade-paths', description: 'See criteria to increase low ratings' },
+      { label: 'Deadline Tracker', icon: Clock, route: '/settings/deadlines', description: 'Track ITF, appeals, and exam dates' },
+    ],
+  },
+  {
     title: 'Export',
     tools: [
       { label: 'Claim Packet Builder', icon: Package, route: '/prep/packet', description: 'Compile your full claim packet' },
+      { label: 'Shareable Summary', icon: Share2, route: '/prep/summary', description: 'Share or export your claims overview' },
     ],
   },
 ];

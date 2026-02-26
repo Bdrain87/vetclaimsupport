@@ -112,6 +112,9 @@ const AboutVCS = lazyWithRetry(() => import('./pages/AboutVCS'));
 const ConditionsByConflict = lazyWithRetry(() => import('./pages/ConditionsByConflict'));
 const ConditionGuide = lazyWithRetry(() => import('./pages/ConditionGuide'));
 const DeploymentLocations = lazyWithRetry(() => import('./pages/DeploymentLocations'));
+const ZeroPercentOptimizer = lazyWithRetry(() => import('./pages/ZeroPercentOptimizer'));
+const DeadlinesPage = lazyWithRetry(() => import('./pages/Deadlines'));
+const ShareableSummary = lazyWithRetry(() => import('./pages/ShareableSummary'));
 
 // Account & Legal pages
 const DeleteAccountPage = lazyWithRetry(() => import('./pages/account/DeleteAccountPage'));
@@ -234,6 +237,7 @@ function AnimatedRoutes() {
           <Route path="/claims/bilateral" element={<PremiumGuard featureName="Bilateral Calculator"><BilateralCalculator /></PremiumGuard>} />
           <Route path="/claims/secondary-finder" element={<PremiumGuard featureName="Secondary Condition Finder"><SecondaryFinder /></PremiumGuard>} />
           <Route path="/claims/checklist" element={<ClaimChecklist />} />
+          <Route path="/claims/upgrade-paths" element={<ZeroPercentOptimizer />} />
           <Route path="/claims/:id" element={<ConditionDetail />} />
 
           {/* === HEALTH === */}
@@ -264,6 +268,7 @@ function AnimatedRoutes() {
           <Route path="/prep/bdd-guide" element={<BDDGuide />} />
           <Route path="/prep/packet" element={<PremiumGuard featureName="Claim Packet Builder"><BuildPacket /></PremiumGuard>} />
           <Route path="/prep/appeals" element={<PremiumGuard featureName="Appeals Guide"><AppealsGuide /></PremiumGuard>} />
+          <Route path="/prep/summary" element={<ShareableSummary />} />
           <Route path="/cp-exam-packet" element={<CPExamPacket />} />
 
           {/* === REFERENCE === */}
@@ -278,6 +283,7 @@ function AnimatedRoutes() {
           <Route path="/settings/vault" element={<PremiumGuard featureName="Document Vault"><DocumentsHub /></PremiumGuard>} />
           <Route path="/settings/journey" element={<ClaimJourney />} />
           <Route path="/settings/itf" element={<IntentToFile />} />
+          <Route path="/settings/deadlines" element={<DeadlinesPage />} />
           <Route path="/settings/timeline" element={<Timeline />} />
           <Route path="/settings/help" element={<HelpCenter />} />
           <Route path="/settings/glossary" element={<Glossary />} />

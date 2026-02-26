@@ -43,6 +43,7 @@ import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import { PageContainer } from '@/components/PageContainer';
+import { EvidenceGapAlert } from '@/components/EvidenceGapAlert';
 
 // Lazy-load RatingGuidance so criteria data is not bundled until needed
 const LazyRatingGuidance = lazy(() => import('@/components/RatingGuidance'));
@@ -953,11 +954,17 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
               </CardContent>
             </Card>
           ) : (
-            <EvidenceChecklistCard
-              conditionId={id || ''}
-              conditionName={conditionDetails.abbreviation || conditionDetails.name}
-              onNavigate={navigate}
-            />
+            <>
+              <EvidenceGapAlert
+                conditionId={id || ''}
+                conditionName={conditionDetails.abbreviation || conditionDetails.name}
+              />
+              <EvidenceChecklistCard
+                conditionId={id || ''}
+                conditionName={conditionDetails.abbreviation || conditionDetails.name}
+                onNavigate={navigate}
+              />
+            </>
           )}
         </TabsContent>
 
