@@ -782,40 +782,40 @@ export default function Conditions() {
 
       {/* Condition Preview Dialog */}
       <Dialog open={!!previewRec} onOpenChange={(open) => { if (!open) setPreviewRec(null); }}>
-        <DialogContent>
+        <DialogContent className="max-w-[92vw] sm:max-w-lg overflow-hidden">
           <DialogHeader>
             <DialogTitle>{previewRec?.conditionName}</DialogTitle>
             <DialogDescription>
               {previewCondition?.description || previewRec?.reason}
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-3 text-sm">
+          <div className="space-y-3 px-6 py-3 text-sm">
             {previewCondition?.diagnosticCode && (
-              <div className="flex items-center gap-2">
-                <Badge variant="outline">DC {previewCondition.diagnosticCode}</Badge>
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant="outline" className="whitespace-nowrap">DC {previewCondition.diagnosticCode}</Badge>
                 {previewCondition.typicalRatings && (
-                  <Badge variant="outline">{previewCondition.typicalRatings}</Badge>
+                  <Badge variant="outline" className="whitespace-nowrap">{previewCondition.typicalRatings}</Badge>
                 )}
               </div>
             )}
             {previewCondition?.bodySystem && (
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground break-words">
                 <span className="font-medium text-foreground">Body System:</span> {previewCondition.bodySystem}
               </p>
             )}
             {previewRec?.reason && (
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground break-words">
                 <span className="font-medium text-foreground">Why consider this:</span> {previewRec.reason}
               </p>
             )}
             {previewCondition?.commonSecondaries && previewCondition.commonSecondaries.length > 0 && (
               <div>
-                <p className="font-medium text-foreground mb-1">Common Secondaries:</p>
-                <div className="flex flex-wrap gap-1">
+                <p className="font-medium text-foreground mb-1.5">Common Secondaries:</p>
+                <div className="flex flex-wrap gap-1.5">
                   {previewCondition.commonSecondaries.slice(0, 5).map(s => {
                     const sec = getConditionById(s);
                     return (
-                      <Badge key={s} variant="secondary" className="text-xs">
+                      <Badge key={s} variant="secondary" className="text-xs whitespace-nowrap">
                         {sec?.name || s}
                       </Badge>
                     );
@@ -824,9 +824,9 @@ export default function Conditions() {
               </div>
             )}
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setPreviewRec(null)}>Not Now</Button>
-            <Button onClick={() => {
+          <DialogFooter className="gap-2 px-6 pb-6 pt-4">
+            <Button variant="outline" className="w-full sm:w-auto" onClick={() => setPreviewRec(null)}>Not Now</Button>
+            <Button className="w-full sm:w-auto" onClick={() => {
               if (previewRec) addCondition(previewRec.conditionId);
               setPreviewRec(null);
             }}>
