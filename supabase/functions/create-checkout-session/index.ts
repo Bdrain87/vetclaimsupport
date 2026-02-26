@@ -16,7 +16,7 @@ const getAllowedOrigin = (origin: string | null): string => {
 const getCorsHeaders = (origin: string | null) => ({
   'Access-Control-Allow-Origin': getAllowedOrigin(origin),
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
   'Access-Control-Max-Age': '86400',
 });
 
@@ -37,11 +37,19 @@ serve(async (req: Request) => {
       );
     }
 
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY')!;
-    const stripePriceId = Deno.env.get('STRIPE_PRICE_ID')!;
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY');
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
+    const stripePriceId = Deno.env.get('STRIPE_PRICE_ID');
+
+    if (!supabaseUrl || !supabaseAnonKey || !supabaseServiceKey || !stripeSecretKey || !stripePriceId) {
+      console.error('Missing required environment variables for checkout');
+      return new Response(
+        JSON.stringify({ error: 'Service not configured. Please contact support.' }),
+        { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     // Verify user JWT
     const userClient = createClient(supabaseUrl, supabaseAnonKey, {

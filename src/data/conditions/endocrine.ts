@@ -187,7 +187,7 @@ export const endocrineConditions: VACondition[] = [
       'hypoparathyroidism',
       'depression',
       'anxiety',
-      'vocal-cord-paralysis',
+      'vocal-cord-dysfunction',
     ],
     keywords: [
       'thyroid cancer',
@@ -393,7 +393,7 @@ export const endocrineConditions: VACondition[] = [
       'anxiety',
       'heart-arrhythmia',
       'adrenal-insufficiency',
-      'headaches',
+      'tension-headaches',
     ],
     keywords: [
       'pheochromocytoma',
@@ -508,7 +508,7 @@ export const endocrineConditions: VACondition[] = [
     commonSecondaries: [
       'hypopituitarism',
       'vision-loss',
-      'headaches',
+      'tension-headaches',
       'hypothyroidism',
       'adrenal-insufficiency',
     ],
@@ -545,7 +545,7 @@ export const endocrineConditions: VACondition[] = [
       'erectile-dysfunction',
       'osteoporosis',
       'depression',
-      'headaches',
+      'tension-headaches',
     ],
     keywords: [
       'prolactinoma',
@@ -576,7 +576,7 @@ export const endocrineConditions: VACondition[] = [
       'Rated by analogy under DC 7909. Consider fluid/electrolyte imbalance, frequency of urination, impact on daily activities. May also be rated under voiding dysfunction criteria (DC 7542) for urinary symptoms.',
     commonSecondaries: [
       'dehydration',
-      'sleep-disturbance',
+      'insomnia',
       'kidney-disease',
       'electrolyte-imbalance',
     ],
@@ -653,7 +653,7 @@ export const endocrineConditions: VACondition[] = [
       'depression',
       'chronic-fatigue',
       'osteoporosis',
-      'sleep-disturbance',
+      'insomnia',
     ],
     keywords: [
       'low testosterone',
@@ -847,7 +847,7 @@ export const endocrineConditions: VACondition[] = [
     commonSecondaries: [
       'diabetes',
       'hypertension',
-      'coronary-artery-disease',
+      'ao-ischemic-heart-disease',
       'sleep-apnea',
       'obesity-endocrine',
     ],
@@ -886,7 +886,7 @@ export const endocrineConditions: VACondition[] = [
       'gerd',
     ],
     keywords: [
-      'obesity',
+      'obesity-endocrine',
       'overweight',
       'BMI',
       'morbid obesity',

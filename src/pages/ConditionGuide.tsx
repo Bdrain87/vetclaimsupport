@@ -4,221 +4,97 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PageContainer } from '@/components/PageContainer';
+import { getConditionById } from '@/data/vaConditions';
+import { conditionRatingCriteria, type ConditionRatingCriteria } from '@/data/ratingCriteria';
+import { categoryLabels, type ConditionCategory } from '@/data/conditions/types';
 
-interface ConditionGuide {
+interface ConditionGuideItem {
   id: string;
   name: string;
   category: string;
   diagnosticCode: string;
   description: string;
-  ratingCriteria: {
-    percentage: number;
-    criteria: string;
-  }[];
+  ratingCriteria: { percentage: number; criteria: string }[];
   requiredEvidence: string[];
   commonSecondaries: string[];
   examTips: string[];
   successTips: string[];
 }
 
-const conditionGuides: ConditionGuide[] = [
-  {
-    id: 'ptsd',
-    name: 'PTSD (Post-Traumatic Stress Disorder)',
-    category: 'Mental Health',
-    diagnosticCode: '9411',
-    description: 'Anxiety disorder caused by witnessing or experiencing traumatic events during service.',
-    ratingCriteria: [
-      { percentage: 0, criteria: 'Formally diagnosed but symptoms controlled by medication' },
-      { percentage: 10, criteria: 'Mild symptoms, occupational and social impairment with decreased work efficiency during stress periods' },
-      { percentage: 30, criteria: 'Occasional decrease in work efficiency with intermittent inability to perform tasks' },
-      { percentage: 50, criteria: 'Reduced reliability and productivity due to symptoms like panic attacks, difficulty understanding commands' },
-      { percentage: 70, criteria: 'Deficiencies in most areas: work, family, thinking, mood. Suicidal ideation, obsessional rituals' },
-      { percentage: 100, criteria: 'Total occupational and social impairment. Persistent danger to self or others, inability to perform daily activities' },
-    ],
-    requiredEvidence: [
-      'Current diagnosis from a mental health professional',
-      'Evidence of in-service stressor (combat, MST, etc.)',
-      'Doctor summary connecting diagnosis to service',
-      'Buddy statements describing behavioral changes',
-      'Treatment records showing ongoing symptoms',
-    ],
-    commonSecondaries: [
-      'Sleep Apnea',
-      'Migraines',
-      'Hypertension',
-      'GERD/IBS',
-      'Erectile Dysfunction',
-      'Depression',
-      'Anxiety Disorder',
-    ],
-    examTips: [
+/**
+ * Build guide items dynamically from the conditions database and rating criteria.
+ * Only includes conditions that have detailed rating criteria available.
+ */
+function buildConditionGuides(): ConditionGuideItem[] {
+  return conditionRatingCriteria.map((rc: ConditionRatingCriteria) => {
+    const condition = getConditionById(rc.conditionId);
+
+    const ratingCriteria = rc.ratingLevels.map((level) => ({
+      percentage: level.percent,
+      criteria: level.criteria,
+    }));
+
+    const commonSecondaries = condition?.possibleSecondaries
+      ?? condition?.commonSecondaries
+        .map((id) => {
+          const secondary = getConditionById(id);
+          return secondary?.name ?? null;
+        })
+        .filter((name): name is string => name !== null)
+      ?? [];
+
+    const examTips = rc.examTips ?? [
       'Describe your worst days, not your best',
-      'Be specific about how symptoms affect work and relationships',
-      'Mention nightmares, flashbacks, and avoidance behaviors',
-      'Discuss any suicidal ideation honestly',
-      'Bring a list of your symptoms and their frequency',
-    ],
-    successTips: [
-      'Get a current diagnosis before filing',
-      'Document your stressor with detail (who, what, when, where)',
-      'Combat veterans have relaxed stressor verification requirements',
-      'MST claims have special evidence rules - markers in records count',
-      'Keep a symptom journal before your C&P exam',
-    ],
-  },
-  {
-    id: 'tinnitus',
-    name: 'Tinnitus',
-    category: 'Auditory',
-    diagnosticCode: '6260',
-    description: 'Persistent ringing, buzzing, or other sounds in the ears without external source.',
-    ratingCriteria: [
-      { percentage: 10, criteria: 'Recurrent tinnitus. This is the maximum schedular rating for tinnitus.' },
-    ],
-    requiredEvidence: [
-      'Statement describing the ringing/buzzing',
-      'Evidence of noise exposure in service (MOS, weapon qualification, etc.)',
-      'Buddy statements if others noticed you mentioning ear issues',
-    ],
-    commonSecondaries: [
-      'Hearing Loss',
-      'Migraines',
-      'Depression',
-      'Anxiety',
-      'Sleep Disorders',
-    ],
-    examTips: [
-      'Describe the sound (ringing, buzzing, hissing, etc.)',
-      'Explain when it started and any worsening',
-      'Discuss impact on concentration and sleep',
-    ],
-    successTips: [
-      'Tinnitus is subjective - your statement is often sufficient',
-      'Connect to your noise exposure (weapons, machinery, aircraft)',
-      '10% is the maximum rating, so focus on secondary conditions',
-      'Often claimed with hearing loss for combined rating benefit',
-    ],
-  },
-  {
-    id: 'lumbar-spine',
-    name: 'Lumbar Spine Conditions',
-    category: 'Musculoskeletal',
-    diagnosticCode: '5237',
-    description: 'Lower back conditions including strain, DDD, herniated discs, and radiculopathy.',
-    ratingCriteria: [
-      { percentage: 10, criteria: 'Forward flexion greater than 60° but not greater than 85°, or combined ROM greater than 120° but not greater than 235°' },
-      { percentage: 20, criteria: 'Forward flexion greater than 30° but not greater than 60°, or combined ROM not greater than 120°' },
-      { percentage: 40, criteria: 'Forward flexion 30° or less, or favorable ankylosis of the entire thoracolumbar spine' },
-      { percentage: 50, criteria: 'Unfavorable ankylosis of the entire thoracolumbar spine' },
-      { percentage: 100, criteria: 'Unfavorable ankylosis of the entire spine' },
-    ],
-    requiredEvidence: [
-      'MRI or X-ray showing spinal condition',
-      'Range of motion measurements',
-      'Service treatment records showing injury or complaints',
-      'Doctor summary from physician',
-      'Buddy statements about carrying heavy gear',
-    ],
-    commonSecondaries: [
-      'Radiculopathy (each extremity rated separately)',
-      'Erectile Dysfunction',
-      'Bladder/Bowel dysfunction',
-      'Depression',
-      'Sleep disturbance',
-    ],
-    examTips: [
-      'Attend during a flare-up if possible, or describe your worst days',
-      'Let the examiner know about pain during ROM testing',
-      'Report any radiating pain down the legs (radiculopathy)',
-      'Mention any incapacitating episodes requiring bed rest',
-    ],
-    successTips: [
-      'Separate ratings for radiculopathy can significantly increase combined rating',
-      'IVDS (Intervertebral Disc Syndrome) has alternate rating criteria',
-      'Document incapacitating episodes (bed rest prescribed by doctor)',
-      'Heavy lifting and carrying gear in service supports nexus',
-    ],
-  },
-  {
-    id: 'sleep-apnea',
-    name: 'Sleep Apnea',
-    category: 'Respiratory',
-    diagnosticCode: '6847',
-    description: 'Breathing repeatedly stops and starts during sleep, often requiring CPAP or other treatment.',
-    ratingCriteria: [
-      { percentage: 0, criteria: 'Asymptomatic but with documented sleep disorder breathing' },
-      { percentage: 30, criteria: 'Persistent day-time hypersomnolence' },
-      { percentage: 50, criteria: 'Requires use of breathing assistance device such as CPAP machine' },
-      { percentage: 100, criteria: 'Chronic respiratory failure with carbon dioxide retention or cor pulmonale, or requires tracheostomy' },
-    ],
-    requiredEvidence: [
-      'Sleep study (polysomnography) showing diagnosis',
-      'CPAP prescription and usage records',
-      'Buddy statements about snoring, gasping during sleep',
-      'Evidence of in-service symptoms or diagnosis',
-    ],
-    commonSecondaries: [
-      'PTSD (often causes or aggravates sleep apnea)',
-      'Hypertension',
-      'Heart conditions',
-      'Depression',
-      'Cognitive impairment',
-    ],
-    examTips: [
-      'Bring CPAP compliance records',
-      'Describe daytime sleepiness and fatigue',
-      'Mention any accidents or near-accidents from fatigue',
-    ],
-    successTips: [
-      '50% rating is common if you use CPAP',
-      'Often claimed as secondary to PTSD, weight gain from other conditions',
-      'Get a sleep study if you have symptoms but no diagnosis',
-      'Buddy statements about witnessed apneas are valuable',
-    ],
-  },
-  {
-    id: 'migraines',
-    name: 'Migraine Headaches',
-    category: 'Neurological',
-    diagnosticCode: '8100',
-    description: 'Severe recurring headaches often with nausea, sensitivity to light/sound, and visual disturbances.',
-    ratingCriteria: [
-      { percentage: 0, criteria: 'Less frequent attacks' },
-      { percentage: 10, criteria: 'Characteristic prostrating attacks averaging one in 2 months' },
-      { percentage: 30, criteria: 'Characteristic prostrating attacks occurring on average once a month' },
-      { percentage: 50, criteria: 'Very frequent, completely prostrating and prolonged attacks productive of severe economic inadaptability' },
-    ],
-    requiredEvidence: [
-      'Migraine diary showing frequency and severity',
-      'Medical records documenting treatment',
-      'Evidence of prostrating attacks (had to lie down, couldn\'t work)',
-      'Buddy statements about witnessed migraine episodes',
-    ],
-    commonSecondaries: [
-      'TBI (often migraines secondary to TBI)',
-      'PTSD',
-      'Depression',
-      'Anxiety',
-    ],
-    examTips: [
-      'Know the difference between prostrating and non-prostrating',
-      'Describe attacks that force you to stop activities and lie down',
-      'Explain economic impact (missed work, reduced productivity)',
-      'Bring your migraine log/diary',
-    ],
-    successTips: [
-      '"Prostrating" means you cannot function - emphasize this',
-      'Track frequency meticulously for months before exam',
-      '"Severe economic inadaptability" includes reduced work performance',
-      'Often secondary to TBI, PTSD, or neck conditions',
-    ],
-  },
-];
+      'Be specific about how symptoms affect work and daily activities',
+      'Bring documentation of treatments and medications',
+    ];
+
+    const successTips = rc.commonMistakes
+      ? rc.commonMistakes.map((m) => `Avoid: ${m}`)
+      : [
+          'Document all symptoms and their frequency before your exam',
+          'Get buddy statements from people who witness your symptoms',
+          'Ensure you have a current diagnosis before filing',
+        ];
+
+    const requiredEvidence = [
+      'Current diagnosis from a qualified provider',
+      'Service treatment records or evidence of in-service incurrence',
+      'Doctor summary connecting condition to service',
+      'Buddy/lay statements supporting your claim',
+      'Treatment records showing ongoing symptoms',
+    ];
+
+    const categoryLabel = condition
+      ? (categoryLabels[condition.category as ConditionCategory] ?? condition.category)
+      : 'General';
+
+    return {
+      id: rc.conditionId,
+      name: rc.conditionName,
+      category: categoryLabel,
+      diagnosticCode: rc.diagnosticCode,
+      description: condition?.description ?? `VA disability condition rated under DC ${rc.diagnosticCode}.`,
+      ratingCriteria,
+      requiredEvidence,
+      commonSecondaries,
+      examTips,
+      successTips,
+    };
+  });
+}
+
+// Lazy singleton — only built when user actually visits this page
+let _cachedGuides: ConditionGuideItem[] | null = null;
+function getConditionGuides(): ConditionGuideItem[] {
+  if (!_cachedGuides) _cachedGuides = buildConditionGuides();
+  return _cachedGuides;
+}
 
 export default function ConditionGuide() {
+  const conditionGuides = getConditionGuides();
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedGuide, setSelectedGuide] = useState<ConditionGuide | null>(null);
+  const [selectedGuide, setSelectedGuide] = useState<ConditionGuideItem | null>(null);
 
   const filteredGuides = useMemo(() => {
     if (!searchQuery.trim()) return conditionGuides;
@@ -229,7 +105,7 @@ export default function ConditionGuide() {
         g.category.toLowerCase().includes(query) ||
         g.diagnosticCode.includes(query)
     );
-  }, [searchQuery]);
+  }, [searchQuery, conditionGuides]);
 
   if (selectedGuide) {
     return (
@@ -297,23 +173,25 @@ export default function ConditionGuide() {
         </Card>
 
         {/* Common Secondaries */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Common Secondary Conditions</CardTitle>
-            <CardDescription>
-              Conditions often rated as secondary to {selectedGuide.name}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-2">
-              {selectedGuide.commonSecondaries.map((secondary) => (
-                <Badge key={secondary} variant="outline" className="px-3 py-1">
-                  {secondary}
-                </Badge>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        {selectedGuide.commonSecondaries.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Common Secondary Conditions</CardTitle>
+              <CardDescription>
+                Conditions often rated as secondary to {selectedGuide.name}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-wrap gap-2">
+                {selectedGuide.commonSecondaries.map((secondary) => (
+                  <Badge key={secondary} variant="outline" className="px-3 py-1">
+                    {secondary}
+                  </Badge>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Tips */}
         <div className="grid md:grid-cols-2 gap-4">
@@ -368,7 +246,7 @@ export default function ConditionGuide() {
         <div>
           <h1 className="text-2xl font-bold text-foreground">Condition Guides</h1>
           <p className="text-muted-foreground">
-            Detailed guides for common VA disability claims
+            Detailed guides for {conditionGuides.length} VA disability conditions
           </p>
         </div>
       </div>
@@ -388,8 +266,12 @@ export default function ConditionGuide() {
         {filteredGuides.map((guide) => (
           <Card
             key={guide.id}
-            className="cursor-pointer hover:border-primary/50 transition-colors"
+            className="cursor-pointer hover:border-primary/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             onClick={() => setSelectedGuide(guide)}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedGuide(guide); } }}
+            tabIndex={0}
+            role="button"
+            aria-label={`View guide for ${guide.name}`}
           >
             <CardContent className="pt-6">
               <div className="flex items-start justify-between">

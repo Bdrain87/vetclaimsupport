@@ -56,7 +56,7 @@ export const infectiousConditions: VACondition[] = [
     ratingCriteria:
       'Rated under DC 7345 for chronic liver disease. 0%: nonsymptomatic. 10%: intermittent fatigue, malaise, and anorexia, or incapacitating episodes totaling at least 1 but less than 2 weeks during past 12 months. 20%: daily fatigue, malaise, anorexia, requiring dietary restriction or continuous medication, or incapacitating episodes totaling 2-4 weeks. 40%: daily fatigue, malaise, anorexia, minor weight loss, hepatomegaly, or incapacitating episodes totaling 4-6 weeks. 60%: daily fatigue, malaise, anorexia, weight loss, hepatomegaly, nausea, vomiting, arthralgia, and incapacitating episodes totaling 6+ weeks. 100%: near-constant debilitating symptoms.',
     commonSecondaries: [
-      'liver-cirrhosis',
+      'cirrhosis',
       'depression',
       'chronic-fatigue',
       'liver-cancer',
@@ -90,7 +90,7 @@ export const infectiousConditions: VACondition[] = [
     ratingCriteria:
       'Rated under DC 7354 for hepatitis C. Same rating criteria as DC 7345 for chronic liver disease. Even after viral cure (SVR), rate on residual liver damage. Cirrhosis rated separately. Incapacitating episodes defined as bed rest prescribed by physician.',
     commonSecondaries: [
-      'liver-cirrhosis',
+      'cirrhosis',
       'depression',
       'chronic-fatigue',
       'diabetes',
@@ -124,7 +124,7 @@ export const infectiousConditions: VACondition[] = [
       'Chronic viral infection caused by herpes simplex virus type 1 (oral) or type 2 (genital). Causes recurrent painful outbreaks of blisters/sores. Latent virus reactivates during stress, illness, or immunosuppression.',
     ratingCriteria:
       'Rated under DC 7820 for infections of the skin not listed elsewhere — rate as disfigurement, scars, or dermatitis depending on predominant disability. Consider frequency of outbreaks, area affected, and need for systemic therapy.',
-    commonSecondaries: ['depression', 'anxiety', 'chronic-pain', 'neuropathy'],
+    commonSecondaries: ['depression', 'anxiety', 'chronic-pain-syndrome', 'peripheral-neuropathy'],
     keywords: [
       'herpes simplex',
       'HSV',
@@ -222,7 +222,7 @@ export const infectiousConditions: VACondition[] = [
     commonSecondaries: [
       'chronic-fatigue',
       'depression',
-      'respiratory-insufficiency',
+      'respiratory-failure',
       'liver-disease',
     ],
     keywords: [
@@ -256,10 +256,10 @@ export const infectiousConditions: VACondition[] = [
       'Rated by analogy based on predominant symptoms. Joint involvement under musculoskeletal codes. Neurological involvement under appropriate nerve codes. Cardiac involvement under cardiac codes. Chronic fatigue under DC 6354.',
     commonSecondaries: [
       'chronic-fatigue',
-      'arthritis',
+      'rheumatoid-arthritis',
       'peripheral-neuropathy',
       'depression',
-      'cognitive-dysfunction',
+      'cognitive-disorder',
     ],
     keywords: [
       'Lyme disease',
@@ -288,7 +288,7 @@ export const infectiousConditions: VACondition[] = [
       'Methicillin-resistant Staphylococcus aureus infection resistant to common antibiotics. Common in military settings due to close quarters, shared equipment, and skin injuries. Recurrent infections can cause chronic skin abscesses and systemic complications.',
     ratingCriteria:
       'Rated under DC 7820 for skin infections. Consider frequency of recurrence, scarring, need for IV antibiotics, and systemic complications. Recurrent abscesses requiring drainage may warrant 10-30%.',
-    commonSecondaries: ['scarring', 'depression', 'chronic-pain', 'osteomyelitis'],
+    commonSecondaries: ['scars', 'depression', 'chronic-pain-syndrome', 'osteomyelitis-chronic'],
     keywords: [
       'MRSA',
       'staph infection',
@@ -316,7 +316,7 @@ export const infectiousConditions: VACondition[] = [
       'Bacterial infection transmitted from animals to humans, common in Middle Eastern deployments. Causes chronic undulating fever, joint pain, fatigue, and sweats. Can relapse months or years after initial treatment.',
     ratingCriteria:
       'Rated under DC 6309. During active infection, rate based on constitutional symptoms. Chronic brucellosis with residual arthralgias, fatigue, and recurrent fevers rated on functional impairment.',
-    commonSecondaries: ['chronic-fatigue', 'arthritis', 'depression', 'liver-disease'],
+    commonSecondaries: ['chronic-fatigue', 'rheumatoid-arthritis', 'depression', 'liver-disease'],
     keywords: [
       'brucellosis',
       'undulant fever',
@@ -350,7 +350,7 @@ export const infectiousConditions: VACondition[] = [
       'Rated under DC 6304: 100% during active disease. After treatment, minimum 30% for residuals. Rate on specific organ damage (liver, spleen, kidneys, brain). Relapsing malaria (P. vivax/ovale) may cause recurrent episodes.',
     commonSecondaries: [
       'chronic-fatigue',
-      'anemia',
+      'iron-deficiency-anemia',
       'splenomegaly',
       'liver-disease',
       'depression',
@@ -382,7 +382,7 @@ export const infectiousConditions: VACondition[] = [
       'Parasitic disease spread by sandfly bites, endemic in Iraq, Afghanistan, and other deployment areas. Cutaneous form causes skin sores. Visceral form (kala-azar) affects internal organs and can be fatal. Common in OIF/OEF veterans.',
     ratingCriteria:
       'Rated under DC 6301. 100% during active visceral disease. Cutaneous form rated on skin residuals and scarring. Visceral form rated on organ damage (liver, spleen, bone marrow). Rate residuals after treatment.',
-    commonSecondaries: ['scarring', 'depression', 'chronic-fatigue', 'splenomegaly', 'anemia'],
+    commonSecondaries: ['scars', 'depression', 'chronic-fatigue', 'splenomegaly', 'iron-deficiency-anemia'],
     keywords: [
       'leishmaniasis',
       'sandfly disease',
@@ -410,7 +410,7 @@ export const infectiousConditions: VACondition[] = [
       'Parasitic infection caused by Entamoeba histolytica, contracted through contaminated food or water during deployment. Causes chronic diarrhea, abdominal pain, and can form liver abscesses. Endemic in many deployment areas.',
     ratingCriteria:
       'Rated under DC 6302 for amebiasis. Consider chronic GI symptoms, frequency of flares, liver abscess history, and impact on daily activities. Rate chronic GI residuals under appropriate digestive codes.',
-    commonSecondaries: ['ibs', 'chronic-fatigue', 'liver-disease', 'depression', 'weight-loss'],
+    commonSecondaries: ['ibs', 'chronic-fatigue', 'liver-disease', 'depression', 'weight-loss-condition'],
     keywords: [
       'amebiasis',
       'amebic dysentery',
@@ -470,7 +470,7 @@ export const infectiousConditions: VACondition[] = [
       'Mosquito-borne viral disease endemic in tropical deployment areas. Causes severe fever, headache, muscle/joint pain, and can progress to hemorrhagic fever. Post-dengue fatigue syndrome can persist for months.',
     ratingCriteria:
       'Rated by analogy based on residuals. Post-dengue fatigue rated under DC 6354 criteria. Joint pain rated under musculoskeletal codes. Consider chronic fatigue, arthralgias, and immune effects.',
-    commonSecondaries: ['chronic-fatigue', 'arthralgia', 'depression', 'headaches'],
+    commonSecondaries: ['chronic-fatigue', 'arthralgia', 'depression', 'tension-headaches'],
     keywords: [
       'dengue fever',
       'dengue',
@@ -499,7 +499,7 @@ export const infectiousConditions: VACondition[] = [
     ratingCriteria:
       'Rated based on organ involvement. Chagas cardiomyopathy rated under cardiac codes (DC 7020). GI involvement (megacolon/megaesophagus) under digestive codes. Consider chronic fatigue and constitutional symptoms.',
     commonSecondaries: [
-      'cardiomyopathy',
+      'dilated-cardiomyopathy',
       'heart-arrhythmia',
       'megacolon',
       'chronic-fatigue',
@@ -540,7 +540,7 @@ export const infectiousConditions: VACondition[] = [
       'kidney-disease',
       'depression',
       'chronic-fatigue',
-      'arthritis',
+      'rheumatoid-arthritis',
       'peripheral-neuropathy',
     ],
     keywords: [
@@ -713,7 +713,7 @@ export const infectiousConditions: VACondition[] = [
       'fibromyalgia',
       'sleep-apnea',
       'ibs',
-      'cognitive-dysfunction',
+      'cognitive-disorder',
     ],
     keywords: [
       'chronic fatigue syndrome',
@@ -749,7 +749,7 @@ export const infectiousConditions: VACondition[] = [
       'chronic-fatigue',
       'ibs',
       'migraines',
-      'sleep-disturbance',
+      'insomnia',
     ],
     keywords: [
       'fibromyalgia',
@@ -863,7 +863,7 @@ export const infectiousConditions: VACondition[] = [
       'cancer',
       'peripheral-neuropathy',
       'parkinsons',
-      'ischemic-heart-disease',
+      'ao-ischemic-heart-disease',
     ],
     keywords: [
       'Agent Orange',
@@ -901,7 +901,7 @@ export const infectiousConditions: VACondition[] = [
       'anxiety',
       'chronic-fatigue',
       'peripheral-neuropathy',
-      'chronic-pain',
+      'chronic-pain-syndrome',
     ],
     keywords: [
       'cancer',
@@ -977,9 +977,9 @@ export const infectiousConditions: VACondition[] = [
     commonSecondaries: [
       'depression',
       'dementia',
-      'sleep-disturbance',
+      'insomnia',
       'falls',
-      'speech-impairment',
+      'dysarthria',
     ],
     keywords: [
       'Parkinsons disease',
@@ -1009,7 +1009,7 @@ export const infectiousConditions: VACondition[] = [
       'Peripheral neuropathy that manifested within a year of herbicide exposure or within one year of last exposure. Presumptive for Agent Orange-exposed veterans. Causes numbness, tingling, burning pain in extremities.',
     ratingCriteria:
       'Rated under appropriate nerve code. DC 8520 (sciatic): 10% mild, 20% moderate, 40% moderately severe, 60% severe with marked muscular atrophy, 80% complete paralysis. Rate each affected extremity separately.',
-    commonSecondaries: ['chronic-pain', 'depression', 'falls', 'sleep-disturbance'],
+    commonSecondaries: ['chronic-pain-syndrome', 'depression', 'falls', 'insomnia'],
     keywords: [
       'peripheral neuropathy Agent Orange',
       'early onset neuropathy',
@@ -1038,7 +1038,7 @@ export const infectiousConditions: VACondition[] = [
       'Skin condition directly caused by exposure to dioxin-containing chemicals like Agent Orange. Characterized by cysts, comedones (blackheads), and pustules, primarily on the face. Must have manifested within one year of exposure.',
     ratingCriteria:
       'Rated under DC 7829 for chloracne. 10%: deep acne (cysts, comedones) of less than 40% of face and neck or less than 40% of the body. 20%: deep acne affecting 40% or more of face and neck. 30%: deep acne affecting 40% or more of face and neck and any involvement of trunk.',
-    commonSecondaries: ['depression', 'anxiety', 'scarring', 'disfigurement'],
+    commonSecondaries: ['depression', 'anxiety', 'scars', 'scar-disfigurement'],
     keywords: [
       'chloracne',
       'Agent Orange skin',
@@ -1067,7 +1067,7 @@ export const infectiousConditions: VACondition[] = [
       'Skin disorder causing blistering, fragile skin, and photosensitivity. Presumptive for Agent Orange-exposed veterans. Must have manifested within a year of exposure. Caused by abnormal porphyrin metabolism.',
     ratingCriteria:
       'Rated under DC 7815 for bullous disorders. Consider extent of skin involvement, scarring, disfigurement, and need for systemic therapy. Rate as dermatitis if skin area involvement is predominant symptom.',
-    commonSecondaries: ['liver-disease', 'depression', 'scarring', 'chronic-pain'],
+    commonSecondaries: ['liver-disease', 'depression', 'scars', 'chronic-pain-syndrome'],
     keywords: [
       'porphyria cutanea tarda',
       'PCT',
@@ -1099,8 +1099,8 @@ export const infectiousConditions: VACondition[] = [
     commonSecondaries: [
       'depression',
       'chronic-fatigue',
-      'respiratory-insufficiency',
-      'chronic-pain',
+      'respiratory-failure',
+      'chronic-pain-syndrome',
     ],
     keywords: [
       'lung cancer',
@@ -1131,7 +1131,7 @@ export const infectiousConditions: VACondition[] = [
     ratingCriteria:
       '100%: during active malignancy or treatment. Following treatment, rate on residuals including functional impairment of affected area, scarring, and lymphedema. Minimum 10% after cessation of treatment.',
     commonSecondaries: [
-      'chronic-pain',
+      'chronic-pain-syndrome',
       'depression',
       'lymphedema',
       'limited-mobility',
@@ -1201,7 +1201,7 @@ export const infectiousConditions: VACondition[] = [
       'Rated under DC 7101: 10%: diastolic pressure predominantly 100 or more, or systolic pressure predominantly 160 or more, or minimum evaluation for individual with history of diastolic pressure predominantly 100 or more who requires continuous medication for control. 20%: diastolic predominantly 110 or more, or systolic predominantly 200 or more. 40%: diastolic predominantly 120 or more. 60%: diastolic predominantly 130 or more.',
     commonSecondaries: [
       'kidney-disease',
-      'coronary-artery-disease',
+      'ao-ischemic-heart-disease',
       'stroke',
       'vision-loss',
       'erectile-dysfunction',

@@ -125,6 +125,38 @@ serve(async (req) => {
       });
     }
 
+    // --- Entitlement check (free users cannot access AI analysis) ---
+    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    if (!serviceRoleKey) {
+      // Fail closed: if the service key is missing, block all requests rather
+      // than silently allowing free users to access premium AI features.
+      console.error(`[${requestId}] SUPABASE_SERVICE_ROLE_KEY not set — blocking request`);
+      return new Response(JSON.stringify({
+        error: 'AI service is not configured. Please contact support.',
+        code: 'SERVICE_UNAVAILABLE',
+        requestId
+      }), {
+        status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    {
+      const adminClient = createClient(supabaseUrl, serviceRoleKey);
+      const { data: entRow } = await adminClient
+        .from('user_entitlements')
+        .select('entitled')
+        .eq('user_id', user.id)
+        .single();
+      if (!entRow?.entitled) {
+        return new Response(JSON.stringify({
+          error: 'AI analysis requires a premium subscription. Upgrade to unlock this feature.',
+          code: 'PREMIUM_REQUIRED',
+          requestId
+        }), {
+          status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+    }
+
     // --- Rate Limiting ---
     if (!(await checkRateLimit(user.id))) {
       return new Response(JSON.stringify({

@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { AI_CONFIG } from '@/lib/ai-prompts';
 import { supabase } from '@/lib/supabase';
-import { sanitizePHI } from '@/utils/phiSanitizer';
+import { redactPII } from '@/lib/redaction';
 
 async function ensureSession(): Promise<boolean> {
   // 1. Check for a cached session
@@ -13,7 +13,7 @@ async function ensureSession(): Promise<boolean> {
     if (expiresAt && expiresAt < Math.floor(Date.now() / 1000) + 30) {
       const { data: refreshed } = await supabase.auth.refreshSession();
       if (refreshed.session) return true;
-      // Refresh failed — session is stale. Fall through to anonymous sign-in.
+      // Refresh failed — session is stale. User must sign in.
     } else {
       return true;
     }
@@ -24,13 +24,10 @@ async function ensureSession(): Promise<boolean> {
   const { data: refreshed } = await supabase.auth.refreshSession();
   if (refreshed.session) return true;
 
-  // 3. Last resort — anonymous sign-in
-  const { data, error } = await supabase.auth.signInAnonymously();
-  if (error || !data.session) return false;
-
-  // Wait briefly for the client to store the new session
-  await new Promise((r) => setTimeout(r, 100));
-  return true;
+  // 3. No valid session and refresh failed — require real authentication.
+  //    Do NOT fall back to anonymous sign-in (security: anonymous sessions
+  //    bypass entitlement checks and should not access Edge Functions).
+  return false;
 }
 
 export const useGemini = (persona: keyof typeof AI_CONFIG) => {
@@ -51,14 +48,14 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
     const timeoutId = setTimeout(() => controller.abort(), 30_000);
 
     try {
-      // Ensure we have a valid session (anonymous sign-in if needed)
+      // Ensure we have a valid session (requires real auth — no anonymous fallback)
       const hasSession = await ensureSession();
       if (!hasSession) {
         setError('Unable to authenticate. Please sign in and try again.');
         return null;
       }
 
-      const sanitizedInput = sanitizePHI(input);
+      const { redactedText: sanitizedInput } = redactPII(input, 'high');
       const body = {
         prompt: `${AI_CONFIG[persona]}\n\nInput: ${sanitizedInput}`,
       };

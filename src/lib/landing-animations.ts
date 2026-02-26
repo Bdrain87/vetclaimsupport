@@ -1,6 +1,10 @@
 import type React from 'react';
 import type { Variants, Transition } from 'framer-motion';
 
+// App Store link — single source of truth for all landing pages
+export const APP_STORE_URL =
+  'https://apps.apple.com/us/app/vet-claim-support/id6744254580';
+
 // ============================================================
 // PREMIUM DESIGN SYSTEM — Based on Linear/Vercel/Fey/Antimetal
 // ============================================================

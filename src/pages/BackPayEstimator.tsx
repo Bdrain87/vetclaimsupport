@@ -11,6 +11,7 @@ import { exportBackPayEstimate } from '@/utils/pdfExport';
 import { PageContainer } from '@/components/PageContainer';
 import {
   BASE_RATES,
+  DEPENDENCY_THRESHOLD,
   calculateMonthlyCompensation,
   monthsBetween,
   formatCurrency,
@@ -188,7 +189,7 @@ export default function BackPayEstimator() {
               Dependent Information
             </Label>
             <p className="text-xs text-muted-foreground -mt-2">
-              Dependents affect compensation at 30% and above.
+              Dependents affect compensation at {DEPENDENCY_THRESHOLD}% and above.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -361,13 +362,13 @@ export default function BackPayEstimator() {
                   <span className="min-w-0">Base rate at {newRating}%</span>
                   <span className="shrink-0">{formatCurrencyExact(BASE_RATES[parseInt(newRating, 10)] ?? 0)}/mo</span>
                 </div>
-                {hasSpouse && parseInt(newRating, 10) >= 30 && (
+                {hasSpouse && parseInt(newRating, 10) >= DEPENDENCY_THRESHOLD && (
                   <div className="flex justify-between gap-2">
                     <span className="min-w-0">Spouse addition at {newRating}%</span>
                     <span className="shrink-0">+{formatCurrencyExact(SPOUSE_ADDITION_BY_RATING[parseInt(newRating, 10)] ?? 0)}/mo</span>
                   </div>
                 )}
-                {parseInt(dependentCount, 10) > 0 && parseInt(newRating, 10) >= 30 && (
+                {parseInt(dependentCount, 10) > 0 && parseInt(newRating, 10) >= DEPENDENCY_THRESHOLD && (
                   <div className="flex justify-between gap-2">
                     <span className="min-w-0">
                       {dependentCount} dependent{parseInt(dependentCount, 10) !== 1 ? 's' : ''} at {newRating}%
@@ -375,13 +376,13 @@ export default function BackPayEstimator() {
                     <span className="shrink-0">+{formatCurrencyExact(parseInt(dependentCount, 10) * (CHILD_ADDITION_BY_RATING[parseInt(newRating, 10)] ?? 0))}/mo</span>
                   </div>
                 )}
-                {hasSpouse && parseInt(currentRating, 10) >= 30 && (
+                {hasSpouse && parseInt(currentRating, 10) >= DEPENDENCY_THRESHOLD && (
                   <div className="flex justify-between gap-2 text-xs">
                     <span className="italic min-w-0">Spouse already included at {currentRating}%</span>
                     <span className="shrink-0">-{formatCurrencyExact(SPOUSE_ADDITION_BY_RATING[parseInt(currentRating, 10)] ?? 0)}/mo</span>
                   </div>
                 )}
-                {parseInt(dependentCount, 10) > 0 && parseInt(currentRating, 10) >= 30 && (
+                {parseInt(dependentCount, 10) > 0 && parseInt(currentRating, 10) >= DEPENDENCY_THRESHOLD && (
                   <div className="flex justify-between gap-2 text-xs">
                     <span className="italic min-w-0">Dependents already included at {currentRating}%</span>
                     <span className="shrink-0">-{formatCurrencyExact(parseInt(dependentCount, 10) * (CHILD_ADDITION_BY_RATING[parseInt(currentRating, 10)] ?? 0))}/mo</span>

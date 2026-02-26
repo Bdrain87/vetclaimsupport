@@ -375,7 +375,15 @@ export default function DoctorSummaryOutline() {
 
     return (
       <Card className="border-muted bg-muted/20">
-        <CardHeader className="pb-2 cursor-pointer" onClick={() => setExpandedRating(isExpanded ? null : criteria.conditionId)}>
+        <CardHeader
+          className="pb-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          onClick={() => setExpandedRating(isExpanded ? null : criteria.conditionId)}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpandedRating(isExpanded ? null : criteria.conditionId); } }}
+          tabIndex={0}
+          role="button"
+          aria-expanded={isExpanded}
+          aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${criteria.conditionName} rating criteria`}
+        >
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-sm">{criteria.conditionName} - Rating Criteria Reference</CardTitle>

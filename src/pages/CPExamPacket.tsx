@@ -145,7 +145,7 @@ export default function CPExamPacket() {
   const appState = useAppStore();
 
   // AI hooks
-  const { generate: aiGenerate, isLoading: aiLoading } = useAIGenerate('EXAMINER_PERSONA');
+  const { generate: aiGenerate, isLoading: aiLoading, error: aiError } = useAIGenerate('EXAMINER_PERSONA');
 
   // State
   const [examQuestions, setExamQuestions] = useState<Record<string, string>>({});
@@ -713,6 +713,10 @@ export default function CPExamPacket() {
                       <Loader2 className="h-4 w-4 animate-spin" />
                       <span className="text-sm">Generating questions...</span>
                     </div>
+                  ) : aiError ? (
+                    <p className="text-xs text-destructive">
+                      {aiError}. Please try again.
+                    </p>
                   ) : (
                     <p className="text-xs text-muted-foreground">
                       Tap "Generate" to get AI-generated exam questions for this condition

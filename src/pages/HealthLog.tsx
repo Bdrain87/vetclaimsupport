@@ -305,8 +305,11 @@ export default function HealthLog() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Symptoms Card */}
               <Card
-                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-gold/30"
+                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-gold/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 onClick={() => setActiveTab('symptoms')}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveTab('symptoms'); } }}
+                tabIndex={0}
+                role="button"
               >
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3 mb-3">
@@ -329,8 +332,11 @@ export default function HealthLog() {
 
               {/* Migraines Card */}
               <Card
-                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-gold/30"
+                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-gold/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 onClick={() => setActiveTab('migraines')}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveTab('migraines'); } }}
+                tabIndex={0}
+                role="button"
               >
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3 mb-3">
@@ -354,8 +360,11 @@ export default function HealthLog() {
 
               {/* Sleep Card */}
               <Card
-                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-gold/30"
+                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-gold/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 onClick={() => setActiveTab('sleep')}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveTab('sleep'); } }}
+                tabIndex={0}
+                role="button"
               >
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3 mb-3">
@@ -378,8 +387,11 @@ export default function HealthLog() {
 
               {/* Medications Card */}
               <Card
-                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-gold/30"
+                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-gold/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 onClick={() => setActiveTab('medications')}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveTab('medications'); } }}
+                tabIndex={0}
+                role="button"
               >
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3 mb-3">

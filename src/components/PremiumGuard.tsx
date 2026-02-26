@@ -2,6 +2,9 @@ import { useState, useEffect, type ReactNode } from 'react';
 import { hasPremiumAccess, ensureFreshEntitlement } from '@/services/entitlements';
 import { UpgradeModal } from '@/components/UpgradeModal';
 
+/** Maximum time to wait for server entitlement check before failing closed. */
+const ENTITLEMENT_TIMEOUT_MS = 8000;
+
 interface PremiumGuardProps {
   featureName: string;
   children: ReactNode;
@@ -18,10 +21,23 @@ export function PremiumGuard({ featureName, children }: PremiumGuardProps) {
       setState('granted');
     }
 
-    // ALWAYS verify with server — never trust local cache alone
-    ensureFreshEntitlement().then((status) => {
+    // ALWAYS verify with server — never trust local cache alone.
+    // Race against a timeout so the guard fails closed (blocked) if the
+    // server is unreachable, preventing free users from accessing premium
+    // content during network outages.
+    const timeout = new Promise<'timeout'>((resolve) =>
+      setTimeout(() => resolve('timeout'), ENTITLEMENT_TIMEOUT_MS),
+    );
+
+    Promise.race([ensureFreshEntitlement(), timeout]).then((result) => {
       if (cancelled) return;
-      const isPremium = status === 'premium' || status === 'lifetime';
+      if (result === 'timeout') {
+        // Fail closed: if we can't verify, block access unless the user
+        // was already confirmed premium in this session's cache.
+        setState(hasPremiumAccess() ? 'granted' : 'blocked');
+        return;
+      }
+      const isPremium = result === 'premium' || result === 'lifetime';
       setState(isPremium ? 'granted' : 'blocked');
     });
 

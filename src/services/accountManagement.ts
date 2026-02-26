@@ -2,8 +2,11 @@ import { supabase } from '@/lib/supabase';
 import useAppStore from '@/store/useAppStore';
 import { useProfileStore } from '@/store/useProfileStore';
 import { useAICacheStore } from '@/store/useAICacheStore';
+import { useFeatureFlagStore } from '@/store/useFeatureFlagStore';
 import { stopSync } from '@/services/syncEngine';
 import { ALL_LOCAL_STORAGE_KEYS } from '@/services/auth';
+import { clearDatabase } from '@/lib/indexedDB';
+import { clearSessionPassword } from '@/lib/encryptedStorage';
 import { exportAllEvidence } from '@/utils/pdfExport';
 import { logAuditEvent } from '@/services/auditLog';
 import type { ClaimsData } from '@/types/claims';
@@ -161,17 +164,31 @@ export async function deleteAccount(): Promise<void> {
   // 3. Stop sync, sign out, and wipe local data
   stopSync();
   await supabase.auth.signOut();
-  clearLocalData();
+  await clearLocalData();
 }
 
-export function clearLocalData(): void {
+export async function clearLocalData(): Promise<void> {
   // Wipe Zustand store state (so in-memory UI resets immediately)
   useAppStore.getState().resetAllData();
   useProfileStore.getState().resetProfile();
   useAICacheStore.getState().clearCache();
+  useFeatureFlagStore.getState().resetFlags();
 
   // Clear ALL known localStorage keys so no user data lingers on disk
   for (const key of ALL_LOCAL_STORAGE_KEYS) {
     localStorage.removeItem(key);
+  }
+
+  // Clear sessionStorage (chunk reload flags, post-login redirects, etc.)
+  sessionStorage.clear();
+
+  // Clear the in-memory encryption key so it doesn't linger after sign-out
+  clearSessionPassword();
+
+  // Delete IndexedDB database (evidence documents, large files)
+  try {
+    await clearDatabase();
+  } catch (error) {
+    console.error('[clearLocalData] IndexedDB clear failed:', error);
   }
 }

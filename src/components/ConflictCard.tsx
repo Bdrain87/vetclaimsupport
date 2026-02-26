@@ -16,10 +16,13 @@ export function ConflictCard({ conflict, onClick, isSelected }: ConflictCardProp
 
   return (
     <Card
-      className={`cursor-pointer transition-all duration-200 hover:border-primary/50 hover:shadow-lg ${
+      className={`cursor-pointer transition-all duration-200 hover:border-primary/50 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
         isSelected ? 'border-primary bg-primary/5 ring-2 ring-primary/20' : ''
       }`}
       onClick={onClick}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } }}
+      tabIndex={0}
+      role="button"
     >
       <CardContent className="p-4">
         <div className="flex items-start justify-between">

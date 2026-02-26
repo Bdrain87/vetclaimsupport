@@ -21,38 +21,38 @@ export const conditionProfiles: ConditionSecondaryProfile[] = [
     nexusTip: 'Highlight the nexus between service-connected auditory distress and psychological impact.',
   },
   {
-    id: 'lumbosacral-strain',
+    id: 'lumbar-strain',
     possibleSecondaries: ['sciatica', 'radiculopathy', 'depression', 'erectile-dysfunction'],
     nexusTip: 'Focus on nerve compression (radiculopathy) secondary to spinal strain.',
   },
   {
     id: 'ptsd',
-    possibleSecondaries: ['sleep-apnea', 'tinnitus', 'gerd', 'hypertension', 'migraines', 'ibs', 'bruxism', 'tmj', 'fibromyalgia', 'erectile-dysfunction'],
+    possibleSecondaries: ['sleep-apnea', 'tinnitus', 'gerd', 'hypertension', 'migraines', 'ibs', 'bruxism', 'tmj-disorder', 'fibromyalgia', 'erectile-dysfunction'],
     nexusTip: 'Emphasize the chronic stress response and its multi-system physiological effects per established medical literature.',
   },
   {
-    id: 'knee-condition',
-    possibleSecondaries: ['contralateral-knee', 'hip-condition', 'lumbar-spine', 'ankle-condition', 'sciatica'],
+    id: 'knee-strain',
+    possibleSecondaries: ['knee-strain', 'hip-strain', 'lumbar-strain', 'ankle-strain', 'sciatica'],
     nexusTip: 'Document altered gait pattern (antalgic gait) as the biomechanical link to compensatory conditions.',
   },
   {
     id: 'sleep-apnea',
-    possibleSecondaries: ['hypertension', 'cognitive-impairment', 'diabetes', 'heart-failure', 'erectile-dysfunction', 'depression'],
+    possibleSecondaries: ['hypertension', 'cognitive-disorder', 'diabetes', 'congestive-heart-failure', 'erectile-dysfunction', 'depression'],
     nexusTip: 'Focus on chronic intermittent hypoxia and its systemic cardiovascular and metabolic consequences.',
   },
   {
     id: 'migraines',
-    possibleSecondaries: ['depression', 'anxiety', 'insomnia', 'cognitive-impairment'],
+    possibleSecondaries: ['depression', 'anxiety', 'insomnia', 'cognitive-disorder'],
     nexusTip: 'Document prostrating frequency and occupational impairment per DC 8100 criteria.',
   },
   {
-    id: 'diabetes-type-ii',
-    possibleSecondaries: ['peripheral-neuropathy', 'retinopathy', 'nephropathy', 'erectile-dysfunction', 'coronary-artery-disease', 'hearing-loss'],
+    id: 'diabetes',
+    possibleSecondaries: ['peripheral-neuropathy', 'diabetic-retinopathy', 'nephropathy-diabetic', 'erectile-dysfunction', 'ao-ischemic-heart-disease', 'hearing-loss'],
     nexusTip: 'Microvascular damage is the primary mechanism — document each affected organ system separately.',
   },
   {
     id: 'hearing-loss',
-    possibleSecondaries: ['tinnitus', 'depression', 'cognitive-decline', 'social-anxiety', 'balance-problems'],
+    possibleSecondaries: ['tinnitus', 'depression', 'cognitive-disorder', 'social-anxiety'],
     nexusTip: 'Establish the audiometric baseline from service and show progressive decline linked to military noise exposure.',
   },
 ];

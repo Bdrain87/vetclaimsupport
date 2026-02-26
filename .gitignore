@@ -48,3 +48,4 @@ marketing/
 ads/
 website-assets/
 planning/
+.env*.local

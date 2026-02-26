@@ -32,8 +32,8 @@ export function RetentionWarningBanner() {
     setOpen(false);
   };
 
-  const handlePurge = () => {
-    purgeAppData();
+  const handlePurge = async () => {
+    await purgeAppData();
     dismissRetentionWarning();
     window.location.reload();
   };

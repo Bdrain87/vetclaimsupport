@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
+import { APP_STORE_URL } from '@/lib/landing-animations';
 
 const NAV_LINKS = [
   { label: 'Features', href: '#features' },
@@ -13,7 +14,7 @@ const NAV_LINKS = [
 function AppStoreBadge() {
   return (
     <a
-      href="https://apps.apple.com/us/app/vet-claim-support/id6744254580"
+      href={APP_STORE_URL}
       target="_blank"
       rel="noopener noreferrer"
       className="inline-flex items-center"

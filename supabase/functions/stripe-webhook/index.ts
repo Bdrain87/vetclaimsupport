@@ -9,10 +9,22 @@ serve(async (req: Request) => {
   }
 
   try {
-    const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY')!;
-    const webhookSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET')!;
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
+    const webhookSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET');
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+
+    if (!stripeSecretKey || !webhookSecret || !supabaseUrl || !supabaseServiceKey) {
+      console.error('Missing required environment variables:', {
+        STRIPE_SECRET_KEY: !!stripeSecretKey,
+        STRIPE_WEBHOOK_SECRET: !!webhookSecret,
+        SUPABASE_URL: !!supabaseUrl,
+        SUPABASE_SERVICE_ROLE_KEY: !!supabaseServiceKey,
+      });
+      return new Response(JSON.stringify({ error: 'Service not configured' }), {
+        status: 503, headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
     const stripe = new Stripe(stripeSecretKey, { apiVersion: '2023-10-16' });
     const adminClient = createClient(supabaseUrl, supabaseServiceKey);
@@ -50,7 +62,7 @@ serve(async (req: Request) => {
         }
 
         // Grant permanent premium access — no subscription, no expiry
-        await adminClient.from('user_entitlements').upsert({
+        const { error: entErr } = await adminClient.from('user_entitlements').upsert({
           user_id: userId,
           entitled: true,
           source: 'stripe',
@@ -59,14 +71,28 @@ serve(async (req: Request) => {
           updated_at: new Date().toISOString(),
         }, { onConflict: 'user_id' });
 
+        if (entErr) {
+          console.error('Failed to upsert entitlement for user:', userId, entErr);
+          return new Response(JSON.stringify({ error: 'Entitlement write failed' }), {
+            status: 500, headers: { 'Content-Type': 'application/json' },
+          });
+        }
+
         // Set profiles.entitlement = 'premium' (permanent)
-        await adminClient
+        const { error: profErr } = await adminClient
           .from('profiles')
           .update({
             entitlement: 'premium',
-            stripe_customer_id: session.customer as string,
+            ...(typeof session.customer === 'string' ? { stripe_customer_id: session.customer } : {}),
           })
           .eq('id', userId);
+
+        if (profErr) {
+          console.error('Failed to update profile for user:', userId, profErr);
+          return new Response(JSON.stringify({ error: 'Profile update failed' }), {
+            status: 500, headers: { 'Content-Type': 'application/json' },
+          });
+        }
 
         console.log('Premium access granted for user:', userId);
         break;
@@ -78,7 +104,7 @@ serve(async (req: Request) => {
         const userId = session.metadata?.supabase_user_id;
         if (!userId) break;
 
-        await adminClient.from('user_entitlements').upsert({
+        const { error: asyncEntErr } = await adminClient.from('user_entitlements').upsert({
           user_id: userId,
           entitled: true,
           source: 'stripe',
@@ -87,10 +113,24 @@ serve(async (req: Request) => {
           updated_at: new Date().toISOString(),
         }, { onConflict: 'user_id' });
 
-        await adminClient
+        if (asyncEntErr) {
+          console.error('Failed to upsert entitlement (async) for user:', userId, asyncEntErr);
+          return new Response(JSON.stringify({ error: 'Entitlement write failed' }), {
+            status: 500, headers: { 'Content-Type': 'application/json' },
+          });
+        }
+
+        const { error: asyncProfErr } = await adminClient
           .from('profiles')
           .update({ entitlement: 'premium' })
           .eq('id', userId);
+
+        if (asyncProfErr) {
+          console.error('Failed to update profile (async) for user:', userId, asyncProfErr);
+          return new Response(JSON.stringify({ error: 'Profile update failed' }), {
+            status: 500, headers: { 'Content-Type': 'application/json' },
+          });
+        }
 
         break;
       }

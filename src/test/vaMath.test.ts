@@ -250,4 +250,56 @@ describe('calculatePlatinumRating – 38 CFR Part 4.25', () => {
       );
     });
   });
+
+  // -----------------------------------------------------------------------
+  // Input validation (sanitizeRating)
+  // -----------------------------------------------------------------------
+  describe('input validation – malformed ratings', () => {
+    it('NaN ratings are treated as 0 and filtered out', () => {
+      expect(calculatePlatinumRating([NaN], [])).toBe(0);
+    });
+
+    it('Infinity ratings are treated as 0 and filtered out', () => {
+      expect(calculatePlatinumRating([Infinity], [])).toBe(0);
+    });
+
+    it('-Infinity ratings are treated as 0 and filtered out', () => {
+      expect(calculatePlatinumRating([-Infinity], [])).toBe(0);
+    });
+
+    it('negative ratings are clamped to 0', () => {
+      expect(calculatePlatinumRating([-50], [])).toBe(0);
+    });
+
+    it('ratings above 100 are clamped to 100', () => {
+      expect(calculatePlatinumRating([150], [])).toBe(100);
+    });
+
+    it('mixed valid and invalid ratings keep only valid ones', () => {
+      // [50, NaN, 30] → sanitized to [50, 30], combined per VA math
+      expect(calculatePlatinumRating([50, NaN, 30], [])).toBe(
+        calculatePlatinumRating([50, 30], [])
+      );
+    });
+
+    it('all-NaN array returns 0', () => {
+      expect(calculatePlatinumRating([NaN, NaN], [])).toBe(0);
+    });
+
+    it('empty ratings array returns 0', () => {
+      expect(calculatePlatinumRating([], [])).toBe(0);
+    });
+
+    it('NaN in bilateral array is filtered out', () => {
+      expect(calculatePlatinumRating([50], [NaN])).toBe(
+        calculatePlatinumRating([50], [])
+      );
+    });
+
+    it('bilateral rating above 100 is clamped', () => {
+      expect(calculatePlatinumRating([50], [200])).toBe(
+        calculatePlatinumRating([50], [100])
+      );
+    });
+  });
 });

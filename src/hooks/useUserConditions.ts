@@ -31,8 +31,13 @@ function calculateCombinedRating(conditions: UserCondition[]): number {
  * All consuming components continue to work unchanged.
  */
 export function useUserConditions() {
-  const store = useAppStore();
-  const conditions = store.userConditions;
+  const conditions = useAppStore((s) => s.userConditions);
+  const addUserConditionAction = useAppStore((s) => s.addUserCondition);
+  const removeUserCondition = useAppStore((s) => s.removeUserCondition);
+  const updateUserConditionAction = useAppStore((s) => s.updateUserCondition);
+  const clearAllUserConditions = useAppStore((s) => s.clearAllUserConditions);
+  const incrementConditionUsageAction = useAppStore((s) => s.incrementConditionUsage);
+  const addClaimConditionAction = useAppStore((s) => s.addClaimCondition);
 
   const addCondition = useCallback(
     (conditionId: string, options?: Partial<UserCondition>): UserCondition | null => {
@@ -48,7 +53,7 @@ export function useUserConditions() {
       if (existingWithSameId.length > 0 && !options?.bodyPart) {
         if (options && (options.claimStatus !== undefined || options.rating !== undefined)) {
           const existing = existingWithSameId[0];
-          store.updateUserCondition(existing.id, options);
+          updateUserConditionAction(existing.id, options);
           return { ...existing, ...options };
         }
         return null;
@@ -72,10 +77,10 @@ export function useUserConditions() {
         ...options,
       };
 
-      store.addUserCondition(newCondition);
+      addUserConditionAction(newCondition);
       return newCondition;
     },
-    [store],
+    [addUserConditionAction, updateUserConditionAction],
   );
 
   const hasCondition = useCallback(
@@ -122,13 +127,14 @@ export function useUserConditions() {
 
   // Sync userConditions → claimConditions so legacy components see the same data
   useEffect(() => {
-    const state = useAppStore.getState();
-    const existingNames = new Set(state.claimConditions.map((c) => c.name.toLowerCase()));
+    const existingNames = new Set(
+      useAppStore.getState().claimConditions.map((c) => c.name.toLowerCase()),
+    );
     for (const uc of conditions) {
       const details = getConditionById(uc.conditionId);
       const name = uc.displayName || details?.name || uc.conditionId;
       if (!existingNames.has(name.toLowerCase())) {
-        state.addClaimCondition({
+        addClaimConditionAction({
           id: uc.id,
           name,
           linkedMedicalVisits: [],
@@ -142,7 +148,7 @@ export function useUserConditions() {
         existingNames.add(name.toLowerCase());
       }
     }
-  }, [conditions]);
+  }, [conditions, addClaimConditionAction]);
 
   const totalRating = useMemo(() => calculateCombinedRating(conditions), [conditions]);
   const approvedConditionsCount = useMemo(
@@ -156,9 +162,9 @@ export function useUserConditions() {
 
   const incrementUsage = useCallback(
     (id: string) => {
-      store.incrementConditionUsage(id);
+      incrementConditionUsageAction(id);
     },
-    [store],
+    [incrementConditionUsageAction],
   );
 
   /** Conditions sorted by usage count (most-used first) for ConditionSelector */
@@ -170,9 +176,9 @@ export function useUserConditions() {
     conditions,
     conditionsByUsage,
     addCondition,
-    removeCondition: store.removeUserCondition,
-    updateCondition: store.updateUserCondition,
-    clearAllConditions: store.clearAllUserConditions,
+    removeCondition: removeUserCondition,
+    updateCondition: updateUserConditionAction,
+    clearAllConditions: clearAllUserConditions,
     incrementUsage,
     hasCondition,
     getCondition,

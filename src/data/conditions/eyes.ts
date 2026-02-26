@@ -32,7 +32,7 @@ export const eyeConditions: VACondition[] = [
     commonSecondaries: [
       'depression',
       'anxiety',
-      'traumatic-brain-injury',
+      'tbi',
       'adjustment-disorder',
     ],
     keywords: [
@@ -70,8 +70,8 @@ export const eyeConditions: VACondition[] = [
     commonSecondaries: [
       'depression',
       'anxiety',
-      'depth-perception-loss',
-      'headaches',
+      'vision-loss',
+      'tension-headaches',
     ],
     keywords: [
       'one eye blind',
@@ -107,7 +107,7 @@ export const eyeConditions: VACondition[] = [
       'Rated under DC 6067–6079 using 38 CFR § 4.79, Table V. Each eye\'s corrected visual acuity is cross-referenced to determine the rating. DC 6079 covers 20/40 impairment (0–10%), DC 6078 covers 20/50 (10%), progressing to DC 6067 for 20/200 in both eyes (70%).',
     commonSecondaries: [
       'depression',
-      'headaches',
+      'tension-headaches',
       'anxiety',
       'dry-eye',
     ],
@@ -149,7 +149,7 @@ export const eyeConditions: VACondition[] = [
     ratingCriteria:
       'Per 38 CFR § 4.76, rating is based on best-corrected distance visual acuity. If correctable to 20/40 or better in both eyes, the rating is 0%. Worse corrected values are rated under DC 6067–6079 using Table V.',
     commonSecondaries: [
-      'headaches',
+      'tension-headaches',
       'dry-eye',
       'eye-strain',
     ],
@@ -192,7 +192,7 @@ export const eyeConditions: VACondition[] = [
       'anxiety',
       'glaucoma',
       'falls',
-      'headaches',
+      'tension-headaches',
     ],
     keywords: [
       'visual field loss',
@@ -228,7 +228,7 @@ export const eyeConditions: VACondition[] = [
       'Rated under DC 6081 at 10% for unilateral or bilateral scotoma. Alternatively, the scotoma may be rated based on the visual acuity or visual field equivalent if that provides a higher evaluation.',
     commonSecondaries: [
       'macular-degeneration',
-      'migraine',
+      'migraines',
       'optic-neuropathy',
       'depression',
     ],
@@ -265,10 +265,10 @@ export const eyeConditions: VACondition[] = [
     ratingCriteria:
       'Rated under DC 6080 as homonymous hemianopia at 20% for bilateral loss of half the visual field, or 30% with loss of the nasal half. May alternatively be rated based on visual field contraction measurements if that produces a higher rating.',
     commonSecondaries: [
-      'traumatic-brain-injury',
+      'tbi',
       'depression',
       'anxiety',
-      'headaches',
+      'tension-headaches',
       'falls',
     ],
     keywords: [
@@ -305,8 +305,8 @@ export const eyeConditions: VACondition[] = [
     ratingCriteria:
       'Rated under DC 6080 as loss of temporal half of visual field. Bilateral: 20%. Unilateral: 10%. May be rated based on remaining visual field contraction if that yields a higher rating.',
     commonSecondaries: [
-      'headaches',
-      'pituitary-disorder',
+      'tension-headaches',
+      'pituitary-tumor',
       'depression',
       'anxiety',
     ],
@@ -386,7 +386,7 @@ export const eyeConditions: VACondition[] = [
     commonSecondaries: [
       'dry-eye',
       'vision-loss',
-      'corneal-scarring',
+      'corneal-transplant',
       'light-sensitivity',
     ],
     keywords: [
@@ -466,7 +466,7 @@ export const eyeConditions: VACondition[] = [
       'allergies',
     ],
     keywords: [
-      'conjunctivitis',
+      'conjunctivitis-chronic',
       'chronic conjunctivitis',
       'pink eye',
       'red eye',
@@ -543,7 +543,7 @@ export const eyeConditions: VACondition[] = [
       'vision-loss',
       'depression',
       'anxiety',
-      'headaches',
+      'tension-headaches',
       'cataracts',
     ],
     keywords: [
@@ -752,9 +752,9 @@ export const eyeConditions: VACondition[] = [
     commonSecondaries: [
       'vision-loss',
       'depression',
-      'headaches',
+      'tension-headaches',
       'multiple-sclerosis',
-      'traumatic-brain-injury',
+      'tbi',
     ],
     keywords: [
       'optic neuritis',
@@ -829,7 +829,7 @@ export const eyeConditions: VACondition[] = [
     commonSecondaries: [
       'vision-loss',
       'dry-eye',
-      'headaches',
+      'tension-headaches',
       'astigmatism',
     ],
     keywords: [
@@ -868,7 +868,7 @@ export const eyeConditions: VACondition[] = [
       'blepharitis',
       'conjunctivitis-chronic',
       'vision-loss',
-      'headaches',
+      'tension-headaches',
       'depression',
     ],
     keywords: [
@@ -1022,10 +1022,10 @@ export const eyeConditions: VACondition[] = [
       'Rated under DC 6090 based on the degree of diplopia (double vision) in the central field using the diplopia chart at 38 CFR § 4.78. If diplopia is not present, rated on visual acuity.',
     commonSecondaries: [
       'diplopia',
-      'headaches',
-      'depth-perception-loss',
+      'tension-headaches',
+      'vision-loss',
       'anxiety',
-      'traumatic-brain-injury',
+      'tbi',
     ],
     keywords: [
       'strabismus',
@@ -1061,11 +1061,11 @@ export const eyeConditions: VACondition[] = [
     ratingCriteria:
       'Rated under DC 6090 using the diplopia field chart at 38 CFR § 4.78. The rating depends on the field of gaze where diplopia is present — central field diplopia receives higher ratings than peripheral.',
     commonSecondaries: [
-      'headaches',
+      'tension-headaches',
       'anxiety',
       'strabismus',
-      'traumatic-brain-injury',
-      'nausea',
+      'tbi',
+      'chronic-nausea',
     ],
     keywords: [
       'diplopia',
@@ -1101,9 +1101,9 @@ export const eyeConditions: VACondition[] = [
       'Rated under DC 6091 or by analogy. Evaluated based on resulting visual impairment, oscillopsia, and impact on daily activities. Associated vestibular symptoms rated separately.',
     commonSecondaries: [
       'vertigo',
-      'headaches',
+      'tension-headaches',
       'vision-loss',
-      'traumatic-brain-injury',
+      'tbi',
       'anxiety',
     ],
     keywords: [
@@ -1293,7 +1293,7 @@ export const eyeConditions: VACondition[] = [
       'Rated under DC 6006 based on incapacitating episodes during active disease or on residual visual impairment after resolution. Chronic or recurrent cases may warrant higher ratings.',
     commonSecondaries: [
       'vision-loss',
-      'headaches',
+      'tension-headaches',
       'anxiety',
       'depression',
     ],
@@ -1370,7 +1370,7 @@ export const eyeConditions: VACondition[] = [
       'vision-loss',
       'depression',
       'anxiety',
-      'disfigurement',
+      'scar-disfigurement',
     ],
     keywords: [
       'eye cancer',
@@ -1407,7 +1407,7 @@ export const eyeConditions: VACondition[] = [
     commonSecondaries: [
       'diplopia',
       'infraorbital-nerve-damage',
-      'disfigurement',
+      'scar-disfigurement',
       'sinusitis',
       'enophthalmos',
     ],
@@ -1446,7 +1446,7 @@ export const eyeConditions: VACondition[] = [
     commonSecondaries: [
       'dry-eye',
       'corneal-ulcer',
-      'facial-nerve-palsy',
+      'facial-nerve-paralysis',
       'keratitis',
     ],
     keywords: [
@@ -1482,7 +1482,7 @@ export const eyeConditions: VACondition[] = [
       'Rated under DC 6019: unilateral 10%, bilateral 20%, bilateral severe with pupil obscured 30%. If visual acuity is impaired, may alternatively be rated on visual acuity loss if that provides a higher evaluation.',
     commonSecondaries: [
       'vision-loss',
-      'headaches',
+      'tension-headaches',
       'strabismus',
       'oculomotor-nerve-palsy',
     ],
@@ -1558,9 +1558,9 @@ export const eyeConditions: VACondition[] = [
       'Rated under DC 6090 based on resulting diplopia using the diplopia chart at 38 CFR § 4.78. The rating depends on the field of gaze affected. Associated ptosis, pupil abnormalities, or visual acuity changes may be rated separately.',
     commonSecondaries: [
       'diplopia',
-      'headaches',
+      'tension-headaches',
       'ptosis',
-      'traumatic-brain-injury',
+      'tbi',
       'strabismus',
     ],
     keywords: [
@@ -1599,7 +1599,7 @@ export const eyeConditions: VACondition[] = [
     commonSecondaries: [
       'depression',
       'anxiety',
-      'headaches',
+      'tension-headaches',
       'falls',
       'social-isolation',
     ],
@@ -1757,7 +1757,7 @@ export const eyeConditions: VACondition[] = [
       'dry-eye',
       'vision-loss',
       'blepharitis',
-      'corneal-scarring',
+      'corneal-transplant',
     ],
     keywords: [
       'ocular surface disease',
@@ -1792,8 +1792,8 @@ export const eyeConditions: VACondition[] = [
       'Rated under DC 6026 based on incapacitating episodes or residual visual impairment. The underlying cause (TBI, intracranial hypertension) is rated separately under neurological codes.',
     commonSecondaries: [
       'vision-loss',
-      'headaches',
-      'traumatic-brain-injury',
+      'tension-headaches',
+      'tbi',
       'intracranial-hypertension',
     ],
     keywords: [

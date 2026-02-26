@@ -7,6 +7,10 @@ import { setSessionPassword } from '@/lib/encryptedStorage';
 
 const MIGRATION_FLAG = 'vcs-encrypted-migration-v2';
 
+// Safety timeout — if hydration takes longer than this, force-complete to
+// prevent a permanent black screen on degraded devices.
+const HYDRATION_TIMEOUT_MS = 10_000;
+
 /**
  * Orchestrates encryption key initialisation and store rehydration.
  *
@@ -17,12 +21,23 @@ const MIGRATION_FLAG = 'vcs-encrypted-migration-v2';
  * 5. Migrates existing plaintext data to encrypted format.
  *
  * Returns `true` once all stores have finished rehydrating and data is ready.
+ * Includes a 10-second safety timeout to prevent permanent black screens.
  */
 export function useHydration(): boolean {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
+
+    // Safety net: if boot() never resolves (e.g. broken IndexedDB, slow
+    // device), force hydration after 10 seconds so the user doesn't see
+    // a permanent loading screen.
+    const safetyTimer = setTimeout(() => {
+      if (!cancelled) {
+        console.warn('[useHydration] Safety timeout reached — forcing hydration');
+        setHydrated(true);
+      }
+    }, HYDRATION_TIMEOUT_MS);
 
     async function boot() {
       try {
@@ -73,6 +88,7 @@ export function useHydration(): boolean {
 
     return () => {
       cancelled = true;
+      clearTimeout(safetyTimer);
     };
   }, []);
 

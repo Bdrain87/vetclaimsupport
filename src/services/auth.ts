@@ -108,7 +108,7 @@ export const ALL_LOCAL_STORAGE_KEYS = [
   'consentTermsVersion',
   'liabilityAccepted',
   // Onboarding progress
-  'vcs-onboarding-progress',
+  'vcs_onboarding_progress',
   // AI audit log
   'vcs-ai-audit-log',
   // Migration flags

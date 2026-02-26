@@ -3,14 +3,6 @@ const RETENTION_DAYS = 365;
 const RETENTION_MS = RETENTION_DAYS * 24 * 60 * 60 * 1000;
 const RETENTION_WARNING_KEY = '_retentionWarningShown';
 
-/** localStorage keys used by the app's Zustand stores */
-export const APP_STORAGE_KEYS = [
-  'vcs-app-data',
-  'vet-user-profile',
-  'vcs-ai-cache',
-  'vcs-feature-flags',
-] as const;
-
 /**
  * Check whether app data has exceeded the retention period (365 days of
  * inactivity). Never auto-purges — flags for user confirmation instead.
@@ -44,14 +36,12 @@ export function dismissRetentionWarning(): void {
 }
 
 /**
- * Purge all app data from localStorage and IndexedDB.
- * Called only after explicit user confirmation.
+ * Purge all app data. Delegates to `clearLocalData()` for comprehensive
+ * cleanup (Zustand stores, localStorage, sessionStorage, IndexedDB,
+ * encryption keys). Called only after explicit user confirmation.
  */
-export function purgeAppData(): void {
-  for (const key of APP_STORAGE_KEYS) {
-    localStorage.removeItem(key);
-  }
-  localStorage.removeItem(LAST_ACTIVITY_KEY);
-  localStorage.removeItem(RETENTION_WARNING_KEY);
+export async function purgeAppData(): Promise<void> {
+  const { clearLocalData } = await import('@/services/accountManagement');
+  await clearLocalData();
 }
 

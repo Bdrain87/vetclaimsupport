@@ -31,7 +31,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/lib/supabase';
-import { sanitizePHI } from '@/utils/phiSanitizer';
+import { redactPII } from '@/lib/redaction';
 import { exportClaimStrategy } from '@/utils/pdfExport';
 import { useClaims } from '@/hooks/useClaims';
 import { PageContainer } from '@/components/PageContainer';
@@ -390,6 +390,7 @@ export default function ClaimStrategyWizard() {
   }, [setData]);
 
   const generateStrategy = async () => {
+    if (isGenerating) return;
     setIsGenerating(true);
     setError(null);
 
@@ -445,20 +446,16 @@ Consider:
         throw new Error('AI strategy generation is disabled');
       }
 
-      // Ensure we have a valid session (refresh or anonymous sign-in)
+      // Ensure we have a valid session (refresh if needed — no anonymous fallback)
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        // Try refreshing first (handles expired access token with valid refresh token)
         const { data: refreshed } = await supabase.auth.refreshSession();
         if (!refreshed.session) {
-          const { error: anonError } = await supabase.auth.signInAnonymously();
-          if (anonError) {
-            throw new Error('Unable to authenticate. Please sign in and try again.');
-          }
+          throw new Error('Unable to authenticate. Please sign in and try again.');
         }
       }
 
-      const sanitizedPrompt = sanitizePHI(prompt);
+      const { redactedText: sanitizedPrompt } = redactPII(prompt, 'high');
       const { data: result, error: apiError } = await supabase.functions.invoke('analyze-disabilities', {
         body: { prompt: sanitizedPrompt },
       });

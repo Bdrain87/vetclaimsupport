@@ -73,10 +73,10 @@ export async function storeFileData(id: string, dataUrl: string): Promise<void> 
   }
 
   const key = getCachedKey();
-  let storedValue = dataUrl;
-  if (key) {
-    storedValue = await encryptWithRawKey(dataUrl, key);
+  if (!key) {
+    throw new Error('Encryption key unavailable. Cannot store unencrypted data.');
   }
+  const storedValue = await encryptWithRawKey(dataUrl, key);
 
   const db = await openDB();
 
@@ -87,7 +87,7 @@ export async function storeFileData(id: string, dataUrl: string): Promise<void> 
     const request = store.put({
       id,
       dataUrl: storedValue,
-      encrypted: !!key,
+      encrypted: true,
       storedAt: new Date().toISOString(),
     });
 
@@ -161,23 +161,20 @@ export async function restoreFiles(
   if (files.length === 0) return;
 
   const key = getCachedKey();
+  if (!key) {
+    throw new Error('Encryption key unavailable. Cannot restore files without encryption.');
+  }
 
   // Pre-encrypt all values before opening the transaction so the transaction
   // does not go inactive while we await crypto operations.
   const prepared: Array<{
     id: string;
     dataUrl: string;
-    encrypted: boolean;
   }> = [];
 
   for (const file of files) {
-    let storedValue = file.dataUrl;
-    let encrypted = false;
-    if (key) {
-      storedValue = await encryptWithRawKey(file.dataUrl, key);
-      encrypted = true;
-    }
-    prepared.push({ id: file.id, dataUrl: storedValue, encrypted });
+    const storedValue = await encryptWithRawKey(file.dataUrl, key);
+    prepared.push({ id: file.id, dataUrl: storedValue });
   }
 
   const db = await openDB();
@@ -190,7 +187,7 @@ export async function restoreFiles(
       store.put({
         id: item.id,
         dataUrl: item.dataUrl,
-        encrypted: item.encrypted,
+        encrypted: true,
         storedAt: new Date().toISOString(),
       });
     }
@@ -246,6 +243,29 @@ export async function getStorageEstimate(): Promise<{ used: number; quota: numbe
     };
   }
   return null;
+}
+
+// Delete the entire IndexedDB database (used during account deletion / data purge)
+export async function clearDatabase(): Promise<void> {
+  // Close any open connection first
+  if (dbPromise) {
+    try {
+      const db = await dbPromise;
+      db.close();
+    } catch { /* ignore */ }
+    dbPromise = null;
+  }
+
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.deleteDatabase(DB_NAME);
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+    request.onblocked = () => {
+      // Database is still in use — resolve anyway to avoid blocking purge
+      console.warn('[indexedDB] deleteDatabase blocked — resolving anyway');
+      resolve();
+    };
+  });
 }
 
 // Check if IndexedDB is available

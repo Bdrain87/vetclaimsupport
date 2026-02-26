@@ -6,6 +6,7 @@ import {
   formatCurrencyExact,
   calculateBackPay,
   BASE_RATES,
+  DEPENDENCY_THRESHOLD,
 } from '@/utils/backPayCalc';
 import { SPOUSE_ADDITION_BY_RATING, CHILD_ADDITION_BY_RATING } from '@/data/compRates2026';
 
@@ -279,5 +280,25 @@ describe('calculateBackPay', () => {
     expect(result!.monthlyAfter).toBe(
       BASE_RATES[50] + SPOUSE_ADDITION_BY_RATING[50] + 2 * CHILD_ADDITION_BY_RATING[50]
     );
+  });
+});
+
+// ---------------------------------------------------------------------------
+// DEPENDENCY_THRESHOLD constant
+// ---------------------------------------------------------------------------
+describe('DEPENDENCY_THRESHOLD', () => {
+  it('is exactly 30 (38 CFR 3.4)', () => {
+    expect(DEPENDENCY_THRESHOLD).toBe(30);
+  });
+
+  it('dependents are excluded below the threshold', () => {
+    const belowThreshold = DEPENDENCY_THRESHOLD - 10; // 20%
+    const comp = calculateMonthlyCompensation(belowThreshold, 1, 2);
+    expect(comp).toBe(BASE_RATES[belowThreshold]);
+  });
+
+  it('dependents are included at the threshold', () => {
+    const comp = calculateMonthlyCompensation(DEPENDENCY_THRESHOLD, 1, 0);
+    expect(comp).toBeGreaterThan(BASE_RATES[DEPENDENCY_THRESHOLD]);
   });
 });

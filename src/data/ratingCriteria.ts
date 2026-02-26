@@ -729,7 +729,7 @@ export const conditionRatingCriteria: ConditionRatingCriteria[] = [
 
   // 14. Hip — Limitation of Flexion (DC 5252)
   {
-    conditionId: 'hip-flexion',
+    conditionId: 'hip-strain',
     conditionName: 'Hip — Limitation of Flexion of Thigh',
     diagnosticCode: '5252',
     cfrReference: '38 CFR § 4.71a, DC 5252',
@@ -1026,7 +1026,7 @@ export const conditionRatingCriteria: ConditionRatingCriteria[] = [
 
   // 21. Rhinitis (allergic)
   {
-    conditionId: 'allergic-rhinitis',
+    conditionId: 'rhinitis',
     conditionName: 'Allergic or Vasomotor Rhinitis',
     diagnosticCode: '6522',
     cfrReference: '38 CFR § 4.97, DC 6522',
@@ -1665,7 +1665,7 @@ export const conditionRatingCriteria: ConditionRatingCriteria[] = [
 
   // 37. Coronary Artery Disease / Ischemic Heart Disease
   {
-    conditionId: 'coronary-artery-disease',
+    conditionId: 'heart-disease',
     conditionName: 'Coronary Artery Disease (Ischemic Heart Disease)',
     diagnosticCode: '7005',
     cfrReference: '38 CFR § 4.104, DC 7005',
@@ -2033,7 +2033,7 @@ export const conditionRatingCriteria: ConditionRatingCriteria[] = [
 
   // 50. Gastric / Duodenal Ulcer
   {
-    conditionId: 'peptic-ulcer',
+    conditionId: 'peptic-ulcer-disease',
     conditionName: 'Duodenal / Gastric Ulcer',
     diagnosticCode: '7305/7306',
     cfrReference: '38 CFR § 4.114, DC 7305/7306',

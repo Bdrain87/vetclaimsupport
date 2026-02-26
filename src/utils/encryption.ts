@@ -191,7 +191,7 @@ export async function decryptObject<T>(
  * Returns a string in the format `<base64-salt>:<base64-hash>` so the salt is
  * stored alongside the hash and can be used during verification.
  *
- * Uses the same iteration count as key derivation (100 000 rounds of
+ * Uses the same iteration count as key derivation (600 000 rounds of
  * PBKDF2-SHA-256) to make brute-force attacks expensive.
  */
 export async function hashPassword(password: string): Promise<string> {

@@ -20,7 +20,7 @@ export const gynecologicalConditions: VACondition[] = [
       'depression',
       'anxiety',
       'infertility',
-      'chronic-pain',
+      'chronic-pain-syndrome',
       'ibs',
     ],
     keywords: [
@@ -52,7 +52,7 @@ export const gynecologicalConditions: VACondition[] = [
       'Noncancerous growths of the uterus that often appear during childbearing years. Cause heavy menstrual bleeding, pelvic pain and pressure, frequent urination, and anemia from blood loss.',
     ratingCriteria:
       'Rated under DC 7613 for disease, injury, or adhesions of the uterus. Consider heavy bleeding requiring treatment, pelvic pain, bladder/bowel pressure symptoms. Rate symptoms not controlled by continuous treatment higher.',
-    commonSecondaries: ['anemia', 'depression', 'urinary-frequency', 'chronic-pain'],
+    commonSecondaries: ['iron-deficiency-anemia', 'depression', 'urinary-frequency', 'chronic-pain-syndrome'],
     keywords: [
       'uterine fibroids',
       'fibroids',
@@ -185,7 +185,7 @@ export const gynecologicalConditions: VACondition[] = [
       'Fluid-filled sacs that develop on or in the ovaries. Most are functional and resolve on their own, but persistent or large cysts cause pelvic pain, bloating, and irregular periods. Ruptured cysts can cause severe acute pain.',
     ratingCriteria:
       'Rated under DC 7615 for disease, injury, or adhesions of the ovary. Consider frequency of recurrence, symptoms not controlled by treatment, and need for surgery. Continuous treatment without control warrants higher rating.',
-    commonSecondaries: ['chronic-pain', 'depression', 'infertility', 'endometriosis'],
+    commonSecondaries: ['chronic-pain-syndrome', 'depression', 'infertility', 'endometriosis'],
     keywords: [
       'ovarian cyst',
       'ovary cyst',
@@ -215,9 +215,9 @@ export const gynecologicalConditions: VACondition[] = [
       'Rated under DC 7621 for complete or incomplete prolapse of the uterus. Consider degree of prolapse, need for pessary or surgical repair, associated urinary and bowel symptoms. Incomplete with symptoms requiring treatment rated 10-30%.',
     commonSecondaries: [
       'urinary-incontinence',
-      'chronic-pain',
+      'chronic-pain-syndrome',
       'depression',
-      'bowel-dysfunction',
+      'ibs',
     ],
     keywords: [
       'uterine prolapse',
@@ -246,7 +246,7 @@ export const gynecologicalConditions: VACondition[] = [
       'Chronic vulvar pain lasting at least 3 months without an identifiable cause. Includes generalized vulvodynia and vestibulodynia (localized). Causes burning, stinging, rawness, and pain during intercourse.',
     ratingCriteria:
       'Rated by analogy under DC 7611 for disease or injury of the vulva. Consider pain severity, impact on daily activities and sexual function, and response to treatment. Symptoms not controlled by treatment rated higher.',
-    commonSecondaries: ['depression', 'anxiety', 'sexual-dysfunction', 'chronic-pain'],
+    commonSecondaries: ['depression', 'anxiety', 'sexual-dysfunction', 'chronic-pain-syndrome'],
     keywords: [
       'vulvodynia',
       'vulvar pain',
@@ -274,7 +274,7 @@ export const gynecologicalConditions: VACondition[] = [
       'Infection of the female reproductive organs (uterus, fallopian tubes, ovaries). Usually caused by sexually transmitted bacteria. Can cause chronic pelvic pain, infertility, and ectopic pregnancy. Chronic PID with adhesions is rated separately.',
     ratingCriteria:
       'Rated under DC 7614 for disease, injury, or adhesions of the fallopian tube. Consider chronic pelvic pain, recurrence frequency, adhesion formation, and infertility. Symptoms requiring continuous treatment rated higher.',
-    commonSecondaries: ['infertility', 'chronic-pain', 'depression', 'endometriosis'],
+    commonSecondaries: ['infertility', 'chronic-pain-syndrome', 'depression', 'endometriosis'],
     keywords: [
       'PID',
       'pelvic inflammatory disease',
@@ -302,7 +302,7 @@ export const gynecologicalConditions: VACondition[] = [
       'Abnormal uterine bleeding patterns including irregular timing, heavy flow, prolonged periods, or breakthrough bleeding. Can result from hormonal imbalances, fibroids, endometriosis, or medications.',
     ratingCriteria:
       'Rated under DC 7613 for disease, injury, or adhesions of the uterus. Consider blood loss severity (anemia), frequency of episodes, impact on daily activities, and response to treatment.',
-    commonSecondaries: ['anemia', 'depression', 'chronic-fatigue', 'anxiety'],
+    commonSecondaries: ['iron-deficiency-anemia', 'depression', 'chronic-fatigue', 'anxiety'],
     keywords: [
       'irregular periods',
       'abnormal uterine bleeding',
@@ -358,7 +358,7 @@ export const gynecologicalConditions: VACondition[] = [
       'Abnormally heavy or prolonged menstrual bleeding. Defined as blood loss exceeding 80 mL per cycle or periods lasting longer than 7 days. Causes iron deficiency anemia, fatigue, and significant daily impact.',
     ratingCriteria:
       'Rated under DC 7613. Consider severity of blood loss, resulting anemia, need for transfusions or surgical intervention (ablation, hysterectomy), and impact on daily activities. Rate anemia separately as secondary condition.',
-    commonSecondaries: ['anemia', 'chronic-fatigue', 'depression', 'uterine-fibroids'],
+    commonSecondaries: ['iron-deficiency-anemia', 'chronic-fatigue', 'depression', 'uterine-fibroids'],
     keywords: [
       'menorrhagia',
       'heavy menstrual bleeding',
@@ -452,9 +452,9 @@ export const gynecologicalConditions: VACondition[] = [
     commonSecondaries: [
       'lymphedema',
       'depression',
-      'chronic-pain',
-      'limited-rom-shoulder',
-      'scarring',
+      'chronic-pain-syndrome',
+      'frozen-shoulder',
+      'scars',
     ],
     keywords: [
       'mastectomy',
@@ -511,7 +511,7 @@ export const gynecologicalConditions: VACondition[] = [
       'Severe, recurrent menstrual cramps and pain during menstruation that interferes with daily activities. Primary dysmenorrhea has no underlying cause. Secondary dysmenorrhea is caused by conditions like endometriosis or fibroids.',
     ratingCriteria:
       'If secondary to endometriosis, rate under DC 7629. Otherwise rate by analogy under DC 7613. Consider pain severity, days of incapacitation per month, need for narcotics, and impact on work/activities.',
-    commonSecondaries: ['endometriosis', 'depression', 'chronic-pain', 'anxiety'],
+    commonSecondaries: ['endometriosis', 'depression', 'chronic-pain-syndrome', 'anxiety'],
     keywords: [
       'dysmenorrhea',
       'painful periods',
@@ -539,7 +539,7 @@ export const gynecologicalConditions: VACondition[] = [
       'Residual effects from ectopic pregnancy where a fertilized egg implants outside the uterus, usually in the fallopian tube. Surgical treatment may result in tubal loss, adhesions, chronic pain, and reduced fertility.',
     ratingCriteria:
       'Rated under DC 7614 for fallopian tube disease/adhesions. Consider loss of fallopian tube, adhesion formation, chronic pelvic pain, and resultant infertility. Rate each residual condition separately.',
-    commonSecondaries: ['infertility-female', 'chronic-pain', 'depression', 'anxiety'],
+    commonSecondaries: ['infertility-female', 'chronic-pain-syndrome', 'depression', 'anxiety'],
     keywords: [
       'ectopic pregnancy',
       'tubal pregnancy',
@@ -633,8 +633,8 @@ export const gynecologicalConditions: VACondition[] = [
       'Rated by analogy under DC 7621 or under voiding/bowel dysfunction criteria depending on predominant symptoms. Consider urinary incontinence, bowel dysfunction, pelvic pain, and impact on sexual function.',
     commonSecondaries: [
       'urinary-incontinence',
-      'constipation',
-      'chronic-pain',
+      'chronic-constipation',
+      'chronic-pain-syndrome',
       'depression',
       'sexual-dysfunction',
     ],

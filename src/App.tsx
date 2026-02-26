@@ -24,6 +24,7 @@ import { isWeb } from './lib/platform';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { PremiumGuard } from './components/PremiumGuard';
 import { ensureFreshEntitlement } from './services/entitlements';
+import { startSync, stopSync } from './services/syncEngine';
 import { supabase } from './lib/supabase';
 
 // Run migration before React renders (synchronous, runs once)
@@ -521,15 +522,24 @@ function App() {
     checkDataRetention();
   }, []);
 
-  // Refresh entitlement on startup and auth state changes
+  // Refresh entitlement and start/stop sync on auth state changes
   useEffect(() => {
     ensureFreshEntitlement();
+    startSync();
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
         ensureFreshEntitlement();
+        startSync();
+      }
+      if (event === 'SIGNED_OUT') {
+        stopSync();
       }
     });
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+      stopSync();
+    };
   }, []);
 
   return (

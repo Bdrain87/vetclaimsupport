@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE } from '@/lib/landing-animations';
+import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE, APP_STORE_URL } from '@/lib/landing-animations';
 
 // Rotating words removed — headline is now static with gold accent on "Your Benefits."
 
@@ -15,7 +15,7 @@ const TRUST_ITEMS = [
 function AppStoreBadge() {
   return (
     <a
-      href="https://apps.apple.com/us/app/vet-claim-support/id6744254580"
+      href={APP_STORE_URL}
       target="_blank"
       rel="noopener noreferrer"
       className="inline-flex items-center opacity-70 hover:opacity-100 transition-opacity"

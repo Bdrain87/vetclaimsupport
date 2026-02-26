@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import useAppStore from '@/store/useAppStore';
 import { useProfileStore } from '@/store/useProfileStore';
-import { sanitizePHI } from '@/utils/phiSanitizer';
+import { redactPII } from '@/lib/redaction';
 import { toast } from '@/hooks/use-toast';
 
 function isNonNullObject(v: unknown): v is Record<string, unknown> {
@@ -47,7 +47,7 @@ function sanitizeRecord<T extends Record<string, unknown>>(record: T): T {
   for (const key of Object.keys(sanitized)) {
     const val = sanitized[key];
     if (typeof val === 'string') {
-      (sanitized as Record<string, unknown>)[key] = sanitizePHI(val);
+      (sanitized as Record<string, unknown>)[key] = redactPII(val, 'high');
     }
   }
   return sanitized;
@@ -392,7 +392,7 @@ export async function pushToCloud(): Promise<void> {
       id: c.id,
       user_id: userId,
       name: c.name,
-      service_connection_notes: c.notes ? sanitizePHI(c.notes) : null,
+      service_connection_notes: c.notes ? redactPII(c.notes, 'high') : null,
       updated_at: new Date().toISOString(),
     }));
     const { error } = await supabase

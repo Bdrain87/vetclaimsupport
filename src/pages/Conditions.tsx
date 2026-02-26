@@ -92,8 +92,11 @@ function ConditionCard({ userCondition, conditionDetails, onView, onRemove, onNa
 
   return (
     <Card
-      className="cursor-pointer hover:border-primary/50 transition-all group"
+      className="cursor-pointer hover:border-primary/50 transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
       onClick={onView}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onView(); } }}
+      tabIndex={0}
+      role="button"
     >
       <CardContent className="p-4">
         <div className="flex items-start justify-between gap-3">

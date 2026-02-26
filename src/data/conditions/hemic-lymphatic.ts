@@ -22,7 +22,7 @@ export const hemicLymphaticConditions: VACondition[] = [
     commonSecondaries: ['chronic-fatigue', 'depression', 'gerd', 'menorrhagia'],
     keywords: [
       'iron deficiency',
-      'anemia',
+      'iron-deficiency-anemia',
       'low iron',
       'low hemoglobin',
       'ferritin low',
@@ -52,7 +52,7 @@ export const hemicLymphaticConditions: VACondition[] = [
       'chronic-fatigue',
       'depression',
       'frequent-infections',
-      'bleeding-disorder',
+      'hemophilia',
     ],
     keywords: [
       'aplastic anemia',
@@ -82,11 +82,11 @@ export const hemicLymphaticConditions: VACondition[] = [
     ratingCriteria:
       'Rated under DC 7714 for sickle cell anemia. 10%: asymptomatic, established case in remission with medication. 30%: without crises, but with symptomatic anemia. 60%: with painful crises several times per year or with symptomatic anemia requiring at least 3 transfusions/year. 100%: with repeated painful crises, repeated infections, or with anemia that is persistent and not responding to treatment.',
     commonSecondaries: [
-      'chronic-pain',
+      'chronic-pain-syndrome',
       'depression',
       'stroke',
       'kidney-disease',
-      'avascular-necrosis',
+      'avascular-necrosis-general',
     ],
     keywords: [
       'sickle cell',
@@ -120,7 +120,7 @@ export const hemicLymphaticConditions: VACondition[] = [
       'peripheral-neuropathy',
       'chronic-fatigue',
       'depression',
-      'cognitive-dysfunction',
+      'cognitive-disorder',
     ],
     keywords: [
       'pernicious anemia',
@@ -221,7 +221,7 @@ export const hemicLymphaticConditions: VACondition[] = [
       'Abnormally low platelet count causing increased bleeding risk. Can be immune-mediated (ITP), medication-induced, or from bone marrow disorders. Causes easy bruising, petechiae, and prolonged bleeding.',
     ratingCriteria:
       'Rated under DC 7705 for thrombocytopenia, immune. 0%: stable platelet count without treatment. 30%: stable platelet count requiring continuous medication. 70%: with history of one or more bleeding episodes requiring transfusion. 100%: with platelet count persistently below 30,000 or intracranial hemorrhage.',
-    commonSecondaries: ['chronic-fatigue', 'bleeding-episodes', 'depression', 'anxiety'],
+    commonSecondaries: ['chronic-fatigue', 'hemophilia', 'depression', 'anxiety'],
     keywords: [
       'thrombocytopenia',
       'low platelets',
@@ -249,7 +249,7 @@ export const hemicLymphaticConditions: VACondition[] = [
       'Slow-growing blood cancer where the bone marrow makes too many red blood cells, causing the blood to thicken. Increases risk of blood clots, stroke, and heart attack. Requires phlebotomy or medication to manage.',
     ratingCriteria:
       'Rated under DC 7704 for polycythemia vera. 10%: requiring phlebotomy alone. 40%: requiring phlebotomy and medication (hydroxyurea). 100%: during active myeloproliferative phase or with transformation to acute leukemia.',
-    commonSecondaries: ['hypertension', 'dvt', 'stroke', 'gout', 'headaches'],
+    commonSecondaries: ['hypertension', 'dvt-chronic-venous-insufficiency', 'stroke', 'gout', 'tension-headaches'],
     keywords: [
       'polycythemia vera',
       'PV',
@@ -277,7 +277,7 @@ export const hemicLymphaticConditions: VACondition[] = [
       'Most common inherited bleeding disorder caused by deficient or defective von Willebrand factor. Causes prolonged bleeding from cuts, heavy menstrual periods, easy bruising, and excessive bleeding after surgery or dental procedures.',
     ratingCriteria:
       'Rated by analogy under DC 7705. Consider bleeding frequency and severity, need for factor replacement, impact on daily activities, and number of bleeding episodes requiring medical intervention.',
-    commonSecondaries: ['anemia', 'depression', 'anxiety', 'menorrhagia'],
+    commonSecondaries: ['iron-deficiency-anemia', 'depression', 'anxiety', 'menorrhagia'],
     keywords: [
       'von Willebrand disease',
       'VWD',
@@ -307,7 +307,7 @@ export const hemicLymphaticConditions: VACondition[] = [
       'Rated under DC 7703. Consider bleeding frequency, joint damage from hemarthrosis, need for factor replacement therapy, and target joint involvement. Severe hemophilia with frequent bleeds rated higher.',
     commonSecondaries: [
       'degenerative-arthritis',
-      'chronic-pain',
+      'chronic-pain-syndrome',
       'depression',
       'hepatitis-c',
       'hiv',
@@ -343,7 +343,7 @@ export const hemicLymphaticConditions: VACondition[] = [
       'chronic-fatigue',
       'depression',
       'frequent-infections',
-      'anemia',
+      'iron-deficiency-anemia',
       'peripheral-neuropathy',
     ],
     keywords: [
@@ -413,9 +413,9 @@ export const hemicLymphaticConditions: VACondition[] = [
     commonSecondaries: [
       'kidney-disease',
       'osteoporosis',
-      'chronic-pain',
+      'chronic-pain-syndrome',
       'peripheral-neuropathy',
-      'anemia',
+      'iron-deficiency-anemia',
     ],
     keywords: [
       'multiple myeloma',
@@ -449,11 +449,11 @@ export const hemicLymphaticConditions: VACondition[] = [
     ratingCriteria:
       'Rated by analogy under DC 7714 or DC 7121 (post-phlebitic syndrome). Consider degree of swelling, frequency of infections (cellulitis), functional impairment of the affected limb, and need for compression garments.',
     commonSecondaries: [
-      'cellulitis',
+      'cellulitis-chronic',
       'depression',
-      'chronic-pain',
+      'chronic-pain-syndrome',
       'limited-mobility',
-      'skin-infections',
+      'fungal-skin-infection',
     ],
     keywords: [
       'lymphedema',
@@ -482,7 +482,7 @@ export const hemicLymphaticConditions: VACondition[] = [
       'Abnormal enlargement of the spleen. Can be caused by infections, liver disease, blood cancers, or blood disorders. May cause early satiety, left upper abdominal pain, and risk of splenic rupture.',
     ratingCriteria:
       'Rated under DC 7707 for splenomegaly. Consider underlying cause, splenic function, risk of rupture, and associated symptoms. If causing hypersplenism (low blood counts), rate on blood count criteria.',
-    commonSecondaries: ['anemia', 'thrombocytopenia', 'chronic-fatigue', 'abdominal-pain'],
+    commonSecondaries: ['iron-deficiency-anemia', 'thrombocytopenia', 'chronic-fatigue', 'abdominal-pain'],
     keywords: [
       'splenomegaly',
       'enlarged spleen',
@@ -512,7 +512,7 @@ export const hemicLymphaticConditions: VACondition[] = [
       'Rated under DC 7706: 20% minimum rating for splenectomy. Consider infection frequency and severity. Complications from repeated infections may warrant higher rating or separate ratings.',
     commonSecondaries: [
       'frequent-infections',
-      'thrombocytosis',
+      'thrombocytopenia',
       'anxiety',
       'chronic-fatigue',
     ],
@@ -584,7 +584,7 @@ export const hemicLymphaticConditions: VACondition[] = [
       'Rated under DC 7121 for post-phlebitic syndrome. 10%: intermittent edema of extremity or aching/fatigue after prolonged standing/walking, relieved by elevation/compression. 20%: persistent edema, incompletely relieved by elevation. 40%: persistent edema and stasis pigmentation or eczema. 60%: persistent edema or subcutaneous induration, stasis pigmentation or eczema, and persistent ulceration. 100%: massive board-like edema with constant pain at rest.',
     commonSecondaries: [
       'pulmonary-embolism',
-      'chronic-pain',
+      'chronic-pain-syndrome',
       'lymphedema',
       'skin-ulcers',
       'depression',
@@ -652,9 +652,9 @@ export const hemicLymphaticConditions: VACondition[] = [
       'Rated under DC 7716 for aplastic anemia or DC 7703 for leukemia if transformed. Consider transfusion requirements, infection frequency, and progression risk. 100% if transformed to AML.',
     commonSecondaries: [
       'chronic-fatigue',
-      'anemia',
+      'iron-deficiency-anemia',
       'frequent-infections',
-      'bleeding-disorder',
+      'hemophilia',
       'depression',
     ],
     keywords: [

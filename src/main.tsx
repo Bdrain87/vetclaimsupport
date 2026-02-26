@@ -98,13 +98,13 @@ if (!isNative && 'serviceWorker' in navigator) {
     });
   });
 
-  // Check for SW updates immediately on load, every 30s, and on tab focus
+  // Check for SW updates immediately on load, every 5 minutes, and on tab focus
   navigator.serviceWorker.ready.then((registration) => {
     // Immediate check on boot
     registration.update();
 
-    // Poll every 30s (was 60s — faster catches deploys sooner)
-    setInterval(() => registration.update(), 30_000);
+    // Poll every 5 minutes — balances deploy detection with battery/bandwidth
+    setInterval(() => registration.update(), 5 * 60_000);
 
     // Check when user returns to tab
     document.addEventListener('visibilitychange', () => {

@@ -299,7 +299,7 @@ export const auditoryConditions: VACondition[] = [
       'tinnitus',
       'depression',
       'social-isolation',
-      'cognitive-decline',
+      'cognitive-disorder',
     ],
     keywords: [
       'presbycusis',
@@ -342,7 +342,7 @@ export const auditoryConditions: VACondition[] = [
       'depression',
       'anxiety',
       'insomnia',
-      'migraine',
+      'migraines',
       'menieres-disease',
     ],
     keywords: [
@@ -503,7 +503,7 @@ export const auditoryConditions: VACondition[] = [
       'hearing-loss',
       'tinnitus',
       'vertigo',
-      'facial-nerve-damage',
+      'facial-nerve-paralysis',
       'chronic-ear-infection',
     ],
     keywords: [
@@ -616,7 +616,7 @@ export const auditoryConditions: VACondition[] = [
       'tinnitus',
       'depression',
       'anxiety',
-      'nausea',
+      'chronic-nausea',
       'falls',
     ],
     keywords: [
@@ -660,8 +660,8 @@ export const auditoryConditions: VACondition[] = [
       'depression',
       'hearing-loss',
       'tinnitus',
-      'nausea',
-      'traumatic-brain-injury',
+      'chronic-nausea',
+      'tbi',
     ],
     keywords: [
       'BPPV',
@@ -701,7 +701,7 @@ export const auditoryConditions: VACondition[] = [
       'tinnitus',
       'anxiety',
       'depression',
-      'nausea',
+      'chronic-nausea',
     ],
     keywords: [
       'labyrinthitis',
@@ -738,7 +738,7 @@ export const auditoryConditions: VACondition[] = [
       'anxiety',
       'depression',
       'insomnia',
-      'nausea',
+      'chronic-nausea',
       'falls',
     ],
     keywords: [
@@ -776,8 +776,8 @@ export const auditoryConditions: VACondition[] = [
       'hearing-loss',
       'tinnitus',
       'vertigo',
-      'facial-nerve-damage',
-      'headaches',
+      'facial-nerve-paralysis',
+      'tension-headaches',
     ],
     keywords: [
       'acoustic neuroma',
@@ -892,8 +892,8 @@ export const auditoryConditions: VACondition[] = [
       'hearing-loss',
       'anxiety',
       'depression',
-      'migraine',
-      'traumatic-brain-injury',
+      'migraines',
+      'tbi',
     ],
     keywords: [
       'hyperacusis',
@@ -929,7 +929,7 @@ export const auditoryConditions: VACondition[] = [
     ratingCriteria:
       'No specific diagnostic code; rated by analogy under DC 6100 or the underlying neurological condition. Audiometric testing may not capture the deficit, so specialized testing (SCAN, dichotic listening) is important for documentation.',
     commonSecondaries: [
-      'traumatic-brain-injury',
+      'tbi',
       'hearing-loss',
       'tinnitus',
       'anxiety',

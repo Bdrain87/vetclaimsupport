@@ -15,6 +15,9 @@ export const BASE_RATES: Record<number, number> = {
   ...COMP_RATES_2026,
 };
 
+/** VA dependent additions only apply at 30% combined rating or higher. */
+export const DEPENDENCY_THRESHOLD = 30;
+
 // ---------------------------------------------------------------------------
 // Pure helpers
 // ---------------------------------------------------------------------------
@@ -25,7 +28,7 @@ export function calculateMonthlyCompensation(
   dependentCount: number
 ): number {
   const base = BASE_RATES[rating] ?? 0;
-  if (rating < 30) return base;
+  if (rating < DEPENDENCY_THRESHOLD) return base;
   const spouseAdd = hasSpouse ? (SPOUSE_ADDITION_BY_RATING[rating] ?? 0) : 0;
   const depAdd = dependentCount * (CHILD_ADDITION_BY_RATING[rating] ?? 0);
   return base + spouseAdd + depAdd;

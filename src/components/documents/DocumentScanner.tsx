@@ -22,6 +22,7 @@ import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { Card } from '@/components/ui/card';
 import type { UploadedDocument, DocumentTypeId } from '@/types/claims';
+import { formatFileSize } from '@/types/documents';
 
 interface DocumentScannerProps {
   documents: UploadedDocument[];
@@ -202,12 +203,6 @@ export function DocumentScanner({
         variant: 'destructive',
       });
     }
-  };
-
-  const formatFileSize = (bytes: number) => {
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   };
 
   const isImage = (type: string) => type.startsWith('image/');

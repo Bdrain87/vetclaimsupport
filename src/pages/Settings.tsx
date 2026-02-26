@@ -30,6 +30,8 @@ import { useProfileStore, type Branch, type ServicePeriod } from '@/store/usePro
 import { PageContainer } from '@/components/PageContainer';
 import { supabase } from '@/lib/supabase';
 import { signOut } from '@/services/auth';
+import { clearLocalData } from '@/services/accountManagement';
+import { stopSync } from '@/services/syncEngine';
 import { isNativeApp } from '@/lib/platform';
 import { NOTIFICATION_COPY, DATA_PRIVACY_COPY, AI_COPY, CLAIM_DATES_COPY, LEGAL_VERSIONS, formatLegalDate } from '@/data/legalCopy';
 import { getAIAuditLog, clearAIAuditLog, type AIAuditEntry } from '@/services/aiAuditLog';
@@ -75,7 +77,9 @@ export default function Settings() {
   }, []);
 
   const handleSignOut = async () => {
+    stopSync();
     await signOut();
+    await clearLocalData();
     setSession(null);
     toast({ title: 'Signed Out', description: 'You have been signed out.' });
   };

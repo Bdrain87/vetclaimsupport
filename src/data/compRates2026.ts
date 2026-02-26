@@ -21,14 +21,14 @@ export const COMP_RATES_2026: Record<number, number> = {
  * Source: https://www.va.gov/disability/compensation-rates/veteran-rates/
  */
 export const SPOUSE_ADDITION_BY_RATING: Record<number, number> = {
-  30: 65.00,
-  40: 87.00,
-  50: 109.00,
-  60: 131.00,
-  70: 153.00,
-  80: 175.00,
-  90: 197.00,
-  100: 219.59,
+  30: 61.00,
+  40: 81.00,
+  50: 101.00,
+  60: 121.00,
+  70: 141.00,
+  80: 161.00,
+  90: 181.00,
+  100: 201.41,
 };
 
 /**

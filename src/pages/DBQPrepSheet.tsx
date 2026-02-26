@@ -509,8 +509,11 @@ export default function DBQPrepSheet() {
       {/* Symptoms Section */}
       <Card>
         <CardHeader
-          className="cursor-pointer"
+          className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          tabIndex={0}
+          role="button"
           onClick={() => toggleSection('symptoms')}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSection('symptoms'); } }}
         >
           <CardTitle className="flex items-center justify-between">
             <span className="flex items-center gap-2">
@@ -594,8 +597,11 @@ export default function DBQPrepSheet() {
       {/* Flare-ups Section */}
       <Card>
         <CardHeader
-          className="cursor-pointer"
+          className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          tabIndex={0}
+          role="button"
           onClick={() => toggleSection('flareups')}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSection('flareups'); } }}
         >
           <CardTitle className="flex items-center justify-between">
             <span className="flex items-center gap-2">
@@ -666,8 +672,11 @@ export default function DBQPrepSheet() {
       {/* Functional Impact Section */}
       <Card>
         <CardHeader
-          className="cursor-pointer"
+          className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          tabIndex={0}
+          role="button"
           onClick={() => toggleSection('functional')}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSection('functional'); } }}
         >
           <CardTitle className="flex items-center justify-between">
             <span className="flex items-center gap-2">
@@ -756,8 +765,11 @@ export default function DBQPrepSheet() {
       {/* Medications Section */}
       <Card>
         <CardHeader
-          className="cursor-pointer"
+          className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          tabIndex={0}
+          role="button"
           onClick={() => toggleSection('medications')}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSection('medications'); } }}
         >
           <CardTitle className="flex items-center justify-between">
             <span className="flex items-center gap-2">

@@ -140,6 +140,7 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email address"
+                aria-label="Email address"
                 autoComplete="email"
                 className={inputClass}
               />
@@ -152,12 +153,14 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
+                aria-label="Password"
                 autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
                 className={`${inputClass} pr-11`}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
                 className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
                 tabIndex={-1}
               >
@@ -173,6 +176,7 @@ export default function Login() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirm password"
+                  aria-label="Confirm password"
                   autoComplete="new-password"
                   className={inputClass}
                 />

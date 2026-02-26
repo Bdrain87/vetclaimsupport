@@ -61,9 +61,9 @@ import {
   ClaimDocumentType,
   claimDocumentTypeLabels,
   claimDocumentTypeShort,
-  formatFileSize,
   getDocTypeColor,
 } from '@/types/claimDocuments';
+import { formatFileSize } from '@/types/documents';
 import { exportDocuments } from '@/utils/pdfExport';
 import { DocumentScanner } from '@/components/documents/DocumentScanner';
 import { format } from 'date-fns';
@@ -705,8 +705,12 @@ export default function DocumentsHub() {
               {filteredDocuments.map((doc) => (
                 <Card
                   key={doc.id}
-                  className="group hover:border-primary/50 transition-colors cursor-pointer overflow-hidden"
+                  className="group hover:border-primary/50 transition-colors cursor-pointer overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                   onClick={() => setSelectedDoc(doc)}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedDoc(doc); } }}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`View document ${doc.name}`}
                 >
                   <CardContent className="p-3">
                     <div className="relative aspect-[4/3] rounded-lg overflow-hidden bg-muted mb-2">

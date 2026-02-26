@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import type { UploadedDocument } from '@/types/claims';
+import { formatFileSize } from '@/types/documents';
 
 interface DocumentUploaderProps {
   documents: UploadedDocument[];
@@ -81,12 +82,6 @@ export function DocumentUploader({ documents, category, onAdd, onDelete }: Docum
     setSelectedFile(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
     if (cameraInputRef.current) cameraInputRef.current.value = '';
-  };
-
-  const formatFileSize = (bytes: number) => {
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   };
 
   const isImage = (type: string) => type.startsWith('image/');

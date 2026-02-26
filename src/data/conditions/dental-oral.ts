@@ -16,7 +16,7 @@ export const dentalConditions: VACondition[] = [
       'Disorder of the temporomandibular joint causing jaw pain, clicking, locking, and limited mouth opening. Common in veterans from clenching/grinding (bruxism related to PTSD), facial trauma, or dental procedures during service.',
     ratingCriteria:
       'Rated under DC 9905 based on limitation of motion of the temporomandibular articulation. 10%: inter-incisal range of 31 to 40mm. 20%: inter-incisal range of 21 to 30mm. 30%: inter-incisal range of 11 to 20mm. 40%: inter-incisal range of 0 to 10mm. Also consider lateral excursion (0 to 4mm = 10%).',
-    commonSecondaries: ['headaches', 'tinnitus', 'depression', 'chronic-pain', 'bruxism'],
+    commonSecondaries: ['tension-headaches', 'tinnitus', 'depression', 'chronic-pain-syndrome', 'bruxism'],
     keywords: [
       'TMJ',
       'TMD',
@@ -46,7 +46,7 @@ export const dentalConditions: VACondition[] = [
       'Involuntary grinding, clenching, or gnashing of teeth, often during sleep. Extremely common secondary to PTSD, anxiety, and stress. Causes tooth damage, jaw pain, headaches, and TMJ dysfunction.',
     ratingCriteria:
       'No specific DC — rated by analogy under DC 9905 (TMJ) if causing jaw limitation, or based on dental damage. Consider TMJ dysfunction, tooth loss, and headaches as separately ratable conditions resulting from bruxism.',
-    commonSecondaries: ['tmj-disorder', 'headaches', 'tooth-loss', 'chronic-pain'],
+    commonSecondaries: ['tmj-disorder', 'tension-headaches', 'tooth-loss', 'chronic-pain-syndrome'],
     keywords: [
       'bruxism',
       'teeth grinding',
@@ -132,7 +132,7 @@ export const dentalConditions: VACondition[] = [
       'Loss of part or all of the upper jaw (maxilla) or lower jaw (mandible). Can result from combat trauma, blast injury, surgical resection for cancer, or severe infection. Causes significant functional impairment in eating, speaking, and facial appearance.',
     ratingCriteria:
       'DC 9900: chronic osteomyelitis or osteoradionecrosis of the maxilla or mandible (10-30%). DC 9901: complete loss of mandible (100%). DC 9902: loss of approximately one-half of mandible (50-80%). Ratings increase with loss of continuity and inability to replace with prosthesis.',
-    commonSecondaries: ['depression', 'speech-impairment', 'nutritional-deficiency', 'disfigurement'],
+    commonSecondaries: ['depression', 'dysarthria', 'nutritional-deficiency', 'scar-disfigurement'],
     keywords: [
       'maxilla loss',
       'mandible loss',
@@ -160,7 +160,7 @@ export const dentalConditions: VACondition[] = [
       'Bone infection of the jaw (maxilla or mandible). Can result from dental infections, trauma, surgical complications, or bisphosphonate medication use (MRONJ). Chronic osteomyelitis requires prolonged antibiotic therapy and may need surgical debridement.',
     ratingCriteria:
       'Rated under DC 9900. 10%: in remission. 20%: active, or recurring, with constitutional symptoms. 30%: with definite involucrum or sequestrum, with or without discharging sinus. Consider separately rating any associated tooth loss.',
-    commonSecondaries: ['tooth-loss', 'chronic-pain', 'depression', 'disfigurement'],
+    commonSecondaries: ['tooth-loss', 'chronic-pain-syndrome', 'depression', 'scar-disfigurement'],
     keywords: [
       'osteomyelitis jaw',
       'jaw bone infection',
@@ -173,7 +173,7 @@ export const dentalConditions: VACondition[] = [
       'involucrum',
       'jaw bone death',
     ],
-    misspellings: ['osteomyelitis', 'osteomylitis jaw', 'osteomielitis', 'osteomyelites jaw'],
+    misspellings: ['osteomyelitis-chronic', 'osteomylitis jaw', 'osteomielitis', 'osteomyelites jaw'],
     bodySystem: 'Jaw',
     cfrReference: '38 CFR § 4.150, DC 9900',
   },
@@ -188,7 +188,7 @@ export const dentalConditions: VACondition[] = [
       'Long-standing bone infection of the jaw requiring ongoing management. Characterized by recurring episodes of pain, swelling, and drainage. May cause pathological fractures and require multiple surgeries.',
     ratingCriteria:
       'Rated under DC 9900: 10%: in remission. 20%: active or recurring with constitutional symptoms. 30%: with definite involucrum or sequestrum, with or without discharging sinus. Recurring nature makes this a chronic disability.',
-    commonSecondaries: ['chronic-pain', 'depression', 'nutritional-deficiency', 'tooth-loss'],
+    commonSecondaries: ['chronic-pain-syndrome', 'depression', 'nutritional-deficiency', 'tooth-loss'],
     keywords: [
       'chronic osteomyelitis',
       'chronic jaw infection',
@@ -216,7 +216,7 @@ export const dentalConditions: VACondition[] = [
       'Residual effects from fracture of the mandible or maxilla. Common in veterans from combat injuries, training accidents, or assaults. Residuals may include malunion, nonunion, limited jaw opening, numbness, and chronic pain.',
     ratingCriteria:
       'Rated under DC 9904 for malunion of the mandible: 0% slight displacement. 10%: moderate displacement. 20%: severe displacement. DC 9903 for nonunion of the mandible: 10% without loss of motion. 30%: with loss of motion. Consider separately rating limitation of motion under DC 9905.',
-    commonSecondaries: ['tmj-disorder', 'trigeminal-neuralgia', 'chronic-pain', 'numbness-facial'],
+    commonSecondaries: ['tmj-disorder', 'trigeminal-neuralgia', 'chronic-pain-syndrome', 'numbness-facial'],
     keywords: [
       'jaw fracture',
       'mandible fracture',
@@ -244,7 +244,7 @@ export const dentalConditions: VACondition[] = [
       'Loss or defect of the hard palate from trauma, surgery, or disease. Causes difficulty eating, nasal regurgitation of food and liquids, and speech impairment. May require prosthetic obturator.',
     ratingCriteria:
       'Rated under DC 9912 for loss of half or more of the hard palate. Consider size of defect, whether prosthesis can restore function, speech impairment, and nasal regurgitation. Loss of soft palate rated separately.',
-    commonSecondaries: ['speech-impairment', 'nutritional-deficiency', 'depression', 'sinusitis'],
+    commonSecondaries: ['dysarthria', 'nutritional-deficiency', 'depression', 'sinusitis'],
     keywords: [
       'palate defect',
       'hard palate loss',
@@ -274,9 +274,9 @@ export const dentalConditions: VACondition[] = [
       '100%: during active malignancy or treatment. Following treatment, rate on residuals including disfigurement, loss of tissue, speech impairment, difficulty eating, and dental/jaw deficits. Multiple residuals may be separately rated.',
     commonSecondaries: [
       'depression',
-      'speech-impairment',
+      'dysarthria',
       'nutritional-deficiency',
-      'disfigurement',
+      'scar-disfigurement',
       'dysphagia',
     ],
     keywords: [
@@ -309,7 +309,7 @@ export const dentalConditions: VACondition[] = [
       'Rated under DC 9911: 100% for loss of whole or exceptionally repulsive deformity of tongue. 60%: loss of half or more. 30%: loss of one-third or more. Consider speech impairment, swallowing difficulty, and associated disfigurement.',
     commonSecondaries: [
       'depression',
-      'speech-impairment',
+      'dysarthria',
       'dysphagia',
       'nutritional-deficiency',
       'aspiration-pneumonia',
@@ -369,7 +369,7 @@ export const dentalConditions: VACondition[] = [
       'Severe, sudden, shock-like facial pain along the trigeminal nerve distribution. Can be triggered by eating, talking, or touching the face. Often misdiagnosed as dental pain. May result from dental procedures, facial trauma, or compression of the nerve.',
     ratingCriteria:
       'Rated under DC 8205 for fifth (trigeminal) cranial nerve paralysis. 10%: incomplete, moderate paralysis. 30%: incomplete, severe paralysis. 50%: complete paralysis. Consider separately rating sensory loss and motor dysfunction.',
-    commonSecondaries: ['depression', 'anxiety', 'chronic-pain', 'weight-loss', 'insomnia'],
+    commonSecondaries: ['depression', 'anxiety', 'chronic-pain-syndrome', 'weight-loss-condition', 'insomnia'],
     keywords: [
       'trigeminal neuralgia',
       'tic douloureux',
@@ -397,7 +397,7 @@ export const dentalConditions: VACondition[] = [
       'Chronic burning sensation in the mouth without an identifiable cause. Affects the tongue, gums, lips, palate, or entire mouth. Often associated with dry mouth, taste changes, and medication side effects. More common in post-menopausal women and veterans on multiple medications.',
     ratingCriteria:
       'Rated by analogy under DC 9916 or based on underlying cause. Consider impact on eating, taste loss, and quality of life. Often rated low but consider secondary depression and medication side effect documentation.',
-    commonSecondaries: ['depression', 'anxiety', 'nutritional-deficiency', 'sleep-disturbance'],
+    commonSecondaries: ['depression', 'anxiety', 'nutritional-deficiency', 'insomnia'],
     keywords: [
       'burning mouth syndrome',
       'BMS',
@@ -425,7 +425,7 @@ export const dentalConditions: VACondition[] = [
       'Residual effects from traumatic dental injuries sustained during military service including fractured teeth, avulsed teeth, alveolar fractures, and damage to dental structures. Service-connected dental trauma qualifies for VA dental treatment and possible compensation.',
     ratingCriteria:
       'Rated under DC 9913 for loss of teeth or applicable jaw/dental codes. Dental conditions must result from combat wounds or service-connected trauma (not routine dental care) for compensation purposes. Treatment eligibility may differ from compensation eligibility.',
-    commonSecondaries: ['tmj-disorder', 'chronic-pain', 'depression', 'anxiety'],
+    commonSecondaries: ['tmj-disorder', 'chronic-pain-syndrome', 'depression', 'anxiety'],
     keywords: [
       'dental trauma',
       'broken teeth military',

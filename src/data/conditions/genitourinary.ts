@@ -19,7 +19,7 @@ export const genitourinaryConditions: VACondition[] = [
       'Progressive loss of kidney function over time. Stages range from mild (Stage 1) to end-stage renal disease (Stage 5) requiring dialysis or transplant. Common secondary to diabetes, hypertension, and nephrotoxic medications.',
     ratingCriteria:
       'Rated under DC 7530 (chronic renal disease requiring regular dialysis) or DC 7541 (renal involvement in other conditions). 80%: requiring regular dialysis. 100%: requiring more than sedentary activity precluded. Rate on renal dysfunction criteria if not on dialysis.',
-    commonSecondaries: ['hypertension', 'diabetes', 'depression', 'anemia', 'peripheral-neuropathy'],
+    commonSecondaries: ['hypertension', 'diabetes', 'depression', 'iron-deficiency-anemia', 'peripheral-neuropathy'],
     keywords: [
       'renal failure',
       'kidney failure',
@@ -51,7 +51,7 @@ export const genitourinaryConditions: VACondition[] = [
       'Inflammation of the kidneys, specifically the glomeruli. Can be acute or chronic. Causes protein and blood in urine, swelling, and progressive kidney damage. May be triggered by infections, autoimmune conditions, or medications.',
     ratingCriteria:
       'Rated under DC 7502 for chronic nephritis. Rate based on renal dysfunction: albumin constant or recurring with hyaline/granular casts, edema, hypertension. BUN and creatinine levels determine severity.',
-    commonSecondaries: ['hypertension', 'kidney-disease', 'anemia', 'edema'],
+    commonSecondaries: ['hypertension', 'kidney-disease', 'iron-deficiency-anemia', 'peripheral-edema'],
     keywords: [
       'nephritis',
       'glomerulonephritis',
@@ -80,12 +80,12 @@ export const genitourinaryConditions: VACondition[] = [
       'Kidney disorder causing excessive protein loss in urine, low blood protein, high cholesterol, and severe swelling. Results from damage to the glomeruli and can lead to kidney failure.',
     ratingCriteria:
       'Rated under DC 7502 or renal dysfunction criteria. Consider degree of proteinuria, hypoalbuminemia, edema, and renal function decline. Persistent nephrotic-range proteinuria with edema warrants at least 60%.',
-    commonSecondaries: ['kidney-disease', 'hypertension', 'dvt', 'hyperlipidemia'],
+    commonSecondaries: ['kidney-disease', 'hypertension', 'dvt-chronic-venous-insufficiency', 'hyperlipidemia'],
     keywords: [
       'nephrotic syndrome',
       'protein in urine',
       'proteinuria',
-      'edema',
+      'peripheral-edema',
       'low albumin',
       'hypoalbuminemia',
       'foamy urine',
@@ -172,7 +172,7 @@ export const genitourinaryConditions: VACondition[] = [
       'depression',
       'chronic-fatigue',
       'hypertension',
-      'anemia',
+      'iron-deficiency-anemia',
     ],
     keywords: [
       'kidney cancer',
@@ -231,7 +231,7 @@ export const genitourinaryConditions: VACondition[] = [
       'Surgical procedure to replace a diseased kidney with a healthy one from a donor. Post-transplant requires lifelong immunosuppressive medication. Rated 100% for one year following transplant, then on residuals.',
     ratingCriteria:
       '100%: for one year following hospital discharge for transplant surgery. Thereafter, rate on residuals — minimum 30%. Consider renal function, need for immunosuppressive therapy, and graft rejection episodes.',
-    commonSecondaries: ['hypertension', 'diabetes', 'depression', 'infections', 'anemia'],
+    commonSecondaries: ['hypertension', 'diabetes', 'depression', 'infections', 'iron-deficiency-anemia'],
     keywords: [
       'kidney transplant',
       'renal transplant',
@@ -291,7 +291,7 @@ export const genitourinaryConditions: VACondition[] = [
       'Chronic inflammation of the bladder, usually caused by recurrent bacterial infections. Symptoms include urinary frequency, urgency, pain with urination, and pelvic discomfort.',
     ratingCriteria:
       'Rated under DC 7512 for cystitis, chronic, includes recurrent symptomatic infection requiring drainage/frequent hospitalization (10-30%) and target hospitalization and continuous intensive management. Also rated on voiding dysfunction criteria.',
-    commonSecondaries: ['urinary-incontinence', 'depression', 'anxiety', 'sleep-disturbance'],
+    commonSecondaries: ['urinary-incontinence', 'depression', 'anxiety', 'insomnia'],
     keywords: [
       'cystitis',
       'bladder infection',
@@ -322,8 +322,8 @@ export const genitourinaryConditions: VACondition[] = [
     commonSecondaries: [
       'depression',
       'anxiety',
-      'sleep-disturbance',
-      'chronic-pain',
+      'insomnia',
+      'chronic-pain-syndrome',
       'sexual-dysfunction',
     ],
     keywords: [
@@ -427,7 +427,7 @@ export const genitourinaryConditions: VACondition[] = [
       'Abnormally frequent urination that disrupts daily activities and sleep. Can be caused by bladder conditions, prostate issues, medications, or neurological disorders.',
     ratingCriteria:
       'Rated under urinary frequency criteria: 10%: daytime voiding interval between 2 and 3 hours, or awakening to void 2 times per night. 20%: daytime voiding interval between 1 and 2 hours, or awakening to void 3 to 4 times per night. 40%: daytime voiding interval less than 1 hour, or awakening to void 5 or more times per night.',
-    commonSecondaries: ['sleep-disturbance', 'depression', 'anxiety'],
+    commonSecondaries: ['insomnia', 'depression', 'anxiety'],
     keywords: [
       'urinary frequency',
       'frequent urination',
@@ -496,7 +496,7 @@ export const genitourinaryConditions: VACondition[] = [
       'erectile-dysfunction',
       'urinary-incontinence',
       'urinary-retention',
-      'sleep-disturbance',
+      'insomnia',
     ],
     keywords: [
       'bph',
@@ -532,7 +532,7 @@ export const genitourinaryConditions: VACondition[] = [
       'urinary-incontinence',
       'depression',
       'anxiety',
-      'bowel-dysfunction',
+      'ibs',
     ],
     keywords: [
       'prostate cancer',
@@ -566,7 +566,7 @@ export const genitourinaryConditions: VACondition[] = [
     commonSecondaries: [
       'erectile-dysfunction',
       'depression',
-      'chronic-pain',
+      'chronic-pain-syndrome',
       'urinary-frequency',
     ],
     keywords: [
@@ -740,7 +740,7 @@ export const genitourinaryConditions: VACondition[] = [
       'Enlargement of the veins within the scrotum, similar to varicose veins. Can cause pain, testicular atrophy, and infertility. Most common on the left side.',
     ratingCriteria:
       'Rated under DC 7525 for chronic epididymo-orchitis or by analogy. Rate based on urinary tract infection criteria or voiding dysfunction if symptomatic. Painful varicocele may warrant 10% rating.',
-    commonSecondaries: ['infertility', 'testicular-atrophy', 'chronic-pain'],
+    commonSecondaries: ['infertility', 'testicular-atrophy', 'chronic-pain-syndrome'],
     keywords: [
       'varicocele',
       'scrotal veins',
@@ -769,7 +769,7 @@ export const genitourinaryConditions: VACondition[] = [
     ratingCriteria:
       'Rated under DC 7525 for chronic epididymo-orchitis. Rate as urinary tract infection criteria: 10%: long-term drug therapy, 1-2 hospitalizations per year, and/or intermittent intensive management. 30%: recurrent symptomatic infection requiring drainage/frequent hospitalization.',
     commonSecondaries: [
-      'chronic-pain',
+      'chronic-pain-syndrome',
       'infertility',
       'urethritis',
       'testicular-atrophy',
@@ -801,7 +801,7 @@ export const genitourinaryConditions: VACondition[] = [
       'Fluid-filled sac surrounding the testicle causing scrotal swelling. May develop after injury, infection, or surgery. Usually painless but can cause discomfort from size and weight.',
     ratingCriteria:
       'Rated by analogy under DC 7525. Consider size, symptoms, need for surgical repair, and recurrence. Typically rated low unless causing significant functional impairment or recurrent after surgery.',
-    commonSecondaries: ['chronic-pain', 'epididymitis'],
+    commonSecondaries: ['chronic-pain-syndrome', 'epididymitis'],
     keywords: [
       'hydrocele',
       'scrotal swelling',
@@ -894,7 +894,7 @@ export const genitourinaryConditions: VACondition[] = [
       'Loss of bladder control causing involuntary urine leakage. Can be stress incontinence, urge incontinence, overflow incontinence, or mixed. Common after prostate surgery, childbirth, or neurological conditions.',
     ratingCriteria:
       'Rated under voiding dysfunction (DC 7542): 20%: requiring absorbent materials changed less than 2x/day. 40%: requiring absorbent materials changed 2-4x/day. 60%: requiring use of appliance or absorbent materials changed more than 4x/day.',
-    commonSecondaries: ['depression', 'sleep-disturbance', 'skin-irritation', 'anxiety'],
+    commonSecondaries: ['depression', 'insomnia', 'contact-dermatitis', 'anxiety'],
     keywords: [
       'bladder problems',
       'leakage',
@@ -957,7 +957,7 @@ export const genitourinaryConditions: VACondition[] = [
       'Sudden, uncontrollable urge to urinate, often with urge incontinence, frequency, and nocturia. Not caused by infection. May result from nerve damage, medications, or aging.',
     ratingCriteria:
       'Rated under urinary frequency or voiding dysfunction criteria, whichever provides higher rating. Consider daytime voiding interval, nighttime voiding frequency, and presence of incontinence.',
-    commonSecondaries: ['urinary-incontinence', 'sleep-disturbance', 'depression', 'anxiety'],
+    commonSecondaries: ['urinary-incontinence', 'insomnia', 'depression', 'anxiety'],
     keywords: [
       'overactive bladder',
       'OAB',
@@ -1046,7 +1046,7 @@ export const genitourinaryConditions: VACondition[] = [
       'Kidney damage caused by diabetes mellitus. Progressive condition that can lead to end-stage renal disease. One of the most common secondary conditions to diabetes. Requires regular monitoring of kidney function and albumin levels.',
     ratingCriteria:
       'Rated under DC 7541 (renal involvement in diabetes) using renal dysfunction criteria. Consider GFR, proteinuria, creatinine, and need for dialysis. Rate separately from diabetes as a secondary condition.',
-    commonSecondaries: ['kidney-disease', 'hypertension', 'anemia', 'edema'],
+    commonSecondaries: ['kidney-disease', 'hypertension', 'iron-deficiency-anemia', 'peripheral-edema'],
     keywords: [
       'diabetic nephropathy',
       'diabetic kidney disease',
@@ -1138,7 +1138,7 @@ export const genitourinaryConditions: VACondition[] = [
     commonSecondaries: [
       'testicular-atrophy',
       'testosterone-deficiency',
-      'chronic-pain',
+      'chronic-pain-syndrome',
       'depression',
     ],
     keywords: [
@@ -1168,7 +1168,7 @@ export const genitourinaryConditions: VACondition[] = [
       'Persistent or intermittent testicular pain lasting more than 3 months. Can result from prior infections, surgery, trauma, varicocele, or have no identifiable cause (idiopathic). Significantly impacts quality of life.',
     ratingCriteria:
       'Rated by analogy under DC 7525. Consider pain frequency, severity, impact on activities, and need for ongoing pain management. May also consider rating under chronic pain syndrome.',
-    commonSecondaries: ['depression', 'anxiety', 'erectile-dysfunction', 'sleep-disturbance'],
+    commonSecondaries: ['depression', 'anxiety', 'erectile-dysfunction', 'insomnia'],
     keywords: [
       'orchialgia',
       'testicular pain chronic',
@@ -1196,7 +1196,7 @@ export const genitourinaryConditions: VACondition[] = [
       'Fluid-filled cyst that develops in the epididymis near the top of the testicle. Usually painless and benign but can grow large enough to cause discomfort or concern. May develop after vasectomy or epididymitis.',
     ratingCriteria:
       'Rated by analogy under DC 7525. Usually rated low (0-10%) unless causing significant pain or requiring repeated surgical intervention. Consider size and symptom severity.',
-    commonSecondaries: ['chronic-pain', 'epididymitis', 'anxiety'],
+    commonSecondaries: ['chronic-pain-syndrome', 'epididymitis', 'anxiety'],
     keywords: [
       'spermatocele',
       'epididymal cyst',
@@ -1257,7 +1257,7 @@ export const genitourinaryConditions: VACondition[] = [
       'Protrusion of tissue through the inguinal canal in the groin area. Very common in veterans due to heavy lifting and physical training. Can be direct or indirect, unilateral or bilateral. May recur after surgical repair.',
     ratingCriteria:
       'Rated under DC 7338. 0%: small, reducible, or without true hernia protrusion. 10%: postoperative recurrent, readily reducible, well supported by truss or belt. 30%: small, not well supported by truss or not readily reducible. 60%: large, postoperative, recurrent, not well supported, not readily reducible.',
-    commonSecondaries: ['chronic-pain', 'nerve-damage', 'testicular-atrophy'],
+    commonSecondaries: ['chronic-pain-syndrome', 'peripheral-neuropathy', 'testicular-atrophy'],
     keywords: [
       'inguinal hernia',
       'groin hernia',

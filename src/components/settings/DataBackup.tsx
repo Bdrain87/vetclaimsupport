@@ -15,11 +15,13 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { useClaims } from '@/hooks/useClaims';
-import { getAllFileIds, getFileData, deleteFileData, restoreFiles } from '@/lib/indexedDB';
+import { getAllFileIds, getFileData, restoreFiles } from '@/lib/indexedDB';
 import { isEncryptionEnabled } from '@/utils/encryption';
 import { DATA_PRIVACY_COPY, BACKUP_COPY } from '@/data/legalCopy';
+import useAppStore from '@/store/useAppStore';
+import { clearLocalData } from '@/services/accountManagement';
+import { stopSync } from '@/services/syncEngine';
 
-const STORAGE_KEY = 'vcs-app-data';
 const BACKUP_VERSION = '2.0.0';
 const LAST_BACKUP_KEY = 'vcs-last-backup-date';
 
@@ -168,9 +170,10 @@ export function DataBackup() {
 
     setIsImporting(true);
     try {
-      // Write to Zustand persist storage key and reload state
+      // Write through Zustand's setState so the persist middleware encrypts
+      // the data before it hits localStorage (avoids plaintext-at-rest gap).
       const claimsData = pendingImportData.claimsData;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ state: claimsData, version: 3 }));
+      useAppStore.setState(claimsData as Partial<ReturnType<typeof useAppStore.getState>>);
 
       // Import IndexedDB files if present
       if (pendingImportData.indexedDBFiles && pendingImportData.indexedDBFiles.length > 0) {
@@ -200,19 +203,8 @@ export function DataBackup() {
   const confirmDeleteAll = async () => {
     setIsDeleting(true);
     try {
-      const keysToRemove: string[] = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key) keysToRemove.push(key);
-      }
-      for (const key of keysToRemove) {
-        localStorage.removeItem(key);
-      }
-
-      const fileIds = await getAllFileIds();
-      for (const id of fileIds) {
-        await deleteFileData(id);
-      }
+      stopSync();
+      await clearLocalData();
 
       toast({
         title: 'All Data Deleted',
