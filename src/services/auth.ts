@@ -102,6 +102,22 @@ export const ALL_LOCAL_STORAGE_KEYS = [
   'vet-claim-veteran-profile',
   // Data retention tracker
   '_lastActivity',
+  '_retentionWarningShown',
+  // Consent / legal
+  'consentTimestamp',
+  'consentTermsVersion',
+  'liabilityAccepted',
+  // Onboarding progress
+  'vcs-onboarding-progress',
+  // AI audit log
+  'vcs-ai-audit-log',
+  // Migration flags
+  'vcs-migration-complete',
+  'vcs-migration-v2',
+  // User data stored outside Zustand
+  'vet-claim-status-log',
+  'vcs-body-map-pins',
+  'vcs-last-backup-date',
   // Legacy migration keys
   'va-claims-tracker-data',
   'user-va-conditions',

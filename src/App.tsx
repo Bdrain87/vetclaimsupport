@@ -37,17 +37,24 @@ try {
 // stale clients will 404 on old URLs. This catches that and forces a reload.
 function lazyWithRetry(factory: () => Promise<{ default: React.ComponentType }>) {
   return lazy(() =>
-    factory().catch(() => {
-      // If chunk load fails, force a full page reload to get new HTML + chunks.
-      // Guard against infinite reload loops with a sessionStorage flag.
-      const key = 'chunk_reload';
-      if (!sessionStorage.getItem(key)) {
-        sessionStorage.setItem(key, '1');
-        window.location.reload();
-      }
-      // If we already reloaded and still failing, throw to error boundary
-      return factory();
-    })
+    factory()
+      .then((mod) => {
+        // Chunk loaded successfully — clear any previous reload flag so future
+        // failures can still trigger the one-time reload mechanism.
+        sessionStorage.removeItem('chunk_reload');
+        return mod;
+      })
+      .catch(() => {
+        // If chunk load fails, force a full page reload to get new HTML + chunks.
+        // Guard against infinite reload loops with a sessionStorage flag.
+        const key = 'chunk_reload';
+        if (!sessionStorage.getItem(key)) {
+          sessionStorage.setItem(key, '1');
+          window.location.reload();
+        }
+        // If we already reloaded and still failing, throw to error boundary
+        return factory();
+      })
   );
 }
 
@@ -391,6 +398,8 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setState(session ? 'authed' : 'unauthed');
+    }).catch(() => {
+      setState('unauthed');
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {

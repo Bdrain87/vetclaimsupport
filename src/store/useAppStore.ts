@@ -896,14 +896,14 @@ const useAppStore = create<AppState>()(
       version: 3,
       storage: createJSONStorage(() => encryptedStorage),
       migrate: (persistedState: unknown, version: number) => {
-        const state = persistedState as Record<string, unknown>;
+        let state = persistedState as Record<string, unknown>;
         if (version < 2) {
-          return { ...state, formDrafts: {} };
+          state = { ...state, formDrafts: {} };
         }
         if (version < 3) {
           // separationDate moved to useProfileStore as single source of truth
           const { separationDate: _, ...rest } = state;
-          return rest;
+          state = rest;
         }
         return state;
       },

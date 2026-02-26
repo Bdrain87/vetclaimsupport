@@ -1106,7 +1106,7 @@ export default function Onboarding() {
                 <div className="rounded-xl border border-[#2a2a2a] bg-white/[0.03] p-3">
                   <p className="text-white/40 text-xs leading-relaxed text-center">This tool helps you organize and prepare your own claim. It does not file claims, provide legal or medical advice, or guarantee any outcome. Always consult a VA-accredited representative for guidance specific to your situation.</p>
                 </div>
-                <p className="text-center text-white/30 text-xs break-words">By continuing, you agree to our <a href="/settings/terms" className="text-gold underline">Terms of Service</a> and <a href="/settings/privacy" className="text-gold underline">Privacy Policy</a>.</p>
+                <p className="text-center text-white/30 text-xs break-words">By continuing, you agree to our <Link to="/settings/terms" className="text-gold underline">Terms of Service</Link> and <Link to="/settings/privacy" className="text-gold underline">Privacy Policy</Link>.</p>
               </div>
             )}
 

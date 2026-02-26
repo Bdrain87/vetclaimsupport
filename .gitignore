@@ -36,6 +36,9 @@ coverage
 # iOS build artifacts
 build/
 
+# Supabase local temp files
+supabase/.temp/
+
 # Screenshots & scripts (dev tooling)
 screenshots/
 screenshot*.mjs
