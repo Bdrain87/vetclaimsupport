@@ -1,7 +1,6 @@
 import { useState, useEffect, type ReactNode } from 'react';
 import { hasPremiumAccess, ensureFreshEntitlement } from '@/services/entitlements';
 import { UpgradeModal } from '@/components/UpgradeModal';
-import { isNativeApp } from '@/lib/platform';
 
 interface PremiumGuardProps {
   featureName: string;
@@ -9,16 +8,9 @@ interface PremiumGuardProps {
 }
 
 export function PremiumGuard({ featureName, children }: PremiumGuardProps) {
-  // TODO: Remove this bypass once StoreKit IAP is implemented.
-  // Currently all native iOS users get premium features for free because
-  // Apple IAP is not yet integrated. This is a known pre-launch limitation.
-  const [state, setState] = useState<'loading' | 'granted' | 'blocked'>(
-    isNativeApp ? 'granted' : 'loading'
-  );
+  const [state, setState] = useState<'loading' | 'granted' | 'blocked'>('loading');
 
   useEffect(() => {
-    if (isNativeApp) return;
-
     let cancelled = false;
 
     // Show content immediately for known premium users (avoids flash)

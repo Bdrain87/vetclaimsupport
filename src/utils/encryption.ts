@@ -306,10 +306,10 @@ export function validatePasswordStrength(password: string): {
   const feedback: string[] = [];
   let score = 0;
 
-  if (password.length >= 8) score++;
-  else feedback.push('Password should be at least 8 characters');
-
   if (password.length >= 12) score++;
+  else feedback.push('Password must be at least 12 characters');
+
+  if (password.length >= 16) score++;
 
   if (/[a-z]/.test(password)) score++;
   else feedback.push('Add lowercase letters');

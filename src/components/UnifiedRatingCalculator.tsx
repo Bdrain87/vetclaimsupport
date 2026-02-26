@@ -338,6 +338,142 @@ function saveState(state: CalculatorState): void {
   }
 }
 
+// --- Lifetime Benefit Projection ---
+
+// VA life expectancy estimates (simplified actuarial table by age)
+const LIFE_EXPECTANCY_BY_AGE: Record<number, number> = {
+  20: 58, 25: 53, 30: 48, 35: 43, 40: 38, 45: 33,
+  50: 28, 55: 24, 60: 20, 65: 17, 70: 14, 75: 11, 80: 8, 85: 5,
+};
+
+function estimateRemainingYears(age: number): number {
+  const ages = Object.keys(LIFE_EXPECTANCY_BY_AGE).map(Number).sort((a, b) => a - b);
+  if (age <= ages[0]) return LIFE_EXPECTANCY_BY_AGE[ages[0]];
+  if (age >= ages[ages.length - 1]) return LIFE_EXPECTANCY_BY_AGE[ages[ages.length - 1]];
+
+  // Linear interpolation
+  for (let i = 0; i < ages.length - 1; i++) {
+    if (age >= ages[i] && age <= ages[i + 1]) {
+      const frac = (age - ages[i]) / (ages[i + 1] - ages[i]);
+      return Math.round(
+        LIFE_EXPECTANCY_BY_AGE[ages[i]] * (1 - frac) +
+        LIFE_EXPECTANCY_BY_AGE[ages[i + 1]] * frac
+      );
+    }
+  }
+  return 30;
+}
+
+function LifetimeBenefitProjection({
+  currentRating,
+  dependents,
+  formatCurrency,
+  calculateCompensation,
+}: {
+  currentRating: number;
+  dependents: Dependent[];
+  formatCurrency: (n: number) => string;
+  calculateCompensation: (rating: number, deps: Dependent[]) => { totalMonthly: number; totalYearly: number };
+}) {
+  const [age, setAge] = useState('');
+
+  const projection = useMemo(() => {
+    const veteranAge = parseInt(age) || 35;
+    const remainingYears = estimateRemainingYears(veteranAge);
+
+    const currentComp = calculateCompensation(currentRating, dependents);
+    const lifetimeCurrent = currentComp.totalMonthly * 12 * remainingYears;
+
+    // Next milestone (next 10% step)
+    const nextRating = Math.min(currentRating + 10, 100);
+    const nextComp = calculateCompensation(nextRating, dependents);
+    const lifetimeNext = nextComp.totalMonthly * 12 * remainingYears;
+
+    // 100% rating
+    const maxComp = calculateCompensation(100, dependents);
+    const lifetimeMax = maxComp.totalMonthly * 12 * remainingYears;
+
+    return {
+      veteranAge,
+      remainingYears,
+      lifetimeCurrent,
+      lifetimeNext,
+      lifetimeMax,
+      nextRating,
+      nextDelta: lifetimeNext - lifetimeCurrent,
+      maxDelta: lifetimeMax - lifetimeCurrent,
+      monthlyDelta: nextComp.totalMonthly - currentComp.totalMonthly,
+    };
+  }, [age, currentRating, dependents, calculateCompensation]);
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <DollarSign className="h-5 w-5 text-green-600" />
+          Lifetime Benefit Projection
+        </CardTitle>
+        <CardDescription>
+          Estimated total tax-free compensation over your lifetime at current rates.
+          Your age is not stored.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="flex items-end gap-3">
+          <div className="space-y-2 w-32">
+            <Label htmlFor="veteran-age">Your Age (optional)</Label>
+            <Input
+              id="veteran-age"
+              type="number"
+              min="18"
+              max="100"
+              placeholder="35"
+              value={age}
+              onChange={(e) => setAge(e.target.value)}
+            />
+          </div>
+          <p className="text-sm text-muted-foreground pb-2">
+            ~{projection.remainingYears} years remaining
+          </p>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-3">
+          <div className="p-4 rounded-xl bg-muted/50 border text-center">
+            <p className="text-xs text-muted-foreground">At {currentRating}% (current)</p>
+            <p className="text-xl font-bold">{formatCurrency(projection.lifetimeCurrent)}</p>
+          </div>
+
+          {currentRating < 100 && (
+            <div className="p-4 rounded-xl bg-gold/10 border border-gold/30 text-center">
+              <p className="text-xs text-muted-foreground">At {projection.nextRating}% (next step)</p>
+              <p className="text-xl font-bold text-gold-dk">{formatCurrency(projection.lifetimeNext)}</p>
+              <p className="text-xs text-green-600 font-medium">+{formatCurrency(projection.nextDelta)}</p>
+            </div>
+          )}
+
+          {currentRating < 90 && (
+            <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/30 text-center">
+              <p className="text-xs text-muted-foreground">At 100% (maximum)</p>
+              <p className="text-xl font-bold text-green-600 dark:text-green-400">{formatCurrency(projection.lifetimeMax)}</p>
+              <p className="text-xs text-green-600 font-medium">+{formatCurrency(projection.maxDelta)}</p>
+            </div>
+          )}
+        </div>
+
+        <Alert className="bg-muted/30 border-muted">
+          <Info className="h-4 w-4" />
+          <AlertDescription className="text-xs text-muted-foreground">
+            Estimate based on current 2026 VA compensation rates and general life expectancy
+            tables. Not a guarantee of benefits. Actual amounts may vary with annual COLA
+            adjustments and changes in dependent status. VA disability compensation is
+            tax-free at the federal and state level.
+          </AlertDescription>
+        </Alert>
+      </CardContent>
+    </Card>
+  );
+}
+
 export function UnifiedRatingCalculator() {
   // User conditions context
   const {
@@ -966,6 +1102,18 @@ export function UnifiedRatingCalculator() {
                     Combined bilateral: {result.bilateralExact.toFixed(1)}%
                     <br />
                     After 10% factor: {result.bilateralWithFactor.toFixed(1)}%
+                    <Separator className="my-2 bg-gold/20" />
+                    <details className="text-xs">
+                      <summary className="cursor-pointer font-medium">What is the bilateral factor?</summary>
+                      <p className="mt-1 leading-relaxed">
+                        Per 38 CFR 4.26, when you have disabilities affecting both
+                        paired extremities (both knees, both shoulders, etc.), the VA
+                        combines those ratings first, then adds 10% to that combined
+                        value. This bilateral result is then combined with your other
+                        non-bilateral conditions. The bilateral factor generally
+                        results in a higher overall combined rating.
+                      </p>
+                    </details>
                   </AlertDescription>
                 </Alert>
               )}
@@ -1021,6 +1169,105 @@ export function UnifiedRatingCalculator() {
             </CardContent>
           </Card>
 
+          {/* Compensation Ladder */}
+          {result.officialRating > 0 && result.officialRating < 100 && (
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-gold" />
+                  Compensation Ladder
+                </CardTitle>
+                <CardDescription>
+                  Tax-free monthly pay at every step to 100%
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {(() => {
+                  const steps: { rating: number; monthly: number; yearly: number; isCurrent: boolean; isNext: boolean }[] = [];
+                  const currentStep = result.officialRating;
+                  let nextMilestoneFound = false;
+
+                  for (let r = 10; r <= 100; r += 10) {
+                    const comp = calculateCompensation(r, dependents);
+                    const isNext = !nextMilestoneFound && r > currentStep;
+                    if (isNext) nextMilestoneFound = true;
+                    steps.push({
+                      rating: r,
+                      monthly: comp.totalMonthly,
+                      yearly: comp.totalYearly,
+                      isCurrent: r === currentStep,
+                      isNext,
+                    });
+                  }
+
+                  const currentComp = compensation.totalMonthly;
+                  const nextStep = steps.find(s => s.isNext);
+                  const nextDelta = nextStep ? nextStep.monthly - currentComp : 0;
+                  const step100 = steps.find(s => s.rating === 100);
+                  const maxDelta = step100 ? step100.monthly - currentComp : 0;
+
+                  return (
+                    <>
+                      {nextStep && (
+                        <div className="p-3 rounded-lg border border-gold/50 bg-gold/10 text-center space-y-1">
+                          <p className="text-xs text-muted-foreground">Next milestone: {nextStep.rating}%</p>
+                          <p className="text-lg font-bold text-gold-dk">
+                            +{formatCurrency(nextDelta)}/mo
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            +{formatCurrency(nextDelta * 12)}/yr
+                          </p>
+                        </div>
+                      )}
+
+                      <div className="space-y-1">
+                        {steps.map(step => {
+                          const barWidth = step100 ? (step.monthly / step100.monthly) * 100 : 0;
+                          return (
+                            <div
+                              key={step.rating}
+                              className={`flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors ${
+                                step.isCurrent
+                                  ? 'bg-primary/10 border border-primary/30 font-semibold'
+                                  : step.isNext
+                                  ? 'bg-gold/10 border border-gold/30'
+                                  : step.rating < currentStep
+                                  ? 'opacity-40'
+                                  : ''
+                              }`}
+                            >
+                              <span className="w-10 text-right font-mono text-xs">{step.rating}%</span>
+                              <div className="flex-1 h-3 bg-muted rounded-full overflow-hidden">
+                                <div
+                                  className={`h-full rounded-full transition-all ${
+                                    step.isCurrent ? 'bg-primary' : step.isNext ? 'bg-gold' : 'bg-muted-foreground/30'
+                                  }`}
+                                  style={{ width: `${barWidth}%` }}
+                                />
+                              </div>
+                              <span className="w-24 text-right font-mono text-xs">
+                                {formatCurrency(step.monthly)}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {maxDelta > 0 && (
+                        <div className="text-center pt-2 border-t border-border">
+                          <p className="text-xs text-muted-foreground">Potential at 100%</p>
+                          <p className="text-sm font-semibold text-green-600 dark:text-green-400">
+                            +{formatCurrency(maxDelta)}/mo ({formatCurrency(maxDelta * 12)}/yr)
+                          </p>
+                        </div>
+                      )}
+                    </>
+                  );
+                })()}
+              </CardContent>
+            </Card>
+          )}
+
           {/* Info Card */}
           <Card className="bg-muted/30">
             <CardContent className="pt-4">
@@ -1036,6 +1283,16 @@ export function UnifiedRatingCalculator() {
           </Card>
         </div>
       </div>
+
+      {/* Lifetime Benefit Projection */}
+      {result.officialRating > 0 && (
+        <LifetimeBenefitProjection
+          currentRating={result.officialRating}
+          dependents={dependents}
+          formatCurrency={formatCurrency}
+          calculateCompensation={calculateCompensation}
+        />
+      )}
     </PageContainer>
   );
 }

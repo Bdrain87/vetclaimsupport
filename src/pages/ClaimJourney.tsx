@@ -16,11 +16,22 @@ import { ProgressRing } from '@/components/ui/progress-ring';
 import { StatCard, StatsGrid } from '@/components/ui/stat-card';
 import { SuccessOverlay } from '@/components/ui/success-animation';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
 import {
   Flag, FileText, Send, Stethoscope, Award, Check,
   Lock, ArrowRight, Sparkles,
   ClipboardList, CheckCircle,
-  ExternalLink, Target
+  ExternalLink, Target, AlertTriangle,
+  TrendingDown, Clock, Plus
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { PageContainer } from '@/components/PageContainer';
@@ -157,6 +168,295 @@ const journeyPhases: JourneyPhase[] = [
     ],
   },
 ];
+
+// --- VA Claim Status Tracker with Regression Detection ---
+
+const VA_CLAIM_PHASES = [
+  { id: 'claim-received', label: 'Claim Received', order: 1, avgDays: 7 },
+  { id: 'initial-review', label: 'Initial Review', order: 2, avgDays: 14 },
+  { id: 'evidence-gathering', label: 'Evidence Gathering', order: 3, avgDays: 45 },
+  { id: 'review-of-evidence', label: 'Review of Evidence', order: 4, avgDays: 30 },
+  { id: 'preparation-for-decision', label: 'Preparation for Decision', order: 5, avgDays: 21 },
+  { id: 'pending-decision-approval', label: 'Pending Decision Approval', order: 6, avgDays: 14 },
+  { id: 'preparation-for-notification', label: 'Preparation for Notification', order: 7, avgDays: 7 },
+  { id: 'complete', label: 'Complete', order: 8, avgDays: 0 },
+] as const;
+
+const STATUS_STORAGE_KEY = 'vet-claim-status-log';
+
+interface StatusLogEntry {
+  id: string;
+  phase: string;
+  loggedAt: string;
+  notes: string;
+}
+
+function loadStatusLog(): StatusLogEntry[] {
+  try {
+    const stored = localStorage.getItem(STATUS_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveStatusLog(entries: StatusLogEntry[]): void {
+  try {
+    localStorage.setItem(STATUS_STORAGE_KEY, JSON.stringify(entries));
+  } catch {
+    // silently ignore
+  }
+}
+
+function detectRegression(entries: StatusLogEntry[]): { isRegression: boolean; from: string; to: string; explanation: string } | null {
+  if (entries.length < 2) return null;
+
+  const latest = entries[entries.length - 1];
+  const previous = entries[entries.length - 2];
+
+  const latestPhase = VA_CLAIM_PHASES.find(p => p.id === latest.phase);
+  const previousPhase = VA_CLAIM_PHASES.find(p => p.id === previous.phase);
+
+  if (!latestPhase || !previousPhase) return null;
+
+  if (latestPhase.order < previousPhase.order) {
+    return {
+      isRegression: true,
+      from: previousPhase.label,
+      to: latestPhase.label,
+      explanation: getRegressExplanation(previousPhase.id, latestPhase.id),
+    };
+  }
+
+  return null;
+}
+
+function getRegressExplanation(fromPhase: string, toPhase: string): string {
+  if (toPhase === 'evidence-gathering') {
+    return 'Your claim moved back to Evidence Gathering. This often means the VA needs additional evidence, medical records, or a new C&P exam. Check your VA.gov account for any requests and respond promptly to avoid delays.';
+  }
+  if (toPhase === 'initial-review') {
+    return 'Your claim returned to Initial Review. This may indicate an error was found or a new issue was added. Contact your VSO or check VA.gov for updates.';
+  }
+  if (fromPhase === 'pending-decision-approval' || fromPhase === 'preparation-for-decision') {
+    return 'Your claim moved backward from the decision stage. This sometimes happens when a reviewer identifies missing information or requests a specialist opinion. While frustrating, this can lead to a more favorable outcome.';
+  }
+  return 'Your claim moved to an earlier processing stage. This is not uncommon and may indicate the VA is gathering additional information. Check VA.gov or contact your VSO for specific details about why.';
+}
+
+function getDaysInPhase(entries: StatusLogEntry[]): number {
+  if (entries.length === 0) return 0;
+  const latest = entries[entries.length - 1];
+  const logDate = new Date(latest.loggedAt);
+  const now = new Date();
+  return Math.floor((now.getTime() - logDate.getTime()) / (1000 * 60 * 60 * 24));
+}
+
+function ClaimStatusTracker() {
+  const [entries, setEntries] = useState<StatusLogEntry[]>(() => loadStatusLog());
+  const [selectedStatus, setSelectedStatus] = useState('');
+  const [showTracker, setShowTracker] = useState(entries.length > 0);
+
+  const regression = useMemo(() => detectRegression(entries), [entries]);
+  const daysInPhase = useMemo(() => getDaysInPhase(entries), [entries]);
+
+  const currentPhase = entries.length > 0
+    ? VA_CLAIM_PHASES.find(p => p.id === entries[entries.length - 1].phase)
+    : null;
+
+  const isOverdue = currentPhase ? daysInPhase > currentPhase.avgDays * 1.5 : false;
+
+  const addStatusEntry = useCallback(() => {
+    if (!selectedStatus) return;
+    const newEntry: StatusLogEntry = {
+      id: crypto.randomUUID(),
+      phase: selectedStatus,
+      loggedAt: new Date().toISOString(),
+      notes: '',
+    };
+    const updated = [...entries, newEntry];
+    setEntries(updated);
+    saveStatusLog(updated);
+    setSelectedStatus('');
+  }, [selectedStatus, entries]);
+
+  if (!showTracker && entries.length === 0) {
+    return (
+      <Card className="border-dashed border-2">
+        <CardContent className="py-6">
+          <div className="text-center space-y-3">
+            <div className="p-3 rounded-full bg-muted inline-flex">
+              <Clock className="h-6 w-6 text-muted-foreground" />
+            </div>
+            <div>
+              <h3 className="font-semibold">VA Claim Status Tracker</h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                Track your claim's progress through VA processing and get alerts if it moves backward.
+              </p>
+            </div>
+            <Button variant="outline" onClick={() => setShowTracker(true)}>
+              <Plus className="h-4 w-4 mr-2" />
+              Start Tracking
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="border-0 shadow-lg">
+      <CardHeader className="border-b border-border/50">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
+            <Clock className="h-5 w-5" />
+          </div>
+          <div>
+            <CardTitle className="text-lg">VA Claim Status Tracker</CardTitle>
+            <CardDescription>
+              Log your claim status from VA.gov to track progress and detect movement
+            </CardDescription>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="p-6 space-y-5">
+        {/* Regression Alert */}
+        {regression && (
+          <Alert className="border-red-500/50 bg-red-500/10">
+            <TrendingDown className="h-4 w-4 text-red-600" />
+            <AlertDescription className="text-red-700 dark:text-red-400">
+              <strong>Claim moved backward:</strong> {regression.from} → {regression.to}
+              <p className="mt-2 text-sm opacity-90">{regression.explanation}</p>
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {/* Overdue Alert */}
+        {isOverdue && currentPhase && !regression && (
+          <Alert className="border-orange-500/50 bg-orange-500/10">
+            <AlertTriangle className="h-4 w-4 text-orange-600" />
+            <AlertDescription className="text-orange-700 dark:text-orange-400">
+              <strong>Longer than average:</strong> Your claim has been in "{currentPhase.label}" for {daysInPhase} days.
+              The VA average for this phase is ~{currentPhase.avgDays} days.
+              Consider checking VA.gov or calling the VA hotline (800-827-1000).
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {/* Current Status Display */}
+        {currentPhase && (
+          <div className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 border">
+            <div className="flex-1">
+              <p className="text-xs text-muted-foreground">Current Status</p>
+              <p className="font-semibold text-lg">{currentPhase.label}</p>
+              <p className="text-sm text-muted-foreground">
+                {daysInPhase} days in this phase
+                {currentPhase.avgDays > 0 && (
+                  <> (VA avg: ~{currentPhase.avgDays} days)</>
+                )}
+              </p>
+            </div>
+            {currentPhase.avgDays > 0 && (
+              <div className="text-right">
+                <Progress
+                  value={Math.min((daysInPhase / currentPhase.avgDays) * 100, 100)}
+                  className={cn('h-2 w-24', isOverdue && '[&>div]:bg-orange-500')}
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  {Math.round((daysInPhase / currentPhase.avgDays) * 100)}% of avg
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Phase Progress Bar */}
+        <div className="space-y-2">
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>Received</span>
+            <span>Complete</span>
+          </div>
+          <div className="flex gap-1">
+            {VA_CLAIM_PHASES.map((phase) => {
+              const latestPhaseOrder = currentPhase?.order || 0;
+              const isCurrent = phase.id === currentPhase?.id;
+              const isPast = phase.order < latestPhaseOrder;
+              return (
+                <div
+                  key={phase.id}
+                  className={cn(
+                    'flex-1 h-3 rounded-sm transition-colors',
+                    isPast && 'bg-green-500',
+                    isCurrent && 'bg-primary animate-pulse',
+                    !isPast && !isCurrent && 'bg-muted',
+                  )}
+                  title={phase.label}
+                />
+              );
+            })}
+          </div>
+        </div>
+
+        <Separator />
+
+        {/* Log New Status */}
+        <div className="flex gap-3">
+          <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+            <SelectTrigger className="flex-1">
+              <SelectValue placeholder="Select current claim status from VA.gov" />
+            </SelectTrigger>
+            <SelectContent>
+              {VA_CLAIM_PHASES.map(phase => (
+                <SelectItem key={phase.id} value={phase.id}>
+                  {phase.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button onClick={addStatusEntry} disabled={!selectedStatus}>
+            <Plus className="h-4 w-4 mr-2" />
+            Log
+          </Button>
+        </div>
+
+        {/* Status History */}
+        {entries.length > 0 && (
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-muted-foreground">Status History</p>
+            <div className="space-y-1 max-h-48 overflow-y-auto">
+              {[...entries].reverse().map((entry, idx) => {
+                const phase = VA_CLAIM_PHASES.find(p => p.id === entry.phase);
+                const prevEntry = entries[entries.length - 1 - idx - 1];
+                const prevPhase = prevEntry ? VA_CLAIM_PHASES.find(p => p.id === prevEntry.phase) : null;
+                const isRegress = prevPhase && phase && phase.order < prevPhase.order;
+
+                return (
+                  <div
+                    key={entry.id}
+                    className={cn(
+                      'flex items-center gap-3 px-3 py-2 rounded-lg text-sm',
+                      isRegress ? 'bg-red-500/5 border border-red-500/20' : 'bg-muted/30',
+                    )}
+                  >
+                    <div className={cn(
+                      'w-2 h-2 rounded-full flex-shrink-0',
+                      isRegress ? 'bg-red-500' : idx === 0 ? 'bg-primary' : 'bg-muted-foreground/40',
+                    )} />
+                    <span className="font-medium flex-1">{phase?.label || entry.phase}</span>
+                    {isRegress && <TrendingDown className="h-3.5 w-3.5 text-red-500 flex-shrink-0" />}
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(entry.loggedAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
 
 export default function ClaimJourney() {
   const { data } = useClaims();
@@ -546,6 +846,9 @@ export default function ClaimJourney() {
           })}
         </div>
       </div>
+
+      {/* VA Claim Status Tracker with Regression Detection */}
+      <ClaimStatusTracker />
 
       {/* Phase Detail Dialog */}
       <Dialog open={!!selectedPhase} onOpenChange={() => setSelectedPhase(null)}>

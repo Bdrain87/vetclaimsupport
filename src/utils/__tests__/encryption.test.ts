@@ -44,7 +44,7 @@ describe('encryption utilities', () => {
     it('marks a short password as invalid and mentions length in feedback', () => {
       const result = validatePasswordStrength('abc');
       expect(result.isValid).toBe(false);
-      expect(result.feedback.some((f) => /8 characters/i.test(f))).toBe(true);
+      expect(result.feedback.some((f) => /12 characters/i.test(f))).toBe(true);
     });
 
     it('mentions uppercase when no uppercase letters are present', () => {

@@ -139,18 +139,14 @@ export const encryptedStorage: StateStorage = {
 
   setItem(key: string, value: string): void {
     if (!_sessionPassword) {
-      // Should not happen after boot — log error but write plaintext to
-      // prevent data loss.
+      // Fail closed — never write sensitive data as plaintext.
+      // This should not happen after boot; if it does, the data is
+      // silently dropped rather than stored unencrypted.
       console.error(
         '[encryptedStorage] No encryption key available during write for key:',
         key,
-        '— writing plaintext as safety fallback.',
+        '— dropping write to prevent plaintext data exposure.',
       );
-      try {
-        localStorage.setItem(key, value);
-      } catch (error) {
-        console.error('[encryptedStorage] Plaintext fallback write failed:', error);
-      }
       return;
     }
 
