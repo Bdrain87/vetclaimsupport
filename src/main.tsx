@@ -30,7 +30,7 @@ const showFatalError = (label: string, err: unknown) => {
 
   const btn = document.createElement('button');
   btn.style.cssText =
-    'background:linear-gradient(90deg,#C8A020,#ECC440,#FFE566,#ECC440,#C8A020);color:#000;border:none;padding:12px 32px;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;';
+    'background:linear-gradient(90deg,#D4A800,#F0C000,#FFD700,#F0C000,#D4A800);color:#000;border:none;padding:12px 32px;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;';
   btn.textContent = 'Reload';
   btn.onclick = () => window.location.reload();
 

@@ -171,7 +171,7 @@ export default function IntentToFile() {
                 timeRemaining.isExpired
                   ? 'bg-red-500/5'
                   : timeRemaining.isExpiringSoon
-                  ? 'bg-[rgba(212,175,55,0.05)]'
+                  ? 'bg-[rgba(240,192,0,0.05)]'
                   : 'bg-emerald-500/5'
               }`}
             >

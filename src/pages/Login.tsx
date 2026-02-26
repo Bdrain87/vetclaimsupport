@@ -88,7 +88,7 @@ export default function Login() {
   };
 
   const inputClass =
-    'w-full h-12 pl-11 pr-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(212,175,55,0.4)] focus:border-gold/50 transition-all';
+    'w-full h-12 pl-11 pr-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(240,192,0,0.4)] focus:border-gold/50 transition-all';
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background">

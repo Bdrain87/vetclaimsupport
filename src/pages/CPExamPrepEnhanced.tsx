@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import {
   Stethoscope,
   CheckCircle2,
@@ -285,8 +285,8 @@ const dontsList = [
 ];
 
 export default function CPExamPrepEnhanced() {
+  const [searchParams] = useSearchParams();
   const { data: claimsData } = useClaims();
-
 
   const {
     formData: cpDraft, updateField: updateCpField,
@@ -322,6 +322,36 @@ export default function CPExamPrepEnhanced() {
       localStorage.setItem('cp-exam-checklist', JSON.stringify([...checkedItems]));
     } catch { /* storage full */ }
   }, [checkedItems]);
+
+  // Auto-select condition from URL params (e.g., navigating from ConditionDetail)
+  useEffect(() => {
+    const urlCondition = searchParams.get('condition');
+    if (urlCondition && !selectedCondition) {
+      // Find matching exam prep condition key (case-insensitive partial match)
+      const matchKey = Object.keys(examPrepData).find(k =>
+        k.toLowerCase().includes(urlCondition.toLowerCase()) ||
+        urlCondition.toLowerCase().includes(k.toLowerCase())
+      );
+      if (matchKey) {
+        setSelectedCondition(matchKey);
+      } else {
+        // Try matching by category
+        const catMatch = examCategories.find(cat =>
+          cat.conditions.some(c =>
+            c.toLowerCase().includes(urlCondition.toLowerCase()) ||
+            urlCondition.toLowerCase().includes(c.toLowerCase())
+          )
+        );
+        if (catMatch) {
+          const condMatch = catMatch.conditions.find(c =>
+            c.toLowerCase().includes(urlCondition.toLowerCase()) ||
+            urlCondition.toLowerCase().includes(c.toLowerCase())
+          );
+          if (condMatch) setSelectedCondition(condMatch);
+        }
+      }
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const selectedPrepData = selectedCondition ? examPrepData[selectedCondition] : null;
 

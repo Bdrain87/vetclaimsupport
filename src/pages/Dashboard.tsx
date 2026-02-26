@@ -321,7 +321,7 @@ export default function Dashboard() {
                 />
                 <motion.circle
                   cx="18" cy="18" r="15" fill="none"
-                  stroke="var(--gold-md, #ECC840)" strokeWidth="3"
+                  stroke="var(--gold-md, #F0C000)" strokeWidth="3"
                   strokeLinecap="round"
                   strokeDasharray={`${combinedRating}, 100`}
                   initial={{ strokeDasharray: '0, 100' }}
@@ -397,7 +397,7 @@ export default function Dashboard() {
               className={cn(
                 'flex items-start gap-3 p-3 rounded-lg border',
                 r.priority === 'high'
-                  ? 'border-gold/30 bg-[rgba(212,175,55,0.05)]'
+                  ? 'border-gold/30 bg-[rgba(240,192,0,0.05)]'
                   : 'border-border bg-secondary',
               )}
             >

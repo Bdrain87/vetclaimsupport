@@ -1,11 +1,11 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { Link2, Plus, Check, FileSignature, Search, ArrowRight } from 'lucide-react';
 import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { useClaims } from '@/hooks/useClaims';
 import { secondaryConditions, type SecondaryConnection } from '@/data/secondaryConditions';
 import { vaConditions, type VACondition, getConditionById, searchConditions } from '@/data/vaConditions';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { AlertTriangle } from 'lucide-react';
 import { PageContainer } from '@/components/PageContainer';
 
@@ -28,6 +28,7 @@ const strengthConfig = {
 };
 
 export default function SecondaryFinder() {
+  const [searchParams] = useSearchParams();
   const [selectedPrimary, setSelectedPrimary] = useState<string | null>(null);
   const [disclaimerAcknowledged, setDisclaimerAcknowledged] = useState(false);
   const { conditions: userConditions, addCondition, hasCondition } = useUserConditions();
@@ -71,6 +72,14 @@ export default function SecondaryFinder() {
     if (!selectedPrimary) return [];
     return findSecondariesForPrimary(selectedPrimary);
   }, [selectedPrimary, findSecondariesForPrimary]);
+
+  // Auto-select condition from URL params (e.g., navigating from ConditionDetail)
+  useEffect(() => {
+    const urlCondition = searchParams.get('condition');
+    if (urlCondition && !selectedPrimary) {
+      setSelectedPrimary(urlCondition);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Handle selecting from autocomplete
   const handleAutocompleteSelect = (condition: VACondition) => {
@@ -119,7 +128,7 @@ export default function SecondaryFinder() {
 
       {/* Disclaimer */}
       {!disclaimerAcknowledged ? (
-        <div className="rounded-xl p-4 flex items-start gap-3 bg-[rgba(212,175,55,0.08)] border border-gold/20">
+        <div className="rounded-xl p-4 flex items-start gap-3 bg-[rgba(240,192,0,0.08)] border border-gold/20">
           <AlertTriangle className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-foreground">Educational Tool Only</p>
@@ -139,7 +148,7 @@ export default function SecondaryFinder() {
       ) : (
         <button
           onClick={() => setDisclaimerAcknowledged(false)}
-          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl border border-[rgba(212,175,55,0.15)] bg-[rgba(212,175,55,0.04)] text-xs text-muted-foreground hover:bg-[rgba(212,175,55,0.08)] transition-colors"
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl border border-[rgba(240,192,0,0.15)] bg-[rgba(240,192,0,0.04)] text-xs text-muted-foreground hover:bg-[rgba(240,192,0,0.08)] transition-colors"
         >
           <AlertTriangle className="h-3.5 w-3.5 text-gold flex-shrink-0" />
           <span>Educational tool disclaimer acknowledged — tap to review</span>
@@ -270,7 +279,7 @@ export default function SecondaryFinder() {
 
       {/* Info card */}
       {!selectedPrimary && (
-        <div className="rounded-2xl p-5 bg-[rgba(212,175,55,0.05)] border border-[rgba(212,175,55,0.15)]">
+        <div className="rounded-2xl p-5 bg-[rgba(240,192,0,0.05)] border border-[rgba(240,192,0,0.15)]">
           <h3 className="text-foreground/90 font-semibold mb-2 text-sm">How Secondary Claims Work</h3>
           <ol className="space-y-1.5 text-xs text-muted-foreground">
             <li>1. Select your already service-connected (primary) condition</li>

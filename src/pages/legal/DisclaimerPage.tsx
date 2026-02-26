@@ -84,7 +84,7 @@ export default function DisclaimerPage() {
         {/* AI-Generated Content Warning */}
         <div className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">AI-Generated Content Warning</h2>
-          <div className="rounded-xl bg-[rgba(212,175,55,0.05)] border border-gold/20 p-4 space-y-3">
+          <div className="rounded-xl bg-[rgba(240,192,0,0.05)] border border-gold/20 p-4 space-y-3">
             <p className="text-muted-foreground">
               This app uses a third-party AI service provider (currently Google Gemini) to generate suggestions and content. {AI_COPY.hallucinationWarning}{' '}
               <strong className="text-gold">NEVER submit AI-generated legal citations without independent verification.</strong>{' '}

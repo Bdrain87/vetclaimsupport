@@ -1,4 +1,5 @@
-import { useState, useMemo, useRef, useCallback } from 'react';
+import { useState, useMemo, useRef, useCallback, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   ClipboardList,
   Search,
@@ -140,11 +141,12 @@ interface PrepFormData {
 
 export default function DBQPrepSheet() {
   const printRef = useRef<HTMLDivElement>(null);
+  const [searchParams] = useSearchParams();
   const { data } = useClaims();
   const { conditions: userConditions } = useUserConditions();
   const [conditionSearch, setConditionSearch] = useState(() => {
     const draft = useAppStore.getState().formDrafts['tool:dbq-prep'];
-    return draft?.condition || '';
+    return draft?.condition || searchParams.get('condition') || '';
   });
   const [showConditionDropdown, setShowConditionDropdown] = useState(false);
   const [exporting, setExporting] = useState(false);
@@ -346,6 +348,14 @@ export default function DBQPrepSheet() {
 
     setPrefilled(p => ({ ...p, ...newPrefilled }));
   };
+
+  // Auto-select condition from URL params (e.g., navigating from Conditions page)
+  useEffect(() => {
+    const urlCondition = searchParams.get('condition');
+    if (urlCondition && !formData.condition) {
+      handleConditionSelect(urlCondition);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggleSection = (section: string) => {
     setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));

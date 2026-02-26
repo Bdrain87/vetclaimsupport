@@ -25,14 +25,14 @@
   --color-success-100: #D1FAE5;
   --color-success-50:  #ECFDF5;
 
-  /* METALLIC GOLD SYSTEM — bright, luminous metallic gold */
-  --color-accent-700: #C8A020;
-  --color-accent-600: #D4B030;
-  --color-accent-500: #ECC840;
-  --color-accent-400: #FFE566;
-  --color-accent-300: #FFF0B0;
-  --color-accent-200: rgba(240, 200, 64, 0.2);
-  --color-accent-100: rgba(240, 200, 64, 0.1);
+  /* METALLIC GOLD SYSTEM — bright, luminous, true gold */
+  --color-accent-700: #D4A800;
+  --color-accent-600: #E0B400;
+  --color-accent-500: #F0C000;
+  --color-accent-400: #FFD700;
+  --color-accent-300: #FFE680;
+  --color-accent-200: rgba(240, 192, 0, 0.2);
+  --color-accent-100: rgba(240, 192, 0, 0.1);
 
   /* Warning Orange */
   --color-warning-600: #D97706;
@@ -187,27 +187,27 @@
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
   /* Focus Rings */
-  --shadow-focus: 0 0 0 3px rgba(240, 200, 64, 0.4);
+  --shadow-focus: 0 0 0 3px rgba(240, 192, 0, 0.4);
   --shadow-focus-error: 0 0 0 3px rgba(239, 68, 68, 0.4);
 
   /* ═══════════════════════════════════════════════════════════════
      GOLD ACCENT SYSTEM — Metallic "Real Gold" Palette
      ═══════════════════════════════════════════════════════════════ */
 
-  /* Core metallic gold tones — bright, luminous metallic */
-  --gold-hl: #FFE566;
-  --gold-md: #ECC840;
-  --gold-dk: #C8A020;
+  /* Core metallic gold tones — bright, true gold */
+  --gold-hl: #FFD700;
+  --gold-md: #F0C000;
+  --gold-dk: #D4A800;
 
   /* Gold transparency variants */
-  --gold-glow: rgba(240, 200, 64, 0.40);
-  --gold-border: rgba(240, 210, 80, 0.18);
-  --gold-border-strong: rgba(240, 200, 64, 0.35);
+  --gold-glow: rgba(240, 192, 0, 0.45);
+  --gold-border: rgba(240, 200, 0, 0.18);
+  --gold-border-strong: rgba(240, 192, 0, 0.35);
 
   /* Metallic gradient — bright gold horizontal sheen with specular highlight */
-  --gold-gradient: linear-gradient(90deg, #C8A020 0%, #ECC440 20%, #FFE566 50%, #ECC440 80%, #C8A020 100%);
-  --gold-gradient-subtle: linear-gradient(90deg, rgba(200, 160, 32, 0.12) 0%, rgba(240, 200, 64, 0.08) 50%, rgba(200, 160, 32, 0.06) 100%);
-  --gold-gradient-shimmer: linear-gradient(90deg, transparent 0%, rgba(255, 229, 102, 0.5) 50%, transparent 100%);
+  --gold-gradient: linear-gradient(90deg, #D4A800 0%, #F0C000 20%, #FFD700 50%, #F0C000 80%, #D4A800 100%);
+  --gold-gradient-subtle: linear-gradient(90deg, rgba(212, 168, 0, 0.12) 0%, rgba(240, 192, 0, 0.08) 50%, rgba(212, 168, 0, 0.06) 100%);
+  --gold-gradient-shimmer: linear-gradient(90deg, transparent 0%, rgba(255, 215, 0, 0.5) 50%, transparent 100%);
 
   /* Gold focus ring */
   --shadow-focus-gold: 0 0 0 2px var(--gold-md), 0 0 12px var(--gold-glow);
@@ -309,13 +309,13 @@
 }
 
 .gold-glow {
-  box-shadow: 0 0 20px rgba(240, 200, 64, 0.35), 0 0 40px rgba(240, 200, 64, 0.15);
+  box-shadow: 0 0 20px rgba(240, 192, 0, 0.35), 0 0 40px rgba(240, 192, 0, 0.15);
 }
 
 .gold-border-glow {
   border: 2px solid transparent;
   border-image: var(--gold-gradient) 1;
-  box-shadow: 0 0 15px rgba(240, 200, 64, 0.35), inset 0 0 15px rgba(240, 200, 64, 0.08);
+  box-shadow: 0 0 15px rgba(240, 192, 0, 0.35), inset 0 0 15px rgba(240, 192, 0, 0.08);
 }
 
 @keyframes goldShimmer {
@@ -326,12 +326,12 @@
 .gold-shimmer {
   background: linear-gradient(
     90deg,
-    #C8A020 0%,
-    #ECC440 20%,
-    #FFE566 40%,
-    #ECC440 60%,
-    #C8A020 80%,
-    #ECC440 100%
+    #D4A800 0%,
+    #F0C000 20%,
+    #FFD700 40%,
+    #F0C000 60%,
+    #D4A800 80%,
+    #F0C000 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;

@@ -732,7 +732,7 @@ export default function CPExamPacket() {
       {/* Section 7: Research Legal Precedent */}
       <div id="legal-research">
         <PacketSection title="Research Legal Precedent" icon={Scale} sectionNumber={7}>
-          <div className="bg-[#C8A020]/30 border border-[#C8A020]/50 rounded-lg p-4">
+          <div className="bg-[#D4A800]/30 border border-[#D4A800]/50 rounded-lg p-4">
             <h3 className="text-lg font-semibold text-gold-hl mb-2">Research Legal Precedent</h3>
             <p className="text-sm text-muted-foreground mb-3">
               Use these verified legal databases to find case law relevant to your claim:

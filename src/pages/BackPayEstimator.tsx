@@ -422,7 +422,7 @@ export default function BackPayEstimator() {
       )}
 
       {/* Disclaimer */}
-      <div className="flex items-start gap-3 bg-[rgba(212,175,55,0.05)] border border-gold/20 rounded-xl p-4">
+      <div className="flex items-start gap-3 bg-[rgba(240,192,0,0.05)] border border-gold/20 rounded-xl p-4">
         <Info className="h-5 w-5 text-gold shrink-0 mt-0.5" />
         <div className="space-y-1">
           <p className="text-sm font-medium text-gold">Disclaimer</p>

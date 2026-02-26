@@ -203,7 +203,7 @@ export function PresumptiveConditionSuggestions({
         </h3>
       </div>
 
-      <div className="rounded-xl p-3 flex items-start gap-3 bg-[rgba(212,175,55,0.08)] border border-gold/20">
+      <div className="rounded-xl p-3 flex items-start gap-3 bg-[rgba(240,192,0,0.08)] border border-gold/20">
         <AlertTriangle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
         <p className="text-xs text-muted-foreground">
           Based on your service locations and exposures, you <strong>may be eligible</strong> for

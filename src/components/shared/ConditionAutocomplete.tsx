@@ -165,7 +165,7 @@ export function ConditionAutocomplete({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           autoFocus={autoFocus}
-          className="w-full h-12 pl-10 pr-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[rgba(212,175,55,0.4)] focus:border-[rgba(212,175,55,0.5)] transition-all"
+          className="w-full h-12 pl-10 pr-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[rgba(240,192,0,0.4)] focus:border-[rgba(240,192,0,0.5)] transition-all"
         />
       </div>
 

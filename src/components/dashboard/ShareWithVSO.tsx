@@ -308,7 +308,7 @@ export function ShareWithVSO() {
             </div>
 
             {/* Privacy Note */}
-            <div className="p-3 bg-[rgba(212,175,55,0.08)] border border-[rgba(212,175,55,0.25)] rounded-lg">
+            <div className="p-3 bg-[rgba(240,192,0,0.08)] border border-[rgba(240,192,0,0.25)] rounded-lg">
               <p className="text-xs text-muted-foreground">
                 <strong className="text-foreground">Privacy Note:</strong> This summary contains only
                 aggregate counts and condition names. Detailed medical information stays on your device.

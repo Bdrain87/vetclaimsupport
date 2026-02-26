@@ -607,16 +607,16 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
         <Button variant="outline" size="sm" onClick={() => navigate('/health/symptoms')}>
           <Activity className="h-3 w-3 mr-1" /> Log Symptom
         </Button>
-        <Button variant="outline" size="sm" onClick={() => navigate('/claims/secondary-finder')}>
+        <Button variant="outline" size="sm" onClick={() => navigate(`/claims/secondary-finder?condition=${encodeURIComponent(conditionDetails.name)}`)}>
           <Link2 className="h-3 w-3 mr-1" /> Find Secondaries
         </Button>
-        <Button variant="outline" size="sm" onClick={() => navigate('/prep/doctor-summary')}>
+        <Button variant="outline" size="sm" onClick={() => navigate(`/prep/doctor-summary?primary=${encodeURIComponent(conditionDetails.name)}`)}>
           <FileText className="h-3 w-3 mr-1" /> Doctor Summary
         </Button>
-        <Button variant="outline" size="sm" onClick={() => navigate('/prep/exam')}>
+        <Button variant="outline" size="sm" onClick={() => navigate(`/prep/exam?condition=${encodeURIComponent(conditionDetails.name)}`)}>
           <Stethoscope className="h-3 w-3 mr-1" /> Exam Prep
         </Button>
-        <Button variant="outline" size="sm" onClick={() => navigate('/cp-exam-packet')}>
+        <Button variant="outline" size="sm" onClick={() => navigate(`/cp-exam-packet?condition=${encodeURIComponent(conditionDetails.name)}`)}>
           <FileCheck className="h-3 w-3 mr-1" /> Exam Packet
         </Button>
       </div>
@@ -720,7 +720,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="bg-[rgba(212,175,55,0.08)] border border-gold/20 rounded-lg p-4">
+          <div className="bg-[rgba(240,192,0,0.08)] border border-gold/20 rounded-lg p-4">
             <p className="text-sm text-muted-foreground mb-3">
               Use these verified legal databases to find case law relevant to your claim:
             </p>
@@ -1035,7 +1035,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                   </ul>
                 </div>
 
-                <Button variant="outline" className="w-full" onClick={() => navigate('/prep/exam')}>
+                <Button variant="outline" className="w-full" onClick={() => navigate(`/prep/exam?condition=${encodeURIComponent(conditionDetails.name)}`)}>
                   <Stethoscope className="h-4 w-4 mr-2" />
                   Full Exam Prep Guide
                 </Button>
@@ -1049,11 +1049,11 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                   We don't have a specific DBQ reference mapped for {conditionDetails.abbreviation || conditionDetails.name} yet. Use our general exam prep tools or view DBQ forms on VA.gov.
                 </p>
                 <div className="flex flex-col gap-2">
-                  <Button variant="outline" size="sm" onClick={() => navigate('/prep/exam')}>
+                  <Button variant="outline" size="sm" onClick={() => navigate(`/prep/exam?condition=${encodeURIComponent(conditionDetails.name)}`)}>
                     <Stethoscope className="h-4 w-4 mr-2" />
                     General Exam Prep Guide
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => navigate('/prep/dbq')}>
+                  <Button variant="outline" size="sm" onClick={() => navigate(`/prep/dbq?condition=${encodeURIComponent(conditionDetails.name)}`)}>
                     <FileText className="h-4 w-4 mr-2" />
                     DBQ Form Guidance Tool
                   </Button>
@@ -1120,7 +1120,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                   We don't have specific secondary conditions mapped for {conditionDetails.abbreviation || conditionDetails.name} yet. Use the search above or the Secondary Condition Finder.
                 </p>
               )}
-              <Button variant="outline" className="w-full mt-4" onClick={() => navigate('/claims/secondary-finder')}>
+              <Button variant="outline" className="w-full mt-4" onClick={() => navigate(`/claims/secondary-finder?condition=${encodeURIComponent(conditionDetails.name)}`)}>
                 <Link2 className="h-4 w-4 mr-2" />
                 Explore Secondary Conditions Finder
               </Button>

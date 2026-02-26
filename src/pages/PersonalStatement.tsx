@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   ChevronLeft,
   ChevronRight,
@@ -42,7 +43,7 @@ import {
   buildFunctionalImpactSummary,
 } from '@/utils/prefillHelpers';
 import type { VACondition } from '@/data/vaConditions';
-import { getConditionById } from '@/data/vaConditions';
+import { getConditionById, searchConditions } from '@/data/vaConditions';
 
 interface PersonalStatementFormData {
   condition: VACondition | null;
@@ -123,6 +124,7 @@ function GuidanceTip({ tips }: GuidanceTipProps) {
 }
 
 export default function PersonalStatement() {
+  const [searchParams] = useSearchParams();
   const { firstName, lastName } = useProfileStore();
   const { data: claimsData } = useClaims();
   const {
@@ -181,6 +183,17 @@ export default function PersonalStatement() {
     setPrefilled((prev) => ({ ...prev, ...newPrefilled }));
     setPolishedStatement(null);
   }, [claimsData.symptoms, claimsData.medications, setFormData]);
+
+  // Auto-select condition from URL params (e.g., navigating from Conditions page)
+  useEffect(() => {
+    const urlCondition = searchParams.get('condition');
+    if (urlCondition && !formData.condition) {
+      const matches = searchConditions(urlCondition);
+      if (matches && matches.length > 0) {
+        handleConditionSelect(matches[0]);
+      }
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const generateStatement = useCallback((): string => {
     const today = new Date().toLocaleDateString('en-US', {
@@ -570,7 +583,7 @@ export default function PersonalStatement() {
             </div>
 
             {filledSections < 5 && (
-              <Card className="border-gold/30 bg-[rgba(212,175,55,0.05)]">
+              <Card className="border-gold/30 bg-[rgba(240,192,0,0.05)]">
                 <CardContent className="pt-4">
                   <div className="flex items-start gap-2">
                     <AlertCircle className="h-5 w-5 text-gold mt-0.5 shrink-0" />

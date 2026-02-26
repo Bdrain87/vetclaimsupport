@@ -128,7 +128,7 @@ export default function TermsOfServicePage() {
         {/* Section 7: Case Law and Legal Citations Warning */}
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">7. Case Law and Legal Citations Warning</h2>
-          <div className="rounded-xl bg-[rgba(212,175,55,0.05)] border border-gold/20 p-4 space-y-3">
+          <div className="rounded-xl bg-[rgba(240,192,0,0.05)] border border-gold/20 p-4 space-y-3">
             <p className="text-muted-foreground">
               <strong className="text-foreground">Verified Case Law Database:</strong> The Appeals Guide&apos;s &quot;My Appeal&quot; and &quot;Case Law&quot; tabs retrieve citations from a curated database of real BVA, CAVC, Federal Circuit, and Supreme Court decisions. These citations include source URLs to official court records. However, case law summaries have been simplified and may not capture every nuance of a ruling. Laws, regulations, and case interpretations can change over time.
             </p>

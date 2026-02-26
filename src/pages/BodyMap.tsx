@@ -322,8 +322,8 @@ export default function BodyMap() {
   // Helper to get fill/stroke for regions
   const _getRegionFill = (regionId: string) => {
     if (selectedRegion === regionId) return 'url(#goldGradient)';
-    if (regionCounts[regionId]) return 'rgba(212,175,55,0.4)';
-    if (hoveredRegion === regionId) return 'rgba(212,175,55,0.25)';
+    if (regionCounts[regionId]) return 'rgba(240,192,0,0.4)';
+    if (hoveredRegion === regionId) return 'rgba(240,192,0,0.25)';
     return '#9CA3AF';
   };
 
@@ -439,9 +439,9 @@ export default function BodyMap() {
 
   // ----- Region overlay helpers (unchanged structure, now aware of view) -----
   const getOverlayBg = (regionId: string) => {
-    if (selectedRegion === regionId) return 'rgba(212,175,55,0.4)';
-    if (regionCounts[regionId] || pinCounts[regionId]) return 'rgba(212,175,55,0.3)';
-    if (hoveredRegion === regionId) return 'rgba(212,175,55,0.25)';
+    if (selectedRegion === regionId) return 'rgba(240,192,0,0.4)';
+    if (regionCounts[regionId] || pinCounts[regionId]) return 'rgba(240,192,0,0.3)';
+    if (hoveredRegion === regionId) return 'rgba(240,192,0,0.25)';
     return 'transparent';
   };
 
@@ -574,7 +574,7 @@ export default function BodyMap() {
           </Button>
 
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-[rgba(212,175,55,0.1)] border border-[rgba(212,175,55,0.2)]">
+            <div className="p-2.5 rounded-xl bg-[rgba(240,192,0,0.1)] border border-[rgba(240,192,0,0.2)]">
               <Activity className="h-6 w-6 text-gold" />
             </div>
             <div>
@@ -682,7 +682,7 @@ export default function BodyMap() {
               transition={{ duration: 0.2 }}
               className="overflow-hidden"
             >
-              <Card className="bg-[rgba(212,175,55,0.08)] border-border">
+              <Card className="bg-[rgba(240,192,0,0.08)] border-border">
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-base text-foreground flex items-center gap-2">
@@ -807,7 +807,7 @@ export default function BodyMap() {
         {/* Main layout: body diagram + condition panel */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Body Diagram with PNG Image */}
-          <Card className="bg-[rgba(212,175,55,0.08)] border-border">
+          <Card className="bg-[rgba(240,192,0,0.08)] border-border">
             <CardHeader className="pb-2">
               <CardTitle className="text-base text-foreground">
                 {viewMode === 'front' ? 'Front View' : 'Back View'}
@@ -1016,7 +1016,7 @@ export default function BodyMap() {
             {activeRegion ? (
               <>
                 {/* Region header */}
-                <Card className="bg-[rgba(212,175,55,0.08)] border-border">
+                <Card className="bg-[rgba(240,192,0,0.08)] border-border">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-lg text-foreground flex items-center gap-2">
@@ -1071,7 +1071,7 @@ export default function BodyMap() {
                             }
                             className={`w-full text-left rounded-lg border p-3 transition-all duration-200 ${
                               isAdded
-                                ? `bg-[rgba(212,175,55,0.15)] border-[rgba(212,175,55,0.4)] hover:bg-gold/20 ${showPainTracking && painLevel > 0 ? 'rounded-b-none border-b-0' : ''}`
+                                ? `bg-[rgba(240,192,0,0.15)] border-[rgba(240,192,0,0.4)] hover:bg-gold/20 ${showPainTracking && painLevel > 0 ? 'rounded-b-none border-b-0' : ''}`
                                 : 'bg-muted/30 border-border hover:bg-muted/50 hover:border-border'
                             }`}
                           >
@@ -1127,7 +1127,7 @@ export default function BodyMap() {
                           {/* Pain intensity scale — shown when condition is added and flag enabled */}
                           {isAdded && showPainTracking && (
                             <div
-                              className="bg-[rgba(212,175,55,0.08)] border border-[rgba(212,175,55,0.4)] border-t-0 rounded-b-lg px-3 py-2"
+                              className="bg-[rgba(240,192,0,0.08)] border border-[rgba(240,192,0,0.4)] border-t-0 rounded-b-lg px-3 py-2"
                               onClick={(e) => e.stopPropagation()}
                             >
                               <div className="flex items-center gap-2 mb-1.5">
@@ -1250,10 +1250,10 @@ export default function BodyMap() {
               </>
             ) : (
               /* Empty state when no region is selected */
-              <Card className="bg-[rgba(212,175,55,0.08)] border-border">
+              <Card className="bg-[rgba(240,192,0,0.08)] border-border">
                 <CardContent className="py-16">
                   <div className="text-center space-y-4">
-                    <div className="mx-auto w-14 h-14 rounded-full bg-[rgba(212,175,55,0.1)] border border-[rgba(212,175,55,0.2)] flex items-center justify-center">
+                    <div className="mx-auto w-14 h-14 rounded-full bg-[rgba(240,192,0,0.1)] border border-[rgba(240,192,0,0.2)] flex items-center justify-center">
                       <Info className="h-7 w-7 text-gold" />
                     </div>
                     <div>
@@ -1272,7 +1272,7 @@ export default function BodyMap() {
 
             {/* Selected conditions summary */}
             {totalSelected > 0 && (
-              <Card className="bg-[rgba(212,175,55,0.08)] border-border">
+              <Card className="bg-[rgba(240,192,0,0.08)] border-border">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base text-foreground flex items-center gap-2">
                     <Plus className="h-4 w-4 text-gold" />
@@ -1299,7 +1299,7 @@ export default function BodyMap() {
                         return (
                           <Badge
                             key={uc.id}
-                            className="bg-[rgba(212,175,55,0.15)] text-gold-hl border border-gold/30 hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30 cursor-pointer transition-colors gap-1 pr-1.5"
+                            className="bg-[rgba(240,192,0,0.15)] text-gold-hl border border-gold/30 hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30 cursor-pointer transition-colors gap-1 pr-1.5"
                             onClick={() => removeUserCondition(uc.id)}
                             title={`${label} (${regionLabel})${showPainTracking && pain > 0 ? ` — Pain: ${pain}/10` : ''} — click to remove`}
                           >

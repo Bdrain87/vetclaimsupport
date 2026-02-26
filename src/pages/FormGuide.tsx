@@ -73,7 +73,7 @@ export default function FormGuide() {
       {/* Disclaimer Banner */}
       <div className={cn(
         'rounded-xl p-4 flex items-start gap-3',
-        'bg-[rgba(212,175,55,0.08)] border border-gold/20'
+        'bg-[rgba(240,192,0,0.08)] border border-gold/20'
       )}>
         <AlertTriangle className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
         <div>

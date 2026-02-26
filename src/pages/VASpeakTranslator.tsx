@@ -511,7 +511,7 @@ export default function VASpeakTranslator() {
       {/* ----------------------------------------------------------------- */}
       {/* Tips Card                                                          */}
       {/* ----------------------------------------------------------------- */}
-      <Card className="border-gold/20 bg-[rgba(212,175,55,0.05)]">
+      <Card className="border-gold/20 bg-[rgba(240,192,0,0.05)]">
         <CardContent className="pt-6 space-y-3">
           <h3 className="text-sm font-semibold text-foreground">
             Tips for Describing Your Symptoms

@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import {
-  Search, Plus, ChevronRight, AlertCircle, Info,
+  Search, Plus, ChevronRight, AlertCircle,
   Link2, Trash2, Edit, Filter, Shield, FileText,
   Stethoscope, Calendar, PersonStanding, Compass, Calculator,
   Zap, AlertTriangle,
@@ -179,11 +179,11 @@ function ConditionCard({ userCondition, conditionDetails, onView, onRemove, onNa
                 <FileText className="h-3 w-3 mr-1" />
                 DBQ
               </Button>
-              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate('/prep/exam')}>
+              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate(`/prep/exam?condition=${encodeURIComponent(conditionDetails.name)}`)}>
                 <Stethoscope className="h-3 w-3 mr-1" />
                 C&P Prep
               </Button>
-              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate('/prep/personal-statement')}>
+              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate(`/prep/personal-statement?condition=${encodeURIComponent(conditionDetails.name)}`)}>
                 <Edit className="h-3 w-3 mr-1" />
                 Statement
               </Button>
@@ -389,7 +389,7 @@ export default function Conditions() {
             const firstGap = evidenceGaps[0];
             if (firstGap?.conditionId) navigate(`/claims/${firstGap.conditionId}`);
           }}
-          className="w-full rounded-xl p-3 text-left bg-[rgba(212,175,55,0.08)] border border-gold/20 hover:bg-[rgba(212,175,55,0.12)] transition-colors"
+          className="w-full rounded-xl p-3 text-left bg-[rgba(240,192,0,0.08)] border border-gold/20 hover:bg-[rgba(240,192,0,0.12)] transition-colors"
         >
           <div className="flex items-start gap-3">
             <AlertTriangle className="h-4 w-4 text-gold flex-shrink-0 mt-0.5" />

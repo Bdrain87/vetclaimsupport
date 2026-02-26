@@ -242,7 +242,7 @@ export default function Sleep() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className="p-3 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 shadow-[0_0_24px_var(--gold-glow)]">
-            <Moon className="h-6 w-6 text-gold drop-shadow-[0_0_8px_rgba(236,200,64,0.5)]" />
+            <Moon className="h-6 w-6 text-gold drop-shadow-[0_0_8px_rgba(240,192,0,0.5)]" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground tracking-tight">Sleep Tracker</h1>
@@ -264,7 +264,7 @@ export default function Sleep() {
       </div>
 
       {/* VA Rating Info - Premium Card */}
-      <div className="rounded-2xl bg-gradient-to-br from-gold/10 to-gold/5 border border-gold/30 p-5 shadow-lg" style={{ boxShadow: '0 4px 24px rgba(240, 200, 64, 0.15)' }}>
+      <div className="rounded-2xl bg-gradient-to-br from-gold/10 to-gold/5 border border-gold/30 p-5 shadow-lg" style={{ boxShadow: '0 4px 24px rgba(240, 192, 0, 0.15)' }}>
         <div className="flex items-center gap-3 mb-4">
           <div className="p-2 rounded-xl bg-gold/20">
             <Moon className="h-5 w-5 text-gold" />
@@ -297,7 +297,7 @@ export default function Sleep() {
       {/* Add Log Button */}
       <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
         <DialogTrigger asChild>
-          <Button className="gap-2 bg-gold hover:bg-[#D4B030] text-[#000000] shadow-[0_4px_16px_rgba(236,200,64,0.3)]">
+          <Button className="gap-2 bg-gold hover:bg-[#E0B400] text-[#000000] shadow-[0_4px_16px_rgba(240,192,0,0.3)]">
             <Plus className="h-4 w-4" />
             Log Sleep
           </Button>
