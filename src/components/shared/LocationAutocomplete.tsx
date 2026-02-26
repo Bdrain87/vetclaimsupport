@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { MapPin } from 'lucide-react';
 import { MILITARY_BASES } from '@/data/militaryBases';
+import { searchLocations } from '@/data/deployment-locations/search';
 
 // --- Highlighted text ---
 
@@ -42,11 +43,15 @@ export function LocationAutocomplete({
   const highlightRef = useRef<HTMLButtonElement>(null);
   const listboxId = useRef(`location-listbox-${Math.random().toString(36).slice(2, 9)}`).current;
 
-  // Fuzzy search: prefix matches first, then contains matches
+  // Fuzzy search: CONUS bases + deployment locations (FOBs, camps, theaters)
   const results = useMemo((): string[] => {
     const q = value.trim().toLowerCase();
     if (q.length < 1) return [];
 
+    const seen = new Set<string>();
+    const merged: string[] = [];
+
+    // 1. Search CONUS military bases
     const prefixMatches: string[] = [];
     const containsMatches: string[] = [];
 
@@ -60,7 +65,6 @@ export function LocationAutocomplete({
     }
 
     // Also match on individual words within each base name
-    // e.g. typing "norfolk" matches "Naval Station Norfolk, VA"
     for (const base of MILITARY_BASES) {
       if (prefixMatches.includes(base) || containsMatches.includes(base)) continue;
       const words = base.toLowerCase().split(/[\s,()/-]+/);
@@ -69,7 +73,20 @@ export function LocationAutocomplete({
       }
     }
 
-    return [...prefixMatches, ...containsMatches].slice(0, 15);
+    for (const b of [...prefixMatches, ...containsMatches]) {
+      const key = b.toLowerCase();
+      if (!seen.has(key)) { seen.add(key); merged.push(b); }
+    }
+
+    // 2. Search deployment locations database (FOBs, camps, airfields, etc.)
+    const deployResults = searchLocations(value.trim(), { limit: 15 });
+    for (const loc of deployResults) {
+      const label = loc.country ? `${loc.name}, ${loc.country}` : loc.name;
+      const key = label.toLowerCase();
+      if (!seen.has(key)) { seen.add(key); merged.push(label); }
+    }
+
+    return merged.slice(0, 15);
   }, [value]);
 
   // Open dropdown when there are results (but not right after a selection)
