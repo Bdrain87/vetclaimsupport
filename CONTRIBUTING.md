@@ -10,8 +10,8 @@ This project is dedicated to helping veterans. Please be respectful and construc
 
 ### Prerequisites
 
-- Node.js 18 or higher
-- npm or bun
+- Node.js 20 or higher
+- npm 10+
 - Git
 
 ### Local Development Setup
@@ -153,15 +153,39 @@ Example: `feat: add migraine severity tracking`
 5. Fill out the PR template
 6. Request review
 
+### Quality Gates (CI enforced)
+
+Every push and PR must pass all of these:
+
+```bash
+# TypeScript — zero errors
+npx tsc --noEmit
+
+# ESLint — zero errors, zero warnings
+npx eslint src/ --max-warnings 0
+
+# Tests — 100% pass rate
+npx vitest run
+
+# Production build — zero errors
+npx vite build
+
+# Security — zero high/critical vulnerabilities
+npm audit --audit-level=high
+```
+
+CI runs these automatically via GitHub Actions on every push to `main` and on all pull requests.
+
 ### PR Checklist
 
-- [ ] Code follows the style guidelines
+- [ ] All quality gates pass locally
 - [ ] TypeScript types are properly defined
-- [ ] Tests pass (`npm run test`)
-- [ ] Build succeeds (`npm run build`)
+- [ ] Tests pass (`npx vitest run`)
+- [ ] Build succeeds (`npx vite build`)
 - [ ] No console errors or warnings
+- [ ] Veteran-facing text uses plain English (no CFR citations, diagnostic codes, or jargon)
 - [ ] Mobile-responsive design
-- [ ] Accessibility considered
+- [ ] Accessibility considered (WCAG 2.1 AA)
 
 ## Testing
 

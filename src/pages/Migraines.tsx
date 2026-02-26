@@ -339,7 +339,7 @@ export default function Migraines() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground tracking-tight">Migraine Tracker</h1>
-            <p className="text-muted-foreground text-sm">Aligned with VA rating criteria DC 8100</p>
+            <p className="text-muted-foreground text-sm">Aligned with VA migraine rating criteria</p>
           </div>
         </div>
         <Button onClick={handleExportPDF} disabled={exporting} variant="outline" className="gap-2 border-border/50 hover:bg-muted">
@@ -351,7 +351,7 @@ export default function Migraines() {
       {/* Main Disclaimer */}
       <div className="p-4 bg-muted/50 border border-border rounded-xl">
         <p className="text-xs text-muted-foreground leading-relaxed">
-          The VA migraine rating criteria shown here are for reference only. Your actual rating will be determined by the VA based on your C&P examination and medical evidence. Track your migraines consistently to build a strong evidence record.
+          The VA migraine rating criteria shown here are for reference only. Your actual rating will be determined by the VA based on your VA examination and medical evidence. Track your migraines consistently to build a strong evidence record.
         </p>
       </div>
 
@@ -363,7 +363,7 @@ export default function Migraines() {
               <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex-shrink-0">
                 <Target className="h-5 w-5 text-primary" />
               </div>
-              <h3 className="text-lg font-bold text-foreground tracking-tight truncate">Estimated VA Rating (DC 8100)</h3>
+              <h3 className="text-lg font-bold text-foreground tracking-tight truncate">Estimated VA Rating — Migraines</h3>
             </div>
           </div>
           <CardContent className="p-5 space-y-4">

@@ -652,7 +652,7 @@ export default function CPExamPrepEnhanced() {
                           VA Rating Criteria
                         </CardTitle>
                         <CardDescription>
-                          {ratingCriteriaMap[selectedCondition].dc} — What the VA evaluates for this condition
+                          What the VA evaluates for this condition
                         </CardDescription>
                       </CardHeader>
                       <CardContent>

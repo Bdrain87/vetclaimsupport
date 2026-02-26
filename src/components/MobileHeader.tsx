@@ -1,8 +1,8 @@
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import useAppStore from '@/store/useAppStore';
-import { getConditionById } from '@/data/vaConditions';
 
 const ROOT_TAB_ROUTES = ['/', '/app', '/claims', '/health', '/prep', '/settings'];
 
@@ -25,7 +25,7 @@ const pageLabels: Record<string, string> = {
   '/health/exposures': 'Exposures',
   '/health/summary': '30-Day Summary',
   '/prep': 'Tools',
-  '/prep/exam': 'C&P Exam Prep',
+  '/prep/exam': 'VA Exam Prep',
   '/prep/personal-statement': 'Personal Statement',
   '/prep/buddy-statement': 'Buddy Statement',
   '/prep/doctor-summary': 'Doctor Summary',
@@ -35,7 +35,7 @@ const pageLabels: Record<string, string> = {
   '/prep/va-speak': 'VA-Speak Translator',
   '/prep/back-pay': 'Back Pay Estimator',
   '/prep/travel-pay': 'Travel Pay Calculator',
-  '/prep/bdd-guide': 'BDD Guide',
+  '/prep/bdd-guide': 'Pre-Discharge Filing',
   '/prep/packet': 'Claim Packet',
   '/prep/appeals': 'Appeals Guide',
   '/settings': 'Me',
@@ -57,7 +57,7 @@ const pageLabels: Record<string, string> = {
   '/settings/faq': 'FAQ',
   '/reference/conditions-by-conflict': 'Conditions by Conflict',
   '/reference/condition-guide': 'Condition Guide',
-  '/cp-exam-packet': 'C&P Exam Packet',
+  '/cp-exam-packet': 'VA Exam Packet',
 };
 
 function getParentRoute(pathname: string): string {
@@ -71,6 +71,34 @@ export function MobileHeader() {
   const navigate = useNavigate();
   const userConditions = useAppStore((s) => s.userConditions);
 
+  // Lazy-resolved condition name for dynamic routes (avoids loading entire conditions DB into main bundle)
+  const [dynamicTitle, setDynamicTitle] = useState<string | null>(null);
+
+  const conditionMatch = !pageLabels[location.pathname]
+    ? location.pathname.match(/^\/claims\/([^/]+)$/)
+    : null;
+
+  useEffect(() => {
+    if (!conditionMatch) {
+      setDynamicTitle(null);
+      return;
+    }
+    const condId = conditionMatch[1];
+    const uc = userConditions.find((c) => c.id === condId);
+    if (!uc) {
+      setDynamicTitle('Condition Detail');
+      return;
+    }
+    if (uc.displayName) {
+      setDynamicTitle(uc.displayName);
+      return;
+    }
+    import('@/data/conditions').then(({ getConditionById }) => {
+      const details = getConditionById(uc.conditionId);
+      setDynamicTitle(details?.abbreviation || details?.name || 'Condition Detail');
+    });
+  }, [location.pathname]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const isRootTab = ROOT_TAB_ROUTES.includes(location.pathname);
   const isOnboarding = location.pathname === '/onboarding';
 
@@ -78,16 +106,8 @@ export function MobileHeader() {
 
   let pageTitle = pageLabels[location.pathname];
   if (!pageTitle) {
-    const conditionMatch = location.pathname.match(/^\/claims\/([^/]+)$/);
     if (conditionMatch) {
-      const condId = conditionMatch[1];
-      const uc = userConditions.find((c) => c.id === condId);
-      if (uc) {
-        const details = getConditionById(uc.conditionId);
-        pageTitle = details?.abbreviation || details?.name || 'Condition Detail';
-      } else {
-        pageTitle = 'Condition Detail';
-      }
+      pageTitle = dynamicTitle || 'Condition Detail';
     } else {
       pageTitle = 'VCS';
     }

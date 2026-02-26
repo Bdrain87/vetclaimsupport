@@ -271,7 +271,7 @@ export default function Sleep() {
           </div>
           <div>
             <h3 className="font-bold text-foreground">VA Sleep Apnea Ratings</h3>
-            <p className="text-xs text-muted-foreground">38 CFR 4.97 DC 6847</p>
+            <p className="text-xs text-muted-foreground">VA sleep apnea rating schedule</p>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-3 text-xs">
@@ -375,7 +375,7 @@ export default function Sleep() {
                   <div className="space-y-3">
                     <Label className="text-base font-semibold flex items-center gap-2">
                       <Wind className="h-4 w-4 text-gold" />
-                      Sleep Apnea Symptoms (VA DC 6847)
+                      Sleep Apnea Symptoms
                     </Label>
 
                     {/* CPAP Section - CRITICAL for 50% rating */}

@@ -46,13 +46,13 @@ const faqData: FAQItem[] = [
   },
   {
     category: 'claims',
-    question: 'What is a C&P exam?',
-    answer: 'Compensation & Pension (C&P) exams are medical examinations ordered by the VA to evaluate your claimed disabilities. The examiner assesses the severity and connection to your service.',
+    question: 'What is a VA exam?',
+    answer: 'VA exams (also called Compensation & Pension exams) are medical examinations ordered by the VA to evaluate your claimed disabilities. The examiner assesses the severity and connection to your service.',
   },
   {
     category: 'claims',
-    question: 'What is a nexus letter?',
-    answer: 'A nexus letter is a medical opinion from a doctor stating that your current condition is "at least as likely as not" connected to your military service. It\'s crucial evidence for service connection.',
+    question: 'What is a nexus letter (service connection letter)?',
+    answer: 'A nexus letter — also called a service connection letter or doctor\'s opinion letter — is a medical opinion from a doctor stating that your current condition is "at least as likely as not" connected to your military service. It\'s crucial evidence for service connection.',
   },
   {
     category: 'claims',

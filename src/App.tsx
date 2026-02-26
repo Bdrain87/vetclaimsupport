@@ -423,6 +423,30 @@ function AppContent() {
     );
   }
 
+  // Free calculator — accessible without login
+  if (location.pathname === '/calculator') {
+    return (
+      <Suspense fallback={<LoadingFallback />}>
+        <div className="min-h-screen bg-background text-foreground">
+          <div className="max-w-4xl mx-auto px-4 py-6">
+            <Combination />
+            <div className="mt-6 text-center space-y-3">
+              <p className="text-sm text-muted-foreground">
+                Create a free account to save your conditions, track health data, and access all 58 tools.
+              </p>
+              <a
+                href="/auth"
+                className="inline-block px-6 py-2.5 rounded-lg bg-gold text-black font-semibold hover:bg-[#D4B030] transition-colors"
+              >
+                Sign Up Free
+              </a>
+            </div>
+          </div>
+        </div>
+      </Suspense>
+    );
+  }
+
   // App shell — requires authentication on web
   const appShell = (
     <div className="h-screen overflow-hidden flex flex-row bg-background text-foreground break-words w-full max-w-full">

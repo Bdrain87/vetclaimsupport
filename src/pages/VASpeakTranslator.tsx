@@ -32,7 +32,7 @@ const VA_GLOSSARY: GlossaryEntry[] = [
   {
     term: 'Nexus',
     definition:
-      'The medical connection between your current condition and your military service. A nexus letter from a doctor states this link exists.',
+      'The medical connection between your current condition and your military service. A doctor\'s opinion letter states this link exists.',
     category: 'medical',
   },
   {

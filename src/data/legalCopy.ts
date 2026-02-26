@@ -85,7 +85,7 @@ export const AI_COPY = {
   safeModeLevels: {
     0: 'AI only processes text you type. No document upload to AI.',
     1: 'Documents are redacted before analysis. Identifiers like SSN, DOB, and addresses are stripped.',
-    2: 'On-device only processing. Coming soon.',
+    2: 'On-device only processing. No data leaves your device.',
   },
 
   analyzeCTA: 'Analyze Document (Safe Mode)',

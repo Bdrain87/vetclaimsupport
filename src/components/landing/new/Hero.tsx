@@ -157,7 +157,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          50+ tools to organize your evidence, build your case, and walk into your C&amp;P exam ready.
+          50+ tools to organize your evidence, build your case, and walk into your VA exam ready.
         </motion.p>
 
         {/* CTAs */}
@@ -202,6 +202,22 @@ export function Hero() {
           >
             See How It Works
           </motion.button>
+        </motion.div>
+
+        {/* Free calculator CTA */}
+        <motion.div
+          className="flex items-center justify-center mb-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+        >
+          <Link
+            to="/calculator"
+            className="text-sm font-medium no-underline"
+            style={{ color: 'rgba(197, 165, 90, 0.85)' }}
+          >
+            Try the free rating calculator — no account needed
+          </Link>
         </motion.div>
 
         {/* Trust Bar */}

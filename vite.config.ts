@@ -83,10 +83,25 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'framer-motion'],
-          supabase: ['@supabase/supabase-js'],
-          icons: ['lucide-react']
+        manualChunks(id) {
+          if (id.includes('node_modules/react-dom/') || id.includes('node_modules/react/')) {
+            return 'vendor';
+          }
+          if (id.includes('node_modules/framer-motion/')) {
+            return 'framer-motion';
+          }
+          if (id.includes('node_modules/@supabase/')) {
+            return 'supabase';
+          }
+          if (id.includes('node_modules/lucide-react/')) {
+            return 'icons';
+          }
+          if (id.includes('node_modules/recharts/') || id.includes('node_modules/d3-')) {
+            return 'recharts';
+          }
+          if (id.includes('node_modules/date-fns/')) {
+            return 'date-fns';
+          }
         }
       }
     }

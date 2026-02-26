@@ -674,7 +674,7 @@ export const ClaimIntelligence = {
     }
     examPrep = Math.min(100, examPrep);
     if (examPrep < 50) {
-      tips.push('Review the DBQ forms and C&P exam tips for this condition before your exam.');
+      tips.push('Review the DBQ forms and VA exam tips for this condition before your exam.');
     }
 
     const overallScore = Math.round(
@@ -1633,7 +1633,7 @@ export const ClaimIntelligence = {
     }
 
     if (commonTriggers.length > 0) {
-      insights.push(`Common triggers: ${commonTriggers.join(', ')}. Note these for your C&P exam.`);
+      insights.push(`Common triggers: ${commonTriggers.join(', ')}. Note these for your VA exam.`);
     }
 
     return {

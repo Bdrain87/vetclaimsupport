@@ -1072,7 +1072,7 @@ export const exportMigraines = async (migraines: MigraineEntry[], stats?: { tota
     { value: calculatedStats.totalAll, label: 'Total Logged' }
   ], yPos);
   
-  yPos = drawInfoBox(doc, 'VA Rating Information: Migraines are rated under 38 CFR § 4.124a, Diagnostic Code 8100. The VA considers the frequency of "prostrating" attacks (requiring bed rest) when determining ratings. 10% = 1 in 2 months | 30% = once a month | 50% = very frequent with severe economic impact.', yPos);
+  yPos = drawInfoBox(doc, 'VA Rating Information: The VA considers the frequency of "prostrating" attacks (requiring bed rest) when determining migraine ratings. 10% = 1 in 2 months | 30% = once a month | 50% = very frequent with severe economic impact.', yPos);
   
   doc.setFontSize(14);
   doc.setTextColor(...colors.secondary);
@@ -1585,7 +1585,7 @@ export const exportSleepLog = async (entries: SleepEntry[]) => {
 
   yPos = drawSummaryBox(doc, summaryItems, yPos);
 
-  yPos = drawInfoBox(doc, 'VA Rating Information: Sleep Apnea is rated under 38 CFR § 4.97, DC 6847. 0% = Asymptomatic with documented disorder | 30% = Persistent daytime hypersomnolence | 50% = Requires breathing assistance device (CPAP) | 100% = Chronic respiratory failure with CO₂ retention or cor pulmonale.', yPos);
+  yPos = drawInfoBox(doc, 'VA Rating Information: Sleep apnea ratings are based on severity. 0% = Asymptomatic with documented disorder | 30% = Persistent daytime hypersomnolence | 50% = Requires breathing assistance device (CPAP) | 100% = Chronic respiratory failure with CO₂ retention or cor pulmonale.', yPos);
 
   doc.setFontSize(14);
   doc.setTextColor(...colors.secondary);
