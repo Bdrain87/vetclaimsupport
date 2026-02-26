@@ -5,7 +5,7 @@ import { Shield, Plus, Trash2, Edit, Calendar, MapPin, Briefcase, AlertTriangle,
 import { getSavedServiceDates, saveServiceDates } from '@/utils/veteranProfile';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -365,6 +365,7 @@ export default function ServiceHistory() {
               <DialogContent className="max-w-2xl">
                 <DialogHeader>
                   <DialogTitle>{editingId ? 'Edit Duty Station' : 'Add Duty Station'}</DialogTitle>
+                  <DialogDescription className="sr-only">Enter duty station details</DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="flex flex-col">
                   <div className="max-h-[60vh] overflow-y-auto space-y-4 pr-2">
@@ -555,6 +556,7 @@ export default function ServiceHistory() {
               <DialogContent className="max-w-2xl">
                 <DialogHeader>
                   <DialogTitle>{editingCombatId ? 'Edit Combat Zone' : 'Add Combat Zone'}</DialogTitle>
+                  <DialogDescription className="sr-only">Enter combat zone details</DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleCombatSubmit} className="flex flex-col">
                   <div className="max-h-[60vh] overflow-y-auto space-y-4 pr-2">
@@ -698,6 +700,7 @@ export default function ServiceHistory() {
               <DialogContent className="max-w-2xl">
                 <DialogHeader>
                   <DialogTitle>{editingEventId ? 'Edit Major Event' : 'Add Major Event'}</DialogTitle>
+                  <DialogDescription className="sr-only">Enter major event details</DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleEventSubmit} className="flex flex-col">
                   <div className="max-h-[60vh] overflow-y-auto space-y-4 pr-2">
@@ -820,6 +823,7 @@ export default function ServiceHistory() {
               <DialogContent className="max-w-2xl">
                 <DialogHeader>
                   <DialogTitle>{editingDeployId ? 'Edit Deployment' : 'Add Deployment'}</DialogTitle>
+                  <DialogDescription className="sr-only">Enter deployment details</DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleDeploySubmit} className="flex flex-col">
                   <div className="max-h-[60vh] overflow-y-auto space-y-4 pr-2">

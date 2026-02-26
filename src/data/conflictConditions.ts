@@ -140,7 +140,7 @@ export const conflicts: Conflict[] = [
     exposures: ['Oil well fires', 'Depleted uranium', 'Chemical agents (Khamisiyah)', 'Pesticides', 'Vaccines', 'Sand/dust'],
     resources: [
       { name: 'VA Gulf War Page', url: 'https://www.va.gov/disability/eligibility/hazardous-materials-exposure/gulf-war-illness-southwest-asia/' },
-      { name: 'Gulf War Registry', url: 'https://www.publichealth.va.gov/exposures/gulfwar/registry.asp' }
+      { name: 'Gulf War Registry', url: 'https://www.publichealth.va.gov/exposures/gulfwar/' }
     ]
   },
   {

@@ -1,10 +1,9 @@
 import { useState, useCallback } from 'react';
-import { Search, Plus, Check } from 'lucide-react';
+import { Search, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { ConditionAutocomplete } from './ConditionAutocomplete';
 import type { VACondition } from '@/data/vaConditions';
-import { getConditionById } from '@/data/vaConditions';
 
 export interface ConditionSelectorProps {
   /** Called when a condition is selected */

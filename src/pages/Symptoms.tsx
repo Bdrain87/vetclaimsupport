@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -28,7 +28,6 @@ const lazyExportSymptoms = async (...args: Parameters<typeof import('@/utils/pdf
 import { VoiceInputButton } from '@/components/ui/voice-input-button';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import { lazy, Suspense } from 'react';
 const SeverityTrendChart = lazy(() => import('@/components/symptoms/SymptomCharts').then(m => ({ default: m.SeverityTrendChart })));
@@ -583,6 +582,7 @@ export default function Symptoms() {
               <DialogContent className="max-w-2xl max-h-[85vh] sm:max-h-[90vh] flex flex-col">
                 <DialogHeader className="p-6 pb-4">
                   <DialogTitle>{editingId ? 'Edit Symptom' : 'Log Symptom'}</DialogTitle>
+                  <DialogDescription className="sr-only">Record symptom details</DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
                   <div className="flex-1 overflow-y-auto space-y-4 px-6 pb-4" style={{ scrollPaddingBottom: '350px' }}>

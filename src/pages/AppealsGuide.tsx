@@ -10,7 +10,6 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { PageContainer } from '@/components/PageContainer';
-import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import {
   appealLanes,
@@ -898,6 +897,7 @@ export default function AppealsGuide() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 pr-10"
+              aria-label="Search appeals"
             />
             {searchQuery && (
               <button

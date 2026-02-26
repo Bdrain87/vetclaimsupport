@@ -57,7 +57,7 @@ const journeyPhases: JourneyPhase[] = [
     ],
     resources: [
       { label: 'File Intent to File', link: 'https://www.va.gov/disability/how-to-file-claim/' },
-      { label: 'What is ITF?', link: 'https://www.va.gov/resources/what-is-an-intent-to-file/' },
+      { label: 'What is ITF?', link: 'https://www.va.gov/resources/your-intent-to-file-a-va-claim/' },
     ],
   },
   {

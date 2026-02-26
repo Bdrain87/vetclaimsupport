@@ -48,7 +48,6 @@ const pages: Record<string, () => Promise<{ default: React.ComponentType }>> = {
   DocumentsHub: () => import('@/pages/DocumentsHub'),
   CPExamPrepEnhanced: () => import('@/pages/CPExamPrepEnhanced'),
   DBQPrepSheet: () => import('@/pages/DBQPrepSheet'),
-  VAForms: () => import('@/pages/VAForms'),
   VAResources: () => import('@/pages/VAResources'),
   ServiceHistory: () => import('@/pages/ServiceHistory'),
   Glossary: () => import('@/pages/Glossary'),

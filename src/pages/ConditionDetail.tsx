@@ -724,11 +724,11 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
               Use these verified legal databases to find case law relevant to your claim:
             </p>
             <div className="space-y-2 overflow-hidden">
-              <a href="https://www.va.gov/vbs/bva/" target="_blank" rel="noopener noreferrer"
+              <a href="https://www.va.gov/decision-reviews/board-appeal/" target="_blank" rel="noopener noreferrer"
                  className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm truncate">
                 Board of Veterans' Appeals (BVA) Decisions
               </a>
-              <a href="https://www.uscourts.cavc.gov/decisions.php" target="_blank" rel="noopener noreferrer"
+              <a href="https://www.uscourts.cavc.gov/opinions.php" target="_blank" rel="noopener noreferrer"
                  className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm truncate">
                 Court of Appeals for Veterans Claims (CAVC)
               </a>
@@ -1129,7 +1129,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
             <Button
               variant="outline"
               className="w-full"
-              onClick={() => window.open('https://www.va.gov/health-care/get-medical-records/dbq-medical-evidence/', '_blank')}
+              onClick={() => window.open('https://www.va.gov/find-forms/?q=dbq', '_blank')}
             >
               <ExternalLink className="h-4 w-4 mr-2" />
               View DBQ Forms on VA.gov

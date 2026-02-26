@@ -44,6 +44,7 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogFooter,
@@ -650,6 +651,7 @@ export default function DocumentsHub() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
+                aria-label="Search documents"
               />
             </div>
             <Select value={filterDocType} onValueChange={setFilterDocType}>
@@ -984,6 +986,7 @@ export default function DocumentsHub() {
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Upload Document</DialogTitle>
+            <DialogDescription className="sr-only">Upload and categorize a document</DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4">
@@ -1073,6 +1076,7 @@ export default function DocumentsHub() {
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{selectedDoc?.title || selectedDoc?.fileName}</DialogTitle>
+            <DialogDescription className="sr-only">Document preview</DialogDescription>
           </DialogHeader>
 
           {selectedDoc && (

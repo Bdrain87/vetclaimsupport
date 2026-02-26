@@ -6,7 +6,6 @@
  */
 import { describe, it, expect, beforeEach, beforeAll } from 'vitest';
 import { useProfileStore } from '@/store/useProfileStore';
-import { useSidebarStore } from '@/store/useSidebarStore';
 import { useAICacheStore } from '@/store/useAICacheStore';
 
 // ── useAppStore ───────────────────────────────────────────────────────────
@@ -275,32 +274,6 @@ describe('useProfileStore Integration', () => {
     expect(useProfileStore.getState().branch).toBe('');
     expect(useProfileStore.getState().hasCompletedOnboarding).toBe(false);
     expect(useProfileStore.getState().entitlement).toBe('preview');
-  });
-});
-
-// ── useSidebarStore ───────────────────────────────────────────────────────
-
-describe('useSidebarStore Integration', () => {
-  beforeEach(() => {
-    useSidebarStore.getState().setCollapsed(false);
-  });
-
-  it('starts not collapsed', () => {
-    expect(useSidebarStore.getState().collapsed).toBe(false);
-  });
-
-  it('toggles collapsed state', () => {
-    useSidebarStore.getState().toggleCollapsed();
-    expect(useSidebarStore.getState().collapsed).toBe(true);
-    useSidebarStore.getState().toggleCollapsed();
-    expect(useSidebarStore.getState().collapsed).toBe(false);
-  });
-
-  it('sets collapsed directly', () => {
-    useSidebarStore.getState().setCollapsed(true);
-    expect(useSidebarStore.getState().collapsed).toBe(true);
-    useSidebarStore.getState().setCollapsed(false);
-    expect(useSidebarStore.getState().collapsed).toBe(false);
   });
 });
 

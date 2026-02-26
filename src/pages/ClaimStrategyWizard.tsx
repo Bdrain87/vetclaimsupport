@@ -340,14 +340,14 @@ export default function ClaimStrategyWizard() {
       ...prev,
       serviceInfo: { ...prev.serviceInfo, [field]: value }
     }));
-  }, []);
+  }, [setData]);
 
   const updateHealthConditions = useCallback((field: keyof HealthConditions, value: string | string[]) => {
     setData(prev => ({
       ...prev,
       healthConditions: { ...prev.healthConditions, [field]: value }
     }));
-  }, []);
+  }, [setData]);
 
   const toggleCondition = useCallback((condition: string) => {
     setData(prev => {
@@ -360,7 +360,7 @@ export default function ClaimStrategyWizard() {
         healthConditions: { ...prev.healthConditions, conditions: updated }
       };
     });
-  }, []);
+  }, [setData]);
 
   const toggleCombatZone = useCallback((zone: string) => {
     setData(prev => {
@@ -373,21 +373,21 @@ export default function ClaimStrategyWizard() {
         serviceInfo: { ...prev.serviceInfo, combatZones: updated }
       };
     });
-  }, []);
+  }, [setData]);
 
   const updateExistingRatings = useCallback((field: keyof ExistingRatings, value: boolean | string) => {
     setData(prev => ({
       ...prev,
       existingRatings: { ...prev.existingRatings, [field]: value }
     }));
-  }, []);
+  }, [setData]);
 
   const updateEvidence = useCallback((field: keyof EvidenceAvailable, value: boolean | string) => {
     setData(prev => ({
       ...prev,
       evidence: { ...prev.evidence, [field]: value }
     }));
-  }, []);
+  }, [setData]);
 
   const generateStrategy = async () => {
     setIsGenerating(true);
@@ -1126,11 +1126,11 @@ attorney for official guidance on your specific claim.
                         Use these verified legal databases to find case law relevant to your claim:
                       </p>
                       <div className="space-y-2 overflow-hidden">
-                        <a href="https://www.va.gov/vbs/bva/" target="_blank" rel="noopener noreferrer"
+                        <a href="https://www.va.gov/decision-reviews/board-appeal/" target="_blank" rel="noopener noreferrer"
                            className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm break-words min-w-0">
                           Board of Veterans' Appeals (BVA) Decisions
                         </a>
-                        <a href="https://www.uscourts.cavc.gov/decisions.php" target="_blank" rel="noopener noreferrer"
+                        <a href="https://www.uscourts.cavc.gov/opinions.php" target="_blank" rel="noopener noreferrer"
                            className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm break-words min-w-0">
                           Court of Appeals for Veterans Claims (CAVC)
                         </a>

@@ -35,7 +35,7 @@ import { PageContainer } from '@/components/PageContainer';
 import { exportDoctorSummaryOutlinePDF } from '@/utils/pdfExport';
 import { containsBannedPhrases, EXPORT_BLOCKED_MESSAGE } from '@/utils/bannedPhrases';
 import { conditionRatingCriteria } from '@/data/ratingCriteria';
-import { toast } from 'sonner';
+import { useToast } from '@/hooks/use-toast';
 import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
 import { useToolDraft } from '@/hooks/useToolDraft';
 
@@ -135,6 +135,7 @@ export default function DoctorSummaryOutline() {
   const [searchParams] = useSearchParams();
   const { data } = useClaims();
   const profile = useProfileStore();
+  const { toast } = useToast();
 
   const branchLabel = getAllBranchLabels(profile);
   const fullName = `${profile.firstName} ${profile.lastName}`.trim();
@@ -188,7 +189,7 @@ export default function DoctorSummaryOutline() {
   }), []);
 
   const {
-    formData, updateField: draftUpdateField, setFormData, currentStep, setCurrentStep,
+    formData, updateField: draftUpdateField, _setFormData, currentStep, setCurrentStep,
     draftRestored, clearDraft, lastSaved,
   } = useToolDraft({
     toolId: 'tool:doctor-summary',
@@ -295,13 +296,13 @@ export default function DoctorSummaryOutline() {
     const allText = collectAllText();
     if (containsBannedPhrases(allText)) {
       setExportError(EXPORT_BLOCKED_MESSAGE);
-      toast.error('Export blocked: contains prohibited language.');
+      toast({ title: 'Export blocked', description: 'Contains prohibited language.', variant: 'destructive' });
       return;
     }
     setExporting(true);
     try {
       await exportDoctorSummaryOutlinePDF(formData);
-      toast.success('PDF exported successfully.');
+      toast({ title: 'PDF Exported', description: 'Your doctor summary has been saved.' });
     } finally {
       setExporting(false);
     }

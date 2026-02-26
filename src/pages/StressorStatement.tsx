@@ -159,7 +159,7 @@ export default function StressorStatement() {
   }), [prefilledData]);
 
   const {
-    formData, updateField, setFormData, currentStep, setCurrentStep,
+    formData, updateField, _setFormData, currentStep, setCurrentStep,
     draftRestored, clearDraft, lastSaved,
   } = useToolDraft({
     toolId: 'tool:stressor-statement',

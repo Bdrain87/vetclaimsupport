@@ -8,8 +8,7 @@ import { initNativeFeatures } from './utils/capacitor';
 // Fatal error display — uses safe DOM APIs (no innerHTML XSS risk)
 // ============================================================
 const showFatalError = (label: string, err: unknown) => {
-  const msg = err instanceof Error ? err.message : String(err);
-  const stack = err instanceof Error ? err.stack ?? '(no stack trace)' : '(no stack trace)';
+  // Log full details for debugging (only visible in browser dev tools)
   console.error(`[TRAP] ${label}:`, err);
 
   // Clear existing content safely
@@ -19,24 +18,25 @@ const showFatalError = (label: string, err: unknown) => {
 
   const container = document.createElement('div');
   container.style.cssText =
-    'color:#ff5555;background:#1a0000;padding:40px;min-height:100vh;font-family:monospace;overflow:auto;';
+    'color:#ffffff;background:#0A0A0A;padding:40px;min-height:100vh;font-family:system-ui,-apple-system,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;';
 
   const heading = document.createElement('h1');
-  heading.style.cssText = 'color:#ff3333;font-size:28px;margin-bottom:10px;';
-  heading.textContent = `RUNTIME TRAP CAUGHT: ${label}`;
+  heading.style.cssText = 'font-size:24px;margin-bottom:12px;font-weight:600;';
+  heading.textContent = 'Something went wrong';
 
   const description = document.createElement('p');
-  description.style.cssText = 'color:#ffaaaa;font-size:16px;margin-bottom:20px;';
-  description.textContent = 'The app crashed during browser execution. Raw error below:';
+  description.style.cssText = 'color:rgba(255,255,255,0.6);font-size:16px;margin-bottom:24px;max-width:400px;line-height:1.5;';
+  description.textContent = 'The app ran into an unexpected error. Please reload the page to try again.';
 
-  const pre = document.createElement('pre');
-  pre.style.cssText =
-    'background:rgba(255,255,255,0.05);padding:20px;border:1px solid #ff5555;color:#ff8888;white-space:pre-wrap;word-break:break-all;font-size:13px;line-height:1.6;';
-  pre.textContent = `${msg}\n\n${stack}`;
+  const btn = document.createElement('button');
+  btn.style.cssText =
+    'background:linear-gradient(90deg,#C8A020,#ECC440,#FFE566,#ECC440,#C8A020);color:#000;border:none;padding:12px 32px;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;';
+  btn.textContent = 'Reload';
+  btn.onclick = () => window.location.reload();
 
   container.appendChild(heading);
   container.appendChild(description);
-  container.appendChild(pre);
+  container.appendChild(btn);
   document.body.appendChild(container);
 };
 

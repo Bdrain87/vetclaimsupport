@@ -115,7 +115,7 @@ export const dbqForms: Record<string, VAForm[]> = {
   // Digestive
   'digestive': [
     { formNumber: '21-0960D-1', name: 'DBQ - Esophageal Conditions', description: 'For GERD, hiatal hernia, etc.', url: 'https://www.va.gov/find-forms/' },
-    { formNumber: '21-0960D-2', name: 'DBQ - Stomach and Duodenal Conditions', description: 'For ulcers, gastritis, etc.', url: 'https://www.gov/find-forms/' },
+    { formNumber: '21-0960D-2', name: 'DBQ - Stomach and Duodenal Conditions', description: 'For ulcers, gastritis, etc.', url: 'https://www.va.gov/find-forms/' },
     { formNumber: '21-0960D-3', name: 'DBQ - Intestinal Conditions', description: 'For IBS, Crohns, colitis, etc.', url: 'https://www.va.gov/find-forms/' },
   ],
   'gerd': [

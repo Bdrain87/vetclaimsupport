@@ -845,10 +845,11 @@ export default function BodyMap() {
                     className="w-full h-auto"
                     style={{ display: 'block' }}
                     onError={(e) => {
-                      // Fallback: if back image doesn't exist, mirror the front
+                      // Fallback: if back image doesn't exist, reuse the front silhouette.
+                      // Do NOT mirror with scaleX(-1) — the overlay positions use screen-relative
+                      // left/right, so flipping the image would swap left/right incorrectly.
                       if (viewMode === 'back') {
                         (e.target as HTMLImageElement).src = '/body-silhouette.png';
-                        (e.target as HTMLImageElement).style.transform = 'scaleX(-1)';
                       }
                     }}
                   />

@@ -5,7 +5,7 @@ import { useFeatureFlag } from '@/store/useFeatureFlagStore';
 import { Pill, Plus, Trash2, Edit, Calendar, AlertCircle, Download, Loader2, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -119,6 +119,7 @@ export default function Medications() {
           <DialogContent className="max-w-lg">
             <DialogHeader>
               <DialogTitle>{editingId ? 'Edit Medication' : 'Add Medication'}</DialogTitle>
+              <DialogDescription className="sr-only">Enter medication details</DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="flex flex-col">
               <div className="max-h-[60vh] overflow-y-auto space-y-4 pr-2">

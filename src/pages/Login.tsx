@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
-import { signInWithEmail, signUpWithEmail, signInWithGoogle, signInWithApple } from '@/services/auth';
+import { signInWithEmail, signUpWithEmail, signInWithGoogle, signInWithApple, resetPassword } from '@/services/auth';
 import { supabase } from '@/lib/supabase';
 import { PageContainer } from '@/components/PageContainer';
 
@@ -21,6 +21,7 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
@@ -41,6 +42,17 @@ export default function Login() {
     if (!email.trim() || !password.trim()) {
       setError('Please enter your email and password.');
       return;
+    }
+
+    if (mode === 'signup') {
+      if (password.length < 6) {
+        setError('Password must be at least 6 characters.');
+        return;
+      }
+      if (password !== confirmPassword) {
+        setError('Passwords do not match.');
+        return;
+      }
     }
 
     setLoading(true);
@@ -152,6 +164,47 @@ export default function Login() {
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
+
+            {mode === 'signup' && (
+              <div className="relative">
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30" />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm password"
+                  autoComplete="new-password"
+                  className={inputClass}
+                />
+              </div>
+            )}
+
+            {mode === 'signin' && (
+              <div className="text-right">
+                <button
+                  type="button"
+                  onClick={async () => {
+                    if (!email.trim()) {
+                      setError('Enter your email address, then tap Forgot Password.');
+                      return;
+                    }
+                    setError('');
+                    setLoading(true);
+                    try {
+                      await resetPassword(email);
+                      setSuccessMsg('Password reset email sent. Check your inbox.');
+                    } catch (err) {
+                      setError(err instanceof Error ? err.message : 'Something went wrong.');
+                    } finally {
+                      setLoading(false);
+                    }
+                  }}
+                  className="text-xs text-[var(--gold-md)] hover:underline"
+                >
+                  Forgot Password?
+                </button>
+              </div>
+            )}
 
             <button
               type="submit"

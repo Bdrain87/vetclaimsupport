@@ -109,8 +109,14 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}): UseVoiceInput
         case 'not-allowed':
           setError('Microphone access denied.');
           break;
+        case 'network':
+          setError('Network error. Check your connection and try again.');
+          break;
+        case 'aborted':
+          // User or system cancelled — don't show error
+          break;
         default:
-          setError(`Speech error: ${event.error}`);
+          setError('Voice input failed. Please try again.');
       }
     };
 

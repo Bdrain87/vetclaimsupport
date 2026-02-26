@@ -400,12 +400,15 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
   return (
     <motion.div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label={title}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
     >
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" role="presentation" onClick={onClose} />
 
       <motion.div
         className="relative z-10 w-[90%] max-w-[500px] rounded-3xl p-8 sm:p-10"
@@ -421,7 +424,8 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+          aria-label="Close feature details"
+          className="absolute top-4 right-4 w-11 h-11 rounded-full flex items-center justify-center transition-colors"
           style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#fff' }}
         >
           <X size={16} />
@@ -487,7 +491,6 @@ const VISIBLE_CARDS = 6;
 const ANIMATION_CONFIG = {
   duration: 1.6,
   stagger: 0.08,
-  ease: 'power3.inOut', // Smooth acceleration and deceleration
   rotationInterval: 4000,
 } as const;
 
@@ -525,16 +528,6 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
   const [rotationOffset, setRotationOffset] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const cardsRef = useRef<Map<number, HTMLDivElement>>(new Map());
-  const gsapRef = useRef<typeof import('gsap')['default'] | null>(null);
-  const timelineRef = useRef<ReturnType<typeof import('gsap')['default']['timeline']> | null>(null);
-
-  useEffect(() => {
-    let mounted = true;
-    import('gsap').then((mod) => {
-      if (mounted) gsapRef.current = mod.default;
-    });
-    return () => { mounted = false; };
-  }, []);
 
   // Auto-advance rotation
   useEffect(() => {
@@ -547,54 +540,23 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
     return () => clearInterval(timer);
   }, [isPaused]);
 
-  // Orchestrate smooth card transitions
+  // Orchestrate smooth card transitions via CSS transitions
   useEffect(() => {
-    // Kill any existing animation
-    if (timelineRef.current) {
-      timelineRef.current.kill();
-    }
-
-    const gsap = gsapRef.current;
-    if (!gsap) return;
-
-    const tl = gsap.timeline();
-
     CARDS.forEach((_, cardIndex) => {
       const cardElement = cardsRef.current.get(cardIndex);
       if (!cardElement) return;
 
-      // Calculate card's position in the visual stack
       const stackPosition = (cardIndex - rotationOffset + N * 100) % N;
       const transform = calculateCardTransform(stackPosition);
       const isInteractive = stackPosition < VISIBLE_CARDS;
 
-      // Animate with stagger for cascade effect
-      tl.to(
-        cardElement,
-        {
-          x: transform.x,
-          y: transform.y,
-          z: transform.z,
-          rotateZ: transform.rotation,
-          scale: transform.scale,
-          opacity: transform.opacity,
-          zIndex: transform.zIndex,
-          duration: ANIMATION_CONFIG.duration,
-          ease: ANIMATION_CONFIG.ease,
-          onStart: () => {
-            // Update interactivity
-            cardElement.style.pointerEvents = isInteractive ? 'auto' : 'none';
-          },
-        },
-        cardIndex * ANIMATION_CONFIG.stagger // Stagger timing
-      );
+      cardElement.style.transition = `transform ${ANIMATION_CONFIG.duration}s cubic-bezier(0.65,0,0.35,1), opacity ${ANIMATION_CONFIG.duration}s cubic-bezier(0.65,0,0.35,1)`;
+      cardElement.style.transitionDelay = `${cardIndex * ANIMATION_CONFIG.stagger}s`;
+      cardElement.style.transform = `translate3d(${transform.x}px, ${transform.y}px, ${transform.z}px) rotateZ(${transform.rotation}deg) scale(${transform.scale})`;
+      cardElement.style.opacity = String(transform.opacity);
+      cardElement.style.zIndex = String(transform.zIndex);
+      cardElement.style.pointerEvents = isInteractive ? 'auto' : 'none';
     });
-
-    timelineRef.current = tl;
-
-    return () => {
-      tl.kill();
-    };
   }, [rotationOffset]);
 
   return (

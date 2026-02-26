@@ -734,11 +734,11 @@ export default function CPExamPacket() {
               Use these verified legal databases to find case law relevant to your claim:
             </p>
             <div className="space-y-2">
-              <a href="https://www.va.gov/vbs/bva/" target="_blank" rel="noopener noreferrer"
+              <a href="https://www.va.gov/decision-reviews/board-appeal/" target="_blank" rel="noopener noreferrer"
                  className="flex items-center gap-2 text-gold-hl hover:text-gold-hl text-sm">
                 Board of Veterans' Appeals (BVA) Decisions
               </a>
-              <a href="https://www.uscourts.cavc.gov/decisions.php" target="_blank" rel="noopener noreferrer"
+              <a href="https://www.uscourts.cavc.gov/opinions.php" target="_blank" rel="noopener noreferrer"
                  className="flex items-center gap-2 text-gold-hl hover:text-gold-hl text-sm">
                 Court of Appeals for Veterans Claims (CAVC)
               </a>

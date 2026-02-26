@@ -63,7 +63,7 @@ export const hazardConditionMap: Record<string, HazardCategory> = {
       { conditionName: 'PTSD', diagnosticCode: '9411', category: 'Mental Health', prevalence: 'very_common', description: 'Post-traumatic stress disorder from combat or operational trauma' },
       { conditionName: 'Major Depressive Disorder', diagnosticCode: '9434', category: 'Mental Health', prevalence: 'common', description: 'Persistent depressive episodes' },
       { conditionName: 'Generalized Anxiety Disorder', diagnosticCode: '9400', category: 'Mental Health', prevalence: 'common', description: 'Chronic excessive anxiety and worry' },
-      { conditionName: 'Insomnia', diagnosticCode: '6847', category: 'Sleep', prevalence: 'common', description: 'Difficulty falling or staying asleep' },
+      { conditionName: 'Insomnia', diagnosticCode: '9413', category: 'Sleep', prevalence: 'common', description: 'Difficulty falling or staying asleep' },
     ],
   },
 
@@ -114,7 +114,7 @@ export const hazardConditionMap: Record<string, HazardCategory> = {
     name: 'Chronic Sleep Disruption',
     description: 'Shift work, 24-hour operations, combat alerts, irregular schedules, submarine/ship duty',
     conditions: [
-      { conditionName: 'Insomnia', diagnosticCode: '6847', category: 'Sleep', prevalence: 'very_common', description: 'Difficulty falling or staying asleep' },
+      { conditionName: 'Insomnia', diagnosticCode: '9413', category: 'Sleep', prevalence: 'very_common', description: 'Difficulty falling or staying asleep' },
       { conditionName: 'Sleep Apnea', diagnosticCode: '6847', category: 'Sleep', prevalence: 'common', description: 'Breathing interruptions during sleep' },
       { conditionName: 'Major Depressive Disorder', diagnosticCode: '9434', category: 'Mental Health', prevalence: 'moderate', description: 'Depression linked to chronic sleep loss' },
     ],
@@ -161,7 +161,7 @@ export const hazardConditionMap: Record<string, HazardCategory> = {
     conditions: [
       { conditionName: 'Bilateral Hearing Loss', diagnosticCode: '6100', category: 'Ear', prevalence: 'very_common', description: 'From engine rooms and shipboard machinery' },
       { conditionName: 'Tinnitus', diagnosticCode: '6260', category: 'Ear', prevalence: 'very_common', description: 'From shipboard noise exposure' },
-      { conditionName: 'Insomnia', diagnosticCode: '6847', category: 'Sleep', prevalence: 'common', description: 'From watch rotations and berthing conditions' },
+      { conditionName: 'Insomnia', diagnosticCode: '9413', category: 'Sleep', prevalence: 'common', description: 'From watch rotations and berthing conditions' },
       { conditionName: 'Lumbosacral Strain', diagnosticCode: '5237', category: 'Musculoskeletal', prevalence: 'common', description: 'From shipboard work and confined spaces' },
       { conditionName: 'Sinusitis (Chronic)', diagnosticCode: '6513', category: 'Respiratory', prevalence: 'moderate', description: 'From air quality in enclosed ship/submarine spaces' },
     ],
@@ -199,7 +199,7 @@ export const hazardConditionMap: Record<string, HazardCategory> = {
       { conditionName: 'Knee Strain (Bilateral)', diagnosticCode: '5260', category: 'Musculoskeletal', prevalence: 'common', description: 'From body armor weight and patrol duties' },
       { conditionName: 'Lumbosacral Strain', diagnosticCode: '5237', category: 'Musculoskeletal', prevalence: 'common', description: 'From body armor and equipment weight' },
       { conditionName: 'Tinnitus', diagnosticCode: '6260', category: 'Ear', prevalence: 'common', description: 'From weapons qualification and range duty' },
-      { conditionName: 'Insomnia', diagnosticCode: '6847', category: 'Sleep', prevalence: 'moderate', description: 'From rotating shift work' },
+      { conditionName: 'Insomnia', diagnosticCode: '9413', category: 'Sleep', prevalence: 'moderate', description: 'From rotating shift work' },
     ],
   },
 
@@ -270,7 +270,7 @@ export const hazardConditionMap: Record<string, HazardCategory> = {
       { conditionName: 'Vocal Cord Dysfunction', diagnosticCode: '6516', category: 'Respiratory', prevalence: 'moderate', description: 'From chronic voice strain and yelling' },
       { conditionName: 'Knee Strain (Bilateral)', diagnosticCode: '5260', category: 'Musculoskeletal', prevalence: 'common', description: 'From constant physical training demonstrations' },
       { conditionName: 'Lumbosacral Strain', diagnosticCode: '5237', category: 'Musculoskeletal', prevalence: 'common', description: 'From physical training and demonstration load' },
-      { conditionName: 'Insomnia', diagnosticCode: '6847', category: 'Sleep', prevalence: 'common', description: 'From early morning schedules and stress' },
+      { conditionName: 'Insomnia', diagnosticCode: '9413', category: 'Sleep', prevalence: 'common', description: 'From early morning schedules and stress' },
     ],
   },
 };

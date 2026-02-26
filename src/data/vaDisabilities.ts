@@ -1095,7 +1095,7 @@ export const vaDisabilitiesBySystem: BodySystem[] = [
       { name: 'Hamstring Injury, Chronic', diagnosticCode: '5313', typicalRatings: '10-30%', description: 'Posterior thigh muscle damage', ratingCriteria: 'Rate as muscle injury', requiredFormKeys: ['hip', 'knee'] },
       { name: 'Groin Strain, Chronic', diagnosticCode: '5315', typicalRatings: '10-30%', description: 'Adductor muscle injury', ratingCriteria: 'Rate as muscle injury', requiredFormKeys: ['hip'] },
       { name: 'Sports Hernia (Athletic Pubalgia)', diagnosticCode: '5315', typicalRatings: '10-30%', description: 'Core muscle injury', ratingCriteria: 'Rate on symptoms', requiredFormKeys: ['hernia', 'hip'] },
-      { name: 'Costochondritis', diagnosticCode: '5297', typicalRatings: '0-10%', description: 'Rib cartilage inflammation', ratingCriteria: 'Rate on symptoms', requiredFormKeys: ['respiratory'] },
+      { name: 'Costochondritis', diagnosticCode: '5321', typicalRatings: '0-10%', description: 'Rib cartilage inflammation', ratingCriteria: 'Rate on symptoms', requiredFormKeys: ['respiratory'] },
       { name: 'Sternoclavicular Joint Dysfunction', diagnosticCode: '5203', typicalRatings: '10-20%', description: 'Collarbone joint problems', ratingCriteria: 'Rate as clavicle impairment', requiredFormKeys: ['shoulder'] },
       { name: 'Acromioclavicular Joint Separation', diagnosticCode: '5203', typicalRatings: '10-20%', description: 'AC joint injury', ratingCriteria: '10% malunion; 20% nonunion/dislocation', requiredFormKeys: ['shoulder'] },
       { name: 'Rib Fracture Residuals', diagnosticCode: '5297', typicalRatings: '0-10%', description: 'Healed rib fracture effects', ratingCriteria: 'Rate on residual pain', requiredFormKeys: ['respiratory'] },

@@ -67,7 +67,7 @@ export const BODY_REGIONS: BodyRegion[] = [
     label: 'Left Shoulder',
     conditions: [
       { id: 'shoulder-impingement', name: 'Shoulder Impingement Syndrome', diagnosticCode: '5201', description: 'Limited arm motion due to shoulder impingement' },
-      { id: 'rotator-cuff', name: 'Rotator Cuff Tear/Tendinitis', diagnosticCode: '5304', description: 'Injury or degeneration of rotator cuff muscles/tendons' },
+      { id: 'rotator-cuff', name: 'Rotator Cuff Tear/Tendinitis', diagnosticCode: '5201', description: 'Injury or degeneration of rotator cuff muscles/tendons' },
       { id: 'shoulder-instability', name: 'Shoulder Instability', diagnosticCode: '5202', description: 'Recurrent dislocation or subluxation of the shoulder' },
       { id: 'shoulder-arthritis', name: 'Shoulder Arthritis', diagnosticCode: '5003', description: 'Degenerative joint disease of the shoulder' },
     ],
@@ -77,7 +77,7 @@ export const BODY_REGIONS: BodyRegion[] = [
     label: 'Right Shoulder',
     conditions: [
       { id: 'shoulder-impingement', name: 'Shoulder Impingement Syndrome', diagnosticCode: '5201', description: 'Limited arm motion due to shoulder impingement' },
-      { id: 'rotator-cuff', name: 'Rotator Cuff Tear/Tendinitis', diagnosticCode: '5304', description: 'Injury or degeneration of rotator cuff muscles/tendons' },
+      { id: 'rotator-cuff', name: 'Rotator Cuff Tear/Tendinitis', diagnosticCode: '5201', description: 'Injury or degeneration of rotator cuff muscles/tendons' },
       { id: 'shoulder-instability', name: 'Shoulder Instability', diagnosticCode: '5202', description: 'Recurrent dislocation or subluxation of the shoulder' },
       { id: 'shoulder-arthritis', name: 'Shoulder Arthritis', diagnosticCode: '5003', description: 'Degenerative joint disease of the shoulder' },
     ],
@@ -120,7 +120,7 @@ export const BODY_REGIONS: BodyRegion[] = [
     conditions: [
       { id: 'carpal-tunnel', name: 'Carpal Tunnel Syndrome', diagnosticCode: '8515', description: 'Median nerve compression causing numbness and weakness in the hand' },
       { id: 'wrist-tendonitis', name: 'Wrist Tendinitis / Strain', diagnosticCode: '5215', description: 'Chronic wrist pain from repetitive motion or injury' },
-      { id: 'trigger-finger', name: 'Trigger Finger', diagnosticCode: '5228', description: 'Locking or catching of finger tendons' },
+      { id: 'trigger-finger', name: 'Trigger Finger', diagnosticCode: '5024', description: 'Locking or catching of finger tendons' },
     ],
   },
   {
@@ -129,7 +129,7 @@ export const BODY_REGIONS: BodyRegion[] = [
     conditions: [
       { id: 'carpal-tunnel', name: 'Carpal Tunnel Syndrome', diagnosticCode: '8515', description: 'Median nerve compression causing numbness and weakness in the hand' },
       { id: 'wrist-tendonitis', name: 'Wrist Tendinitis / Strain', diagnosticCode: '5215', description: 'Chronic wrist pain from repetitive motion or injury' },
-      { id: 'trigger-finger', name: 'Trigger Finger', diagnosticCode: '5228', description: 'Locking or catching of finger tendons' },
+      { id: 'trigger-finger', name: 'Trigger Finger', diagnosticCode: '5024', description: 'Locking or catching of finger tendons' },
     ],
   },
   {
@@ -191,14 +191,14 @@ export const BODY_REGIONS: BodyRegion[] = [
     id: 'left-upper-leg',
     label: 'Left Upper Leg',
     conditions: [
-      { id: 'hamstring-strain', name: 'Hamstring Strain', diagnosticCode: '5312', description: 'Muscle tear or strain from training or service activities' },
+      { id: 'hamstring-strain', name: 'Hamstring Strain', diagnosticCode: '5313', description: 'Muscle tear or strain from training or service activities' },
     ],
   },
   {
     id: 'right-upper-leg',
     label: 'Right Upper Leg',
     conditions: [
-      { id: 'hamstring-strain', name: 'Hamstring Strain', diagnosticCode: '5312', description: 'Muscle tear or strain from training or service activities' },
+      { id: 'hamstring-strain', name: 'Hamstring Strain', diagnosticCode: '5313', description: 'Muscle tear or strain from training or service activities' },
     ],
   },
   {

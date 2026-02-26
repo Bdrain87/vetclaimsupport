@@ -1644,8 +1644,8 @@ export async function generateCPExamPacketPDF(data: CPExamPacketData): Promise<v
   addSectionHeader(7, 'LEGAL RESEARCH RESOURCES');
   addText('Use these verified legal databases to find case law relevant to your claim:');
   y += 2;
-  addText('• Board of Veterans\' Appeals (BVA) Decisions — www.va.gov/vbs/bva/');
-  addText('• Court of Appeals for Veterans Claims (CAVC) — www.uscourts.cavc.gov/decisions.php');
+  addText('• Board of Veterans\' Appeals (BVA) Decisions — www.va.gov/decision-reviews/board-appeal/');
+  addText('• Court of Appeals for Veterans Claims (CAVC) — www.uscourts.cavc.gov/opinions.php');
   addText('• Google Scholar — Legal Opinions — scholar.google.com');
   addText('• 38 U.S.C. — Veterans\' Benefits (Cornell Law) — www.law.cornell.edu/uscode/text/38');
 

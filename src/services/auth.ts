@@ -63,6 +63,13 @@ export async function signUpWithEmail(email: string, password: string) {
   return data;
 }
 
+export async function resetPassword(email: string) {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/auth`,
+  });
+  if (error) throw sanitizeAuthError(error);
+}
+
 /**
  * All localStorage keys the app may write. Kept here so sign-out and account
  * deletion both clear the same comprehensive list.

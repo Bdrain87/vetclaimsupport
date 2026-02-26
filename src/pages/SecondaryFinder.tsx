@@ -1,6 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
 import { Link2, Plus, Check, FileSignature, Search, ArrowRight } from 'lucide-react';
-import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { useClaims } from '@/hooks/useClaims';

@@ -300,7 +300,7 @@ export const verifiedCases: VerifiedCase[] = [
       'nexus',
       'more likely than not',
     ],
-    sourceUrl: 'https://cafc.uscourts.gov/opinions-orders/',
+    sourceUrl: 'https://www.cafc.uscourts.gov/',
     verified: true,
   },
   {
@@ -347,7 +347,7 @@ export const verifiedCases: VerifiedCase[] = [
       'observable symptoms',
       'personal knowledge',
     ],
-    sourceUrl: 'https://cafc.uscourts.gov/opinions-orders/',
+    sourceUrl: 'https://www.cafc.uscourts.gov/',
     verified: true,
   },
   {
@@ -368,7 +368,7 @@ export const verifiedCases: VerifiedCase[] = [
       'absence of records',
       'not credible',
     ],
-    sourceUrl: 'https://cafc.uscourts.gov/opinions-orders/',
+    sourceUrl: 'https://www.cafc.uscourts.gov/',
     verified: true,
   },
   {
@@ -527,7 +527,7 @@ export const verifiedCases: VerifiedCase[] = [
       'reasonably raised',
       'formal application not required',
     ],
-    sourceUrl: 'https://cafc.uscourts.gov/opinions-orders/',
+    sourceUrl: 'https://www.cafc.uscourts.gov/',
     verified: true,
   },
 
@@ -694,7 +694,7 @@ export const verifiedCases: VerifiedCase[] = [
       'aggravation',
       'rebuttal',
     ],
-    sourceUrl: 'https://cafc.uscourts.gov/opinions-orders/',
+    sourceUrl: 'https://www.cafc.uscourts.gov/',
     verified: true,
   },
 
@@ -878,7 +878,7 @@ export const verifiedCases: VerifiedCase[] = [
       'Combee',
       'alternative theory',
     ],
-    sourceUrl: 'https://cafc.uscourts.gov/opinions-orders/',
+    sourceUrl: 'https://www.cafc.uscourts.gov/',
     verified: true,
   },
 

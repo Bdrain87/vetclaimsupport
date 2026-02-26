@@ -52,11 +52,13 @@ export function QuickAddFAB() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/60 z-40"
+            role="presentation"
             onClick={() => setOpen(false)}
+            onKeyDown={(e) => { if (e.key === 'Escape') setOpen(false); }}
           />
         )}
       </AnimatePresence>
-      <div className="fixed bottom-20 right-4 z-50 flex flex-col items-end gap-2">
+      <div className="fixed bottom-20 right-4 z-50 flex flex-col items-end gap-2" role="menu" aria-label="Quick add actions">
         <AnimatePresence>
           {open && actions.map((action, i) => (
             <motion.button

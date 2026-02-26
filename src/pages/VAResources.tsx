@@ -28,7 +28,7 @@ const vaOfficialResources: VAResource[] = [
   {
     title: 'BVA Decisions Search',
     description: 'Search Board of Veterans Appeals decisions',
-    url: 'https://www.index.va.gov/search/va/bva.jsp',
+    url: 'https://www.va.gov/decision-reviews/board-appeal/',
     category: 'decisions'
   },
   {

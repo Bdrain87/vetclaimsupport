@@ -121,7 +121,7 @@ export const PACT_ACT_CONDITIONS: PACTCondition[] = [
     category: 'Cancer',
     presumptiveFor: ['Agent Orange'],
     description: 'Cancer of soft tissues (muscle, fat, blood vessels)',
-    diagnosticCode: '7819'
+    diagnosticCode: '5329'
   },
   {
     id: 'non-hodgkins-lymphoma',
@@ -169,7 +169,7 @@ export const PACT_ACT_CONDITIONS: PACTCondition[] = [
     category: 'Cancer',
     presumptiveFor: ['Agent Orange'],
     description: 'Blood cancer affecting plasma cells',
-    diagnosticCode: '7709'
+    diagnosticCode: '7703'
   },
   {
     id: 'chronic-b-cell-leukemia',
@@ -251,7 +251,7 @@ export const PACT_ACT_CONDITIONS: PACTCondition[] = [
     category: 'Cancer',
     presumptiveFor: ['Burn Pit Exposure', 'Post-9/11'],
     description: 'Malignant brain tumor',
-    diagnosticCode: '8045'
+    diagnosticCode: '8002'
   },
 
   // ============ OTHER CONDITIONS ============
@@ -326,7 +326,7 @@ export const PACT_ACT_CONDITIONS: PACTCondition[] = [
     category: 'Other',
     presumptiveFor: ['Agent Orange'],
     description: 'Blood condition that can lead to cancer',
-    diagnosticCode: '7700'
+    diagnosticCode: '7703'
   }
 ];
 

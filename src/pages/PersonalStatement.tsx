@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
@@ -24,7 +24,6 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
-import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { PageContainer } from '@/components/PageContainer';
@@ -181,7 +180,7 @@ export default function PersonalStatement() {
 
     setPrefilled((prev) => ({ ...prev, ...newPrefilled }));
     setPolishedStatement(null);
-  }, [claimsData.symptoms, claimsData.medications]);
+  }, [claimsData.symptoms, claimsData.medications, setFormData]);
 
   const generateStatement = useCallback((): string => {
     const today = new Date().toLocaleDateString('en-US', {

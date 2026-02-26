@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { Paperclip, X, Image as ImageIcon, FileText, File, Eye, Link2, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import type { EvidenceDocument, AttachableEntryType } from '@/types/documents';
@@ -191,6 +191,7 @@ export function EvidenceAttachment({
           <DialogContent className="max-w-3xl">
             <DialogHeader>
               <DialogTitle>{previewDoc?.title}</DialogTitle>
+              <DialogDescription className="sr-only">Document preview</DialogDescription>
             </DialogHeader>
             {previewDoc && (
               <div className="space-y-4">

@@ -170,6 +170,7 @@ export default function FAQ() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
+              aria-label="Search frequently asked questions"
             />
           </div>
           <div className="flex flex-wrap gap-2">

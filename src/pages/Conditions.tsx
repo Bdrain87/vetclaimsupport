@@ -35,7 +35,6 @@ import { useProfileStore } from '@/store/useProfileStore';
 import { ClaimIntelligence } from '@/services/claimIntelligence';
 import useAppStore from '@/store/useAppStore';
 import { PageContainer } from '@/components/PageContainer';
-import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput.utils';
 import {
@@ -533,6 +532,7 @@ export default function Conditions() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
+            aria-label="Search conditions"
           />
         </div>
         <Select value={bodySystemFilter} onValueChange={setBodySystemFilter}>

@@ -18,7 +18,7 @@ import { Slider } from '@/components/ui/slider';
 import { PageContainer } from '@/components/PageContainer';
 
 const RATE_PER_MILE = 0.415;
-const DEDUCTIBLE_ONE_WAY = 13.68;
+const DEDUCTIBLE_ONE_WAY = 3.0;
 const DEDUCTIBLE_ROUND_TRIP = DEDUCTIBLE_ONE_WAY * 2;
 const BTSSS_URL = 'https://dvagov-btsss.dynamics365portals.us/';
 
@@ -168,7 +168,7 @@ export default function TravelPayCalculator() {
                   Deductible Waived?
                 </Label>
                 <p className="text-xs text-muted-foreground">
-                  VA charges $13.68/one-way ($27.36 round trip). Waived for SC conditions rated 30%+, some other criteria.
+                  VA charges $3.00/one-way ($6.00 round trip). Waived for SC conditions rated 30%+, some other criteria.
                 </p>
               </div>
               <Switch

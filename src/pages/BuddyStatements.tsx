@@ -4,7 +4,7 @@ import { useProfileStore } from '@/store/useProfileStore';
 import { Users, Plus, Trash2, Edit, Phone, Mail, FileText, CheckCircle, Clock, Send, Download, Camera, Copy, Check, ChevronRight, ChevronLeft, HelpCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -96,7 +96,7 @@ export default function BuddyStatements() {
   }), [fullName, conditionSummary]);
 
   const {
-    formData: statementData, updateField: updateStatementField, setFormData: setStatementData,
+    formData: statementData, updateField: updateStatementField, _setFormData,
     currentStep, setCurrentStep, draftRestored, clearDraft, lastSaved,
   } = useToolDraft({
     toolId: 'tool:buddy-statement',
@@ -486,6 +486,7 @@ Date: ${today}`;
               <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle>{editingId ? 'Edit Contact' : 'Add Buddy Contact'}</DialogTitle>
+                  <DialogDescription className="sr-only">Enter buddy contact details for your statement</DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid gap-4 sm:grid-cols-2">

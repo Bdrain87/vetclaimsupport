@@ -4,7 +4,7 @@ import { useEvidence } from '@/hooks/useEvidence';
 import { AlertTriangle, Plus, Trash2, Edit, Calendar, MapPin, Shield, Users, Download, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -183,6 +183,7 @@ export default function Exposures() {
           <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle>{editingId ? 'Edit Exposure' : 'Log Exposure'}</DialogTitle>
+              <DialogDescription className="sr-only">Record details about a toxic or environmental exposure</DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="flex flex-col">
               <div className="max-h-[60vh] overflow-y-auto space-y-4 pr-2">

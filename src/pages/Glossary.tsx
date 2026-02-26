@@ -215,6 +215,7 @@ export default function Glossary() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
+              aria-label="Search glossary terms"
             />
           </div>
         </CardContent>
@@ -229,7 +230,7 @@ export default function Glossary() {
                 <a
                   key={letter}
                   href={`#glossary-${letter}`}
-                  className="w-8 h-8 flex items-center justify-center rounded-lg bg-muted text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors text-sm font-medium"
+                  className="w-11 h-11 flex items-center justify-center rounded-lg bg-muted text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors text-sm font-medium"
                 >
                   {letter}
                 </a>

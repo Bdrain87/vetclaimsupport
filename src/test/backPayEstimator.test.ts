@@ -6,9 +6,8 @@ import {
   formatCurrencyExact,
   calculateBackPay,
   BASE_RATES,
-  SPOUSE_ADDITION,
-  DEPENDENT_ADDITION,
 } from '@/utils/backPayCalc';
+import { SPOUSE_ADDITION_BY_RATING, CHILD_ADDITION_BY_RATING } from '@/data/compRates2026';
 
 // ---------------------------------------------------------------------------
 // calculateMonthlyCompensation
@@ -58,34 +57,34 @@ describe('calculateMonthlyCompensation', () => {
   describe('dependent adjustments at 30% and above', () => {
     it('adds spouse addition at 30%', () => {
       expect(calculateMonthlyCompensation(30, true, 0)).toBe(
-        BASE_RATES[30] + SPOUSE_ADDITION
+        BASE_RATES[30] + SPOUSE_ADDITION_BY_RATING[30]
       );
     });
 
     it('adds dependent additions at 50%', () => {
       const deps = 3;
       expect(calculateMonthlyCompensation(50, false, deps)).toBe(
-        BASE_RATES[50] + deps * DEPENDENT_ADDITION
+        BASE_RATES[50] + deps * CHILD_ADDITION_BY_RATING[50]
       );
     });
 
     it('adds both spouse and dependent additions at 70%', () => {
       const deps = 2;
       expect(calculateMonthlyCompensation(70, true, deps)).toBe(
-        BASE_RATES[70] + SPOUSE_ADDITION + deps * DEPENDENT_ADDITION
+        BASE_RATES[70] + SPOUSE_ADDITION_BY_RATING[70] + deps * CHILD_ADDITION_BY_RATING[70]
       );
     });
 
     it('adds both spouse and dependent additions at 100%', () => {
       const deps = 4;
       expect(calculateMonthlyCompensation(100, true, deps)).toBe(
-        BASE_RATES[100] + SPOUSE_ADDITION + deps * DEPENDENT_ADDITION
+        BASE_RATES[100] + SPOUSE_ADDITION_BY_RATING[100] + deps * CHILD_ADDITION_BY_RATING[100]
       );
     });
 
     it('handles zero dependents with spouse at 90%', () => {
       expect(calculateMonthlyCompensation(90, true, 0)).toBe(
-        BASE_RATES[90] + SPOUSE_ADDITION
+        BASE_RATES[90] + SPOUSE_ADDITION_BY_RATING[90]
       );
     });
   });
@@ -238,8 +237,8 @@ describe('calculateBackPay', () => {
     const result = calculateBackPay(30, 70, dateStr, true, 2);
     expect(result).not.toBeNull();
 
-    const expectedBefore = BASE_RATES[30] + SPOUSE_ADDITION + 2 * DEPENDENT_ADDITION;
-    const expectedAfter = BASE_RATES[70] + SPOUSE_ADDITION + 2 * DEPENDENT_ADDITION;
+    const expectedBefore = BASE_RATES[30] + SPOUSE_ADDITION_BY_RATING[30] + 2 * CHILD_ADDITION_BY_RATING[30];
+    const expectedAfter = BASE_RATES[70] + SPOUSE_ADDITION_BY_RATING[70] + 2 * CHILD_ADDITION_BY_RATING[70];
     expect(result!.monthlyBefore).toBe(expectedBefore);
     expect(result!.monthlyAfter).toBe(expectedAfter);
     expect(result!.monthlyDifference).toBe(expectedAfter - expectedBefore);
@@ -278,7 +277,7 @@ describe('calculateBackPay', () => {
     expect(result!.monthlyBefore).toBe(BASE_RATES[10]);
     // At 50%, dependent additions apply
     expect(result!.monthlyAfter).toBe(
-      BASE_RATES[50] + SPOUSE_ADDITION + 2 * DEPENDENT_ADDITION
+      BASE_RATES[50] + SPOUSE_ADDITION_BY_RATING[50] + 2 * CHILD_ADDITION_BY_RATING[50]
     );
   });
 });

@@ -44,6 +44,7 @@ export function DraftRestoredBanner({ lastSaved, onStartFresh }: DraftRestoredBa
         size="icon"
         className="h-7 w-7 text-muted-foreground"
         onClick={() => setDismissed(true)}
+        aria-label="Dismiss draft restored notification"
       >
         <X className="h-3.5 w-3.5" />
       </Button>

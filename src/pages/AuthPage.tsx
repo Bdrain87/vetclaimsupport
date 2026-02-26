@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
-import { signInWithEmail, signUpWithEmail, signInWithGoogle, signInWithApple } from '@/services/auth';
+import { signInWithEmail, signUpWithEmail, signInWithGoogle, signInWithApple, resetPassword } from '@/services/auth';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
 
@@ -243,6 +243,32 @@ export default function AuthPage() {
                   className={inputClass}
                   autoComplete="new-password"
                 />
+              </div>
+            )}
+
+            {mode === 'signin' && (
+              <div className="text-right">
+                <button
+                  type="button"
+                  onClick={async () => {
+                    if (!email.trim()) {
+                      toast({ title: 'Enter your email', description: 'Type your email address, then tap Forgot Password.', variant: 'destructive' });
+                      return;
+                    }
+                    setLoading(true);
+                    try {
+                      await resetPassword(email);
+                      toast({ title: 'Check your email', description: 'Password reset link sent to your inbox.' });
+                    } catch (err) {
+                      toast({ title: 'Reset failed', description: err instanceof Error ? err.message : 'Please try again.', variant: 'destructive' });
+                    } finally {
+                      setLoading(false);
+                    }
+                  }}
+                  className="bg-transparent border-none cursor-pointer text-xs transition-colors text-gold hover:underline"
+                >
+                  Forgot Password?
+                </button>
               </div>
             )}
 

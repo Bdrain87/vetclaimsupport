@@ -11,13 +11,12 @@ import { exportBackPayEstimate } from '@/utils/pdfExport';
 import { PageContainer } from '@/components/PageContainer';
 import {
   BASE_RATES,
-  SPOUSE_ADDITION,
-  DEPENDENT_ADDITION,
   calculateMonthlyCompensation,
   monthsBetween,
   formatCurrency,
   formatCurrencyExact,
 } from '@/utils/backPayCalc';
+import { SPOUSE_ADDITION_BY_RATING, CHILD_ADDITION_BY_RATING } from '@/data/compRates2026';
 
 const RATING_OPTIONS = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 const DEPENDENT_COUNT_OPTIONS = Array.from({ length: 11 }, (_, i) => i);
@@ -364,28 +363,28 @@ export default function BackPayEstimator() {
                 </div>
                 {hasSpouse && parseInt(newRating, 10) >= 30 && (
                   <div className="flex justify-between gap-2">
-                    <span className="min-w-0">Spouse addition (30%+)</span>
-                    <span className="shrink-0">+{formatCurrencyExact(SPOUSE_ADDITION)}/mo</span>
+                    <span className="min-w-0">Spouse addition at {newRating}%</span>
+                    <span className="shrink-0">+{formatCurrencyExact(SPOUSE_ADDITION_BY_RATING[parseInt(newRating, 10)] ?? 0)}/mo</span>
                   </div>
                 )}
                 {parseInt(dependentCount, 10) > 0 && parseInt(newRating, 10) >= 30 && (
                   <div className="flex justify-between gap-2">
                     <span className="min-w-0">
-                      {dependentCount} dependent{parseInt(dependentCount, 10) !== 1 ? 's' : ''} (30%+)
+                      {dependentCount} dependent{parseInt(dependentCount, 10) !== 1 ? 's' : ''} at {newRating}%
                     </span>
-                    <span className="shrink-0">+{formatCurrencyExact(parseInt(dependentCount, 10) * DEPENDENT_ADDITION)}/mo</span>
+                    <span className="shrink-0">+{formatCurrencyExact(parseInt(dependentCount, 10) * (CHILD_ADDITION_BY_RATING[parseInt(newRating, 10)] ?? 0))}/mo</span>
                   </div>
                 )}
                 {hasSpouse && parseInt(currentRating, 10) >= 30 && (
                   <div className="flex justify-between gap-2 text-xs">
-                    <span className="italic min-w-0">Spouse already included at current rating</span>
-                    <span className="shrink-0">-{formatCurrencyExact(SPOUSE_ADDITION)}/mo</span>
+                    <span className="italic min-w-0">Spouse already included at {currentRating}%</span>
+                    <span className="shrink-0">-{formatCurrencyExact(SPOUSE_ADDITION_BY_RATING[parseInt(currentRating, 10)] ?? 0)}/mo</span>
                   </div>
                 )}
                 {parseInt(dependentCount, 10) > 0 && parseInt(currentRating, 10) >= 30 && (
                   <div className="flex justify-between gap-2 text-xs">
-                    <span className="italic min-w-0">Dependents already included at current rating</span>
-                    <span className="shrink-0">-{formatCurrencyExact(parseInt(dependentCount, 10) * DEPENDENT_ADDITION)}/mo</span>
+                    <span className="italic min-w-0">Dependents already included at {currentRating}%</span>
+                    <span className="shrink-0">-{formatCurrencyExact(parseInt(dependentCount, 10) * (CHILD_ADDITION_BY_RATING[parseInt(currentRating, 10)] ?? 0))}/mo</span>
                   </div>
                 )}
                 <div className="border-t border-border/30 pt-1 mt-1 flex justify-between gap-2 font-medium text-foreground">

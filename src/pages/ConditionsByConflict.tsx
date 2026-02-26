@@ -101,6 +101,7 @@ export default function ConditionsByConflict() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-9"
+              aria-label="Search conflicts"
             />
             {searchQuery && (
               <button

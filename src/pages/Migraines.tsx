@@ -11,7 +11,7 @@ import {
 import { exportMigraines } from '@/utils/pdfExport';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -459,6 +459,7 @@ export default function Migraines() {
             <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col">
               <DialogHeader className="flex-shrink-0">
                 <DialogTitle>{editingId ? 'Edit Migraine Entry' : 'Log Migraine Attack'}</DialogTitle>
+                <DialogDescription className="sr-only">Record migraine attack details</DialogDescription>
               </DialogHeader>
               <div 
                 ref={modalContentRef}

@@ -167,10 +167,6 @@ describe('Section 10B: Prohibited Copy Patterns', () => {
       expect(content).toContain('Do not cite specific legal cases');
     });
 
-    it('"Coming soon" exists in aiSafeMode.ts', () => {
-      const content = readFile('lib/aiSafeMode.ts');
-      expect(content).toContain('Coming soon');
-    });
   });
 });
 

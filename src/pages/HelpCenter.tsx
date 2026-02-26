@@ -288,6 +288,7 @@ export default function HelpCenter() {
               value={globalSearch}
               onChange={(e) => setGlobalSearch(e.target.value)}
               className="pl-12 h-12 text-base bg-background border-border/50"
+              aria-label="Search help topics"
             />
             {globalSearch && (
               <Button
@@ -536,7 +537,7 @@ export default function HelpCenter() {
                 <a
                   key={letter}
                   href={`#glossary-${letter}`}
-                  className="w-8 h-8 flex items-center justify-center rounded-lg bg-muted text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors text-sm font-medium"
+                  className="w-11 h-11 flex items-center justify-center rounded-lg bg-muted text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors text-sm font-medium"
                 >
                   {letter}
                 </a>

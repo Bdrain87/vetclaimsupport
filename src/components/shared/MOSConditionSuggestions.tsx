@@ -40,7 +40,7 @@ export function MOSConditionSuggestions({
 }: MOSConditionSuggestionsProps) {
   const profileMosCode = useProfileStore((s) => s.mosCode);
   const servicePeriods = useProfileStore((s) => s.servicePeriods);
-  const { addCondition, hasCondition } = useUserConditions();
+  const { addCondition } = useUserConditions();
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [addedItems, setAddedItems] = useState<Set<string>>(new Set());
 
@@ -74,7 +74,7 @@ export function MOSConditionSuggestions({
   }, [allMosCodes]);
 
   // Flatten all conditions across matching categories (deduplicated)
-  const allConditions = useMemo(() => {
+  const _allConditions = useMemo(() => {
     const seen = new Set<string>();
     const results: { name: string; category: string }[] = [];
     for (const cat of matchingCategories) {

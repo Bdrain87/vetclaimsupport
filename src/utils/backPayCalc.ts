@@ -4,7 +4,7 @@
  * Extracted from BackPayEstimator.tsx so they can be unit-tested independently.
  */
 
-import { COMP_RATES_2026 } from '@/data/compRates2026';
+import { COMP_RATES_2026, SPOUSE_ADDITION_BY_RATING, CHILD_ADDITION_BY_RATING } from '@/data/compRates2026';
 
 // ---------------------------------------------------------------------------
 // Rate constants
@@ -14,9 +14,6 @@ export const BASE_RATES: Record<number, number> = {
   0: 0,
   ...COMP_RATES_2026,
 };
-
-export const SPOUSE_ADDITION = 100;
-export const DEPENDENT_ADDITION = 50;
 
 // ---------------------------------------------------------------------------
 // Pure helpers
@@ -29,8 +26,8 @@ export function calculateMonthlyCompensation(
 ): number {
   const base = BASE_RATES[rating] ?? 0;
   if (rating < 30) return base;
-  const spouseAdd = hasSpouse ? SPOUSE_ADDITION : 0;
-  const depAdd = dependentCount * DEPENDENT_ADDITION;
+  const spouseAdd = hasSpouse ? (SPOUSE_ADDITION_BY_RATING[rating] ?? 0) : 0;
+  const depAdd = dependentCount * (CHILD_ADDITION_BY_RATING[rating] ?? 0);
   return base + spouseAdd + depAdd;
 }
 

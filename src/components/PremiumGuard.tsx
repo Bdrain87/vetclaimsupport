@@ -9,7 +9,9 @@ interface PremiumGuardProps {
 }
 
 export function PremiumGuard({ featureName, children }: PremiumGuardProps) {
-  // Bypass paywall on native (iOS/simulator) — payments handled via App Store
+  // TODO: Remove this bypass once StoreKit IAP is implemented.
+  // Currently all native iOS users get premium features for free because
+  // Apple IAP is not yet integrated. This is a known pre-launch limitation.
   const [state, setState] = useState<'loading' | 'granted' | 'blocked'>(
     isNativeApp ? 'granted' : 'loading'
   );

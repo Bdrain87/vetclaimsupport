@@ -442,6 +442,7 @@ export default function VASpeakTranslator() {
               onChange={(e) => setGlossarySearch(e.target.value)}
               placeholder="Search terms or definitions..."
               className="pl-10"
+              aria-label="Search VA terms"
             />
           </div>
 
