@@ -118,7 +118,7 @@ function PacketSection({
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center gap-3 p-4 text-left hover:bg-accent/30 transition-colors"
       >
-        <span className="flex items-center justify-center w-7 h-7 rounded-full bg-gold/10 text-gold text-sm font-bold shrink-0">
+        <span className="flex items-center justify-center w-7 h-7 rounded-full bg-gold/10 text-foreground text-sm font-bold shrink-0">
           {sectionNumber}
         </span>
         <Icon className="h-5 w-5 text-gold shrink-0" />
@@ -508,8 +508,8 @@ export default function CPExamPacket() {
                           condition.claimType === 'secondary'
                             ? 'bg-purple-500/20 text-purple-400 border-purple-500/30'
                             : condition.claimType === 'increase'
-                            ? 'bg-gold/20 text-gold border-gold/30'
-                            : 'bg-gold/20 text-gold-hl border-gold/30'
+                            ? 'bg-gold/20 text-foreground border-gold/30'
+                            : 'bg-gold/20 text-foreground-hl border-gold/30'
                         )}
                       >
                         {condition.claimType}

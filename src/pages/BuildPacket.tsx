@@ -338,7 +338,7 @@ export default function BuildPacket() {
               evidenceScore >= 80
                 ? 'border-green-500/40 bg-green-500/10 text-green-400'
                 : evidenceScore >= 50
-                  ? 'border-gold/40 bg-gold/10 text-gold'
+                  ? 'border-gold/40 bg-gold/10 text-foreground'
                   : 'border-red-500/40 bg-red-500/10 text-red-400',
             )}
           >
@@ -608,7 +608,7 @@ export default function BuildPacket() {
                             s.severity >= 7
                               ? 'bg-red-500/10 text-red-400'
                               : s.severity >= 4
-                                ? 'bg-gold/10 text-gold'
+                                ? 'bg-gold/10 text-foreground'
                                 : '',
                           )}
                         >

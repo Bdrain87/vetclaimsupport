@@ -231,7 +231,7 @@ export default function Sleep() {
       case 'Excellent': return 'bg-success/10 text-success border-success/20';
       case 'Good': return 'bg-green-500/10 text-green-600 border-green-500/20';
       case 'Fair': return 'bg-warning/10 text-warning border-warning/20';
-      case 'Poor': return 'bg-gold/10 text-gold border-gold/20';
+      case 'Poor': return 'bg-amber-500/10 text-amber-500 border-amber-500/20';
       case 'Very Poor': return 'bg-destructive/10 text-destructive border-destructive/20';
     }
   };

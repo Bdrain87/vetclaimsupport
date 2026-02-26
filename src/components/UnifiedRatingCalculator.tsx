@@ -432,7 +432,7 @@ function LifetimeBenefitProjection({
           {currentRating < 100 && (
             <div className="p-4 rounded-xl bg-gold/10 border border-gold/30 text-center">
               <p className="text-xs text-muted-foreground">At {projection.nextRating}% (next step)</p>
-              <p className="text-xl font-bold text-gold-dk">{formatCurrency(projection.lifetimeNext)}</p>
+              <p className="text-xl font-bold text-foreground">{formatCurrency(projection.lifetimeNext)}</p>
               <p className="text-xs text-green-600 font-medium">+{formatCurrency(projection.nextDelta)}</p>
             </div>
           )}
@@ -832,8 +832,8 @@ export function UnifiedRatingCalculator() {
 
               {wouldBeBilateral(newConditionBodyPart) && (
                 <Alert className="border-gold/50 bg-gold/10">
-                  <Sparkles className="h-4 w-4 text-gold" />
-                  <AlertDescription className="text-[#C8A020] dark:text-gold-hl">
+                  <Sparkles className="h-4 w-4 text-foreground" />
+                  <AlertDescription className="text-foreground">
                     This will create a bilateral pair! The 10% bilateral factor will be automatically applied.
                   </AlertDescription>
                 </Alert>
@@ -971,8 +971,8 @@ export function UnifiedRatingCalculator() {
                 <CardContent className="space-y-4">
                   {result.officialRating < 30 && (
                     <Alert className="border-gold/50 bg-gold/10">
-                      <Info className="h-4 w-4 text-gold" />
-                      <AlertDescription className="text-[#C8A020] dark:text-gold-hl">
+                      <Info className="h-4 w-4 text-foreground" />
+                      <AlertDescription className="text-foreground">
                         Dependent benefits require a combined rating of 30% or higher.
                       </AlertDescription>
                     </Alert>
@@ -1081,8 +1081,8 @@ export function UnifiedRatingCalculator() {
 
               {result.hasBilateral && (
                 <Alert className="border-gold/50 bg-gold/10 mt-4">
-                  <Sparkles className="h-4 w-4 text-gold" />
-                  <AlertDescription className="text-[#C8A020] dark:text-gold-hl text-sm">
+                  <Sparkles className="h-4 w-4 text-foreground" />
+                  <AlertDescription className="text-foreground text-sm">
                     <strong>Bilateral Factor Applied!</strong>
                     <br />
                     Combined bilateral: {result.bilateralExact.toFixed(1)}%
@@ -1197,7 +1197,7 @@ export function UnifiedRatingCalculator() {
                       {nextStep && (
                         <div className="p-3 rounded-lg border border-gold/50 bg-gold/10 text-center space-y-1">
                           <p className="text-xs text-muted-foreground">Next milestone: {nextStep.rating}%</p>
-                          <p className="text-lg font-bold text-gold-dk">
+                          <p className="text-lg font-bold text-foreground">
                             +{formatCurrency(nextDelta)}/mo
                           </p>
                           <p className="text-xs text-muted-foreground">

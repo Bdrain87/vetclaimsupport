@@ -176,7 +176,7 @@ export default function BackPayEstimator() {
 
           {/* Validation message for rating selection */}
           {currentRating && newRating && !hasValidIncrease && (
-            <div className="flex items-center gap-2 text-gold text-sm bg-gold/10 border border-gold/20 rounded-xl px-4 py-3">
+            <div className="flex items-center gap-2 text-foreground text-sm bg-gold/10 border border-gold/20 rounded-xl px-4 py-3">
               <Info className="h-4 w-4 shrink-0" />
               New rating must be higher than current rating to calculate back pay.
             </div>

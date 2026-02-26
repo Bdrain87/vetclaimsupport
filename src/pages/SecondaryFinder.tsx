@@ -23,7 +23,7 @@ function getConnectionStrength(connection: SecondaryConnection): 'strong' | 'mod
 
 const strengthConfig = {
   strong: { label: 'Strong Connection', color: 'text-emerald-400', bg: 'bg-emerald-400/10 border-emerald-400/20', dot: 'bg-emerald-400' },
-  moderate: { label: 'Moderate Connection', color: 'text-gold', bg: 'bg-gold/10 border-gold/20', dot: 'bg-gold' },
+  moderate: { label: 'Moderate Connection', color: 'text-amber-400', bg: 'bg-amber-400/10 border-amber-400/20', dot: 'bg-amber-400' },
   possible: { label: 'Possible Connection', color: 'text-muted-foreground', bg: 'bg-muted/30 border-border', dot: 'bg-muted-foreground' },
 };
 
@@ -130,7 +130,7 @@ export default function SecondaryFinder() {
             </p>
             <button
               onClick={() => setDisclaimerAcknowledged(true)}
-              className="mt-2 px-3 py-1.5 rounded-md bg-gold/15 text-gold text-xs font-medium hover:bg-gold/25 transition-colors"
+              className="mt-2 px-3 py-1.5 rounded-md bg-gold/15 text-foreground text-xs font-medium hover:bg-gold/25 transition-colors"
             >
               I Acknowledge
             </button>
@@ -172,7 +172,7 @@ export default function SecondaryFinder() {
                 onClick={() => handleChipClick(c.fullName)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all max-w-full truncate ${
                   selectedPrimary === c.fullName
-                    ? 'bg-gold/20 text-gold border border-gold/40'
+                    ? 'bg-gold/20 text-foreground border border-gold/40'
                     : 'bg-muted/50 text-muted-foreground border border-border hover:border-gold/30 hover:text-foreground'
                 }`}
               >
@@ -194,7 +194,7 @@ export default function SecondaryFinder() {
                 <p className="text-muted-foreground text-sm">{currentSecondaries.length} medically-linked conditions found</p>
             </div>
             <Link to={`/prep/doctor-summary?primary=${encodeURIComponent(selectedPrimary)}`}>
-              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gold/10 border border-gold/30 text-gold text-sm font-medium hover:bg-gold/20 transition-colors whitespace-nowrap shrink-0">
+              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gold/10 border border-gold/30 text-foreground text-sm font-medium hover:bg-gold/20 transition-colors whitespace-nowrap shrink-0">
                 <FileSignature className="h-4 w-4 shrink-0" />
                 <span className="hidden sm:inline">Build</span> Doctor Summary
               </button>

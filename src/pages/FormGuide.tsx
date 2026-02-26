@@ -32,7 +32,7 @@ function priorityLabel(p: FormPriority): string {
 
 function priorityColor(p: FormPriority): string {
   return p === 'urgent'
-    ? 'bg-gold/15 text-gold border-gold/30'
+    ? 'bg-gold/15 text-foreground border-gold/30'
     : p === 'required'
       ? 'bg-primary/15 text-primary border-primary/30'
       : 'bg-muted text-muted-foreground border-border';

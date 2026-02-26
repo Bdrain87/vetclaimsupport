@@ -589,7 +589,7 @@ export default function BodyMap() {
         {/* Summary Badges */}
         <div className="flex items-center gap-2 flex-wrap">
           {totalSelected > 0 && (
-            <Badge className="bg-gold/20 text-gold border border-gold/30 hover:bg-gold/30">
+            <Badge className="bg-gold/20 text-foreground border border-gold/30 hover:bg-gold/30">
               {totalSelected} condition{totalSelected !== 1 ? 's' : ''} selected
             </Badge>
           )}
@@ -613,7 +613,7 @@ export default function BodyMap() {
               onClick={() => { setViewMode('front'); setSelectedRegion(null); }}
               className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
                 viewMode === 'front'
-                  ? 'bg-gold/20 text-gold border border-gold/30 shadow-sm'
+                  ? 'bg-gold/20 text-foreground border border-gold/30 shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
@@ -624,7 +624,7 @@ export default function BodyMap() {
               onClick={() => { setViewMode('back'); setSelectedRegion(null); }}
               className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
                 viewMode === 'back'
-                  ? 'bg-gold/20 text-gold border border-gold/30 shadow-sm'
+                  ? 'bg-gold/20 text-foreground border border-gold/30 shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >

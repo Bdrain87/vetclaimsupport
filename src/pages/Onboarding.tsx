@@ -889,7 +889,7 @@ export default function Onboarding() {
                       const c = getConditionById(id);
                       if (!c) return null;
                       return (
-                        <span key={id} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-sm text-gold max-w-full">
+                        <span key={id} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-sm text-foreground max-w-full">
                           <span className="truncate">{c.abbreviation || c.name}</span>
                           <button onClick={() => handleRemoveCondition(id)} className="ml-1 text-gold/60 hover:text-gold" aria-label={`Remove ${c.abbreviation || c.name}`}>
                             <X className="h-3 w-3" />
@@ -1062,7 +1062,7 @@ export default function Onboarding() {
                           <button
                             onClick={() => setNewRatedType('primary')}
                             className={`px-3 py-2 text-xs font-medium transition-colors ${
-                              newRatedType === 'primary' ? 'bg-gold/20 text-gold' : 'text-white/50 hover:text-white/80'
+                              newRatedType === 'primary' ? 'bg-gold/20 text-white' : 'text-white/50 hover:text-white/80'
                             }`}
                           >
                             Primary
@@ -1070,7 +1070,7 @@ export default function Onboarding() {
                           <button
                             onClick={() => setNewRatedType('secondary')}
                             className={`px-3 py-2 text-xs font-medium transition-colors ${
-                              newRatedType === 'secondary' ? 'bg-gold/20 text-gold' : 'text-white/50 hover:text-white/80'
+                              newRatedType === 'secondary' ? 'bg-gold/20 text-white' : 'text-white/50 hover:text-white/80'
                             }`}
                           >
                             Secondary
@@ -1080,7 +1080,7 @@ export default function Onboarding() {
                       <button
                         onClick={handleAddExistingRated}
                         disabled={!newRatedCondition.trim()}
-                        className="w-full h-10 rounded-xl bg-gold/20 text-gold text-sm font-medium hover:bg-gold/30 disabled:opacity-40 transition-colors"
+                        className="w-full h-10 rounded-xl bg-gold/20 text-white text-sm font-medium hover:bg-gold/30 disabled:opacity-40 transition-colors"
                       >
                         Save
                       </button>

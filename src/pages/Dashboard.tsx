@@ -523,7 +523,7 @@ export default function Dashboard() {
                   className={cn(
                     'flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold mt-0.5',
                     step.priority === 'urgent'
-                      ? 'bg-gold/20 text-gold'
+                      ? 'bg-gold/20 text-foreground'
                       : 'bg-muted text-muted-foreground'
                   )}
                 >
@@ -554,7 +554,7 @@ export default function Dashboard() {
               { title: 'Generate a personal statement', description: 'Create a compelling statement for your claim.', route: '/prep/personal-statement' },
             ].map((step, i) => (
               <div key={i} className="flex items-start gap-3">
-                <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold mt-0.5 bg-gold/20 text-gold">
+                <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold mt-0.5 bg-gold/20 text-foreground">
                   {i + 1}
                 </span>
                 <div className="flex-1 min-w-0">

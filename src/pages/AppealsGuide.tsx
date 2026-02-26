@@ -37,9 +37,9 @@ const courtLabels: Record<string, string> = {
 };
 
 const courtColors: Record<string, string> = {
-  BVA: 'bg-gold/20 text-gold-hl border-gold/30',
+  BVA: 'bg-gold/20 text-foreground-hl border-gold/30',
   CAVC: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
-  FedCir: 'bg-gold/20 text-gold border-gold/30',
+  FedCir: 'bg-gold/20 text-foreground border-gold/30',
   SupCt: 'bg-red-500/20 text-red-400 border-red-500/30',
 };
 
@@ -294,7 +294,7 @@ function DisclaimerBanner() {
     return (
       <button
         onClick={() => setAcknowledged(false)}
-        className="w-full flex items-center gap-2 px-3 py-2 rounded-xl border border-gold/20 bg-gold/5 text-xs text-gold/70 hover:bg-gold/10 transition-colors"
+        className="w-full flex items-center gap-2 px-3 py-2 rounded-xl border border-gold/20 bg-gold/5 text-xs text-muted-foreground hover:bg-gold/10 transition-colors"
       >
         <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
         <span>Legal disclaimer acknowledged — tap to review</span>
@@ -316,7 +316,7 @@ function DisclaimerBanner() {
           </div>
           <button
             onClick={() => setAcknowledged(true)}
-            className="px-3 py-1.5 rounded-md bg-gold/20 text-gold-hl text-xs font-medium hover:bg-gold/30 transition-colors flex-shrink-0"
+            className="px-3 py-1.5 rounded-md bg-gold/20 text-foreground-hl text-xs font-medium hover:bg-gold/30 transition-colors flex-shrink-0"
           >
             I Acknowledge
           </button>
@@ -378,7 +378,7 @@ function AppealLaneCard({ lane }: { lane: typeof appealLanes[number] }) {
         <div className="px-4 pb-4 space-y-2">
           {lane.process.map((step, i) => (
             <div key={i} className="flex items-start gap-2.5 text-sm">
-              <span className="shrink-0 w-5 h-5 rounded-full bg-gold/20 text-gold text-xs font-bold flex items-center justify-center mt-0.5">
+              <span className="shrink-0 w-5 h-5 rounded-full bg-gold/20 text-foreground text-xs font-bold flex items-center justify-center mt-0.5">
                 {i + 1}
               </span>
               <span className="text-foreground/80">{step}</span>
@@ -392,7 +392,7 @@ function AppealLaneCard({ lane }: { lane: typeof appealLanes[number] }) {
         href={lane.officialUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-medium bg-gold/10 text-gold hover:bg-gold/20 transition-colors border-t border-border/50 overflow-hidden"
+        className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-medium bg-gold/10 text-foreground hover:bg-gold/20 transition-colors border-t border-border/50 overflow-hidden"
       >
         Start this process
         <ExternalLink className="h-3.5 w-3.5" />
@@ -478,7 +478,7 @@ function MatchedCaseCard({ matched, context }: { matched: MatchedCase; context: 
             <p className="text-xs text-muted-foreground font-mono break-all">{c.citation}</p>
           </div>
           <div className="flex flex-col items-end gap-1 shrink-0">
-            <Badge className="text-[10px] bg-gold/20 text-gold border-gold/30 px-2 py-0.5">Score: {matched.relevanceScore}</Badge>
+            <Badge className="text-[10px] bg-gold/20 text-foreground border-gold/30 px-2 py-0.5">Score: {matched.relevanceScore}</Badge>
             <div className="flex items-center gap-1">
               <CheckCircle2 className="h-3 w-3 text-gold" />
               <span className="text-[9px] text-gold">Verified</span>
@@ -607,19 +607,19 @@ function MyAppealTab() {
         </div>
         <ol className="space-y-1.5 text-xs text-muted-foreground">
           <li className="flex items-start gap-2">
-            <span className="shrink-0 w-4 h-4 rounded-full bg-gold/20 text-gold text-[10px] font-bold flex items-center justify-center mt-0.5">1</span>
+            <span className="shrink-0 w-4 h-4 rounded-full bg-gold/20 text-foreground text-[10px] font-bold flex items-center justify-center mt-0.5">1</span>
             <span>Select the condition you want to appeal</span>
           </li>
           <li className="flex items-start gap-2">
-            <span className="shrink-0 w-4 h-4 rounded-full bg-gold/20 text-gold text-[10px] font-bold flex items-center justify-center mt-0.5">2</span>
+            <span className="shrink-0 w-4 h-4 rounded-full bg-gold/20 text-foreground text-[10px] font-bold flex items-center justify-center mt-0.5">2</span>
             <span>Choose why your claim was denied</span>
           </li>
           <li className="flex items-start gap-2">
-            <span className="shrink-0 w-4 h-4 rounded-full bg-gold/20 text-gold text-[10px] font-bold flex items-center justify-center mt-0.5">3</span>
+            <span className="shrink-0 w-4 h-4 rounded-full bg-gold/20 text-foreground text-[10px] font-bold flex items-center justify-center mt-0.5">3</span>
             <span>Get matched to verified case law ranked by relevance</span>
           </li>
           <li className="flex items-start gap-2">
-            <span className="shrink-0 w-4 h-4 rounded-full bg-gold/20 text-gold text-[10px] font-bold flex items-center justify-center mt-0.5">4</span>
+            <span className="shrink-0 w-4 h-4 rounded-full bg-gold/20 text-foreground text-[10px] font-bold flex items-center justify-center mt-0.5">4</span>
             <span>Export a personalized brief to share with your VSO or attorney</span>
           </li>
         </ol>
@@ -633,7 +633,7 @@ function MyAppealTab() {
 
       <div className="space-y-3">
         <div className="flex items-center gap-2">
-          <span className="shrink-0 w-6 h-6 rounded-full bg-gold/20 text-gold text-xs font-bold flex items-center justify-center">1</span>
+          <span className="shrink-0 w-6 h-6 rounded-full bg-gold/20 text-foreground text-xs font-bold flex items-center justify-center">1</span>
           <h3 className="text-sm font-semibold text-foreground">Select Your Condition</h3>
         </div>
         {userConditions.length > 0 && !useManualEntry ? (
@@ -657,7 +657,7 @@ function MyAppealTab() {
                   </div>
                   {!uc.isPrimary && <Badge variant="outline" className="text-[9px] shrink-0">Secondary</Badge>}
                   {uc.claimStatus === 'denied' && <Badge className="text-[9px] bg-red-500/20 text-red-400 border-red-500/30 shrink-0">Denied</Badge>}
-                  {uc.claimStatus === 'appeal' && <Badge className="text-[9px] bg-gold/20 text-gold border-gold/30 shrink-0">Appeal</Badge>}
+                  {uc.claimStatus === 'appeal' && <Badge className="text-[9px] bg-gold/20 text-foreground border-gold/30 shrink-0">Appeal</Badge>}
                 </button>
               ))}
             </div>
@@ -693,7 +693,7 @@ function MyAppealTab() {
       {(selectedConditionId || manualCondition.length > 2) && (
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <span className="shrink-0 w-6 h-6 rounded-full bg-gold/20 text-gold text-xs font-bold flex items-center justify-center">2</span>
+            <span className="shrink-0 w-6 h-6 rounded-full bg-gold/20 text-foreground text-xs font-bold flex items-center justify-center">2</span>
             <h3 className="text-sm font-semibold text-foreground">Why Was It Denied?</h3>
           </div>
           <p className="text-xs text-muted-foreground">Select all that apply. This helps match you to the most relevant case law.</p>
@@ -734,10 +734,10 @@ function MyAppealTab() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="shrink-0 w-6 h-6 rounded-full bg-gold/20 text-gold text-xs font-bold flex items-center justify-center">3</span>
+              <span className="shrink-0 w-6 h-6 rounded-full bg-gold/20 text-foreground text-xs font-bold flex items-center justify-center">3</span>
               <h3 className="text-sm font-semibold text-foreground">Matched Case Law ({matchedCases.length})</h3>
             </div>
-            <button onClick={handleExport} disabled={exporting} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gold/10 text-gold border border-gold/30 hover:bg-gold/20 transition-all">
+            <button onClick={handleExport} disabled={exporting} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gold/10 text-foreground border border-gold/30 hover:bg-gold/20 transition-all">
               <FileDown className="h-3.5 w-3.5" />
               {exporting ? 'Generating...' : 'Export Brief'}
             </button>
@@ -827,7 +827,7 @@ export default function AppealsGuide() {
         <TabsList className="w-full grid grid-cols-3 bg-muted/50 border border-border/50">
           <TabsTrigger
             value="my-appeal"
-            className="data-[state=active]:bg-gold/15 data-[state=active]:text-gold text-xs sm:text-sm"
+            className="data-[state=active]:bg-gold/15 data-[state=active]:text-foreground text-xs sm:text-sm"
           >
             <Crosshair className="h-4 w-4 sm:mr-1.5 shrink-0" />
             <span className="hidden sm:inline">My Appeal</span>
@@ -835,7 +835,7 @@ export default function AppealsGuide() {
           </TabsTrigger>
           <TabsTrigger
             value="overview"
-            className="data-[state=active]:bg-gold/15 data-[state=active]:text-gold text-xs sm:text-sm"
+            className="data-[state=active]:bg-gold/15 data-[state=active]:text-foreground text-xs sm:text-sm"
           >
             <BookOpen className="h-4 w-4 sm:mr-1.5 shrink-0" />
             <span className="hidden sm:inline">Appeal Lanes</span>
@@ -843,7 +843,7 @@ export default function AppealsGuide() {
           </TabsTrigger>
           <TabsTrigger
             value="caselaw"
-            className="data-[state=active]:bg-gold/15 data-[state=active]:text-gold text-xs sm:text-sm"
+            className="data-[state=active]:bg-gold/15 data-[state=active]:text-foreground text-xs sm:text-sm"
           >
             <Gavel className="h-4 w-4 mr-1.5" />
             Case Law
@@ -919,7 +919,7 @@ export default function AppealsGuide() {
               <Filter className="h-3.5 w-3.5" />
               {showFilters ? 'Hide' : 'Show'} topic filters
               {activeTopic && (
-                <Badge className="ml-1 text-[9px] bg-gold/20 text-gold border-gold/30 px-1.5 py-0">
+                <Badge className="ml-1 text-[9px] bg-gold/20 text-foreground border-gold/30 px-1.5 py-0">
                   1 active
                 </Badge>
               )}
@@ -936,7 +936,7 @@ export default function AppealsGuide() {
                     className={cn(
                       'px-2.5 py-1 rounded-full text-[11px] font-medium border transition-all',
                       activeTopic === chip.value
-                        ? 'bg-gold/20 text-gold border-gold/40 shadow-sm shadow-gold/10'
+                        ? 'bg-gold/20 text-foreground border-gold/40 shadow-sm shadow-gold/10'
                         : 'bg-muted/40 text-muted-foreground border-border/50 hover:bg-muted/60'
                     )}
                   >
@@ -969,7 +969,7 @@ export default function AppealsGuide() {
               className={cn(
                 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all border',
                 filteredCases.length > 0
-                  ? 'bg-gold/10 text-gold border-gold/30 hover:bg-gold/20'
+                  ? 'bg-gold/10 text-foreground border-gold/30 hover:bg-gold/20'
                   : 'bg-muted/30 text-muted-foreground/50 border-border/30 cursor-not-allowed'
               )}
             >

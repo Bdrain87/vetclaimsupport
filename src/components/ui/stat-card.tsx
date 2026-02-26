@@ -137,7 +137,7 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
                   : variant === 'success'
                   ? 'bg-green-500/10 text-green-600 dark:text-green-500'
                   : variant === 'warning'
-                  ? 'bg-gold/10 text-gold-dk dark:text-gold'
+                  ? 'bg-gold/10 text-foreground'
                   : 'bg-muted text-muted-foreground'
               )}
             >

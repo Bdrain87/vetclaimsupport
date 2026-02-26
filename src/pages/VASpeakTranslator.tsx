@@ -184,9 +184,9 @@ const CATEGORY_LABELS: Record<GlossaryEntry['category'], string> = {
 };
 
 const CATEGORY_COLORS: Record<GlossaryEntry['category'], string> = {
-  'claims-process': 'bg-gold/10 text-gold-hl border-gold/20',
+  'claims-process': 'bg-amber-500/10 text-amber-400 border-amber-500/20',
   medical: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  legal: 'bg-gold/10 text-gold border-gold/20',
+  legal: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
   rating: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
   evidence: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
 };
