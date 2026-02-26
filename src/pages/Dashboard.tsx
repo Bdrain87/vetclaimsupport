@@ -23,6 +23,7 @@ import {
   Bone,
   FileText,
   Shield,
+  LogIn,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { vcsSpring } from '@/constants/animations';
@@ -34,8 +35,10 @@ import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { getConditionById } from '@/data/vaConditions';
+import { supabase } from '@/lib/supabase';
+import type { Session } from '@supabase/supabase-js';
 import { ExportButton } from '@/components/dashboard/ExportButton';
 import { IntentToFileBanner } from '@/components/dashboard/IntentToFileBanner';
 import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
@@ -50,6 +53,13 @@ export default function Dashboard() {
   const profile = useProfileStore();
   const addDashboardQuickLog = useAppStore((s) => s.addDashboardQuickLog);
   const navigate = useNavigate();
+
+  const [session, setSession] = useState<Session | null>(null);
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session: s } }) => setSession(s));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => setSession(s));
+    return () => subscription.unsubscribe();
+  }, []);
 
   const streak = useStreakTracker();
   const reminders = useSmartReminders();
@@ -221,6 +231,23 @@ export default function Dashboard() {
     <PageContainer className="space-y-4 animate-fade-in pb-4">
       {/* Intent to File Banner */}
       <IntentToFileBanner />
+
+      {/* Sign-in prompt for unauthenticated users */}
+      {!session && (
+        <button
+          onClick={() => navigate('/login')}
+          className="w-full flex items-center gap-3 p-3 rounded-xl border border-gold/30 bg-gold/5 text-left"
+        >
+          <div className="h-9 w-9 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
+            <LogIn className="h-4 w-4 text-gold" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-foreground">Sign in to sync your data</p>
+            <p className="text-xs text-muted-foreground">Keep your claim data backed up and accessible across devices</p>
+          </div>
+          <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+        </button>
+      )}
 
       {/* BDD Countdown — shown when user has a separation date */}
       {profile.separationDate && (

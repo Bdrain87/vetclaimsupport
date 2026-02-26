@@ -1,6 +1,13 @@
 import { useProfileStore } from '@/store/useProfileStore';
 import { supabase } from '@/lib/supabase';
 
+/** Team accounts that always have lifetime access. */
+const LIFETIME_EMAILS = new Set([
+  'blakedrain@gmail.com',
+  'carlospv123@gmail.com',
+  'thatwyliecoyote@icloud.com',
+]);
+
 export type EntitlementStatus = 'preview' | 'premium' | 'lifetime';
 export type EntitlementSource = 'apple' | 'stripe' | 'lifetime';
 
@@ -47,7 +54,14 @@ export function isPremiumRoute(pathname: string): boolean {
   return (PREMIUM_ROUTES as readonly string[]).includes(pathname);
 }
 
+let cachedEmail: string | null = null;
+
+function isTeamAccount(): boolean {
+  return cachedEmail != null && LIFETIME_EMAILS.has(cachedEmail.toLowerCase());
+}
+
 export function checkEntitlement(): EntitlementStatus {
+  if (isTeamAccount()) return 'lifetime';
   const entitlement = useProfileStore.getState().entitlement;
   return entitlement || 'preview';
 }
@@ -90,6 +104,14 @@ export async function refreshEntitlementFromServer(): Promise<EntitlementStatus>
   try {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) return checkEntitlement();
+
+    // Cache email for team account bypass
+    cachedEmail = session.user.email ?? null;
+    if (isTeamAccount()) {
+      useProfileStore.getState().setEntitlement('lifetime');
+      lastRefreshAt = Date.now();
+      return 'lifetime';
+    }
 
     const { data } = await supabase
       .from('user_entitlements')
