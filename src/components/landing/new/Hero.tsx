@@ -1,10 +1,9 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE } from '@/lib/landing-animations';
 
-const ROTATING_WORDS = ['Organized', 'Prepared', 'Confident', 'Ready'];
-const CYCLE_MS = 3000;
+// Rotating words removed — headline is now static with gold accent on "Your Benefits."
 
 const TRUST_ITEMS = [
   'YOUR DATA STAYS PRIVATE',
@@ -77,7 +76,6 @@ function WebAppBadge() {
 }
 
 export function Hero() {
-  const [index, setIndex] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -85,15 +83,6 @@ export function Hero() {
     offset: ['start start', 'end start'],
   });
   const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
-
-  const advance = useCallback(() => {
-    setIndex((prev) => (prev + 1) % ROTATING_WORDS.length);
-  }, []);
-
-  useEffect(() => {
-    const timer = setInterval(advance, CYCLE_MS);
-    return () => clearInterval(timer);
-  }, [advance]);
 
   const scrollToHowItWorks = () => {
     const el = document.getElementById('how-it-works');
@@ -133,7 +122,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          Built for Those Who Served
+          Built for Service Members &amp; Veterans
         </motion.p>
 
         {/* Main heading — Option A */}
@@ -150,28 +139,10 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          Claims Built for Those Who Served.{' '}
-          <br className="hidden sm:inline" />
-          Be{' '}
-          <span className="relative inline-block w-[160px] sm:w-[220px] text-left align-baseline" style={{ lineHeight: 1.25 }}>
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={ROTATING_WORDS[index]}
-                style={{
-                  display: 'inline-block',
-                  lineHeight: 1.3,
-                  paddingBottom: '0.15em',
-                  ...GOLD_GRADIENT_TEXT,
-                }}
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -24 }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              >
-                {ROTATING_WORDS[index]}
-              </motion.span>
-            </AnimatePresence>
-          </span>
+          You Served Your Country.
+          <br />
+          You Shouldn't Have to Battle for{' '}
+          <span style={GOLD_GRADIENT_TEXT}>Your Benefits.</span>
         </motion.h1>
 
         {/* Subtitle */}
@@ -186,7 +157,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          Organize your evidence. Build your case. Be prepared.
+          50+ tools to organize your evidence, build your case, and walk into your C&amp;P exam ready.
         </motion.p>
 
         {/* CTAs */}
