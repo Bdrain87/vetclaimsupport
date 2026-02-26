@@ -32,7 +32,7 @@ export const conditionProfiles: ConditionSecondaryProfile[] = [
   },
   {
     id: 'knee-strain',
-    possibleSecondaries: ['knee-strain', 'hip-strain', 'lumbar-strain', 'ankle-strain', 'sciatica'],
+    possibleSecondaries: ['hip-strain', 'lumbar-strain', 'ankle-strain', 'sciatica'],
     nexusTip: 'Document altered gait pattern (antalgic gait) as the biomechanical link to compensatory conditions.',
   },
   {

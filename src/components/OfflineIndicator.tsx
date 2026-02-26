@@ -1,26 +1,30 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { WifiOff, Wifi } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export function OfflineIndicator() {
   const [online, setOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
   const [showReconnected, setShowReconnected] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
     const goOnline = () => {
       setOnline(true);
       setShowReconnected(true);
-      setTimeout(() => setShowReconnected(false), 3000);
+      clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => setShowReconnected(false), 3000);
     };
     const goOffline = () => {
       setOnline(false);
       setShowReconnected(false);
+      clearTimeout(timerRef.current);
     };
     window.addEventListener('online', goOnline);
     window.addEventListener('offline', goOffline);
     return () => {
       window.removeEventListener('online', goOnline);
       window.removeEventListener('offline', goOffline);
+      clearTimeout(timerRef.current);
     };
   }, []);
 

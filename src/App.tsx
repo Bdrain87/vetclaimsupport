@@ -524,12 +524,12 @@ function App() {
 
   // Refresh entitlement and start/stop sync on auth state changes
   useEffect(() => {
-    ensureFreshEntitlement();
+    ensureFreshEntitlement().catch(() => {});
     startSync();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-        ensureFreshEntitlement();
+        ensureFreshEntitlement().catch(() => {});
         startSync();
       }
       if (event === 'SIGNED_OUT') {

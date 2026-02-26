@@ -7,7 +7,23 @@ function sanitizeRating(r: number): number {
 }
 
 /**
- * 38 CFR Part 4.25 Compliant Combined Rating Math
+ * Simple combined rating per 38 CFR 4.25 — no bilateral factor.
+ * Accepts any number[], sorts descending, rounds to nearest 10%.
+ */
+export function combineRatings(ratings: number[]): number {
+  const safe = ratings.map(sanitizeRating).filter(r => r > 0);
+  if (safe.length === 0) return 0;
+
+  const sorted = [...safe].sort((a, b) => b - a);
+  let remaining = 100;
+  for (const r of sorted) {
+    remaining = remaining * (1 - r / 100);
+  }
+  return Math.round((100 - remaining) / 10) * 10;
+}
+
+/**
+ * 38 CFR Part 4.25 Compliant Combined Rating Math (with bilateral factor per 4.26)
  */
 export const calculatePlatinumRating = (ratings: number[], bilateral: number[]) => {
   // Input validation: filter out invalid values, clamp to 0-100

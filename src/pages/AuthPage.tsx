@@ -208,6 +208,7 @@ export default function AuthPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email address"
+                aria-label="Email address"
                 className={inputClass}
                 autoComplete="email"
               />
@@ -220,12 +221,14 @@ export default function AuthPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
+                aria-label="Password"
                 className={`${inputClass} pr-11`}
                 autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
                 className="absolute right-3.5 top-1/2 -translate-y-1/2 bg-transparent border-none text-white/30 hover:text-white/60 cursor-pointer transition-colors"
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -240,6 +243,7 @@ export default function AuthPage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirm password"
+                  aria-label="Confirm password"
                   className={inputClass}
                   autoComplete="new-password"
                 />

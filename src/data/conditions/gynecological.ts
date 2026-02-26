@@ -19,7 +19,6 @@ export const gynecologicalConditions: VACondition[] = [
     commonSecondaries: [
       'depression',
       'anxiety',
-      'infertility',
       'chronic-pain-syndrome',
       'ibs',
     ],
@@ -85,9 +84,7 @@ export const gynecologicalConditions: VACondition[] = [
     commonSecondaries: [
       'diabetes',
       'depression',
-      'infertility',
       'obesity-endocrine',
-      'hirsutism',
     ],
     keywords: [
       'PCOS',
@@ -119,7 +116,6 @@ export const gynecologicalConditions: VACondition[] = [
     commonSecondaries: [
       'depression',
       'anxiety',
-      'sexual-dysfunction',
       'urinary-incontinence',
       'lymphedema',
     ],
@@ -155,7 +151,6 @@ export const gynecologicalConditions: VACondition[] = [
       'chronic-fatigue',
       'anxiety',
       'peripheral-neuropathy',
-      'hormonal-deficiency',
     ],
     keywords: [
       'ovarian cancer',
@@ -185,7 +180,7 @@ export const gynecologicalConditions: VACondition[] = [
       'Fluid-filled sacs that develop on or in the ovaries. Most are functional and resolve on their own, but persistent or large cysts cause pelvic pain, bloating, and irregular periods. Ruptured cysts can cause severe acute pain.',
     ratingCriteria:
       'Rated under DC 7615 for disease, injury, or adhesions of the ovary. Consider frequency of recurrence, symptoms not controlled by treatment, and need for surgery. Continuous treatment without control warrants higher rating.',
-    commonSecondaries: ['chronic-pain-syndrome', 'depression', 'infertility', 'endometriosis'],
+    commonSecondaries: ['chronic-pain-syndrome', 'depression', 'endometriosis'],
     keywords: [
       'ovarian cyst',
       'ovary cyst',
@@ -246,7 +241,7 @@ export const gynecologicalConditions: VACondition[] = [
       'Chronic vulvar pain lasting at least 3 months without an identifiable cause. Includes generalized vulvodynia and vestibulodynia (localized). Causes burning, stinging, rawness, and pain during intercourse.',
     ratingCriteria:
       'Rated by analogy under DC 7611 for disease or injury of the vulva. Consider pain severity, impact on daily activities and sexual function, and response to treatment. Symptoms not controlled by treatment rated higher.',
-    commonSecondaries: ['depression', 'anxiety', 'sexual-dysfunction', 'chronic-pain-syndrome'],
+    commonSecondaries: ['depression', 'anxiety', 'chronic-pain-syndrome'],
     keywords: [
       'vulvodynia',
       'vulvar pain',
@@ -274,7 +269,7 @@ export const gynecologicalConditions: VACondition[] = [
       'Infection of the female reproductive organs (uterus, fallopian tubes, ovaries). Usually caused by sexually transmitted bacteria. Can cause chronic pelvic pain, infertility, and ectopic pregnancy. Chronic PID with adhesions is rated separately.',
     ratingCriteria:
       'Rated under DC 7614 for disease, injury, or adhesions of the fallopian tube. Consider chronic pelvic pain, recurrence frequency, adhesion formation, and infertility. Symptoms requiring continuous treatment rated higher.',
-    commonSecondaries: ['infertility', 'chronic-pain-syndrome', 'depression', 'endometriosis'],
+    commonSecondaries: ['chronic-pain-syndrome', 'depression', 'endometriosis'],
     keywords: [
       'PID',
       'pelvic inflammatory disease',
@@ -330,7 +325,7 @@ export const gynecologicalConditions: VACondition[] = [
       'Absence of menstrual periods. Primary amenorrhea is failure to menstruate by age 15. Secondary amenorrhea is absence of periods for 3+ months in someone who previously had regular cycles. Can indicate hormonal, structural, or stress-related causes.',
     ratingCriteria:
       'Rated under DC 7613 or by analogy to the underlying cause. Consider hormonal deficiency, need for replacement therapy, associated infertility, and bone density effects from estrogen loss.',
-    commonSecondaries: ['osteoporosis', 'infertility', 'depression', 'hormonal-deficiency'],
+    commonSecondaries: ['osteoporosis', 'depression'],
     keywords: [
       'amenorrhea',
       'absent periods',
@@ -386,7 +381,7 @@ export const gynecologicalConditions: VACondition[] = [
       'Chronic inflammation of the vagina causing discharge, itching, and pain. Includes bacterial vaginosis, yeast infections, and atrophic vaginitis. Recurrent episodes are common and can significantly impact quality of life.',
     ratingCriteria:
       'Rated under DC 7611 for disease or injury of the vagina. Consider recurrence frequency, need for continuous treatment, and impact on daily activities. Symptoms requiring continuous treatment rated 10%.',
-    commonSecondaries: ['depression', 'sexual-dysfunction', 'urinary-tract-infections'],
+    commonSecondaries: ['depression', 'urinary-tract-infections'],
     keywords: [
       'vaginitis',
       'vaginal infection',
@@ -485,7 +480,6 @@ export const gynecologicalConditions: VACondition[] = [
       'Rated by analogy under DC 7699 based on the underlying cause. The infertility itself is not directly rated, but the conditions causing it are. Consider secondary service connection through endometriosis, PID, or surgical complications.',
     commonSecondaries: ['depression', 'anxiety', 'endometriosis', 'pcos-gynecological'],
     keywords: [
-      'infertility',
       'unable to conceive',
       'fertility problems',
       'tubal factor infertility',
@@ -571,7 +565,6 @@ export const gynecologicalConditions: VACondition[] = [
     commonSecondaries: [
       'depression',
       'osteoporosis',
-      'hormonal-deficiency',
       'urinary-incontinence',
       'chronic-fatigue',
     ],
@@ -636,7 +629,6 @@ export const gynecologicalConditions: VACondition[] = [
       'chronic-constipation',
       'chronic-pain-syndrome',
       'depression',
-      'sexual-dysfunction',
     ],
     keywords: [
       'pelvic floor dysfunction',

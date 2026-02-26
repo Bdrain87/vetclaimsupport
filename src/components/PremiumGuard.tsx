@@ -15,6 +15,7 @@ export function PremiumGuard({ featureName, children }: PremiumGuardProps) {
 
   useEffect(() => {
     let cancelled = false;
+    let timerId: ReturnType<typeof setTimeout> | undefined;
 
     // Show content immediately for known premium users (avoids flash)
     if (hasPremiumAccess()) {
@@ -25,9 +26,9 @@ export function PremiumGuard({ featureName, children }: PremiumGuardProps) {
     // Race against a timeout so the guard fails closed (blocked) if the
     // server is unreachable, preventing free users from accessing premium
     // content during network outages.
-    const timeout = new Promise<'timeout'>((resolve) =>
-      setTimeout(() => resolve('timeout'), ENTITLEMENT_TIMEOUT_MS),
-    );
+    const timeout = new Promise<'timeout'>((resolve) => {
+      timerId = setTimeout(() => resolve('timeout'), ENTITLEMENT_TIMEOUT_MS);
+    });
 
     Promise.race([ensureFreshEntitlement(), timeout]).then((result) => {
       if (cancelled) return;
@@ -41,7 +42,10 @@ export function PremiumGuard({ featureName, children }: PremiumGuardProps) {
       setState(isPremium ? 'granted' : 'blocked');
     });
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+      clearTimeout(timerId);
+    };
   }, []);
 
   if (state === 'loading') {

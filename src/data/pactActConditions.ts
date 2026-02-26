@@ -116,7 +116,7 @@ export const PACT_ACT_CONDITIONS: PACTCondition[] = [
   // ============ CANCERS ============
   // Agent Orange Presumptive Cancers
   {
-    id: 'soft-tissue-sarcoma',
+    id: 'ao-soft-tissue-sarcoma',
     condition: 'Soft Tissue Sarcoma',
     category: 'Cancer',
     presumptiveFor: ['Agent Orange'],
@@ -124,7 +124,7 @@ export const PACT_ACT_CONDITIONS: PACTCondition[] = [
     diagnosticCode: '5329'
   },
   {
-    id: 'non-hodgkins-lymphoma',
+    id: 'lymphoma',
     condition: "Non-Hodgkin's Lymphoma",
     category: 'Cancer',
     presumptiveFor: ['Agent Orange'],
@@ -172,7 +172,7 @@ export const PACT_ACT_CONDITIONS: PACTCondition[] = [
     diagnosticCode: '7703'
   },
   {
-    id: 'chronic-b-cell-leukemia',
+    id: 'leukemia',
     condition: 'Chronic B-Cell Leukemia',
     category: 'Cancer',
     presumptiveFor: ['Agent Orange'],
@@ -180,7 +180,7 @@ export const PACT_ACT_CONDITIONS: PACTCondition[] = [
     diagnosticCode: '7703'
   },
   {
-    id: 'throat-cancer',
+    id: 'ao-respiratory-cancers',
     condition: 'Respiratory Cancers (Throat)',
     category: 'Cancer',
     presumptiveFor: ['Agent Orange', 'Burn Pit Exposure'],
@@ -238,15 +238,7 @@ export const PACT_ACT_CONDITIONS: PACTCondition[] = [
     diagnosticCode: '7343'
   },
   {
-    id: 'lymphoma-any-type',
-    condition: 'Lymphoma (any type)',
-    category: 'Cancer',
-    presumptiveFor: ['Burn Pit Exposure', 'Post-9/11'],
-    description: 'Cancer of the lymphatic system',
-    diagnosticCode: '7715'
-  },
-  {
-    id: 'brain-cancer',
+    id: 'brain-tumor-malignant',
     condition: 'Brain Cancer (Glioblastoma)',
     category: 'Cancer',
     presumptiveFor: ['Burn Pit Exposure', 'Post-9/11'],
@@ -257,7 +249,7 @@ export const PACT_ACT_CONDITIONS: PACTCondition[] = [
   // ============ OTHER CONDITIONS ============
   // Agent Orange Other Conditions
   {
-    id: 'type-2-diabetes',
+    id: 'diabetes',
     condition: 'Type 2 Diabetes Mellitus',
     category: 'Other',
     presumptiveFor: ['Agent Orange'],
@@ -265,7 +257,7 @@ export const PACT_ACT_CONDITIONS: PACTCondition[] = [
     diagnosticCode: '7913'
   },
   {
-    id: 'ischemic-heart-disease',
+    id: 'ao-ischemic-heart-disease',
     condition: 'Ischemic Heart Disease',
     category: 'Other',
     presumptiveFor: ['Agent Orange'],
@@ -281,7 +273,7 @@ export const PACT_ACT_CONDITIONS: PACTCondition[] = [
     diagnosticCode: '8520'
   },
   {
-    id: 'parkinsons-disease',
+    id: 'ao-parkinsons',
     condition: "Parkinson's Disease",
     category: 'Other',
     presumptiveFor: ['Agent Orange'],
@@ -297,7 +289,7 @@ export const PACT_ACT_CONDITIONS: PACTCondition[] = [
     diagnosticCode: '7829'
   },
   {
-    id: 'porphyria-cutanea-tarda',
+    id: 'ao-porphyria-cutanea-tarda',
     condition: 'Porphyria Cutanea Tarda',
     category: 'Other',
     presumptiveFor: ['Agent Orange'],

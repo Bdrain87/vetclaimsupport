@@ -74,7 +74,7 @@ export const dentalConditions: VACondition[] = [
       'Chronic gum infection that damages the soft tissue and bone supporting the teeth. Leads to tooth loosening and loss. Can be aggravated by medications (dry mouth side effect), tobacco use, and neglect of dental care during deployments.',
     ratingCriteria:
       'Rated based on resulting tooth loss under DC 9913 (loss of teeth due to loss of substance of body of maxilla or mandible without loss of continuity). Ratings depend on number of teeth lost and whether replaceable by prosthesis.',
-    commonSecondaries: ['tooth-loss', 'depression', 'cardiovascular-disease'],
+    commonSecondaries: ['tooth-loss', 'depression'],
     keywords: [
       'periodontitis',
       'periodontal disease',
@@ -102,7 +102,7 @@ export const dentalConditions: VACondition[] = [
       'Loss of teeth due to injury, disease, or bone loss. VA dental disability compensation requires loss of teeth due to loss of substance of the body of the maxilla or mandible. Service-connected tooth loss from trauma is separately compensable.',
     ratingCriteria:
       'Rated under DC 9913. Ratings based on number of teeth lost and whether replaceable by suitable prosthesis. 0%: where lost masticatory surface can be restored by prosthesis. Higher ratings when bone loss prevents prosthesis: all upper teeth lost (40%), all lower teeth lost (40%), all upper and lower teeth lost on one side (30%), etc.',
-    commonSecondaries: ['depression', 'nutritional-deficiency', 'tmj-disorder'],
+    commonSecondaries: ['depression', 'tmj-disorder'],
     keywords: [
       'tooth loss',
       'lost teeth',
@@ -132,7 +132,7 @@ export const dentalConditions: VACondition[] = [
       'Loss of part or all of the upper jaw (maxilla) or lower jaw (mandible). Can result from combat trauma, blast injury, surgical resection for cancer, or severe infection. Causes significant functional impairment in eating, speaking, and facial appearance.',
     ratingCriteria:
       'DC 9900: chronic osteomyelitis or osteoradionecrosis of the maxilla or mandible (10-30%). DC 9901: complete loss of mandible (100%). DC 9902: loss of approximately one-half of mandible (50-80%). Ratings increase with loss of continuity and inability to replace with prosthesis.',
-    commonSecondaries: ['depression', 'dysarthria', 'nutritional-deficiency', 'scar-disfigurement'],
+    commonSecondaries: ['depression', 'dysarthria', 'scar-disfigurement'],
     keywords: [
       'maxilla loss',
       'mandible loss',
@@ -188,7 +188,7 @@ export const dentalConditions: VACondition[] = [
       'Long-standing bone infection of the jaw requiring ongoing management. Characterized by recurring episodes of pain, swelling, and drainage. May cause pathological fractures and require multiple surgeries.',
     ratingCriteria:
       'Rated under DC 9900: 10%: in remission. 20%: active or recurring with constitutional symptoms. 30%: with definite involucrum or sequestrum, with or without discharging sinus. Recurring nature makes this a chronic disability.',
-    commonSecondaries: ['chronic-pain-syndrome', 'depression', 'nutritional-deficiency', 'tooth-loss'],
+    commonSecondaries: ['chronic-pain-syndrome', 'depression', 'tooth-loss'],
     keywords: [
       'chronic osteomyelitis',
       'chronic jaw infection',
@@ -216,7 +216,7 @@ export const dentalConditions: VACondition[] = [
       'Residual effects from fracture of the mandible or maxilla. Common in veterans from combat injuries, training accidents, or assaults. Residuals may include malunion, nonunion, limited jaw opening, numbness, and chronic pain.',
     ratingCriteria:
       'Rated under DC 9904 for malunion of the mandible: 0% slight displacement. 10%: moderate displacement. 20%: severe displacement. DC 9903 for nonunion of the mandible: 10% without loss of motion. 30%: with loss of motion. Consider separately rating limitation of motion under DC 9905.',
-    commonSecondaries: ['tmj-disorder', 'trigeminal-neuralgia', 'chronic-pain-syndrome', 'numbness-facial'],
+    commonSecondaries: ['tmj-disorder', 'trigeminal-neuralgia', 'chronic-pain-syndrome'],
     keywords: [
       'jaw fracture',
       'mandible fracture',
@@ -244,7 +244,7 @@ export const dentalConditions: VACondition[] = [
       'Loss or defect of the hard palate from trauma, surgery, or disease. Causes difficulty eating, nasal regurgitation of food and liquids, and speech impairment. May require prosthetic obturator.',
     ratingCriteria:
       'Rated under DC 9912 for loss of half or more of the hard palate. Consider size of defect, whether prosthesis can restore function, speech impairment, and nasal regurgitation. Loss of soft palate rated separately.',
-    commonSecondaries: ['dysarthria', 'nutritional-deficiency', 'depression', 'sinusitis'],
+    commonSecondaries: ['dysarthria', 'depression', 'sinusitis'],
     keywords: [
       'palate defect',
       'hard palate loss',
@@ -275,7 +275,6 @@ export const dentalConditions: VACondition[] = [
     commonSecondaries: [
       'depression',
       'dysarthria',
-      'nutritional-deficiency',
       'scar-disfigurement',
       'dysphagia',
     ],
@@ -311,8 +310,6 @@ export const dentalConditions: VACondition[] = [
       'depression',
       'dysarthria',
       'dysphagia',
-      'nutritional-deficiency',
-      'aspiration-pneumonia',
     ],
     keywords: [
       'tongue loss',
@@ -341,7 +338,7 @@ export const dentalConditions: VACondition[] = [
       'Disorders of the salivary glands including chronic sialadenitis (inflammation), sialolithiasis (stones), Sjogren\'s syndrome effects, and post-radiation xerostomia (dry mouth). Dry mouth from medications is also common in veterans.',
     ratingCriteria:
       'Rated under DC 9916 for disease of the salivary glands or by analogy. Consider xerostomia severity, recurrent infections/stones, need for surgical intervention, and impact on eating and dental health.',
-    commonSecondaries: ['tooth-loss', 'periodontitis', 'depression', 'nutritional-deficiency'],
+    commonSecondaries: ['tooth-loss', 'periodontitis', 'depression'],
     keywords: [
       'salivary gland',
       'dry mouth',
@@ -397,7 +394,7 @@ export const dentalConditions: VACondition[] = [
       'Chronic burning sensation in the mouth without an identifiable cause. Affects the tongue, gums, lips, palate, or entire mouth. Often associated with dry mouth, taste changes, and medication side effects. More common in post-menopausal women and veterans on multiple medications.',
     ratingCriteria:
       'Rated by analogy under DC 9916 or based on underlying cause. Consider impact on eating, taste loss, and quality of life. Often rated low but consider secondary depression and medication side effect documentation.',
-    commonSecondaries: ['depression', 'anxiety', 'nutritional-deficiency', 'insomnia'],
+    commonSecondaries: ['depression', 'anxiety', 'insomnia'],
     keywords: [
       'burning mouth syndrome',
       'BMS',

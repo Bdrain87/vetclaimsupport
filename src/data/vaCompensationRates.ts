@@ -1,13 +1,20 @@
 // ========================================================================
-// WARNING: These are 2024 rates. Update annually when VA publishes new
-// COLA rates. The 2026 projected rates live in compRates2026.ts.
-// Check https://www.va.gov/disability/compensation-rates/veteran-rates/
-// for the latest official rates each December.
+// WARNING: These are 2024 rates, retained for historical reference.
+// Active rates live in compRates2026.ts (effective Dec 1, 2025).
+// calculateCompensation() below uses the 2026 rates.
 // ========================================================================
 //
 // 2024 VA Compensation Rates (Effective December 1, 2023)
 // Source: https://www.va.gov/disability/compensation-rates/veteran-rates/
 // Last verified: February 2024
+
+import {
+  COMP_RATES_2026,
+  SPOUSE_ADDITION_BY_RATING,
+  CHILD_ADDITION_BY_RATING,
+  SCHOOL_CHILD_ADDITION_BY_RATING,
+  PARENT_ADDITION_BY_RATING,
+} from './compRates2026';
 
 export const vaCompensationRates2024 = {
   // Base rates for veteran alone (no dependents)
@@ -93,10 +100,7 @@ export function calculateCompensation(
   totalMonthly: number;
   totalYearly: number;
 } {
-  const rates = vaCompensationRates2024;
-
-  // Get base rate
-  const baseRate = rates.base[rating] || 0;
+  const baseRate = COMP_RATES_2026[rating] || 0;
 
   // Dependents only apply at 30%+
   if (rating < 30) {
@@ -112,10 +116,10 @@ export function calculateCompensation(
   }
 
   // Calculate dependent additions
-  const spouseAddition = dependents.hasSpouse ? (rates.spouse[rating] || 0) : 0;
-  const childrenAddition = dependents.childrenUnder18 * (rates.childUnder18[rating] || 0);
-  const schoolChildrenAddition = dependents.childrenInSchool * (rates.childSchool[rating] || 0);
-  const parentsAddition = dependents.dependentParents * (rates.dependentParent[rating] || 0);
+  const spouseAddition = dependents.hasSpouse ? (SPOUSE_ADDITION_BY_RATING[rating] || 0) : 0;
+  const childrenAddition = dependents.childrenUnder18 * (CHILD_ADDITION_BY_RATING[rating] || 0);
+  const schoolChildrenAddition = dependents.childrenInSchool * (SCHOOL_CHILD_ADDITION_BY_RATING[rating] || 0);
+  const parentsAddition = dependents.dependentParents * (PARENT_ADDITION_BY_RATING[rating] || 0);
 
   const totalMonthly = baseRate + spouseAddition + childrenAddition + schoolChildrenAddition + parentsAddition;
 

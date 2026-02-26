@@ -2,6 +2,7 @@ import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { useProfileStore } from '@/store/useProfileStore';
 import { getAllBranchLabels } from '@/utils/veteranProfile';
+import { combineRatings } from '@/utils/vaMath';
 import useAppStore from '@/store/useAppStore';
 import { ClaimIntelligence } from '@/services/claimIntelligence';
 import {
@@ -160,17 +161,8 @@ export default function Dashboard() {
     const ratings = userConditions
       .filter(uc => uc.claimStatus === 'approved')
       .map(uc => uc.rating)
-      .filter((r): r is number => r !== undefined && r > 0)
-      .sort((a, b) => b - a); // Sort descending
-
-    if (ratings.length === 0) return 0;
-
-    let combined = 0;
-    for (const rating of ratings) {
-      const remaining = 100 - combined;
-      combined = combined + (remaining * rating / 100);
-    }
-    return Math.round(combined / 10) * 10;
+      .filter((r): r is number => r !== undefined && r > 0);
+    return combineRatings(ratings);
   }, [userConditions]);
 
   // Quick log state

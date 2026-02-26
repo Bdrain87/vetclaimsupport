@@ -28,7 +28,6 @@ export const auditoryConditions: VACondition[] = [
       'depression',
       'anxiety',
       'vertigo',
-      'social-isolation',
     ],
     keywords: [
       'hearing loss',
@@ -146,7 +145,6 @@ export const auditoryConditions: VACondition[] = [
       'depression',
       'anxiety',
       'vertigo',
-      'social-isolation',
     ],
     keywords: [
       'sensorineural hearing loss',
@@ -298,7 +296,6 @@ export const auditoryConditions: VACondition[] = [
     commonSecondaries: [
       'tinnitus',
       'depression',
-      'social-isolation',
       'cognitive-disorder',
     ],
     keywords: [
@@ -617,7 +614,6 @@ export const auditoryConditions: VACondition[] = [
       'depression',
       'anxiety',
       'chronic-nausea',
-      'falls',
     ],
     keywords: [
       "Meniere's disease",
@@ -739,7 +735,6 @@ export const auditoryConditions: VACondition[] = [
       'depression',
       'insomnia',
       'chronic-nausea',
-      'falls',
     ],
     keywords: [
       'vestibular neuritis',

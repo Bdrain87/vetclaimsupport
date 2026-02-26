@@ -460,6 +460,7 @@ export function DocumentScanner({
             <>
               <DialogHeader>
                 <DialogTitle>{viewingDoc.title}</DialogTitle>
+                <DialogDescription className="sr-only">Document details</DialogDescription>
               </DialogHeader>
               
               <div className="space-y-4">

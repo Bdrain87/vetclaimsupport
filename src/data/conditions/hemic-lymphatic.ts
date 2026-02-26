@@ -51,7 +51,6 @@ export const hemicLymphaticConditions: VACondition[] = [
     commonSecondaries: [
       'chronic-fatigue',
       'depression',
-      'frequent-infections',
       'hemophilia',
     ],
     keywords: [
@@ -154,7 +153,6 @@ export const hemicLymphaticConditions: VACondition[] = [
       'gallstones',
       'chronic-fatigue',
       'depression',
-      'jaundice',
     ],
     keywords: [
       'hemolytic anemia',
@@ -184,9 +182,7 @@ export const hemicLymphaticConditions: VACondition[] = [
     ratingCriteria:
       'Rated under DC 7714. Thalassemia minor with mild anemia may rate 0-10%. Thalassemia intermedia/major rated based on transfusion requirements and symptoms per DC 7714 criteria.',
     commonSecondaries: [
-      'iron-overload',
       'osteoporosis',
-      'heart-disease',
       'chronic-fatigue',
       'depression',
     ],
@@ -310,7 +306,6 @@ export const hemicLymphaticConditions: VACondition[] = [
       'chronic-pain-syndrome',
       'depression',
       'hepatitis-c',
-      'hiv',
     ],
     keywords: [
       'hemophilia',
@@ -342,7 +337,6 @@ export const hemicLymphaticConditions: VACondition[] = [
     commonSecondaries: [
       'chronic-fatigue',
       'depression',
-      'frequent-infections',
       'iron-deficiency-anemia',
       'peripheral-neuropathy',
     ],
@@ -379,7 +373,6 @@ export const hemicLymphaticConditions: VACondition[] = [
       'chronic-fatigue',
       'depression',
       'peripheral-neuropathy',
-      'frequent-infections',
     ],
     keywords: [
       'non-Hodgkins lymphoma',
@@ -452,7 +445,6 @@ export const hemicLymphaticConditions: VACondition[] = [
       'cellulitis-chronic',
       'depression',
       'chronic-pain-syndrome',
-      'limited-mobility',
       'fungal-skin-infection',
     ],
     keywords: [
@@ -482,7 +474,7 @@ export const hemicLymphaticConditions: VACondition[] = [
       'Abnormal enlargement of the spleen. Can be caused by infections, liver disease, blood cancers, or blood disorders. May cause early satiety, left upper abdominal pain, and risk of splenic rupture.',
     ratingCriteria:
       'Rated under DC 7707 for splenomegaly. Consider underlying cause, splenic function, risk of rupture, and associated symptoms. If causing hypersplenism (low blood counts), rate on blood count criteria.',
-    commonSecondaries: ['iron-deficiency-anemia', 'thrombocytopenia', 'chronic-fatigue', 'abdominal-pain'],
+    commonSecondaries: ['iron-deficiency-anemia', 'thrombocytopenia', 'chronic-fatigue'],
     keywords: [
       'splenomegaly',
       'enlarged spleen',
@@ -511,7 +503,6 @@ export const hemicLymphaticConditions: VACondition[] = [
     ratingCriteria:
       'Rated under DC 7706: 20% minimum rating for splenectomy. Consider infection frequency and severity. Complications from repeated infections may warrant higher rating or separate ratings.',
     commonSecondaries: [
-      'frequent-infections',
       'thrombocytopenia',
       'anxiety',
       'chronic-fatigue',
@@ -548,7 +539,6 @@ export const hemicLymphaticConditions: VACondition[] = [
       'hypothyroidism',
       'depression',
       'peripheral-neuropathy',
-      'infertility',
     ],
     keywords: [
       'Hodgkins disease',
@@ -586,7 +576,6 @@ export const hemicLymphaticConditions: VACondition[] = [
       'pulmonary-embolism',
       'chronic-pain-syndrome',
       'lymphedema',
-      'skin-ulcers',
       'depression',
     ],
     keywords: [
@@ -653,7 +642,6 @@ export const hemicLymphaticConditions: VACondition[] = [
     commonSecondaries: [
       'chronic-fatigue',
       'iron-deficiency-anemia',
-      'frequent-infections',
       'hemophilia',
       'depression',
     ],
@@ -673,5 +661,34 @@ export const hemicLymphaticConditions: VACondition[] = [
     bodySystem: 'Blood',
     presumptiveEligibility: ['radiation', 'pact-act'],
     cfrReference: '38 CFR § 4.117, DC 7716',
+  },
+  {
+    id: 'monoclonal-gammopathy',
+    name: 'Monoclonal Gammopathy of Undetermined Significance (MGUS)',
+    abbreviation: 'MGUS',
+    category: 'hematologic',
+    diagnosticCode: '7703',
+    typicalRatings: '0-10%',
+    description:
+      'Blood condition where an abnormal protein (monoclonal protein or M protein) is found in the blood. Can progress to multiple myeloma or other blood cancers. Presumptive for Agent Orange exposure under the PACT Act. Requires lifelong monitoring.',
+    ratingCriteria:
+      'Rated by analogy under DC 7703. Consider monitoring requirements, anxiety about progression, and any associated symptoms. If progresses to myeloma or lymphoma, rate under the appropriate malignancy DC.',
+    commonSecondaries: ['peripheral-neuropathy', 'osteoporosis', 'anxiety', 'depression', 'kidney-disease'],
+    keywords: [
+      'MGUS',
+      'monoclonal gammopathy',
+      'M protein',
+      'M spike',
+      'paraprotein',
+      'monoclonal protein',
+      'gammopathy undetermined',
+      'pre-myeloma',
+      'serum protein electrophoresis',
+      'SPEP abnormal',
+    ],
+    misspellings: ['monoclonal gamopathy', 'monoclonal gamapathy', 'MGUS gammopathy', 'monoclonol gammopathy'],
+    bodySystem: 'Blood',
+    presumptiveEligibility: ['agent-orange'],
+    cfrReference: '38 CFR § 4.117, DC 7703',
   },
 ];

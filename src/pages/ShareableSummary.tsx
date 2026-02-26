@@ -15,16 +15,7 @@ import { useProfileStore } from '@/store/useProfileStore';
 import { getConditionById } from '@/data/vaConditions';
 import { COMP_RATES_2026 } from '@/data/compRates2026';
 import { PageContainer } from '@/components/PageContainer';
-function calculateCombinedRating(ratings: number[]): number {
-  if (ratings.length === 0) return 0;
-  const sorted = [...ratings].sort((a, b) => b - a);
-  let remaining = 100;
-  for (const rating of sorted) {
-    remaining = remaining - (remaining * (rating / 100));
-  }
-  const exact = 100 - remaining;
-  return Math.round(exact / 10) * 10;
-}
+import { combineRatings } from '@/utils/vaMath';
 
 export default function ShareableSummary() {
   const userConditions = useAppStore((s) => s.userConditions);
@@ -53,7 +44,7 @@ export default function ShareableSummary() {
       .filter(c => c.rating !== undefined && c.rating > 0)
       .map(c => c.rating!);
 
-    const combinedRating = calculateCombinedRating(ratings);
+    const combinedRating = combineRatings(ratings);
     const monthlyComp = COMP_RATES_2026[combinedRating] || 0;
     const annualComp = monthlyComp * 12;
 

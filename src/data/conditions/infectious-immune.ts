@@ -25,7 +25,6 @@ export const infectiousConditions: VACondition[] = [
       'peripheral-neuropathy',
       'chronic-fatigue',
       'anxiety',
-      'lipodystrophy',
     ],
     keywords: [
       'HIV',
@@ -60,7 +59,6 @@ export const infectiousConditions: VACondition[] = [
       'depression',
       'chronic-fatigue',
       'liver-cancer',
-      'arthralgia',
     ],
     keywords: [
       'hepatitis B',
@@ -438,7 +436,7 @@ export const infectiousConditions: VACondition[] = [
       'Intestinal parasitic infection contracted through skin contact with contaminated soil. Common in tropical deployment areas. Causes iron deficiency anemia, fatigue, abdominal pain, and protein deficiency from chronic blood loss.',
     ratingCriteria:
       'Rated under DC 6305 for hookworm disease. Consider anemia severity, nutritional deficiency, GI symptoms, and need for ongoing treatment. Rate anemia separately if significant.',
-    commonSecondaries: ['iron-deficiency-anemia', 'chronic-fatigue', 'nutritional-deficiency'],
+    commonSecondaries: ['iron-deficiency-anemia', 'chronic-fatigue'],
     keywords: [
       'hookworm',
       'hookworm disease',
@@ -470,7 +468,7 @@ export const infectiousConditions: VACondition[] = [
       'Mosquito-borne viral disease endemic in tropical deployment areas. Causes severe fever, headache, muscle/joint pain, and can progress to hemorrhagic fever. Post-dengue fatigue syndrome can persist for months.',
     ratingCriteria:
       'Rated by analogy based on residuals. Post-dengue fatigue rated under DC 6354 criteria. Joint pain rated under musculoskeletal codes. Consider chronic fatigue, arthralgias, and immune effects.',
-    commonSecondaries: ['chronic-fatigue', 'arthralgia', 'depression', 'tension-headaches'],
+    commonSecondaries: ['chronic-fatigue', 'depression', 'tension-headaches'],
     keywords: [
       'dengue fever',
       'dengue',
@@ -501,7 +499,6 @@ export const infectiousConditions: VACondition[] = [
     commonSecondaries: [
       'dilated-cardiomyopathy',
       'heart-arrhythmia',
-      'megacolon',
       'chronic-fatigue',
       'depression',
     ],
@@ -609,9 +606,7 @@ export const infectiousConditions: VACondition[] = [
     commonSecondaries: [
       'chronic-fatigue',
       'depression',
-      'eye-conditions',
       'peripheral-neuropathy',
-      'skin-conditions',
     ],
     keywords: [
       'sarcoidosis',
@@ -645,7 +640,6 @@ export const infectiousConditions: VACondition[] = [
       'peripheral-neuropathy',
       'chronic-fatigue',
       'depression',
-      'respiratory-conditions',
     ],
     keywords: [
       'vasculitis',
@@ -944,7 +938,6 @@ export const infectiousConditions: VACondition[] = [
       'anxiety',
       'erectile-dysfunction',
       'sleep-apnea',
-      'peripheral-artery-disease',
     ],
     keywords: [
       'ischemic heart disease',
@@ -976,9 +969,7 @@ export const infectiousConditions: VACondition[] = [
       'Rated under DC 8004 for paralysis agitans. Minimum 30% rating. Consider tremor severity, rigidity, bradykinesia, gait disturbance, cognitive decline, and impact on daily activities. 100% for total economic and social impairment.',
     commonSecondaries: [
       'depression',
-      'dementia',
       'insomnia',
-      'falls',
       'dysarthria',
     ],
     keywords: [
@@ -1009,7 +1000,7 @@ export const infectiousConditions: VACondition[] = [
       'Peripheral neuropathy that manifested within a year of herbicide exposure or within one year of last exposure. Presumptive for Agent Orange-exposed veterans. Causes numbness, tingling, burning pain in extremities.',
     ratingCriteria:
       'Rated under appropriate nerve code. DC 8520 (sciatic): 10% mild, 20% moderate, 40% moderately severe, 60% severe with marked muscular atrophy, 80% complete paralysis. Rate each affected extremity separately.',
-    commonSecondaries: ['chronic-pain-syndrome', 'depression', 'falls', 'insomnia'],
+    commonSecondaries: ['chronic-pain-syndrome', 'depression', 'insomnia'],
     keywords: [
       'peripheral neuropathy Agent Orange',
       'early onset neuropathy',
@@ -1134,7 +1125,6 @@ export const infectiousConditions: VACondition[] = [
       'chronic-pain-syndrome',
       'depression',
       'lymphedema',
-      'limited-mobility',
       'chronic-fatigue',
     ],
     keywords: [

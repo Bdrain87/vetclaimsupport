@@ -291,6 +291,7 @@ export function EvidenceAttachment({
               <DialogContent className="max-w-3xl">
                 <DialogHeader>
                   <DialogTitle>{doc.title}</DialogTitle>
+                  <DialogDescription className="sr-only">Document preview</DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div className="flex items-center justify-center min-h-[300px] bg-muted rounded-lg">

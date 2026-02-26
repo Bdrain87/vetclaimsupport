@@ -33,8 +33,8 @@ export const BODY_REGIONS: BodyRegion[] = [
     id: 'face-jaw',
     label: 'Face & Jaw',
     conditions: [
-      { id: 'tmj', name: 'TMJ (Temporomandibular Joint) Disorder', diagnosticCode: '9905', description: 'Jaw pain or dysfunction from injury or stress' },
-      { id: 'facial-scarring', name: 'Facial Scarring', diagnosticCode: '7800', description: 'Disfigurement from service-related injuries' },
+      { id: 'tmj-disorder', name: 'TMJ (Temporomandibular Joint) Disorder', diagnosticCode: '9905', description: 'Jaw pain or dysfunction from injury or stress' },
+      { id: 'scar-disfigurement', name: 'Facial Scarring / Disfigurement', diagnosticCode: '7800', description: 'Disfigurement from service-related injuries' },
     ],
   },
   {
@@ -86,14 +86,14 @@ export const BODY_REGIONS: BodyRegion[] = [
     id: 'left-upper-arm',
     label: 'Left Upper Arm',
     conditions: [
-      { id: 'bicep-tendinitis', name: 'Bicep Tendinitis', diagnosticCode: '5305', description: 'Inflammation of the bicep tendon from overuse' },
+      { id: 'bicep-tendonitis', name: 'Bicep Tendonitis', diagnosticCode: '5305', description: 'Inflammation of the bicep tendon from overuse' },
     ],
   },
   {
     id: 'right-upper-arm',
     label: 'Right Upper Arm',
     conditions: [
-      { id: 'bicep-tendinitis', name: 'Bicep Tendinitis', diagnosticCode: '5305', description: 'Inflammation of the bicep tendon from overuse' },
+      { id: 'bicep-tendonitis', name: 'Bicep Tendonitis', diagnosticCode: '5305', description: 'Inflammation of the bicep tendon from overuse' },
     ],
   },
   {
@@ -191,14 +191,14 @@ export const BODY_REGIONS: BodyRegion[] = [
     id: 'left-upper-leg',
     label: 'Left Upper Leg',
     conditions: [
-      { id: 'hamstring-strain', name: 'Hamstring Strain', diagnosticCode: '5313', description: 'Muscle tear or strain from training or service activities' },
+      { id: 'hamstring-injury', name: 'Hamstring Injury', diagnosticCode: '5313', description: 'Muscle tear or strain from training or service activities' },
     ],
   },
   {
     id: 'right-upper-leg',
     label: 'Right Upper Leg',
     conditions: [
-      { id: 'hamstring-strain', name: 'Hamstring Strain', diagnosticCode: '5313', description: 'Muscle tear or strain from training or service activities' },
+      { id: 'hamstring-injury', name: 'Hamstring Injury', diagnosticCode: '5313', description: 'Muscle tear or strain from training or service activities' },
     ],
   },
   {

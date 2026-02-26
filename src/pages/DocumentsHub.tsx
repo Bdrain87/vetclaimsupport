@@ -238,10 +238,10 @@ export default function DocumentsHub() {
     if (!files || files.length === 0) return;
 
     const file = files[0];
-    if (file.size > 15 * 1024 * 1024) {
+    if (file.size > 10 * 1024 * 1024) {
       toast({
         title: 'File Too Large',
-        description: 'Please select a file under 15MB.',
+        description: 'Please select a file under 10MB.',
         variant: 'destructive',
       });
       return;
@@ -635,7 +635,7 @@ export default function DocumentsHub() {
               </Button>
             </div>
             <p className="text-xs text-muted-foreground">
-              Supports images, PDFs, and documents up to 15MB
+              Supports images, PDFs, and documents up to 10MB
             </p>
             <p className="text-xs text-gold/80 mt-1">
               Documents are stored locally on this device only and are not synced to the cloud. Use Settings &gt; Export Backup regularly.

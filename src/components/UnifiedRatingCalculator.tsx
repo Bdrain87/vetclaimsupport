@@ -28,11 +28,14 @@ import {
   Users, Heart, GraduationCap, UserPlus, DollarSign, AlertTriangle,
   RotateCcw, Sparkles, Link2, Check
 } from 'lucide-react';
-import { COMP_RATES_2026 } from '@/data/compRates2026';
-// 2024 rates retained only for dependent additions (spouse, children, parents)
-// because compRates2026 only contains base veteran rates. Replace once 2026
-// dependent rates are available.
-import { vaCompensationRates2024 } from '@/data/vaCompensationRates';
+import {
+  COMP_RATES_2026,
+  SPOUSE_ADDITION_BY_RATING,
+  CHILD_ADDITION_BY_RATING,
+  SCHOOL_CHILD_ADDITION_BY_RATING,
+  PARENT_ADDITION_BY_RATING,
+} from '@/data/compRates2026';
+import { combineRatings } from '@/utils/vaMath';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import {
   searchConditions,
@@ -135,21 +138,6 @@ interface CalculatorState {
   conditions: RatedCondition[];
   dependents: Dependent[];
   lastUpdated: number;
-}
-
-// VA Math: Combine ratings
-function combineRatings(ratings: number[]): number {
-  if (ratings.length === 0) return 0;
-  if (ratings.length === 1) return ratings[0];
-
-  const sorted = [...ratings].sort((a, b) => b - a);
-  let remaining = 100;
-
-  for (const rating of sorted) {
-    remaining = remaining - (remaining * (rating / 100));
-  }
-
-  return 100 - remaining;
 }
 
 // Calculate with bilateral factor
@@ -265,8 +253,6 @@ function calculateCompensation(
   breakdown: { label: string; amount: number }[];
 } {
   const baseRate = COMP_RATES_2026[rating] || 0;
-  // Dependent additions still use 2024 rates until 2026 dependent rates are published
-  const depRates = vaCompensationRates2024;
 
   // Dependents only apply at 30%+
   if (rating < 30) {
@@ -288,10 +274,10 @@ function calculateCompensation(
   const childrenInSchool = dependents.filter(d => d.type === 'child_in_school').length;
   const dependentParents = dependents.filter(d => d.type === 'dependent_parent').length;
 
-  const spouseAddition = hasSpouse ? (depRates.spouse[rating] || 0) : 0;
-  const childrenAddition = childrenUnder18 * (depRates.childUnder18[rating] || 0);
-  const schoolChildrenAddition = childrenInSchool * (depRates.childSchool[rating] || 0);
-  const parentsAddition = dependentParents * (depRates.dependentParent[rating] || 0);
+  const spouseAddition = hasSpouse ? (SPOUSE_ADDITION_BY_RATING[rating] || 0) : 0;
+  const childrenAddition = childrenUnder18 * (CHILD_ADDITION_BY_RATING[rating] || 0);
+  const schoolChildrenAddition = childrenInSchool * (SCHOOL_CHILD_ADDITION_BY_RATING[rating] || 0);
+  const parentsAddition = dependentParents * (PARENT_ADDITION_BY_RATING[rating] || 0);
 
   const totalMonthly = baseRate + spouseAddition + childrenAddition + schoolChildrenAddition + parentsAddition;
 
@@ -484,9 +470,10 @@ export function UnifiedRatingCalculator() {
     getConditionDetails,
   } = useUserConditions();
 
-  // Load initial state from localStorage
-  const [conditions, setConditions] = useState<RatedCondition[]>(() => loadState().conditions);
-  const [dependents, setDependents] = useState<Dependent[]>(() => loadState().dependents);
+  // Load initial state from localStorage (single parse via shared initializer)
+  const [initial] = useState(loadState);
+  const [conditions, setConditions] = useState<RatedCondition[]>(initial.conditions);
+  const [dependents, setDependents] = useState<Dependent[]>(initial.dependents);
 
   // Form state for new condition
   const [newConditionName, setNewConditionName] = useState('');
@@ -630,34 +617,33 @@ export function UnifiedRatingCalculator() {
 
   // Remove condition
   const removeCondition = useCallback((id: string) => {
-    const conditionToRemove = conditions.find(c => c.id === id);
-    setConditions(prev => prev.filter(c => c.id !== id));
-
-    // Also remove from user conditions context if it was linked
-    if (conditionToRemove?.conditionId) {
-      // Find the user condition with this conditionId
-      const userCondition = userConditions.find(uc => uc.conditionId === conditionToRemove.conditionId);
-      if (userCondition) {
-        removeUserCondition(userCondition.id);
+    setConditions(prev => {
+      const conditionToRemove = prev.find(c => c.id === id);
+      // Also remove from user conditions context if it was linked
+      if (conditionToRemove?.conditionId) {
+        const userCondition = userConditions.find(uc => uc.conditionId === conditionToRemove.conditionId);
+        if (userCondition) {
+          removeUserCondition(userCondition.id);
+        }
       }
-    }
-  }, [conditions, userConditions, removeUserCondition]);
+      return prev.filter(c => c.id !== id);
+    });
+  }, [userConditions, removeUserCondition]);
 
   // Update condition rating
   const updateConditionRating = useCallback((id: string, rating: number) => {
-    setConditions(prev => prev.map(c =>
-      c.id === id ? { ...c, rating } : c
-    ));
-
-    // Also update in user conditions context
-    const condition = conditions.find(c => c.id === id);
-    if (condition?.conditionId) {
-      const userCondition = userConditions.find(uc => uc.conditionId === condition.conditionId);
-      if (userCondition) {
-        updateUserCondition(userCondition.id, { rating });
+    setConditions(prev => {
+      const condition = prev.find(c => c.id === id);
+      // Also update in user conditions context
+      if (condition?.conditionId) {
+        const userCondition = userConditions.find(uc => uc.conditionId === condition.conditionId);
+        if (userCondition) {
+          updateUserCondition(userCondition.id, { rating });
+        }
       }
-    }
-  }, [conditions, userConditions, updateUserCondition]);
+      return prev.map(c => c.id === id ? { ...c, rating } : c);
+    });
+  }, [userConditions, updateUserCondition]);
 
   // Add dependent
   const addDependent = useCallback(() => {

@@ -100,7 +100,7 @@ export const endocrineConditions: VACondition[] = [
       'Underactive thyroid gland that does not produce enough thyroid hormone. Common symptoms include fatigue, weight gain, cold intolerance, and depression. Often develops secondary to thyroid surgery or radiation treatment.',
     ratingCriteria:
       '10%: fatigability, or continuous medication required for control. 30%: fatigability, constipation, and mental sluggishness. 60%: muscular weakness, mental disturbance, and weight gain. 100%: cold intolerance, muscular weakness, cardiovascular involvement, mental disturbance (dementia, slowing of thought, depression), bradycardia, and sleepiness.',
-    commonSecondaries: ['depression', 'chronic-fatigue', 'weight-gain', 'peripheral-neuropathy'],
+    commonSecondaries: ['depression', 'chronic-fatigue', 'peripheral-neuropathy'],
     keywords: [
       'low thyroid',
       'underactive thyroid',
@@ -144,7 +144,6 @@ export const endocrineConditions: VACondition[] = [
       'heart-arrhythmia',
       'atrial-fibrillation',
       'osteoporosis',
-      'eye-conditions',
     ],
     keywords: [
       'overactive thyroid',
@@ -252,7 +251,6 @@ export const endocrineConditions: VACondition[] = [
       'depression',
       'chronic-fatigue',
       'fibromyalgia',
-      'other-autoimmune',
     ],
     keywords: [
       'hashimotos',
@@ -291,7 +289,7 @@ export const endocrineConditions: VACondition[] = [
       'The adrenal glands do not produce enough cortisol and sometimes aldosterone. Addison\'s disease is the primary form. Can be life-threatening if untreated. Requires lifelong hormone replacement.',
     ratingCriteria:
       '20%: requiring continuous cortisone or analogous preparation. 40%: requiring cortisone or analogous preparation, with weakness and fatigability. 60%: with 1-2 crises per year. Four or more crises per year warrants higher consideration.',
-    commonSecondaries: ['depression', 'chronic-fatigue', 'hypotension', 'osteoporosis'],
+    commonSecondaries: ['depression', 'chronic-fatigue', 'osteoporosis'],
     keywords: [
       'addisons disease',
       'adrenal insufficiency',
@@ -355,7 +353,7 @@ export const endocrineConditions: VACondition[] = [
       'Overproduction of aldosterone by the adrenal glands, leading to high blood pressure and low potassium levels. Conn\'s syndrome refers to the primary form caused by an adrenal adenoma.',
     ratingCriteria:
       'Rated by analogy under DC 7911 (adrenal cortex conditions). Consider hypertension, hypokalemia, and muscle weakness. Rate residuals after adrenalectomy.',
-    commonSecondaries: ['hypertension', 'kidney-disease', 'heart-arrhythmia', 'muscle-weakness'],
+    commonSecondaries: ['hypertension', 'kidney-disease', 'heart-arrhythmia'],
     keywords: [
       'hyperaldosteronism',
       'conns syndrome',
@@ -575,10 +573,8 @@ export const endocrineConditions: VACondition[] = [
     ratingCriteria:
       'Rated by analogy under DC 7909. Consider fluid/electrolyte imbalance, frequency of urination, impact on daily activities. May also be rated under voiding dysfunction criteria (DC 7542) for urinary symptoms.',
     commonSecondaries: [
-      'dehydration',
       'insomnia',
       'kidney-disease',
-      'electrolyte-imbalance',
     ],
     keywords: [
       'diabetes insipidus',
@@ -686,7 +682,6 @@ export const endocrineConditions: VACondition[] = [
     commonSecondaries: [
       'diabetes',
       'depression',
-      'infertility',
       'obesity-endocrine',
       'sleep-apnea',
     ],
@@ -696,7 +691,6 @@ export const endocrineConditions: VACondition[] = [
       'polycystic ovarian',
       'ovarian cysts',
       'irregular periods',
-      'hirsutism',
       'excess hair growth',
       'anovulation',
       'insulin resistance PCOS',
@@ -763,7 +757,6 @@ export const endocrineConditions: VACondition[] = [
     ratingCriteria:
       'Rated under DC 7905. 10%: continuous medication required. Higher ratings based on severity of hypocalcemia symptoms, frequency of tetany episodes, and cardiac involvement. Consider Chvostek and Trousseau signs.',
     commonSecondaries: [
-      'seizures',
       'depression',
       'anxiety',
       'cataracts',

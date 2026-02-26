@@ -45,3 +45,33 @@ export const CHILD_ADDITION_BY_RATING: Record<number, number> = {
   90: 98.00,
   100: 109.11,
 };
+
+/**
+ * Additional monthly compensation per child 18-23 in school (ratings 30%+).
+ * Source: https://www.va.gov/disability/compensation-rates/veteran-rates/
+ */
+export const SCHOOL_CHILD_ADDITION_BY_RATING: Record<number, number> = {
+  30: 105.00,
+  40: 140.00,
+  50: 176.00,
+  60: 211.00,
+  70: 246.00,
+  80: 281.00,
+  90: 317.00,
+  100: 352.45,
+};
+
+/**
+ * Additional monthly compensation per dependent parent (ratings 30%+).
+ * Source: https://www.va.gov/disability/compensation-rates/veteran-rates/
+ */
+export const PARENT_ADDITION_BY_RATING: Record<number, number> = {
+  30: 52.00,
+  40: 70.00,
+  50: 88.00,
+  60: 105.00,
+  70: 123.00,
+  80: 140.00,
+  90: 158.00,
+  100: 176.24,
+};

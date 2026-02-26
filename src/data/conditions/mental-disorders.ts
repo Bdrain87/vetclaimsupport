@@ -204,7 +204,6 @@ export const mentalHealthConditions: VACondition[] = [
       'anxiety',
       'insomnia',
       'substance-abuse',
-      'skin-conditions',
     ],
     keywords: [
       'OCD',
@@ -389,7 +388,6 @@ export const mentalHealthConditions: VACondition[] = [
       'migraines',
       'ibs',
       'chronic-fatigue',
-      'weight-gain',
     ],
     keywords: [
       'depression',
@@ -890,8 +888,6 @@ export const mentalHealthConditions: VACondition[] = [
       'anxiety',
       'osteoporosis',
       'amenorrhea',
-      'electrolyte-imbalance',
-      'dental-erosion',
     ],
     keywords: [
       'anorexia',
@@ -931,9 +927,7 @@ export const mentalHealthConditions: VACondition[] = [
     commonSecondaries: [
       'depression',
       'anxiety',
-      'dental-erosion',
       'gerd',
-      'electrolyte-imbalance',
       'substance-abuse',
     ],
     keywords: [
@@ -1148,7 +1142,6 @@ export const mentalHealthConditions: VACondition[] = [
       'anxiety',
       'insomnia',
       'substance-abuse',
-      'self-harm',
     ],
     keywords: [
       'dissociative identity disorder',

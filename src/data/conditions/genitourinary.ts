@@ -80,7 +80,7 @@ export const genitourinaryConditions: VACondition[] = [
       'Kidney disorder causing excessive protein loss in urine, low blood protein, high cholesterol, and severe swelling. Results from damage to the glomeruli and can lead to kidney failure.',
     ratingCriteria:
       'Rated under DC 7502 or renal dysfunction criteria. Consider degree of proteinuria, hypoalbuminemia, edema, and renal function decline. Persistent nephrotic-range proteinuria with edema warrants at least 60%.',
-    commonSecondaries: ['kidney-disease', 'hypertension', 'dvt-chronic-venous-insufficiency', 'hyperlipidemia'],
+    commonSecondaries: ['kidney-disease', 'hypertension', 'dvt-chronic-venous-insufficiency'],
     keywords: [
       'nephrotic syndrome',
       'protein in urine',
@@ -231,7 +231,7 @@ export const genitourinaryConditions: VACondition[] = [
       'Surgical procedure to replace a diseased kidney with a healthy one from a donor. Post-transplant requires lifelong immunosuppressive medication. Rated 100% for one year following transplant, then on residuals.',
     ratingCriteria:
       '100%: for one year following hospital discharge for transplant surgery. Thereafter, rate on residuals — minimum 30%. Consider renal function, need for immunosuppressive therapy, and graft rejection episodes.',
-    commonSecondaries: ['hypertension', 'diabetes', 'depression', 'infections', 'iron-deficiency-anemia'],
+    commonSecondaries: ['hypertension', 'diabetes', 'depression', 'iron-deficiency-anemia'],
     keywords: [
       'kidney transplant',
       'renal transplant',
@@ -324,7 +324,6 @@ export const genitourinaryConditions: VACondition[] = [
       'anxiety',
       'insomnia',
       'chronic-pain-syndrome',
-      'sexual-dysfunction',
     ],
     keywords: [
       'interstitial cystitis',
@@ -669,7 +668,7 @@ export const genitourinaryConditions: VACondition[] = [
       'Inability to achieve or maintain an erection sufficient for sexual intercourse. Very commonly secondary to medications (antidepressants, blood pressure meds), diabetes, cardiovascular disease, or psychological conditions.',
     ratingCriteria:
       '0%: with loss of erectile power (eligible for Special Monthly Compensation K). 20%: with deformity of the penis with loss of erectile power. SMC-K is typically awarded in addition to the percentage rating for loss of use of a creative organ.',
-    commonSecondaries: ['depression', 'anxiety', 'relationship-issues'],
+    commonSecondaries: ['depression', 'anxiety'],
     keywords: [
       'impotence',
       'sexual dysfunction',
@@ -709,7 +708,6 @@ export const genitourinaryConditions: VACondition[] = [
       'testosterone-deficiency',
       'depression',
       'anxiety',
-      'infertility',
       'chronic-fatigue',
     ],
     keywords: [
@@ -740,7 +738,7 @@ export const genitourinaryConditions: VACondition[] = [
       'Enlargement of the veins within the scrotum, similar to varicose veins. Can cause pain, testicular atrophy, and infertility. Most common on the left side.',
     ratingCriteria:
       'Rated under DC 7525 for chronic epididymo-orchitis or by analogy. Rate based on urinary tract infection criteria or voiding dysfunction if symptomatic. Painful varicocele may warrant 10% rating.',
-    commonSecondaries: ['infertility', 'testicular-atrophy', 'chronic-pain-syndrome'],
+    commonSecondaries: ['testicular-atrophy', 'chronic-pain-syndrome'],
     keywords: [
       'varicocele',
       'scrotal veins',
@@ -770,7 +768,6 @@ export const genitourinaryConditions: VACondition[] = [
       'Rated under DC 7525 for chronic epididymo-orchitis. Rate as urinary tract infection criteria: 10%: long-term drug therapy, 1-2 hospitalizations per year, and/or intermittent intensive management. 30%: recurrent symptomatic infection requiring drainage/frequent hospitalization.',
     commonSecondaries: [
       'chronic-pain-syndrome',
-      'infertility',
       'urethritis',
       'testicular-atrophy',
     ],
@@ -833,7 +830,6 @@ export const genitourinaryConditions: VACondition[] = [
       'testosterone-deficiency',
       'erectile-dysfunction',
       'depression',
-      'infertility',
     ],
     keywords: [
       'testicular atrophy',
@@ -1018,7 +1014,7 @@ export const genitourinaryConditions: VACondition[] = [
       'Condition where the kidneys fail to properly acidify the urine, leading to metabolic acidosis, electrolyte imbalances, kidney stones, and bone disease. Can be inherited or acquired.',
     ratingCriteria:
       'Rated under renal dysfunction criteria (DC 7502). Consider electrolyte management, frequency of kidney stones, bone density effects, and need for ongoing alkali therapy.',
-    commonSecondaries: ['kidney-stones', 'osteoporosis', 'muscle-weakness', 'chronic-fatigue'],
+    commonSecondaries: ['kidney-stones', 'osteoporosis', 'chronic-fatigue'],
     keywords: [
       'renal tubular acidosis',
       'RTA',
@@ -1074,7 +1070,7 @@ export const genitourinaryConditions: VACondition[] = [
       'Narrowing of one or both renal arteries, reducing blood flow to the kidneys. Causes renovascular hypertension and progressive kidney damage. May be caused by atherosclerosis or fibromuscular dysplasia.',
     ratingCriteria:
       'Rated under renal dysfunction criteria (DC 7502). Consider hypertension severity, kidney function decline, and need for revascularization. Refractory hypertension from renal artery stenosis may be rated separately.',
-    commonSecondaries: ['hypertension', 'kidney-disease', 'atherosclerosis'],
+    commonSecondaries: ['hypertension', 'kidney-disease'],
     keywords: [
       'renal artery stenosis',
       'kidney artery narrowing',
@@ -1273,5 +1269,67 @@ export const genitourinaryConditions: VACondition[] = [
     misspellings: ['inguinal hernia', 'inguinal hurnia', 'inquinal hernia', 'inguinial hernia'],
     bodySystem: 'Male Reproductive',
     cfrReference: '38 CFR § 4.114, DC 7338',
+  },
+
+  // ============================================
+  // PACT ACT CANCERS
+  // ============================================
+  {
+    id: 'kidney-cancer',
+    name: 'Kidney Cancer (Renal Cell Carcinoma)',
+    abbreviation: 'Kidney Cancer',
+    category: 'genitourinary',
+    diagnosticCode: '7528',
+    typicalRatings: '100% (active), then residuals',
+    description:
+      'Malignant neoplasm of the kidney, most commonly renal cell carcinoma. Rated 100% during active disease or treatment. Presumptive under the PACT Act for burn pit and post-9/11 veterans.',
+    ratingCriteria:
+      '100%: during active malignancy or treatment. Following treatment, rate on residuals including renal dysfunction, voiding dysfunction, and any effects of nephrectomy. Minimum 10% after treatment.',
+    commonSecondaries: ['kidney-disease', 'depression', 'chronic-fatigue', 'hypertension', 'chronic-pain-syndrome'],
+    keywords: [
+      'kidney cancer',
+      'renal cell carcinoma',
+      'RCC',
+      'renal cancer',
+      'kidney tumor',
+      'nephrectomy',
+      'kidney mass',
+      'renal mass',
+      'clear cell carcinoma kidney',
+      'kidney malignancy',
+    ],
+    misspellings: ['kidney canser', 'kidney cancir', 'renal cell carsinoma', 'kidny cancer'],
+    bodySystem: 'Kidney',
+    presumptiveEligibility: ['pact-act'],
+    cfrReference: '38 CFR § 4.115b, DC 7528',
+  },
+  {
+    id: 'reproductive-cancers',
+    name: 'Reproductive Cancers',
+    abbreviation: 'Reproductive Cancers',
+    category: 'genitourinary',
+    diagnosticCode: '7528',
+    typicalRatings: '100% (active), then residuals',
+    description:
+      'Cancers of the reproductive organs including ovarian, uterine, cervical, testicular, and other reproductive malignancies. Presumptive under the PACT Act for burn pit and post-9/11 veterans.',
+    ratingCriteria:
+      '100%: during active malignancy or treatment. Following treatment, rate on residuals. Consider loss of reproductive organs (SMC-K for loss of creative organ), hormonal deficiencies, voiding dysfunction, and chronic pain.',
+    commonSecondaries: ['depression', 'chronic-fatigue', 'chronic-pain-syndrome', 'anxiety', 'erectile-dysfunction'],
+    keywords: [
+      'reproductive cancer',
+      'testicular cancer',
+      'ovarian cancer',
+      'uterine cancer',
+      'cervical cancer',
+      'prostate cancer',
+      'reproductive malignancy',
+      'seminoma',
+      'germ cell tumor',
+      'endometrial cancer',
+    ],
+    misspellings: ['reproductive canser', 'reproductve cancer', 'reporductive cancer'],
+    bodySystem: 'Male Reproductive',
+    presumptiveEligibility: ['pact-act'],
+    cfrReference: '38 CFR § 4.115b, DC 7528',
   },
 ];

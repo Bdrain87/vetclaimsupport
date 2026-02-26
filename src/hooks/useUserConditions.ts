@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo } from 'react';
 import useAppStore from '@/store/useAppStore';
 import { getConditionById } from '@/data/vaConditions';
 import type { VACondition } from '@/data/vaConditions';
+import { combineRatings } from '@/utils/vaMath';
 
 // Re-export the UserCondition type from the store
 export type { UserCondition } from '@/store/useAppStore';
@@ -12,18 +13,8 @@ function calculateCombinedRating(conditions: UserCondition[]): number {
     .filter((c): c is UserCondition & { rating: number } =>
       c.claimStatus === 'approved' && typeof c.rating === 'number' && c.rating > 0
     )
-    .map((c) => c.rating)
-    .sort((a, b) => b - a);
-
-  if (approvedRatings.length === 0) return 0;
-
-  let remaining = 100;
-  for (const rating of approvedRatings) {
-    remaining = remaining - (remaining * rating) / 100;
-  }
-
-  const combined = 100 - remaining;
-  return Math.round(combined / 10) * 10;
+    .map((c) => c.rating);
+  return combineRatings(approvedRatings);
 }
 
 /**

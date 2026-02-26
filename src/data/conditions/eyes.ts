@@ -151,7 +151,6 @@ export const eyeConditions: VACondition[] = [
     commonSecondaries: [
       'tension-headaches',
       'dry-eye',
-      'eye-strain',
     ],
     keywords: [
       'corrected vision',
@@ -191,7 +190,6 @@ export const eyeConditions: VACondition[] = [
       'depression',
       'anxiety',
       'glaucoma',
-      'falls',
       'tension-headaches',
     ],
     keywords: [
@@ -269,7 +267,6 @@ export const eyeConditions: VACondition[] = [
       'depression',
       'anxiety',
       'tension-headaches',
-      'falls',
     ],
     keywords: [
       'hemianopia',
@@ -387,7 +384,6 @@ export const eyeConditions: VACondition[] = [
       'dry-eye',
       'vision-loss',
       'corneal-transplant',
-      'light-sensitivity',
     ],
     keywords: [
       'keratitis',
@@ -463,7 +459,6 @@ export const eyeConditions: VACondition[] = [
       'dry-eye',
       'blepharitis',
       'pterygium',
-      'allergies',
     ],
     keywords: [
       'conjunctivitis-chronic',
@@ -501,7 +496,6 @@ export const eyeConditions: VACondition[] = [
       'Rated under DC 6034 based on disfigurement. If the pterygium encroaches on the visual axis and impairs visual acuity, it is rated on visual impairment under DC 6067–6079.',
     commonSecondaries: [
       'dry-eye',
-      'astigmatism',
       'vision-loss',
       'conjunctivitis-chronic',
     ],
@@ -672,7 +666,6 @@ export const eyeConditions: VACondition[] = [
       'anxiety',
       'vision-loss',
       'cataracts',
-      'social-isolation',
     ],
     keywords: [
       'macular degeneration',
@@ -753,7 +746,6 @@ export const eyeConditions: VACondition[] = [
       'vision-loss',
       'depression',
       'tension-headaches',
-      'multiple-sclerosis',
       'tbi',
     ],
     keywords: [
@@ -791,8 +783,6 @@ export const eyeConditions: VACondition[] = [
     commonSecondaries: [
       'vision-loss',
       'dry-eye',
-      'corneal-erosion',
-      'light-sensitivity',
     ],
     keywords: [
       'corneal dystrophy',
@@ -830,7 +820,6 @@ export const eyeConditions: VACondition[] = [
       'vision-loss',
       'dry-eye',
       'tension-headaches',
-      'astigmatism',
     ],
     keywords: [
       'keratoconus',
@@ -912,7 +901,6 @@ export const eyeConditions: VACondition[] = [
       'dry-eye',
       'conjunctivitis-chronic',
       'chalazion',
-      'stye',
     ],
     keywords: [
       'blepharitis',
@@ -949,7 +937,6 @@ export const eyeConditions: VACondition[] = [
     commonSecondaries: [
       'blepharitis',
       'dry-eye',
-      'astigmatism',
     ],
     keywords: [
       'chalazion',
@@ -957,7 +944,6 @@ export const eyeConditions: VACondition[] = [
       'eyelid cyst',
       'meibomian cyst',
       'eyelid nodule',
-      'stye',
       'hordeolum',
       'eyelid lump',
       'recurrent chalazion',
@@ -986,7 +972,6 @@ export const eyeConditions: VACondition[] = [
     commonSecondaries: [
       'dry-eye',
       'conjunctivitis-chronic',
-      'epiphora',
     ],
     keywords: [
       'dacryocystitis',
@@ -995,7 +980,6 @@ export const eyeConditions: VACondition[] = [
       'tear duct blockage',
       'blocked tear duct',
       'nasolacrimal duct',
-      'epiphora',
       'tearing',
       'eye drainage obstruction',
     ],
@@ -1182,7 +1166,6 @@ export const eyeConditions: VACondition[] = [
       'dry-eye',
       'glaucoma',
       'vision-loss',
-      'astigmatism',
     ],
     keywords: [
       'corneal transplant',
@@ -1406,10 +1389,8 @@ export const eyeConditions: VACondition[] = [
       'Rated based on residual impairment: diplopia rated under DC 6090, visual acuity loss under DC 6067–6079, disfigurement under DC 7800, and sensory nerve damage under neurological codes. Multiple ratings may apply for different residuals.',
     commonSecondaries: [
       'diplopia',
-      'infraorbital-nerve-damage',
       'scar-disfigurement',
       'sinusitis',
-      'enophthalmos',
     ],
     keywords: [
       'orbital fracture',
@@ -1417,7 +1398,6 @@ export const eyeConditions: VACondition[] = [
       'eye socket fracture',
       'orbit fracture',
       'floor fracture eye',
-      'enophthalmos',
       'sunken eye',
       'trapped muscle eye',
       'facial fracture eye',
@@ -1445,7 +1425,6 @@ export const eyeConditions: VACondition[] = [
       'Rated under DC 6020 (ectropion): unilateral 10%, bilateral 20%. Corneal complications rated separately. Underlying facial nerve palsy rated under neurological codes.',
     commonSecondaries: [
       'dry-eye',
-      'corneal-ulcer',
       'facial-nerve-paralysis',
       'keratitis',
     ],
@@ -1484,7 +1463,6 @@ export const eyeConditions: VACondition[] = [
       'vision-loss',
       'tension-headaches',
       'strabismus',
-      'oculomotor-nerve-palsy',
     ],
     keywords: [
       'ptosis',
@@ -1600,8 +1578,6 @@ export const eyeConditions: VACondition[] = [
       'depression',
       'anxiety',
       'tension-headaches',
-      'falls',
-      'social-isolation',
     ],
     keywords: [
       'vision loss',
@@ -1642,7 +1618,6 @@ export const eyeConditions: VACondition[] = [
       'anxiety',
       'cataracts',
       'macular-edema',
-      'social-isolation',
     ],
     keywords: [
       'retinitis pigmentosa',
