@@ -9,7 +9,7 @@
 // Version metadata
 // ---------------------------------------------------------------------------
 export const LEGAL_VERSIONS = {
-  app: '1.2.0',
+  app: '1.3.0',
   terms: { version: '1.2', effectiveDate: '2026-02-19' },
   privacy: { version: '1.1', effectiveDate: '2026-02-18' },
   disclaimer: { version: '1.2', effectiveDate: '2026-02-24' },
