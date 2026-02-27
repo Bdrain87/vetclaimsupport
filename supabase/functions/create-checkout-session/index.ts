@@ -28,6 +28,13 @@ serve(async (req: Request) => {
     return new Response('ok', { headers: corsHeaders });
   }
 
+  if (req.method !== 'POST') {
+    return new Response(
+      JSON.stringify({ error: 'Method not allowed' }),
+      { status: 405, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+
   try {
     const authHeader = req.headers.get('authorization');
     if (!authHeader) {
@@ -83,10 +90,13 @@ serve(async (req: Request) => {
       });
       stripeCustomerId = customer.id;
       // Store customer ID on profile
-      await adminClient
+      const { error: profileError } = await adminClient
         .from('profiles')
         .update({ stripe_customer_id: stripeCustomerId })
         .eq('id', user.id);
+      if (profileError) {
+        console.error('Failed to save stripe_customer_id to profile:', profileError);
+      }
     }
 
     // Determine origin for redirect URLs

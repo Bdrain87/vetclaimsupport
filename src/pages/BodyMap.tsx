@@ -319,25 +319,6 @@ export default function BodyMap() {
     return userConditions.filter((uc) => uc.bodyPart).length;
   }, [userConditions]);
 
-  // Helper to get fill/stroke for regions
-  const _getRegionFill = (regionId: string) => {
-    if (selectedRegion === regionId) return 'url(#goldGradient)';
-    if (regionCounts[regionId]) return 'rgba(240,192,0,0.4)';
-    if (hoveredRegion === regionId) return 'rgba(240,192,0,0.25)';
-    return '#9CA3AF';
-  };
-
-  const _getRegionStroke = (regionId: string) => {
-    if (selectedRegion === regionId || regionCounts[regionId] || hoveredRegion === regionId) {
-      return 'var(--gold-md)';
-    }
-    return '#6B7280';
-  };
-
-  const _getRegionStrokeWidth = (regionId: string) => {
-    return selectedRegion === regionId || regionCounts[regionId] ? 2.5 : 1;
-  };
-
   // ----- Zoom + Pan handlers -----
   const handleZoomIn = useCallback(() => {
     setZoom((z) => Math.min(z + 0.25, 3));

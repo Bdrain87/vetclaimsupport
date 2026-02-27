@@ -4,6 +4,7 @@ interface AnnouncerContextType {
   announce: (message: string, priority?: 'polite' | 'assertive') => void;
 }
 
+// Context available for future useContext(AnnouncerContext) consumers
 const AnnouncerContext = createContext<AnnouncerContextType>({ announce: () => {} });
 
 export function AriaLiveAnnouncer({ children }: { children: ReactNode }) {

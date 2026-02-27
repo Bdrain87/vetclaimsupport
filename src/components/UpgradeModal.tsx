@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { supabase } from '@/lib/supabase';
 import { startCheckout } from '@/services/entitlements';
 import { useToast } from '@/hooks/use-toast';
+import { openExternalUrl } from '@/lib/platform';
 
 interface UpgradeModalProps {
   featureName: string;
@@ -36,7 +37,7 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
       }
 
       const url = await startCheckout();
-      window.open(url, '_blank');
+      await openExternalUrl(url);
       // Reset loading after opening checkout — user may close the tab
       setTimeout(() => setLoading(false), 2000);
     } catch (err) {

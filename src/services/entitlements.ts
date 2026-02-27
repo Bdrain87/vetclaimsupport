@@ -134,6 +134,14 @@ export async function refreshEntitlementFromServer(): Promise<EntitlementStatus>
 }
 
 /**
+ * Invalidate the entitlement cache so the next check hits the server.
+ * Call this after checkout or any event where entitlement may have changed.
+ */
+export function invalidateEntitlementCache(): void {
+  lastRefreshAt = 0;
+}
+
+/**
  * Refresh entitlement from server if the TTL has expired.
  * Falls back to the cached value if offline.
  */

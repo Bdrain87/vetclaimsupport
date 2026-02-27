@@ -21,7 +21,14 @@ export function SplashScreen({
   const [timerDone, setTimerDone] = useState(false);
   const prefersReducedMotion = useReducedMotion();
   const onCompleteRef = useRef(onComplete);
+  const hasCompletedRef = useRef(false);
   onCompleteRef.current = onComplete;
+
+  const completeOnce = () => {
+    if (hasCompletedRef.current) return;
+    hasCompletedRef.current = true;
+    onCompleteRef.current();
+  };
 
   // Track when the minimum display time has elapsed.
   useEffect(() => {
@@ -41,7 +48,7 @@ export function SplashScreen({
     setIsVisible(false);
 
     const exitDuration = prefersReducedMotion ? 300 : 600;
-    const innerTimer = setTimeout(() => onCompleteRef.current(), exitDuration);
+    const innerTimer = setTimeout(completeOnce, exitDuration);
 
     return () => clearTimeout(innerTimer);
   }, [timerDone, ready, prefersReducedMotion]);
@@ -49,7 +56,7 @@ export function SplashScreen({
   // Safety timeout: force-complete after 8 seconds no matter what.
   // (Raised from 5 s to accommodate slow decryption on cold boot.)
   useEffect(() => {
-    const safety = setTimeout(() => onCompleteRef.current(), 8000);
+    const safety = setTimeout(completeOnce, 8000);
     return () => clearTimeout(safety);
   }, []);
 

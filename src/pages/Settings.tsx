@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Scale, Shield, FileText, AlertTriangle, ChevronRight, User, Plus, Trash2, Briefcase, Info, HelpCircle, BookOpen, LogIn, LogOut, Calendar, Database } from 'lucide-react';
+import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Scale, Shield, FileText, AlertTriangle, ChevronRight, User, Plus, Trash2, Briefcase, Info, HelpCircle, BookOpen, LogIn, LogOut, Calendar, Database, Crown } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -25,7 +25,7 @@ import { DataBackup } from '@/components/settings/DataBackup';
 import { VaultPasscode } from '@/components/settings/VaultPasscode';
 import { SubscriptionCard } from '@/components/settings/SubscriptionCard';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { refreshEntitlementFromServer } from '@/services/entitlements';
+import { refreshEntitlementFromServer, invalidateEntitlementCache, hasPremiumAccess } from '@/services/entitlements';
 import { useProfileStore, type Branch, type ServicePeriod } from '@/store/useProfileStore';
 import { PageContainer } from '@/components/PageContainer';
 import { supabase } from '@/lib/supabase';
@@ -184,26 +184,52 @@ export default function Settings() {
     };
   }, [profileForm.separationDate, setSeparationDate]);
 
-  // Post-checkout success handling
+  // Post-checkout success handling — retry because the Stripe webhook may
+  // still be processing when the user returns.
   const [searchParams, setSearchParams] = useSearchParams();
   useEffect(() => {
     const sessionId = searchParams.get('session_id');
-    if (sessionId) {
-      refreshEntitlementFromServer().then(() => {
+    if (!sessionId) return;
+
+    // Clear the query param immediately so we don't re-trigger on re-render
+    searchParams.delete('session_id');
+    setSearchParams(searchParams, { replace: true });
+
+    let cancelled = false;
+    const RETRY_DELAYS = [0, 2000, 4000, 8000]; // immediate, 2s, 4s, 8s
+
+    (async () => {
+      for (const delay of RETRY_DELAYS) {
+        if (cancelled) return;
+        if (delay > 0) await new Promise((r) => setTimeout(r, delay));
+        if (cancelled) return;
+
+        invalidateEntitlementCache();
+        try {
+          const status = await refreshEntitlementFromServer();
+          if (status === 'premium' || status === 'lifetime') {
+            toast({
+              title: 'Welcome to Premium!',
+              description: 'You now have full access to all features.',
+            });
+            return;
+          }
+        } catch {
+          // Keep retrying
+        }
+      }
+
+      // All retries exhausted
+      if (!cancelled) {
         toast({
-          title: 'Welcome to Premium!',
-          description: 'You now have full access to all features.',
-        });
-      }).catch(() => {
-        toast({
-          title: 'Could not verify purchase',
-          description: 'Please restart the app to check your premium status.',
+          title: 'Purchase is processing',
+          description: 'It may take a moment. Try "Restore Purchases" below in a few seconds.',
           variant: 'destructive',
         });
-      });
-      searchParams.delete('session_id');
-      setSearchParams(searchParams, { replace: true });
-    }
+      }
+    })();
+
+    return () => { cancelled = true; };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [reminderSettings, setReminderSettings] = useState<ReminderSettings>(getInitialReminderSettings);
@@ -727,7 +753,7 @@ export default function Settings() {
         </CardContent>
       </Card>
 
-      {/* Export & Share — Phase 1F */}
+      {/* Export & Share — Phase 1F (Premium only) */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -737,14 +763,28 @@ export default function Settings() {
           <CardDescription>Export your evidence as PDF or share with your VSO</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="p-3 rounded-lg bg-gold/5 border border-gold/20">
-            <p className="text-xs text-muted-foreground">
-              <AlertTriangle className="h-3 w-3 inline mr-1 text-gold" />
-              Exported PDFs may contain sensitive health information. Review before sharing.
-            </p>
-          </div>
-          <ExportButton />
-          <ShareWithVSO />
+          {hasPremiumAccess() ? (
+            <>
+              <div className="p-3 rounded-lg bg-gold/5 border border-gold/20">
+                <p className="text-xs text-muted-foreground">
+                  <AlertTriangle className="h-3 w-3 inline mr-1 text-gold" />
+                  Exported PDFs may contain sensitive health information. Review before sharing.
+                </p>
+              </div>
+              <ExportButton />
+              <ShareWithVSO />
+            </>
+          ) : (
+            <div className="text-center py-4 space-y-2">
+              <p className="text-sm text-muted-foreground">Export & sharing requires Premium access.</p>
+              <Link to="/claims/strategy">
+                <Button variant="outline" size="sm">
+                  <Crown className="h-4 w-4 mr-2" />
+                  Upgrade to Premium
+                </Button>
+              </Link>
+            </div>
+          )}
         </CardContent>
       </Card>
 

@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase';
 import { startCheckout, refreshEntitlementFromServer } from '@/services/entitlements';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
-import { isNativeApp } from '@/lib/platform';
+import { isNativeApp, openExternalUrl } from '@/lib/platform';
 import { PREMIUM_COPY } from '@/data/legalCopy';
 
 export function SubscriptionCard() {
@@ -38,12 +38,7 @@ export function SubscriptionCard() {
         return;
       }
       const url = await startCheckout();
-      if (isNativeApp) {
-        const { Browser } = await import('@capacitor/browser');
-        await Browser.open({ url, presentationStyle: 'popover' });
-      } else {
-        window.open(url, '_blank');
-      }
+      await openExternalUrl(url);
     } catch (err) {
       console.error('Checkout failed:', err);
       toast({

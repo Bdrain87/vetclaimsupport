@@ -496,7 +496,7 @@ function AppContent() {
 
   // App shell — requires authentication on web
   const appShell = (
-    <div className="h-screen overflow-hidden flex flex-row bg-background text-foreground break-words w-full max-w-full">
+    <div className="h-[100dvh] overflow-hidden flex flex-row bg-background text-foreground break-words w-full max-w-full">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:text-sm focus:font-medium"

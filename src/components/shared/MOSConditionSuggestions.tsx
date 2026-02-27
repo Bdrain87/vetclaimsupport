@@ -73,21 +73,6 @@ export function MOSConditionSuggestions({
     return results;
   }, [allMosCodes]);
 
-  // Flatten all conditions across matching categories (deduplicated)
-  const _allConditions = useMemo(() => {
-    const seen = new Set<string>();
-    const results: { name: string; category: string }[] = [];
-    for (const cat of matchingCategories) {
-      for (const cond of cat.conditions) {
-        if (!seen.has(cond)) {
-          seen.add(cond);
-          results.push({ name: cond, category: cat.label });
-        }
-      }
-    }
-    return results;
-  }, [matchingCategories]);
-
   const toggleSelected = (conditionName: string) => {
     setSelectedItems((prev) => {
       const next = new Set(prev);

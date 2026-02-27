@@ -30,7 +30,7 @@ const RATE_LIMIT_MAX = 10;
 
 async function checkRateLimit(userId: string): Promise<boolean> {
   try {
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
     if (!supabaseServiceKey) {
       return checkRateLimitInMemory(userId);
@@ -94,6 +94,16 @@ serve(async (req) => {
     return new Response('ok', { headers: corsHeaders });
   }
 
+  if (req.method !== 'POST') {
+    return new Response(JSON.stringify({
+      error: 'Method not allowed',
+      code: 'METHOD_NOT_ALLOWED',
+      requestId
+    }), {
+      status: 405, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
   try {
     // --- JWT Authentication (mirrors delete-user pattern) ---
     const authHeader = req.headers.get('authorization');
@@ -107,8 +117,17 @@ serve(async (req) => {
       });
     }
 
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY');
+    if (!supabaseUrl || !supabaseAnonKey) {
+      return new Response(JSON.stringify({
+        error: 'Service not configured. Please contact support.',
+        code: 'SERVICE_UNAVAILABLE',
+        requestId
+      }), {
+        status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
     const userClient = createClient(supabaseUrl, supabaseAnonKey, {
       global: { headers: { Authorization: authHeader } },

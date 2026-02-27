@@ -3,7 +3,6 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/compone
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ShieldAlert, ChevronDown } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabase';
@@ -248,21 +247,25 @@ export function LiabilityAcceptanceScreen() {
               />
               <span className="text-sm text-muted-foreground leading-relaxed">
                 I agree to the{' '}
-                <Link
-                  to="/settings/terms"
+                <a
+                  href="/settings/terms"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-primary hover:underline"
                   onClick={(e) => e.stopPropagation()}
                 >
                   Terms of Service
-                </Link>{' '}
+                </a>{' '}
                 and{' '}
-                <Link
-                  to="/settings/privacy"
+                <a
+                  href="/settings/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-primary hover:underline"
                   onClick={(e) => e.stopPropagation()}
                 >
                   Privacy Policy
-                </Link>.
+                </a>.
               </span>
             </label>
           </div>
