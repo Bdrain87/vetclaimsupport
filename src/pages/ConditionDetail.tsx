@@ -915,7 +915,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => window.open('https://www.ecfr.gov/current/title-38/chapter-I/part-4', '_blank')}
+                    onClick={() => window.open('https://www.ecfr.gov/current/title-38/chapter-I/part-4', '_blank', 'noopener,noreferrer')}
                   >
                     View VASRD on eCFR <ExternalLink className="h-4 w-4 ml-1" />
                   </Button>
@@ -1136,7 +1136,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
             <Button
               variant="outline"
               className="w-full"
-              onClick={() => window.open('https://www.va.gov/find-forms/?q=dbq', '_blank')}
+              onClick={() => window.open('https://www.va.gov/find-forms/?q=dbq', '_blank', 'noopener,noreferrer')}
             >
               <ExternalLink className="h-4 w-4 mr-2" />
               View DBQ Forms on VA.gov

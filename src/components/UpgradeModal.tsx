@@ -100,7 +100,7 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
             </Button>
             <Button
               variant="ghost"
-              onClick={() => navigate(-1)}
+              onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/app')}
               className="w-full text-muted-foreground"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />

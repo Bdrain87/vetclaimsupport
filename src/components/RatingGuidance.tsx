@@ -234,7 +234,7 @@ export default function RatingGuidance({ conditionId, conditionName }: RatingGui
                 const { Browser } = await import('@capacitor/browser');
                 await Browser.open({ url });
               } else {
-                window.open(url, '_blank');
+                window.open(url, '_blank', 'noopener,noreferrer');
               }
             }}
           >

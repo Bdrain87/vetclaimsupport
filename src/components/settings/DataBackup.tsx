@@ -19,6 +19,7 @@ import { getAllFileIds, getFileData, restoreFiles } from '@/lib/indexedDB';
 import { isEncryptionEnabled } from '@/utils/encryption';
 import { DATA_PRIVACY_COPY, BACKUP_COPY } from '@/data/legalCopy';
 import useAppStore from '@/store/useAppStore';
+import { useProfileStore } from '@/store/useProfileStore';
 import { clearLocalData } from '@/services/accountManagement';
 import { stopSync } from '@/services/syncEngine';
 
@@ -60,6 +61,7 @@ const backupDataSchema = z.object({
     (data) => typeof data === 'object' && data !== null,
     { message: 'claimsData must be a non-null object' }
   ),
+  profileData: z.record(z.unknown()).optional(),
   indexedDBFiles: z.array(
     z.object({
       id: z.string(),
@@ -109,10 +111,20 @@ export function DataBackup() {
         }
       }
 
+      // Include profile data (name, branch, MOS, service dates, etc.)
+      const profileState = useProfileStore.getState();
+      const serializableProfile: Record<string, unknown> = {};
+      for (const [key, value] of Object.entries(profileState)) {
+        if (typeof value !== 'function') {
+          serializableProfile[key] = value;
+        }
+      }
+
       const backupData: BackupData = {
         version: BACKUP_VERSION,
         exportDate: new Date().toISOString(),
         claimsData: serializableState,
+        profileData: serializableProfile,
         indexedDBFiles,
       };
 
@@ -192,6 +204,11 @@ export function DataBackup() {
       // the data before it hits localStorage (avoids plaintext-at-rest gap).
       const claimsData = pendingImportData.claimsData;
       useAppStore.setState(claimsData as Partial<ReturnType<typeof useAppStore.getState>>);
+
+      // Restore profile data if present in backup
+      if (pendingImportData.profileData) {
+        useProfileStore.setState(pendingImportData.profileData as Partial<ReturnType<typeof useProfileStore.getState>>);
+      }
 
       // Import IndexedDB files if present
       if (pendingImportData.indexedDBFiles && pendingImportData.indexedDBFiles.length > 0) {

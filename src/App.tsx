@@ -8,6 +8,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { TooltipProvider } from './components/ui/tooltip';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RouteErrorBoundary } from './components/RouteErrorBoundary';
+import { MotionConfig } from 'framer-motion';
 import { LiabilityAcceptanceScreen } from './components/legal/LiabilityAcceptanceScreen';
 import { SplashScreen } from './components/SplashScreen';
 import { useProfileStore } from './store/useProfileStore';
@@ -576,6 +577,7 @@ function App() {
 
   return (
     <ErrorBoundary>
+      <MotionConfig reducedMotion="user">
       <ThemeProvider>
         <TooltipProvider>
           <AriaLiveAnnouncer>
@@ -595,6 +597,7 @@ function App() {
           </AriaLiveAnnouncer>
         </TooltipProvider>
       </ThemeProvider>
+      </MotionConfig>
     </ErrorBoundary>
   );
 }

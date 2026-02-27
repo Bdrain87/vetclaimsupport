@@ -9,6 +9,6 @@ export async function openExternalUrl(url: string): Promise<void> {
     const { Browser } = await import('@capacitor/browser');
     await Browser.open({ url });
   } else {
-    window.open(url, '_blank');
+    window.open(url, '_blank', 'noopener,noreferrer');
   }
 }

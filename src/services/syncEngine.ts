@@ -416,6 +416,28 @@ export async function pushToCloud(): Promise<void> {
       logger.error('[sync] push conditions failed', error);
       pushErrors.push('conditions');
     }
+
+    // Delete cloud conditions that were removed locally
+    const localConditionIds = new Set(appState.claimConditions.map((c) => c.id));
+    const { data: cloudConditions } = await supabase
+      .from('conditions')
+      .select('id')
+      .eq('user_id', userId);
+    if (cloudConditions) {
+      const toDelete = cloudConditions
+        .filter((cc) => !localConditionIds.has(cc.id))
+        .map((cc) => cc.id);
+      if (toDelete.length > 0) {
+        const { error: delError } = await supabase
+          .from('conditions')
+          .delete()
+          .eq('user_id', userId)
+          .in('id', toDelete);
+        if (delError) {
+          logger.warn('[sync] delete stale cloud conditions failed', delError);
+        }
+      }
+    }
   }
 
   // Push symptoms as health logs

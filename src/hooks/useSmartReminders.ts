@@ -326,7 +326,7 @@ export function useSmartReminders(): SmartReminder[] {
         // Only show med reminder if they're actively logging — don't nag inactive users
         const recentSymptomNotes = symptoms
           .filter((s) => daysSince(s.date) <= 7)
-          .map((s) => s.notes.toLowerCase())
+          .map((s) => (s.notes || '').toLowerCase())
           .join(' ');
         const mentionsMed = activeMeds.some((m) =>
           recentSymptomNotes.includes(m.name.toLowerCase()),

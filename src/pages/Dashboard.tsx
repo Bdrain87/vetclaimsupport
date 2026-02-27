@@ -3,6 +3,7 @@ import { useUserConditions } from '@/hooks/useUserConditions';
 import { useProfileStore } from '@/store/useProfileStore';
 import { getAllBranchLabels } from '@/utils/veteranProfile';
 import { combineRatings } from '@/utils/vaMath';
+import { safeFormatDate } from '@/utils/dateUtils';
 import useAppStore from '@/store/useAppStore';
 import { ClaimIntelligence } from '@/services/claimIntelligence';
 import {
@@ -233,7 +234,7 @@ export default function Dashboard() {
   const additionalPeriodsCount = servicePeriods.length > 1 ? servicePeriods.length - 1 : 0;
 
   const serviceDateStr = profile.serviceDates?.start
-    ? `${new Date(profile.serviceDates.start).toLocaleDateString()} – ${profile.serviceDates.end ? new Date(profile.serviceDates.end).toLocaleDateString() : 'Present'}`
+    ? `${safeFormatDate(profile.serviceDates.start, '')} – ${profile.serviceDates.end ? safeFormatDate(profile.serviceDates.end, 'Present') : 'Present'}`
     : '';
 
   const separationDateParsed = profile.separationDate
@@ -675,7 +676,7 @@ export default function Dashboard() {
                 {step.actionRoute && (
                   <Link
                     to={step.actionRoute}
-                    className="text-gold text-xs hover:text-gold-hl shrink-0 mt-0.5"
+                    className="text-gold text-xs hover:text-gold-hl shrink-0 px-3 py-2.5 min-h-[44px] flex items-center"
                   >
                     Go
                   </Link>
@@ -875,7 +876,7 @@ export default function Dashboard() {
                           type="button"
                           onClick={() => setFlareUpTriggers((prev) => prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t])}
                           className={cn(
-                            'text-[11px] px-2 py-1 rounded-full border transition-colors',
+                            'text-[11px] px-3 py-2.5 min-h-[44px] rounded-full border transition-colors',
                             flareUpTriggers.includes(t)
                               ? 'border-primary bg-primary/10 text-primary'
                               : 'border-border bg-secondary text-muted-foreground'
