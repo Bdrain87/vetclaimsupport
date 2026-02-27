@@ -7,11 +7,11 @@ import { Check, Shield, ChevronDown } from 'lucide-react';
 const INCLUDED_FEATURES = [
   {
     category: 'Guides & Tools',
-    features: ['Claim Checklist', 'VA Form Guide', 'Intent to File Guide', 'Travel Pay Calculator', 'VA-Speak Translator'],
+    features: ['Claim Checklist', 'VA Form Guide', 'Intent to File Guide', 'Travel Pay Calculator', 'VA-Speak Translator', 'BDD Guide'],
   },
   {
     category: 'Document Builders',
-    features: ['Personal Statement Builder', 'Buddy Statement Builder', 'Doctor Summary Outline', 'Stressor Statement Writer'],
+    features: ['Personal Statement Builder', 'Buddy Statement Builder', 'Doctor Summary Outline', 'Stressor Statement Writer', 'Shareable Summary'],
   },
   {
     category: 'Health & Symptom Tracking',
@@ -19,11 +19,11 @@ const INCLUDED_FEATURES = [
   },
   {
     category: 'Strategy & Exam Prep',
-    features: ['Claim Strategy Wizard', 'C&P Exam Prep', 'DBQ Prep Sheet', 'Secondary Condition Finder', 'Bilateral Factor Calculator', 'Back Pay Estimator'],
+    features: ['Claim Strategy Wizard', 'C&P Exam Prep', 'DBQ Prep Sheet', 'Secondary Condition Finder', 'Bilateral Factor Calculator', 'Back Pay Estimator', 'Rating Calculator', 'Zero Percent Optimizer', 'PACT Act Checker'],
   },
   {
     category: 'Package & Export',
-    features: ['Full Claim Packet Builder', 'Document Vault', 'Health Summary & Timeline', 'Interactive Body Map', 'Appeals & Decision Review Guide'],
+    features: ['Full Claim Packet Builder', 'Document Vault', 'Health Summary & Timeline', 'Interactive Body Map', 'Appeals & Decision Review Guide', 'Conditions by Conflict', 'Deadlines Tracker'],
   },
 ];
 
