@@ -1178,8 +1178,8 @@ export const ClaimIntelligence = {
   getDocumentationNeeded(conditionId?: string): DocumentationStatus[] {
     const userConditions = getUserConditionsFromStore();
     const appState = useAppStore.getState();
-    const evidenceDocs = appState.evidenceDocuments;
-    const claimDocs = appState.claimDocuments;
+    const evidenceDocs = appState.evidenceDocuments ?? [];
+    const claimDocs = appState.claimDocuments ?? [];
 
     const targetConditions = conditionId
       ? userConditions.filter((uc) => uc.id === conditionId || uc.conditionId === conditionId)
@@ -1599,8 +1599,10 @@ export const ClaimIntelligence = {
     const dayCounts: Record<string, number> = { Sun: 0, Mon: 0, Tue: 0, Wed: 0, Thu: 0, Fri: 0, Sat: 0 };
     const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     for (const e of entries) {
-      const dayIdx = new Date(e.date).getDay();
-      dayCounts[dayNames[dayIdx]]++;
+      const d = new Date(e.date);
+      if (!isNaN(d.getTime())) {
+        dayCounts[dayNames[d.getDay()]]++;
+      }
     }
     const maxDayCount = Math.max(...Object.values(dayCounts));
     const peakDays = maxDayCount > 0

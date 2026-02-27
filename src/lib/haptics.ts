@@ -14,6 +14,8 @@ let Haptics: {
 if (Capacitor.isNativePlatform()) {
   import('@capacitor/haptics').then((mod) => {
     Haptics = mod.Haptics;
+  }).catch(() => {
+    // Haptics plugin unavailable — non-fatal
   });
 }
 
