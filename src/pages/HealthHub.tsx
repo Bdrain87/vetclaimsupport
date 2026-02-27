@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useShallow } from 'zustand/react/shallow';
 import { Activity, Moon, Brain, Pill, Stethoscope, AlertTriangle, BarChart3, PersonStanding, Clock, Briefcase, TrendingUp } from 'lucide-react';
 import useAppStore from '@/store/useAppStore';
 import { PageContainer } from '@/components/PageContainer';
@@ -35,7 +36,19 @@ function formatLastEntry(entries: { date?: string; createdAt?: string; startDate
 
 export default function HealthHub() {
   const navigate = useNavigate();
-  const store = useAppStore();
+  const store = useAppStore(
+    useShallow((s) => ({
+      symptoms: s.symptoms,
+      quickLogs: s.quickLogs,
+      userConditions: s.userConditions,
+      sleepEntries: s.sleepEntries,
+      migraines: s.migraines,
+      medications: s.medications,
+      medicalVisits: s.medicalVisits,
+      exposures: s.exposures,
+      employmentImpactEntries: s.employmentImpactEntries,
+    })),
+  );
 
   // 30-Day Summary Stats
   const thirtyDayStats = useMemo(() => {

@@ -7,7 +7,8 @@ import { useProfileStore } from '@/store/useProfileStore';
 const ITF_DISMISSED_KEY = 'itf-popup-dismissed';
 
 export function IntentToFileBanner() {
-  const { intentToFileDate, intentToFileFiled } = useProfileStore();
+  const intentToFileDate = useProfileStore((s) => s.intentToFileDate);
+  const intentToFileFiled = useProfileStore((s) => s.intentToFileFiled);
 
   const [dismissed, setDismissed] = useState(() => {
     try {

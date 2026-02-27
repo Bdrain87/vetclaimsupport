@@ -21,7 +21,8 @@ const VA_BDD_URL = 'https://www.va.gov/disability/how-to-file-claim/when-to-file
 
 export default function BDDGuide() {
   const navigate = useNavigate();
-  const { separationDate, setSeparationDate } = useProfileStore();
+  const separationDate = useProfileStore((s) => s.separationDate);
+  const setSeparationDate = useProfileStore((s) => s.setSeparationDate);
 
   const parsedDate = (() => {
     if (!separationDate) return null;

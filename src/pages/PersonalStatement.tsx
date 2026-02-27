@@ -180,7 +180,8 @@ function GuidanceTip({ tips }: GuidanceTipProps) {
 export default function PersonalStatement() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { firstName, lastName } = useProfileStore();
+  const firstName = useProfileStore((s) => s.firstName);
+  const lastName = useProfileStore((s) => s.lastName);
   const { data: claimsData } = useClaims();
   const { toast } = useToast();
   const {

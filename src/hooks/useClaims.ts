@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import useAppStore from '@/store/useAppStore';
 import { useProfileStore } from '@/store/useProfileStore';
 import type { ClaimsData } from '@/types/claims';
@@ -6,118 +7,127 @@ import type { ClaimsData } from '@/types/claims';
 /**
  * Adapter hook — returns the same shape as the old ClaimsContext / useClaimsData.
  * All consuming components continue to work unchanged.
+ *
+ * Uses useShallow so the component only re-renders when the specific data
+ * slices it subscribes to actually change (not on every store mutation).
  */
 export function useClaims() {
-  const store = useAppStore();
+  const dataSlice = useAppStore(
+    useShallow((s) => ({
+      medicalVisits: s.medicalVisits,
+      exposures: s.exposures,
+      symptoms: s.symptoms,
+      medications: s.medications,
+      serviceHistory: s.serviceHistory,
+      combatHistory: s.combatHistory,
+      majorEvents: s.majorEvents,
+      deployments: s.deployments,
+      buddyContacts: s.buddyContacts,
+      documents: s.documents,
+      migraines: s.migraines,
+      sleepEntries: s.sleepEntries,
+      ptsdSymptoms: s.ptsdSymptoms,
+      uploadedDocuments: s.uploadedDocuments,
+      claimConditions: s.claimConditions,
+      quickLogs: s.quickLogs,
+      deadlines: s.deadlines,
+      documentScanDisclaimerShown: s.documentScanDisclaimerShown,
+      milestonesAchieved: s.milestonesAchieved,
+      approvedConditions: s.approvedConditions,
+      journeyProgress: s.journeyProgress,
+    })),
+  );
+
   const separationDate = useProfileStore((s) => s.separationDate) ?? null;
 
   // Build the `data` object that matches the ClaimsData interface
   const data: ClaimsData = useMemo(() => ({
-    medicalVisits: store.medicalVisits,
-    exposures: store.exposures,
-    symptoms: store.symptoms,
-    medications: store.medications,
-    serviceHistory: store.serviceHistory,
-    combatHistory: store.combatHistory,
-    majorEvents: store.majorEvents,
-    deployments: store.deployments,
-    buddyContacts: store.buddyContacts,
-    documents: store.documents,
-    migraines: store.migraines,
-    sleepEntries: store.sleepEntries,
-    ptsdSymptoms: store.ptsdSymptoms,
+    ...dataSlice,
     separationDate,
-    uploadedDocuments: store.uploadedDocuments,
-    claimConditions: store.claimConditions,
-    quickLogs: store.quickLogs,
-    deadlines: store.deadlines,
-    documentScanDisclaimerShown: store.documentScanDisclaimerShown,
-    milestonesAchieved: store.milestonesAchieved,
-    approvedConditions: store.approvedConditions,
-    journeyProgress: store.journeyProgress,
-  }), [
-    store.medicalVisits, store.exposures, store.symptoms, store.medications,
-    store.serviceHistory, store.combatHistory, store.majorEvents, store.deployments,
-    store.buddyContacts, store.documents, store.migraines, store.sleepEntries,
-    store.ptsdSymptoms, separationDate, store.uploadedDocuments,
-    store.claimConditions, store.quickLogs, store.deadlines,
-    store.documentScanDisclaimerShown, store.milestonesAchieved,
-    store.approvedConditions, store.journeyProgress,
-  ]);
+  }), [dataSlice, separationDate]);
+
+  // Actions are stable references from the store — read once and reuse.
+  // Using getState() avoids subscribing the component to action identity changes.
+  const actions = useMemo(() => {
+    const s = useAppStore.getState();
+    return {
+      // Medical Visits
+      addMedicalVisit: s.addMedicalVisit,
+      updateMedicalVisit: s.updateMedicalVisit,
+      deleteMedicalVisit: s.deleteMedicalVisit,
+      // Exposures
+      addExposure: s.addExposure,
+      updateExposure: s.updateExposure,
+      deleteExposure: s.deleteExposure,
+      // Symptoms
+      addSymptom: s.addSymptom,
+      updateSymptom: s.updateSymptom,
+      deleteSymptom: s.deleteSymptom,
+      // Medications
+      addMedication: s.addMedication,
+      updateMedication: s.updateMedication,
+      deleteMedication: s.deleteMedication,
+      // Service History
+      addServiceEntry: s.addServiceEntry,
+      updateServiceEntry: s.updateServiceEntry,
+      deleteServiceEntry: s.deleteServiceEntry,
+      // Combat History
+      addCombatEntry: s.addCombatEntry,
+      updateCombatEntry: s.updateCombatEntry,
+      deleteCombatEntry: s.deleteCombatEntry,
+      // Major Events
+      addMajorEvent: s.addMajorEvent,
+      updateMajorEvent: s.updateMajorEvent,
+      deleteMajorEvent: s.deleteMajorEvent,
+      // Deployments
+      addDeployment: s.addDeployment,
+      updateDeployment: s.updateDeployment,
+      deleteDeployment: s.deleteDeployment,
+      // Buddy Contacts
+      addBuddyContact: s.addBuddyContact,
+      updateBuddyContact: s.updateBuddyContact,
+      deleteBuddyContact: s.deleteBuddyContact,
+      // Documents checklist
+      updateDocument: s.updateDocument,
+      // Migraines
+      addMigraine: s.addMigraine,
+      updateMigraine: s.updateMigraine,
+      deleteMigraine: s.deleteMigraine,
+      // Uploaded Documents
+      addUploadedDocument: s.addUploadedDocument,
+      deleteUploadedDocument: s.deleteUploadedDocument,
+      // Sleep Entries
+      addSleepEntry: s.addSleepEntry,
+      updateSleepEntry: s.updateSleepEntry,
+      deleteSleepEntry: s.deleteSleepEntry,
+      // PTSD Symptoms
+      addPTSDSymptom: s.addPTSDSymptom,
+      updatePTSDSymptom: s.updatePTSDSymptom,
+      deletePTSDSymptom: s.deletePTSDSymptom,
+      // Claim Conditions
+      addClaimCondition: s.addClaimCondition,
+      updateClaimCondition: s.updateClaimCondition,
+      deleteClaimCondition: s.deleteClaimCondition,
+      // Document scan disclaimer
+      setDocumentScanDisclaimerShown: s.setDocumentScanDisclaimerShown,
+      // Quick Logs
+      addQuickLog: s.addQuickLog,
+      deleteQuickLog: s.deleteQuickLog,
+      // Deadlines
+      addDeadline: s.addDeadline,
+      updateDeadline: s.updateDeadline,
+      deleteDeadline: s.deleteDeadline,
+      // Milestones
+      addMilestone: s.addMilestone,
+      // Approved Conditions
+      addApprovedCondition: s.addApprovedCondition,
+      updateApprovedCondition: s.updateApprovedCondition,
+      deleteApprovedCondition: s.deleteApprovedCondition,
+    };
+  }, []);
 
   return {
     data,
-    // Medical Visits
-    addMedicalVisit: store.addMedicalVisit,
-    updateMedicalVisit: store.updateMedicalVisit,
-    deleteMedicalVisit: store.deleteMedicalVisit,
-    // Exposures
-    addExposure: store.addExposure,
-    updateExposure: store.updateExposure,
-    deleteExposure: store.deleteExposure,
-    // Symptoms
-    addSymptom: store.addSymptom,
-    updateSymptom: store.updateSymptom,
-    deleteSymptom: store.deleteSymptom,
-    // Medications
-    addMedication: store.addMedication,
-    updateMedication: store.updateMedication,
-    deleteMedication: store.deleteMedication,
-    // Service History
-    addServiceEntry: store.addServiceEntry,
-    updateServiceEntry: store.updateServiceEntry,
-    deleteServiceEntry: store.deleteServiceEntry,
-    // Combat History
-    addCombatEntry: store.addCombatEntry,
-    updateCombatEntry: store.updateCombatEntry,
-    deleteCombatEntry: store.deleteCombatEntry,
-    // Major Events
-    addMajorEvent: store.addMajorEvent,
-    updateMajorEvent: store.updateMajorEvent,
-    deleteMajorEvent: store.deleteMajorEvent,
-    // Deployments
-    addDeployment: store.addDeployment,
-    updateDeployment: store.updateDeployment,
-    deleteDeployment: store.deleteDeployment,
-    // Buddy Contacts
-    addBuddyContact: store.addBuddyContact,
-    updateBuddyContact: store.updateBuddyContact,
-    deleteBuddyContact: store.deleteBuddyContact,
-    // Documents checklist
-    updateDocument: store.updateDocument,
-    // Migraines
-    addMigraine: store.addMigraine,
-    updateMigraine: store.updateMigraine,
-    deleteMigraine: store.deleteMigraine,
-    // Uploaded Documents
-    addUploadedDocument: store.addUploadedDocument,
-    deleteUploadedDocument: store.deleteUploadedDocument,
-    // Sleep Entries
-    addSleepEntry: store.addSleepEntry,
-    updateSleepEntry: store.updateSleepEntry,
-    deleteSleepEntry: store.deleteSleepEntry,
-    // PTSD Symptoms
-    addPTSDSymptom: store.addPTSDSymptom,
-    updatePTSDSymptom: store.updatePTSDSymptom,
-    deletePTSDSymptom: store.deletePTSDSymptom,
-    // Claim Conditions
-    addClaimCondition: store.addClaimCondition,
-    updateClaimCondition: store.updateClaimCondition,
-    deleteClaimCondition: store.deleteClaimCondition,
-    // Document scan disclaimer
-    setDocumentScanDisclaimerShown: store.setDocumentScanDisclaimerShown,
-    // Quick Logs
-    addQuickLog: store.addQuickLog,
-    deleteQuickLog: store.deleteQuickLog,
-    // Deadlines
-    addDeadline: store.addDeadline,
-    updateDeadline: store.updateDeadline,
-    deleteDeadline: store.deleteDeadline,
-    // Milestones
-    addMilestone: store.addMilestone,
-    // Approved Conditions
-    addApprovedCondition: store.addApprovedCondition,
-    updateApprovedCondition: store.updateApprovedCondition,
-    deleteApprovedCondition: store.deleteApprovedCondition,
+    ...actions,
   };
 }
