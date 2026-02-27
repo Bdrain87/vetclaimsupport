@@ -173,15 +173,16 @@ export default function Settings() {
 
   // Auto-save separation date with debounce
   const separationAutoSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const setSeparationDate = useProfileStore((s) => s.setSeparationDate);
   useEffect(() => {
     if (separationAutoSaveTimer.current) clearTimeout(separationAutoSaveTimer.current);
     separationAutoSaveTimer.current = setTimeout(() => {
-      profile.setSeparationDate(profileForm.separationDate || '');
+      setSeparationDate(profileForm.separationDate || '');
     }, 800);
     return () => {
       if (separationAutoSaveTimer.current) clearTimeout(separationAutoSaveTimer.current);
     };
-  }, [profileForm.separationDate, profile]);
+  }, [profileForm.separationDate, setSeparationDate]);
 
   // Post-checkout success handling
   const [searchParams, setSearchParams] = useSearchParams();
