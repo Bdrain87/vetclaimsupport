@@ -14,10 +14,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // WKWebView can't cache anything during the session and fails to load.
         URLCache.shared.removeAllCachedResponses()
 
-        // Also clear WKWebView's own data store (async, belt-and-suspenders)
+        // Also clear WKWebView's disk/memory/fetch caches (belt-and-suspenders).
+        // IMPORTANT: Only clear cache types — NOT localStorage/IndexedDB/cookies,
+        // which hold persisted user data (Zustand stores, encryption keys, etc.).
         let dataStore = WKWebsiteDataStore.default()
-        let allTypes = WKWebsiteDataStore.allWebsiteDataTypes()
-        dataStore.removeData(ofTypes: allTypes, modifiedSince: .distantPast) { }
+        let cacheTypes: Set<String> = [
+            WKWebsiteDataTypeDiskCache,
+            WKWebsiteDataTypeMemoryCache,
+            WKWebsiteDataTypeFetchCache
+        ]
+        dataStore.removeData(ofTypes: cacheTypes, modifiedSince: .distantPast) { }
 
         let args = ProcessInfo.processInfo.arguments
 
