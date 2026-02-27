@@ -20,6 +20,7 @@ import {
   encryptWithRawKey,
   decryptWithRawKey,
 } from '@/utils/encryption';
+import { logger } from '@/utils/logger';
 
 // ---- session-scoped password ------------------------------------------------
 
@@ -88,7 +89,7 @@ export const encryptedStorage: StateStorage = {
     try {
       raw = localStorage.getItem(key);
     } catch (error) {
-      console.warn('[encryptedStorage] localStorage.getItem failed:', error);
+      logger.warn('[encryptedStorage] localStorage.getItem failed:', error);
       return null;
     }
     if (raw === null) return null;
@@ -97,7 +98,7 @@ export const encryptedStorage: StateStorage = {
     if (raw.startsWith(ENCRYPTED_V2_PREFIX)) {
       const password = _sessionPassword;
       if (!password) {
-        console.error(
+        logger.error(
           '[encryptedStorage] No encryption key available for key:',
           key,
           '— this should not happen after init.',
@@ -107,7 +108,7 @@ export const encryptedStorage: StateStorage = {
 
       const ciphertext = raw.slice(ENCRYPTED_V2_PREFIX.length);
       return decryptWithRawKey(ciphertext, password).catch(() => {
-        console.warn(
+        logger.warn(
           '[encryptedStorage] v2 decryption failed for key:',
           key,
           '— returning null.',
@@ -125,7 +126,7 @@ export const encryptedStorage: StateStorage = {
 
       const ciphertext = raw.slice(ENCRYPTED_PREFIX.length);
       return decrypt(ciphertext, password).catch(() => {
-        console.warn(
+        logger.warn(
           '[encryptedStorage] PBKDF2 decryption failed for key:',
           key,
           '— returning null.',
@@ -143,7 +144,7 @@ export const encryptedStorage: StateStorage = {
       // Fail closed — never write sensitive data as plaintext.
       // This should not happen after boot; if it does, the data is
       // silently dropped rather than stored unencrypted.
-      console.error(
+      logger.error(
         '[encryptedStorage] No encryption key available during write for key:',
         key,
         '— dropping write to prevent plaintext data exposure.',
@@ -165,7 +166,7 @@ export const encryptedStorage: StateStorage = {
           localStorage.setItem(key, ENCRYPTED_PREFIX + ciphertext);
         }
       } catch (error) {
-        console.error(
+        logger.error(
           '[encryptedStorage] Encryption/write failed for key "' + key + '":',
           error,
         );
@@ -177,7 +178,7 @@ export const encryptedStorage: StateStorage = {
     try {
       localStorage.removeItem(key);
     } catch (error) {
-      console.warn('[encryptedStorage] localStorage.removeItem failed:', error);
+      logger.warn('[encryptedStorage] localStorage.removeItem failed:', error);
     }
   },
 };

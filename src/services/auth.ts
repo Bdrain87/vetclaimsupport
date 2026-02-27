@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import { isNativeApp } from '@/lib/platform';
 import { openNativeOAuth, getNativeRedirectUrl } from '@/lib/nativeOAuth';
+import { logger } from '@/utils/logger';
 import type { Session, User, AuthChangeEvent } from '@supabase/supabase-js';
 
 /**
@@ -161,7 +162,7 @@ export async function signOut() {
     try {
       localStorage.removeItem(key);
     } catch (error) {
-      console.warn('[auth] localStorage.removeItem failed for key:', key, error);
+      logger.warn('[auth] localStorage.removeItem failed for key:', key, error);
     }
   }
 
@@ -169,7 +170,7 @@ export async function signOut() {
   if (error) {
     // Sign-out network failure is non-fatal: local state is already cleared
     // and the Supabase token will expire on its own.
-    console.warn('[auth] signOut RPC failed (local data already cleared):', error.message);
+    logger.warn('[auth] signOut RPC failed (local data already cleared):', error.message);
   }
 }
 

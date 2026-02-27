@@ -2,6 +2,7 @@
 import type jsPDFType from 'jspdf';
 import type { ServiceEntry, MedicalVisit, SymptomEntry, Medication, Exposure, DocumentItem, BuddyContact, ClaimsData, ClaimCondition, MigraineEntry, SleepEntry } from '@/types/claims';
 import { DOCTOR_SUMMARY_DISCLAIMER } from '@/utils/bannedPhrases';
+import { logger } from '@/utils/logger';
 
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import('jspdf');
@@ -174,7 +175,7 @@ const wrapText = (doc: jsPDFType, text: string, maxWidth: number): string[] => {
 // Service History Export
 export const exportServiceHistory = async (entries: ServiceEntry[]) => {
   if (entries.length === 0) {
-    console.warn('No service history entries to export');
+    logger.warn('No service history entries to export');
     return;
   }
 
@@ -275,7 +276,7 @@ export const exportServiceHistory = async (entries: ServiceEntry[]) => {
 // Medical Visits Export
 export const exportMedicalVisits = async (visits: MedicalVisit[]) => {
   if (visits.length === 0) {
-    console.warn('No medical visits to export');
+    logger.warn('No medical visits to export');
     return;
   }
 
@@ -369,7 +370,7 @@ export const exportMedicalVisits = async (visits: MedicalVisit[]) => {
 // Symptoms Journal Export
 export const exportSymptoms = async (symptoms: SymptomEntry[]) => {
   if (symptoms.length === 0) {
-    console.warn('No symptoms to export');
+    logger.warn('No symptoms to export');
     return;
   }
 
@@ -458,7 +459,7 @@ export const exportSymptoms = async (symptoms: SymptomEntry[]) => {
 // Medications Export
 export const exportMedications = async (medications: Medication[]) => {
   if (medications.length === 0) {
-    console.warn('No medications to export');
+    logger.warn('No medications to export');
     return;
   }
 
@@ -554,7 +555,7 @@ export const exportMedications = async (medications: Medication[]) => {
 // Exposures Export
 export const exportExposures = async (exposures: Exposure[]) => {
   if (exposures.length === 0) {
-    console.warn('No exposures to export');
+    logger.warn('No exposures to export');
     return;
   }
 
@@ -651,7 +652,7 @@ export const exportExposures = async (exposures: Exposure[]) => {
 // Documents Checklist Export
 export const exportDocuments = async (documents: DocumentItem[]) => {
   if (documents.length === 0) {
-    console.warn('No documents to export');
+    logger.warn('No documents to export');
     return;
   }
 
@@ -726,7 +727,7 @@ export const exportDocuments = async (documents: DocumentItem[]) => {
 // Buddy Contacts Export
 export const exportBuddyContacts = async (contacts: BuddyContact[]) => {
   if (contacts.length === 0) {
-    console.warn('No buddy contacts to export');
+    logger.warn('No buddy contacts to export');
     return;
   }
 
@@ -1045,7 +1046,7 @@ export const exportAllEvidence = async (data: ClaimsData, options?: { returnBlob
 // Migraines Export
 export const exportMigraines = async (migraines: MigraineEntry[], stats?: { totalLast30Days: number; prostratingLast30Days: number; totalAll: number }) => {
   if (migraines.length === 0) {
-    console.warn('No migraine entries to export');
+    logger.warn('No migraine entries to export');
     return;
   }
 
@@ -1553,7 +1554,7 @@ export const exportConditionEvidence = async (
 // Sleep Log Export
 export const exportSleepLog = async (entries: SleepEntry[]) => {
   if (entries.length === 0) {
-    console.warn('No sleep entries to export');
+    logger.warn('No sleep entries to export');
     return;
   }
 

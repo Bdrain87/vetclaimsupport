@@ -5,6 +5,7 @@ import { Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { signInWithEmail, signUpWithEmail, signInWithGoogle, signInWithApple, resetPassword } from '@/services/auth';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
+import { PageContainer } from '@/components/PageContainer';
 
 const GOLD_GRADIENT =
   'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)';
@@ -112,10 +113,10 @@ export default function AuthPage() {
   };
 
   const inputClass =
-    'w-full h-12 pl-11 pr-4 bg-white/[0.07] border border-white/[0.12] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(240,192,0,0.4)] focus:border-[rgba(240,192,0,0.5)] transition-all';
+    'w-full h-12 pl-11 pr-4 bg-white/[0.07] border border-white/[0.12] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(197,165,90,0.4)] focus:border-[rgba(197,165,90,0.5)] transition-all';
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#000000' }}>
+    <PageContainer noPadding className="min-h-screen flex flex-col bg-black">
       <div className="p-4">
         <button
           onClick={() => navigate('/')}
@@ -317,6 +318,6 @@ export default function AuthPage() {
           </p>
         </motion.div>
       </div>
-    </div>
+    </PageContainer>
   );
 }

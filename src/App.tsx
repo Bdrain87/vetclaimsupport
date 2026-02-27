@@ -26,6 +26,7 @@ import { PremiumGuard } from './components/PremiumGuard';
 import { ensureFreshEntitlement } from './services/entitlements';
 import { startSync, stopSync } from './services/syncEngine';
 import { supabase } from './lib/supabase';
+import { logger } from './utils/logger';
 import { initNativeOAuthListener } from './lib/nativeOAuth';
 
 // Initialize native OAuth deep-link listener (no-op on web)
@@ -35,7 +36,7 @@ initNativeOAuthListener().catch(() => {});
 try {
   migrateOldDataToAppStore();
 } catch (e) {
-  console.error('Data migration failed:', e);
+  logger.error('Data migration failed:', e);
 }
 
 // Retry wrapper for lazy imports — when a deploy ships new chunk filenames,

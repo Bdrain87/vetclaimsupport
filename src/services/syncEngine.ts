@@ -2,6 +2,7 @@ import { supabase } from '@/lib/supabase';
 import useAppStore from '@/store/useAppStore';
 import { useProfileStore } from '@/store/useProfileStore';
 import { redactPII } from '@/lib/redaction';
+import { logger } from '@/utils/logger';
 
 
 function isNonNullObject(v: unknown): v is Record<string, unknown> {
@@ -116,7 +117,7 @@ export async function pullFromCloud(): Promise<void> {
     .maybeSingle();
 
   if (profileError) {
-    console.error('[sync] pull profile failed', profileError.message, profileError);
+    logger.error('[sync] pull profile failed', profileError.message, profileError);
   }
 
   if (profile) {
@@ -159,7 +160,7 @@ export async function pullFromCloud(): Promise<void> {
     .eq('user_id', userId);
 
   if (conditionsError) {
-    console.error('[sync] pull conditions failed', conditionsError.message, conditionsError);
+    logger.error('[sync] pull conditions failed', conditionsError.message, conditionsError);
   }
 
   if (conditions && conditions.length > 0) {
@@ -167,7 +168,7 @@ export async function pullFromCloud(): Promise<void> {
 
     for (const rawCondition of conditions) {
       if (!isValidConditionRow(rawCondition)) {
-        console.warn('[sync] Skipping invalid condition row from cloud');
+        logger.warn('[sync] Skipping invalid condition row from cloud');
         continue;
       }
       const cloudCondition = rawCondition;
@@ -261,7 +262,7 @@ export async function pullFromCloud(): Promise<void> {
     .eq('user_id', userId);
 
   if (healthLogsError) {
-    console.error('[sync] pull health logs failed', healthLogsError.message, healthLogsError);
+    logger.error('[sync] pull health logs failed', healthLogsError.message, healthLogsError);
   }
 
   if (healthLogs && healthLogs.length > 0) {
@@ -269,13 +270,13 @@ export async function pullFromCloud(): Promise<void> {
 
     for (const rawLog of healthLogs) {
       if (!isValidHealthLogRow(rawLog)) {
-        console.warn('[sync] Skipping invalid health log row from cloud');
+        logger.warn('[sync] Skipping invalid health log row from cloud');
         continue;
       }
       const log = rawLog;
       const logData = log.data;
       if (!isValidHealthLogData(log.log_type, logData)) {
-        console.warn('[sync] Skipping health log with invalid data shape');
+        logger.warn('[sync] Skipping health log with invalid data shape');
         continue;
       }
 
@@ -386,7 +387,7 @@ export async function pushToCloud(): Promise<void> {
     updated_at: new Date().toISOString(),
   });
   if (profilePushError) {
-    console.error('[sync] push profile failed', profilePushError.message, profilePushError);
+    logger.error('[sync] push profile failed', profilePushError.message, profilePushError);
     pushErrors.push('profile');
   }
 
@@ -412,7 +413,7 @@ export async function pushToCloud(): Promise<void> {
       .from('conditions')
       .upsert(conditionRows, { onConflict: 'id' });
     if (error) {
-      console.error('[sync] push conditions failed', error);
+      logger.error('[sync] push conditions failed', error);
       pushErrors.push('conditions');
     }
   }
@@ -430,7 +431,7 @@ export async function pushToCloud(): Promise<void> {
       .from('health_logs')
       .upsert(symptomRows, { onConflict: 'id' });
     if (error) {
-      console.error('[sync] push symptoms failed', error);
+      logger.error('[sync] push symptoms failed', error);
       pushErrors.push('symptoms');
     }
   }
@@ -448,7 +449,7 @@ export async function pushToCloud(): Promise<void> {
       .from('health_logs')
       .upsert(sleepRows, { onConflict: 'id' });
     if (error) {
-      console.error('[sync] push sleep failed', error);
+      logger.error('[sync] push sleep failed', error);
       pushErrors.push('sleep');
     }
   }
@@ -466,7 +467,7 @@ export async function pushToCloud(): Promise<void> {
       .from('health_logs')
       .upsert(migraineRows, { onConflict: 'id' });
     if (error) {
-      console.error('[sync] push migraines failed', error);
+      logger.error('[sync] push migraines failed', error);
       pushErrors.push('migraines');
     }
   }
@@ -475,7 +476,7 @@ export async function pushToCloud(): Promise<void> {
   useProfileStore.getState().setLastSyncedAt(lastSyncedAt);
 
   if (pushErrors.length > 0) {
-    console.warn(`[sync] Partial push failure: ${pushErrors.join(', ')}`);
+    logger.warn(`[sync] Partial push failure: ${pushErrors.join(', ')}`);
   }
 }
 
@@ -491,7 +492,7 @@ export async function syncNow(): Promise<void> {
   if (consecutiveFailures >= 3) {
     const backoffMs = Math.min(SYNC_DEBOUNCE_MS * Math.pow(2, consecutiveFailures - 2), 600000);
     // Let the interval handle eventual retry — don't pile on
-    console.warn(`[sync] Backing off after ${consecutiveFailures} failures (next retry in ~${Math.round(backoffMs / 1000)}s)`);
+    logger.warn(`[sync] Backing off after ${consecutiveFailures} failures (next retry in ~${Math.round(backoffMs / 1000)}s)`);
     return;
   }
 
@@ -509,7 +510,7 @@ export async function syncNow(): Promise<void> {
       setStatus('synced');
       consecutiveFailures = 0;
     } catch (err) {
-      console.error('[sync] syncNow failed:', err instanceof Error ? err.message : err);
+      logger.error('[sync] syncNow failed:', err instanceof Error ? err.message : err);
       setStatus('error');
       consecutiveFailures++;
     }

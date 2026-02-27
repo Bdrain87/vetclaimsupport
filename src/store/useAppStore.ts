@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { encryptedStorage } from '@/lib/encryptedStorage';
+import { logger } from '@/utils/logger';
 import type {
   MedicalVisit, Exposure, SymptomEntry, Medication,
   ServiceEntry, BuddyContact, DocumentItem, MigraineEntry,
@@ -494,7 +495,7 @@ const useAppStore = create<AppState>()(
       // Claim Conditions
       addClaimCondition: (condition) => {
         if (!condition.name || typeof condition.name !== 'string' || !condition.name.trim()) {
-          console.warn('[useAppStore] addClaimCondition called with empty name — skipping');
+          logger.warn('[useAppStore] addClaimCondition called with empty name — skipping');
           return;
         }
         set((s) => ({
@@ -504,7 +505,7 @@ const useAppStore = create<AppState>()(
       updateClaimCondition: (id, condition) => {
         if (!id || typeof id !== 'string') return;
         if (condition.name !== undefined && (!condition.name || !condition.name.trim())) {
-          console.warn('[useAppStore] updateClaimCondition called with empty name — skipping');
+          logger.warn('[useAppStore] updateClaimCondition called with empty name — skipping');
           return;
         }
         set((s) => ({
@@ -692,7 +693,7 @@ const useAppStore = create<AppState>()(
           try {
             await storeFileData(id, doc.dataUrl);
           } catch (error) {
-            console.error('[addEvidenceDocument] IndexedDB write failed, falling back to localStorage:', error);
+            logger.error('[addEvidenceDocument] IndexedDB write failed, falling back to localStorage:', error);
             useIndexedDB = false;
           }
         }
@@ -830,7 +831,7 @@ const useAppStore = create<AppState>()(
           try {
             await storeFileData(id, doc.dataUrl);
           } catch (error) {
-            console.error('[addClaimDocument] IndexedDB write failed, falling back to localStorage:', error);
+            logger.error('[addClaimDocument] IndexedDB write failed, falling back to localStorage:', error);
             useIndexedDB = false;
           }
         }
@@ -935,7 +936,7 @@ const useAppStore = create<AppState>()(
       onRehydrateStorage: () => {
         return (_state, error) => {
           if (error) {
-            console.error('useAppStore hydration failed:', error);
+            logger.error('useAppStore hydration failed:', error);
           }
         };
       },

@@ -4,6 +4,7 @@ import { useProfileStore } from '@/store/useProfileStore';
 import { useAICacheStore } from '@/store/useAICacheStore';
 import { initEncryptionKey } from '@/lib/keyManager';
 import { setSessionPassword } from '@/lib/encryptedStorage';
+import { logger } from '@/utils/logger';
 
 const MIGRATION_FLAG = 'vcs-encrypted-migration-v2';
 
@@ -34,7 +35,7 @@ export function useHydration(): boolean {
     // a permanent loading screen.
     const safetyTimer = setTimeout(() => {
       if (!cancelled) {
-        console.warn('[useHydration] Safety timeout reached — forcing hydration');
+        logger.warn('[useHydration] Safety timeout reached — forcing hydration');
         setHydrated(true);
       }
     }, HYDRATION_TIMEOUT_MS);
@@ -52,7 +53,7 @@ export function useHydration(): boolean {
       } catch (error) {
         // Safety net: if key init fails, still allow rehydration with
         // whatever state is available (plaintext reads still work).
-        console.error('[useHydration] Encryption key init failed:', error);
+        logger.error('[useHydration] Encryption key init failed:', error);
       }
 
       if (cancelled) return;
@@ -76,7 +77,7 @@ export function useHydration(): boolean {
           localStorage.setItem(MIGRATION_FLAG, 'true');
         }
       } catch (error) {
-        console.error('[useHydration] Migration failed:', error);
+        logger.error('[useHydration] Migration failed:', error);
       }
 
       if (!cancelled) {

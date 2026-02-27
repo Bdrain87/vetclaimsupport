@@ -23,6 +23,7 @@ import { Badge } from '@/components/ui/badge';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { useProfileStore } from '@/store/useProfileStore';
+import { logger } from '@/utils/logger';
 import { getAllBranchLabels } from '@/utils/veteranProfile';
 import useAppStore from '@/store/useAppStore';
 import { getConditionById } from '@/data/vaConditions';
@@ -325,7 +326,7 @@ export default function CPExamPacket() {
         setExamQuestions((prev) => ({ ...prev, [conditionName]: result }));
       }
     } catch (err) {
-      console.error('Failed to generate questions:', err);
+      logger.error('Failed to generate questions:', err);
     } finally {
       setLoadingQuestions((prev) => {
         const next = new Set(prev);
@@ -398,7 +399,7 @@ export default function CPExamPacket() {
         });
       }).catch(() => {});
     } catch (err) {
-      console.error('PDF export failed:', err);
+      logger.error('PDF export failed:', err);
     } finally {
       setPdfExporting(false);
     }

@@ -2,6 +2,7 @@
  * Veteran Profile Persistence
  * Saves and loads veteran profile data (service job code, service dates) to/from localStorage
  */
+import { logger } from '@/utils/logger';
 
 const STORAGE_KEY = 'vet-claim-veteran-profile';
 
@@ -64,7 +65,7 @@ export function getVeteranProfile(): VeteranProfile {
       return { ...defaultProfile, ...parsed };
     }
   } catch (error) {
-    console.warn('Failed to load veteran profile from localStorage:', error);
+    logger.warn('Failed to load veteran profile from localStorage:', error);
   }
   return { ...defaultProfile };
 }
@@ -82,7 +83,7 @@ export function saveVeteranProfile(profile: Partial<VeteranProfile>): void {
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
   } catch (error) {
-    console.warn('Failed to save veteran profile to localStorage:', error);
+    logger.warn('Failed to save veteran profile to localStorage:', error);
   }
 }
 
@@ -174,6 +175,6 @@ export function clearVeteranProfile(): void {
   try {
     localStorage.removeItem(STORAGE_KEY);
   } catch (error) {
-    console.warn('Failed to clear veteran profile from localStorage:', error);
+    logger.warn('Failed to clear veteran profile from localStorage:', error);
   }
 }

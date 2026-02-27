@@ -1,6 +1,7 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { logger } from '@/utils/logger';
 
 interface Props {
   children: ReactNode;
@@ -19,7 +20,7 @@ export class RouteErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    console.error('Route error:', error, errorInfo);
+    logger.error('Route error:', error, errorInfo);
   }
 
   private handleRetry = (): void => {

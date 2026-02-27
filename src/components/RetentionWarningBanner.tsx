@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { AlertTriangle } from 'lucide-react';
+import { logger } from '@/utils/logger';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,7 +39,7 @@ export function RetentionWarningBanner() {
       dismissRetentionWarning();
       window.location.reload();
     } catch (error) {
-      console.error('[RetentionWarningBanner] purge failed:', error);
+      logger.error('[RetentionWarningBanner] purge failed:', error);
       setOpen(false);
     }
   };

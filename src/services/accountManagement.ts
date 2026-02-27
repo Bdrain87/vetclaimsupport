@@ -6,6 +6,7 @@ import { useFeatureFlagStore } from '@/store/useFeatureFlagStore';
 import { stopSync } from '@/services/syncEngine';
 import { ALL_LOCAL_STORAGE_KEYS } from '@/services/auth';
 import { clearDatabase } from '@/lib/indexedDB';
+import { logger } from '@/utils/logger';
 import { clearSessionPassword } from '@/lib/encryptedStorage';
 import { exportAllEvidence } from '@/utils/pdfExport';
 import { logAuditEvent } from '@/services/auditLog';
@@ -130,14 +131,14 @@ export async function deleteAccount(): Promise<void> {
         .from('user-files')
         .list(userId, { limit: 100 });
       if (listError) {
-        console.error('[deleteAccount] storage list failed:', listError.message);
+        logger.error('[deleteAccount] storage list failed:', listError.message);
         break;
       }
       if (files && files.length > 0) {
         const paths = files.map((f) => `${userId}/${f.name}`);
         const { error: removeError } = await supabase.storage.from('user-files').remove(paths);
         if (removeError) {
-          console.error('[deleteAccount] storage remove failed');
+          logger.error('[deleteAccount] storage remove failed');
           break;
         }
       } else {
@@ -193,6 +194,6 @@ export async function clearLocalData(): Promise<void> {
   try {
     await clearDatabase();
   } catch (error) {
-    console.error('[clearLocalData] IndexedDB clear failed:', error);
+    logger.error('[clearLocalData] IndexedDB clear failed:', error);
   }
 }

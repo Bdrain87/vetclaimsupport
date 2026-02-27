@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Crown, Shield, FileText, Activity, Package, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { logger } from '@/utils/logger';
 import { supabase } from '@/lib/supabase';
 import { startCheckout } from '@/services/entitlements';
 import { useToast } from '@/hooks/use-toast';
@@ -41,7 +42,7 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
       // Reset loading after opening checkout — user may close the tab
       setTimeout(() => setLoading(false), 2000);
     } catch (err) {
-      console.error('Checkout failed:', err);
+      logger.error('Checkout failed:', err);
       toast({
         title: 'Checkout failed',
         description: err instanceof Error ? err.message : 'Something went wrong. Please try again.',

@@ -4,6 +4,7 @@
 
 import { encryptWithRawKey, decryptWithRawKey } from '@/utils/encryption';
 import { getCachedKey } from '@/lib/keyManager';
+import { logger } from '@/utils/logger';
 
 const DB_NAME = 'va-claims-evidence-db';
 const DB_VERSION = 1;
@@ -118,13 +119,13 @@ export async function getFileData(id: string): Promise<string | null> {
   if (result.encrypted) {
     const key = getCachedKey();
     if (!key) {
-      console.error('[indexedDB] No encryption key available to decrypt record:', id);
+      logger.error('[indexedDB] No encryption key available to decrypt record:', id);
       return null;
     }
     try {
       return await decryptWithRawKey(result.dataUrl, key);
     } catch {
-      console.error('[indexedDB] Decryption failed for record:', id);
+      logger.error('[indexedDB] Decryption failed for record:', id);
       return null;
     }
   }
@@ -144,7 +145,7 @@ export async function getFileData(id: string): Promise<string | null> {
       });
     } catch {
       // Migration failure is non-fatal — data is still readable
-      console.warn('[indexedDB] Failed to migrate record to encrypted:', id);
+      logger.warn('[indexedDB] Failed to migrate record to encrypted:', id);
     }
   }
 
@@ -262,7 +263,7 @@ export async function clearDatabase(): Promise<void> {
     request.onerror = () => reject(request.error);
     request.onblocked = () => {
       // Database is still in use — resolve anyway to avoid blocking purge
-      console.warn('[indexedDB] deleteDatabase blocked — resolving anyway');
+      logger.warn('[indexedDB] deleteDatabase blocked — resolving anyway');
       resolve();
     };
   });

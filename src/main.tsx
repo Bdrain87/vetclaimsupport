@@ -3,13 +3,14 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
 import { initNativeFeatures } from './utils/capacitor';
+import { logger } from './utils/logger';
 
 // ============================================================
 // Fatal error display — uses safe DOM APIs (no innerHTML XSS risk)
 // ============================================================
 const showFatalError = (label: string, err: unknown) => {
   // Log full details for debugging (only visible in browser dev tools)
-  console.error(`[TRAP] ${label}:`, err);
+  logger.error(`[TRAP] ${label}:`, err);
 
   // Clear existing content safely
   while (document.body.firstChild) {
@@ -51,7 +52,7 @@ window.addEventListener('error', (event) => {
 // and component-level error handling cover user-facing recovery.
 window.addEventListener('unhandledrejection', (event) => {
   const reason = event.reason;
-  console.error(
+  logger.error(
     '[unhandledrejection]',
     reason instanceof Error ? reason.message : String(reason),
     reason instanceof Error ? reason.stack : '',

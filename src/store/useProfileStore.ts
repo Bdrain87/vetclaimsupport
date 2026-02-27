@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { encryptedStorage } from '@/lib/encryptedStorage';
+import { logger } from '@/utils/logger';
 
 export type Branch = 'army' | 'marines' | 'navy' | 'air_force' | 'coast_guard' | 'space_force';
 
@@ -147,7 +148,7 @@ export const useProfileStore = create<ProfileState>()(
       onRehydrateStorage: () => {
         return (_state, error) => {
           if (error) {
-            console.error('useProfileStore hydration failed:', error);
+            logger.error('useProfileStore hydration failed:', error);
           }
         };
       },

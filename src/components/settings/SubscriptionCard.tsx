@@ -3,6 +3,7 @@ import { Crown, Award, RefreshCw } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useProfileStore } from '@/store/useProfileStore';
+import { logger } from '@/utils/logger';
 import { supabase } from '@/lib/supabase';
 import { startCheckout, refreshEntitlementFromServer } from '@/services/entitlements';
 import { useNavigate } from 'react-router-dom';
@@ -40,7 +41,7 @@ export function SubscriptionCard() {
       const url = await startCheckout();
       await openExternalUrl(url);
     } catch (err) {
-      console.error('Checkout failed:', err);
+      logger.error('Checkout failed:', err);
       toast({
         title: 'Checkout failed',
         description: err instanceof Error ? err.message : 'Something went wrong. Please try again.',
