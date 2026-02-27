@@ -485,13 +485,13 @@ export async function syncNow(): Promise<void> {
   }
 
   const doSync = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      setStatus('offline');
-      return;
-    }
-
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        setStatus('offline');
+        return;
+      }
+
       setStatus('syncing');
       await pullFromCloud();
       await pushToCloud();
