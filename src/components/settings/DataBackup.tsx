@@ -116,15 +116,22 @@ export function DataBackup() {
         indexedDBFiles,
       };
 
+      const filename = `vet-claim-support-backup-${new Date().toISOString().split('T')[0]}.json`;
       const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `vet-claim-support-backup-${new Date().toISOString().split('T')[0]}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+
+      // Use navigator.share on iOS/native (download attribute doesn't work in WKWebView)
+      if (navigator.share && navigator.canShare?.({ files: [new File([blob], filename)] })) {
+        await navigator.share({ files: [new File([blob], filename, { type: 'application/json' })] });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
 
       setLastBackupDate();
       toast({

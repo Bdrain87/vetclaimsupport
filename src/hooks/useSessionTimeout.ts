@@ -43,6 +43,7 @@ export function useSessionTimeout() {
       // Sign-out best-effort; ignore network errors
     }
     await clearLocalData();
+    window.location.replace('/auth');
   }, [clearTimers]);
 
   const resetTimers = useCallback(() => {

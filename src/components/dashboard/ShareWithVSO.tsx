@@ -14,10 +14,10 @@ export function ShareWithVSO() {
   const [exporting, setExporting] = useState(false);
 
   const conditions = data.claimConditions || [];
-  const buddyStatementsReceived = data.buddyContacts.filter(b =>
+  const buddyStatementsReceived = (data.buddyContacts || []).filter(b =>
     b.statementStatus === 'Received' || b.statementStatus === 'Submitted'
   ).length;
-  const documentsObtained = data.documents.filter(d =>
+  const documentsObtained = (data.documents || []).filter(d =>
     d.status === 'Obtained' || d.status === 'Submitted'
   ).length;
 
@@ -29,9 +29,9 @@ export function ShareWithVSO() {
     lines.push('');
     lines.push('--- VETERAN INFO ---');
     lines.push(`Separation Date: ${data.separationDate ? new Date(data.separationDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Not set'}`);
-    if (data.serviceHistory.length > 0) {
+    if ((data.serviceHistory || []).length > 0) {
       lines.push('Service Locations:');
-      data.serviceHistory.filter(s => s.base).forEach(s => {
+      (data.serviceHistory || []).filter(s => s.base).forEach(s => {
         lines.push(`  - ${s.base}`);
       });
     }

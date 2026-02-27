@@ -166,13 +166,22 @@ export default function ShareableSummary() {
     }
   }, [generateTextSummary, handleCopyText]);
 
-  const handleDownloadText = useCallback(() => {
+  const handleDownloadText = useCallback(async () => {
     const text = generateTextSummary();
+    const filename = `va-claims-summary-${new Date().toISOString().split('T')[0]}.txt`;
     const blob = new Blob([text], { type: 'text/plain' });
+
+    if (navigator.share && navigator.canShare?.({ files: [new File([blob], filename)] })) {
+      try {
+        await navigator.share({ files: [new File([blob], filename, { type: 'text/plain' })] });
+        return;
+      } catch { /* cancelled */ }
+    }
+
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `va-claims-summary-${new Date().toISOString().split('T')[0]}.txt`;
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

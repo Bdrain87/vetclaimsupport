@@ -371,7 +371,7 @@ export default function DBQPrepSheet() {
   };
 
   const handlePrint = () => {
-    window.print();
+    if (!('Capacitor' in window)) window.print();
   };
 
   const handleDownloadPDF = async () => {

@@ -70,6 +70,7 @@ import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import type { DocumentTypeId } from '@/types/claims';
 import { PageContainer } from '@/components/PageContainer';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 
 // Tab configuration
 const tabConfig = [
@@ -157,6 +158,7 @@ export default function DocumentsHub() {
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [deleteDocTarget, setDeleteDocTarget] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
@@ -762,8 +764,7 @@ export default function DocumentsHub() {
                         className="h-8 text-destructive hover:text-destructive"
                         onClick={(e) => {
                           e.stopPropagation();
-                          deleteDocument(doc.id);
-                          toast({ title: 'Document Deleted' });
+                          setDeleteDocTarget(doc.id);
                         }}
                       >
                         <Trash2 className="h-3 w-3" />
@@ -1132,9 +1133,8 @@ export default function DocumentsHub() {
               variant="destructive"
               onClick={() => {
                 if (selectedDoc) {
-                  deleteDocument(selectedDoc.id);
+                  setDeleteDocTarget(selectedDoc.id);
                   setSelectedDoc(null);
-                  toast({ title: 'Document Deleted' });
                 }
               }}
             >
@@ -1144,6 +1144,21 @@ export default function DocumentsHub() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        open={!!deleteDocTarget}
+        onOpenChange={(open) => { if (!open) setDeleteDocTarget(null); }}
+        title="Delete Document?"
+        description="This will permanently remove this document. This action cannot be undone."
+        confirmText="Delete"
+        variant="destructive"
+        onConfirm={() => {
+          if (deleteDocTarget) {
+            deleteDocument(deleteDocTarget);
+            toast({ title: 'Document Deleted' });
+          }
+        }}
+      />
     </PageContainer>
   );
 }

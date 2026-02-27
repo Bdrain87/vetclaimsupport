@@ -256,7 +256,7 @@ export default function HelpCenter() {
   }, []);
 
   const handlePrint = useCallback(() => {
-    window.print();
+    if (!('Capacitor' in window)) window.print();
   }, []);
 
   return (

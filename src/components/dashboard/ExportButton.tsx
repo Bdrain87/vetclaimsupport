@@ -68,12 +68,12 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
     doc.roundedRect(20, yPos, pageWidth - 40, 40, 2, 2, 'F');
     
     const summaryItems = [
-      sections.serviceHistory ? { value: data.serviceHistory.length, label: 'Service Entries' } : null,
-      sections.medicalVisits ? { value: data.medicalVisits.length, label: 'Medical Visits' } : null,
-      sections.symptoms ? { value: data.symptoms.length, label: 'Symptom Entries' } : null,
-      sections.exposures ? { value: data.exposures.length, label: 'Exposures' } : null,
-      sections.medications ? { value: data.medications.length, label: 'Medications' } : null,
-      sections.buddyContacts ? { value: data.buddyContacts.length, label: 'Buddy Contacts' } : null,
+      sections.serviceHistory ? { value: (data.serviceHistory || []).length, label: 'Service Entries' } : null,
+      sections.medicalVisits ? { value: (data.medicalVisits || []).length, label: 'Medical Visits' } : null,
+      sections.symptoms ? { value: (data.symptoms || []).length, label: 'Symptom Entries' } : null,
+      sections.exposures ? { value: (data.exposures || []).length, label: 'Exposures' } : null,
+      sections.medications ? { value: (data.medications || []).length, label: 'Medications' } : null,
+      sections.buddyContacts ? { value: (data.buddyContacts || []).length, label: 'Buddy Contacts' } : null,
     ].filter(Boolean) as { value: number; label: string }[];
     
     if (summaryItems.length > 0) {
@@ -126,7 +126,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
     }
 
     // Service History Section
-    if (sections.serviceHistory && data.serviceHistory.length > 0) {
+    if (sections.serviceHistory && (data.serviceHistory || []).length > 0) {
       yPos = checkPageBreak(40);
       doc.setFontSize(14);
       doc.setTextColor(...colors.secondary);
@@ -166,7 +166,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
     }
 
     // Medical Visits Section
-    if (sections.medicalVisits && data.medicalVisits.length > 0) {
+    if (sections.medicalVisits && (data.medicalVisits || []).length > 0) {
       yPos = checkPageBreak(50);
       doc.setFontSize(14);
       doc.setTextColor(...colors.secondary);
@@ -212,7 +212,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
     }
 
     // Symptoms Section
-    if (sections.symptoms && data.symptoms.length > 0) {
+    if (sections.symptoms && (data.symptoms || []).length > 0) {
       yPos = checkPageBreak(50);
       const avgSeverity = (data.symptoms.reduce((sum, s) => sum + s.severity, 0) / data.symptoms.length).toFixed(1);
       
@@ -263,7 +263,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
     }
 
     // Medications Section
-    if (sections.medications && data.medications.length > 0) {
+    if (sections.medications && (data.medications || []).length > 0) {
       yPos = checkPageBreak(40);
       const currentMeds = data.medications.filter(m => m.stillTaking);
       
@@ -299,7 +299,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
     }
 
     // Exposures Section
-    if (sections.exposures && data.exposures.length > 0) {
+    if (sections.exposures && (data.exposures || []).length > 0) {
       yPos = checkPageBreak(40);
       
       doc.setFontSize(14);
@@ -445,7 +445,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
     }
 
     // Buddy Contacts Section
-    if (sections.buddyContacts && data.buddyContacts.length > 0) {
+    if (sections.buddyContacts && (data.buddyContacts || []).length > 0) {
       yPos = checkPageBreak(40);
       
       doc.setFontSize(14);

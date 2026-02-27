@@ -1043,7 +1043,7 @@ export default function CPExamPrepEnhanced() {
           </div>
 
           <div className="flex flex-wrap justify-center gap-3">
-            <Button variant="outline" className="gap-2" onClick={() => window.print()}>
+            <Button variant="outline" className="gap-2" onClick={() => { if (!('Capacitor' in window)) window.print(); }}>
               <Printer className="h-4 w-4" />
               Print Checklist
             </Button>

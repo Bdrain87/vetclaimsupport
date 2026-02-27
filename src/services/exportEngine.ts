@@ -1133,11 +1133,22 @@ export async function shareExport(result: ExportResult): Promise<void> {
   downloadExport(result);
 }
 
-export function downloadExport(result: ExportResult): void {
+export async function downloadExport(result: ExportResult): Promise<void> {
   const blob =
     result.content instanceof Blob
       ? result.content
       : new Blob([result.content], { type: result.mimeType });
+
+  // Use navigator.share on iOS/native (download attribute doesn't work in WKWebView)
+  if (navigator.share && navigator.canShare?.({ files: [new File([blob], result.filename)] })) {
+    try {
+      await navigator.share({ files: [new File([blob], result.filename, { type: result.mimeType })] });
+      return;
+    } catch {
+      // User cancelled or share failed — fall through to download
+    }
+  }
+
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;

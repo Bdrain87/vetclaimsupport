@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import useAppStore from '@/store/useAppStore';
 import { useProfileStore } from '@/store/useProfileStore';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { COMP_RATES_2026 } from '@/data/compRates2026';
 import { PageContainer } from '@/components/PageContainer';
 import { cn } from '@/lib/utils';
@@ -198,6 +199,7 @@ export default function Deadlines() {
   const intentToFileDate = useProfileStore((s) => s.intentToFileDate);
 
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [newType, setNewType] = useState<DeadlineType>('intent_to_file');
   const [newTitle, setNewTitle] = useState('');
   const [newDate, setNewDate] = useState('');
@@ -335,7 +337,7 @@ export default function Deadlines() {
                 <DeadlineCard
                   key={d.id}
                   deadline={d}
-                  onDelete={deleteDeadline}
+                  onDelete={setDeleteTarget}
                   onComplete={handleComplete}
                 />
               ))}
@@ -350,7 +352,7 @@ export default function Deadlines() {
                 <DeadlineCard
                   key={d.id}
                   deadline={d}
-                  onDelete={deleteDeadline}
+                  onDelete={setDeleteTarget}
                   onComplete={handleComplete}
                 />
               ))}
@@ -422,6 +424,16 @@ export default function Deadlines() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => { if (!open) setDeleteTarget(null); }}
+        title="Delete Deadline?"
+        description="This will permanently remove this deadline from your tracker."
+        confirmText="Delete"
+        variant="destructive"
+        onConfirm={() => { if (deleteTarget) deleteDeadline(deleteTarget); }}
+      />
     </PageContainer>
   );
 }
