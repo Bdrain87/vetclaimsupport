@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { Download, Upload, AlertTriangle, CheckCircle2, Trash2, Shield, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -14,7 +15,6 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
-import { useClaims } from '@/hooks/useClaims';
 import { getAllFileIds, getFileData, restoreFiles } from '@/lib/indexedDB';
 import { isEncryptionEnabled } from '@/utils/encryption';
 import { DATA_PRIVACY_COPY, BACKUP_COPY } from '@/data/legalCopy';
@@ -72,7 +72,7 @@ type BackupData = z.infer<typeof backupDataSchema>;
 
 export function DataBackup() {
   const { toast } = useToast();
-  const { data } = useClaims();
+  const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
@@ -98,10 +98,21 @@ export function DataBackup() {
         }
       }
 
+      // Export the full store state so nothing is lost (userConditions,
+      // conditionEvidenceChecks, formDrafts, dutyStations, etc.)
+      const fullState = useAppStore.getState();
+      // Strip functions — keep only serialisable data
+      const serializableState: Record<string, unknown> = {};
+      for (const [key, value] of Object.entries(fullState)) {
+        if (typeof value !== 'function') {
+          serializableState[key] = value;
+        }
+      }
+
       const backupData: BackupData = {
         version: BACKUP_VERSION,
         exportDate: new Date().toISOString(),
-        claimsData: data as unknown as Record<string, unknown>,
+        claimsData: serializableState,
         indexedDBFiles,
       };
 
@@ -212,7 +223,7 @@ export function DataBackup() {
       });
 
       await new Promise((resolve) => setTimeout(resolve, 500));
-      window.location.href = '/';
+      navigate('/', { replace: true });
     } catch {
       toast({
         title: 'Delete Failed',

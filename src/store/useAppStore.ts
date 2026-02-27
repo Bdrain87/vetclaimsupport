@@ -491,7 +491,7 @@ const useAppStore = create<AppState>()(
           return;
         }
         set((s) => ({
-          claimConditions: [...s.claimConditions, { ...condition, name: condition.name.trim(), id: generateId() }],
+          claimConditions: [...s.claimConditions, { ...condition, name: condition.name.trim(), id: (condition as { id?: string }).id || generateId() }],
         }));
       },
       updateClaimCondition: (id, condition) => {

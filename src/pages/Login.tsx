@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { signInWithEmail, signUpWithEmail, signInWithGoogle, signInWithApple, resetPassword } from '@/services/auth';
 import { supabase } from '@/lib/supabase';
@@ -295,9 +295,9 @@ export default function Login() {
 
           <p className="text-center text-white/20 text-xs">
             By continuing, you agree to our{' '}
-            <a href="/settings/terms" className="underline hover:text-white/40">Terms</a>{' '}
+            <Link to="/settings/terms" className="underline hover:text-white/40">Terms</Link>{' '}
             and{' '}
-            <a href="/settings/privacy" className="underline hover:text-white/40">Privacy Policy</a>.
+            <Link to="/settings/privacy" className="underline hover:text-white/40">Privacy Policy</Link>.
           </p>
         </div>
       </PageContainer>

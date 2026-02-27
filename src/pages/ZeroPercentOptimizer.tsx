@@ -200,6 +200,7 @@ function ConditionUpgradeCard({ conditionId, conditionName, currentRating }: {
 }
 
 export default function ZeroPercentOptimizer() {
+  const navigate = useNavigate();
   const userConditions = useAppStore((s) => s.userConditions);
 
   const lowRatedConditions = useMemo(() => {
@@ -253,7 +254,7 @@ export default function ZeroPercentOptimizer() {
               Add conditions rated at 0% or 10% to your profile to see upgrade paths with specific criteria,
               evidence recommendations, and exam tips.
             </p>
-            <Button variant="outline" onClick={() => window.location.href = '/claims'}>
+            <Button variant="outline" onClick={() => navigate('/claims')}>
               Add Conditions
             </Button>
           </CardContent>

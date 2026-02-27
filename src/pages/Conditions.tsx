@@ -230,7 +230,7 @@ export default function Conditions() {
     claimConditions.forEach((c) => {
       const matchingUserCondition = userConditions.find(uc => {
         const details = getConditionDetails(uc);
-        return details?.name.toLowerCase() === c.name.toLowerCase() || uc.conditionId === c.id;
+        return details?.name.toLowerCase() === c.name.toLowerCase() || uc.conditionId === c.id || uc.id === c.id;
       });
       if (matchingUserCondition?.claimStatus === 'approved') return;
       const missing: string[] = [];
@@ -238,7 +238,8 @@ export default function Conditions() {
       if (c.linkedSymptoms.length === 0) missing.push('Symptom logs');
       if (c.linkedBuddyContacts.length === 0) missing.push('Buddy statements');
       if (missing.length > 0) {
-        gaps.push({ conditionName: c.name, missing, conditionId: c.id });
+        // Use the userCondition ID for navigation (matches ConditionDetail param)
+        gaps.push({ conditionName: c.name, missing, conditionId: matchingUserCondition?.id || c.id });
       }
     });
     return gaps;

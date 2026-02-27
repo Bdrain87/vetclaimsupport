@@ -35,7 +35,7 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
       }
 
       const url = await startCheckout();
-      window.location.href = url;
+      window.open(url, '_blank');
     } catch (err) {
       console.error('Checkout failed:', err);
       toast({

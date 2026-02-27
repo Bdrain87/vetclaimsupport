@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { MobileHeader } from './components/MobileHeader';
 import { BottomTabBar } from './components/BottomTabBar';
@@ -468,12 +468,12 @@ function AppContent() {
               <p className="text-sm text-muted-foreground">
                 Create a free account to save your conditions, track health data, and access all 58 tools.
               </p>
-              <a
-                href="/auth"
+              <Link
+                to="/auth"
                 className="inline-block px-6 py-2.5 rounded-lg bg-gold text-black font-semibold hover:bg-[#E0B400] transition-colors"
               >
                 Sign Up Free
-              </a>
+              </Link>
             </div>
           </div>
         </div>

@@ -34,11 +34,9 @@ function AppStoreBadge() {
 
 function GooglePlayBadge() {
   return (
-    <a
-      href="#"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center opacity-70 hover:opacity-100 transition-opacity"
+    <span
+      className="inline-flex items-center opacity-50 cursor-default"
+      title="Coming soon to Google Play"
     >
       <svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
         <rect width="120" height="40" rx="6" fill="#000" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
@@ -51,7 +49,7 @@ function GooglePlayBadge() {
           <text x="38" y="28" fontSize="13" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="600" fill="#fff" letterSpacing="-0.01em">Google Play</text>
         </g>
       </svg>
-    </a>
+    </span>
   );
 }
 
