@@ -59,6 +59,7 @@ let syncInterval: ReturnType<typeof setInterval> | null = null;
 let currentStatus: SyncStatus = 'offline';
 let lastSyncedAt: string | null = null;
 let syncInProgress: Promise<void> | null = null;
+let consecutiveFailures = 0;
 const statusListeners = new Set<(status: SyncStatus) => void>();
 const SYNC_DEBOUNCE_MS = 60000; // 60 seconds — avoid hammering the server
 
@@ -107,12 +108,16 @@ export async function pullFromCloud(): Promise<void> {
 
   const userId = session.user.id;
 
-  // Pull profile data
-  const { data: profile } = await supabase
+  // Pull profile data (maybeSingle — new users may not have a row yet)
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', userId)
-    .single();
+    .maybeSingle();
+
+  if (profileError) {
+    console.error('[sync] pull profile failed', profileError.message, profileError);
+  }
 
   if (profile) {
     const profileStore = useProfileStore.getState();
@@ -154,8 +159,7 @@ export async function pullFromCloud(): Promise<void> {
     .eq('user_id', userId);
 
   if (conditionsError) {
-    console.error('[sync] pull conditions failed', conditionsError);
-    throw conditionsError;
+    console.error('[sync] pull conditions failed', conditionsError.message, conditionsError);
   }
 
   if (conditions && conditions.length > 0) {
@@ -257,8 +261,7 @@ export async function pullFromCloud(): Promise<void> {
     .eq('user_id', userId);
 
   if (healthLogsError) {
-    console.error('[sync] pull health logs failed', healthLogsError);
-    throw healthLogsError;
+    console.error('[sync] pull health logs failed', healthLogsError.message, healthLogsError);
   }
 
   if (healthLogs && healthLogs.length > 0) {
@@ -383,8 +386,8 @@ export async function pushToCloud(): Promise<void> {
     updated_at: new Date().toISOString(),
   });
   if (profilePushError) {
-    console.error('[sync] push profile failed', profilePushError);
-    throw profilePushError;
+    console.error('[sync] push profile failed', profilePushError.message, profilePushError);
+    pushErrors.push('profile');
   }
 
   // ------------------------------------------------------------------
@@ -472,7 +475,7 @@ export async function pushToCloud(): Promise<void> {
   useProfileStore.getState().setLastSyncedAt(lastSyncedAt);
 
   if (pushErrors.length > 0) {
-    throw new Error(`Partial sync failure: could not push ${pushErrors.join(', ')}`);
+    console.warn(`[sync] Partial push failure: ${pushErrors.join(', ')}`);
   }
 }
 
@@ -481,6 +484,14 @@ export async function syncNow(): Promise<void> {
 
   if (!navigator.onLine) {
     setStatus('offline');
+    return;
+  }
+
+  // Exponential backoff: skip sync if we've failed repeatedly
+  if (consecutiveFailures >= 3) {
+    const backoffMs = Math.min(SYNC_DEBOUNCE_MS * Math.pow(2, consecutiveFailures - 2), 600000);
+    // Let the interval handle eventual retry — don't pile on
+    console.warn(`[sync] Backing off after ${consecutiveFailures} failures (next retry in ~${Math.round(backoffMs / 1000)}s)`);
     return;
   }
 
@@ -496,14 +507,11 @@ export async function syncNow(): Promise<void> {
       await pullFromCloud();
       await pushToCloud();
       setStatus('synced');
-    } catch {
-      // Network errors, auth expiry, or unexpected failures. Individual
-      // push/pull operations log their own granular errors above; this catch
-      // handles truly fatal issues (e.g. no network mid-sync).
-      // Status is set to 'error' for any UI indicators — no toast to avoid
-      // spamming the user on every 60s retry cycle.
-      console.error('[sync] syncNow failed');
+      consecutiveFailures = 0;
+    } catch (err) {
+      console.error('[sync] syncNow failed:', err instanceof Error ? err.message : err);
       setStatus('error');
+      consecutiveFailures++;
     }
   };
 
@@ -540,6 +548,7 @@ export function stopSync(): void {
 }
 
 function handleOnline() {
+  consecutiveFailures = 0; // Reset backoff on reconnect
   syncNow().catch(() => { /* handled inside syncNow */ });
 }
 
