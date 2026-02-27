@@ -96,7 +96,7 @@ export default function BuddyStatements() {
   }), [fullName, conditionSummary]);
 
   const {
-    formData: statementData, updateField: updateStatementField, _setFormData,
+    formData: statementData, updateField: updateStatementField, setFormData: _setFormData,
     currentStep, setCurrentStep, draftRestored, clearDraft, lastSaved,
   } = useToolDraft({
     toolId: 'tool:buddy-statement',

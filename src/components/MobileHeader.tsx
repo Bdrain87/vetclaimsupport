@@ -101,6 +101,8 @@ export function MobileHeader() {
     import('@/data/conditions').then(({ getConditionById }) => {
       const details = getConditionById(uc.conditionId);
       setDynamicTitle(details?.abbreviation || details?.name || 'Condition Detail');
+    }).catch(() => {
+      setDynamicTitle('Condition Detail');
     });
   }, [location.pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -9,8 +9,9 @@ interface AIContentBadgeProps {
 }
 
 export function AIContentBadge({ className, timestamp, variant = 'banner' }: AIContentBadgeProps) {
-  const formattedTime = timestamp
-    ? new Date(timestamp).toLocaleString(undefined, {
+  const parsed = timestamp ? new Date(timestamp) : null;
+  const formattedTime = parsed && !isNaN(parsed.getTime())
+    ? parsed.toLocaleString(undefined, {
         month: 'short',
         day: 'numeric',
         year: 'numeric',

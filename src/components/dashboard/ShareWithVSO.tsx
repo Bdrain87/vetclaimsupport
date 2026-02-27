@@ -262,28 +262,28 @@ export function ShareWithVSO() {
                 <div className="flex items-center gap-2 p-2 bg-muted/30 rounded-md">
                   <Stethoscope className="h-4 w-4 text-gold" />
                   <div>
-                    <p className="font-medium text-foreground">{data.medicalVisits.length}</p>
+                    <p className="font-medium text-foreground">{(data.medicalVisits || []).length}</p>
                     <p className="text-xs text-muted-foreground">Medical Visits</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 p-2 bg-muted/30 rounded-md">
                   <Pill className="h-4 w-4 text-gold" />
                   <div>
-                    <p className="font-medium text-foreground">{data.medications.length}</p>
+                    <p className="font-medium text-foreground">{(data.medications || []).length}</p>
                     <p className="text-xs text-muted-foreground">Medications</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 p-2 bg-muted/30 rounded-md">
                   <Activity className="h-4 w-4 text-gold" />
                   <div>
-                    <p className="font-medium text-foreground">{data.symptoms.length}</p>
+                    <p className="font-medium text-foreground">{(data.symptoms || []).length}</p>
                     <p className="text-xs text-muted-foreground">Symptoms Logged</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 p-2 bg-muted/30 rounded-md">
                   <Users className="h-4 w-4 text-gold" />
                   <div>
-                    <p className="font-medium text-foreground">{data.buddyContacts.length}</p>
+                    <p className="font-medium text-foreground">{(data.buddyContacts || []).length}</p>
                     <p className="text-xs text-muted-foreground">Buddy Contacts</p>
                   </div>
                 </div>
@@ -298,13 +298,13 @@ export function ShareWithVSO() {
               </div>
               <div className="pl-6 space-y-1 text-sm text-muted-foreground">
                 <p>
-                  <span className="font-medium text-foreground">{documentsObtained}</span> of {data.documents.length} documents obtained/submitted
+                  <span className="font-medium text-foreground">{documentsObtained}</span> of {(data.documents || []).length} documents obtained/submitted
                 </p>
                 <p>
-                  <span className="font-medium text-foreground">{buddyStatementsReceived}</span> of {data.buddyContacts.length} buddy statements received
+                  <span className="font-medium text-foreground">{buddyStatementsReceived}</span> of {(data.buddyContacts || []).length} buddy statements received
                 </p>
                 <p>
-                  <span className="font-medium text-foreground">{data.exposures.length}</span> exposures documented
+                  <span className="font-medium text-foreground">{(data.exposures || []).length}</span> exposures documented
                 </p>
               </div>
             </div>

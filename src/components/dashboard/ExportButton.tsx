@@ -505,38 +505,50 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
       
       // Add service history
       (data.serviceHistory || []).forEach(entry => {
-        events.push({
-          date: new Date(entry.startDate),
-          type: 'Service',
-          description: `Started: ${entry.base || entry.unit || 'Duty Station'}`,
-        });
-        if (entry.endDate) {
+        const sd = new Date(entry.startDate);
+        if (!isNaN(sd.getTime())) {
           events.push({
-            date: new Date(entry.endDate),
+            date: sd,
             type: 'Service',
-            description: `Ended: ${entry.base || entry.unit || 'Duty Station'}`,
+            description: `Started: ${entry.base || entry.unit || 'Duty Station'}`,
+          });
+        }
+        if (entry.endDate) {
+          const ed = new Date(entry.endDate);
+          if (!isNaN(ed.getTime())) {
+            events.push({
+              date: ed,
+              type: 'Service',
+              description: `Ended: ${entry.base || entry.unit || 'Duty Station'}`,
+            });
+          }
+        }
+      });
+
+      // Add medical visits
+      (data.medicalVisits || []).slice(0, 5).forEach(visit => {
+        const vd = new Date(visit.date);
+        if (!isNaN(vd.getTime())) {
+          events.push({
+            date: vd,
+            type: 'Medical',
+            description: visit.reason || visit.diagnosis || 'Medical Visit',
           });
         }
       });
-      
-      // Add medical visits
-      (data.medicalVisits || []).slice(0, 5).forEach(visit => {
-        events.push({
-          date: new Date(visit.date),
-          type: 'Medical',
-          description: visit.reason || visit.diagnosis || 'Medical Visit',
-        });
-      });
-      
+
       // Add severe symptoms
       (data.symptoms || []).filter(s => s.severity >= 7).slice(0, 5).forEach(symptom => {
-        events.push({
-          date: new Date(symptom.date),
-          type: 'Symptom',
-          description: `${symptom.symptom} (Severity: ${symptom.severity}/10)`,
-        });
+        const sd = new Date(symptom.date);
+        if (!isNaN(sd.getTime())) {
+          events.push({
+            date: sd,
+            type: 'Symptom',
+            description: `${symptom.symptom} (Severity: ${symptom.severity}/10)`,
+          });
+        }
       });
-      
+
       // Sort by date
       events.sort((a, b) => a.date.getTime() - b.date.getTime());
       

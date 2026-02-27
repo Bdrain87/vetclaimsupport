@@ -213,6 +213,7 @@ function FieldCard({ field, formId: _formId, savedValue, onSave }: FieldCardProp
 export default function FormGuideDetail() {
   const { formId } = useParams<{ formId: string }>();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const formDrafts = useAppStore((s) => s.formDrafts);
   const setFormDraft = useAppStore((s) => s.setFormDraft);
   const clearFormDraft = useAppStore((s) => s.clearFormDraft);
