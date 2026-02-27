@@ -134,6 +134,7 @@ export default function Sleep() {
     }
     setIsOpen(false);
     resetForm();
+    toast({ title: 'Sleep entry saved', description: 'Regular sleep logs strengthen your rating evidence.' });
   };
 
   const handleEdit = (entry: SleepEntry) => {

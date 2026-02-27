@@ -13,6 +13,7 @@ import {
   Check,
   ExternalLink,
   Scale,
+  ArrowRight,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -214,6 +215,68 @@ const APPEAL_PATHWAYS: AppealPathway[] = [
     learnMoreUrl: 'https://www.va.gov/decision-reviews/board-appeal/',
   },
 ];
+
+// ---------------------------------------------------------------------------
+// Recommended actions based on denial patterns
+// ---------------------------------------------------------------------------
+
+const PATTERN_ACTIONS: Record<string, { label: string; description: string; route: string }[]> = {
+  NEXUS: [
+    { label: 'Build Doctor Summary', description: 'Create a medical opinion outline for your provider', route: '/prep/doctor-summary' },
+    { label: 'Write Personal Statement', description: 'Document your service connection story', route: '/prep/personal-statement' },
+  ],
+  NO_DX: [
+    { label: 'Log Medical Visit', description: 'Record healthcare visits and get a current diagnosis', route: '/health/visits' },
+    { label: 'Log Symptoms', description: 'Document current symptoms and severity', route: '/health/symptoms' },
+  ],
+  NO_EVENT: [
+    { label: 'Build Buddy Statement', description: 'Get witness statements about in-service events', route: '/prep/buddy-statement' },
+    { label: 'Write Personal Statement', description: 'Detail the in-service event in your own words', route: '/prep/personal-statement' },
+  ],
+  PREEXIST: [
+    { label: 'Log Symptoms', description: 'Document how symptoms worsened since service', route: '/health/symptoms' },
+    { label: 'Build Doctor Summary', description: 'Get medical opinion on service aggravation', route: '/prep/doctor-summary' },
+  ],
+  ZERO_PCT: [
+    { label: 'Check Evidence Strength', description: 'See how evidence aligns with rating criteria', route: '/claims/evidence-strength' },
+    { label: 'Log Symptoms', description: 'Document symptoms matching higher rating criteria', route: '/health/symptoms' },
+  ],
+  CP_EXAM: [
+    { label: 'Exam Day Guide', description: 'Review what to say and bring to your C&P exam', route: '/prep/exam-day' },
+    { label: 'Build Doctor Summary', description: 'Get medical opinion addressing exam findings', route: '/prep/doctor-summary' },
+  ],
+  SECONDARY: [
+    { label: 'Review Conditions', description: 'Add or manage your claimed conditions', route: '/claims' },
+    { label: 'Build Doctor Summary', description: 'Get opinion linking conditions together', route: '/prep/doctor-summary' },
+  ],
+  PRESUMPTIVE: [
+    { label: 'Review Conditions', description: 'Add presumptive conditions to your claim', route: '/claims' },
+    { label: 'Log Medical Visit', description: 'Document your current diagnosis', route: '/health/visits' },
+  ],
+  INCREASE: [
+    { label: 'Check Evidence Strength', description: 'See criteria for the next higher rating', route: '/claims/evidence-strength' },
+    { label: 'Log Symptoms', description: 'Document worsened symptoms for increased rating', route: '/health/symptoms' },
+  ],
+};
+
+function getRecommendedActions(patterns: DenialPattern[]): { label: string; description: string; route: string }[] {
+  const actions: { label: string; description: string; route: string }[] = [];
+  const seenRoutes = new Set<string>();
+
+  for (const p of patterns) {
+    const patternActions = PATTERN_ACTIONS[p.code];
+    if (patternActions) {
+      for (const action of patternActions) {
+        if (!seenRoutes.has(action.route)) {
+          actions.push(action);
+          seenRoutes.add(action.route);
+        }
+      }
+    }
+  }
+
+  return actions;
+}
 
 // ---------------------------------------------------------------------------
 // Parser: extract structured info from pasted decision letter text
@@ -590,6 +653,34 @@ export default function DecisionDecoder() {
               ))}
             </div>
           )}
+
+          {/* Recommended Next Steps */}
+          {parsed.matchedPatterns.length > 0 && (() => {
+            const actions = getRecommendedActions(parsed.matchedPatterns);
+            if (actions.length === 0) return null;
+            return (
+              <div className="space-y-2">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1">
+                  Recommended Next Steps
+                </p>
+                <div className="grid gap-2">
+                  {actions.map((action) => (
+                    <button
+                      key={action.route}
+                      onClick={() => navigate(action.route)}
+                      className="flex items-center gap-3 p-3 rounded-xl border border-primary/20 bg-primary/5 hover:bg-primary/10 active:scale-[0.98] transition-all text-left"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-foreground">{action.label}</p>
+                        <p className="text-xs text-muted-foreground">{action.description}</p>
+                      </div>
+                      <ArrowRight className="h-4 w-4 text-muted-foreground shrink-0" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
 
           {/* Appeal pathways — educational only */}
           <div className="space-y-2">

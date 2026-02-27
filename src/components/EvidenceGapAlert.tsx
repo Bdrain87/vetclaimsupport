@@ -133,22 +133,22 @@ export function EvidenceGapAlert({ conditionId, conditionName }: {
 }) {
   const navigate = useNavigate();
   const checkedItems = useAppStore((s) => s.conditionEvidenceChecks[conditionId] || []);
-  const buddyContacts = useAppStore((s) => s.buddyContacts);
-  const symptoms = useAppStore((s) => s.symptoms);
-  const sleepEntries = useAppStore((s) => s.sleepEntries);
-  const medicalVisits = useAppStore((s) => s.medicalVisits);
-  const medications = useAppStore((s) => s.medications);
-  const uploadedDocuments = useAppStore((s) => s.uploadedDocuments);
+  const hasBuddyContacts = useAppStore((s) => s.buddyContacts.length > 0);
+  const hasSymptomLogs = useAppStore((s) => s.symptoms.length > 0);
+  const hasSleepLogs = useAppStore((s) => s.sleepEntries.length > 0);
+  const hasMedicalVisits = useAppStore((s) => s.medicalVisits.length > 0);
+  const hasMedications = useAppStore((s) => s.medications.length > 0);
+  const hasUploadedDocs = useAppStore((s) => s.uploadedDocuments.length > 0);
 
   const state: AppState = useMemo(() => ({
     checkedItems,
-    hasBuddyContacts: buddyContacts.length > 0,
-    hasSymptomLogs: symptoms.length > 0,
-    hasSleepLogs: sleepEntries.length > 0,
-    hasMedicalVisits: medicalVisits.length > 0,
-    hasMedications: medications.length > 0,
-    hasUploadedDocs: uploadedDocuments.length > 0,
-  }), [checkedItems, buddyContacts.length, symptoms.length, sleepEntries.length, medicalVisits.length, medications.length, uploadedDocuments.length]);
+    hasBuddyContacts,
+    hasSymptomLogs,
+    hasSleepLogs,
+    hasMedicalVisits,
+    hasMedications,
+    hasUploadedDocs,
+  }), [checkedItems, hasBuddyContacts, hasSymptomLogs, hasSleepLogs, hasMedicalVisits, hasMedications, hasUploadedDocs]);
 
   const analysis = useMemo(() => {
     const results = EVIDENCE_REQUIREMENTS.map(req => ({

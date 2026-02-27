@@ -80,12 +80,36 @@ interface ConditionCardProps {
     dateAdded?: string;
   };
   conditionDetails: VACondition | null;
+  readinessScore?: number;
   onView: () => void;
   onRemove: () => void;
   onNavigate?: (path: string) => void;
 }
 
-function ConditionCard({ userCondition, conditionDetails, onView, onRemove, onNavigate }: ConditionCardProps) {
+function ReadinessRing({ score }: { score: number }) {
+  const r = 14;
+  const circ = 2 * Math.PI * r;
+  const offset = circ - (score / 100) * circ;
+  const color = score >= 70 ? 'text-green-500' : score >= 40 ? 'text-gold' : 'text-red-500';
+  return (
+    <div className="relative flex-shrink-0" title={`Readiness: ${score}%`}>
+      <svg width="36" height="36" viewBox="0 0 36 36">
+        <circle cx="18" cy="18" r={r} fill="none" stroke="currentColor" strokeWidth="3" className="text-muted/30" />
+        <circle
+          cx="18" cy="18" r={r} fill="none" strokeWidth="3" strokeLinecap="round"
+          stroke="currentColor" className={color}
+          strokeDasharray={circ} strokeDashoffset={offset}
+          transform="rotate(-90 18 18)"
+        />
+      </svg>
+      <span className={`absolute inset-0 flex items-center justify-center text-[9px] font-bold ${color}`}>
+        {score}
+      </span>
+    </div>
+  );
+}
+
+function ConditionCard({ userCondition, conditionDetails, readinessScore, onView, onRemove, onNavigate }: ConditionCardProps) {
   const evidenceProgress = userCondition.evidenceTotal && userCondition.evidenceTotal > 0
     ? (userCondition.evidenceChecked || 0) / userCondition.evidenceTotal * 100
     : 0;
@@ -165,7 +189,12 @@ function ConditionCard({ userCondition, conditionDetails, onView, onRemove, onNa
             )}
           </div>
 
-          <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
+          <div className="flex items-center gap-1 flex-shrink-0">
+            {readinessScore !== undefined && userCondition.claimStatus !== 'approved' && (
+              <ReadinessRing score={readinessScore} />
+            )}
+            <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
+          </div>
         </div>
 
         {/* Quick Actions + Remove */}
@@ -223,6 +252,19 @@ export default function Conditions() {
     () => ClaimIntelligence.getRecommendations(profile, userConditions, data),
     [profile, userConditions, data]
   );
+
+  const readinessScores = useMemo(() => {
+    const scores: Record<string, number> = {};
+    for (const uc of userConditions) {
+      if (uc.claimStatus === 'approved') continue;
+      const details = getConditionDetails(uc);
+      if (details) {
+        const r = ClaimIntelligence.getConditionReadiness(details.name, data);
+        scores[uc.id] = r.overallScore;
+      }
+    }
+    return scores;
+  }, [userConditions, data, getConditionDetails]);
 
   const evidenceGaps = useMemo(() => {
     const claimConditions = data.claimConditions || [];
@@ -575,6 +617,7 @@ export default function Conditions() {
                       evidenceTotal: EVIDENCE_TOTAL,
                     }}
                     conditionDetails={details ?? null}
+                    readinessScore={readinessScores[uc.id]}
                     onView={() => handleViewCondition(uc.id)}
                     onRemove={() => handleRemoveCondition(uc.id)}
                     onNavigate={(path) => navigate(path)}
@@ -599,6 +642,7 @@ export default function Conditions() {
                               evidenceTotal: EVIDENCE_TOTAL,
                             }}
                             conditionDetails={secDetails ?? null}
+                            readinessScore={readinessScores[sec.id]}
                             onView={() => handleViewCondition(sec.id)}
                             onRemove={() => handleRemoveCondition(sec.id)}
                             onNavigate={(path) => navigate(path)}
@@ -626,6 +670,7 @@ export default function Conditions() {
                     evidenceTotal: EVIDENCE_TOTAL,
                   }}
                   conditionDetails={details ?? null}
+                  readinessScore={readinessScores[uc.id]}
                   onView={() => handleViewCondition(uc.id)}
                   onRemove={() => handleRemoveCondition(uc.id)}
                   onNavigate={(path) => navigate(path)}

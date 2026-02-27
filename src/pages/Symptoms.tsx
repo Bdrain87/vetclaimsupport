@@ -305,6 +305,7 @@ export default function Symptoms() {
       
       setIsOpen(false);
       resetForm();
+      toast({ title: 'Symptom logged', description: 'Consistent logging builds the evidence trail VA raters look for.' });
     } catch {
       toast({
         title: 'Save Failed',

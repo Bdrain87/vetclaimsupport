@@ -12,6 +12,8 @@ import {
   AlertTriangle,
   TrendingUp,
   ExternalLink,
+  FileText,
+  Stethoscope,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -413,7 +415,7 @@ export default function EvidenceStrength() {
                   )}
 
                   {/* Action buttons */}
-                  <div className="flex gap-2 pt-1">
+                  <div className="flex flex-wrap gap-2 pt-1">
                     <Button
                       variant="outline"
                       size="sm"
@@ -425,6 +427,30 @@ export default function EvidenceStrength() {
                     >
                       <Activity className="h-3 w-3" />
                       Log Symptoms
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-xs gap-1.5"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/prep/personal-statement?condition=${encodeURIComponent(name)}`);
+                      }}
+                    >
+                      <FileText className="h-3 w-3" />
+                      Write Statement
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-xs gap-1.5"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate('/prep/doctor-summary');
+                      }}
+                    >
+                      <Stethoscope className="h-3 w-3" />
+                      Doctor Summary
                     </Button>
                     {criteria.scheduleUrl && (
                       <Button

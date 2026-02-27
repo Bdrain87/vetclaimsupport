@@ -311,6 +311,11 @@ export interface QuickLogEntry {
   overallFeeling: number; // 1-10
   hadFlareUp: boolean;
   flareUpNote: string;
+  // Enhanced flare-up fields (optional for backwards compat)
+  flareUpDuration?: 'less-than-1hr' | '1-4hrs' | '4-8hrs' | 'full-day' | 'multi-day';
+  flareUpSeverity?: number; // 1-10
+  flareUpTriggers?: string[];
+  flareUpActivitiesAffected?: string;
   cpapUsed?: boolean;
   painLevel?: number;
   mood?: 'good' | 'okay' | 'bad';
@@ -319,6 +324,47 @@ export interface QuickLogEntry {
   createdAt: string;
   conditionTags?: string[];
 }
+
+export type FlareUpDuration = QuickLogEntry['flareUpDuration'];
+
+export const FLARE_UP_TRIGGERS = [
+  'Weather change',
+  'Physical activity',
+  'Stress',
+  'Poor sleep',
+  'Standing/walking',
+  'Sitting too long',
+  'Lifting',
+  'Cold exposure',
+  'Heat exposure',
+] as const;
+
+export const FLARE_UP_DURATIONS: Record<NonNullable<FlareUpDuration>, string> = {
+  'less-than-1hr': 'Less than 1 hour',
+  '1-4hrs': '1–4 hours',
+  '4-8hrs': '4–8 hours',
+  'full-day': 'Full day',
+  'multi-day': 'Multiple days',
+};
+
+// Employment impact tracking for TDIU / increased rating evidence
+export interface EmploymentImpactEntry {
+  id: string;
+  date: string;
+  type: 'missed-work' | 'left-early' | 'reduced-duties' | 'unable-to-perform' | 'accommodation-needed';
+  hoursLost: number;
+  condition: string;
+  description: string;
+  notes?: string;
+}
+
+export const EMPLOYMENT_IMPACT_TYPES: Record<EmploymentImpactEntry['type'], string> = {
+  'missed-work': 'Missed work entirely',
+  'left-early': 'Had to leave early',
+  'reduced-duties': 'Could not perform full duties',
+  'unable-to-perform': 'Unable to perform specific task',
+  'accommodation-needed': 'Needed accommodation',
+};
 
 export interface ClaimsData {
   medicalVisits: MedicalVisit[];

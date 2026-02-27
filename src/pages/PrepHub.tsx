@@ -4,7 +4,7 @@ import {
   ClipboardCheck, FileText, Users, FileSignature, AlertTriangle,
   BookOpen, ClipboardList, Languages, DollarSign, Package, FileCheck,
   Calculator, Scale, Navigation, Clock, Shield, Wrench, Share2, TrendingUp, Target, FileSearch,
-  Search,
+  Search, Briefcase, Stethoscope,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PageContainer } from '@/components/PageContainer';
@@ -67,6 +67,8 @@ const toolCategories: { title: string; tools: ToolItem[] }[] = [
     tools: [
       { label: 'Claim Packet Builder', icon: Package, route: '/prep/packet', description: 'Compile your full claim packet' },
       { label: 'Shareable Summary', icon: Share2, route: '/prep/summary', description: 'Share or export your claims overview' },
+      { label: 'VSO/Attorney Packet', icon: Briefcase, route: '/prep/vso-packet', description: 'Full evidence summary for your representative' },
+      { label: 'Doctor Prep Packet', icon: Stethoscope, route: '/prep/doctor-packet', description: 'Pre-appointment summary for your clinician' },
     ],
   },
 ];

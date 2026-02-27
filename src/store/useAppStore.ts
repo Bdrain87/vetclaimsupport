@@ -7,6 +7,7 @@ import type {
   UploadedDocument, SleepEntry, ClaimCondition, QuickLogEntry,
   Deadline, PTSDSymptomEntry, CombatEntry, MajorEvent,
   DeploymentEntry, ApprovedCondition, JourneyProgress,
+  EmploymentImpactEntry,
 } from '@/types/claims';
 import type { EvidenceDocument, AttachableEntryType } from '@/types/documents';
 import type { ClaimDocument } from '@/types/claimDocuments';
@@ -101,6 +102,7 @@ interface AppState {
   approvedConditions: ApprovedCondition[];
   journeyProgress: JourneyProgress;
   dutyStations: DutyStation[];
+  employmentImpactEntries: EmploymentImpactEntry[];
 
   // --- Form Guide Drafts ---
   formDrafts: Record<string, Record<string, string> & { lastModified: string }>;
@@ -226,8 +228,12 @@ interface AppState {
   setFormDraft: (formId: string, fieldId: string, value: string) => void;
   clearFormDraft: (formId: string) => void;
 
+  // Employment Impact
+  addEmploymentImpact: (entry: Omit<EmploymentImpactEntry, 'id'>) => void;
+  deleteEmploymentImpact: (id: string) => void;
+
   // Dashboard Quick Log (convenience)
-  addDashboardQuickLog: (pain: number, mood: 'good' | 'okay' | 'bad', condition?: string, notes?: string, date?: string) => void;
+  addDashboardQuickLog: (pain: number, mood: 'good' | 'okay' | 'bad', condition?: string, notes?: string, date?: string, flareUp?: { hadFlareUp: boolean; duration?: string; severity?: number; triggers?: string[]; activitiesAffected?: string; note?: string }) => void;
 
   // ========== USER CONDITIONS METHODS ==========
 
@@ -306,6 +312,7 @@ const initialState = {
   approvedConditions: [] as ApprovedCondition[],
   journeyProgress: { currentPhase: 0, completedChecklist: {} } as JourneyProgress,
   dutyStations: [] as DutyStation[],
+  employmentImpactEntries: [] as EmploymentImpactEntry[],
 
   // Form Guide Drafts
   formDrafts: {} as Record<string, Record<string, string> & { lastModified: string }>,
@@ -577,14 +584,26 @@ const useAppStore = create<AppState>()(
         return { formDrafts: rest };
       }),
 
+      // Employment Impact
+      addEmploymentImpact: (entry) => set((s) => ({
+        employmentImpactEntries: [...s.employmentImpactEntries, { ...entry, id: generateId() }],
+      })),
+      deleteEmploymentImpact: (id) => set((s) => ({
+        employmentImpactEntries: s.employmentImpactEntries.filter((e) => e.id !== id),
+      })),
+
       // Dashboard Quick Log (convenience)
-      addDashboardQuickLog: (pain, mood, condition, notes, date) => set((s) => ({
+      addDashboardQuickLog: (pain, mood, condition, notes, date, flareUp) => set((s) => ({
         quickLogs: [...s.quickLogs, {
           id: generateId(),
           date: date || new Date().toISOString(),
           overallFeeling: pain,
-          hadFlareUp: false,
-          flareUpNote: notes || '',
+          hadFlareUp: flareUp?.hadFlareUp ?? false,
+          flareUpNote: flareUp?.note || '',
+          flareUpDuration: flareUp?.duration as QuickLogEntry['flareUpDuration'],
+          flareUpSeverity: flareUp?.severity,
+          flareUpTriggers: flareUp?.triggers,
+          flareUpActivitiesAffected: flareUp?.activitiesAffected,
           painLevel: pain,
           mood,
           condition: condition || 'general',

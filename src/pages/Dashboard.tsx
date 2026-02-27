@@ -193,19 +193,32 @@ export default function Dashboard() {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   });
+  const [hadFlareUp, setHadFlareUp] = useState(false);
+  const [flareUpDuration, setFlareUpDuration] = useState('');
+  const [flareUpSeverity, setFlareUpSeverity] = useState(7);
+  const [flareUpTriggers, setFlareUpTriggers] = useState<string[]>([]);
+  const [flareUpActivities, setFlareUpActivities] = useState('');
 
   const handleSaveQuickLog = useCallback(() => {
     if (!selectedMood) return;
-    addDashboardQuickLog(painLevel, selectedMood, logCondition, logNotes, logDate);
+    addDashboardQuickLog(
+      painLevel, selectedMood, logCondition, logNotes, logDate,
+      hadFlareUp ? { hadFlareUp: true, duration: flareUpDuration, severity: flareUpSeverity, triggers: flareUpTriggers, activitiesAffected: flareUpActivities } : undefined,
+    );
     setLogSaved(true);
     setTimeout(() => setLogSaved(false), 2000);
     setPainLevel(5);
     setSelectedMood(null);
     setLogCondition('general');
     setLogNotes('');
+    setHadFlareUp(false);
+    setFlareUpDuration('');
+    setFlareUpSeverity(7);
+    setFlareUpTriggers([]);
+    setFlareUpActivities('');
     const d = new Date();
     setLogDate(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`);
-  }, [painLevel, selectedMood, logCondition, logNotes, logDate, addDashboardQuickLog]);
+  }, [painLevel, selectedMood, logCondition, logNotes, logDate, hadFlareUp, flareUpDuration, flareUpSeverity, flareUpTriggers, flareUpActivities, addDashboardQuickLog]);
 
   const displayName =profile.firstName
     ? `${profile.firstName}${profile.lastName ? ' ' + profile.lastName : ''}`
@@ -807,6 +820,83 @@ export default function Dashboard() {
                 placeholder="Symptoms, triggers, activities affected..."
                 className="min-h-[60px] resize-none text-sm"
               />
+            </div>
+
+            {/* Flare-Up Toggle */}
+            <div className="space-y-2">
+              <button
+                type="button"
+                onClick={() => setHadFlareUp(!hadFlareUp)}
+                className={cn(
+                  'w-full flex items-center gap-2 px-3 py-2 rounded-lg border text-sm transition-colors',
+                  hadFlareUp
+                    ? 'border-destructive/30 bg-destructive/5 text-foreground'
+                    : 'border-border bg-secondary text-muted-foreground hover:bg-accent/50'
+                )}
+              >
+                <AlertTriangle className={cn('h-4 w-4', hadFlareUp ? 'text-destructive' : 'text-muted-foreground')} />
+                <span className="font-medium">{hadFlareUp ? 'Flare-up reported' : 'Had a flare-up?'}</span>
+              </button>
+              {hadFlareUp && (
+                <div className="space-y-2 p-3 rounded-lg border border-destructive/20 bg-destructive/5">
+                  <div className="space-y-1">
+                    <label className="text-xs text-muted-foreground">Duration</label>
+                    <Select value={flareUpDuration} onValueChange={setFlareUpDuration}>
+                      <SelectTrigger className="h-9 text-sm">
+                        <SelectValue placeholder="How long?" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="less-than-1hr">Less than 1 hour</SelectItem>
+                        <SelectItem value="1-4hrs">1–4 hours</SelectItem>
+                        <SelectItem value="4-8hrs">4–8 hours</SelectItem>
+                        <SelectItem value="full-day">Full day</SelectItem>
+                        <SelectItem value="multi-day">Multiple days</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs text-muted-foreground">Flare severity</label>
+                      <span className="text-xs font-bold text-foreground">{flareUpSeverity}/10</span>
+                    </div>
+                    <Slider
+                      value={[flareUpSeverity]}
+                      onValueChange={([v]) => setFlareUpSeverity(v)}
+                      min={1} max={10} step={1}
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs text-muted-foreground">Triggers (tap to select)</label>
+                    <div className="flex flex-wrap gap-1">
+                      {['Weather', 'Activity', 'Stress', 'Sleep', 'Standing', 'Sitting', 'Lifting', 'Cold', 'Heat'].map((t) => (
+                        <button
+                          key={t}
+                          type="button"
+                          onClick={() => setFlareUpTriggers((prev) => prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t])}
+                          className={cn(
+                            'text-[11px] px-2 py-1 rounded-full border transition-colors',
+                            flareUpTriggers.includes(t)
+                              ? 'border-primary bg-primary/10 text-primary'
+                              : 'border-border bg-secondary text-muted-foreground'
+                          )}
+                        >
+                          {t}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs text-muted-foreground">Activities affected</label>
+                    <Input
+                      value={flareUpActivities}
+                      onChange={(e) => setFlareUpActivities(e.target.value)}
+                      placeholder="e.g., couldn't drive, missed work..."
+                      className="h-9 text-sm"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Save Button */}

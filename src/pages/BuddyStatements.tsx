@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { exportBuddyContacts, exportBuddyStatement } from '@/utils/pdfExport';
 import { saveToVault } from '@/utils/vaultAutoSave';
+import { markJourneyItem } from '@/utils/journeySync';
 import { ToastAction } from '@/components/ui/toast';
 import { DocumentUploader } from '@/components/documents/DocumentUploader';
 import { useToast } from '@/hooks/use-toast';
@@ -246,6 +247,7 @@ Date: ${today}`;
     try {
       const statement = generateStatement();
       await exportBuddyStatement(statement, statementData.witnessName);
+      markJourneyItem('buddy-statements');
       const condition = statementData.conditionWitnessed || '';
       saveToVault({
         documentType: 'buddy-statement',

@@ -101,6 +101,8 @@ const CPExamPacket = lazyWithRetry(() => import('./pages/CPExamPacket'));
 const Combination = lazyWithRetry(() => import('./components/UnifiedRatingCalculator'));
 const ClaimJourney = lazyWithRetry(() => import('./pages/ClaimJourney'));
 const HealthLog = lazyWithRetry(() => import('./pages/HealthLog'));
+const WorkImpact = lazyWithRetry(() => import('./pages/WorkImpact'));
+const HealthTrends = lazyWithRetry(() => import('./pages/HealthTrends'));
 // Hub pages
 const HealthHub = lazyWithRetry(() => import('./pages/HealthHub'));
 const PrepHub = lazyWithRetry(() => import('./pages/PrepHub'));
@@ -124,6 +126,8 @@ const DeadlinesPage = lazyWithRetry(() => import('./pages/Deadlines'));
 const ShareableSummary = lazyWithRetry(() => import('./pages/ShareableSummary'));
 const EvidenceStrength = lazyWithRetry(() => import('./pages/EvidenceStrength'));
 const DecisionDecoder = lazyWithRetry(() => import('./pages/DecisionDecoder'));
+const VSOPacket = lazyWithRetry(() => import('./pages/VSOPacket'));
+const DoctorPacket = lazyWithRetry(() => import('./pages/DoctorPacket'));
 
 // Account & Legal pages
 const DeleteAccountPage = lazyWithRetry(() => import('./pages/account/DeleteAccountPage'));
@@ -268,6 +272,8 @@ function AnimatedRoutes() {
           <Route path="/health/exposures" element={<PremiumGuard featureName="Exposure Tracker"><Exposures /></PremiumGuard>} />
           <Route path="/health/summary" element={<PremiumGuard featureName="Health Summary"><HealthLog /></PremiumGuard>} />
           <Route path="/health/timeline" element={<PremiumGuard featureName="Health Timeline"><UnifiedTimeline /></PremiumGuard>} />
+          <Route path="/health/work-impact" element={<PremiumGuard featureName="Work Impact"><WorkImpact /></PremiumGuard>} />
+          <Route path="/health/trends" element={<PremiumGuard featureName="Health Trends"><HealthTrends /></PremiumGuard>} />
 
           {/* === PREP === */}
           <Route path="/prep" element={<PrepHub />} />
@@ -287,6 +293,8 @@ function AnimatedRoutes() {
           <Route path="/prep/packet" element={<PremiumGuard featureName="Claim Packet Builder"><BuildPacket /></PremiumGuard>} />
           <Route path="/prep/appeals" element={<PremiumGuard featureName="Appeals Guide"><AppealsGuide /></PremiumGuard>} />
           <Route path="/prep/summary" element={<ShareableSummary />} />
+          <Route path="/prep/vso-packet" element={<PremiumGuard featureName="VSO Packet"><VSOPacket /></PremiumGuard>} />
+          <Route path="/prep/doctor-packet" element={<PremiumGuard featureName="Doctor Packet"><DoctorPacket /></PremiumGuard>} />
           <Route path="/prep/exam-day" element={<CPExamPacket />} />
           <Route path="/cp-exam-packet" element={<Navigate to="/prep/exam-day" replace />} />
 

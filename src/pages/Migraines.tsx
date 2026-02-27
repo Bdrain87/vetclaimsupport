@@ -194,6 +194,12 @@ export default function Migraines() {
     }
     setIsOpen(false);
     resetForm();
+    toast({
+      title: finalData.wasProstrating ? 'Prostrating migraine logged' : 'Migraine logged',
+      description: finalData.wasProstrating
+        ? 'Prostrating episodes count toward higher DC 8100 rating thresholds.'
+        : 'Track frequency and severity — the VA uses this for DC 8100 ratings.',
+    });
   };
 
   const handleEdit = (entry: MigraineEntry) => {

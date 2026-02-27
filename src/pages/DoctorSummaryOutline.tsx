@@ -34,6 +34,7 @@ import { vaDisabilitiesBySystem } from '@/data/vaDisabilities';
 import { PageContainer } from '@/components/PageContainer';
 import { exportDoctorSummaryOutlinePDF } from '@/utils/pdfExport';
 import { saveToVault } from '@/utils/vaultAutoSave';
+import { markJourneyItem } from '@/utils/journeySync';
 import { ToastAction } from '@/components/ui/toast';
 import { containsBannedPhrases, EXPORT_BLOCKED_MESSAGE } from '@/utils/bannedPhrases';
 import { conditionRatingCriteria } from '@/data/ratingCriteria';
@@ -305,6 +306,7 @@ export default function DoctorSummaryOutline() {
     setExporting(true);
     try {
       await exportDoctorSummaryOutlinePDF(formData);
+      markJourneyItem('nexus-letter');
       const condition = formData.primaryCondition || '';
       const outlineText = [
         `DOCTOR SUMMARY OUTLINE - ${condition || 'General'}`,

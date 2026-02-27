@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Activity, Moon, Brain, Pill, Stethoscope, AlertTriangle, BarChart3, PersonStanding, Clock } from 'lucide-react';
+import { Activity, Moon, Brain, Pill, Stethoscope, AlertTriangle, BarChart3, PersonStanding, Clock, Briefcase, TrendingUp } from 'lucide-react';
 import useAppStore from '@/store/useAppStore';
 import { PageContainer } from '@/components/PageContainer';
 
@@ -12,6 +12,7 @@ const healthCards = [
   { label: 'Medications', icon: Pill, route: '/health/medications', storeKey: 'medications' as const },
   { label: 'Medical Visits', icon: Stethoscope, route: '/health/visits', storeKey: 'medicalVisits' as const },
   { label: 'Exposures', icon: AlertTriangle, route: '/health/exposures', storeKey: 'exposures' as const },
+  { label: 'Work Impact', icon: Briefcase, route: '/health/work-impact', storeKey: 'employmentImpactEntries' as const },
 ];
 
 function formatLastEntry(entries: { date?: string; createdAt?: string; startDate?: string }[]): string {
@@ -96,19 +97,33 @@ export default function HealthHub() {
         </div>
       </button>
 
-      {/* Unified Timeline Link */}
-      <button
-        onClick={() => navigate('/health/timeline')}
-        className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
-      >
-        <div className="p-2 rounded-lg bg-gold/10">
-          <Clock className="h-5 w-5 text-gold" />
-        </div>
-        <div className="flex-1">
-          <span className="text-sm font-medium text-foreground">Unified Timeline</span>
-          <span className="text-xs text-muted-foreground block">See all your health data in one place</span>
-        </div>
-      </button>
+      {/* Quick Links */}
+      <div className="grid grid-cols-2 gap-2">
+        <button
+          onClick={() => navigate('/health/trends')}
+          className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors text-left"
+        >
+          <div className="p-2 rounded-lg bg-gold/10">
+            <TrendingUp className="h-5 w-5 text-gold" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <span className="text-sm font-medium text-foreground block truncate">Health Trends</span>
+            <span className="text-[10px] text-muted-foreground block truncate">Pain, sleep & migraine trends</span>
+          </div>
+        </button>
+        <button
+          onClick={() => navigate('/health/timeline')}
+          className="flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
+        >
+          <div className="p-2 rounded-lg bg-gold/10">
+            <Clock className="h-5 w-5 text-gold" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <span className="text-sm font-medium text-foreground block truncate">Timeline</span>
+            <span className="text-[10px] text-muted-foreground block truncate">All health data in one place</span>
+          </div>
+        </button>
+      </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         {healthCards.map((card) => {

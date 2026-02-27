@@ -34,6 +34,7 @@ import { useClaims } from '@/hooks/useClaims';
 import { cn } from '@/lib/utils';
 import { exportPersonalStatement } from '@/utils/pdfExport';
 import { saveToVault } from '@/utils/vaultAutoSave';
+import { markJourneyItem } from '@/utils/journeySync';
 import { ToastAction } from '@/components/ui/toast';
 import { PrefillBadge } from '@/components/ui/PrefillBadge';
 import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
@@ -321,6 +322,7 @@ export default function PersonalStatement() {
       const statement = polishedStatement || generateStatement();
       const conditionName = formData.condition?.name || '';
       await exportPersonalStatement(statement, conditionName || undefined);
+      markJourneyItem('personal-statement');
       saveToVault({
         documentType: 'personal-statement',
         condition: conditionName,
