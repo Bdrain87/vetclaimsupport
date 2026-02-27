@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { safeFormatDateTime } from '@/utils/dateUtils';
 import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Scale, Shield, FileText, AlertTriangle, ChevronRight, User, Plus, Trash2, Briefcase, Info, HelpCircle, BookOpen, LogIn, LogOut, Calendar, Database, Crown } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
@@ -858,7 +859,7 @@ export default function Settings() {
                   {auditEntries.map((entry) => (
                     <div key={entry.id} className="p-3 rounded-lg bg-muted/50 border border-border text-sm space-y-1">
                       <p className="text-foreground font-medium">
-                        {AI_COPY.auditLogEntry(new Date(entry.timestamp).toLocaleString(), entry.redactionMode)}
+                        {AI_COPY.auditLogEntry(safeFormatDateTime(entry.timestamp), entry.redactionMode)}
                       </p>
                       <p className="text-muted-foreground">
                         Redactions: <span className="font-medium text-foreground">{entry.redactionCount}</span>

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useClaims } from '@/hooks/useClaims';
+import { safeFormatDate } from '@/utils/dateUtils';
 import { Calendar, Activity, Moon, Brain, Pill, Stethoscope, AlertTriangle, ChevronDown, ChevronUp } from 'lucide-react';
 import { PageContainer } from '@/components/PageContainer';
 import { Button } from '@/components/ui/button';
@@ -175,7 +176,7 @@ export default function UnifiedTimeline() {
               <div key={day} className="rounded-xl border border-border bg-card overflow-hidden">
                 <div className="px-4 py-2 bg-secondary/50 flex items-center justify-between">
                   <p className="text-sm font-semibold text-foreground">
-                    {new Date(day + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
+                    {safeFormatDate(day + 'T00:00:00', day)}
                   </p>
                   <Badge variant="outline" className="text-xs">{dayEvents.length}</Badge>
                 </div>

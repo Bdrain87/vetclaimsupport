@@ -1,5 +1,6 @@
 import { useState, useMemo, useRef, useCallback, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { safeFormatDate } from '@/utils/dateUtils';
 import {
   ClipboardList,
   Search,
@@ -867,7 +868,7 @@ export default function DBQPrepSheet() {
             <p><strong>Condition:</strong> {formData.condition}</p>
             <p><strong>Appointment Type:</strong> {formData.appointmentType.replace('_', ' ').toUpperCase()}</p>
             {formData.appointmentDate && (
-              <p><strong>Date:</strong> {new Date(formData.appointmentDate).toLocaleDateString()}</p>
+              <p><strong>Date:</strong> {safeFormatDate(formData.appointmentDate)}</p>
             )}
           </div>
 

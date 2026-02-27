@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect, lazy, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { safeFormatDate } from '@/utils/dateUtils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -765,7 +766,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                   {log.type === 'migraine' && <Brain className="h-4 w-4 text-purple-400 flex-shrink-0" />}
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{log.label}</p>
-                    <p className="text-xs text-muted-foreground">{new Date(log.date).toLocaleDateString()}</p>
+                    <p className="text-xs text-muted-foreground">{safeFormatDate(log.date)}</p>
                   </div>
                   {log.severity !== undefined && (
                     <Badge variant="outline" className="text-xs">{log.severity}/10</Badge>

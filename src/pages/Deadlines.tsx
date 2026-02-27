@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
+import { safeFormatDate } from '@/utils/dateUtils';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -143,7 +144,7 @@ function DeadlineCard({ deadline, onDelete, onComplete }: {
               </Badge>
             </div>
             <p className="text-xs text-muted-foreground mt-0.5">
-              {new Date(deadline.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
+              {safeFormatDate(deadline.date, 'N/A', 'en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
             </p>
           </div>
           <div className="flex gap-1">
@@ -275,7 +276,7 @@ export default function Deadlines() {
         <Alert className="border-blue-500/30 bg-blue-500/5">
           <Shield className="h-4 w-4 text-blue-600" />
           <AlertDescription className="text-blue-700 dark:text-blue-400">
-            You have an Intent to File date ({new Date(intentToFileDate).toLocaleDateString()}) but no ITF
+            You have an Intent to File date ({safeFormatDate(intentToFileDate)}) but no ITF
             deadline tracked here. Would you like to add it?
             <Button
               variant="outline"
@@ -288,7 +289,7 @@ export default function Deadlines() {
                   type: 'intent_to_file',
                   title: 'Intent to File Expiration',
                   date: expiry.toISOString().split('T')[0],
-                  notes: `ITF filed on ${new Date(intentToFileDate).toLocaleDateString()}`,
+                  notes: `ITF filed on ${safeFormatDate(intentToFileDate)}`,
                   completed: false,
                   createdAt: new Date().toISOString(),
                 });

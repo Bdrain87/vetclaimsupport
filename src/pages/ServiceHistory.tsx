@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useEvidence } from '@/hooks/useEvidence';
+import { safeFormatDate } from '@/utils/dateUtils';
 import { Shield, Plus, Trash2, Edit, Calendar, MapPin, Briefcase, AlertTriangle, Download, Sword, Star, Plane, Loader2, Globe } from 'lucide-react';
 import { getSavedServiceDates, saveServiceDates } from '@/utils/veteranProfile';
 import { Button } from '@/components/ui/button';
@@ -509,7 +510,7 @@ export default function ServiceHistory() {
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Calendar className="h-4 w-4" />
-                        {new Date(entry.startDate).toLocaleDateString()} - {entry.endDate ? new Date(entry.endDate).toLocaleDateString() : 'Present'}
+                        {safeFormatDate(entry.startDate)} - {entry.endDate ? safeFormatDate(entry.endDate) : 'Present'}
                       </div>
                       <div className="flex gap-2">
                         <Button variant="ghost" size="icon" onClick={() => handleEdit(entry)} aria-label="Edit duty station"><Edit className="h-4 w-4" /></Button>
@@ -660,7 +661,7 @@ export default function ServiceHistory() {
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Calendar className="h-4 w-4" />
-                        {new Date(entry.startDate).toLocaleDateString()} - {entry.endDate ? new Date(entry.endDate).toLocaleDateString() : 'Present'}
+                        {safeFormatDate(entry.startDate)} - {entry.endDate ? safeFormatDate(entry.endDate) : 'Present'}
                       </div>
                       <div className="flex gap-2">
                         <Button variant="ghost" size="icon" onClick={() => handleEditCombat(entry)} aria-label="Edit combat entry"><Edit className="h-4 w-4" /></Button>
@@ -784,7 +785,7 @@ export default function ServiceHistory() {
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Calendar className="h-4 w-4" />
-                        {new Date(entry.date).toLocaleDateString()}
+                        {safeFormatDate(entry.date)}
                         <Badge variant={entry.type === 'Award/Decoration' ? 'default' : entry.type === 'Assault/MST' || entry.type === 'Injury' ? 'destructive' : 'secondary'}>
                           {entry.type}
                         </Badge>
@@ -914,7 +915,7 @@ export default function ServiceHistory() {
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Calendar className="h-4 w-4" />
-                        {new Date(entry.startDate).toLocaleDateString()} - {entry.endDate ? new Date(entry.endDate).toLocaleDateString() : 'Present'}
+                        {safeFormatDate(entry.startDate)} - {entry.endDate ? safeFormatDate(entry.endDate) : 'Present'}
                       </div>
                       <div className="flex gap-2">
                         <Button variant="ghost" size="icon" onClick={() => handleEditDeploy(entry)} aria-label="Edit deployment"><Edit className="h-4 w-4" /></Button>

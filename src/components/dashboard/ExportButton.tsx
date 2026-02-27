@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useClaims } from '@/hooks/useClaims';
+import { safeFormatDate } from '@/utils/dateUtils';
 import { useToast } from '@/hooks/use-toast';
 import { ExportCustomizationModal, ExportSections } from './ExportCustomizationModal';
 
@@ -133,7 +134,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
       const conditions = data.claimConditions?.length || 0;
       doc.text(`This evidence package documents ${conditions} claimed condition(s) with supporting`, 25, yPos + 6);
       doc.text(`medical visits, symptom logs, and lay/buddy statements for VA rating purposes.`, 25, yPos + 12);
-      doc.text(`Separation Date: ${data.separationDate ? new Date(data.separationDate).toLocaleDateString() : 'Not set'}`, 25, yPos + 18);
+      doc.text(`Separation Date: ${safeFormatDate(data.separationDate, 'Not set')}`, 25, yPos + 18);
       yPos += 35;
     }
 

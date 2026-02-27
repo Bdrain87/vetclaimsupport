@@ -4,10 +4,24 @@
 export function safeFormatDate(
   dateStr: string | undefined | null,
   fallback = 'N/A',
+  locales?: string | string[],
+  options?: Intl.DateTimeFormatOptions,
 ): string {
   if (!dateStr) return fallback;
   const d = new Date(dateStr);
-  return isNaN(d.getTime()) ? fallback : d.toLocaleDateString();
+  return isNaN(d.getTime()) ? fallback : d.toLocaleDateString(locales, options);
+}
+
+/**
+ * Safe datetime formatting (includes time) — returns fallback instead of "Invalid Date".
+ */
+export function safeFormatDateTime(
+  dateStr: string | undefined | null,
+  fallback = 'N/A',
+): string {
+  if (!dateStr) return fallback;
+  const d = new Date(dateStr);
+  return isNaN(d.getTime()) ? fallback : d.toLocaleString();
 }
 
 /**

@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { safeFormatDate } from '@/utils/dateUtils';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -184,7 +185,7 @@ function ConditionCard({ userCondition, conditionDetails, readinessScore, onView
             {userCondition.dateAdded && (
               <p className="text-[10px] text-muted-foreground/60 flex items-center gap-1">
                 <Calendar className="h-2.5 w-2.5" />
-                Added {new Date(userCondition.dateAdded).toLocaleDateString()}
+                Added {safeFormatDate(userCondition.dateAdded)}
               </p>
             )}
           </div>

@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
+import { safeFormatDate } from '@/utils/dateUtils';
 import { 
   Camera, 
   Upload, 
@@ -484,7 +485,7 @@ export function DocumentScanner({
                 )}
                 
                 <div className="text-xs text-muted-foreground flex gap-4">
-                  <span>Uploaded: {new Date(viewingDoc.uploadedAt).toLocaleDateString()}</span>
+                  <span>Uploaded: {safeFormatDate(viewingDoc.uploadedAt)}</span>
                   <span>{formatFileSize(viewingDoc.fileSize)}</span>
                 </div>
 

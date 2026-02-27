@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { getAllFileIds, getFileData, restoreFiles } from '@/lib/indexedDB';
+import { safeFormatDate, safeFormatDateTime } from '@/utils/dateUtils';
 import { isEncryptionEnabled } from '@/utils/encryption';
 import { DATA_PRIVACY_COPY, BACKUP_COPY } from '@/data/legalCopy';
 import useAppStore from '@/store/useAppStore';
@@ -217,7 +218,7 @@ export function DataBackup() {
 
       toast({
         title: 'Restore Complete',
-        description: `Data restored from backup dated ${new Date(pendingImportData.exportDate).toLocaleDateString()}. Reloading...`,
+        description: `Data restored from backup dated ${safeFormatDate(pendingImportData.exportDate)}. Reloading...`,
       });
 
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -364,7 +365,7 @@ export function DataBackup() {
                   This will <strong>replace all your current data</strong> with the backup from{' '}
                   <strong>
                     {pendingImportData?.exportDate
-                      ? new Date(pendingImportData.exportDate).toLocaleString()
+                      ? safeFormatDateTime(pendingImportData.exportDate)
                       : 'unknown date'}
                   </strong>.
                 </p>

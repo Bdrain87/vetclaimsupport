@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
+import { safeFormatDate } from '@/utils/dateUtils';
 import { 
   ClipboardCheck, 
   CheckCircle2, 
@@ -106,7 +107,7 @@ export default function ClaimChecklist() {
         currentCount: data.separationDate ? 1 : 0,
         recommendedCount: 1,
         progressText: data.separationDate 
-          ? `Set: ${new Date(data.separationDate).toLocaleDateString()}`
+          ? `Set: ${safeFormatDate(data.separationDate)}`
           : 'Not set',
         guidance: data.separationDate 
           ? 'Your BDD timeline is being tracked on the dashboard.'

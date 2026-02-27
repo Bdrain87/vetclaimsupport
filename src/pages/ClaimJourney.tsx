@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useClaims } from '@/hooks/useClaims';
+import { safeFormatDate } from '@/utils/dateUtils';
 import useAppStore from '@/store/useAppStore';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -445,7 +446,7 @@ function ClaimStatusTracker() {
                     <span className="font-medium flex-1">{phase?.label || entry.phase}</span>
                     {isRegress && <TrendingDown className="h-3.5 w-3.5 text-red-500 flex-shrink-0" />}
                     <span className="text-xs text-muted-foreground">
-                      {new Date(entry.loggedAt).toLocaleDateString()}
+                      {safeFormatDate(entry.loggedAt)}
                     </span>
                   </div>
                 );

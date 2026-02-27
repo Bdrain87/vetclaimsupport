@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useEvidence } from '@/hooks/useEvidence';
+import { safeFormatDate } from '@/utils/dateUtils';
 import { AlertTriangle, Plus, Trash2, Edit, Calendar, MapPin, Shield, Users, Download, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -341,7 +342,7 @@ export default function Exposures() {
                 <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 text-sm">
                   <div className="flex items-center gap-2 text-muted-foreground min-w-0">
                     <Calendar className="h-4 w-4 flex-shrink-0" />
-                    <span className="truncate">{new Date(exposure.date).toLocaleDateString()}</span>
+                    <span className="truncate">{safeFormatDate(exposure.date)}</span>
                   </div>
                   {exposure.location && (
                     <div className="flex items-center gap-2 text-muted-foreground min-w-0">

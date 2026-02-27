@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useEvidence } from '@/hooks/useEvidence';
 import { useFeatureFlag } from '@/store/useFeatureFlagStore';
+import { safeFormatDate } from '@/utils/dateUtils';
 import { Pill, Plus, Trash2, Edit, Calendar, AlertCircle, Download, Loader2, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -318,7 +319,7 @@ export default function Medications() {
                   )}
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Calendar className="h-4 w-4" />
-                    Since {new Date(med.startDate).toLocaleDateString()}
+                    Since {safeFormatDate(med.startDate)}
                   </div>
                   {med.sideEffects && (
                     <div className="flex items-start gap-2 text-destructive/80 bg-destructive/5 border border-destructive/10 rounded-xl p-3 mt-2">
@@ -367,7 +368,7 @@ export default function Medications() {
                   )}
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Calendar className="h-4 w-4" />
-                    {new Date(med.startDate).toLocaleDateString()} - {med.endDate ? new Date(med.endDate).toLocaleDateString() : 'N/A'}
+                    {safeFormatDate(med.startDate)} - {safeFormatDate(med.endDate)}
                   </div>
                   {med.sideEffects && (
                     <div className="flex items-start gap-2 text-muted-foreground bg-muted/50 rounded p-2 mt-2">

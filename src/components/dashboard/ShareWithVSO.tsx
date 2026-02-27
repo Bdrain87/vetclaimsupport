@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useClaims } from '@/hooks/useClaims';
+import { safeFormatDate } from '@/utils/dateUtils';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
 import { Share2, Copy, CheckCircle2, Download, Calendar, FileText, Stethoscope, Pill, Activity, Users } from 'lucide-react';
@@ -28,7 +29,7 @@ export function ShareWithVSO() {
     lines.push(`Generated: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`);
     lines.push('');
     lines.push('--- VETERAN INFO ---');
-    lines.push(`Separation Date: ${data.separationDate ? new Date(data.separationDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Not set'}`);
+    lines.push(`Separation Date: ${safeFormatDate(data.separationDate, 'Not set', 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`);
     if ((data.serviceHistory || []).length > 0) {
       lines.push('Service Locations:');
       (data.serviceHistory || []).filter(s => s.base).forEach(s => {
@@ -106,7 +107,7 @@ export function ShareWithVSO() {
 
       // Veteran Info
       addText('VETERAN INFO', 12, 'bold');
-      addText(`Separation Date: ${data.separationDate ? new Date(data.separationDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Not set'}`, 10);
+      addText(`Separation Date: ${safeFormatDate(data.separationDate, 'Not set', 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`, 10);
       if ((data.serviceHistory || []).length > 0) {
         addText('Service Locations:', 10, 'bold');
         (data.serviceHistory || []).filter(s => s.base).forEach(s => {

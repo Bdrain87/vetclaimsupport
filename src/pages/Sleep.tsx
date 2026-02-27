@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { useEvidence } from '@/hooks/useEvidence';
+import { safeFormatDate } from '@/utils/dateUtils';
 import { getConditionById } from '@/data/vaConditions';
 import { Moon, Plus, Trash2, Edit, Calendar, Clock, CheckCircle2, TrendingUp, Wind, Zap, Download, Tag, HelpCircle, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -871,7 +872,7 @@ export default function Sleep() {
               <CardContent className="space-y-2">
                 <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                   <Calendar className="h-4 w-4" />
-                  {new Date(entry.date).toLocaleDateString()}
+                  {safeFormatDate(entry.date)}
                   {entry.interruptions > 0 && (
                     <span>• {entry.interruptions} interruptions</span>
                   )}

@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useEvidence } from '@/hooks/useEvidence';
+import { safeFormatDate } from '@/utils/dateUtils';
 import { Stethoscope, Plus, Trash2, Edit, Calendar, MapPin, User, FileText, AlertTriangle, Download, Camera, Upload, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -413,7 +414,7 @@ export default function MedicalVisits() {
                 <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 text-sm">
                   <div className="flex items-center gap-2 text-muted-foreground min-w-0">
                     <Calendar className="h-4 w-4 flex-shrink-0" />
-                    <span className="truncate">{new Date(visit.date).toLocaleDateString()}</span>
+                    <span className="truncate">{safeFormatDate(visit.date)}</span>
                   </div>
                   {visit.location && (
                     <div className="flex items-center gap-2 text-muted-foreground min-w-0">

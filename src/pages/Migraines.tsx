@@ -2,6 +2,7 @@ import { useState, useMemo, useRef } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { useEvidence } from '@/hooks/useEvidence';
+import { safeFormatDate } from '@/utils/dateUtils';
 import { getConditionById } from '@/data/vaConditions';
 import {
   Brain, Plus, Trash2, Edit, Calendar, Clock, AlertTriangle,
@@ -980,7 +981,7 @@ export default function Migraines() {
                 <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap min-w-0">
                   <div className="flex items-center gap-2 flex-shrink-0">
                     <Calendar className="h-4 w-4 flex-shrink-0" />
-                    {new Date(entry.date).toLocaleDateString()}
+                    {safeFormatDate(entry.date)}
                   </div>
                   {entry.time && (
                     <div className="flex items-center gap-2 flex-shrink-0">

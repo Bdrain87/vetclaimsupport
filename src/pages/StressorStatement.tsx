@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { safeFormatDate } from '@/utils/dateUtils';
 import {
   ChevronLeft,
   ChevronRight,
@@ -198,7 +199,7 @@ export default function StressorStatement() {
     sections.push('TIMEFRAME:');
     const timeframeParts: string[] = [];
     if (formData.whenStart) {
-      const startDate = new Date(formData.whenStart).toLocaleDateString('en-US', {
+      const startDate = safeFormatDate(formData.whenStart, 'N/A', 'en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -206,7 +207,7 @@ export default function StressorStatement() {
       timeframeParts.push(`Start date: ${startDate}`);
     }
     if (formData.whenEnd) {
-      const endDate = new Date(formData.whenEnd).toLocaleDateString('en-US', {
+      const endDate = safeFormatDate(formData.whenEnd, 'N/A', 'en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',

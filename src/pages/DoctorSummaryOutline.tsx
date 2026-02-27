@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { safeFormatDate } from '@/utils/dateUtils';
 import {
   FileText,
   ChevronRight,
@@ -967,7 +968,7 @@ export default function DoctorSummaryOutline() {
                 <ReviewField label="MOS / Job Code" value={formData.mosOrJobCode} />
                 <ReviewField label="Service Dates" value={
                   formData.serviceStartDate && formData.serviceEndDate
-                    ? `${new Date(formData.serviceStartDate).toLocaleDateString()} - ${new Date(formData.serviceEndDate).toLocaleDateString()}`
+                    ? `${safeFormatDate(formData.serviceStartDate)} - ${safeFormatDate(formData.serviceEndDate)}`
                     : ''
                 } />
               </ReviewSection>
@@ -1027,7 +1028,7 @@ export default function DoctorSummaryOutline() {
                 <ReviewSection title="Evidence References">
                   {formData.evidenceReferences.map(ref => (
                     <div key={ref.id} className="text-xs text-muted-foreground">
-                      {ref.type}{ref.date ? ` (${new Date(ref.date).toLocaleDateString()})` : ''}{ref.provider ? ` - ${ref.provider}` : ''}{ref.title ? `: ${ref.title}` : ''}
+                      {ref.type}{ref.date ? ` (${safeFormatDate(ref.date)})` : ''}{ref.provider ? ` - ${ref.provider}` : ''}{ref.title ? `: ${ref.title}` : ''}
                     </div>
                   ))}
                 </ReviewSection>

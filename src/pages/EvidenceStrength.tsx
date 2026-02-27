@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { safeFormatDate } from '@/utils/dateUtils';
 import {
   ChevronLeft,
   Target,
@@ -277,7 +278,7 @@ export default function EvidenceStrength() {
                       {count > 0 && (
                         <>
                           <span>Avg severity: {avgSeverity.toFixed(1)}/10</span>
-                          {recentDate && <span>Last: {new Date(recentDate).toLocaleDateString()}</span>}
+                          {recentDate && <span>Last: {safeFormatDate(recentDate)}</span>}
                         </>
                       )}
                     </div>

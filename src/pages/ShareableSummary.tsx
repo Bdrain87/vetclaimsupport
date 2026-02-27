@@ -1,5 +1,6 @@
 import { useState, useMemo, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { safeFormatDate } from '@/utils/dateUtils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -120,7 +121,7 @@ export default function ShareableSummary() {
     if (includeDeadlines && summary.activeDeadlines.length > 0) {
       lines.push('── UPCOMING DEADLINES ──');
       summary.activeDeadlines.forEach(d => {
-        lines.push(`  📅 ${d.title} — ${new Date(d.date).toLocaleDateString()}`);
+        lines.push(`  📅 ${d.title} — ${safeFormatDate(d.date)}`);
       });
       lines.push('');
     }
@@ -304,7 +305,7 @@ export default function ShareableSummary() {
                     <div key={i} className="flex items-center justify-between py-2 px-3 rounded-lg bg-muted/30">
                       <span className="text-sm">{d.title}</span>
                       <span className="text-xs text-muted-foreground">
-                        {new Date(d.date).toLocaleDateString()}
+                        {safeFormatDate(d.date)}
                       </span>
                     </div>
                   ))}

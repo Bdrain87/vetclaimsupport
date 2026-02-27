@@ -3,6 +3,7 @@ import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { useProfileStore } from '@/store/useProfileStore';
 import { getAllBranchLabels } from '@/utils/veteranProfile';
+import { safeFormatDate } from '@/utils/dateUtils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -595,7 +596,7 @@ export default function BuildPacket() {
                       >
                         <div className="flex items-center gap-2 min-w-0 flex-1">
                           <span className="text-muted-foreground w-20 flex-shrink-0">
-                            {new Date(s.date).toLocaleDateString()}
+                            {safeFormatDate(s.date)}
                           </span>
                           <span className="font-medium text-foreground truncate">{s.symptom}</span>
                           {s.bodyArea && (
@@ -656,7 +657,7 @@ export default function BuildPacket() {
                         className="flex items-start gap-3 text-xs border-b border-border/50 pb-1.5 last:border-0"
                       >
                         <span className="text-muted-foreground w-20 flex-shrink-0">
-                          {new Date(v.date).toLocaleDateString()}
+                          {safeFormatDate(v.date)}
                         </span>
                         <div className="flex-1 min-w-0">
                           <span className="font-medium text-foreground">{v.visitType}</span>
@@ -776,7 +777,7 @@ export default function BuildPacket() {
                         className="flex items-start gap-3 text-xs border-b border-border/50 pb-1.5 last:border-0"
                       >
                         <span className="text-muted-foreground w-20 flex-shrink-0">
-                          {new Date(e.date).toLocaleDateString()}
+                          {safeFormatDate(e.date)}
                         </span>
                         <div className="flex-1 min-w-0">
                           <span className="font-medium text-foreground">{e.type}</span>

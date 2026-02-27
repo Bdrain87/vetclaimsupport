@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { safeFormatDate } from '@/utils/dateUtils';
 import { Camera, Upload, Eye, Trash2, FileText, File } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -265,7 +266,7 @@ export function DocumentUploader({ documents, category, onAdd, onDelete }: Docum
                 )}
                 
                 <div className="text-xs text-muted-foreground flex gap-4">
-                  <span>Uploaded: {new Date(viewingDoc.uploadedAt).toLocaleDateString()}</span>
+                  <span>Uploaded: {safeFormatDate(viewingDoc.uploadedAt)}</span>
                   <span>{formatFileSize(viewingDoc.fileSize)}</span>
                 </div>
 

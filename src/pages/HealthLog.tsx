@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
+import { safeFormatDate } from '@/utils/dateUtils';
 import { getConditionById } from '@/data/vaConditions';
 import {
   Heart, Activity, Brain, Moon, Pill,
@@ -484,7 +485,7 @@ export default function HealthLog() {
                               {entry.label}
                             </p>
                             <p className="text-xs text-muted-foreground">
-                              {new Date(entry.date).toLocaleDateString()}
+                              {safeFormatDate(entry.date)}
                             </p>
                           </div>
                         </div>

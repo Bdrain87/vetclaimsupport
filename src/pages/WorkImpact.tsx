@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
+import { safeFormatDate } from '@/utils/dateUtils';
 import { Briefcase, Plus, Trash2, Clock, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -199,7 +200,7 @@ export default function WorkImpact() {
                     </div>
                     <p className="text-sm text-foreground">{entry.description}</p>
                     <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
-                      <span>{new Date(entry.date).toLocaleDateString()}</span>
+                      <span>{safeFormatDate(entry.date)}</span>
                       {entry.condition && entry.condition !== 'general' && (
                         <span>· {entry.condition}</span>
                       )}
