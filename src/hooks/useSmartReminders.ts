@@ -35,6 +35,8 @@ export function useSmartReminders(): SmartReminder[] {
   const buddyContacts = useAppStore((s) => s.buddyContacts);
   const quickLogs = useAppStore((s) => s.quickLogs);
 
+  const employmentImpact = useAppStore((s) => s.employmentImpactEntries);
+
   const separationDate = useProfileStore((s) => s.separationDate);
   const intentToFileDate = useProfileStore((s) => s.intentToFileDate);
 
@@ -156,7 +158,27 @@ export function useSmartReminders(): SmartReminder[] {
         description: `Complete your document checklist: ${missingDocs.slice(0, 3).map((d) => d.name).join(', ')}${missingDocs.length > 3 ? '...' : ''}`,
         priority: 'medium',
         category: 'evidence',
+        actionRoute: '/claims/checklist',
       });
+    }
+
+    // ── Employment impact logging gap ─────────────────────────────────
+    if (pendingConditions.length > 0) {
+      const lastImpact = employmentImpact.length
+        ? employmentImpact.reduce((a, b) => (a.date > b.date ? a : b))
+        : null;
+      if (!lastImpact || daysSince(lastImpact.date) > 14) {
+        reminders.push({
+          id: 'work-impact-gap',
+          title: 'Log work impact',
+          description: lastImpact
+            ? `It's been ${daysSince(lastImpact.date)} days since your last work impact entry. Employment documentation is critical for TDIU and increased ratings.`
+            : 'Start tracking how your conditions affect work — this is key evidence for TDIU claims and rating increases.',
+          priority: 'medium',
+          category: 'logging',
+          actionRoute: '/health/work-impact',
+        });
+      }
     }
 
     // ── Medical visit gap ───────────────────────────────────────────────
@@ -325,5 +347,5 @@ export function useSmartReminders(): SmartReminder[] {
       const p = { high: 0, medium: 1, low: 2 };
       return p[a.priority] - p[b.priority];
     });
-  }, [symptoms, medicalVisits, medications, sleepEntries, migraines, deadlines, userConditions, documents, buddyContacts, quickLogs, separationDate, intentToFileDate]);
+  }, [symptoms, medicalVisits, medications, sleepEntries, migraines, deadlines, userConditions, documents, buddyContacts, quickLogs, employmentImpact, separationDate, intentToFileDate]);
 }

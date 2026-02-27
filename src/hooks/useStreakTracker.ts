@@ -26,6 +26,7 @@ export function useStreakTracker(): StreakInfo {
   const sleepEntries = useAppStore((s) => s.sleepEntries);
   const migraines = useAppStore((s) => s.migraines);
   const medicalVisits = useAppStore((s) => s.medicalVisits);
+  const employmentImpact = useAppStore((s) => s.employmentImpactEntries);
 
   return useMemo(() => {
     const dateSet = new Set<string>();
@@ -35,6 +36,7 @@ export function useStreakTracker(): StreakInfo {
     for (const sl of sleepEntries) if (sl.date) dateSet.add(sl.date.slice(0, 10));
     for (const m of migraines) if (m.date) dateSet.add(m.date.slice(0, 10));
     for (const v of medicalVisits) if (v.date) dateSet.add(v.date.slice(0, 10));
+    for (const e of employmentImpact) if (e.date) dateSet.add(e.date.slice(0, 10));
 
     if (dateSet.size === 0) {
       return {
@@ -85,5 +87,5 @@ export function useStreakTracker(): StreakInfo {
       lastLogDate: lastLog,
       streakActive,
     };
-  }, [symptoms, quickLogs, sleepEntries, migraines, medicalVisits]);
+  }, [symptoms, quickLogs, sleepEntries, migraines, medicalVisits, employmentImpact]);
 }

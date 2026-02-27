@@ -20,6 +20,7 @@ import type {
   CombatEntry,
   MajorEvent,
   PTSDSymptomEntry,
+  EmploymentImpactEntry,
 } from '@/types/claims';
 
 // ============================================================================
@@ -109,6 +110,7 @@ interface GatheredData {
   combatHistory: CombatEntry[];
   majorEvents: MajorEvent[];
   ptsdSymptoms: PTSDSymptomEntry[];
+  employmentImpact: EmploymentImpactEntry[];
   formDrafts: Record<string, Record<string, string> & { lastModified: string }>;
 }
 
@@ -142,6 +144,7 @@ function gatherData(): GatheredData {
     combatHistory: appState.combatHistory,
     majorEvents: appState.majorEvents,
     ptsdSymptoms: appState.ptsdSymptoms,
+    employmentImpact: appState.employmentImpactEntries || [],
     formDrafts: appState.formDrafts,
   };
 }
@@ -238,6 +241,7 @@ function generateJSON(
       sleepEntries: data.sleepEntries,
       migraines: data.migraines,
       ptsdSymptoms: data.ptsdSymptoms,
+      employmentImpact: data.employmentImpact,
     };
   }
 
@@ -416,12 +420,21 @@ function generateText(
       lines.push('');
     }
 
+    // Employment Impact
+    if (data.employmentImpact.length > 0) {
+      const totalHours = data.employmentImpact.reduce((s, e) => s + e.hoursLost, 0);
+      lines.push(`  Employment Impact: ${data.employmentImpact.length} entries`);
+      lines.push(`  Total Hours Lost: ${totalHours}`);
+      lines.push('');
+    }
+
     if (
       data.quickLogs.length === 0 &&
       data.symptoms.length === 0 &&
       data.medications.length === 0 &&
       data.sleepEntries.length === 0 &&
-      data.migraines.length === 0
+      data.migraines.length === 0 &&
+      data.employmentImpact.length === 0
     ) {
       lines.push('  No health log data recorded yet.');
       lines.push('');
@@ -816,6 +829,22 @@ async function generatePDF(
       y += 6;
       doc.setTextColor(...PDF_COLORS.textSecondary);
       doc.text(`Prostrating: ${prostrating} | Work Impact: ${data.migraines.filter((m) => m.couldNotWork).length}`, margin + 8, y);
+      y += 8;
+    }
+
+    // Employment Impact
+    if (data.employmentImpact.length > 0) {
+      hasAnyLogs = true;
+      y = checkPageBreak(14);
+      const totalHours = data.employmentImpact.reduce((s, e) => s + e.hoursLost, 0);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...PDF_COLORS.textDark);
+      doc.text(`Employment Impact: ${data.employmentImpact.length} entries`, margin + 4, y);
+      doc.setFont('helvetica', 'normal');
+      y += 6;
+      doc.setTextColor(...PDF_COLORS.textSecondary);
+      doc.text(`Total Hours Lost: ${totalHours}`, margin + 8, y);
       y += 8;
     }
 

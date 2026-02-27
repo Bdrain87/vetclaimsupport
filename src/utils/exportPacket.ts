@@ -92,6 +92,20 @@ export function generateVSOPacket(): string {
   }
   lines.push('');
 
+  // Exposures
+  const exposures = store.exposures || [];
+  if (exposures.length > 0) {
+    lines.push(sep);
+    lines.push('DOCUMENTED EXPOSURES');
+    lines.push(sep);
+    for (const exp of exposures) {
+      lines.push(`  ${exp.type}${exp.location ? ` — ${exp.location}` : ''}`);
+      if (exp.duration) lines.push(`    Duration: ${exp.duration}`);
+      if (exp.details) lines.push(`    Details: ${exp.details}`);
+    }
+    lines.push('');
+  }
+
   // Employment Impact
   const employmentEntries = store.employmentImpactEntries || [];
   if (employmentEntries.length > 0) {
@@ -252,6 +266,22 @@ export function generateDoctorPacket(conditionId?: string): string {
     const unique = [...new Set(impacts)];
     for (const impact of unique.slice(0, 5)) {
       lines.push(`  - ${impact}`);
+    }
+    lines.push('');
+  }
+
+  // Employment Impact
+  const employmentEntries = store.employmentImpactEntries || [];
+  const recentImpact = employmentEntries.filter((e) => recentDays(e.date, 30));
+  if (recentImpact.length > 0) {
+    lines.push(sep);
+    lines.push('WORK IMPACT (30 DAYS)');
+    lines.push(sep);
+    const totalHours = recentImpact.reduce((sum, e) => sum + e.hoursLost, 0);
+    lines.push(`  Entries: ${recentImpact.length}`);
+    lines.push(`  Total hours lost: ${totalHours}`);
+    for (const entry of recentImpact.slice(0, 5)) {
+      lines.push(`  ${formatDate(entry.date)} — ${EMPLOYMENT_IMPACT_TYPES[entry.type]} (${entry.hoursLost}h)`);
     }
     lines.push('');
   }
