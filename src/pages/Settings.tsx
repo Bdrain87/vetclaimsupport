@@ -81,6 +81,7 @@ export default function Settings() {
     await signOut();
     await clearLocalData();
     setSession(null);
+    navigate('/auth', { replace: true });
     toast({ title: 'Signed Out', description: 'You have been signed out.' });
   };
   const [profileForm, setProfileForm] = useState({
