@@ -248,7 +248,7 @@ export default function HelpCenter() {
   const groupedGlossary = useMemo(() => {
     const groups: Record<string, GlossaryTerm[]> = {};
     glossaryData.forEach(term => {
-      const letter = term.term[0].toUpperCase();
+      const letter = (term.term[0] || '#').toUpperCase();
       if (!groups[letter]) groups[letter] = [];
       groups[letter].push(term);
     });

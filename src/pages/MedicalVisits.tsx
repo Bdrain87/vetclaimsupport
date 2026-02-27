@@ -128,13 +128,11 @@ export default function MedicalVisits() {
               const files = e.target.files;
               if (!files || files.length === 0) return;
               const fileArray = Array.from(files);
-              let pending = fileArray.length;
-              const newDocs: typeof documents = [];
-              fileArray.forEach(file => {
+              Promise.all(fileArray.map(file => new Promise<(typeof documents)[number] | null>(resolve => {
                 const reader = new FileReader();
                 reader.onload = (ev) => {
                   const dataUrl = ev.target?.result as string;
-                  newDocs.push({
+                  resolve({
                     id: crypto.randomUUID(),
                     fileName: file.name,
                     fileType: file.type,
@@ -147,12 +145,12 @@ export default function MedicalVisits() {
                     storageType: 'localStorage' as const,
                     ...(file.type.startsWith('image/') ? { thumbnailUrl: dataUrl } : {}),
                   } as (typeof documents)[number]);
-                  pending--;
-                  if (pending === 0) {
-                    setAllDocuments([...documents, ...newDocs]);
-                  }
                 };
+                reader.onerror = () => resolve(null);
                 reader.readAsDataURL(file);
+              }))).then(results => {
+                const newDocs = results.filter((d): d is NonNullable<typeof d> => d !== null);
+                if (newDocs.length > 0) setAllDocuments([...documents, ...newDocs]);
               });
               if (importFileRef.current) importFileRef.current.value = '';
             }}

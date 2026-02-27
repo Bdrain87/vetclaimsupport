@@ -126,6 +126,7 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}): UseVoiceInput
 
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const result = event.results[i];
+        if (result.length === 0) continue;
         if (result.isFinal) {
           finalTranscript += result[0].transcript;
         } else {

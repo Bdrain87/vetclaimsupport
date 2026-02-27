@@ -182,7 +182,7 @@ export default function Glossary() {
   const groupedTerms = useMemo(() => {
     const groups: Record<string, GlossaryTerm[]> = {};
     filteredTerms.forEach((term) => {
-      const firstLetter = term.term[0].toUpperCase();
+      const firstLetter = (term.term[0] || '#').toUpperCase();
       if (!groups[firstLetter]) {
         groups[firstLetter] = [];
       }

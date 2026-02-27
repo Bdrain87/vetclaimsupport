@@ -58,7 +58,7 @@ export function QuickAddFAB() {
           />
         )}
       </AnimatePresence>
-      <div className="fixed bottom-20 right-4 z-50 flex flex-col items-end gap-2" role="menu" aria-label="Quick add actions">
+      <div className="fixed right-4 z-50 flex flex-col items-end gap-2" style={{ bottom: 'calc(5rem + env(safe-area-inset-bottom, 0px))' }} role="menu" aria-label="Quick add actions">
         <AnimatePresence>
           {open && actions.map((action, i) => (
             <motion.button

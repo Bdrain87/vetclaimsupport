@@ -36,6 +36,8 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
 
       const url = await startCheckout();
       window.open(url, '_blank');
+      // Reset loading after opening checkout — user may close the tab
+      setTimeout(() => setLoading(false), 2000);
     } catch (err) {
       console.error('Checkout failed:', err);
       toast({
