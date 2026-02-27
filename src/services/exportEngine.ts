@@ -111,6 +111,7 @@ interface GatheredData {
   majorEvents: MajorEvent[];
   ptsdSymptoms: PTSDSymptomEntry[];
   employmentImpact: EmploymentImpactEntry[];
+  dutyStations: { id: string; baseName: string; startDate: string; endDate: string }[];
   formDrafts: Record<string, Record<string, string> & { lastModified: string }>;
 }
 
@@ -145,6 +146,7 @@ function gatherData(): GatheredData {
     majorEvents: appState.majorEvents,
     ptsdSymptoms: appState.ptsdSymptoms,
     employmentImpact: appState.employmentImpactEntries || [],
+    dutyStations: appState.dutyStations || [],
     formDrafts: appState.formDrafts,
   };
 }
@@ -195,6 +197,7 @@ function generateJSON(
       serviceDates: data.serviceDates || null,
       separationDate: data.separationDate || null,
       claimType: data.claimType || null,
+      dutyStations: data.dutyStations,
     };
   }
 
@@ -322,6 +325,12 @@ function generateText(
     }
     if (data.claimType) {
       lines.push(`  Claim Type: ${data.claimType}`);
+    }
+    if (data.dutyStations.length > 0) {
+      lines.push('  Duty Stations:');
+      data.dutyStations.forEach((ds) => {
+        lines.push(`    • ${ds.baseName} (${safeDate(ds.startDate)} – ${safeDate(ds.endDate)})`);
+      });
     }
     lines.push('');
     sectionNum++;
@@ -648,6 +657,22 @@ async function generatePDF(
       doc.text(value, margin + 50, y);
       y += 6;
     });
+
+    if (data.dutyStations.length > 0) {
+      y = checkPageBreak(8);
+      doc.setFontSize(9);
+      doc.setTextColor(...PDF_COLORS.textMuted);
+      doc.text('Duty Stations:', margin + 4, y);
+      y += 6;
+      data.dutyStations.forEach((ds) => {
+        y = checkPageBreak(6);
+        doc.setFontSize(8);
+        doc.setTextColor(...PDF_COLORS.textDark);
+        doc.text(`• ${ds.baseName} (${safeDate(ds.startDate)} – ${safeDate(ds.endDate)})`, margin + 8, y);
+        y += 5;
+      });
+    }
+
     y += 6;
     sectionNum++;
   }
@@ -1245,6 +1270,16 @@ function buildTimelineData(data: GatheredData): TimelineEvent[] {
       type: 'Service',
       description: `Duty station: ${entry.base || entry.unit || 'Unknown'}`,
       sortDate: new Date(entry.startDate).getTime(),
+    });
+  });
+
+  // Duty stations
+  data.dutyStations.forEach((ds) => {
+    events.push({
+      date: ds.startDate,
+      type: 'Service',
+      description: `Stationed at ${ds.baseName}`,
+      sortDate: new Date(ds.startDate).getTime(),
     });
   });
 

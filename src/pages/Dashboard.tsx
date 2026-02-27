@@ -88,7 +88,7 @@ export default function Dashboard() {
       const details = getConditionById(uc.conditionId);
       const name = details?.name?.toLowerCase();
       const match = name
-        ? claimConditions.find((c) => c.name.toLowerCase() === name)
+        ? claimConditions.find((c) => c.name?.toLowerCase() === name)
         : undefined;
       if (match) {
         let score = 0;

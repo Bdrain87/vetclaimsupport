@@ -15,7 +15,7 @@ import { join } from 'path';
 const DIST_DIR = join(process.cwd(), 'dist', 'assets');
 const JS_SIZE_BUDGET_KB = 1024; // per-chunk budget (raised for a11y + PHI sanitizer + session timeout)
 const CSS_SIZE_BUDGET_KB = 300;
-const TOTAL_JS_BUDGET_KB = 4850; // total JS budget (raised for 856 deployment locations + expanded condition data)
+const TOTAL_JS_BUDGET_KB = 5000; // total JS budget (raised for deployment locations, condition data, health trends, export packets)
 
 function getAssetFiles(ext: string) {
   try {

@@ -272,7 +272,7 @@ export default function Conditions() {
     claimConditions.forEach((c) => {
       const matchingUserCondition = userConditions.find(uc => {
         const details = getConditionDetails(uc);
-        return details?.name.toLowerCase() === c.name.toLowerCase() || uc.conditionId === c.id || uc.id === c.id;
+        return (details?.name && c.name && details.name.toLowerCase() === c.name.toLowerCase()) || uc.conditionId === c.id || uc.id === c.id;
       });
       if (matchingUserCondition?.claimStatus === 'approved') return;
       const missing: string[] = [];

@@ -4,7 +4,8 @@ import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { useClaims } from '@/hooks/useClaims';
 import { secondaryConditions, type SecondaryConnection } from '@/data/secondaryConditions';
-import { vaConditions, type VACondition, getConditionById, searchConditions } from '@/data/vaConditions';
+import { vaConditions, type VACondition, getConditionById } from '@/data/vaConditions';
+import { searchAllConditions } from '@/utils/conditionSearch';
 import { Link, useSearchParams } from 'react-router-dom';
 import { PageContainer } from '@/components/PageContainer';
 
@@ -46,7 +47,7 @@ export default function SecondaryFinder() {
     const fromClaimsContext = (claimsData.claimConditions || [])
       .filter(cc => !fromUserConditions.some(uc => uc.fullName.toLowerCase() === cc.name.toLowerCase()))
       .map(cc => {
-        const match = searchConditions(cc.name)?.[0];
+        const match = searchAllConditions(cc.name, { limit: 1 })?.[0];
         return { id: match?.id || cc.id, name: match?.abbreviation || cc.name, fullName: match?.name || cc.name };
       });
 

@@ -161,7 +161,7 @@ export default function ConditionDetail() {
     // If we have a claimCondition, try to find VA condition by name
     if (claimCondition) {
       const allConditions = vaConditions;
-      const match = allConditions.find(c => c.name.toLowerCase() === claimCondition.name.toLowerCase());
+      const match = allConditions.find(c => c.name?.toLowerCase() === claimCondition.name?.toLowerCase());
       if (match) return match;
     }
     // If not a tracked condition, try looking up directly in the database
