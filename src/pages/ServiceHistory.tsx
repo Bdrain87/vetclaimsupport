@@ -14,6 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { exportServiceHistory } from '@/utils/pdfExport';
+import { useToast } from '@/hooks/use-toast';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import { MOSCombobox } from '@/components/ui/mos-combobox';
 import { AwardsCombobox } from '@/components/ui/awards-combobox';
@@ -53,6 +54,7 @@ function ConflictsTabContent() {
 }
 
 export default function ServiceHistory() {
+  const { toast } = useToast();
   const today = new Date().toISOString().split('T')[0];
   const {
     data,
@@ -313,7 +315,7 @@ export default function ServiceHistory() {
 
         <Button variant="outline" disabled={exporting} onClick={async () => {
           setExporting(true);
-          try { await exportServiceHistory(data.serviceHistory); } finally { setExporting(false); }
+          try { await exportServiceHistory(data.serviceHistory); } catch { toast({ title: 'Export failed', variant: 'destructive' }); } finally { setExporting(false); }
         }} className="gap-2 flex-shrink-0">
           {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
           {exporting ? 'Exporting...' : 'Export PDF'}

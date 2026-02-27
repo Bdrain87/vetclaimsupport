@@ -9,6 +9,7 @@ import {
   Briefcase, Activity, Tag, Loader2
 } from 'lucide-react';
 import { exportMigraines } from '@/utils/pdfExport';
+import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -96,6 +97,7 @@ export default function Migraines() {
   const today = new Date().toISOString().split('T')[0];
   const { data, addMigraine, updateMigraine, deleteMigraine } = useClaims();
   const { conditions: userConditions } = useUserConditions();
+  const { toast } = useToast();
   const { documents, setAllDocuments } = useEvidence();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -324,6 +326,8 @@ export default function Migraines() {
     setExporting(true);
     try {
       await exportMigraines(data.migraines || [], stats);
+    } catch {
+      toast({ title: 'Export failed', description: 'Could not generate PDF. Please try again.', variant: 'destructive' });
     } finally {
       setExporting(false);
     }

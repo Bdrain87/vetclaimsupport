@@ -8,6 +8,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from '@/components/ui/dialog';
+import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
@@ -151,6 +152,7 @@ export function ExportCustomizationModal({
   onExport,
 }: ExportCustomizationModalProps) {
   const { data } = useClaims();
+  const { toast } = useToast();
   const showPacketCheck = useFeatureFlag('exportPacketCheck');
   
   const [sections, setSections] = useState<ExportSections>({
@@ -246,6 +248,8 @@ export function ExportCustomizationModal({
     try {
       await onExport(sections);
       onOpenChange(false);
+    } catch {
+      toast({ title: 'Export failed', description: 'Could not generate PDF. Please try again.', variant: 'destructive' });
     } finally {
       setExporting(false);
     }

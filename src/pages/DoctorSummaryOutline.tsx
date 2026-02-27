@@ -303,6 +303,8 @@ export default function DoctorSummaryOutline() {
     try {
       await exportDoctorSummaryOutlinePDF(formData);
       toast({ title: 'PDF Exported', description: 'Your doctor summary has been saved.' });
+    } catch {
+      toast({ title: 'Export failed', description: 'Could not generate PDF. Please try again.', variant: 'destructive' });
     } finally {
       setExporting(false);
     }

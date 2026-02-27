@@ -18,6 +18,7 @@ import {
   Check,
   Loader2,
 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -143,6 +144,7 @@ export default function DBQPrepSheet() {
   const printRef = useRef<HTMLDivElement>(null);
   const [searchParams] = useSearchParams();
   const { data } = useClaims();
+  const { toast } = useToast();
   const { conditions: userConditions } = useUserConditions();
   const [conditionSearch, setConditionSearch] = useState(() => {
     const draft = useAppStore.getState().formDrafts['tool:dbq-prep'];
@@ -378,6 +380,8 @@ export default function DBQPrepSheet() {
     setExporting(true);
     try {
       await exportDBQPrepSheet(formData);
+    } catch {
+      toast({ title: 'Export failed', description: 'Could not generate PDF. Please try again.', variant: 'destructive' });
     } finally {
       setExporting(false);
     }

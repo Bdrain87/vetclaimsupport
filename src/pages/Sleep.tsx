@@ -4,6 +4,7 @@ import { useUserConditions } from '@/hooks/useUserConditions';
 import { useEvidence } from '@/hooks/useEvidence';
 import { getConditionById } from '@/data/vaConditions';
 import { Moon, Plus, Trash2, Edit, Calendar, Clock, CheckCircle2, TrendingUp, Wind, Zap, Download, Tag, HelpCircle, Loader2 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -43,6 +44,7 @@ export default function Sleep() {
   const today = new Date().toISOString().split('T')[0];
   const { data, addSleepEntry, updateSleepEntry, deleteSleepEntry } = useClaims();
   const { conditions: userConditions } = useUserConditions();
+  const { toast } = useToast();
   const { documents, setAllDocuments } = useEvidence();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -253,7 +255,7 @@ export default function Sleep() {
           variant="outline"
           onClick={async () => {
             setExporting(true);
-            try { await exportSleepLog(sleepEntries); } finally { setExporting(false); }
+            try { await exportSleepLog(sleepEntries); } catch { toast({ title: 'Export failed', variant: 'destructive' }); } finally { setExporting(false); }
           }}
           className="gap-2 flex-shrink-0"
           disabled={sleepEntries.length === 0 || exporting}

@@ -17,6 +17,7 @@ import {
   Pill,
   Briefcase,
 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
@@ -127,6 +128,7 @@ export default function PersonalStatement() {
   const [searchParams] = useSearchParams();
   const { firstName, lastName } = useProfileStore();
   const { data: claimsData } = useClaims();
+  const { toast } = useToast();
   const {
     formData, updateField: _draftUpdateField, setFormData, currentStep, setCurrentStep,
     draftRestored, clearDraft, lastSaved,
@@ -267,10 +269,12 @@ export default function PersonalStatement() {
       const statement = polishedStatement || generateStatement();
       const conditionName = formData.condition?.name;
       await exportPersonalStatement(statement, conditionName);
+    } catch {
+      toast({ title: 'Export failed', description: 'Could not generate PDF. Please try again.', variant: 'destructive' });
     } finally {
       setExporting(false);
     }
-  }, [generateStatement, polishedStatement, formData.condition]);
+  }, [generateStatement, polishedStatement, formData.condition, toast]);
 
   const handleCopy = useCallback(async () => {
     const statement = polishedStatement || generateStatement();

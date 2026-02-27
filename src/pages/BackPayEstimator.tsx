@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { exportBackPayEstimate } from '@/utils/pdfExport';
+import { useToast } from '@/hooks/use-toast';
 import { PageContainer } from '@/components/PageContainer';
 import {
   BASE_RATES,
@@ -28,6 +29,7 @@ const DEPENDENT_COUNT_OPTIONS = Array.from({ length: 11 }, (_, i) => i);
 
 export default function BackPayEstimator() {
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   // Form state
   const [effectiveDate, setEffectiveDate] = useState('');
@@ -339,6 +341,8 @@ export default function BackPayEstimator() {
                         totalBackPay: calculation.totalBackPay,
                         months: calculation.months,
                       });
+                    } catch {
+                      toast({ title: 'Export failed', variant: 'destructive' });
                     } finally {
                       setExporting(false);
                     }

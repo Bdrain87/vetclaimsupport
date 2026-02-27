@@ -15,6 +15,7 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { exportMedicalVisits } from '@/utils/pdfExport';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import { PageContainer } from '@/components/PageContainer';
+import { useToast } from '@/hooks/use-toast';
 import type { MedicalVisit } from '@/types/claims';
 
 const visitTypes = ['Sick Call', 'ER', 'Mental Health', 'PT', 'Dental', 'Specialist'] as const;
@@ -22,6 +23,7 @@ const visitTypes = ['Sick Call', 'ER', 'Mental Health', 'PT', 'Dental', 'Special
 export default function MedicalVisits() {
   const today = new Date().toISOString().split('T')[0];
   const { data, addMedicalVisit, updateMedicalVisit, deleteMedicalVisit } = useClaims();
+  const { toast } = useToast();
   const { documents, setAllDocuments } = useEvidence();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -197,7 +199,7 @@ export default function MedicalVisits() {
           </Button>
           <Button variant="outline" disabled={exporting} onClick={async () => {
             setExporting(true);
-            try { await exportMedicalVisits(data.medicalVisits); } finally { setExporting(false); }
+            try { await exportMedicalVisits(data.medicalVisits); } catch { toast({ title: 'Export failed', variant: 'destructive' }); } finally { setExporting(false); }
           }} className="gap-2">
             {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
             {exporting ? 'Exporting...' : 'Export PDF'}

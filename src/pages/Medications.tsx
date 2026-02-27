@@ -12,12 +12,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { MedicationCombobox } from '@/components/ui/medication-combobox';
 import { exportMedications } from '@/utils/pdfExport';
+import { useToast } from '@/hooks/use-toast';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import { PageContainer } from '@/components/PageContainer';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import type { Medication } from '@/types/claims';
 
 export default function Medications() {
+  const { toast } = useToast();
   const today = new Date().toISOString().split('T')[0];
   const { data, addMedication, updateMedication, deleteMedication } = useClaims();
   const { documents, setAllDocuments } = useEvidence();
@@ -103,7 +105,7 @@ export default function Medications() {
         <div className="flex gap-2 flex-shrink-0">
           <Button variant="outline" disabled={exporting} onClick={async () => {
             setExporting(true);
-            try { await exportMedications(data.medications); } finally { setExporting(false); }
+            try { await exportMedications(data.medications); } catch { toast({ title: 'Export failed', variant: 'destructive' }); } finally { setExporting(false); }
           }} className="gap-2">
             {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
             {exporting ? 'Exporting...' : 'Export PDF'}

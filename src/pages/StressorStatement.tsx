@@ -17,6 +17,7 @@ import {
   Lightbulb,
   Loader2,
 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
@@ -131,6 +132,7 @@ function GuidanceTip({ tips }: GuidanceTipProps) {
 export default function StressorStatement() {
   const navigate = useNavigate();
   const { data: claimsData } = useClaims();
+  const { toast } = useToast();
 
   // Build prefilled initial data from store
   const [prefilled, setPrefilled] = useState<Record<string, boolean>>({});
@@ -276,10 +278,12 @@ export default function StressorStatement() {
     try {
       const statement = generateStatement();
       await exportStressorStatement(statement);
+    } catch {
+      toast({ title: 'Export failed', description: 'Could not generate PDF. Please try again.', variant: 'destructive' });
     } finally {
       setExporting(false);
     }
-  }, [generateStatement]);
+  }, [generateStatement, toast]);
 
   const handleCopy = useCallback(async () => {
     const statement = generateStatement();

@@ -243,6 +243,8 @@ Date: ${today}`;
       const statement = generateStatement();
       await exportBuddyStatement(statement, statementData.witnessName);
       toast({ title: 'Downloaded', description: 'Statement saved as PDF.' });
+    } catch {
+      toast({ title: 'Export failed', description: 'Could not generate PDF. Please try again.', variant: 'destructive' });
     } finally {
       setExportingStatement(false);
     }
@@ -451,7 +453,7 @@ Date: ${today}`;
 
         <Button variant="outline" disabled={exporting} onClick={async () => {
           setExporting(true);
-          try { await exportBuddyContacts(data.buddyContacts); } finally { setExporting(false); }
+          try { await exportBuddyContacts(data.buddyContacts); } catch { toast({ title: 'Export failed', variant: 'destructive' }); } finally { setExporting(false); }
         }} className="gap-2 flex-shrink-0">
           {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
           {exporting ? 'Exporting...' : 'Export PDF'}

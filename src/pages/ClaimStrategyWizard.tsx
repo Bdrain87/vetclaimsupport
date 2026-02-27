@@ -621,6 +621,8 @@ attorney for official guidance on your specific claim.
     try {
       await exportClaimStrategy(content);
       toast({ title: 'Strategy downloaded as PDF', description: 'Check your downloads folder.' });
+    } catch {
+      toast({ title: 'Export failed', description: 'Could not generate PDF. Please try again.', variant: 'destructive' });
     } finally {
       setExportingStrategy(false);
     }

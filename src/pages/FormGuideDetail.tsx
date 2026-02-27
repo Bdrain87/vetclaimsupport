@@ -263,6 +263,8 @@ export default function FormGuideDetail() {
         formDef.fields.map((f) => ({ section: f.section, label: f.label, fieldId: f.fieldId })),
         drafts as Record<string, string>
       );
+    } catch {
+      toast({ title: 'Export failed', description: 'Could not generate PDF. Please try again.', variant: 'destructive' });
     } finally {
       setExporting(false);
     }

@@ -9,6 +9,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 import { PageContainer } from '@/components/PageContainer';
 import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import {
@@ -526,6 +527,7 @@ function MatchedCaseCard({ matched, context }: { matched: MatchedCase; context: 
 }
 
 function MyAppealTab() {
+  const { toast } = useToast();
   const userConditions = useAppStore((s) => s.userConditions);
   const [selectedConditionId, setSelectedConditionId] = useState<string | null>(null);
   const [selectedDenialReasons, setSelectedDenialReasons] = useState<string[]>([]);
@@ -590,10 +592,12 @@ function MyAppealTab() {
     setExporting(true);
     try {
       await exportPersonalizedAppealPDF(matchedCases, appealContext);
+    } catch {
+      toast({ title: 'Export failed', variant: 'destructive' });
     } finally {
       setExporting(false);
     }
-  }, [matchedCases, appealContext]);
+  }, [matchedCases, appealContext, toast]);
 
   const hasResults = matchedCases.length > 0;
   const topCases = matchedCases.slice(0, 15);
@@ -774,6 +778,7 @@ function MyAppealTab() {
 // ── Main Page ───────────────────────────────────────────────────────────
 
 export default function AppealsGuide() {
+  const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedConditionCategory, setSelectedConditionCategory] = useState<string | null>(null);
   const [activeTopic, setActiveTopic] = useState<string | null>(null);
@@ -793,10 +798,12 @@ export default function AppealsGuide() {
     setExporting(true);
     try {
       await exportCaseLawPDF(filteredCases);
+    } catch {
+      toast({ title: 'Export failed', variant: 'destructive' });
     } finally {
       setExporting(false);
     }
-  }, [filteredCases]);
+  }, [filteredCases, toast]);
 
   const clearFilters = () => {
     setSearchQuery('');

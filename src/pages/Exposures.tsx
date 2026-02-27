@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { exportExposures } from '@/utils/pdfExport';
+import { useToast } from '@/hooks/use-toast';
 import { BranchExposuresSelector } from '@/components/exposures/BranchExposuresSelector';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import { LocationAutocomplete } from '@/components/shared/LocationAutocomplete';
@@ -42,6 +43,7 @@ const exposureTypes: ExposureType[] = [
 export default function Exposures() {
   const { data, addExposure, updateExposure, deleteExposure } = useClaims();
   const { documents, setAllDocuments } = useEvidence();
+  const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
@@ -167,7 +169,7 @@ export default function Exposures() {
         <div className="flex gap-2 flex-shrink-0">
           <Button variant="outline" disabled={exporting} onClick={async () => {
             setExporting(true);
-            try { await exportExposures(data.exposures); } finally { setExporting(false); }
+            try { await exportExposures(data.exposures); } catch { toast({ title: 'Export failed', variant: 'destructive' }); } finally { setExporting(false); }
           }} className="gap-2">
             {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
             {exporting ? 'Exporting...' : 'Export PDF'}
