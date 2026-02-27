@@ -5,8 +5,11 @@ import WebKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
+
+    #if DEBUG
     var currentStep = 0
     var steps: [(String, String, String, Double)] = []
+    #endif
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Clear cached responses on launch so the app fetches fresh content.
@@ -25,6 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ]
         dataStore.removeData(ofTypes: cacheTypes, modifiedSince: .distantPast) { }
 
+        #if DEBUG
         let args = ProcessInfo.processInfo.arguments
 
         if args.contains("--dark-capture") {
@@ -46,9 +50,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             ]
             DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) { self.run() }
         }
+        #endif
         return true
     }
 
+    #if DEBUG
     func getWebView() -> WKWebView? {
         (window?.rootViewController as? CAPBridgeViewController)?.bridge?.webView
     }
@@ -91,6 +97,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+    #endif
 
     func applicationWillResignActive(_ application: UIApplication) {}
     func applicationDidEnterBackground(_ application: UIApplication) {}
