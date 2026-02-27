@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase';
 import { toast } from '@/hooks/use-toast';
 import { clearLocalData } from '@/services/accountManagement';
 import { stopSync } from '@/services/syncEngine';
+import { isWeb } from '@/lib/platform';
 
 const TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
 const WARNING_MS = 25 * 60 * 1000; // 25 minutes (5 min before timeout)
@@ -18,6 +19,9 @@ const ACTIVITY_EVENTS: (keyof WindowEventMap)[] = [
 const THROTTLE_MS = 5_000; // Throttle activity resets to once per 5 seconds
 
 export function useSessionTimeout() {
+  // Session timeout only applies to web where auth is required.
+  // On native iOS, users may not be signed in — wiping data after idle would destroy their work.
+  const enabled = isWeb;
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const warningRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const warningShownRef = useRef(false);
@@ -65,6 +69,8 @@ export function useSessionTimeout() {
   }, [clearTimers, handleSignOut]);
 
   useEffect(() => {
+    if (!enabled) return;
+
     resetTimers();
 
     const onActivity = () => {
@@ -84,5 +90,5 @@ export function useSessionTimeout() {
         window.removeEventListener(event, onActivity);
       }
     };
-  }, [resetTimers, clearTimers]);
+  }, [enabled, resetTimers, clearTimers]);
 }

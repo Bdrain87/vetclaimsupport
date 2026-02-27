@@ -85,6 +85,7 @@ const DEADLINE_META: Record<DeadlineType, {
 
 function getDaysRemaining(dateStr: string): number {
   const target = new Date(dateStr);
+  if (isNaN(target.getTime())) return 0;
   const now = new Date();
   now.setHours(0, 0, 0, 0);
   target.setHours(0, 0, 0, 0);

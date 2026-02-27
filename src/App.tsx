@@ -237,7 +237,7 @@ function AnimatedRoutes() {
           <Route path="/app" element={<Dashboard />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/auth" element={<Navigate to="/login" replace />} />
+          <Route path="/auth" element={<AuthPage />} />
 
           {/* === CLAIMS === */}
           <Route path="/claims" element={<Conditions />} />
@@ -531,10 +531,15 @@ function App() {
     checkDataRetention();
   }, []);
 
-  // Refresh entitlement and start/stop sync on auth state changes
+  // Refresh entitlement and start/stop sync on auth state changes.
+  // Only start sync if user has an active session — avoids useless polling on native.
   useEffect(() => {
-    ensureFreshEntitlement().catch(() => {});
-    startSync();
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        ensureFreshEntitlement().catch(() => {});
+        startSync();
+      }
+    }).catch(() => {});
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
