@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useClaims } from '@/hooks/useClaims';
 import { useProfileStore } from '@/store/useProfileStore';
 import { Users, Plus, Trash2, Edit, Phone, Mail, FileText, CheckCircle, Clock, Send, Download, Camera, Copy, Check, ChevronRight, ChevronLeft, HelpCircle, Loader2 } from 'lucide-react';
@@ -11,6 +12,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { exportBuddyContacts, exportBuddyStatement } from '@/utils/pdfExport';
+import { saveToVault } from '@/utils/vaultAutoSave';
+import { ToastAction } from '@/components/ui/toast';
 import { DocumentUploader } from '@/components/documents/DocumentUploader';
 import { useToast } from '@/hooks/use-toast';
 import type { BuddyContact } from '@/types/claims';
@@ -61,6 +64,7 @@ const steps = [
 
 export default function BuddyStatements() {
   const { data, addBuddyContact, updateBuddyContact, deleteBuddyContact, addUploadedDocument, deleteUploadedDocument } = useClaims();
+  const navigate = useNavigate();
   const profile = useProfileStore();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('contacts');
@@ -242,7 +246,21 @@ Date: ${today}`;
     try {
       const statement = generateStatement();
       await exportBuddyStatement(statement, statementData.witnessName);
-      toast({ title: 'Downloaded', description: 'Statement saved as PDF.' });
+      const condition = statementData.conditionWitnessed || '';
+      saveToVault({
+        documentType: 'buddy-statement',
+        condition,
+        title: `Buddy Statement${condition ? ` - ${condition}` : ''}`,
+        content: statement,
+        fileName: `buddy-statement-${statementData.witnessName || 'witness'}.txt`,
+      }).then(() => {
+        toast({
+          title: 'Saved to Vault',
+          action: <ToastAction altText="View in Vault" onClick={() => navigate('/settings/vault')}>View</ToastAction>,
+        });
+      }).catch(() => {
+        toast({ title: 'Downloaded', description: 'Statement saved as PDF.' });
+      });
     } catch {
       toast({ title: 'Export failed', description: 'Could not generate PDF. Please try again.', variant: 'destructive' });
     } finally {

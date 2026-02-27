@@ -26,6 +26,9 @@ import useAppStore from '@/store/useAppStore';
 import { getConditionById } from '@/data/vaConditions';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { generateCPExamPacketPDF } from '@/services/exportEngine';
+import { useToast } from '@/hooks/use-toast';
+import { ToastAction } from '@/components/ui/toast';
+import { saveToVault } from '@/utils/vaultAutoSave';
 import { cn } from '@/lib/utils';
 import { format, subDays } from 'date-fns';
 import { PageContainer } from '@/components/PageContainer';
@@ -141,6 +144,7 @@ function PacketSection({
 
 export default function CPExamPacket() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const profile = useProfileStore();
   const appState = useAppStore();
 
@@ -365,6 +369,31 @@ export default function CPExamPacket() {
         medications: (medications ?? []).filter((m) => m.stillTaking),
         examQuestions,
       });
+      const packetText = [
+        'C&P EXAM PREPARATION PACKET',
+        `Generated: ${new Date().toLocaleDateString()}`,
+        '',
+        'CONDITIONS:',
+        ...allConditions.map((c) => `- ${c.name} (${c.claimType})`),
+        '',
+        `Avg Pain (90d): ${symptomSummary.avgPain}/10`,
+        `Flare-Ups (90d): ${symptomSummary.flareUps}`,
+        symptomSummary.currentMeds.length > 0
+          ? `Medications: ${symptomSummary.currentMeds.map((m) => m.name).join(', ')}`
+          : '',
+      ].filter(Boolean).join('\n');
+      saveToVault({
+        documentType: 'cp-exam-prep',
+        condition: '',
+        title: 'C&P Exam Packet',
+        content: packetText,
+        fileName: `cp-exam-packet-${new Date().toISOString().split('T')[0]}.txt`,
+      }).then(() => {
+        toast({
+          title: 'Saved to Vault',
+          action: <ToastAction altText="View in Vault" onClick={() => navigate('/settings/vault')}>View</ToastAction>,
+        });
+      }).catch(() => {});
     } catch (err) {
       console.error('PDF export failed:', err);
     } finally {

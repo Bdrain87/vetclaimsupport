@@ -24,6 +24,7 @@ import {
   FileText,
   Shield,
   LogIn,
+  FolderOpen,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { vcsSpring } from '@/constants/animations';
@@ -52,6 +53,7 @@ export default function Dashboard() {
   const { conditions: userConditions } = useUserConditions();
   const profile = useProfileStore();
   const addDashboardQuickLog = useAppStore((s) => s.addDashboardQuickLog);
+  const vaultDocCount = useAppStore((s) => s.claimDocuments.length);
   const navigate = useNavigate();
 
   const [session, setSession] = useState<Session | null>(null);
@@ -469,6 +471,31 @@ export default function Dashboard() {
           )}
         </motion.div>
       )}
+
+      {/* Document Vault Quick Link */}
+      <Link to="/settings/vault" className="block">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={vcsSpring}
+          className="rounded-xl bg-card border border-border p-4 shadow-sm hover:bg-accent/30 transition-colors cursor-pointer overflow-hidden max-w-full"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <FolderOpen className="h-5 w-5 text-primary" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold text-foreground">Document Vault</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {vaultDocCount > 0
+                  ? `${vaultDocCount} document${vaultDocCount === 1 ? '' : 's'} stored`
+                  : 'Store and organize your claim documents'}
+              </p>
+            </div>
+            <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+          </div>
+        </motion.div>
+      </Link>
 
       {/* Recommended for Your Claims */}
       {showRecommendations && conditionRecommendations.length > 0 && (

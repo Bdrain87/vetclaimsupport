@@ -1,4 +1,5 @@
 import { useState, useMemo, useRef, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -10,6 +11,9 @@ import {
   Share2, Download, Shield, AlertTriangle, Copy,
   CheckCircle2, Star, Loader2,
 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { ToastAction } from '@/components/ui/toast';
+import { saveToVault } from '@/utils/vaultAutoSave';
 import useAppStore from '@/store/useAppStore';
 import { useProfileStore } from '@/store/useProfileStore';
 import { getConditionById } from '@/data/vaConditions';
@@ -18,6 +22,8 @@ import { PageContainer } from '@/components/PageContainer';
 import { combineRatings } from '@/utils/vaMath';
 
 export default function ShareableSummary() {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const userConditions = useAppStore((s) => s.userConditions);
   const deadlines = useAppStore((s) => s.deadlines);
   const profile = useProfileStore();
@@ -174,19 +180,31 @@ export default function ShareableSummary() {
     if (navigator.share && navigator.canShare?.({ files: [new File([blob], filename)] })) {
       try {
         await navigator.share({ files: [new File([blob], filename, { type: 'text/plain' })] });
-        return;
       } catch { /* cancelled */ }
+    } else {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     }
 
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }, [generateTextSummary]);
+    saveToVault({
+      documentType: 'shareable-summary',
+      condition: '',
+      title: 'Claims Summary',
+      content: text,
+      fileName: filename,
+    }).then(() => {
+      toast({
+        title: 'Saved to Vault',
+        action: <ToastAction altText="View in Vault" onClick={() => navigate('/settings/vault')}>View</ToastAction>,
+      });
+    }).catch(() => {});
+  }, [generateTextSummary, toast, navigate]);
 
   return (
     <PageContainer className="py-8 space-y-6 animate-fade-in">

@@ -26,6 +26,8 @@ import { Label } from '@/components/ui/label';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { cn } from '@/lib/utils';
 import { exportStressorStatement } from '@/utils/pdfExport';
+import { saveToVault } from '@/utils/vaultAutoSave';
+import { ToastAction } from '@/components/ui/toast';
 import { PageContainer } from '@/components/PageContainer';
 import { useClaims } from '@/hooks/useClaims';
 import { PrefillBadge } from '@/components/ui/PrefillBadge';
@@ -278,12 +280,24 @@ export default function StressorStatement() {
     try {
       const statement = generateStatement();
       await exportStressorStatement(statement);
+      saveToVault({
+        documentType: 'stressor-statement',
+        condition: 'PTSD',
+        title: 'Stressor Statement - PTSD',
+        content: statement,
+        fileName: 'stressor-statement-ptsd.txt',
+      }).then(() => {
+        toast({
+          title: 'Saved to Vault',
+          action: <ToastAction altText="View in Vault" onClick={() => navigate('/settings/vault')}>View</ToastAction>,
+        });
+      }).catch(() => {});
     } catch {
       toast({ title: 'Export failed', description: 'Could not generate PDF. Please try again.', variant: 'destructive' });
     } finally {
       setExporting(false);
     }
-  }, [generateStatement, toast]);
+  }, [generateStatement, toast, navigate]);
 
   const handleCopy = useCallback(async () => {
     const statement = generateStatement();

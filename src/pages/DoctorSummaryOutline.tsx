@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import {
   FileText,
   ChevronRight,
@@ -33,6 +33,8 @@ import { getAllBranchLabels } from '@/utils/veteranProfile';
 import { vaDisabilitiesBySystem } from '@/data/vaDisabilities';
 import { PageContainer } from '@/components/PageContainer';
 import { exportDoctorSummaryOutlinePDF } from '@/utils/pdfExport';
+import { saveToVault } from '@/utils/vaultAutoSave';
+import { ToastAction } from '@/components/ui/toast';
 import { containsBannedPhrases, EXPORT_BLOCKED_MESSAGE } from '@/utils/bannedPhrases';
 import { conditionRatingCriteria } from '@/data/ratingCriteria';
 import { useToast } from '@/hooks/use-toast';
@@ -133,6 +135,7 @@ const STEPS = [
 
 export default function DoctorSummaryOutline() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const { data } = useClaims();
   const profile = useProfileStore();
   const { toast } = useToast();
@@ -302,7 +305,32 @@ export default function DoctorSummaryOutline() {
     setExporting(true);
     try {
       await exportDoctorSummaryOutlinePDF(formData);
-      toast({ title: 'PDF Exported', description: 'Your doctor summary has been saved.' });
+      const condition = formData.primaryCondition || '';
+      const outlineText = [
+        `DOCTOR SUMMARY OUTLINE - ${condition || 'General'}`,
+        formData.secondaryCondition ? `Secondary: ${formData.secondaryCondition}` : '',
+        '',
+        formData.inServiceEvent ? `SERVICE HISTORY:\n${formData.inServiceEvent}` : '',
+        formData.onsetTimeline ? `ONSET TIMELINE:\n${formData.onsetTimeline}` : '',
+        formData.currentSymptoms ? `CURRENT SYMPTOMS:\n${formData.currentSymptoms}` : '',
+        formData.currentSymptomsDetail ? `SYMPTOM DETAIL:\n${formData.currentSymptomsDetail}` : '',
+        formData.functionalImpact ? `FUNCTIONAL IMPACT:\n${formData.functionalImpact}` : '',
+        formData.currentMedications ? `MEDICATIONS:\n${formData.currentMedications}` : '',
+      ].filter(Boolean).join('\n\n');
+      saveToVault({
+        documentType: 'nexus-letter',
+        condition,
+        title: `Doctor Summary${condition ? ` - ${condition}` : ''}`,
+        content: outlineText,
+        fileName: `doctor-summary-${condition || 'outline'}.txt`,
+      }).then(() => {
+        toast({
+          title: 'Saved to Vault',
+          action: <ToastAction altText="View in Vault" onClick={() => navigate('/settings/vault')}>View</ToastAction>,
+        });
+      }).catch(() => {
+        toast({ title: 'PDF Exported', description: 'Your doctor summary has been saved.' });
+      });
     } catch {
       toast({ title: 'Export failed', description: 'Could not generate PDF. Please try again.', variant: 'destructive' });
     } finally {

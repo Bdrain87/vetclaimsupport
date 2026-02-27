@@ -10,6 +10,8 @@ export type ClaimDocumentType =
   | 'private-medical-opinion'
   | 'personal-statement'
   | 'stressor-statement'
+  | 'shareable-summary'
+  | 'cp-exam-prep'
   | 'other';
 
 export const claimDocumentTypeLabels: Record<ClaimDocumentType, string> = {
@@ -22,6 +24,8 @@ export const claimDocumentTypeLabels: Record<ClaimDocumentType, string> = {
   'private-medical-opinion': 'Private Medical Opinion',
   'personal-statement': 'Personal Statement',
   'stressor-statement': 'Stressor Statement',
+  'shareable-summary': 'Claims Summary',
+  'cp-exam-prep': 'C&P Exam Prep',
   'other': 'Other',
 };
 
@@ -35,6 +39,8 @@ export const claimDocumentTypeShort: Record<ClaimDocumentType, string> = {
   'private-medical-opinion': 'PMO',
   'personal-statement': 'Personal',
   'stressor-statement': 'Stressor',
+  'shareable-summary': 'Summary',
+  'cp-exam-prep': 'C&P Prep',
   'other': 'Other',
 };
 
@@ -77,6 +83,10 @@ export function getDocTypeColor(docType: ClaimDocumentType): string {
       return 'bg-muted text-muted-foreground border-muted';
     case 'stressor-statement':
       return 'bg-purple-500/20 text-purple-500 border-purple-500/30';
+    case 'shareable-summary':
+      return 'bg-blue-500/20 text-blue-500 border-blue-500/30';
+    case 'cp-exam-prep':
+      return 'bg-gold/20 text-gold border-gold/30';
     default:
       return 'bg-muted text-muted-foreground border-border';
   }

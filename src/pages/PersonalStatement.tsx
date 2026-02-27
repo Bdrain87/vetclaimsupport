@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import {
   ChevronLeft,
   ChevronRight,
@@ -33,6 +33,8 @@ import { useProfileStore } from '@/store/useProfileStore';
 import { useClaims } from '@/hooks/useClaims';
 import { cn } from '@/lib/utils';
 import { exportPersonalStatement } from '@/utils/pdfExport';
+import { saveToVault } from '@/utils/vaultAutoSave';
+import { ToastAction } from '@/components/ui/toast';
 import { PrefillBadge } from '@/components/ui/PrefillBadge';
 import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
 import { useToolDraft } from '@/hooks/useToolDraft';
@@ -126,6 +128,7 @@ function GuidanceTip({ tips }: GuidanceTipProps) {
 
 export default function PersonalStatement() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const { firstName, lastName } = useProfileStore();
   const { data: claimsData } = useClaims();
   const { toast } = useToast();
@@ -267,14 +270,26 @@ export default function PersonalStatement() {
     setExporting(true);
     try {
       const statement = polishedStatement || generateStatement();
-      const conditionName = formData.condition?.name;
-      await exportPersonalStatement(statement, conditionName);
+      const conditionName = formData.condition?.name || '';
+      await exportPersonalStatement(statement, conditionName || undefined);
+      saveToVault({
+        documentType: 'personal-statement',
+        condition: conditionName,
+        title: `Personal Statement${conditionName ? ` - ${conditionName}` : ''}`,
+        content: statement,
+        fileName: `personal-statement-${conditionName || 'general'}.txt`,
+      }).then(() => {
+        toast({
+          title: 'Saved to Vault',
+          action: <ToastAction altText="View in Vault" onClick={() => navigate('/settings/vault')}>View</ToastAction>,
+        });
+      }).catch(() => {});
     } catch {
       toast({ title: 'Export failed', description: 'Could not generate PDF. Please try again.', variant: 'destructive' });
     } finally {
       setExporting(false);
     }
-  }, [generateStatement, polishedStatement, formData.condition, toast]);
+  }, [generateStatement, polishedStatement, formData.condition, toast, navigate]);
 
   const handleCopy = useCallback(async () => {
     const statement = polishedStatement || generateStatement();
