@@ -94,7 +94,7 @@ export default function ClaimChecklist() {
         guidance: metrics.hasDD214 
           ? 'Your DD-214 is ready for your claim.'
           : 'Request from National Personnel Records Center (NPRC) if you don\'t have a copy.',
-        link: '/settings/vault',
+        link: '/claims/vault',
         linkText: 'Update Status',
         priority: 'high',
       },
@@ -130,7 +130,7 @@ export default function ClaimChecklist() {
         guidance: metrics.hasSTRs 
           ? 'Your STRs will help establish service connection.'
           : 'Request from your last duty station or NPRC. These are critical for proving in-service events.',
-        link: '/settings/vault',
+        link: '/claims/vault',
         linkText: 'Update Status',
         priority: 'high',
       },
@@ -184,7 +184,7 @@ export default function ClaimChecklist() {
         guidance: metrics.hasNexus
           ? 'Your doctor summary provides crucial medical opinion for service connection.'
           : 'A doctor summary from your physician can significantly strengthen claims. Use the Doctor Summary Builder to get started.',
-        link: '/settings/vault',
+        link: '/claims/vault',
         linkText: 'Update Status',
         priority: 'high',
       },
@@ -508,7 +508,7 @@ export default function ClaimChecklist() {
               is comprehensive and ready for submission.
             </p>
             <Button asChild>
-              <Link to="/settings/vault">
+              <Link to="/claims/vault">
                 View Your Documents
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Link>

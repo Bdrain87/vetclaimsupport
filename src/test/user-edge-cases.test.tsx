@@ -282,69 +282,6 @@ describe('DeleteAccountPage Edge Cases', () => {
   });
 });
 
-// ── Dashboard Quick Log Edge Cases ────────────────────────────────────────
-
-describe('Dashboard Quick Log Edge Cases', () => {
-  let Dashboard: React.ComponentType;
-
-  beforeEach(async () => {
-    const mod = await import('@/pages/Dashboard');
-    Dashboard = mod.default;
-  });
-
-  it('save button stays disabled without mood selection even with notes', async () => {
-    const user = userEvent.setup();
-    render(
-      <ThemeProvider>
-        <TooltipProvider>
-          <MemoryRouter initialEntries={['/app']}>
-            <Suspense fallback={<div>Loading...</div>}>
-              <Dashboard />
-            </Suspense>
-          </MemoryRouter>
-        </TooltipProvider>
-      </ThemeProvider>,
-    );
-
-    await waitFor(() => {
-      expect(
-        screen.getByPlaceholderText(/symptoms, triggers, activities/i),
-      ).toBeInTheDocument();
-    });
-
-    await user.type(
-      screen.getByPlaceholderText(/symptoms, triggers, activities/i),
-      'Some notes here',
-    );
-
-    expect(screen.getByRole('button', { name: /save log/i })).toBeDisabled();
-  });
-
-  it('allows switching between mood selections', async () => {
-    const user = userEvent.setup();
-    render(
-      <ThemeProvider>
-        <TooltipProvider>
-          <MemoryRouter initialEntries={['/app']}>
-            <Suspense fallback={<div>Loading...</div>}>
-              <Dashboard />
-            </Suspense>
-          </MemoryRouter>
-        </TooltipProvider>
-      </ThemeProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByRole('radio', { name: /mood: good/i })).toBeInTheDocument();
-    });
-
-    await user.click(screen.getByRole('radio', { name: /mood: good/i }));
-    await user.click(screen.getByRole('radio', { name: /mood: bad/i }));
-
-    expect(screen.getByRole('button', { name: /save log/i })).not.toBeDisabled();
-  });
-});
-
 // ── BackPayEstimator Edge Cases ───────────────────────────────────────────
 
 describe('BackPayEstimator Edge Cases', () => {

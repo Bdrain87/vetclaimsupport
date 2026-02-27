@@ -259,6 +259,11 @@ function AnimatedRoutes() {
 
           {/* === CLAIMS === */}
           <Route path="/claims" element={<Conditions />} />
+          <Route path="/claims/vault" element={<PremiumGuard featureName="Document Vault"><DocumentsHub /></PremiumGuard>} />
+          <Route path="/claims/deadlines" element={<DeadlinesPage />} />
+          <Route path="/claims/journey" element={<ClaimJourney />} />
+          <Route path="/claims/itf" element={<IntentToFile />} />
+          <Route path="/claims/timeline" element={<Timeline />} />
           <Route path="/claims/strategy" element={<PremiumGuard featureName="Claim Strategy Wizard"><ClaimStrategyWizard /></PremiumGuard>} />
           <Route path="/claims/body-map" element={<PremiumGuard featureName="Body Map"><BodyMap /></PremiumGuard>} />
           <Route path="/claims/calculator" element={<Combination />} />
@@ -315,11 +320,11 @@ function AnimatedRoutes() {
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/settings/edit-profile" element={<SettingsPage />} />
           <Route path="/settings/service-history" element={<ServiceHistory />} />
-          <Route path="/settings/vault" element={<PremiumGuard featureName="Document Vault"><DocumentsHub /></PremiumGuard>} />
-          <Route path="/settings/journey" element={<ClaimJourney />} />
-          <Route path="/settings/itf" element={<IntentToFile />} />
-          <Route path="/settings/deadlines" element={<DeadlinesPage />} />
-          <Route path="/settings/timeline" element={<Timeline />} />
+          <Route path="/settings/vault" element={<Navigate to="/claims/vault" replace />} />
+          <Route path="/settings/journey" element={<Navigate to="/claims/journey" replace />} />
+          <Route path="/settings/itf" element={<Navigate to="/claims/itf" replace />} />
+          <Route path="/settings/deadlines" element={<Navigate to="/claims/deadlines" replace />} />
+          <Route path="/settings/timeline" element={<Navigate to="/claims/timeline" replace />} />
           <Route path="/settings/help" element={<HelpCenter />} />
           <Route path="/settings/glossary" element={<Glossary />} />
           <Route path="/settings/resources" element={<VAResources />} />
@@ -342,20 +347,20 @@ function AnimatedRoutes() {
           <Route path="/cp-exam-prep" element={<Navigate to="/prep/exam" replace />} />
           <Route path="/claim-strategy" element={<Navigate to="/claims/strategy" replace />} />
           <Route path="/health-log" element={<Navigate to="/health/summary" replace />} />
-          <Route path="/docs" element={<Navigate to="/settings/vault" replace />} />
-          <Route path="/documents" element={<Navigate to="/settings/vault" replace />} />
+          <Route path="/docs" element={<Navigate to="/claims/vault" replace />} />
+          <Route path="/documents" element={<Navigate to="/claims/vault" replace />} />
           <Route path="/service-history" element={<Navigate to="/settings/service-history" replace />} />
           <Route path="/help" element={<Navigate to="/settings/help" replace />} />
           <Route path="/va-resources" element={<Navigate to="/settings/resources" replace />} />
           <Route path="/buddy-statements" element={<Navigate to="/prep/buddy-statement" replace />} />
-          <Route path="/journey" element={<Navigate to="/settings/journey" replace />} />
-          <Route path="/claim-journey" element={<Navigate to="/settings/journey" replace />} />
+          <Route path="/journey" element={<Navigate to="/claims/journey" replace />} />
+          <Route path="/claim-journey" element={<Navigate to="/claims/journey" replace />} />
           <Route path="/checklist" element={<Navigate to="/claims/checklist" replace />} />
           <Route path="/claim-checklist" element={<Navigate to="/claims/checklist" replace />} />
           <Route path="/migraines" element={<Navigate to="/health/migraines" replace />} />
           <Route path="/exposures" element={<Navigate to="/health/exposures" replace />} />
           <Route path="/medical-visits" element={<Navigate to="/health/visits" replace />} />
-          <Route path="/timeline" element={<Navigate to="/settings/timeline" replace />} />
+          <Route path="/timeline" element={<Navigate to="/claims/timeline" replace />} />
           <Route path="/privacy" element={<Navigate to="/settings/privacy" replace />} />
           <Route path="/terms" element={<Navigate to="/settings/terms" replace />} />
           <Route path="/disclaimer" element={<Navigate to="/settings/disclaimer" replace />} />
@@ -407,10 +412,10 @@ function AnimatedRoutes() {
           <Route path="/profile" element={<Navigate to="/settings" replace />} />
           <Route path="/profile/edit" element={<Navigate to="/settings/edit-profile" replace />} />
           <Route path="/profile/service-history" element={<Navigate to="/settings/service-history" replace />} />
-          <Route path="/profile/vault" element={<Navigate to="/settings/vault" replace />} />
-          <Route path="/profile/journey" element={<Navigate to="/settings/journey" replace />} />
-          <Route path="/profile/itf" element={<Navigate to="/settings/itf" replace />} />
-          <Route path="/profile/timeline" element={<Navigate to="/settings/timeline" replace />} />
+          <Route path="/profile/vault" element={<Navigate to="/claims/vault" replace />} />
+          <Route path="/profile/journey" element={<Navigate to="/claims/journey" replace />} />
+          <Route path="/profile/itf" element={<Navigate to="/claims/itf" replace />} />
+          <Route path="/profile/timeline" element={<Navigate to="/claims/timeline" replace />} />
           <Route path="/profile/settings" element={<Navigate to="/settings" replace />} />
           <Route path="/profile/help" element={<Navigate to="/settings/help" replace />} />
           <Route path="/profile/glossary" element={<Navigate to="/settings/glossary" replace />} />

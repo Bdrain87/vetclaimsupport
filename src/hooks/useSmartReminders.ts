@@ -110,7 +110,7 @@ export function useSmartReminders(): SmartReminder[] {
           description: `Your Intent to File expires in ~${remaining} days. File your claim before it lapses to preserve your effective date.`,
           priority: 'high',
           category: 'deadline',
-          actionRoute: '/settings/itf',
+          actionRoute: '/claims/itf',
         });
       }
     }
@@ -141,7 +141,7 @@ export function useSmartReminders(): SmartReminder[] {
             description: `${remaining} days remaining. ${dl.notes || ''}`.trim(),
             priority: remaining <= 7 ? 'high' : 'medium',
             category: 'deadline',
-            actionRoute: '/settings/deadlines',
+            actionRoute: '/claims/deadlines',
           });
         }
       }

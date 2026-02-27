@@ -345,7 +345,7 @@ export default function DocumentsHub() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'Submitted': return <Check className="h-4 w-4 text-success" />;
-      case 'Obtained': return <FileText className="h-4 w-4 text-primary" />;
+      case 'Obtained': return <FileText className="h-4 w-4 text-gold" />;
       case 'In Progress': return <Clock className="h-4 w-4 text-warning" />;
       default: return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
     }
@@ -354,7 +354,7 @@ export default function DocumentsHub() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Submitted': return 'bg-success/10 border-success/20';
-      case 'Obtained': return 'bg-primary/10 border-primary/20';
+      case 'Obtained': return 'bg-gold/10 border-gold/20';
       case 'In Progress': return 'bg-warning/10 border-warning/20';
       default: return 'bg-muted/50 border-border';
     }
@@ -374,9 +374,9 @@ export default function DocumentsHub() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className="relative overflow-hidden">
-            <div className="absolute inset-0 bg-primary/30 blur-2xl rounded-full scale-150 opacity-50" />
-            <div className="relative p-3.5 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 shadow-lg shadow-primary/10">
-              <FolderOpen className="h-7 w-7 text-primary" />
+            <div className="absolute inset-0 bg-gold/30 blur-2xl rounded-full scale-150 opacity-50" />
+            <div className="relative p-3.5 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/20 shadow-lg shadow-gold/10">
+              <FolderOpen className="h-7 w-7 text-gold" />
             </div>
           </div>
           <div>
@@ -403,14 +403,14 @@ export default function DocumentsHub() {
                 className={cn(
                   "flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-3 px-2 sm:px-4 rounded-xl",
                   "text-xs sm:text-sm font-medium transition-all duration-300",
-                  "data-[state=active]:bg-background data-[state=active]:shadow-lg data-[state=active]:shadow-primary/10",
-                  "data-[state=active]:border data-[state=active]:border-primary/20",
+                  "data-[state=active]:bg-background data-[state=active]:shadow-lg data-[state=active]:shadow-gold/10",
+                  "data-[state=active]:border data-[state=active]:border-gold/20",
                   "hover:bg-background/50"
                 )}
               >
                 <tab.icon className={cn(
                   "h-4 w-4 sm:h-5 sm:w-5 transition-colors",
-                  activeTab === tab.value ? "text-primary" : "text-muted-foreground"
+                  activeTab === tab.value ? "text-gold" : "text-muted-foreground"
                 )} />
                 <span className="hidden xs:inline">{tab.label}</span>
               </TabsTrigger>
@@ -477,10 +477,10 @@ export default function DocumentsHub() {
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
+            <Card className="bg-gradient-to-br from-gold/10 to-gold/5 border-gold/20">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <FolderOpen className="h-8 w-8 text-primary" />
+                  <FolderOpen className="h-8 w-8 text-gold" />
                   <div>
                     <p className="text-3xl font-bold">{stats.totalDocuments}</p>
                     <p className="text-sm text-muted-foreground">Total Docs</p>
@@ -537,8 +537,8 @@ export default function DocumentsHub() {
                     <Card
                       key={cat.type}
                       className={cn(
-                        'flex-shrink-0 w-[140px] cursor-pointer transition-all hover:border-primary/50',
-                        count > 0 ? 'border-primary/20 bg-primary/5' : ''
+                        'flex-shrink-0 w-[140px] cursor-pointer transition-all hover:border-gold/50',
+                        count > 0 ? 'border-gold/20 bg-gold/5' : ''
                       )}
                       onClick={() => {
                         setFilterDocType(cat.type);
@@ -548,11 +548,11 @@ export default function DocumentsHub() {
                       <CardContent className="p-4 text-center">
                         <div className={cn(
                           'w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-2',
-                          count > 0 ? 'bg-primary/10' : 'bg-muted'
+                          count > 0 ? 'bg-gold/10' : 'bg-muted'
                         )}>
                           <cat.icon className={cn(
                             'h-5 w-5',
-                            count > 0 ? 'text-primary' : 'text-muted-foreground'
+                            count > 0 ? 'text-gold' : 'text-muted-foreground'
                           )} />
                         </div>
                         <p className="font-medium text-sm">{cat.label}</p>
@@ -567,10 +567,10 @@ export default function DocumentsHub() {
           </div>
 
           {/* VA Tip */}
-          <Card className="border-primary/20 bg-primary/5">
+          <Card className="border-gold/20 bg-gold/5">
             <CardContent className="p-4">
               <div className="flex items-start gap-3">
-                <Sparkles className="h-5 w-5 text-primary mt-0.5" />
+                <Sparkles className="h-5 w-5 text-gold mt-0.5" />
                 <div>
                   <h3 className="font-semibold text-sm mb-1">Key Evidence for VA Claims</h3>
                   <p className="text-xs text-muted-foreground">
@@ -612,12 +612,12 @@ export default function DocumentsHub() {
               'relative border-2 border-dashed rounded-2xl p-6 transition-all duration-200',
               'flex flex-col items-center justify-center gap-4',
               isDragging
-                ? 'border-primary bg-primary/10'
-                : 'border-border hover:border-primary/50 bg-muted/30'
+                ? 'border-gold bg-gold/10'
+                : 'border-border hover:border-gold/50 bg-muted/30'
             )}
           >
-            <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10">
-              <Upload className="h-7 w-7 text-primary" />
+            <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gold/10">
+              <Upload className="h-7 w-7 text-gold" />
             </div>
             <div className="text-center">
               <p className="font-medium">
@@ -715,7 +715,7 @@ export default function DocumentsHub() {
               {filteredDocuments.map((doc) => (
                 <Card
                   key={doc.id}
-                  className="group hover:border-primary/50 transition-colors cursor-pointer overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  className="group hover:border-gold/50 transition-colors cursor-pointer overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
                   onClick={() => setSelectedDoc(doc)}
                   onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedDoc(doc); } }}
                   tabIndex={0}
@@ -789,10 +789,10 @@ export default function DocumentsHub() {
         <TabsContent value="checklist" className="space-y-6 mt-0">
           {/* Progress Summary */}
           <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-            <Card className="border-primary/20 bg-primary/5">
+            <Card className="border-gold/20 bg-gold/5">
               <CardContent className="pt-4 pb-3">
                 <div className="flex items-center gap-3">
-                  <FileText className="h-6 w-6 text-primary" />
+                  <FileText className="h-6 w-6 text-gold" />
                   <div>
                     <p className="text-xl font-bold">{data.documents.reduce((sum, doc) => sum + (doc.count || 0), 0)}</p>
                     <p className="text-xs text-muted-foreground">Total Copies</p>
@@ -929,9 +929,9 @@ export default function DocumentsHub() {
           </div>
 
           {/* Tips */}
-          <Card className="bg-primary/5 border-primary/20">
+          <Card className="bg-gold/5 border-gold/20">
             <CardHeader className="pb-2">
-              <CardTitle className="text-base text-primary">Tips for Gathering Documents</CardTitle>
+              <CardTitle className="text-base text-gold">Tips for Gathering Documents</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 text-sm text-foreground/80">
               <p>• <strong>STRs:</strong> Request from NPRC or your local MTF</p>
@@ -975,10 +975,10 @@ export default function DocumentsHub() {
             ))}
           </div>
 
-          <Card className="border-primary/20 bg-primary/5">
+          <Card className="border-gold/20 bg-gold/5">
             <CardContent className="p-4">
               <div className="flex items-start gap-3">
-                <Sparkles className="h-5 w-5 text-primary mt-0.5" />
+                <Sparkles className="h-5 w-5 text-gold mt-0.5" />
                 <div>
                   <h3 className="font-semibold text-sm mb-1">Statement Writing Tips</h3>
                   <ul className="text-xs text-muted-foreground space-y-1">

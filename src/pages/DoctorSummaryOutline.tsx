@@ -329,7 +329,7 @@ export default function DoctorSummaryOutline() {
       }).then(() => {
         toast({
           title: 'Saved to Vault',
-          action: <ToastAction altText="View in Vault" onClick={() => navigate('/settings/vault')}>View</ToastAction>,
+          action: <ToastAction altText="View in Vault" onClick={() => navigate('/claims/vault')}>View</ToastAction>,
         });
       }).catch(() => {
         toast({ title: 'PDF Exported', description: 'Your doctor summary has been saved.' });

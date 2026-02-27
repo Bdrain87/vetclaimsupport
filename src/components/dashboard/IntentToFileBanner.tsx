@@ -95,7 +95,7 @@ export function IntentToFileBanner() {
                 </p>
                 <div className="flex flex-wrap gap-2 pt-1" role="group" aria-label="Intent to File actions">
                   <Link
-                    to="/settings/itf"
+                    to="/claims/itf"
                     className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-xs font-semibold transition-colors min-h-[44px]"
                     style={{ background: 'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)', color: '#000' }}
                   >

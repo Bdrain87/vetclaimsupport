@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { safeFormatDateTime } from '@/utils/dateUtils';
-import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Scale, Shield, FileText, AlertTriangle, ChevronRight, User, Plus, Trash2, Briefcase, Info, HelpCircle, BookOpen, LogIn, LogOut, Calendar, Database, Crown } from 'lucide-react';
+import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Scale, Shield, FileText, AlertTriangle, ChevronRight, User, Plus, Trash2, Briefcase, Info, BookOpen, LogIn, LogOut, Calendar, Database, Crown } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -604,7 +604,7 @@ export default function Settings() {
                 Learn: BDD Guide
               </Button>
             </Link>
-            <Link to="/settings/itf" className="flex-1">
+            <Link to="/claims/itf" className="flex-1">
               <Button variant="outline" className="w-full text-sm">
                 <Info className="h-4 w-4 mr-1.5" />
                 Learn: Intent to File
@@ -939,14 +939,14 @@ export default function Settings() {
         </CardContent>
       </Card>
 
-      {/* More Pages — Phase 1I */}
+      {/* More — Phase 1I */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Info className="h-5 w-5" />
             More
           </CardTitle>
-          <CardDescription>Additional resources</CardDescription>
+          <CardDescription>Additional information</CardDescription>
         </CardHeader>
         <CardContent className="space-y-2">
           <Link
@@ -956,28 +956,6 @@ export default function Settings() {
             <div className="flex items-center gap-3">
               <Info className="h-5 w-5 text-primary" />
               <span className="font-medium text-foreground">About VCS</span>
-            </div>
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-          </Link>
-
-          <Link
-            to="/settings/glossary"
-            className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
-          >
-            <div className="flex items-center gap-3">
-              <BookOpen className="h-5 w-5 text-primary" />
-              <span className="font-medium text-foreground">Glossary</span>
-            </div>
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-          </Link>
-
-          <Link
-            to="/settings/faq"
-            className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
-          >
-            <div className="flex items-center gap-3">
-              <HelpCircle className="h-5 w-5 text-primary" />
-              <span className="font-medium text-foreground">FAQ</span>
             </div>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </Link>

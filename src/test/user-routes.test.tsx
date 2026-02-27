@@ -87,8 +87,8 @@ const redirects: Array<{ from: string; to: string; label: string }> = [
   { from: '/build-packet', to: '/prep/packet', label: 'build-packet → prep/packet' },
   { from: '/bdd-guide', to: '/prep/bdd-guide', label: 'bdd-guide → prep/bdd-guide' },
   // Settings/Documentation routes
-  { from: '/docs', to: '/settings/vault', label: 'docs → settings/vault' },
-  { from: '/documents', to: '/settings/vault', label: 'documents → settings/vault' },
+  { from: '/docs', to: '/claims/vault', label: 'docs → claims/vault' },
+  { from: '/documents', to: '/claims/vault', label: 'documents → claims/vault' },
   {
     from: '/service-history',
     to: '/settings/service-history',
@@ -110,10 +110,10 @@ const redirects: Array<{ from: string; to: string; label: string }> = [
   },
   {
     from: '/timeline',
-    to: '/settings/timeline',
-    label: 'timeline → settings/timeline',
+    to: '/claims/timeline',
+    label: 'timeline → claims/timeline',
   },
-  { from: '/journey', to: '/settings/journey', label: 'journey → settings/journey' },
+  { from: '/journey', to: '/claims/journey', label: 'journey → claims/journey' },
   // Old /tools/* namespace
   {
     from: '/tools/calculator',
@@ -160,8 +160,8 @@ const redirects: Array<{ from: string; to: string; label: string }> = [
   },
   {
     from: '/profile/vault',
-    to: '/settings/vault',
-    label: 'profile/vault → settings/vault',
+    to: '/claims/vault',
+    label: 'profile/vault → claims/vault',
   },
   {
     from: '/profile/help',

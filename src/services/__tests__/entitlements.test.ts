@@ -160,8 +160,8 @@ describe('Section 3B — isPremiumRoute', () => {
     expect(isPremiumRoute('/health/symptoms')).toBe(true);
   });
 
-  it('returns true for /settings/vault', () => {
-    expect(isPremiumRoute('/settings/vault')).toBe(true);
+  it('returns true for /claims/vault', () => {
+    expect(isPremiumRoute('/claims/vault')).toBe(true);
   });
 
   it('returns true for /prep/exam', () => {
@@ -381,7 +381,7 @@ describe('Section 3D — Premium Feature Gating', () => {
       expect(isPremiumRoute('/claims/strategy')).toBe(true);
       expect(isPremiumRoute('/prep/personal-statement')).toBe(true);
       expect(isPremiumRoute('/health/summary')).toBe(true);
-      expect(isPremiumRoute('/settings/vault')).toBe(true);
+      expect(isPremiumRoute('/claims/vault')).toBe(true);
     });
   });
 

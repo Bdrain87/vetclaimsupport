@@ -216,14 +216,14 @@ describe('Premium Gating', () => {
       expect(PREMIUM_ROUTES).toContain('/health/medications');
       expect(PREMIUM_ROUTES).toContain('/prep/personal-statement');
       expect(PREMIUM_ROUTES).toContain('/prep/buddy-statement');
-      expect(PREMIUM_ROUTES).toContain('/settings/vault');
+      expect(PREMIUM_ROUTES).toContain('/claims/vault');
     });
 
     it('isPremiumRoute returns true for premium paths', () => {
       expect(isPremiumRoute('/claims/strategy')).toBe(true);
       expect(isPremiumRoute('/health/symptoms')).toBe(true);
       expect(isPremiumRoute('/prep/personal-statement')).toBe(true);
-      expect(isPremiumRoute('/settings/vault')).toBe(true);
+      expect(isPremiumRoute('/claims/vault')).toBe(true);
       expect(isPremiumRoute('/prep/exam')).toBe(true);
       expect(isPremiumRoute('/health/timeline')).toBe(true);
     });
@@ -247,12 +247,11 @@ describe('Premium Gating', () => {
       }
     });
 
-    it('premium routes include claims, health, prep, and settings sections', () => {
+    it('premium routes include claims, health, and prep sections', () => {
       const sections = new Set(PREMIUM_ROUTES.map((r) => r.split('/')[1]));
       expect(sections.has('claims')).toBe(true);
       expect(sections.has('health')).toBe(true);
       expect(sections.has('prep')).toBe(true);
-      expect(sections.has('settings')).toBe(true);
     });
   });
 });

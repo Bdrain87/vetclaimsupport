@@ -202,7 +202,7 @@ export default function ShareableSummary() {
     }).then(() => {
       toast({
         title: 'Saved to Vault',
-        action: <ToastAction altText="View in Vault" onClick={() => navigate('/settings/vault')}>View</ToastAction>,
+        action: <ToastAction altText="View in Vault" onClick={() => navigate('/claims/vault')}>View</ToastAction>,
       });
     }).catch(() => {});
   }, [generateTextSummary, toast, navigate]);

@@ -4,7 +4,7 @@ import {
   ClipboardCheck, FileText, Users, FileSignature, AlertTriangle,
   BookOpen, ClipboardList, Languages, DollarSign, Package, FileCheck,
   Calculator, Scale, Navigation, Clock, Shield, Wrench, Share2, TrendingUp, Target, FileSearch,
-  Search, Briefcase, Stethoscope,
+  Search, Briefcase, Stethoscope, HelpCircle, GraduationCap, MapPin, Globe,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PageContainer } from '@/components/PageContainer';
@@ -16,6 +16,13 @@ interface ToolItem {
   route: string;
   description: string;
 }
+
+const MOST_USED: ToolItem[] = [
+  { label: 'Rating Calculator', icon: Calculator, route: '/claims/calculator', description: 'Calculate combined VA rating' },
+  { label: 'C&P Exam Prep', icon: ClipboardCheck, route: '/prep/exam', description: 'Prepare for your compensation exam' },
+  { label: 'Personal Statement', icon: FileText, route: '/prep/personal-statement', description: 'Generate your personal statement' },
+  { label: 'Claim Packet Builder', icon: Package, route: '/prep/packet', description: 'Compile your full claim packet' },
+];
 
 const toolCategories: { title: string; tools: ToolItem[] }[] = [
   {
@@ -50,7 +57,7 @@ const toolCategories: { title: string; tools: ToolItem[] }[] = [
       { label: 'Appeals Guide', icon: Scale, route: '/prep/appeals', description: 'Appeal lanes & verified case law' },
       { label: 'BDD Guide', icon: Clock, route: '/prep/bdd-guide', description: 'Pre-discharge filing guide' },
       { label: 'VA-Speak Translator', icon: Languages, route: '/prep/va-speak', description: 'Translate VA jargon to plain English' },
-      { label: 'Intent to File', icon: Shield, route: '/settings/itf', description: 'Protect your effective date' },
+      { label: 'Intent to File', icon: Shield, route: '/claims/itf', description: 'Protect your effective date' },
     ],
   },
   {
@@ -59,7 +66,7 @@ const toolCategories: { title: string; tools: ToolItem[] }[] = [
       { label: 'Evidence Strength', icon: Target, route: '/claims/evidence-strength', description: 'See how your logs match rating criteria' },
       { label: 'Decision Decoder', icon: FileSearch, route: '/claims/decision-decoder', description: 'Understand your VA decision letter' },
       { label: 'Rating Upgrade Paths', icon: TrendingUp, route: '/claims/upgrade-paths', description: 'See criteria to increase low ratings' },
-      { label: 'Deadline Tracker', icon: Clock, route: '/settings/deadlines', description: 'Track ITF, appeals, and exam dates' },
+      { label: 'Deadline Tracker', icon: Clock, route: '/claims/deadlines', description: 'Track ITF, appeals, and exam dates' },
     ],
   },
   {
@@ -73,14 +80,31 @@ const toolCategories: { title: string; tools: ToolItem[] }[] = [
   },
 ];
 
+const LEARN_TOOLS: ToolItem[] = [
+  { label: 'Help Center', icon: HelpCircle, route: '/settings/help', description: 'How to use VCS effectively' },
+  { label: 'FAQ', icon: HelpCircle, route: '/settings/faq', description: 'Frequently asked questions' },
+  { label: 'Glossary', icon: BookOpen, route: '/settings/glossary', description: 'VA terms & definitions' },
+  { label: 'VA Resources', icon: Globe, route: '/settings/resources', description: 'Official VA links & phone numbers' },
+  { label: 'Conditions by Conflict', icon: Shield, route: '/reference/conditions-by-conflict', description: 'Common conditions by era of service' },
+  { label: 'Condition Guide', icon: GraduationCap, route: '/reference/condition-guide', description: 'Browse 784+ VA conditions' },
+  { label: 'Deployment Locations', icon: MapPin, route: '/reference/deployment-locations', description: 'Presumptive conditions by deployment' },
+];
+
 export default function PrepHub() {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
 
-  const filteredCategories = useMemo(() => {
-    if (!search.trim()) return toolCategories;
+  const allCategories = useMemo(() => {
+    // Build the full list: Most Used + regular categories + Learn
+    const all: { title: string; tools: ToolItem[]; featured?: boolean; muted?: boolean }[] = [
+      { title: 'Most Used', tools: MOST_USED, featured: true },
+      ...toolCategories,
+      { title: 'Learn', tools: LEARN_TOOLS, muted: true },
+    ];
+
+    if (!search.trim()) return all;
     const q = search.toLowerCase();
-    return toolCategories
+    return all
       .map((cat) => ({
         ...cat,
         tools: cat.tools.filter(
@@ -113,37 +137,66 @@ export default function PrepHub() {
         />
       </div>
 
-      {filteredCategories.length === 0 && (
+      {allCategories.length === 0 && (
         <div className="py-8 text-center">
           <p className="text-sm text-muted-foreground">No tools match &ldquo;{search}&rdquo;</p>
         </div>
       )}
 
-      {filteredCategories.map((category) => (
+      {allCategories.map((category) => (
         <div key={category.title} className="space-y-2">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground px-1">
+          <h2 className={cn(
+            'text-xs font-semibold uppercase tracking-wider px-1',
+            category.featured ? 'text-gold' : 'text-muted-foreground'
+          )}>
             {category.title}
           </h2>
-          <div className="space-y-1.5">
-            {category.tools.map((tool) => (
-              <button
-                key={tool.route}
-                onClick={() => navigate(tool.route)}
-                className={cn(
-                  'w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card',
-                  'hover:bg-accent/50 active:scale-[0.98] transition-all text-left'
-                )}
-              >
-                <div className="p-2 rounded-xl bg-gold/10 flex-shrink-0">
-                  <tool.icon className="h-4 w-4 text-gold" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <span className="text-sm font-medium text-foreground block truncate">{tool.label}</span>
-                  <span className="text-xs text-muted-foreground block truncate">{tool.description}</span>
-                </div>
-              </button>
-            ))}
-          </div>
+
+          {/* Most Used: 2x2 grid with gold border */}
+          {category.featured ? (
+            <div className="grid grid-cols-2 gap-2">
+              {category.tools.map((tool) => (
+                <button
+                  key={tool.route}
+                  onClick={() => navigate(tool.route)}
+                  className="flex flex-col items-start gap-2 p-3 rounded-2xl border border-gold/30 bg-gold/5 hover:bg-gold/10 active:scale-[0.98] transition-all text-left"
+                >
+                  <div className="p-2 rounded-xl bg-gold/10">
+                    <tool.icon className="h-5 w-5 text-gold" />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-sm font-medium text-foreground block truncate">{tool.label}</span>
+                    <span className="text-[11px] text-muted-foreground block truncate">{tool.description}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-1.5">
+              {category.tools.map((tool) => (
+                <button
+                  key={tool.route}
+                  onClick={() => navigate(tool.route)}
+                  className={cn(
+                    'w-full flex items-center gap-3 p-3 rounded-2xl border bg-card',
+                    'hover:bg-accent/50 active:scale-[0.98] transition-all text-left',
+                    category.muted ? 'border-border/50' : 'border-border'
+                  )}
+                >
+                  <div className={cn(
+                    'p-2 rounded-xl flex-shrink-0',
+                    category.muted ? 'bg-muted' : 'bg-gold/10'
+                  )}>
+                    <tool.icon className={cn('h-4 w-4', category.muted ? 'text-muted-foreground' : 'text-gold')} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-sm font-medium text-foreground block truncate">{tool.label}</span>
+                    <span className="text-xs text-muted-foreground block truncate">{tool.description}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       ))}
     </PageContainer>

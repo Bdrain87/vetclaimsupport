@@ -46,8 +46,8 @@ export const PREMIUM_ROUTES = [
   '/prep/back-pay',
   '/prep/packet',
   '/prep/appeals',
-  // Settings
-  '/settings/vault',
+  // Claims
+  '/claims/vault',
 ] as const;
 
 export function isPremiumRoute(pathname: string): boolean {

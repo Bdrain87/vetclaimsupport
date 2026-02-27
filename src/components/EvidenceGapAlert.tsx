@@ -53,7 +53,7 @@ const EVIDENCE_REQUIREMENTS: EvidenceRequirement[] = [
     icon: <FileCheck className="h-4 w-4" />,
     importance: 'critical',
     checkFn: (cid, state) => state.checkedItems.includes('Service Treatment Records (STRs)'),
-    actionPath: '/settings/vault',
+    actionPath: '/claims/vault',
     actionLabel: 'Upload STRs',
     missingDescription: 'In-service medical records help establish that the condition began during or was aggravated by service.',
   },

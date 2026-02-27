@@ -36,6 +36,7 @@ import { useProfileStore } from '@/store/useProfileStore';
 import { ClaimIntelligence, type Recommendation } from '@/services/claimIntelligence';
 import useAppStore from '@/store/useAppStore';
 import { PageContainer } from '@/components/PageContainer';
+import { ClaimManagementStrip } from '@/components/ClaimManagementStrip';
 import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import { getDiagnosticCodeForCondition } from '@/components/shared/ConditionSearchInput.utils';
 import {
@@ -411,6 +412,9 @@ export default function Conditions() {
           Add Condition
         </Button>
       </div>
+
+      {/* Claim Management Strip */}
+      <ClaimManagementStrip />
 
       {/* Quick Claim Tools */}
       <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">

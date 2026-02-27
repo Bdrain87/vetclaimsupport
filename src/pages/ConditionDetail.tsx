@@ -112,7 +112,7 @@ function EvidenceChecklistCard({ conditionId, conditionName, onNavigate }: { con
           );
         })}
 
-        <Button variant="outline" className="w-full mt-4" onClick={() => onNavigate('/settings/vault')}>
+        <Button variant="outline" className="w-full mt-4" onClick={() => onNavigate('/claims/vault')}>
           <FileText className="h-4 w-4 mr-2" />
           Go to Documents Hub
         </Button>
