@@ -107,7 +107,7 @@ export function EvidenceAttachment({
           title: 'Evidence Attached',
           description: `${newDocs.length} file${newDocs.length > 1 ? 's' : ''} added to this entry.`,
         });
-      });
+      }).catch(() => { /* file read errors are non-fatal */ });
     }
 
     // Reset input

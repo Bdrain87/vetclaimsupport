@@ -69,9 +69,9 @@ const isNative = Capacitor.isNativePlatform();
 if (isNative && 'serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then((regs) => {
     regs.forEach((r) => r.unregister());
-  });
+  }).catch(() => {});
   if ('caches' in window) {
-    caches.keys().then((names) => names.forEach((n) => caches.delete(n)));
+    caches.keys().then((names) => names.forEach((n) => caches.delete(n))).catch(() => {});
   }
 }
 
@@ -96,7 +96,7 @@ if (!isNative && 'serviceWorker' in navigator) {
         caches.delete(name);
       }
     });
-  });
+  }).catch(() => {});
 
   // Check for SW updates immediately on load, every 5 minutes, and on tab focus
   navigator.serviceWorker.ready.then((registration) => {

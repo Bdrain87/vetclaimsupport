@@ -48,9 +48,9 @@ export default function ClaimChecklist() {
       buddyStatementsReceived,
       severeSymptoms,
       currentMeds,
-      hasDD214: (data.documents || []).some(d => d.name.includes('DD-214') && (d.status === 'Obtained' || d.status === 'Submitted')),
-      hasSTRs: (data.documents || []).some(d => d.name.includes('STR') && (d.status === 'Obtained' || d.status === 'Submitted')),
-      hasNexus: (data.documents || []).some(d => (d.name.includes('Nexus') || d.name.includes('Doctor Summar')) && (d.status === 'Obtained' || d.status === 'Submitted')),
+      hasDD214: (data.documents || []).some(d => d.name?.includes('DD-214') && (d.status === 'Obtained' || d.status === 'Submitted')),
+      hasSTRs: (data.documents || []).some(d => d.name?.includes('STR') && (d.status === 'Obtained' || d.status === 'Submitted')),
+      hasNexus: (data.documents || []).some(d => (d.name?.includes('Nexus') || d.name?.includes('Doctor Summar')) && (d.status === 'Obtained' || d.status === 'Submitted')),
     };
   }, [data]);
 

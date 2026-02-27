@@ -95,7 +95,7 @@ export default function SecondaryFinder() {
   const handleAddToClaim = (secondaryName: string) => {
     const match = vaConditions.find(c =>
       c.name.toLowerCase().includes(secondaryName.toLowerCase()) ||
-      c.abbreviation.toLowerCase().includes(secondaryName.toLowerCase()) ||
+      c.abbreviation?.toLowerCase().includes(secondaryName.toLowerCase()) ||
       secondaryName.toLowerCase().includes(c.name.toLowerCase())
     );
     if (match) {
@@ -107,7 +107,7 @@ export default function SecondaryFinder() {
   const isAlreadyClaimed = (secondaryName: string): boolean => {
     const match = vaConditions.find(c =>
       c.name.toLowerCase().includes(secondaryName.toLowerCase()) ||
-      c.abbreviation.toLowerCase().includes(secondaryName.toLowerCase()) ||
+      c.abbreviation?.toLowerCase().includes(secondaryName.toLowerCase()) ||
       secondaryName.toLowerCase().includes(c.name.toLowerCase())
     );
     return match ? hasCondition(match.id) : false;

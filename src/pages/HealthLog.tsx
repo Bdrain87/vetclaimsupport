@@ -111,7 +111,7 @@ export default function HealthLog() {
     const allSymptoms = (data.symptoms || []).filter(s => matchesFilter(s.conditionTags));
     const recentSymptoms = allSymptoms.filter(s => new Date(s.date) >= thirtyDaysAgo);
     const avgSeverity = recentSymptoms.length > 0
-      ? (recentSymptoms.reduce((sum, s) => sum + s.severity, 0) / recentSymptoms.length).toFixed(1)
+      ? (recentSymptoms.reduce((sum, s) => sum + (s.severity || 0), 0) / recentSymptoms.length).toFixed(1)
       : 0;
 
     // Migraine stats
@@ -125,7 +125,7 @@ export default function HealthLog() {
     const allSleep = (data.sleepEntries || []).filter(s => matchesFilter(s.conditionTags));
     const recentSleep = allSleep.filter(s => new Date(s.date) >= thirtyDaysAgo);
     const avgHours = recentSleep.length > 0
-      ? (recentSleep.reduce((sum, s) => sum + s.hoursSlept, 0) / recentSleep.length).toFixed(1)
+      ? (recentSleep.reduce((sum, s) => sum + (s.hoursSlept || 0), 0) / recentSleep.length).toFixed(1)
       : 0;
     const cpapNights = recentSleep.filter(s => s.usesCPAP && s.cpapUsedLastNight).length;
 

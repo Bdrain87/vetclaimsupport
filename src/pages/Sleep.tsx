@@ -177,7 +177,7 @@ export default function Sleep() {
     });
 
     const avgHours = last30Days.length > 0
-      ? (last30Days.reduce((sum, e) => sum + e.hoursSlept, 0) / last30Days.length).toFixed(1)
+      ? (last30Days.reduce((sum, e) => sum + (e.hoursSlept || 0), 0) / last30Days.length).toFixed(1)
       : 0;
 
     const nightmaresCount = last30Days.filter(e => e.nightmares).length;

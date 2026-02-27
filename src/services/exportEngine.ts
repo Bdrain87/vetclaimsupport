@@ -380,7 +380,7 @@ function generateText(
     // Symptoms
     if (data.symptoms.length > 0) {
       lines.push(`  Symptom Entries: ${data.symptoms.length}`);
-      const avgSev = (data.symptoms.reduce((s, e) => s + e.severity, 0) / data.symptoms.length).toFixed(1);
+      const avgSev = (data.symptoms.reduce((s, e) => s + (e.severity || 0), 0) / data.symptoms.length).toFixed(1);
       lines.push(`  Average Severity: ${avgSev}/10`);
       const severe = data.symptoms.filter((s) => s.severity >= 7).length;
       lines.push(`  Severe Episodes (7+): ${severe}`);
@@ -748,7 +748,7 @@ async function generatePDF(
       doc.text(`Symptom Journal: ${data.symptoms.length} entries`, margin + 4, y);
       doc.setFont('helvetica', 'normal');
       y += 6;
-      const avgSev = (data.symptoms.reduce((s, e) => s + e.severity, 0) / data.symptoms.length).toFixed(1);
+      const avgSev = (data.symptoms.reduce((s, e) => s + (e.severity || 0), 0) / data.symptoms.length).toFixed(1);
       doc.setTextColor(...PDF_COLORS.textSecondary);
       doc.text(`Average Severity: ${avgSev}/10 | Severe (7+): ${data.symptoms.filter((s) => s.severity >= 7).length}`, margin + 8, y);
       y += 8;

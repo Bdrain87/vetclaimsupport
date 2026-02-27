@@ -220,7 +220,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
     // Symptoms Section
     if (sections.symptoms && (data.symptoms || []).length > 0) {
       yPos = checkPageBreak(50);
-      const avgSeverity = (data.symptoms.reduce((sum, s) => sum + s.severity, 0) / data.symptoms.length).toFixed(1);
+      const avgSeverity = (data.symptoms.reduce((sum, s) => sum + (s.severity || 0), 0) / data.symptoms.length).toFixed(1);
       
       doc.setFontSize(14);
       doc.setTextColor(...colors.secondary);

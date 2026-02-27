@@ -253,7 +253,7 @@ export default function CPExamPacket() {
       avgPain,
       flareUps,
       worstPain,
-      worstDate: worstDate ? format(new Date(worstDate), 'MMM d, yyyy') : null,
+      worstDate: worstDate && !isNaN(new Date(worstDate).getTime()) ? format(new Date(worstDate), 'MMM d, yyyy') : null,
       avgSleep,
       migraineCount,
       prostratingCount,

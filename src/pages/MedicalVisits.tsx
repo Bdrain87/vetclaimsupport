@@ -153,7 +153,7 @@ export default function MedicalVisits() {
               }))).then(results => {
                 const newDocs = results.filter((d): d is NonNullable<typeof d> => d !== null);
                 if (newDocs.length > 0) setAllDocuments([...documents, ...newDocs]);
-              });
+              }).catch(() => { /* file read errors are non-fatal */ });
               if (importFileRef.current) importFileRef.current.value = '';
             }}
             className="hidden"

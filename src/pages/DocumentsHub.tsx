@@ -72,6 +72,14 @@ import type { DocumentTypeId } from '@/types/claims';
 import { PageContainer } from '@/components/PageContainer';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 
+// Safe date format — date-fns format() throws on invalid Date
+function safeFormatDate(dateStr: string | null | undefined, fmt: string): string {
+  if (!dateStr) return 'N/A';
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return 'N/A';
+  return format(d, fmt);
+}
+
 // Tab configuration
 const tabConfig = [
   { value: 'overview', label: 'Overview', icon: FolderOpen },
@@ -741,7 +749,7 @@ export default function DocumentsHub() {
                         <p className="text-xs text-muted-foreground truncate">{doc.title}</p>
                       )}
                       <div className="flex items-center justify-between text-[10px] text-muted-foreground">
-                        <span>{format(new Date(doc.date), 'MMM d, yyyy')}</span>
+                        <span>{safeFormatDate(doc.date, 'MMM d, yyyy')}</span>
                         <span>{formatFileSize(doc.fileSize)}</span>
                       </div>
                     </div>
@@ -1111,7 +1119,7 @@ export default function DocumentsHub() {
                 </div>
                 <div>
                   <p className="text-muted-foreground">Date</p>
-                  <p className="font-medium">{format(new Date(selectedDoc.date), 'MMM d, yyyy')}</p>
+                  <p className="font-medium">{safeFormatDate(selectedDoc.date, 'MMM d, yyyy')}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground">Size</p>
