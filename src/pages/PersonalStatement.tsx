@@ -103,6 +103,55 @@ const steps = [
   },
 ];
 
+// Clickable sentence starters that insert text into a textarea
+function SentenceStarters({
+  starters,
+  currentValue,
+  onInsert,
+}: {
+  starters: string[];
+  currentValue: string;
+  onInsert: (text: string) => void;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Don't show if the field already has substantial content
+  if (currentValue.trim().length > 100) return null;
+
+  return (
+    <div className="rounded-2xl border border-gold/20 bg-gold/5 p-3">
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-2 w-full text-left"
+      >
+        <HelpCircle className="h-3.5 w-3.5 text-gold shrink-0" />
+        <span className="text-xs font-medium text-foreground">
+          Need help starting? Tap a prompt below
+        </span>
+      </button>
+      {isOpen && (
+        <div className="flex flex-wrap gap-1.5 mt-2">
+          {starters.map((starter, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => {
+                const prefix = currentValue.trim() ? currentValue.trim() + '\n\n' : '';
+                onInsert(prefix + starter);
+                setIsOpen(false);
+              }}
+              className="text-[11px] px-2.5 py-1.5 rounded-full border border-gold/30 bg-gold/10 text-foreground hover:bg-gold/20 transition-colors text-left"
+            >
+              {starter}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 interface GuidanceTipProps {
   tips: string[];
 }
@@ -431,6 +480,18 @@ export default function PersonalStatement() {
                   : 'Explain the connection between your military service and this condition.'}
               </p>
             </div>
+            <SentenceStarters
+              currentValue={formData.serviceConnection}
+              onInsert={(text) => updateField('serviceConnection', text)}
+              starters={[
+                'During my service as a [MOS/role], I was exposed to...',
+                'While stationed at [base/location] in [year], I...',
+                'This condition first appeared during deployment to...',
+                'I first noticed symptoms after [specific event/duty]...',
+                'My service-connected [condition] caused this condition because...',
+                'I went to sick call on [approximate date] for...',
+              ]}
+            />
             <GuidanceTip
               tips={[
                 'Be specific about the event, duty, or exposure that caused your condition',
@@ -467,6 +528,18 @@ export default function PersonalStatement() {
                   : 'Describe your symptoms on your worst days, not just your average days.'}
               </p>
             </div>
+            <SentenceStarters
+              currentValue={formData.currentSymptoms}
+              onInsert={(text) => updateField('currentSymptoms', text)}
+              starters={[
+                'On my worst days, I experience...',
+                'The pain/symptoms occur [daily/weekly] and last for...',
+                'My symptoms are triggered or worsened by...',
+                'I rate my pain at [X]/10 on most days, but during flare-ups it reaches...',
+                'Since leaving service, my symptoms have [stayed the same/gotten worse]...',
+                'I have difficulty sleeping because...',
+              ]}
+            />
             <GuidanceTip
               tips={[
                 'Describe your symptoms on your WORST days, not just average days',
@@ -540,6 +613,18 @@ export default function PersonalStatement() {
                   : 'Think about what you can no longer do, or what is much harder now.'}
               </p>
             </div>
+            <SentenceStarters
+              currentValue={formData.dailyImpact}
+              onInsert={(text) => updateField('dailyImpact', text)}
+              starters={[
+                'Because of this condition, I can no longer...',
+                'At work, I struggle with...',
+                'Simple tasks like [cooking/cleaning/driving] are difficult because...',
+                'My relationships have been affected because...',
+                'I used to enjoy [activity] but now I cannot because...',
+                'I need help from my [spouse/family] to...',
+              ]}
+            />
             <GuidanceTip
               tips={[
                 'Describe specific activities you can no longer do or have difficulty with',

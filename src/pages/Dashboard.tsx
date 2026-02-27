@@ -25,6 +25,10 @@ import {
   Shield,
   LogIn,
   FolderOpen,
+  FileSearch,
+  Activity,
+  Plus,
+  Sparkles,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { vcsSpring } from '@/constants/animations';
@@ -54,6 +58,7 @@ export default function Dashboard() {
   const profile = useProfileStore();
   const addDashboardQuickLog = useAppStore((s) => s.addDashboardQuickLog);
   const vaultDocCount = useAppStore((s) => s.claimDocuments.length);
+  const symptoms = useAppStore((s) => s.symptoms);
   const navigate = useNavigate();
 
   const [session, setSession] = useState<Session | null>(null);
@@ -239,7 +244,7 @@ export default function Dashboard() {
       {!session && (
         <button
           onClick={() => navigate('/login')}
-          className="w-full flex items-center gap-3 p-3 rounded-xl border border-gold/30 bg-gold/5 text-left"
+          className="w-full flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 text-left"
         >
           <div className="h-9 w-9 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
             <LogIn className="h-4 w-4 text-gold" />
@@ -267,7 +272,7 @@ export default function Dashboard() {
       )}
 
       {/* Profile Card */}
-      <div className="rounded-xl border border-border bg-card overflow-hidden max-w-full">
+      <div className="rounded-2xl border border-border bg-card overflow-hidden max-w-full">
         <div className="p-4 flex items-center gap-4">
           <div className="h-12 w-12 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center flex-shrink-0">
             <User className="h-6 w-6 text-gold" />
@@ -306,13 +311,56 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* Getting Started — shown when user has zero conditions */}
+      {userConditions.length === 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={vcsSpring}
+          className="rounded-2xl border border-gold/20 bg-gradient-to-b from-gold/5 to-transparent p-5 space-y-4 overflow-hidden max-w-full"
+        >
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center flex-shrink-0">
+              <Sparkles className="h-5 w-5 text-gold" />
+            </div>
+            <div>
+              <h2 className="text-base font-bold text-foreground">Get Started</h2>
+              <p className="text-xs text-muted-foreground">Three steps to build your strongest claim.</p>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            {([
+              { step: 1, title: 'Add your conditions', desc: 'Tell us what you\'re claiming so we can tailor your tools.', route: '/claims', icon: Plus },
+              { step: 2, title: 'Start logging symptoms', desc: 'Daily logs create the evidence trail the VA looks for.', route: '/health/symptoms', icon: Activity },
+              { step: 3, title: 'Build your statement', desc: 'We\'ll help you write a personal statement in your words.', route: '/prep/personal-statement', icon: FileText },
+            ] as const).map(({ step, title, desc, route, icon: Icon }) => (
+              <button
+                key={step}
+                onClick={() => navigate(route)}
+                className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
+              >
+                <span className="flex-shrink-0 w-7 h-7 rounded-full bg-gold/15 flex items-center justify-center text-xs font-bold text-gold">
+                  {step}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-foreground">{title}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{desc}</p>
+                </div>
+                <Icon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+              </button>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
       {/* My Current Rating — Clickable to go to Rating Calculator */}
       <Link to="/claims/calculator" className="block">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={vcsSpring}
-          className="rounded-xl bg-card border border-border p-4 shadow-sm hover:bg-accent/30 transition-colors cursor-pointer overflow-hidden max-w-full"
+          className="rounded-2xl bg-card border border-border p-4 hover:bg-accent/30 transition-colors cursor-pointer overflow-hidden max-w-full"
         >
           <div className="flex items-center gap-4">
             <div className="relative w-16 h-16 flex-shrink-0">
@@ -375,7 +423,7 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={vcsSpring}
-          className="rounded-xl bg-card border border-border p-4 shadow-sm space-y-3 overflow-hidden max-w-full"
+          className="rounded-2xl bg-card border border-border p-4 space-y-3 overflow-hidden max-w-full"
         >
           {streak.currentStreak > 0 && (
             <div className="flex items-center gap-3">
@@ -429,7 +477,7 @@ export default function Dashboard() {
           transition={vcsSpring}
         >
           <Link to="/claims" className="block">
-            <div className="rounded-xl bg-card border border-border p-4 shadow-sm hover:bg-accent/30 transition-colors overflow-hidden max-w-full">
+            <div className="rounded-2xl bg-card border border-border p-4 hover:bg-accent/30 transition-colors overflow-hidden max-w-full">
               <div className="flex items-center gap-4">
                 <div className="relative w-14 h-14 flex-shrink-0">
                   <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90" role="img" aria-label={`Claim readiness: ${readinessScore} percent`}>
@@ -478,7 +526,7 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={vcsSpring}
-          className="rounded-xl bg-card border border-border p-4 shadow-sm hover:bg-accent/30 transition-colors cursor-pointer overflow-hidden max-w-full"
+          className="rounded-2xl bg-card border border-border p-4 hover:bg-accent/30 transition-colors cursor-pointer overflow-hidden max-w-full"
         >
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
@@ -503,7 +551,7 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...vcsSpring, delay: 0.2 }}
-          className="rounded-xl bg-card border border-border p-4 shadow-sm overflow-hidden max-w-full"
+          className="rounded-2xl bg-card border border-border p-4 overflow-hidden max-w-full"
         >
           <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
             <Compass className="w-4 h-4 text-gold" />
@@ -532,12 +580,60 @@ export default function Dashboard() {
         </motion.div>
       )}
 
+      {/* Contextual Feature Discovery — surfaces tools based on claim state */}
+      {userConditions.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ ...vcsSpring, delay: 0.15 }}
+          className="space-y-2"
+        >
+          {/* Evidence Strength — show when user has symptom logs */}
+          {symptoms.length >= 3 && (
+            <button
+              onClick={() => navigate('/claims/evidence-strength')}
+              className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
+            >
+              <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center flex-shrink-0">
+                <Target className="h-4 w-4 text-gold" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground">Evidence Strength</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  See how your {symptoms.length} symptom logs align with VA rating criteria
+                </p>
+              </div>
+              <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+            </button>
+          )}
+
+          {/* Decision Decoder — show when user has denied conditions */}
+          {userConditions.some(uc => uc.claimStatus === 'denied') && (
+            <button
+              onClick={() => navigate('/claims/decision-decoder')}
+              className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
+            >
+              <div className="w-9 h-9 rounded-xl bg-blue-500/10 flex items-center justify-center flex-shrink-0">
+                <FileSearch className="h-4 w-4 text-blue-400" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground">Decision Decoder</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Understand your denial in plain English and see your options
+                </p>
+              </div>
+              <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+            </button>
+          )}
+        </motion.div>
+      )}
+
       {/* Next Steps — always rendered */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ ...vcsSpring, delay: 0.25 }}
-        className="rounded-xl bg-card border border-border p-4 shadow-sm overflow-hidden max-w-full"
+        className="rounded-2xl bg-card border border-border p-4 overflow-hidden max-w-full"
       >
         <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
           <Zap className="w-4 h-4 text-gold" />
@@ -606,7 +702,7 @@ export default function Dashboard() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ ...vcsSpring, delay: 0.3 }}
-        className="rounded-xl bg-card border border-border p-4 shadow-sm overflow-hidden max-w-full"
+        className="rounded-2xl bg-card border border-border p-4 overflow-hidden max-w-full"
       >
         <h3 className="font-bold text-sm text-foreground mb-3">Quick Daily Log</h3>
         {logSaved ? (

@@ -72,7 +72,7 @@ export default function HealthHub() {
       {/* 30-Day Summary Card */}
       <button
         onClick={() => navigate('/health/summary')}
-        className="w-full rounded-xl border border-gold/30 bg-gold/5 hover:bg-gold/10 transition-colors p-4"
+        className="w-full rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors p-4"
       >
         <div className="flex items-center gap-3 mb-3">
           <BarChart3 className="h-5 w-5 text-gold" />
@@ -99,7 +99,7 @@ export default function HealthHub() {
       {/* Unified Timeline Link */}
       <button
         onClick={() => navigate('/health/timeline')}
-        className="w-full flex items-center gap-3 p-3 rounded-xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
+        className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
       >
         <div className="p-2 rounded-lg bg-gold/10">
           <Clock className="h-5 w-5 text-gold" />
@@ -120,7 +120,7 @@ export default function HealthHub() {
             <button
               key={card.route}
               onClick={() => navigate(card.route)}
-              className="flex flex-col items-center gap-2 p-4 rounded-xl border border-border bg-card hover:bg-accent/50 transition-colors text-center"
+              className="flex flex-col items-center gap-2 p-4 rounded-2xl border border-border bg-card hover:bg-accent/50 active:scale-[0.98] transition-all text-center"
             >
               <card.icon className={`h-8 w-8 ${isEmpty ? 'text-muted-foreground/40' : 'text-gold'}`} />
               <span className="text-sm font-medium text-foreground">{card.label}</span>

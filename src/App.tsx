@@ -122,6 +122,8 @@ const DeploymentLocations = lazyWithRetry(() => import('./pages/DeploymentLocati
 const ZeroPercentOptimizer = lazyWithRetry(() => import('./pages/ZeroPercentOptimizer'));
 const DeadlinesPage = lazyWithRetry(() => import('./pages/Deadlines'));
 const ShareableSummary = lazyWithRetry(() => import('./pages/ShareableSummary'));
+const EvidenceStrength = lazyWithRetry(() => import('./pages/EvidenceStrength'));
+const DecisionDecoder = lazyWithRetry(() => import('./pages/DecisionDecoder'));
 
 // Account & Legal pages
 const DeleteAccountPage = lazyWithRetry(() => import('./pages/account/DeleteAccountPage'));
@@ -252,6 +254,8 @@ function AnimatedRoutes() {
           <Route path="/claims/secondary-finder" element={<PremiumGuard featureName="Secondary Condition Finder"><SecondaryFinder /></PremiumGuard>} />
           <Route path="/claims/checklist" element={<ClaimChecklist />} />
           <Route path="/claims/upgrade-paths" element={<ZeroPercentOptimizer />} />
+          <Route path="/claims/evidence-strength" element={<PremiumGuard featureName="Evidence Strength"><EvidenceStrength /></PremiumGuard>} />
+          <Route path="/claims/decision-decoder" element={<PremiumGuard featureName="Decision Decoder"><DecisionDecoder /></PremiumGuard>} />
           <Route path="/claims/:id" element={<ConditionDetail />} />
 
           {/* === HEALTH === */}
@@ -283,7 +287,8 @@ function AnimatedRoutes() {
           <Route path="/prep/packet" element={<PremiumGuard featureName="Claim Packet Builder"><BuildPacket /></PremiumGuard>} />
           <Route path="/prep/appeals" element={<PremiumGuard featureName="Appeals Guide"><AppealsGuide /></PremiumGuard>} />
           <Route path="/prep/summary" element={<ShareableSummary />} />
-          <Route path="/cp-exam-packet" element={<CPExamPacket />} />
+          <Route path="/prep/exam-day" element={<CPExamPacket />} />
+          <Route path="/cp-exam-packet" element={<Navigate to="/prep/exam-day" replace />} />
 
           {/* === REFERENCE === */}
           <Route path="/reference/conditions-by-conflict" element={<ConditionsByConflict />} />

@@ -15,6 +15,8 @@ import {
   Scale,
   Sparkles,
   AlertTriangle,
+  Shield,
+  Pill,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -155,6 +157,7 @@ export default function CPExamPacket() {
   const [examQuestions, setExamQuestions] = useState<Record<string, string>>({});
   const [loadingQuestions, setLoadingQuestions] = useState<Set<string>>(new Set());
   const [pdfExporting, setPdfExporting] = useState(false);
+  const [viewMode, setViewMode] = useState<'full' | 'examday'>('full');
 
   // Data
   const userConditions = appState.userConditions;
@@ -442,6 +445,151 @@ export default function CPExamPacket() {
         </div>
       </div>
 
+      {/* View Toggle */}
+      <div className="inline-flex rounded-lg border border-border bg-muted/30 p-1">
+        <button
+          type="button"
+          onClick={() => setViewMode('full')}
+          className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
+            viewMode === 'full'
+              ? 'bg-gold/20 text-foreground border border-gold/30 shadow-sm'
+              : 'text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          Full Packet
+        </button>
+        <button
+          type="button"
+          onClick={() => setViewMode('examday')}
+          className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-1.5 ${
+            viewMode === 'examday'
+              ? 'bg-green-500/20 text-foreground border border-green-500/30 shadow-sm'
+              : 'text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          <Shield className="h-3.5 w-3.5" />
+          Exam Day
+        </button>
+      </div>
+
+      {/* ========== EXAM DAY QUICK VIEW ========== */}
+      {viewMode === 'examday' && (
+        <div className="space-y-4">
+          {/* Quick tips card */}
+          <div className="rounded-xl border border-green-500/20 bg-green-500/5 p-4 space-y-3">
+            <div className="flex items-center gap-2">
+              <Shield className="h-4 w-4 text-green-400" />
+              <p className="text-sm font-semibold text-foreground">Before You Walk In</p>
+            </div>
+            <div className="space-y-1.5">
+              {[
+                'Describe your WORST days, not your average or best',
+                'Be specific with numbers — "3-4 times per week", not "often"',
+                'Mention how symptoms limit work, daily tasks, and relationships',
+                "Don't minimize symptoms or say \"I'm fine\" out of habit",
+                "Don't dress up more than your normal daily routine",
+                'If you have flare-ups, describe how often and how long they last',
+              ].map((tip, i) => (
+                <div key={i} className="flex gap-2 text-xs text-muted-foreground">
+                  <span className="text-green-400 flex-shrink-0">•</span>
+                  <span>{tip}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Per-condition quick cards */}
+          {allConditions.map((condition) => {
+            const reminders = getConditionSpecificReminders(condition.name);
+            const condSymptoms = (symptoms ?? []).filter(
+              (s) => s.bodyArea?.toLowerCase() === condition.name.toLowerCase()
+            );
+            const severities = condSymptoms.map((s) => s.severity).filter((v) => v > 0);
+            const avgSev = severities.length > 0
+              ? (severities.reduce((a, b) => a + b, 0) / severities.length).toFixed(1)
+              : null;
+
+            return (
+              <div key={condition.id} className="rounded-xl border border-border bg-card p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-foreground">{condition.name}</p>
+                  {avgSev && (
+                    <Badge className="bg-gold/20 text-gold border-gold/30 text-[10px]">
+                      Avg {avgSev}/10
+                    </Badge>
+                  )}
+                </div>
+                {reminders.length > 0 && (
+                  <div className="space-y-1">
+                    {reminders.map((r, i) => (
+                      <div key={i} className="flex gap-2 text-xs text-muted-foreground">
+                        <span className="text-gold flex-shrink-0">•</span>
+                        <span>{r}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {reminders.length === 0 && (
+                  <p className="text-xs text-muted-foreground italic">
+                    Describe severity, frequency, and how it limits daily functioning.
+                  </p>
+                )}
+              </div>
+            );
+          })}
+
+          {/* Current medications */}
+          {symptomSummary.currentMeds.length > 0 && (
+            <div className="rounded-xl border border-border bg-card p-4 space-y-2">
+              <div className="flex items-center gap-2">
+                <Pill className="h-4 w-4 text-blue-400" />
+                <p className="text-sm font-semibold text-foreground">
+                  Current Medications ({symptomSummary.currentMeds.length})
+                </p>
+              </div>
+              <div className="space-y-1">
+                {symptomSummary.currentMeds.map((med) => (
+                  <div key={med.id} className="flex justify-between text-xs">
+                    <span className="text-foreground">{med.name}</span>
+                    <span className="text-muted-foreground">{med.prescribedFor || ''}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 90-day symptom stats */}
+          {symptomSummary.totalLogs > 0 && (
+            <div className="rounded-xl border border-border bg-card p-4 space-y-2">
+              <div className="flex items-center gap-2">
+                <Activity className="h-4 w-4 text-gold" />
+                <p className="text-sm font-semibold text-foreground">Your 90-Day Data</p>
+              </div>
+              <div className="grid grid-cols-3 gap-3 text-center">
+                <div>
+                  <p className="text-lg font-bold text-foreground">{symptomSummary.avgPain}</p>
+                  <p className="text-[10px] text-muted-foreground">Avg Pain</p>
+                </div>
+                <div>
+                  <p className="text-lg font-bold text-foreground">{symptomSummary.worstPain || '--'}</p>
+                  <p className="text-[10px] text-muted-foreground">Worst Pain</p>
+                </div>
+                <div>
+                  <p className="text-lg font-bold text-foreground">{symptomSummary.flareUps}</p>
+                  <p className="text-[10px] text-muted-foreground">Flare-Ups</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <p className="text-[10px] text-muted-foreground text-center italic">
+            This is your personal reference. Not an official VA document.
+          </p>
+        </div>
+      )}
+
+      {/* ========== FULL PACKET VIEW ========== */}
+      {viewMode === 'full' && <>
       {/* Export + Quick Jump */}
       <div className="space-y-3">
         <Button
@@ -792,6 +940,8 @@ export default function CPExamPacket() {
           </div>
         </PacketSection>
       </div>
+
+      </>}
 
       {/* Footer */}
       <div className="text-center py-4 space-y-2">
