@@ -164,7 +164,7 @@ function LoadingFallback() {
             className="absolute inset-0"
             style={{
               borderRadius: 18,
-              border: '2px solid rgba(240, 192, 0, 0.3)',
+              border: '2px solid rgba(197, 165, 90, 0.3)',
               animation: 'pulse-ring 2s ease-in-out infinite',
             }}
           />
@@ -177,7 +177,7 @@ function LoadingFallback() {
           <div
             className="h-full rounded-full"
             style={{
-              background: 'var(--gold-gradient, linear-gradient(90deg, #D4A800 0%, #F0C000 20%, #FFD700 50%, #F0C000 80%, #D4A800 100%))',
+              background: 'var(--gold-gradient, linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%))',
               animation: 'gradient-slide 1.2s ease-in-out infinite',
             }}
           />
@@ -496,7 +496,7 @@ function AppContent() {
               </p>
               <Link
                 to="/auth"
-                className="inline-block px-6 py-2.5 rounded-lg bg-gold text-black font-semibold hover:bg-[#E0B400] transition-colors"
+                className="inline-block px-6 py-2.5 rounded-lg bg-gold text-black font-semibold hover:bg-[#B59847] transition-colors"
               >
                 Sign Up Free
               </Link>

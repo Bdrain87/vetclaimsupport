@@ -267,7 +267,7 @@ export default function Sleep() {
       </div>
 
       {/* VA Rating Info - Premium Card */}
-      <div className="rounded-2xl bg-gradient-to-br from-gold/10 to-gold/5 border border-gold/30 p-5 shadow-lg" style={{ boxShadow: '0 4px 24px rgba(240, 192, 0, 0.15)' }}>
+      <div className="rounded-2xl bg-gradient-to-br from-gold/10 to-gold/5 border border-gold/30 p-5 shadow-lg" style={{ boxShadow: '0 4px 24px rgba(197, 165, 90, 0.15)' }}>
         <div className="flex items-center gap-3 mb-4">
           <div className="p-2 rounded-xl bg-gold/20">
             <Moon className="h-5 w-5 text-gold" />
@@ -300,7 +300,7 @@ export default function Sleep() {
       {/* Add Log Button */}
       <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
         <DialogTrigger asChild>
-          <Button className="gap-2 bg-gold hover:bg-[#E0B400] text-[#000000] shadow-[0_4px_16px_rgba(240,192,0,0.3)]">
+          <Button className="gap-2 bg-gold hover:bg-[#B59847] text-[#000000] shadow-[0_4px_16px_rgba(197,165,90,0.3)]">
             <Plus className="h-4 w-4" />
             Log Sleep
           </Button>

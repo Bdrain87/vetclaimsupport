@@ -47,7 +47,8 @@ import {
   buildFunctionalImpactSummary,
 } from '@/utils/prefillHelpers';
 import type { VACondition } from '@/data/vaConditions';
-import { getConditionById, searchConditions } from '@/data/vaConditions';
+import { getConditionById } from '@/data/vaConditions';
+import { searchAllConditions } from '@/utils/conditionSearch';
 
 interface PersonalStatementFormData {
   condition: VACondition | null;
@@ -243,9 +244,10 @@ export default function PersonalStatement() {
   useEffect(() => {
     const urlCondition = searchParams.get('condition');
     if (urlCondition && !formData.condition) {
-      const matches = searchConditions(urlCondition);
+      const matches = searchAllConditions(urlCondition, { limit: 1 });
       if (matches && matches.length > 0) {
-        handleConditionSelect(matches[0]);
+        const vaCondition = getConditionById(matches[0].id);
+        if (vaCondition) handleConditionSelect(vaCondition);
       }
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

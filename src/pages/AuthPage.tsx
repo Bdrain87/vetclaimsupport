@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
 
 const GOLD_GRADIENT =
-  'linear-gradient(90deg, #D4A800 0%, #F0C000 20%, #FFD700 50%, #F0C000 80%, #D4A800 100%)';
+  'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)';
 
 /** Only allow relative paths starting with / (no protocol-relative // or external URLs). */
 function getSafeRedirect(): string {

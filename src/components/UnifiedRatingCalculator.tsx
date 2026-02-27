@@ -37,11 +37,8 @@ import {
 } from '@/data/compRates2026';
 import { combineRatings } from '@/utils/vaMath';
 import { useUserConditions } from '@/hooks/useUserConditions';
-import {
-  searchConditions,
-  getConditionById,
-  type VACondition,
-} from '@/data/vaConditions';
+import { getConditionById } from '@/data/vaConditions';
+import { searchAllConditions } from '@/utils/conditionSearch';
 import { SecondaryConditionSuggestions } from '@/components/SecondaryConditionSuggestions';
 import { PageContainer } from '@/components/PageContainer';
 
@@ -482,7 +479,7 @@ export function UnifiedRatingCalculator() {
 
   // Autocomplete state
   const [showAutocomplete, setShowAutocomplete] = useState(false);
-  const [autocompleteResults, setAutocompleteResults] = useState<VACondition[]>([]);
+  const [autocompleteResults, setAutocompleteResults] = useState<{ id: string; name: string; abbreviation?: string; diagnosticCode: string; typicalRatings?: string }[]>([]);
   const [selectedConditionId, setSelectedConditionId] = useState<string | null>(null);
   const autocompleteRef = useRef<HTMLDivElement>(null);
 
@@ -532,8 +529,8 @@ export function UnifiedRatingCalculator() {
   useEffect(() => {
     if (newConditionName.trim().length >= 2) {
       const existingConditionIds = conditions.map(c => c.conditionId).filter(Boolean) as string[];
-      const results = searchConditions(newConditionName, existingConditionIds);
-      setAutocompleteResults(results.slice(0, 8));
+      const results = searchAllConditions(newConditionName, { excludeIds: existingConditionIds, limit: 8 });
+      setAutocompleteResults(results);
       setShowAutocomplete(results.length > 0);
     } else {
       setAutocompleteResults([]);
@@ -574,8 +571,8 @@ export function UnifiedRatingCalculator() {
   }, [conditions]);
 
   // Handle autocomplete selection
-  const handleAutocompleteSelect = useCallback((condition: VACondition) => {
-    setNewConditionName(condition.abbreviation);
+  const handleAutocompleteSelect = useCallback((condition: { id: string; name: string; abbreviation?: string }) => {
+    setNewConditionName(condition.abbreviation || condition.name);
     setSelectedConditionId(condition.id);
     setShowAutocomplete(false);
   }, []);

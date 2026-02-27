@@ -7,7 +7,8 @@ import { searchMilitaryJobs, getCodeTypeForBranch, type MilitaryJobCode } from '
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import { LocationAutocomplete } from '@/components/shared/LocationAutocomplete';
 import { useUserConditions } from '@/hooks/useUserConditions';
-import { type VACondition, getConditionById, searchConditions } from '@/data/vaConditions';
+import { type VACondition, getConditionById } from '@/data/vaConditions';
+import { searchAllConditions } from '@/utils/conditionSearch';
 import useAppStore, { type DutyStation } from '@/store/useAppStore';
 import { SuccessAnimation } from '@/components/ui/success-animation';
 import { PageContainer } from '@/components/PageContainer';
@@ -373,7 +374,7 @@ export default function Onboarding() {
         createdAt: new Date().toISOString(),
       });
 
-      const matchingConditions = searchConditions(rated.conditionName);
+      const matchingConditions = searchAllConditions(rated.conditionName, { limit: 1 });
       const matchedCondition = matchingConditions.length > 0 ? matchingConditions[0] : null;
       const resolvedId = matchedCondition ? matchedCondition.id : rated.conditionName.toLowerCase().replace(/\s+/g, '-');
 

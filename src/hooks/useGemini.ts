@@ -2,6 +2,7 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { AI_CONFIG } from '@/lib/ai-prompts';
 import { supabase } from '@/lib/supabase';
 import { redactPII } from '@/lib/redaction';
+import { logAISend } from '@/services/aiAuditLog';
 
 async function ensureSession(): Promise<boolean> {
   // 1. Check for a cached session
@@ -55,7 +56,14 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
         return null;
       }
 
-      const { redactedText: sanitizedInput } = redactPII(input, 'high');
+      const { redactedText: sanitizedInput, redactionCount } = redactPII(input, 'high');
+
+      logAISend({
+        redactionMode: 'high',
+        redactionCount,
+        textLengthSent: sanitizedInput.length,
+      });
+
       const body = {
         prompt: `${AI_CONFIG[persona]}\n\nInput: ${sanitizedInput}`,
       };

@@ -385,7 +385,7 @@ export default function Dashboard() {
                 />
                 <motion.circle
                   cx="18" cy="18" r="15" fill="none"
-                  stroke="var(--gold-md, #F0C000)" strokeWidth="3"
+                  stroke="var(--gold-md, #C5A55A)" strokeWidth="3"
                   strokeLinecap="round"
                   strokeDasharray={`${combinedRating}, 100`}
                   initial={{ strokeDasharray: '0, 100' }}

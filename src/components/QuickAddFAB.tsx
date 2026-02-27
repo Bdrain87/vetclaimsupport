@@ -53,12 +53,13 @@ export function QuickAddFAB() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/60 z-40"
             role="presentation"
+            tabIndex={-1}
             onClick={() => setOpen(false)}
             onKeyDown={(e) => { if (e.key === 'Escape') setOpen(false); }}
           />
         )}
       </AnimatePresence>
-      <div className="fixed right-4 z-50 flex flex-col items-end gap-2" style={{ bottom: 'calc(5rem + env(safe-area-inset-bottom, 0px))' }} role="menu" aria-label="Quick add actions">
+      <div className="fixed right-4 z-50 flex flex-col items-end gap-2" style={{ bottom: 'calc(5rem + env(safe-area-inset-bottom, 0px))' }} role={open ? 'menu' : undefined} aria-label={open ? 'Quick add actions' : undefined}>
         <AnimatePresence>
           {open && actions.map((action, i) => (
             <motion.button
@@ -67,6 +68,8 @@ export function QuickAddFAB() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.8 }}
               transition={{ delay: i * 0.04 }}
+              role="menuitem"
+              aria-label={action.label}
               onClick={() => handleAction(action.path)}
               className="flex items-center gap-3 pl-4 pr-3 py-2.5 rounded-full bg-card border border-border shadow-lg hover:bg-accent transition-colors"
             >
@@ -81,7 +84,7 @@ export function QuickAddFAB() {
           whileTap={{ scale: 0.9 }}
           onClick={() => { impactLight(); setOpen(!open); }}
           className="w-14 h-14 rounded-full shadow-lg flex items-center justify-center"
-          style={{ background: 'var(--gold-gradient, linear-gradient(90deg, #D4A800 0%, #F0C000 20%, #FFD700 50%, #F0C000 80%, #D4A800 100%))' }}
+          style={{ background: 'var(--gold-gradient, linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%))' }}
           aria-label={open ? 'Close quick add menu' : 'Open quick add menu'}
         >
           <motion.div animate={{ rotate: open ? 45 : 0 }} transition={{ duration: 0.2 }}>
