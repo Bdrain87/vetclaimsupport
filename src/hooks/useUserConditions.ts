@@ -119,7 +119,7 @@ export function useUserConditions() {
   // Sync userConditions → claimConditions so legacy components see the same data
   useEffect(() => {
     const existingNames = new Set(
-      useAppStore.getState().claimConditions.map((c) => c.name.toLowerCase()),
+      (useAppStore.getState().claimConditions || []).map((c) => c.name.toLowerCase()),
     );
     for (const uc of conditions) {
       const details = getConditionById(uc.conditionId);

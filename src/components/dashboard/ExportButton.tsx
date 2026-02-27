@@ -27,6 +27,12 @@ function safeDate(dateStr: string | undefined | null): string {
   return isNaN(d.getTime()) ? 'N/A' : d.toLocaleDateString();
 }
 
+function safeDateSort(dateA: string | undefined | null, dateB: string | undefined | null): number {
+  const a = dateA ? new Date(dateA).getTime() : 0;
+  const b = dateB ? new Date(dateB).getTime() : 0;
+  return (isNaN(b) ? 0 : b) - (isNaN(a) ? 0 : a);
+}
+
 interface ExportButtonProps {
   variant?: 'default' | 'prominent';
 }
@@ -140,8 +146,8 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
       doc.text('Service History & Combat Dates', 20, yPos);
       yPos += 8;
       
-      const sortedHistory = [...data.serviceHistory].sort((a, b) => 
-        new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
+      const sortedHistory = [...data.serviceHistory].sort((a, b) =>
+        safeDateSort(a.startDate, b.startDate)
       );
       
       sortedHistory.forEach(entry => {
@@ -193,7 +199,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
       yPos += 10;
       
       const sortedVisits = [...data.medicalVisits]
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .sort((a, b) => safeDateSort(a.date, b.date))
         .slice(0, 15);
       
       doc.setFont('helvetica', 'normal');
@@ -235,7 +241,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
       yPos += 8;
       
       const sortedSymptoms = [...data.symptoms]
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .sort((a, b) => safeDateSort(a.date, b.date))
         .slice(0, 10);
       
       sortedSymptoms.forEach(symptom => {
@@ -355,7 +361,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
       yPos += 8;
       
       const recentSleep = [...data.sleepEntries]
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .sort((a, b) => safeDateSort(a.date, b.date))
         .slice(0, 7);
       
       recentSleep.forEach(entry => {
@@ -425,7 +431,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
       yPos += 10;
       
       const sortedMigraines = [...data.migraines]
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .sort((a, b) => safeDateSort(a.date, b.date))
         .slice(0, 10);
       
       doc.setFont('helvetica', 'normal');

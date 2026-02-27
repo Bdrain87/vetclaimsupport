@@ -622,7 +622,7 @@ export const ClaimIntelligence = {
     );
     if (recentSymptomMatches.length > 0) {
       const avgSeverity =
-        recentSymptomMatches.reduce((sum, s) => sum + s.severity, 0) /
+        recentSymptomMatches.reduce((sum, s) => sum + (s.severity || 0), 0) /
         recentSymptomMatches.length;
       currentSeverity = Math.min(100, Math.round((avgSeverity / 10) * 60 + recentSymptomMatches.length * 5));
     }
@@ -1006,7 +1006,7 @@ export const ClaimIntelligence = {
       if (matchTerms.some((t) => text.includes(t))) {
         totalEntries++;
         symptomCounts[s.symptom] = (symptomCounts[s.symptom] || 0) + 1;
-        severitySum += s.severity;
+        severitySum += (s.severity || 0);
         severityCount++;
       }
     }
@@ -1014,7 +1014,7 @@ export const ClaimIntelligence = {
     // Scan quick logs
     for (const q of claimsData.quickLogs) {
       if (!isWithinDays(q.date, days)) continue;
-      const text = q.flareUpNote.toLowerCase();
+      const text = (q.flareUpNote || '').toLowerCase();
       if (matchTerms.some((t) => text.includes(t))) {
         totalEntries++;
         const label = q.hadFlareUp ? 'flare-up' : 'general-log';
@@ -1082,10 +1082,10 @@ export const ClaimIntelligence = {
         if (!matchTerms.some((t) => text.includes(t))) continue;
 
         if (daysAgo(s.date) > halfDays) {
-          firstHalfSev += s.severity;
+          firstHalfSev += (s.severity || 0);
           firstHalfCount++;
         } else {
-          secondHalfSev += s.severity;
+          secondHalfSev += (s.severity || 0);
           secondHalfCount++;
         }
       }
@@ -1494,7 +1494,7 @@ export const ClaimIntelligence = {
     }
 
     for (const q of claimsData.quickLogs) {
-      const text = q.flareUpNote.toLowerCase();
+      const text = (q.flareUpNote || '').toLowerCase();
       if (matchTerms.length === 0 || matchTerms.some((t) => text.includes(t)) ||
           (q.conditionTags && q.conditionTags.some((tag) => matchTerms.includes(tag.toLowerCase())))) {
         entries.push({
@@ -1573,8 +1573,8 @@ export const ClaimIntelligence = {
       const mid = Math.floor(entries.length / 2);
       const firstHalf = entries.slice(0, mid);
       const secondHalf = entries.slice(mid);
-      const firstAvg = firstHalf.reduce((s, e) => s + e.severity, 0) / firstHalf.length;
-      const secondAvg = secondHalf.reduce((s, e) => s + e.severity, 0) / secondHalf.length;
+      const firstAvg = firstHalf.reduce((s, e) => s + (e.severity || 0), 0) / firstHalf.length;
+      const secondAvg = secondHalf.reduce((s, e) => s + (e.severity || 0), 0) / secondHalf.length;
       const delta = secondAvg - firstAvg;
       if (delta > 1) severityTrend = 'worsening';
       else if (delta < -1) severityTrend = 'improving';
@@ -1611,7 +1611,7 @@ export const ClaimIntelligence = {
 
     // Insights
     const insights: string[] = [];
-    const avgSeverity = entries.reduce((s, e) => s + e.severity, 0) / entries.length;
+    const avgSeverity = entries.reduce((s, e) => s + (e.severity || 0), 0) / entries.length;
 
     if (severityTrend === 'worsening') {
       insights.push('Symptoms appear to be worsening over time. This trend supports a claim for increased severity.');

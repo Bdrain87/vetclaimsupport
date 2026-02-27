@@ -3,7 +3,9 @@ import { Clock, X, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 function timeAgo(isoString: string): string {
-  const diff = Date.now() - new Date(isoString).getTime();
+  const parsed = new Date(isoString).getTime();
+  if (isNaN(parsed)) return 'recently';
+  const diff = Date.now() - parsed;
   const minutes = Math.floor(diff / 60000);
   if (minutes < 1) return 'just now';
   if (minutes < 60) return `${minutes} minute${minutes === 1 ? '' : 's'} ago`;
