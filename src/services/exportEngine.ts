@@ -37,6 +37,12 @@ export interface ExportSections {
   timeline: boolean;
 }
 
+function safeDate(dateStr: string | undefined | null): string {
+  if (!dateStr) return 'N/A';
+  const d = new Date(dateStr);
+  return isNaN(d.getTime()) ? 'N/A' : d.toLocaleDateString();
+}
+
 export type ExportFormat = 'pdf' | 'text' | 'json';
 
 export interface ExportOptions {
@@ -755,7 +761,7 @@ async function generatePDF(
         y = checkPageBreak(8);
         doc.setFontSize(8);
         doc.setTextColor(...PDF_COLORS.textMuted);
-        doc.text(new Date(s.date).toLocaleDateString(), margin + 8, y);
+        doc.text(safeDate(s.date), margin + 8, y);
         doc.setTextColor(...PDF_COLORS.textDark);
         doc.text(`${s.symptom} (${s.severity}/10)`, margin + 35, y);
         y += 5;

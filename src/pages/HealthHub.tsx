@@ -23,6 +23,7 @@ function formatLastEntry(entries: { date?: string; createdAt?: string; startDate
     .reverse();
   if (dates.length === 0) return 'No entries';
   const d = new Date(dates[0]);
+  if (isNaN(d.getTime())) return 'No entries';
   const now = new Date();
   const diffDays = Math.floor((now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24));
   if (diffDays === 0) return 'Today';

@@ -399,7 +399,7 @@ export default function Conditions() {
                 {evidenceGaps.length} condition{evidenceGaps.length !== 1 ? 's' : ''} need more evidence
               </p>
               <p className="text-xs text-muted-foreground mt-0.5 truncate">
-                {evidenceGaps[0]?.conditionName}: missing {evidenceGaps[0]?.missing.join(', ')}
+                {evidenceGaps[0]?.conditionName}: missing {evidenceGaps[0]?.missing?.join(', ')}
               </p>
             </div>
             <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-0.5" />

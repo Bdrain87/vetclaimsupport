@@ -21,6 +21,12 @@ const colors = {
   dangerBg: [254, 215, 215] as [number, number, number],
 };
 
+function safeDate(dateStr: string | undefined | null): string {
+  if (!dateStr) return 'N/A';
+  const d = new Date(dateStr);
+  return isNaN(d.getTime()) ? 'N/A' : d.toLocaleDateString();
+}
+
 interface ExportButtonProps {
   variant?: 'default' | 'prominent';
 }
@@ -147,7 +153,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
         doc.setFontSize(10);
         doc.setTextColor(...colors.secondary);
         doc.setFont('helvetica', 'bold');
-        const dateRange = `${new Date(entry.startDate).toLocaleDateString()} - ${entry.endDate ? new Date(entry.endDate).toLocaleDateString() : 'Present'}`;
+        const dateRange = `${safeDate(entry.startDate)} - ${entry.endDate ? safeDate(entry.endDate) : 'Present'}`;
         doc.text(dateRange, 25, yPos + 5);
         
         doc.setFont('helvetica', 'normal');
@@ -194,7 +200,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
       sortedVisits.forEach(visit => {
         yPos = checkPageBreak(8);
         doc.setTextColor(...colors.secondary);
-        doc.text(new Date(visit.date).toLocaleDateString(), 25, yPos);
+        doc.text(safeDate(visit.date), 25, yPos);
         doc.text((visit.visitType || '').substring(0, 15), 55, yPos);
         doc.text((visit.reason || visit.diagnosis || 'N/A').substring(0, 40), 85, yPos);
         doc.setTextColor(...(visit.gotAfterVisitSummary ? colors.success : colors.danger));
@@ -241,7 +247,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
         doc.setFontSize(9);
         doc.setTextColor(...colors.secondary);
         doc.setFont('helvetica', 'bold');
-        doc.text(`${new Date(symptom.date).toLocaleDateString()} - ${symptom.symptom}`, 25, yPos + 4);
+        doc.text(`${safeDate(symptom.date)} - ${symptom.symptom || 'Symptom'}`, 25, yPos + 4);
         
         // Severity badge
         const severity = symptom.severity || 0;
@@ -355,7 +361,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
       recentSleep.forEach(entry => {
         yPos = checkPageBreak(8);
         doc.setTextColor(...colors.secondary);
-        doc.text(`${new Date(entry.date).toLocaleDateString()} - ${entry.hoursSlept || 0} hrs`, 25, yPos);
+        doc.text(`${safeDate(entry.date)} - ${entry.hoursSlept || 0} hrs`, 25, yPos);
         doc.text(`Quality: ${entry.quality || 'N/A'}`, 100, yPos);
         if (entry.usesCPAP) {
           doc.setTextColor(...colors.primary);
@@ -426,8 +432,8 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
       sortedMigraines.forEach(m => {
         yPos = checkPageBreak(8);
         doc.setTextColor(...colors.secondary);
-        doc.text(new Date(m.date).toLocaleDateString(), 25, yPos);
-        
+        doc.text(safeDate(m.date), 25, yPos);
+
         const severityColor = m.severity === 'Prostrating' ? colors.danger 
           : m.severity === 'Severe' ? colors.warning : colors.secondary;
         doc.setTextColor(...severityColor);

@@ -174,7 +174,9 @@ export function ShareWithVSO() {
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) return 'Not set';
-    return new Date(dateString).toLocaleDateString('en-US', {
+    const d = new Date(dateString);
+    if (isNaN(d.getTime())) return 'Not set';
+    return d.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'

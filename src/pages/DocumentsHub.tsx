@@ -199,10 +199,10 @@ export default function DocumentsHub() {
     return claimDocuments.filter((doc) => {
       const matchesSearch =
         !searchQuery.trim() ||
-        doc.condition.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        doc.condition?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         doc.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         doc.notes?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        doc.fileName.toLowerCase().includes(searchQuery.toLowerCase());
+        doc.fileName?.toLowerCase().includes(searchQuery.toLowerCase());
 
       const matchesDocType =
         filterDocType === 'all' || doc.documentType === filterDocType;
