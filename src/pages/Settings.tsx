@@ -71,7 +71,7 @@ export default function Settings() {
   const [auditEntries, setAuditEntries] = useState<AIAuditEntry[]>(() => getAIAuditLog().slice(0, 10));
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session: s } }) => setSession(s));
+    supabase.auth.getSession().then(({ data: { session: s } }) => setSession(s)).catch(() => {});
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => setSession(s));
     return () => subscription.unsubscribe();
   }, []);
