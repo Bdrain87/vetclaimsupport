@@ -110,7 +110,7 @@ export default function Migraines() {
   const allConditionNames = useMemo(() => {
     const names = new Set<string>();
     claimConditions.forEach(c => names.add(c.name));
-    userConditions.forEach(uc => {
+    (userConditions ?? []).forEach(uc => {
       const details = getConditionById(uc.conditionId);
       if (details?.name) names.add(details.name);
     });

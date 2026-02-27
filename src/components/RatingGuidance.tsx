@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { isNativeApp } from '@/lib/platform';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -228,12 +229,15 @@ export default function RatingGuidance({ conditionId, conditionName }: RatingGui
           <Button
             variant="outline"
             size="sm"
-            onClick={() =>
-              window.open(
-                'https://www.ecfr.gov/current/title-38/chapter-I/part-4',
-                '_blank',
-              )
-            }
+            onClick={async () => {
+              const url = 'https://www.ecfr.gov/current/title-38/chapter-I/part-4';
+              if (isNativeApp) {
+                const { Browser } = await import('@capacitor/browser');
+                await Browser.open({ url });
+              } else {
+                window.open(url, '_blank');
+              }
+            }}
           >
             <ExternalLink className="h-4 w-4 mr-2" />
             View VASRD on eCFR

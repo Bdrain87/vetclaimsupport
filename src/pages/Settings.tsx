@@ -216,7 +216,7 @@ export default function Settings() {
   }, []);
 
   const scheduleReminder = useCallback(() => {
-    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    if (!isNativeApp && 'serviceWorker' in navigator && navigator.serviceWorker.controller) {
       navigator.serviceWorker.controller.postMessage({
         type: 'SCHEDULE_REMINDER',
         settings: reminderSettings,
@@ -323,9 +323,7 @@ export default function Settings() {
             Account
           </CardTitle>
           <CardDescription>
-            {session
-              ? session.user.email
-              : DATA_PRIVACY_COPY.localDefault}
+            {session?.user?.email || DATA_PRIVACY_COPY.localDefault}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">

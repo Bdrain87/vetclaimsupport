@@ -38,7 +38,12 @@ export function SubscriptionCard() {
         return;
       }
       const url = await startCheckout();
-      window.open(url, '_blank');
+      if (isNativeApp) {
+        const { Browser } = await import('@capacitor/browser');
+        await Browser.open({ url, presentationStyle: 'popover' });
+      } else {
+        window.open(url, '_blank');
+      }
     } catch (err) {
       console.error('Checkout failed:', err);
       toast({

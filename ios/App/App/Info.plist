@@ -49,6 +49,10 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Vet Claim Support needs access to your photo library to upload medical documents and records for your disability claim.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Vet Claim Support needs camera access to scan and upload documents for your disability claim.</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

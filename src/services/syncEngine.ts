@@ -370,7 +370,7 @@ export async function pushToCloud(): Promise<void> {
   // Profile is critical — if it fails, abort the entire push.
   const { error: profilePushError } = await supabase.from('profiles').upsert({
     id: userId,
-    email: session.user.email,
+    email: session.user.email || null,
     branch: profileState.branch || null,
     mos_code: profileState.mosCode || null,
     mos_title: profileState.mosTitle || null,

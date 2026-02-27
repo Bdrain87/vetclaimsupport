@@ -91,6 +91,7 @@ export default function AuthPage() {
         description: err instanceof Error ? err.message : 'Please try again.',
         variant: 'destructive',
       });
+    } finally {
       setOauthLoading(null);
     }
   };
@@ -105,6 +106,7 @@ export default function AuthPage() {
         description: err instanceof Error ? err.message : 'Please try again.',
         variant: 'destructive',
       });
+    } finally {
       setOauthLoading(null);
     }
   };

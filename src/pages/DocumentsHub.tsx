@@ -184,9 +184,9 @@ export default function DocumentsHub() {
   // Get conditions from all sources (useAppStore via adapter hooks)
   const allConditions = useMemo(() => {
     const names = new Set<string>();
-    data.symptoms.forEach(s => { if (s.bodyArea) names.add(s.bodyArea); });
-    data.claimConditions.forEach(c => names.add(c.name));
-    userConditions.forEach(uc => {
+    (data.symptoms ?? []).forEach(s => { if (s.bodyArea) names.add(s.bodyArea); });
+    (data.claimConditions ?? []).forEach(c => names.add(c.name));
+    (userConditions ?? []).forEach(uc => {
       const details = getConditionById(uc.conditionId);
       if (details?.name) names.add(details.name);
     });
@@ -196,7 +196,7 @@ export default function DocumentsHub() {
   // Unique conditions from uploaded documents
   const documentConditions = useMemo(() => {
     const conditions = new Set<string>();
-    claimDocuments.forEach((doc) => {
+    (claimDocuments ?? []).forEach((doc) => {
       if (doc.condition) conditions.add(doc.condition);
     });
     return Array.from(conditions).sort();
@@ -204,7 +204,7 @@ export default function DocumentsHub() {
 
   // Filter documents
   const filteredDocuments = useMemo(() => {
-    return claimDocuments.filter((doc) => {
+    return (claimDocuments ?? []).filter((doc) => {
       const matchesSearch =
         !searchQuery.trim() ||
         doc.condition?.toLowerCase().includes(searchQuery.toLowerCase()) ||

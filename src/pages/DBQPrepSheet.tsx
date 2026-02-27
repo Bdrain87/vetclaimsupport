@@ -215,7 +215,7 @@ export default function DBQPrepSheet() {
   const userConditionNames = useMemo(() => {
     const names = new Set<string>();
     (data.claimConditions || []).forEach(c => names.add(c.name));
-    userConditions.forEach(uc => {
+    (userConditions ?? []).forEach(uc => {
       const vaCondition = getConditionById(uc.conditionId);
       if (vaCondition) names.add(vaCondition.name);
       else if (uc.conditionId) names.add(uc.conditionId);

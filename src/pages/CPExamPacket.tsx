@@ -174,11 +174,11 @@ export default function CPExamPacket() {
       rating?: number;
     }> = [];
 
-    userConditions.forEach((uc) => {
+    (userConditions ?? []).forEach((uc) => {
       const details = getConditionById(uc.conditionId);
       if (!details) return;
       const primary = uc.linkedPrimaryId
-        ? userConditions.find((c) => c.id === uc.linkedPrimaryId)
+        ? (userConditions ?? []).find((c) => c.id === uc.linkedPrimaryId)
         : null;
       const primaryDetails = primary ? getConditionById(primary.conditionId) : null;
 
@@ -200,7 +200,7 @@ export default function CPExamPacket() {
     });
 
     // Also include claim conditions not already represented
-    claimConditions.forEach((cc) => {
+    (claimConditions ?? []).forEach((cc) => {
       if (!conditions.some((c) => c.name.toLowerCase() === cc.name.toLowerCase())) {
         conditions.push({
           id: cc.id,
@@ -218,10 +218,10 @@ export default function CPExamPacket() {
   const symptomSummary = useMemo(() => {
     const ninetyDaysAgo = subDays(new Date(), 90).toISOString();
 
-    const recentLogs = quickLogs.filter((l) => l.date >= ninetyDaysAgo);
-    const recentSymptoms = symptoms.filter((s) => s.date >= ninetyDaysAgo);
-    const recentSleep = sleepEntries.filter((s) => s.date >= ninetyDaysAgo);
-    const recentMigraines = migraines.filter((m) => m.date >= ninetyDaysAgo);
+    const recentLogs = (quickLogs ?? []).filter((l) => l.date >= ninetyDaysAgo);
+    const recentSymptoms = (symptoms ?? []).filter((s) => s.date >= ninetyDaysAgo);
+    const recentSleep = (sleepEntries ?? []).filter((s) => s.date >= ninetyDaysAgo);
+    const recentMigraines = (migraines ?? []).filter((m) => m.date >= ninetyDaysAgo);
 
     const painLevels = [
       ...recentLogs.map((l) => l.painLevel || l.overallFeeling || 0),
@@ -362,7 +362,7 @@ export default function CPExamPacket() {
           ...getEvidenceSummary(c.name),
         })),
         symptomSummary,
-        medications: medications.filter((m) => m.stillTaking),
+        medications: (medications ?? []).filter((m) => m.stillTaking),
         examQuestions,
       });
     } catch (err) {

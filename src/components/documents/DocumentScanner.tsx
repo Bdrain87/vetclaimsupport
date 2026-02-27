@@ -200,11 +200,23 @@ export function DocumentScanner({
         description: 'Text copied to clipboard',
       });
     } catch {
-      toast({
-        title: 'Copy Failed',
-        description: 'Could not copy text',
-        variant: 'destructive',
-      });
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = scanResult.text;
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-999999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        toast({ title: 'Copied!', description: 'Text copied to clipboard' });
+      } catch {
+        toast({
+          title: 'Copy Failed',
+          description: 'Could not copy text',
+          variant: 'destructive',
+        });
+      }
     }
   };
 
