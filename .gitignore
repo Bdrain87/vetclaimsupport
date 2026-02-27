@@ -49,3 +49,6 @@ ads/
 website-assets/
 planning/
 .env*.local
+
+# Export plists (local signing config)
+ExportOptions*.plist
