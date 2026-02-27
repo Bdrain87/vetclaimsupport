@@ -198,6 +198,12 @@ function useFirstTimeRedirect() {
   const hasOnboarded = useProfileStore((s) => s.hasCompletedOnboarding);
 
   useEffect(() => {
+    // Don't redirect until the profile store has hydrated — otherwise the
+    // default `hasCompletedOnboarding: false` triggers a false-positive
+    // redirect to onboarding on every app launch (especially native iOS
+    // where encrypted storage rehydration is async).
+    if (!useProfileStore.persist.hasHydrated()) return;
+
     const isOnboardingPage = location.pathname === '/onboarding';
     const isLegalPage = ['/terms', '/privacy', '/disclaimer', '/settings/privacy', '/settings/terms', '/settings/disclaimer', '/profile/privacy', '/profile/terms', '/profile/disclaimer'].includes(location.pathname);
     const isLoginPage = location.pathname === '/login';
@@ -557,7 +563,7 @@ function App() {
             <BrowserRouter>
               <ScrollToTop />
               <RetentionWarningBanner />
-              <AppContent />
+              {hydrated ? <AppContent /> : <LoadingFallback />}
               <Toaster />
             </BrowserRouter>
           </AriaLiveAnnouncer>
