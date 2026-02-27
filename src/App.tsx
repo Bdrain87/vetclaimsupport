@@ -26,6 +26,10 @@ import { PremiumGuard } from './components/PremiumGuard';
 import { ensureFreshEntitlement } from './services/entitlements';
 import { startSync, stopSync } from './services/syncEngine';
 import { supabase } from './lib/supabase';
+import { initNativeOAuthListener } from './lib/nativeOAuth';
+
+// Initialize native OAuth deep-link listener (no-op on web)
+initNativeOAuthListener().catch(() => {});
 
 // Run migration before React renders (synchronous, runs once)
 try {

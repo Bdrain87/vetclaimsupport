@@ -1,4 +1,6 @@
 import { supabase } from '@/lib/supabase';
+import { isNativeApp } from '@/lib/platform';
+import { openNativeOAuth, getNativeRedirectUrl } from '@/lib/nativeOAuth';
 import type { Session, User, AuthChangeEvent } from '@supabase/supabase-js';
 
 /**
@@ -24,24 +26,46 @@ function sanitizeAuthError(error: unknown): Error {
 }
 
 export async function signInWithApple() {
+  const redirectTo = isNativeApp
+    ? getNativeRedirectUrl()
+    : `${window.location.origin}/auth`;
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'apple',
     options: {
-      redirectTo: `${window.location.origin}/auth`,
+      redirectTo,
+      skipBrowserRedirect: isNativeApp,
     },
   });
   if (error) throw sanitizeAuthError(error);
+
+  // On native, open the OAuth URL in SFSafariViewController
+  if (isNativeApp && data.url) {
+    await openNativeOAuth(data.url);
+  }
+
   return data;
 }
 
 export async function signInWithGoogle() {
+  const redirectTo = isNativeApp
+    ? getNativeRedirectUrl()
+    : `${window.location.origin}/auth`;
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${window.location.origin}/auth`,
+      redirectTo,
+      skipBrowserRedirect: isNativeApp,
     },
   });
   if (error) throw sanitizeAuthError(error);
+
+  // On native, open the OAuth URL in SFSafariViewController
+  if (isNativeApp && data.url) {
+    await openNativeOAuth(data.url);
+  }
+
   return data;
 }
 
@@ -64,8 +88,12 @@ export async function signUpWithEmail(email: string, password: string) {
 }
 
 export async function resetPassword(email: string) {
+  const redirectTo = isNativeApp
+    ? getNativeRedirectUrl()
+    : `${window.location.origin}/auth`;
+
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${window.location.origin}/auth`,
+    redirectTo,
   });
   if (error) throw sanitizeAuthError(error);
 }
