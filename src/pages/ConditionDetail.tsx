@@ -344,11 +344,11 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
 
   // Evidence completion percentage — computed from linked items on the claim condition
   const evidenceCount = claimCondition
-    ? (claimCondition.linkedMedicalVisits.length > 0 ? 1 : 0)
-      + (claimCondition.linkedSymptoms.length > 0 ? 1 : 0)
-      + (claimCondition.linkedExposures.length > 0 ? 1 : 0)
-      + (claimCondition.linkedDocuments.length > 0 ? 1 : 0)
-      + (claimCondition.linkedBuddyContacts.length > 0 ? 1 : 0)
+    ? ((claimCondition.linkedMedicalVisits?.length ?? 0) > 0 ? 1 : 0)
+      + ((claimCondition.linkedSymptoms?.length ?? 0) > 0 ? 1 : 0)
+      + ((claimCondition.linkedExposures?.length ?? 0) > 0 ? 1 : 0)
+      + ((claimCondition.linkedDocuments?.length ?? 0) > 0 ? 1 : 0)
+      + ((claimCondition.linkedBuddyContacts?.length ?? 0) > 0 ? 1 : 0)
     : 0;
   const totalEvidenceNeeded = 5;
   const evidenceProgress = (evidenceCount / totalEvidenceNeeded) * 100;

@@ -43,10 +43,10 @@ export function useClaimDocuments() {
       const lower = query.toLowerCase();
       return store.claimDocuments.filter(
         (doc) =>
-          doc.condition.toLowerCase().includes(lower) ||
+          doc.condition?.toLowerCase().includes(lower) ||
           doc.title?.toLowerCase().includes(lower) ||
           doc.notes?.toLowerCase().includes(lower) ||
-          doc.fileName.toLowerCase().includes(lower),
+          doc.fileName?.toLowerCase().includes(lower),
       );
     },
     [store.claimDocuments],

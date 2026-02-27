@@ -8,6 +8,13 @@ const loadJsPDF = async () => {
   return jsPDF;
 };
 
+/** Safely format a date string, returning 'N/A' for invalid or missing dates. */
+function safeDate(dateStr: string | undefined | null): string {
+  if (!dateStr) return 'N/A';
+  const d = new Date(dateStr);
+  return isNaN(d.getTime()) ? 'N/A' : d.toLocaleDateString();
+}
+
 // Duration labels for migraines
 const migraineDurations: Record<string, string> = {
   '30min': '30 minutes',
@@ -204,7 +211,7 @@ export const exportServiceHistory = async (entries: ServiceEntry[]) => {
     doc.setFontSize(11);
     doc.setTextColor(...colors.secondary);
     doc.setFont('helvetica', 'bold');
-    const dateRange = `${new Date(entry.startDate).toLocaleDateString()} - ${entry.endDate ? new Date(entry.endDate).toLocaleDateString() : 'Present'}`;
+    const dateRange = `${safeDate(entry.startDate)} - ${entry.endDate ? safeDate(entry.endDate) : 'Present'}`;
     doc.text(dateRange, 25, yPos);
     yPos += 7;
     
@@ -307,8 +314,8 @@ export const exportMedicalVisits = async (visits: MedicalVisit[]) => {
     doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(...colors.secondary);
-    doc.text(new Date(visit.date).toLocaleDateString(), 25, yPos);
-    
+    doc.text(safeDate(visit.date), 25, yPos);
+
     // Visit type badge
     doc.setFillColor(...colors.infoBg);
     doc.roundedRect(100, yPos - 4, 40, 6, 1, 1, 'F');
@@ -370,8 +377,8 @@ export const exportSymptoms = async (symptoms: SymptomEntry[]) => {
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
   const sorted = [...symptoms].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  const avgSeverity = symptoms.length > 0 
-    ? (symptoms.reduce((sum, s) => sum + s.severity, 0) / symptoms.length).toFixed(1)
+  const avgSeverity = symptoms.length > 0
+    ? (symptoms.reduce((sum, s) => sum + (s.severity || 0), 0) / symptoms.length).toFixed(1)
     : '0';
   
   let yPos = addPDFHeader(doc, {
@@ -403,8 +410,8 @@ export const exportSymptoms = async (symptoms: SymptomEntry[]) => {
     doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(...colors.secondary);
-    doc.text(new Date(symptom.date).toLocaleDateString(), 25, yPos);
-    
+    doc.text(safeDate(symptom.date), 25, yPos);
+
     // Severity badge
     const severity = symptom.severity || 0;
     const severityColor = severity <= 3 ? colors.successBg : severity <= 6 ? colors.warningBg : colors.dangerBg;
@@ -500,7 +507,7 @@ export const exportMedications = async (medications: Medication[]) => {
       doc.setTextColor(...colors.secondary);
       doc.text(med.name?.substring(0, 25) || '', 25, yPos);
       doc.text(med.prescribedFor?.substring(0, 25) || 'N/A', 70, yPos);
-      doc.text(new Date(med.startDate).toLocaleDateString(), 120, yPos);
+      doc.text(safeDate(med.startDate), 120, yPos);
       doc.text(med.sideEffects?.substring(0, 20) || 'None', 150, yPos);
       yPos += 6;
     });
@@ -533,7 +540,7 @@ export const exportMedications = async (medications: Medication[]) => {
       doc.setTextColor(...colors.secondary);
       doc.text(med.name?.substring(0, 22) || '', 25, yPos);
       doc.text(med.prescribedFor?.substring(0, 22) || 'N/A', 65, yPos);
-      const duration = `${new Date(med.startDate).toLocaleDateString()} - ${med.endDate ? new Date(med.endDate).toLocaleDateString() : 'N/A'}`;
+      const duration = `${safeDate(med.startDate)} - ${med.endDate ? safeDate(med.endDate) : 'N/A'}`;
       doc.text(duration.substring(0, 22), 110, yPos);
       doc.text(med.sideEffects?.substring(0, 15) || 'None', 155, yPos);
       yPos += 6;
@@ -592,8 +599,8 @@ export const exportExposures = async (exposures: Exposure[]) => {
     doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(...colors.secondary);
-    doc.text(new Date(exposure.date).toLocaleDateString(), 25, yPos);
-    
+    doc.text(safeDate(exposure.date), 25, yPos);
+
     // PPE badge
     doc.setFillColor(...(hasPPE ? colors.successBg : colors.dangerBg));
     doc.roundedRect(100, yPos - 4, 25, 6, 1, 1, 'F');
@@ -1090,7 +1097,7 @@ export const exportMigraines = async (migraines: MigraineEntry[], stats?: { tota
     doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(...colors.secondary);
-    doc.text(`${new Date(migraine.date).toLocaleDateString()} at ${migraine.time || 'N/A'}`, 25, yPos);
+    doc.text(`${safeDate(migraine.date)} at ${migraine.time || 'N/A'}`, 25, yPos);
     
     // Severity badge
     const severity = migraine.severity || 'Moderate';
@@ -1209,7 +1216,7 @@ export const exportConditionEvidence = async (
   doc.setFont('helvetica', 'bold');
   doc.text('Claim Started:', 25, yPos + 16);
   doc.setFont('helvetica', 'normal');
-  doc.text(new Date(claimDate).toLocaleDateString(), 55, yPos + 16);
+  doc.text(safeDate(claimDate), 55, yPos + 16);
   
   // Evidence strength badge
   const strengthColor = evidenceScore >= 75 ? colors.success : evidenceScore >= 50 ? colors.warning : colors.danger;
@@ -1254,8 +1261,8 @@ export const exportConditionEvidence = async (
       doc.setFontSize(10);
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(...colors.secondary);
-      doc.text(new Date(symptom.date).toLocaleDateString(), 25, yPos);
-      
+      doc.text(safeDate(symptom.date), 25, yPos);
+
       // Severity badge
       const severity = symptom.severity || 0;
       const sevColor = severity <= 3 ? colors.successBg : severity <= 6 ? colors.warningBg : colors.dangerBg;
@@ -1328,18 +1335,18 @@ export const exportConditionEvidence = async (
       doc.setFontSize(10);
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(...colors.secondary);
-      doc.text(new Date(visit.date).toLocaleDateString(), 25, yPos);
-      
+      doc.text(safeDate(visit.date), 25, yPos);
+
       doc.setFillColor(...colors.infoBg);
       doc.roundedRect(100, yPos - 4, 40, 6, 1, 1, 'F');
       doc.setFontSize(8);
       doc.setTextColor(...colors.primary);
       doc.text(visit.visitType || 'Visit', 120, yPos, { align: 'center' });
       yPos += 7;
-      
+
       doc.setFontSize(9);
       doc.setFont('helvetica', 'normal');
-      
+
       const visitFields = [
         { label: 'Reason', value: visit.reason },
         { label: 'Location', value: visit.location },
@@ -1393,7 +1400,7 @@ export const exportConditionEvidence = async (
       doc.setTextColor(...colors.secondary);
       doc.text((med.name || '').substring(0, 25), 25, yPos);
       doc.text((med.prescribedFor || 'N/A').substring(0, 25), 70, yPos);
-      doc.text(med.startDate ? new Date(med.startDate).toLocaleDateString() : 'N/A', 120, yPos);
+      doc.text(safeDate(med.startDate), 120, yPos);
       const statusColor = med.stillTaking ? colors.success : colors.muted;
       doc.setTextColor(...statusColor);
       doc.text(med.stillTaking ? 'Current' : 'Discontinued', 155, yPos);
@@ -1436,7 +1443,7 @@ export const exportConditionEvidence = async (
         doc.setTextColor(...colors.muted);
         doc.text('Date:', 25, yPos);
         doc.setTextColor(...colors.secondary);
-        doc.text(new Date(exposure.date).toLocaleDateString(), 55, yPos);
+        doc.text(safeDate(exposure.date), 55, yPos);
         yPos += 5;
       }
       
@@ -1564,7 +1571,7 @@ export const exportSleepLog = async (entries: SleepEntry[]) => {
   });
 
   const avgHours = last30Days.length > 0
-    ? (last30Days.reduce((sum, e) => sum + e.hoursSlept, 0) / last30Days.length).toFixed(1)
+    ? (last30Days.reduce((sum, e) => sum + (e.hoursSlept || 0), 0) / last30Days.length).toFixed(1)
     : '0';
   const cpapNights = last30Days.filter(e => e.usesCPAP);
   const cpapUsed = cpapNights.filter(e => e.cpapUsedLastNight).length;
@@ -1603,7 +1610,7 @@ export const exportSleepLog = async (entries: SleepEntry[]) => {
     doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(...colors.secondary);
-    doc.text(new Date(entry.date).toLocaleDateString(), 25, yPos);
+    doc.text(safeDate(entry.date), 25, yPos);
 
     // Quality badge
     const quality = entry.quality || 'Fair';
@@ -1949,7 +1956,7 @@ export const exportDBQPrepSheet = async (data: DBQPrepSheetData) => {
   doc.text('Appointment:', 25, yPos + 16);
   doc.setFont('helvetica', 'normal');
   const apptType = data.appointmentType.replace('_', ' ').toUpperCase();
-  const apptDate = data.appointmentDate ? new Date(data.appointmentDate).toLocaleDateString() : 'Not set';
+  const apptDate = data.appointmentDate ? safeDate(data.appointmentDate) : 'Not set';
   doc.text(`${apptType} — ${apptDate}`, 55, yPos + 16);
   yPos += 30;
 
@@ -2142,7 +2149,7 @@ export const exportBackPayEstimate = async (data: BackPayEstimateData) => {
   const fmt = (n: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(n);
 
   const rows = [
-    { label: 'Effective Date', value: new Date(data.effectiveDate + 'T00:00:00').toLocaleDateString() },
+    { label: 'Effective Date', value: safeDate(data.effectiveDate ? data.effectiveDate + 'T00:00:00' : '') },
     { label: 'Spouse', value: data.hasSpouse ? 'Yes' : 'No' },
     { label: 'Dependents', value: String(data.dependentCount) },
     { label: `Monthly at ${data.currentRating}%`, value: fmt(data.monthlyBefore) },
@@ -2311,7 +2318,7 @@ export const exportDoctorSummaryOutlinePDF = async (data: OutlineFormDataForPDF)
       label: 'Service Dates',
       value:
         data.serviceStartDate && data.serviceEndDate
-          ? `${new Date(data.serviceStartDate).toLocaleDateString()} - ${new Date(data.serviceEndDate).toLocaleDateString()}`
+          ? `${safeDate(data.serviceStartDate)} - ${safeDate(data.serviceEndDate)}`
           : '',
     },
   ], yPos);
@@ -2385,7 +2392,7 @@ export const exportDoctorSummaryOutlinePDF = async (data: OutlineFormDataForPDF)
       doc.setFont('helvetica', 'normal');
       const refLine = [
         ref.type,
-        ref.date ? new Date(ref.date).toLocaleDateString() : '',
+        ref.date ? safeDate(ref.date) : '',
         ref.provider,
         ref.title,
       ].filter(Boolean).join(' | ');

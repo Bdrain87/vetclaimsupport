@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AlertTriangle, Trash2, Loader2, CheckCircle, ChevronLeft } from 'lucide-react';
 import { deleteAccount } from '@/services/accountManagement';
@@ -10,6 +10,13 @@ export default function DeleteAccountPage() {
   const [processing, setProcessing] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const redirectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (redirectTimer.current) clearTimeout(redirectTimer.current);
+    };
+  }, []);
 
   const isConfirmed = confirmText.trim().toUpperCase() === 'DELETE';
 
@@ -21,7 +28,8 @@ export default function DeleteAccountPage() {
     try {
       await deleteAccount();
       setCompleted(true);
-      setTimeout(() => {
+      setProcessing(false);
+      redirectTimer.current = setTimeout(() => {
         navigate('/onboarding', { replace: true });
       }, 3000);
     } catch (err) {

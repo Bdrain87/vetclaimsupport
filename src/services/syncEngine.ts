@@ -402,7 +402,7 @@ export async function pushToCloud(): Promise<void> {
       id: c.id,
       user_id: userId,
       name: c.name,
-      service_connection_notes: c.notes ? redactPII(c.notes, 'high') : null,
+      service_connection_notes: c.notes ? redactPII(c.notes, 'high').redactedText : null,
       updated_at: new Date().toISOString(),
     }));
     const { error } = await supabase

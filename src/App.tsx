@@ -45,16 +45,18 @@ function lazyWithRetry(factory: () => Promise<{ default: React.ComponentType }>)
         sessionStorage.removeItem('chunk_reload');
         return mod;
       })
-      .catch(() => {
+      .catch((err) => {
         // If chunk load fails, force a full page reload to get new HTML + chunks.
         // Guard against infinite reload loops with a sessionStorage flag.
         const key = 'chunk_reload';
         if (!sessionStorage.getItem(key)) {
           sessionStorage.setItem(key, '1');
           window.location.reload();
+          // Return a never-resolving promise since we're reloading
+          return new Promise<never>(() => {});
         }
         // If we already reloaded and still failing, throw to error boundary
-        return factory();
+        throw err;
       })
   );
 }
@@ -207,8 +209,9 @@ function useFirstTimeRedirect() {
     const isOnboardingPage = location.pathname === '/onboarding';
     const isLegalPage = ['/terms', '/privacy', '/disclaimer', '/settings/privacy', '/settings/terms', '/settings/disclaimer', '/profile/privacy', '/profile/terms', '/profile/disclaimer'].includes(location.pathname);
     const isLoginPage = location.pathname === '/login';
+    const isAuthPage = location.pathname === '/auth';
 
-    if (!hasOnboarded && !isOnboardingPage && !isLegalPage && !isLoginPage) {
+    if (!hasOnboarded && !isOnboardingPage && !isLegalPage && !isLoginPage && !isAuthPage) {
       navigate('/onboarding', { replace: true });
     }
   }, [location.pathname, navigate, hasOnboarded]);

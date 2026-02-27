@@ -311,16 +311,21 @@ export default function CPExamPacket() {
     if (examQuestions[conditionName]) return; // Already cached
     setLoadingQuestions((prev) => new Set(prev).add(conditionName));
 
-    const prompt = `For a C&P exam for ${conditionName}, list the 8-10 most likely questions the examiner will ask. Focus on functional impact, frequency, severity, and daily life limitations. Format as a numbered list.`;
-    const result = await aiGenerate(prompt);
-    if (result) {
-      setExamQuestions((prev) => ({ ...prev, [conditionName]: result }));
+    try {
+      const prompt = `For a C&P exam for ${conditionName}, list the 8-10 most likely questions the examiner will ask. Focus on functional impact, frequency, severity, and daily life limitations. Format as a numbered list.`;
+      const result = await aiGenerate(prompt);
+      if (result) {
+        setExamQuestions((prev) => ({ ...prev, [conditionName]: result }));
+      }
+    } catch (err) {
+      console.error('Failed to generate questions:', err);
+    } finally {
+      setLoadingQuestions((prev) => {
+        const next = new Set(prev);
+        next.delete(conditionName);
+        return next;
+      });
     }
-    setLoadingQuestions((prev) => {
-      const next = new Set(prev);
-      next.delete(conditionName);
-      return next;
-    });
   };
 
   // PDF export

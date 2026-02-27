@@ -105,7 +105,7 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
               )}
             >
               {prefix}
-              {displayValue.toLocaleString()}
+              {typeof displayValue === 'number' ? displayValue.toLocaleString() : displayValue}
               {suffix}
             </p>
             {trend && (

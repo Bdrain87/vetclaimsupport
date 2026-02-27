@@ -25,7 +25,7 @@ export function AwardsCombobox({
 
   // Parse current value into array of awards
   const selectedAwards = React.useMemo(() => {
-    if (!value.trim()) return [];
+    if (!value || !value.trim()) return [];
     return value.split(',').map(a => a.trim()).filter(Boolean);
   }, [value]);
 

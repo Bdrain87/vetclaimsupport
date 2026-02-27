@@ -617,33 +617,29 @@ export function UnifiedRatingCalculator() {
 
   // Remove condition
   const removeCondition = useCallback((id: string) => {
-    setConditions(prev => {
-      const conditionToRemove = prev.find(c => c.id === id);
-      // Also remove from user conditions context if it was linked
-      if (conditionToRemove?.conditionId) {
-        const userCondition = userConditions.find(uc => uc.conditionId === conditionToRemove.conditionId);
-        if (userCondition) {
-          removeUserCondition(userCondition.id);
-        }
+    // Find condition before updating state — side effects must run outside setState
+    const conditionToRemove = conditions.find(c => c.id === id);
+    if (conditionToRemove?.conditionId) {
+      const userCondition = userConditions.find(uc => uc.conditionId === conditionToRemove.conditionId);
+      if (userCondition) {
+        removeUserCondition(userCondition.id);
       }
-      return prev.filter(c => c.id !== id);
-    });
-  }, [userConditions, removeUserCondition]);
+    }
+    setConditions(prev => prev.filter(c => c.id !== id));
+  }, [conditions, userConditions, removeUserCondition]);
 
   // Update condition rating
   const updateConditionRating = useCallback((id: string, rating: number) => {
-    setConditions(prev => {
-      const condition = prev.find(c => c.id === id);
-      // Also update in user conditions context
-      if (condition?.conditionId) {
-        const userCondition = userConditions.find(uc => uc.conditionId === condition.conditionId);
-        if (userCondition) {
-          updateUserCondition(userCondition.id, { rating });
-        }
+    // Find condition before updating state — side effects must run outside setState
+    const condition = conditions.find(c => c.id === id);
+    if (condition?.conditionId) {
+      const userCondition = userConditions.find(uc => uc.conditionId === condition.conditionId);
+      if (userCondition) {
+        updateUserCondition(userCondition.id, { rating });
       }
-      return prev.map(c => c.id === id ? { ...c, rating } : c);
-    });
-  }, [userConditions, updateUserCondition]);
+    }
+    setConditions(prev => prev.map(c => c.id === id ? { ...c, rating } : c));
+  }, [conditions, userConditions, updateUserCondition]);
 
   // Add dependent
   const addDependent = useCallback(() => {

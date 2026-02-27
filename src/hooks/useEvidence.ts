@@ -43,8 +43,8 @@ export function useEvidence() {
     (query: string) => {
       const lower = query.toLowerCase();
       return store.evidenceDocuments.filter((doc) =>
-        doc.title.toLowerCase().includes(lower) ||
-        doc.fileName.toLowerCase().includes(lower) ||
+        doc.title?.toLowerCase().includes(lower) ||
+        doc.fileName?.toLowerCase().includes(lower) ||
         doc.description?.toLowerCase().includes(lower),
       );
     },

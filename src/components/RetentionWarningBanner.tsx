@@ -33,9 +33,14 @@ export function RetentionWarningBanner() {
   };
 
   const handlePurge = async () => {
-    await purgeAppData();
-    dismissRetentionWarning();
-    window.location.reload();
+    try {
+      await purgeAppData();
+      dismissRetentionWarning();
+      window.location.reload();
+    } catch (error) {
+      console.error('[RetentionWarningBanner] purge failed:', error);
+      setOpen(false);
+    }
   };
 
   return (

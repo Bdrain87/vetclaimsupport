@@ -47,6 +47,7 @@ export function getSessionPassword(): string | null {
 /** Clear the session password/key from memory (e.g. on lock / logout). */
 export function clearSessionPassword(): void {
   _sessionPassword = null;
+  _encryptionMode = 'raw';
 }
 
 // ---- encrypted storage prefixes ---------------------------------------------

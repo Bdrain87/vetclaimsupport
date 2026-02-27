@@ -96,6 +96,7 @@ const BRANCH_MAP: Record<Branch, string> = {
  */
 function daysAgo(dateStr: string): number {
   const then = new Date(dateStr).getTime();
+  if (isNaN(then)) return Infinity;
   const now = Date.now();
   return Math.floor((now - then) / (1000 * 60 * 60 * 24));
 }

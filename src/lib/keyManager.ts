@@ -45,6 +45,7 @@ export async function initEncryptionKey(): Promise<string> {
 
     try {
       const { value } = await SecureStoragePlugin.get({ key: NATIVE_KEY_ALIAS });
+      if (!value) throw new Error('Empty key retrieved from Keychain');
       _cachedKey = value;
       return _cachedKey;
     } catch {
