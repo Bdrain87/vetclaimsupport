@@ -12,7 +12,7 @@ import useAppStore, { type DutyStation } from '@/store/useAppStore';
 import { SuccessAnimation } from '@/components/ui/success-animation';
 import { PageContainer } from '@/components/PageContainer';
 
-const TOTAL_STEPS = 11;
+const TOTAL_STEPS = 12;
 
 const MONTHS = [
   { value: '01', label: 'Jan' }, { value: '02', label: 'Feb' }, { value: '03', label: 'Mar' },
@@ -236,8 +236,8 @@ export default function Onboarding() {
   const [deployCombat, setDeployCombat] = useState(false);
 
   // BDD (Benefits Delivery at Discharge)
-  const [stillActiveDuty, setStillActiveDuty] = useState<boolean | null>(null);
-  const [separationDate, setSeparationDate] = useState('');
+  const [stillActiveDuty, setStillActiveDuty] = useState<boolean | null>(cached?.stillActiveDuty ?? null);
+  const [separationDate, setSeparationDate] = useState(cached?.separationDate ?? '');
 
   // Existing rated conditions
   const [hasExistingRated, setHasExistingRated] = useState<boolean | null>(null);
@@ -255,9 +255,10 @@ export default function Onboarding() {
       localStorage.setItem('vcs_onboarding_progress', JSON.stringify({
         step, firstName, lastName, branch, selectedBranches,
         mosCode, mosTitle, addedConditions, claimGoal, manualCode, manualTitle,
+        stillActiveDuty, separationDate,
       }));
     } catch { /* quota exceeded — ignore */ }
-  }, [step, firstName, lastName, branch, selectedBranches, mosCode, mosTitle, addedConditions, claimGoal, manualCode, manualTitle]);
+  }, [step, firstName, lastName, branch, selectedBranches, mosCode, mosTitle, addedConditions, claimGoal, manualCode, manualTitle, stillActiveDuty, separationDate]);
 
   useEffect(() => {
     persistProgress();
@@ -276,13 +277,14 @@ export default function Onboarding() {
       case 1: return firstName.trim().length > 0;
       case 2: return selectedBranches.length > 0;
       case 3: return true;
-      case 4: return true;
-      case 5: return true;
-      case 6: return true;
-      case 7: return true; // Goal step
-      case 8: return true;
-      case 9: return true;
-      case 10: return true;
+      case 4: return true; // Service Status
+      case 5: return true; // Duty Stations
+      case 6: return true; // Deployments
+      case 7: return true; // Goal
+      case 8: return true; // Existing Ratings
+      case 9: return true; // Conditions
+      case 10: return true; // Getting Started
+      case 11: return true; // Complete
       default: return true;
     }
   }, [step, firstName, selectedBranches.length]);
@@ -449,8 +451,9 @@ export default function Onboarding() {
 
   const STEP_LABELS = [
     'Welcome', 'Your Name', 'Branch of Service', 'Military Job',
-    'Duty Stations', 'Deployments', 'Conditions', 'Existing Ratings',
-    'Claim Goal', 'Getting Started', 'Complete',
+    'Service Status', 'Duty Stations', 'Deployments',
+    'Claim Goal', 'Existing Ratings', 'Conditions',
+    'Getting Started', 'Complete',
   ];
 
   const ProgressDots = () => {
@@ -694,8 +697,70 @@ export default function Onboarding() {
               </div>
             ))}
 
-            {/* Step 4: Duty Stations */}
+            {/* Step 4: Service Status (Active Duty / BDD) */}
             {step === 4 && (
+              <div className="space-y-5">
+                <div className="text-center">
+                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.09] border border-white/[0.14] flex items-center justify-center mb-4">
+                    <Shield className="h-7 w-7 text-gold" />
+                  </div>
+                  <h2 className="text-xl font-bold text-white">Are you still on active duty?</h2>
+                  <p className="text-white/40 text-sm mt-1">This helps determine if you qualify for BDD (Benefits Delivery at Discharge).</p>
+                </div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setStillActiveDuty(true)}
+                    className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${
+                      stillActiveDuty === true
+                        ? 'bg-gold/10 border-gold/40 text-white'
+                        : 'bg-white/[0.07] border-white/[0.12] text-white/70 hover:bg-white/[0.10]'
+                    }`}
+                  >
+                    Yes, active duty
+                  </button>
+                  <button
+                    onClick={() => { setStillActiveDuty(false); setSeparationDate(''); }}
+                    className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${
+                      stillActiveDuty === false
+                        ? 'bg-gold/10 border-gold/40 text-white'
+                        : 'bg-white/[0.07] border-white/[0.12] text-white/70 hover:bg-white/[0.10]'
+                    }`}
+                  >
+                    No, separated / retired
+                  </button>
+                </div>
+                {stillActiveDuty && (
+                  <div className="space-y-2">
+                    <p className="text-white/50 text-xs">Expected separation / ETS date</p>
+                    <input
+                      type="date"
+                      value={separationDate}
+                      onChange={e => setSeparationDate(e.target.value)}
+                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(240,192,0,0.4)] focus:border-gold/50 transition-all [color-scheme:dark]"
+                    />
+                    {separationDate && (() => {
+                      const daysOut = Math.round((new Date(separationDate).getTime() - Date.now()) / 86400000);
+                      if (daysOut >= 90 && daysOut <= 180) {
+                        return (
+                          <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-400/10 border border-emerald-400/20">
+                            <Shield className="h-4 w-4 text-emerald-400 shrink-0" />
+                            <span className="text-xs text-emerald-400">You may be eligible for BDD (Benefits Delivery at Discharge). File 90–180 days before separation to get your rating faster.</span>
+                          </div>
+                        );
+                      } else if (daysOut > 0 && daysOut < 90) {
+                        return (
+                          <p className="text-xs text-amber-400/80 px-1">Your separation is less than 90 days out — standard filing recommended.</p>
+                        );
+                      }
+                      return null;
+                    })()}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Step 5: Duty Stations */}
+            {step === 5 && (
               <div className="space-y-5">
                 <div className="text-center">
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.09] border border-white/[0.14] flex items-center justify-center mb-4">
@@ -766,8 +831,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 5: Deployments */}
-            {step === 5 && (
+            {/* Step 6: Deployments */}
+            {step === 6 && (
               <div className="space-y-5">
                 <div className="text-center">
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.09] border border-white/[0.14] flex items-center justify-center mb-4">
@@ -872,40 +937,6 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 6: Conditions */}
-            {step === 6 && (
-              <div className="space-y-5">
-                <div className="text-center">
-                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.09] border border-white/[0.14] flex items-center justify-center mb-4">
-                    <Stethoscope className="h-7 w-7 text-gold" />
-                  </div>
-                  <h2 className="text-xl font-bold text-white">Are you claiming any conditions?</h2>
-                  <p className="text-white/40 text-sm mt-1">This helps show you the most relevant tools.</p>
-                </div>
-                <ConditionAutocomplete
-                  onSelect={handleAddCondition}
-                  placeholder="Search conditions..."
-                  excludeIds={addedConditions}
-                />
-                {addedConditions.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {addedConditions.map(id => {
-                      const c = getConditionById(id);
-                      if (!c) return null;
-                      return (
-                        <span key={id} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-sm text-foreground max-w-full">
-                          <span className="truncate">{c.abbreviation || c.name}</span>
-                          <button onClick={() => handleRemoveCondition(id)} className="ml-1 text-gold/60 hover:text-gold" aria-label={`Remove ${c.abbreviation || c.name}`}>
-                            <X className="h-3 w-3" />
-                          </button>
-                        </span>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
-
             {/* Step 7: What's Your Goal? */}
             {step === 7 && (
               <div className="space-y-5">
@@ -945,62 +976,6 @@ export default function Onboarding() {
                     </button>
                   ))}
                 </div>
-
-                {/* BDD: Active duty + separation date */}
-                {claimGoal === 'initial' && (
-                  <div className="space-y-3 pt-2">
-                    <p className="text-white/60 text-sm font-medium">Are you still on active duty?</p>
-                    <div className="flex gap-3">
-                      <button
-                        onClick={() => setStillActiveDuty(true)}
-                        className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${
-                          stillActiveDuty === true
-                            ? 'bg-gold/10 border-gold/40 text-white'
-                            : 'bg-white/[0.07] border-white/[0.12] text-white/70 hover:bg-white/[0.10]'
-                        }`}
-                      >
-                        Yes
-                      </button>
-                      <button
-                        onClick={() => { setStillActiveDuty(false); setSeparationDate(''); }}
-                        className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${
-                          stillActiveDuty === false
-                            ? 'bg-gold/10 border-gold/40 text-white'
-                            : 'bg-white/[0.07] border-white/[0.12] text-white/70 hover:bg-white/[0.10]'
-                        }`}
-                      >
-                        No
-                      </button>
-                    </div>
-                    {stillActiveDuty && (
-                      <div className="space-y-2">
-                        <p className="text-white/50 text-xs">Expected separation / ETS date</p>
-                        <input
-                          type="date"
-                          value={separationDate}
-                          onChange={e => setSeparationDate(e.target.value)}
-                          className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(240,192,0,0.4)] focus:border-gold/50 transition-all [color-scheme:dark]"
-                        />
-                        {separationDate && (() => {
-                          const daysOut = Math.round((new Date(separationDate).getTime() - Date.now()) / 86400000);
-                          if (daysOut >= 90 && daysOut <= 180) {
-                            return (
-                              <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-400/10 border border-emerald-400/20">
-                                <Shield className="h-4 w-4 text-emerald-400 shrink-0" />
-                                <span className="text-xs text-emerald-400">You may be eligible for BDD (Benefits Delivery at Discharge). File 90–180 days before separation to get your rating faster.</span>
-                              </div>
-                            );
-                          } else if (daysOut > 0 && daysOut < 90) {
-                            return (
-                              <p className="text-xs text-amber-400/80 px-1">Your separation is less than 90 days out — standard filing recommended.</p>
-                            );
-                          }
-                          return null;
-                        })()}
-                      </div>
-                    )}
-                  </div>
-                )}
               </div>
             )}
 
@@ -1084,7 +1059,7 @@ export default function Onboarding() {
                       <button
                         onClick={handleAddExistingRated}
                         disabled={!newRatedCondition.trim()}
-                        className="w-full h-10 rounded-xl bg-gold/20 text-white text-sm font-medium hover:bg-gold/30 disabled:opacity-40 transition-colors"
+                        className="w-full h-10 rounded-xl bg-gold text-[#000000] text-sm font-bold disabled:opacity-40 transition-all"
                       >
                         Save
                       </button>
@@ -1111,8 +1086,42 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 9: How to Get Results */}
+            {/* Step 9: Conditions */}
             {step === 9 && (
+              <div className="space-y-5">
+                <div className="text-center">
+                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.09] border border-white/[0.14] flex items-center justify-center mb-4">
+                    <Stethoscope className="h-7 w-7 text-gold" />
+                  </div>
+                  <h2 className="text-xl font-bold text-white">Are you claiming any conditions?</h2>
+                  <p className="text-white/40 text-sm mt-1">This helps show you the most relevant tools.</p>
+                </div>
+                <ConditionAutocomplete
+                  onSelect={handleAddCondition}
+                  placeholder="Search conditions..."
+                  excludeIds={addedConditions}
+                />
+                {addedConditions.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {addedConditions.map(id => {
+                      const c = getConditionById(id);
+                      if (!c) return null;
+                      return (
+                        <span key={id} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-sm text-foreground max-w-full">
+                          <span className="truncate">{c.abbreviation || c.name}</span>
+                          <button onClick={() => handleRemoveCondition(id)} className="ml-1 text-gold/60 hover:text-gold" aria-label={`Remove ${c.abbreviation || c.name}`}>
+                            <X className="h-3 w-3" />
+                          </button>
+                        </span>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Step 10: How to Get Results */}
+            {step === 10 && (
               <div className="space-y-5">
                 <div className="text-center">
                   <h2 className="text-xl font-bold text-white">How to Get Results</h2>
@@ -1175,8 +1184,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 10: Thank You */}
-            {step === 10 && (
+            {/* Step 11: Thank You */}
+            {step === 11 && (
               <div className="text-center space-y-6">
                 <style>{`
                   @keyframes flagWave {
@@ -1266,7 +1275,7 @@ export default function Onboarding() {
               )}
             </div>
             <div className="flex items-center gap-2">
-              {(step === 3 || step === 4 || step === 5 || step === 6 || step === 7 || step === 8) && (
+              {(step >= 3 && step <= 9) && (
                 <button onClick={handleSkip} className="text-sm text-white/40 hover:text-white/60 transition-colors h-11 px-4">
                   Skip
                 </button>
