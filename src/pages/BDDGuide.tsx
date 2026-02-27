@@ -323,14 +323,9 @@ export default function BDDGuide() {
         </Card>
       </motion.div>
 
-      {/* Disclaimer */}
-      <div className="p-4 bg-muted/30 rounded-lg border border-border">
-        <p className="text-xs text-muted-foreground leading-relaxed">
-          This guide is for educational purposes only and does not constitute legal or medical advice.
-          For personalized guidance, consult with a Veterans Service Organization (VSO) or
-          VA-accredited attorney. All information is based on publicly available VA resources.
-        </p>
-      </div>
+      <p className="text-xs text-muted-foreground/70 text-center">
+        Based on publicly available VA resources. Consult a VSO for personalized guidance.
+      </p>
     </PageContainer>
   );
 }

@@ -849,25 +849,6 @@ export default function BuildPacket() {
         </Card>
       </motion.div>
 
-      {/* ===== Legal Disclaimer ===== */}
-      <motion.div variants={fadeUp} custom={5}>
-        <Card className="border-warning/20 bg-warning/5">
-          <CardContent className="py-4">
-            <div className="flex items-start gap-3">
-              <Shield className="h-4 w-4 text-warning flex-shrink-0 mt-0.5" />
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                <strong className="text-foreground">Disclaimer:</strong> Vet Claim Support (VCS)
-                is a claim preparation and educational tool. It is not affiliated with or endorsed
-                by the U.S. Department of Veterans Affairs. This app does not provide legal or
-                medical advice. The information generated is for organizational purposes only and
-                should not be submitted to the VA without review by a qualified Veterans Service
-                Officer (VSO) or VA-accredited attorney. Consult qualified professionals for advice
-                specific to your situation.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
     </motion.div>
     </PageContainer>
   );

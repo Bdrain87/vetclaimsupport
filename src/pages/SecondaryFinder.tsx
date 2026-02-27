@@ -6,7 +6,6 @@ import { useClaims } from '@/hooks/useClaims';
 import { secondaryConditions, type SecondaryConnection } from '@/data/secondaryConditions';
 import { vaConditions, type VACondition, getConditionById, searchConditions } from '@/data/vaConditions';
 import { Link, useSearchParams } from 'react-router-dom';
-import { AlertTriangle } from 'lucide-react';
 import { PageContainer } from '@/components/PageContainer';
 
 // Connection strength heuristic based on data
@@ -30,7 +29,6 @@ const strengthConfig = {
 export default function SecondaryFinder() {
   const [searchParams] = useSearchParams();
   const [selectedPrimary, setSelectedPrimary] = useState<string | null>(null);
-  const [disclaimerAcknowledged, setDisclaimerAcknowledged] = useState(false);
   const { conditions: userConditions, addCondition, hasCondition } = useUserConditions();
   const { data: claimsData } = useClaims();
 
@@ -126,34 +124,9 @@ export default function SecondaryFinder() {
         </div>
       </div>
 
-      {/* Disclaimer */}
-      {!disclaimerAcknowledged ? (
-        <div className="rounded-xl p-4 flex items-start gap-3 bg-[rgba(240,192,0,0.08)] border border-gold/20">
-          <AlertTriangle className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-foreground">Educational Tool Only</p>
-            <p className="text-xs text-muted-foreground mt-1">
-              Secondary conditions must be formally diagnosed by a medical professional before filing.
-              This tool is not medical advice. Always consult with a doctor and/or Veterans Service Organization (VSO)
-              before adding conditions to your claim.
-            </p>
-            <button
-              onClick={() => setDisclaimerAcknowledged(true)}
-              className="mt-2 px-3 py-1.5 rounded-md bg-gold/15 text-foreground text-xs font-medium hover:bg-gold/25 transition-colors"
-            >
-              I Acknowledge
-            </button>
-          </div>
-        </div>
-      ) : (
-        <button
-          onClick={() => setDisclaimerAcknowledged(false)}
-          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl border border-[rgba(240,192,0,0.15)] bg-[rgba(240,192,0,0.04)] text-xs text-muted-foreground hover:bg-[rgba(240,192,0,0.08)] transition-colors"
-        >
-          <AlertTriangle className="h-3.5 w-3.5 text-gold flex-shrink-0" />
-          <span>Educational tool disclaimer acknowledged — tap to review</span>
-        </button>
-      )}
+      <p className="text-xs text-muted-foreground/70 text-center">
+        Conditions must be diagnosed before filing. Consult a doctor or VSO.
+      </p>
 
       {/* Autocomplete search */}
       <ConditionSelector

@@ -786,18 +786,6 @@ export default function StressorStatement() {
         )}
       </div>
 
-      {/* Disclaimer */}
-      <Card className="border-border bg-muted/20">
-        <CardContent className="pt-4">
-          <div className="flex items-start gap-2">
-            <AlertCircle className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              This tool provides organizational guidance only. It does not provide legal or medical advice.
-              Consult with an accredited VSO or attorney for official guidance.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
     </PageContainer>
   );
 }

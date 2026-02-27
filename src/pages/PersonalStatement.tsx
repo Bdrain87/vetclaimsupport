@@ -732,7 +732,6 @@ export default function PersonalStatement() {
             </p>
             <p className="mt-2 text-xs text-muted-foreground/80">
               This tool helps you organize your thoughts into a structured personal statement.
-              This is not legal advice. Review all content carefully before submitting to the VA.
             </p>
           </div>
         </CardContent>
@@ -816,19 +815,6 @@ export default function PersonalStatement() {
         )}
       </div>
 
-      {/* Footer Disclaimer */}
-      <Card className="border-border bg-muted/20">
-        <CardContent className="pt-4">
-          <div className="flex items-start gap-2">
-            <AlertCircle className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              This tool helps you organize your thoughts into a structured personal statement.
-              This is not legal advice. Review all content carefully before submitting to the VA.
-              Consult with an accredited VSO or attorney for official guidance.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
     </PageContainer>
   );
 }

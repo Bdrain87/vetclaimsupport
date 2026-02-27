@@ -26,13 +26,13 @@ export function LegalDisclaimer() {
         <p className="text-xs leading-relaxed text-center" style={{ color: 'rgba(255, 255, 255, 0.35)' }}>
           Free VA-accredited Veterans Service Organizations (VSOs) are available at{' '}
           <a
-            href="https://www.va.gov/vso"
+            href="https://www.va.gov/ogc/apps/accreditation"
             target="_blank"
             rel="noopener noreferrer"
             className="underline"
             style={{ color: 'rgba(255, 255, 255, 0.55)' }}
           >
-            va.gov/vso
+            va.gov/ogc/apps/accreditation
           </a>{' '}
           to help with claims filing.
         </p>

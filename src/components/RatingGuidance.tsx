@@ -12,7 +12,6 @@ import {
   AlertTriangle,
   Lightbulb,
   BookOpen,
-  ShieldAlert,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -288,17 +287,10 @@ export default function RatingGuidance({ conditionId, conditionName }: RatingGui
         </a>
       </div>
 
-      {/* Mandatory educational disclaimer */}
-      <div className="rounded-xl border border-border/50 bg-muted/30 backdrop-blur-sm p-4">
-        <div className="flex gap-3">
-          <ShieldAlert className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            Rating criteria shown are simplified summaries of 38 CFR Part 4 for educational purposes
-            only. Actual ratings are determined by VA adjudicators based on the totality of evidence.
-            This is not legal advice.
-          </p>
-        </div>
-      </div>
+      {/* Educational note */}
+      <p className="text-xs text-muted-foreground/70 text-center">
+        Simplified summaries of 38 CFR Part 4. Actual ratings determined by the VA.
+      </p>
     </div>
   );
 }

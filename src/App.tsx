@@ -479,7 +479,7 @@ function AppContent() {
             <Combination />
             <div className="mt-6 text-center space-y-3">
               <p className="text-sm text-muted-foreground">
-                Create a free account to save your conditions, track health data, and access all 58 tools.
+                Create a free account to save your conditions, track health data, and access all 40+ tools.
               </p>
               <Link
                 to="/auth"

@@ -729,18 +729,9 @@ export default function IntentToFile() {
           </CardContent>
         </Card>
 
-        {/* Disclaimer */}
-        <div className="p-4 bg-muted/30 rounded-lg border border-border">
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            This page is for educational and personal tracking purposes only. It
-            does not file an Intent to File with the VA on your behalf. To
-            officially file an ITF, use one of the methods described above. All
-            information is based on publicly available VA resources and is
-            provided for general guidance. For personalized legal or benefits
-            advice, consult with an accredited Veterans Service Organization
-            (VSO) or VA-accredited attorney.
-          </p>
-        </div>
+        <p className="text-xs text-muted-foreground/70 text-center">
+          This does not file an ITF with the VA — use one of the methods above to officially file.
+        </p>
     </PageContainer>
   );
 }

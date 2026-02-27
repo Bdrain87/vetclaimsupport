@@ -19,7 +19,7 @@ export function AIDisclaimer({ className, variant = 'inline' }: AIDisclaimerProp
       >
         <Sparkles className="h-3.5 w-3.5 text-[var(--interactive-primary)] shrink-0" />
         <p className="text-xs leading-relaxed">
-          AI-generated content — not legal, medical, or VA advice. VCS is not VA-accredited (38 C.F.R. Part 14). Verify all content before use. Do not enter your SSN, date of birth, or full legal name.
+          AI-assisted — verify all content before use.
         </p>
       </div>
     );
@@ -33,7 +33,7 @@ export function AIDisclaimer({ className, variant = 'inline' }: AIDisclaimerProp
       )}
     >
       <Sparkles className="h-3 w-3 text-[var(--interactive-primary)]" />
-      AI-generated content — not legal, medical, or VA advice. VCS is not VA-accredited (38 C.F.R. Part 14). Verify all content before use. Do not enter your SSN, date of birth, or full legal name.
+      AI-assisted — verify before use.
     </span>
   );
 }

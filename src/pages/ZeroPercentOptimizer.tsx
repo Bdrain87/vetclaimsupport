@@ -3,10 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
 import {
-  TrendingUp, ChevronRight, AlertTriangle, Info,
+  TrendingUp, ChevronRight, AlertTriangle,
   FileText, Stethoscope, Target, ChevronDown, ChevronUp,
 } from 'lucide-react';
 import useAppStore from '@/store/useAppStore';
@@ -233,15 +232,9 @@ export default function ZeroPercentOptimizer() {
         </div>
       </div>
 
-      {/* Educational Alert */}
-      <Alert>
-        <Info className="h-4 w-4" />
-        <AlertDescription>
-          This tool shows the VA's published rating criteria so you can understand what symptoms and evidence
-          correspond to each rating level. This is educational information, not medical or legal advice.
-          A VSO or attorney can help you understand your specific situation.
-        </AlertDescription>
-      </Alert>
+      <p className="text-xs text-muted-foreground/70 text-center">
+        Based on VA published rating criteria. Actual ratings determined by the VA.
+      </p>
 
       {lowRatedConditions.length === 0 ? (
         <Card className="border-dashed border-2">

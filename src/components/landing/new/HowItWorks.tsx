@@ -25,7 +25,7 @@ const STEPS = [
   {
     num: '03',
     title: 'Prepare for the C&P Exam',
-    desc: 'Practice questions, know what to expect, walk in confident. Use health trackers to log symptoms mapped to rating criteria.',
+    desc: 'Practice questions, know what to expect, walk in feeling confident. Use health trackers to log symptoms mapped to rating criteria.',
   },
   {
     num: '04',

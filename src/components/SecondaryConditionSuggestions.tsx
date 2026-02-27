@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Target, Plus, Check, ChevronDown, ChevronUp, Link2, Sparkles, AlertTriangle } from 'lucide-react';
+import { Target, Plus, Check, ChevronDown, ChevronUp, Link2, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -135,21 +135,8 @@ export function SecondaryConditionSuggestions({
 
   const content = (
     <div className="space-y-3">
-      {/* Disclaimer */}
-      <div className="rounded-xl p-4 flex items-start gap-3 bg-[rgba(240,192,0,0.08)] border border-gold/20">
-        <AlertTriangle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-        <div>
-          <p className="text-sm font-semibold text-foreground">Educational Tool Only</p>
-          <p className="text-xs text-muted-foreground mt-1">
-            Secondary conditions must be formally diagnosed by a medical professional before filing.
-            This tool is not medical advice. Always consult with a doctor and/or VSO before adding
-            conditions to your claim.
-          </p>
-        </div>
-      </div>
-
       <p className="text-xs text-muted-foreground">
-        Based on your conditions, these are commonly connected:
+        Commonly connected conditions based on yours. Must be diagnosed before filing.
       </p>
 
       <div className="grid gap-2">

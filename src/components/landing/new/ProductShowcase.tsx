@@ -157,7 +157,7 @@ export function ProductShowcase() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1, ease: EASE_SMOOTH }}
         >
-          50+ tools designed around how the VA actually evaluates claims.
+          40+ tools designed around how the VA actually evaluates claims.
         </motion.p>
 
         {/* Category tabs */}
@@ -305,7 +305,7 @@ export function ProductShowcase() {
             className="inline-block rounded-full px-8 py-3.5 text-sm font-semibold text-black no-underline"
             style={{ background: GOLD_GRADIENT }}
           >
-            Explore All 50+ Tools
+            Explore All 40+ Tools
           </Link>
         </motion.div>
       </div>

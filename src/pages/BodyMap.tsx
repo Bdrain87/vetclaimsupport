@@ -821,7 +821,7 @@ export default function BodyMap() {
                 >
                   {/* Professional body silhouette PNG */}
                   <img
-                    src={viewMode === 'front' ? '/body-silhouette.png' : '/body-silhouette-back.png'}
+                    src="/body-silhouette.png"
                     alt={`Body map — ${viewMode} view`}
                     className="w-full h-auto"
                     style={{ display: 'block' }}

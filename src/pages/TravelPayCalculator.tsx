@@ -403,12 +403,9 @@ export default function TravelPayCalculator() {
         </Card>
       </motion.div>
 
-      {/* Disclaimer */}
-      <div className="p-4 bg-muted/30 rounded-lg border border-border">
-        <p className="text-xs text-muted-foreground leading-relaxed">
-          This calculator provides estimates only. Actual reimbursement may vary based on VA policies, eligibility, and the specific circumstances of your travel. The mileage rate and deductible amounts are subject to change. For official travel pay information, visit the VA BTSSS portal or contact your local VA medical center&apos;s travel office.
-        </p>
-      </div>
+      <p className="text-xs text-muted-foreground/70 text-center">
+        Estimate only — actual reimbursement may vary. Visit the VA BTSSS portal for official info.
+      </p>
     </PageContainer>
   );
 }

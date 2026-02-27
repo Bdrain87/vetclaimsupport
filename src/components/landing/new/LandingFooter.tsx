@@ -8,7 +8,7 @@ type FooterLink =
 const PRODUCT_LINKS: FooterLink[] = [
   { label: 'Features', href: '#features' },
   { label: 'Pricing', href: '#pricing' },
-  { label: 'Launch App', to: '/login' },
+  { label: 'Launch App', to: '/auth' },
 ];
 
 const RESOURCE_LINKS: FooterLink[] = [
@@ -226,7 +226,7 @@ export function LandingFooter() {
           Not affiliated with the U.S. Department of Veterans Affairs. Free VA-accredited Veterans Service
           Organizations (VSOs) are available at{' '}
           <a
-            href="https://www.va.gov/vso"
+            href="https://www.va.gov/ogc/apps/accreditation"
             target="_blank"
             rel="noopener noreferrer"
             className="underline"
@@ -234,7 +234,7 @@ export function LandingFooter() {
             onMouseEnter={(e) => (e.currentTarget.style.color = '#fff')}
             onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255, 255, 255, 0.35)')}
           >
-            va.gov/vso
+            va.gov/ogc/apps/accreditation
           </a>{' '}
           to help with claims filing.
         </p>

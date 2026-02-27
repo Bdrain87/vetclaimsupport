@@ -618,19 +618,6 @@ export default function HelpCenter() {
                   </a>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-muted/50 border border-border/50">
-                  <div className="flex items-start gap-3">
-                    <AlertCircle className="h-5 w-5 text-primary mt-0.5" />
-                    <div>
-                      <p className="font-semibold">Important Disclaimer</p>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        This app is an educational tool only. It does not provide legal, medical, or
-                        professional advice. Always consult with an accredited VSO, attorney, or VA
-                        representative for official guidance on your claim.
-                      </p>
-                    </div>
-                  </div>
-                </div>
               </CardContent>
             </Card>
           </TabsContent>

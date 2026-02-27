@@ -425,20 +425,9 @@ export default function BackPayEstimator() {
         </Card>
       )}
 
-      {/* Disclaimer */}
-      <div className="flex items-start gap-3 bg-[rgba(240,192,0,0.05)] border border-gold/20 rounded-xl p-4">
-        <Info className="h-5 w-5 text-gold shrink-0 mt-0.5" />
-        <div className="space-y-1">
-          <p className="text-sm font-medium text-gold">Disclaimer</p>
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            This is an estimate only. Actual back pay amounts are determined by the VA. Rates shown
-            are approximate 2026 VA compensation rates. Your actual compensation may differ based on
-            specific circumstances, rate changes, withholdings, or other factors. Dependent additions
-            are simplified estimates; actual VA rates vary by rating level and number of dependents.
-            Consult the VA or a Veterans Service Organization (VSO) for precise amounts.
-          </p>
-        </div>
-      </div>
+      <p className="text-xs text-muted-foreground/70 text-center">
+        Estimate only — actual amounts determined by the VA based on your specific circumstances.
+      </p>
     </PageContainer>
   );
 }
