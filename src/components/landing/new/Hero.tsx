@@ -6,7 +6,7 @@ import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE, APP_STORE_URL } from '@/lib/landi
 // Rotating words removed — headline is now static with gold accent on "Your Benefits."
 
 const TRUST_ITEMS = [
-  'YOUR DATA STAYS PRIVATE',
+  'NOT AFFILIATED WITH THE VA',
   'VETERAN-BUILT',
   '50+ CLAIM TOOLS',
   'ONE-TIME PURCHASE',

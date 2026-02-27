@@ -79,19 +79,25 @@ export function BuiltByVeteran() {
             className="text-lg md:text-xl italic leading-relaxed mb-6"
             style={{ color: '#E5E7EB' }}
           >
-            &ldquo;I&rsquo;m a 100% service-connected disabled veteran. I went through the claims
-            process myself. The confusion, the denials, the C&amp;P exams, the sharks who wanted
-            thousands of dollars to do what I could do with the right tools. I built Vet Claim
-            Support because no service member or veteran should have to pay someone thousands to
-            organize what&rsquo;s already theirs. This isn&rsquo;t a corporation. It&rsquo;s a
-            weapon, built by a veteran, for service members and veterans.&rdquo;
+            &ldquo;I&rsquo;m a service-connected disabled veteran. I went through the claims
+            process myself &mdash; the confusion, the denials, the C&amp;P exams, the companies charging
+            thousands of dollars for help I could have done with the right tools. I built Vet Claim
+            Support because no service member or veteran should have to pay that much just to
+            organize their own evidence. This isn&rsquo;t a corporation. It&rsquo;s a tool,
+            built by a veteran, for service members and veterans.&rdquo;
           </p>
           <footer
             className="text-sm"
             style={{ color: '#B8B8B8' }}
           >
-            &mdash; Blake, Vet Claim Support
+            &mdash; Blake, Founder &amp; Creator
           </footer>
+          <p
+            className="text-xs mt-4 pl-6 md:pl-8"
+            style={{ color: '#6B7280' }}
+          >
+            Individual results vary. Vet Claim Support is an organizational tool &mdash; not a guarantee of any particular outcome.
+          </p>
         </motion.blockquote>
       </div>
     </section>

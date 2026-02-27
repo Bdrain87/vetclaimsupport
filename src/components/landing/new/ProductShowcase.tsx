@@ -35,9 +35,9 @@ const CATEGORIES: FeatureCategory[] = [
     id: 'tracking',
     icon: Activity,
     label: 'Health Tracking',
-    headline: 'Symptoms mapped to VA rating criteria',
+    headline: 'Symptoms organized by VA rating categories',
     description:
-      'Daily logs with severity, frequency, and triggers — automatically organized into the evidence the VA needs to see.',
+      'Daily logs with severity, frequency, and triggers — automatically organized to align with VA rating schedule categories.',
     features: [
       'Symptom, sleep, and migraine trackers',
       'Medication log with side effects',
@@ -67,7 +67,7 @@ const CATEGORIES: FeatureCategory[] = [
     label: 'Strategy & Prep',
     headline: 'Walk into your C&P exam confident',
     description:
-      'Condition-specific exam prep, claim strategy recommendations, and secondary condition discovery — built on real VA data.',
+      'Condition-specific exam prep, claim organization tools, and secondary condition discovery — based on publicly available VA rating schedules.',
     features: [
       'Claim Strategy Wizard with filing order guidance',
       'C&P Exam Prep with practice questions',

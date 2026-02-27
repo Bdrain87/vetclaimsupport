@@ -179,8 +179,8 @@ export function Pricing() {
             priceLabel="typical cost"
             items={[
               'Large upfront fees',
-              'No guaranteed outcomes',
-              'Unregulated industry',
+              'Limited transparency',
+              'No standardized oversight',
             ]}
           />
 
