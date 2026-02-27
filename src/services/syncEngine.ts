@@ -2,7 +2,7 @@ import { supabase } from '@/lib/supabase';
 import useAppStore from '@/store/useAppStore';
 import { useProfileStore } from '@/store/useProfileStore';
 import { redactPII } from '@/lib/redaction';
-import { toast } from '@/hooks/use-toast';
+
 
 function isNonNullObject(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null && !Array.isArray(v);
@@ -500,13 +500,10 @@ export async function syncNow(): Promise<void> {
       // Network errors, auth expiry, or unexpected failures. Individual
       // push/pull operations log their own granular errors above; this catch
       // handles truly fatal issues (e.g. no network mid-sync).
+      // Status is set to 'error' for any UI indicators — no toast to avoid
+      // spamming the user on every 60s retry cycle.
       console.error('[sync] syncNow failed');
       setStatus('error');
-      toast({
-        title: 'Sync failed',
-        description: 'Your data could not be synced. Changes are saved locally and will sync when connectivity is restored.',
-        variant: 'destructive',
-      });
     }
   };
 
