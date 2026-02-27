@@ -89,6 +89,10 @@ export function TrustMarquee() {
       style.textContent = MARQUEE_STYLES;
       document.head.appendChild(style);
     }
+    return () => {
+      const el = document.getElementById(id);
+      if (el) el.remove();
+    };
   }, []);
 
   return (

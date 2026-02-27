@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback } from 'react';
-import { supabase } from '@/lib/supabase';
+import { signOut } from '@/services/auth';
 import { toast } from '@/hooks/use-toast';
 import { clearLocalData } from '@/services/accountManagement';
 import { stopSync } from '@/services/syncEngine';
@@ -41,11 +41,7 @@ export function useSessionTimeout() {
   const handleSignOut = useCallback(async () => {
     clearTimers();
     stopSync();
-    try {
-      await supabase.auth.signOut();
-    } catch {
-      // Sign-out best-effort; ignore network errors
-    }
+    await signOut();
     await clearLocalData();
     window.location.replace('/auth');
   }, [clearTimers]);

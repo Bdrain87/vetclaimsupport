@@ -12,14 +12,16 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
     setDisplay(0);
     const duration = 1800;
     const startTime = Date.now();
+    let rafId: number;
     const tick = () => {
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
       setDisplay(Math.round(eased * value));
-      if (progress < 1) requestAnimationFrame(tick);
+      if (progress < 1) rafId = requestAnimationFrame(tick);
     };
-    requestAnimationFrame(tick);
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
   }, [isInView, value]);
 
   return (
