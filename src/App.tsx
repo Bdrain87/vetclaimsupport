@@ -201,6 +201,12 @@ function ScrollToTop() {
     const main = document.querySelector('main');
     if (main) main.scrollTop = 0;
     else window.scrollTo(0, 0);
+    // Move focus to the first h1 so screen readers announce the new page
+    const heading = document.querySelector('h1');
+    if (heading instanceof HTMLElement) {
+      heading.setAttribute('tabindex', '-1');
+      heading.focus({ preventScroll: true });
+    }
   }, [pathname]);
 
   return null;

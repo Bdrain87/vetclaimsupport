@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { secureAuthStorage } from '@/lib/secureAuthStorage';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || '';
@@ -20,7 +21,7 @@ export const supabase = createClient(
   isTestEnv && !supabaseAnonKey ? 'placeholder-key' : supabaseAnonKey,
   {
     auth: {
-      storage: typeof localStorage !== 'undefined' ? localStorage : undefined,
+      storage: secureAuthStorage,
       persistSession: true,
       autoRefreshToken: true,
     },

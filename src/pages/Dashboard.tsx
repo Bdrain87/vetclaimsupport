@@ -841,9 +841,9 @@ export default function Dashboard() {
               {hadFlareUp && (
                 <div className="space-y-2 p-3 rounded-lg border border-destructive/20 bg-destructive/5">
                   <div className="space-y-1">
-                    <label className="text-xs text-muted-foreground">Duration</label>
+                    <label htmlFor="flareup-duration" className="text-xs text-muted-foreground">Duration</label>
                     <Select value={flareUpDuration} onValueChange={setFlareUpDuration}>
-                      <SelectTrigger className="h-9 text-sm">
+                      <SelectTrigger id="flareup-duration" className="h-9 text-sm">
                         <SelectValue placeholder="How long?" />
                       </SelectTrigger>
                       <SelectContent>
@@ -857,7 +857,7 @@ export default function Dashboard() {
                   </div>
                   <div className="space-y-1">
                     <div className="flex items-center justify-between">
-                      <label className="text-xs text-muted-foreground">Flare severity</label>
+                      <label id="flare-severity-label" className="text-xs text-muted-foreground">Flare severity</label>
                       <span className="text-xs font-bold text-foreground">{flareUpSeverity}/10</span>
                     </div>
                     <Slider
@@ -865,15 +865,18 @@ export default function Dashboard() {
                       onValueChange={([v]) => setFlareUpSeverity(v)}
                       min={1} max={10} step={1}
                       className="w-full"
+                      aria-label={`Flare severity: ${flareUpSeverity} out of 10`}
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-xs text-muted-foreground">Triggers (tap to select)</label>
-                    <div className="flex flex-wrap gap-1">
+                    <span id="triggers-label" className="text-xs text-muted-foreground">Triggers (tap to select)</span>
+                    <div className="flex flex-wrap gap-1" role="group" aria-labelledby="triggers-label">
                       {['Weather', 'Activity', 'Stress', 'Sleep', 'Standing', 'Sitting', 'Lifting', 'Cold', 'Heat'].map((t) => (
                         <button
                           key={t}
                           type="button"
+                          role="checkbox"
+                          aria-checked={flareUpTriggers.includes(t)}
                           onClick={() => setFlareUpTriggers((prev) => prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t])}
                           className={cn(
                             'text-[11px] px-3 py-2.5 min-h-[44px] rounded-full border transition-colors',
@@ -888,8 +891,9 @@ export default function Dashboard() {
                     </div>
                   </div>
                   <div className="space-y-1">
-                    <label className="text-xs text-muted-foreground">Activities affected</label>
+                    <label htmlFor="flareup-activities" className="text-xs text-muted-foreground">Activities affected</label>
                     <Input
+                      id="flareup-activities"
                       value={flareUpActivities}
                       onChange={(e) => setFlareUpActivities(e.target.value)}
                       placeholder="e.g., couldn't drive, missed work..."

@@ -418,19 +418,21 @@ export default function ClaimChecklist() {
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-3" role="list">
               {items.map(item => (
                 <div
                   key={item.id}
+                  role="listitem"
+                  aria-label={`${item.title} — ${item.isComplete ? 'Complete' : 'Incomplete'}`}
                   className={`rounded-lg border transition-all ${
-                    item.isComplete 
-                      ? 'bg-success/5 border-success/20' 
+                    item.isComplete
+                      ? 'bg-success/5 border-success/20'
                       : 'bg-card border-border hover:border-primary/30'
                   }`}
                 >
                   <div className="p-4">
                     <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 mt-0.5">
+                      <div className="flex-shrink-0 mt-0.5" aria-hidden="true">
                         {item.isComplete ? (
                           <CheckCircle2 className="h-5 w-5 text-success" />
                         ) : (
