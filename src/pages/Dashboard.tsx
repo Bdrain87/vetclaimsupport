@@ -220,12 +220,13 @@ export default function Dashboard() {
     ? new Date(profile.separationDate + 'T00:00:00')
     : null;
 
+  const setSeparationDate = useProfileStore((s) => s.setSeparationDate);
   const handleSeparationDateChange = useCallback((date: Date | null) => {
     if (date) {
       const formatted = date.toISOString().split('T')[0];
-      profile.setSeparationDate(formatted);
+      setSeparationDate(formatted);
     }
-  }, [profile]);
+  }, [setSeparationDate]);
 
   return (
     <PageContainer className="space-y-4 animate-fade-in pb-4">
