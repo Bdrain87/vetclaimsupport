@@ -76,7 +76,7 @@ export default defineConfig({
     // Strip console.log and console.debug in production builds.
     // console.warn and console.error are kept for runtime diagnostics.
     minify: 'esbuild',
-    target: 'esnext',
+    target: 'safari15',
     esbuild: {
       drop: ['debugger'],
       pure: ['console.log', 'console.debug'],
