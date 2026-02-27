@@ -30,6 +30,7 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         sessionStorage.setItem('post_login_redirect', window.location.pathname);
+        setLoading(false);
         navigate('/auth');
         return;
       }

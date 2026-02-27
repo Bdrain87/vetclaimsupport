@@ -492,7 +492,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
       const events: { date: Date; type: string; description: string }[] = [];
       
       // Add service history
-      data.serviceHistory.forEach(entry => {
+      (data.serviceHistory || []).forEach(entry => {
         events.push({
           date: new Date(entry.startDate),
           type: 'Service',
@@ -508,7 +508,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
       });
       
       // Add medical visits
-      data.medicalVisits.slice(0, 5).forEach(visit => {
+      (data.medicalVisits || []).slice(0, 5).forEach(visit => {
         events.push({
           date: new Date(visit.date),
           type: 'Medical',
@@ -517,7 +517,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
       });
       
       // Add severe symptoms
-      data.symptoms.filter(s => s.severity >= 7).slice(0, 5).forEach(symptom => {
+      (data.symptoms || []).filter(s => s.severity >= 7).slice(0, 5).forEach(symptom => {
         events.push({
           date: new Date(symptom.date),
           type: 'Symptom',

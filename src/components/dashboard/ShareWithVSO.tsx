@@ -47,15 +47,15 @@ export function ShareWithVSO() {
     }
     lines.push('');
     lines.push('--- EVIDENCE SUMMARY ---');
-    lines.push(`Medical Visits: ${data.medicalVisits.length}`);
-    lines.push(`Medications: ${data.medications.length}`);
-    lines.push(`Symptoms Logged: ${data.symptoms.length}`);
-    lines.push(`Buddy Contacts: ${data.buddyContacts.length}`);
+    lines.push(`Medical Visits: ${(data.medicalVisits || []).length}`);
+    lines.push(`Medications: ${(data.medications || []).length}`);
+    lines.push(`Symptoms Logged: ${(data.symptoms || []).length}`);
+    lines.push(`Buddy Contacts: ${(data.buddyContacts || []).length}`);
     lines.push('');
     lines.push('--- DOCUMENTS & STATEMENTS ---');
-    lines.push(`Documents: ${documentsObtained} of ${data.documents.length} obtained/submitted`);
-    lines.push(`Buddy Statements: ${buddyStatementsReceived} of ${data.buddyContacts.length} received`);
-    lines.push(`Exposures Documented: ${data.exposures.length}`);
+    lines.push(`Documents: ${documentsObtained} of ${(data.documents || []).length} obtained/submitted`);
+    lines.push(`Buddy Statements: ${buddyStatementsReceived} of ${(data.buddyContacts || []).length} received`);
+    lines.push(`Exposures Documented: ${(data.exposures || []).length}`);
     lines.push('');
     lines.push('Privacy Note: This summary contains only aggregate counts and condition names. Detailed medical information stays on your device.');
     return lines.join('\n');
@@ -107,9 +107,9 @@ export function ShareWithVSO() {
       // Veteran Info
       addText('VETERAN INFO', 12, 'bold');
       addText(`Separation Date: ${data.separationDate ? new Date(data.separationDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Not set'}`, 10);
-      if (data.serviceHistory.length > 0) {
+      if ((data.serviceHistory || []).length > 0) {
         addText('Service Locations:', 10, 'bold');
-        data.serviceHistory.filter(s => s.base).forEach(s => {
+        (data.serviceHistory || []).filter(s => s.base).forEach(s => {
           addText(`  • ${s.base}`, 10);
         });
       } else {
@@ -131,17 +131,17 @@ export function ShareWithVSO() {
 
       // Evidence Summary
       addText('EVIDENCE SUMMARY', 12, 'bold');
-      addText(`Medical Visits: ${data.medicalVisits.length}`, 10);
-      addText(`Medications: ${data.medications.length}`, 10);
-      addText(`Symptoms Logged: ${data.symptoms.length}`, 10);
-      addText(`Buddy Contacts: ${data.buddyContacts.length}`, 10);
+      addText(`Medical Visits: ${(data.medicalVisits || []).length}`, 10);
+      addText(`Medications: ${(data.medications || []).length}`, 10);
+      addText(`Symptoms Logged: ${(data.symptoms || []).length}`, 10);
+      addText(`Buddy Contacts: ${(data.buddyContacts || []).length}`, 10);
       addSpacer();
 
       // Documents
       addText('DOCUMENTS & STATEMENTS', 12, 'bold');
-      addText(`Documents: ${documentsObtained} of ${data.documents.length} obtained/submitted`, 10);
-      addText(`Buddy Statements: ${buddyStatementsReceived} of ${data.buddyContacts.length} received`, 10);
-      addText(`Exposures Documented: ${data.exposures.length}`, 10);
+      addText(`Documents: ${documentsObtained} of ${(data.documents || []).length} obtained/submitted`, 10);
+      addText(`Buddy Statements: ${buddyStatementsReceived} of ${(data.buddyContacts || []).length} received`, 10);
+      addText(`Exposures Documented: ${(data.exposures || []).length}`, 10);
       addSpacer(20);
 
       // Privacy note
@@ -207,17 +207,17 @@ export function ShareWithVSO() {
               </div>
               <div className="pl-6 space-y-1 text-sm text-muted-foreground">
                 <p><span className="font-medium text-foreground">Separation Date:</span> {formatDate(data.separationDate)}</p>
-                {data.serviceHistory.length > 0 && (
+                {(data.serviceHistory || []).length > 0 && (
                   <div>
                     <span className="font-medium text-foreground">Service Locations:</span>
                     <ul className="list-disc list-inside ml-2 mt-1">
-                      {data.serviceHistory.filter(s => s.base).map((s, i) => (
+                      {(data.serviceHistory || []).filter(s => s.base).map((s, i) => (
                         <li key={i} className="truncate">{s.base}</li>
                       ))}
                     </ul>
                   </div>
                 )}
-                {data.serviceHistory.length === 0 && (
+                {(data.serviceHistory || []).length === 0 && (
                   <p className="italic">No service history logged</p>
                 )}
               </div>

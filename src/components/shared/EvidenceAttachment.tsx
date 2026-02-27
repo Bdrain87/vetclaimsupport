@@ -63,10 +63,11 @@ export function EvidenceAttachment({
 
     if (validFiles.length > 0) {
       Promise.all(
-        validFiles.map(file => new Promise<EvidenceDocument>((resolve) => {
+        validFiles.map(file => new Promise<EvidenceDocument | null>((resolve) => {
           const reader = new FileReader();
           reader.onload = (e) => {
             const dataUrl = e.target?.result as string;
+            if (!dataUrl) { resolve(null); return; }
             const suggestedCategory = suggestCategoryFromFilename(file.name);
 
             const newDoc: EvidenceDocument = {
@@ -94,9 +95,12 @@ export function EvidenceAttachment({
 
             resolve(newDoc);
           };
+          reader.onerror = () => resolve(null);
           reader.readAsDataURL(file);
         }))
-      ).then(newDocs => {
+      ).then(results => {
+        const newDocs = results.filter((d): d is EvidenceDocument => d !== null);
+        if (newDocs.length === 0) return;
         onDocumentsChange([...documents, ...newDocs]);
 
         toast({

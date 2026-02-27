@@ -30,11 +30,11 @@ export function useStreakTracker(): StreakInfo {
   return useMemo(() => {
     const dateSet = new Set<string>();
 
-    for (const s of symptoms) dateSet.add(s.date.slice(0, 10));
-    for (const q of quickLogs) dateSet.add(q.date.slice(0, 10));
-    for (const sl of sleepEntries) dateSet.add(sl.date.slice(0, 10));
-    for (const m of migraines) dateSet.add(m.date.slice(0, 10));
-    for (const v of medicalVisits) dateSet.add(v.date.slice(0, 10));
+    for (const s of symptoms) if (s.date) dateSet.add(s.date.slice(0, 10));
+    for (const q of quickLogs) if (q.date) dateSet.add(q.date.slice(0, 10));
+    for (const sl of sleepEntries) if (sl.date) dateSet.add(sl.date.slice(0, 10));
+    for (const m of migraines) if (m.date) dateSet.add(m.date.slice(0, 10));
+    for (const v of medicalVisits) if (v.date) dateSet.add(v.date.slice(0, 10));
 
     if (dateSet.size === 0) {
       return {

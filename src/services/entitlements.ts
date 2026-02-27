@@ -161,6 +161,7 @@ export async function startCheckout(): Promise<string> {
     body: {},
   });
   if (error) throw new Error('Failed to start checkout. Please try again.');
+  if (!data?.url) throw new Error('Invalid checkout URL received. Please try again.');
 
   const url = data.url;
   try {

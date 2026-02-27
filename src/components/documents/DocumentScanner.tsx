@@ -133,7 +133,7 @@ export function DocumentScanner({
         dataUrl,
       });
       setIsUploadOpen(true);
-      
+
       // Auto-populate title
       if (!title) {
         const nameWithoutExt = file.name.replace(/\.[^/.]+$/, '');
@@ -143,6 +143,9 @@ export function DocumentScanner({
       // Reset OCR state
       setScanResult(null);
       setOcrError(null);
+    };
+    reader.onerror = () => {
+      toast({ title: 'Failed to read file', description: 'Please try again.', variant: 'destructive' });
     };
     reader.readAsDataURL(file);
   };

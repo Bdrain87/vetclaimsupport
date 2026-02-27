@@ -607,7 +607,7 @@ export default function Onboarding() {
             )}
 
             {/* Step 3: MOS */}
-            {step === 3 && branch && (
+            {step === 3 && (branch ? (
               <div className="space-y-5">
                 <div className="text-center">
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.09] border border-white/[0.14] flex items-center justify-center mb-4">
@@ -688,7 +688,11 @@ export default function Onboarding() {
                   </div>
                 )}
               </div>
-            )}
+            ) : (
+              <div className="text-center space-y-4">
+                <p className="text-white/60 text-sm">Please go back and select your branch of service first.</p>
+              </div>
+            ))}
 
             {/* Step 4: Duty Stations */}
             {step === 4 && (

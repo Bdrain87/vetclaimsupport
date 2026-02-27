@@ -543,7 +543,7 @@ export default function ClaimJourney() {
     return 'locked';
   };
 
-  const currentPhase = journeyPhases[journeyProgress.currentPhase];
+  const currentPhase = journeyPhases[Math.min(journeyProgress.currentPhase, journeyPhases.length - 1)];
 
   return (
     <PageContainer className="py-8 space-y-8 animate-fade-in">

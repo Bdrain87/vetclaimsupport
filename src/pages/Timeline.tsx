@@ -3,7 +3,7 @@ import { useClaims } from '@/hooks/useClaims';
 import { Clock, Shield, Stethoscope, AlertTriangle, Activity, Pill, Brain, Lightbulb } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, isValid } from 'date-fns';
 import { PageContainer } from '@/components/PageContainer';
 
 interface TimelineEvent {
@@ -22,12 +22,19 @@ export default function Timeline() {
   const events = useMemo(() => {
     const allEvents: TimelineEvent[] = [];
 
+    /** Parse a date string, returning null if invalid. */
+    const safeParse = (dateStr: string): Date | null => {
+      const d = parseISO(dateStr);
+      return isValid(d) ? d : null;
+    };
+
     // Service history (start dates)
     data.serviceHistory.forEach(entry => {
       if (entry.startDate) {
-        allEvents.push({
+        const d = safeParse(entry.startDate);
+        if (d) allEvents.push({
           id: `service-start-${entry.id}`,
-          date: parseISO(entry.startDate),
+          date: d,
           type: 'service',
           title: `Started at ${entry.base || 'New Assignment'}`,
           description: entry.unit ? `Unit: ${entry.unit}` : (entry.duties || 'Service began'),
@@ -36,9 +43,10 @@ export default function Timeline() {
         });
       }
       if (entry.endDate) {
-        allEvents.push({
+        const d = safeParse(entry.endDate);
+        if (d) allEvents.push({
           id: `service-end-${entry.id}`,
-          date: parseISO(entry.endDate),
+          date: d,
           type: 'service',
           title: `Left ${entry.base || 'Assignment'}`,
           description: 'Service period ended',
@@ -51,9 +59,10 @@ export default function Timeline() {
     // Medical visits
     data.medicalVisits.forEach(visit => {
       if (visit.date) {
-        allEvents.push({
+        const d = safeParse(visit.date);
+        if (d) allEvents.push({
           id: `medical-${visit.id}`,
-          date: parseISO(visit.date),
+          date: d,
           type: 'medical',
           title: `${visit.visitType} Visit`,
           description: visit.reason || visit.diagnosis || 'Medical appointment',
@@ -66,9 +75,10 @@ export default function Timeline() {
     // Exposures
     data.exposures.forEach(exposure => {
       if (exposure.date) {
-        allEvents.push({
+        const d = safeParse(exposure.date);
+        if (d) allEvents.push({
           id: `exposure-${exposure.id}`,
-          date: parseISO(exposure.date),
+          date: d,
           type: 'exposure',
           title: `${exposure.type} Exposure`,
           description: exposure.location || exposure.details || 'Hazardous exposure',
@@ -83,15 +93,18 @@ export default function Timeline() {
     data.symptoms.forEach(symptom => {
       if (symptom.date && symptom.symptom) {
         const existing = symptomsByName.get(symptom.symptom);
-        if (!existing || parseISO(symptom.date) < parseISO(existing.date)) {
+        const currentParsed = safeParse(symptom.date);
+        const existingParsed = existing ? safeParse(existing.date) : null;
+        if (currentParsed && (!existingParsed || currentParsed < existingParsed)) {
           symptomsByName.set(symptom.symptom, symptom);
         }
       }
     });
     symptomsByName.forEach(symptom => {
-      allEvents.push({
+      const d = safeParse(symptom.date);
+      if (d) allEvents.push({
         id: `symptom-${symptom.id}`,
-        date: parseISO(symptom.date),
+        date: d,
         type: 'symptom',
         title: `${symptom.symptom} Started`,
         description: symptom.bodyArea ? `Affecting: ${symptom.bodyArea}` : 'Symptom onset',
@@ -103,9 +116,10 @@ export default function Timeline() {
     // Medications (start dates)
     data.medications.forEach(med => {
       if (med.startDate) {
-        allEvents.push({
+        const d = safeParse(med.startDate);
+        if (d) allEvents.push({
           id: `medication-${med.id}`,
-          date: parseISO(med.startDate),
+          date: d,
           type: 'medication',
           title: `Started ${med.name}`,
           description: med.prescribedFor || 'Prescription started',
@@ -120,9 +134,10 @@ export default function Timeline() {
       .filter(m => m.severity === 'Prostrating' || m.severity === 'Severe')
       .forEach(migraine => {
         if (migraine.date) {
-          allEvents.push({
+          const d = safeParse(migraine.date);
+          if (d) allEvents.push({
             id: `migraine-${migraine.id}`,
-            date: parseISO(migraine.date),
+            date: d,
             type: 'migraine',
             title: `${migraine.severity} Migraine`,
             description: `Duration: ${migraine.duration}`,

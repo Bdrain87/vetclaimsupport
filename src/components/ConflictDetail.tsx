@@ -64,7 +64,7 @@ export function ConflictDetail({ conflict, onClose }: ConflictDetailProps) {
           Common Conditions
         </h3>
 
-        <Accordion type="multiple" defaultValue={[conflict.commonConditions[0]?.name]} className="space-y-2">
+        <Accordion type="multiple" defaultValue={conflict.commonConditions.length > 0 ? [conflict.commonConditions[0].name] : []} className="space-y-2">
           {conflict.commonConditions.map((group) => (
             <AccordionItem
               key={group.name}

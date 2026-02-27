@@ -36,25 +36,31 @@ export default function ClaimChecklist() {
 
   // Calculate specific metrics
   const metrics = useMemo(() => {
-    const missingSummaries = data.medicalVisits.filter(v => !v.gotAfterVisitSummary).length;
-    const buddyStatementsReceived = data.buddyContacts.filter(
+    const missingSummaries = (data.medicalVisits || []).filter(v => !v.gotAfterVisitSummary).length;
+    const buddyStatementsReceived = (data.buddyContacts || []).filter(
       b => b.statementStatus === 'Received' || b.statementStatus === 'Submitted'
     ).length;
-    const severeSymptoms = data.symptoms.filter(s => s.severity >= 7).length;
-    const currentMeds = data.medications.filter(m => m.stillTaking).length;
-    
+    const severeSymptoms = (data.symptoms || []).filter(s => s.severity >= 7).length;
+    const currentMeds = (data.medications || []).filter(m => m.stillTaking).length;
+
     return {
       missingSummaries,
       buddyStatementsReceived,
       severeSymptoms,
       currentMeds,
-      hasDD214: data.documents.some(d => d.name.includes('DD-214') && (d.status === 'Obtained' || d.status === 'Submitted')),
-      hasSTRs: data.documents.some(d => d.name.includes('STR') && (d.status === 'Obtained' || d.status === 'Submitted')),
-      hasNexus: data.documents.some(d => (d.name.includes('Nexus') || d.name.includes('Doctor Summar')) && (d.status === 'Obtained' || d.status === 'Submitted')),
+      hasDD214: (data.documents || []).some(d => d.name.includes('DD-214') && (d.status === 'Obtained' || d.status === 'Submitted')),
+      hasSTRs: (data.documents || []).some(d => d.name.includes('STR') && (d.status === 'Obtained' || d.status === 'Submitted')),
+      hasNexus: (data.documents || []).some(d => (d.name.includes('Nexus') || d.name.includes('Doctor Summar')) && (d.status === 'Obtained' || d.status === 'Submitted')),
     };
   }, [data]);
 
   const checklistItems = useMemo((): ChecklistItem[] => {
+    const serviceHistory = data.serviceHistory || [];
+    const medicalVisits = data.medicalVisits || [];
+    const symptoms = data.symptoms || [];
+    const medications = data.medications || [];
+    const exposures = data.exposures || [];
+    const buddyContacts = data.buddyContacts || [];
     return [
       // Service Connection Evidence
       {
@@ -62,13 +68,13 @@ export default function ClaimChecklist() {
         category: 'Service Connection',
         title: 'Service History',
         description: 'Document your duty stations and deployments',
-        isComplete: data.serviceHistory.length >= 2,
-        currentCount: data.serviceHistory.length,
+        isComplete: serviceHistory.length >= 2,
+        currentCount: serviceHistory.length,
         recommendedCount: 2,
-        progressText: `${data.serviceHistory.length} ${data.serviceHistory.length === 1 ? 'entry' : 'entries'} logged`,
-        guidance: data.serviceHistory.length === 0 
+        progressText: `${serviceHistory.length} ${serviceHistory.length === 1 ? 'entry' : 'entries'} logged`,
+        guidance: serviceHistory.length === 0
           ? 'Start by adding your primary duty station and any deployments.'
-          : data.serviceHistory.length < 2 
+          : serviceHistory.length < 2
             ? 'Add additional duty stations or deployments for a complete service record.'
             : 'Great! Your service history is well documented.',
         link: '/settings/service-history',
@@ -132,14 +138,14 @@ export default function ClaimChecklist() {
         category: 'Medical Evidence',
         title: 'Medical Visits',
         description: 'Documented healthcare appointments',
-        isComplete: data.medicalVisits.length >= 5,
-        currentCount: data.medicalVisits.length,
+        isComplete: medicalVisits.length >= 5,
+        currentCount: medicalVisits.length,
         recommendedCount: 5,
-        progressText: `${data.medicalVisits.length} of 5+ recommended`,
-        guidance: data.medicalVisits.length === 0
+        progressText: `${medicalVisits.length} of 5+ recommended`,
+        guidance: medicalVisits.length === 0
           ? 'Log every medical visit related to your conditions, including dates and diagnoses.'
-          : data.medicalVisits.length < 5
-            ? `Add ${5 - data.medicalVisits.length} more visits. Include sick call, ER visits, and specialist appointments.`
+          : medicalVisits.length < 5
+            ? `Add ${5 - medicalVisits.length} more visits. Include sick call, ER visits, and specialist appointments.`
             : 'Excellent documentation! Keep logging new visits.',
         link: '/health/visits',
         linkText: 'Add Visit',
@@ -150,15 +156,15 @@ export default function ClaimChecklist() {
         category: 'Medical Evidence',
         title: 'After-Visit Summaries',
         description: 'Documentation from each medical appointment',
-        isComplete: data.medicalVisits.length > 0 && metrics.missingSummaries === 0,
-        currentCount: data.medicalVisits.length - metrics.missingSummaries,
-        recommendedCount: data.medicalVisits.length || 1,
-        progressText: data.medicalVisits.length === 0 
+        isComplete: medicalVisits.length > 0 && metrics.missingSummaries === 0,
+        currentCount: medicalVisits.length - metrics.missingSummaries,
+        recommendedCount: medicalVisits.length || 1,
+        progressText: medicalVisits.length === 0
           ? 'No visits logged yet'
-          : `${data.medicalVisits.length - metrics.missingSummaries} of ${data.medicalVisits.length} obtained`,
+          : `${medicalVisits.length - metrics.missingSummaries} of ${medicalVisits.length} obtained`,
         guidance: metrics.missingSummaries > 0
           ? `${metrics.missingSummaries} ${metrics.missingSummaries === 1 ? 'summary is' : 'summaries are'} missing. Request copies from your MTF or clinic.`
-          : data.medicalVisits.length === 0
+          : medicalVisits.length === 0
             ? 'Log medical visits first, then track your summaries.'
             : 'All summaries collected! These strengthen your medical evidence.',
         link: '/health/visits',
@@ -188,14 +194,14 @@ export default function ClaimChecklist() {
         category: 'Condition Documentation',
         title: 'Symptom Journal',
         description: 'Ongoing record of your symptoms',
-        isComplete: data.symptoms.length >= 10,
-        currentCount: data.symptoms.length,
+        isComplete: symptoms.length >= 10,
+        currentCount: symptoms.length,
         recommendedCount: 10,
-        progressText: `${data.symptoms.length} entries (${metrics.severeSymptoms} severe)`,
-        guidance: data.symptoms.length === 0
+        progressText: `${symptoms.length} entries (${metrics.severeSymptoms} severe)`,
+        guidance: symptoms.length === 0
           ? 'Start logging symptoms daily. Include severity, frequency, and impact on daily life.'
-          : data.symptoms.length < 10
-            ? `Add ${10 - data.symptoms.length} more entries. Consistent logging shows chronic conditions.`
+          : symptoms.length < 10
+            ? `Add ${10 - symptoms.length} more entries. Consistent logging shows chronic conditions.`
             : `Strong symptom history! ${metrics.severeSymptoms} severe episodes documented.`,
         link: '/health/symptoms',
         linkText: 'Log Symptom',
@@ -206,13 +212,13 @@ export default function ClaimChecklist() {
         category: 'Condition Documentation',
         title: 'Medications',
         description: 'Prescriptions for service-connected conditions',
-        isComplete: data.medications.length >= 2,
-        currentCount: data.medications.length,
+        isComplete: medications.length >= 2,
+        currentCount: medications.length,
         recommendedCount: 2,
-        progressText: `${data.medications.length} documented (${metrics.currentMeds} current)`,
-        guidance: data.medications.length === 0
+        progressText: `${medications.length} documented (${metrics.currentMeds} current)`,
+        guidance: medications.length === 0
           ? 'Document all medications prescribed for your conditions, including dosages and side effects.'
-          : data.medications.length < 2
+          : medications.length < 2
             ? 'Add any other medications, including over-the-counter treatments for your conditions.'
             : 'Good medication history. Remember to log any new prescriptions.',
         link: '/health/medications',
@@ -226,13 +232,13 @@ export default function ClaimChecklist() {
         category: 'Exposure Documentation',
         title: 'Hazardous Exposures',
         description: 'Toxic substances, burn pits, chemicals, etc.',
-        isComplete: data.exposures.length >= 1,
-        currentCount: data.exposures.length,
+        isComplete: exposures.length >= 1,
+        currentCount: exposures.length,
         recommendedCount: 1,
-        progressText: data.exposures.length === 0 
+        progressText: exposures.length === 0
           ? 'None documented'
-          : `${data.exposures.length} ${data.exposures.length === 1 ? 'exposure' : 'exposures'} logged`,
-        guidance: data.exposures.length === 0
+          : `${exposures.length} ${exposures.length === 1 ? 'exposure' : 'exposures'} logged`,
+        guidance: exposures.length === 0
           ? 'If you were near burn pits, chemicals, or other hazards, document them. PACT Act may apply.'
           : 'Exposures documented. Check if you qualify for PACT Act presumptive conditions.',
         link: '/health/exposures',
@@ -246,13 +252,13 @@ export default function ClaimChecklist() {
         category: 'Supporting Evidence',
         title: 'Buddy Contacts',
         description: 'Fellow service members who can support your claim',
-        isComplete: data.buddyContacts.length >= 2,
-        currentCount: data.buddyContacts.length,
+        isComplete: buddyContacts.length >= 2,
+        currentCount: buddyContacts.length,
         recommendedCount: 2,
-        progressText: `${data.buddyContacts.length} of 2+ recommended`,
-        guidance: data.buddyContacts.length === 0
+        progressText: `${buddyContacts.length} of 2+ recommended`,
+        guidance: buddyContacts.length === 0
           ? 'Add contacts who witnessed your injury, symptoms, or service conditions.'
-          : data.buddyContacts.length < 2
+          : buddyContacts.length < 2
             ? 'Add at least one more contact. Multiple witnesses strengthen your claim.'
             : 'Good network of witnesses identified.',
         link: '/prep/buddy-statement',
@@ -266,16 +272,16 @@ export default function ClaimChecklist() {
         description: 'Written statements from witnesses',
         isComplete: metrics.buddyStatementsReceived >= 2,
         currentCount: metrics.buddyStatementsReceived,
-        recommendedCount: Math.max(2, data.buddyContacts.length),
-        progressText: data.buddyContacts.length === 0 
+        recommendedCount: Math.max(2, buddyContacts.length),
+        progressText: buddyContacts.length === 0
           ? 'Add contacts first'
-          : `${metrics.buddyStatementsReceived} of ${data.buddyContacts.length} received`,
-        guidance: data.buddyContacts.length === 0
+          : `${metrics.buddyStatementsReceived} of ${buddyContacts.length} received`,
+        guidance: buddyContacts.length === 0
           ? 'Add buddy contacts first, then request statements from them.'
           : metrics.buddyStatementsReceived === 0
             ? 'Request statements from your contacts. Use the templates in the Reference section.'
             : metrics.buddyStatementsReceived < data.buddyContacts.length
-              ? `${data.buddyContacts.length - metrics.buddyStatementsReceived} statement(s) pending. Follow up with your contacts.`
+              ? `${buddyContacts.length - metrics.buddyStatementsReceived} statement(s) pending. Follow up with your contacts.`
               : 'All statements collected! These provide valuable third-party evidence.',
         link: '/prep/buddy-statement',
         linkText: 'Track Status',

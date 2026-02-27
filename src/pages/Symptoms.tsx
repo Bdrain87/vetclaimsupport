@@ -335,7 +335,7 @@ export default function Symptoms() {
       frequency: symptom.frequency,
       trigger: triggerMatch?.[1] || '',
       duration: durationMatch?.[1] || '',
-      dailyImpact: symptom.dailyImpact,
+      dailyImpact: symptom.dailyImpact ?? '',
       notes: cleanNotes,
     });
     setSelectedConditionTags(symptom.conditionTags || []);

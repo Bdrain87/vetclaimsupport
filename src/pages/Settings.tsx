@@ -192,6 +192,12 @@ export default function Settings() {
           title: 'Welcome to Premium!',
           description: 'You now have full access to all features.',
         });
+      }).catch(() => {
+        toast({
+          title: 'Could not verify purchase',
+          description: 'Please restart the app to check your premium status.',
+          variant: 'destructive',
+        });
       });
       searchParams.delete('session_id');
       setSearchParams(searchParams, { replace: true });

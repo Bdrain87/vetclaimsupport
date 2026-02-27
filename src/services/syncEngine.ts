@@ -47,7 +47,7 @@ function sanitizeRecord<T extends Record<string, unknown>>(record: T): T {
   for (const key of Object.keys(sanitized)) {
     const val = sanitized[key];
     if (typeof val === 'string') {
-      (sanitized as Record<string, unknown>)[key] = redactPII(val, 'high');
+      (sanitized as Record<string, unknown>)[key] = redactPII(val, 'high').redactedText;
     }
   }
   return sanitized;

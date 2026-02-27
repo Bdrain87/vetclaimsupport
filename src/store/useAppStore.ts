@@ -621,7 +621,7 @@ const useAppStore = create<AppState>()(
         userConditions: s.userConditions.map((c) => c.id === id ? { ...c, ...updates } : c),
       })),
 
-      clearAllUserConditions: () => set({ userConditions: [] }),
+      clearAllUserConditions: () => set({ userConditions: [], conditionEvidenceChecks: {} }),
 
       incrementConditionUsage: (id) => set((s) => ({
         userConditions: s.userConditions.map((c) =>

@@ -40,6 +40,9 @@ export function PremiumGuard({ featureName, children }: PremiumGuardProps) {
       }
       const isPremium = result === 'premium' || result === 'lifetime';
       setState(isPremium ? 'granted' : 'blocked');
+    }).catch(() => {
+      if (cancelled) return;
+      setState(hasPremiumAccess() ? 'granted' : 'blocked');
     });
 
     return () => {

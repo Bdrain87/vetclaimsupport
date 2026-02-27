@@ -83,6 +83,7 @@ export default function Login() {
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong.');
+    } finally {
       setLoading(false);
     }
   };

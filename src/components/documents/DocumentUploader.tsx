@@ -48,12 +48,15 @@ export function DocumentUploader({ documents, category, onAdd, onDelete }: Docum
         dataUrl: reader.result as string,
       });
       setIsUploadOpen(true);
-      
+
       // Auto-set title from filename if empty
       if (!title) {
         const nameWithoutExt = file.name.replace(/\.[^/.]+$/, '');
         setTitle(nameWithoutExt);
       }
+    };
+    reader.onerror = () => {
+      setFileError('Failed to read file. Please try again.');
     };
     reader.readAsDataURL(file);
   };
