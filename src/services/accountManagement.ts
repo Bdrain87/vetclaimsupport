@@ -126,9 +126,13 @@ export async function deleteAccount(): Promise<void> {
     let hasMore = true;
     let page = 0;
     while (hasMore && page < MAX_STORAGE_PAGES) {
-      const { data: files } = await supabase.storage
+      const { data: files, error: listError } = await supabase.storage
         .from('user-files')
         .list(userId, { limit: 100 });
+      if (listError) {
+        console.error('[deleteAccount] storage list failed:', listError.message);
+        break;
+      }
       if (files && files.length > 0) {
         const paths = files.map((f) => `${userId}/${f.name}`);
         const { error: removeError } = await supabase.storage.from('user-files').remove(paths);

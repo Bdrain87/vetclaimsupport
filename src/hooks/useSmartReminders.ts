@@ -11,11 +11,15 @@ export interface SmartReminder {
 }
 
 function daysSince(dateStr: string): number {
-  return Math.floor((Date.now() - new Date(dateStr).getTime()) / 86_400_000);
+  const t = new Date(dateStr).getTime();
+  if (isNaN(t)) return Infinity;
+  return Math.floor((Date.now() - t) / 86_400_000);
 }
 
 function daysUntil(dateStr: string): number {
-  return Math.ceil((new Date(dateStr).getTime() - Date.now()) / 86_400_000);
+  const t = new Date(dateStr).getTime();
+  if (isNaN(t)) return Infinity;
+  return Math.ceil((t - Date.now()) / 86_400_000);
 }
 
 export function useSmartReminders(): SmartReminder[] {
@@ -45,7 +49,7 @@ export function useSmartReminders(): SmartReminder[] {
       reminders.push({
         id: 'symptom-gap',
         title: 'Log your symptoms',
-        description: lastSymptom
+        description: lastSymptom && isFinite(daysSince(lastSymptom.date))
           ? `It's been ${daysSince(lastSymptom.date)} days since your last symptom log. The VA looks for consistent frequency documentation.`
           : 'Start logging symptoms to build evidence for your claim.',
         priority: 'high',

@@ -158,7 +158,7 @@ export const useProfileStore = create<ProfileState>()(
             ...state,
             serviceDates: state.serviceDates || undefined,
             claimType: state.claimType || undefined,
-            intentToFileFiled: state.intentToFileFiled || undefined,
+            intentToFileFiled: state.intentToFileFiled ?? undefined,
             intentToFileDate: state.intentToFileDate || undefined,
             separationDate: state.separationDate || undefined,
             entitlement: 'preview',

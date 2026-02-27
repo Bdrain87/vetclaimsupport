@@ -770,7 +770,10 @@ const useAppStore = create<AppState>()(
             (doc) => doc.storageType === 'indexedDB' && !doc.dataUrl,
           );
 
-          if (docsNeedingData.length === 0) return;
+          if (docsNeedingData.length === 0) {
+            set({ _evidenceLoading: new Set() });
+            return;
+          }
 
           const ids = new Set(docsNeedingData.map((d) => d.id));
           set({ _evidenceLoading: ids });
@@ -845,7 +848,10 @@ const useAppStore = create<AppState>()(
             (doc) => doc.storageType === 'indexedDB' && !doc.dataUrl,
           );
 
-          if (docsNeedingData.length === 0) return;
+          if (docsNeedingData.length === 0) {
+            set({ _claimDocLoading: new Set() });
+            return;
+          }
 
           const ids = new Set(docsNeedingData.map((d) => d.id));
           set({ _claimDocLoading: ids });
