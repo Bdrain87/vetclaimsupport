@@ -39,6 +39,20 @@ export function WelcomeScreen({ onSkip }: WelcomeScreenProps) {
     return () => subscription.unsubscribe();
   }, [onSkip]);
 
+  // Safety timeout: if OAuth loading stays active for 10s, clear it
+  useEffect(() => {
+    if (!loading) return;
+    const timeout = setTimeout(() => {
+      setLoading(null);
+      toast({
+        title: 'Sign-in timed out',
+        description: 'OAuth didn\u2019t complete. Please try again.',
+        variant: 'destructive',
+      });
+    }, 10000);
+    return () => clearTimeout(timeout);
+  }, [loading, toast]);
+
   const handleApple = async () => {
     impactLight();
     setLoading('apple');
@@ -80,6 +94,7 @@ export function WelcomeScreen({ onSkip }: WelcomeScreenProps) {
       className="fixed inset-0 z-[9998] flex flex-col bg-black"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
+      exit={{ opacity: 0, transition: { duration: 0.3, ease: 'easeInOut' } }}
       transition={{ duration: 0.4 }}
     >
       <div

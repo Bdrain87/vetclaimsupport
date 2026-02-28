@@ -8,7 +8,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { TooltipProvider } from './components/ui/tooltip';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RouteErrorBoundary } from './components/RouteErrorBoundary';
-import { MotionConfig } from 'framer-motion';
+import { AnimatePresence, MotionConfig } from 'framer-motion';
 import { LiabilityAcceptanceScreen } from './components/legal/LiabilityAcceptanceScreen';
 import { SplashScreen } from './components/SplashScreen';
 import { WelcomeScreen } from './components/WelcomeScreen';
@@ -558,6 +558,7 @@ function App() {
     return true;
   });
   const [showWelcome, setShowWelcome] = useState(false);
+  const [welcomeDismissing, setWelcomeDismissing] = useState(false);
 
   const handleSplashComplete = useCallback(async () => {
     setShowSplash(false);
@@ -579,7 +580,7 @@ function App() {
 
   const dismissWelcome = useCallback(() => {
     localStorage.setItem('vcs_seen_welcome', '1');
-    setShowWelcome(false);
+    setWelcomeDismissing(true);
   }, []);
 
   useEffect(() => {
@@ -639,9 +640,11 @@ function App() {
               <ScrollToTop />
               <RetentionWarningBanner />
               {hydrated ? <AppContent /> : <LoadingFallback />}
-              {!showSplash && showWelcome && !isWeb && (
-                <WelcomeScreen onSkip={dismissWelcome} />
-              )}
+              <AnimatePresence onExitComplete={() => setShowWelcome(false)}>
+                {!showSplash && showWelcome && !welcomeDismissing && !isWeb && (
+                  <WelcomeScreen onSkip={dismissWelcome} />
+                )}
+              </AnimatePresence>
               <Toaster />
             </BrowserRouter>
           </AriaLiveAnnouncer>
