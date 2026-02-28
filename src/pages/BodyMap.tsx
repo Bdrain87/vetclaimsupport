@@ -301,6 +301,7 @@ export default function BodyMap() {
         const newCondition: UserCondition = {
           id: crypto.randomUUID(),
           conditionId: condition.id,
+          displayName: condition.abbreviation || condition.name,
           serviceConnected: true,
           claimStatus: 'pending',
           isPrimary: true,

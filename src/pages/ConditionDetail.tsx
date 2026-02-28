@@ -608,16 +608,16 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
         <Button variant="outline" size="sm" onClick={() => navigate('/health/symptoms')}>
           <Activity className="h-3 w-3 mr-1" /> Log Symptom
         </Button>
-        <Button variant="outline" size="sm" onClick={() => navigate(`/claims/secondary-finder?condition=${encodeURIComponent(conditionDetails.name)}`)}>
+        <Button variant="outline" size="sm" onClick={() => navigate(`/claims/secondary-finder?condition=${encodeURIComponent(conditionDetails.id)}`)}>
           <Link2 className="h-3 w-3 mr-1" /> Find Secondaries
         </Button>
-        <Button variant="outline" size="sm" onClick={() => navigate(`/prep/doctor-summary?primary=${encodeURIComponent(conditionDetails.name)}`)}>
+        <Button variant="outline" size="sm" onClick={() => navigate(`/prep/doctor-summary?primary=${encodeURIComponent(conditionDetails.id)}`)}>
           <FileText className="h-3 w-3 mr-1" /> Doctor Summary
         </Button>
-        <Button variant="outline" size="sm" onClick={() => navigate(`/prep/exam?condition=${encodeURIComponent(conditionDetails.name)}`)}>
+        <Button variant="outline" size="sm" onClick={() => navigate(`/prep/exam?condition=${encodeURIComponent(conditionDetails.id)}`)}>
           <Stethoscope className="h-3 w-3 mr-1" /> Exam Prep
         </Button>
-        <Button variant="outline" size="sm" onClick={() => navigate(`/cp-exam-packet?condition=${encodeURIComponent(conditionDetails.name)}`)}>
+        <Button variant="outline" size="sm" onClick={() => navigate(`/cp-exam-packet?condition=${encodeURIComponent(conditionDetails.id)}`)}>
           <FileCheck className="h-3 w-3 mr-1" /> Exam Packet
         </Button>
       </div>

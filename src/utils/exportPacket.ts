@@ -6,6 +6,7 @@
 import useAppStore from '@/store/useAppStore';
 import { useProfileStore } from '@/store/useProfileStore';
 import { getConditionById } from '@/data/vaConditions';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { conditionRatingCriteria } from '@/data/ratingCriteria';
 import { EMPLOYMENT_IMPACT_TYPES, FLARE_UP_DURATIONS } from '@/types/claims';
 import type { UserCondition } from '@/store/useAppStore';
@@ -59,14 +60,14 @@ export function generateVSOPacket(): string {
 
   for (const uc of pending) {
     const details = getConditionById(uc.conditionId);
-    const name = details?.name || uc.conditionId;
+    const name = details?.name || getConditionDisplayName(uc);
     const dc = details?.diagnosticCode ? ` (DC ${details.diagnosticCode})` : '';
     lines.push(`  [PENDING] ${name}${dc}`);
     if (uc.claimType) lines.push(`           Type: ${uc.claimType}`);
   }
   for (const uc of approved) {
     const details = getConditionById(uc.conditionId);
-    const name = details?.name || uc.conditionId;
+    const name = details?.name || getConditionDisplayName(uc);
     lines.push(`  [APPROVED ${uc.rating || 0}%] ${name}`);
   }
   lines.push('');
@@ -199,7 +200,7 @@ export function generateDoctorPacket(conditionId?: string): string {
   lines.push(sep);
   for (const uc of targetConditions) {
     const details = getConditionById(uc.conditionId);
-    const name = details?.name || uc.conditionId;
+    const name = details?.name || getConditionDisplayName(uc);
     const dc = details?.diagnosticCode ? ` (DC ${details.diagnosticCode})` : '';
     lines.push(`  ${name}${dc}`);
   }

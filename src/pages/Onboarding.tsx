@@ -9,6 +9,7 @@ import { LocationAutocomplete } from '@/components/shared/LocationAutocomplete';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { type VACondition, getConditionById } from '@/data/vaConditions';
 import { searchAllConditions } from '@/utils/conditionSearch';
+import { resolveConditionId } from '@/utils/conditionResolver';
 import useAppStore, { type DutyStation } from '@/store/useAppStore';
 import { SuccessAnimation } from '@/components/ui/success-animation';
 import { PageContainer } from '@/components/PageContainer';
@@ -376,7 +377,8 @@ export default function Onboarding() {
 
       const matchingConditions = searchAllConditions(rated.conditionName, { limit: 1 });
       const matchedCondition = matchingConditions.length > 0 ? matchingConditions[0] : null;
-      const resolvedId = matchedCondition ? matchedCondition.id : rated.conditionName.toLowerCase().replace(/\s+/g, '-');
+      const resolved = matchedCondition ? { conditionId: matchedCondition.id, displayName: matchedCondition.abbreviation || matchedCondition.name } : resolveConditionId(rated.conditionName);
+      const resolvedId = resolved.conditionId;
 
       const existing = appStore.userConditions.find((c) => c.conditionId === resolvedId);
       if (existing) {
@@ -390,6 +392,7 @@ export default function Onboarding() {
         appStore.addUserCondition({
           id: crypto.randomUUID(),
           conditionId: resolvedId,
+          displayName: resolved.displayName,
           rating: rated.rating,
           serviceConnected: true,
           claimStatus: 'approved',

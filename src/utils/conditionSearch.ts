@@ -63,7 +63,7 @@ function buildUnifiedIndex(): SearchableCondition[] {
       if (!seen.has(key)) {
         seen.add(key);
         results.push({
-          id: `disability-${d.diagnosticCode}-${d.name.replace(/\s+/g, '-').toLowerCase()}`,
+          id: `disability-${d.diagnosticCode}`,
           name: d.name,
           diagnosticCode: d.diagnosticCode,
           category: system.name,

@@ -76,7 +76,9 @@ export default function SecondaryFinder() {
   useEffect(() => {
     const urlCondition = searchParams.get('condition');
     if (urlCondition && !selectedPrimary) {
-      setSelectedPrimary(urlCondition);
+      // Try ID-first lookup, fall back to treating as name
+      const byId = getConditionById(urlCondition);
+      setSelectedPrimary(byId ? byId.name : urlCondition);
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -13,6 +13,7 @@ import { militaryJobCodes } from '@/data/militaryMOS';
 import type { ClaimsData } from '@/types/claims';
 import useAppStore from '@/store/useAppStore';
 import type { UserCondition } from '@/store/useAppStore';
+import { resolveConditionId } from '@/utils/conditionResolver';
 import { useProfileStore } from '@/store/useProfileStore';
 import type { UserProfile, Branch } from '@/store/useProfileStore';
 import { getConditionsForHazards, hazardConditionMap } from '@/data/hazardConditionMap';
@@ -804,7 +805,7 @@ export const ClaimIntelligence = {
             c.name.toLowerCase() === sc.secondaryCondition.toLowerCase() ||
             c.abbreviation.toLowerCase() === sc.secondaryCondition.toLowerCase(),
         );
-        const secId = secVA?.id ?? sc.secondaryCondition.toLowerCase().replace(/\s+/g, '-');
+        const secId = secVA?.id ?? resolveConditionId(sc.secondaryCondition).conditionId;
         addRec({
           conditionId: secId,
           conditionName: sc.secondaryCondition,
@@ -1156,8 +1157,9 @@ export const ClaimIntelligence = {
         );
       });
 
+      const resolved = resolveConditionId(c.conditionName);
       const alreadyClaimed =
-        existingIds.has(c.conditionName.toLowerCase().replace(/\s+/g, '-')) ||
+        existingIds.has(resolved.conditionId) ||
         existingNames.has(c.conditionName.toLowerCase());
 
       return {

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { useProfileStore } from '@/store/useProfileStore';
+import { resolveConditionId } from '@/utils/conditionResolver';
 import mosData from '@/data/mos-conditions.json';
 
 interface MOSCategory {
@@ -88,10 +89,10 @@ export function MOSConditionSuggestions({
   const handleAddSelected = () => {
     const newlyAdded = new Set<string>();
     for (const conditionName of selectedItems) {
-      const condId = conditionName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-      const result = addCondition(condId, {
+      const resolved = resolveConditionId(conditionName);
+      const result = addCondition(resolved.conditionId, {
         connectionType: 'direct',
-        displayName: conditionName,
+        displayName: resolved.displayName,
       });
       if (result) {
         newlyAdded.add(conditionName);

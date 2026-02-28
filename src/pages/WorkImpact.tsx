@@ -13,6 +13,7 @@ import { PageContainer } from '@/components/PageContainer';
 import { useToast } from '@/hooks/use-toast';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { getConditionById } from '@/data/vaConditions';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import useAppStore from '@/store/useAppStore';
 import { EMPLOYMENT_IMPACT_TYPES } from '@/types/claims';
@@ -124,7 +125,7 @@ export default function WorkImpact() {
                     <SelectItem value="general">General</SelectItem>
                     {userConditions.map((uc) => {
                       const details = getConditionById(uc.conditionId);
-                      return <SelectItem key={uc.id} value={details?.name || uc.conditionId}>{details?.abbreviation || details?.name || uc.conditionId}</SelectItem>;
+                      return <SelectItem key={uc.id} value={details?.name || getConditionDisplayName(uc)}>{getConditionDisplayName(uc)}</SelectItem>;
                     })}
                   </SelectContent>
                 </Select>

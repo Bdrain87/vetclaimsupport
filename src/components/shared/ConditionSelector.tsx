@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { Search, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUserConditions } from '@/hooks/useUserConditions';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { ConditionAutocomplete } from './ConditionAutocomplete';
 import type { VACondition } from '@/data/vaConditions';
 
@@ -57,7 +58,9 @@ export function ConditionSelector({
   const handleSelectNew = useCallback(
     (vaCondition: VACondition) => {
       // Add to user conditions globally
-      const result = addCondition(vaCondition.id);
+      const result = addCondition(vaCondition.id, {
+        displayName: vaCondition.abbreviation || vaCondition.name,
+      });
       if (result) {
         incrementUsage(result.id);
         onSelect({
@@ -92,7 +95,7 @@ export function ConditionSelector({
           <div className="grid gap-1.5">
             {filteredConditions.map((uc) => {
               const details = getConditionDetails(uc);
-              const displayName = uc.displayName || details?.abbreviation || details?.name || uc.conditionId;
+              const displayName = getConditionDisplayName(uc);
               return (
                 <button
                   key={uc.id}

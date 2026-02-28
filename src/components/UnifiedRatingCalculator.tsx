@@ -38,6 +38,7 @@ import {
 import { combineRatings } from '@/utils/vaMath';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { getConditionById } from '@/data/vaConditions';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { searchAllConditions } from '@/utils/conditionSearch';
 import { SecondaryConditionSuggestions } from '@/components/SecondaryConditionSuggestions';
 import { PageContainer } from '@/components/PageContainer';
@@ -499,7 +500,7 @@ export function UnifiedRatingCalculator() {
         const details = getConditionDetails(uc);
         return {
           id: uc.id,
-          name: details?.name || uc.conditionId,
+          name: details?.name || getConditionDisplayName(uc),
           rating: uc.rating || 0,
           bodyPart: uc.bodyPart || 'other',
           conditionId: uc.conditionId,

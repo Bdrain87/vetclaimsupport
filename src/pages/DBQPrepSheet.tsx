@@ -31,6 +31,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { vaDisabilitiesBySystem } from '@/data/vaDisabilities';
 import { getConditionById } from '@/data/conditions';
+import { searchAllConditions } from '@/utils/conditionSearch';
 import { cn } from '@/lib/utils';
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
@@ -149,7 +150,14 @@ export default function DBQPrepSheet() {
   const { conditions: userConditions } = useUserConditions();
   const [conditionSearch, setConditionSearch] = useState(() => {
     const draft = useAppStore.getState().formDrafts['tool:dbq-prep'];
-    return draft?.condition || searchParams.get('condition') || '';
+    if (draft?.condition) return draft.condition;
+    const urlParam = searchParams.get('condition');
+    if (urlParam) {
+      // Resolve ID to name for display
+      const byId = getConditionById(urlParam);
+      if (byId) return byId.name;
+    }
+    return urlParam || '';
   });
   const [showConditionDropdown, setShowConditionDropdown] = useState(false);
   const [exporting, setExporting] = useState(false);
@@ -356,7 +364,14 @@ export default function DBQPrepSheet() {
   useEffect(() => {
     const urlCondition = searchParams.get('condition');
     if (urlCondition && !formData.condition) {
-      handleConditionSelect(urlCondition);
+      // Try ID-first lookup, fall back to name search
+      const byId = getConditionById(urlCondition);
+      if (byId) {
+        handleConditionSelect(byId.name);
+      } else {
+        const results = searchAllConditions(urlCondition, { limit: 1 });
+        handleConditionSelect(results.length > 0 ? results[0].name : urlCondition);
+      }
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -3,6 +3,7 @@ import useAppStore from '@/store/useAppStore';
 import { getConditionById } from '@/data/vaConditions';
 import type { VACondition } from '@/data/vaConditions';
 import { combineRatings } from '@/utils/vaMath';
+import { isSuspiciousConditionId } from '@/utils/conditionResolver';
 
 // Re-export the UserCondition type from the store
 export type { UserCondition } from '@/store/useAppStore';
@@ -32,6 +33,13 @@ export function useUserConditions() {
 
   const addCondition = useCallback(
     (conditionId: string, options?: Partial<UserCondition>): UserCondition | null => {
+      if (import.meta.env.DEV && isSuspiciousConditionId(conditionId)) {
+        console.warn(
+          `[useUserConditions] Suspicious conditionId: "${conditionId}". ` +
+          'This looks like a slugified name instead of a database ID. ' +
+          'Use resolveConditionId() to convert names to IDs.',
+        );
+      }
       const vaCondition = getConditionById(conditionId);
       if (!vaCondition && !options?.displayName) {
         // Condition not found in database and no displayName fallback provided
@@ -58,9 +66,13 @@ export function useUserConditions() {
         }
       }
 
+      // Always populate displayName for resilient display
+      const displayName = options?.displayName || vaCondition?.abbreviation || vaCondition?.name || conditionId;
+
       const newCondition: UserCondition = {
         id: crypto.randomUUID(),
         conditionId,
+        displayName,
         serviceConnected: true,
         claimStatus: 'pending',
         isPrimary: true,

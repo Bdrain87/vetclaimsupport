@@ -245,10 +245,16 @@ export default function PersonalStatement() {
   useEffect(() => {
     const urlCondition = searchParams.get('condition');
     if (urlCondition && !formData.condition) {
-      const matches = searchAllConditions(urlCondition, { limit: 1 });
-      if (matches && matches.length > 0) {
-        const vaCondition = getConditionById(matches[0].id);
-        if (vaCondition) handleConditionSelect(vaCondition);
+      // Try ID-first lookup, then fall back to search
+      const byId = getConditionById(urlCondition);
+      if (byId) {
+        handleConditionSelect(byId);
+      } else {
+        const matches = searchAllConditions(urlCondition, { limit: 1 });
+        if (matches && matches.length > 0) {
+          const vaCondition = getConditionById(matches[0].id);
+          if (vaCondition) handleConditionSelect(vaCondition);
+        }
       }
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

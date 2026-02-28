@@ -27,6 +27,7 @@ import { cn } from '@/lib/utils';
 import { PageContainer } from '@/components/PageContainer';
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { getConditionById } from '@/data/vaConditions';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { supabase } from '@/lib/supabase';
 import type { Session } from '@supabase/supabase-js';
 import { ExportButton } from '@/components/dashboard/ExportButton';
@@ -220,7 +221,7 @@ export default function Dashboard() {
                       const details = getConditionById(uc.conditionId);
                       return (
                         <p key={uc.id} className="text-xs text-muted-foreground truncate">
-                          {details?.abbreviation || details?.name || uc.conditionId}: {uc.rating}%
+                          {details?.abbreviation || details?.name || getConditionDisplayName(uc)}: {uc.rating}%
                         </p>
                       );
                     })}

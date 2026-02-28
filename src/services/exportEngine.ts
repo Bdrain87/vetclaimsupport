@@ -3,6 +3,7 @@ import useAppStore from '@/store/useAppStore';
 import { useProfileStore } from '@/store/useProfileStore';
 import { getAllBranchLabels } from '@/utils/veteranProfile';
 import { getConditionById } from '@/data/vaConditions';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
 import type { UserCondition } from '@/store/useAppStore';
 import type {
   ClaimCondition,
@@ -206,7 +207,7 @@ function generateJSON(
       userConditions: data.userConditions.map((c) => {
         const vaInfo = getConditionById(c.conditionId);
         return {
-          name: vaInfo?.name || c.conditionId,
+          name: vaInfo?.name || getConditionDisplayName(c),
           diagnosticCode: vaInfo?.diagnosticCode || 'N/A',
           rating: c.rating ?? null,
           serviceConnected: c.serviceConnected,
@@ -345,7 +346,7 @@ function generateText(
     } else {
       data.userConditions.forEach((c) => {
         const vaInfo = getConditionById(c.conditionId);
-        const name = vaInfo?.name || c.conditionId;
+        const name = vaInfo?.name || getConditionDisplayName(c);
         const dc = vaInfo?.diagnosticCode || 'N/A';
         lines.push(`  • ${name} — DC ${dc}`);
         lines.push(`    Rating: ${c.rating != null ? `${c.rating}%` : 'Pending'} | Status: ${c.claimStatus} | ${c.isPrimary ? 'Primary' : 'Secondary'}`);

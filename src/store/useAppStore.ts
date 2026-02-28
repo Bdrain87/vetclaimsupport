@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { encryptedStorage } from '@/lib/encryptedStorage';
 import { logger } from '@/utils/logger';
+import { resolveConditionId, isSuspiciousConditionId } from '@/utils/conditionResolver';
 import type {
   MedicalVisit, Exposure, SymptomEntry, Medication,
   ServiceEntry, BuddyContact, DocumentItem, MigraineEntry,
@@ -896,7 +897,7 @@ const useAppStore = create<AppState>()(
     }),
     {
       name: 'vcs-app-data',
-      version: 3,
+      version: 4,
       storage: createJSONStorage(() => encryptedStorage),
       migrate: (persistedState: unknown, version: number) => {
         let state = persistedState as Record<string, unknown>;
@@ -907,6 +908,24 @@ const useAppStore = create<AppState>()(
           // separationDate moved to useProfileStore as single source of truth
           const { separationDate: _, ...rest } = state;
           state = rest;
+        }
+        if (version < 4) {
+          // Fix bad conditionIds (slugified names like "gerd-(gastroesophageal-reflux-disease)")
+          const ucs = state.userConditions as UserCondition[] | undefined;
+          if (Array.isArray(ucs)) {
+            state = {
+              ...state,
+              userConditions: ucs.map((uc) => {
+                if (!isSuspiciousConditionId(uc.conditionId)) return uc;
+                const resolved = resolveConditionId(uc.displayName || uc.conditionId);
+                return {
+                  ...uc,
+                  conditionId: resolved.conditionId,
+                  displayName: uc.displayName || resolved.displayName,
+                };
+              }),
+            };
+          }
         }
         return state;
       },

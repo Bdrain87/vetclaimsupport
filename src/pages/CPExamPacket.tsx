@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   ChevronLeft,
   FileCheck,
@@ -27,6 +27,7 @@ import { logger } from '@/utils/logger';
 import { getAllBranchLabels } from '@/utils/veteranProfile';
 import useAppStore from '@/store/useAppStore';
 import { getConditionById } from '@/data/vaConditions';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { generateCPExamPacketPDF } from '@/services/exportEngine';
 import { useToast } from '@/hooks/use-toast';
@@ -147,6 +148,7 @@ function PacketSection({
 
 export default function CPExamPacket() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const profile = useProfileStore();
   const appState = useAppStore();
@@ -170,6 +172,14 @@ export default function CPExamPacket() {
   const migraines = appState.migraines;
   const documents = appState.documents;
 
+  // Resolve URL condition param (for highlighting/scrolling)
+  const highlightConditionName = useMemo(() => {
+    const urlCondition = searchParams.get('condition');
+    if (!urlCondition) return null;
+    const byId = getConditionById(urlCondition);
+    return byId ? byId.name : urlCondition;
+  }, [searchParams]);
+
   // All conditions with details
   const allConditions = useMemo(() => {
     const conditions: Array<{
@@ -184,7 +194,6 @@ export default function CPExamPacket() {
 
     (userConditions ?? []).forEach((uc) => {
       const details = getConditionById(uc.conditionId);
-      if (!details) return;
       const primary = uc.linkedPrimaryId
         ? (userConditions ?? []).find((c) => c.id === uc.linkedPrimaryId)
         : null;
@@ -192,8 +201,8 @@ export default function CPExamPacket() {
 
       conditions.push({
         id: uc.id,
-        name: details.name,
-        diagnosticCode: details.diagnosticCode,
+        name: details?.name || getConditionDisplayName(uc),
+        diagnosticCode: details?.diagnosticCode,
         claimType: uc.isPrimary
           ? 'new'
           : uc.linkedPrimaryId
@@ -202,7 +211,7 @@ export default function CPExamPacket() {
           ? 'appeal'
           : 'increase',
         isPrimary: uc.isPrimary,
-        linkedPrimaryName: primaryDetails?.name,
+        linkedPrimaryName: primaryDetails?.name || (primary ? getConditionDisplayName(primary) : undefined),
         rating: uc.rating,
       });
     });
@@ -511,7 +520,7 @@ export default function CPExamPacket() {
               : null;
 
             return (
-              <div key={condition.id} className="rounded-xl border border-border bg-card p-4 space-y-2">
+              <div key={condition.id} className={cn("rounded-xl border bg-card p-4 space-y-2", highlightConditionName && condition.name.toLowerCase() === highlightConditionName.toLowerCase() ? "border-primary ring-1 ring-primary/30" : "border-border")}>
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-semibold text-foreground">{condition.name}</p>
                   {avgSev && (

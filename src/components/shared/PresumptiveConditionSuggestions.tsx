@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import useAppStore from '@/store/useAppStore';
+import { resolveConditionId } from '@/utils/conditionResolver';
 import presumptiveData from '@/data/presumptive-conditions.json';
 import { getLegacyDeploymentData } from '@/data/deployment-locations';
 
@@ -177,10 +178,11 @@ export function PresumptiveConditionSuggestions({
             if (result) newlyAdded.add(key);
           } else {
             // For conditions without a conditionId, add with display name
-            const result = addCondition(conditionName.toLowerCase().replace(/[^a-z0-9]+/g, '-'), {
+            const resolved = resolveConditionId(conditionName);
+            const result = addCondition(resolved.conditionId, {
               connectionType: 'presumptive',
               linkedExposure: group.exposureId,
-              displayName: conditionName,
+              displayName: resolved.displayName,
             });
             if (result) newlyAdded.add(key);
           }

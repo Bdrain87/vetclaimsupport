@@ -44,6 +44,7 @@ import {
   getConditionById,
 } from '@/data/vaConditions';
 import { getAllCategories, searchAllConditions } from '@/utils/conditionSearch';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
 
 // Build body system options dynamically from the unified index
 const dynamicCategories = getAllCategories();
@@ -206,15 +207,15 @@ function ConditionCard({ userCondition, conditionDetails, readinessScore, onView
         >
           {conditionDetails && onNavigate && (
             <>
-              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate(`/prep/dbq?condition=${encodeURIComponent(conditionDetails.name)}`)}>
+              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate(`/prep/dbq?condition=${encodeURIComponent(conditionDetails.id)}`)}>
                 <FileText className="h-3 w-3 mr-1" />
                 DBQ
               </Button>
-              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate(`/prep/exam?condition=${encodeURIComponent(conditionDetails.name)}`)}>
+              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate(`/prep/exam?condition=${encodeURIComponent(conditionDetails.id)}`)}>
                 <Stethoscope className="h-3 w-3 mr-1" />
                 C&P Prep
               </Button>
-              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate(`/prep/personal-statement?condition=${encodeURIComponent(conditionDetails.name)}`)}>
+              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate(`/prep/personal-statement?condition=${encodeURIComponent(conditionDetails.id)}`)}>
                 <Edit className="h-3 w-3 mr-1" />
                 Statement
               </Button>
@@ -313,10 +314,11 @@ export default function Conditions() {
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
         const matchesSearch =
-          details?.name.toLowerCase().includes(query) ||
+          details?.name?.toLowerCase().includes(query) ||
           details?.abbreviation?.toLowerCase().includes(query) ||
           details?.diagnosticCode?.includes(query) ||
-          uc.conditionId.toLowerCase().includes(query);
+          uc.conditionId.toLowerCase().includes(query) ||
+          uc.displayName?.toLowerCase().includes(query);
         if (!matchesSearch) return false;
       }
 
@@ -514,10 +516,9 @@ export default function Conditions() {
                     </SelectTrigger>
                     <SelectContent>
                       {primaryConditions.map(pc => {
-                        const details = getConditionDetails(pc);
                         return (
                           <SelectItem key={pc.id} value={pc.id}>
-                            {details?.abbreviation || details?.name || pc.conditionId}
+                            {getConditionDisplayName(pc)}
                           </SelectItem>
                         );
                       })}

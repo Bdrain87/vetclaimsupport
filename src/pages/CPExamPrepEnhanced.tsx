@@ -42,6 +42,7 @@ import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
 import { useToolDraft } from '@/hooks/useToolDraft';
 import { getConditionSymptoms, getConditionMedications } from '@/utils/prefillHelpers';
 import { useFeatureFlag } from '@/store/useFeatureFlagStore';
+import { getConditionById } from '@/data/vaConditions';
 
 interface ChecklistItem {
   id: string;
@@ -327,10 +328,14 @@ export default function CPExamPrepEnhanced() {
   useEffect(() => {
     const urlCondition = searchParams.get('condition');
     if (urlCondition && !selectedCondition) {
+      // Resolve ID to name first, then match against examPrepData
+      const byId = getConditionById(urlCondition);
+      const searchName = byId ? (byId.abbreviation || byId.name) : urlCondition;
+
       // Find matching exam prep condition key (case-insensitive partial match)
       const matchKey = Object.keys(examPrepData).find(k =>
-        k.toLowerCase().includes(urlCondition.toLowerCase()) ||
-        urlCondition.toLowerCase().includes(k.toLowerCase())
+        k.toLowerCase().includes(searchName.toLowerCase()) ||
+        searchName.toLowerCase().includes(k.toLowerCase())
       );
       if (matchKey) {
         setSelectedCondition(matchKey);
@@ -338,14 +343,14 @@ export default function CPExamPrepEnhanced() {
         // Try matching by category
         const catMatch = examCategories.find(cat =>
           cat.conditions.some(c =>
-            c.toLowerCase().includes(urlCondition.toLowerCase()) ||
-            urlCondition.toLowerCase().includes(c.toLowerCase())
+            c.toLowerCase().includes(searchName.toLowerCase()) ||
+            searchName.toLowerCase().includes(c.toLowerCase())
           )
         );
         if (catMatch) {
           const condMatch = catMatch.conditions.find(c =>
-            c.toLowerCase().includes(urlCondition.toLowerCase()) ||
-            urlCondition.toLowerCase().includes(c.toLowerCase())
+            c.toLowerCase().includes(searchName.toLowerCase()) ||
+            searchName.toLowerCase().includes(c.toLowerCase())
           );
           if (condMatch) setSelectedCondition(condMatch);
         }
