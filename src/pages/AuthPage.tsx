@@ -144,7 +144,7 @@ export default function AuthPage() {
 
   return (
     <PageContainer noPadding className="min-h-screen flex flex-col bg-black">
-      <div className="p-4">
+      <div className="p-4" style={{ paddingTop: 'calc(1rem + env(safe-area-inset-top, 0px))' }}>
         <button
           onClick={() => navigate('/')}
           className="flex items-center gap-2 text-white/60 hover:text-white transition-colors bg-transparent border-none cursor-pointer text-sm"
@@ -154,7 +154,7 @@ export default function AuthPage() {
         </button>
       </div>
 
-      <div className="flex-1 flex items-center justify-center px-4 pb-8">
+      <div className="flex-1 flex items-center justify-center px-4" style={{ paddingBottom: 'calc(2rem + var(--keyboard-height, 0px) + env(safe-area-inset-bottom, 0px))' }}>
         <motion.div
           className="w-full max-w-sm"
           initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
