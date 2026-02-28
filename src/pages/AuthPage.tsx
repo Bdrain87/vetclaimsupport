@@ -31,13 +31,39 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [oauthLoading, setOauthLoading] = useState<'google' | 'apple' | null>(null);
 
+  // Listen for auth state changes — this is what detects OAuth completion
+  // after the deep-link callback sets the session.
   useEffect(() => {
+    // Check existing session on mount
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         navigate(getSafeRedirect(), { replace: true });
       }
     }).catch(() => { /* session check failed — stay on auth */ });
+
+    // Subscribe to auth changes (catches OAuth deep-link completions)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_IN') {
+        setOauthLoading(null);
+        navigate(getSafeRedirect(), { replace: true });
+      }
+    });
+    return () => subscription.unsubscribe();
   }, [navigate]);
+
+  // Safety timeout: if OAuth loading stays active for 10s, clear it
+  useEffect(() => {
+    if (!oauthLoading) return;
+    const timeout = setTimeout(() => {
+      setOauthLoading(null);
+      toast({
+        title: 'Sign-in timed out',
+        description: 'OAuth didn\u2019t complete. Please try again.',
+        variant: 'destructive',
+      });
+    }, 10000);
+    return () => clearTimeout(timeout);
+  }, [oauthLoading, toast]);
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,14 +112,15 @@ export default function AuthPage() {
     setOauthLoading('google');
     try {
       await signInWithGoogle();
+      // Don't clear oauthLoading here — the onAuthStateChange listener
+      // or the safety timeout will handle it when OAuth completes/fails.
     } catch (err) {
+      setOauthLoading(null);
       toast({
         title: 'Google sign-in failed',
         description: err instanceof Error ? err.message : 'Please try again.',
         variant: 'destructive',
       });
-    } finally {
-      setOauthLoading(null);
     }
   };
 
@@ -102,13 +129,12 @@ export default function AuthPage() {
     try {
       await signInWithApple();
     } catch (err) {
+      setOauthLoading(null);
       toast({
         title: 'Apple sign-in failed',
         description: err instanceof Error ? err.message : 'Please try again.',
         variant: 'destructive',
       });
-    } finally {
-      setOauthLoading(null);
     }
   };
 

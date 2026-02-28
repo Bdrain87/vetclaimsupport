@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useState } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { MobileHeader } from './components/MobileHeader';
@@ -11,6 +11,7 @@ import { RouteErrorBoundary } from './components/RouteErrorBoundary';
 import { MotionConfig } from 'framer-motion';
 import { LiabilityAcceptanceScreen } from './components/legal/LiabilityAcceptanceScreen';
 import { SplashScreen } from './components/SplashScreen';
+import { WelcomeScreen } from './components/WelcomeScreen';
 import { useProfileStore } from './store/useProfileStore';
 import { migrateOldDataToAppStore } from './utils/migrateData';
 import { useSessionTimeout } from './hooks/useSessionTimeout';
@@ -556,6 +557,21 @@ function App() {
     if (isWeb && (window.location.pathname === '/' || window.location.pathname === '/auth')) return false;
     return true;
   });
+  const [showWelcome, setShowWelcome] = useState(false);
+
+  const handleSplashComplete = useCallback(async () => {
+    setShowSplash(false);
+    // On native, show auth-first welcome screen if no session exists
+    if (!isWeb) {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) setShowWelcome(true);
+      } catch {
+        // If session check fails, show welcome anyway
+        setShowWelcome(true);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     checkDataRetention();
@@ -586,6 +602,15 @@ function App() {
     };
   }, []);
 
+  // Auto-dismiss WelcomeScreen when user signs in
+  useEffect(() => {
+    if (!showWelcome) return;
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_IN') setShowWelcome(false);
+    });
+    return () => subscription.unsubscribe();
+  }, [showWelcome]);
+
   return (
     <ErrorBoundary>
       <MotionConfig reducedMotion="user">
@@ -594,8 +619,8 @@ function App() {
           <AriaLiveAnnouncer>
             {showSplash && (
               <SplashScreen
-                onComplete={() => setShowSplash(false)}
-                minimumDuration={1800}
+                onComplete={handleSplashComplete}
+                minimumDuration={2200}
                 ready={hydrated}
               />
             )}
@@ -603,6 +628,9 @@ function App() {
               <ScrollToTop />
               <RetentionWarningBanner />
               {hydrated ? <AppContent /> : <LoadingFallback />}
+              {!showSplash && showWelcome && !isWeb && (
+                <WelcomeScreen onSkip={() => setShowWelcome(false)} />
+              )}
               <Toaster />
             </BrowserRouter>
           </AriaLiveAnnouncer>

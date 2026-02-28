@@ -1591,224 +1591,41 @@ body {
    SPLASH SCREEN STYLES
    ======================================== */
 
-/* Splash screen container */
-.splash-screen {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(160deg, #000000 0%, #000000 50%, #000000 100%);
+/* Gold ring SVG draw animation */
+@keyframes goldRingDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
-/* Splash content wrapper */
-.splash-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.25rem;
-  text-align: center;
-  padding: 1.5rem;
-}
-
-/* Logo container for CSS animations */
-.splash-logo {
-  position: relative;
-  width: 96px;
-  height: 96px;
-  animation: splashLogoEntrance 0.8s ease-out forwards;
-  opacity: 0;
-}
-
-/* Logo image styling */
-.splash-logo-img {
-  width: 96px;
-  height: 96px;
-  border-radius: 20px;
-}
-
-@keyframes splashLogoEntrance {
+/* Shimmer sweep across logo */
+@keyframes shimmerSlide {
   from {
-    opacity: 0;
-    transform: scale(0.85);
-    filter: blur(12px);
+    transform: translateX(-100%);
   }
   to {
-    opacity: 1;
-    transform: scale(1);
-    filter: blur(0);
+    transform: translateX(100%);
   }
 }
 
-/* Lens sweep overlay for CSS fallback */
-.splash-lens-sweep {
-  position: absolute;
-  inset: -20%;
-  background: linear-gradient(
-    105deg,
-    transparent 40%,
-    rgba(245, 214, 128, 0.08) 45%,
-    rgba(255, 255, 255, 0.12) 50%,
-    rgba(245, 214, 128, 0.08) 55%,
-    transparent 60%
-  );
-  animation: lensSweep 1.4s ease-in-out 0.3s forwards;
-  opacity: 0;
-  pointer-events: none;
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-@keyframes lensSweep {
+/* Loading bar shimmer */
+@keyframes shimmerBar {
   0% {
-    transform: translateX(-100%);
+    width: 0%;
+    opacity: 0.6;
+  }
+  50% {
+    width: 70%;
     opacity: 1;
   }
   100% {
-    transform: translateX(100%);
-    opacity: 1;
+    width: 0%;
+    opacity: 0.6;
   }
 }
 
-/* App name styling */
-.splash-title {
-  font-size: 28px;
-  font-weight: 600;
-  color: white;
-  letter-spacing: -0.02em;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-  animation: splashTitleFadeIn 0.5s ease-out 0.4s forwards;
-  opacity: 0;
-}
-
-@keyframes splashTitleFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Tagline styling */
-.splash-tagline {
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.7);
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
-  animation: splashTaglineFadeIn 0.5s ease-out 0.6s forwards;
-  opacity: 0;
-}
-
-@keyframes splashTaglineFadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Loading dots container */
-.loading-dots {
-  display: flex;
-  gap: 8px;
-  margin-top: 1.5rem;
-  animation: splashDotsContainer 0.5s ease-out 0.8s forwards;
-  opacity: 0;
-}
-
-@keyframes splashDotsContainer {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Individual loading dot — uses gold token */
-.loading-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: var(--gold-md, #C5A55A);
-  animation: loadingDotPulse 0.8s ease-in-out infinite;
-}
-
-.loading-dot:nth-child(1) {
-  animation-delay: 0s;
-}
-
-.loading-dot:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.loading-dot:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes loadingDotPulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.5;
-  }
-  50% {
-    transform: scale(1.3);
-    opacity: 1;
-  }
-}
-
-/* Splash screen dissolve exit — scale + fade */
-.splash-screen.fade-out {
-  animation: splashDissolve 0.6s ease-in-out forwards;
-}
-
-@keyframes splashDissolve {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(1.3);
-  }
-}
-
-/* Reduced motion preferences */
+/* Reduced motion: simple fade for splash exit */
 @media (prefers-reduced-motion: reduce) {
-  .splash-logo {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-    filter: none !important;
-  }
-
-  .splash-lens-sweep {
-    animation: none !important;
-    display: none;
-  }
-
-  .splash-title,
-  .splash-tagline,
-  .loading-dots {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
-
-  .loading-dot {
-    animation: loadingDotPulse 0.8s ease-in-out infinite !important;
-  }
-
-  .splash-screen.fade-out {
-    animation: splashReducedFadeOut 0.3s ease-in-out forwards;
-  }
-
   @keyframes splashReducedFadeOut {
     from {
       opacity: 1;
