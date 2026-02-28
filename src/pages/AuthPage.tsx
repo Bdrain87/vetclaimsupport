@@ -6,9 +6,7 @@ import { signInWithEmail, signUpWithEmail, signInWithGoogle, signInWithApple, re
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
 import { PageContainer } from '@/components/PageContainer';
-
-const GOLD_GRADIENT =
-  'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)';
+import { GOLD_GRADIENT } from '@/lib/landing-animations';
 
 /** Only allow relative paths starting with / (no protocol-relative // or external URLs). */
 function getSafeRedirect(): string {
@@ -167,12 +165,12 @@ export default function AuthPage() {
               alt="Vet Claim Support"
               width={56}
               height={56}
-              style={{ borderRadius: 14, margin: '0 auto 16px' }}
+              style={{ borderRadius: 20, margin: '0 auto 16px' }}
             />
             <h1 className="text-2xl font-semibold text-white mb-2">
               {mode === 'signin' ? 'Welcome Back' : 'Create Your Account'}
             </h1>
-            <p className="text-sm" style={{ color: '#9CA3AF' }}>
+            <p className="text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>
               {mode === 'signin'
                 ? 'Sign in to access your claim data'
                 : 'Start preparing your VA claim today'}
@@ -320,7 +318,7 @@ export default function AuthPage() {
             </button>
           </form>
 
-          <p className="text-center text-sm" style={{ color: '#9CA3AF' }}>
+          <p className="text-center text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>
             {mode === 'signin' ? (
               <>
                 Don&apos;t have an account?{' '}

@@ -6,9 +6,7 @@ import { signInWithApple, signInWithGoogle } from '@/services/auth';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
 import { impactLight, impactMedium } from '@/lib/haptics';
-
-const GOLD_GRADIENT =
-  'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)';
+import { GOLD_GRADIENT, GOLD_GRADIENT_TEXT } from '@/lib/landing-animations';
 
 interface WelcomeScreenProps {
   onSkip: () => void;
@@ -118,10 +116,10 @@ export function WelcomeScreen({ onSkip }: WelcomeScreenProps) {
               alt="Vet Claim Support"
               width={64}
               height={64}
-              style={{ borderRadius: 16, display: 'block' }}
+              style={{ borderRadius: 20, display: 'block' }}
             />
             <div
-              className="absolute inset-[-3px] rounded-[19px] pointer-events-none"
+              className="absolute inset-[-3px] rounded-[23px] pointer-events-none"
               style={{
                 border: '1.5px solid rgba(197,165,90,0.4)',
               }}
@@ -132,10 +130,7 @@ export function WelcomeScreen({ onSkip }: WelcomeScreenProps) {
             style={{
               fontFamily:
                 "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif",
-              background: GOLD_GRADIENT,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
+              ...GOLD_GRADIENT_TEXT,
             }}
           >
             Vet Claim Support
@@ -173,14 +168,14 @@ export function WelcomeScreen({ onSkip }: WelcomeScreenProps) {
                   size={18}
                   style={{ color: '#C5A55A', flexShrink: 0 }}
                 />
-                <span className="text-sm text-white/80">{f.label}</span>
+                <span className="text-sm text-white/70">{f.label}</span>
               </motion.div>
             ))}
           </div>
 
           <p
             className="text-center text-xs mt-4"
-            style={{ color: 'rgba(255,255,255,0.35)' }}
+            style={{ color: 'rgba(255,255,255,0.4)' }}
           >
             $9.99 one-time — No subscription
           </p>

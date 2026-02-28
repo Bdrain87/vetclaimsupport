@@ -1,8 +1,6 @@
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-
-const GOLD_GRADIENT =
-  'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)';
+import { GOLD_GRADIENT, GOLD_GRADIENT_TEXT } from '@/lib/landing-animations';
 
 interface SplashScreenProps {
   onComplete: () => void;
@@ -118,10 +116,7 @@ export function SplashScreen({
                 style={{
                   fontFamily:
                     "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif",
-                  background: GOLD_GRADIENT,
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
+                  ...GOLD_GRADIENT_TEXT,
                 }}
               >
                 Vet Claim Support
@@ -141,7 +136,7 @@ export function SplashScreen({
             <motion.p
               className="text-base m-0"
               style={{
-                color: 'rgba(255, 255, 255, 0.6)',
+                color: 'rgba(255, 255, 255, 0.7)',
                 fontFamily:
                   "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
               }}
@@ -231,10 +226,10 @@ function LogoBlock({
   prefersReducedMotion: boolean;
 }) {
   const size = 120;
-  const borderRadius = 24;
+  const borderRadius = 20;
   // Accurate rounded-rect perimeter: 4 straight edges + 4 quarter-circle arcs
   const straight = (size - 2) - 2 * borderRadius; // each straight segment
-  const perimeter = 4 * straight + 2 * Math.PI * borderRadius; // ~431
+  const perimeter = 4 * straight + 2 * Math.PI * borderRadius; // ~438
 
   return (
     <div className="relative" style={{ width: size, height: size }}>
