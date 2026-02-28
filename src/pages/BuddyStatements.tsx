@@ -2,7 +2,8 @@ import { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useClaims } from '@/hooks/useClaims';
 import { useProfileStore } from '@/store/useProfileStore';
-import { Users, Plus, Trash2, Edit, Phone, Mail, FileText, CheckCircle, Clock, Send, Download, Camera, Copy, Check, ChevronRight, ChevronLeft, HelpCircle, Loader2, Share2 } from 'lucide-react';
+import { Users, Plus, Trash2, Edit, Phone, Mail, FileText, CheckCircle, Clock, Send, Download, Camera, Copy, Check, ChevronRight, ChevronLeft, HelpCircle, Loader2, Share2, Activity } from 'lucide-react';
+import useAppStore from '@/store/useAppStore';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -20,6 +21,7 @@ import { useToast } from '@/hooks/use-toast';
 import type { BuddyContact } from '@/types/claims';
 import { createBuddyShareLink, shareBuddyLink } from '@/services/buddyShare';
 import { PageContainer } from '@/components/PageContainer';
+import { EmptyState } from '@/components/EmptyState';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
 import { useToolDraft } from '@/hooks/useToolDraft';
@@ -69,6 +71,7 @@ export default function BuddyStatements() {
   const navigate = useNavigate();
   const profile = useProfileStore();
   const { toast } = useToast();
+  const symptoms = useAppStore((s) => s.symptoms);
   const [activeTab, setActiveTab] = useState('contacts');
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
@@ -78,6 +81,28 @@ export default function BuddyStatements() {
   const conditionSummary = useMemo(() => {
     return (data.claimConditions || []).map(c => c.name).join(', ');
   }, [data.claimConditions]);
+
+  // Build symptom summary for buddy context
+  const symptomSummary = useMemo(() => {
+    if (symptoms.length === 0) return '';
+    const recent = symptoms.slice(0, 10);
+    const bySymptom = new Map<string, { count: number; maxSeverity: number; impacts: string[] }>();
+    for (const s of recent) {
+      const existing = bySymptom.get(s.symptom) || { count: 0, maxSeverity: 0, impacts: [] };
+      existing.count++;
+      existing.maxSeverity = Math.max(existing.maxSeverity, s.severity);
+      if (s.dailyImpact && !existing.impacts.includes(s.dailyImpact)) {
+        existing.impacts.push(s.dailyImpact);
+      }
+      bySymptom.set(s.symptom, existing);
+    }
+    return Array.from(bySymptom.entries())
+      .map(([name, info]) => {
+        const severity = info.maxSeverity >= 7 ? 'severe' : info.maxSeverity >= 4 ? 'moderate' : 'mild';
+        return `${name} (${severity}, logged ${info.count} time${info.count !== 1 ? 's' : ''})${info.impacts.length > 0 ? ` — impacts: ${info.impacts.join(', ')}` : ''}`;
+      })
+      .join('; ');
+  }, [symptoms]);
 
   // Contacts form state
   const [isOpen, setIsOpen] = useState(false);
@@ -389,6 +414,30 @@ Date: ${today}`;
                 rows={2}
               />
             </div>
+            {/* Symptom context pre-fill from logged data */}
+            {symptomSummary && (
+              <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 space-y-2">
+                <div className="flex items-center gap-2">
+                  <Activity className="h-4 w-4 text-primary" />
+                  <p className="text-xs font-semibold text-foreground">Symptom Context from Your Logs</p>
+                </div>
+                <p className="text-[11px] text-muted-foreground leading-relaxed">{symptomSummary}</p>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="text-xs"
+                  onClick={() => {
+                    const current = statementData.specificObservations;
+                    const addition = `\n\nBased on recent symptom tracking: ${symptomSummary}`;
+                    updateField('specificObservations', current + addition);
+                    toast({ title: 'Symptom context added', description: 'Symptom summary appended to observations.' });
+                  }}
+                >
+                  Include in Observations
+                </Button>
+              </div>
+            )}
           </div>
         );
 
@@ -465,9 +514,9 @@ Date: ${today}`;
               onClick={async () => {
                 const result = await createBuddyShareLink({
                   veteranFirstName: profile.firstName || 'A veteran',
-                  conditionName: selectedContact?.whatTheyWitnessed || 'their VA claim',
+                  conditionName: statementData.conditionWitnessed || 'their VA claim',
                   templateContent: generateStatement(),
-                  relationshipHint: selectedContact?.relationship || '',
+                  relationshipHint: statementData.witnessRelationship || '',
                 });
                 if (result.success && result.shareUrl) {
                   await shareBuddyLink(result.shareUrl, profile.firstName || 'A veteran');
@@ -633,10 +682,14 @@ Date: ${today}`;
           {/* Contacts Grid */}
           {data.buddyContacts.length === 0 ? (
             <Card className="data-card">
-              <CardContent className="flex flex-col items-center justify-center py-12">
-                <Users className="h-12 w-12 text-muted-foreground/50 mb-4" />
-                <p className="text-muted-foreground text-center">No buddy contacts yet.</p>
-                <p className="text-sm text-muted-foreground text-center mt-1">Add people who can provide witness statements for your claim.</p>
+              <CardContent>
+                <EmptyState
+                  icon={<Users className="h-10 w-10" />}
+                  title="No buddy contacts yet"
+                  description="Add people who can provide witness statements for your claim."
+                  actionLabel="Add Contact"
+                  onAction={() => setIsOpen(true)}
+                />
               </CardContent>
             </Card>
           ) : (

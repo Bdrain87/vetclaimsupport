@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { safeFormatDate } from '@/utils/dateUtils';
 import { Card, CardContent } from '@/components/ui/card';
@@ -45,6 +45,9 @@ import {
 } from '@/data/vaConditions';
 import { getAllCategories, searchAllConditions } from '@/utils/conditionSearch';
 import { getConditionDisplayName } from '@/utils/conditionResolver';
+import { useToast } from '@/hooks/use-toast';
+import { ToastAction } from '@/components/ui/toast';
+import { Skeleton } from '@/components/ui/skeleton';
 
 // Build body system options dynamically from the unified index
 const dynamicCategories = getAllCategories();
@@ -249,6 +252,9 @@ export default function Conditions() {
   const { data } = useClaims();
   const profile = useProfileStore();
 
+  const { toast } = useToast();
+  const [initialLoad, setInitialLoad] = useState(true);
+  useEffect(() => { setInitialLoad(false); }, []);
   const conditionEvidenceChecks = useAppStore(s => s.conditionEvidenceChecks);
 
   const recommendations = useMemo(
@@ -359,6 +365,18 @@ export default function Conditions() {
       linkedPrimaryId: isSecondary && linkedPrimaryId ? linkedPrimaryId : undefined,
     });
 
+    // Post-add prompt: guide user to next step
+    const condName = selectedCondition.abbreviation || selectedCondition.name;
+    toast({
+      title: `${condName} added`,
+      description: 'Next step: start logging symptoms to build your evidence trail.',
+      action: (
+        <ToastAction altText="Log symptoms" onClick={() => navigate('/health/symptoms')}>
+          Log Symptoms
+        </ToastAction>
+      ),
+    });
+
     // Reset form
     setSelectedCondition(null);
     setNewRating('');
@@ -366,7 +384,7 @@ export default function Conditions() {
     setIsSecondary(false);
     setLinkedPrimaryId('');
     setShowAddDialog(false);
-  }, [selectedCondition, newRating, newClaimStatus, isSecondary, linkedPrimaryId, addCondition]);
+  }, [selectedCondition, newRating, newClaimStatus, isSecondary, linkedPrimaryId, addCondition, toast, navigate]);
 
   // Confirm remove state
   const [removeTarget, setRemoveTarget] = useState<{ id: string; name: string } | null>(null);
@@ -392,6 +410,28 @@ export default function Conditions() {
       setRemoveTarget(null);
     }
   };
+
+  if (initialLoad) {
+    return (
+      <PageContainer className="py-6 space-y-6">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-10 w-10 rounded-xl" />
+            <div className="space-y-2">
+              <Skeleton className="h-6 w-32" />
+              <Skeleton className="h-4 w-24" />
+            </div>
+          </div>
+          <Skeleton className="h-9 w-32 rounded-md" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[1, 2, 3, 4].map((i) => (
+            <Skeleton key={i} className="h-32 rounded-xl" />
+          ))}
+        </div>
+      </PageContainer>
+    );
+  }
 
   return (
     <PageContainer className="py-6 space-y-6">

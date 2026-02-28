@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useEvidence } from '@/hooks/useEvidence';
 import { useFeatureFlag } from '@/store/useFeatureFlagStore';
@@ -16,7 +16,11 @@ import { exportMedications } from '@/utils/pdfExport';
 import { useToast } from '@/hooks/use-toast';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import { PageContainer } from '@/components/PageContainer';
+import { EmptyState } from '@/components/EmptyState';
+import { Skeleton } from '@/components/ui/skeleton';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { useUserConditions } from '@/hooks/useUserConditions';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
 import type { Medication } from '@/types/claims';
 
 const EFFECTIVENESS_OPTIONS = [
@@ -42,6 +46,9 @@ export default function Medications() {
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
   const showSideEffectStats = useFeatureFlag('medicationSideEffectStats');
+  const { conditions: userConditions } = useUserConditions();
+  const [initialLoad, setInitialLoad] = useState(true);
+  useEffect(() => { setInitialLoad(false); }, []);
   const [formData, setFormData] = useState<Omit<Medication, 'id'>>({
     startDate: '',
     endDate: '',
@@ -53,6 +60,7 @@ export default function Medications() {
     frequency: '',
     prescriber: '',
     effectiveness: '',
+    conditionTags: [],
     functionalImpactOnMed: '',
     functionalImpactOffMed: '',
   });
@@ -69,6 +77,7 @@ export default function Medications() {
       frequency: '',
       prescriber: '',
       effectiveness: '',
+      conditionTags: [],
       functionalImpactOnMed: '',
       functionalImpactOffMed: '',
     });
@@ -98,6 +107,7 @@ export default function Medications() {
       frequency: medication.frequency || '',
       prescriber: medication.prescriber || '',
       effectiveness: medication.effectiveness || '',
+      conditionTags: medication.conditionTags || [],
       functionalImpactOnMed: medication.functionalImpactOnMed || '',
       functionalImpactOffMed: medication.functionalImpactOffMed || '',
     });
@@ -156,6 +166,18 @@ export default function Medications() {
         {med.prescribedFor && (
           <p className="text-muted-foreground">For: <span className="text-foreground">{med.prescribedFor}</span></p>
         )}
+        {med.conditionTags && med.conditionTags.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {med.conditionTags.map((tagId) => {
+              const uc = userConditions.find((c) => c.id === tagId);
+              return (
+                <span key={tagId} className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-primary/10 text-primary border border-primary/20">
+                  {uc ? getConditionDisplayName(uc) : tagId}
+                </span>
+              );
+            })}
+          </div>
+        )}
         {med.prescriber && (
           <div className="flex items-center gap-2 text-muted-foreground">
             <Stethoscope className="h-3.5 w-3.5" />
@@ -188,6 +210,28 @@ export default function Medications() {
       </CardContent>
     </Card>
   );
+
+  if (initialLoad) {
+    return (
+      <PageContainer className="space-y-6 overflow-x-hidden">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-10 w-10 rounded-xl" />
+            <div className="space-y-2">
+              <Skeleton className="h-6 w-32" />
+              <Skeleton className="h-4 w-40" />
+            </div>
+          </div>
+          <Skeleton className="h-9 w-36 rounded-md" />
+        </div>
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-48 rounded-xl" />
+          ))}
+        </div>
+      </PageContainer>
+    );
+  }
 
   return (
     <PageContainer className="space-y-6 animate-fade-in overflow-x-hidden">
@@ -288,6 +332,42 @@ export default function Medications() {
                   onChange={(e) => setFormData({ ...formData, prescribedFor: e.target.value })}
                 />
               </div>
+
+              {/* Linked Conditions — conditionTags chip selector */}
+              {userConditions.length > 0 && (
+                <div className="space-y-2">
+                  <Label>Link to Conditions</Label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {userConditions.map((uc) => {
+                      const name = getConditionDisplayName(uc);
+                      const isSelected = formData.conditionTags?.includes(uc.id) ?? false;
+                      return (
+                        <button
+                          key={uc.id}
+                          type="button"
+                          onClick={() => {
+                            const tags = formData.conditionTags || [];
+                            const next = isSelected
+                              ? tags.filter((t) => t !== uc.id)
+                              : [...tags, uc.id];
+                            setFormData({ ...formData, conditionTags: next });
+                          }}
+                          className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
+                            isSelected
+                              ? 'bg-primary text-primary-foreground border-primary'
+                              : 'bg-secondary text-muted-foreground border-border hover:border-primary/50'
+                          }`}
+                        >
+                          {name}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <p className="text-[11px] text-muted-foreground">
+                    Select the conditions this medication treats
+                  </p>
+                </div>
+              )}
 
               {/* Dates */}
               <div className="grid gap-4 sm:grid-cols-2">
@@ -493,10 +573,14 @@ export default function Medications() {
       {/* Empty State */}
       {data.medications.length === 0 && (
         <Card className="data-card">
-          <CardContent className="empty-state">
-            <Pill className="empty-state-icon" />
-            <p className="empty-state-title">No medications logged yet</p>
-            <p className="empty-state-description">Track all prescriptions during service to build a complete medical history for your VA claim.</p>
+          <CardContent>
+            <EmptyState
+              icon={<Pill className="h-10 w-10" />}
+              title="No medications logged yet"
+              description="Track all prescriptions during service to build a complete medical history for your VA claim."
+              actionLabel="Add Medication"
+              onAction={() => setIsOpen(true)}
+            />
           </CardContent>
         </Card>
       )}

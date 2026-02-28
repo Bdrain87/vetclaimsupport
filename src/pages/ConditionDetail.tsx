@@ -28,7 +28,7 @@ import {
   ChevronLeft, Scale, FileText, Link2, Stethoscope, CheckCircle2,
   AlertTriangle, Info, ExternalLink, Trash2, BookOpen,
   Activity, TrendingUp, Clock, Brain, Moon, Zap, ArrowRight,
-  Sparkles, Loader2, ChevronDown, FileCheck, Plus, Pill,
+  Sparkles, Loader2, ChevronDown, FileCheck, Plus, Pill, Users,
 } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
@@ -976,17 +976,27 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                 m.conditionTags?.includes(userCondition?.conditionId || '') ||
                 m.prescribedFor === (conditionDetails.abbreviation || conditionDetails.name),
             );
-            if (linkedMeds.length === 0) return null;
             return (
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <Pill className="h-4 w-4" />
-                    Linked Medications ({linkedMeds.length})
-                  </CardTitle>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <Pill className="h-4 w-4" />
+                      Linked Medications ({linkedMeds.length})
+                    </CardTitle>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-xs h-7"
+                      onClick={() => navigate('/health/medications')}
+                    >
+                      <Plus className="h-3 w-3 mr-1" />
+                      Add
+                    </Button>
+                  </div>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  {linkedMeds.map((m) => (
+                  {linkedMeds.length > 0 ? linkedMeds.map((m) => (
                     <div key={m.id} className="flex items-center justify-between text-sm p-2 rounded-lg bg-muted/30">
                       <div>
                         <p className="font-medium text-foreground">{m.name}</p>
@@ -998,7 +1008,59 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                         <Badge variant="outline" className="text-[10px]">{m.effectiveness.replace(/_/g, ' ')}</Badge>
                       )}
                     </div>
-                  ))}
+                  )) : (
+                    <p className="text-xs text-muted-foreground text-center py-2">
+                      No medications linked yet. Add medications and tag this condition.
+                    </p>
+                  )}
+                </CardContent>
+              </Card>
+            );
+          })()}
+
+          {/* Linked Buddy Letters */}
+          {(() => {
+            const condName = conditionDetails.abbreviation || conditionDetails.name || '';
+            const linkedBuddies = data.buddyContacts.filter(
+              (b) =>
+                b.whatTheyWitnessed?.toLowerCase().includes(condName.toLowerCase()) ||
+                b.relationship?.toLowerCase().includes(condName.toLowerCase()),
+            );
+            return (
+              <Card>
+                <CardHeader className="pb-2">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <Users className="h-4 w-4" />
+                      Buddy Statements ({linkedBuddies.length})
+                    </CardTitle>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-xs h-7"
+                      onClick={() => navigate('/health/buddy-statements')}
+                    >
+                      <Plus className="h-3 w-3 mr-1" />
+                      Add
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {linkedBuddies.length > 0 ? linkedBuddies.map((b) => (
+                    <div key={b.id} className="flex items-center justify-between text-sm p-2 rounded-lg bg-muted/30">
+                      <div>
+                        <p className="font-medium text-foreground">{b.rank ? `${b.rank} ` : ''}{b.name}</p>
+                        {b.relationship && (
+                          <p className="text-xs text-muted-foreground">{b.relationship}</p>
+                        )}
+                      </div>
+                      <Badge variant="outline" className="text-[10px]">{b.statementStatus}</Badge>
+                    </div>
+                  )) : (
+                    <p className="text-xs text-muted-foreground text-center py-2">
+                      No buddy statements linked. Add contacts who witnessed this condition.
+                    </p>
+                  )}
                 </CardContent>
               </Card>
             );

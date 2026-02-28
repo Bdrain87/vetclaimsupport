@@ -25,6 +25,7 @@ import { vcsSpring } from '@/constants/animations';
 import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { PageContainer } from '@/components/PageContainer';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { getConditionById } from '@/data/vaConditions';
 import { getConditionDisplayName } from '@/utils/conditionResolver';
@@ -54,6 +55,10 @@ export default function Dashboard() {
   const currentPhase = useAppStore((s) => s.journeyProgress?.currentPhase ?? 0);
   const symptoms = useAppStore((s) => s.symptoms);
   const navigate = useNavigate();
+
+  // Brief skeleton on initial mount for perceived performance
+  const [initialLoad, setInitialLoad] = useState(true);
+  useEffect(() => { setInitialLoad(false); }, []);
 
   const [session, setSession] = useState<Session | null>(null);
   useEffect(() => {
@@ -157,6 +162,31 @@ export default function Dashboard() {
     return Date.now() - parseInt(ts, 10) < 30 * 24 * 60 * 60 * 1000;
   }, []);
   const hasMedications = data.medications.length > 0;
+
+  if (initialLoad) {
+    return (
+      <PageContainer className="space-y-4 pb-4">
+        <Skeleton className="h-12 w-full rounded-2xl" />
+        <div className="rounded-2xl border border-border p-3">
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-10 w-10 rounded-full" />
+            <div className="flex-1 space-y-2">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-3 w-48" />
+            </div>
+          </div>
+        </div>
+        <Skeleton className="h-20 w-full rounded-2xl" />
+        <div className="grid grid-cols-2 gap-2">
+          <Skeleton className="h-16 rounded-2xl" />
+          <Skeleton className="h-16 rounded-2xl" />
+          <Skeleton className="h-16 rounded-2xl" />
+          <Skeleton className="h-16 rounded-2xl" />
+        </div>
+        <Skeleton className="h-40 w-full rounded-2xl" />
+      </PageContainer>
+    );
+  }
 
   return (
     <PageContainer className="space-y-4 animate-fade-in pb-4">
