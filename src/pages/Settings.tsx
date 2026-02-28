@@ -900,7 +900,7 @@ export default function Settings() {
             className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
           >
             <div className="flex items-center gap-3">
-              <Shield className="h-5 w-5 text-primary" />
+              <Shield className="h-5 w-5 text-gold" />
               <div>
                 <span className="font-medium text-foreground">Privacy Policy</span>
                 <p className="text-[11px] text-muted-foreground">v{LEGAL_VERSIONS.privacy.version} · {formatLegalDate(LEGAL_VERSIONS.privacy.effectiveDate)}</p>
@@ -914,7 +914,7 @@ export default function Settings() {
             className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
           >
             <div className="flex items-center gap-3">
-              <FileText className="h-5 w-5 text-primary" />
+              <FileText className="h-5 w-5 text-gold" />
               <div>
                 <span className="font-medium text-foreground">Terms of Service</span>
                 <p className="text-[11px] text-muted-foreground">v{LEGAL_VERSIONS.terms.version} · {formatLegalDate(LEGAL_VERSIONS.terms.effectiveDate)}</p>
@@ -954,7 +954,7 @@ export default function Settings() {
             className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
           >
             <div className="flex items-center gap-3">
-              <Info className="h-5 w-5 text-primary" />
+              <Info className="h-5 w-5 text-gold" />
               <span className="font-medium text-foreground">About VCS</span>
             </div>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />

@@ -188,12 +188,17 @@ describe('XSS Prevention', () => {
   }, 15_000);
 
   it('XSS in quick log notes does not inject scripts', async () => {
-    appStore.getState().addDashboardQuickLog(
-      3,
-      'good',
-      undefined,
-      '<img src=x onerror=alert(1)>',
-    );
+    appStore.getState().addQuickLog({
+      date: new Date().toISOString(),
+      overallFeeling: 3,
+      hadFlareUp: false,
+      flareUpNote: '',
+      painLevel: 3,
+      mood: 'good',
+      condition: 'general',
+      notes: '<img src=x onerror=alert(1)>',
+      createdAt: new Date().toISOString(),
+    });
 
     const mod = await import('@/pages/Dashboard');
     const Dashboard = mod.default;

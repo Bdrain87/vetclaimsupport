@@ -7,12 +7,11 @@ const JOURNEY_PHASE_LABELS = ['Research', 'Evidence', 'Filing', 'C&P Exam', 'Dec
 
 export function ClaimManagementStrip() {
   const docCount = useAppStore((s) => s.claimDocuments.length);
-  const deadlines = useAppStore((s) => s.deadlines);
-  const journeyProgress = useAppStore((s) => s.journeyProgress);
+  const activeDeadlines = useAppStore((s) => (s.deadlines ?? []).filter((d) => !d.completed).length);
+  const currentPhase = useAppStore((s) => s.journeyProgress?.currentPhase ?? 0);
   const itfFiled = useProfileStore((s) => s.intentToFileFiled);
 
-  const activeDeadlines = deadlines.filter((d) => !d.completed).length;
-  const phaseLabel = JOURNEY_PHASE_LABELS[journeyProgress.currentPhase] || `Phase ${journeyProgress.currentPhase + 1}`;
+  const phaseLabel = JOURNEY_PHASE_LABELS[currentPhase] || `Phase ${currentPhase + 1}`;
 
   const cards = [
     {
@@ -47,6 +46,7 @@ export function ClaimManagementStrip() {
         <Link
           key={card.route}
           to={card.route}
+          aria-label={`${card.label} — ${card.detail}`}
           className="flex flex-col items-center gap-1 min-w-[80px] p-3 rounded-xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors text-center"
         >
           <card.icon className="h-5 w-5 text-gold" />

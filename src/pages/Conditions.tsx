@@ -118,7 +118,7 @@ function ConditionCard({ userCondition, conditionDetails, readinessScore, onView
 
   return (
     <Card
-      className="cursor-pointer hover:border-primary/50 transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      className="cursor-pointer hover:border-gold/50 transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
       onClick={onView}
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onView(); } }}
       tabIndex={0}
@@ -128,7 +128,7 @@ function ConditionCard({ userCondition, conditionDetails, readinessScore, onView
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <h3 className="font-semibold truncate max-w-full group-hover:text-primary transition-colors">
+              <h3 className="font-semibold truncate max-w-full group-hover:text-gold transition-colors">
                 {conditionDetails?.abbreviation || conditionDetails?.name || userCondition.conditionId}
               </h3>
               {userCondition.claimStatus && (
@@ -152,7 +152,7 @@ function ConditionCard({ userCondition, conditionDetails, readinessScore, onView
 
             <div className="flex items-center gap-3 mb-2 flex-wrap">
               {userCondition.rating !== undefined && (
-                <Badge className="bg-primary/20 text-primary hover:bg-primary/30">
+                <Badge className="bg-gold/20 text-gold hover:bg-gold/30">
                   Current: {userCondition.rating}%
                 </Badge>
               )}
@@ -195,7 +195,7 @@ function ConditionCard({ userCondition, conditionDetails, readinessScore, onView
             {readinessScore !== undefined && userCondition.claimStatus !== 'approved' && (
               <ReadinessRing score={readinessScore} />
             )}
-            <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
+            <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-gold transition-colors" />
           </div>
         </div>
 
@@ -396,8 +396,8 @@ export default function Conditions() {
       {/* Header */}
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-primary/10">
-            <Shield className="h-6 w-6 text-primary" />
+          <div className="p-2 rounded-xl bg-gold/10">
+            <Shield className="h-6 w-6 text-gold" />
           </div>
           <div>
             <h1 className="text-2xl font-bold">My Claim</h1>
@@ -628,7 +628,7 @@ export default function Conditions() {
                     onNavigate={(path) => navigate(path)}
                   />
                 {secondaries.length > 0 && (
-                  <div className="ml-6 border-l-2 border-primary/20 pl-4 space-y-3">
+                  <div className="ml-6 border-l-2 border-gold/20 pl-4 space-y-3">
                     {secondaries.map(sec => {
                       const secDetails = getConditionDetails(sec);
                       const primaryDetails = getConditionDetails(uc);
@@ -737,7 +737,7 @@ export default function Conditions() {
           <CardContent className="py-4">
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
-                <div className="text-2xl font-bold text-primary">
+                <div className="text-2xl font-bold text-gold">
                   {userConditions.length}
                 </div>
                 <div className="text-xs text-muted-foreground">Conditions</div>
@@ -793,14 +793,14 @@ export default function Conditions() {
         <Card>
           <CardContent className="pt-4">
             <p className="text-sm font-medium mb-3 flex items-center gap-2">
-              <Search className="h-4 w-4 text-primary" />
+              <Search className="h-4 w-4 text-gold" />
               Add from VA database
             </p>
             <div className="space-y-2">
               {databaseResults.map(result => (
                 <div
                   key={result.id}
-                  className="flex items-center justify-between p-3 rounded-lg border border-border hover:border-primary/30 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg border border-border hover:border-gold/30 transition-colors"
                 >
                   <div className="flex-1 min-w-0 mr-3">
                     <p className="text-sm font-medium truncate">{result.name}</p>

@@ -1103,6 +1103,16 @@ body {
     border-radius: 2px;
   }
 
+  /* Hidden scrollbar */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Apple-style smooth transitions */
   .transition-apple {
     @apply transition-all duration-200;

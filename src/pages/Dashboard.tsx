@@ -42,8 +42,8 @@ export default function Dashboard() {
   const { conditions: userConditions } = useUserConditions();
   const profile = useProfileStore();
   const vaultDocCount = useAppStore((s) => s.claimDocuments.length);
-  const deadlines = useAppStore((s) => s.deadlines);
-  const journeyProgress = useAppStore((s) => s.journeyProgress);
+  const activeDeadlines = useAppStore((s) => (s.deadlines ?? []).filter((d) => !d.completed).length);
+  const currentPhase = useAppStore((s) => s.journeyProgress?.currentPhase ?? 0);
   const symptoms = useAppStore((s) => s.symptoms);
   const navigate = useNavigate();
 
@@ -121,8 +121,7 @@ export default function Dashboard() {
     }
   }, [setSeparationDate]);
 
-  const activeDeadlines = deadlines.filter((d) => !d.completed).length;
-  const phaseLabel = JOURNEY_PHASE_LABELS[journeyProgress.currentPhase] || `Phase ${journeyProgress.currentPhase + 1}`;
+  const phaseLabel = JOURNEY_PHASE_LABELS[currentPhase] || `Phase ${currentPhase + 1}`;
   const readinessLabel = readinessScore >= 70 ? 'Strong' : readinessScore >= 40 ? 'Building' : 'Early';
 
   return (
@@ -246,6 +245,7 @@ export default function Dashboard() {
       >
         <Link
           to="/claims/vault"
+          aria-label={`Documents — ${vaultDocCount > 0 ? `${vaultDocCount} stored` : 'No docs yet'}`}
           className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors"
         >
           <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center flex-shrink-0">
@@ -260,6 +260,7 @@ export default function Dashboard() {
         </Link>
         <Link
           to="/claims/deadlines"
+          aria-label={`Deadlines — ${activeDeadlines > 0 ? `${activeDeadlines} active` : 'None set'}`}
           className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors"
         >
           <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center flex-shrink-0">
@@ -274,6 +275,7 @@ export default function Dashboard() {
         </Link>
         <Link
           to="/claims/journey"
+          aria-label={`Journey — ${phaseLabel}`}
           className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors"
         >
           <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center flex-shrink-0">
@@ -287,6 +289,7 @@ export default function Dashboard() {
         {userConditions.length > 0 ? (
           <Link
             to="/claims"
+            aria-label={`Readiness — ${readinessScore}% — ${readinessLabel}`}
             className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors"
           >
             <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center flex-shrink-0">
@@ -300,6 +303,7 @@ export default function Dashboard() {
         ) : (
           <Link
             to="/claims"
+            aria-label="Add Conditions — Start your claim"
             className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors"
           >
             <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center flex-shrink-0">

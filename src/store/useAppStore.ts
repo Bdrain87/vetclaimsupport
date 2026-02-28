@@ -233,9 +233,6 @@ interface AppState {
   addEmploymentImpact: (entry: Omit<EmploymentImpactEntry, 'id'>) => void;
   deleteEmploymentImpact: (id: string) => void;
 
-  // Dashboard Quick Log (convenience)
-  addDashboardQuickLog: (pain: number, mood: 'good' | 'okay' | 'bad', condition?: string, notes?: string, date?: string, flareUp?: { hadFlareUp: boolean; duration?: string; severity?: number; triggers?: string[]; activitiesAffected?: string; note?: string }) => void;
-
   // ========== USER CONDITIONS METHODS ==========
 
   addUserCondition: (condition: UserCondition) => void;
@@ -591,26 +588,6 @@ const useAppStore = create<AppState>()(
       })),
       deleteEmploymentImpact: (id) => set((s) => ({
         employmentImpactEntries: s.employmentImpactEntries.filter((e) => e.id !== id),
-      })),
-
-      // Dashboard Quick Log (convenience)
-      addDashboardQuickLog: (pain, mood, condition, notes, date, flareUp) => set((s) => ({
-        quickLogs: [...s.quickLogs, {
-          id: generateId(),
-          date: date || new Date().toISOString(),
-          overallFeeling: pain,
-          hadFlareUp: flareUp?.hadFlareUp ?? false,
-          flareUpNote: flareUp?.note || '',
-          flareUpDuration: flareUp?.duration as QuickLogEntry['flareUpDuration'],
-          flareUpSeverity: flareUp?.severity,
-          flareUpTriggers: flareUp?.triggers,
-          flareUpActivitiesAffected: flareUp?.activitiesAffected,
-          painLevel: pain,
-          mood,
-          condition: condition || 'general',
-          notes: notes || '',
-          createdAt: new Date().toISOString(),
-        }],
       })),
 
       // ========== USER CONDITIONS METHODS ==========

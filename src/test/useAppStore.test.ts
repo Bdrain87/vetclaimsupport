@@ -404,31 +404,6 @@ describe('useAppStore', () => {
   });
 
   // -------------------------------------------------------------------------
-  // Dashboard Quick Log
-  // -------------------------------------------------------------------------
-  describe('addDashboardQuickLog', () => {
-    it('creates a quick log with pain, mood, and optional fields', () => {
-      useAppStore.getState().addDashboardQuickLog(6, 'okay', 'PTSD', 'bad day');
-
-      const logs = useAppStore.getState().quickLogs;
-      expect(logs).toHaveLength(1);
-      expect(logs[0].painLevel).toBe(6);
-      expect(logs[0].mood).toBe('okay');
-      expect(logs[0].condition).toBe('PTSD');
-      expect(logs[0].notes).toBe('bad day');
-      expect(logs[0].id).toBeTruthy();
-    });
-
-    it('defaults condition to "general" and notes to empty when omitted', () => {
-      useAppStore.getState().addDashboardQuickLog(3, 'good');
-
-      const log = useAppStore.getState().quickLogs[0];
-      expect(log.condition).toBe('general');
-      expect(log.notes).toBe('');
-    });
-  });
-
-  // -------------------------------------------------------------------------
   // Document checklist update
   // -------------------------------------------------------------------------
   describe('updateDocument', () => {

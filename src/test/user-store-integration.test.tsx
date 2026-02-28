@@ -116,8 +116,18 @@ describe('useAppStore Integration', () => {
     expect(appStore.getState().userConditions).toHaveLength(0);
   });
 
-  it('adds a dashboard quick log', () => {
-    appStore.getState().addDashboardQuickLog(7, 'bad', 'knee-pain', 'Flare-up today');
+  it('adds a quick log', () => {
+    appStore.getState().addQuickLog({
+      date: new Date().toISOString(),
+      overallFeeling: 7,
+      hadFlareUp: false,
+      flareUpNote: '',
+      painLevel: 7,
+      mood: 'bad',
+      condition: 'knee-pain',
+      notes: 'Flare-up today',
+      createdAt: new Date().toISOString(),
+    });
 
     expect(appStore.getState().quickLogs).toHaveLength(1);
     expect(appStore.getState().quickLogs[0].mood).toBe('bad');
@@ -162,7 +172,17 @@ describe('useAppStore Integration', () => {
       isPrimary: true,
       dateAdded: '2025-01-01',
     });
-    appStore.getState().addDashboardQuickLog(1, 'good');
+    appStore.getState().addQuickLog({
+      date: new Date().toISOString(),
+      overallFeeling: 1,
+      hadFlareUp: false,
+      flareUpNote: '',
+      painLevel: 1,
+      mood: 'good',
+      condition: 'general',
+      notes: '',
+      createdAt: new Date().toISOString(),
+    });
     appStore.getState().addMilestone('test');
 
     appStore.getState().resetAllData();
