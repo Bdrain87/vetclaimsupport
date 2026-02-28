@@ -227,6 +227,21 @@ function useFirstTimeRedirect() {
   const navigate = useNavigate();
   const location = useLocation();
   const hasOnboarded = useProfileStore((s) => s.hasCompletedOnboarding);
+  const [sessionChecked, setSessionChecked] = useState(false);
+  const [hasSession, setHasSession] = useState(false);
+
+  // Check for an existing auth session once on mount.
+  // Returning users who are signed in should NOT be forced through onboarding
+  // even if local store hasn't rehydrated yet — their profile (with
+  // onboarding_completed: true) will sync from Supabase momentarily.
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setHasSession(!!session);
+      setSessionChecked(true);
+    }).catch(() => {
+      setSessionChecked(true);
+    });
+  }, []);
 
   useEffect(() => {
     // Don't redirect until the profile store has hydrated — otherwise the
@@ -234,6 +249,11 @@ function useFirstTimeRedirect() {
     // redirect to onboarding on every app launch (especially native iOS
     // where encrypted storage rehydration is async).
     if (!useProfileStore.persist.hasHydrated()) return;
+    if (!sessionChecked) return;
+
+    // If user has an active session, they're a returning user — skip onboarding
+    // redirect. Their profile will sync and restore hasCompletedOnboarding.
+    if (hasSession) return;
 
     const isOnboardingPage = location.pathname === '/onboarding';
     const isLegalPage = ['/terms', '/privacy', '/disclaimer', '/settings/privacy', '/settings/terms', '/settings/disclaimer', '/profile/privacy', '/profile/terms', '/profile/disclaimer'].includes(location.pathname);
@@ -243,7 +263,7 @@ function useFirstTimeRedirect() {
     if (!hasOnboarded && !isOnboardingPage && !isLegalPage && !isLoginPage && !isAuthPage) {
       navigate('/onboarding', { replace: true });
     }
-  }, [location.pathname, navigate, hasOnboarded]);
+  }, [location.pathname, navigate, hasOnboarded, sessionChecked, hasSession]);
 }
 
 function AnimatedRoutes() {
