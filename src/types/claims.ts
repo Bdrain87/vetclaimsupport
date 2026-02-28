@@ -74,6 +74,14 @@ export interface Medication {
   prescribedFor: string;
   sideEffects: string;
   stillTaking: boolean;
+  // Extended fields (all optional for backwards compatibility)
+  dosage?: string;              // "50mg", "10ml"
+  frequency?: string;           // "twice daily", "as needed"
+  prescriber?: string;          // "Dr. Smith, VA Medical Center"
+  effectiveness?: 'effective' | 'partially_effective' | 'not_effective' | '';
+  conditionTags?: string[];     // link to multiple conditions
+  functionalImpactOnMed?: string;  // "With medication I can..."
+  functionalImpactOffMed?: string; // "Without medication I..."
 }
 
 // Combat Zone Entry for tracking hostile fire, imminent danger pay

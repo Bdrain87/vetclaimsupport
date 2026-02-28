@@ -606,12 +606,50 @@ const useAppStore = create<AppState>()(
             if (c.linkedPrimaryId === id) idsToRemove.push(c.id);
           });
         }
+
         // Clean up conditionEvidenceChecks for removed conditions
         const newChecks = { ...s.conditionEvidenceChecks };
         idsToRemove.forEach((rid) => { delete newChecks[rid]; });
+
+        // Cascade: remove from claimConditions
+        const claimConditions = s.claimConditions.filter(
+          (c) => !idsToRemove.includes(c.id),
+        );
+
+        // Cascade: remove conditionId from symptom tags
+        const symptoms = s.symptoms.map((sym) => ({
+          ...sym,
+          conditionTags: sym.conditionTags?.filter((t) => !idsToRemove.includes(t)) ?? [],
+        }));
+
+        // Cascade: clear prescribedFor references in medications
+        const medications = s.medications.map((m) => ({
+          ...m,
+          prescribedFor: idsToRemove.includes(m.prescribedFor) ? '' : m.prescribedFor,
+        }));
+
+        // Cascade: remove associated form drafts
+        const formDrafts = Object.fromEntries(
+          Object.entries(s.formDrafts).filter(
+            ([key]) => !idsToRemove.some((rid) => key.includes(rid)),
+          ),
+        ) as typeof s.formDrafts;
+
+        // Cascade: remove associated evidence documents
+        const evidenceDocuments = s.evidenceDocuments.filter(
+          (d) => !d.linkedEntries.some(
+            (link) => idsToRemove.includes(link.entryId),
+          ),
+        );
+
         return {
           userConditions: s.userConditions.filter((c) => !idsToRemove.includes(c.id)),
           conditionEvidenceChecks: newChecks,
+          claimConditions,
+          symptoms,
+          medications,
+          formDrafts,
+          evidenceDocuments,
         };
       }),
 
@@ -897,7 +935,7 @@ const useAppStore = create<AppState>()(
     }),
     {
       name: 'vcs-app-data',
-      version: 4,
+      version: 5,
       storage: createJSONStorage(() => encryptedStorage),
       migrate: (persistedState: unknown, version: number) => {
         let state = persistedState as Record<string, unknown>;
@@ -927,6 +965,8 @@ const useAppStore = create<AppState>()(
             };
           }
         }
+        // v5: Extended Medication fields (dosage, frequency, prescriber, etc.)
+        // All new fields are optional with defaults — no data transform needed.
         return state;
       },
       onRehydrateStorage: () => {

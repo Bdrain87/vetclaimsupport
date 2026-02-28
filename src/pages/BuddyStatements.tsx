@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useClaims } from '@/hooks/useClaims';
 import { useProfileStore } from '@/store/useProfileStore';
-import { Users, Plus, Trash2, Edit, Phone, Mail, FileText, CheckCircle, Clock, Send, Download, Camera, Copy, Check, ChevronRight, ChevronLeft, HelpCircle, Loader2 } from 'lucide-react';
+import { Users, Plus, Trash2, Edit, Phone, Mail, FileText, CheckCircle, Clock, Send, Download, Camera, Copy, Check, ChevronRight, ChevronLeft, HelpCircle, Loader2, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -18,6 +18,7 @@ import { ToastAction } from '@/components/ui/toast';
 import { DocumentUploader } from '@/components/documents/DocumentUploader';
 import { useToast } from '@/hooks/use-toast';
 import type { BuddyContact } from '@/types/claims';
+import { createBuddyShareLink, shareBuddyLink } from '@/services/buddyShare';
 import { PageContainer } from '@/components/PageContainer';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
@@ -442,6 +443,12 @@ Date: ${today}`;
                 </pre>
               </CardContent>
             </Card>
+            <div className="px-3 py-2 rounded-md bg-amber-500/10 border border-amber-500/20">
+              <p className="text-[11px] text-amber-200/70">
+                This is a template only — not a legal document. Review all content for accuracy
+                and consult with your VSO or attorney before submitting to the VA.
+              </p>
+            </div>
             <div className="flex gap-2">
               <Button onClick={copyToClipboard} className="flex-1 gap-2">
                 {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
@@ -452,6 +459,27 @@ Date: ${today}`;
                 {exportingStatement ? 'Exporting...' : 'Download PDF'}
               </Button>
             </div>
+            <Button
+              variant="outline"
+              className="w-full gap-2 mt-2"
+              onClick={async () => {
+                const result = await createBuddyShareLink({
+                  veteranFirstName: profile.firstName || 'A veteran',
+                  conditionName: selectedContact?.whatTheyWitnessed || 'their VA claim',
+                  templateContent: generateStatement(),
+                  relationshipHint: selectedContact?.relationship || '',
+                });
+                if (result.success && result.shareUrl) {
+                  await shareBuddyLink(result.shareUrl, profile.firstName || 'A veteran');
+                  toast({ title: 'Share link created', description: 'Send the link to your buddy to fill out.' });
+                } else {
+                  toast({ title: 'Could not create share link', description: result.error || 'Please try again.', variant: 'destructive' });
+                }
+              }}
+            >
+              <Share2 className="h-4 w-4" />
+              Share with Buddy
+            </Button>
           </div>
         );
     }
@@ -478,6 +506,14 @@ Date: ${today}`;
           {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
           {exporting ? 'Exporting...' : 'Export PDF'}
         </Button>
+      </div>
+
+      {/* Legal Disclaimer */}
+      <div className="px-4 py-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
+        <p className="text-xs text-amber-200/80">
+          This tool helps organize your thoughts. Generated letters are templates only —
+          not legal documents. Review with your VSO or attorney before submitting to the VA.
+        </p>
       </div>
 
       {/* Tabs */}

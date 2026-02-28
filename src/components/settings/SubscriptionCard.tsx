@@ -5,11 +5,12 @@ import { Button } from '@/components/ui/button';
 import { useProfileStore } from '@/store/useProfileStore';
 import { logger } from '@/utils/logger';
 import { supabase } from '@/lib/supabase';
-import { startCheckout, refreshEntitlementFromServer } from '@/services/entitlements';
+import { startCheckout, refreshEntitlementFromServer, verifyAppleReceipt } from '@/services/entitlements';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { isNativeApp, openExternalUrl } from '@/lib/platform';
 import { PREMIUM_COPY } from '@/data/legalCopy';
+import { purchaseViaApple, restoreApplePurchases } from '@/services/iap';
 
 export function SubscriptionCard() {
   const entitlement = useProfileStore((s) => s.entitlement);
@@ -22,11 +23,38 @@ export function SubscriptionCard() {
 
   const handleUpgrade = async () => {
     if (isNativeApp) {
-      // On iOS, purchases go through StoreKit (not yet implemented)
-      toast({
-        title: 'Coming Soon',
-        description: 'In-app purchases will be available in a future update.',
-      });
+      setLoading(true);
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          sessionStorage.setItem('post_login_redirect', '/settings');
+          navigate('/auth');
+          return;
+        }
+
+        const result = await purchaseViaApple();
+
+        if (result.cancelled) return; // User cancelled — no toast needed
+
+        if (result.success && result.entitlementActive) {
+          // Verify with our backend to record entitlement
+          await verifyAppleReceipt('revenuecat').catch(() => {});
+          // Refresh local entitlement state
+          await refreshEntitlementFromServer();
+          toast({ title: 'Premium Unlocked', description: 'Welcome to VCS Premium!' });
+        } else if (!result.success && result.error) {
+          toast({ title: 'Purchase Failed', description: result.error, variant: 'destructive' });
+        }
+      } catch (err) {
+        logger.error('iOS purchase failed:', err);
+        toast({
+          title: 'Purchase Failed',
+          description: err instanceof Error ? err.message : 'Something went wrong. Please try again.',
+          variant: 'destructive',
+        });
+      } finally {
+        setLoading(false);
+      }
       return;
     }
 
@@ -64,6 +92,22 @@ export function SubscriptionCard() {
         });
         return;
       }
+
+      if (isNativeApp) {
+        // Try restoring via Apple IAP first
+        const { restored, error } = await restoreApplePurchases();
+        if (restored) {
+          await verifyAppleReceipt('revenuecat').catch(() => {});
+          await refreshEntitlementFromServer();
+          toast({ title: 'Premium Restored', description: 'Welcome back! Premium access is active.' });
+          return;
+        }
+        if (error) {
+          logger.warn('Apple restore failed, falling back to server check:', error);
+        }
+      }
+
+      // Fallback: check server for existing entitlement (works for Stripe + Apple)
       const status = await refreshEntitlementFromServer();
       if (status === 'premium' || status === 'lifetime') {
         toast({ title: 'Premium Restored', description: 'Welcome back! Premium access is active.' });
@@ -127,17 +171,9 @@ export function SubscriptionCard() {
           ))}
         </ul>
 
-        {!isNativeApp && (
-          <Button onClick={handleUpgrade} disabled={loading} className="w-full" size="sm">
-            {loading ? 'Redirecting...' : PREMIUM_COPY.ctaLabel}
-          </Button>
-        )}
-
-        {isNativeApp && (
-          <Button onClick={handleUpgrade} disabled={loading} className="w-full" size="sm">
-            {loading ? 'Loading...' : PREMIUM_COPY.ctaLabel}
-          </Button>
-        )}
+        <Button onClick={handleUpgrade} disabled={loading} className="w-full" size="sm">
+          {loading ? (isNativeApp ? 'Processing...' : 'Redirecting...') : PREMIUM_COPY.ctaLabel}
+        </Button>
 
         <p className="text-[11px] text-muted-foreground/70 text-center">
           {PREMIUM_COPY.accountNote} {PREMIUM_COPY.signInNote}

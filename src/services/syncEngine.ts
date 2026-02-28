@@ -353,6 +353,49 @@ export async function pullFromCloud(): Promise<void> {
     }
   }
 
+  // ------------------------------------------------------------------
+  // Pull form drafts
+  // ------------------------------------------------------------------
+  const { data: formDraftRows, error: formDraftsError } = await supabase
+    .from('form_drafts')
+    .select('*')
+    .eq('user_id', userId);
+
+  if (formDraftsError) {
+    logger.error('[sync] pull form drafts failed', formDraftsError.message, formDraftsError);
+  }
+
+  if (formDraftRows && formDraftRows.length > 0) {
+    const appStore = useAppStore.getState();
+    const localDrafts = appStore.formDrafts;
+
+    for (const row of formDraftRows) {
+      if (!row.form_type || typeof row.form_type !== 'string') continue;
+
+      const key = row.condition_id
+        ? `${row.form_type}:${row.condition_id}`
+        : row.form_type;
+
+      const cloudContent = row.content as Record<string, string> & { lastModified?: string };
+      const cloudUpdatedAt = row.updated_at || '';
+      const localDraft = localDrafts[key];
+      const localUpdatedAt = localDraft?.lastModified || '';
+
+      // Merge: cloud wins if newer or local doesn't exist
+      if (!localDraft || (cloudUpdatedAt && cloudUpdatedAt > localUpdatedAt)) {
+        useAppStore.setState((s) => ({
+          formDrafts: {
+            ...s.formDrafts,
+            [key]: {
+              ...cloudContent,
+              lastModified: cloudUpdatedAt || new Date().toISOString(),
+            },
+          },
+        }));
+      }
+    }
+  }
+
   lastSyncedAt = new Date().toISOString();
   useProfileStore.getState().setLastSyncedAt(lastSyncedAt);
 }
@@ -491,6 +534,34 @@ export async function pushToCloud(): Promise<void> {
     if (error) {
       logger.error('[sync] push migraines failed', error);
       pushErrors.push('migraines');
+    }
+  }
+
+  // Push form drafts
+  const draftEntries = Object.entries(appState.formDrafts);
+  if (draftEntries.length > 0) {
+    const draftRows = draftEntries.map(([key, draft]) => {
+      // Key format: "tool:buddy-statement" or "tool:personal-statement:conditionId"
+      const parts = key.split(':');
+      const formType = parts.length >= 2 ? `${parts[0]}:${parts[1]}` : key;
+      const conditionId = parts.length > 2 ? parts.slice(2).join(':') : null;
+
+      const { lastModified, ...content } = draft;
+      return {
+        user_id: userId,
+        form_type: formType,
+        condition_id: conditionId,
+        content: content,
+        updated_at: lastModified || new Date().toISOString(),
+      };
+    });
+
+    const { error } = await supabase
+      .from('form_drafts')
+      .upsert(draftRows, { onConflict: 'user_id,form_type,condition_id' });
+    if (error) {
+      logger.error('[sync] push form drafts failed', error);
+      pushErrors.push('formDrafts');
     }
   }
 

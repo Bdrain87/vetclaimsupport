@@ -3,7 +3,7 @@ import { useClaims } from '@/hooks/useClaims';
 import { useEvidence } from '@/hooks/useEvidence';
 import { useFeatureFlag } from '@/store/useFeatureFlagStore';
 import { safeFormatDate } from '@/utils/dateUtils';
-import { Pill, Plus, Trash2, Edit, Calendar, AlertCircle, Download, Loader2, Info } from 'lucide-react';
+import { Pill, Plus, Trash2, Edit, Calendar, AlertCircle, Download, Loader2, Info, Stethoscope } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -18,6 +18,19 @@ import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/Evid
 import { PageContainer } from '@/components/PageContainer';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import type { Medication } from '@/types/claims';
+
+const EFFECTIVENESS_OPTIONS = [
+  { value: '', label: 'Not assessed' },
+  { value: 'effective', label: 'Effective' },
+  { value: 'partially_effective', label: 'Partially effective' },
+  { value: 'not_effective', label: 'Not effective' },
+] as const;
+
+const EFFECTIVENESS_COLORS: Record<string, string> = {
+  effective: 'text-success',
+  partially_effective: 'text-gold',
+  not_effective: 'text-destructive',
+};
 
 export default function Medications() {
   const { toast } = useToast();
@@ -36,6 +49,12 @@ export default function Medications() {
     prescribedFor: '',
     sideEffects: '',
     stillTaking: false,
+    dosage: '',
+    frequency: '',
+    prescriber: '',
+    effectiveness: '',
+    functionalImpactOnMed: '',
+    functionalImpactOffMed: '',
   });
 
   const resetForm = () => {
@@ -46,6 +65,12 @@ export default function Medications() {
       prescribedFor: '',
       sideEffects: '',
       stillTaking: false,
+      dosage: '',
+      frequency: '',
+      prescriber: '',
+      effectiveness: '',
+      functionalImpactOnMed: '',
+      functionalImpactOffMed: '',
     });
     setEditingId(null);
   };
@@ -69,6 +94,12 @@ export default function Medications() {
       prescribedFor: medication.prescribedFor,
       sideEffects: medication.sideEffects,
       stillTaking: medication.stillTaking,
+      dosage: medication.dosage || '',
+      frequency: medication.frequency || '',
+      prescriber: medication.prescriber || '',
+      effectiveness: medication.effectiveness || '',
+      functionalImpactOnMed: medication.functionalImpactOnMed || '',
+      functionalImpactOffMed: medication.functionalImpactOffMed || '',
     });
     setEditingId(medication.id);
     setIsOpen(true);
@@ -88,6 +119,75 @@ export default function Medications() {
       currentWithSideEffects: currentWithSideEffects.length,
     };
   }, [data.medications, currentMeds]);
+
+  const renderMedCard = (med: Medication, isActive: boolean, index: number) => (
+    <Card
+      key={med.id}
+      className={`data-card group hover:border-primary/30 transition-all duration-300 animate-fade-in ${!isActive ? 'opacity-75' : ''}`}
+      style={isActive ? { animationDelay: `${index * 0.05}s` } : undefined}
+    >
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between">
+          {isActive ? (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-success/15 text-success border border-success/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-success" />
+              Active
+            </span>
+          ) : (
+            <span className="inline-flex items-center rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground ring-1 ring-inset ring-border">
+              Discontinued
+            </span>
+          )}
+          <div className={`flex gap-1 ${isActive ? 'opacity-0 group-hover:opacity-100' : ''} transition-opacity`}>
+            <Button variant="ghost" size="icon" className="h-8 w-8 min-h-[44px] min-w-[44px]" onClick={() => handleEdit(med)} aria-label="Edit medication">
+              <Edit className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="h-8 w-8 min-h-[44px] min-w-[44px]" onClick={() => setDeleteTarget(med.id)} aria-label="Delete medication">
+              <Trash2 className="h-4 w-4 text-destructive" />
+            </Button>
+          </div>
+        </div>
+        <CardTitle className={`text-base mt-2 break-words ${isActive ? 'group-hover:text-primary transition-colors' : ''}`}>{med.name}</CardTitle>
+        {med.dosage && (
+          <p className="text-xs text-muted-foreground">{med.dosage}{med.frequency ? ` · ${med.frequency}` : ''}</p>
+        )}
+      </CardHeader>
+      <CardContent className="space-y-2 text-sm">
+        {med.prescribedFor && (
+          <p className="text-muted-foreground">For: <span className="text-foreground">{med.prescribedFor}</span></p>
+        )}
+        {med.prescriber && (
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <Stethoscope className="h-3.5 w-3.5" />
+            <span className="text-xs">{med.prescriber}</span>
+          </div>
+        )}
+        <div className="flex items-center gap-2 text-muted-foreground">
+          <Calendar className="h-4 w-4" />
+          {isActive
+            ? `Since ${safeFormatDate(med.startDate)}`
+            : `${safeFormatDate(med.startDate)} - ${safeFormatDate(med.endDate)}`
+          }
+        </div>
+        {med.effectiveness && med.effectiveness !== '' && (
+          <span className={`text-xs font-medium ${EFFECTIVENESS_COLORS[med.effectiveness] || 'text-muted-foreground'}`}>
+            {EFFECTIVENESS_OPTIONS.find(o => o.value === med.effectiveness)?.label}
+          </span>
+        )}
+        {med.sideEffects && (
+          <div className={`flex items-start gap-2 ${isActive ? 'text-destructive/80 bg-destructive/5 border border-destructive/10 rounded-xl p-3' : 'text-muted-foreground bg-muted/50 rounded p-2'} mt-2`}>
+            <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+            <span className="text-xs">{med.sideEffects}</span>
+          </div>
+        )}
+        <EvidenceThumbnails
+          entryType="medication"
+          entryId={med.id}
+          documents={documents}
+        />
+      </CardContent>
+    </Card>
+  );
 
   return (
     <PageContainer className="space-y-6 animate-fade-in overflow-x-hidden">
@@ -111,7 +211,7 @@ export default function Medications() {
             {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
             {exporting ? 'Exporting...' : 'Export PDF'}
           </Button>
-          
+
           <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
             <DialogTrigger asChild>
               <Button className="gap-2">
@@ -126,6 +226,8 @@ export default function Medications() {
             </DialogHeader>
             <form onSubmit={handleSubmit} className="flex flex-col">
               <div className="max-h-[60vh] overflow-y-auto space-y-4 pr-2">
+
+              {/* Basic Info */}
               <div className="space-y-2">
                 <Label htmlFor="name">Medication Name</Label>
                 <MedicationCombobox
@@ -134,7 +236,6 @@ export default function Medications() {
                     setFormData({
                       ...formData,
                       name,
-                      // Auto-fill prescribed for if selecting from list and field is empty
                       prescribedFor: prescribedFor && !formData.prescribedFor ? prescribedFor : formData.prescribedFor
                     });
                   }}
@@ -146,16 +247,49 @@ export default function Medications() {
                 </p>
               </div>
 
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="dosage">Dosage</Label>
+                  <Input
+                    id="dosage"
+                    placeholder="e.g., 50mg, 10ml"
+                    value={formData.dosage || ''}
+                    onChange={(e) => setFormData({ ...formData, dosage: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="frequency">Frequency</Label>
+                  <Input
+                    id="frequency"
+                    placeholder="e.g., twice daily, as needed"
+                    value={formData.frequency || ''}
+                    onChange={(e) => setFormData({ ...formData, frequency: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              {/* Prescriber */}
+              <div className="space-y-2">
+                <Label htmlFor="prescriber">Prescriber</Label>
+                <Input
+                  id="prescriber"
+                  placeholder="e.g., Dr. Smith, VA Medical Center"
+                  value={formData.prescriber || ''}
+                  onChange={(e) => setFormData({ ...formData, prescriber: e.target.value })}
+                />
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="prescribedFor">Prescribed For</Label>
-                <Input 
-                  id="prescribedFor" 
+                <Input
+                  id="prescribedFor"
                   placeholder="Condition being treated"
                   value={formData.prescribedFor}
                   onChange={(e) => setFormData({ ...formData, prescribedFor: e.target.value })}
                 />
               </div>
 
+              {/* Dates */}
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="startDate">Start Date</Label>
@@ -187,13 +321,35 @@ export default function Medications() {
                   <Label htmlFor="stillTaking" className="text-base">Still Taking?</Label>
                   <p className="text-sm text-muted-foreground">Currently on this medication</p>
                 </div>
-                <Switch 
+                <Switch
                   id="stillTaking"
                   checked={formData.stillTaking}
                   onCheckedChange={(checked) => setFormData({ ...formData, stillTaking: checked, endDate: checked ? '' : formData.endDate })}
                 />
               </div>
 
+              {/* Effectiveness */}
+              <div className="space-y-2">
+                <Label>Effectiveness</Label>
+                <div className="flex gap-2 flex-wrap">
+                  {EFFECTIVENESS_OPTIONS.map((opt) => (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, effectiveness: opt.value as Medication['effectiveness'] })}
+                      className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                        formData.effectiveness === opt.value
+                          ? 'bg-primary text-primary-foreground border-primary'
+                          : 'bg-secondary text-muted-foreground border-border hover:border-primary/50'
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Side Effects */}
               <div className="space-y-2">
                 <Label htmlFor="sideEffects">Side Effects</Label>
                 <Textarea
@@ -206,6 +362,31 @@ export default function Medications() {
                 <p className="text-[11px] text-muted-foreground">
                   Include severity (mild/moderate/severe), frequency, and when side effects started.
                   Side effects may qualify as secondary conditions for VA claims.
+                </p>
+              </div>
+
+              {/* Functional Impact */}
+              <div className="space-y-2">
+                <Label htmlFor="functionalImpactOnMed">Functional Impact — On Medication</Label>
+                <Textarea
+                  id="functionalImpactOnMed"
+                  placeholder="Describe how this medication affects your daily activities when taking it..."
+                  value={formData.functionalImpactOnMed || ''}
+                  onChange={(e) => setFormData({ ...formData, functionalImpactOnMed: e.target.value })}
+                  rows={2}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="functionalImpactOffMed">Functional Impact — Without Medication</Label>
+                <Textarea
+                  id="functionalImpactOffMed"
+                  placeholder="Describe your symptoms/limitations without this medication..."
+                  value={formData.functionalImpactOffMed || ''}
+                  onChange={(e) => setFormData({ ...formData, functionalImpactOffMed: e.target.value })}
+                  rows={2}
+                />
+                <p className="text-[11px] text-muted-foreground">
+                  VA raters compare your functioning with and without medication to assess severity.
                 </p>
               </div>
 
@@ -294,47 +475,7 @@ export default function Medications() {
             <span className="text-xs text-muted-foreground">({currentMeds.length})</span>
           </div>
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {currentMeds.map((med, index) => (
-              <Card key={med.id} className="data-card group hover:border-primary/30 transition-all duration-300 animate-fade-in" style={{ animationDelay: `${index * 0.05}s` }}>
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-success/15 text-success border border-success/20">
-                      <span className="w-1.5 h-1.5 rounded-full bg-success" />
-                      Active
-                    </span>
-                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Button variant="ghost" size="icon" className="h-8 w-8 min-h-[44px] min-w-[44px]" onClick={() => handleEdit(med)} aria-label="Edit medication">
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 min-h-[44px] min-w-[44px]" onClick={() => setDeleteTarget(med.id)} aria-label="Delete medication">
-                        <Trash2 className="h-4 w-4 text-destructive" />
-                      </Button>
-                    </div>
-                  </div>
-                  <CardTitle className="text-base mt-2 group-hover:text-primary transition-colors break-words">{med.name}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2 text-sm">
-                  {med.prescribedFor && (
-                    <p className="text-muted-foreground">For: <span className="text-foreground">{med.prescribedFor}</span></p>
-                  )}
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
-                    Since {safeFormatDate(med.startDate)}
-                  </div>
-                  {med.sideEffects && (
-                    <div className="flex items-start gap-2 text-destructive/80 bg-destructive/5 border border-destructive/10 rounded-xl p-3 mt-2">
-                      <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                      <span className="text-xs">{med.sideEffects}</span>
-                    </div>
-                  )}
-                  <EvidenceThumbnails
-                    entryType="medication"
-                    entryId={med.id}
-                    documents={documents}
-                  />
-                </CardContent>
-              </Card>
-            ))}
+            {currentMeds.map((med, index) => renderMedCard(med, true, index))}
           </div>
         </div>
       )}
@@ -344,46 +485,7 @@ export default function Medications() {
         <div className="space-y-4">
           <h2 className="text-lg font-semibold text-foreground">Past Medications</h2>
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {pastMeds.map((med) => (
-              <Card key={med.id} className="data-card opacity-75">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <span className="inline-flex items-center rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground ring-1 ring-inset ring-border">
-                      Discontinued
-                    </span>
-                    <div className="flex gap-1">
-                      <Button variant="ghost" size="icon" className="h-8 w-8 min-h-[44px] min-w-[44px]" onClick={() => handleEdit(med)} aria-label="Edit medication">
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 min-h-[44px] min-w-[44px]" onClick={() => setDeleteTarget(med.id)} aria-label="Delete medication">
-                        <Trash2 className="h-4 w-4 text-destructive" />
-                      </Button>
-                    </div>
-                  </div>
-                  <CardTitle className="text-base mt-2 break-words">{med.name}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2 text-sm">
-                  {med.prescribedFor && (
-                    <p className="text-muted-foreground">For: {med.prescribedFor}</p>
-                  )}
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
-                    {safeFormatDate(med.startDate)} - {safeFormatDate(med.endDate)}
-                  </div>
-                  {med.sideEffects && (
-                    <div className="flex items-start gap-2 text-muted-foreground bg-muted/50 rounded p-2 mt-2">
-                      <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                      <span className="text-xs">{med.sideEffects}</span>
-                    </div>
-                  )}
-                  <EvidenceThumbnails
-                    entryType="medication"
-                    entryId={med.id}
-                    documents={documents}
-                  />
-                </CardContent>
-              </Card>
-            ))}
+            {pastMeds.map((med, index) => renderMedCard(med, false, index))}
           </div>
         </div>
       )}

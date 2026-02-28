@@ -28,7 +28,7 @@ import {
   ChevronLeft, Scale, FileText, Link2, Stethoscope, CheckCircle2,
   AlertTriangle, Info, ExternalLink, Trash2, BookOpen,
   Activity, TrendingUp, Clock, Brain, Moon, Zap, ArrowRight,
-  Sparkles, Loader2, ChevronDown, FileCheck, Plus,
+  Sparkles, Loader2, ChevronDown, FileCheck, Plus, Pill,
 } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
@@ -967,6 +967,65 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
               />
             </>
           )}
+
+          {/* Linked Medications */}
+          {(() => {
+            const linkedMeds = data.medications.filter(
+              (m) =>
+                m.conditionTags?.includes(id || '') ||
+                m.conditionTags?.includes(userCondition?.conditionId || '') ||
+                m.prescribedFor === (conditionDetails.abbreviation || conditionDetails.name),
+            );
+            if (linkedMeds.length === 0) return null;
+            return (
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <Pill className="h-4 w-4" />
+                    Linked Medications ({linkedMeds.length})
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {linkedMeds.map((m) => (
+                    <div key={m.id} className="flex items-center justify-between text-sm p-2 rounded-lg bg-muted/30">
+                      <div>
+                        <p className="font-medium text-foreground">{m.name}</p>
+                        {m.dosage && (
+                          <p className="text-xs text-muted-foreground">{m.dosage}{m.frequency ? ` · ${m.frequency}` : ''}</p>
+                        )}
+                      </div>
+                      {m.effectiveness && m.effectiveness !== '' && (
+                        <Badge variant="outline" className="text-[10px]">{m.effectiveness.replace(/_/g, ' ')}</Badge>
+                      )}
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            );
+          })()}
+
+          {/* Nexus Letter CTA */}
+          <Card className="border-blue-500/20 bg-blue-500/5">
+            <CardContent className="p-4">
+              <div className="flex items-start gap-3">
+                <FileText className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <h3 className="text-sm font-semibold text-foreground">Need a nexus letter?</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    A nexus letter from a qualified provider can be the most important piece of evidence in your claim.
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="mt-2 text-xs"
+                    onClick={() => navigate(`/prep/nexus-guide?condition=${userCondition?.id || ''}`)}
+                  >
+                    Nexus Letter Guide <ArrowRight className="h-3 w-3 ml-1" />
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
 
         {/* C&P Exam Tab */}

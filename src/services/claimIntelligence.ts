@@ -424,6 +424,34 @@ export const ClaimIntelligence = {
       });
     }
 
+    // --- No personal statement drafts ---
+    if (pendingConditions.length > 0) {
+      const appStore = useAppStore.getState();
+      const hasPersonalStatement = Object.keys(appStore.formDrafts).some((k) => k.includes('personal-statement'));
+      if (!hasPersonalStatement) {
+        steps.push({
+          id: nextId(),
+          title: 'Draft a personal statement',
+          description: 'A personal statement in your own words is one of the most impactful pieces of evidence for your claim.',
+          priority: 'medium',
+          category: 'statements',
+          actionRoute: '/prep/personal-statement',
+        });
+      }
+    }
+
+    // --- No medications linked to conditions ---
+    if (claimsData.medications.length === 0 && pendingConditions.length > 0) {
+      steps.push({
+        id: nextId(),
+        title: 'Track your medications',
+        description: 'Log medications prescribed for your conditions. VA raters consider medication necessity and side effects.',
+        priority: 'medium',
+        category: 'medications',
+        actionRoute: '/health/medications',
+      });
+    }
+
     // --- Profile incomplete ---
     if (profile) {
       const missing: string[] = [];
@@ -1652,6 +1680,87 @@ export const ClaimIntelligence = {
       peakDays,
       insights,
     };
+  },
+
+  // -----------------------------------------------------------------------
+  // getMedicationRuleReadiness
+  // -----------------------------------------------------------------------
+  /**
+   * Returns a per-medication compliance score for the 2026 VA medication rule.
+   * Checks: prescriber, functional impact on/off, side effects, condition linkage.
+   */
+  getMedicationRuleReadiness(
+    claimsData: ClaimsData,
+  ): { perMed: { name: string; score: number; missing: string[] }[]; overall: number } {
+    const meds = claimsData.medications;
+    if (meds.length === 0) return { perMed: [], overall: 100 };
+
+    const checks: { label: string; test: (m: ClaimsData['medications'][0]) => boolean }[] = [
+      { label: 'Prescriber', test: (m) => !!m.prescriber?.trim() },
+      { label: 'Impact on med', test: (m) => !!m.functionalImpactOnMed?.trim() },
+      { label: 'Impact off med', test: (m) => !!m.functionalImpactOffMed?.trim() },
+      { label: 'Side effects', test: (m) => !!m.sideEffects?.trim() },
+      { label: 'Linked condition', test: (m) => !!m.prescribedFor?.trim() || (m.conditionTags?.length ?? 0) > 0 },
+    ];
+
+    let totalPassed = 0;
+    const perMed = meds.map((m) => {
+      const missing: string[] = [];
+      let passed = 0;
+      for (const c of checks) {
+        if (c.test(m)) {
+          passed++;
+        } else {
+          missing.push(c.label);
+        }
+      }
+      totalPassed += passed;
+      return { name: m.name, score: Math.round((passed / checks.length) * 100), missing };
+    });
+
+    const overall = Math.round((totalPassed / (meds.length * checks.length)) * 100);
+    return { perMed, overall };
+  },
+
+  // -----------------------------------------------------------------------
+  // getTDIUEligibility
+  // -----------------------------------------------------------------------
+  /**
+   * Checks whether a veteran's rated conditions meet TDIU schedular criteria.
+   */
+  getTDIUEligibility(
+    userConditions: UserCondition[],
+  ): { eligible: boolean; pathway: 'schedular' | 'extraschedular' | 'none'; reason: string } {
+    const approved = userConditions
+      .filter((c) => c.claimStatus === 'approved' && typeof c.rating === 'number' && c.rating > 0)
+      .map((c) => c.rating as number);
+
+    if (approved.length === 0) {
+      return { eligible: false, pathway: 'none', reason: 'No rated conditions' };
+    }
+
+    const hasOneAt60 = approved.some((r) => r >= 60);
+    const hasOneAt40 = approved.some((r) => r >= 40);
+
+    // Use VA math for combined
+    const sorted = [...approved].sort((a, b) => b - a);
+    let combined = 0;
+    for (const r of sorted) {
+      combined = combined + ((100 - combined) * r) / 100;
+      combined = Math.floor(combined);
+    }
+    const roundedCombined = Math.round(combined / 10) * 10;
+
+    if (hasOneAt60) {
+      return { eligible: true, pathway: 'schedular', reason: 'One condition at 60%+' };
+    }
+    if (roundedCombined >= 70 && hasOneAt40) {
+      return { eligible: true, pathway: 'schedular', reason: 'Combined 70%+ with one at 40%+' };
+    }
+    if (roundedCombined >= 40) {
+      return { eligible: false, pathway: 'extraschedular', reason: 'May qualify for extraschedular TDIU' };
+    }
+    return { eligible: false, pathway: 'none', reason: 'Does not meet TDIU criteria' };
   },
 };
 

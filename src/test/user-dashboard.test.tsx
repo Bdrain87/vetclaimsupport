@@ -46,7 +46,7 @@ describe('Dashboard User Interactions', () => {
     });
   });
 
-  it('shows "What to Do Next" section with action steps', async () => {
+  it('shows "Your Next Steps" section with action steps', async () => {
     render(
       <TestWrapper>
         <Dashboard />
@@ -54,7 +54,7 @@ describe('Dashboard User Interactions', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('What to Do Next')).toBeInTheDocument();
+      expect(screen.getByText('Your Next Steps')).toBeInTheDocument();
     });
   });
 

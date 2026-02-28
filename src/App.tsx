@@ -30,6 +30,7 @@ import { startSync, stopSync } from './services/syncEngine';
 import { supabase } from './lib/supabase';
 import { logger } from './utils/logger';
 import { initNativeOAuthListener } from './lib/nativeOAuth';
+import { initializePurchases, loginPurchases, logoutPurchases } from './services/iap';
 
 // Initialize native OAuth deep-link listener (no-op on web)
 initNativeOAuthListener().catch(() => {});
@@ -131,6 +132,14 @@ const EvidenceStrength = lazyWithRetry(() => import('./pages/EvidenceStrength'))
 const DecisionDecoder = lazyWithRetry(() => import('./pages/DecisionDecoder'));
 const VSOPacket = lazyWithRetry(() => import('./pages/VSOPacket'));
 const DoctorPacket = lazyWithRetry(() => import('./pages/DoctorPacket'));
+
+// Sprint 3-5 new pages
+const MedicationRuleTool = lazyWithRetry(() => import('./pages/MedicationRuleTool'));
+const CompensationLadder = lazyWithRetry(() => import('./pages/CompensationLadder'));
+const NexusGuide = lazyWithRetry(() => import('./pages/NexusGuide'));
+const TDIUChecker = lazyWithRetry(() => import('./pages/TDIUChecker'));
+const BenefitsDiscovery = lazyWithRetry(() => import('./pages/BenefitsDiscovery'));
+const BuddyFillPage = lazyWithRetry(() => import('./pages/BuddyFillPage'));
 
 // Account & Legal pages
 const DeleteAccountPage = lazyWithRetry(() => import('./pages/account/DeleteAccountPage'));
@@ -309,7 +318,12 @@ function AnimatedRoutes() {
           <Route path="/prep/summary" element={<ShareableSummary />} />
           <Route path="/prep/vso-packet" element={<PremiumGuard featureName="VSO Packet"><VSOPacket /></PremiumGuard>} />
           <Route path="/prep/doctor-packet" element={<PremiumGuard featureName="Doctor Packet"><DoctorPacket /></PremiumGuard>} />
+          <Route path="/prep/nexus-guide" element={<NexusGuide />} />
           <Route path="/prep/exam-day" element={<CPExamPacket />} />
+          <Route path="/prep/medication-rule" element={<MedicationRuleTool />} />
+          <Route path="/prep/compensation" element={<CompensationLadder />} />
+          <Route path="/prep/tdiu" element={<TDIUChecker />} />
+          <Route path="/prep/benefits" element={<BenefitsDiscovery />} />
           <Route path="/cp-exam-packet" element={<Navigate to="/prep/exam-day" replace />} />
 
           {/* === REFERENCE === */}
@@ -336,6 +350,9 @@ function AnimatedRoutes() {
           <Route path="/settings/about" element={<AboutVCS />} />
           <Route path="/settings/export-data" element={<ExportDataPage />} />
           <Route path="/settings/delete-account" element={<DeleteAccountPage />} />
+
+          {/* === PUBLIC (no auth) === */}
+          <Route path="/buddy/fill/:token" element={<BuddyFillPage />} />
 
           {/* === REDIRECTS FROM OLD ROUTES === */}
           <Route path="/dashboard" element={<Navigate to={isWeb ? '/app' : '/'} replace />} />
@@ -497,6 +514,15 @@ function AppContent() {
     );
   }
 
+  // Public buddy fill page — no auth required
+  if (location.pathname.startsWith('/buddy/fill/')) {
+    return (
+      <Suspense fallback={<LoadingFallback />}>
+        <BuddyFillPage />
+      </Suspense>
+    );
+  }
+
   // Free calculator — accessible without login
   if (location.pathname === '/calculator') {
     return (
@@ -587,23 +613,28 @@ function App() {
     checkDataRetention();
   }, []);
 
-  // Refresh entitlement and start/stop sync on auth state changes.
-  // Only start sync if user has an active session — avoids useless polling on native.
+  // Initialize IAP on native platform boot + refresh entitlement and sync.
   useEffect(() => {
+    // Initialize IAP (no-op on web, safe to call early)
+    initializePurchases().catch(() => {});
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         ensureFreshEntitlement().catch(() => {});
         startSync();
+        loginPurchases(session.user.id).catch(() => {});
       }
     }).catch(() => {});
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
         ensureFreshEntitlement().catch(() => {});
         startSync();
+        if (session) loginPurchases(session.user.id).catch(() => {});
       }
       if (event === 'SIGNED_OUT') {
         stopSync();
+        logoutPurchases().catch(() => {});
         // Clear welcome flag so signed-out users see WelcomeScreen again
         localStorage.removeItem('vcs_seen_welcome');
       }
