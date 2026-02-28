@@ -487,7 +487,8 @@ export default function Onboarding() {
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background">
-      <PageContainer className="flex-1 flex flex-col justify-center py-8">
+      <PageContainer className="flex-1 flex flex-col justify-start pt-[15vh] pb-8 overflow-y-auto"
+        style={{ paddingBottom: 'calc(2rem + var(--keyboard-height, 0px))' }}>
       <div className="w-full max-w-md mx-auto space-y-8">
         <ProgressDots />
 

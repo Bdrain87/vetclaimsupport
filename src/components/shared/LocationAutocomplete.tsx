@@ -108,6 +108,13 @@ export function LocationAutocomplete({
     highlightRef.current?.scrollIntoView({ block: 'nearest' });
   }, [highlightedIndex]);
 
+  // Scroll input into view when dropdown opens (keyboard may be covering it)
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+    }
+  }, [isOpen]);
+
   // Close on outside click
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -194,7 +201,7 @@ export function LocationAutocomplete({
           onChange={e => onChange(e.target.value)}
           onFocus={() => {
             if (results.length > 0) setIsOpen(true);
-            setTimeout(() => inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+            setTimeout(() => inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
           }}
           onKeyDown={handleKeyDown}
           onBlur={handleBlur}

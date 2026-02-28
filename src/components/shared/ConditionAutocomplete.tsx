@@ -97,6 +97,13 @@ export function ConditionAutocomplete({
     highlightRef.current?.scrollIntoView({ block: 'nearest' });
   }, [highlightedIndex]);
 
+  // Scroll input into view when dropdown opens (keyboard may be covering it)
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+    }
+  }, [isOpen]);
+
   // Close on outside click
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -160,7 +167,7 @@ export function ConditionAutocomplete({
           onFocus={() => {
             if (results.length > 0) setIsOpen(true);
             // Scroll input above keyboard on mobile
-            setTimeout(() => inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+            setTimeout(() => inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
           }}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
