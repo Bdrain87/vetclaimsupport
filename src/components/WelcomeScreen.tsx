@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Shield, Activity, FileText, Package } from 'lucide-react';
 import { signInWithApple, signInWithGoogle } from '@/services/auth';
 import { supabase } from '@/lib/supabase';
@@ -24,6 +24,7 @@ const FEATURES = [
 export function WelcomeScreen({ onSkip }: WelcomeScreenProps) {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const prefersReducedMotion = useReducedMotion();
   const [loading, setLoading] = useState<'apple' | 'google' | null>(null);
 
   // Auto-dismiss when auth succeeds
@@ -94,8 +95,8 @@ export function WelcomeScreen({ onSkip }: WelcomeScreenProps) {
       className="fixed inset-0 z-[9998] flex flex-col bg-black"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0, transition: { duration: 0.3, ease: 'easeInOut' } }}
-      transition={{ duration: 0.4 }}
+      exit={{ opacity: 0, transition: { duration: prefersReducedMotion ? 0.15 : 0.3, ease: 'easeInOut' } }}
+      transition={{ duration: prefersReducedMotion ? 0.15 : 0.4 }}
     >
       <div
         className="flex-1 flex flex-col items-center justify-center px-6 overflow-y-auto"
@@ -109,7 +110,7 @@ export function WelcomeScreen({ onSkip }: WelcomeScreenProps) {
           className="flex flex-col items-center gap-3 mb-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.1, duration: 0.4 }}
+          transition={prefersReducedMotion ? { duration: 0.15 } : { delay: 0.1, duration: 0.4 }}
         >
           <div className="relative">
             <img
@@ -146,7 +147,7 @@ export function WelcomeScreen({ onSkip }: WelcomeScreenProps) {
           className="w-full max-w-sm mb-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.4 }}
+          transition={prefersReducedMotion ? { duration: 0.15 } : { delay: 0.2, duration: 0.4 }}
         >
           <h2
             className="text-2xl font-semibold text-white text-center mb-5"
@@ -164,9 +165,9 @@ export function WelcomeScreen({ onSkip }: WelcomeScreenProps) {
                 key={f.label}
                 className="flex items-center gap-3 px-3 py-2.5 rounded-xl"
                 style={{ backgroundColor: 'rgba(255,255,255,0.04)' }}
-                initial={{ opacity: 0, x: -12 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 + i * 0.08, duration: 0.35 }}
+                initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: -12 }}
+                animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, x: 0 }}
+                transition={prefersReducedMotion ? { duration: 0.15 } : { delay: 0.3 + i * 0.08, duration: 0.35 }}
               >
                 <f.icon
                   size={18}
@@ -197,9 +198,9 @@ export function WelcomeScreen({ onSkip }: WelcomeScreenProps) {
               color: '#ffffff',
               border: '1px solid rgba(255,255,255,0.2)',
             }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.65, duration: 0.35 }}
+            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
+            animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+            transition={prefersReducedMotion ? { duration: 0.15 } : { delay: 0.65, duration: 0.35 }}
           >
             {loading === 'apple' ? (
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -221,9 +222,9 @@ export function WelcomeScreen({ onSkip }: WelcomeScreenProps) {
               color: '#1f1f1f',
               border: 'none',
             }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.75, duration: 0.35 }}
+            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
+            animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+            transition={prefersReducedMotion ? { duration: 0.15 } : { delay: 0.75, duration: 0.35 }}
           >
             {loading === 'google' ? (
               <div className="w-5 h-5 border-2 border-gray-400 border-t-gray-800 rounded-full animate-spin" />
@@ -255,7 +256,7 @@ export function WelcomeScreen({ onSkip }: WelcomeScreenProps) {
             className="flex items-center gap-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.85 }}
+            transition={prefersReducedMotion ? { duration: 0.15 } : { delay: 0.85 }}
           >
             <div
               className="h-px flex-1"
@@ -279,9 +280,9 @@ export function WelcomeScreen({ onSkip }: WelcomeScreenProps) {
               background: GOLD_GRADIENT,
               color: '#000000',
             }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 0.35 }}
+            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
+            animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+            transition={prefersReducedMotion ? { duration: 0.15 } : { delay: 0.9, duration: 0.35 }}
           >
             Sign in with Email
           </motion.button>
@@ -294,7 +295,7 @@ export function WelcomeScreen({ onSkip }: WelcomeScreenProps) {
           style={{ color: 'rgba(255,255,255,0.4)' }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.0 }}
+          transition={prefersReducedMotion ? { duration: 0.15 } : { delay: 1.0 }}
         >
           Explore free tools — no account needed
         </motion.button>
