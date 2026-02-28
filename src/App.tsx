@@ -230,10 +230,13 @@ function useFirstTimeRedirect() {
   const [sessionChecked, setSessionChecked] = useState(false);
   const [hasSession, setHasSession] = useState(false);
 
-  // Check for an existing auth session once on mount.
+  // Check for an existing auth session on mount AND subscribe to changes.
   // Returning users who are signed in should NOT be forced through onboarding
   // even if local store hasn't rehydrated yet — their profile (with
   // onboarding_completed: true) will sync from Supabase momentarily.
+  // We also listen for SIGNED_IN so that if the user signs in after mount
+  // (e.g. on native where the app shell is already rendered), hasSession
+  // updates immediately and we don't redirect them back to onboarding.
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setHasSession(!!session);
@@ -241,6 +244,12 @@ function useFirstTimeRedirect() {
     }).catch(() => {
       setSessionChecked(true);
     });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setHasSession(!!session);
+      setSessionChecked(true);
+    });
+    return () => subscription.unsubscribe();
   }, []);
 
   useEffect(() => {
