@@ -48,7 +48,11 @@ marketing/
 ads/
 website-assets/
 planning/
-.env*.local
+
+# Lock files from other package managers
+bun.lockb
+yarn.lock
+pnpm-lock.yaml
 
 # Export plists (local signing config)
 ExportOptions*.plist
