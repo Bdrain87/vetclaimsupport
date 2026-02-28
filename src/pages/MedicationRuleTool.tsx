@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useClaims } from '@/hooks/useClaims';
-import { useUserConditions } from '@/hooks/useUserConditions';
+
 import { Pill, CheckCircle2, Circle, AlertTriangle, ChevronRight, ShieldAlert } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -55,7 +55,6 @@ function getMedScore(med: Medication): number {
 
 export default function MedicationRuleTool() {
   const { data } = useClaims();
-  const { conditions } = useUserConditions();
 
   const analysis = useMemo(() => {
     const meds = data.medications;

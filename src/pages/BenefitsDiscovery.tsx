@@ -138,7 +138,7 @@ export default function BenefitsDiscovery() {
                     <BenefitCard key={benefit.id} benefit={benefit} qualified />
                   ))}
                   {items.locked.map((benefit) => (
-                    <BenefitCard key={benefit.id} benefit={benefit} qualified={false} currentRating={currentCombined} />
+                    <BenefitCard key={benefit.id} benefit={benefit} qualified={false} />
                   ))}
                 </div>
               )}
@@ -184,11 +184,9 @@ export default function BenefitsDiscovery() {
 function BenefitCard({
   benefit,
   qualified,
-  currentRating,
 }: {
   benefit: VABenefit;
   qualified: boolean;
-  currentRating?: number;
 }) {
   const [expanded, setExpanded] = useState(false);
 

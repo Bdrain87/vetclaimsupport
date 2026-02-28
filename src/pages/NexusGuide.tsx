@@ -25,7 +25,7 @@ interface GuideStep {
 export default function NexusGuide() {
   const [searchParams] = useSearchParams();
   const conditionId = searchParams.get('condition');
-  const { conditions, getCondition } = useUserConditions();
+  const { getCondition } = useUserConditions();
   const condition = conditionId ? getCondition(conditionId) : undefined;
 
   const [expandedStep, setExpandedStep] = useState<string | null>('what-is');

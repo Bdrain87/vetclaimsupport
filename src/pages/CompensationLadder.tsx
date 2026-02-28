@@ -1,7 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useUserConditions } from '@/hooks/useUserConditions';
-import { useClaims } from '@/hooks/useClaims';
 import {
   calculateCombinedRating,
   getMonthlyCompensation,
@@ -11,7 +10,6 @@ import type { DependentInfo } from '@/services/vaCompensation';
 import {
   DollarSign,
   TrendingUp,
-  ChevronRight,
   Users,
   Calculator,
   ArrowUp,
@@ -24,7 +22,6 @@ const WHAT_IF_OPTIONS = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
 export default function CompensationLadder() {
   const { conditions } = useUserConditions();
-  const { data } = useClaims();
 
   const [dependents, setDependents] = useState<DependentInfo>({
     spouse: false,

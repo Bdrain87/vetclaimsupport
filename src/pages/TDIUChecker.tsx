@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useUserConditions } from '@/hooks/useUserConditions';
-import { useClaims } from '@/hooks/useClaims';
 import { calculateCombinedRating, getMonthlyCompensation } from '@/services/vaCompensation';
 import {
   Briefcase,
@@ -70,8 +69,6 @@ function assessTDIU(ratings: { name: string; rating: number }[]): TDIUResult {
     };
   }
 
-  // What would it take?
-  const needFor60 = 60 - maxSingle;
   return {
     eligible: false,
     pathway: 'none',
@@ -90,7 +87,6 @@ const EMPLOYMENT_QUESTIONS = [
 
 export default function TDIUChecker() {
   const { conditions } = useUserConditions();
-  const { data } = useClaims();
   const [answers, setAnswers] = useState<Record<number, boolean>>({});
 
   const approvedWithRatings = useMemo(

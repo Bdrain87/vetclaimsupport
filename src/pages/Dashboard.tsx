@@ -41,7 +41,6 @@ import {
   Briefcase,
   Gift,
   ShieldAlert,
-  Pill,
 } from 'lucide-react';
 
 const JOURNEY_PHASE_LABELS = ['Research', 'Evidence', 'Filing', 'C&P Exam', 'Decision'];
