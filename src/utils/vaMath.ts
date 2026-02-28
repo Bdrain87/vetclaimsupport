@@ -19,7 +19,10 @@ export function combineRatings(ratings: number[]): number {
   for (const r of sorted) {
     remaining = remaining * (1 - r / 100);
   }
-  return Math.round((100 - remaining) / 10) * 10;
+  const rawCombined = 100 - remaining;
+  // Round to nearest 10% using floor(x + 0.5) for consistent round-half-up
+  // behavior, avoiding floating-point edge cases with Math.round.
+  return Math.floor(rawCombined / 10 + 0.5) * 10;
 }
 
 /**
@@ -55,5 +58,7 @@ export const calculatePlatinumRating = (ratings: number[], bilateral: number[]) 
   const rawCombined = 100 - current;
 
   // 3. Round to NEAREST 10% (0.5 rounds up, 0.4 rounds down)
-  return Math.round(rawCombined / 10) * 10;
+  // Use floor(x + 0.5) for consistent round-half-up, avoiding floating-point
+  // edge cases with Math.round.
+  return Math.floor(rawCombined / 10 + 0.5) * 10;
 };

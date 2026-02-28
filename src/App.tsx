@@ -600,11 +600,7 @@ function AppContent() {
     </div>
   );
 
-  if (isWeb) {
-    return <AuthGuard>{appShell}</AuthGuard>;
-  }
-
-  return appShell;
+  return <AuthGuard>{appShell}</AuthGuard>;
 }
 
 function App() {

@@ -82,8 +82,9 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
         } catch { /* ignore */ }
 
         if (status === 401) {
+          if (controller.signal.aborted) return null;
           const { data: refreshed } = await supabase.auth.refreshSession();
-          if (refreshed.session) {
+          if (refreshed.session && !controller.signal.aborted) {
             result = await supabase.functions.invoke('analyze-disabilities', { body });
             if (controller.signal.aborted) return null;
           }

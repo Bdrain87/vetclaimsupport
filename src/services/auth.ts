@@ -153,6 +153,8 @@ export const ALL_LOCAL_STORAGE_KEYS = [
   'vet-claim-status-log',
   'vcs-body-map-pins',
   'vcs-last-backup-date',
+  // Welcome screen
+  'vcs_seen_welcome',
   // Legacy migration keys
   'va-claims-tracker-data',
   'user-va-conditions',

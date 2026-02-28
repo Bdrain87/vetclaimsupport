@@ -840,9 +840,8 @@ const useAppStore = create<AppState>()(
               ),
             }));
           }
-
-          set({ _evidenceLoading: new Set() });
         } finally {
+          set({ _evidenceLoading: new Set() });
           _evidenceHydrating = false;
         }
       },
@@ -896,7 +895,6 @@ const useAppStore = create<AppState>()(
           );
 
           if (docsNeedingData.length === 0) {
-            set({ _claimDocLoading: new Set() });
             return;
           }
 
@@ -918,9 +916,8 @@ const useAppStore = create<AppState>()(
               ),
             }));
           }
-
-          set({ _claimDocLoading: new Set() });
         } finally {
+          set({ _claimDocLoading: new Set() });
           _claimDocHydrating = false;
         }
       },

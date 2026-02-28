@@ -46,8 +46,25 @@ export function EvidenceAttachment({
       return;
     }
 
+    const ALLOWED_TYPES = new Set([
+      'image/jpeg', 'image/png', 'image/heic', 'image/heif', 'image/webp', 'image/gif',
+      'application/pdf',
+      'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ]);
+    const ALLOWED_EXTENSIONS = /\.(jpe?g|png|heic|heif|webp|gif|pdf|docx?)$/i;
+
     const validFiles: File[] = [];
     Array.from(files).forEach(file => {
+      // Validate file type (whitelist)
+      if (!ALLOWED_TYPES.has(file.type) && !ALLOWED_EXTENSIONS.test(file.name)) {
+        toast({
+          title: 'Unsupported File Type',
+          description: `${file.name} is not a supported format. Please upload PDF, image, or Word files.`,
+          variant: 'destructive',
+        });
+        return;
+      }
+
       // Validate file size (10MB limit for documents)
       if (file.size > 10 * 1024 * 1024) {
         toast({

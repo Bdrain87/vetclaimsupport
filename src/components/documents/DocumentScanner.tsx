@@ -115,6 +115,20 @@ export function DocumentScanner({
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Validate file type
+    const ALLOWED_TYPES = new Set([
+      'image/jpeg', 'image/png', 'image/heic', 'image/heif', 'image/webp', 'image/gif',
+      'application/pdf',
+    ]);
+    if (!ALLOWED_TYPES.has(file.type) && !/\.(jpe?g|png|heic|heif|webp|gif|pdf)$/i.test(file.name)) {
+      toast({
+        title: 'Unsupported File Type',
+        description: 'Please upload PDF or image files.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     if (file.size > 10 * 1024 * 1024) {
       toast({
         title: 'File Too Large',

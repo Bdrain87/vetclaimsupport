@@ -34,6 +34,16 @@ export function DocumentUploader({ documents, category, onAdd, onDelete }: Docum
     if (!file) return;
     setFileError(null);
 
+    // Validate file type
+    const ALLOWED_TYPES = new Set([
+      'image/jpeg', 'image/png', 'image/heic', 'image/heif', 'image/webp', 'image/gif',
+      'application/pdf',
+    ]);
+    if (!ALLOWED_TYPES.has(file.type) && !/\.(jpe?g|png|heic|heif|webp|gif|pdf)$/i.test(file.name)) {
+      setFileError('Unsupported file type. Please upload PDF or image files.');
+      return;
+    }
+
     // Check file size (max 10MB)
     if (file.size > 10 * 1024 * 1024) {
       setFileError('File size must be less than 10MB');

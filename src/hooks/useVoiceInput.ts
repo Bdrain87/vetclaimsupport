@@ -154,7 +154,12 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}): UseVoiceInput
     recognitionRef.current = recognition;
 
     return () => {
+      recognition.onstart = null;
+      recognition.onend = null;
+      recognition.onerror = null;
+      recognition.onresult = null;
       recognition.abort();
+      recognitionRef.current = null;
     };
   }, [isSupported, continuous, language]);
 

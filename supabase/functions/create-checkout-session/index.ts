@@ -20,6 +20,27 @@ const getCorsHeaders = (origin: string | null) => ({
   'Access-Control-Max-Age': '86400',
 });
 
+// ---------------------------------------------------------------------------
+// In-memory rate limiting (max 5 checkout sessions per user per minute)
+// ---------------------------------------------------------------------------
+const CHECKOUT_RATE_LIMIT_WINDOW_MS = 60_000;
+const CHECKOUT_RATE_LIMIT_MAX = 5;
+const checkoutRateLimitMap = new Map<string, { count: number; resetAt: number }>();
+
+function checkCheckoutRateLimit(userId: string): boolean {
+  const now = Date.now();
+  const entry = checkoutRateLimitMap.get(userId);
+  if (!entry || now >= entry.resetAt) {
+    checkoutRateLimitMap.set(userId, { count: 1, resetAt: now + CHECKOUT_RATE_LIMIT_WINDOW_MS });
+    return true;
+  }
+  if (entry.count >= CHECKOUT_RATE_LIMIT_MAX) {
+    return false;
+  }
+  entry.count++;
+  return true;
+}
+
 serve(async (req: Request) => {
   const origin = req.headers.get('origin');
   const corsHeaders = getCorsHeaders(origin);
@@ -67,6 +88,14 @@ serve(async (req: Request) => {
       return new Response(
         JSON.stringify({ error: 'Unauthorized' }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Rate limiting: max 5 checkout sessions per user per minute
+    if (!checkCheckoutRateLimit(user.id)) {
+      return new Response(
+        JSON.stringify({ error: 'Too many requests. Please wait a moment and try again.' }),
+        { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
