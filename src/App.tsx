@@ -163,40 +163,7 @@ function LoadingFallback() {
       style={{ background: '#000000' }}
       role="status"
       aria-label="Loading application"
-    >
-      <div className="flex flex-col items-center gap-6 animate-fade-in">
-        <div className="relative">
-          <img
-            src="/app-icon.png"
-            alt=""
-            width={80}
-            height={80}
-            style={{ borderRadius: 18, display: 'block' }}
-          />
-          <div
-            className="absolute inset-0"
-            style={{
-              borderRadius: 18,
-              border: '2px solid rgba(197, 165, 90, 0.3)',
-              animation: 'pulse-ring 2s ease-in-out infinite',
-            }}
-          />
-        </div>
-        <div className="text-center">
-          <h1 className="text-white text-lg font-semibold tracking-wide">Vet Claim Support</h1>
-          <p className="text-white/40 text-xs mt-1">Get the rating you earned</p>
-        </div>
-        <div className="w-32 h-0.5 bg-white/10 rounded-full overflow-hidden" aria-hidden="true">
-          <div
-            className="h-full rounded-full"
-            style={{
-              background: 'var(--gold-gradient, linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%))',
-              animation: 'gradient-slide 1.2s ease-in-out infinite',
-            }}
-          />
-        </div>
-      </div>
-    </div>
+    />
   );
 }
 
