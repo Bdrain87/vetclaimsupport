@@ -18,10 +18,15 @@ import {
   formatCurrency,
   formatCurrencyExact,
 } from '@/utils/backPayCalc';
-import { SPOUSE_ADDITION_BY_RATING, CHILD_ADDITION_BY_RATING } from '@/data/compRates2026';
+import {
+  SPOUSE_ADDITION_BY_RATING,
+  CHILD_ADDITION_BY_RATING,
+  SCHOOL_CHILD_ADDITION_BY_RATING,
+  PARENT_ADDITION_BY_RATING,
+} from '@/data/compRates2026';
 
 const RATING_OPTIONS = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-const DEPENDENT_COUNT_OPTIONS = Array.from({ length: 11 }, (_, i) => i);
+const COUNT_OPTIONS = Array.from({ length: 11 }, (_, i) => i);
 
 // ---------------------------------------------------------------------------
 // Component
@@ -36,7 +41,9 @@ export default function BackPayEstimator() {
   const [currentRating, setCurrentRating] = useState<string>('');
   const [newRating, setNewRating] = useState<string>('');
   const [hasSpouse, setHasSpouse] = useState(false);
-  const [dependentCount, setDependentCount] = useState<string>('0');
+  const [childrenUnder18, setChildrenUnder18] = useState<string>('0');
+  const [childrenInSchool, setChildrenInSchool] = useState<string>('0');
+  const [dependentParents, setDependentParents] = useState<string>('0');
   const [exporting, setExporting] = useState(false);
 
   // Derived calculations
@@ -60,11 +67,13 @@ export default function BackPayEstimator() {
       return null;
     }
 
-    const depCount = parseInt(dependentCount, 10) || 0;
+    const under18 = parseInt(childrenUnder18, 10) || 0;
+    const inSchool = parseInt(childrenInSchool, 10) || 0;
+    const parents = parseInt(dependentParents, 10) || 0;
     const months = monthsBetween(startDate, today);
 
-    const monthlyBefore = calculateMonthlyCompensation(currentRatingNum, hasSpouse, depCount);
-    const monthlyAfter = calculateMonthlyCompensation(newRatingNum, hasSpouse, depCount);
+    const monthlyBefore = calculateMonthlyCompensation(currentRatingNum, hasSpouse, under18, inSchool, parents);
+    const monthlyAfter = calculateMonthlyCompensation(newRatingNum, hasSpouse, under18, inSchool, parents);
     const monthlyDifference = monthlyAfter - monthlyBefore;
     const totalBackPay = monthlyDifference * months;
 
@@ -76,7 +85,7 @@ export default function BackPayEstimator() {
       months,
       startDate,
     };
-  }, [effectiveDate, currentRating, newRating, hasSpouse, dependentCount]);
+  }, [effectiveDate, currentRating, newRating, hasSpouse, childrenUnder18, childrenInSchool, dependentParents]);
 
   const isFormComplete = effectiveDate && currentRating && newRating;
   const hasValidIncrease =
@@ -194,35 +203,73 @@ export default function BackPayEstimator() {
               Dependents affect compensation at {DEPENDENCY_THRESHOLD}% and above.
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Spouse checkbox */}
-              <div className="flex items-center gap-3 bg-muted/40 rounded-xl px-4 py-3 border border-border/30">
-                <Checkbox
-                  id="hasSpouse"
-                  checked={hasSpouse}
-                  onCheckedChange={(checked) => setHasSpouse(checked === true)}
-                />
-                <Label
-                  htmlFor="hasSpouse"
-                  className="text-foreground cursor-pointer select-none"
-                >
-                  Married (has spouse)
-                </Label>
-              </div>
+            {/* Spouse */}
+            <div className="flex items-center gap-3 bg-muted/40 rounded-xl px-4 py-3 border border-border/30">
+              <Checkbox
+                id="hasSpouse"
+                checked={hasSpouse}
+                onCheckedChange={(checked) => setHasSpouse(checked === true)}
+              />
+              <Label
+                htmlFor="hasSpouse"
+                className="text-foreground cursor-pointer select-none"
+              >
+                Married (has spouse)
+              </Label>
+            </div>
 
-              {/* Number of dependents */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {/* Children under 18 */}
               <div className="space-y-2">
                 <Label className="text-sm text-muted-foreground">
-                  Number of Dependents (children)
+                  Children under 18
                 </Label>
-                <Select value={dependentCount} onValueChange={setDependentCount}>
+                <Select value={childrenUnder18} onValueChange={setChildrenUnder18}>
                   <SelectTrigger>
                     <SelectValue placeholder="0" />
                   </SelectTrigger>
                   <SelectContent>
-                    {DEPENDENT_COUNT_OPTIONS.map((count) => (
+                    {COUNT_OPTIONS.map((count) => (
                       <SelectItem key={count} value={String(count)}>
-                        {count} {count === 1 ? 'dependent' : 'dependents'}
+                        {count}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Children 18-23 in school */}
+              <div className="space-y-2">
+                <Label className="text-sm text-muted-foreground">
+                  Children 18-23 in school
+                </Label>
+                <Select value={childrenInSchool} onValueChange={setChildrenInSchool}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="0" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {COUNT_OPTIONS.map((count) => (
+                      <SelectItem key={count} value={String(count)}>
+                        {count}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Dependent parents */}
+              <div className="space-y-2">
+                <Label className="text-sm text-muted-foreground">
+                  Dependent parents
+                </Label>
+                <Select value={dependentParents} onValueChange={setDependentParents}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="0" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {COUNT_OPTIONS.slice(0, 3).map((count) => (
+                      <SelectItem key={count} value={String(count)}>
+                        {count}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -334,7 +381,7 @@ export default function BackPayEstimator() {
                         newRating: parseInt(newRating, 10),
                         effectiveDate,
                         hasSpouse,
-                        dependentCount: parseInt(dependentCount, 10) || 0,
+                        dependentCount: (parseInt(childrenUnder18, 10) || 0) + (parseInt(childrenInSchool, 10) || 0) + (parseInt(dependentParents, 10) || 0),
                         monthlyBefore: calculation.monthlyBefore,
                         monthlyAfter: calculation.monthlyAfter,
                         monthlyDifference: calculation.monthlyDifference,
@@ -355,49 +402,15 @@ export default function BackPayEstimator() {
             </div>
 
             {/* Breakdown Detail */}
-            <div className="bg-muted/30 rounded-xl p-4 border border-border/20 space-y-2">
-              <p className="text-sm font-medium text-foreground">Calculation Breakdown</p>
-              <div className="space-y-1 text-sm text-muted-foreground">
-                <div className="flex justify-between gap-2">
-                  <span className="min-w-0">Base rate at {currentRating}%</span>
-                  <span className="shrink-0">{formatCurrencyExact(BASE_RATES[parseInt(currentRating, 10)] ?? 0)}/mo</span>
-                </div>
-                <div className="flex justify-between gap-2">
-                  <span className="min-w-0">Base rate at {newRating}%</span>
-                  <span className="shrink-0">{formatCurrencyExact(BASE_RATES[parseInt(newRating, 10)] ?? 0)}/mo</span>
-                </div>
-                {hasSpouse && parseInt(newRating, 10) >= DEPENDENCY_THRESHOLD && (
-                  <div className="flex justify-between gap-2">
-                    <span className="min-w-0">Spouse addition at {newRating}%</span>
-                    <span className="shrink-0">+{formatCurrencyExact(SPOUSE_ADDITION_BY_RATING[parseInt(newRating, 10)] ?? 0)}/mo</span>
-                  </div>
-                )}
-                {parseInt(dependentCount, 10) > 0 && parseInt(newRating, 10) >= DEPENDENCY_THRESHOLD && (
-                  <div className="flex justify-between gap-2">
-                    <span className="min-w-0">
-                      {dependentCount} dependent{parseInt(dependentCount, 10) !== 1 ? 's' : ''} at {newRating}%
-                    </span>
-                    <span className="shrink-0">+{formatCurrencyExact(parseInt(dependentCount, 10) * (CHILD_ADDITION_BY_RATING[parseInt(newRating, 10)] ?? 0))}/mo</span>
-                  </div>
-                )}
-                {hasSpouse && parseInt(currentRating, 10) >= DEPENDENCY_THRESHOLD && (
-                  <div className="flex justify-between gap-2 text-xs">
-                    <span className="italic min-w-0">Spouse already included at {currentRating}%</span>
-                    <span className="shrink-0">-{formatCurrencyExact(SPOUSE_ADDITION_BY_RATING[parseInt(currentRating, 10)] ?? 0)}/mo</span>
-                  </div>
-                )}
-                {parseInt(dependentCount, 10) > 0 && parseInt(currentRating, 10) >= DEPENDENCY_THRESHOLD && (
-                  <div className="flex justify-between gap-2 text-xs">
-                    <span className="italic min-w-0">Dependents already included at {currentRating}%</span>
-                    <span className="shrink-0">-{formatCurrencyExact(parseInt(dependentCount, 10) * (CHILD_ADDITION_BY_RATING[parseInt(currentRating, 10)] ?? 0))}/mo</span>
-                  </div>
-                )}
-                <div className="border-t border-border/30 pt-1 mt-1 flex justify-between gap-2 font-medium text-foreground">
-                  <span className="min-w-0">Net monthly difference</span>
-                  <span className="shrink-0">+{formatCurrencyExact(calculation.monthlyDifference)}/mo</span>
-                </div>
-              </div>
-            </div>
+            <BreakdownDetail
+              currentRating={parseInt(currentRating, 10)}
+              newRating={parseInt(newRating, 10)}
+              hasSpouse={hasSpouse}
+              childrenUnder18={parseInt(childrenUnder18, 10) || 0}
+              childrenInSchool={parseInt(childrenInSchool, 10) || 0}
+              dependentParents={parseInt(dependentParents, 10) || 0}
+              monthlyDifference={calculation.monthlyDifference}
+            />
           </CardContent>
         </Card>
       )}
@@ -429,5 +442,108 @@ export default function BackPayEstimator() {
         Estimate only — actual amounts determined by the VA based on your specific circumstances.
       </p>
     </PageContainer>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Breakdown sub-component
+// ---------------------------------------------------------------------------
+
+function BreakdownDetail({
+  currentRating,
+  newRating,
+  hasSpouse,
+  childrenUnder18,
+  childrenInSchool,
+  dependentParents,
+  monthlyDifference,
+}: {
+  currentRating: number;
+  newRating: number;
+  hasSpouse: boolean;
+  childrenUnder18: number;
+  childrenInSchool: number;
+  dependentParents: number;
+  monthlyDifference: number;
+}) {
+  const atThreshold = (rating: number) => rating >= DEPENDENCY_THRESHOLD;
+
+  return (
+    <div className="bg-muted/30 rounded-xl p-4 border border-border/20 space-y-2">
+      <p className="text-sm font-medium text-foreground">Calculation Breakdown</p>
+      <div className="space-y-1 text-sm text-muted-foreground">
+        <div className="flex justify-between gap-2">
+          <span className="min-w-0">Base rate at {currentRating}%</span>
+          <span className="shrink-0">{formatCurrencyExact(BASE_RATES[currentRating] ?? 0)}/mo</span>
+        </div>
+        <div className="flex justify-between gap-2">
+          <span className="min-w-0">Base rate at {newRating}%</span>
+          <span className="shrink-0">{formatCurrencyExact(BASE_RATES[newRating] ?? 0)}/mo</span>
+        </div>
+
+        {/* New rating additions */}
+        {hasSpouse && atThreshold(newRating) && (
+          <div className="flex justify-between gap-2">
+            <span className="min-w-0">Spouse addition at {newRating}%</span>
+            <span className="shrink-0">+{formatCurrencyExact(SPOUSE_ADDITION_BY_RATING[newRating] ?? 0)}/mo</span>
+          </div>
+        )}
+        {childrenUnder18 > 0 && atThreshold(newRating) && (
+          <div className="flex justify-between gap-2">
+            <span className="min-w-0">
+              {childrenUnder18} child{childrenUnder18 !== 1 ? 'ren' : ''} under 18 at {newRating}%
+            </span>
+            <span className="shrink-0">+{formatCurrencyExact(childrenUnder18 * (CHILD_ADDITION_BY_RATING[newRating] ?? 0))}/mo</span>
+          </div>
+        )}
+        {childrenInSchool > 0 && atThreshold(newRating) && (
+          <div className="flex justify-between gap-2">
+            <span className="min-w-0">
+              {childrenInSchool} child{childrenInSchool !== 1 ? 'ren' : ''} 18-23 in school at {newRating}%
+            </span>
+            <span className="shrink-0">+{formatCurrencyExact(childrenInSchool * (SCHOOL_CHILD_ADDITION_BY_RATING[newRating] ?? 0))}/mo</span>
+          </div>
+        )}
+        {dependentParents > 0 && atThreshold(newRating) && (
+          <div className="flex justify-between gap-2">
+            <span className="min-w-0">
+              {dependentParents} dependent parent{dependentParents !== 1 ? 's' : ''} at {newRating}%
+            </span>
+            <span className="shrink-0">+{formatCurrencyExact(dependentParents * (PARENT_ADDITION_BY_RATING[newRating] ?? 0))}/mo</span>
+          </div>
+        )}
+
+        {/* Current rating deductions (already included) */}
+        {hasSpouse && atThreshold(currentRating) && (
+          <div className="flex justify-between gap-2 text-xs">
+            <span className="italic min-w-0">Spouse already included at {currentRating}%</span>
+            <span className="shrink-0">-{formatCurrencyExact(SPOUSE_ADDITION_BY_RATING[currentRating] ?? 0)}/mo</span>
+          </div>
+        )}
+        {childrenUnder18 > 0 && atThreshold(currentRating) && (
+          <div className="flex justify-between gap-2 text-xs">
+            <span className="italic min-w-0">Children under 18 already at {currentRating}%</span>
+            <span className="shrink-0">-{formatCurrencyExact(childrenUnder18 * (CHILD_ADDITION_BY_RATING[currentRating] ?? 0))}/mo</span>
+          </div>
+        )}
+        {childrenInSchool > 0 && atThreshold(currentRating) && (
+          <div className="flex justify-between gap-2 text-xs">
+            <span className="italic min-w-0">Children in school already at {currentRating}%</span>
+            <span className="shrink-0">-{formatCurrencyExact(childrenInSchool * (SCHOOL_CHILD_ADDITION_BY_RATING[currentRating] ?? 0))}/mo</span>
+          </div>
+        )}
+        {dependentParents > 0 && atThreshold(currentRating) && (
+          <div className="flex justify-between gap-2 text-xs">
+            <span className="italic min-w-0">Dependent parents already at {currentRating}%</span>
+            <span className="shrink-0">-{formatCurrencyExact(dependentParents * (PARENT_ADDITION_BY_RATING[currentRating] ?? 0))}/mo</span>
+          </div>
+        )}
+
+        <div className="border-t border-border/30 pt-1 mt-1 flex justify-between gap-2 font-medium text-foreground">
+          <span className="min-w-0">Net monthly difference</span>
+          <span className="shrink-0">+{formatCurrencyExact(monthlyDifference)}/mo</span>
+        </div>
+      </div>
+    </div>
   );
 }

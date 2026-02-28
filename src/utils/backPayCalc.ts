@@ -4,7 +4,13 @@
  * Extracted from BackPayEstimator.tsx so they can be unit-tested independently.
  */
 
-import { COMP_RATES_2026, SPOUSE_ADDITION_BY_RATING, CHILD_ADDITION_BY_RATING } from '@/data/compRates2026';
+import {
+  COMP_RATES_2026,
+  SPOUSE_ADDITION_BY_RATING,
+  CHILD_ADDITION_BY_RATING,
+  SCHOOL_CHILD_ADDITION_BY_RATING,
+  PARENT_ADDITION_BY_RATING,
+} from '@/data/compRates2026';
 
 // ---------------------------------------------------------------------------
 // Rate constants
@@ -25,13 +31,17 @@ export const DEPENDENCY_THRESHOLD = 30;
 export function calculateMonthlyCompensation(
   rating: number,
   hasSpouse: boolean,
-  dependentCount: number
+  childrenUnder18: number,
+  childrenInSchool: number = 0,
+  dependentParents: number = 0,
 ): number {
   const base = BASE_RATES[rating] ?? 0;
   if (rating < DEPENDENCY_THRESHOLD) return base;
   const spouseAdd = hasSpouse ? (SPOUSE_ADDITION_BY_RATING[rating] ?? 0) : 0;
-  const depAdd = dependentCount * (CHILD_ADDITION_BY_RATING[rating] ?? 0);
-  return base + spouseAdd + depAdd;
+  const childAdd = childrenUnder18 * (CHILD_ADDITION_BY_RATING[rating] ?? 0);
+  const schoolAdd = childrenInSchool * (SCHOOL_CHILD_ADDITION_BY_RATING[rating] ?? 0);
+  const parentAdd = dependentParents * (PARENT_ADDITION_BY_RATING[rating] ?? 0);
+  return base + spouseAdd + childAdd + schoolAdd + parentAdd;
 }
 
 export function monthsBetween(start: Date, end: Date): number {
@@ -78,7 +88,9 @@ export function calculateBackPay(
   newRating: number,
   effectiveDate: string,
   hasSpouse: boolean,
-  dependentCount: number
+  childrenUnder18: number,
+  childrenInSchool: number = 0,
+  dependentParents: number = 0,
 ): {
   monthlyBefore: number;
   monthlyAfter: number;
@@ -110,8 +122,8 @@ export function calculateBackPay(
   if (startDate > today) return null;
 
   const months = monthsBetween(startDate, today);
-  const monthlyBefore = calculateMonthlyCompensation(currentRating, hasSpouse, dependentCount);
-  const monthlyAfter = calculateMonthlyCompensation(newRating, hasSpouse, dependentCount);
+  const monthlyBefore = calculateMonthlyCompensation(currentRating, hasSpouse, childrenUnder18, childrenInSchool, dependentParents);
+  const monthlyAfter = calculateMonthlyCompensation(newRating, hasSpouse, childrenUnder18, childrenInSchool, dependentParents);
   const monthlyDifference = monthlyAfter - monthlyBefore;
   const totalBackPay = monthlyDifference * months;
 
