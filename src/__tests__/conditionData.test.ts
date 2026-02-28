@@ -10,8 +10,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { vaConditions, getConditionById } from '@/data/vaConditions';
-import { vaDisabilitiesBySystem } from '@/data/vaDisabilities';
+import { vaConditions } from '@/data/vaConditions';
 import { resolveConditionId, getConditionDisplayName, isSuspiciousConditionId } from '@/utils/conditionResolver';
 import type { UserCondition } from '@/store/useAppStore';
 
