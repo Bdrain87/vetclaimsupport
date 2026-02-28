@@ -5,6 +5,7 @@ import { Shield, Activity, FileText, Package } from 'lucide-react';
 import { signInWithApple, signInWithGoogle } from '@/services/auth';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
+import { impactLight, impactMedium } from '@/lib/haptics';
 
 const GOLD_GRADIENT =
   'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)';
@@ -39,6 +40,7 @@ export function WelcomeScreen({ onSkip }: WelcomeScreenProps) {
   }, [onSkip]);
 
   const handleApple = async () => {
+    impactLight();
     setLoading('apple');
     try {
       await signInWithApple();
@@ -53,6 +55,7 @@ export function WelcomeScreen({ onSkip }: WelcomeScreenProps) {
   };
 
   const handleGoogle = async () => {
+    impactLight();
     setLoading('google');
     try {
       await signInWithGoogle();
@@ -67,6 +70,7 @@ export function WelcomeScreen({ onSkip }: WelcomeScreenProps) {
   };
 
   const handleEmail = () => {
+    impactMedium();
     navigate('/auth');
     onSkip();
   };
@@ -78,7 +82,13 @@ export function WelcomeScreen({ onSkip }: WelcomeScreenProps) {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
     >
-      <div className="flex-1 flex flex-col items-center justify-center px-6 py-8 overflow-y-auto">
+      <div
+        className="flex-1 flex flex-col items-center justify-center px-6 overflow-y-auto"
+        style={{
+          paddingTop: 'calc(2rem + env(safe-area-inset-top, 0px))',
+          paddingBottom: 'calc(2rem + env(safe-area-inset-bottom, 0px))',
+        }}
+      >
         {/* Brand header */}
         <motion.div
           className="flex flex-col items-center gap-3 mb-8"

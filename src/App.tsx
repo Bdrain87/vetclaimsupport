@@ -562,15 +562,24 @@ function App() {
   const handleSplashComplete = useCallback(async () => {
     setShowSplash(false);
     // On native, show auth-first welcome screen if no session exists
+    // and user hasn't already dismissed it ("try for free").
     if (!isWeb) {
       try {
         const { data: { session } } = await supabase.auth.getSession();
-        if (!session) setShowWelcome(true);
+        if (!session && !localStorage.getItem('vcs_seen_welcome')) {
+          setShowWelcome(true);
+        }
       } catch {
-        // If session check fails, show welcome anyway
-        setShowWelcome(true);
+        if (!localStorage.getItem('vcs_seen_welcome')) {
+          setShowWelcome(true);
+        }
       }
     }
+  }, []);
+
+  const dismissWelcome = useCallback(() => {
+    localStorage.setItem('vcs_seen_welcome', '1');
+    setShowWelcome(false);
   }, []);
 
   useEffect(() => {
@@ -606,10 +615,10 @@ function App() {
   useEffect(() => {
     if (!showWelcome) return;
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'SIGNED_IN') setShowWelcome(false);
+      if (event === 'SIGNED_IN') dismissWelcome();
     });
     return () => subscription.unsubscribe();
-  }, [showWelcome]);
+  }, [showWelcome, dismissWelcome]);
 
   return (
     <ErrorBoundary>
@@ -629,7 +638,7 @@ function App() {
               <RetentionWarningBanner />
               {hydrated ? <AppContent /> : <LoadingFallback />}
               {!showSplash && showWelcome && !isWeb && (
-                <WelcomeScreen onSkip={() => setShowWelcome(false)} />
+                <WelcomeScreen onSkip={dismissWelcome} />
               )}
               <Toaster />
             </BrowserRouter>
