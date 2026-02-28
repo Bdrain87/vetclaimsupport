@@ -603,6 +603,8 @@ function App() {
       }
       if (event === 'SIGNED_OUT') {
         stopSync();
+        // Clear welcome flag so signed-out users see WelcomeScreen again
+        localStorage.removeItem('vcs_seen_welcome');
       }
     });
     return () => {

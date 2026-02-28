@@ -232,6 +232,9 @@ function LogoBlock({
 }) {
   const size = 120;
   const borderRadius = 24;
+  // Accurate rounded-rect perimeter: 4 straight edges + 4 quarter-circle arcs
+  const straight = (size - 2) - 2 * borderRadius; // each straight segment
+  const perimeter = 4 * straight + 2 * Math.PI * borderRadius; // ~431
 
   return (
     <div className="relative" style={{ width: size, height: size }}>
@@ -277,8 +280,8 @@ function LogoBlock({
             fill="none"
             stroke="rgba(197,165,90,0.5)"
             strokeWidth="1.5"
-            strokeDasharray={`${(size - 2) * 2 + (size - 2) * 2}`}
-            strokeDashoffset={`${(size - 2) * 2 + (size - 2) * 2}`}
+            strokeDasharray={perimeter}
+            strokeDashoffset={perimeter}
             style={{
               animation: 'goldRingDraw 700ms ease-out 400ms forwards',
             }}
