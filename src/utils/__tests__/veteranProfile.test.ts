@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import {
   getVeteranProfile,
   saveVeteranProfile,
@@ -8,6 +8,7 @@ import {
   getSavedServiceDates,
   clearVeteranProfile,
 } from '../veteranProfile';
+import { logger } from '@/utils/logger';
 import type { VeteranProfile } from '../veteranProfile';
 
 const STORAGE_KEY = 'vet-claim-veteran-profile';
@@ -15,6 +16,10 @@ const STORAGE_KEY = 'vet-claim-veteran-profile';
 // ---------------------------------------------------------------------------
 // Test setup: localStorage is cleared in src/test/setup.ts afterEach
 // ---------------------------------------------------------------------------
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe('getVeteranProfile', () => {
   it('returns a default profile when localStorage is empty', () => {
@@ -45,7 +50,7 @@ describe('getVeteranProfile', () => {
 
   it('returns default profile when localStorage has invalid JSON', () => {
     localStorage.setItem(STORAGE_KEY, '{{not valid json');
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const warnSpy = vi.spyOn(logger, 'warn').mockImplementation(() => {});
 
     const profile = getVeteranProfile();
     expect(profile.primaryMOS).toBe('');
@@ -101,16 +106,14 @@ describe('saveVeteranProfile', () => {
   });
 
   it('handles QuotaExceededError gracefully', () => {
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    const setItemSpy = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+    const warnSpy = vi.spyOn(logger, 'warn').mockImplementation(() => {});
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
       throw new DOMException('QuotaExceededError');
     });
 
     // Should not throw
     expect(() => saveVeteranProfile({ primaryMOS: 'test' })).not.toThrow();
     expect(warnSpy).toHaveBeenCalled();
-
-    setItemSpy.mockRestore();
   });
 });
 
@@ -224,14 +227,12 @@ describe('clearVeteranProfile', () => {
   });
 
   it('handles localStorage errors gracefully', () => {
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    const removeSpy = vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(() => {
+    const warnSpy = vi.spyOn(logger, 'warn').mockImplementation(() => {});
+    vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(() => {
       throw new Error('Storage unavailable');
     });
 
     expect(() => clearVeteranProfile()).not.toThrow();
     expect(warnSpy).toHaveBeenCalled();
-
-    removeSpy.mockRestore();
   });
 });
