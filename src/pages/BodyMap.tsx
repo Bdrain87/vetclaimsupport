@@ -760,7 +760,7 @@ export default function BodyMap() {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => openEditPinDialog(pin)}
-                                className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
+                                className="h-8 w-8 min-h-[44px] min-w-[44px] p-0 text-muted-foreground hover:text-foreground"
                                 title="Edit pin"
                               >
                                 <Edit3 className="h-3.5 w-3.5" />
@@ -769,7 +769,7 @@ export default function BodyMap() {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => deletePin(pin.id)}
-                                className="h-7 w-7 p-0 text-muted-foreground hover:text-red-400"
+                                className="h-8 w-8 min-h-[44px] min-w-[44px] p-0 text-muted-foreground hover:text-red-400"
                                 title="Delete pin"
                               >
                                 <Trash2 className="h-3.5 w-3.5" />
@@ -1132,7 +1132,7 @@ export default function BodyMap() {
                                     key={level}
                                     type="button"
                                     onClick={() => setPainLevel(key, painLevel === level ? 0 : level)}
-                                    className={`flex-1 h-5 rounded-sm text-[9px] font-bold transition-all ${
+                                    className={`flex-1 h-7 min-h-[28px] rounded-sm text-[10px] font-bold transition-all ${
                                       level <= painLevel
                                         ? level >= 7 ? 'bg-red-500/70 text-white'
                                           : level >= 4 ? 'bg-yellow-500/60 text-white'
@@ -1191,17 +1191,17 @@ export default function BodyMap() {
                               </Badge>
                             </div>
                             {pin.flareTriggers && (
-                              <p className="text-[11px] text-muted-foreground mt-1">
+                              <p className="text-[11px] text-muted-foreground mt-1 line-clamp-2">
                                 Triggers: {pin.flareTriggers}
                               </p>
                             )}
                             {pin.functionalImpact && (
-                              <p className="text-[11px] text-muted-foreground mt-0.5">
+                              <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-2">
                                 Impact: {pin.functionalImpact}
                               </p>
                             )}
                             {pin.notes && (
-                              <p className="text-[11px] text-muted-foreground mt-0.5 italic">
+                              <p className="text-[11px] text-muted-foreground mt-0.5 italic line-clamp-2">
                                 {pin.notes}
                               </p>
                             )}
@@ -1211,17 +1211,17 @@ export default function BodyMap() {
                               variant="ghost"
                               size="sm"
                               onClick={() => openEditPinDialog(pin)}
-                              className="h-6 w-6 p-0 text-muted-foreground hover:text-foreground"
+                              className="h-8 w-8 min-h-[44px] min-w-[44px] p-0 text-muted-foreground hover:text-foreground"
                             >
-                              <Edit3 className="h-3 w-3" />
+                              <Edit3 className="h-3.5 w-3.5" />
                             </Button>
                             <Button
                               variant="ghost"
                               size="sm"
                               onClick={() => deletePin(pin.id)}
-                              className="h-6 w-6 p-0 text-muted-foreground hover:text-red-400"
+                              className="h-8 w-8 min-h-[44px] min-w-[44px] p-0 text-muted-foreground hover:text-red-400"
                             >
-                              <Trash2 className="h-3 w-3" />
+                              <Trash2 className="h-3.5 w-3.5" />
                             </Button>
                           </div>
                         </div>
@@ -1376,7 +1376,7 @@ export default function BodyMap() {
                     value={pinForm.symptomType}
                     onChange={(e) => setPinForm((f) => ({ ...f, symptomType: e.target.value }))}
                     placeholder="e.g., Sharp pain, Numbness, Stiffness..."
-                    className="w-full rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60"
+                    className="w-full rounded-xl border border-border bg-muted/30 px-4 py-3 min-h-[44px] text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60"
                   />
                 </div>
 
@@ -1420,7 +1420,7 @@ export default function BodyMap() {
                     id="pin-frequency"
                     value={pinForm.frequency}
                     onChange={(e) => setPinForm((f) => ({ ...f, frequency: e.target.value as BodyMapPin['frequency'] }))}
-                    className="w-full rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60"
+                    className="w-full rounded-xl border border-border bg-muted/30 px-4 py-3 min-h-[44px] text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60"
                   >
                     <option value="daily">Daily</option>
                     <option value="weekly">Weekly</option>
@@ -1439,7 +1439,7 @@ export default function BodyMap() {
                     type="date"
                     value={pinForm.onsetDate}
                     onChange={(e) => setPinForm((f) => ({ ...f, onsetDate: e.target.value }))}
-                    className="w-full rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60"
+                    className="w-full rounded-xl border border-border bg-muted/30 px-4 py-3 min-h-[44px] text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60"
                   />
                 </div>
 
@@ -1454,7 +1454,7 @@ export default function BodyMap() {
                     value={pinForm.flareTriggers}
                     onChange={(e) => setPinForm((f) => ({ ...f, flareTriggers: e.target.value }))}
                     placeholder="e.g., Cold weather, Lifting, Extended standing..."
-                    className="w-full rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60"
+                    className="w-full rounded-xl border border-border bg-muted/30 px-4 py-3 min-h-[44px] text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60"
                   />
                 </div>
 
@@ -1469,7 +1469,7 @@ export default function BodyMap() {
                     value={pinForm.functionalImpact}
                     onChange={(e) => setPinForm((f) => ({ ...f, functionalImpact: e.target.value }))}
                     placeholder="e.g., Cannot lift above shoulder, Limits walking..."
-                    className="w-full rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60"
+                    className="w-full rounded-xl border border-border bg-muted/30 px-4 py-3 min-h-[44px] text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60"
                   />
                 </div>
 

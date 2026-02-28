@@ -371,7 +371,7 @@ export default function Exposures() {
                 
                 {exposure.details && (
                   <div className="bg-muted/50 rounded-lg p-3">
-                    <p className="text-sm">{exposure.details}</p>
+                    <p className="text-sm line-clamp-3">{exposure.details}</p>
                   </div>
                 )}
 

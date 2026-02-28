@@ -719,13 +719,13 @@ Date: ${today}`;
                   </CardHeader>
                   <CardContent className="space-y-3 text-sm">
                     {contact.relationship && (
-                      <p className="text-muted-foreground">{contact.relationship}</p>
+                      <p className="text-muted-foreground truncate">{contact.relationship}</p>
                     )}
 
                     {contact.whatTheyWitnessed && (
                       <div className="bg-muted/50 rounded-lg p-3">
                         <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Can Verify</p>
-                        <p className="text-sm">{contact.whatTheyWitnessed}</p>
+                        <p className="text-sm line-clamp-3">{contact.whatTheyWitnessed}</p>
                       </div>
                     )}
 

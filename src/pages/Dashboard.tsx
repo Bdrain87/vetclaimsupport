@@ -583,7 +583,7 @@ export default function Dashboard() {
                         type="button"
                         onClick={() => setQuickLogFlareUpDuration(key)}
                         className={cn(
-                          'text-[11px] px-2.5 py-1 rounded-full border transition-colors',
+                          'text-[11px] px-3 py-2 min-h-[36px] rounded-full border transition-colors',
                           quickLogFlareUpDuration === key
                             ? 'bg-amber-500/20 border-amber-500/40 text-amber-300'
                             : 'border-border text-muted-foreground hover:bg-accent',
@@ -611,7 +611,7 @@ export default function Dashboard() {
                           )
                         }
                         className={cn(
-                          'text-[11px] px-2.5 py-1 rounded-full border transition-colors',
+                          'text-[11px] px-3 py-2 min-h-[36px] rounded-full border transition-colors',
                           quickLogFlareUpTriggers.includes(trigger)
                             ? 'bg-amber-500/20 border-amber-500/40 text-amber-300'
                             : 'border-border text-muted-foreground hover:bg-accent',
@@ -631,7 +631,7 @@ export default function Dashboard() {
                     value={quickLogFlareUpActivities}
                     onChange={(e) => setQuickLogFlareUpActivities(e.target.value)}
                     placeholder="e.g., couldn't walk, missed work..."
-                    className="w-full text-sm bg-muted/50 border border-border rounded-lg px-3 py-2 text-foreground placeholder:text-muted-foreground/50"
+                    className="w-full text-sm bg-muted/50 border border-border rounded-xl px-4 py-3 min-h-[44px] text-foreground placeholder:text-muted-foreground/50"
                   />
                 </div>
 
@@ -643,7 +643,7 @@ export default function Dashboard() {
                     value={quickLogFlareNote}
                     onChange={(e) => setQuickLogFlareNote(e.target.value)}
                     placeholder="Describe the flare-up..."
-                    className="w-full text-sm bg-muted/50 border border-border rounded-lg px-3 py-2 text-foreground placeholder:text-muted-foreground/50"
+                    className="w-full text-sm bg-muted/50 border border-border rounded-xl px-4 py-3 min-h-[44px] text-foreground placeholder:text-muted-foreground/50"
                   />
                 </div>
               </div>

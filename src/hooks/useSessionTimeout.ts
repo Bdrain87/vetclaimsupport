@@ -41,8 +41,16 @@ export function useSessionTimeout() {
   const handleSignOut = useCallback(async () => {
     clearTimers();
     stopSync();
-    await signOut();
-    await clearLocalData();
+    try {
+      await signOut();
+    } catch {
+      // Sign-out failure is non-fatal — local data clear + redirect must still happen
+    }
+    try {
+      await clearLocalData();
+    } catch {
+      // IndexedDB clear failure is non-fatal — redirect must still happen
+    }
     window.location.replace('/auth');
   }, [clearTimers]);
 

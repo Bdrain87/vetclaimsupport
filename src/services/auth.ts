@@ -102,6 +102,12 @@ export async function resetPassword(email: string) {
 /**
  * All localStorage keys the app may write. Kept here so sign-out and account
  * deletion both clear the same comprehensive list.
+ *
+ * !! MAINTENANCE WARNING !!
+ * This array is manually maintained. If you add a new localStorage key
+ * anywhere in the codebase, you MUST also add it here. Otherwise sign-out
+ * and account deletion will not fully clear user data (privacy issue).
+ * Search the codebase for `localStorage.setItem` to audit coverage.
  */
 export const ALL_LOCAL_STORAGE_KEYS = [
   // Zustand persisted stores

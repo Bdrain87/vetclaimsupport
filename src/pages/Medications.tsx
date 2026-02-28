@@ -154,14 +154,14 @@ export default function Medications() {
             </Button>
           </div>
         </div>
-        <CardTitle className={`text-base mt-2 break-words ${isActive ? 'group-hover:text-primary transition-colors' : ''}`}>{med.name}</CardTitle>
+        <CardTitle className={`text-base mt-2 break-words line-clamp-2 ${isActive ? 'group-hover:text-primary transition-colors' : ''}`}>{med.name}</CardTitle>
         {med.dosage && (
           <p className="text-xs text-muted-foreground">{med.dosage}{med.frequency ? ` · ${med.frequency}` : ''}</p>
         )}
       </CardHeader>
       <CardContent className="space-y-2 text-sm">
         {med.prescribedFor && (
-          <p className="text-muted-foreground">For: <span className="text-foreground">{med.prescribedFor}</span></p>
+          <p className="text-muted-foreground line-clamp-1">For: <span className="text-foreground">{med.prescribedFor}</span></p>
         )}
         {med.conditionTags && med.conditionTags.length > 0 && (
           <div className="flex flex-wrap gap-1">
@@ -196,7 +196,7 @@ export default function Medications() {
         {med.sideEffects && (
           <div className={`flex items-start gap-2 ${isActive ? 'text-destructive/80 bg-destructive/5 border border-destructive/10 rounded-xl p-3' : 'text-muted-foreground bg-muted/50 rounded p-2'} mt-2`}>
             <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
-            <span className="text-xs">{med.sideEffects}</span>
+            <span className="text-xs line-clamp-3">{med.sideEffects}</span>
           </div>
         )}
         <EvidenceThumbnails

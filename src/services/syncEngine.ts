@@ -61,6 +61,7 @@ let currentStatus: SyncStatus = 'offline';
 let lastSyncedAt: string | null = null;
 let syncInProgress: Promise<void> | null = null;
 let consecutiveFailures = 0;
+let lastFailureAt = 0;
 const statusListeners = new Set<(status: SyncStatus) => void>();
 const SYNC_DEBOUNCE_MS = 60000; // 60 seconds — avoid hammering the server
 
@@ -581,12 +582,14 @@ export async function syncNow(): Promise<void> {
     return;
   }
 
-  // Exponential backoff: skip sync if we've failed repeatedly
+  // Exponential backoff: skip sync if we've failed recently
   if (consecutiveFailures >= 3) {
     const backoffMs = Math.min(SYNC_DEBOUNCE_MS * Math.pow(2, consecutiveFailures - 2), 600000);
-    // Let the interval handle eventual retry — don't pile on
-    logger.warn(`[sync] Backing off after ${consecutiveFailures} failures (next retry in ~${Math.round(backoffMs / 1000)}s)`);
-    return;
+    const elapsed = Date.now() - lastFailureAt;
+    if (elapsed < backoffMs) {
+      logger.warn(`[sync] Backing off after ${consecutiveFailures} failures (retry in ~${Math.round((backoffMs - elapsed) / 1000)}s)`);
+      return;
+    }
   }
 
   const doSync = async () => {
@@ -602,10 +605,12 @@ export async function syncNow(): Promise<void> {
       await pushToCloud();
       setStatus('synced');
       consecutiveFailures = 0;
+      lastFailureAt = 0;
     } catch (err) {
       logger.error('[sync] syncNow failed:', err instanceof Error ? err.message : err);
       setStatus('error');
       consecutiveFailures++;
+      lastFailureAt = Date.now();
     }
   };
 
@@ -642,7 +647,8 @@ export function stopSync(): void {
 }
 
 function handleOnline() {
-  consecutiveFailures = 0; // Reset backoff on reconnect
+  consecutiveFailures = 0;
+  lastFailureAt = 0;
   syncNow().catch(() => { /* handled inside syncNow */ });
 }
 

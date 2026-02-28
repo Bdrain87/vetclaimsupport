@@ -438,21 +438,21 @@ export default function MedicalVisits() {
                 {visit.diagnosis && (
                   <div>
                     <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Diagnosis</p>
-                    <p className="text-sm">{visit.diagnosis}</p>
+                    <p className="text-sm line-clamp-2">{visit.diagnosis}</p>
                   </div>
                 )}
 
                 {visit.treatment && (
                   <div>
                     <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Treatment</p>
-                    <p className="text-sm">{visit.treatment}</p>
+                    <p className="text-sm line-clamp-2">{visit.treatment}</p>
                   </div>
                 )}
 
                 {visit.notes && (
                   <div className="flex items-start gap-2 text-sm text-muted-foreground bg-muted/50 rounded-lg p-3">
                     <FileText className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                    <p className="break-words min-w-0">{visit.notes}</p>
+                    <p className="break-words min-w-0 line-clamp-3">{visit.notes}</p>
                   </div>
                 )}
 

@@ -189,7 +189,7 @@ export default function BuddyFillPage() {
                   type="text"
                   value={form.buddyName}
                   onChange={(e) => setForm((f) => ({ ...f, buddyName: e.target.value }))}
-                  className="w-full bg-muted/50 border border-border rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50"
+                  className="w-full bg-muted/50 border border-border rounded-xl px-4 py-3 min-h-[44px] text-sm text-foreground placeholder:text-muted-foreground/50"
                   placeholder="John Smith"
                 />
               </div>
@@ -202,7 +202,7 @@ export default function BuddyFillPage() {
                   type="text"
                   value={form.buddyRelationship}
                   onChange={(e) => setForm((f) => ({ ...f, buddyRelationship: e.target.value }))}
-                  className="w-full bg-muted/50 border border-border rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50"
+                  className="w-full bg-muted/50 border border-border rounded-xl px-4 py-3 min-h-[44px] text-sm text-foreground placeholder:text-muted-foreground/50"
                   placeholder="e.g. Fellow service member, spouse, coworker"
                 />
               </div>
@@ -215,7 +215,7 @@ export default function BuddyFillPage() {
                   type="text"
                   value={form.buddyContact}
                   onChange={(e) => setForm((f) => ({ ...f, buddyContact: e.target.value }))}
-                  className="w-full bg-muted/50 border border-border rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50"
+                  className="w-full bg-muted/50 border border-border rounded-xl px-4 py-3 min-h-[44px] text-sm text-foreground placeholder:text-muted-foreground/50"
                   placeholder="email@example.com or (555) 123-4567"
                 />
               </div>

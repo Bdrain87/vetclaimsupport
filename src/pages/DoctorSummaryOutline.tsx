@@ -737,7 +737,7 @@ export default function DoctorSummaryOutline() {
                       <select
                         value={ref.type}
                         onChange={(e) => updateEvidenceReference(ref.id, 'type', e.target.value)}
-                        className="text-sm bg-background border border-border rounded px-2 py-1 max-w-full"
+                        className="text-sm bg-background border border-border rounded-lg px-3 py-2 min-h-[44px] max-w-full"
                       >
                         <option value="">Select type...</option>
                         {EVIDENCE_TYPES.map(t => <option key={t} value={t}>{t}</option>)}

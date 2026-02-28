@@ -101,6 +101,11 @@ export function useSmartReminders(): SmartReminder[] {
     }
 
     // ── Intent to File expiring ─────────────────────────────────────────
+    // VA ITF rule: an Intent to File is valid for 1 year (365 days) from the
+    // date it was filed.  `intentToFileDate` is the filing date, so the
+    // expiration is intentToFileDate + 365 days.  `daysUntil(intentToFileDate)`
+    // is negative (filing date is in the past), so adding 365 gives the
+    // number of days remaining until expiration.
     if (intentToFileDate) {
       const remaining = daysUntil(intentToFileDate) + 365;
       if (remaining > 0 && remaining <= 60) {

@@ -865,10 +865,10 @@ export default function Sleep() {
                     )}
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="ghost" size="icon" onClick={() => handleEdit(entry)} aria-label="Edit sleep entry">
+                    <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => handleEdit(entry)} aria-label="Edit sleep entry">
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => setDeleteTarget(entry.id)} aria-label="Delete sleep entry">
+                    <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => setDeleteTarget(entry.id)} aria-label="Delete sleep entry">
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
@@ -909,12 +909,12 @@ export default function Sleep() {
                 {entry.impactOnWork && (
                   <div className="text-sm">
                     <span className="text-muted-foreground">Impact: </span>
-                    <span>{entry.impactOnWork}</span>
+                    <span className="line-clamp-2">{entry.impactOnWork}</span>
                   </div>
                 )}
 
                 {entry.notes && (
-                  <p className="text-sm text-muted-foreground bg-muted/50 rounded p-2">{entry.notes}</p>
+                  <p className="text-sm text-muted-foreground bg-muted/50 rounded p-2 line-clamp-3">{entry.notes}</p>
                 )}
                 
                 <EvidenceThumbnails

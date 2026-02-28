@@ -758,24 +758,24 @@ export default function DocumentsHub() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="flex-1 h-8"
+                        className="flex-1 min-h-[44px]"
                         onClick={(e) => {
                           e.stopPropagation();
                           setSelectedDoc(doc);
                         }}
                       >
-                        <Eye className="h-3 w-3" />
+                        <Eye className="h-4 w-4" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-8 text-destructive hover:text-destructive"
+                        className="min-h-[44px] text-destructive hover:text-destructive"
                         onClick={(e) => {
                           e.stopPropagation();
                           setDeleteDocTarget(doc.id);
                         }}
                       >
-                        <Trash2 className="h-3 w-3" />
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   </CardContent>
