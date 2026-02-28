@@ -16,6 +16,7 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { exportMedicalVisits } from '@/utils/pdfExport';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import { PageContainer } from '@/components/PageContainer';
+import { EmptyState } from '@/components/EmptyState';
 import { useToast } from '@/hooks/use-toast';
 import type { MedicalVisit } from '@/types/claims';
 
@@ -200,7 +201,7 @@ export default function MedicalVisits() {
           </Button>
           <Button variant="outline" disabled={exporting} onClick={async () => {
             setExporting(true);
-            try { await exportMedicalVisits(data.medicalVisits); } catch { toast({ title: 'Export failed', variant: 'destructive' }); } finally { setExporting(false); }
+            try { await exportMedicalVisits(data.medicalVisits); } catch (err) { toast({ title: 'Export failed', description: err instanceof Error ? err.message : 'Could not generate PDF. Please try again.', variant: 'destructive' }); } finally { setExporting(false); }
           }} className="gap-2">
             {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
             {exporting ? 'Exporting...' : 'Export PDF'}
@@ -377,10 +378,14 @@ export default function MedicalVisits() {
       {/* Visits List */}
       {data.medicalVisits.length === 0 ? (
         <Card className="data-card">
-          <CardContent className="empty-state">
-            <Stethoscope className="empty-state-icon" />
-            <p className="empty-state-title">No medical visits logged yet</p>
-            <p className="empty-state-description">Document all medical appointments during service. Each visit can be linked to a claimed condition.</p>
+          <CardContent>
+            <EmptyState
+              icon={<Stethoscope className="h-12 w-12" />}
+              title="No medical visits logged yet"
+              description="Document all medical appointments during service. Each visit can be linked to a claimed condition."
+              actionLabel="Add Visit"
+              onAction={() => setIsOpen(true)}
+            />
           </CardContent>
         </Card>
       ) : (

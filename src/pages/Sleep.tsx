@@ -22,6 +22,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { PageContainer } from '@/components/PageContainer';
+import { EmptyState } from '@/components/EmptyState';
 import type { SleepEntry, SleepQuality, DaytimeSleepiness } from '@/types/claims';
 import { exportSleepLog } from '@/utils/pdfExport';
 
@@ -257,7 +258,7 @@ export default function Sleep() {
           variant="outline"
           onClick={async () => {
             setExporting(true);
-            try { await exportSleepLog(sleepEntries); } catch { toast({ title: 'Export failed', variant: 'destructive' }); } finally { setExporting(false); }
+            try { await exportSleepLog(sleepEntries); } catch (err) { toast({ title: 'Export failed', description: err instanceof Error ? err.message : 'Could not generate PDF. Please try again.', variant: 'destructive' }); } finally { setExporting(false); }
           }}
           className="gap-2 flex-shrink-0"
           disabled={sleepEntries.length === 0 || exporting}
@@ -816,10 +817,14 @@ export default function Sleep() {
       {/* Sleep Entries List */}
       {sleepEntries.length === 0 ? (
         <Card className="data-card">
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <Moon className="h-12 w-12 text-muted-foreground/50 mb-4" />
-            <p className="text-muted-foreground text-center">No sleep entries logged yet.</p>
-            <p className="text-sm text-muted-foreground text-center mt-1">Track your sleep to build evidence.</p>
+          <CardContent>
+            <EmptyState
+              icon={<Moon className="h-12 w-12" />}
+              title="No sleep entries logged yet"
+              description="Track your sleep patterns to build evidence for sleep apnea, insomnia, or other sleep-related claims."
+              actionLabel="Log Sleep"
+              onAction={() => setIsOpen(true)}
+            />
           </CardContent>
         </Card>
       ) : (

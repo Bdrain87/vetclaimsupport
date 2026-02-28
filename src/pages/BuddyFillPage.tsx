@@ -51,6 +51,8 @@ export default function BuddyFillPage() {
         return;
       }
       setState({ status: 'ready', share: result.share });
+    }).catch(() => {
+      setState({ status: 'error', message: 'Unable to load this buddy statement. Check your internet connection and try again.' });
     });
   }, [token]);
 

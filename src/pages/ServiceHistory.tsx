@@ -316,7 +316,7 @@ export default function ServiceHistory() {
 
         <Button variant="outline" disabled={exporting} onClick={async () => {
           setExporting(true);
-          try { await exportServiceHistory(data.serviceHistory); } catch { toast({ title: 'Export failed', variant: 'destructive' }); } finally { setExporting(false); }
+          try { await exportServiceHistory(data.serviceHistory); } catch (err) { toast({ title: 'Export failed', description: err instanceof Error ? err.message : 'Could not generate PDF. Please try again.', variant: 'destructive' }); } finally { setExporting(false); }
         }} className="gap-2 flex-shrink-0">
           {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
           {exporting ? 'Exporting...' : 'Export PDF'}

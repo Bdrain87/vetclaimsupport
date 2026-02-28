@@ -19,13 +19,18 @@ import {
   Map,
   Activity,
   Plus,
+  DollarSign,
+  Briefcase,
+  Gift,
+  ShieldAlert,
+  Heart,
+  Flame,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { vcsSpring } from '@/constants/animations';
 import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { PageContainer } from '@/components/PageContainer';
-import { Skeleton } from '@/components/ui/skeleton';
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { getConditionById } from '@/data/vaConditions';
 import { getConditionDisplayName } from '@/utils/conditionResolver';
@@ -37,12 +42,8 @@ import { BDDCountdown } from '@/components/dashboard/BDDCountdown';
 import { useStreakTracker } from '@/hooks/useStreakTracker';
 import { useSmartReminders } from '@/hooks/useSmartReminders';
 import { getMonthlyCompensation } from '@/services/vaCompensation';
-import {
-  DollarSign,
-  Briefcase,
-  Gift,
-  ShieldAlert,
-} from 'lucide-react';
+import { FLARE_UP_TRIGGERS, FLARE_UP_DURATIONS } from '@/types/claims';
+import type { QuickLogEntry } from '@/types/claims';
 
 const JOURNEY_PHASE_LABELS = ['Research', 'Evidence', 'Filing', 'C&P Exam', 'Decision'];
 
@@ -54,11 +55,24 @@ export default function Dashboard() {
   const activeDeadlines = useAppStore((s) => (s.deadlines ?? []).filter((d) => !d.completed).length);
   const currentPhase = useAppStore((s) => s.journeyProgress?.currentPhase ?? 0);
   const symptoms = useAppStore((s) => s.symptoms);
+  const addQuickLog = useAppStore((s) => s.addQuickLog);
+  const quickLogs = useAppStore((s) => s.quickLogs);
   const navigate = useNavigate();
 
-  // Brief skeleton on initial mount for perceived performance
-  const [initialLoad, setInitialLoad] = useState(true);
-  useEffect(() => { setInitialLoad(false); }, []);
+  // Quick Log state
+  const [quickLogOpen, setQuickLogOpen] = useState(false);
+  const [quickLogFeeling, setQuickLogFeeling] = useState(5);
+  const [quickLogFlareUp, setQuickLogFlareUp] = useState(false);
+  const [quickLogFlareNote, setQuickLogFlareNote] = useState('');
+  const [quickLogFlareUpSeverity, setQuickLogFlareUpSeverity] = useState(5);
+  const [quickLogFlareUpDuration, setQuickLogFlareUpDuration] = useState<string>('');
+  const [quickLogFlareUpTriggers, setQuickLogFlareUpTriggers] = useState<string[]>([]);
+  const [quickLogFlareUpActivities, setQuickLogFlareUpActivities] = useState('');
+
+  const todayLogged = useMemo(() => {
+    const today = new Date().toISOString().slice(0, 10);
+    return quickLogs.some((l) => l.date === today);
+  }, [quickLogs]);
 
   const [session, setSession] = useState<Session | null>(null);
   useEffect(() => {
@@ -162,31 +176,6 @@ export default function Dashboard() {
     return Date.now() - parseInt(ts, 10) < 30 * 24 * 60 * 60 * 1000;
   }, []);
   const hasMedications = data.medications.length > 0;
-
-  if (initialLoad) {
-    return (
-      <PageContainer className="space-y-4 pb-4">
-        <Skeleton className="h-12 w-full rounded-2xl" />
-        <div className="rounded-2xl border border-border p-3">
-          <div className="flex items-center gap-3">
-            <Skeleton className="h-10 w-10 rounded-full" />
-            <div className="flex-1 space-y-2">
-              <Skeleton className="h-4 w-32" />
-              <Skeleton className="h-3 w-48" />
-            </div>
-          </div>
-        </div>
-        <Skeleton className="h-20 w-full rounded-2xl" />
-        <div className="grid grid-cols-2 gap-2">
-          <Skeleton className="h-16 rounded-2xl" />
-          <Skeleton className="h-16 rounded-2xl" />
-          <Skeleton className="h-16 rounded-2xl" />
-          <Skeleton className="h-16 rounded-2xl" />
-        </div>
-        <Skeleton className="h-40 w-full rounded-2xl" />
-      </PageContainer>
-    );
-  }
 
   return (
     <PageContainer className="space-y-4 animate-fade-in pb-4">
@@ -489,6 +478,282 @@ export default function Dashboard() {
             </div>
             <ChevronRight className="h-4 w-4 text-amber-400 flex-shrink-0" />
           </button>
+        </motion.div>
+      )}
+
+      {/* Section 6b: Quick Daily Log */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={vcsSpring}
+        className="rounded-2xl bg-card border border-border p-4 overflow-hidden max-w-full"
+      >
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="font-bold text-sm text-foreground flex items-center gap-2">
+            <Heart className="w-4 h-4 text-gold" />
+            Daily Quick Log
+          </h3>
+          {todayLogged && (
+            <span className="text-[10px] text-green-400 font-medium bg-green-500/10 px-2 py-0.5 rounded-full">
+              Logged today
+            </span>
+          )}
+        </div>
+        {!quickLogOpen ? (
+          <button
+            onClick={() => setQuickLogOpen(true)}
+            className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
+          >
+            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-gold/15 flex items-center justify-center">
+              <Plus className="h-3.5 w-3.5 text-gold" />
+            </span>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-foreground">Log how you're feeling</p>
+              <p className="text-xs text-muted-foreground">Daily logs build your evidence trail</p>
+            </div>
+          </button>
+        ) : (
+          <div className="space-y-4">
+            {/* Overall feeling slider */}
+            <div>
+              <label className="text-xs font-medium text-muted-foreground mb-2 block">
+                Overall Feeling: {quickLogFeeling}/10
+              </label>
+              <input
+                type="range"
+                min={1}
+                max={10}
+                value={quickLogFeeling}
+                onChange={(e) => setQuickLogFeeling(Number(e.target.value))}
+                className="w-full accent-gold"
+              />
+              <div className="flex justify-between text-[10px] text-muted-foreground mt-1">
+                <span>Worst</span><span>Best</span>
+              </div>
+            </div>
+
+            {/* Flare-up toggle */}
+            <div className="flex items-center justify-between p-3 rounded-xl border border-border">
+              <div className="flex items-center gap-2">
+                <Flame className="h-4 w-4 text-amber-400" />
+                <span className="text-sm font-medium text-foreground">Flare-up today?</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setQuickLogFlareUp(!quickLogFlareUp)}
+                className={cn(
+                  'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
+                  quickLogFlareUp ? 'bg-gold' : 'bg-muted',
+                )}
+              >
+                <span
+                  className={cn(
+                    'inline-block h-4 w-4 rounded-full bg-white transition-transform',
+                    quickLogFlareUp ? 'translate-x-6' : 'translate-x-1',
+                  )}
+                />
+              </button>
+            </div>
+
+            {/* Flare-up details (conditional) */}
+            {quickLogFlareUp && (
+              <div className="space-y-3 p-3 rounded-xl border border-amber-500/20 bg-amber-500/5">
+                {/* Severity */}
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">
+                    Severity: {quickLogFlareUpSeverity}/10
+                  </label>
+                  <input
+                    type="range"
+                    min={1}
+                    max={10}
+                    value={quickLogFlareUpSeverity}
+                    onChange={(e) => setQuickLogFlareUpSeverity(Number(e.target.value))}
+                    className="w-full accent-amber-400"
+                  />
+                </div>
+
+                {/* Duration */}
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Duration</label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {Object.entries(FLARE_UP_DURATIONS).map(([key, label]) => (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() => setQuickLogFlareUpDuration(key)}
+                        className={cn(
+                          'text-[11px] px-2.5 py-1 rounded-full border transition-colors',
+                          quickLogFlareUpDuration === key
+                            ? 'bg-amber-500/20 border-amber-500/40 text-amber-300'
+                            : 'border-border text-muted-foreground hover:bg-accent',
+                        )}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Triggers */}
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Triggers</label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {FLARE_UP_TRIGGERS.map((trigger) => (
+                      <button
+                        key={trigger}
+                        type="button"
+                        onClick={() =>
+                          setQuickLogFlareUpTriggers((prev) =>
+                            prev.includes(trigger)
+                              ? prev.filter((t) => t !== trigger)
+                              : [...prev, trigger],
+                          )
+                        }
+                        className={cn(
+                          'text-[11px] px-2.5 py-1 rounded-full border transition-colors',
+                          quickLogFlareUpTriggers.includes(trigger)
+                            ? 'bg-amber-500/20 border-amber-500/40 text-amber-300'
+                            : 'border-border text-muted-foreground hover:bg-accent',
+                        )}
+                      >
+                        {trigger}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Activities affected */}
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Activities affected</label>
+                  <input
+                    type="text"
+                    value={quickLogFlareUpActivities}
+                    onChange={(e) => setQuickLogFlareUpActivities(e.target.value)}
+                    placeholder="e.g., couldn't walk, missed work..."
+                    className="w-full text-sm bg-muted/50 border border-border rounded-lg px-3 py-2 text-foreground placeholder:text-muted-foreground/50"
+                  />
+                </div>
+
+                {/* Flare note */}
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-1 block">Notes</label>
+                  <input
+                    type="text"
+                    value={quickLogFlareNote}
+                    onChange={(e) => setQuickLogFlareNote(e.target.value)}
+                    placeholder="Describe the flare-up..."
+                    className="w-full text-sm bg-muted/50 border border-border rounded-lg px-3 py-2 text-foreground placeholder:text-muted-foreground/50"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Submit */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => setQuickLogOpen(false)}
+                className="flex-1 py-2.5 rounded-xl border border-border text-sm text-muted-foreground hover:bg-accent transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  addQuickLog({
+                    date: new Date().toISOString().slice(0, 10),
+                    overallFeeling: quickLogFeeling,
+                    hadFlareUp: quickLogFlareUp,
+                    flareUpNote: quickLogFlareNote,
+                    flareUpSeverity: quickLogFlareUp ? quickLogFlareUpSeverity : undefined,
+                    flareUpDuration: quickLogFlareUp && quickLogFlareUpDuration ? quickLogFlareUpDuration as QuickLogEntry['flareUpDuration'] : undefined,
+                    flareUpTriggers: quickLogFlareUp && quickLogFlareUpTriggers.length > 0 ? quickLogFlareUpTriggers : undefined,
+                    flareUpActivitiesAffected: quickLogFlareUp && quickLogFlareUpActivities ? quickLogFlareUpActivities : undefined,
+                    createdAt: new Date().toISOString(),
+                  });
+                  setQuickLogOpen(false);
+                  setQuickLogFeeling(5);
+                  setQuickLogFlareUp(false);
+                  setQuickLogFlareNote('');
+                  setQuickLogFlareUpSeverity(5);
+                  setQuickLogFlareUpDuration('');
+                  setQuickLogFlareUpTriggers([]);
+                  setQuickLogFlareUpActivities('');
+                }}
+                className="flex-1 py-2.5 rounded-xl bg-gold text-black font-semibold text-sm hover:bg-gold/90 transition-colors"
+              >
+                Save Log
+              </button>
+            </div>
+          </div>
+        )}
+      </motion.div>
+
+      {/* Section 6c: Contextual Feature Discovery */}
+      {userConditions.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={vcsSpring}
+          className="rounded-2xl bg-card border border-border p-4 overflow-hidden max-w-full"
+        >
+          <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
+            <Zap className="w-4 h-4 text-gold" />
+            Discover Tools for Your Claim
+          </h3>
+          <div className="space-y-2">
+            {symptoms.length === 0 && (
+              <button
+                onClick={() => navigate('/health/symptoms')}
+                className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
+              >
+                <Activity className="h-4 w-4 text-gold flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-foreground">Start logging symptoms</p>
+                  <p className="text-xs text-muted-foreground">Daily symptom logs are one of the strongest evidence types</p>
+                </div>
+                <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+              </button>
+            )}
+            {symptoms.length >= 3 && (
+              <button
+                onClick={() => navigate('/claims/evidence-strength')}
+                className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
+              >
+                <Target className="h-4 w-4 text-gold flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-foreground">Evidence Strength Analyzer</p>
+                  <p className="text-xs text-muted-foreground">See how your {symptoms.length} symptom logs align with VA rating criteria</p>
+                </div>
+                <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+              </button>
+            )}
+            {data.buddyContacts.length === 0 && (
+              <button
+                onClick={() => navigate('/health/buddy-statements')}
+                className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
+              >
+                <FileText className="h-4 w-4 text-gold flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-foreground">Get buddy statements</p>
+                  <p className="text-xs text-muted-foreground">Third-party evidence strengthens your claim</p>
+                </div>
+                <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+              </button>
+            )}
+            {userConditions.some((uc) => uc.claimStatus === 'denied') && (
+              <button
+                onClick={() => navigate('/claims/decision-decoder')}
+                className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
+              >
+                <AlertTriangle className="h-4 w-4 text-amber-400 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-foreground">Decision Decoder</p>
+                  <p className="text-xs text-muted-foreground">Understand your denial in plain English and see your options</p>
+                </div>
+                <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+              </button>
+            )}
+          </div>
         </motion.div>
       )}
 

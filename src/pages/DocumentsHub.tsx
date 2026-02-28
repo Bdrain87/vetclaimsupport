@@ -462,7 +462,7 @@ export default function DocumentsHub() {
               disabled={exporting}
               onClick={async () => {
                 setExporting(true);
-                try { await exportDocuments(data.documents); } catch { toast({ title: 'Export failed', variant: 'destructive' }); } finally { setExporting(false); }
+                try { await exportDocuments(data.documents); } catch (err) { toast({ title: 'Export failed', description: err instanceof Error ? err.message : 'Could not generate PDF. Please try again.', variant: 'destructive' }); } finally { setExporting(false); }
               }}
               className="group p-4 rounded-2xl bg-gradient-to-br from-violet-500/20 to-purple-500/10 border border-violet-500/30 hover:scale-[1.02] transition-all text-left disabled:opacity-50 disabled:pointer-events-none"
             >

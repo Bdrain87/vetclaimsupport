@@ -26,6 +26,7 @@ import { Slider } from '@/components/ui/slider';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { PageContainer } from '@/components/PageContainer';
+import { EmptyState } from '@/components/EmptyState';
 import type {
   MigraineEntry, MigraineSeverity, MigraineDuration,
   MigraneTrigger, MigraineImpact, MigraineSymptom, EconomicImpactType
@@ -931,12 +932,14 @@ export default function Migraines() {
       {/* Migraine List */}
       {(data.migraines?.length || 0) === 0 ? (
         <Card className="data-card">
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <Brain className="h-12 w-12 text-muted-foreground/50 mb-4" />
-            <p className="text-muted-foreground text-center">No migraine attacks logged yet.</p>
-            <p className="text-sm text-muted-foreground text-center mt-1">
-              Click "Log Attack" to start tracking your migraines for VA claims.
-            </p>
+          <CardContent>
+            <EmptyState
+              icon={<Brain className="h-12 w-12" />}
+              title="No migraine attacks logged yet"
+              description="Track your migraines with severity, duration, and triggers to build evidence for VA claims."
+              actionLabel="Log Attack"
+              onAction={() => setIsOpen(true)}
+            />
           </CardContent>
         </Card>
       ) : (

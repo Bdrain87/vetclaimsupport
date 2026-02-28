@@ -512,6 +512,17 @@ const useAppStore = create<AppState>()(
       },
       deleteClaimCondition: (id) => set((s) => ({
         claimConditions: s.claimConditions.filter((c) => c.id !== id),
+        symptoms: s.symptoms.map((sym) => ({
+          ...sym,
+          conditionTags: sym.conditionTags?.filter((t) => t !== id) ?? [],
+        })),
+        medications: s.medications.map((m) => ({
+          ...m,
+          conditionTags: (m as Record<string, unknown>).conditionTags
+            ? ((m as Record<string, unknown>).conditionTags as string[]).filter((t: string) => t !== id)
+            : undefined,
+          prescribedFor: m.prescribedFor === id ? '' : m.prescribedFor,
+        })),
       })),
 
       // Document scan disclaimer

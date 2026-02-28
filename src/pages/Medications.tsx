@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useEvidence } from '@/hooks/useEvidence';
 import { useFeatureFlag } from '@/store/useFeatureFlagStore';
@@ -17,7 +17,6 @@ import { useToast } from '@/hooks/use-toast';
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import { PageContainer } from '@/components/PageContainer';
 import { EmptyState } from '@/components/EmptyState';
-import { Skeleton } from '@/components/ui/skeleton';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { getConditionDisplayName } from '@/utils/conditionResolver';
@@ -47,8 +46,6 @@ export default function Medications() {
   const [exporting, setExporting] = useState(false);
   const showSideEffectStats = useFeatureFlag('medicationSideEffectStats');
   const { conditions: userConditions } = useUserConditions();
-  const [initialLoad, setInitialLoad] = useState(true);
-  useEffect(() => { setInitialLoad(false); }, []);
   const [formData, setFormData] = useState<Omit<Medication, 'id'>>({
     startDate: '',
     endDate: '',
@@ -211,28 +208,6 @@ export default function Medications() {
     </Card>
   );
 
-  if (initialLoad) {
-    return (
-      <PageContainer className="space-y-6 overflow-x-hidden">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Skeleton className="h-10 w-10 rounded-xl" />
-            <div className="space-y-2">
-              <Skeleton className="h-6 w-32" />
-              <Skeleton className="h-4 w-40" />
-            </div>
-          </div>
-          <Skeleton className="h-9 w-36 rounded-md" />
-        </div>
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {[1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-48 rounded-xl" />
-          ))}
-        </div>
-      </PageContainer>
-    );
-  }
-
   return (
     <PageContainer className="space-y-6 animate-fade-in overflow-x-hidden">
       {/* Header */}
@@ -250,7 +225,7 @@ export default function Medications() {
         <div className="flex gap-2 flex-shrink-0">
           <Button variant="outline" disabled={exporting} onClick={async () => {
             setExporting(true);
-            try { await exportMedications(data.medications); } catch { toast({ title: 'Export failed', variant: 'destructive' }); } finally { setExporting(false); }
+            try { await exportMedications(data.medications); } catch (err) { toast({ title: 'Export failed', description: err instanceof Error ? err.message : 'Could not generate PDF. Please try again.', variant: 'destructive' }); } finally { setExporting(false); }
           }} className="gap-2">
             {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
             {exporting ? 'Exporting...' : 'Export PDF'}

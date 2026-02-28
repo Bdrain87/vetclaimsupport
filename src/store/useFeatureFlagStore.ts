@@ -16,10 +16,6 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 // ---------------------------------------------------------------------------
 
 export interface FeatureFlags {
-  /** Show per-condition readiness breakdown on Dashboard */
-  dashboardConditionReadiness: boolean;
-  /** Show "Recommended for Your Claims" section on Dashboard */
-  dashboardRecommendations: boolean;
   /** Enable AI-powered claim strategy generation */
   aiClaimStrategy: boolean;
   /** Enable AI-powered practice questions in C&P prep */
@@ -37,8 +33,6 @@ export interface FeatureFlags {
 }
 
 export const DEFAULT_FLAGS: FeatureFlags = {
-  dashboardConditionReadiness: true,
-  dashboardRecommendations: true,
   aiClaimStrategy: true,
   aiPracticeQuestions: true,
   symptomRatingGuidance: true,

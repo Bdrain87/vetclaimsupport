@@ -18,6 +18,7 @@ import { BranchExposuresSelector } from '@/components/exposures/BranchExposuresS
 import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import { LocationAutocomplete } from '@/components/shared/LocationAutocomplete';
 import { PageContainer } from '@/components/PageContainer';
+import { EmptyState } from '@/components/EmptyState';
 import type { Exposure, ExposureType } from '@/types/claims';
 
 // Extended exposure types including branch-specific ones
@@ -170,7 +171,7 @@ export default function Exposures() {
         <div className="flex gap-2 flex-shrink-0">
           <Button variant="outline" disabled={exporting} onClick={async () => {
             setExporting(true);
-            try { await exportExposures(data.exposures); } catch { toast({ title: 'Export failed', variant: 'destructive' }); } finally { setExporting(false); }
+            try { await exportExposures(data.exposures); } catch (err) { toast({ title: 'Export failed', description: err instanceof Error ? err.message : 'Could not generate PDF. Please try again.', variant: 'destructive' }); } finally { setExporting(false); }
           }} className="gap-2">
             {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
             {exporting ? 'Exporting...' : 'Export PDF'}
@@ -306,10 +307,14 @@ export default function Exposures() {
       {/* Exposures List */}
       {data.exposures.length === 0 ? (
         <Card className="data-card">
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <AlertTriangle className="h-12 w-12 text-muted-foreground/50 mb-4" />
-            <p className="text-muted-foreground text-center">No exposures logged yet.</p>
-            <p className="text-sm text-muted-foreground text-center mt-1">Document hazardous exposures for PACT Act claims.</p>
+          <CardContent>
+            <EmptyState
+              icon={<AlertTriangle className="h-12 w-12" />}
+              title="No exposures logged yet"
+              description="Document hazardous exposures for PACT Act claims. Burn pits, chemicals, noise, and more."
+              actionLabel="Add Exposure"
+              onAction={() => setIsOpen(true)}
+            />
           </CardContent>
         </Card>
       ) : (

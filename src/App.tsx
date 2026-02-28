@@ -102,6 +102,7 @@ const FormGuide = lazyWithRetry(() => import('./pages/FormGuide'));
 const FormGuideDetail = lazyWithRetry(() => import('./pages/FormGuideDetail'));
 const BuildPacket = lazyWithRetry(() => import('./pages/BuildPacket'));
 const CPExamPacket = lazyWithRetry(() => import('./pages/CPExamPacket'));
+const ExamDayMode = lazyWithRetry(() => import('./pages/ExamDayMode'));
 const Combination = lazyWithRetry(() => import('./components/UnifiedRatingCalculator'));
 const ClaimJourney = lazyWithRetry(() => import('./pages/ClaimJourney'));
 const HealthLog = lazyWithRetry(() => import('./pages/HealthLog'));
@@ -319,7 +320,8 @@ function AnimatedRoutes() {
           <Route path="/prep/vso-packet" element={<PremiumGuard featureName="VSO Packet"><VSOPacket /></PremiumGuard>} />
           <Route path="/prep/doctor-packet" element={<PremiumGuard featureName="Doctor Packet"><DoctorPacket /></PremiumGuard>} />
           <Route path="/prep/nexus-guide" element={<NexusGuide />} />
-          <Route path="/prep/exam-day" element={<CPExamPacket />} />
+          <Route path="/prep/exam-day" element={<ExamDayMode />} />
+          <Route path="/prep/exam-packet" element={<CPExamPacket />} />
           <Route path="/prep/medication-rule" element={<MedicationRuleTool />} />
           <Route path="/prep/compensation" element={<CompensationLadder />} />
           <Route path="/prep/tdiu" element={<TDIUChecker />} />

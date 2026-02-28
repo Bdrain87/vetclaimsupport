@@ -383,7 +383,7 @@ export default function Symptoms() {
         <div className="flex gap-2 flex-shrink-0">
           <Button variant="outline" disabled={exporting} onClick={async () => {
             setExporting(true);
-            try { await lazyExportSymptoms(data.symptoms); } catch { toast({ title: 'Export failed', variant: 'destructive' }); } finally { setExporting(false); }
+            try { await lazyExportSymptoms(data.symptoms); } catch (err) { toast({ title: 'Export failed', description: err instanceof Error ? err.message : 'Could not generate PDF. Please try again.', variant: 'destructive' }); } finally { setExporting(false); }
           }} className="gap-2 border-border/50 hover:bg-muted">
             {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
             {exporting ? 'Exporting...' : 'Export PDF'}

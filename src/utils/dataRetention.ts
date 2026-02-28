@@ -1,3 +1,5 @@
+import { clearLocalData } from '@/services/accountManagement';
+
 const LAST_ACTIVITY_KEY = '_lastActivity';
 const RETENTION_DAYS = 365;
 const RETENTION_MS = RETENTION_DAYS * 24 * 60 * 60 * 1000;
@@ -41,7 +43,6 @@ export function dismissRetentionWarning(): void {
  * encryption keys). Called only after explicit user confirmation.
  */
 export async function purgeAppData(): Promise<void> {
-  const { clearLocalData } = await import('@/services/accountManagement');
   await clearLocalData();
 }
 

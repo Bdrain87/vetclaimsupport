@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import useAppStore from '@/store/useAppStore';
+import { getConditionById } from '@/data/conditions';
 
 const ROOT_TAB_ROUTES = ['/', '/app', '/claims', '/health', '/prep', '/settings'];
 
@@ -102,12 +103,8 @@ export function MobileHeader() {
       setDynamicTitle(uc.displayName);
       return;
     }
-    import('@/data/conditions').then(({ getConditionById }) => {
-      const details = getConditionById(uc.conditionId);
-      setDynamicTitle(details?.abbreviation || details?.name || 'Condition Detail');
-    }).catch(() => {
-      setDynamicTitle('Condition Detail');
-    });
+    const details = getConditionById(uc.conditionId);
+    setDynamicTitle(details?.abbreviation || details?.name || 'Condition Detail');
   }, [location.pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const isRootTab = ROOT_TAB_ROUTES.includes(location.pathname);
