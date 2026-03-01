@@ -59,6 +59,18 @@ export default function Login() {
     return () => clearTimeout(timeout);
   }, [oauthLoading, toast]);
 
+  // Safety timeout: if email/password loading stays active for 20s, force-clear it.
+  // The Supabase fetch wrapper aborts at 15s, but this catches any edge case where
+  // the Promise chain stalls (internal lock, unexpected hang, etc.).
+  useEffect(() => {
+    if (!loading) return;
+    const timeout = setTimeout(() => {
+      setLoading(false);
+      setError('Request timed out. Please check your connection and try again.');
+    }, 20_000);
+    return () => clearTimeout(timeout);
+  }, [loading]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');

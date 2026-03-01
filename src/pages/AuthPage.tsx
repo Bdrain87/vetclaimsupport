@@ -50,7 +50,7 @@ export default function AuthPage() {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  // Safety timeout: if OAuth loading stays active for 10s, clear it
+  // Safety timeout: if OAuth loading stays active for 30s, clear it
   useEffect(() => {
     if (!oauthLoading) return;
     const timeout = setTimeout(() => {
@@ -63,6 +63,22 @@ export default function AuthPage() {
     }, 30000);
     return () => clearTimeout(timeout);
   }, [oauthLoading, toast]);
+
+  // Safety timeout: if email/password loading stays active for 20s, force-clear it.
+  // The Supabase fetch wrapper aborts at 15s, but this catches any edge case where
+  // the Promise chain stalls (internal lock, unexpected hang, etc.).
+  useEffect(() => {
+    if (!loading) return;
+    const timeout = setTimeout(() => {
+      setLoading(false);
+      toast({
+        title: 'Request timed out',
+        description: 'Please check your connection and try again.',
+        variant: 'destructive',
+      });
+    }, 20_000);
+    return () => clearTimeout(timeout);
+  }, [loading, toast]);
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
