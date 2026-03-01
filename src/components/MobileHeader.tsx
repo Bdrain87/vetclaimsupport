@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -81,45 +81,26 @@ export function MobileHeader() {
   const navigate = useNavigate();
   const userConditions = useAppStore((s) => s.userConditions);
 
-  // Lazy-resolved condition name for dynamic routes (avoids loading entire conditions DB into main bundle)
-  const [dynamicTitle, setDynamicTitle] = useState<string | null>(null);
+  const pageTitle = useMemo(() => {
+    const staticLabel = pageLabels[location.pathname];
+    if (staticLabel) return staticLabel;
 
-  const conditionMatch = !pageLabels[location.pathname]
-    ? location.pathname.match(/^\/claims\/([^/]+)$/)
-    : null;
+    const conditionMatch = location.pathname.match(/^\/claims\/([^/]+)$/);
+    if (!conditionMatch) return 'VCS';
 
-  useEffect(() => {
-    if (!conditionMatch) {
-      setDynamicTitle(null);
-      return;
-    }
     const condId = conditionMatch[1];
     const uc = userConditions.find((c) => c.id === condId);
-    if (!uc) {
-      setDynamicTitle('Condition Detail');
-      return;
-    }
-    if (uc.displayName) {
-      setDynamicTitle(uc.displayName);
-      return;
-    }
+    if (!uc) return 'Condition Detail';
+    if (uc.displayName) return uc.displayName;
+
     const details = getConditionById(uc.conditionId);
-    setDynamicTitle(details?.abbreviation || details?.name || 'Condition Detail');
-  }, [location.pathname]); // eslint-disable-line react-hooks/exhaustive-deps
+    return details?.abbreviation || details?.name || 'Condition Detail';
+  }, [location.pathname, userConditions]);
 
   const isRootTab = ROOT_TAB_ROUTES.includes(location.pathname);
   const isOnboarding = location.pathname === '/onboarding';
 
   if (isOnboarding) return null;
-
-  let pageTitle = pageLabels[location.pathname];
-  if (!pageTitle) {
-    if (conditionMatch) {
-      pageTitle = dynamicTitle || 'Condition Detail';
-    } else {
-      pageTitle = 'VCS';
-    }
-  }
 
   return (
     <header

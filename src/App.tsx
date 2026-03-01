@@ -163,7 +163,15 @@ function LoadingFallback() {
       style={{ background: '#000000' }}
       role="status"
       aria-label="Loading application"
-    />
+    >
+      <div
+        className="w-8 h-8 border-2 rounded-full animate-spin"
+        style={{
+          borderColor: 'rgba(197,165,90,0.2)',
+          borderTopColor: 'rgba(197,165,90,0.8)',
+        }}
+      />
+    </div>
   );
 }
 
