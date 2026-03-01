@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Crown, Shield, FileText, Activity, Package, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -25,6 +25,16 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
+  // Reset loading when user returns from checkout (tab becomes visible again)
+  useEffect(() => {
+    if (!loading) return;
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') setLoading(false);
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => document.removeEventListener('visibilitychange', handleVisibility);
+  }, [loading]);
+
   const handleGetPremium = async () => {
     setLoading(true);
     try {
@@ -39,8 +49,7 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
 
       const url = await startCheckout();
       await openExternalUrl(url);
-      // Reset loading after opening checkout — user may close the tab
-      setTimeout(() => setLoading(false), 2000);
+      // Loading stays true until user returns (visibilitychange handler above)
     } catch (err) {
       logger.error('Checkout failed:', err);
       toast({

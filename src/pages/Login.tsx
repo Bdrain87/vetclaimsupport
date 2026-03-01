@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { signInWithEmail, signUpWithEmail, signInWithGoogle, signInWithApple, resetPassword } from '@/services/auth';
 import { supabase } from '@/lib/supabase';
+import { useToast } from '@/hooks/use-toast';
 import { PageContainer } from '@/components/PageContainer';
 
 /** Only allow relative paths starting with / (no protocol-relative // or external URLs). */
@@ -22,7 +23,9 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [oauthLoading, setOauthLoading] = useState<'google' | 'apple' | null>(null);
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
@@ -32,7 +35,29 @@ export default function Login() {
         navigate(getSafeRedirect(), { replace: true });
       }
     }).catch(() => { /* session check failed — stay on login */ });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_IN') {
+        setOauthLoading(null);
+        navigate(getSafeRedirect(), { replace: true });
+      }
+    });
+    return () => subscription.unsubscribe();
   }, [navigate]);
+
+  // Safety timeout: if OAuth loading stays active for 30s, clear it
+  useEffect(() => {
+    if (!oauthLoading) return;
+    const timeout = setTimeout(() => {
+      setOauthLoading(null);
+      toast({
+        title: 'Sign-in timed out',
+        description: 'OAuth didn\u2019t complete. Please try again.',
+        variant: 'destructive',
+      });
+    }, 30000);
+    return () => clearTimeout(timeout);
+  }, [oauthLoading, toast]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,7 +99,7 @@ export default function Login() {
 
   const handleOAuth = async (provider: 'google' | 'apple') => {
     setError('');
-    setLoading(true);
+    setOauthLoading(provider);
     try {
       if (provider === 'google') {
         await signInWithGoogle();
@@ -82,9 +107,8 @@ export default function Login() {
         await signInWithApple();
       }
     } catch (err) {
+      setOauthLoading(null);
       setError(err instanceof Error ? err.message : 'Something went wrong.');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -234,7 +258,7 @@ export default function Login() {
           <div className="space-y-3">
             <button
               onClick={() => handleOAuth('google')}
-              disabled={loading}
+              disabled={loading || !!oauthLoading}
               className="w-full h-12 rounded-xl bg-white/[0.09] border border-white/[0.14] text-white text-sm font-medium flex items-center justify-center gap-3 hover:bg-white/[0.14] disabled:opacity-50 transition-all"
             >
               <svg width="18" height="18" viewBox="0 0 24 24">
@@ -260,7 +284,7 @@ export default function Login() {
 
             <button
               onClick={() => handleOAuth('apple')}
-              disabled={loading}
+              disabled={loading || !!oauthLoading}
               className="w-full h-12 rounded-xl bg-white/[0.09] border border-white/[0.14] text-white text-sm font-medium flex items-center justify-center gap-3 hover:bg-white/[0.14] disabled:opacity-50 transition-all"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="white">

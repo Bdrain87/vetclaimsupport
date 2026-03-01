@@ -48,7 +48,7 @@ export function WelcomeScreen({ onSkip }: WelcomeScreenProps) {
         description: 'OAuth didn\u2019t complete. Please try again.',
         variant: 'destructive',
       });
-    }, 10000);
+    }, 30000);
     return () => clearTimeout(timeout);
   }, [loading, toast]);
 

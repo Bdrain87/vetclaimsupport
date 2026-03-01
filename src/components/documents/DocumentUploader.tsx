@@ -68,6 +68,8 @@ export function DocumentUploader({ documents, category, onAdd, onDelete }: Docum
     };
     reader.onerror = () => {
       setFileError('Failed to read file. Please try again.');
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      if (cameraInputRef.current) cameraInputRef.current.value = '';
     };
     reader.readAsDataURL(file);
   };

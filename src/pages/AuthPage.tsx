@@ -60,7 +60,7 @@ export default function AuthPage() {
         description: 'OAuth didn\u2019t complete. Please try again.',
         variant: 'destructive',
       });
-    }, 10000);
+    }, 30000);
     return () => clearTimeout(timeout);
   }, [oauthLoading, toast]);
 

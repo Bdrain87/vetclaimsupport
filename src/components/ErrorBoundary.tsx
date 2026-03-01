@@ -77,7 +77,8 @@ export class ErrorBoundary extends Component<Props, State> {
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground text-center">
-                If this keeps happening, try clearing your browser cache or contact support.
+                If this keeps happening, try clearing your browser cache or contact us at{' '}
+                <a href="mailto:support@vetclaimsupport.com" className="underline">support@vetclaimsupport.com</a>.
               </p>
             </CardContent>
           </Card>

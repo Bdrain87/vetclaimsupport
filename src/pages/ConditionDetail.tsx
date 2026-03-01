@@ -32,6 +32,7 @@ import {
 } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { vaConditions, getConditionById } from '@/data/vaConditions';
@@ -624,21 +625,32 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
 
       {/* Rating Criteria — lazy loaded */}
       {conditionDetails && ratingCriteriaKey && (
-        <Suspense
+        <ErrorBoundary
           fallback={
             <Card className="bg-card/80 backdrop-blur-sm border-border">
               <CardContent className="py-8 text-center">
-                <Scale className="h-6 w-6 text-muted-foreground mx-auto mb-2 animate-pulse" />
-                <p className="text-sm text-muted-foreground">Loading rating criteria...</p>
+                <AlertTriangle className="h-6 w-6 text-muted-foreground mx-auto mb-2" />
+                <p className="text-sm text-muted-foreground">Rating criteria failed to load.</p>
               </CardContent>
             </Card>
           }
         >
-          <LazyRatingGuidance
-            conditionId={ratingCriteriaKey}
-            conditionName={conditionDetails.abbreviation || conditionDetails.name}
-          />
-        </Suspense>
+          <Suspense
+            fallback={
+              <Card className="bg-card/80 backdrop-blur-sm border-border">
+                <CardContent className="py-8 text-center">
+                  <Scale className="h-6 w-6 text-muted-foreground mx-auto mb-2 animate-pulse" />
+                  <p className="text-sm text-muted-foreground">Loading rating criteria...</p>
+                </CardContent>
+              </Card>
+            }
+          >
+            <LazyRatingGuidance
+              conditionId={ratingCriteriaKey}
+              conditionName={conditionDetails.abbreviation || conditionDetails.name}
+            />
+          </Suspense>
+        </ErrorBoundary>
       )}
 
       {/* AI Claim Insights */}
