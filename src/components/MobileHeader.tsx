@@ -105,7 +105,8 @@ export function MobileHeader() {
     }
     const details = getConditionById(uc.conditionId);
     setDynamicTitle(details?.abbreviation || details?.name || 'Condition Detail');
-  }, [location.pathname, conditionMatch, userConditions]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- conditionMatch is derived from pathname
+  }, [location.pathname, userConditions]);
 
   const isRootTab = ROOT_TAB_ROUTES.includes(location.pathname);
   const isOnboarding = location.pathname === '/onboarding';
