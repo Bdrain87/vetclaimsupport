@@ -21,6 +21,10 @@ function sanitizeAuthError(error: unknown): Error {
     return new Error('An account with this email already exists.');
   if (msg.includes('rate limit') || msg.includes('too many'))
     return new Error('Too many attempts. Please wait a moment and try again.');
+  if (msg.includes('abort') || msg.includes('timed out') || msg.includes('timeout'))
+    return new Error('Request timed out. Please check your internet connection and try again.');
+  if (msg.includes('fetch') || msg.includes('network') || msg.includes('failed to fetch'))
+    return new Error('Network error. Please check your internet connection and try again.');
 
   // Fallback: never expose the raw message
   return new Error('Authentication failed. Please try again.');
