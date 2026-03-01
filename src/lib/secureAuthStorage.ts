@@ -11,10 +11,18 @@
 import { isNativeApp } from '@/lib/platform';
 
 const AUTH_PREFIX = 'sb-auth-';
+const KEYCHAIN_TIMEOUT_MS = 5_000;
 
 async function getNativePlugin() {
   const { SecureStoragePlugin } = await import('capacitor-secure-storage-plugin');
   return SecureStoragePlugin;
+}
+
+function withTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
+  ]);
 }
 
 export const secureAuthStorage = {
@@ -24,8 +32,11 @@ export const secureAuthStorage = {
     }
     try {
       const plugin = await getNativePlugin();
-      const { value } = await plugin.get({ key: AUTH_PREFIX + key });
-      return value ?? null;
+      return await withTimeout(
+        plugin.get({ key: AUTH_PREFIX + key }).then(({ value }) => value ?? null),
+        KEYCHAIN_TIMEOUT_MS,
+        null,
+      );
     } catch {
       // Key doesn't exist in Keychain
       return null;

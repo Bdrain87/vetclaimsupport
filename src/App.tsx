@@ -466,16 +466,27 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
   const location = useLocation();
 
   useEffect(() => {
+    // Safety timeout — if getSession() hangs (Keychain / Capacitor bridge),
+    // fall through to unauthed so the user isn't stuck on a black screen.
+    const timeout = setTimeout(() => {
+      setState((prev) => (prev === 'loading' ? 'unauthed' : prev));
+    }, 8_000);
+
     supabase.auth.getSession().then(({ data: { session } }) => {
+      clearTimeout(timeout);
       setState(session ? 'authed' : 'unauthed');
     }).catch(() => {
+      clearTimeout(timeout);
       setState('unauthed');
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setState(session ? 'authed' : 'unauthed');
     });
-    return () => subscription.unsubscribe();
+    return () => {
+      clearTimeout(timeout);
+      subscription.unsubscribe();
+    };
   }, []);
 
   if (state === 'loading') {
