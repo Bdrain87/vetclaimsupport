@@ -16,6 +16,13 @@ export async function initNativeFeatures() {
   }
 
   try {
+    const { SplashScreen } = await import('@capacitor/splash-screen');
+    await SplashScreen.hide();
+  } catch {
+    // SplashScreen plugin not available
+  }
+
+  try {
     const { Keyboard } = await import('@capacitor/keyboard');
     // Keyboard listeners for safe layout adjustments
     await Keyboard.addListener('keyboardWillShow', (info) => {

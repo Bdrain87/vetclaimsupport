@@ -105,7 +105,10 @@
       // Cache-bust: nuke old service workers and caches when deploy version changes.
       // This runs before any bundled JS so stale SW can't serve old code.
       // Bump this number on breaking deploys that require a clean slate.
+      // Skip on native — Capacitor serves local files, no stale SW risk,
+      // and reloading can interfere with the native splash screen lifecycle.
       (function(){
+        if(window.Capacitor)return;
         var V='vcs_deploy_v',C='6';
         try{
           if(localStorage.getItem(V)!==C){

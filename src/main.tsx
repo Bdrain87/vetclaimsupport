@@ -77,6 +77,11 @@ if (isNative && 'serviceWorker' in navigator) {
 }
 
 if (!isNative && 'serviceWorker' in navigator) {
+  // Register SW on web only (injectRegister: null in vite.config.ts)
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' });
+  });
+
   // When a new SW takes control, reload so the user gets fresh code.
   // This fires after skipWaiting + clientsClaim on a new deployment.
   let swRefreshing = false;

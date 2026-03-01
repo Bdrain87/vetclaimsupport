@@ -12,6 +12,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      injectRegister: null, // We handle registration in main.tsx (skip on native)
       includeAssets: ['logo.svg', 'icon-*.png'],
       manifest: false, // Use existing public/manifest.json
       workbox: {
