@@ -49,6 +49,7 @@ export function BottomTabBar() {
                 'relative flex flex-col items-center justify-center gap-0.5',
                 'flex-1 h-full',
                 'transition-colors duration-200 ease-out',
+                'outline-none focus:outline-none focus-visible:outline-none focus-visible:shadow-none',
               )}
             >
               {isActive && (

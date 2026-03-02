@@ -35,6 +35,7 @@ body {
   background-color: #000000;
   color: white;
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Ensure bottom tab bar respects safe area */
