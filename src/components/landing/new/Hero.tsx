@@ -249,7 +249,7 @@ export function Hero() {
 
         {/* App Store Badges */}
         <motion.div
-          className="flex items-center justify-center gap-3 mt-8"
+          className="flex flex-wrap items-center justify-center gap-3 mt-8"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.2 }}

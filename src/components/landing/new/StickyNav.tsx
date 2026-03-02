@@ -203,7 +203,7 @@ export function StickyNav() {
             >
               Launch App
             </Link>
-            <div className="mt-2 flex items-center gap-3">
+            <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
               <AppStoreBadge />
               <GooglePlayBadge />
               <WebAppBadge />
