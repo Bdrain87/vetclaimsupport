@@ -524,10 +524,10 @@ export default function CPExamPrepEnhanced() {
           <Card className="bg-primary/5 border-primary/30">
             <CardContent className="pt-6">
               <div className="flex items-start gap-4">
-                <div className="p-3 rounded-full bg-primary/10">
+                <div className="p-3 rounded-full bg-primary/10 shrink-0">
                   <Lightbulb className="h-6 w-6 text-primary" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <h3 className="font-bold text-lg text-foreground mb-2">
                     The #1 Rule: Describe Your Worst Days
                   </h3>

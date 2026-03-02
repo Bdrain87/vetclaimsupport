@@ -6,9 +6,28 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { PageContainer } from '@/components/PageContainer';
 import { searchLocations, ALL_LOCATIONS, CONFLICT_META, HAZARD_LABELS } from '@/data/deployment-locations';
+import { HAZARD_SECONDARIES } from '@/data/deployment-locations/hazard-conditions';
+import { getConditionById } from '@/data/vaConditions';
 import type { EnrichedLocation, ConflictId, HazardType } from '@/data/deployment-locations';
 import useAppStore from '@/store/useAppStore';
 import { cn } from '@/lib/utils';
+
+const HAZARD_DESCRIPTIONS: Partial<Record<HazardType, string>> = {
+  burn_pit: 'Open-air burn pits were used to dispose of waste including chemicals, plastics, and medical materials. Veterans exposed may qualify for presumptive conditions under the PACT Act.',
+  agent_orange: 'Agent Orange and other tactical herbicides were used for defoliation. The VA presumes certain conditions are service-connected for exposed veterans.',
+  high_dioxin: 'Areas with heavy herbicide spraying had elevated dioxin levels. These locations carry the same presumptive conditions as Agent Orange exposure.',
+  radiation: 'Veterans exposed to ionizing radiation during nuclear testing, cleanup, or certain occupations may qualify for presumptive conditions.',
+  contaminated_water: 'Contaminated drinking water at this location has been linked to specific cancers and other conditions now covered by the VA.',
+  oil_well_fire: 'Exposure to oil well fire smoke during the Gulf War is associated with Gulf War Illness and related conditions.',
+  depleted_uranium: 'Depleted uranium exposure from military equipment or munitions may cause kidney and respiratory conditions.',
+  pfas: 'Per- and polyfluoroalkyl substances (PFAS) in water or fire-fighting foam are linked to thyroid disease and certain cancers.',
+  chemical: 'Chemical exposure at this location may qualify for presumptive service connection for neurological and skin conditions.',
+  noise: 'Hazardous noise levels from military operations are linked to hearing loss and tinnitus — the #1 and #3 most common VA disabilities.',
+  asbestos: 'Asbestos exposure from military buildings, ships, or equipment is linked to respiratory conditions and mesothelioma.',
+  lead: 'Lead exposure from military facilities, ammunition, or paint is linked to neurological and kidney conditions.',
+  jet_fuel: 'JP-8 and other jet fuel exposure is associated with respiratory and neurological conditions.',
+  munitions: 'Exposure to munitions chemicals and byproducts may cause respiratory, neurological, and skin conditions.',
+};
 
 type FilterMode = 'all' | 'conflict' | 'hazard';
 
@@ -283,10 +302,64 @@ export default function DeploymentLocations() {
                       ))}
                     </div>
 
-                    {loc.notes && isExpanded && (
-                      <p className="text-xs text-muted-foreground/70 italic mt-2">
-                        {loc.notes}
-                      </p>
+                    {isExpanded && (
+                      <div className="mt-3 pt-3 border-t border-border/50 space-y-3">
+                        {loc.notes && (
+                          <p className="text-xs text-muted-foreground/70 italic">
+                            {loc.notes}
+                          </p>
+                        )}
+
+                        {/* Hazard details */}
+                        {loc.hazards.map((h) => {
+                          const desc = HAZARD_DESCRIPTIONS[h];
+                          if (!desc) return null;
+                          return (
+                            <div key={h} className="text-xs text-muted-foreground leading-relaxed">
+                              <span className="font-semibold text-foreground">{HAZARD_LABELS[h] || h}:</span>{' '}
+                              {desc}
+                            </div>
+                          );
+                        })}
+
+                        {/* Associated conditions */}
+                        {(() => {
+                          const allConditionIds = new Set<string>();
+                          loc.hazards.forEach((h) => {
+                            (HAZARD_SECONDARIES[h] || []).forEach((id) => allConditionIds.add(id));
+                          });
+                          if (allConditionIds.size === 0) return null;
+                          const conditions = Array.from(allConditionIds)
+                            .map((id) => {
+                              const c = getConditionById(id);
+                              return c ? (c.abbreviation || c.name) : id.replace(/-/g, ' ');
+                            });
+                          return (
+                            <div>
+                              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                                Associated Presumptive Conditions
+                              </p>
+                              <div className="flex flex-wrap gap-1">
+                                {conditions.map((name) => (
+                                  <span key={name} className="text-[10px] px-1.5 py-0.5 rounded bg-gold/10 text-gold border border-gold/20">
+                                    {name}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          );
+                        })()}
+
+                        {loc.pactActEligible && (
+                          <p className="text-xs text-success/80">
+                            This location qualifies under the PACT Act — you do not need to prove a direct connection between service and diagnosis for presumptive conditions.
+                          </p>
+                        )}
+
+                        <p className="text-[10px] text-muted-foreground/60">
+                          If you were stationed or deployed here, add this location to your profile. Conditions must still be diagnosed before filing.
+                        </p>
+                      </div>
                     )}
                   </div>
 
