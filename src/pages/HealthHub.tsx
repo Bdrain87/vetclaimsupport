@@ -78,9 +78,14 @@ export default function HealthHub() {
 
   return (
     <PageContainer className="py-6 space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">Track</h1>
-        <p className="text-muted-foreground text-sm mt-1">Log health data to strengthen your VA evidence.</p>
+      <div className="flex items-center gap-3">
+        <div className="p-2 rounded-xl bg-gold/10 border border-gold/20">
+          <Activity className="h-6 w-6 text-gold" />
+        </div>
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Track</h1>
+          <p className="text-muted-foreground text-sm">Log health data to strengthen your VA evidence.</p>
+        </div>
       </div>
 
       {/* 30-Day Summary Card */}

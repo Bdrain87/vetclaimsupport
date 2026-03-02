@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 interface SplashScreenProps {
@@ -13,41 +13,41 @@ export function SplashScreen({
   ready = true,
 }: SplashScreenProps) {
   const [isVisible, setIsVisible] = useState(true);
-  const [timerDone, setTimerDone] = useState(false);
+  const [videoDone, setVideoDone] = useState(false);
   const prefersReducedMotion = useReducedMotion();
   const onCompleteRef = useRef(onComplete);
   const hasCompletedRef = useRef(false);
   onCompleteRef.current = onComplete;
 
-  const completeOnce = () => {
+  const completeOnce = useCallback(() => {
     if (hasCompletedRef.current) return;
     hasCompletedRef.current = true;
     onCompleteRef.current();
-  };
+  }, []);
 
   const r = !!prefersReducedMotion;
 
-  // Minimum display timer
+  // If reduced motion, skip video and use a short timer
   useEffect(() => {
-    const t = r ? Math.min(minimumDuration, 600) : minimumDuration;
-    const timer = setTimeout(() => setTimerDone(true), t);
+    if (!r) return;
+    const timer = setTimeout(() => setVideoDone(true), Math.min(minimumDuration, 600));
     return () => clearTimeout(timer);
   }, [minimumDuration, r]);
 
-  // Begin exit when timer done + ready
+  // Begin exit when video done + ready
   useEffect(() => {
-    if (!timerDone || !ready) return;
+    if (!videoDone || !ready) return;
     setIsVisible(false);
     const exit = r ? 150 : 300;
     const timer = setTimeout(completeOnce, exit);
     return () => clearTimeout(timer);
-  }, [timerDone, ready, r]);
+  }, [videoDone, ready, r, completeOnce]);
 
   // Safety timeout
   useEffect(() => {
     const safety = setTimeout(completeOnce, 8000);
     return () => clearTimeout(safety);
-  }, []);
+  }, [completeOnce]);
 
   return (
     <AnimatePresence>
@@ -62,30 +62,22 @@ export function SplashScreen({
           }}
         >
           <div className="flex flex-col items-center text-center">
-            {/* App Icon */}
-            <motion.div
-              initial={r ? { opacity: 0 } : { opacity: 0, scale: 0.92 }}
-              animate={r ? { opacity: 1 } : { opacity: 1, scale: 1 }}
-              transition={{
-                duration: r ? 0.2 : 0.6,
-                delay: r ? 0.05 : 0.2,
-                ease: [0.22, 1, 0.36, 1],
+            <video
+              src="/splash.mp4"
+              autoPlay
+              muted
+              playsInline
+              onEnded={() => setVideoDone(true)}
+              onError={() => setVideoDone(true)}
+              style={{
+                width: 200,
+                height: 200,
+                objectFit: 'contain',
+                display: 'block',
+                borderRadius: 32,
               }}
-            >
-              <img
-                src="/app-icon.png"
-                alt=""
-                width={72}
-                height={72}
-                style={{
-                  borderRadius: 20,
-                  display: 'block',
-                  boxShadow: '0 0 60px rgba(197,165,90,0.15)',
-                }}
-              />
-            </motion.div>
+            />
 
-            {/* Wordmark */}
             <motion.p
               className="m-0 mt-5"
               style={{
@@ -101,7 +93,7 @@ export function SplashScreen({
               animate={{ opacity: 1 }}
               transition={{
                 duration: r ? 0.2 : 0.5,
-                delay: r ? 0.15 : 0.6,
+                delay: r ? 0.15 : 0.3,
               }}
             >
               Vet Claim Support

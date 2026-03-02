@@ -8,6 +8,7 @@ import { vaConditions, type VACondition, getConditionById } from '@/data/vaCondi
 import { searchAllConditions } from '@/utils/conditionSearch';
 import { Link, useSearchParams } from 'react-router-dom';
 import { PageContainer } from '@/components/PageContainer';
+import { SecondaryConditionSuggestions } from '@/components/SecondaryConditionSuggestions';
 
 // Connection strength heuristic based on data
 function getConnectionStrength(connection: SecondaryConnection): 'strong' | 'moderate' | 'possible' {
@@ -166,6 +167,15 @@ export default function SecondaryFinder() {
             ))}
           </div>
         </div>
+      )}
+
+      {/* Secondaries to consider based on current conditions */}
+      {claimedConditions.length > 0 && !selectedPrimary && (
+        <SecondaryConditionSuggestions
+          collapsible={false}
+          maxSuggestions={15}
+          conditionIds={claimedConditions.map(c => c.id)}
+        />
       )}
 
       {/* Results */}
