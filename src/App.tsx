@@ -8,10 +8,10 @@ import { ThemeProvider } from './context/ThemeContext';
 import { TooltipProvider } from './components/ui/tooltip';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RouteErrorBoundary } from './components/RouteErrorBoundary';
-import { AnimatePresence, MotionConfig } from 'framer-motion';
+import { MotionConfig } from 'framer-motion';
 import { LiabilityAcceptanceScreen } from './components/legal/LiabilityAcceptanceScreen';
 import { SplashScreen } from './components/SplashScreen';
-import { WelcomeScreen } from './components/WelcomeScreen';
+
 import { useProfileStore } from './store/useProfileStore';
 import { migrateOldDataToAppStore } from './utils/migrateData';
 import { useSessionTimeout } from './hooks/useSessionTimeout';
@@ -596,30 +596,8 @@ function App() {
     if (isWeb && (window.location.pathname === '/' || window.location.pathname === '/auth')) return false;
     return true;
   });
-  const [showWelcome, setShowWelcome] = useState(false);
-  const [welcomeDismissing, setWelcomeDismissing] = useState(false);
-
-  const handleSplashComplete = useCallback(async () => {
+  const handleSplashComplete = useCallback(() => {
     setShowSplash(false);
-    // On native, show auth-first welcome screen if no session exists
-    // and user hasn't already dismissed it ("try for free").
-    if (!isWeb) {
-      try {
-        const session = await getSharedSession();
-        if (!session && !localStorage.getItem('vcs_seen_welcome')) {
-          setShowWelcome(true);
-        }
-      } catch {
-        if (!localStorage.getItem('vcs_seen_welcome')) {
-          setShowWelcome(true);
-        }
-      }
-    }
-  }, []);
-
-  const dismissWelcome = useCallback(() => {
-    localStorage.setItem('vcs_seen_welcome', '1');
-    setWelcomeDismissing(true);
   }, []);
 
   useEffect(() => {
@@ -648,8 +626,6 @@ function App() {
       if (event === 'SIGNED_OUT') {
         stopSync();
         logoutPurchases().catch(() => {});
-        // Clear welcome flag so signed-out users see WelcomeScreen again
-        localStorage.removeItem('vcs_seen_welcome');
       }
     });
     return () => {
@@ -657,15 +633,6 @@ function App() {
       stopSync();
     };
   }, []);
-
-  // Auto-dismiss WelcomeScreen when user signs in
-  useEffect(() => {
-    if (!showWelcome) return;
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'SIGNED_IN') dismissWelcome();
-    });
-    return () => subscription.unsubscribe();
-  }, [showWelcome, dismissWelcome]);
 
   return (
     <ErrorBoundary>
@@ -676,7 +643,7 @@ function App() {
             {showSplash && (
               <SplashScreen
                 onComplete={handleSplashComplete}
-                minimumDuration={2200}
+                minimumDuration={2000}
                 ready={hydrated}
               />
             )}
@@ -684,11 +651,6 @@ function App() {
               <ScrollToTop />
               <RetentionWarningBanner />
               {hydrated ? <AppContent /> : <LoadingFallback />}
-              <AnimatePresence onExitComplete={() => setShowWelcome(false)}>
-                {!showSplash && showWelcome && !welcomeDismissing && !isWeb && (
-                  <WelcomeScreen onSkip={dismissWelcome} />
-                )}
-              </AnimatePresence>
               <Toaster />
             </BrowserRouter>
           </AriaLiveAnnouncer>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, ArrowLeft, Shield, Activity, FileText, Package } from 'lucide-react';
 import { signInWithEmail, signUpWithEmail, signInWithGoogle, signInWithApple, resetPassword } from '@/services/auth';
 import { supabase, getSharedSession } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
@@ -193,6 +193,25 @@ export default function AuthPage() {
             </p>
           </div>
 
+          {mode === 'signup' && (
+            <div className="mb-6 space-y-2.5">
+              {[
+                { icon: Shield, label: '800+ conditions & VA form guides' },
+                { icon: Activity, label: 'Track symptoms, sleep & medications' },
+                { icon: FileText, label: 'Build personal statements & buddy letters' },
+                { icon: Package, label: 'Export your complete claim packet' },
+              ].map(({ icon: Icon, label }) => (
+                <div key={label} className="flex items-center gap-3">
+                  <Icon size={16} style={{ color: 'rgba(197,165,90,0.8)', flexShrink: 0 }} />
+                  <span className="text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>{label}</span>
+                </div>
+              ))}
+              <p className="text-xs font-medium mt-3" style={{ color: 'rgba(197,165,90,0.9)', letterSpacing: '0.02em' }}>
+                $9.99 one-time — No subscription
+              </p>
+            </div>
+          )}
+
           <div className="space-y-3 mb-6">
             <button
               onClick={handleGoogleSignIn}
@@ -357,6 +376,14 @@ export default function AuthPage() {
               </>
             )}
           </p>
+
+          <button
+            onClick={() => navigate('/app')}
+            className="block mx-auto mt-4 bg-transparent border-none cursor-pointer text-sm transition-colors"
+            style={{ color: 'rgba(255,255,255,0.4)' }}
+          >
+            Explore free tools →
+          </button>
         </motion.div>
       </div>
     </PageContainer>
