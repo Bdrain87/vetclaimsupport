@@ -34,7 +34,7 @@ import { PageContainer } from '@/components/PageContainer';
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { getConditionById } from '@/data/vaConditions';
 import { getConditionDisplayName } from '@/utils/conditionResolver';
-import { supabase } from '@/lib/supabase';
+import { supabase, getSharedSession } from '@/lib/supabase';
 import type { Session } from '@supabase/supabase-js';
 import { ExportButton } from '@/components/dashboard/ExportButton';
 import { IntentToFileBanner } from '@/components/dashboard/IntentToFileBanner';
@@ -76,7 +76,7 @@ export default function Dashboard() {
 
   const [session, setSession] = useState<Session | null>(null);
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session: s } }) => setSession(s));
+    getSharedSession().then((s) => setSession(s));
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => setSession(s));
     return () => subscription.unsubscribe();
   }, []);

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { signInWithEmail, signUpWithEmail, signInWithGoogle, signInWithApple, resetPassword } from '@/services/auth';
-import { supabase } from '@/lib/supabase';
+import { supabase, getSharedSession } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
 import { PageContainer } from '@/components/PageContainer';
 
@@ -30,7 +30,7 @@ export default function Login() {
   const [successMsg, setSuccessMsg] = useState('');
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    getSharedSession().then((session) => {
       if (session) {
         navigate(getSafeRedirect(), { replace: true });
       }

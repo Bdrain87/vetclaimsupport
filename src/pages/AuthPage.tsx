@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { signInWithEmail, signUpWithEmail, signInWithGoogle, signInWithApple, resetPassword } from '@/services/auth';
-import { supabase } from '@/lib/supabase';
+import { supabase, getSharedSession } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
 import { PageContainer } from '@/components/PageContainer';
 import { GOLD_GRADIENT } from '@/lib/landing-animations';
@@ -34,7 +34,7 @@ export default function AuthPage() {
   // after the deep-link callback sets the session.
   useEffect(() => {
     // Check existing session on mount
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    getSharedSession().then((session) => {
       if (session) {
         navigate(getSafeRedirect(), { replace: true });
       }

@@ -5,7 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ShieldAlert } from 'lucide-react';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { cn } from '@/lib/utils';
-import { supabase } from '@/lib/supabase';
+import { supabase, getSharedSession } from '@/lib/supabase';
 
 const LIABILITY_ACCEPTED_KEY = 'liabilityAccepted';
 const TERMS_VERSION = '1.2';
@@ -21,7 +21,7 @@ export function LiabilityAcceptanceScreen() {
 
     (async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const session = await getSharedSession();
         if (session?.user?.user_metadata?.liability_accepted) {
           // They accepted before — restore localStorage and skip modal
           localStorage.setItem(LIABILITY_ACCEPTED_KEY, 'true');

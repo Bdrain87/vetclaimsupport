@@ -27,7 +27,7 @@ import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { PremiumGuard } from './components/PremiumGuard';
 import { ensureFreshEntitlement } from './services/entitlements';
 import { startSync, stopSync } from './services/syncEngine';
-import { supabase } from './lib/supabase';
+import { supabase, getSharedSession } from './lib/supabase';
 import { logger } from './utils/logger';
 import { initNativeOAuthListener } from './lib/nativeOAuth';
 import { initializePurchases, loginPurchases, logoutPurchases } from './services/iap';
@@ -213,7 +213,7 @@ function useFirstTimeRedirect() {
   // (e.g. on native where the app shell is already rendered), hasSession
   // updates immediately and we don't redirect them back to onboarding.
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    getSharedSession().then((session) => {
       setHasSession(!!session);
       setSessionChecked(true);
     }).catch(() => {
@@ -472,7 +472,7 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
       setState((prev) => (prev === 'loading' ? 'unauthed' : prev));
     }, 8_000);
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    getSharedSession().then((session) => {
       clearTimeout(timeout);
       setState(session ? 'authed' : 'unauthed');
     }).catch(() => {
@@ -605,7 +605,7 @@ function App() {
     // and user hasn't already dismissed it ("try for free").
     if (!isWeb) {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const session = await getSharedSession();
         if (!session && !localStorage.getItem('vcs_seen_welcome')) {
           setShowWelcome(true);
         }
@@ -631,7 +631,7 @@ function App() {
     // Initialize IAP (no-op on web, safe to call early)
     initializePurchases().catch(() => {});
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    getSharedSession().then((session) => {
       if (session) {
         ensureFreshEntitlement().catch(() => {});
         startSync();
