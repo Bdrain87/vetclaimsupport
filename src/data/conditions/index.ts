@@ -116,40 +116,6 @@ export function getConditionsByCategory(category: string): VACondition[] {
   return vaConditions.filter(c => c.category === category);
 }
 
-/** @deprecated Use searchAllConditions from utils/conditionSearch.ts instead */
-export function searchConditions(query: string, excludeIds: string[] = []): VACondition[] {
-  if (!query.trim()) return [];
-
-  const searchTerms = query.toLowerCase().split(' ').filter(Boolean);
-
-  return vaConditions
-    .filter(condition => {
-      if (excludeIds.includes(condition.id)) return false;
-
-      const searchText = [
-        condition.abbreviation,
-        condition.name,
-        condition.description || '',
-        ...condition.keywords,
-        ...(condition.misspellings || []),
-      ].join(' ').toLowerCase();
-
-      return searchTerms.every(term => searchText.includes(term));
-    })
-    .sort((a, b) => {
-      const aAbbr = a.abbreviation.toLowerCase();
-      const bAbbr = b.abbreviation.toLowerCase();
-      const queryLower = query.toLowerCase();
-
-      if (aAbbr === queryLower) return -1;
-      if (bAbbr === queryLower) return 1;
-      if (aAbbr.startsWith(queryLower)) return -1;
-      if (bAbbr.startsWith(queryLower)) return 1;
-
-      return a.name.localeCompare(b.name);
-    })
-    .slice(0, 20);
-}
 
 /** Get secondary conditions for a primary condition */
 export function getSecondaryConditions(primaryId: string): VACondition[] {

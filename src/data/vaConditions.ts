@@ -21,7 +21,6 @@ export {
   Conditions,
   getConditionById,
   getConditionsByCategory,
-  searchConditions,
   getSecondaryConditions,
   getConditionDisplayText,
   getConditionShortText,

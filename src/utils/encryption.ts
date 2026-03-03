@@ -274,14 +274,6 @@ export async function verifyPasswordHash(
   return bufferToBase64(hashBuffer) === storedHash;
 }
 
-/**
- * @deprecated Use `hashPassword` instead.  Retained only so that call-sites
- * that have not yet been migrated continue to compile.
- */
-export async function hashString(str: string): Promise<string> {
-  return hashPassword(str);
-}
-
 // Generate a secure random password
 export function generateSecurePassword(length: number = 16): string {
   const charset =
