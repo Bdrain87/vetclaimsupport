@@ -178,7 +178,7 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
             <p className="text-3xl font-bold text-foreground">
               {priceString}<span className="text-base font-normal text-muted-foreground"> one-time</span>
             </p>
-            <p className="text-xs text-muted-foreground">Less than a single copay. No subscription. Yours forever.</p>
+            <p className="text-xs text-muted-foreground">Less than a single copay. No subscription. One-time purchase.</p>
           </div>
 
           {/* Contextual feature bullets */}
