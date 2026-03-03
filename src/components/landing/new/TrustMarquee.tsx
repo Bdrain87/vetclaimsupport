@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { MARQUEE_STYLES } from '@/lib/landing-animations';
+import { MARQUEE_STYLES, LANDING_BG, GOLD } from '@/lib/landing-animations';
 
 const ROW_1_ITEMS = [
   'VA Combined Rating Calculator',
@@ -56,7 +56,7 @@ function MarqueeRow({ items, direction, speed }: { items: string[]; direction: '
           <span
             className="font-medium"
             style={{
-              color: '#C5A55A',
+              color: GOLD,
               fontSize: '1rem',
               fontWeight: 500,
               letterSpacing: '0.01em',
@@ -99,7 +99,7 @@ export function TrustMarquee() {
     <section
       className="py-8"
       style={{
-        backgroundColor: '#0A0A0A',
+        backgroundColor: LANDING_BG,
         borderTop: '1px solid rgba(255, 255, 255, 0.05)',
         borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
       }}

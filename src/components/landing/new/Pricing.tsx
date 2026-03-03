@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { fadeInUp, staggerContainer, GOLD_GRADIENT_TEXT, GOLD_GRADIENT, EASE_SMOOTH, HEADING_H2_STYLE } from '@/lib/landing-animations';
+import { fadeInUp, staggerContainer, GOLD_GRADIENT_TEXT, GOLD_GRADIENT, EASE_SMOOTH, HEADING_H2_STYLE, LANDING_BG_ELEVATED, LANDING_BG, TEXT_TERTIARY, TEXT_DIM, TEXT_SECONDARY, TEXT_PRIMARY, TEXT_BRIGHT, GOLD } from '@/lib/landing-animations';
 import { Check, Shield, ChevronDown } from 'lucide-react';
 
 const INCLUDED_FEATURES = [
@@ -79,7 +79,7 @@ function RotatingBorderCard({ children }: { children: React.ReactNode }) {
         className="relative rounded-2xl p-[1.5px]"
       >
         {/* Inner card */}
-        <div className="relative rounded-[15px] overflow-hidden" style={{ backgroundColor: '#0F0F0F' }}>
+        <div className="relative rounded-[15px] overflow-hidden" style={{ backgroundColor: LANDING_BG_ELEVATED }}>
           {children}
         </div>
       </div>
@@ -120,18 +120,18 @@ function CompetitorCard({
       <div
         className="relative rounded-[15px] h-full p-7"
         style={{
-          backgroundColor: '#0F0F0F',
+          backgroundColor: LANDING_BG_ELEVATED,
         }}
       >
-        <h3 className="text-base font-semibold mb-4" style={{ color: '#6B7280' }}>{title}</h3>
+        <h3 className="text-base font-semibold mb-4" style={{ color: TEXT_TERTIARY }}>{title}</h3>
         <div className="mb-5">
           <span className="text-3xl font-bold text-white">{price}</span>
-          <span className="text-xs ml-2" style={{ color: '#6B7280' }}>{priceLabel}</span>
+          <span className="text-xs ml-2" style={{ color: TEXT_TERTIARY }}>{priceLabel}</span>
         </div>
         <ul className="space-y-2.5">
           {items.map((item) => (
-            <li key={item} className="flex items-start gap-2.5 text-sm" style={{ color: '#6B7280' }}>
-              <span className="mt-0.5 text-xs" style={{ color: '#4B5563' }}>&#10005;</span>
+            <li key={item} className="flex items-start gap-2.5 text-sm" style={{ color: TEXT_TERTIARY }}>
+              <span className="mt-0.5 text-xs" style={{ color: TEXT_DIM }}>&#10005;</span>
               <span>{item}</span>
             </li>
           ))}
@@ -145,7 +145,7 @@ export function Pricing() {
   const [showFeatures, setShowFeatures] = useState(false);
 
   return (
-    <section id="pricing" className="py-16 md:py-24 px-4" style={{ backgroundColor: '#0A0A0A' }}>
+    <section id="pricing" className="py-16 md:py-24 px-4" style={{ backgroundColor: LANDING_BG }}>
       <div className="max-w-4xl mx-auto">
         <motion.h2
           className="text-center text-3xl md:text-5xl text-white mb-4"
@@ -159,7 +159,7 @@ export function Pricing() {
         </motion.h2>
         <motion.p
           className="text-center mb-14 text-lg"
-          style={{ color: '#9CA3AF' }}
+          style={{ color: TEXT_SECONDARY }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -207,7 +207,7 @@ export function Pricing() {
                     border: '1px solid rgba(197, 165, 90, 0.2)',
                   }}
                 >
-                  <Shield size={16} style={{ color: '#C5A55A' }} />
+                  <Shield size={16} style={{ color: GOLD }} />
                 </div>
                 <h3 className="text-base font-semibold" style={GOLD_GRADIENT_TEXT}>Vet Claim Support</h3>
               </div>
@@ -219,7 +219,7 @@ export function Pricing() {
                 >
                   $9.99
                 </span>
-                <span className="text-xs ml-2" style={{ color: '#9CA3AF' }}>one-time</span>
+                <span className="text-xs ml-2" style={{ color: TEXT_SECONDARY }}>one-time</span>
               </div>
 
               <ul className="space-y-2.5 mb-6">
@@ -230,14 +230,14 @@ export function Pricing() {
                   'Symptom trackers',
                   'No subscription required',
                 ].map((feature) => (
-                  <li key={feature} className="flex items-center gap-2.5 text-sm" style={{ color: '#E5E7EB' }}>
+                  <li key={feature} className="flex items-center gap-2.5 text-sm" style={{ color: TEXT_PRIMARY }}>
                     <div
                       className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0"
                       style={{
                         background: 'rgba(197, 165, 90, 0.15)',
                       }}
                     >
-                      <Check size={10} style={{ color: '#C5A55A' }} />
+                      <Check size={10} style={{ color: GOLD }} />
                     </div>
                     {feature}
                   </li>
@@ -285,7 +285,7 @@ export function Pricing() {
           <button
             onClick={() => setShowFeatures(!showFeatures)}
             className="inline-flex items-center gap-2 bg-transparent border-none cursor-pointer text-sm font-medium transition-colors"
-            style={{ color: '#C5A55A' }}
+            style={{ color: GOLD }}
           >
             What's included in Premium?
             <motion.span
@@ -310,15 +310,15 @@ export function Pricing() {
                     <div key={group.category}>
                       <p
                         className="text-[10px] font-bold uppercase tracking-widest mb-2"
-                        style={{ color: '#C5A55A' }}
+                        style={{ color: GOLD }}
                       >
                         {group.category}
                       </p>
                       <ul className="space-y-1.5">
                         {group.features.map((f) => (
                           <li key={f} className="flex items-center gap-2.5 text-sm">
-                            <Check size={14} className="shrink-0" style={{ color: '#C5A55A' }} />
-                            <span style={{ color: '#D1D5DB' }}>{f}</span>
+                            <Check size={14} className="shrink-0" style={{ color: GOLD }} />
+                            <span style={{ color: TEXT_BRIGHT }}>{f}</span>
                           </li>
                         ))}
                       </ul>

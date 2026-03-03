@@ -21,15 +21,35 @@ function calculateCombinedRating(conditions: UserCondition[]): number {
 /**
  * Adapter hook — returns the same shape as the old UserConditionsContext.
  * All consuming components continue to work unchanged.
+ *
+ * Uses a single subscription for data and getState() for stable action
+ * references (matching useClaims.ts pattern).
  */
 export function useUserConditions() {
   const conditions = useAppStore((s) => s.userConditions);
-  const addUserConditionAction = useAppStore((s) => s.addUserCondition);
-  const removeUserCondition = useAppStore((s) => s.removeUserCondition);
-  const updateUserConditionAction = useAppStore((s) => s.updateUserCondition);
-  const clearAllUserConditions = useAppStore((s) => s.clearAllUserConditions);
-  const incrementConditionUsageAction = useAppStore((s) => s.incrementConditionUsage);
-  const addClaimConditionAction = useAppStore((s) => s.addClaimCondition);
+
+  // Actions are stable references from the store — read once and reuse.
+  // Using getState() avoids subscribing the component to action identity changes.
+  const actions = useMemo(() => {
+    const s = useAppStore.getState();
+    return {
+      addUserCondition: s.addUserCondition,
+      removeUserCondition: s.removeUserCondition,
+      updateUserCondition: s.updateUserCondition,
+      clearAllUserConditions: s.clearAllUserConditions,
+      incrementConditionUsage: s.incrementConditionUsage,
+      addClaimCondition: s.addClaimCondition,
+    };
+  }, []);
+
+  const {
+    addUserCondition: addUserConditionAction,
+    removeUserCondition,
+    updateUserCondition: updateUserConditionAction,
+    clearAllUserConditions,
+    incrementConditionUsage: incrementConditionUsageAction,
+    addClaimCondition: addClaimConditionAction,
+  } = actions;
 
   const addCondition = useCallback(
     (conditionId: string, options?: Partial<UserCondition>): UserCondition | null => {
@@ -83,7 +103,7 @@ export function useUserConditions() {
       addUserConditionAction(newCondition);
       return newCondition;
     },
-    [addUserConditionAction, updateUserConditionAction],
+    [actions],
   );
 
   const hasCondition = useCallback(
@@ -151,7 +171,7 @@ export function useUserConditions() {
         existingNames.add(name.toLowerCase());
       }
     }
-  }, [conditions, addClaimConditionAction]);
+  }, [conditions, actions]);
 
   const totalRating = useMemo(() => calculateCombinedRating(conditions), [conditions]);
   const approvedConditionsCount = useMemo(
@@ -167,7 +187,7 @@ export function useUserConditions() {
     (id: string) => {
       incrementConditionUsageAction(id);
     },
-    [incrementConditionUsageAction],
+    [actions],
   );
 
   /** Conditions sorted by usage count (most-used first) for ConditionSelector */

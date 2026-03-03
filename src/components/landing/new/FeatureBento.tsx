@@ -5,6 +5,13 @@ import {
   PILL_STYLE,
   EASE_SMOOTH,
   GOLD_GRADIENT_TEXT,
+  LANDING_BG,
+  LANDING_BG_CARD,
+  TEXT_SECONDARY,
+  TEXT_TERTIARY,
+  TEXT_SLATE,
+  TEXT_SLATE_DIM,
+  GOLD,
 } from '@/lib/landing-animations';
 import {
   Activity,
@@ -435,10 +442,10 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
           className="w-14 h-14 rounded-xl flex items-center justify-center mb-5"
           style={{ backgroundColor: 'rgba(197,165,90,0.15)', border: '1px solid rgba(197,165,90,0.3)' }}
         >
-          <Icon size={24} style={{ color: '#C5A55A' }} />
+          <Icon size={24} style={{ color: GOLD }} />
         </div>
 
-        <span className="text-[10px] font-medium tracking-widest uppercase" style={{ color: '#C5A55A' }}>
+        <span className="text-[10px] font-medium tracking-widest uppercase" style={{ color: GOLD }}>
           {card.category}
         </span>
 
@@ -446,18 +453,18 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
           {card.title}
         </h3>
 
-        <p className="text-sm mb-5 leading-relaxed" style={{ color: '#E2E8F0' }}>
+        <p className="text-sm mb-5 leading-relaxed" style={{ color: TEXT_SLATE }}>
           {card.detail}
         </p>
 
         <div className="mb-5">
-          <h4 className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: '#CBD5E1' }}>
+          <h4 className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: TEXT_SLATE_DIM }}>
             Key Capabilities
           </h4>
           <ul className="space-y-1.5">
             {card.capabilities.map((cap) => (
-              <li key={cap} className="flex items-start gap-2 text-sm" style={{ color: '#E2E8F0' }}>
-                <span className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: '#C5A55A' }} />
+              <li key={cap} className="flex items-start gap-2 text-sm" style={{ color: TEXT_SLATE }}>
+                <span className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: GOLD }} />
                 {cap}
               </li>
             ))}
@@ -468,7 +475,7 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
           className="inline-block rounded-full px-4 py-1.5 text-xs font-semibold"
           style={{
             backgroundColor: 'rgba(197,165,90,0.15)',
-            color: '#C5A55A',
+            color: GOLD,
           }}
         >
           {card.plan}
@@ -623,12 +630,12 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
                       border: '1px solid rgba(197,165,90,0.25)',
                     }}
                   >
-                    <Icon size={20} style={{ color: '#C5A55A' }} />
+                    <Icon size={20} style={{ color: GOLD }} />
                   </div>
                   <div className="min-w-0">
                     <span
                       className="text-[10px] font-semibold tracking-[0.15em] uppercase block mb-1"
-                      style={{ color: '#C5A55A' }}
+                      style={{ color: GOLD }}
                     >
                       {card.category}
                     </span>
@@ -641,7 +648,7 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
                   </div>
                 </div>
 
-                <p className="text-sm leading-relaxed mb-4" style={{ color: '#E2E8F0' }}>
+                <p className="text-sm leading-relaxed mb-4" style={{ color: TEXT_SLATE }}>
                   {card.short}
                 </p>
 
@@ -667,7 +674,7 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
                   >
                     {card.plan.startsWith('Free') ? 'Free' : 'Premium'}
                   </span>
-                  <span className="text-[11px] font-semibold transition-colors duration-200" style={{ color: '#C5A55A' }}>
+                  <span className="text-[11px] font-semibold transition-colors duration-200" style={{ color: GOLD }}>
                     Tap to explore →
                   </span>
                 </div>
@@ -735,15 +742,15 @@ function MobileCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => vo
               className="w-10 h-10 rounded-lg flex items-center justify-center mb-3"
               style={{ backgroundColor: 'rgba(197,165,90,0.15)' }}
             >
-              <Icon size={18} style={{ color: '#C5A55A' }} />
+              <Icon size={18} style={{ color: GOLD }} />
             </div>
-            <span className="text-[10px] font-medium tracking-widest uppercase" style={{ color: '#C5A55A' }}>
+            <span className="text-[10px] font-medium tracking-widest uppercase" style={{ color: GOLD }}>
               {card.category}
             </span>
             <h4 className="text-base font-semibold mt-1 mb-2" style={{ color: '#fff', letterSpacing: '-0.02em' }}>
               {card.title}
             </h4>
-            <p className="text-sm leading-relaxed" style={{ color: '#E2E8F0' }}>
+            <p className="text-sm leading-relaxed" style={{ color: TEXT_SLATE }}>
               {card.short}
             </p>
           </motion.div>
@@ -753,19 +760,19 @@ function MobileCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => vo
           <button
             onClick={() => goTo(currentIndex - 1)}
             className="w-10 h-10 rounded-full flex items-center justify-center"
-            style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#9CA3AF' }}
+            style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: TEXT_SECONDARY }}
           >
             <ChevronLeft size={18} />
           </button>
 
-          <span className="text-xs tabular-nums" style={{ color: '#6B7280' }}>
+          <span className="text-xs tabular-nums" style={{ color: TEXT_TERTIARY }}>
             {currentIndex + 1} / {N}
           </span>
 
           <button
             onClick={() => goTo(currentIndex + 1)}
             className="w-10 h-10 rounded-full flex items-center justify-center"
-            style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#9CA3AF' }}
+            style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: TEXT_SECONDARY }}
           >
             <ChevronRight size={18} />
           </button>
@@ -796,7 +803,7 @@ export function FeatureBento() {
       <section
         id="features"
         className="relative py-12"
-        style={{ backgroundColor: '#0A0A0A', scrollMarginTop: '5rem' }}
+        style={{ backgroundColor: LANDING_BG, scrollMarginTop: '5rem' }}
       >
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <motion.div
@@ -823,7 +830,7 @@ export function FeatureBento() {
 
           <motion.p
             className="text-base max-w-xl mx-auto text-center mb-12"
-            style={{ color: '#9CA3AF' }}
+            style={{ color: TEXT_SECONDARY }}
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -848,7 +855,7 @@ export function FeatureBento() {
     <section
       id="features"
       className="relative py-12 lg:py-16"
-      style={{ backgroundColor: '#0A0A0A', scrollMarginTop: '5rem' }}
+      style={{ backgroundColor: LANDING_BG, scrollMarginTop: '5rem' }}
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -871,7 +878,7 @@ export function FeatureBento() {
 
             <p
               className="text-lg lg:text-xl leading-relaxed"
-              style={{ color: '#9CA3AF' }}
+              style={{ color: TEXT_SECONDARY }}
             >
               Every card is a real tool built into the app—from free calculators to premium document builders. Click to explore.
             </p>

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useUserConditions } from '@/hooks/useUserConditions';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { calculateCombinedRating, getMonthlyCompensation } from '@/services/vaCompensation';
 import {
   Briefcase,
@@ -93,7 +94,7 @@ export default function TDIUChecker() {
     () =>
       conditions
         .filter((c) => c.claimStatus === 'approved' && typeof c.rating === 'number' && c.rating > 0)
-        .map((c) => ({ name: c.displayName || c.conditionId, rating: c.rating as number })),
+        .map((c) => ({ name: getConditionDisplayName(c), rating: c.rating as number })),
     [conditions],
   );
 

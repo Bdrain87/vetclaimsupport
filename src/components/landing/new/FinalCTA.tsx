@@ -7,6 +7,8 @@ import {
   HEADING_H2_STYLE,
   PILL_STYLE,
   EASE_SMOOTH,
+  LANDING_BG,
+  TEXT_BRIGHT,
 } from '@/lib/landing-animations';
 
 export function FinalCTA() {
@@ -23,7 +25,7 @@ export function FinalCTA() {
     <section
       ref={sectionRef}
       className="relative py-12 md:py-16 overflow-hidden"
-      style={{ backgroundColor: '#0A0A0A' }}
+      style={{ backgroundColor: LANDING_BG }}
     >
       <motion.div
         className="absolute inset-0 pointer-events-none"
@@ -73,7 +75,7 @@ export function FinalCTA() {
 
         <motion.p
           className="text-lg md:text-xl mb-10 text-center"
-          style={{ color: '#D1D5DB' }}
+          style={{ color: TEXT_BRIGHT }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

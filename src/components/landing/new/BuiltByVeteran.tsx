@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { EASE_SMOOTH } from '@/lib/landing-animations';
+import { EASE_SMOOTH, LANDING_BG, TEXT_PRIMARY, TEXT_TERTIARY } from '@/lib/landing-animations';
 
 function GoldFlag() {
   return (
@@ -51,7 +51,7 @@ function GoldFlag() {
 
 export function BuiltByVeteran() {
   return (
-    <section className="py-16 md:py-24 px-4" style={{ backgroundColor: '#0A0A0A' }}>
+    <section className="py-16 md:py-24 px-4" style={{ backgroundColor: LANDING_BG }}>
       <div className="mx-auto max-w-3xl">
         {/* Gold flag */}
         <motion.div
@@ -77,7 +77,7 @@ export function BuiltByVeteran() {
         >
           <p
             className="text-lg md:text-xl italic leading-relaxed mb-6"
-            style={{ color: '#E5E7EB' }}
+            style={{ color: TEXT_PRIMARY }}
           >
             &ldquo;I&rsquo;m a service-connected disabled veteran. I went through the claims
             process myself &mdash; the confusion, the denials, the C&amp;P exams, the companies charging
@@ -94,7 +94,7 @@ export function BuiltByVeteran() {
           </footer>
           <p
             className="text-xs mt-4 pl-6 md:pl-8"
-            style={{ color: '#6B7280' }}
+            style={{ color: TEXT_TERTIARY }}
           >
             Individual results vary. Vet Claim Support is an organizational tool &mdash; not a guarantee of any particular outcome.
           </p>

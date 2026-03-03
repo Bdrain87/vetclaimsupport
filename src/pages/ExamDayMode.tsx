@@ -18,7 +18,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { PageContainer } from '@/components/PageContainer';
 import { useUserConditions } from '@/hooks/useUserConditions';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
 import useAppStore from '@/store/useAppStore';
+import { useShallow } from 'zustand/react/shallow';
 import { useProfileStore } from '@/store/useProfileStore';
 import {
   conditionRatingCriteria,
@@ -80,9 +82,13 @@ export default function ExamDayMode() {
   const focusCondition = searchParams.get('condition');
   const { conditions: userConditions } = useUserConditions();
   const profile = useProfileStore();
-  const symptoms = useAppStore((s) => s.symptoms);
-  const medications = useAppStore((s) => s.medications);
-  const medicalVisits = useAppStore((s) => s.medicalVisits);
+  const { symptoms, medications, medicalVisits } = useAppStore(
+    useShallow((s) => ({
+      symptoms: s.symptoms,
+      medications: s.medications,
+      medicalVisits: s.medicalVisits,
+    })),
+  );
 
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
     new Set(['tips', 'conditions']),
@@ -128,7 +134,7 @@ export default function ExamDayMode() {
   // Build per-condition exam data
   const conditionExamData = useMemo(() => {
     return userConditions.map((uc) => {
-      const name = uc.displayName || uc.conditionId;
+      const name = getConditionDisplayName(uc);
       const criteria = findCriteria(uc.conditionId, name);
       const condSymptoms = recentSymptoms[name] || [];
 

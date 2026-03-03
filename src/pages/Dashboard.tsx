@@ -4,6 +4,7 @@ import { useProfileStore } from '@/store/useProfileStore';
 import { getAllBranchLabels } from '@/utils/veteranProfile';
 import { combineRatings } from '@/utils/vaMath';
 import useAppStore from '@/store/useAppStore';
+import { useShallow } from 'zustand/react/shallow';
 import { ClaimIntelligence } from '@/services/claimIntelligence';
 import {
   ChevronRight,
@@ -51,12 +52,16 @@ export default function Dashboard() {
   const { data } = useClaims();
   const { conditions: userConditions } = useUserConditions();
   const profile = useProfileStore();
-  const vaultDocCount = useAppStore((s) => s.claimDocuments.length);
-  const activeDeadlines = useAppStore((s) => (s.deadlines ?? []).filter((d) => !d.completed).length);
-  const currentPhase = useAppStore((s) => s.journeyProgress?.currentPhase ?? 0);
-  const symptoms = useAppStore((s) => s.symptoms);
-  const addQuickLog = useAppStore((s) => s.addQuickLog);
-  const quickLogs = useAppStore((s) => s.quickLogs);
+  const { vaultDocCount, activeDeadlines, currentPhase, symptoms, quickLogs } = useAppStore(
+    useShallow((s) => ({
+      vaultDocCount: s.claimDocuments.length,
+      activeDeadlines: (s.deadlines ?? []).filter((d) => !d.completed).length,
+      currentPhase: s.journeyProgress?.currentPhase ?? 0,
+      symptoms: s.symptoms,
+      quickLogs: s.quickLogs,
+    })),
+  );
+  const addQuickLog = useMemo(() => useAppStore.getState().addQuickLog, []);
   const navigate = useNavigate();
 
   // Quick Log state

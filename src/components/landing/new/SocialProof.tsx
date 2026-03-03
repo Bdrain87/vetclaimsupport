@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { fadeInUp, staggerContainer } from '@/lib/landing-animations';
+import { fadeInUp, staggerContainer, LANDING_BG_CARD, TEXT_SECONDARY } from '@/lib/landing-animations';
 
 function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -50,7 +50,7 @@ const STATS = [
 
 export function SocialProof() {
   return (
-    <section className="py-8 md:py-10" style={{ backgroundColor: '#111111', borderTop: '1px solid rgba(197,165,90,0.15)', borderBottom: '1px solid rgba(197,165,90,0.15)' }}>
+    <section className="py-8 md:py-10" style={{ backgroundColor: LANDING_BG_CARD, borderTop: '1px solid rgba(197,165,90,0.15)', borderBottom: '1px solid rgba(197,165,90,0.15)' }}>
       <motion.div
         className="mx-auto max-w-5xl px-4 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0"
         variants={staggerContainer}
@@ -114,7 +114,7 @@ export function SocialProof() {
             ) : (
               <AnimatedNumber value={stat.value} suffix={stat.suffix} />
             )}
-            <span className="text-sm" style={{ color: '#9CA3AF' }}>
+            <span className="text-sm" style={{ color: TEXT_SECONDARY }}>
               {stat.label}
             </span>
           </motion.div>

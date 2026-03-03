@@ -16,6 +16,7 @@ import { getConditionById } from '@/data/vaConditions';
 import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import useAppStore from '@/store/useAppStore';
+import { useShallow } from 'zustand/react/shallow';
 import { EMPLOYMENT_IMPACT_TYPES } from '@/types/claims';
 import type { EmploymentImpactEntry } from '@/types/claims';
 
@@ -26,8 +27,10 @@ const todayStr = () => {
 
 export default function WorkImpact() {
   const entries = useAppStore((s) => s.employmentImpactEntries);
-  const addEntry = useAppStore((s) => s.addEmploymentImpact);
-  const deleteEntry = useAppStore((s) => s.deleteEmploymentImpact);
+  const { addEntry, deleteEntry } = useMemo(() => {
+    const s = useAppStore.getState();
+    return { addEntry: s.addEmploymentImpact, deleteEntry: s.deleteEmploymentImpact };
+  }, []);
   const { conditions: userConditions } = useUserConditions();
   const { toast } = useToast();
 

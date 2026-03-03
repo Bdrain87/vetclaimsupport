@@ -9,6 +9,9 @@ import {
   CARD_SHADOW,
   staggerContainerFast,
   fadeInUp,
+  LANDING_BG,
+  LANDING_BG_CARD,
+  TEXT_SECONDARY,
 } from '@/lib/landing-animations';
 import {
   Activity,
@@ -129,7 +132,7 @@ export function ProductShowcase() {
     <section
       id="features"
       className="py-16 md:py-24"
-      style={{ backgroundColor: '#0A0A0A', scrollMarginTop: '5rem' }}
+      style={{ backgroundColor: LANDING_BG, scrollMarginTop: '5rem' }}
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         {/* Header */}
@@ -151,13 +154,13 @@ export function ProductShowcase() {
         </motion.h2>
         <motion.p
           className="text-center mb-16 text-lg max-w-2xl mx-auto"
-          style={{ color: '#9CA3AF' }}
+          style={{ color: TEXT_SECONDARY }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1, ease: EASE_SMOOTH }}
         >
-          40+ tools designed around how the VA actually evaluates claims.
+          50+ tools designed around how the VA actually evaluates claims.
         </motion.p>
 
         {/* Category tabs */}
@@ -180,7 +183,7 @@ export function ProductShowcase() {
                   backgroundColor: isActive
                     ? 'rgba(197, 165, 90, 0.15)'
                     : 'rgba(255, 255, 255, 0.04)',
-                  color: isActive ? '#C5A55A' : '#9CA3AF',
+                  color: isActive ? '#C5A55A' : TEXT_SECONDARY,
                   border: isActive
                     ? '1px solid rgba(197, 165, 90, 0.3)'
                     : '1px solid rgba(255, 255, 255, 0.06)',
@@ -205,7 +208,7 @@ export function ProductShowcase() {
             <div
               className="relative rounded-2xl overflow-hidden"
               style={{
-                background: '#111111',
+                background: LANDING_BG_CARD,
                 border: '1px solid rgba(255, 255, 255, 0.06)',
                 boxShadow: CARD_SHADOW,
               }}
@@ -305,7 +308,7 @@ export function ProductShowcase() {
             className="inline-block rounded-full px-8 py-3.5 text-sm font-semibold text-black no-underline"
             style={{ background: GOLD_GRADIENT }}
           >
-            Explore All 40+ Tools
+            Explore All 50+ Tools
           </Link>
         </motion.div>
       </div>

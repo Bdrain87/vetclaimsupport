@@ -9,6 +9,8 @@ import {
   cardRevealRotate,
   staggerContainerSlow,
   hoverLift,
+  LANDING_BG,
+  LANDING_BG_SUBTLE,
 } from '@/lib/landing-animations';
 
 const STEPS = [
@@ -39,7 +41,7 @@ export function HowItWorks() {
     <section
       id="how-it-works"
       className="relative py-16 md:py-24 overflow-hidden"
-      style={{ backgroundColor: '#0A0A0A', scrollMarginTop: '5rem' }}
+      style={{ backgroundColor: LANDING_BG, scrollMarginTop: '5rem' }}
     >
       <motion.h2
         className="relative z-10 text-white text-center mb-16 px-4"
@@ -74,7 +76,7 @@ export function HowItWorks() {
             className="relative overflow-hidden cursor-default group"
             style={{
               ...CARD_STYLE,
-              background: '#161616',
+              background: LANDING_BG_SUBTLE,
               border: '1px solid rgba(255, 255, 255, 0.06)',
               borderRadius: '16px',
               padding: '32px',

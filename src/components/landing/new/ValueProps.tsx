@@ -5,6 +5,9 @@ import {
   HEADING_H2_STYLE,
   PILL_STYLE,
   EASE_SMOOTH,
+  LANDING_BG_CARD,
+  LANDING_BG_CARD_HOVER,
+  TEXT_SECONDARY,
 } from '@/lib/landing-animations';
 
 function ClipboardIcon() {
@@ -66,7 +69,7 @@ const PROPS = [
 
 export function ValueProps() {
   return (
-    <section className="py-16 md:py-24" style={{ backgroundColor: '#111111' }}>
+    <section className="py-16 md:py-24" style={{ backgroundColor: LANDING_BG_CARD }}>
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
         {/* Pill label */}
         <motion.div
@@ -91,7 +94,7 @@ export function ValueProps() {
         </motion.h2>
         <motion.p
           className="text-center mb-16 text-lg max-w-2xl mx-auto"
-          style={{ color: '#9CA3AF' }}
+          style={{ color: TEXT_SECONDARY }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -118,7 +121,7 @@ export function ValueProps() {
               }}
               className="relative text-center rounded-2xl p-8 overflow-hidden group"
               style={{
-                backgroundColor: '#1a1a1a',
+                backgroundColor: LANDING_BG_CARD_HOVER,
                 border: '1px solid rgba(197, 165, 90, 0.1)',
               }}
             >
@@ -135,7 +138,7 @@ export function ValueProps() {
                   </div>
                 </div>
                 <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#D9BE6C] transition-colors duration-300">{title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: '#9CA3AF' }}>
+                <p className="text-sm leading-relaxed" style={{ color: TEXT_SECONDARY }}>
                   {desc}
                 </p>
               </div>

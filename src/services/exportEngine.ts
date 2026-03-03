@@ -689,8 +689,8 @@ async function generatePDF(
     } else {
       data.userConditions.forEach((c) => {
         y = checkPageBreak(18);
+        const name = getConditionDisplayName(c);
         const vaInfo = getConditionById(c.conditionId);
-        const name = vaInfo?.name || c.conditionId;
         const dc = vaInfo?.diagnosticCode || 'N/A';
 
         doc.setFontSize(10);
@@ -1340,11 +1340,10 @@ function buildTimelineData(data: GatheredData): TimelineEvent[] {
   // Condition add dates
   data.userConditions.forEach((c) => {
     if (c.dateAdded) {
-      const vaInfo = getConditionById(c.conditionId);
       events.push({
         date: c.dateAdded,
         type: 'Condition',
-        description: `Claimed: ${vaInfo?.name || c.conditionId}`,
+        description: `Claimed: ${getConditionDisplayName(c)}`,
         sortDate: new Date(c.dateAdded).getTime(),
       });
     }

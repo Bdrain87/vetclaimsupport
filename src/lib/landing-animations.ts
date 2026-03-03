@@ -150,6 +150,21 @@ export const hoverGlow = (color: string = 'rgba(197,165,90,0.3)') => ({
   transition: { duration: 0.3 },
 });
 
+// --- LANDING PAGE COLOR TOKENS ---
+export const LANDING_BG = '#0A0A0A';
+export const LANDING_BG_ELEVATED = '#0F0F0F';
+export const LANDING_BG_CARD = '#111111';
+export const LANDING_BG_CARD_HOVER = '#1a1a1a';
+export const LANDING_BG_SUBTLE = '#161616';
+export const TEXT_PRIMARY = '#E5E7EB';
+export const TEXT_SECONDARY = '#9CA3AF';
+export const TEXT_TERTIARY = '#6B7280';
+export const TEXT_DIM = '#4B5563';
+export const TEXT_BRIGHT = '#D1D5DB';
+export const TEXT_SLATE = '#E2E8F0';
+export const TEXT_SLATE_DIM = '#CBD5E1';
+export const BORDER_DIM = '#374151';
+
 // --- LUXURY GOLD PALETTE ---
 // Dark: #A68B3C | Primary: #C5A55A | Light: #D9BE6C
 // RGBA base: rgba(197, 165, 90, opacity)

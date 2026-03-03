@@ -22,6 +22,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { PageContainer } from '@/components/PageContainer';
 import { useUserConditions } from '@/hooks/useUserConditions';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
 import useAppStore from '@/store/useAppStore';
 import {
   conditionRatingCriteria,
@@ -142,7 +143,7 @@ export default function EvidenceStrength() {
   // Build analysis per user condition
   const conditionAnalysis = useMemo(() => {
     return userConditions.map((uc) => {
-      const name = uc.displayName || uc.conditionId;
+      const name = getConditionDisplayName(uc);
       const criteria = findCriteria(uc.conditionId, name);
 
       // Gather symptom evidence — fuzzy match condition name to bodyArea

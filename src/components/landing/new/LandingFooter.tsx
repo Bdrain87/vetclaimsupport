@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { APP_STORE_URL } from '@/lib/landing-animations';
+import { APP_STORE_URL, LANDING_BG_CARD, TEXT_SECONDARY, TEXT_TERTIARY, BORDER_DIM } from '@/lib/landing-animations';
 
 type FooterLink =
   | { label: string; href: string; to?: never; external?: boolean }
@@ -91,7 +91,7 @@ export function LandingFooter() {
   };
 
   return (
-    <footer style={{ backgroundColor: '#111111' }} className="pt-16 pb-8">
+    <footer style={{ backgroundColor: LANDING_BG_CARD }} className="pt-16 pb-8">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           {/* Brand */}
@@ -100,7 +100,7 @@ export function LandingFooter() {
               <img src="/app-icon.png" alt="Vet Claim Support" width={28} height={28} style={{ borderRadius: 6 }} />
               <span className="text-white font-semibold">Vet Claim Support</span>
             </div>
-            <p className="text-sm leading-relaxed mb-4" style={{ color: '#9CA3AF' }}>
+            <p className="text-sm leading-relaxed mb-4" style={{ color: TEXT_SECONDARY }}>
               Secure VA claim preparation tools for veterans and service members.
             </p>
             {/* App Store Badges */}
@@ -121,9 +121,9 @@ export function LandingFooter() {
                     <button
                       onClick={() => scrollTo(link.href)}
                       className="bg-transparent border-none cursor-pointer text-sm p-0"
-                      style={{ color: '#9CA3AF', transition: 'color 300ms ease' }}
+                      style={{ color: TEXT_SECONDARY, transition: 'color 300ms ease' }}
                       onMouseEnter={(e) => (e.currentTarget.style.color = '#fff')}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = '#9CA3AF')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = TEXT_SECONDARY)}
                     >
                       {link.label}
                     </button>
@@ -131,9 +131,9 @@ export function LandingFooter() {
                     <Link
                       to={link.to}
                       className="text-sm no-underline"
-                      style={{ color: '#9CA3AF', transition: 'color 300ms ease' }}
+                      style={{ color: TEXT_SECONDARY, transition: 'color 300ms ease' }}
                       onMouseEnter={(e) => (e.currentTarget.style.color = '#fff')}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = '#9CA3AF')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = TEXT_SECONDARY)}
                     >
                       {link.label}
                     </Link>
@@ -155,9 +155,9 @@ export function LandingFooter() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-sm no-underline"
-                      style={{ color: '#9CA3AF', transition: 'color 300ms ease' }}
+                      style={{ color: TEXT_SECONDARY, transition: 'color 300ms ease' }}
                       onMouseEnter={(e) => (e.currentTarget.style.color = '#fff')}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = '#9CA3AF')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = TEXT_SECONDARY)}
                     >
                       {link.label}
                     </a>
@@ -165,9 +165,9 @@ export function LandingFooter() {
                     <Link
                       to={link.to}
                       className="text-sm no-underline"
-                      style={{ color: '#9CA3AF', transition: 'color 300ms ease' }}
+                      style={{ color: TEXT_SECONDARY, transition: 'color 300ms ease' }}
                       onMouseEnter={(e) => (e.currentTarget.style.color = '#fff')}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = '#9CA3AF')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = TEXT_SECONDARY)}
                     >
                       {link.label}
                     </Link>
@@ -186,9 +186,9 @@ export function LandingFooter() {
                   <Link
                     to={link.to}
                     className="text-sm no-underline"
-                    style={{ color: '#9CA3AF', transition: 'color 300ms ease' }}
+                    style={{ color: TEXT_SECONDARY, transition: 'color 300ms ease' }}
                     onMouseEnter={(e) => (e.currentTarget.style.color = '#fff')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = '#9CA3AF')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = TEXT_SECONDARY)}
                   >
                     {link.label}
                   </Link>
@@ -201,12 +201,12 @@ export function LandingFooter() {
         {/* Bottom bar */}
         <div
           className="border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-3"
-          style={{ borderColor: '#374151' }}
+          style={{ borderColor: BORDER_DIM }}
         >
-          <p className="text-xs" style={{ color: '#6B7280' }}>
+          <p className="text-xs" style={{ color: TEXT_TERTIARY }}>
             &copy; {new Date().getFullYear()} Vet Claim Support. All rights reserved.
           </p>
-          <p className="text-xs" style={{ color: '#6B7280' }}>
+          <p className="text-xs" style={{ color: TEXT_TERTIARY }}>
             Built with care by a veteran.
           </p>
         </div>

@@ -1,14 +1,14 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE, APP_STORE_URL } from '@/lib/landing-animations';
+import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE, APP_STORE_URL, LANDING_BG } from '@/lib/landing-animations';
 
 // Rotating words removed — headline is now static with gold accent on "Your Benefits."
 
 const TRUST_ITEMS = [
   'NOT AFFILIATED WITH THE VA',
   'VETERAN-BUILT',
-  '40+ CLAIM TOOLS',
+  '50+ CLAIM TOOLS',
   'ONE-TIME PURCHASE',
 ];
 
@@ -91,7 +91,7 @@ export function Hero() {
     <section
       ref={sectionRef}
       className="relative flex flex-col items-center justify-center overflow-hidden"
-      style={{ backgroundColor: '#0A0A0A' }}
+      style={{ backgroundColor: LANDING_BG }}
     >
       {/* Parallax background */}
       <motion.div
@@ -101,7 +101,7 @@ export function Hero() {
           background: `
             radial-gradient(ellipse at 20% 50%, rgba(197,165,90,0.08) 0%, transparent 50%),
             radial-gradient(ellipse at 80% 20%, rgba(197,165,90,0.05) 0%, transparent 50%),
-            #0A0A0A
+            ${LANDING_BG}
           `,
         }}
       />
@@ -155,7 +155,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          40+ tools to organize your evidence, build your case, and walk into your VA exam ready.
+          50+ tools to organize your evidence, build your case, and walk into your VA exam ready.
         </motion.p>
 
         {/* CTAs */}

@@ -1,12 +1,12 @@
 import { motion } from 'framer-motion';
-import { EASE_SMOOTH } from '@/lib/landing-animations';
+import { EASE_SMOOTH, LANDING_BG } from '@/lib/landing-animations';
 
 export function LegalDisclaimer() {
   return (
     <motion.section
       className="py-8 px-4"
       style={{
-        backgroundColor: '#0A0A0A',
+        backgroundColor: LANDING_BG,
         borderTop: '1px solid rgba(255, 255, 255, 0.05)',
       }}
       initial={{ opacity: 0 }}

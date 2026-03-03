@@ -17,7 +17,7 @@ import { ToastAction } from '@/components/ui/toast';
 import { saveToVault } from '@/utils/vaultAutoSave';
 import useAppStore from '@/store/useAppStore';
 import { useProfileStore } from '@/store/useProfileStore';
-import { getConditionById } from '@/data/vaConditions';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { COMP_RATES_2026 } from '@/data/compRates2026';
 import { PageContainer } from '@/components/PageContainer';
 import { combineRatings } from '@/utils/vaMath';
@@ -38,9 +38,8 @@ export default function ShareableSummary() {
 
   const summary = useMemo(() => {
     const conditions = userConditions.map(uc => {
-      const condition = getConditionById(uc.conditionId);
       return {
-        name: condition?.name || uc.displayName || uc.conditionId,
+        name: getConditionDisplayName(uc),
         rating: uc.rating,
         status: uc.claimStatus,
         serviceConnected: uc.serviceConnected,

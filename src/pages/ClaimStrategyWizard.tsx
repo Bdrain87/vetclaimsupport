@@ -34,6 +34,8 @@ import { supabase } from '@/lib/supabase';
 import { redactPII } from '@/lib/redaction';
 import { exportClaimStrategy } from '@/utils/pdfExport';
 import { useClaims } from '@/hooks/useClaims';
+import { useUserConditions } from '@/hooks/useUserConditions';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { PageContainer } from '@/components/PageContainer';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
@@ -249,11 +251,15 @@ const branches = ['Army', 'Navy', 'Air Force', 'Marine Corps', 'Coast Guard', 'S
 
 export default function ClaimStrategyWizard() {
   const { data: claimsData } = useClaims();
+  const { conditions: userConditions, totalRating } = useUserConditions();
   const profile = useProfileStore();
   const branchLabel = getAllBranchLabels(profile);
 
   // Pre-populate from stored data
   const prePopulated = useMemo<WizardData>(() => {
+    const approvedWithRatings = userConditions.filter(
+      c => c.claimStatus === 'approved' && typeof c.rating === 'number' && c.rating > 0,
+    );
     const conditionNames = (claimsData.claimConditions || []).map(c => c.name);
     const deploymentLocations = (claimsData.deployments || []).map(d => d.location).filter(Boolean);
     const hasBuddy = (claimsData.buddyContacts || []).length > 0;
@@ -275,9 +281,11 @@ export default function ClaimStrategyWizard() {
         primaryConcern: conditionNames[0] || initialData.healthConditions.primaryConcern,
       },
       existingRatings: {
-        hasExisting: (claimsData.approvedConditions || []).length > 0,
-        currentRating: initialData.existingRatings.currentRating,
-        ratedConditions: (claimsData.approvedConditions || []).map(c => `${c.name} (${c.rating}%)`).join(', '),
+        hasExisting: approvedWithRatings.length > 0,
+        currentRating: totalRating > 0 ? String(totalRating) : initialData.existingRatings.currentRating,
+        ratedConditions: approvedWithRatings.length > 0
+          ? approvedWithRatings.map(c => `${getConditionDisplayName(c)} (${c.rating}%)`).join(', ')
+          : initialData.existingRatings.ratedConditions,
       },
       evidence: {
         hasMedicalRecords: hasMedVisits,
@@ -288,7 +296,7 @@ export default function ClaimStrategyWizard() {
         evidenceNotes: initialData.evidence.evidenceNotes,
       },
     };
-  }, [claimsData, profile, branchLabel]);
+  }, [claimsData, profile, branchLabel, userConditions, totalRating]);
 
   const {
     formData: data, setFormData: setData, currentStep, setCurrentStep,

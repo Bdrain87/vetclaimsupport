@@ -9,7 +9,7 @@ import {
   FileText, Stethoscope, Target, ChevronDown, ChevronUp,
 } from 'lucide-react';
 import useAppStore from '@/store/useAppStore';
-import { getConditionById } from '@/data/vaConditions';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { conditionRatingCriteria } from '@/data/ratingCriteria';
 import { PageContainer } from '@/components/PageContainer';
 import { cn } from '@/lib/utils';
@@ -206,10 +206,9 @@ export default function ZeroPercentOptimizer() {
     return userConditions
       .filter(uc => uc.rating !== undefined && uc.rating < 100)
       .map(uc => {
-        const condition = getConditionById(uc.conditionId);
         return {
           id: uc.conditionId,
-          name: condition?.name || uc.displayName || uc.conditionId,
+          name: getConditionDisplayName(uc),
           rating: uc.rating!,
         };
       })

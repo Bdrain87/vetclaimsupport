@@ -23,8 +23,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import useAppStore from '@/store/useAppStore';
+import { useShallow } from 'zustand/react/shallow';
 import { PageContainer } from '@/components/PageContainer';
 import type { UserCondition } from '@/store/useAppStore';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { BODY_REGIONS } from '@/data/bodyRegions';
 import type { BodyRegion, RegionCondition } from '@/data/bodyRegions';
 import { useFeatureFlag } from '@/store/useFeatureFlagStore';
@@ -172,8 +174,10 @@ export default function BodyMap() {
 
   // Store
   const userConditions = useAppStore((s) => s.userConditions);
-  const addUserCondition = useAppStore((s) => s.addUserCondition);
-  const removeUserCondition = useAppStore((s) => s.removeUserCondition);
+  const { addUserCondition, removeUserCondition } = useMemo(() => {
+    const s = useAppStore.getState();
+    return { addUserCondition: s.addUserCondition, removeUserCondition: s.removeUserCondition };
+  }, []);
 
   // UI state
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
@@ -1273,7 +1277,7 @@ export default function BodyMap() {
                           (c) => c.id === uc.conditionId,
                         );
                         const label =
-                          condition?.name || uc.notes || uc.conditionId;
+                          condition?.name || uc.notes || getConditionDisplayName(uc);
                         const regionLabel = region ? disambiguatedLabel(region) : (uc.bodyPart || '');
                         const key = uc.bodyPart ? conditionKey(uc.bodyPart, uc.conditionId) : '';
                         const pain = painLevels[key] ?? 0;

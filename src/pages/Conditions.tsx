@@ -652,7 +652,7 @@ export default function Conditions() {
                       return (
                         <div key={sec.id} className="space-y-1">
                           <p className="text-xs text-muted-foreground line-clamp-2">
-                            Secondary to: {primaryDetails?.abbreviation || primaryDetails?.name || uc.conditionId}
+                            Secondary to: {getConditionDisplayName(uc)}
                           </p>
                           <ConditionCard
                             userCondition={{
