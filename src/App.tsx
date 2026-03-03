@@ -13,6 +13,7 @@ import { LiabilityAcceptanceScreen } from './components/legal/LiabilityAcceptanc
 import { SplashScreen } from './components/SplashScreen';
 
 import { useProfileStore } from './store/useProfileStore';
+import useAppStore from './store/useAppStore';
 import { migrateOldDataToAppStore } from './utils/migrateData';
 import { useSessionTimeout } from './hooks/useSessionTimeout';
 import { useHydration } from './hooks/useHydration';
