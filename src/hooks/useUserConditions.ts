@@ -103,7 +103,7 @@ export function useUserConditions() {
       addUserConditionAction(newCondition);
       return newCondition;
     },
-    [actions],
+    [addUserConditionAction, updateUserConditionAction],
   );
 
   const hasCondition = useCallback(
@@ -171,7 +171,7 @@ export function useUserConditions() {
         existingNames.add(name.toLowerCase());
       }
     }
-  }, [conditions, actions]);
+  }, [conditions, actions, addClaimConditionAction]);
 
   const totalRating = useMemo(() => calculateCombinedRating(conditions), [conditions]);
   const approvedConditionsCount = useMemo(
@@ -187,7 +187,7 @@ export function useUserConditions() {
     (id: string) => {
       incrementConditionUsageAction(id);
     },
-    [actions],
+    [incrementConditionUsageAction],
   );
 
   /** Conditions sorted by usage count (most-used first) for ConditionSelector */

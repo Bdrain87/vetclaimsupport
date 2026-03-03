@@ -18,7 +18,6 @@ import { getConditionById } from '@/data/vaConditions';
 import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import useAppStore from '@/store/useAppStore';
-import { useShallow } from 'zustand/react/shallow';
 import { EMPLOYMENT_IMPACT_TYPES } from '@/types/claims';
 import type { EmploymentImpactEntry } from '@/types/claims';
 

@@ -432,7 +432,7 @@ export default function ClaimChecklist() {
                   }`}
                 >
                   <div className="p-4">
-                    <div className="flex items-start gap-4">
+                    <div className="flex items-start gap-3">
                       <div className="flex-shrink-0 mt-0.5" aria-hidden="true">
                         {item.isComplete ? (
                           <CheckCircle2 className="h-5 w-5 text-success" />
@@ -441,50 +441,51 @@ export default function ClaimChecklist() {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <h3 className={`font-medium ${
-                            item.isComplete ? 'text-muted-foreground' : 'text-foreground'
-                          }`}>
-                            {item.title}
-                          </h3>
-                          {getPriorityBadge(item.priority, item.isComplete)}
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <h3 className={`font-medium text-sm ${
+                              item.isComplete ? 'text-muted-foreground' : 'text-foreground'
+                            }`}>
+                              {item.title}
+                            </h3>
+                            {getPriorityBadge(item.priority, item.isComplete)}
+                          </div>
+                          <Button
+                            variant={item.isComplete ? "ghost" : "outline"}
+                            size="sm"
+                            asChild
+                            className="flex-shrink-0"
+                          >
+                            <Link to={item.link}>
+                              {item.isComplete ? 'View' : item.linkText}
+                              <ArrowRight className="h-4 w-4 ml-1" />
+                            </Link>
+                          </Button>
                         </div>
                         <p className="text-sm text-muted-foreground mt-1">
                           {item.description}
                         </p>
-                        
+
                         {/* Progress indicator */}
-                        <div className="mt-3 flex items-center gap-4">
+                        <div className="mt-2 flex items-center gap-4">
                           <div className={`text-sm font-medium ${getProgressColor(item.currentCount, item.recommendedCount)}`}>
                             {item.progressText}
                           </div>
                           {!item.isComplete && item.currentCount > 0 && item.recommendedCount > 1 && (
                             <div className="flex-1 max-w-32">
-                              <Progress 
-                                value={Math.min((item.currentCount / item.recommendedCount) * 100, 100)} 
-                                className="h-1.5" 
+                              <Progress
+                                value={Math.min((item.currentCount / item.recommendedCount) * 100, 100)}
+                                className="h-1.5"
                               />
                             </div>
                           )}
                         </div>
                       </div>
-                      
-                      <Button 
-                        variant={item.isComplete ? "ghost" : "outline"}
-                        size="sm" 
-                        asChild
-                        className="flex-shrink-0"
-                      >
-                        <Link to={item.link}>
-                          {item.isComplete ? 'View' : item.linkText}
-                          <ArrowRight className="h-4 w-4 ml-1" />
-                        </Link>
-                      </Button>
                     </div>
 
                     {/* Guidance text */}
                     {!item.isComplete && (
-                      <div className="mt-3 ml-9 flex items-start gap-2 p-3 rounded-md bg-muted/50">
+                      <div className="mt-3 ml-8 flex items-start gap-2 p-3 rounded-md bg-muted/50">
                         <AlertCircle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
                         <p className="text-sm text-muted-foreground">{item.guidance}</p>
                       </div>

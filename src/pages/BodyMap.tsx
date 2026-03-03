@@ -23,7 +23,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import useAppStore from '@/store/useAppStore';
-import { useShallow } from 'zustand/react/shallow';
 import { PageContainer } from '@/components/PageContainer';
 import type { UserCondition } from '@/store/useAppStore';
 import { getConditionDisplayName } from '@/utils/conditionResolver';

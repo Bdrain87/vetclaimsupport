@@ -53,14 +53,14 @@ function fetchWithTimeout(
 const noopLock = async (
   _name: string,
   _acquireTimeout: number,
-  fn: () => Promise<any>,
+  fn: () => Promise<unknown>,
 ) => await fn();
 
 if (isNativeApp) {
   // Suppress BroadcastChannel on native — the SDK creates one for cross-tab
   // session sync which is useless in a single-tab WKWebView and could cause issues.
   if (typeof globalThis.BroadcastChannel !== 'undefined') {
-    (globalThis as any).BroadcastChannel = undefined;
+    (globalThis as unknown as Record<string, unknown>).BroadcastChannel = undefined;
   }
 }
 

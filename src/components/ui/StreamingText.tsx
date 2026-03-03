@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface StreamingTextProps {
   /** The text content being streamed (grows over time). */

@@ -27,7 +27,7 @@ import {
 import {
   ChevronLeft, Scale, FileText, Link2, Stethoscope, CheckCircle2,
   AlertTriangle, Info, ExternalLink, Trash2, BookOpen,
-  Activity, TrendingUp, Clock, Brain, Moon, Zap, ArrowRight,
+  Activity, TrendingUp, Clock, Brain, Moon, ArrowRight,
   Sparkles, Loader2, ChevronDown, FileCheck, Plus, Pill, Users, Circle,
 } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';

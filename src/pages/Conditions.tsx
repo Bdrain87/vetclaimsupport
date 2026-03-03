@@ -46,6 +46,7 @@ import {
 } from '@/data/vaConditions';
 import { getAllCategories, searchAllConditions } from '@/utils/conditionSearch';
 import { getConditionDisplayName } from '@/utils/conditionResolver';
+import type { UserCondition } from '@/store/useAppStore';
 import { useToast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
 
@@ -133,7 +134,7 @@ function ConditionCard({ userCondition, conditionDetails, readinessScore, onView
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
               <h3 className="font-semibold truncate max-w-full group-hover:text-gold transition-colors">
-                {conditionDetails?.abbreviation || conditionDetails?.name || userCondition.displayName || getConditionDisplayName(userCondition as any)}
+                {conditionDetails?.abbreviation || conditionDetails?.name || userCondition.displayName || getConditionDisplayName(userCondition as unknown as UserCondition)}
               </h3>
               {userCondition.claimStatus && (
                 <Badge variant="outline" className={`text-[10px] px-1.5 py-0 truncate max-w-full ${STATUS_COLORS[userCondition.claimStatus] || ''}`}>
@@ -650,7 +651,6 @@ export default function Conditions() {
                   <div className="ml-6 border-l-2 border-gold/20 pl-4 space-y-3">
                     {secondaries.map(sec => {
                       const secDetails = getConditionDetails(sec);
-                      const primaryDetails = getConditionDetails(uc);
                       const secChecked = conditionEvidenceChecks[sec.id] || [];
                       return (
                         <div key={sec.id} className="space-y-1">
