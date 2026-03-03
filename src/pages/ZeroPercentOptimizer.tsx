@@ -202,9 +202,9 @@ export default function ZeroPercentOptimizer() {
   const navigate = useNavigate();
   const userConditions = useAppStore((s) => s.userConditions);
 
-  const lowRatedConditions = useMemo(() => {
+  const ratedConditions = useMemo(() => {
     return userConditions
-      .filter(uc => uc.rating !== undefined && uc.rating <= 10)
+      .filter(uc => uc.rating !== undefined && uc.rating < 100)
       .map(uc => {
         const condition = getConditionById(uc.conditionId);
         return {
@@ -216,14 +216,16 @@ export default function ZeroPercentOptimizer() {
       .sort((a, b) => a.rating - b.rating);
   }, [userConditions]);
 
-  const zeroRated = lowRatedConditions.filter(c => c.rating === 0);
-  const tenRated = lowRatedConditions.filter(c => c.rating === 10);
+  const zeroRated = ratedConditions.filter(c => c.rating === 0);
+  const lowRated = ratedConditions.filter(c => c.rating > 0 && c.rating <= 20);
+  const midRated = ratedConditions.filter(c => c.rating > 20 && c.rating <= 50);
+  const highRated = ratedConditions.filter(c => c.rating > 50 && c.rating < 100);
 
   return (
     <PageContainer className="py-8 space-y-6 animate-fade-in">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <div className="p-3 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 text-white shadow-lg">
+        <div className="p-3 rounded-2xl bg-gradient-to-br from-warning to-gold text-black shadow-lg">
           <TrendingUp className="h-6 w-6" />
         </div>
         <div>
@@ -236,7 +238,7 @@ export default function ZeroPercentOptimizer() {
         Based on VA published rating criteria. Actual ratings determined by the VA.
       </p>
 
-      {lowRatedConditions.length === 0 ? (
+      {ratedConditions.length === 0 ? (
         <Card className="border-dashed border-2">
           <CardContent className="py-12 text-center space-y-3">
             <div className="p-4 rounded-full bg-muted inline-flex">
@@ -244,7 +246,7 @@ export default function ZeroPercentOptimizer() {
             </div>
             <h3 className="font-semibold text-lg">No conditions to optimize</h3>
             <p className="text-sm text-muted-foreground max-w-md mx-auto">
-              Add conditions rated at 0% or 10% to your profile to see upgrade paths with specific criteria,
+              Add conditions with ratings to your profile to see upgrade paths with specific criteria,
               evidence recommendations, and exam tips.
             </p>
             <Button variant="outline" onClick={() => navigate('/claims')}>
@@ -277,18 +279,62 @@ export default function ZeroPercentOptimizer() {
             </div>
           )}
 
-          {/* 10% Conditions */}
-          {tenRated.length > 0 && (
+          {/* Low Rated (10-20%) */}
+          {lowRated.length > 0 && (
             <div className="space-y-4">
               <h2 className="text-lg font-semibold flex items-center gap-2">
-                <Badge className={cn('text-xs', 'bg-warning/10 text-warning border-warning/30')}>10%</Badge>
-                Conditions Rated at 10%
-                <Badge variant="outline" className="ml-auto">{tenRated.length}</Badge>
+                <Badge className={cn('text-xs', 'bg-warning/10 text-warning border-warning/30')}>10-20%</Badge>
+                Low-Rated Conditions
+                <Badge variant="outline" className="ml-auto">{lowRated.length}</Badge>
               </h2>
               <p className="text-sm text-muted-foreground -mt-2">
                 These conditions contribute minimally to your combined rating. See what evidence could support a higher evaluation.
               </p>
-              {tenRated.map(c => (
+              {lowRated.map(c => (
+                <ConditionUpgradeCard
+                  key={c.id}
+                  conditionId={c.id}
+                  conditionName={c.name}
+                  currentRating={c.rating}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Mid Rated (30-50%) */}
+          {midRated.length > 0 && (
+            <div className="space-y-4">
+              <h2 className="text-lg font-semibold flex items-center gap-2">
+                <Badge className={cn('text-xs', 'bg-gold/10 text-gold border-gold/30')}>30-50%</Badge>
+                Mid-Rated Conditions
+                <Badge variant="outline" className="ml-auto">{midRated.length}</Badge>
+              </h2>
+              <p className="text-sm text-muted-foreground -mt-2">
+                See what the next rating level requires and what evidence could push your rating higher.
+              </p>
+              {midRated.map(c => (
+                <ConditionUpgradeCard
+                  key={c.id}
+                  conditionId={c.id}
+                  conditionName={c.name}
+                  currentRating={c.rating}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* High Rated (60-90%) */}
+          {highRated.length > 0 && (
+            <div className="space-y-4">
+              <h2 className="text-lg font-semibold flex items-center gap-2">
+                <Badge className={cn('text-xs', 'bg-success/10 text-success border-success/30')}>60%+</Badge>
+                High-Rated Conditions
+                <Badge variant="outline" className="ml-auto">{highRated.length}</Badge>
+              </h2>
+              <p className="text-sm text-muted-foreground -mt-2">
+                You're close to the maximum for these conditions. See what the next level requires.
+              </p>
+              {highRated.map(c => (
                 <ConditionUpgradeCard
                   key={c.id}
                   conditionId={c.id}

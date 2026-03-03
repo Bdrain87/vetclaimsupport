@@ -324,10 +324,10 @@ function saveState(state: CalculatorState): void {
 
 // --- Lifetime Benefit Projection ---
 
-// VA life expectancy estimates (simplified actuarial table by age)
+// Life expectancy estimates (SSA 2023 actuarial period life table, rounded)
 const LIFE_EXPECTANCY_BY_AGE: Record<number, number> = {
-  20: 58, 25: 53, 30: 48, 35: 43, 40: 38, 45: 33,
-  50: 28, 55: 24, 60: 20, 65: 17, 70: 14, 75: 11, 80: 8, 85: 5,
+  20: 60, 25: 55, 30: 50, 35: 46, 40: 41, 45: 36,
+  50: 31, 55: 27, 60: 22, 65: 18, 70: 15, 75: 12, 80: 8, 85: 5,
 };
 
 function estimateRemainingYears(age: number): number {
@@ -1053,54 +1053,7 @@ export function UnifiedRatingCalculator() {
 
         {/* Right Column: Results */}
         <div className="space-y-6">
-          {/* Combined Rating Card */}
-          <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Combined Rating</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-4">
-                <div className="text-6xl font-bold text-primary">
-                  {result.officialRating}%
-                </div>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Official VA Rating
-                </p>
-                {result.exactCombined > 0 && (
-                  <p className="text-xs text-muted-foreground">
-                    Exact: {result.exactCombined.toFixed(2)}%
-                  </p>
-                )}
-              </div>
-
-              {result.hasBilateral && (
-                <Alert className="border-gold/50 bg-gold/10 mt-4">
-                  <Sparkles className="h-4 w-4 text-foreground" />
-                  <AlertDescription className="text-foreground text-sm">
-                    <strong>Bilateral Factor Applied!</strong>
-                    <br />
-                    Combined bilateral: {result.bilateralExact.toFixed(1)}%
-                    <br />
-                    After 10% factor: {result.bilateralWithFactor.toFixed(1)}%
-                    <Separator className="my-2 bg-gold/20" />
-                    <details className="text-xs">
-                      <summary className="cursor-pointer font-medium">What is the bilateral factor?</summary>
-                      <p className="mt-1 leading-relaxed">
-                        Per 38 CFR 4.26, when you have disabilities affecting both
-                        paired extremities (both knees, both shoulders, etc.), the VA
-                        combines those ratings first, then adds 10% to that combined
-                        value. This bilateral result is then combined with your other
-                        non-bilateral conditions. The bilateral factor generally
-                        results in a higher overall combined rating.
-                      </p>
-                    </details>
-                  </AlertDescription>
-                </Alert>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Compensation Card */}
+          {/* Compensation Card — most eye-catching, shown first */}
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center gap-2">
@@ -1145,6 +1098,53 @@ export function UnifiedRatingCalculator() {
                 <p className="text-xs text-muted-foreground mt-4 text-center">
                   Add dependents above for additional compensation
                 </p>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Combined Rating Card */}
+          <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg">Combined Rating</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-4">
+                <div className="text-6xl font-bold text-primary">
+                  {result.officialRating}%
+                </div>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Official VA Rating
+                </p>
+                {result.exactCombined > 0 && (
+                  <p className="text-xs text-muted-foreground">
+                    Exact: {result.exactCombined.toFixed(2)}%
+                  </p>
+                )}
+              </div>
+
+              {result.hasBilateral && (
+                <Alert className="border-gold/50 bg-gold/10 mt-4">
+                  <Sparkles className="h-4 w-4 text-foreground" />
+                  <AlertDescription className="text-foreground text-sm">
+                    <strong>Bilateral Factor Applied!</strong>
+                    <br />
+                    Combined bilateral: {result.bilateralExact.toFixed(1)}%
+                    <br />
+                    After 10% factor: {result.bilateralWithFactor.toFixed(1)}%
+                    <Separator className="my-2 bg-gold/20" />
+                    <details className="text-xs">
+                      <summary className="cursor-pointer font-medium">What is the bilateral factor?</summary>
+                      <p className="mt-1 leading-relaxed">
+                        Per 38 CFR 4.26, when you have disabilities affecting both
+                        paired extremities (both knees, both shoulders, etc.), the VA
+                        combines those ratings first, then adds 10% to that combined
+                        value. This bilateral result is then combined with your other
+                        non-bilateral conditions. The bilateral factor generally
+                        results in a higher overall combined rating.
+                      </p>
+                    </details>
+                  </AlertDescription>
+                </Alert>
               )}
             </CardContent>
           </Card>

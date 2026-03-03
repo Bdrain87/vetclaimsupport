@@ -132,7 +132,7 @@ function ConditionCard({ userCondition, conditionDetails, readinessScore, onView
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
               <h3 className="font-semibold truncate max-w-full group-hover:text-gold transition-colors">
-                {conditionDetails?.abbreviation || conditionDetails?.name || userCondition.conditionId}
+                {conditionDetails?.abbreviation || conditionDetails?.name || userCondition.displayName || getConditionDisplayName(userCondition as any)}
               </h3>
               {userCondition.claimStatus && (
                 <Badge variant="outline" className={`text-[10px] px-1.5 py-0 truncate max-w-full ${STATUS_COLORS[userCondition.claimStatus] || ''}`}>

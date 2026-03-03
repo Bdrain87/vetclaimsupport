@@ -45,8 +45,8 @@ function RatingLevelCard({
   const badgeClasses = cn(
     'text-sm font-bold tabular-nums min-w-[3.5rem] justify-center',
     pct === 0 && 'bg-muted text-muted-foreground',
-    pct > 0 && pct < 30 && 'bg-primary/15 text-primary',
-    pct >= 30 && pct < 70 && 'bg-primary/20 text-primary',
+    pct > 0 && pct < 30 && 'bg-primary/15 text-foreground',
+    pct >= 30 && pct < 70 && 'bg-primary/20 text-foreground',
     pct >= 70 &&
       'text-[var(--gold-dk)] bg-[image:var(--gold-gradient-subtle)] shadow-[inset_0_0_0_1px_var(--gold-border-strong)]',
   );
