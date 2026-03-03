@@ -410,7 +410,7 @@ export default function ExamDayMode() {
             <CollapsibleTrigger className="w-full text-left p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-purple-400" />
+                  <Calendar className="h-4 w-4 text-gold" />
                   <span className="text-sm font-semibold text-foreground">
                     Recent Medical Visits ({recentVisits.length})
                   </span>

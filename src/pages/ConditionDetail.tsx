@@ -775,7 +775,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                 <div key={`${log.type}-${log.date}-${i}`} className="flex items-center gap-3 p-2.5 rounded-lg bg-muted/50">
                   {log.type === 'symptom' && <Activity className="h-4 w-4 text-success flex-shrink-0" />}
                   {log.type === 'sleep' && <Moon className="h-4 w-4 text-indigo-400 flex-shrink-0" />}
-                  {log.type === 'migraine' && <Brain className="h-4 w-4 text-purple-400 flex-shrink-0" />}
+                  {log.type === 'migraine' && <Brain className="h-4 w-4 text-gold flex-shrink-0" />}
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium line-clamp-2">{log.label}</p>
                     <p className="text-xs text-muted-foreground">{safeFormatDate(log.date)}</p>

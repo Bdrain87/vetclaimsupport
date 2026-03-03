@@ -370,7 +370,7 @@ export default function BuildPacket() {
             { label: 'Conditions', value: conditionsCount, color: 'text-primary' },
             { label: 'Symptom Entries', value: symptomCount, color: 'text-gold' },
             { label: 'Medical Visits', value: medicalVisitCount, color: 'text-success' },
-            { label: 'Documents', value: documentCount, color: 'text-violet-400' },
+            { label: 'Documents', value: documentCount, color: 'text-gold' },
           ].map((stat) => (
             <Card key={stat.label} className="glass-card">
               <CardContent className="p-4 text-center">
@@ -687,7 +687,7 @@ export default function BuildPacket() {
             {selected.medications && (
               <div className="space-y-3">
                 <h3 className="font-semibold text-foreground flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-violet-400" />
+                  <FileText className="h-4 w-4 text-gold" />
                   Medication List ({medicationCount})
                 </h3>
                 {medicationCount === 0 ? (

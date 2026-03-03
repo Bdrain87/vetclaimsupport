@@ -802,16 +802,16 @@ export default function Dashboard() {
         >
           <button
             onClick={() => navigate('/prep/tdiu')}
-            className="w-full flex items-center gap-3 p-3 rounded-2xl border border-purple-500/20 bg-purple-500/5 hover:bg-purple-500/10 active:scale-[0.98] transition-all text-left"
+            className="w-full flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 active:scale-[0.98] transition-all text-left"
           >
-            <div className="h-9 w-9 rounded-full bg-purple-500/10 flex items-center justify-center flex-shrink-0">
-              <Briefcase className="h-4 w-4 text-purple-400" />
+            <div className="h-9 w-9 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
+              <Briefcase className="h-4 w-4 text-gold" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-foreground">You may qualify for TDIU</p>
               <p className="text-xs text-muted-foreground">Get compensated at the 100% rate — check eligibility</p>
             </div>
-            <ChevronRight className="h-4 w-4 text-purple-400 flex-shrink-0" />
+            <ChevronRight className="h-4 w-4 text-gold flex-shrink-0" />
           </button>
         </motion.div>
       )}

@@ -501,7 +501,7 @@ export default function Sleep() {
                     </div>
 
                     {/* Spouse/Partner Observed */}
-                    <div className="flex items-center justify-between gap-3 rounded-lg border p-3 border-purple-500/30 bg-purple-500/5">
+                    <div className="flex items-center justify-between gap-3 rounded-lg border p-3 border-gold/30 bg-gold/5">
                       <div className="space-y-0.5 min-w-0 flex-1">
                         <Label className="text-sm">Spouse/Partner Observed Apnea?</Label>
                         <p className="text-xs text-muted-foreground">Supports buddy statement</p>
@@ -858,7 +858,7 @@ export default function Sleep() {
                         <Badge variant="outline" className="text-xs text-gold border-gold/50">Gasping x{entry.timesWokeGasping}</Badge>
                       )}
                       {entry.spouseObserved && (
-                        <Badge variant="outline" className="text-xs text-purple-500 border-purple-500/50">Witnessed</Badge>
+                        <Badge variant="outline" className="text-xs text-gold border-gold/50">Witnessed</Badge>
                       )}
                     {entry.requiresOxygen && (
                       <Badge variant="outline" className="text-xs text-destructive border-destructive/50">O₂ Therapy</Badge>

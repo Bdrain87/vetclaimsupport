@@ -39,7 +39,7 @@ const courtLabels: Record<string, string> = {
 
 const courtColors: Record<string, string> = {
   BVA: 'bg-gold/20 text-foreground-hl border-gold/30',
-  CAVC: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
+  CAVC: 'bg-gold/20 text-gold border-gold/30',
   FedCir: 'bg-gold/20 text-foreground border-gold/30',
   SupCt: 'bg-destructive/20 text-destructive border-destructive/30',
 };

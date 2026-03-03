@@ -464,10 +464,10 @@ export default function DocumentsHub() {
                 setExporting(true);
                 try { await exportDocuments(data.documents); } catch (err) { toast({ title: 'Export failed', description: err instanceof Error ? err.message : 'Could not generate PDF. Please try again.', variant: 'destructive' }); } finally { setExporting(false); }
               }}
-              className="group p-4 rounded-2xl bg-gradient-to-br from-violet-500/20 to-purple-500/10 border border-violet-500/30 hover:scale-[1.02] transition-all text-left disabled:opacity-50 disabled:pointer-events-none"
+              className="group p-4 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/10 border border-gold/30 hover:scale-[1.02] transition-all text-left disabled:opacity-50 disabled:pointer-events-none"
             >
               <div className="flex items-center gap-3 mb-2">
-                <Download className="h-5 w-5 text-violet-400" />
+                <Download className="h-5 w-5 text-gold" />
                 <ChevronRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity ml-auto" />
               </div>
               <h3 className="font-semibold text-sm">{exporting ? 'Exporting...' : 'Export PDF'}</h3>

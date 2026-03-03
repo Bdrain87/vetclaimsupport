@@ -124,7 +124,7 @@ export default function Timeline() {
           title: `Started ${med.name}`,
           description: med.prescribedFor || 'Prescription started',
           icon: Pill,
-          color: 'bg-violet-500',
+          color: 'bg-gold',
         });
       }
     });
@@ -219,7 +219,7 @@ export default function Timeline() {
         <Badge variant="outline" className="bg-rose-500/10 border-rose-500/30">
           <Activity className="h-3 w-3 mr-1" /> Symptom
         </Badge>
-        <Badge variant="outline" className="bg-violet-500/10 border-violet-500/30">
+        <Badge variant="outline" className="bg-gold/10 border-gold/30">
           <Pill className="h-3 w-3 mr-1" /> Medication
         </Badge>
         <Badge variant="outline" className="bg-pink-500/10 border-pink-500/30">

@@ -720,7 +720,7 @@ export default function PersonalStatement() {
                 <div className="flex items-center justify-between gap-2">
                   <CardTitle className="text-base min-w-0">Statement Preview</CardTitle>
                   {polishedStatement && (
-                    <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 shrink-0">
+                    <Badge className="bg-gold/20 text-gold border-gold/30 shrink-0">
                       <Sparkles className="h-3 w-3 mr-1" />
                       AI Polished
                     </Badge>
@@ -738,10 +738,10 @@ export default function PersonalStatement() {
             </Card>
 
             {/* AI Polish */}
-            <Card className="border-purple-500/20 bg-purple-500/5">
+            <Card className="border-gold/20 bg-gold/5">
               <CardContent className="pt-4">
                 <div className="flex items-start gap-3">
-                  <Sparkles className="h-5 w-5 text-purple-400 mt-0.5 shrink-0" />
+                  <Sparkles className="h-5 w-5 text-gold mt-0.5 shrink-0" />
                   <div className="flex-1 space-y-2">
                     <p className="text-sm font-medium text-foreground">AI Polish (Optional)</p>
                     <p className="text-xs text-muted-foreground">
@@ -754,7 +754,7 @@ export default function PersonalStatement() {
                         variant="outline"
                         onClick={handleAIPolish}
                         disabled={isPolishing || filledSections === 0}
-                        className="gap-2 border-purple-500/30 hover:bg-purple-500/10"
+                        className="gap-2 border-gold/30 hover:bg-gold/10"
                       >
                         {isPolishing ? (
                           <>

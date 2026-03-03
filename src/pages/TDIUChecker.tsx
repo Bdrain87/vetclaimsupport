@@ -111,8 +111,8 @@ export default function TDIUChecker() {
     <PageContainer className="space-y-6 animate-fade-in pb-8">
       {/* Header */}
       <div className="section-header">
-        <div className="section-icon bg-purple-500/10">
-          <Briefcase className="h-5 w-5 text-purple-400" />
+        <div className="section-icon bg-gold/10">
+          <Briefcase className="h-5 w-5 text-gold" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">TDIU Eligibility</h1>
@@ -121,7 +121,7 @@ export default function TDIUChecker() {
       </div>
 
       {/* Explanation */}
-      <Card className="border-purple-500/20 bg-purple-500/5">
+      <Card className="border-gold/20 bg-gold/5">
         <CardContent className="p-4">
           <div className="space-y-1.5">
             <h3 className="font-semibold text-sm">What is TDIU?</h3>
@@ -131,7 +131,7 @@ export default function TDIUChecker() {
               conditions prevent them from maintaining substantially gainful employment.
             </p>
             {monthlyIncrease > 0 && (
-              <p className="text-xs text-purple-400 font-medium mt-1">
+              <p className="text-xs text-gold font-medium mt-1">
                 If approved, your monthly compensation would increase by ${monthlyIncrease.toLocaleString('en-US', { minimumFractionDigits: 2 })} to ${tdiu100Monthly.toLocaleString('en-US', { minimumFractionDigits: 2 })}/mo.
               </p>
             )}
@@ -225,8 +225,8 @@ export default function TDIUChecker() {
             </button>
           ))}
           {yesCount >= 3 && (
-            <div className="bg-purple-500/10 border border-purple-500/20 rounded-lg p-3 mt-2">
-              <p className="text-xs text-purple-300">
+            <div className="bg-gold/10 border border-gold/20 rounded-lg p-3 mt-2">
+              <p className="text-xs text-gold">
                 Your answers suggest your conditions may significantly impact your employability.
                 Consider discussing TDIU with your VSO or attorney.
               </p>

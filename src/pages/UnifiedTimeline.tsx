@@ -21,7 +21,7 @@ interface TimelineEvent {
 const TYPE_META: Record<TimelineEvent['type'], { icon: typeof Activity; color: string; label: string }> = {
   symptom: { icon: Activity, color: 'text-destructive', label: 'Symptom' },
   sleep: { icon: Moon, color: 'text-indigo-400', label: 'Sleep' },
-  migraine: { icon: Brain, color: 'text-purple-400', label: 'Migraine' },
+  migraine: { icon: Brain, color: 'text-gold', label: 'Migraine' },
   medication: { icon: Pill, color: 'text-success', label: 'Medication' },
   visit: { icon: Stethoscope, color: 'text-primary', label: 'Visit' },
   exposure: { icon: AlertTriangle, color: 'text-gold', label: 'Exposure' },

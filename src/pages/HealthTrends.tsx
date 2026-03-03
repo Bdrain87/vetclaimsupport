@@ -312,7 +312,7 @@ export default function HealthTrends() {
           values={data.migraines.values}
           trend={data.migraines.trend}
           summary={`${data.stats.totalMigraines} total (${data.stats.totalProstrating} prostrating) over ${periodLabel.toLowerCase()}`}
-          color="bg-purple-500/80"
+          color="bg-gold/80"
           vaNote={
             data.stats.totalProstrating > 0
               ? `DC 8100: ${data.stats.totalProstrating} prostrating episodes documented.`

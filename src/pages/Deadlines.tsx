@@ -52,7 +52,7 @@ const DEADLINE_META: Record<DeadlineType, {
   cp_exam: {
     label: 'C&P Exam',
     icon: <Stethoscope className="h-4 w-4" />,
-    color: 'text-purple-600 dark:text-purple-400',
+    color: 'text-gold',
     description: 'Your compensation and pension examination. Missing it can result in claim denial.',
   },
   nod_appeal: {

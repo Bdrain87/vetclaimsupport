@@ -59,7 +59,7 @@ const STATUS_COLORS: Record<string, string> = {
   pending: 'bg-gold/20 text-foreground border-gold/30',
   approved: 'bg-success/20 text-success border-success/30',
   denied: 'bg-destructive/20 text-destructive border-destructive/30',
-  appeal: 'bg-purple-500/20 text-purple-600 border-purple-500/30',
+  appeal: 'bg-gold/20 text-gold border-gold/30',
 };
 
 const STATUS_LABELS: Record<string, string> = {

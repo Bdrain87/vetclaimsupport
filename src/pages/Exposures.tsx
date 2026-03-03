@@ -135,7 +135,7 @@ export default function Exposures() {
   const getExposureColor = (type: string) => {
     const colors: Record<string, string> = {
       'Burn pit': 'bg-warning/10 text-warning ring-warning/20',
-      'Jet fuel': 'bg-purple-500/10 text-purple-600 ring-purple-500/20',
+      'Jet fuel': 'bg-gold/10 text-gold ring-gold/20',
       'Chemicals': 'bg-destructive/10 text-destructive ring-destructive/20',
       'Noise': 'bg-warning/10 text-warning ring-warning/20',
       'Radiation': 'bg-warning/10 text-warning ring-warning/20',

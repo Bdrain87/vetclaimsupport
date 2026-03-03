@@ -698,7 +698,7 @@ export default function CPExamPacket() {
                         className={cn(
                           'text-xs shrink-0',
                           condition.claimType === 'secondary'
-                            ? 'bg-purple-500/20 text-purple-400 border-purple-500/30'
+                            ? 'bg-gold/20 text-gold border-gold/30'
                             : condition.claimType === 'increase'
                             ? 'bg-gold/20 text-foreground border-gold/30'
                             : 'bg-gold/20 text-foreground-hl border-gold/30'
@@ -795,7 +795,7 @@ export default function CPExamPacket() {
               )}
 
               {symptomSummary.migraineCount > 0 && (
-                <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                <div className="p-3 rounded-lg bg-gold/10 border border-gold/20">
                   <p className="text-sm font-medium text-foreground">Migraines</p>
                   <p className="text-xs text-muted-foreground">
                     {symptomSummary.migraineCount} episodes, {symptomSummary.prostratingCount} prostrating
