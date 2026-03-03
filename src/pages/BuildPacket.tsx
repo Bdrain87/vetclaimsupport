@@ -22,7 +22,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { generateExport, downloadExport } from '@/services/exportEngine';
 import { PageContainer } from '@/components/PageContainer';
 

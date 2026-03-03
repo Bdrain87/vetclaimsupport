@@ -1762,6 +1762,96 @@ export const ClaimIntelligence = {
     }
     return { eligible: false, pathway: 'none', reason: 'Does not meet TDIU criteria' };
   },
+
+  // -----------------------------------------------------------------------
+  // Evidence Completeness per Condition
+  // -----------------------------------------------------------------------
+  getConditionEvidenceCompleteness(
+    conditionName: string,
+    userCondition: UserCondition,
+    claimsData: ClaimsData,
+  ): {
+    score: number;
+    items: { label: string; complete: boolean; points: number }[];
+    recommendations: { action: string; pointsGain: number; route: string }[];
+  } {
+    const lowerName = conditionName.toLowerCase();
+    const items: { label: string; complete: boolean; points: number }[] = [];
+    const recommendations: { action: string; pointsGain: number; route: string }[] = [];
+
+    // Find linked claim condition
+    const cc = claimsData.claimConditions.find(
+      (c) => c.name.toLowerCase() === lowerName,
+    );
+
+    // 1. Service Treatment Records (20 pts)
+    const hasSTRs = claimsData.documents.some(
+      (d) => d.name.toLowerCase().includes('service treatment') && d.status === 'Completed',
+    );
+    items.push({ label: 'Service Treatment Records', complete: hasSTRs, points: 20 });
+    if (!hasSTRs) {
+      recommendations.push({ action: 'Upload or request your Service Treatment Records', pointsGain: 20, route: '/claims/vault' });
+    }
+
+    // 2. Private/Post-service medical records (15 pts)
+    const hasPrivateRecords = (cc?.linkedMedicalVisits?.length ?? 0) > 0 ||
+      claimsData.documents.some(
+        (d) => d.name.toLowerCase().includes('private medical') && d.status === 'Completed',
+      );
+    items.push({ label: 'Post-service medical records', complete: hasPrivateRecords, points: 15 });
+    if (!hasPrivateRecords) {
+      recommendations.push({ action: 'Add civilian medical records or log medical visits', pointsGain: 15, route: '/health/medical-visits' });
+    }
+
+    // 3. Buddy/lay statement (15 pts)
+    const hasBuddy = (cc?.linkedBuddyContacts?.length ?? 0) > 0 ||
+      claimsData.buddyContacts.length > 0;
+    items.push({ label: 'Buddy/lay statement', complete: hasBuddy, points: 15 });
+    if (!hasBuddy) {
+      recommendations.push({ action: 'Add a buddy statement from someone who witnessed your condition', pointsGain: 15, route: '/health/buddy-statements' });
+    }
+
+    // 4. Doctor summary / nexus letter (20 pts)
+    const hasNexus = claimsData.uploadedDocuments.some(
+      (d) => d.title?.toLowerCase().includes('nexus') || d.title?.toLowerCase().includes('doctor summary'),
+    ) || claimsData.documents.some(
+      (d) => d.name.toLowerCase().includes('doctor summar') && d.status === 'Completed',
+    );
+    items.push({ label: 'Doctor summary / nexus letter', complete: hasNexus, points: 20 });
+    if (!hasNexus) {
+      recommendations.push({ action: 'Generate a doctor summary outline to bring to your physician', pointsGain: 20, route: '/prep/doctor-summary' });
+    }
+
+    // 5. Symptom log entries - 30+ days (15 pts)
+    const symptomLogs = claimsData.symptoms.filter(
+      (s) => textMatchesAny(s.symptom + ' ' + s.bodyArea + ' ' + s.notes, [lowerName]),
+    );
+    const quickLogs = claimsData.quickLogs.filter(
+      (q) => isWithinDays(q.date, 90),
+    );
+    const hasEnoughLogs = symptomLogs.length >= 10 || quickLogs.length >= 15;
+    items.push({ label: 'Consistent symptom logging (10+ entries)', complete: hasEnoughLogs, points: 15 });
+    if (!hasEnoughLogs) {
+      const needed = Math.max(0, 10 - symptomLogs.length);
+      recommendations.push({ action: `Log ${needed} more symptom entries for this condition`, pointsGain: 15, route: '/health/symptoms' });
+    }
+
+    // 6. Personal statement (15 pts)
+    const hasPersonalStatement = claimsData.uploadedDocuments.some(
+      (d) => d.title?.toLowerCase().includes('personal statement'),
+    ) || (cc?.notes && cc.notes.trim().length > 100);
+    items.push({ label: 'Personal statement', complete: hasPersonalStatement, points: 15 });
+    if (!hasPersonalStatement) {
+      recommendations.push({ action: 'Write a personal statement describing your condition and its impact', pointsGain: 15, route: `/prep/personal-statement?condition=${encodeURIComponent(conditionName)}` });
+    }
+
+    const score = items.reduce((sum, item) => sum + (item.complete ? item.points : 0), 0);
+
+    // Sort recommendations by point gain (biggest first)
+    recommendations.sort((a, b) => b.pointsGain - a.pointsGain);
+
+    return { score, items, recommendations };
+  },
 };
 
 export type { JobCodeSuggestion, DocumentationStatus, EvidenceItem, RatingOpportunity, ClaimSummary, SymptomAnalysis } from '@/types/intelligence';

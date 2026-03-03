@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Paperclip, X, Image as ImageIcon, FileText, File, Eye, Link2, Upload } from 'lucide-react';
+import { Paperclip, X, Image as ImageIcon, FileText, File, Eye, Link2, Upload, Camera } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
@@ -26,6 +26,7 @@ export function EvidenceAttachment({
 }: EvidenceAttachmentProps) {
   const [previewDoc, setPreviewDoc] = useState<EvidenceDocument | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   // Get documents linked to this entry
@@ -127,9 +128,12 @@ export function EvidenceAttachment({
       }).catch(() => { /* file read errors are non-fatal */ });
     }
 
-    // Reset input
+    // Reset inputs
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
+    }
+    if (cameraInputRef.current) {
+      cameraInputRef.current.value = '';
     }
   };
 
@@ -166,6 +170,25 @@ export function EvidenceAttachment({
           className="hidden"
           aria-label="Choose evidence files"
         />
+        <input
+          ref={cameraInputRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          onChange={handleFileSelect}
+          className="hidden"
+          aria-label="Take photo of evidence"
+        />
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => cameraInputRef.current?.click()}
+          className="gap-1.5"
+        >
+          <Camera className="h-3.5 w-3.5" />
+          <span className="hidden sm:inline">Photo</span>
+        </Button>
         <Button
           type="button"
           variant="outline"
@@ -349,7 +372,7 @@ export function EvidenceAttachment({
         </div>
       )}
 
-      {/* Add Attachment Button */}
+      {/* Add Attachment Buttons */}
       {linkedDocuments.length < maxFiles && (
         <div>
           <input
@@ -361,16 +384,35 @@ export function EvidenceAttachment({
             className="hidden"
             aria-label="Choose evidence files"
           />
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => fileInputRef.current?.click()}
-            className="w-full"
-          >
-            <Upload className="h-4 w-4 mr-2" />
-            Attach Evidence
-          </Button>
+          <input
+            ref={cameraInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            onChange={handleFileSelect}
+            className="hidden"
+            aria-label="Take photo of evidence"
+          />
+          <div className="grid grid-cols-2 gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => cameraInputRef.current?.click()}
+            >
+              <Camera className="h-4 w-4 mr-2" />
+              Take Photo
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Upload className="h-4 w-4 mr-2" />
+              Attach File
+            </Button>
+          </div>
         </div>
       )}
 

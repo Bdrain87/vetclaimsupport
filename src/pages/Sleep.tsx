@@ -822,6 +822,7 @@ export default function Sleep() {
               icon={<Moon className="h-12 w-12" />}
               title="No sleep entries logged yet"
               description="Track your sleep patterns to build evidence for sleep apnea, insomnia, or other sleep-related claims."
+              whyItMatters="Sleep disturbances are rated under DC 6847. Frequency logs support higher rating brackets."
               actionLabel="Log Sleep"
               onAction={() => setIsOpen(true)}
             />

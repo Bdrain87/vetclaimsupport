@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { safeFormatDate } from '@/utils/dateUtils';
+import { impactMedium } from '@/lib/haptics';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -354,6 +355,7 @@ export default function Conditions() {
     const parsedRating = newRating && newRating !== 'not-rated' ? parseInt(newRating) : undefined;
     if (parsedRating !== undefined && isNaN(parsedRating)) return;
 
+    impactMedium();
     addCondition(selectedCondition.id, {
       rating: parsedRating,
       claimStatus: newClaimStatus,
@@ -403,6 +405,7 @@ export default function Conditions() {
 
   const confirmRemoveCondition = () => {
     if (removeTarget) {
+      impactMedium();
       removeCondition(removeTarget.id);
       setRemoveTarget(null);
     }

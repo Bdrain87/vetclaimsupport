@@ -34,6 +34,8 @@ async function ensureSession(): Promise<boolean> {
 export const useGemini = (persona: keyof typeof AI_CONFIG) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [streamedText, setStreamedText] = useState('');
+  const [isStreaming, setIsStreaming] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const generate = useCallback(async (input: string): Promise<string | null> => {
@@ -149,6 +151,138 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
     }
   }, [persona]);
 
+  /**
+   * Streaming variant of generate(). Calls the edge function with stream=true
+   * and reads SSE chunks. Falls back to non-streaming on error.
+   *
+   * Updates `streamedText` state as tokens arrive.
+   * Returns the complete text when done, or null on error.
+   */
+  const generateStream = useCallback(async (input: string): Promise<string | null> => {
+    abortControllerRef.current?.abort();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    setIsLoading(true);
+    setIsStreaming(true);
+    setStreamedText('');
+    setError(null);
+
+    const timeoutId = setTimeout(() => controller.abort(), 60_000);
+
+    try {
+      const hasSession = await ensureSession();
+      if (!hasSession) {
+        setError('Unable to authenticate. Please sign in and try again.');
+        return null;
+      }
+
+      const { redactedText: sanitizedInput, redactionCount } = redactPII(input, 'high');
+      logAISend({ redactionMode: 'high', redactionCount, textLengthSent: sanitizedInput.length });
+
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        setError('Session expired. Please sign in again.');
+        return null;
+      }
+
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const response = await fetch(`${supabaseUrl}/functions/v1/analyze-disabilities`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          prompt: `${AI_CONFIG[persona]}\n\nInput: ${sanitizedInput}`,
+          stream: true,
+        }),
+        signal: controller.signal,
+      });
+
+      if (!response.ok) {
+        // Fall back to non-streaming
+        setIsStreaming(false);
+        return generate(input);
+      }
+
+      if (!response.body) {
+        // No streaming body — fall back
+        setIsStreaming(false);
+        return generate(input);
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let fullText = '';
+      let rawBody = ''; // Track raw response for fallback parsing
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        if (controller.signal.aborted) return null;
+
+        const chunk = decoder.decode(value, { stream: true });
+        rawBody += chunk;
+
+        // Parse SSE lines
+        const lines = chunk.split('\n');
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = line.slice(6);
+            if (data === '[DONE]') continue;
+            try {
+              const parsed = JSON.parse(data);
+              const token = parsed.text || parsed.token || parsed.content || '';
+              if (token) {
+                fullText += token;
+                setStreamedText(fullText);
+              }
+            } catch {
+              // If it's not JSON, treat the raw data as text
+              if (data && data !== '[DONE]') {
+                fullText += data;
+                setStreamedText(fullText);
+              }
+            }
+          }
+        }
+      }
+
+      // If we got no streamed text, the edge function might not support streaming yet
+      // Fall back to parsing the raw response body as JSON
+      if (!fullText && rawBody) {
+        try {
+          const jsonResponse = JSON.parse(rawBody);
+          if (jsonResponse?.analysis) {
+            fullText = jsonResponse.analysis;
+            setStreamedText(fullText);
+          }
+        } catch {
+          // Not JSON either — fall back to non-streaming
+          setIsStreaming(false);
+          return generate(input);
+        }
+      }
+
+      return fullText || null;
+    } catch (err: unknown) {
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        setError('Request timed out. Please try again.');
+        return null;
+      }
+      if (controller.signal.aborted) return null;
+
+      // Fall back to non-streaming on any streaming error
+      setIsStreaming(false);
+      return generate(input);
+    } finally {
+      clearTimeout(timeoutId);
+      setIsLoading(false);
+      setIsStreaming(false);
+    }
+  }, [persona, generate]);
+
   const cancel = useCallback(() => {
     abortControllerRef.current?.abort();
   }, []);
@@ -160,5 +294,5 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
     };
   }, []);
 
-  return { generate, isLoading, cancel, error };
+  return { generate, generateStream, isLoading, isStreaming, streamedText, cancel, error };
 };

@@ -4,7 +4,7 @@ import {
   ClipboardCheck, FileText, Users, FileSignature, AlertTriangle,
   BookOpen, ClipboardList, Languages, DollarSign, Package, FileCheck,
   Calculator, Scale, Navigation, Clock, Shield, Wrench, Share2, TrendingUp, Target, FileSearch,
-  Search, Briefcase, Stethoscope, HelpCircle, GraduationCap, MapPin, Globe,
+  Search, Briefcase, Stethoscope, HelpCircle, GraduationCap, MapPin, Globe, Camera,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PageContainer } from '@/components/PageContainer';
@@ -20,7 +20,7 @@ interface ToolItem {
 const MOST_USED: ToolItem[] = [
   { label: 'Rating Calculator', icon: Calculator, route: '/claims/calculator', description: 'Calculate combined VA rating' },
   { label: 'C&P Exam Prep', icon: ClipboardCheck, route: '/prep/exam', description: 'Prepare for your compensation exam' },
-  { label: 'Personal Statement', icon: FileText, route: '/prep/personal-statement', description: 'Generate your personal statement' },
+  { label: 'Scan Document', icon: Camera, route: '/claims/vault', description: 'Scan or photo medical records & evidence' },
   { label: 'Claim Packet Builder', icon: Package, route: '/prep/packet', description: 'Compile your full claim packet' },
 ];
 

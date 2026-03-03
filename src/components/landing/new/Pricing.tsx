@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { fadeInUp, staggerContainer, GOLD_GRADIENT_TEXT, GOLD_GRADIENT, EASE_SMOOTH, HEADING_H2_STYLE, LANDING_BG_ELEVATED, LANDING_BG, TEXT_TERTIARY, TEXT_DIM, TEXT_SECONDARY, TEXT_PRIMARY, TEXT_BRIGHT, GOLD } from '@/lib/landing-animations';
 import { Check, Shield, ChevronDown } from 'lucide-react';

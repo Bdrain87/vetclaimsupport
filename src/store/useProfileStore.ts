@@ -53,6 +53,7 @@ export interface UserProfile {
   entitlement: 'preview' | 'premium' | 'lifetime';
   vaultPasscodeSet: boolean;
   lastSyncedAt: string | null;
+  isFirstSession: boolean;
 }
 
 interface ProfileState extends UserProfile {
@@ -72,6 +73,7 @@ interface ProfileState extends UserProfile {
   setEntitlement: (entitlement: 'preview' | 'premium' | 'lifetime') => void;
   setVaultPasscodeSet: (set: boolean) => void;
   setLastSyncedAt: (date: string | null) => void;
+  setFirstSessionComplete: () => void;
   completeOnboarding: () => void;
   resetProfile: () => void;
 }
@@ -95,6 +97,7 @@ export const useProfileStore = create<ProfileState>()(
       entitlement: 'preview',
       vaultPasscodeSet: false,
       lastSyncedAt: null,
+      isFirstSession: true,
 
       setFirstName: (name) => set({ firstName: name }),
       setLastName: (name) => set({ lastName: name }),
@@ -120,6 +123,7 @@ export const useProfileStore = create<ProfileState>()(
       setEntitlement: (entitlement) => set({ entitlement }),
       setVaultPasscodeSet: (val) => set({ vaultPasscodeSet: val }),
       setLastSyncedAt: (date) => set({ lastSyncedAt: date }),
+      setFirstSessionComplete: () => set({ isFirstSession: false }),
       completeOnboarding: () => set({ hasCompletedOnboarding: true }),
       resetProfile: () => set({
         firstName: '',
@@ -138,6 +142,7 @@ export const useProfileStore = create<ProfileState>()(
         entitlement: 'preview',
         vaultPasscodeSet: false,
         lastSyncedAt: null,
+        isFirstSession: true,
       }),
     }),
     {

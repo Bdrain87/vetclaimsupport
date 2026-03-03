@@ -57,8 +57,6 @@ const noopLock = async (
 ) => await fn();
 
 if (isNativeApp) {
-  console.log('[supabase] native mode: lock=noop, detectSessionInUrl=false, broadcastChannel=suppressed');
-
   // Suppress BroadcastChannel on native — the SDK creates one for cross-tab
   // session sync which is useless in a single-tab WKWebView and could cause issues.
   if (typeof globalThis.BroadcastChannel !== 'undefined') {

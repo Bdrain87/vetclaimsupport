@@ -28,7 +28,7 @@ export const documentCategoryIcons: Record<DocumentCategory, string> = {
 };
 
 // Entry types that can have attachments
-export type AttachableEntryType = 
+export type AttachableEntryType =
   | 'symptom'
   | 'medical-visit'
   | 'medication'
@@ -40,7 +40,8 @@ export type AttachableEntryType =
   | 'major-event'
   | 'deployment'
   | 'ptsd-symptom'
-  | 'claim-condition';
+  | 'claim-condition'
+  | 'employment-impact';
 
 // A document/evidence file stored 100% locally on user's device
 export interface EvidenceDocument {

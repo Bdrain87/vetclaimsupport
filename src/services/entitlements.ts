@@ -56,6 +56,21 @@ export function isPremiumRoute(pathname: string): boolean {
 
 let cachedEmail: string | null = null;
 
+/**
+ * Session-level flag: once a user is confirmed premium in this app session,
+ * they should never be blocked by a timeout. This prevents paying users from
+ * being locked out on slow cell networks.
+ */
+let _wasPremiumThisSession = false;
+
+export function wasPremiumInSession(): boolean {
+  return _wasPremiumThisSession;
+}
+
+export function markPremiumSession(): void {
+  _wasPremiumThisSession = true;
+}
+
 function isTeamAccount(): boolean {
   return cachedEmail != null && LIFETIME_EMAILS.has(cachedEmail.toLowerCase());
 }
@@ -68,7 +83,9 @@ export function checkEntitlement(): EntitlementStatus {
 
 export function hasPremiumAccess(): boolean {
   const status = checkEntitlement();
-  return status === 'premium' || status === 'lifetime';
+  const isPremium = status === 'premium' || status === 'lifetime';
+  if (isPremium) _wasPremiumThisSession = true;
+  return isPremium;
 }
 
 export function isFeatureAvailable(feature: keyof typeof PREVIEW_LIMITS): boolean {

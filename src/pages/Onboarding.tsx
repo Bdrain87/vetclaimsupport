@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { ChevronRight, ChevronLeft, X, Search, Shield, User, Briefcase, Stethoscope, Check, MapPin, Plane, ClipboardList, Activity, FileText, Users, Calculator } from 'lucide-react';
 import { useProfileStore, BRANCH_LABELS, BRANCH_COLORS, type Branch, type ClaimGoal } from '@/store/useProfileStore';
 import { searchMilitaryJobs, getCodeTypeForBranch, type MilitaryJobCode } from '@/data/militaryMOS';

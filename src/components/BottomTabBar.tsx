@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Home, Shield, Activity, Wrench, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { isWeb } from '@/lib/platform';
+import { selectionTap } from '@/lib/haptics';
 
 const tabs = [
   { to: isWeb ? '/app' : '/', icon: Home, label: 'Home' },
@@ -42,7 +43,7 @@ export function BottomTabBar() {
           return (
             <button
               key={tab.to}
-              onClick={() => navigate(tab.to)}
+              onClick={() => { selectionTap(); navigate(tab.to); }}
               aria-current={isActive ? 'page' : undefined}
               aria-label={tab.label}
               className={cn(

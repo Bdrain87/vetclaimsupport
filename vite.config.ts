@@ -88,8 +88,8 @@ export default defineConfig({
           if (id.includes('node_modules/react-dom/') || id.includes('node_modules/react/')) {
             return 'vendor';
           }
-          if (id.includes('node_modules/framer-motion/')) {
-            return 'framer-motion';
+          if (id.includes('node_modules/motion/')) {
+            return 'motion';
           }
           if (id.includes('node_modules/@supabase/')) {
             return 'supabase';

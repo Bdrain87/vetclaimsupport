@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { EASE_SMOOTH, LANDING_BG, TEXT_PRIMARY, TEXT_TERTIARY } from '@/lib/landing-animations';
 
 function GoldFlag() {

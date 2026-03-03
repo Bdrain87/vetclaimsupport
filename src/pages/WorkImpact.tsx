@@ -1,6 +1,8 @@
 import { useState, useMemo, useCallback } from 'react';
 import { safeFormatDate } from '@/utils/dateUtils';
 import { Briefcase, Plus, Trash2, Clock, AlertTriangle } from 'lucide-react';
+import { useEvidence } from '@/hooks/useEvidence';
+import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/EvidenceAttachment';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -32,6 +34,7 @@ export default function WorkImpact() {
     return { addEntry: s.addEmploymentImpact, deleteEntry: s.deleteEmploymentImpact };
   }, []);
   const { conditions: userConditions } = useUserConditions();
+  const { documents, setAllDocuments } = useEvidence();
   const { toast } = useToast();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -210,10 +213,24 @@ export default function WorkImpact() {
                       )}
                     </div>
                   </div>
-                  <Button variant="ghost" size="sm" className="text-muted-foreground h-8 w-8 p-0" onClick={() => setDeleteId(entry.id)}>
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </Button>
+                  <div className="flex items-center gap-1">
+                    <EvidenceAttachment
+                      entryType="employment-impact"
+                      entryId={entry.id}
+                      documents={documents}
+                      onDocumentsChange={setAllDocuments}
+                      compact
+                    />
+                    <Button variant="ghost" size="sm" className="text-muted-foreground h-8 w-8 p-0" onClick={() => setDeleteId(entry.id)}>
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
                 </div>
+                <EvidenceThumbnails
+                  entryType="employment-impact"
+                  entryId={entry.id}
+                  documents={documents}
+                />
               </CardContent>
             </Card>
           ))}

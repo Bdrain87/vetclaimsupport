@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion } from 'motion/react';
 import { Shield, Activity, FileText, Package } from 'lucide-react';
 import { signInWithApple, signInWithGoogle } from '@/services/auth';
 import { supabase } from '@/lib/supabase';

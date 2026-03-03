@@ -51,6 +51,10 @@ export default function BuddyFillPage() {
         return;
       }
       setState({ status: 'ready', share: result.share });
+      // Pre-fill relationship if provided
+      if (result.share.relationshipHint) {
+        setForm((f) => ({ ...f, buddyRelationship: result.share.relationshipHint }));
+      }
     }).catch(() => {
       setState({ status: 'error', message: 'Unable to load this buddy statement. Check your internet connection and try again.' });
     });
@@ -225,15 +229,30 @@ export default function BuddyFillPage() {
                   Your Statement *
                 </label>
                 <p className="text-[11px] text-muted-foreground mb-2">
-                  Describe what you witnessed or know about the veteran's condition. Be specific about
-                  dates, events, and how the condition affects their daily life.
+                  Describe what you've personally witnessed. The VA values specific details.
+                  This statement must be in your own words describing what you personally observed.
                 </p>
+                {/* Guided prompts */}
+                <div className="space-y-1.5 mb-3 p-3 rounded-lg bg-muted/30 border border-border">
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Questions to help you write</p>
+                  {[
+                    `How long have you known ${state.share.veteranFirstName}, and in what capacity?`,
+                    `What specific symptoms or behaviors have you observed related to ${state.share.conditionName}?`,
+                    `How has this condition changed their daily activities, work, or relationships?`,
+                    'Can you describe specific incidents or examples you personally witnessed?',
+                    'How does their condition now compare to before or when you first noticed it?',
+                  ].map((q, i) => (
+                    <p key={i} className="text-[11px] text-muted-foreground flex items-start gap-1.5">
+                      <span className="text-gold font-bold mt-px">{i + 1}.</span> {q}
+                    </p>
+                  ))}
+                </div>
                 <textarea
                   value={form.statementContent}
                   onChange={(e) => setForm((f) => ({ ...f, statementContent: e.target.value }))}
                   rows={8}
                   className="w-full bg-muted/50 border border-border rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 resize-none"
-                  placeholder="I have known [veteran] since... During our time together, I observed..."
+                  placeholder={`I have known ${state.share.veteranFirstName} since [year] as their [relationship]. During this time, I have observed...`}
                 />
               </div>
 

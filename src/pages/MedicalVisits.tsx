@@ -383,6 +383,7 @@ export default function MedicalVisits() {
               icon={<Stethoscope className="h-12 w-12" />}
               title="No medical visits logged yet"
               description="Document all medical appointments during service. Each visit can be linked to a claimed condition."
+              whyItMatters="The VA looks for ongoing treatment as evidence of severity. Gaps in treatment history can lower your rating."
               actionLabel="Add Visit"
               onAction={() => setIsOpen(true)}
             />

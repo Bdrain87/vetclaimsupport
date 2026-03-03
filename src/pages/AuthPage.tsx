@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion } from 'motion/react';
 import { Mail, Lock, Eye, EyeOff, ArrowLeft, Shield, Activity, FileText, Package } from 'lucide-react';
 import { signInWithEmail, signUpWithEmail, signInWithGoogle, signInWithApple, resetPassword } from '@/services/auth';
 import { supabase, getSharedSession } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
 import { PageContainer } from '@/components/PageContainer';
 import { GOLD_GRADIENT } from '@/lib/landing-animations';
+import { notifyError } from '@/lib/haptics';
 
 /** Only allow relative paths starting with / (no protocol-relative // or external URLs). */
 function getSafeRedirect(): string {
@@ -83,16 +84,19 @@ export default function AuthPage() {
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim() || !password.trim()) {
+      notifyError();
       toast({ title: 'Missing fields', description: 'Please enter your email and password.', variant: 'destructive' });
       return;
     }
 
     if (mode === 'signup') {
       if (password.length < 6) {
+        notifyError();
         toast({ title: 'Weak password', description: 'Password must be at least 6 characters.', variant: 'destructive' });
         return;
       }
       if (password !== confirmPassword) {
+        notifyError();
         toast({ title: 'Passwords don\'t match', description: 'Please make sure your passwords match.', variant: 'destructive' });
         return;
       }

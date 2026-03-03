@@ -553,6 +553,7 @@ export default function Medications() {
               icon={<Pill className="h-10 w-10" />}
               title="No medications logged yet"
               description="Track all prescriptions during service to build a complete medical history for your VA claim."
+              whyItMatters="The 2026 VA medication rule requires documented treatment history. Side effects may qualify as secondary conditions."
               actionLabel="Add Medication"
               onAction={() => setIsOpen(true)}
             />

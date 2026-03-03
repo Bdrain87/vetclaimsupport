@@ -1,5 +1,5 @@
 import type React from 'react';
-import type { Variants, Transition } from 'framer-motion';
+import type { Variants, Transition } from 'motion/react';
 
 // App Store link — single source of truth for all landing pages
 export const APP_STORE_URL =

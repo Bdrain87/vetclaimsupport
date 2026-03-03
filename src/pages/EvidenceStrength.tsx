@@ -15,6 +15,7 @@ import {
   ExternalLink,
   FileText,
   Stethoscope,
+  ArrowRight,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -24,6 +25,9 @@ import { PageContainer } from '@/components/PageContainer';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { getConditionDisplayName } from '@/utils/conditionResolver';
 import useAppStore from '@/store/useAppStore';
+import { useClaims } from '@/hooks/useClaims';
+import { ClaimIntelligence } from '@/services/claimIntelligence';
+import { ProgressRing } from '@/components/ui/progress-ring';
 import {
   conditionRatingCriteria,
   type ConditionRatingCriteria,
@@ -115,7 +119,17 @@ export default function EvidenceStrength() {
   const navigate = useNavigate();
   const { conditions: userConditions } = useUserConditions();
   const symptoms = useAppStore((s) => s.symptoms);
+  const { data: claimsData } = useClaims();
   const [expandedConditions, setExpandedConditions] = useState<Set<string>>(new Set());
+
+  // Per-condition evidence completeness
+  const evidenceScores = useMemo(() => {
+    return userConditions.map((uc) => {
+      const name = getConditionDisplayName(uc);
+      const completeness = ClaimIntelligence.getConditionEvidenceCompleteness(name, uc, claimsData);
+      return { uc, name, ...completeness };
+    });
+  }, [userConditions, claimsData]);
 
   // Build a text corpus per condition from all symptom entries
   const conditionEvidence = useMemo(() => {
@@ -240,6 +254,59 @@ export default function EvidenceStrength() {
           </a>.
         </p>
       </div>
+
+      {/* Evidence Completeness per Condition */}
+      {evidenceScores.length > 0 && (
+        <div className="space-y-3">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1">
+            Evidence Completeness
+          </p>
+          {evidenceScores.map(({ uc, name, score, items, recommendations }) => (
+            <Card key={uc.id} className="rounded-2xl overflow-hidden">
+              <CardContent className="py-4 px-4">
+                <div className="flex items-center gap-3">
+                  <ProgressRing
+                    value={score}
+                    size="sm"
+                    variant={score >= 80 ? 'success' : score >= 50 ? 'warning' : 'danger'}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-foreground truncate">{name}</p>
+                    <div className="mt-1 space-y-0.5">
+                      {items.map((item) => (
+                        <div key={item.label} className="flex items-center gap-1.5 text-[11px]">
+                          {item.complete ? (
+                            <CheckCircle2 className="h-3 w-3 text-success flex-shrink-0" />
+                          ) : (
+                            <Circle className="h-3 w-3 text-muted-foreground/30 flex-shrink-0" />
+                          )}
+                          <span className={item.complete ? 'text-muted-foreground' : 'text-foreground'}>
+                            {item.label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                {recommendations.length > 0 && (
+                  <div className="mt-3 pt-3 border-t border-border space-y-1.5">
+                    {recommendations.slice(0, 2).map((rec, i) => (
+                      <button
+                        key={i}
+                        onClick={() => navigate(rec.route)}
+                        className="w-full text-left flex items-start gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        <ArrowRight className="h-3 w-3 text-primary mt-0.5 flex-shrink-0" />
+                        <span>{rec.action} <span className="text-primary font-medium">(+{rec.pointsGain}pts)</span></span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
 
       {/* No conditions state */}
       {userConditions.length === 0 && (

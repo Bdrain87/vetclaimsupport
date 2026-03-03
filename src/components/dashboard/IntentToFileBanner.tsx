@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { Shield, X, ExternalLink, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useProfileStore } from '@/store/useProfileStore';

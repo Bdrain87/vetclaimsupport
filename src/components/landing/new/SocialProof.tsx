@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView } from 'motion/react';
 import { fadeInUp, staggerContainer, LANDING_BG_CARD, TEXT_SECONDARY } from '@/lib/landing-animations';
 
 function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string }) {

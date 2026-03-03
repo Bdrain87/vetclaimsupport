@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE, APP_STORE_URL, LANDING_BG } from '@/lib/landing-animations';
 

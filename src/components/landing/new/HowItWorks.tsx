@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import {
   GOLD_GRADIENT_TEXT,
   HEADING_H2_STYLE,

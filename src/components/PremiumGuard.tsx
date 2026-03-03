@@ -1,9 +1,9 @@
 import { useState, useEffect, type ReactNode } from 'react';
-import { hasPremiumAccess, ensureFreshEntitlement } from '@/services/entitlements';
+import { hasPremiumAccess, ensureFreshEntitlement, wasPremiumInSession } from '@/services/entitlements';
 import { UpgradeModal } from '@/components/UpgradeModal';
 
-/** Maximum time to wait for server entitlement check before failing closed. */
-const ENTITLEMENT_TIMEOUT_MS = 8000;
+/** Maximum time to wait for server entitlement check before degrading gracefully. */
+const ENTITLEMENT_TIMEOUT_MS = 4000;
 
 interface PremiumGuardProps {
   featureName: string;
@@ -17,15 +17,13 @@ export function PremiumGuard({ featureName, children }: PremiumGuardProps) {
     let cancelled = false;
     let timerId: ReturnType<typeof setTimeout> | undefined;
 
-    // Show content immediately for known premium users (avoids flash)
-    if (hasPremiumAccess()) {
+    // Immediate grant for known premium users — avoids flash
+    const premiumAtMount = hasPremiumAccess() || wasPremiumInSession();
+    if (premiumAtMount) {
       setState('granted');
     }
 
     // ALWAYS verify with server — never trust local cache alone.
-    // Race against a timeout so the guard fails closed (blocked) if the
-    // server is unreachable, preventing free users from accessing premium
-    // content during network outages.
     const timeout = new Promise<'timeout'>((resolve) => {
       timerId = setTimeout(() => resolve('timeout'), ENTITLEMENT_TIMEOUT_MS);
     });
@@ -33,16 +31,25 @@ export function PremiumGuard({ featureName, children }: PremiumGuardProps) {
     Promise.race([ensureFreshEntitlement(), timeout]).then((result) => {
       if (cancelled) return;
       if (result === 'timeout') {
-        // Fail closed: if we can't verify, block access unless the user
-        // was already confirmed premium in this session's cache.
-        setState(hasPremiumAccess() ? 'granted' : 'blocked');
+        // If the user was premium at mount or earlier in this session,
+        // NEVER flip to blocked on timeout — gracefully degrade.
+        if (premiumAtMount || wasPremiumInSession()) {
+          setState('granted');
+        } else {
+          setState(hasPremiumAccess() ? 'granted' : 'blocked');
+        }
         return;
       }
       const isPremium = result === 'premium' || result === 'lifetime';
       setState(isPremium ? 'granted' : 'blocked');
     }).catch(() => {
       if (cancelled) return;
-      setState(hasPremiumAccess() ? 'granted' : 'blocked');
+      // On error: same logic — never lock out known-premium users
+      if (premiumAtMount || wasPremiumInSession()) {
+        setState('granted');
+      } else {
+        setState(hasPremiumAccess() ? 'granted' : 'blocked');
+      }
     });
 
     return () => {

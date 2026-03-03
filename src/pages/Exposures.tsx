@@ -312,6 +312,7 @@ export default function Exposures() {
               icon={<AlertTriangle className="h-12 w-12" />}
               title="No exposures logged yet"
               description="Document hazardous exposures for PACT Act claims. Burn pits, chemicals, noise, and more."
+              whyItMatters="The PACT Act expanded presumptive coverage for burn pits, Agent Orange, and radiation. Documenting exposures connects your conditions to service."
               actionLabel="Add Exposure"
               onAction={() => setIsOpen(true)}
             />

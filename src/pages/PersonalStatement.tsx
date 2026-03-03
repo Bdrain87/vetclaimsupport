@@ -49,6 +49,8 @@ import {
 import type { VACondition } from '@/data/vaConditions';
 import { getConditionById } from '@/data/vaConditions';
 import { searchAllConditions } from '@/utils/conditionSearch';
+import { useEvidence } from '@/hooks/useEvidence';
+import { EvidenceAttachment } from '@/components/shared/EvidenceAttachment';
 
 interface PersonalStatementFormData {
   condition: VACondition | null;
@@ -191,6 +193,7 @@ export default function PersonalStatement() {
     toolId: 'tool:personal-statement',
     initialData: initialFormData,
   });
+  const { documents, setAllDocuments } = useEvidence();
   const [copied, setCopied] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [polishedStatement, setPolishedStatement] = useState<string | null>(null);
@@ -902,6 +905,24 @@ export default function PersonalStatement() {
         </CardHeader>
         <CardContent>{renderStep()}</CardContent>
       </Card>
+
+      {/* Attach Supporting Documents */}
+      {formData.condition && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Attach Supporting Documents</CardTitle>
+            <CardDescription>Photos of medical records, test results, or other evidence for this statement</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <EvidenceAttachment
+              entryType="claim-condition"
+              entryId={`personal-statement-${formData.condition.id}`}
+              documents={documents}
+              onDocumentsChange={setAllDocuments}
+            />
+          </CardContent>
+        </Card>
+      )}
 
       {/* Navigation */}
       <div className="flex justify-between">

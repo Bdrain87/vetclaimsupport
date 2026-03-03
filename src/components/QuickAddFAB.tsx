@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, X, Activity, Moon, Brain, Pill, Stethoscope, FileText } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Plus, X, Activity, Moon, Brain, Pill, Stethoscope, FileText, Camera } from 'lucide-react';
 import { impactLight } from '@/lib/haptics';
 import { useProfileStore } from '@/store/useProfileStore';
 
@@ -12,6 +12,7 @@ const actions = [
   { label: 'Log Medication', icon: Pill, path: '/health/medications', color: 'text-success' },
   { label: 'Medical Visit', icon: Stethoscope, path: '/health/visits', color: 'text-gold' },
   { label: 'Quick Note', icon: FileText, path: '/health/summary', color: 'text-muted-foreground' },
+  { label: 'Scan Document', icon: Camera, path: '/claims/vault', color: 'text-primary' },
 ];
 
 /** Paths where the FAB should appear — only screens where adding entries makes sense */

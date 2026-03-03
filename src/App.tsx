@@ -8,7 +8,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { TooltipProvider } from './components/ui/tooltip';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RouteErrorBoundary } from './components/RouteErrorBoundary';
-import { MotionConfig } from 'framer-motion';
+import { MotionConfig } from 'motion/react';
 import { LiabilityAcceptanceScreen } from './components/legal/LiabilityAcceptanceScreen';
 import { SplashScreen } from './components/SplashScreen';
 
@@ -31,6 +31,11 @@ import { supabase, getSharedSession } from './lib/supabase';
 import { logger } from './utils/logger';
 import { initNativeOAuthListener } from './lib/nativeOAuth';
 import { initializePurchases, loginPurchases, logoutPurchases } from './services/iap';
+import { scheduleDeadlineNotifications } from './services/notifications';
+import { DashboardSkeleton } from './components/skeletons/DashboardSkeleton';
+import { ConditionsSkeleton } from './components/skeletons/ConditionsSkeleton';
+import { HealthHubSkeleton } from './components/skeletons/HealthHubSkeleton';
+import { PrepHubSkeleton } from './components/skeletons/PrepHubSkeleton';
 
 // Initialize native OAuth deep-link listener (no-op on web)
 initNativeOAuthListener().catch(() => {});
@@ -175,6 +180,19 @@ function LoadingFallback() {
   );
 }
 
+// Route-aware loading fallback that shows page-specific skeletons
+function RouteLoadingFallback() {
+  const location = useLocation();
+  const path = location.pathname;
+
+  if (path === '/' || path === '/app') return <DashboardSkeleton />;
+  if (path === '/claims') return <ConditionsSkeleton />;
+  if (path === '/health') return <HealthHubSkeleton />;
+  if (path === '/prep') return <PrepHubSkeleton />;
+
+  return <LoadingFallback />;
+}
+
 function RedirectConditionToClaimsId() {
   const { id } = useParams();
   return <Navigate to={`/claims/${id}`} replace />;
@@ -194,6 +212,19 @@ function ScrollToTop() {
       heading.focus({ preventScroll: true });
     }
   }, [pathname]);
+
+  return null;
+}
+
+/** Register the router's navigate function for deep link handling. */
+function DeepLinkHandler() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    import('@/utils/capacitor').then(({ setDeepLinkNavigator }) => {
+      setDeepLinkNavigator((path: string) => navigate(path));
+    });
+  }, [navigate]);
 
   return null;
 }
@@ -259,7 +290,7 @@ function AnimatedRoutes() {
   return (
     <div key={location.pathname} className="animate-fade-in">
       <RouteErrorBoundary>
-      <Suspense fallback={<LoadingFallback />}>
+      <Suspense fallback={<RouteLoadingFallback />}>
         <Routes location={location}>
           {/* === ROOT TABS === */}
           {isWeb ? (
@@ -609,6 +640,17 @@ function App() {
     // Initialize IAP (no-op on web, safe to call early)
     initializePurchases().catch(() => {});
 
+    // Reschedule push notifications on every app launch
+    const profileState = useProfileStore.getState();
+    const appState = useAppStore.getState();
+    scheduleDeadlineNotifications({
+      intentToFileDate: profileState.intentToFileDate,
+      separationDate: profileState.separationDate,
+      deadlines: (appState.deadlines ?? [])
+        .filter((d: { completed?: boolean }) => !d.completed)
+        .map((d: { title: string; dueDate: string }) => ({ title: d.title, dueDate: d.dueDate })),
+    }).catch(() => {});
+
     getSharedSession().then((session) => {
       if (session) {
         ensureFreshEntitlement().catch(() => {});
@@ -649,6 +691,7 @@ function App() {
             )}
             <BrowserRouter>
               <ScrollToTop />
+              <DeepLinkHandler />
               <RetentionWarningBanner />
               {hydrated ? <AppContent /> : <LoadingFallback />}
               <Toaster />

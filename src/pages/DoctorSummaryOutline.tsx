@@ -42,6 +42,8 @@ import { conditionRatingCriteria } from '@/data/ratingCriteria';
 import { useToast } from '@/hooks/use-toast';
 import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
 import { useToolDraft } from '@/hooks/useToolDraft';
+import { useEvidence } from '@/hooks/useEvidence';
+import { EvidenceAttachment } from '@/components/shared/EvidenceAttachment';
 
 const getAllConditions = (): string[] => {
   const conditions = new Set<string>();
@@ -140,6 +142,7 @@ export default function DoctorSummaryOutline() {
   const navigate = useNavigate();
   const { data } = useClaims();
   const profile = useProfileStore();
+  const { documents, setAllDocuments } = useEvidence();
   const { toast } = useToast();
 
   const branchLabel = getAllBranchLabels(profile);
@@ -1166,6 +1169,24 @@ export default function DoctorSummaryOutline() {
           {renderStep()}
         </CardContent>
       </Card>
+
+      {/* Attach Supporting Documents */}
+      {formData.primaryCondition && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Attach Documents for Your Doctor</CardTitle>
+            <CardDescription>Photos of lab results, prior records, or imaging to bring to your appointment</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <EvidenceAttachment
+              entryType="claim-condition"
+              entryId={`doctor-summary-${formData.primaryCondition}`}
+              documents={documents}
+              onDocumentsChange={setAllDocuments}
+            />
+          </CardContent>
+        </Card>
+      )}
 
       <div className="flex justify-between">
         <Button

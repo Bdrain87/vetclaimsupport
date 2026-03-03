@@ -28,7 +28,7 @@ import {
   ChevronLeft, Scale, FileText, Link2, Stethoscope, CheckCircle2,
   AlertTriangle, Info, ExternalLink, Trash2, BookOpen,
   Activity, TrendingUp, Clock, Brain, Moon, Zap, ArrowRight,
-  Sparkles, Loader2, ChevronDown, FileCheck, Plus, Pill, Users,
+  Sparkles, Loader2, ChevronDown, FileCheck, Plus, Pill, Users, Circle,
 } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
@@ -46,6 +46,9 @@ import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import { PageContainer } from '@/components/PageContainer';
 import { EvidenceGapAlert } from '@/components/EvidenceGapAlert';
+import { useEvidence } from '@/hooks/useEvidence';
+import { EvidenceAttachment } from '@/components/shared/EvidenceAttachment';
+import { ProgressRing } from '@/components/ui/progress-ring';
 
 // Lazy-load RatingGuidance so criteria data is not bundled until needed
 const LazyRatingGuidance = lazy(() => import('@/components/RatingGuidance'));
@@ -133,6 +136,7 @@ export default function ConditionDetail() {
     removeCondition,
     getConditionDetails,
   } = useUserConditions();
+  const { documents, setAllDocuments } = useEvidence();
 
   // Find the claim condition from the app store (for claimCondition ID lookups)
   const claimConditions = useMemo(() => data.claimConditions || [], [data.claimConditions]);
@@ -210,6 +214,12 @@ export default function ConditionDetail() {
     if (!conditionDetails) return null;
     return ClaimIntelligence.getConditionReadiness(conditionDetails.name, data);
   }, [conditionDetails, data]);
+
+  // Intelligence: evidence completeness
+  const evidenceCompleteness = useMemo(() => {
+    if (!conditionDetails || !userCondition) return null;
+    return ClaimIntelligence.getConditionEvidenceCompleteness(conditionDetails.name, userCondition, data);
+  }, [conditionDetails, userCondition, data]);
 
   // Intelligence: symptom frequency
   const frequencyReport = useMemo(() => {
@@ -449,14 +459,35 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
             {/* Evidence Progress */}
             <div className="space-y-2">
               <label className="text-sm font-medium">Evidence Status</label>
-              <div className="space-y-1">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">
-                    {evidenceCount} of {totalEvidenceNeeded} items
-                  </span>
-                  <span className="font-medium">{Math.round(evidenceProgress)}%</span>
+              <div className="flex items-center gap-3">
+                <ProgressRing
+                  value={evidenceCompleteness?.score ?? evidenceProgress}
+                  size="sm"
+                  variant={
+                    (evidenceCompleteness?.score ?? evidenceProgress) >= 80 ? 'success' :
+                    (evidenceCompleteness?.score ?? evidenceProgress) >= 50 ? 'warning' : 'danger'
+                  }
+                />
+                <div className="flex-1 space-y-1">
+                  {evidenceCompleteness ? (
+                    <div className="space-y-0.5">
+                      {evidenceCompleteness.items.slice(0, 4).map((item) => (
+                        <div key={item.label} className="flex items-center gap-1.5 text-xs">
+                          {item.complete ? (
+                            <CheckCircle2 className="h-3 w-3 text-success flex-shrink-0" />
+                          ) : (
+                            <Circle className="h-3 w-3 text-muted-foreground/40 flex-shrink-0" />
+                          )}
+                          <span className={item.complete ? 'text-muted-foreground line-through' : 'text-foreground'}>{item.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-sm text-muted-foreground">
+                      {evidenceCount} of {totalEvidenceNeeded} items
+                    </div>
+                  )}
                 </div>
-                <Progress value={evidenceProgress} />
               </div>
             </div>
           </div>
@@ -500,21 +531,12 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center gap-4">
-                <div className="relative h-16 w-16">
-                  <svg viewBox="0 0 36 36" className="h-16 w-16 -rotate-90">
-                    <circle cx="18" cy="18" r="15.5" fill="none" stroke="hsl(var(--muted))" strokeWidth="3" />
-                    <circle
-                      cx="18" cy="18" r="15.5" fill="none"
-                      stroke="hsl(var(--primary))"
-                      strokeWidth="3"
-                      strokeDasharray={`${conditionReadiness.overallScore * 0.975} 97.5`}
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                  <span className="absolute inset-0 flex items-center justify-center text-lg font-bold">
-                    {conditionReadiness.overallScore}%
-                  </span>
-                </div>
+                <ProgressRing
+                  value={conditionReadiness.overallScore}
+                  size="sm"
+                  variant={conditionReadiness.overallScore >= 70 ? 'success' : conditionReadiness.overallScore >= 40 ? 'warning' : 'danger'}
+                  label="Ready"
+                />
                 <div className="flex-1 min-w-0 space-y-1 text-xs">
                   <div className="flex justify-between"><span className="text-muted-foreground">Medical</span><span>{conditionReadiness.components.medicalEvidence}%</span></div>
                   <div className="flex justify-between"><span className="text-muted-foreground">Service Link</span><span>{conditionReadiness.components.serviceConnection}%</span></div>
@@ -523,13 +545,18 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                   <div className="flex justify-between"><span className="text-muted-foreground">Exam Prep</span><span>{conditionReadiness.components.examPrep}%</span></div>
                 </div>
               </div>
-              {conditionReadiness.tips.length > 0 && (
-                <div className="space-y-1 pt-2 border-t border-border">
-                  {conditionReadiness.tips.slice(0, 3).map((tip, i) => (
-                    <p key={i} className="text-xs text-muted-foreground flex items-start gap-1.5">
-                      <Zap className="h-3 w-3 text-primary mt-0.5 flex-shrink-0" />
-                      {tip}
-                    </p>
+              {evidenceCompleteness && evidenceCompleteness.recommendations.length > 0 && (
+                <div className="space-y-1.5 pt-2 border-t border-border">
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Next Steps to Strengthen</p>
+                  {evidenceCompleteness.recommendations.slice(0, 3).map((rec, i) => (
+                    <button
+                      key={i}
+                      onClick={() => navigate(rec.route)}
+                      className="w-full text-left flex items-start gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <ArrowRight className="h-3 w-3 text-primary mt-0.5 flex-shrink-0" />
+                      <span>{rec.action} <span className="text-primary font-medium">(+{rec.pointsGain}pts)</span></span>
+                    </button>
                   ))}
                 </div>
               )}
@@ -1262,6 +1289,24 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Attach Evidence for This Condition */}
+      {id && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Attach Evidence</CardTitle>
+            <CardDescription>Photos, medical records, or documents supporting this condition</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <EvidenceAttachment
+              entryType="claim-condition"
+              entryId={id}
+              documents={documents}
+              onDocumentsChange={setAllDocuments}
+            />
+          </CardContent>
+        </Card>
+      )}
 
       {/* View DBQ Button */}
       {conditionDetails.diagnosticCode && (

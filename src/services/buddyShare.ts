@@ -74,12 +74,26 @@ export async function createBuddyShareLink(
 }
 
 /**
+ * Generate a ready-to-send text message template for buddy statement requests.
+ */
+export function getBuddyShareMessage(url: string, veteranName: string, conditionName?: string): string {
+  const conditionPart = conditionName ? ` for ${conditionName}` : '';
+  return `Hey, I'm working on my VA disability claim${conditionPart} and could use your help. ` +
+    `The VA gives a lot of weight to "buddy statements" — a short letter from someone who's seen how my condition affects me. ` +
+    `I set up a simple form that walks you through it. It only takes about 5-10 minutes:\n\n` +
+    `${url}\n\n` +
+    `Just describe what you've personally seen — there's no right or wrong answer. Thanks so much, ${veteranName}`;
+}
+
+/**
  * Use the native Share API (or Capacitor Share) to send the link.
  */
-export async function shareBuddyLink(url: string, veteranName: string): Promise<void> {
+export async function shareBuddyLink(url: string, veteranName: string, conditionName?: string): Promise<void> {
+  const text = getBuddyShareMessage(url, veteranName, conditionName);
+
   const shareData = {
     title: 'Buddy Statement Request',
-    text: `${veteranName} is requesting your help with a buddy statement for their VA disability claim. Please tap the link to fill it out:`,
+    text,
     url,
   };
 
@@ -89,13 +103,13 @@ export async function shareBuddyLink(url: string, veteranName: string): Promise<
       await navigator.share(shareData);
     } catch {
       // User cancelled or not supported — fall through to clipboard
-      await navigator.clipboard?.writeText(`${shareData.text}\n${url}`);
+      await navigator.clipboard?.writeText(text);
     }
   } else if (typeof navigator.share === 'function') {
     await navigator.share(shareData);
   } else {
     // Fallback: copy to clipboard
-    await navigator.clipboard.writeText(`${shareData.text}\n${url}`);
+    await navigator.clipboard.writeText(text);
   }
 }
 

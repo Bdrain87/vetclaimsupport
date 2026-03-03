@@ -937,6 +937,7 @@ export default function Migraines() {
               icon={<Brain className="h-12 w-12" />}
               title="No migraine attacks logged yet"
               description="Track your migraines with severity, duration, and triggers to build evidence for VA claims."
+              whyItMatters="A 50% migraine rating requires documented prostrating attacks. The difference between 30% and 50% is $200+/month."
               actionLabel="Log Attack"
               onAction={() => setIsOpen(true)}
             />

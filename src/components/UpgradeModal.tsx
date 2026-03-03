@@ -1,39 +1,61 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Crown, Shield, FileText, Activity, Package, ArrowLeft } from 'lucide-react';
+import { Crown, ArrowLeft, RotateCcw, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { logger } from '@/utils/logger';
 import { supabase } from '@/lib/supabase';
-import { startCheckout } from '@/services/entitlements';
+import { startCheckout, refreshEntitlementFromServer, invalidateEntitlementCache } from '@/services/entitlements';
 import { useToast } from '@/hooks/use-toast';
-import { openExternalUrl } from '@/lib/platform';
+import { isNativeApp, openExternalUrl } from '@/lib/platform';
+import { getFeatureValue } from '@/data/premiumFeatureValues';
+import confetti from 'canvas-confetti';
 
 interface UpgradeModalProps {
   featureName: string;
 }
 
-const PREMIUM_HIGHLIGHTS = [
-  { icon: Shield, label: 'Claim Strategy & Body Map tools' },
-  { icon: Activity, label: 'Full health & symptom tracking' },
-  { icon: FileText, label: 'Personal statements, buddy letters & more' },
-  { icon: Package, label: 'Build & export your complete claim packet' },
-];
-
 export function UpgradeModal({ featureName }: UpgradeModalProps) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [restoring, setRestoring] = useState(false);
+  const [priceString, setPriceString] = useState('$9.99');
   const { toast } = useToast();
 
-  // Reset loading when user returns from checkout (tab becomes visible again)
+  const featureValue = getFeatureValue(featureName);
+
+  // On native, fetch dynamic price from RevenueCat
   useEffect(() => {
-    if (!loading) return;
+    if (!isNativeApp) return;
+    import('@/services/iap').then(({ getOfferings }) =>
+      getOfferings().then((offerings) => {
+        if (offerings.length > 0) {
+          setPriceString(offerings[0].priceString);
+        }
+      }).catch(() => {
+        // Keep default price string
+      })
+    );
+  }, []);
+
+  // Reset loading when user returns from Stripe checkout (web only)
+  useEffect(() => {
+    if (!loading || isNativeApp) return;
     const handleVisibility = () => {
       if (document.visibilityState === 'visible') setLoading(false);
     };
     document.addEventListener('visibilitychange', handleVisibility);
     return () => document.removeEventListener('visibilitychange', handleVisibility);
   }, [loading]);
+
+  const fireConfetti = () => {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#C5A55A', '#DAA520', '#FFD700', '#B8860B'],
+    });
+  };
 
   const handleGetPremium = async () => {
     setLoading(true);
@@ -47,9 +69,36 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
         return;
       }
 
-      const url = await startCheckout();
-      await openExternalUrl(url);
-      // Loading stays true until user returns (visibilitychange handler above)
+      if (isNativeApp) {
+        // Apple IAP flow
+        const { purchaseViaApple } = await import('@/services/iap');
+        const result = await purchaseViaApple();
+
+        if (result.cancelled) {
+          setLoading(false);
+          return;
+        }
+
+        if (result.success && result.entitlementActive) {
+          // Sync entitlement to Supabase
+          invalidateEntitlementCache();
+          await refreshEntitlementFromServer();
+          fireConfetti();
+          toast({ title: 'Welcome to Premium!', description: 'All features are now unlocked.' });
+          // Navigate back to the feature they wanted
+          setTimeout(() => navigate(0), 1500);
+          return;
+        }
+
+        if (result.error) {
+          throw new Error(result.error);
+        }
+      } else {
+        // Stripe web flow
+        const url = await startCheckout();
+        await openExternalUrl(url);
+        // Loading stays true until user returns (visibilitychange handler above)
+      }
     } catch (err) {
       logger.error('Checkout failed:', err);
       toast({
@@ -57,7 +106,53 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
         description: err instanceof Error ? err.message : 'Something went wrong. Please try again.',
         variant: 'destructive',
       });
-      setLoading(false);
+    } finally {
+      if (isNativeApp) setLoading(false);
+    }
+  };
+
+  const handleRestore = async () => {
+    setRestoring(true);
+    try {
+      if (isNativeApp) {
+        const { restoreApplePurchases } = await import('@/services/iap');
+        const result = await restoreApplePurchases();
+        if (result.restored) {
+          invalidateEntitlementCache();
+          await refreshEntitlementFromServer();
+          fireConfetti();
+          toast({ title: 'Purchases restored!', description: 'Premium access has been restored.' });
+          setTimeout(() => navigate(0), 1500);
+          return;
+        }
+        toast({
+          title: 'No purchases found',
+          description: 'No previous purchase was found for this account.',
+        });
+      } else {
+        // On web, just re-check server entitlement
+        invalidateEntitlementCache();
+        const status = await refreshEntitlementFromServer();
+        if (status === 'premium' || status === 'lifetime') {
+          fireConfetti();
+          toast({ title: 'Access restored!', description: 'Premium access has been restored.' });
+          setTimeout(() => navigate(0), 1500);
+          return;
+        }
+        toast({
+          title: 'No purchase found',
+          description: 'No active subscription was found for this account.',
+        });
+      }
+    } catch (err) {
+      logger.error('Restore failed:', err);
+      toast({
+        title: 'Restore failed',
+        description: err instanceof Error ? err.message : 'Could not restore purchases.',
+        variant: 'destructive',
+      });
+    } finally {
+      setRestoring(false);
     }
   };
 
@@ -71,7 +166,7 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
               <Crown className="h-7 w-7 text-primary" />
             </div>
             <h2 className="text-xl font-bold text-foreground">
-              Premium Feature
+              {featureValue.headline}
             </h2>
             <p className="text-sm text-muted-foreground">
               <span className="font-medium text-foreground">{featureName}</span> requires Premium access.
@@ -81,22 +176,29 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
           {/* Pricing */}
           <div className="text-center space-y-1">
             <p className="text-3xl font-bold text-foreground">
-              $9.99<span className="text-base font-normal text-muted-foreground"> one-time</span>
+              {priceString}<span className="text-base font-normal text-muted-foreground"> one-time</span>
             </p>
-            <p className="text-xs text-muted-foreground">One-time purchase. No subscription.</p>
+            <p className="text-xs text-muted-foreground">Less than a single copay. No subscription. Yours forever.</p>
           </div>
 
-          {/* Feature highlights */}
+          {/* Contextual feature bullets */}
           <div className="space-y-3">
-            {PREMIUM_HIGHLIGHTS.map(({ icon: Icon, label }) => (
-              <div key={label} className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Icon className="h-4 w-4 text-primary" />
+            {featureValue.bullets.map((bullet) => (
+              <div key={bullet} className="flex items-start gap-3">
+                <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <Check className="h-3 w-3 text-primary" />
                 </div>
-                <span className="text-sm text-foreground">{label}</span>
+                <span className="text-sm text-foreground">{bullet}</span>
               </div>
             ))}
           </div>
+
+          {/* Urgency message */}
+          {featureValue.urgency && (
+            <p className="text-xs text-center text-primary font-medium bg-primary/5 rounded-xl px-3 py-2">
+              {featureValue.urgency}
+            </p>
+          )}
 
           {/* CTA */}
           <div className="space-y-3 pt-2">
@@ -105,8 +207,20 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
               disabled={loading}
               className="w-full h-12 text-base font-semibold"
             >
-              {loading ? 'Redirecting...' : 'Get Premium'}
+              {loading ? 'Processing...' : `Get Premium — ${priceString}`}
             </Button>
+
+            {/* Restore Purchases (Apple requirement on native) */}
+            <Button
+              variant="outline"
+              onClick={handleRestore}
+              disabled={restoring}
+              className="w-full text-muted-foreground"
+            >
+              <RotateCcw className="h-4 w-4 mr-2" />
+              {restoring ? 'Restoring...' : 'Restore Purchases'}
+            </Button>
+
             <Button
               variant="ghost"
               onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/app')}

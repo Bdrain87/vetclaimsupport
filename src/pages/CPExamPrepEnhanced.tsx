@@ -43,6 +43,8 @@ import { useToolDraft } from '@/hooks/useToolDraft';
 import { getConditionSymptoms, getConditionMedications } from '@/utils/prefillHelpers';
 import { useFeatureFlag } from '@/store/useFeatureFlagStore';
 import { getConditionById } from '@/data/vaConditions';
+import { useEvidence } from '@/hooks/useEvidence';
+import { EvidenceAttachment } from '@/components/shared/EvidenceAttachment';
 
 interface ChecklistItem {
   id: string;
@@ -302,6 +304,7 @@ export default function CPExamPrepEnhanced() {
   const userAnswer = cpDraft.userAnswer;
   const setUserAnswer = (value: string) => updateCpField('userAnswer', value);
 
+  const { documents, setAllDocuments } = useEvidence();
   const conditionDetailRef = useRef<HTMLDivElement>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const showAIPractice = useFeatureFlag('aiPracticeQuestions');
@@ -1061,6 +1064,24 @@ export default function CPExamPrepEnhanced() {
           </div>
         </TabsContent>
       </Tabs>
+
+      {/* Attach Supporting Documents */}
+      {selectedCondition && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Attach Supporting Documents</CardTitle>
+            <CardDescription>Bring medical records, test results, or photos to your C&P exam</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <EvidenceAttachment
+              entryType="claim-condition"
+              entryId={`cp-exam-prep-${selectedCondition}`}
+              documents={documents}
+              onDocumentsChange={setAllDocuments}
+            />
+          </CardContent>
+        </Card>
+      )}
     </PageContainer>
   );
 }

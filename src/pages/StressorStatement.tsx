@@ -35,6 +35,8 @@ import { PrefillBadge } from '@/components/ui/PrefillBadge';
 import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
 import { useToolDraft } from '@/hooks/useToolDraft';
 import { buildStressorPrefill } from '@/utils/prefillHelpers';
+import { useEvidence } from '@/hooks/useEvidence';
+import { EvidenceAttachment } from '@/components/shared/EvidenceAttachment';
 
 interface StressorFormData {
   whatHappened: string;
@@ -135,6 +137,7 @@ function GuidanceTip({ tips }: GuidanceTipProps) {
 export default function StressorStatement() {
   const navigate = useNavigate();
   const { data: claimsData } = useClaims();
+  const { documents, setAllDocuments } = useEvidence();
   const { toast } = useToast();
 
   // Build prefilled initial data from store
@@ -776,6 +779,22 @@ export default function StressorStatement() {
           <CardDescription>{steps[currentStep - 1].description}</CardDescription>
         </CardHeader>
         <CardContent>{renderStep()}</CardContent>
+      </Card>
+
+      {/* Attach Supporting Documents */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base">Attach Supporting Documents</CardTitle>
+          <CardDescription>Photos of service records, incident reports, or corroborating evidence</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <EvidenceAttachment
+            entryType="claim-condition"
+            entryId="stressor-statement"
+            documents={documents}
+            onDocumentsChange={setAllDocuments}
+          />
+        </CardContent>
       </Card>
 
       {/* Navigation */}

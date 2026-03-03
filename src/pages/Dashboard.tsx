@@ -26,8 +26,9 @@ import {
   ShieldAlert,
   Heart,
   Flame,
+  Camera,
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { vcsSpring } from '@/constants/animations';
 import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -45,6 +46,8 @@ import { useSmartReminders } from '@/hooks/useSmartReminders';
 import { getMonthlyCompensation } from '@/services/vaCompensation';
 import { FLARE_UP_TRIGGERS, FLARE_UP_DURATIONS } from '@/types/claims';
 import type { QuickLogEntry } from '@/types/claims';
+import { notifySuccess, impactLight } from '@/lib/haptics';
+import { BRANCH_LABELS, type Branch } from '@/store/useProfileStore';
 
 const JOURNEY_PHASE_LABELS = ['Research', 'Evidence', 'Filing', 'C&P Exam', 'Decision'];
 
@@ -88,6 +91,8 @@ export default function Dashboard() {
 
   const streak = useStreakTracker();
   const reminders = useSmartReminders();
+  const isFirstSession = useProfileStore((s) => s.isFirstSession);
+  const setFirstSessionComplete = useProfileStore((s) => s.setFirstSessionComplete);
 
   const readinessScore = useMemo(
     () => ClaimIntelligence.getOverallReadiness(userConditions, data, profile),
@@ -186,6 +191,56 @@ export default function Dashboard() {
     <PageContainer className="space-y-4 animate-fade-in pb-4">
       {/* Section 1: Alert Zone */}
       <IntentToFileBanner />
+
+      {/* First Session Welcome Card */}
+      {isFirstSession && profile.hasCompletedOnboarding && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={vcsSpring}
+          className="rounded-2xl border border-gold/30 bg-gradient-to-br from-gold/10 to-gold/5 p-5 space-y-3"
+        >
+          <h2 className="text-lg font-bold text-foreground">
+            Welcome{profile.firstName ? `, ${profile.firstName}` : ''}!
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            {profile.branch && BRANCH_LABELS[profile.branch as Branch]
+              ? `Thank you for your service in the ${BRANCH_LABELS[profile.branch as Branch]}. `
+              : 'Thank you for your service. '}
+            {profile.claimGoal === 'initial'
+              ? "Let's build your first VA disability claim. Start by filing an Intent to File to protect your effective date."
+              : profile.claimGoal === 'increase'
+                ? "Let's work on increasing your current rating. Start by adding your rated conditions so we can identify opportunities."
+                : profile.claimGoal === 'appeal'
+                  ? "We'll help you understand your denial and build a stronger appeal. Start by adding the denied condition."
+                  : profile.claimGoal === 'secondary'
+                    ? "We'll help you find and claim secondary conditions. Add your primary conditions first so we can identify connections."
+                    : "Let's get your claim organized. Start by adding your conditions below."}
+          </p>
+          <div className="flex gap-2 pt-1">
+            {profile.claimGoal === 'initial' && !profile.intentToFileFiled && (
+              <button
+                onClick={() => navigate('/claims/itf')}
+                className="flex-1 py-2.5 rounded-xl bg-gold text-black font-semibold text-sm hover:bg-gold/90 transition-colors"
+              >
+                File Intent to File
+              </button>
+            )}
+            <button
+              onClick={() => navigate('/claims')}
+              className="flex-1 py-2.5 rounded-xl bg-gold text-black font-semibold text-sm hover:bg-gold/90 transition-colors"
+            >
+              {userConditions.length === 0 ? 'Add Your Conditions' : 'View Conditions'}
+            </button>
+            <button
+              onClick={() => setFirstSessionComplete()}
+              className="py-2.5 px-4 rounded-xl border border-border text-sm text-muted-foreground hover:bg-accent transition-colors"
+            >
+              Dismiss
+            </button>
+          </div>
+        </motion.div>
+      )}
 
       {!session && (
         <button
@@ -303,19 +358,19 @@ export default function Dashboard() {
       >
         <Link
           to="/claims/vault"
-          aria-label={`Documents — ${vaultDocCount > 0 ? `${vaultDocCount} stored` : 'No docs yet'}`}
+          aria-label={`Documents & Scan — ${vaultDocCount > 0 ? `${vaultDocCount} stored` : 'No docs yet'}`}
           className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors"
         >
           <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center flex-shrink-0">
             <FolderOpen className="h-4 w-4 text-gold" />
           </div>
-          <div className="min-w-0">
+          <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-foreground">Documents</p>
             <p className="text-[11px] text-muted-foreground">
               {vaultDocCount > 0 ? `${vaultDocCount} stored` : 'No docs yet'}
             </p>
-
           </div>
+          <Camera className="h-4 w-4 text-gold/60 flex-shrink-0" />
         </Link>
         <Link
           to="/claims/deadlines"
@@ -546,7 +601,7 @@ export default function Dashboard() {
               </div>
               <button
                 type="button"
-                onClick={() => setQuickLogFlareUp(!quickLogFlareUp)}
+                onClick={() => { impactLight(); setQuickLogFlareUp(!quickLogFlareUp); }}
                 className={cn(
                   'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
                   quickLogFlareUp ? 'bg-gold' : 'bg-muted',
@@ -665,6 +720,7 @@ export default function Dashboard() {
               </button>
               <button
                 onClick={() => {
+                  notifySuccess();
                   addQuickLog({
                     date: new Date().toISOString().slice(0, 10),
                     overallFeeling: quickLogFeeling,

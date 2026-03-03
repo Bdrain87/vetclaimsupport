@@ -18,6 +18,8 @@ import { markJourneyItem } from '@/utils/journeySync';
 import { ToastAction } from '@/components/ui/toast';
 import { DocumentUploader } from '@/components/documents/DocumentUploader';
 import { useToast } from '@/hooks/use-toast';
+import { useEvidence } from '@/hooks/useEvidence';
+import { EvidenceAttachment } from '@/components/shared/EvidenceAttachment';
 import type { BuddyContact } from '@/types/claims';
 import { createBuddyShareLink, shareBuddyLink } from '@/services/buddyShare';
 import { PageContainer } from '@/components/PageContainer';
@@ -70,6 +72,7 @@ export default function BuddyStatements() {
   const { data, addBuddyContact, updateBuddyContact, deleteBuddyContact, addUploadedDocument, deleteUploadedDocument } = useClaims();
   const navigate = useNavigate();
   const profile = useProfileStore();
+  const { documents, setAllDocuments } = useEvidence();
   const { toast } = useToast();
   const symptoms = useAppStore((s) => s.symptoms);
   const [activeTab, setActiveTab] = useState('contacts');
@@ -519,7 +522,7 @@ Date: ${today}`;
                   relationshipHint: statementData.witnessRelationship || '',
                 });
                 if (result.success && result.shareUrl) {
-                  await shareBuddyLink(result.shareUrl, profile.firstName || 'A veteran');
+                  await shareBuddyLink(result.shareUrl, profile.firstName || 'A veteran', statementData.conditionWitnessed || undefined);
                   toast({ title: 'Share link created', description: 'Send the link to your buddy to fill out.' });
                 } else {
                   toast({ title: 'Could not create share link', description: result.error || 'Please try again.', variant: 'destructive' });
@@ -687,6 +690,7 @@ Date: ${today}`;
                   icon={<Users className="h-10 w-10" />}
                   title="No buddy contacts yet"
                   description="Add people who can provide witness statements for your claim."
+                  whyItMatters="Third-party statements are one of the strongest evidence types the VA accepts. Fellow service members and family can describe what they witnessed."
                   actionLabel="Add Contact"
                   onAction={() => setIsOpen(true)}
                 />
@@ -752,17 +756,21 @@ Date: ${today}`;
                 <Camera className="h-5 w-5 text-buddy" />
                 Scanned Buddy Statements
               </CardTitle>
+              <CardDescription>Take a photo or upload signed buddy statements (VA Form 21-10210)</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
+              <EvidenceAttachment
+                entryType="claim-condition"
+                entryId="buddy-statements"
+                documents={documents}
+                onDocumentsChange={setAllDocuments}
+              />
               <DocumentUploader
                 documents={data.uploadedDocuments}
                 category="buddy-contacts"
                 onAdd={addUploadedDocument}
                 onDelete={deleteUploadedDocument}
               />
-              <p className="text-xs text-muted-foreground mt-3">
-                Scan or upload signed buddy statements (VA Form 21-10210) here for safekeeping.
-              </p>
             </CardContent>
           </Card>
         </TabsContent>
