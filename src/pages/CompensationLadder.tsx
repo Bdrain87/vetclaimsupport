@@ -59,8 +59,8 @@ export default function CompensationLadder() {
     <PageContainer className="space-y-6 animate-fade-in pb-8">
       {/* Header */}
       <div className="section-header">
-        <div className="section-icon bg-emerald-500/10">
-          <DollarSign className="h-5 w-5 text-emerald-400" />
+        <div className="section-icon bg-gold/10">
+          <DollarSign className="h-5 w-5 text-gold" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Compensation Ladder</h1>
@@ -77,7 +77,7 @@ export default function CompensationLadder() {
           </div>
           <div className="flex items-center justify-between">
             <p className="text-sm text-muted-foreground">Estimated Monthly</p>
-            <span className="text-xl font-bold text-emerald-400">
+            <span className="text-xl font-bold text-success">
               ${currentMonthly.toLocaleString('en-US', { minimumFractionDigits: 2 })}
             </span>
           </div>
@@ -207,10 +207,10 @@ export default function CompensationLadder() {
       </Card>
 
       {/* What If Calculator */}
-      <Card className="border-emerald-500/20">
+      <Card className="border-gold/20">
         <CardHeader className="pb-2">
           <div className="flex items-center gap-2">
-            <Calculator className="h-4 w-4 text-emerald-400" />
+            <Calculator className="h-4 w-4 text-gold" />
             <CardTitle className="text-sm">What If Calculator</CardTitle>
           </div>
           <p className="text-xs text-muted-foreground">See what happens if you add another rated condition</p>
@@ -226,7 +226,7 @@ export default function CompensationLadder() {
                   onClick={() => setWhatIfRating(r)}
                   className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
                     whatIfRating === r
-                      ? 'bg-emerald-500 text-white'
+                      ? 'bg-gold text-background'
                       : 'bg-muted text-muted-foreground hover:bg-muted/80'
                   }`}
                 >
@@ -236,23 +236,23 @@ export default function CompensationLadder() {
             </div>
           </div>
 
-          <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-lg p-3 space-y-2">
+          <div className="bg-gold/5 border border-gold/20 rounded-lg p-3 space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Current combined</span>
               <span className="font-medium">{currentCombined}%</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">+ {whatIfRating}% condition</span>
-              <span className="font-bold text-emerald-400">{projection.projectedCombined}%</span>
+              <span className="font-bold text-gold">{projection.projectedCombined}%</span>
             </div>
-            <div className="border-t border-emerald-500/20 pt-2 flex justify-between text-sm">
+            <div className="border-t border-gold/20 pt-2 flex justify-between text-sm">
               <span className="text-muted-foreground">New monthly</span>
-              <span className="font-bold text-emerald-400">
+              <span className="font-bold text-gold">
                 ${projectedMonthly.toLocaleString('en-US', { minimumFractionDigits: 2 })}
               </span>
             </div>
             {monthlyIncrease > 0 && (
-              <p className="text-xs text-emerald-400">
+              <p className="text-xs text-gold">
                 +${monthlyIncrease.toLocaleString('en-US', { minimumFractionDigits: 2 })}/mo (${(monthlyIncrease * 12).toLocaleString('en-US', { minimumFractionDigits: 2 })}/yr)
               </p>
             )}

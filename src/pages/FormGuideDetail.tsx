@@ -160,7 +160,7 @@ function FieldCard({ field, formId: _formId, savedValue, onSave }: FieldCardProp
           onClick={handleCopy}
           disabled={!value.trim()}
         >
-          {copied ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5" />}
+          {copied ? <Check className="h-3.5 w-3.5 text-success" /> : <Copy className="h-3.5 w-3.5" />}
           {copied ? 'Copied' : 'Copy'}
         </Button>
       </div>

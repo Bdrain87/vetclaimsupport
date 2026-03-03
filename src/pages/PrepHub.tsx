@@ -115,7 +115,7 @@ export default function PrepHub() {
   }, [search]);
 
   return (
-    <PageContainer className="py-6 space-y-5">
+    <PageContainer className="py-6 space-y-6">
       <div className="flex items-center gap-3">
         <div className="p-2 rounded-xl bg-gold/10 border border-gold/20">
           <Wrench className="h-6 w-6 text-gold" />
@@ -164,9 +164,9 @@ export default function PrepHub() {
                   <div className="p-2 rounded-xl bg-gold/10">
                     <tool.icon className="h-5 w-5 text-gold" />
                   </div>
-                  <div className="min-w-0">
+                  <div className="min-w-0 w-full">
                     <span className="text-sm font-medium text-foreground block truncate">{tool.label}</span>
-                    <span className="text-[11px] text-muted-foreground block truncate">{tool.description}</span>
+                    <span className="text-[11px] text-muted-foreground block leading-tight">{tool.description}</span>
                   </div>
                 </button>
               ))}
@@ -191,7 +191,7 @@ export default function PrepHub() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <span className="text-sm font-medium text-foreground block truncate">{tool.label}</span>
-                    <span className="text-xs text-muted-foreground block truncate">{tool.description}</span>
+                    <span className="text-xs text-muted-foreground block leading-tight">{tool.description}</span>
                   </div>
                 </button>
               ))}

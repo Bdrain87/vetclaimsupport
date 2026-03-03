@@ -140,9 +140,9 @@ const statementTemplates = [
     title: 'Stressor Statement',
     description: 'Document traumatic events for PTSD claims',
     icon: Shield,
-    gradient: 'from-red-500/20 to-rose-500/10',
-    borderColor: 'border-red-500/30',
-    iconColor: 'text-red-400',
+    gradient: 'from-destructive/20 to-destructive/10',
+    borderColor: 'border-destructive/30',
+    iconColor: 'text-destructive',
   },
 ];
 
@@ -436,10 +436,10 @@ export default function DocumentsHub() {
 
             <button
               onClick={() => setActiveTab('checklist')}
-              className="group p-4 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-green-500/10 border border-emerald-500/30 hover:scale-[1.02] transition-all text-left"
+              className="group p-4 rounded-2xl bg-gradient-to-br from-success/20 to-success/10 border border-success/30 hover:scale-[1.02] transition-all text-left"
             >
               <div className="flex items-center gap-3 mb-2">
-                <ListChecks className="h-5 w-5 text-emerald-400" />
+                <ListChecks className="h-5 w-5 text-success" />
                 <ChevronRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity ml-auto" />
               </div>
               <h3 className="font-semibold text-sm">View Checklist</h3>

@@ -113,7 +113,7 @@ export function MOSConditionSuggestions({
         </h3>
       </div>
 
-      <div className="rounded-xl p-3 flex items-start gap-3 bg-[rgba(240,192,0,0.08)] border border-gold/20">
+      <div className="rounded-xl p-3 flex items-start gap-3 bg-gold/5 border border-gold/20">
         <AlertTriangle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
         <p className="text-xs text-muted-foreground">
           Based on your MOS ({allMosCodes.join(', ')}), veterans commonly claim these conditions.
@@ -140,7 +140,7 @@ export function MOSConditionSuggestions({
                     className={cn(
                       'flex items-center gap-3 px-4 py-2.5 cursor-pointer transition-colors',
                       isAdded
-                        ? 'bg-green-500/10'
+                        ? 'bg-success/10'
                         : isSelected
                           ? 'bg-gold/10'
                           : 'hover:bg-muted/40',
@@ -157,7 +157,7 @@ export function MOSConditionSuggestions({
                       {conditionName}
                     </span>
                     {isAdded && (
-                      <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
+                      <Check className="h-4 w-4 text-success flex-shrink-0" />
                     )}
                   </label>
                 );

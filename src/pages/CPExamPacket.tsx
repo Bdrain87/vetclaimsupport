@@ -473,7 +473,7 @@ export default function CPExamPacket() {
           onClick={() => setViewMode('examday')}
           className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-1.5 ${
             viewMode === 'examday'
-              ? 'bg-green-500/20 text-foreground border border-green-500/30 shadow-sm'
+              ? 'bg-success/20 text-foreground border border-success/30 shadow-sm'
               : 'text-muted-foreground hover:text-foreground'
           }`}
         >
@@ -486,9 +486,9 @@ export default function CPExamPacket() {
       {viewMode === 'examday' && (
         <div className="space-y-4">
           {/* Quick tips card */}
-          <div className="rounded-xl border border-green-500/20 bg-green-500/5 p-4 space-y-3">
+          <div className="rounded-xl border border-success/20 bg-success/5 p-4 space-y-3">
             <div className="flex items-center gap-2">
-              <Shield className="h-4 w-4 text-green-400" />
+              <Shield className="h-4 w-4 text-success" />
               <p className="text-sm font-semibold text-foreground">Before You Walk In</p>
             </div>
             <div className="space-y-1.5">
@@ -501,7 +501,7 @@ export default function CPExamPacket() {
                 'If you have flare-ups, describe how often and how long they last',
               ].map((tip, i) => (
                 <div key={i} className="flex gap-2 text-xs text-muted-foreground">
-                  <span className="text-green-400 flex-shrink-0">•</span>
+                  <span className="text-success flex-shrink-0">•</span>
                   <span>{tip}</span>
                 </div>
               ))}
@@ -552,7 +552,7 @@ export default function CPExamPacket() {
           {symptomSummary.currentMeds.length > 0 && (
             <div className="rounded-xl border border-border bg-card p-4 space-y-2">
               <div className="flex items-center gap-2">
-                <Pill className="h-4 w-4 text-blue-400" />
+                <Pill className="h-4 w-4 text-primary" />
                 <p className="text-sm font-semibold text-foreground">
                   Current Medications ({symptomSummary.currentMeds.length})
                 </p>
@@ -924,7 +924,7 @@ export default function CPExamPacket() {
       {/* Section 7: Research Legal Precedent */}
       <div id="legal-research">
         <PacketSection title="Research Legal Precedent" icon={Scale} sectionNumber={7}>
-          <div className="bg-[#A68B3C]/30 border border-[#A68B3C]/50 rounded-lg p-4">
+          <div className="bg-gold/20 border border-gold/40 rounded-lg p-4">
             <h3 className="text-lg font-semibold text-gold-hl mb-2">Research Legal Precedent</h3>
             <p className="text-sm text-muted-foreground mb-3">
               Use these verified legal databases to find case law relevant to your claim:
@@ -1009,7 +1009,7 @@ function EvidenceItem({
       <div
         className={cn(
           'w-2 h-2 rounded-full shrink-0',
-          hasIt ? 'bg-emerald-500' : 'bg-muted-foreground/40'
+          hasIt ? 'bg-success' : 'bg-muted-foreground/40'
         )}
       />
       <div className="min-w-0">

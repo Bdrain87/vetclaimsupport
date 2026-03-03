@@ -42,7 +42,7 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
     const variantStyles = {
       default: 'bg-card border border-border/50',
       primary: 'bg-primary/5 border border-primary/20',
-      success: 'bg-green-500/5 border border-green-500/20',
+      success: 'bg-success/5 border border-success/20',
       warning: 'bg-gold/5 border border-gold/20',
       muted: 'bg-muted/50 border border-border/30',
     };
@@ -50,7 +50,7 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
     const valueStyles = {
       default: 'text-foreground',
       primary: 'text-primary',
-      success: 'text-green-600 dark:text-green-500',
+      success: 'text-success',
       warning: 'text-gold-dk dark:text-gold',
       muted: 'text-muted-foreground',
     };
@@ -70,8 +70,8 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
       : null;
 
     const trendStyles = {
-      up: 'text-green-600 dark:text-green-500 bg-green-500/10',
-      down: 'text-red-600 dark:text-red-500 bg-red-500/10',
+      up: 'text-success bg-success/10',
+      down: 'text-destructive bg-destructive/10',
       neutral: 'text-muted-foreground bg-muted/50',
     };
 
@@ -135,7 +135,7 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
                 variant === 'primary'
                   ? 'bg-primary/10 text-primary'
                   : variant === 'success'
-                  ? 'bg-green-500/10 text-green-600 dark:text-green-500'
+                  ? 'bg-success/10 text-success'
                   : variant === 'warning'
                   ? 'bg-gold/10 text-foreground'
                   : 'bg-muted text-muted-foreground'

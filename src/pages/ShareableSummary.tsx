@@ -223,9 +223,9 @@ export default function ShareableSummary() {
       </div>
 
       {/* Disclaimer */}
-      <Alert className="border-orange-500/30 bg-orange-500/5">
-        <AlertTriangle className="h-4 w-4 text-orange-600" />
-        <AlertDescription className="text-orange-700 dark:text-orange-400 text-sm">
+      <Alert className="border-warning/30 bg-warning/5">
+        <AlertTriangle className="h-4 w-4 text-warning" />
+        <AlertDescription className="text-warning text-sm">
           This is <strong>NOT an official VA document</strong>. This summary is generated from data you entered
           into Vet Claim Support for personal planning and organization purposes only.
         </AlertDescription>
@@ -243,7 +243,7 @@ export default function ShareableSummary() {
             <div className="text-right">
               {summary.monthlyComp > 0 && (
                 <>
-                  <p className="text-2xl font-bold text-green-400">
+                  <p className="text-2xl font-bold text-success">
                     ${summary.monthlyComp.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                   </p>
                   <p className="text-white/60 text-sm">Est. Monthly (2026)</p>
@@ -260,12 +260,12 @@ export default function ShareableSummary() {
               <p className="text-2xl font-bold">{summary.totalConditions}</p>
               <p className="text-xs text-muted-foreground">Conditions</p>
             </div>
-            <div className="text-center p-3 rounded-lg bg-green-500/5">
-              <p className="text-2xl font-bold text-green-600">{summary.approvedConditions}</p>
+            <div className="text-center p-3 rounded-lg bg-success/5">
+              <p className="text-2xl font-bold text-success">{summary.approvedConditions}</p>
               <p className="text-xs text-muted-foreground">Approved</p>
             </div>
-            <div className="text-center p-3 rounded-lg bg-yellow-500/5">
-              <p className="text-2xl font-bold text-yellow-600">{summary.pendingConditions}</p>
+            <div className="text-center p-3 rounded-lg bg-warning/5">
+              <p className="text-2xl font-bold text-warning">{summary.pendingConditions}</p>
               <p className="text-xs text-muted-foreground">Pending</p>
             </div>
           </div>
@@ -280,8 +280,8 @@ export default function ShareableSummary() {
                   {summary.conditions.map((c, i) => (
                     <div key={i} className="flex items-center justify-between py-2 px-3 rounded-lg bg-muted/30">
                       <div className="flex items-center gap-2 min-w-0">
-                        {c.status === 'approved' && <CheckCircle2 className="h-4 w-4 text-green-500 flex-shrink-0" />}
-                        {c.status === 'pending' && <Star className="h-4 w-4 text-yellow-500 flex-shrink-0" />}
+                        {c.status === 'approved' && <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0" />}
+                        {c.status === 'pending' && <Star className="h-4 w-4 text-warning flex-shrink-0" />}
                         <span className="text-sm truncate">{c.name}</span>
                       </div>
                       <Badge variant="outline" className="text-xs flex-shrink-0 ml-2">
@@ -364,7 +364,7 @@ export default function ShareableSummary() {
         </Button>
         <Button variant="outline" onClick={handleCopyText} className="w-full">
           {copied ? (
-            <CheckCircle2 className="h-4 w-4 mr-2 text-green-500" />
+            <CheckCircle2 className="h-4 w-4 mr-2 text-success" />
           ) : (
             <Copy className="h-4 w-4 mr-2" />
           )}

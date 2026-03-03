@@ -293,8 +293,8 @@ export default function DeploymentLocations() {
                           className={cn(
                             'inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide',
                             h === 'high_dioxin'
-                              ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                              : 'bg-amber-500/10 text-amber-300/80 border border-amber-500/20',
+                              ? 'bg-warning/20 text-warning border border-warning/30'
+                              : 'bg-warning/10 text-warning/80 border border-warning/20',
                           )}
                         >
                           {HAZARD_LABELS[h] || h}

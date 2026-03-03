@@ -138,11 +138,11 @@ export function MOSCombobox({
 
   const getBranchColor = (branch: string) => {
     switch (branch) {
-      case 'Army': return 'bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30';
+      case 'Army': return 'bg-success/20 text-success border-success/30';
       case 'Air Force': return 'bg-sky-500/20 text-sky-700 dark:text-sky-400 border-sky-500/30';
       case 'Navy': return 'bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 border-indigo-500/30';
-      case 'Marines': return 'bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/30';
-      case 'Coast Guard': return 'bg-orange-500/20 text-orange-700 dark:text-orange-400 border-orange-500/30';
+      case 'Marines': return 'bg-destructive/20 text-destructive border-destructive/30';
+      case 'Coast Guard': return 'bg-warning/20 text-warning border-warning/30';
       default: return 'bg-muted text-muted-foreground';
     }
   };

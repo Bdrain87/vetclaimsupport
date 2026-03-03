@@ -83,9 +83,6 @@ export const supabase = createClient(
         // Skips URL parsing in _initialize() — prevents stale PKCE params or
         // capacitor:// URL from confusing the SDK.
         detectSessionInUrl: false,
-        // Temporary: verbose logging for Safari Web Inspector debugging.
-        // Remove after confirming login works on device.
-        debug: true,
       }),
     },
     global: {

@@ -340,10 +340,10 @@ export default function BuildPacket() {
             className={cn(
               'text-sm px-3 py-1 self-start sm:self-auto',
               evidenceScore >= 80
-                ? 'border-green-500/40 bg-green-500/10 text-green-400'
+                ? 'border-success/40 bg-success/10 text-success'
                 : evidenceScore >= 50
                   ? 'border-gold/40 bg-gold/10 text-foreground'
-                  : 'border-red-500/40 bg-red-500/10 text-red-400',
+                  : 'border-destructive/40 bg-destructive/10 text-destructive',
             )}
           >
             Evidence Strength: {evidenceScore}%
@@ -369,7 +369,7 @@ export default function BuildPacket() {
           {[
             { label: 'Conditions', value: conditionsCount, color: 'text-primary' },
             { label: 'Symptom Entries', value: symptomCount, color: 'text-gold' },
-            { label: 'Medical Visits', value: medicalVisitCount, color: 'text-emerald-400' },
+            { label: 'Medical Visits', value: medicalVisitCount, color: 'text-success' },
             { label: 'Documents', value: documentCount, color: 'text-violet-400' },
           ].map((stat) => (
             <Card key={stat.label} className="glass-card">
@@ -531,22 +531,22 @@ export default function BuildPacket() {
                 <div className="rounded-lg border border-border bg-muted/30 p-4 space-y-2">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1">
                     <span className="text-muted-foreground">Veteran</span>
-                    <span className="font-medium text-foreground truncate">
+                    <span className="font-medium text-foreground break-words">
                       {profile.firstName && profile.lastName
                         ? `${profile.firstName} ${profile.lastName}`
                         : 'Not set'}
                     </span>
                     <span className="text-muted-foreground">Branch</span>
-                    <span className="font-medium text-foreground truncate">
+                    <span className="font-medium text-foreground break-words">
                       {getAllBranchLabels(profile) || 'Not set'}
                     </span>
                     <span className="text-muted-foreground">Service Job Code</span>
-                    <span className="font-medium text-foreground truncate">
+                    <span className="font-medium text-foreground break-words">
                       {profile.mosCode || 'Not set'}
                       {profile.mosTitle ? ` - ${profile.mosTitle}` : ''}
                     </span>
                     <span className="text-muted-foreground">Claim Type</span>
-                    <span className="font-medium text-foreground capitalize truncate">
+                    <span className="font-medium text-foreground capitalize break-words">
                       {profile.claimType || 'Not set'}
                     </span>
                     <span className="text-muted-foreground">Evidence Strength</span>
@@ -559,7 +559,7 @@ export default function BuildPacket() {
                       </p>
                       <div className="flex flex-wrap gap-1.5">
                         {(data.claimConditions || []).map((c) => (
-                          <Badge key={c.id} variant="secondary" className="text-xs truncate max-w-full">
+                          <Badge key={c.id} variant="secondary" className="text-xs break-words max-w-full">
                             {c.name}
                           </Badge>
                         ))}
@@ -598,7 +598,7 @@ export default function BuildPacket() {
                           <span className="text-muted-foreground w-20 flex-shrink-0">
                             {safeFormatDate(s.date)}
                           </span>
-                          <span className="font-medium text-foreground truncate">{s.symptom}</span>
+                          <span className="font-medium text-foreground line-clamp-1">{s.symptom}</span>
                           {s.bodyArea && (
                             <Badge variant="outline" className="text-[10px] shrink-0">
                               {s.bodyArea}
@@ -610,7 +610,7 @@ export default function BuildPacket() {
                           className={cn(
                             'text-[10px]',
                             s.severity >= 7
-                              ? 'bg-red-500/10 text-red-400'
+                              ? 'bg-destructive/10 text-destructive'
                               : s.severity >= 4
                                 ? 'bg-gold/10 text-foreground'
                                 : '',
@@ -644,7 +644,7 @@ export default function BuildPacket() {
             {selected.medicalVisits && (
               <div className="space-y-3">
                 <h3 className="font-semibold text-foreground flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-emerald-400" />
+                  <FileText className="h-4 w-4 text-success" />
                   Medical Visit Records ({medicalVisitCount})
                 </h3>
                 {medicalVisitCount === 0 ? (
@@ -669,7 +669,7 @@ export default function BuildPacket() {
                           )}
                         </div>
                         {v.gotAfterVisitSummary && (
-                          <CheckCircle2 className="h-3.5 w-3.5 text-green-400 flex-shrink-0 mt-0.5" />
+                          <CheckCircle2 className="h-3.5 w-3.5 text-success flex-shrink-0 mt-0.5" />
                         )}
                       </div>
                     ))}
@@ -732,7 +732,7 @@ export default function BuildPacket() {
                         className="flex items-center justify-between gap-2 text-xs border-b border-border/50 pb-1.5 last:border-0"
                       >
                         <div className="min-w-0 flex-1">
-                          <span className="font-medium text-foreground truncate block">
+                          <span className="font-medium text-foreground break-words block">
                             {b.rank ? `${b.rank} ` : ''}
                             {b.name}
                           </span>
@@ -745,7 +745,7 @@ export default function BuildPacket() {
                           className={cn(
                             'text-[10px]',
                             b.statementStatus === 'Received' || b.statementStatus === 'Submitted'
-                              ? 'border-green-500/40 text-green-400'
+                              ? 'border-success/40 text-success'
                               : b.statementStatus === 'Requested'
                                 ? 'border-gold/40 text-gold'
                                 : '',
@@ -810,18 +810,18 @@ export default function BuildPacket() {
                     >
                       <div className="flex items-center gap-2 min-w-0 flex-1">
                         {doc.status === 'Obtained' || doc.status === 'Submitted' ? (
-                          <CheckCircle2 className="h-3.5 w-3.5 text-green-400" />
+                          <CheckCircle2 className="h-3.5 w-3.5 text-success" />
                         ) : (
                           <div className="h-3.5 w-3.5 rounded-full border border-muted-foreground/40" />
                         )}
-                        <span className="font-medium text-foreground truncate">{doc.name}</span>
+                        <span className="font-medium text-foreground line-clamp-2">{doc.name}</span>
                       </div>
                       <Badge
                         variant="outline"
                         className={cn(
                           'text-[10px]',
                           doc.status === 'Submitted'
-                            ? 'border-green-500/40 text-green-400'
+                            ? 'border-success/40 text-success'
                             : doc.status === 'Obtained'
                               ? 'border-gold/40 text-gold'
                               : doc.status === 'In Progress'

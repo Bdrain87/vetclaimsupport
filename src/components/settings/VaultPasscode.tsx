@@ -185,7 +185,7 @@ export function VaultPasscode() {
                         key={i}
                         className={`h-1 flex-1 rounded-full ${
                           i < strength.score
-                            ? strength.score >= 4 ? 'bg-emerald-500' : strength.score >= 2 ? 'bg-gold' : 'bg-red-500'
+                            ? strength.score >= 4 ? 'bg-success' : strength.score >= 2 ? 'bg-gold' : 'bg-destructive'
                             : 'bg-muted'
                         }`}
                       />
@@ -265,7 +265,7 @@ export function VaultPasscode() {
                         key={i}
                         className={`h-1 flex-1 rounded-full ${
                           i < strength.score
-                            ? strength.score >= 4 ? 'bg-emerald-500' : strength.score >= 2 ? 'bg-gold' : 'bg-red-500'
+                            ? strength.score >= 4 ? 'bg-success' : strength.score >= 2 ? 'bg-gold' : 'bg-destructive'
                             : 'bg-muted'
                         }`}
                       />

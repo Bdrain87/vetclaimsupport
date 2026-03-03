@@ -387,7 +387,7 @@ export default function ServiceHistory() {
                       <Label htmlFor="currentlyServing" className="text-sm text-muted-foreground cursor-pointer">Currently Serving (no end date)</Label>
                     </div>
                     {dateError && (
-                      <p className="text-xs text-red-400 flex items-center gap-1">
+                      <p className="text-xs text-destructive flex items-center gap-1">
                         <AlertTriangle className="h-3 w-3" />
                         {dateError}
                       </p>

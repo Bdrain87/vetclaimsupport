@@ -73,7 +73,7 @@ export default function FormGuide() {
       {/* Disclaimer Banner */}
       <div className={cn(
         'rounded-xl p-4 flex items-start gap-3',
-        'bg-[rgba(240,192,0,0.08)] border border-gold/20'
+        'bg-gold/5 border border-gold/20'
       )}>
         <AlertTriangle className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
         <div>
@@ -116,7 +116,7 @@ export default function FormGuide() {
               className={cn(
                 'w-full text-left rounded-xl border border-border bg-card p-4',
                 'hover:bg-accent/50 transition-colors',
-                'active:scale-[0.99]'
+                'active:scale-[0.98]'
               )}
             >
               <div className="flex items-start justify-between gap-3">

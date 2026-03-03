@@ -242,7 +242,7 @@ export default function TravelPayCalculator() {
               {!deductibleWaived && (
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Deductible (round trip)</span>
-                  <span className="text-red-400 font-medium" aria-label={`Deductible: minus $${DEDUCTIBLE_ROUND_TRIP.toFixed(2)}`}>
+                  <span className="text-destructive font-medium" aria-label={`Deductible: minus $${DEDUCTIBLE_ROUND_TRIP.toFixed(2)}`}>
                     -${DEDUCTIBLE_ROUND_TRIP.toFixed(2)}
                   </span>
                 </div>
@@ -250,12 +250,7 @@ export default function TravelPayCalculator() {
               <div className="border-t border-border pt-2 flex items-center justify-between">
                 <span className="text-sm font-semibold text-foreground">Per Trip</span>
                 <span
-                  className="text-xl font-bold"
-                  style={{
-                    background: 'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                  }}
+                  className="text-xl font-bold text-gold"
                 >
                   ${calculations.tripTotal.toFixed(2)}
                 </span>
@@ -268,27 +263,13 @@ export default function TravelPayCalculator() {
                 <p className="text-xs text-muted-foreground mb-1">
                   Monthly ({appointmentsPerMonth} visits)
                 </p>
-                <p
-                  className="text-lg font-bold"
-                  style={{
-                    background: 'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                  }}
-                >
+                <p className="text-lg font-bold text-gold">
                   ${calculations.monthlyTotal.toFixed(2)}
                 </p>
               </div>
               <div className="p-3 rounded-lg bg-muted/30 border border-border text-center">
                 <p className="text-xs text-muted-foreground mb-1">Annual Estimate</p>
-                <p
-                  className="text-lg font-bold"
-                  style={{
-                    background: 'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                  }}
-                >
+                <p className="text-lg font-bold text-gold">
                   ${calculations.annualTotal.toFixed(2)}
                 </p>
               </div>

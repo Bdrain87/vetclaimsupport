@@ -146,12 +146,12 @@ export default function TDIUChecker() {
             {result.eligible ? (
               <ShieldCheck className="h-6 w-6 text-success flex-shrink-0" />
             ) : result.pathway === 'extraschedular' ? (
-              <AlertTriangle className="h-6 w-6 text-amber-400 flex-shrink-0" />
+              <AlertTriangle className="h-6 w-6 text-warning flex-shrink-0" />
             ) : (
               <XCircle className="h-6 w-6 text-muted-foreground flex-shrink-0" />
             )}
             <div className="space-y-1">
-              <h3 className={`text-sm font-bold ${result.eligible ? 'text-success' : result.pathway === 'extraschedular' ? 'text-amber-400' : 'text-foreground'}`}>
+              <h3 className={`text-sm font-bold ${result.eligible ? 'text-success' : result.pathway === 'extraschedular' ? 'text-warning' : 'text-foreground'}`}>
                 {result.reason}
               </h3>
               <p className="text-xs text-muted-foreground leading-relaxed">{result.details}</p>
@@ -267,10 +267,10 @@ export default function TDIUChecker() {
       </Card>
 
       {/* Disclaimer */}
-      <div className="px-4 py-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
+      <div className="px-4 py-3 rounded-lg bg-warning/10 border border-warning/20">
         <div className="flex items-start gap-2">
-          <AlertTriangle className="h-4 w-4 text-amber-400 flex-shrink-0 mt-0.5" />
-          <p className="text-xs text-amber-200/80">
+          <AlertTriangle className="h-4 w-4 text-warning flex-shrink-0 mt-0.5" />
+          <p className="text-xs text-warning/80">
             This screening tool is for educational purposes only. It is not a guarantee of eligibility.
             Consult with your VSO or attorney before filing for TDIU.
           </p>

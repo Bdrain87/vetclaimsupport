@@ -72,8 +72,8 @@ export default function MedicationRuleTool() {
     <PageContainer className="space-y-6 animate-fade-in">
       {/* Header */}
       <div className="section-header">
-        <div className="section-icon bg-amber-500/10">
-          <ShieldAlert className="h-5 w-5 text-amber-400" />
+        <div className="section-icon bg-warning/10">
+          <ShieldAlert className="h-5 w-5 text-warning" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">2026 Medication Rule</h1>
@@ -82,10 +82,10 @@ export default function MedicationRuleTool() {
       </div>
 
       {/* Explanation */}
-      <Card className="border-amber-500/20 bg-amber-500/5">
+      <Card className="border-warning/20 bg-warning/5">
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
-            <AlertTriangle className="h-5 w-5 text-amber-400 mt-0.5 flex-shrink-0" />
+            <AlertTriangle className="h-5 w-5 text-warning mt-0.5 flex-shrink-0" />
             <div className="space-y-1.5">
               <h3 className="font-semibold text-sm">What's Changing</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">

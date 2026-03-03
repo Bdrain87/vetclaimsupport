@@ -39,7 +39,7 @@ export default function DisclaimerPage() {
       <div className="space-y-6 text-sm leading-relaxed">
 
         {/* Main Disclaimer */}
-        <div className="rounded-xl bg-red-500/5 border border-red-500/20 p-5">
+        <div className="rounded-xl bg-destructive/5 border border-destructive/20 p-5">
           <p className="text-foreground/80 font-medium">
             <strong className="text-foreground">IMPORTANT:</strong> {CORE_DISCLAIMERS.mainDisclaimer}
           </p>
@@ -49,9 +49,9 @@ export default function DisclaimerPage() {
         <div className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">What This App Is</h2>
           <ul className="space-y-1.5 text-muted-foreground">
-            <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span>An organizational tool to help you prepare and track information related to VA disability claims</li>
-            <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span>An educational resource about VA benefits and processes</li>
-            <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span>A health and symptom logging tool for your personal records</li>
+            <li className="flex items-start gap-2"><span className="text-success mt-0.5">&#x2713;</span>An organizational tool to help you prepare and track information related to VA disability claims</li>
+            <li className="flex items-start gap-2"><span className="text-success mt-0.5">&#x2713;</span>An educational resource about VA benefits and processes</li>
+            <li className="flex items-start gap-2"><span className="text-success mt-0.5">&#x2713;</span>A health and symptom logging tool for your personal records</li>
           </ul>
         </div>
 
@@ -59,12 +59,12 @@ export default function DisclaimerPage() {
         <div className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">What This App Is NOT</h2>
           <ul className="space-y-1.5 text-muted-foreground">
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>{CORE_DISCLAIMERS.notLegalAdvice}</li>
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>{CORE_DISCLAIMERS.notMedicalAdvice}</li>
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>{CORE_DISCLAIMERS.notVAAccredited}</li>
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>{CORE_DISCLAIMERS.notClaimsFiling}</li>
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>{CORE_DISCLAIMERS.notSubstitute}</li>
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>{CORE_DISCLAIMERS.notGuarantee}</li>
+            <li className="flex items-start gap-2"><span className="text-destructive mt-0.5">&#x2717;</span>{CORE_DISCLAIMERS.notLegalAdvice}</li>
+            <li className="flex items-start gap-2"><span className="text-destructive mt-0.5">&#x2717;</span>{CORE_DISCLAIMERS.notMedicalAdvice}</li>
+            <li className="flex items-start gap-2"><span className="text-destructive mt-0.5">&#x2717;</span>{CORE_DISCLAIMERS.notVAAccredited}</li>
+            <li className="flex items-start gap-2"><span className="text-destructive mt-0.5">&#x2717;</span>{CORE_DISCLAIMERS.notClaimsFiling}</li>
+            <li className="flex items-start gap-2"><span className="text-destructive mt-0.5">&#x2717;</span>{CORE_DISCLAIMERS.notSubstitute}</li>
+            <li className="flex items-start gap-2"><span className="text-destructive mt-0.5">&#x2717;</span>{CORE_DISCLAIMERS.notGuarantee}</li>
           </ul>
         </div>
 
@@ -84,7 +84,7 @@ export default function DisclaimerPage() {
         {/* AI-Generated Content Warning */}
         <div className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">AI-Generated Content Warning</h2>
-          <div className="rounded-xl bg-[rgba(240,192,0,0.05)] border border-gold/20 p-4 space-y-3">
+          <div className="rounded-xl bg-gold/5 border border-gold/20 p-4 space-y-3">
             <p className="text-muted-foreground">
               This app uses a third-party AI service provider (currently Google Gemini) to generate suggestions and content. {AI_COPY.hallucinationWarning}{' '}
               <strong className="text-gold">NEVER submit AI-generated legal citations without independent verification.</strong>{' '}

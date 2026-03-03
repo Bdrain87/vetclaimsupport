@@ -309,7 +309,7 @@ function ClaimStatusTracker() {
     <Card className="border-0 shadow-lg">
       <CardHeader className="border-b border-border/50">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
+          <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
             <Clock className="h-5 w-5" />
           </div>
           <div>
@@ -323,9 +323,9 @@ function ClaimStatusTracker() {
       <CardContent className="p-6 space-y-5">
         {/* Regression Alert */}
         {regression && (
-          <Alert className="border-red-500/50 bg-red-500/10">
-            <TrendingDown className="h-4 w-4 text-red-600" />
-            <AlertDescription className="text-red-700 dark:text-red-400">
+          <Alert className="border-destructive/50 bg-destructive/10">
+            <TrendingDown className="h-4 w-4 text-destructive" />
+            <AlertDescription className="text-destructive">
               <strong>Claim moved backward:</strong> {regression.from} → {regression.to}
               <p className="mt-2 text-sm opacity-90">{regression.explanation}</p>
             </AlertDescription>
@@ -334,9 +334,9 @@ function ClaimStatusTracker() {
 
         {/* Overdue Alert */}
         {isOverdue && currentPhase && !regression && (
-          <Alert className="border-orange-500/50 bg-orange-500/10">
-            <AlertTriangle className="h-4 w-4 text-orange-600" />
-            <AlertDescription className="text-orange-700 dark:text-orange-400">
+          <Alert className="border-warning/50 bg-warning/10">
+            <AlertTriangle className="h-4 w-4 text-warning" />
+            <AlertDescription className="text-warning">
               <strong>Longer than average:</strong> Your claim has been in "{currentPhase.label}" for {daysInPhase} days.
               The VA average for this phase is ~{currentPhase.avgDays} days.
               Consider checking VA.gov or calling the VA hotline (800-827-1000).
@@ -361,7 +361,7 @@ function ClaimStatusTracker() {
               <div className="text-right">
                 <Progress
                   value={Math.min((daysInPhase / currentPhase.avgDays) * 100, 100)}
-                  className={cn('h-2 w-24', isOverdue && '[&>div]:bg-orange-500')}
+                  className={cn('h-2 w-24', isOverdue && '[&>div]:bg-warning')}
                 />
                 <p className="text-xs text-muted-foreground mt-1">
                   {Math.round((daysInPhase / currentPhase.avgDays) * 100)}% of avg
@@ -387,7 +387,7 @@ function ClaimStatusTracker() {
                   key={phase.id}
                   className={cn(
                     'flex-1 h-3 rounded-sm transition-colors',
-                    isPast && 'bg-green-500',
+                    isPast && 'bg-success',
                     isCurrent && 'bg-primary animate-pulse',
                     !isPast && !isCurrent && 'bg-muted',
                   )}
@@ -436,15 +436,15 @@ function ClaimStatusTracker() {
                     key={entry.id}
                     className={cn(
                       'flex items-center gap-3 px-3 py-2 rounded-lg text-sm',
-                      isRegress ? 'bg-red-500/5 border border-red-500/20' : 'bg-muted/30',
+                      isRegress ? 'bg-destructive/5 border border-destructive/20' : 'bg-muted/30',
                     )}
                   >
                     <div className={cn(
                       'w-2 h-2 rounded-full flex-shrink-0',
-                      isRegress ? 'bg-red-500' : idx === 0 ? 'bg-primary' : 'bg-muted-foreground/40',
+                      isRegress ? 'bg-destructive' : idx === 0 ? 'bg-primary' : 'bg-muted-foreground/40',
                     )} />
                     <span className="font-medium flex-1">{phase?.label || entry.phase}</span>
-                    {isRegress && <TrendingDown className="h-3.5 w-3.5 text-red-500 flex-shrink-0" />}
+                    {isRegress && <TrendingDown className="h-3.5 w-3.5 text-destructive flex-shrink-0" />}
                     <span className="text-xs text-muted-foreground">
                       {safeFormatDate(entry.loggedAt)}
                     </span>
@@ -603,7 +603,7 @@ export default function ClaimJourney() {
                     <div
                       className={cn(
                         'w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300',
-                        status === 'completed' && 'bg-green-500 text-white shadow-lg shadow-green-500/30',
+                        status === 'completed' && 'bg-success text-white shadow-lg shadow-success/30',
                         status === 'current' && 'bg-primary text-primary-foreground shadow-lg shadow-primary/30 ring-4 ring-primary/20',
                         status === 'locked' && 'bg-muted text-muted-foreground'
                       )}
@@ -619,7 +619,7 @@ export default function ClaimJourney() {
                     <span
                       className={cn(
                         'mt-2 text-xs font-medium text-center max-w-[80px]',
-                        status === 'completed' && 'text-green-600 dark:text-green-500',
+                        status === 'completed' && 'text-success',
                         status === 'current' && 'text-primary',
                         status === 'locked' && 'text-muted-foreground'
                       )}
@@ -639,7 +639,7 @@ export default function ClaimJourney() {
                       <div
                         className={cn(
                           'absolute inset-y-0 left-0 rounded-full transition-all duration-500',
-                          status === 'completed' ? 'bg-green-500' : 'bg-primary/30'
+                          status === 'completed' ? 'bg-success' : 'bg-primary/30'
                         )}
                         style={{
                           width: status === 'completed' ? '100%' : status === 'current' ? `${phaseProgress[index]}%` : '0%',
@@ -694,7 +694,7 @@ export default function ClaimJourney() {
             </div>
             <div className="flex-1 min-w-0">
               <Badge variant="secondary" className="mb-1">Current Phase</Badge>
-              <CardTitle className="truncate">{currentPhase.title}</CardTitle>
+              <CardTitle>{currentPhase.title}</CardTitle>
               <CardDescription className="line-clamp-2">{currentPhase.description}</CardDescription>
             </div>
             <ProgressRing
@@ -736,7 +736,7 @@ export default function ClaimJourney() {
                     className={cn(
                       'flex items-start gap-4 p-4 rounded-xl border transition-all duration-300',
                       isChecked
-                        ? 'bg-green-500/5 border-green-500/30'
+                        ? 'bg-success/5 border-success/30'
                         : 'bg-card border-border/50 hover:border-primary/30'
                     )}
                   >
@@ -761,7 +761,7 @@ export default function ClaimJourney() {
                       )}
                     </div>
                     {isChecked && (
-                      <Check className="h-5 w-5 text-green-600 flex-shrink-0" />
+                      <Check className="h-5 w-5 text-success flex-shrink-0" />
                     )}
                   </div>
                 );
@@ -813,7 +813,7 @@ export default function ClaimJourney() {
                 disabled={status === 'locked'}
                 className={cn(
                   'text-left p-4 rounded-2xl border transition-all duration-300',
-                  status === 'completed' && 'bg-green-500/5 border-green-500/30 hover:border-green-500/50',
+                  status === 'completed' && 'bg-success/5 border-success/30 hover:border-success/50',
                   status === 'current' && 'bg-primary/5 border-primary/30 hover:border-primary/50 ring-2 ring-primary/20',
                   status === 'locked' && 'bg-muted/30 border-border/30 opacity-60 cursor-not-allowed'
                 )}
@@ -822,7 +822,7 @@ export default function ClaimJourney() {
                   <div
                     className={cn(
                       'p-2 rounded-lg',
-                      status === 'completed' && 'bg-green-500/20 text-green-600',
+                      status === 'completed' && 'bg-success/20 text-success',
                       status === 'current' && 'bg-primary/20 text-primary',
                       status === 'locked' && 'bg-muted text-muted-foreground'
                     )}
@@ -879,7 +879,7 @@ export default function ClaimJourney() {
                           key={item.id}
                           className={cn(
                             'flex items-start gap-3 p-3 rounded-xl border',
-                            isChecked ? 'bg-green-500/5 border-green-500/30' : 'bg-muted/30'
+                            isChecked ? 'bg-success/5 border-success/30' : 'bg-muted/30'
                           )}
                         >
                           <Checkbox
@@ -907,7 +907,7 @@ export default function ClaimJourney() {
                   <ul className="space-y-2">
                     {selectedPhase.tips.map((tip, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                        <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
                         {tip}
                       </li>
                     ))}

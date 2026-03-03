@@ -114,7 +114,7 @@ const SuccessAnimation = React.forwardRef<HTMLDivElement, SuccessAnimationProps>
 
           {/* Glow effect */}
           <div
-            className="absolute inset-0 rounded-full bg-green-500/20 blur-xl animate-success-glow"
+            className="absolute inset-0 rounded-full bg-success/20 blur-xl animate-success-glow"
             style={{ width: config.circle, height: config.circle }}
           />
 
@@ -133,7 +133,7 @@ const SuccessAnimation = React.forwardRef<HTMLDivElement, SuccessAnimationProps>
               fill="none"
               stroke="currentColor"
               strokeWidth={config.stroke}
-              className="text-green-500/20"
+              className="text-success/20"
             />
 
             {/* Animated circle */}
@@ -145,7 +145,7 @@ const SuccessAnimation = React.forwardRef<HTMLDivElement, SuccessAnimationProps>
               stroke="currentColor"
               strokeWidth={config.stroke}
               strokeLinecap="round"
-              className="text-green-500 animate-success-circle"
+              className="text-success animate-success-circle"
               style={{
                 strokeDasharray: Math.PI * (config.circle - config.stroke),
                 strokeDashoffset: Math.PI * (config.circle - config.stroke),
@@ -162,7 +162,7 @@ const SuccessAnimation = React.forwardRef<HTMLDivElement, SuccessAnimationProps>
               strokeWidth={config.stroke}
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="text-green-500 animate-success-check"
+              className="text-success animate-success-check"
               style={{
                 strokeDasharray: config.check * 2,
                 strokeDashoffset: config.check * 2,
@@ -205,7 +205,7 @@ const MiniSuccess = React.forwardRef<HTMLSpanElement, MiniSuccessProps>(
       <span
         ref={ref}
         className={cn(
-          'inline-flex items-center justify-center w-5 h-5 rounded-full bg-green-500 text-white animate-scale-in',
+          'inline-flex items-center justify-center w-5 h-5 rounded-full bg-success text-white animate-scale-in',
           className
         )}
         {...props}

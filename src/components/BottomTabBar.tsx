@@ -59,13 +59,13 @@ export function BottomTabBar() {
               <tab.icon
                 className={cn(
                   'h-6 w-6 transition-colors duration-200 ease-out',
-                  isActive ? 'text-gold' : 'text-[#94A3B8]'
+                  isActive ? 'text-gold' : 'text-muted-foreground'
                 )}
               />
               <span
                 className={cn(
                   'font-medium transition-colors duration-200 ease-out',
-                  isActive ? 'text-gold' : 'text-[#94A3B8]'
+                  isActive ? 'text-gold' : 'text-muted-foreground'
                 )}
                 style={{ fontSize: '0.6875rem', lineHeight: '1' }}
               >

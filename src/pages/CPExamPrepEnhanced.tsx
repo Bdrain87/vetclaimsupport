@@ -637,7 +637,7 @@ export default function CPExamPrepEnhanced() {
                                   conditionDetailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                                 }, 100);
                               }}
-                              className={`w-full text-left p-2 rounded-lg text-sm transition-colors truncate ${
+                              className={`w-full text-left p-2 rounded-lg text-sm transition-colors ${
                                 selectedCondition === condition
                                   ? 'bg-primary/10 text-primary font-medium'
                                   : 'hover:bg-muted'
@@ -1055,7 +1055,7 @@ export default function CPExamPrepEnhanced() {
             <Button variant="outline" className="gap-2" asChild>
               <Link to="/cp-exam-packet">
                 <Download className="h-4 w-4" />
-                <span className="truncate">Download Full Exam Packet PDF</span>
+                <span>Download Full Exam Packet PDF</span>
               </Link>
             </Button>
           </div>

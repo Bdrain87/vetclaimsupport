@@ -492,8 +492,8 @@ Date: ${today}`;
                 </pre>
               </CardContent>
             </Card>
-            <div className="px-3 py-2 rounded-md bg-amber-500/10 border border-amber-500/20">
-              <p className="text-[11px] text-amber-200/70">
+            <div className="px-3 py-2 rounded-md bg-warning/10 border border-warning/20">
+              <p className="text-[11px] text-warning/70">
                 This is a template only — not a legal document. Review all content for accuracy
                 and consult with your VSO or attorney before submitting to the VA.
               </p>
@@ -558,8 +558,8 @@ Date: ${today}`;
       </div>
 
       {/* Legal Disclaimer */}
-      <div className="px-4 py-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
-        <p className="text-xs text-amber-200/80">
+      <div className="px-4 py-3 rounded-lg bg-warning/10 border border-warning/20">
+        <p className="text-xs text-warning/80">
           This tool helps organize your thoughts. Generated letters are templates only —
           not legal documents. Review with your VSO or attorney before submitting to the VA.
         </p>
@@ -719,7 +719,7 @@ Date: ${today}`;
                   </CardHeader>
                   <CardContent className="space-y-3 text-sm">
                     {contact.relationship && (
-                      <p className="text-muted-foreground truncate">{contact.relationship}</p>
+                      <p className="text-muted-foreground leading-tight">{contact.relationship}</p>
                     )}
 
                     {contact.whatTheyWitnessed && (
@@ -736,7 +736,7 @@ Date: ${today}`;
                         ) : (
                           <Phone className="h-4 w-4 flex-shrink-0" />
                         )}
-                        <span className="text-xs truncate">{contact.contactInfo}</span>
+                        <span className="text-xs break-all">{contact.contactInfo}</span>
                       </div>
                     )}
                   </CardContent>

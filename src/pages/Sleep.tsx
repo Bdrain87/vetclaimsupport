@@ -234,9 +234,9 @@ export default function Sleep() {
   const getQualityColor = (quality: SleepQuality) => {
     switch (quality) {
       case 'Excellent': return 'bg-success/10 text-success border-success/20';
-      case 'Good': return 'bg-green-500/10 text-green-600 border-green-500/20';
+      case 'Good': return 'bg-success/10 text-success border-success/20';
       case 'Fair': return 'bg-warning/10 text-warning border-warning/20';
-      case 'Poor': return 'bg-amber-500/10 text-amber-500 border-amber-500/20';
+      case 'Poor': return 'bg-warning/10 text-warning border-warning/20';
       case 'Very Poor': return 'bg-destructive/10 text-destructive border-destructive/20';
     }
   };
@@ -302,7 +302,7 @@ export default function Sleep() {
       {/* Add Log Button */}
       <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
         <DialogTrigger asChild>
-          <Button className="gap-2 bg-gold hover:bg-[#B59847] text-[#000000] shadow-[0_4px_16px_rgba(197,165,90,0.3)]">
+          <Button className="gap-2 bg-gold hover:bg-gold/80 text-background shadow-[0_4px_16px_rgba(197,165,90,0.3)]">
             <Plus className="h-4 w-4" />
             Log Sleep
           </Button>

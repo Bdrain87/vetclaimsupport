@@ -167,8 +167,8 @@ export default function ExamDayMode() {
         </Button>
 
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-green-500/10 border border-green-500/20">
-            <Shield className="h-6 w-6 text-green-400" />
+          <div className="p-2.5 rounded-xl bg-success/10 border border-success/20">
+            <Shield className="h-6 w-6 text-success" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Exam Day</h1>
@@ -180,7 +180,7 @@ export default function ExamDayMode() {
       </div>
 
       {/* Profile quick reference */}
-      <Card className="border-green-500/20 bg-green-500/5">
+      <Card className="border-success/20 bg-success/5">
         <CardContent className="py-3 px-4">
           <div className="grid grid-cols-2 gap-2 text-xs">
             {profile.firstName && (
@@ -213,7 +213,7 @@ export default function ExamDayMode() {
           <CollapsibleTrigger className="w-full text-left p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-green-400" />
+                <CheckCircle2 className="h-4 w-4 text-success" />
                 <span className="text-sm font-semibold text-foreground">General Exam Tips</span>
               </div>
               {expandedSections.has('tips') ? (
@@ -228,7 +228,7 @@ export default function ExamDayMode() {
               <div className="space-y-1.5">
                 {GENERAL_EXAM_TIPS.map((tip, i) => (
                   <div key={i} className="flex gap-2 text-xs text-muted-foreground">
-                    <CheckCircle2 className="h-3 w-3 text-green-400 flex-shrink-0 mt-0.5" />
+                    <CheckCircle2 className="h-3 w-3 text-success flex-shrink-0 mt-0.5" />
                     <span>{tip}</span>
                   </div>
                 ))}
@@ -376,7 +376,7 @@ export default function ExamDayMode() {
             <CollapsibleTrigger className="w-full text-left p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Pill className="h-4 w-4 text-blue-400" />
+                  <Pill className="h-4 w-4 text-primary" />
                   <span className="text-sm font-semibold text-foreground">
                     Current Medications ({currentMeds.length})
                   </span>
@@ -445,7 +445,7 @@ export default function ExamDayMode() {
             href="https://www.va.gov/get-help-from-accredited-representative/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-400 underline"
+            className="text-primary underline"
           >
             VA-accredited representative
           </a>.

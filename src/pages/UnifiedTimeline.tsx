@@ -19,11 +19,11 @@ interface TimelineEvent {
 }
 
 const TYPE_META: Record<TimelineEvent['type'], { icon: typeof Activity; color: string; label: string }> = {
-  symptom: { icon: Activity, color: 'text-red-400', label: 'Symptom' },
+  symptom: { icon: Activity, color: 'text-destructive', label: 'Symptom' },
   sleep: { icon: Moon, color: 'text-indigo-400', label: 'Sleep' },
   migraine: { icon: Brain, color: 'text-purple-400', label: 'Migraine' },
-  medication: { icon: Pill, color: 'text-emerald-400', label: 'Medication' },
-  visit: { icon: Stethoscope, color: 'text-blue-400', label: 'Visit' },
+  medication: { icon: Pill, color: 'text-success', label: 'Medication' },
+  visit: { icon: Stethoscope, color: 'text-primary', label: 'Visit' },
   exposure: { icon: AlertTriangle, color: 'text-gold', label: 'Exposure' },
 };
 
@@ -187,11 +187,11 @@ export default function UnifiedTimeline() {
                       <div key={ev.id} className="flex items-start gap-3 px-4 py-3">
                         <Icon className={`h-4 w-4 mt-0.5 flex-shrink-0 ${ev.color}`} />
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-foreground truncate">{ev.title}</p>
+                          <p className="text-sm font-medium text-foreground line-clamp-2">{ev.title}</p>
                           <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{ev.detail}</p>
                         </div>
                         {ev.severity !== undefined && (
-                          <span className={`text-xs font-bold flex-shrink-0 ${ev.severity >= 7 ? 'text-red-400' : ev.severity >= 4 ? 'text-gold' : 'text-emerald-400'}`}>
+                          <span className={`text-xs font-bold flex-shrink-0 ${ev.severity >= 7 ? 'text-destructive' : ev.severity >= 4 ? 'text-gold' : 'text-success'}`}>
                             {ev.severity}/10
                           </span>
                         )}

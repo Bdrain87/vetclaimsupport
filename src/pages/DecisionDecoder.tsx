@@ -440,8 +440,8 @@ export default function DecisionDecoder() {
       </div>
 
       {/* Disclaimer */}
-      <div className="flex gap-3 p-3 rounded-2xl border border-blue-500/20 bg-blue-500/5">
-        <Info className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
+      <div className="flex gap-3 p-3 rounded-2xl border border-primary/20 bg-primary/5">
+        <Info className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
         <p className="text-xs text-muted-foreground leading-relaxed">
           This tool provides general educational explanations of common VA decision language. It does not
           provide legal advice or recommend specific actions for your claim. For personalized guidance,
@@ -450,7 +450,7 @@ export default function DecisionDecoder() {
             href="https://www.va.gov/get-help-from-accredited-representative/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-400 underline"
+            className="text-primary underline"
           >
             free VA-accredited representative
           </a>{' '}
@@ -533,17 +533,17 @@ export default function DecisionDecoder() {
 
           {/* Granted conditions */}
           {parsed.grantedConditions.length > 0 && (
-            <Card className="border-green-500/20">
+            <Card className="border-success/20">
               <CardContent className="py-3 px-4 space-y-2">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-green-400" />
+                  <CheckCircle2 className="h-4 w-4 text-success" />
                   <span className="text-sm font-semibold text-foreground">
                     Granted ({parsed.grantedConditions.length})
                   </span>
                 </div>
                 {parsed.grantedConditions.map((c, i) => (
                   <div key={i} className="flex items-start gap-2 text-xs text-muted-foreground pl-6">
-                    <span className="text-green-400 flex-shrink-0">•</span>
+                    <span className="text-success flex-shrink-0">•</span>
                     <span>{c}</span>
                   </div>
                 ))}
@@ -622,7 +622,7 @@ export default function DecisionDecoder() {
                 <Card key={dp.code}>
                   <CardContent className="py-3 px-4 space-y-3">
                     <div className="flex items-center gap-2">
-                      <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 text-[10px]">
+                      <Badge className="bg-primary/20 text-primary border-primary/30 text-[10px]">
                         {dp.code}
                       </Badge>
                       <span className="text-sm font-semibold text-foreground">{dp.title}</span>
@@ -747,7 +747,7 @@ export default function DecisionDecoder() {
                           </p>
                           {pathway.bestFor.map((item, i) => (
                             <div key={i} className="flex gap-2 text-xs text-muted-foreground">
-                              <CheckCircle2 className="h-3 w-3 text-green-400 flex-shrink-0 mt-0.5" />
+                              <CheckCircle2 className="h-3 w-3 text-success flex-shrink-0 mt-0.5" />
                               <span>{item}</span>
                             </div>
                           ))}
@@ -768,7 +768,7 @@ export default function DecisionDecoder() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="text-xs gap-1.5 text-blue-400"
+                          className="text-xs gap-1.5 text-primary"
                           onClick={(e) => {
                             e.stopPropagation();
                             window.open(pathway.learnMoreUrl, '_blank', 'noopener,noreferrer');
@@ -786,10 +786,10 @@ export default function DecisionDecoder() {
           </div>
 
           {/* VSO referral — always shown */}
-          <Card className="border-green-500/20 bg-green-500/5">
+          <Card className="border-success/20 bg-success/5">
             <CardContent className="py-4 px-4">
               <div className="flex items-start gap-3">
-                <Info className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                <Info className="h-5 w-5 text-success mt-0.5 flex-shrink-0" />
                 <div className="space-y-2">
                   <p className="text-sm font-semibold text-foreground">Get Free Help</p>
                   <p className="text-xs text-muted-foreground leading-relaxed">

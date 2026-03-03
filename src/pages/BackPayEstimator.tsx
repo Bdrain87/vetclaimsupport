@@ -101,8 +101,8 @@ export default function BackPayEstimator() {
 
       {/* Header */}
       <div className="flex items-start gap-4">
-        <div className="p-3 rounded-xl bg-emerald-500/10 shrink-0">
-          <DollarSign className="h-6 w-6 text-emerald-500" />
+        <div className="p-3 rounded-xl bg-gold/10 shrink-0">
+          <DollarSign className="h-6 w-6 text-gold" />
         </div>
         <div className="flex-1 min-w-0">
           <h1 className="text-2xl font-bold text-foreground">Back Pay Estimator</h1>
@@ -285,7 +285,7 @@ export default function BackPayEstimator() {
         <Card className="bg-card border-border">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
-              <DollarSign className="h-5 w-5 text-emerald-500" />
+              <DollarSign className="h-5 w-5 text-gold" />
               Estimated Back Pay
             </CardTitle>
             <CardDescription>
@@ -331,7 +331,7 @@ export default function BackPayEstimator() {
                 <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
                   Monthly Difference
                 </p>
-                <p className="text-xl font-bold text-emerald-400">
+                <p className="text-xl font-bold text-success">
                   +{formatCurrencyExact(calculation.monthlyDifference)}
                 </p>
                 <p className="text-xs text-muted-foreground">
@@ -354,11 +354,11 @@ export default function BackPayEstimator() {
             </div>
 
             {/* Total Back Pay - highlighted */}
-            <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-5 text-center space-y-2">
-              <p className="text-sm text-emerald-400 uppercase tracking-wide font-semibold">
+            <div className="bg-success/10 border border-success/20 rounded-xl p-5 text-center space-y-2">
+              <p className="text-sm text-success uppercase tracking-wide font-semibold">
                 Total Estimated Back Pay
               </p>
-              <p className="text-4xl font-bold text-emerald-400">
+              <p className="text-4xl font-bold text-success">
                 {formatCurrency(calculation.totalBackPay)}
               </p>
               <p className="text-xs text-muted-foreground">

@@ -316,15 +316,15 @@ export default function Migraines() {
 
   const getSeverityColor = (severity: MigraineSeverity) => {
     switch (severity) {
-      case 'Mild': return 'bg-green-500/10 text-green-500 border-green-500/20';
-      case 'Moderate': return 'bg-amber-500/10 text-amber-500 border-amber-500/20';
-      case 'Severe': return 'bg-orange-500/10 text-orange-500 border-orange-500/20';
-      case 'Prostrating': return 'bg-red-500/10 text-red-500 border-red-500/20';
+      case 'Mild': return 'bg-success/10 text-success border-success/20';
+      case 'Moderate': return 'bg-warning/10 text-warning border-warning/20';
+      case 'Severe': return 'bg-warning/10 text-warning border-warning/20';
+      case 'Prostrating': return 'bg-destructive/10 text-destructive border-destructive/20';
     }
   };
 
   const getRatingColor = (rating: number) => {
-    if (rating >= 50) return 'text-green-500';
+    if (rating >= 50) return 'text-success';
     if (rating >= 30) return 'text-gold';
     if (rating >= 10) return 'text-gold';
     return 'text-muted-foreground';
@@ -375,7 +375,7 @@ export default function Migraines() {
               <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex-shrink-0">
                 <Target className="h-5 w-5 text-primary" />
               </div>
-              <h3 className="text-lg font-bold text-foreground tracking-tight truncate">Estimated VA Rating — Migraines</h3>
+              <h3 className="text-lg font-bold text-foreground tracking-tight">Estimated VA Rating — Migraines</h3>
             </div>
           </div>
           <CardContent className="p-5 space-y-4">
@@ -414,7 +414,7 @@ export default function Migraines() {
 
             <div className="grid grid-cols-2 gap-2 pt-2">
               <div className="bg-muted/50 rounded-lg p-3">
-                <p className="text-2xl font-bold text-red-500">{stats.prostratingPerMonth.toFixed(1)}</p>
+                <p className="text-2xl font-bold text-destructive">{stats.prostratingPerMonth.toFixed(1)}</p>
                 <p className="text-xs text-muted-foreground">Prostrating/Month (avg)</p>
               </div>
               <div className="bg-muted/50 rounded-lg p-3">
@@ -566,27 +566,27 @@ export default function Migraines() {
                   </div>
 
                   {/* VA-CRITICAL: Prostrating Documentation Section */}
-                  <Card className="border-red-500/30 bg-red-500/5">
+                  <Card className="border-destructive/30 bg-destructive/5">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-semibold flex items-center gap-2 text-red-500">
+                      <CardTitle className="text-sm font-semibold flex items-center gap-2 text-destructive">
                         <BedDouble className="h-4 w-4" />
                         VA Rating Evidence (Critical for Claims)
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="space-y-3">
-                        <div className="flex items-start space-x-3 p-3 bg-background/50 rounded-lg border border-red-500/20">
-                          <Checkbox 
+                        <div className="flex items-start space-x-3 p-3 bg-background/50 rounded-lg border border-destructive/20">
+                          <Checkbox
                             id="wasProstrating"
                             checked={formData.wasProstrating}
-                            onCheckedChange={(checked) => setFormData({ 
-                              ...formData, 
+                            onCheckedChange={(checked) => setFormData({
+                              ...formData,
                               wasProstrating: checked as boolean,
-                              requiredBedRest: checked as boolean || formData.requiredBedRest 
+                              requiredBedRest: checked as boolean || formData.requiredBedRest
                             })}
                           />
                           <div className="space-y-1">
-                            <Label htmlFor="wasProstrating" className="font-medium cursor-pointer text-red-500">
+                            <Label htmlFor="wasProstrating" className="font-medium cursor-pointer text-destructive">
                               This was a PROSTRATING attack
                             </Label>
                             <p className="text-xs text-muted-foreground">
@@ -885,14 +885,14 @@ export default function Migraines() {
             </CardContent>
           </Card>
           
-          <Card className="data-card border-red-500/30">
+          <Card className="data-card border-destructive/30">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-full bg-red-500/10">
-                  <Zap className="h-6 w-6 text-red-500" />
+                <div className="p-3 rounded-full bg-destructive/10">
+                  <Zap className="h-6 w-6 text-destructive" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-red-500">{stats.prostratingLast30Days}</p>
+                  <p className="text-2xl font-bold text-destructive">{stats.prostratingLast30Days}</p>
                   <p className="text-sm text-muted-foreground">Prostrating (30 Days)</p>
                 </div>
               </div>
@@ -958,7 +958,7 @@ export default function Migraines() {
                       {durations.find(d => d.value === entry.duration)?.label}
                     </Badge>
                     {(entry.severity === 'Prostrating' || entry.wasProstrating || entry.requiredBedRest) && (
-                      <Badge className="bg-red-500 text-white gap-1">
+                      <Badge className="bg-destructive text-white gap-1">
                         <BedDouble className="h-3 w-3" />
                         Prostrating
                       </Badge>
@@ -994,7 +994,7 @@ export default function Migraines() {
                   )}
                   <div className="flex items-center gap-2 min-w-0">
                     <AlertTriangle className="h-4 w-4 flex-shrink-0" />
-                    <span className="truncate">{entry.impacts?.length ? entry.impacts.join(', ') : entry.impact}</span>
+                    <span className="line-clamp-2">{entry.impacts?.length ? entry.impacts.join(', ') : entry.impact}</span>
                   </div>
                   {entry.functioningLevel !== undefined && entry.functioningLevel < 50 && (
                     <div className="flex items-center gap-2">
@@ -1006,14 +1006,14 @@ export default function Migraines() {
 
                 {/* VA Evidence Summary */}
                 {(entry.requiredBedRest || entry.couldNotWork || (entry.hoursLostToMigraine && entry.hoursLostToMigraine > 0)) && (
-                  <div className="flex flex-wrap gap-2 p-2 bg-red-500/5 rounded-lg border border-red-500/20">
+                  <div className="flex flex-wrap gap-2 p-2 bg-destructive/5 rounded-lg border border-destructive/20">
                     {entry.requiredBedRest && (
-                      <span className="text-xs text-red-500 flex items-center gap-1">
+                      <span className="text-xs text-destructive flex items-center gap-1">
                         <BedDouble className="h-3 w-3" /> Bed rest required
                       </span>
                     )}
                     {entry.couldNotWork && (
-                      <span className="text-xs text-red-500 flex items-center gap-1">
+                      <span className="text-xs text-destructive flex items-center gap-1">
                         <Briefcase className="h-3 w-3" /> Unable to work
                       </span>
                     )}
@@ -1045,9 +1045,9 @@ export default function Migraines() {
                 {entry.treatment && (
                   <div className="flex items-center gap-2 flex-wrap min-w-0">
                     <span className="text-xs text-muted-foreground flex-shrink-0">Treatment: </span>
-                    <span className="text-sm truncate min-w-0">{entry.treatment}</span>
+                    <span className="text-sm min-w-0">{entry.treatment}</span>
                     {entry.medicationEffective !== undefined && (
-                      <Badge variant="outline" className={entry.medicationEffective ? 'text-green-500 border-green-500/50' : 'text-red-500 border-red-500/50'}>
+                      <Badge variant="outline" className={entry.medicationEffective ? 'text-success border-success/50' : 'text-destructive border-destructive/50'}>
                         {entry.medicationEffective ? 'Effective' : 'Not Effective'}
                       </Badge>
                     )}

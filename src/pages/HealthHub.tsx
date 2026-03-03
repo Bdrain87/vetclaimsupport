@@ -119,14 +119,14 @@ export default function HealthHub() {
       <div className="grid grid-cols-2 gap-2">
         <button
           onClick={() => navigate('/health/trends')}
-          className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors text-left"
+          className="flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
         >
           <div className="p-2 rounded-lg bg-gold/10">
             <TrendingUp className="h-5 w-5 text-gold" />
           </div>
           <div className="flex-1 min-w-0">
             <span className="text-sm font-medium text-foreground block truncate">Health Trends</span>
-            <span className="text-[10px] text-muted-foreground block truncate">Pain, sleep & migraine trends</span>
+            <span className="text-[10px] text-muted-foreground block leading-tight">Pain, sleep & migraine trends</span>
           </div>
         </button>
         <button
@@ -138,7 +138,7 @@ export default function HealthHub() {
           </div>
           <div className="flex-1 min-w-0">
             <span className="text-sm font-medium text-foreground block truncate">Timeline</span>
-            <span className="text-[10px] text-muted-foreground block truncate">All health data in one place</span>
+            <span className="text-[10px] text-muted-foreground block leading-tight">All health data in one place</span>
           </div>
         </button>
       </div>

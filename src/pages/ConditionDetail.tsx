@@ -99,10 +99,10 @@ function EvidenceChecklistCard({ conditionId, conditionName, onNavigate }: { con
               onClick={() => toggleCheck(conditionId, item.name)}
               className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 w-full text-left hover:bg-muted/70 transition-colors"
             >
-              <CheckCircle2 className={`h-5 w-5 mt-0.5 flex-shrink-0 transition-colors ${isChecked ? 'text-green-500' : 'text-muted-foreground/40'}`} />
+              <CheckCircle2 className={`h-5 w-5 mt-0.5 flex-shrink-0 transition-colors ${isChecked ? 'text-success' : 'text-muted-foreground/40'}`} />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className={`font-medium text-sm min-w-0 truncate ${isChecked ? 'line-through text-muted-foreground' : ''}`}>{item.name}</span>
+                  <span className={`font-medium text-sm min-w-0 ${isChecked ? 'line-through text-muted-foreground' : ''}`}>{item.name}</span>
                   {item.required && (
                     <Badge variant="outline" className="text-xs flex-shrink-0">Required</Badge>
                   )}
@@ -559,7 +559,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                     <div className="bg-muted/50 rounded-lg p-2">
                       <p className={`text-xl font-bold ${
                         frequencyReport.trend === 'worsening' ? 'text-destructive' :
-                        frequencyReport.trend === 'improving' ? 'text-green-500' :
+                        frequencyReport.trend === 'improving' ? 'text-success' :
                         'text-muted-foreground'
                       }`}>
                         {frequencyReport.trend === 'worsening' ? '↑' :
@@ -733,25 +733,25 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="bg-[rgba(240,192,0,0.08)] border border-gold/20 rounded-lg p-4">
+          <div className="bg-gold/5 border border-gold/20 rounded-lg p-4">
             <p className="text-sm text-muted-foreground mb-3">
               Use these verified legal databases to find case law relevant to your claim:
             </p>
             <div className="space-y-2 overflow-hidden">
               <a href="https://www.va.gov/decision-reviews/board-appeal/" target="_blank" rel="noopener noreferrer"
-                 className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm truncate">
+                 className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm">
                 Board of Veterans' Appeals (BVA) Decisions
               </a>
               <a href="https://www.uscourts.cavc.gov/opinions.php" target="_blank" rel="noopener noreferrer"
-                 className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm truncate">
+                 className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm">
                 Court of Appeals for Veterans Claims (CAVC)
               </a>
               <a href="https://scholar.google.com/" target="_blank" rel="noopener noreferrer"
-                 className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm truncate">
+                 className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm">
                 Google Scholar — Legal Opinions
               </a>
               <a href="https://www.law.cornell.edu/uscode/text/38" target="_blank" rel="noopener noreferrer"
-                 className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm truncate">
+                 className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm">
                 38 U.S.C. — Veterans' Benefits (Cornell Law)
               </a>
             </div>
@@ -773,11 +773,11 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
             <div className="space-y-2">
               {relatedLogs.map((log, i) => (
                 <div key={`${log.type}-${log.date}-${i}`} className="flex items-center gap-3 p-2.5 rounded-lg bg-muted/50">
-                  {log.type === 'symptom' && <Activity className="h-4 w-4 text-emerald-400 flex-shrink-0" />}
+                  {log.type === 'symptom' && <Activity className="h-4 w-4 text-success flex-shrink-0" />}
                   {log.type === 'sleep' && <Moon className="h-4 w-4 text-indigo-400 flex-shrink-0" />}
                   {log.type === 'migraine' && <Brain className="h-4 w-4 text-purple-400 flex-shrink-0" />}
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">{log.label}</p>
+                    <p className="text-sm font-medium line-clamp-2">{log.label}</p>
                     <p className="text-xs text-muted-foreground">{safeFormatDate(log.date)}</p>
                   </div>
                   {log.severity !== undefined && (
@@ -835,7 +835,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                             level.percentage === 0 ? 'bg-muted-foreground' :
                             level.percentage <= 30 ? 'bg-gold' :
                             level.percentage <= 70 ? 'bg-gold' :
-                            'bg-green-500'
+                            'bg-success'
                           }
                         >
                           {level.percentage}%
@@ -869,7 +869,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                           <ul className="space-y-1">
                             {level.examTips.map((tip, idx) => (
                               <li key={idx} className="text-xs text-muted-foreground flex items-start gap-1">
-                                <CheckCircle2 className="h-3 w-3 text-green-500 mt-0.5 flex-shrink-0" />
+                                <CheckCircle2 className="h-3 w-3 text-success mt-0.5 flex-shrink-0" />
                                 {tip}
                               </li>
                             ))}
@@ -898,9 +898,9 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
               </div>
 
               {/* General Tips */}
-              <Card className="bg-green-500/5 border-green-500/30">
+              <Card className="bg-success/5 border-success/30">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-base text-green-700 dark:text-green-400 flex items-center gap-2">
+                  <CardTitle className="text-base text-success flex items-center gap-2">
                     <BookOpen className="h-5 w-5" />
                     General Tips
                   </CardTitle>
@@ -908,7 +908,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                 <CardContent>
                   <ul className="space-y-2">
                     {ratingCriteria.generalTips.map((tip, idx) => (
-                      <li key={idx} className="text-sm text-green-700 dark:text-green-400 flex items-start gap-2">
+                      <li key={idx} className="text-sm text-success flex items-start gap-2">
                         <CheckCircle2 className="h-4 w-4 mt-0.5 flex-shrink-0" />
                         {tip}
                       </li>
@@ -946,7 +946,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
           {userCondition?.claimStatus === 'approved' ? (
             <Card>
               <CardContent className="py-8 text-center space-y-3">
-                <CheckCircle2 className="h-8 w-8 text-green-500 mx-auto" />
+                <CheckCircle2 className="h-8 w-8 text-success mx-auto" />
                 <h3 className="font-semibold text-foreground">Condition Already Approved</h3>
                 <p className="text-sm text-muted-foreground max-w-sm mx-auto">
                   This condition is already service-connected and approved. Additional evidence collection is typically only needed if you are pursuing a rating increase.
@@ -1079,10 +1079,10 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
           })()}
 
           {/* Nexus Letter CTA */}
-          <Card className="border-blue-500/20 bg-blue-500/5">
+          <Card className="border-primary/20 bg-primary/5">
             <CardContent className="p-4">
               <div className="flex items-start gap-3">
-                <FileText className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                <FileText className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
                   <h3 className="text-sm font-semibold text-foreground">Need a nexus letter?</h3>
                   <p className="text-xs text-muted-foreground mt-0.5">
@@ -1111,7 +1111,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                   <Stethoscope className="h-5 w-5" />
                   C&P Exam Preparation
                 </CardTitle>
-                <CardDescription className="truncate">
+                <CardDescription>
                   Form {dbqReference.formNumber} - {dbqReference.name}
                 </CardDescription>
               </CardHeader>
@@ -1128,7 +1128,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                           <ul className="mt-2 space-y-1">
                             {q.tips.map((tip, tipIdx) => (
                               <li key={tipIdx} className="text-xs text-muted-foreground flex items-start gap-1">
-                                <CheckCircle2 className="h-3 w-3 text-green-500 mt-0.5 flex-shrink-0" />
+                                <CheckCircle2 className="h-3 w-3 text-success mt-0.5 flex-shrink-0" />
                                 {tip}
                               </li>
                             ))}
@@ -1143,11 +1143,11 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
 
                 {/* Prep Tips */}
                 <div>
-                  <h4 className="font-medium mb-2 text-green-600">Preparation Tips</h4>
+                  <h4 className="font-medium mb-2 text-success">Preparation Tips</h4>
                   <ul className="space-y-2">
                     {dbqReference.prepTips.map((tip, idx) => (
                       <li key={idx} className="text-sm flex items-start gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                        <CheckCircle2 className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
                         {tip}
                       </li>
                     ))}

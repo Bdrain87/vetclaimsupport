@@ -185,7 +185,7 @@ export default function Dashboard() {
       {!session && (
         <button
           onClick={() => navigate('/login')}
-          className="w-full flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 text-left"
+          className="w-full flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 active:scale-[0.98] transition-all text-left"
         >
           <div className="h-9 w-9 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
             <LogIn className="h-4 w-4 text-gold" />
@@ -309,6 +309,7 @@ export default function Dashboard() {
             <p className="text-[11px] text-muted-foreground">
               {vaultDocCount > 0 ? `${vaultDocCount} stored` : 'No docs yet'}
             </p>
+
           </div>
         </Link>
         <Link
@@ -467,16 +468,16 @@ export default function Dashboard() {
         >
           <button
             onClick={() => navigate('/prep/medication-rule')}
-            className="w-full flex items-center gap-3 p-3 rounded-2xl border border-amber-500/20 bg-amber-500/5 text-left"
+            className="w-full flex items-center gap-3 p-3 rounded-2xl border border-warning/20 bg-warning/5 text-left"
           >
-            <div className="h-9 w-9 rounded-full bg-amber-500/10 flex items-center justify-center flex-shrink-0">
-              <ShieldAlert className="h-4 w-4 text-amber-400" />
+            <div className="h-9 w-9 rounded-full bg-warning/10 flex items-center justify-center flex-shrink-0">
+              <ShieldAlert className="h-4 w-4 text-warning" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-foreground">2026 VA Medication Rule</p>
               <p className="text-xs text-muted-foreground">Check if your {data.medications.length} medication{data.medications.length !== 1 ? 's are' : ' is'} properly documented</p>
             </div>
-            <ChevronRight className="h-4 w-4 text-amber-400 flex-shrink-0" />
+            <ChevronRight className="h-4 w-4 text-warning flex-shrink-0" />
           </button>
         </motion.div>
       )}
@@ -494,7 +495,7 @@ export default function Dashboard() {
             Daily Quick Log
           </h3>
           {todayLogged && (
-            <span className="text-[10px] text-green-400 font-medium bg-green-500/10 px-2 py-0.5 rounded-full">
+            <span className="text-[10px] text-success font-medium bg-success/10 px-2 py-0.5 rounded-full">
               Logged today
             </span>
           )}
@@ -535,7 +536,7 @@ export default function Dashboard() {
             {/* Flare-up toggle */}
             <div className="flex items-center justify-between p-3 rounded-xl border border-border">
               <div className="flex items-center gap-2">
-                <Flame className="h-4 w-4 text-amber-400" />
+                <Flame className="h-4 w-4 text-warning" />
                 <span className="text-sm font-medium text-foreground">Flare-up today?</span>
               </div>
               <button
@@ -557,7 +558,7 @@ export default function Dashboard() {
 
             {/* Flare-up details (conditional) */}
             {quickLogFlareUp && (
-              <div className="space-y-3 p-3 rounded-xl border border-amber-500/20 bg-amber-500/5">
+              <div className="space-y-3 p-3 rounded-xl border border-warning/20 bg-warning/5">
                 {/* Severity */}
                 <div>
                   <label className="text-xs font-medium text-muted-foreground mb-1 block">
@@ -585,7 +586,7 @@ export default function Dashboard() {
                         className={cn(
                           'text-[11px] px-3 py-2 min-h-[36px] rounded-full border transition-colors',
                           quickLogFlareUpDuration === key
-                            ? 'bg-amber-500/20 border-amber-500/40 text-amber-300'
+                            ? 'bg-warning/20 border-warning/40 text-warning'
                             : 'border-border text-muted-foreground hover:bg-accent',
                         )}
                       >
@@ -613,7 +614,7 @@ export default function Dashboard() {
                         className={cn(
                           'text-[11px] px-3 py-2 min-h-[36px] rounded-full border transition-colors',
                           quickLogFlareUpTriggers.includes(trigger)
-                            ? 'bg-amber-500/20 border-amber-500/40 text-amber-300'
+                            ? 'bg-warning/20 border-warning/40 text-warning'
                             : 'border-border text-muted-foreground hover:bg-accent',
                         )}
                       >
@@ -745,7 +746,7 @@ export default function Dashboard() {
                 onClick={() => navigate('/claims/decision-decoder')}
                 className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
               >
-                <AlertTriangle className="h-4 w-4 text-amber-400 flex-shrink-0" />
+                <AlertTriangle className="h-4 w-4 text-warning flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground">Decision Decoder</p>
                   <p className="text-xs text-muted-foreground">Understand your denial in plain English and see your options</p>
@@ -767,10 +768,10 @@ export default function Dashboard() {
         >
           <Link
             to="/prep/compensation"
-            className="flex items-center gap-3 p-3 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 hover:bg-emerald-500/10 transition-colors"
+            className="flex items-center gap-3 p-3 rounded-2xl border border-success/20 bg-success/5 hover:bg-success/10 transition-colors"
           >
-            <div className="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
-              <DollarSign className="h-4 w-4 text-emerald-400" />
+            <div className="w-9 h-9 rounded-xl bg-success/10 flex items-center justify-center flex-shrink-0">
+              <DollarSign className="h-4 w-4 text-success" />
             </div>
             <div className="min-w-0">
               <p className="text-sm font-medium text-foreground">${monthlyCompensation.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}/mo</p>
@@ -801,7 +802,7 @@ export default function Dashboard() {
         >
           <button
             onClick={() => navigate('/prep/tdiu')}
-            className="w-full flex items-center gap-3 p-3 rounded-2xl border border-purple-500/20 bg-purple-500/5 text-left"
+            className="w-full flex items-center gap-3 p-3 rounded-2xl border border-purple-500/20 bg-purple-500/5 hover:bg-purple-500/10 active:scale-[0.98] transition-all text-left"
           >
             <div className="h-9 w-9 rounded-full bg-purple-500/10 flex items-center justify-center flex-shrink-0">
               <Briefcase className="h-4 w-4 text-purple-400" />
@@ -827,9 +828,9 @@ export default function Dashboard() {
             <div
               key={r.id}
               className={cn(
-                'flex items-start gap-3 p-3 rounded-lg border',
+                'flex items-start gap-3 p-3 rounded-2xl border',
                 r.priority === 'high'
-                  ? 'border-gold/30 bg-[rgba(240,192,0,0.05)]'
+                  ? 'border-gold/30 bg-gold/5'
                   : 'border-border bg-secondary',
               )}
             >

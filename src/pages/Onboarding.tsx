@@ -26,7 +26,7 @@ const YEARS = Array.from({ length: 80 }, (_, i) => String(new Date().getFullYear
 
 function MonthYearPicker({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder?: string }) {
   const [year, month] = value ? value.split('-') : ['', ''];
-  const selectClass = 'h-12 px-3 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(240,192,0,0.4)] transition-all appearance-none';
+  const selectClass = 'h-12 px-3 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all appearance-none';
   const handleChange = (newMonth: string, newYear: string) => {
     if (newMonth && newYear) onChange(`${newYear}-${newMonth}`);
     else if (newYear && !newMonth) onChange(`${newYear}-01`);
@@ -155,7 +155,7 @@ function MOSAutocomplete({
         onFocus={() => { if (results.length > 0) setIsOpen(true); }}
         onKeyDown={handleKeyDown}
         placeholder="Type your code or job title..."
-        className="w-full h-12 pl-10 pr-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(240,192,0,0.4)] focus:border-gold/50 transition-all"
+        className="w-full h-12 pl-10 pr-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/50 transition-all"
       />
       {isOpen && (
         <div className="absolute top-full left-0 right-0 mt-1 z-50 bg-[#111111] border border-white/[0.14] rounded-xl shadow-2xl shadow-black/50 max-h-60 overflow-y-auto">
@@ -520,9 +520,9 @@ export default function Onboarding() {
                     <strong className="text-white/90">Not affiliated with the U.S. Department of Veterans Affairs.</strong> Not legal or medical advice.
                   </p>
                 </div>
-                <div className="flex items-center justify-center gap-2 p-3 rounded-xl bg-emerald-400/10 border border-emerald-400/20">
-                  <Shield className="h-4 w-4 text-emerald-400" />
-                  <span className="text-xs text-emerald-400 font-medium">Your data is encrypted in transit and at rest. You control your data, including export and deletion.</span>
+                <div className="flex items-center justify-center gap-2 p-3 rounded-xl bg-success/10 border border-success/20">
+                  <Shield className="h-4 w-4 text-success" />
+                  <span className="text-xs text-success font-medium">Your data is encrypted in transit and at rest. You control your data, including export and deletion.</span>
                 </div>
                 <p className="text-white/40 text-sm">
                   Already have an account?{' '}
@@ -551,18 +551,18 @@ export default function Onboarding() {
                       onBlur={() => { if (!firstName.trim()) setNameError('Please enter your first name'); }}
                       placeholder="First Name"
                       autoFocus
-                      className={`w-full h-12 px-4 bg-white/[0.09] border rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(240,192,0,0.4)] transition-all ${
-                        nameError ? 'border-red-400/50' : 'border-white/[0.14]'
+                      className={`w-full h-12 px-4 bg-white/[0.09] border rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all ${
+                        nameError ? 'border-destructive/50' : 'border-white/[0.14]'
                       }`}
                     />
-                    {nameError && <p className="text-red-400 text-xs mt-1">{nameError}</p>}
+                    {nameError && <p className="text-destructive text-xs mt-1">{nameError}</p>}
                   </div>
                   <input
                     type="text"
                     value={lastName}
                     onChange={e => setLastName(e.target.value)}
                     placeholder="Last Name (optional)"
-                    className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(240,192,0,0.4)] transition-all"
+                    className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all"
                   />
                 </div>
               </div>
@@ -668,7 +668,7 @@ export default function Onboarding() {
                         setMosCode(e.target.value);
                       }}
                       placeholder="Job Code (e.g., 11B)"
-                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(240,192,0,0.4)] transition-all"
+                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all"
                     />
                     <input
                       type="text"
@@ -678,7 +678,7 @@ export default function Onboarding() {
                         setMosTitle(e.target.value);
                       }}
                       placeholder="Job Title (e.g., Infantryman)"
-                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(240,192,0,0.4)] transition-all"
+                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all"
                     />
                     {manualCode && manualTitle && (
                       <div className="flex items-center gap-2 text-sm text-gold min-w-0">
@@ -741,20 +741,20 @@ export default function Onboarding() {
                       type="date"
                       value={separationDate}
                       onChange={e => setSeparationDate(e.target.value)}
-                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(240,192,0,0.4)] focus:border-gold/50 transition-all [color-scheme:dark]"
+                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/50 transition-all [color-scheme:dark]"
                     />
                     {separationDate && (() => {
                       const daysOut = Math.round((new Date(separationDate).getTime() - Date.now()) / 86400000);
                       if (daysOut >= 90 && daysOut <= 180) {
                         return (
-                          <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-400/10 border border-emerald-400/20">
-                            <Shield className="h-4 w-4 text-emerald-400 shrink-0" />
-                            <span className="text-xs text-emerald-400">You may be eligible for BDD (Benefits Delivery at Discharge). File 90–180 days before separation to get your rating faster.</span>
+                          <div className="flex items-center gap-2 p-3 rounded-xl bg-success/10 border border-success/20">
+                            <Shield className="h-4 w-4 text-success shrink-0" />
+                            <span className="text-xs text-success">You may be eligible for BDD (Benefits Delivery at Discharge). File 90–180 days before separation to get your rating faster.</span>
                           </div>
                         );
                       } else if (daysOut > 0 && daysOut < 90) {
                         return (
-                          <p className="text-xs text-amber-400/80 px-1">Your separation is less than 90 days out — standard filing recommended.</p>
+                          <p className="text-xs text-warning/80 px-1">Your separation is less than 90 days out — standard filing recommended.</p>
                         );
                       }
                       return null;
@@ -855,7 +855,7 @@ export default function Onboarding() {
                           <div className="flex items-center gap-2 flex-wrap">
                             <p className="text-white text-sm font-medium truncate">{dep.operationName}</p>
                             {dep.combatDeployment && (
-                              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-400 border border-red-500/30">COMBAT</span>
+                              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-destructive/20 text-destructive border border-destructive/30">COMBAT</span>
                             )}
                           </div>
                           {dep.location && <p className="text-white/40 text-xs truncate">{dep.location}</p>}
@@ -880,7 +880,7 @@ export default function Onboarding() {
                     <select
                       value={deployOp}
                       onChange={e => setDeployOp(e.target.value)}
-                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(240,192,0,0.4)] transition-all"
+                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all"
                     >
                       <option value="" className="bg-[#000000]">Select Operation/Theater...</option>
                       {OPERATIONS.map(op => (
@@ -900,11 +900,11 @@ export default function Onboarding() {
                     <button
                       onClick={() => setDeployCombat(!deployCombat)}
                       className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${
-                        deployCombat ? 'border-red-500/40 bg-red-500/10' : 'border-white/[0.14] bg-white/[0.07]'
+                        deployCombat ? 'border-destructive/40 bg-destructive/10' : 'border-white/[0.14] bg-white/[0.07]'
                       }`}
                     >
                       <span className="text-white text-sm">Combat Zone?</span>
-                      <div className={`w-10 h-6 rounded-full transition-colors ${deployCombat ? 'bg-red-500' : 'bg-white/20'}`}>
+                      <div className={`w-10 h-6 rounded-full transition-colors ${deployCombat ? 'bg-destructive' : 'bg-white/20'}`}>
                         <div className={`w-5 h-5 rounded-full bg-white mt-0.5 transition-transform ${deployCombat ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
                       </div>
                     </button>
@@ -1172,7 +1172,7 @@ export default function Onboarding() {
                     },
                   ].map((card) => (
                     <div key={card.step} className="flex items-start gap-3 p-4 rounded-xl bg-white/[0.07] border border-white/[0.12]">
-                      <div className="w-10 h-10 rounded-lg bg-[rgba(197,164,66,0.12)] border border-[rgba(197,164,66,0.25)] flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 rounded-lg bg-gold/10 border border-gold/25 flex items-center justify-center flex-shrink-0">
                         <card.icon className="h-5 w-5 text-gold" />
                       </div>
                       <div className="flex-1 min-w-0">

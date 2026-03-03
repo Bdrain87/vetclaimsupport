@@ -92,9 +92,9 @@ export default function ExportDataPage() {
 
             <ExportButton variant="prominent" />
 
-            <div className="flex items-start gap-2 rounded-lg bg-yellow-500/5 border border-yellow-500/20 p-3">
-              <AlertTriangle className="h-4 w-4 text-yellow-500 shrink-0 mt-0.5" />
-              <p className="text-xs text-yellow-500/90 leading-relaxed">
+            <div className="flex items-start gap-2 rounded-lg bg-warning/5 border border-warning/20 p-3">
+              <AlertTriangle className="h-4 w-4 text-warning shrink-0 mt-0.5" />
+              <p className="text-xs text-warning/90 leading-relaxed">
                 Exported PDFs may contain sensitive health information. Review before sharing.
               </p>
             </div>
@@ -146,9 +146,9 @@ export default function ExportDataPage() {
               )}
             </Button>
 
-            <div className="flex items-start gap-2 rounded-lg bg-yellow-500/5 border border-yellow-500/20 p-3">
-              <AlertTriangle className="h-4 w-4 text-yellow-500 shrink-0 mt-0.5" />
-              <p className="text-xs text-yellow-500/90 leading-relaxed">
+            <div className="flex items-start gap-2 rounded-lg bg-warning/5 border border-warning/20 p-3">
+              <AlertTriangle className="h-4 w-4 text-warning shrink-0 mt-0.5" />
+              <p className="text-xs text-warning/90 leading-relaxed">
                 Exported files are outside the app sandbox and are not automatically encrypted.
               </p>
             </div>

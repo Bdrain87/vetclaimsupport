@@ -556,7 +556,7 @@ export default function BodyMap() {
           </Button>
 
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-[rgba(240,192,0,0.1)] border border-[rgba(240,192,0,0.2)]">
+            <div className="p-2.5 rounded-xl bg-gold/10 border border-gold/20">
               <Activity className="h-6 w-6 text-gold" />
             </div>
             <div>
@@ -577,7 +577,7 @@ export default function BodyMap() {
           )}
           {pins.length > 0 && (
             <Badge
-              className="bg-blue-500/20 text-blue-300 border border-blue-500/30 hover:bg-blue-500/30 cursor-pointer gap-1"
+              className="bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30 cursor-pointer gap-1"
               onClick={() => setShowPinList(!showPinList)}
             >
               <MapPin className="h-3 w-3" />
@@ -664,7 +664,7 @@ export default function BodyMap() {
               transition={{ duration: 0.2 }}
               className="overflow-hidden"
             >
-              <Card className="bg-[rgba(240,192,0,0.08)] border-border">
+              <Card className="bg-gold/5 border-border">
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-base text-foreground flex items-center gap-2">
@@ -709,9 +709,9 @@ export default function BodyMap() {
                           >
                             <div className="flex-shrink-0 mt-0.5">
                               <MapPin className={`h-4 w-4 ${
-                                pin.severity >= 7 ? 'text-red-400' :
-                                pin.severity >= 4 ? 'text-yellow-400' :
-                                'text-emerald-400'
+                                pin.severity >= 7 ? 'text-destructive' :
+                                pin.severity >= 4 ? 'text-warning' :
+                                'text-success'
                               }`} />
                             </div>
                             <div className="flex-1 min-w-0">
@@ -728,9 +728,9 @@ export default function BodyMap() {
                                 <Badge
                                   variant="outline"
                                   className={`text-[10px] px-1.5 py-0 h-4 gap-0.5 ${
-                                    pin.severity >= 7 ? 'border-red-500/40 text-red-400' :
-                                    pin.severity >= 4 ? 'border-yellow-500/40 text-yellow-400' :
-                                    'border-emerald-500/40 text-emerald-400'
+                                    pin.severity >= 7 ? 'border-destructive/40 text-destructive' :
+                                    pin.severity >= 4 ? 'border-warning/40 text-warning' :
+                                    'border-success/40 text-success'
                                   }`}
                                 >
                                   <Flame className="h-2.5 w-2.5" />
@@ -769,7 +769,7 @@ export default function BodyMap() {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => deletePin(pin.id)}
-                                className="h-8 w-8 min-h-[44px] min-w-[44px] p-0 text-muted-foreground hover:text-red-400"
+                                className="h-8 w-8 min-h-[44px] min-w-[44px] p-0 text-muted-foreground hover:text-destructive"
                                 title="Delete pin"
                               >
                                 <Trash2 className="h-3.5 w-3.5" />
@@ -789,7 +789,7 @@ export default function BodyMap() {
         {/* Main layout: body diagram + condition panel */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Body Diagram with PNG Image */}
-          <Card className="bg-[rgba(240,192,0,0.08)] border-border">
+          <Card className="bg-gold/5 border-border">
             <CardHeader className="pb-2">
               <CardTitle className="text-base text-foreground">
                 {viewMode === 'front' ? 'Front View' : 'Back View'}
@@ -998,7 +998,7 @@ export default function BodyMap() {
             {activeRegion ? (
               <>
                 {/* Region header */}
-                <Card className="bg-[rgba(240,192,0,0.08)] border-border">
+                <Card className="bg-gold/5 border-border">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-lg text-foreground flex items-center gap-2">
@@ -1007,7 +1007,7 @@ export default function BodyMap() {
                         {isBilateral(activeRegion.id) && (
                           <Badge
                             variant="outline"
-                            className="text-[10px] px-1.5 py-0 h-4 border-blue-500/30 text-blue-300"
+                            className="text-[10px] px-1.5 py-0 h-4 border-primary/30 text-primary"
                           >
                             {activeRegion.id.startsWith('left-') ? 'L' : 'R'}
                           </Badge>
@@ -1018,7 +1018,7 @@ export default function BodyMap() {
                           variant="ghost"
                           size="sm"
                           onClick={() => openPinDialog(activeRegion.id)}
-                          className="text-blue-300 hover:text-blue-200 h-8 px-2 gap-1"
+                          className="text-primary hover:text-primary/80 h-8 px-2 gap-1"
                           title="Add a pin to this region"
                         >
                           <MapPin className="h-3.5 w-3.5" />
@@ -1053,16 +1053,16 @@ export default function BodyMap() {
                             }
                             className={`w-full text-left rounded-lg border p-3 transition-all duration-200 ${
                               isAdded
-                                ? `bg-[rgba(240,192,0,0.15)] border-[rgba(240,192,0,0.4)] hover:bg-gold/20 ${showPainTracking && painLevel > 0 ? 'rounded-b-none border-b-0' : ''}`
+                                ? `bg-gold/15 border-gold/40 hover:bg-gold/20 ${showPainTracking && painLevel > 0 ? 'rounded-b-none border-b-0' : ''}`
                                 : 'bg-muted/30 border-border hover:bg-muted/50 hover:border-border'
                             }`}
                           >
                             <div className="flex items-start gap-3">
                               <div
-                                className={`mt-0.5 flex-shrink-0 h-5 w-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+                                className={`mt-0.5 flex-shrink-0 h-6 w-6 rounded-full border-2 flex items-center justify-center transition-colors ${
                                   isAdded
                                     ? 'bg-gold border-gold'
-                                    : 'border-muted-foreground'
+                                    : 'border-white/70'
                                 }`}
                               >
                                 {isAdded && (
@@ -1090,9 +1090,9 @@ export default function BodyMap() {
                                     <Badge
                                       variant="outline"
                                       className={`text-[10px] px-1.5 py-0 h-4 gap-0.5 ${
-                                        painLevel >= 7 ? 'border-red-500/40 text-red-400' :
-                                        painLevel >= 4 ? 'border-yellow-500/40 text-yellow-400' :
-                                        'border-emerald-500/40 text-emerald-400'
+                                        painLevel >= 7 ? 'border-destructive/40 text-destructive' :
+                                        painLevel >= 4 ? 'border-warning/40 text-warning' :
+                                        'border-success/40 text-success'
                                       }`}
                                     >
                                       <Flame className="h-2.5 w-2.5" />
@@ -1109,7 +1109,7 @@ export default function BodyMap() {
                           {/* Pain intensity scale — shown when condition is added and flag enabled */}
                           {isAdded && showPainTracking && (
                             <div
-                              className="bg-[rgba(240,192,0,0.08)] border border-[rgba(240,192,0,0.4)] border-t-0 rounded-b-lg px-3 py-2"
+                              className="bg-gold/5 border border-gold/40 border-t-0 rounded-b-lg px-3 py-2"
                               onClick={(e) => e.stopPropagation()}
                             >
                               <div className="flex items-center gap-2 mb-1.5">
@@ -1118,9 +1118,9 @@ export default function BodyMap() {
                                   Pain / Severity on worst days
                                 </span>
                                 <span className={`text-[11px] font-bold ml-auto ${
-                                  painLevel >= 7 ? 'text-red-400' :
-                                  painLevel >= 4 ? 'text-yellow-400' :
-                                  painLevel > 0 ? 'text-emerald-400' :
+                                  painLevel >= 7 ? 'text-destructive' :
+                                  painLevel >= 4 ? 'text-warning' :
+                                  painLevel > 0 ? 'text-success' :
                                   'text-muted-foreground'
                                 }`}>
                                   {painLevel > 0 ? `${painLevel}/10` : 'Not set'}
@@ -1134,9 +1134,9 @@ export default function BodyMap() {
                                     onClick={() => setPainLevel(key, painLevel === level ? 0 : level)}
                                     className={`flex-1 h-7 min-h-[28px] rounded-sm text-[10px] font-bold transition-all ${
                                       level <= painLevel
-                                        ? level >= 7 ? 'bg-red-500/70 text-white'
-                                          : level >= 4 ? 'bg-yellow-500/60 text-white'
-                                          : 'bg-emerald-500/60 text-white'
+                                        ? level >= 7 ? 'bg-destructive/70 text-white'
+                                          : level >= 4 ? 'bg-warning/60 text-white'
+                                          : 'bg-success/60 text-white'
                                         : 'bg-muted/60 text-muted-foreground hover:bg-muted'
                                     }`}
                                     aria-label={`Pain level ${level}`}
@@ -1155,10 +1155,10 @@ export default function BodyMap() {
 
                 {/* Pins for this region */}
                 {activeRegionPins.length > 0 && (
-                  <Card className="bg-blue-500/5 border-blue-500/20">
+                  <Card className="bg-primary/5 border-primary/20">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-sm text-foreground flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-blue-400" />
+                        <MapPin className="h-4 w-4 text-primary" />
                         Pins for {disambiguatedLabel(activeRegion)} ({activeRegionPins.length})
                       </CardTitle>
                     </CardHeader>
@@ -1166,7 +1166,7 @@ export default function BodyMap() {
                       {activeRegionPins.map((pin) => (
                         <div
                           key={pin.id}
-                          className="flex items-start gap-3 p-2.5 rounded-lg border border-blue-500/20 bg-blue-500/5 hover:bg-blue-500/10 transition-colors"
+                          className="flex items-start gap-3 p-2.5 rounded-lg border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-colors"
                         >
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap">
@@ -1176,9 +1176,9 @@ export default function BodyMap() {
                               <Badge
                                 variant="outline"
                                 className={`text-[10px] px-1.5 py-0 h-4 gap-0.5 ${
-                                  pin.severity >= 7 ? 'border-red-500/40 text-red-400' :
-                                  pin.severity >= 4 ? 'border-yellow-500/40 text-yellow-400' :
-                                  'border-emerald-500/40 text-emerald-400'
+                                  pin.severity >= 7 ? 'border-destructive/40 text-destructive' :
+                                  pin.severity >= 4 ? 'border-warning/40 text-warning' :
+                                  'border-success/40 text-success'
                                 }`}
                               >
                                 {pin.severity}/10
@@ -1219,7 +1219,7 @@ export default function BodyMap() {
                               variant="ghost"
                               size="sm"
                               onClick={() => deletePin(pin.id)}
-                              className="h-8 w-8 min-h-[44px] min-w-[44px] p-0 text-muted-foreground hover:text-red-400"
+                              className="h-8 w-8 min-h-[44px] min-w-[44px] p-0 text-muted-foreground hover:text-destructive"
                             >
                               <Trash2 className="h-3.5 w-3.5" />
                             </Button>
@@ -1232,10 +1232,10 @@ export default function BodyMap() {
               </>
             ) : (
               /* Empty state when no region is selected */
-              <Card className="bg-[rgba(240,192,0,0.08)] border-border">
+              <Card className="bg-gold/5 border-border">
                 <CardContent className="py-16">
                   <div className="text-center space-y-4">
-                    <div className="mx-auto w-14 h-14 rounded-full bg-[rgba(240,192,0,0.1)] border border-[rgba(240,192,0,0.2)] flex items-center justify-center">
+                    <div className="mx-auto w-14 h-14 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center">
                       <Info className="h-7 w-7 text-gold" />
                     </div>
                     <div>
@@ -1254,7 +1254,7 @@ export default function BodyMap() {
 
             {/* Selected conditions summary */}
             {totalSelected > 0 && (
-              <Card className="bg-[rgba(240,192,0,0.08)] border-border">
+              <Card className="bg-gold/5 border-border">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base text-foreground flex items-center gap-2">
                     <Plus className="h-4 w-4 text-gold" />
@@ -1281,7 +1281,7 @@ export default function BodyMap() {
                         return (
                           <Badge
                             key={uc.id}
-                            className="bg-[rgba(240,192,0,0.15)] text-gold-hl border border-gold/30 hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/30 cursor-pointer transition-colors gap-1 pr-1.5"
+                            className="bg-gold/15 text-gold-hl border border-gold/30 hover:bg-destructive/20 hover:text-destructive hover:border-destructive/30 cursor-pointer transition-colors gap-1 pr-1.5"
                             onClick={() => removeUserCondition(uc.id)}
                             title={`${label} (${regionLabel})${showPainTracking && pain > 0 ? ` — Pain: ${pain}/10` : ''} — click to remove`}
                           >
@@ -1290,7 +1290,7 @@ export default function BodyMap() {
                             </span>
                             {showPainTracking && pain > 0 && (
                               <span className={`text-[10px] font-bold ${
-                                pain >= 7 ? 'text-red-400' : pain >= 4 ? 'text-yellow-400' : 'text-emerald-400'
+                                pain >= 7 ? 'text-destructive' : pain >= 4 ? 'text-warning' : 'text-success'
                               }`}>
                                 {pain}/10
                               </span>
@@ -1338,7 +1338,7 @@ export default function BodyMap() {
             >
               <div className="sticky top-0 bg-background border-b border-border px-6 py-4 flex items-center justify-between rounded-t-xl z-10">
                 <div className="flex items-center gap-2">
-                  <MapPin className="h-5 w-5 text-blue-400" />
+                  <MapPin className="h-5 w-5 text-primary" />
                   <h2 className="text-lg font-semibold text-foreground">
                     {editingPin ? 'Edit Pin' : 'Add Pin'}
                   </h2>
@@ -1385,9 +1385,9 @@ export default function BodyMap() {
                   <label className="text-sm font-medium text-foreground" htmlFor="pin-severity">
                     Severity
                     <span className={`ml-2 text-sm font-bold ${
-                      pinForm.severity >= 7 ? 'text-red-400' :
-                      pinForm.severity >= 4 ? 'text-yellow-400' :
-                      'text-emerald-400'
+                      pinForm.severity >= 7 ? 'text-destructive' :
+                      pinForm.severity >= 4 ? 'text-warning' :
+                      'text-success'
                     }`}>
                       {pinForm.severity}/10
                     </span>

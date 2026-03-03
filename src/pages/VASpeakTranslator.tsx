@@ -184,9 +184,9 @@ const CATEGORY_LABELS: Record<GlossaryEntry['category'], string> = {
 };
 
 const CATEGORY_COLORS: Record<GlossaryEntry['category'], string> = {
-  'claims-process': 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-  medical: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  legal: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
+  'claims-process': 'bg-warning/10 text-warning border-warning/20',
+  medical: 'bg-success/10 text-success border-success/20',
+  legal: 'bg-warning/10 text-warning border-warning/20',
   rating: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
   evidence: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
 };
@@ -386,14 +386,14 @@ export default function VASpeakTranslator() {
                 </Badge>
                 <Badge
                   variant="outline"
-                  className="text-xs border-emerald-500/30 text-emerald-400"
+                  className="text-xs border-success/30 text-success"
                 >
                   38 CFR
                 </Badge>
               </div>
 
               <AIContentBadge timestamp={new Date().toISOString()} />
-              <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-4">
+              <div className="rounded-lg border border-success/20 bg-success/5 p-4">
                 <p className="text-sm font-medium leading-relaxed whitespace-pre-wrap">
                   {translatedText}
                 </p>
@@ -511,7 +511,7 @@ export default function VASpeakTranslator() {
       {/* ----------------------------------------------------------------- */}
       {/* Tips Card                                                          */}
       {/* ----------------------------------------------------------------- */}
-      <Card className="border-gold/20 bg-[rgba(240,192,0,0.05)]">
+      <Card className="border-gold/20 bg-gold/5">
         <CardContent className="pt-6 space-y-3">
           <h3 className="text-sm font-semibold text-foreground">
             Tips for Describing Your Symptoms

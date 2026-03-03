@@ -111,16 +111,16 @@ export default function IntentToFile() {
 
   const getStatusColor = () => {
     if (!timeRemaining) return 'text-muted-foreground';
-    if (timeRemaining.isExpired) return 'text-red-400';
+    if (timeRemaining.isExpired) return 'text-destructive';
     if (timeRemaining.isExpiringSoon) return 'text-gold';
-    return 'text-emerald-400';
+    return 'text-success';
   };
 
   const getProgressColor = () => {
     if (!timeRemaining) return '';
-    if (timeRemaining.isExpired) return '[&>div]:bg-red-500';
+    if (timeRemaining.isExpired) return '[&>div]:bg-destructive';
     if (timeRemaining.isExpiringSoon) return '[&>div]:bg-gold';
-    return '[&>div]:bg-emerald-500';
+    return '[&>div]:bg-success';
   };
 
   const todayStr = new Date().toISOString().split('T')[0];
@@ -160,19 +160,19 @@ export default function IntentToFile() {
           <Card
             className={`overflow-hidden border ${
               timeRemaining.isExpired
-                ? 'border-red-500/30'
+                ? 'border-destructive/30'
                 : timeRemaining.isExpiringSoon
                 ? 'border-gold/30'
-                : 'border-emerald-500/30'
+                : 'border-success/30'
             }`}
           >
             <div
               className={`p-6 ${
                 timeRemaining.isExpired
-                  ? 'bg-red-500/5'
+                  ? 'bg-destructive/5'
                   : timeRemaining.isExpiringSoon
-                  ? 'bg-[rgba(240,192,0,0.05)]'
-                  : 'bg-emerald-500/5'
+                  ? 'bg-gold/5'
+                  : 'bg-success/5'
               }`}
             >
               {/* Status Badge */}
@@ -181,10 +181,10 @@ export default function IntentToFile() {
                   variant="outline"
                   className={`${
                     timeRemaining.isExpired
-                      ? 'border-red-500/50 text-red-400'
+                      ? 'border-destructive/50 text-destructive'
                       : timeRemaining.isExpiringSoon
                       ? 'border-gold/50 text-gold'
-                      : 'border-emerald-500/50 text-emerald-400'
+                      : 'border-success/50 text-success'
                   }`}
                 >
                   {timeRemaining.isExpired ? (
@@ -218,7 +218,7 @@ export default function IntentToFile() {
               <div className="text-center mb-6">
                 {timeRemaining.isExpired ? (
                   <>
-                    <p className="text-5xl font-bold text-red-400 mb-1">
+                    <p className="text-5xl font-bold text-destructive mb-1">
                       Expired
                     </p>
                     <p className="text-muted-foreground text-sm">
@@ -283,10 +283,10 @@ export default function IntentToFile() {
               )}
 
               {timeRemaining.isExpired && (
-                <div className="mt-4 flex items-start gap-3 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
-                  <AlertCircle className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
+                <div className="mt-4 flex items-start gap-3 p-3 rounded-lg bg-destructive/10 border border-destructive/20">
+                  <AlertCircle className="h-5 w-5 text-destructive flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-red-400">
+                    <p className="text-sm font-medium text-destructive">
                       Your Intent to File has expired
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
@@ -409,35 +409,35 @@ export default function IntentToFile() {
               </h3>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
                   <span className="text-sm text-muted-foreground">
                     You have <strong>1 year</strong> from the date of your ITF to
                     submit your completed claim
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
                   <span className="text-sm text-muted-foreground">
                     Filing an ITF is free and carries no obligation to file a
                     claim
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
                   <span className="text-sm text-muted-foreground">
                     You can file for disability compensation, pension, or
                     Dependency and Indemnity Compensation (DIC)
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
                   <span className="text-sm text-muted-foreground">
                     If your ITF expires before you file, you can submit a new one
                     to start a fresh 1-year window
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
                   <span className="text-sm text-muted-foreground">
                     Starting a claim on VA.gov automatically creates an ITF for
                     you

@@ -64,7 +64,7 @@ export default function TermsOfServicePage() {
         {/* Section 3: What VCS Is NOT */}
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">3. What VCS Is NOT &mdash; VA Accreditation Disclosure</h2>
-          <div className="rounded-xl bg-red-500/5 border border-red-500/20 p-4">
+          <div className="rounded-xl bg-destructive/5 border border-destructive/20 p-4">
             <p className="text-muted-foreground">
               <strong className="text-foreground">IMPORTANT:</strong> Vet Claim Support is NOT affiliated with, endorsed by, or connected to the U.S. Department of Veterans Affairs (VA). VCS is NOT a VA-accredited representative, attorney, claims agent, or Veterans Service Organization (VSO) as defined under 38 U.S.C. &sect;&sect; 5901-5905 and 38 C.F.R. Part 14. VCS does not engage in the &quot;preparation, presentation, or prosecution&quot; of VA claims as those terms are defined under 38 C.F.R. &sect; 14.629.
             </p>
@@ -100,7 +100,7 @@ export default function TermsOfServicePage() {
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(d) Consulting with accredited professionals when appropriate</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(e) Verifying current VA form versions, requirements, and deadlines</li>
           </ul>
-          <div className="rounded-xl bg-red-500/5 border border-red-500/20 p-4">
+          <div className="rounded-xl bg-destructive/5 border border-destructive/20 p-4">
             <p className="text-muted-foreground">
               <strong className="text-foreground">VCS IS NOT RESPONSIBLE</strong> for any false, misleading, inaccurate, or incomplete information that you enter into or submit through the Service. Making false statements in connection with a VA claim may constitute fraud under federal law (18 U.S.C. &sect; 1001) and may result in denial of benefits, repayment demands, or criminal prosecution. You agree not to use the Service for any fraudulent, deceptive, or unlawful purpose.
             </p>
@@ -128,7 +128,7 @@ export default function TermsOfServicePage() {
         {/* Section 7: Case Law and Legal Citations Warning */}
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">7. Case Law and Legal Citations Warning</h2>
-          <div className="rounded-xl bg-[rgba(240,192,0,0.05)] border border-gold/20 p-4 space-y-3">
+          <div className="rounded-xl bg-gold/5 border border-gold/20 p-4 space-y-3">
             <p className="text-muted-foreground">
               <strong className="text-foreground">Verified Case Law Database:</strong> The Appeals Guide&apos;s &quot;My Appeal&quot; and &quot;Case Law&quot; tabs retrieve citations from a curated database of real BVA, CAVC, Federal Circuit, and Supreme Court decisions. These citations include source URLs to official court records. However, case law summaries have been simplified and may not capture every nuance of a ruling. Laws, regulations, and case interpretations can change over time.
             </p>
@@ -167,12 +167,12 @@ export default function TermsOfServicePage() {
             TO THE MAXIMUM EXTENT PERMITTED BY LAW, VCS AND ITS OWNER, OPERATORS, AND AFFILIATES SHALL NOT BE LIABLE FOR:
           </p>
           <ul className="space-y-1.5 text-muted-foreground">
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2022;</span>(a) Any VA claim decisions, ratings, denials, or outcomes</li>
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2022;</span>(b) Any errors, inaccuracies, or omissions in AI-generated content</li>
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2022;</span>(c) Any damages arising from your reliance on the Service</li>
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2022;</span>(d) Any loss of data</li>
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2022;</span>(e) Any consequences of submitting information to the VA</li>
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2022;</span>(f) Any indirect, incidental, special, consequential, or punitive damages</li>
+            <li className="flex items-start gap-2"><span className="text-destructive mt-0.5">&#x2022;</span>(a) Any VA claim decisions, ratings, denials, or outcomes</li>
+            <li className="flex items-start gap-2"><span className="text-destructive mt-0.5">&#x2022;</span>(b) Any errors, inaccuracies, or omissions in AI-generated content</li>
+            <li className="flex items-start gap-2"><span className="text-destructive mt-0.5">&#x2022;</span>(c) Any damages arising from your reliance on the Service</li>
+            <li className="flex items-start gap-2"><span className="text-destructive mt-0.5">&#x2022;</span>(d) Any loss of data</li>
+            <li className="flex items-start gap-2"><span className="text-destructive mt-0.5">&#x2022;</span>(e) Any consequences of submitting information to the VA</li>
+            <li className="flex items-start gap-2"><span className="text-destructive mt-0.5">&#x2022;</span>(f) Any indirect, incidental, special, consequential, or punitive damages</li>
           </ul>
           <p className="text-muted-foreground font-medium">
             OUR TOTAL LIABILITY SHALL NOT EXCEED THE AMOUNT YOU PAID FOR THE SERVICE.

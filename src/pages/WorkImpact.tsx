@@ -141,8 +141,8 @@ export default function WorkImpact() {
       </div>
 
       {/* Why this matters */}
-      <div className="flex gap-3 p-3 rounded-2xl border border-blue-500/20 bg-blue-500/5">
-        <AlertTriangle className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
+      <div className="flex gap-3 p-3 rounded-2xl border border-primary/20 bg-primary/5">
+        <AlertTriangle className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
         <p className="text-xs text-muted-foreground leading-relaxed">
           Employment impact documentation is critical for TDIU claims and increased ratings. The VA needs
           evidence of how your conditions affect your ability to work, earn income, and perform job duties.

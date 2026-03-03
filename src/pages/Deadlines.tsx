@@ -45,7 +45,7 @@ const DEADLINE_META: Record<DeadlineType, {
   intent_to_file: {
     label: 'Intent to File',
     icon: <Shield className="h-4 w-4" />,
-    color: 'text-blue-600 dark:text-blue-400',
+    color: 'text-primary',
     description: 'You have 1 year from filing your ITF to submit your full claim. Missing this deadline means a later effective date and less back pay.',
     defaultDaysFromNow: 365,
   },
@@ -58,21 +58,21 @@ const DEADLINE_META: Record<DeadlineType, {
   nod_appeal: {
     label: 'Notice of Disagreement',
     icon: <Scale className="h-4 w-4" />,
-    color: 'text-red-600 dark:text-red-400',
+    color: 'text-destructive',
     description: 'Board of Veterans Appeals appeal. Must be filed within 1 year of the decision you are appealing.',
     defaultDaysFromNow: 365,
   },
   hlr_appeal: {
     label: 'Higher-Level Review',
     icon: <Scale className="h-4 w-4" />,
-    color: 'text-orange-600 dark:text-orange-400',
+    color: 'text-warning',
     description: 'A senior reviewer re-examines your claim. Must be filed within 1 year of the decision.',
     defaultDaysFromNow: 365,
   },
   supplemental_claim: {
     label: 'Supplemental Claim',
     icon: <FileText className="h-4 w-4" />,
-    color: 'text-amber-600 dark:text-amber-400',
+    color: 'text-warning',
     description: 'Submit new and relevant evidence. Must be filed within 1 year of the decision to preserve effective date.',
     defaultDaysFromNow: 365,
   },
@@ -103,11 +103,11 @@ function getUrgencyLevel(daysRemaining: number): 'expired' | 'critical' | 'urgen
 
 function getUrgencyStyles(urgency: ReturnType<typeof getUrgencyLevel>) {
   switch (urgency) {
-    case 'expired': return { bg: 'bg-red-500/10', border: 'border-red-500/30', text: 'text-red-700 dark:text-red-400', badge: 'bg-red-500 text-white' };
-    case 'critical': return { bg: 'bg-red-500/5', border: 'border-red-500/20', text: 'text-red-600 dark:text-red-400', badge: 'bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/30' };
-    case 'urgent': return { bg: 'bg-orange-500/5', border: 'border-orange-500/20', text: 'text-orange-600 dark:text-orange-400', badge: 'bg-orange-500/10 text-orange-700 dark:text-orange-400 border-orange-500/30' };
-    case 'warning': return { bg: 'bg-yellow-500/5', border: 'border-yellow-500/20', text: 'text-yellow-600 dark:text-yellow-400', badge: 'bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/30' };
-    case 'healthy': return { bg: 'bg-green-500/5', border: 'border-green-500/20', text: 'text-green-600 dark:text-green-400', badge: 'bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/30' };
+    case 'expired': return { bg: 'bg-destructive/10', border: 'border-destructive/30', text: 'text-destructive', badge: 'bg-destructive text-white' };
+    case 'critical': return { bg: 'bg-destructive/5', border: 'border-destructive/20', text: 'text-destructive', badge: 'bg-destructive/10 text-destructive border-destructive/30' };
+    case 'urgent': return { bg: 'bg-warning/5', border: 'border-warning/20', text: 'text-warning', badge: 'bg-warning/10 text-warning border-warning/30' };
+    case 'warning': return { bg: 'bg-gold/5', border: 'border-gold/20', text: 'text-gold', badge: 'bg-gold/10 text-gold border-gold/30' };
+    case 'healthy': return { bg: 'bg-success/5', border: 'border-success/20', text: 'text-success', badge: 'bg-success/10 text-success border-success/30' };
   }
 }
 
@@ -138,7 +138,7 @@ function DeadlineCard({ deadline, onDelete, onComplete }: {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-sm truncate">{deadline.title}</h3>
+              <h3 className="font-semibold text-sm line-clamp-2">{deadline.title}</h3>
               <Badge variant="outline" className={cn('text-[10px]', styles.badge)}>
                 {urgency === 'expired' ? 'EXPIRED' : `${daysRemaining}d left`}
               </Badge>
@@ -150,7 +150,7 @@ function DeadlineCard({ deadline, onDelete, onComplete }: {
           <div className="flex gap-1">
             {!deadline.completed && (
               <Button variant="ghost" size="sm" onClick={() => onComplete(deadline.id)} title="Mark complete">
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <CheckCircle2 className="h-4 w-4 text-success" />
               </Button>
             )}
             <Button variant="ghost" size="sm" onClick={() => onDelete(deadline.id)} title="Remove">
@@ -163,7 +163,7 @@ function DeadlineCard({ deadline, onDelete, onComplete }: {
           <>
             <Progress
               value={progress}
-              className={cn('h-1.5', urgency === 'critical' && '[&>div]:bg-red-500', urgency === 'urgent' && '[&>div]:bg-orange-500')}
+              className={cn('h-1.5', urgency === 'critical' && '[&>div]:bg-destructive', urgency === 'urgent' && '[&>div]:bg-warning')}
             />
 
             {urgency !== 'healthy' && (
@@ -273,9 +273,9 @@ export default function Deadlines() {
 
       {/* ITF Warning */}
       {intentToFileDate && !hasItfDeadline && (
-        <Alert className="border-blue-500/30 bg-blue-500/5">
-          <Shield className="h-4 w-4 text-blue-600" />
-          <AlertDescription className="text-blue-700 dark:text-blue-400">
+        <Alert className="border-primary/30 bg-primary/5">
+          <Shield className="h-4 w-4 text-primary" />
+          <AlertDescription className="text-primary">
             You have an Intent to File date ({safeFormatDate(intentToFileDate)}) but no ITF
             deadline tracked here. Would you like to add it?
             <Button
@@ -303,9 +303,9 @@ export default function Deadlines() {
 
       {/* Urgent Summary */}
       {urgentCount > 0 && (
-        <Alert className="border-red-500/30 bg-red-500/5">
-          <Bell className="h-4 w-4 text-red-600" />
-          <AlertDescription className="text-red-700 dark:text-red-400">
+        <Alert className="border-destructive/30 bg-destructive/5">
+          <Bell className="h-4 w-4 text-destructive" />
+          <AlertDescription className="text-destructive">
             <strong>{urgentCount} deadline{urgentCount > 1 ? 's' : ''}</strong> due within 30 days.
             Review and take action on each one below.
           </AlertDescription>

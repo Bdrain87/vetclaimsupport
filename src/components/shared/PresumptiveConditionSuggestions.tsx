@@ -205,7 +205,7 @@ export function PresumptiveConditionSuggestions({
         </h3>
       </div>
 
-      <div className="rounded-xl p-3 flex items-start gap-3 bg-[rgba(240,192,0,0.08)] border border-gold/20">
+      <div className="rounded-xl p-3 flex items-start gap-3 bg-gold/5 border border-gold/20">
         <AlertTriangle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
         <p className="text-xs text-muted-foreground">
           Based on your service locations and exposures, you <strong>may be eligible</strong> for
@@ -230,9 +230,9 @@ export function PresumptiveConditionSuggestions({
                 {group.cfrCitation} — {group.eligibility}
               </p>
               {group.deadline && (
-                <div className="mt-2 flex items-center gap-1.5 px-2 py-1 bg-amber-500/15 border border-amber-500/30 rounded-lg">
-                  <Clock className="h-3.5 w-3.5 text-amber-500 flex-shrink-0" />
-                  <span className="text-[11px] font-medium text-amber-500">
+                <div className="mt-2 flex items-center gap-1.5 px-2 py-1 bg-warning/15 border border-warning/30 rounded-lg">
+                  <Clock className="h-3.5 w-3.5 text-warning flex-shrink-0" />
+                  <span className="text-[11px] font-medium text-warning">
                     {group.deadline}
                   </span>
                 </div>
@@ -254,7 +254,7 @@ export function PresumptiveConditionSuggestions({
                     className={cn(
                       'flex items-center gap-3 px-4 py-2.5 cursor-pointer transition-colors',
                       isAdded
-                        ? 'bg-green-500/10'
+                        ? 'bg-success/10'
                         : isSelected
                           ? 'bg-gold/10'
                           : 'hover:bg-muted/40',
@@ -276,7 +276,7 @@ export function PresumptiveConditionSuggestions({
                       </Badge>
                     )}
                     {isAdded && (
-                      <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
+                      <Check className="h-4 w-4 text-success flex-shrink-0" />
                     )}
                     {alreadyHas && !isAdded && (
                       <span className="text-[10px] text-muted-foreground flex-shrink-0">

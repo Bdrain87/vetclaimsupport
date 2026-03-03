@@ -42,8 +42,8 @@ export default function DeleteAccountPage() {
     return (
       <div className="min-h-[60vh] flex items-center justify-center px-4">
         <div className="text-center space-y-4 max-w-md">
-          <div className="w-16 h-16 mx-auto rounded-full bg-emerald-400/10 border border-emerald-400/20 flex items-center justify-center">
-            <CheckCircle className="h-8 w-8 text-emerald-400" />
+          <div className="w-16 h-16 mx-auto rounded-full bg-success/10 border border-success/20 flex items-center justify-center">
+            <CheckCircle className="h-8 w-8 text-success" />
           </div>
           <h2 className="text-xl font-bold text-foreground">Account Deleted</h2>
           <p className="text-muted-foreground text-sm">
@@ -67,8 +67,8 @@ export default function DeleteAccountPage() {
 
       {/* Header */}
       <div className="text-center space-y-3">
-        <div className="w-16 h-16 mx-auto rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-          <AlertTriangle className="h-8 w-8 text-red-400" />
+        <div className="w-16 h-16 mx-auto rounded-full bg-destructive/10 border border-destructive/20 flex items-center justify-center">
+          <AlertTriangle className="h-8 w-8 text-destructive" />
         </div>
         <h1 className="text-2xl font-bold text-foreground">Delete Your Account</h1>
         <p className="text-muted-foreground text-sm leading-relaxed">
@@ -78,42 +78,42 @@ export default function DeleteAccountPage() {
       </div>
 
       {/* What will be deleted */}
-      <div className="rounded-xl bg-red-500/5 border border-red-500/20 p-4 space-y-2">
-        <h3 className="text-sm font-semibold text-red-400 mb-3">The following will be permanently deleted:</h3>
+      <div className="rounded-xl bg-destructive/5 border border-destructive/20 p-4 space-y-2">
+        <h3 className="text-sm font-semibold text-destructive mb-3">The following will be permanently deleted:</h3>
         <ul className="space-y-1.5 text-sm text-muted-foreground">
           <li className="flex items-start gap-2">
-            <span className="text-red-400 mt-0.5">&#x2022;</span>
+            <span className="text-destructive mt-0.5">&#x2022;</span>
             Your profile and account information
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-red-400 mt-0.5">&#x2022;</span>
+            <span className="text-destructive mt-0.5">&#x2022;</span>
             All tracked conditions and claim data
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-red-400 mt-0.5">&#x2022;</span>
+            <span className="text-destructive mt-0.5">&#x2022;</span>
             All health logs (symptoms, sleep, migraines, medications, visits)
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-red-400 mt-0.5">&#x2022;</span>
+            <span className="text-destructive mt-0.5">&#x2022;</span>
             All uploaded evidence and documents
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-red-400 mt-0.5">&#x2022;</span>
+            <span className="text-destructive mt-0.5">&#x2022;</span>
             All VA form drafts and generated documents
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-red-400 mt-0.5">&#x2022;</span>
+            <span className="text-destructive mt-0.5">&#x2022;</span>
             Your encryption keys and vault passcode
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-red-400 mt-0.5">&#x2022;</span>
+            <span className="text-destructive mt-0.5">&#x2022;</span>
             All cloud-synced data
           </li>
         </ul>
       </div>
 
       {/* Warning */}
-      <p className="text-red-400 text-sm font-semibold text-center">
+      <p className="text-destructive text-sm font-semibold text-center">
         This is permanent. There is no recovery.
       </p>
 
@@ -127,14 +127,14 @@ export default function DeleteAccountPage() {
           value={confirmText}
           onChange={(e) => setConfirmText(e.target.value)}
           placeholder="Type DELETE"
-          className="w-full h-12 px-4 bg-muted border border-border rounded-xl text-foreground text-sm placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-red-400/40 focus:border-red-400/50 transition-all"
+          className="w-full h-12 px-4 bg-muted border border-border rounded-xl text-foreground text-sm placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-destructive/40 focus:border-destructive/50 transition-all"
           disabled={processing}
         />
       </div>
 
       {/* Error */}
       {error && (
-        <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+        <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
           {error}
         </div>
       )}
@@ -143,7 +143,7 @@ export default function DeleteAccountPage() {
       <button
         onClick={handleDelete}
         disabled={!isConfirmed || processing}
-        className="w-full h-12 rounded-xl bg-red-500 text-white font-bold text-sm hover:bg-red-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+        className="w-full h-12 rounded-xl bg-destructive text-white font-bold text-sm hover:bg-destructive/90 disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
       >
         {processing ? (
           <>

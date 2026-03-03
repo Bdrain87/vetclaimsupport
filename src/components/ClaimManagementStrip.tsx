@@ -41,13 +41,13 @@ export function ClaimManagementStrip() {
   ];
 
   return (
-    <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">
+    <div className="grid grid-cols-4 gap-2">
       {cards.map((card) => (
         <Link
           key={card.route}
           to={card.route}
           aria-label={`${card.label} — ${card.detail}`}
-          className="flex flex-col items-center gap-1 min-w-[80px] p-3 rounded-xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors text-center"
+          className="flex flex-col items-center gap-1 p-3 rounded-xl border border-border bg-card hover:bg-accent/50 transition-colors text-center"
         >
           <card.icon className="h-5 w-5 text-gold" />
           <span className="text-[11px] font-semibold text-foreground leading-tight">{card.label}</span>

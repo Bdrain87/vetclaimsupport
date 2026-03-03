@@ -71,7 +71,7 @@ export default function AboutVCS() {
           <ul className="space-y-2 text-sm text-muted-foreground">
             {ABOUT_COPY.whatVCSDoes.map((item) => (
               <li key={item} className="flex items-start gap-2">
-                <span className="text-emerald-400 mt-0.5 shrink-0">&#x2713;</span>
+                <span className="text-success mt-0.5 shrink-0">&#x2713;</span>
                 {item}
               </li>
             ))}
@@ -98,7 +98,7 @@ export default function AboutVCS() {
             <h3 className="text-sm font-semibold text-foreground">What VCS is NOT:</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li className="flex items-start gap-2">
-                <span className="text-red-400 mt-0.5 shrink-0">&#x2717;</span>
+                <span className="text-destructive mt-0.5 shrink-0">&#x2717;</span>
                 <span>
                   <strong className="text-foreground">Not VA-accredited.</strong> VCS is not a VA-accredited
                   claims agent, attorney, or Veterans Service Organization (VSO). We cannot
@@ -106,21 +106,21 @@ export default function AboutVCS() {
                 </span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-red-400 mt-0.5 shrink-0">&#x2717;</span>
+                <span className="text-destructive mt-0.5 shrink-0">&#x2717;</span>
                 <span>
                   <strong className="text-foreground">Not legal advice.</strong> Nothing in this app
                   constitutes legal advice.
                 </span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-red-400 mt-0.5 shrink-0">&#x2717;</span>
+                <span className="text-destructive mt-0.5 shrink-0">&#x2717;</span>
                 <span>
                   <strong className="text-foreground">Not medical advice.</strong> VCS does not diagnose
                   conditions or recommend treatments.
                 </span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-red-400 mt-0.5 shrink-0">&#x2717;</span>
+                <span className="text-destructive mt-0.5 shrink-0">&#x2717;</span>
                 <span>
                   <strong className="text-foreground">Not affiliated with the VA.</strong> This app is not
                   affiliated with, endorsed by, or connected to the U.S. Department of
@@ -128,7 +128,7 @@ export default function AboutVCS() {
                 </span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-red-400 mt-0.5 shrink-0">&#x2717;</span>
+                <span className="text-destructive mt-0.5 shrink-0">&#x2717;</span>
                 <span>
                   <strong className="text-foreground">Not a guarantee of outcomes.</strong> {CORE_DISCLAIMERS.estimateDisclaimer}
                 </span>

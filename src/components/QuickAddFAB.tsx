@@ -6,10 +6,10 @@ import { impactLight } from '@/lib/haptics';
 import { useProfileStore } from '@/store/useProfileStore';
 
 const actions = [
-  { label: 'Log Symptom', icon: Activity, path: '/health/symptoms', color: 'text-red-400' },
-  { label: 'Log Sleep', icon: Moon, path: '/health/sleep', color: 'text-blue-400' },
+  { label: 'Log Symptom', icon: Activity, path: '/health/symptoms', color: 'text-destructive' },
+  { label: 'Log Sleep', icon: Moon, path: '/health/sleep', color: 'text-primary' },
   { label: 'Log Migraine', icon: Brain, path: '/health/migraines', color: 'text-purple-400' },
-  { label: 'Log Medication', icon: Pill, path: '/health/medications', color: 'text-green-400' },
+  { label: 'Log Medication', icon: Pill, path: '/health/medications', color: 'text-success' },
   { label: 'Medical Visit', icon: Stethoscope, path: '/health/visits', color: 'text-gold' },
   { label: 'Quick Note', icon: FileText, path: '/health/summary', color: 'text-muted-foreground' },
 ];

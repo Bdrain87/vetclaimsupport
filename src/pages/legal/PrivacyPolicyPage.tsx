@@ -141,12 +141,12 @@ export default function PrivacyPolicyPage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">6. What We Do NOT Do</h2>
           <ul className="space-y-1.5 text-muted-foreground">
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do NOT sell your data to anyone</li>
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do NOT share your data with third parties for marketing</li>
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do NOT use your data for targeted advertising</li>
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do NOT use your data to train AI models</li>
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do NOT track your browsing activity</li>
-            <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">&#x2717;</span>We do not ask for or require your Social Security Number, date of birth, or financial information (if you voluntarily enter such data in free-text fields, you do so at your own risk)</li>
+            <li className="flex items-start gap-2"><span className="text-destructive mt-0.5">&#x2717;</span>We do NOT sell your data to anyone</li>
+            <li className="flex items-start gap-2"><span className="text-destructive mt-0.5">&#x2717;</span>We do NOT share your data with third parties for marketing</li>
+            <li className="flex items-start gap-2"><span className="text-destructive mt-0.5">&#x2717;</span>We do NOT use your data for targeted advertising</li>
+            <li className="flex items-start gap-2"><span className="text-destructive mt-0.5">&#x2717;</span>We do NOT use your data to train AI models</li>
+            <li className="flex items-start gap-2"><span className="text-destructive mt-0.5">&#x2717;</span>We do NOT track your browsing activity</li>
+            <li className="flex items-start gap-2"><span className="text-destructive mt-0.5">&#x2717;</span>We do not ask for or require your Social Security Number, date of birth, or financial information (if you voluntarily enter such data in free-text fields, you do so at your own risk)</li>
           </ul>
         </section>
 
@@ -155,10 +155,10 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-lg font-semibold text-foreground">7. Your Rights</h2>
           <p className="text-muted-foreground">You have the right to:</p>
           <ul className="space-y-1.5 text-muted-foreground">
-            <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span><strong className="text-foreground">ACCESS</strong> all your data via the Export feature in Settings</li>
-            <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span><strong className="text-foreground">DELETE</strong> all local data from your device</li>
-            <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span><strong className="text-foreground">DELETE</strong> your cloud account and all associated data</li>
-            <li className="flex items-start gap-2"><span className="text-emerald-400 mt-0.5">&#x2713;</span><strong className="text-foreground">PORT</strong> your data by exporting to PDF or text format</li>
+            <li className="flex items-start gap-2"><span className="text-success mt-0.5">&#x2713;</span><strong className="text-foreground">ACCESS</strong> all your data via the Export feature in Settings</li>
+            <li className="flex items-start gap-2"><span className="text-success mt-0.5">&#x2713;</span><strong className="text-foreground">DELETE</strong> all local data from your device</li>
+            <li className="flex items-start gap-2"><span className="text-success mt-0.5">&#x2713;</span><strong className="text-foreground">DELETE</strong> your cloud account and all associated data</li>
+            <li className="flex items-start gap-2"><span className="text-success mt-0.5">&#x2713;</span><strong className="text-foreground">PORT</strong> your data by exporting to PDF or text format</li>
           </ul>
           <p className="text-muted-foreground">
             To exercise these rights, use the Settings page or contact{' '}

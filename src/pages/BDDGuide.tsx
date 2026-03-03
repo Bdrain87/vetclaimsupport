@@ -103,9 +103,9 @@ export default function BDDGuide() {
               <strong className="text-foreground">180 to 90 days</strong> before their separation date.
             </p>
 
-            <div className="p-4 rounded-lg bg-[rgba(34,197,94,0.05)] border border-[rgba(34,197,94,0.2)]">
+            <div className="p-4 rounded-lg bg-success/5 border border-success/20">
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                <CheckCircle2 className="h-5 w-5 text-success flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="text-sm font-medium text-foreground">Why It Matters</p>
                   <p className="text-sm text-muted-foreground mt-1">
@@ -124,7 +124,7 @@ export default function BDDGuide() {
               </h3>
               <div className="space-y-2 text-sm text-muted-foreground">
                 <p>
-                  <Badge variant="outline" className="mr-2 border-emerald-500/50 text-emerald-400">180 days</Badge>
+                  <Badge variant="outline" className="mr-2 border-success/50 text-success">180 days</Badge>
                   Window opens — earliest you can file a BDD claim
                 </p>
                 <p>
@@ -132,7 +132,7 @@ export default function BDDGuide() {
                   Window closes — last day to file through BDD
                 </p>
                 <p>
-                  <Badge variant="outline" className="mr-2 border-red-500/50 text-red-400">&lt; 90 days</Badge>
+                  <Badge variant="outline" className="mr-2 border-destructive/50 text-destructive">&lt; 90 days</Badge>
                   Must file a standard claim (can still file before separation)
                 </p>
               </div>
@@ -186,7 +186,7 @@ export default function BDDGuide() {
                 },
               ].map((item) => (
                 <li key={item.title} className="flex items-start gap-3">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
                   <div>
                     <span className="text-sm font-medium text-foreground">{item.title}</span>
                     <p className="text-xs text-muted-foreground mt-0.5">{item.desc}</p>

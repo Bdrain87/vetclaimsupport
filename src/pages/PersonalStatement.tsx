@@ -430,9 +430,9 @@ export default function PersonalStatement() {
                 placeholder="Type to search conditions (e.g., tinnitus, PTSD, sleep apnea)..."
               />
               {formData.condition && (
-                <div className="mt-3 p-3 rounded-lg border border-green-500/30 bg-green-500/5">
+                <div className="mt-3 p-3 rounded-lg border border-success/30 bg-success/5">
                   <div className="flex items-start gap-2">
-                    <Check className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />
+                    <Check className="h-4 w-4 text-success shrink-0 mt-0.5" />
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-foreground break-words">
                         {formData.condition.name}
@@ -682,7 +682,7 @@ export default function PersonalStatement() {
                     className={cn(
                       'flex flex-col items-center gap-1 p-2 rounded-lg text-center transition-colors',
                       isComplete
-                        ? 'bg-green-500/10 text-green-500 hover:bg-green-500/20'
+                        ? 'bg-success/10 text-success hover:bg-success/20'
                         : 'bg-muted text-muted-foreground hover:bg-muted/80'
                     )}
                   >
@@ -698,7 +698,7 @@ export default function PersonalStatement() {
             </div>
 
             {filledSections < 5 && (
-              <Card className="border-gold/30 bg-[rgba(240,192,0,0.05)]">
+              <Card className="border-gold/30 bg-gold/5">
                 <CardContent className="pt-4">
                   <div className="flex items-start gap-2">
                     <AlertCircle className="h-5 w-5 text-gold mt-0.5 shrink-0" />
@@ -780,7 +780,7 @@ export default function PersonalStatement() {
                       )}
                     </div>
                     {aiError && (
-                      <p className="text-xs text-red-400">{aiError}</p>
+                      <p className="text-xs text-destructive">{aiError}</p>
                     )}
                     <AIDisclaimer />
                   </div>
@@ -861,7 +861,7 @@ export default function PersonalStatement() {
                 currentStep === step.id
                   ? 'bg-primary text-primary-foreground'
                   : step.id < currentStep
-                  ? 'bg-green-500/20 text-green-500 cursor-pointer hover:bg-green-500/30'
+                  ? 'bg-success/20 text-success cursor-pointer hover:bg-success/30'
                   : 'bg-muted text-muted-foreground'
               )}
             >
@@ -871,7 +871,7 @@ export default function PersonalStatement() {
                   currentStep === step.id
                     ? 'bg-primary-foreground text-primary'
                     : step.id < currentStep
-                    ? 'bg-green-500 text-white'
+                    ? 'bg-success text-white'
                     : 'bg-muted-foreground/30 text-muted-foreground'
                 )}
               >

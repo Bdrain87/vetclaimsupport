@@ -619,7 +619,7 @@ export default function StressorStatement() {
                     className={cn(
                       'flex flex-col items-center gap-1 p-2 rounded-lg text-center transition-colors',
                       isComplete
-                        ? 'bg-green-500/10 text-green-500 hover:bg-green-500/20'
+                        ? 'bg-success/10 text-success hover:bg-success/20'
                         : 'bg-muted text-muted-foreground hover:bg-muted/80'
                     )}
                   >
@@ -635,7 +635,7 @@ export default function StressorStatement() {
             </div>
 
             {filledSections < 5 && (
-              <Card className="border-gold/30 bg-[rgba(240,192,0,0.05)]">
+              <Card className="border-gold/30 bg-gold/5">
                 <CardContent className="pt-4">
                   <div className="flex items-start gap-2">
                     <AlertCircle className="h-5 w-5 text-gold mt-0.5 shrink-0" />
@@ -692,8 +692,8 @@ export default function StressorStatement() {
 
       {/* Header */}
       <div className="section-header mb-0">
-        <div className="section-icon bg-red-500/10">
-          <Shield className="h-5 w-5 text-red-500" />
+        <div className="section-icon bg-destructive/10">
+          <Shield className="h-5 w-5 text-destructive" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Stressor Statement Builder</h1>
@@ -738,7 +738,7 @@ export default function StressorStatement() {
                 currentStep === step.id
                   ? 'bg-primary text-primary-foreground'
                   : step.id < currentStep
-                  ? 'bg-green-500/20 text-green-500 cursor-pointer hover:bg-green-500/30'
+                  ? 'bg-success/20 text-success cursor-pointer hover:bg-success/30'
                   : 'bg-muted text-muted-foreground'
               )}
             >
@@ -748,7 +748,7 @@ export default function StressorStatement() {
                   currentStep === step.id
                     ? 'bg-primary-foreground text-primary'
                     : step.id < currentStep
-                    ? 'bg-green-500 text-white'
+                    ? 'bg-success text-white'
                     : 'bg-muted-foreground/30 text-muted-foreground'
                 )}
               >

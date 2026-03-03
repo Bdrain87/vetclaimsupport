@@ -39,7 +39,7 @@ export default function Timeline() {
           title: `Started at ${entry.base || 'New Assignment'}`,
           description: entry.unit ? `Unit: ${entry.unit}` : (entry.duties || 'Service began'),
           icon: Shield,
-          color: 'bg-emerald-500',
+          color: 'bg-success',
         });
       }
       if (entry.endDate) {
@@ -51,7 +51,7 @@ export default function Timeline() {
           title: `Left ${entry.base || 'Assignment'}`,
           description: 'Service period ended',
           icon: Shield,
-          color: 'bg-emerald-600/70',
+          color: 'bg-success/70',
         });
       }
     });
@@ -207,7 +207,7 @@ export default function Timeline() {
 
       {/* Legend */}
       <div className="flex flex-wrap gap-2">
-        <Badge variant="outline" className="bg-emerald-500/10 border-emerald-500/30">
+        <Badge variant="outline" className="bg-success/10 border-success/30">
           <Shield className="h-3 w-3 mr-1" /> Service
         </Badge>
         <Badge variant="outline" className="bg-gold/10 border-gold/30">

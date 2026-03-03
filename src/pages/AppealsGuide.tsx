@@ -41,7 +41,7 @@ const courtColors: Record<string, string> = {
   BVA: 'bg-gold/20 text-foreground-hl border-gold/30',
   CAVC: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
   FedCir: 'bg-gold/20 text-foreground border-gold/30',
-  SupCt: 'bg-red-500/20 text-red-400 border-red-500/30',
+  SupCt: 'bg-destructive/20 text-destructive border-destructive/30',
 };
 
 // ── Topic filter chips ──────────────────────────────────────────────────
@@ -654,13 +654,13 @@ function MyAppealTab() {
                 >
                   <User className="h-4 w-4 text-gold shrink-0" />
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-foreground truncate">{uc.details?.name || uc.conditionId}</p>
+                    <p className="text-sm font-medium text-foreground">{uc.details?.name || uc.conditionId}</p>
                     {uc.details?.category && (
                       <p className="text-[10px] text-muted-foreground capitalize">{uc.details.category.replace('-', ' ')}</p>
                     )}
                   </div>
                   {!uc.isPrimary && <Badge variant="outline" className="text-[9px] shrink-0">Secondary</Badge>}
-                  {uc.claimStatus === 'denied' && <Badge className="text-[9px] bg-red-500/20 text-red-400 border-red-500/30 shrink-0">Denied</Badge>}
+                  {uc.claimStatus === 'denied' && <Badge className="text-[9px] bg-destructive/20 text-destructive border-destructive/30 shrink-0">Denied</Badge>}
                   {uc.claimStatus === 'appeal' && <Badge className="text-[9px] bg-gold/20 text-foreground border-gold/30 shrink-0">Appeal</Badge>}
                 </button>
               ))}
@@ -754,9 +754,9 @@ function MyAppealTab() {
           {matchedCases.length > 15 && (
             <p className="text-xs text-muted-foreground text-center">Showing top 15 of {matchedCases.length} matched cases. Export the PDF for the full list.</p>
           )}
-          <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-4 space-y-2">
-            <h4 className="text-sm font-medium text-blue-400">Recommended Next Steps</h4>
-            <ul className="space-y-1.5 text-xs text-blue-300/80">
+          <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 space-y-2">
+            <h4 className="text-sm font-medium text-primary">Recommended Next Steps</h4>
+            <ul className="space-y-1.5 text-xs text-primary/80">
               <li className="flex items-start gap-1.5"><ArrowRight className="h-3 w-3 mt-0.5 shrink-0" /><span>Export this brief and share it with a VA-accredited attorney or VSO representative</span></li>
               <li className="flex items-start gap-1.5"><ArrowRight className="h-3 w-3 mt-0.5 shrink-0" /><span>Read the full opinion of each case using the source links before relying on it</span></li>
               <li className="flex items-start gap-1.5"><ArrowRight className="h-3 w-3 mt-0.5 shrink-0" /><span>Review the Appeal Lanes tab to determine which appeal path is best for your situation</span></li>

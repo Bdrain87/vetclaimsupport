@@ -278,7 +278,7 @@ export function ExportCustomizationModal({
           </div>
           <div className="grid grid-cols-2 gap-x-4 gap-y-1">
             {packetChecks.checks.map((check) => (
-              <span key={check.label} className={`text-[11px] flex items-center gap-1.5 ${check.ok ? 'text-emerald-500' : 'text-muted-foreground'}`}>
+              <span key={check.label} className={`text-[11px] flex items-center gap-1.5 ${check.ok ? 'text-success' : 'text-muted-foreground'}`}>
                 {check.ok ? '✓' : '○'} {check.label}
               </span>
             ))}

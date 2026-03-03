@@ -386,11 +386,11 @@ export default function Settings() {
                 <div>
                   <p className="font-medium text-foreground mb-1.5">Stays on your device (local only)</p>
                   <ul className="space-y-1 text-muted-foreground">
-                    <li className="flex items-start gap-2"><span className="text-emerald-400">&#x2713;</span>Health data & symptom logs</li>
-                    <li className="flex items-start gap-2"><span className="text-emerald-400">&#x2713;</span>Documents & vault contents</li>
-                    <li className="flex items-start gap-2"><span className="text-emerald-400">&#x2713;</span>Claim preparation data</li>
-                    <li className="flex items-start gap-2"><span className="text-emerald-400">&#x2713;</span>AI-generated drafts</li>
-                    <li className="flex items-start gap-2"><span className="text-emerald-400">&#x2713;</span>Service history & medications</li>
+                    <li className="flex items-start gap-2"><span className="text-success">&#x2713;</span>Health data & symptom logs</li>
+                    <li className="flex items-start gap-2"><span className="text-success">&#x2713;</span>Documents & vault contents</li>
+                    <li className="flex items-start gap-2"><span className="text-success">&#x2713;</span>Claim preparation data</li>
+                    <li className="flex items-start gap-2"><span className="text-success">&#x2713;</span>AI-generated drafts</li>
+                    <li className="flex items-start gap-2"><span className="text-success">&#x2713;</span>Service history & medications</li>
                   </ul>
                 </div>
                 <div>
@@ -597,14 +597,14 @@ export default function Settings() {
               {CLAIM_DATES_COPY.etsDefinition} Used to calculate your BDD filing window. Leave blank if already separated. {CLAIM_DATES_COPY.autoSaveLabel}
             </p>
           </div>
-          <div className="flex gap-2">
-            <Link to="/prep/bdd-guide" className="flex-1">
+          <div className="flex flex-col gap-2">
+            <Link to="/prep/bdd-guide">
               <Button variant="outline" className="w-full text-sm">
                 <BookOpen className="h-4 w-4 mr-1.5" />
                 Learn: BDD Guide
               </Button>
             </Link>
-            <Link to="/claims/itf" className="flex-1">
+            <Link to="/claims/itf">
               <Button variant="outline" className="w-full text-sm">
                 <Info className="h-4 w-4 mr-1.5" />
                 Learn: Intent to File

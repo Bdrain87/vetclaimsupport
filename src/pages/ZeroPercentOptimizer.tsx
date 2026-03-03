@@ -49,13 +49,13 @@ function ConditionUpgradeCard({ conditionId, conditionName, currentRating }: {
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
-            <CardTitle className="text-base truncate">{conditionName}</CardTitle>
+            <CardTitle className="text-base">{conditionName}</CardTitle>
             <CardDescription className="flex items-center gap-2 mt-1">
               <Badge variant="secondary" className="text-xs">Current: {currentRating}%</Badge>
               {nextLevel && (
                 <>
                   <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
-                  <Badge className="text-xs bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/30">
+                  <Badge className="text-xs bg-success/10 text-success border-success/30">
                     Next: {nextLevel.percent}%
                   </Badge>
                 </>
@@ -95,14 +95,14 @@ function ConditionUpgradeCard({ conditionId, conditionName, currentRating }: {
 
           {/* Next level preview */}
           {nextLevel && (
-            <div className="p-3 rounded-lg bg-green-500/5 border border-green-500/20">
-              <p className="text-xs font-semibold text-green-700 dark:text-green-400 mb-1">
+            <div className="p-3 rounded-lg bg-success/5 border border-success/20">
+              <p className="text-xs font-semibold text-success mb-1">
                 What {nextLevel.percent}% looks like
               </p>
               <p className="text-sm">{nextLevel.criteria}</p>
               <div className="flex flex-wrap gap-1.5 mt-2">
                 {nextLevel.keywords.map(kw => (
-                  <Badge key={kw} variant="outline" className="text-[10px] border-green-500/30 text-green-700 dark:text-green-400">
+                  <Badge key={kw} variant="outline" className="text-[10px] border-success/30 text-success">
                     {kw}
                   </Badge>
                 ))}
@@ -156,13 +156,13 @@ function ConditionUpgradeCard({ conditionId, conditionName, currentRating }: {
               {upgradePath.commonMistakes.length > 0 && (
                 <div>
                   <p className="text-sm font-semibold mb-2 flex items-center gap-2">
-                    <AlertTriangle className="h-4 w-4 text-orange-500" />
+                    <AlertTriangle className="h-4 w-4 text-warning" />
                     Common Mistakes
                   </p>
                   <ul className="space-y-1.5">
                     {upgradePath.commonMistakes.map((mistake, i) => (
                       <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                        <span className="text-orange-500 mt-0.5">•</span>
+                        <span className="text-warning mt-0.5">•</span>
                         {mistake}
                       </li>
                     ))}
@@ -281,7 +281,7 @@ export default function ZeroPercentOptimizer() {
           {tenRated.length > 0 && (
             <div className="space-y-4">
               <h2 className="text-lg font-semibold flex items-center gap-2">
-                <Badge className={cn('text-xs', 'bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/30')}>10%</Badge>
+                <Badge className={cn('text-xs', 'bg-warning/10 text-warning border-warning/30')}>10%</Badge>
                 Conditions Rated at 10%
                 <Badge variant="outline" className="ml-auto">{tenRated.length}</Badge>
               </h2>

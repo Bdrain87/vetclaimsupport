@@ -481,7 +481,7 @@ export default function HealthLog() {
                         >
                           <entry.icon className="h-4 w-4 text-muted-foreground" />
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-foreground truncate">
+                            <p className="text-sm font-medium text-foreground line-clamp-2">
                               {entry.label}
                             </p>
                             <p className="text-xs text-muted-foreground">

@@ -426,12 +426,12 @@ export default function HelpCenter() {
                   ))}
                 </div>
 
-                <div className="p-4 rounded-2xl bg-green-500/10 border border-green-500/20">
+                <div className="p-4 rounded-2xl bg-success/10 border border-success/20">
                   <div className="flex items-start gap-3">
-                    <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
+                    <CheckCircle className="h-5 w-5 text-success mt-0.5" />
                     <div>
-                      <p className="font-semibold text-green-700 dark:text-green-500">Pro Tip</p>
-                      <p className="text-sm text-green-600/80 dark:text-green-500/80 mt-1">
+                      <p className="font-semibold text-success">Pro Tip</p>
+                      <p className="text-sm text-success/80 mt-1">
                         Consistency is key! Log symptoms regularly - even brief entries help establish
                         a pattern that strengthens your claim.
                       </p>
@@ -607,7 +607,7 @@ export default function HelpCenter() {
                     href="mailto:support@vetclaimsupport.com?subject=Feature%20Request"
                     className="flex items-center gap-4 p-4 rounded-2xl border border-border/50 bg-card hover:border-primary/30 hover:shadow-md transition-all group"
                   >
-                    <div className="p-2.5 rounded-xl bg-green-500/10 text-green-600">
+                    <div className="p-2.5 rounded-xl bg-success/10 text-success">
                       <Sparkles className="h-5 w-5" />
                     </div>
                     <div className="flex-1">

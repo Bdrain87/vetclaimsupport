@@ -203,7 +203,7 @@ export function DeploymentLocationPicker({
                         </span>
 
                         {hasHighDioxin && (
-                          <AlertTriangle className="h-3.5 w-3.5 text-amber-400 flex-shrink-0" />
+                          <AlertTriangle className="h-3.5 w-3.5 text-warning flex-shrink-0" />
                         )}
 
                         {location.exposureFlags?.map((flag) => (
@@ -212,8 +212,8 @@ export function DeploymentLocationPicker({
                             className={cn(
                               'inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide',
                               flag === 'high_dioxin'
-                                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                                : 'bg-amber-500/10 text-amber-300/80 border border-amber-500/20',
+                                ? 'bg-warning/20 text-warning border border-warning/30'
+                                : 'bg-warning/10 text-warning/80 border border-warning/20',
                             )}
                           >
                             {EXPOSURE_LABELS[flag] || flag}

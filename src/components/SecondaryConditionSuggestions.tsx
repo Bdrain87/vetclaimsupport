@@ -150,7 +150,7 @@ export function SecondaryConditionSuggestions({
               className={cn(
                 "flex items-center justify-between gap-3 p-3 rounded-lg border transition-all",
                 isJustAdded
-                  ? "border-green-500 bg-green-500/10"
+                  ? "border-success bg-success/10"
                   : "border-border bg-muted/30 hover:bg-muted/50"
               )}
             >
@@ -177,7 +177,7 @@ export function SecondaryConditionSuggestions({
                 size="sm"
                 className={cn(
                   "h-8 px-3 flex-shrink-0 transition-all",
-                  isJustAdded && "bg-green-500 hover:bg-green-600"
+                  isJustAdded && "bg-success hover:bg-success/90"
                 )}
                 disabled={isAlreadyAdded || isJustAdded}
                 onClick={() => handleAddCondition(condition.id, parentConditionId)}
@@ -314,7 +314,7 @@ export function InlineSecondarySuggestions({
               size="sm"
               className={cn(
                 "h-7 text-xs transition-all",
-                isJustAdded && "bg-green-500 hover:bg-green-600"
+                isJustAdded && "bg-success hover:bg-success/90"
               )}
               disabled={isJustAdded}
               onClick={() => handleAdd(condition.id)}

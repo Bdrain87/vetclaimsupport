@@ -394,7 +394,7 @@ function LifetimeBenefitProjection({
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <DollarSign className="h-5 w-5 text-green-600" />
+          <DollarSign className="h-5 w-5 text-success" />
           Lifetime Benefit Projection
         </CardTitle>
         <CardDescription>
@@ -431,15 +431,15 @@ function LifetimeBenefitProjection({
             <div className="p-4 rounded-xl bg-gold/10 border border-gold/30 text-center">
               <p className="text-xs text-muted-foreground">At {projection.nextRating}% (next step)</p>
               <p className="text-xl font-bold text-foreground">{formatCurrency(projection.lifetimeNext)}</p>
-              <p className="text-xs text-green-600 font-medium">+{formatCurrency(projection.nextDelta)}</p>
+              <p className="text-xs text-success font-medium">+{formatCurrency(projection.nextDelta)}</p>
             </div>
           )}
 
           {currentRating < 90 && (
-            <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/30 text-center">
+            <div className="p-4 rounded-xl bg-success/10 border border-success/30 text-center">
               <p className="text-xs text-muted-foreground">At 100% (maximum)</p>
-              <p className="text-xl font-bold text-green-600 dark:text-green-400">{formatCurrency(projection.lifetimeMax)}</p>
-              <p className="text-xs text-green-600 font-medium">+{formatCurrency(projection.maxDelta)}</p>
+              <p className="text-xl font-bold text-success">{formatCurrency(projection.lifetimeMax)}</p>
+              <p className="text-xs text-success font-medium">+{formatCurrency(projection.maxDelta)}</p>
             </div>
           )}
         </div>
@@ -741,10 +741,10 @@ export function UnifiedRatingCalculator() {
                         setShowAutocomplete(false);
                       }
                     }}
-                    className={selectedConditionId ? 'border-green-500' : ''}
+                    className={selectedConditionId ? 'border-success' : ''}
                   />
                   {selectedConditionId && (
-                    <Badge className="absolute right-2 top-8 bg-green-500 text-white text-xs">
+                    <Badge className="absolute right-2 top-8 bg-success text-white text-xs">
                       <Check className="h-3 w-3 mr-1" />
                       Linked
                     </Badge>
@@ -848,7 +848,7 @@ export function UnifiedRatingCalculator() {
                   <CardTitle className="text-lg flex items-center gap-2">
                     Your Conditions ({conditions.length})
                     {conditions.some(c => c.conditionId) && (
-                      <Badge variant="outline" className="text-xs font-normal border-green-500/50 text-green-600">
+                      <Badge variant="outline" className="text-xs font-normal border-success/50 text-success">
                         <Link2 className="h-3 w-3 mr-1" />
                         Synced
                       </Badge>
@@ -896,7 +896,7 @@ export function UnifiedRatingCalculator() {
                           </Badge>
                         )}
                         {condition.conditionId && (
-                          <Badge variant="outline" className="border-green-500/50 text-green-600 text-xs shrink-0">
+                          <Badge variant="outline" className="border-success/50 text-success text-xs shrink-0">
                             <Link2 className="h-3 w-3" />
                           </Badge>
                         )}
@@ -1110,7 +1110,7 @@ export function UnifiedRatingCalculator() {
             </CardHeader>
             <CardContent>
               <div className="text-center py-2">
-                <div className="text-4xl font-bold text-green-600 dark:text-green-400">
+                <div className="text-4xl font-bold text-success">
                   {formatCurrency(compensation.totalMonthly)}
                 </div>
                 <p className="text-sm text-muted-foreground">
@@ -1236,7 +1236,7 @@ export function UnifiedRatingCalculator() {
                       {maxDelta > 0 && (
                         <div className="text-center pt-2 border-t border-border">
                           <p className="text-xs text-muted-foreground">Potential at 100%</p>
-                          <p className="text-sm font-semibold text-green-600 dark:text-green-400">
+                          <p className="text-sm font-semibold text-success">
                             +{formatCurrency(maxDelta)}/mo ({formatCurrency(maxDelta * 12)}/yr)
                           </p>
                         </div>

@@ -180,15 +180,15 @@ export default function EvidenceStrength() {
   };
 
   const getConfidenceColor = (c: 'low' | 'moderate' | 'strong') => {
-    if (c === 'strong') return 'bg-green-500/20 text-green-400 border-green-500/30';
+    if (c === 'strong') return 'bg-success/20 text-success border-success/30';
     if (c === 'moderate') return 'bg-gold/20 text-gold border-gold/30';
     return 'bg-muted text-muted-foreground border-border';
   };
 
   const getLevelColor = (pct: number) => {
-    if (pct >= 70) return 'text-green-400';
+    if (pct >= 70) return 'text-success';
     if (pct >= 50) return 'text-gold';
-    if (pct >= 30) return 'text-orange-400';
+    if (pct >= 30) return 'text-warning';
     return 'text-muted-foreground';
   };
 
@@ -223,8 +223,8 @@ export default function EvidenceStrength() {
       </div>
 
       {/* Educational disclaimer */}
-      <div className="flex gap-3 p-3 rounded-2xl border border-blue-500/20 bg-blue-500/5">
-        <Info className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
+      <div className="flex gap-3 p-3 rounded-2xl border border-primary/20 bg-primary/5">
+        <Info className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
         <p className="text-xs text-muted-foreground leading-relaxed">
           This is an educational reference based on publicly available 38 CFR Part 4 rating criteria.
           It does not predict your rating — your actual rating is determined by VA raters based on your
@@ -233,7 +233,7 @@ export default function EvidenceStrength() {
             href="https://www.va.gov/get-help-from-accredited-representative/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-400 underline"
+            className="text-primary underline"
           >
             VA-accredited representative
           </a>.
@@ -268,7 +268,7 @@ export default function EvidenceStrength() {
                 <div className="p-4 flex items-center gap-3">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <span className="text-sm font-semibold text-foreground truncate">{name}</span>
+                      <span className="text-sm font-semibold text-foreground break-words">{name}</span>
                       <Badge variant="outline" className="text-[10px] px-1.5">
                         DC {criteria.diagnosticCode}
                       </Badge>
@@ -359,7 +359,7 @@ export default function EvidenceStrength() {
                               {matched.map((kw) => (
                                 <span
                                   key={kw}
-                                  className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-green-500/15 text-green-400 border border-green-500/20"
+                                  className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-success/15 text-success border border-success/20"
                                 >
                                   <CheckCircle2 className="h-2.5 w-2.5" />
                                   {kw}

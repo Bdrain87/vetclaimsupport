@@ -165,7 +165,7 @@ export function SubscriptionCard() {
         <ul className="space-y-1 text-xs text-muted-foreground">
           {PREMIUM_COPY.whatYouGet.map((item) => (
             <li key={item} className="flex items-start gap-1.5">
-              <span className="text-emerald-400 mt-0.5 shrink-0">✓</span>
+              <span className="text-success mt-0.5 shrink-0">✓</span>
               {item}
             </li>
           ))}

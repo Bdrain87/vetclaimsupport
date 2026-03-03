@@ -23,8 +23,8 @@ function getConnectionStrength(connection: SecondaryConnection): 'strong' | 'mod
 }
 
 const strengthConfig = {
-  strong: { label: 'Strong Connection', color: 'text-emerald-400', bg: 'bg-emerald-400/10 border-emerald-400/20', dot: 'bg-emerald-400' },
-  moderate: { label: 'Moderate Connection', color: 'text-amber-400', bg: 'bg-amber-400/10 border-amber-400/20', dot: 'bg-amber-400' },
+  strong: { label: 'Strong Connection', color: 'text-success', bg: 'bg-success/10 border-success/20', dot: 'bg-success' },
+  moderate: { label: 'Moderate Connection', color: 'text-warning', bg: 'bg-warning/10 border-warning/20', dot: 'bg-warning' },
   possible: { label: 'Possible Connection', color: 'text-muted-foreground', bg: 'bg-muted/30 border-border', dot: 'bg-muted-foreground' },
 };
 
@@ -156,7 +156,7 @@ export default function SecondaryFinder() {
               <button
                 key={c.id}
                 onClick={() => handleChipClick(c.fullName)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all max-w-full truncate ${
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all max-w-full ${
                   selectedPrimary === c.fullName
                     ? 'bg-gold/20 text-foreground border border-gold/40'
                     : 'bg-muted/50 text-muted-foreground border border-border hover:border-gold/30 hover:text-foreground'
@@ -229,7 +229,7 @@ export default function SecondaryFinder() {
                     </p>
 
                     {claimed ? (
-                      <div className="flex items-center gap-2 text-xs text-emerald-400/70 font-medium">
+                      <div className="flex items-center gap-2 text-xs text-success/70 font-medium">
                         <Check className="h-4 w-4" />
                         Already Claimed
                       </div>
@@ -265,7 +265,7 @@ export default function SecondaryFinder() {
 
       {/* Info card */}
       {!selectedPrimary && (
-        <div className="rounded-2xl p-5 bg-[rgba(240,192,0,0.05)] border border-[rgba(240,192,0,0.15)]">
+        <div className="rounded-2xl p-5 bg-gold/5 border border-gold/15">
           <h3 className="text-foreground/90 font-semibold mb-2 text-sm">How Secondary Claims Work</h3>
           <ol className="space-y-1.5 text-xs text-muted-foreground">
             <li>1. Select your already service-connected (primary) condition</li>

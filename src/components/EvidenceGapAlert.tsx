@@ -121,9 +121,9 @@ const EVIDENCE_REQUIREMENTS: EvidenceRequirement[] = [
 
 function getImportanceColor(importance: EvidenceRequirement['importance']) {
   switch (importance) {
-    case 'critical': return { text: 'text-red-600 dark:text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20', badge: 'bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/30' };
-    case 'recommended': return { text: 'text-orange-600 dark:text-orange-400', bg: 'bg-orange-500/10', border: 'border-orange-500/20', badge: 'bg-orange-500/10 text-orange-700 dark:text-orange-400 border-orange-500/30' };
-    case 'helpful': return { text: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/20', badge: 'bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/30' };
+    case 'critical': return { text: 'text-destructive', bg: 'bg-destructive/10', border: 'border-destructive/20', badge: 'bg-destructive/10 text-destructive border-destructive/30' };
+    case 'recommended': return { text: 'text-warning', bg: 'bg-warning/10', border: 'border-warning/20', badge: 'bg-warning/10 text-warning border-warning/30' };
+    case 'helpful': return { text: 'text-primary', bg: 'bg-primary/10', border: 'border-primary/20', badge: 'bg-primary/10 text-primary border-primary/30' };
   }
 }
 
@@ -177,12 +177,12 @@ export function EvidenceGapAlert({ conditionId, conditionName }: {
 
   if (analysis.missing.length === 0) {
     return (
-      <Card className="border-green-500/30 bg-green-500/5">
+      <Card className="border-success/30 bg-success/5">
         <CardContent className="py-4">
           <div className="flex items-center gap-3">
-            <CheckCircle2 className="h-5 w-5 text-green-600" />
+            <CheckCircle2 className="h-5 w-5 text-success" />
             <div>
-              <p className="font-semibold text-sm text-green-700 dark:text-green-400">Evidence looks strong</p>
+              <p className="font-semibold text-sm text-success">Evidence looks strong</p>
               <p className="text-xs text-muted-foreground">All typical evidence items are marked as present for {conditionName}.</p>
             </div>
           </div>
@@ -197,7 +197,7 @@ export function EvidenceGapAlert({ conditionId, conditionName }: {
         <div className="flex items-start justify-between gap-3">
           <div>
             <CardTitle className="text-base flex items-center gap-2">
-              <AlertTriangle className={cn('h-4 w-4', analysis.criticalMissing.length > 0 ? 'text-red-500' : 'text-orange-500')} />
+              <AlertTriangle className={cn('h-4 w-4', analysis.criticalMissing.length > 0 ? 'text-destructive' : 'text-warning')} />
               Evidence Gap Analysis
             </CardTitle>
             <CardDescription className="mt-1">
@@ -216,9 +216,9 @@ export function EvidenceGapAlert({ conditionId, conditionName }: {
           value={analysis.score}
           className={cn(
             'h-2 mt-2',
-            analysis.score < 40 && '[&>div]:bg-red-500',
-            analysis.score >= 40 && analysis.score < 70 && '[&>div]:bg-orange-500',
-            analysis.score >= 70 && '[&>div]:bg-green-500',
+            analysis.score < 40 && '[&>div]:bg-destructive',
+            analysis.score >= 40 && analysis.score < 70 && '[&>div]:bg-warning',
+            analysis.score >= 70 && '[&>div]:bg-success',
           )}
         />
       </CardHeader>
@@ -226,7 +226,7 @@ export function EvidenceGapAlert({ conditionId, conditionName }: {
         {/* Missing items grouped by importance */}
         {analysis.criticalMissing.length > 0 && (
           <div className="space-y-2">
-            <p className="text-xs font-semibold text-red-600 dark:text-red-400 uppercase tracking-wider">Critical — Typically Required</p>
+            <p className="text-xs font-semibold text-destructive uppercase tracking-wider">Critical — Typically Required</p>
             {analysis.criticalMissing.map(item => {
               const colors = getImportanceColor(item.importance);
               return (
@@ -255,7 +255,7 @@ export function EvidenceGapAlert({ conditionId, conditionName }: {
 
         {analysis.recommendedMissing.length > 0 && (
           <div className="space-y-2">
-            <p className="text-xs font-semibold text-orange-600 dark:text-orange-400 uppercase tracking-wider">Recommended</p>
+            <p className="text-xs font-semibold text-warning uppercase tracking-wider">Recommended</p>
             {analysis.recommendedMissing.map(item => {
               const colors = getImportanceColor(item.importance);
               return (
@@ -284,7 +284,7 @@ export function EvidenceGapAlert({ conditionId, conditionName }: {
 
         {analysis.helpfulMissing.length > 0 && (
           <div className="space-y-2">
-            <p className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Helpful</p>
+            <p className="text-xs font-semibold text-primary uppercase tracking-wider">Helpful</p>
             {analysis.helpfulMissing.map(item => {
               const colors = getImportanceColor(item.importance);
               return (
@@ -311,10 +311,10 @@ export function EvidenceGapAlert({ conditionId, conditionName }: {
         {/* Present items collapsed */}
         {analysis.present.length > 0 && (
           <div className="pt-2">
-            <p className="text-xs font-semibold text-green-600 dark:text-green-400 uppercase tracking-wider mb-2">Present</p>
+            <p className="text-xs font-semibold text-success uppercase tracking-wider mb-2">Present</p>
             <div className="flex flex-wrap gap-2">
               {analysis.present.map(item => (
-                <Badge key={item.id} variant="outline" className="text-xs bg-green-500/5 text-green-700 dark:text-green-400 border-green-500/30">
+                <Badge key={item.id} variant="outline" className="text-xs bg-success/5 text-success border-success/30">
                   <CheckCircle2 className="h-3 w-3 mr-1" />
                   {item.name}
                 </Badge>

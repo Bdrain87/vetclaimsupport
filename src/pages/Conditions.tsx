@@ -57,8 +57,8 @@ const bodySystems = [
 
 const STATUS_COLORS: Record<string, string> = {
   pending: 'bg-gold/20 text-foreground border-gold/30',
-  approved: 'bg-green-500/20 text-green-600 border-green-500/30',
-  denied: 'bg-red-500/20 text-red-600 border-red-500/30',
+  approved: 'bg-success/20 text-success border-success/30',
+  denied: 'bg-destructive/20 text-destructive border-destructive/30',
   appeal: 'bg-purple-500/20 text-purple-600 border-purple-500/30',
 };
 
@@ -95,7 +95,7 @@ function ReadinessRing({ score }: { score: number }) {
   const r = 14;
   const circ = 2 * Math.PI * r;
   const offset = circ - (score / 100) * circ;
-  const color = score >= 70 ? 'text-green-500' : score >= 40 ? 'text-gold' : 'text-red-500';
+  const color = score >= 70 ? 'text-success' : score >= 40 ? 'text-gold' : 'text-destructive';
   return (
     <div className="relative flex-shrink-0" title={`Readiness: ${score}%`}>
       <svg width="36" height="36" viewBox="0 0 36 36">
@@ -413,7 +413,7 @@ export default function Conditions() {
       {/* Header */}
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-gold/10">
+          <div className="p-2 rounded-xl bg-gold/10 border border-gold/20">
             <Shield className="h-6 w-6 text-gold" />
           </div>
           <div>
@@ -434,12 +434,12 @@ export default function Conditions() {
       <ClaimManagementStrip />
 
       {/* Quick Claim Tools */}
-      <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">
+      <div className="grid grid-cols-4 gap-2">
         {CLAIM_TOOLS.map((tool) => (
           <Link
             key={tool.route}
             to={tool.route}
-            className="flex flex-col items-center gap-1.5 min-w-[72px] p-2.5 rounded-xl border border-border bg-card hover:bg-accent/50 transition-colors text-center"
+            className="flex flex-col items-center gap-1.5 p-2.5 rounded-xl border border-border bg-card hover:bg-accent/50 transition-colors text-center"
           >
             <tool.icon className="h-5 w-5 text-gold" />
             <span className="text-[10px] font-medium text-foreground leading-tight">{tool.label}</span>
@@ -454,7 +454,7 @@ export default function Conditions() {
             const firstGap = evidenceGaps[0];
             if (firstGap?.conditionId) navigate(`/claims/${firstGap.conditionId}`);
           }}
-          className="w-full rounded-xl p-3 text-left bg-[rgba(240,192,0,0.08)] border border-gold/20 hover:bg-[rgba(240,192,0,0.12)] transition-colors"
+          className="w-full rounded-xl p-3 text-left bg-gold/5 border border-gold/20 hover:bg-gold/10 active:scale-[0.98] transition-all"
         >
           <div className="flex items-start gap-3">
             <AlertTriangle className="h-4 w-4 text-gold flex-shrink-0 mt-0.5" />
@@ -462,7 +462,7 @@ export default function Conditions() {
               <p className="text-sm font-medium text-foreground">
                 {evidenceGaps.length} condition{evidenceGaps.length !== 1 ? 's' : ''} need more evidence
               </p>
-              <p className="text-xs text-muted-foreground mt-0.5 truncate">
+              <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
                 {evidenceGaps[0]?.conditionName}: missing {evidenceGaps[0]?.missing?.join(', ')}
               </p>
             </div>
@@ -497,7 +497,7 @@ export default function Conditions() {
                 excludeIds={userConditions.map(c => c.conditionId)}
               />
               {selectedCondition && (
-                <Badge className="mt-1 bg-green-500">
+                <Badge className="mt-1 bg-success">
                   Selected: {selectedCondition.abbreviation}
                 </Badge>
               )}
@@ -651,7 +651,7 @@ export default function Conditions() {
                       const secChecked = conditionEvidenceChecks[sec.id] || [];
                       return (
                         <div key={sec.id} className="space-y-1">
-                          <p className="text-xs text-muted-foreground truncate">
+                          <p className="text-xs text-muted-foreground line-clamp-2">
                             Secondary to: {primaryDetails?.abbreviation || primaryDetails?.name || uc.conditionId}
                           </p>
                           <ConditionCard
@@ -759,7 +759,7 @@ export default function Conditions() {
                 <div className="text-xs text-muted-foreground">Conditions</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-green-600">
+                <div className="text-2xl font-bold text-success">
                   {userConditions.filter(c => c.rating !== undefined).length}
                 </div>
                 <div className="text-xs text-muted-foreground">Rated</div>
@@ -789,7 +789,7 @@ export default function Conditions() {
                 <button
                   key={rec.conditionId}
                   onClick={() => setPreviewRec(rec)}
-                  className="w-full flex items-center justify-between p-3 rounded-xl border border-border bg-card hover:border-gold/30 transition-colors text-left"
+                  className="w-full flex items-center justify-between p-3 rounded-xl border border-border bg-card hover:border-gold/30 active:scale-[0.98] transition-all text-left"
                 >
                   <div className="flex-1 min-w-0 mr-3">
                     <p className="text-sm font-medium text-foreground truncate">{rec.conditionName}</p>
@@ -816,7 +816,7 @@ export default function Conditions() {
               {databaseResults.map(result => (
                 <div
                   key={result.id}
-                  className="flex items-center justify-between p-3 rounded-lg border border-border hover:border-gold/30 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-xl border border-border hover:border-gold/30 transition-colors"
                 >
                   <div className="flex-1 min-w-0 mr-3">
                     <p className="text-sm font-medium truncate">{result.name}</p>

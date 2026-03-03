@@ -171,13 +171,13 @@ function TrendBadge({ trend, inverted }: { trend: 'up' | 'down' | 'stable' | 'no
   }
   if (isGood) {
     return (
-      <Badge className="text-[10px] gap-1 bg-green-500/15 text-green-500 border-green-500/30">
+      <Badge className="text-[10px] gap-1 bg-success/15 text-success border-success/30">
         {inverted ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />} Improving
       </Badge>
     );
   }
   return (
-    <Badge className="text-[10px] gap-1 bg-red-500/15 text-red-500 border-red-500/30">
+    <Badge className="text-[10px] gap-1 bg-destructive/15 text-destructive border-destructive/30">
       {isBad && (inverted ? <TrendingDown className="h-3 w-3" /> : <TrendingUp className="h-3 w-3" />)} Worsening
     </Badge>
   );
@@ -302,7 +302,7 @@ export default function HealthTrends() {
           trend={data.pain.trend}
           maxVal={10}
           summary={`Weekly average severity over ${periodLabel.toLowerCase()}`}
-          color="bg-red-500/80"
+          color="bg-destructive/80"
           vaNote="Worsening pain trends strengthen increased rating claims."
         />
 
@@ -327,7 +327,7 @@ export default function HealthTrends() {
           trend={data.sleep.trend}
           maxVal={5}
           summary={`Weekly average quality (1=Very Poor, 5=Excellent) over ${periodLabel.toLowerCase()}`}
-          color="bg-blue-500/80"
+          color="bg-primary/80"
           inverted
           vaNote="Consistent poor sleep supports sleep apnea and PTSD rating criteria."
         />
@@ -338,7 +338,7 @@ export default function HealthTrends() {
           values={data.flares.values}
           trend={data.flares.trend}
           summary={`${data.stats.totalFlareUps} total flare-ups over ${periodLabel.toLowerCase()}`}
-          color="bg-orange-500/80"
+          color="bg-warning/80"
           vaNote="Flare-up frequency and duration are key factors in functional loss ratings."
         />
 

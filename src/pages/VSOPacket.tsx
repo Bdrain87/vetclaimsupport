@@ -60,7 +60,7 @@ export default function VSOPacket() {
 
       <div className="flex gap-2">
         <Button size="sm" variant="outline" className="gap-1.5" onClick={handleCopy}>
-          {copied ? <CheckCircle2 className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+          {copied ? <CheckCircle2 className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
           {copied ? 'Copied' : 'Copy'}
         </Button>
         <Button size="sm" variant="outline" className="gap-1.5" onClick={handleShare}>

@@ -123,7 +123,7 @@ function RatingLevelCard({
                   key={idx}
                   className="text-xs text-muted-foreground flex items-start gap-1.5"
                 >
-                  <CheckCircle2 className="h-3 w-3 text-green-500 dark:text-green-400 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-3 w-3 text-success mt-0.5 flex-shrink-0" />
                   <span>{tip}</span>
                 </li>
               ))}
@@ -172,7 +172,7 @@ function ExamTipsSection({ tips }: { tips: string[] }) {
           <CardHeader className="cursor-pointer hover:bg-muted/30 transition-colors pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-base flex items-center gap-2">
-                <BookOpen className="h-5 w-5 text-green-600 dark:text-green-400" />
+                <BookOpen className="h-5 w-5 text-success" />
                 General Exam Tips
               </CardTitle>
               <ChevronDown
@@ -192,7 +192,7 @@ function ExamTipsSection({ tips }: { tips: string[] }) {
                   key={idx}
                   className="text-sm flex items-start gap-2 text-foreground/80"
                 >
-                  <CheckCircle2 className="h-4 w-4 text-green-500 dark:text-green-400 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
                   <span>{tip}</span>
                 </li>
               ))}

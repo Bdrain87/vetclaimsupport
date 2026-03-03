@@ -276,7 +276,7 @@ export function DataBackup() {
           {/* Backup Health Indicator */}
           <div className="flex items-center justify-between p-3 rounded-lg border border-border bg-card">
             <div className="flex items-center gap-2">
-              <Clock className={`h-4 w-4 ${lastBackup ? 'text-emerald-400' : 'text-yellow-400'}`} />
+              <Clock className={`h-4 w-4 ${lastBackup ? 'text-success' : 'text-warning'}`} />
               <div>
                 <p className="text-xs font-medium text-foreground">{BACKUP_COPY.healthIndicatorLabel}</p>
                 <p className="text-[11px] text-muted-foreground">

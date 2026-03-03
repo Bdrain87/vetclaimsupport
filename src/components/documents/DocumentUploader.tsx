@@ -123,7 +123,7 @@ export function DocumentUploader({ documents, category, onAdd, onDelete }: Docum
 
       {/* File size error */}
       {fileError && (
-        <p className="text-sm text-red-500">{fileError}</p>
+        <p className="text-sm text-destructive">{fileError}</p>
       )}
 
       {/* Mobile-Optimized Upload Buttons - 48px min touch targets */}
