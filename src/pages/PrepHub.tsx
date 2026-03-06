@@ -47,6 +47,7 @@ const toolCategories: { title: string; tools: ToolItem[] }[] = [
     tools: [
       { label: 'Rating Calculator', icon: Calculator, route: '/claims/calculator', description: 'Calculate combined VA rating' },
       { label: 'Back Pay Estimator', icon: DollarSign, route: '/prep/back-pay', description: 'Estimate potential back pay' },
+      { label: 'Lifetime Benefits', icon: TrendingUp, route: '/prep/cost-estimate', description: 'Project total compensation over time' },
       { label: 'Travel Pay', icon: Navigation, route: '/prep/travel-pay', description: 'Estimate VA travel reimbursement' },
     ],
   },
