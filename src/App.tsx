@@ -125,6 +125,7 @@ const BodyMap = lazyWithRetry(() => import('./pages/BodyMap'));
 const StressorStatement = lazyWithRetry(() => import('./pages/StressorStatement'));
 const VASpeakTranslator = lazyWithRetry(() => import('./pages/VASpeakTranslator'));
 const BackPayEstimator = lazyWithRetry(() => import('./pages/BackPayEstimator'));
+const CostEstimator = lazyWithRetry(() => import('./pages/CostEstimator'));
 const IntentToFile = lazyWithRetry(() => import('./pages/IntentToFile'));
 const TravelPayCalculator = lazyWithRetry(() => import('./pages/TravelPayCalculator'));
 const BDDGuide = lazyWithRetry(() => import('./pages/BDDGuide'));
@@ -348,6 +349,7 @@ function AnimatedRoutes() {
           <Route path="/prep/dbq" element={<PremiumGuard featureName="DBQ Prep Sheet"><DBQPrepSheet /></PremiumGuard>} />
           <Route path="/prep/va-speak" element={<VASpeakTranslator />} />
           <Route path="/prep/back-pay" element={<PremiumGuard featureName="Back Pay Estimator"><BackPayEstimator /></PremiumGuard>} />
+          <Route path="/prep/cost-estimate" element={<CostEstimator />} />
           <Route path="/prep/travel-pay" element={<TravelPayCalculator />} />
           <Route path="/prep/bdd-guide" element={<BDDGuide />} />
           <Route path="/prep/packet" element={<PremiumGuard featureName="Claim Packet Builder"><BuildPacket /></PremiumGuard>} />
