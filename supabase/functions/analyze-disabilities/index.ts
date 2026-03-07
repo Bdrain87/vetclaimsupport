@@ -110,7 +110,7 @@ function redactPIIServerSide(text: string): string {
   result = result.replace(/\bMRN\s*[:#]?\s*[A-Za-z0-9]{4,12}\b/gi, '[MRN_REDACTED]');
   // DOB (label-aware)
   result = result.replace(
-    /(\b(?:DOB|date\s+of\s+birth|born|birthday)(?:\s*:)?)\s*(?:\d{1,2}[/\-]\d{1,2}[/\-]\d{2,4}|\d{4}[/\-]\d{1,2}[/\-]\d{1,2}|(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2},?\s+\d{2,4})/gi,
+    /(\b(?:DOB|date\s+of\s+birth|born|birthday)(?:\s*:)?)\s*(?:\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\d{4}[/-]\d{1,2}[/-]\d{1,2}|(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2},?\s+\d{2,4})/gi,
     '$1 [DOB_REDACTED]',
   );
   // Labeled names (aggressive)
