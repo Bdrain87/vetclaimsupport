@@ -33,10 +33,6 @@ import { logger } from './utils/logger';
 import { initNativeOAuthListener } from './lib/nativeOAuth';
 import { initializePurchases, loginPurchases, logoutPurchases } from './services/iap';
 import { scheduleDeadlineNotifications } from './services/notifications';
-import { DashboardSkeleton } from './components/skeletons/DashboardSkeleton';
-import { ConditionsSkeleton } from './components/skeletons/ConditionsSkeleton';
-import { HealthHubSkeleton } from './components/skeletons/HealthHubSkeleton';
-import { PrepHubSkeleton } from './components/skeletons/PrepHubSkeleton';
 
 // Initialize native OAuth deep-link listener (no-op on web)
 initNativeOAuthListener().catch(() => {});
@@ -48,32 +44,16 @@ try {
   logger.error('Data migration failed:', e);
 }
 
-// Retry wrapper for lazy imports — when a deploy ships new chunk filenames,
-// stale clients will 404 on old URLs. This catches that and forces a reload.
-function lazyWithRetry(factory: () => Promise<{ default: React.ComponentType }>) {
+// Retry wrapper for lazy imports — waits 1 second then retries once before
+// throwing to the error boundary. Handles transient network blips gracefully.
+const lazyWithRetry = (importFn: () => Promise<{ default: React.ComponentType }>) => {
   return lazy(() =>
-    factory()
-      .then((mod) => {
-        // Chunk loaded successfully — clear any previous reload flag so future
-        // failures can still trigger the one-time reload mechanism.
-        sessionStorage.removeItem('chunk_reload');
-        return mod;
-      })
-      .catch((err) => {
-        // If chunk load fails, force a full page reload to get new HTML + chunks.
-        // Guard against infinite reload loops with a sessionStorage flag.
-        const key = 'chunk_reload';
-        if (!sessionStorage.getItem(key)) {
-          sessionStorage.setItem(key, '1');
-          window.location.reload();
-          // Return a never-resolving promise since we're reloading
-          return new Promise<never>(() => {});
-        }
-        // If we already reloaded and still failing, throw to error boundary
-        throw err;
-      })
+    importFn().catch(async () => {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      return importFn();
+    })
   );
-}
+};
 
 // Lazy-loaded route components for code splitting
 const Dashboard = lazyWithRetry(() => import('./pages/Dashboard'));
@@ -182,17 +162,15 @@ function LoadingFallback() {
   );
 }
 
-// Route-aware loading fallback that shows page-specific skeletons
 function RouteLoadingFallback() {
-  const location = useLocation();
-  const path = location.pathname;
-
-  if (path === '/' || path === '/app') return <DashboardSkeleton />;
-  if (path === '/claims') return <ConditionsSkeleton />;
-  if (path === '/health') return <HealthHubSkeleton />;
-  if (path === '/prep') return <PrepHubSkeleton />;
-
-  return <LoadingFallback />;
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 flex items-center justify-center">
+      <div className="glass-card p-8 rounded-3xl border border-white/10 backdrop-blur-3xl">
+        <div className="w-10 h-10 border-4 border-white/30 border-t-white rounded-full animate-spin mx-auto" />
+        <p className="mt-4 text-white/80 font-medium">Preparing your claim packet...</p>
+      </div>
+    </div>
+  );
 }
 
 function RedirectConditionToClaimsId() {
