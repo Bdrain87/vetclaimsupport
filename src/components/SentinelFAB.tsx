@@ -12,7 +12,7 @@ import useAppStore from '@/store/useAppStore';
 
 const SYSTEM_PROMPT = 'As a VA disability claim expert, provide helpful, accurate advice for veterans:';
 
-function useGeminiModel() {
+function getGeminiModel() {
   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || '');
   return genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 }
@@ -45,7 +45,7 @@ export function SentinelFAB() {
     setLoading(true);
     setResponse('');
     try {
-      const model = useGeminiModel();
+      const model = getGeminiModel();
       const result = await model.generateContent(`${SYSTEM_PROMPT} ${text}`);
       setResponse(result.response.text());
     } catch {
@@ -74,7 +74,7 @@ export function SentinelFAB() {
 
       setLoading(true);
       try {
-        const model = useGeminiModel();
+        const model = getGeminiModel();
         const audioPart = {
           inlineData: {
             mimeType: 'audio/wav' as const,
