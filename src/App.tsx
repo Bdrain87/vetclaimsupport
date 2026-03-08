@@ -132,6 +132,12 @@ const TDIUChecker = lazyWithRetry(() => import('./pages/TDIUChecker'));
 const BenefitsDiscovery = lazyWithRetry(() => import('./pages/BenefitsDiscovery'));
 const BuddyFillPage = lazyWithRetry(() => import('./pages/BuddyFillPage'));
 
+// Voice-powered features
+const CPExamSimulator = lazyWithRetry(() => import('./pages/CPExamSimulator'));
+const PostExamDebrief = lazyWithRetry(() => import('./pages/PostExamDebrief'));
+const FamilyStatement = lazyWithRetry(() => import('./pages/FamilyStatement'));
+const EvidenceScanner = lazyWithRetry(() => import('./pages/EvidenceScanner'));
+
 // Account & Legal pages
 const DeleteAccountPage = lazyWithRetry(() => import('./pages/account/DeleteAccountPage'));
 const ExportDataPage = lazyWithRetry(() => import('./pages/account/ExportDataPage'));
@@ -321,6 +327,10 @@ function AnimatedRoutes() {
           <Route path="/prep/vso-packet" element={<PremiumGuard featureName="VSO Packet"><VSOPacket /></PremiumGuard>} />
           <Route path="/prep/doctor-packet" element={<PremiumGuard featureName="Doctor Packet"><DoctorPacket /></PremiumGuard>} />
           <Route path="/prep/nexus-guide" element={<NexusGuide />} />
+          <Route path="/prep/exam-simulator" element={<PremiumGuard featureName="C&P Exam Simulator"><CPExamSimulator /></PremiumGuard>} />
+          <Route path="/prep/post-debrief" element={<PremiumGuard featureName="Post-Exam Debrief"><PostExamDebrief /></PremiumGuard>} />
+          <Route path="/prep/family-statement" element={<PremiumGuard featureName="Family Statement"><FamilyStatement /></PremiumGuard>} />
+          <Route path="/prep/evidence-scanner" element={<PremiumGuard featureName="Evidence Scanner"><EvidenceScanner /></PremiumGuard>} />
           <Route path="/prep/exam-day" element={<ExamDayMode />} />
           <Route path="/prep/exam-packet" element={<CPExamPacket />} />
           <Route path="/prep/medication-rule" element={<MedicationRuleTool />} />

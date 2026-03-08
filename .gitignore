@@ -14,6 +14,13 @@ coverage
 .vite
 *.local
 
+# Code signing (NEVER commit)
+*.cer
+*.p12
+*.certSigningRequest
+*.mobileprovision
+ios/App/fastlane/
+
 # Environment files (NEVER commit secrets)
 .env
 .env.local

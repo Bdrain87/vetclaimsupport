@@ -47,8 +47,11 @@ import { useSmartReminders } from '@/hooks/useSmartReminders';
 import { getMonthlyCompensation } from '@/services/vaCompensation';
 import { FLARE_UP_TRIGGERS, FLARE_UP_DURATIONS } from '@/types/claims';
 import type { QuickLogEntry } from '@/types/claims';
-import { notifySuccess, impactLight } from '@/lib/haptics';
+import { notifySuccess, impactLight, impactMedium } from '@/lib/haptics';
 import { BRANCH_LABELS, type Branch } from '@/store/useProfileStore';
+import { ReadinessDrillDown } from '@/components/ReadinessDrillDown';
+import { SyncStatusBadge } from '@/components/SyncStatusBadge';
+import { AnimatePresence } from 'motion/react';
 
 const JOURNEY_PHASE_LABELS = ['Research', 'Evidence', 'Filing', 'C&P Exam', 'Decision'];
 
@@ -117,6 +120,7 @@ export default function Dashboard() {
   const setFirstSessionComplete = useProfileStore((s) => s.setFirstSessionComplete);
 
   const { score: readinessScore, label: readinessLabel } = useSentinel();
+  const [showDrillDown, setShowDrillDown] = useState(false);
 
   const nextSteps = useMemo(
     () => ClaimIntelligence.getNextSteps(profile, userConditions, data),
@@ -419,17 +423,17 @@ export default function Dashboard() {
           </div>
         </Link>
         {userConditions.length > 0 ? (
-          <Link
-            to="/claims"
+          <button
+            onClick={() => { impactMedium(); setShowDrillDown(!showDrillDown); }}
             aria-label={`Readiness — ${readinessScore}% — ${readinessLabel}`}
-            className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors"
+            className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors text-left"
           >
             <ReadinessRing score={readinessScore} />
             <div className="min-w-0">
               <p className="text-sm font-medium text-foreground">Readiness</p>
               <p className="text-[11px] text-muted-foreground">{readinessLabel}</p>
             </div>
-          </Link>
+          </button>
         ) : (
           <Link
             to="/claims"
@@ -446,6 +450,25 @@ export default function Dashboard() {
           </Link>
         )}
       </motion.div>
+
+      {/* Readiness Drill-Down (expands when readiness tapped) */}
+      <AnimatePresence>
+        {showDrillDown && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="rounded-2xl border border-border bg-card p-4 overflow-hidden"
+          >
+            <ReadinessDrillDown onClose={() => setShowDrillDown(false)} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Sync Status */}
+      <div className="flex justify-end">
+        <SyncStatusBadge />
+      </div>
 
       {/* Section 5: Your Next Steps (primary CTA — promoted from Section 6) */}
       <motion.div
