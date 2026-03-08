@@ -26,6 +26,7 @@ import { Button } from './components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './components/ui/dialog';
 import { Input } from './components/ui/input';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { OfflineIndicator } from './components/OfflineIndicator';
 import { isWeb } from './lib/platform';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
@@ -495,6 +496,14 @@ function AnimatedRoutes() {
   );
 }
 
+const hapticImpact = async () => {
+  try {
+    await Haptics.impact({ style: ImpactStyle.Medium });
+  } catch {
+    // silent fallback for web
+  }
+};
+
 function SentinelFAB() {
   const [query, setQuery] = useState('');
   const [response, setResponse] = useState('');
@@ -545,7 +554,7 @@ function SentinelFAB() {
             placeholder="Ask about VA claims, symptoms, etc."
             className="bg-slate-800/50 text-white border-white/20"
           />
-          <Button onClick={handleAsk} disabled={loading} className="w-full bg-amber-600 hover:bg-amber-500">
+          <Button onClick={() => { hapticImpact(); handleAsk(); }} disabled={loading} className="w-full bg-amber-600 hover:bg-amber-500">
             {loading ? 'Asking...' : 'Ask Gemini'}
           </Button>
           {response && <p className="text-white/90 p-4 bg-slate-800/50 rounded-lg">{response}</p>}
@@ -567,7 +576,7 @@ function VeteranErrorBoundary({ error, resetErrorBoundary }: { error: Error; res
         <p className="text-white/80 mb-6">An unexpected issue occurred. Your data is safe — let's get back to your claim.</p>
         <p className="text-red-400/80 mb-6 text-sm">{error.message}</p>
         <Button
-          onClick={resetErrorBoundary}
+          onClick={() => { hapticImpact(); resetErrorBoundary(); }}
           className="bg-amber-600 hover:bg-amber-500 text-white font-semibold"
         >
           Retry Mission
