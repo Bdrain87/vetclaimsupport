@@ -558,15 +558,21 @@ function SentinelFAB() {
           data: recording.value,
         },
       };
-      const result = await model.generateContent([
+      const transResult = await model.generateContent([
         { text: 'Transcribe this audio accurately:' },
         audioPart,
       ]);
-      setQuery(result.response.text());
+      const transcribed = transResult.response.text();
+      setQuery(transcribed);
+      // Auto-ask after transcription for seamless flow
+      const vaPrompt = `As a VA disability claim expert, provide helpful, accurate advice for veterans: ${transcribed}`;
+      const result = await model.generateContent(vaPrompt);
+      setResponse(result.response.text());
     } catch {
       setQuery('Transcription error: Try again.');
     } finally {
       setLoading(false);
+      setIsRecording(false);
     }
   };
 
