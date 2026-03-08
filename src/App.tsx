@@ -22,6 +22,7 @@ import { checkDataRetention } from './utils/dataRetention';
 import { RetentionWarningBanner } from './components/RetentionWarningBanner';
 import { AriaLiveAnnouncer } from './components/AriaLiveAnnouncer';
 import { QuickAddFAB } from './components/QuickAddFAB';
+import { Button } from './components/ui/button';
 import { OfflineIndicator } from './components/OfflineIndicator';
 import { isWeb } from './lib/platform';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
@@ -491,6 +492,25 @@ function AnimatedRoutes() {
   );
 }
 
+function SentinelFAB() {
+  return (
+    <motion.div
+      initial={{ scale: 0, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ delay: 0.5, duration: 0.3 }}
+      className="fixed bottom-20 right-4 z-50"
+    >
+      <Button
+        variant="outline"
+        className="rounded-full p-4 bg-indigo-950/80 border-white/20 backdrop-blur-md shadow-lg"
+        onClick={() => alert('Sentinel AI (Gemini Flash): Ask me anything about your VA claim!')}
+      >
+        <span className="text-white font-bold tracking-wide">Sentinel AI</span>
+      </Button>
+    </motion.div>
+  );
+}
+
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<'loading' | 'authed' | 'unauthed'>('loading');
   const location = useLocation();
@@ -611,6 +631,7 @@ function AppContent() {
           <AnimatedRoutes />
         </main>
         <QuickAddFAB />
+        <SentinelFAB />
         <BottomTabBar />
       </div>
     </div>
