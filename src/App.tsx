@@ -677,6 +677,9 @@ function SentinelFAB() {
             </>
           )}
         </div>
+        <p className="mt-6 text-xs text-white/50 text-center italic">
+          AI outputs are samples based on general knowledge. Verify with VA resources, personalize with your facts, and consult a VSO or attorney. Not legal advice.
+        </p>
         </motion.div>
       </DialogContent>
     </Dialog>
