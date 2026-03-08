@@ -23,6 +23,8 @@ import { RetentionWarningBanner } from './components/RetentionWarningBanner';
 import { AriaLiveAnnouncer } from './components/AriaLiveAnnouncer';
 import { QuickAddFAB } from './components/QuickAddFAB';
 import { Button } from './components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './components/ui/dialog';
+import { Input } from './components/ui/input';
 import { OfflineIndicator } from './components/OfflineIndicator';
 import { isWeb } from './lib/platform';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
@@ -493,21 +495,49 @@ function AnimatedRoutes() {
 }
 
 function SentinelFAB() {
+  const [query, setQuery] = useState('');
+  const [response, setResponse] = useState('');
+
+  const handleAsk = () => {
+    // Placeholder for Gemini Flash API call
+    setResponse(`Gemini Flash response to: "${query}" (e.g., VA claim tips here)`);
+  };
+
   return (
-    <motion.div
-      initial={{ scale: 0, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ delay: 0.5, duration: 0.3 }}
-      className="fixed bottom-20 right-4 z-50"
-    >
-      <Button
-        variant="outline"
-        className="rounded-full p-4 bg-indigo-950/80 border-white/20 backdrop-blur-md shadow-lg"
-        onClick={() => alert('Sentinel AI (Gemini Flash): Ask me anything about your VA claim!')}
-      >
-        <span className="text-white font-bold tracking-wide">Sentinel AI</span>
-      </Button>
-    </motion.div>
+    <Dialog>
+      <DialogTrigger asChild>
+        <motion.div
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.5, duration: 0.3 }}
+          className="fixed bottom-20 right-4 z-50"
+        >
+          <Button
+            variant="outline"
+            className="rounded-full p-4 bg-indigo-950/80 border-white/20 backdrop-blur-md shadow-lg"
+          >
+            <span className="text-white font-bold tracking-wide">Sentinel AI</span>
+          </Button>
+        </motion.div>
+      </DialogTrigger>
+      <DialogContent className="glass-card bg-slate-950/90 border-white/10 backdrop-blur-xl rounded-2xl">
+        <DialogHeader>
+          <DialogTitle className="text-white text-xl font-semibold">Ask Sentinel AI (Gemini Flash)</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+          <Input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Ask about VA claims, symptoms, etc."
+            className="bg-slate-800/50 text-white border-white/20"
+          />
+          <Button onClick={handleAsk} className="w-full bg-amber-600 hover:bg-amber-500">
+            Ask Gemini
+          </Button>
+          {response && <p className="text-white/90 p-4 bg-slate-800/50 rounded-lg">{response}</p>}
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
