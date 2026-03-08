@@ -517,13 +517,19 @@ function SentinelFAB() {
     try {
       const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || 'your-api-key-here');
       const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-      const result = await model.generateContent(query);
+      const vaPrompt = `As a VA disability claim expert, provide helpful, accurate advice for veterans: ${query}`;
+      const result = await model.generateContent(vaPrompt);
       setResponse(result.response.text());
     } catch {
       setResponse('Error: Could not get response from Gemini. Check your API key.');
     } finally {
       setLoading(false);
     }
+  };
+
+  const quickPrompt = (prompt: string) => {
+    setQuery(prompt);
+    hapticImpact();
   };
 
   return (
@@ -554,6 +560,9 @@ function SentinelFAB() {
             placeholder="Ask about VA claims, symptoms, etc."
             className="bg-slate-800/50 text-white border-white/20"
           />
+          <Button onClick={() => quickPrompt('Generate a sample VA impact statement for [condition].')} variant="secondary" className="w-full bg-slate-800/50 text-white/90">
+            Quick: Impact Statement
+          </Button>
           <Button onClick={() => { hapticImpact(); handleAsk(); }} disabled={loading} className="w-full bg-amber-600 hover:bg-amber-500">
             {loading ? 'Asking...' : 'Ask Gemini'}
           </Button>
