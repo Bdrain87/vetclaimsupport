@@ -22,7 +22,7 @@ import { checkDataRetention } from './utils/dataRetention';
 import { RetentionWarningBanner } from './components/RetentionWarningBanner';
 import { AriaLiveAnnouncer } from './components/AriaLiveAnnouncer';
 import { QuickAddFAB } from './components/QuickAddFAB';
-import { SentinelFAB } from './components/SentinelFAB';
+import { SentinelCore } from './components/SentinelCore';
 import { VeteranErrorBoundary } from './components/VeteranErrorBoundary';
 import { LoadingFallback, RouteLoadingFallback } from './components/LoadingFallback';
 import { OfflineIndicator } from './components/OfflineIndicator';
@@ -577,7 +577,7 @@ function AppContent() {
           <AnimatedRoutes />
         </main>
         <QuickAddFAB />
-        <SentinelFAB />
+        <SentinelCore />
         <BottomTabBar />
       </div>
     </div>

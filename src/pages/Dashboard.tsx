@@ -6,6 +6,7 @@ import { combineRatings } from '@/utils/vaMath';
 import useAppStore from '@/store/useAppStore';
 import { useShallow } from 'zustand/react/shallow';
 import { ClaimIntelligence } from '@/services/claimIntelligence';
+import { useSentinel } from '@/hooks/useSentinel';
 import {
   ChevronRight,
   Zap,
@@ -51,6 +52,27 @@ import { BRANCH_LABELS, type Branch } from '@/store/useProfileStore';
 
 const JOURNEY_PHASE_LABELS = ['Research', 'Evidence', 'Filing', 'C&P Exam', 'Decision'];
 
+function ReadinessRing({ score }: { score: number }) {
+  const circumference = 2 * Math.PI * 14;
+  const offset = circumference - (score / 100) * circumference;
+  const color = score >= 70 ? '#22c55e' : score >= 40 ? '#C5A55A' : '#ef4444';
+
+  return (
+    <svg width="36" height="36" viewBox="0 0 36 36" className="flex-shrink-0">
+      <circle cx="18" cy="18" r="14" fill="none" stroke="currentColor" strokeOpacity="0.1" strokeWidth="2.5" />
+      <circle
+        cx="18" cy="18" r="14" fill="none" stroke={color} strokeWidth="2.5"
+        strokeDasharray={circumference} strokeDashoffset={offset}
+        strokeLinecap="round" transform="rotate(-90 18 18)"
+        className="transition-all duration-700"
+      />
+      <text x="18" y="20" textAnchor="middle" fill="currentColor" fontSize="9" fontWeight="bold">
+        {score}
+      </text>
+    </svg>
+  );
+}
+
 export default function Dashboard() {
   const { data } = useClaims();
   const { conditions: userConditions } = useUserConditions();
@@ -94,10 +116,7 @@ export default function Dashboard() {
   const isFirstSession = useProfileStore((s) => s.isFirstSession);
   const setFirstSessionComplete = useProfileStore((s) => s.setFirstSessionComplete);
 
-  const readinessScore = useMemo(
-    () => ClaimIntelligence.getOverallReadiness(userConditions, data, profile),
-    [userConditions, data, profile]
-  );
+  const { score: readinessScore, label: readinessLabel } = useSentinel();
 
   const nextSteps = useMemo(
     () => ClaimIntelligence.getNextSteps(profile, userConditions, data),
@@ -159,7 +178,6 @@ export default function Dashboard() {
   }, [setSeparationDate]);
 
   const phaseLabel = JOURNEY_PHASE_LABELS[currentPhase] || `Phase ${currentPhase + 1}`;
-  const readinessLabel = readinessScore >= 70 ? 'Strong' : readinessScore >= 40 ? 'Building' : 'Early';
 
   // Monthly compensation estimate
   const monthlyCompensation = useMemo(
@@ -406,12 +424,10 @@ export default function Dashboard() {
             aria-label={`Readiness — ${readinessScore}% — ${readinessLabel}`}
             className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors"
           >
-            <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center flex-shrink-0">
-              <Target className="h-4 w-4 text-gold" />
-            </div>
+            <ReadinessRing score={readinessScore} />
             <div className="min-w-0">
               <p className="text-sm font-medium text-foreground">Readiness</p>
-              <p className="text-[11px] text-muted-foreground">{readinessScore}% — {readinessLabel}</p>
+              <p className="text-[11px] text-muted-foreground">{readinessLabel}</p>
             </div>
           </Link>
         ) : (
