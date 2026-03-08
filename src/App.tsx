@@ -576,7 +576,14 @@ function SentinelFAB() {
           <Button onClick={() => { hapticImpact(); handleAsk(); }} disabled={loading} className="w-full bg-amber-600 hover:bg-amber-500">
             {loading ? 'Asking...' : 'Ask Gemini'}
           </Button>
-          {response && <p className="text-white/90 p-4 bg-slate-800/50 rounded-lg">{response}</p>}
+          {response && (
+            <>
+              <p className="text-white/90 p-4 bg-slate-800/50 rounded-lg">{response}</p>
+              <Button onClick={() => { hapticImpact(); setQuery(''); setResponse(''); }} variant="outline" className="w-full border-white/20 text-white/80">
+                Clear
+              </Button>
+            </>
+          )}
         </div>
       </DialogContent>
     </Dialog>
