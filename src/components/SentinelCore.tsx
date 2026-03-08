@@ -14,7 +14,7 @@ import { useSentinel } from '@/hooks/useSentinel';
 import { Mic, MicOff, Copy, Trash2, Sparkles, FileText, Shield, Heart, Scan } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const SYSTEM_PROMPT = `You are Sentinel, a VA disability claim preparation assistant. You help veterans understand the claims process and generate SAMPLE statement templates. Important rules:
+const SYSTEM_PROMPT = `You are Intel, an AI assistant for VA disability claim preparation. You help veterans understand the claims process and generate SAMPLE statement templates. Important rules:
 - All outputs are sample templates that must be personalized
 - Never provide legal advice — always recommend consulting a VSO or attorney
 - Use military-respectful language and VA-recognized terminology
@@ -66,14 +66,14 @@ function ReadinessRing({ score, label }: { score: number; label: string }) {
   );
 }
 
-type SentinelMode = 'ask' | 'voice-build';
+type IntelMode = 'ask' | 'voice-build';
 
 export function SentinelCore() {
   const [query, setQuery] = useState('');
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const [mode, setMode] = useState<SentinelMode>('ask');
+  const [mode, setMode] = useState<IntelMode>('ask');
   const conditions = useAppStore((state) => state.userConditions?.map(c => c.displayName || c.conditionId).join(', ') || 'my conditions');
   const { score, label } = useSentinel();
   const navigate = useNavigate();
@@ -90,7 +90,7 @@ export function SentinelCore() {
       const result = await model.generateContent(`${SYSTEM_PROMPT}\n\n${text}`);
       setResponse(result.response.text());
     } catch {
-      setResponse('Error: Could not get response. Check your connection or API key.');
+      setResponse('Something went wrong. Please check your connection and try again.');
     } finally {
       setLoading(false);
     }
@@ -168,14 +168,14 @@ export function SentinelCore() {
           transition={{ delay: 0.5, duration: 0.3 }}
           className="fixed right-4 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-gold/90 to-amber-700/90 border border-gold/30 backdrop-blur-md shadow-[0_4px_24px_rgba(197,165,90,0.3)] flex items-center justify-center"
           style={{ bottom: 'calc(9rem + env(safe-area-inset-bottom, 0px))' }}
-          aria-label="Open Sentinel AI"
+          aria-label="Open Intel AI"
         >
           <Sparkles className="h-6 w-6 text-white" />
         </motion.button>
       </DialogTrigger>
       <DialogContent className="bg-card border-border rounded-2xl max-h-[85dvh] overflow-y-auto p-6">
           <DialogHeader>
-            <DialogTitle className="text-foreground text-lg font-semibold tracking-wide">Sentinel AI</DialogTitle>
+            <DialogTitle className="text-foreground text-lg font-semibold tracking-wide">Intel</DialogTitle>
           </DialogHeader>
 
           {/* Readiness Score */}
@@ -184,7 +184,7 @@ export function SentinelCore() {
           </div>
 
           {/* Mode Toggle */}
-          <div className="flex gap-1 p-1 rounded-lg bg-secondary mb-3" role="tablist" aria-label="Sentinel mode">
+          <div className="flex gap-1 p-1 rounded-lg bg-secondary mb-3" role="tablist" aria-label="Intel mode">
             <button
               role="tab"
               aria-selected={mode === 'ask'}
@@ -270,7 +270,7 @@ export function SentinelCore() {
                   disabled={loading || !query}
                   className="w-full bg-gold hover:bg-gold/80 text-black font-semibold"
                 >
-                  {loading ? 'Asking...' : 'Ask Sentinel'}
+                  {loading ? 'Asking...' : 'Ask Intel'}
                 </Button>
               </>
             )}

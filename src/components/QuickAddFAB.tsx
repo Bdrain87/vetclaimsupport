@@ -88,7 +88,7 @@ export function QuickAddFAB() {
           aria-label={open ? 'Close quick add menu' : 'Open quick add menu'}
         >
           <motion.div animate={{ rotate: open ? 45 : 0 }} transition={{ duration: 0.2 }}>
-            {open ? <X className="h-6 w-6 text-black" /> : <Plus className="h-6 w-6 text-black" />}
+            {open ? <X className="h-6 w-6 text-white" /> : <Plus className="h-6 w-6 text-white" />}
           </motion.div>
         </motion.button>
       </div>
