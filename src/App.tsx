@@ -8,8 +8,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { TooltipProvider } from './components/ui/tooltip';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RouteErrorBoundary } from './components/RouteErrorBoundary';
-import { MotionConfig } from 'motion/react';
-import { motion } from 'motion/react';
+import { MotionConfig, motion, AnimatePresence } from 'motion/react';
 import { LiabilityAcceptanceScreen } from './components/legal/LiabilityAcceptanceScreen';
 import { SplashScreen } from './components/SplashScreen';
 
@@ -278,10 +277,18 @@ function AnimatedRoutes() {
   useKeyboardShortcuts();
 
   return (
-    <div key={location.pathname} className="animate-fade-in">
-      <RouteErrorBoundary>
-      <Suspense fallback={<RouteLoadingFallback />}>
-        <Routes location={location}>
+    <AnimatePresence mode="wait" initial={false}>
+      <motion.div
+        key={location.pathname}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="h-full"
+      >
+        <RouteErrorBoundary>
+          <Suspense fallback={<RouteLoadingFallback />}>
+            <Routes location={location}>
           {/* === ROOT TABS === */}
           {isWeb ? (
             <Route path="/" element={<Navigate to="/app" replace />} />
@@ -476,10 +483,11 @@ function AnimatedRoutes() {
 
           {/* === CATCH-ALL === */}
           <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
-      </RouteErrorBoundary>
-    </div>
+            </Routes>
+          </Suspense>
+        </RouteErrorBoundary>
+      </motion.div>
+    </AnimatePresence>
   );
 }
 
