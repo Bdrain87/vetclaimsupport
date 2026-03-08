@@ -317,8 +317,8 @@ export default function Migraines() {
   const getSeverityColor = (severity: MigraineSeverity) => {
     switch (severity) {
       case 'Mild': return 'bg-success/10 text-success border-success/20';
-      case 'Moderate': return 'bg-warning/10 text-warning border-warning/20';
-      case 'Severe': return 'bg-warning/10 text-warning border-warning/20';
+      case 'Moderate': return 'bg-gold/10 text-gold border-gold/20';
+      case 'Severe': return 'bg-gold/10 text-gold border-gold/20';
       case 'Prostrating': return 'bg-destructive/10 text-destructive border-destructive/20';
     }
   };

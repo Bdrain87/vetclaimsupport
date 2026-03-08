@@ -203,7 +203,7 @@ export default function EvidenceStrength() {
   const getLevelColor = (pct: number) => {
     if (pct >= 70) return 'text-success';
     if (pct >= 50) return 'text-gold';
-    if (pct >= 30) return 'text-warning';
+    if (pct >= 30) return 'text-gold';
     return 'text-muted-foreground';
   };
 

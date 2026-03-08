@@ -928,7 +928,7 @@ export default function Settings() {
             className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
           >
             <div className="flex items-center gap-3">
-              <AlertTriangle className="h-5 w-5 text-warning" />
+              <AlertTriangle className="h-5 w-5 text-gold" />
               <div>
                 <span className="font-medium text-foreground">Disclaimer</span>
                 <p className="text-[11px] text-muted-foreground">v{LEGAL_VERSIONS.disclaimer.version} · {formatLegalDate(LEGAL_VERSIONS.disclaimer.effectiveDate)}</p>

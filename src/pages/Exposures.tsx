@@ -134,16 +134,16 @@ export default function Exposures() {
 
   const getExposureColor = (type: string) => {
     const colors: Record<string, string> = {
-      'Burn pit': 'bg-warning/10 text-warning ring-warning/20',
+      'Burn pit': 'bg-gold/10 text-gold ring-gold/20',
       'Jet fuel': 'bg-gold/10 text-gold ring-gold/20',
       'Chemicals': 'bg-destructive/10 text-destructive ring-destructive/20',
-      'Noise': 'bg-warning/10 text-warning ring-warning/20',
-      'Radiation': 'bg-warning/10 text-warning ring-warning/20',
+      'Noise': 'bg-gold/10 text-gold ring-gold/20',
+      'Radiation': 'bg-gold/10 text-gold ring-gold/20',
       'Asbestos': 'bg-gray-500/10 text-gray-600 ring-gray-500/20',
       'Extreme temps': 'bg-cyan-500/10 text-cyan-600 ring-cyan-500/20',
       'Diesel exhaust': 'bg-stone-500/10 text-stone-600 ring-stone-500/20',
-      'Depleted uranium': 'bg-warning/10 text-warning ring-warning/20',
-      'Sand/dust': 'bg-warning/10 text-warning ring-warning/20',
+      'Depleted uranium': 'bg-gold/10 text-gold ring-gold/20',
+      'Sand/dust': 'bg-gold/10 text-gold ring-gold/20',
       'Contaminated water (Camp Lejeune)': 'bg-teal-500/10 text-teal-600 ring-teal-500/20',
       'Contaminated water': 'bg-teal-500/10 text-teal-600 ring-teal-500/20',
       'Herbicides': 'bg-success/10 text-success ring-success/20',

@@ -267,7 +267,7 @@ export default function VAResources() {
                 <div className="grid gap-4 md:grid-cols-2">
                   {/* Burn Pit Conditions */}
                   <div className="p-4 bg-muted/30 rounded-lg border border-border">
-                    <h3 className="font-semibold text-warning mb-3">
+                    <h3 className="font-semibold text-gold mb-3">
                       Burn Pit / Toxic Exposure (23+ Conditions)
                     </h3>
                     <ul className="text-sm text-muted-foreground space-y-1">

@@ -104,11 +104,11 @@ export function PACTActChecker() {
   return (
     <div className="space-y-6">
       {/* Info Banner */}
-      <div className="p-4 rounded-xl bg-warning/10 border border-warning/30">
+      <div className="p-4 rounded-xl bg-gold/10 border border-gold/30">
         <div className="flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-warning mt-0.5 flex-shrink-0" />
+          <AlertCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
           <div>
-            <h3 className="font-semibold text-warning">PACT Act Eligibility Checker</h3>
+            <h3 className="font-semibold text-gold">PACT Act Eligibility Checker</h3>
             <p className="text-sm text-muted-foreground mt-1">
               Check if you may qualify for presumptive benefits under the PACT Act based on your service locations.
               This is for educational purposes only.
@@ -275,7 +275,7 @@ export function PACTActChecker() {
                 <h4 className="text-sm font-medium text-foreground mb-2">Exposure Types</h4>
                 <div className="flex flex-wrap gap-2">
                   {result.exposureTypes.map(type => (
-                    <Badge key={type} variant="outline" className="bg-warning/10 text-warning border-warning/30">
+                    <Badge key={type} variant="outline" className="bg-gold/10 text-gold border-gold/30">
                       {type}
                     </Badge>
                   ))}

@@ -65,14 +65,14 @@ const DEADLINE_META: Record<DeadlineType, {
   hlr_appeal: {
     label: 'Higher-Level Review',
     icon: <Scale className="h-4 w-4" />,
-    color: 'text-warning',
+    color: 'text-gold',
     description: 'A senior reviewer re-examines your claim. Must be filed within 1 year of the decision.',
     defaultDaysFromNow: 365,
   },
   supplemental_claim: {
     label: 'Supplemental Claim',
     icon: <FileText className="h-4 w-4" />,
-    color: 'text-warning',
+    color: 'text-gold',
     description: 'Submit new and relevant evidence. Must be filed within 1 year of the decision to preserve effective date.',
     defaultDaysFromNow: 365,
   },
@@ -105,7 +105,7 @@ function getUrgencyStyles(urgency: ReturnType<typeof getUrgencyLevel>) {
   switch (urgency) {
     case 'expired': return { bg: 'bg-destructive/10', border: 'border-destructive/30', text: 'text-destructive', badge: 'bg-destructive text-white' };
     case 'critical': return { bg: 'bg-destructive/5', border: 'border-destructive/20', text: 'text-destructive', badge: 'bg-destructive/10 text-destructive border-destructive/30' };
-    case 'urgent': return { bg: 'bg-warning/5', border: 'border-warning/20', text: 'text-warning', badge: 'bg-warning/10 text-warning border-warning/30' };
+    case 'urgent': return { bg: 'bg-gold/5', border: 'border-gold/20', text: 'text-gold', badge: 'bg-gold/10 text-gold border-gold/30' };
     case 'warning': return { bg: 'bg-gold/5', border: 'border-gold/20', text: 'text-gold', badge: 'bg-gold/10 text-gold border-gold/30' };
     case 'healthy': return { bg: 'bg-success/5', border: 'border-success/20', text: 'text-success', badge: 'bg-success/10 text-success border-success/30' };
   }
@@ -163,7 +163,7 @@ function DeadlineCard({ deadline, onDelete, onComplete }: {
           <>
             <Progress
               value={progress}
-              className={cn('h-1.5', urgency === 'critical' && '[&>div]:bg-destructive', urgency === 'urgent' && '[&>div]:bg-warning')}
+              className={cn('h-1.5', urgency === 'critical' && '[&>div]:bg-destructive', urgency === 'urgent' && '[&>div]:bg-gold')}
             />
 
             {urgency !== 'healthy' && (

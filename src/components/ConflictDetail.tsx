@@ -39,7 +39,7 @@ export function ConflictDetail({ conflict, onClose }: ConflictDetailProps) {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
-            <AlertCircle className="h-5 w-5 text-warning" />
+            <AlertCircle className="h-5 w-5 text-gold" />
             Known Exposures
           </CardTitle>
           <CardDescription>

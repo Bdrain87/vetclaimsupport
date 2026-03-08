@@ -754,7 +754,7 @@ export default function Onboarding() {
                         );
                       } else if (daysOut > 0 && daysOut < 90) {
                         return (
-                          <p className="text-xs text-warning/80 px-1">Your separation is less than 90 days out — standard filing recommended.</p>
+                          <p className="text-xs text-gold/80 px-1">Your separation is less than 90 days out — standard filing recommended.</p>
                         );
                       }
                       return null;

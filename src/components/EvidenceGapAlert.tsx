@@ -122,7 +122,7 @@ const EVIDENCE_REQUIREMENTS: EvidenceRequirement[] = [
 function getImportanceColor(importance: EvidenceRequirement['importance']) {
   switch (importance) {
     case 'critical': return { text: 'text-destructive', bg: 'bg-destructive/10', border: 'border-destructive/20', badge: 'bg-destructive/10 text-destructive border-destructive/30' };
-    case 'recommended': return { text: 'text-warning', bg: 'bg-warning/10', border: 'border-warning/20', badge: 'bg-warning/10 text-warning border-warning/30' };
+    case 'recommended': return { text: 'text-gold', bg: 'bg-gold/10', border: 'border-gold/20', badge: 'bg-gold/10 text-gold border-gold/30' };
     case 'helpful': return { text: 'text-primary', bg: 'bg-primary/10', border: 'border-primary/20', badge: 'bg-primary/10 text-primary border-primary/30' };
   }
 }
@@ -197,7 +197,7 @@ export function EvidenceGapAlert({ conditionId, conditionName }: {
         <div className="flex items-start justify-between gap-3">
           <div>
             <CardTitle className="text-base flex items-center gap-2">
-              <AlertTriangle className={cn('h-4 w-4', analysis.criticalMissing.length > 0 ? 'text-destructive' : 'text-warning')} />
+              <AlertTriangle className={cn('h-4 w-4', analysis.criticalMissing.length > 0 ? 'text-destructive' : 'text-gold')} />
               Evidence Gap Analysis
             </CardTitle>
             <CardDescription className="mt-1">
@@ -217,7 +217,7 @@ export function EvidenceGapAlert({ conditionId, conditionName }: {
           className={cn(
             'h-2 mt-2',
             analysis.score < 40 && '[&>div]:bg-destructive',
-            analysis.score >= 40 && analysis.score < 70 && '[&>div]:bg-warning',
+            analysis.score >= 40 && analysis.score < 70 && '[&>div]:bg-gold',
             analysis.score >= 70 && '[&>div]:bg-success',
           )}
         />
@@ -255,7 +255,7 @@ export function EvidenceGapAlert({ conditionId, conditionName }: {
 
         {analysis.recommendedMissing.length > 0 && (
           <div className="space-y-2">
-            <p className="text-xs font-semibold text-warning uppercase tracking-wider">Recommended</p>
+            <p className="text-xs font-semibold text-gold uppercase tracking-wider">Recommended</p>
             {analysis.recommendedMissing.map(item => {
               const colors = getImportanceColor(item.importance);
               return (

@@ -222,9 +222,9 @@ export default function ShareableSummary() {
       </div>
 
       {/* Disclaimer */}
-      <Alert className="border-warning/30 bg-warning/5">
-        <AlertTriangle className="h-4 w-4 text-warning" />
-        <AlertDescription className="text-warning text-sm">
+      <Alert className="border-gold/30 bg-gold/5">
+        <AlertTriangle className="h-4 w-4 text-gold" />
+        <AlertDescription className="text-gold text-sm">
           This is <strong>NOT an official VA document</strong>. This summary is generated from data you entered
           into Vet Claim Support for personal planning and organization purposes only.
         </AlertDescription>
@@ -263,8 +263,8 @@ export default function ShareableSummary() {
               <p className="text-2xl font-bold text-success">{summary.approvedConditions}</p>
               <p className="text-xs text-muted-foreground">Approved</p>
             </div>
-            <div className="text-center p-3 rounded-lg bg-warning/5">
-              <p className="text-2xl font-bold text-warning">{summary.pendingConditions}</p>
+            <div className="text-center p-3 rounded-lg bg-gold/5">
+              <p className="text-2xl font-bold text-gold">{summary.pendingConditions}</p>
               <p className="text-xs text-muted-foreground">Pending</p>
             </div>
           </div>
@@ -280,7 +280,7 @@ export default function ShareableSummary() {
                     <div key={i} className="flex items-center justify-between py-2 px-3 rounded-lg bg-muted/30">
                       <div className="flex items-center gap-2 min-w-0">
                         {c.status === 'approved' && <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0" />}
-                        {c.status === 'pending' && <Star className="h-4 w-4 text-warning flex-shrink-0" />}
+                        {c.status === 'pending' && <Star className="h-4 w-4 text-gold flex-shrink-0" />}
                         <span className="text-sm truncate">{c.name}</span>
                       </div>
                       <Badge variant="outline" className="text-xs flex-shrink-0 ml-2">

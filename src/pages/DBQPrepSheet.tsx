@@ -941,10 +941,10 @@ export default function DBQPrepSheet() {
       </div>
 
       {/* Exam Tips */}
-      <Card className="border-warning/30 bg-warning/5">
+      <Card className="border-gold/30 bg-gold/5">
         <CardContent className="pt-4">
           <div className="flex items-start gap-2">
-            <AlertCircle className="h-5 w-5 text-warning mt-0.5" />
+            <AlertCircle className="h-5 w-5 text-gold mt-0.5" />
             <div className="text-sm">
               <p className="font-medium mb-2">C&P Exam Tips</p>
               <ul className="space-y-1 text-muted-foreground">

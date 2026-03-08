@@ -226,7 +226,7 @@ export default function Sleep() {
     );
     
     if (hasRespiratoryFailure) return { rating: '100%', color: 'text-destructive', note: 'Chronic respiratory failure with CO₂ retention or cor pulmonale' };
-    if (usesCPAP) return { rating: '50%', color: 'text-warning', note: 'Requires use of breathing assistance device such as CPAP' };
+    if (usesCPAP) return { rating: '50%', color: 'text-gold', note: 'Requires use of breathing assistance device such as CPAP' };
     if (hasSevereSleepiness) return { rating: '30%', color: 'text-gold', note: 'Persistent daytime hypersomnolence' };
     return { rating: '0%', color: 'text-muted-foreground', note: 'Asymptomatic with documented sleep disorder' };
   }, [sleepEntries]);
@@ -235,8 +235,8 @@ export default function Sleep() {
     switch (quality) {
       case 'Excellent': return 'bg-success/10 text-success border-success/20';
       case 'Good': return 'bg-success/10 text-success border-success/20';
-      case 'Fair': return 'bg-warning/10 text-warning border-warning/20';
-      case 'Poor': return 'bg-warning/10 text-warning border-warning/20';
+      case 'Fair': return 'bg-gold/10 text-gold border-gold/20';
+      case 'Poor': return 'bg-gold/10 text-gold border-gold/20';
       case 'Very Poor': return 'bg-destructive/10 text-destructive border-destructive/20';
     }
   };
@@ -288,8 +288,8 @@ export default function Sleep() {
             <span className="font-bold text-gold-hl text-lg">30%</span>
             <p className="text-muted-foreground mt-1">Persistent daytime sleepiness</p>
           </div>
-          <div className="bg-background/60 rounded-xl p-3 border border-warning/30">
-            <span className="font-bold text-warning text-lg">50%</span>
+          <div className="bg-background/60 rounded-xl p-3 border border-gold/30">
+            <span className="font-bold text-gold text-lg">50%</span>
             <p className="text-muted-foreground mt-1">Requires CPAP machine</p>
           </div>
           <div className="bg-background/60 rounded-xl p-3 border border-destructive/30">
@@ -384,11 +384,11 @@ export default function Sleep() {
                     </Label>
 
                     {/* CPAP Section - CRITICAL for 50% rating */}
-                    <div className={`rounded-lg border-2 p-4 ${formData.usesCPAP ? 'border-success bg-success/10' : 'border-warning bg-warning/10'}`}>
+                    <div className={`rounded-lg border-2 p-4 ${formData.usesCPAP ? 'border-success bg-success/10' : 'border-gold bg-gold/10'}`}>
                       <div className="flex items-center justify-between gap-3 flex-wrap">
                         <div className="space-y-1 min-w-0 flex-1">
                           <Label className="text-base font-semibold">Do you use a CPAP/breathing device?</Label>
-                          <p className="text-sm font-medium text-warning">⭐ Critical for 50% rating</p>
+                          <p className="text-sm font-medium text-gold">⭐ Critical for 50% rating</p>
                         </div>
                         <div className="flex gap-2 flex-shrink-0">
                           <Button
@@ -582,7 +582,7 @@ export default function Sleep() {
                         <Label>Sleep Issue Severity</Label>
                         <span className={`text-lg font-bold ${
                           formData.severityRating && formData.severityRating >= 8 ? 'text-destructive' :
-                          formData.severityRating && formData.severityRating >= 5 ? 'text-warning' :
+                          formData.severityRating && formData.severityRating >= 5 ? 'text-gold' :
                           'text-success'
                         }`}>
                           {formData.severityRating}/10
@@ -744,7 +744,7 @@ export default function Sleep() {
           <Card className="data-card">
             <CardContent className="pt-6">
               <div className="flex items-center gap-3">
-                <CheckCircle2 className={`h-8 w-8 ${stats.cpapCompliance >= 70 ? 'text-success' : 'text-warning'}`} />
+                <CheckCircle2 className={`h-8 w-8 ${stats.cpapCompliance >= 70 ? 'text-success' : 'text-gold'}`} />
                 <div>
                   <p className="text-2xl font-bold">{stats.cpapCompliance}%</p>
                   <p className="text-sm text-muted-foreground">CPAP Compliance</p>
@@ -773,7 +773,7 @@ export default function Sleep() {
         <Card className="data-card">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <Zap className="h-8 w-8 text-warning" />
+              <Zap className="h-8 w-8 text-gold" />
               <div>
                 <p className="text-2xl font-bold">{stats.notRested}</p>
                 <p className="text-sm text-muted-foreground">Not Rested</p>
@@ -806,7 +806,7 @@ export default function Sleep() {
           <Card className="data-card">
             <CardContent className="pt-4 pb-4">
               <div className="text-center">
-                <p className="text-xl font-bold text-warning">{stats.oxygenDrops}</p>
+                <p className="text-xl font-bold text-gold">{stats.oxygenDrops}</p>
                 <p className="text-xs text-muted-foreground">O₂ Desaturations</p>
               </div>
             </CardContent>
@@ -846,7 +846,7 @@ export default function Sleep() {
                       {entry.severityRating && (
                         <Badge variant="outline" className={
                           entry.severityRating >= 8 ? 'text-destructive border-destructive/50' :
-                          entry.severityRating >= 5 ? 'text-warning border-warning/50' :
+                          entry.severityRating >= 5 ? 'text-gold border-gold/50' :
                           'text-success border-success/50'
                         }>
                           {entry.severityRating}/10
@@ -890,7 +890,7 @@ export default function Sleep() {
                 {/* CPAP Info */}
                 {entry.usesCPAP && (
                   <div className="flex items-center gap-2 text-sm">
-                    <span className={entry.cpapUsedLastNight ? 'text-success' : 'text-warning'}>
+                    <span className={entry.cpapUsedLastNight ? 'text-success' : 'text-gold'}>
                       CPAP: {entry.cpapUsedLastNight ? `Used${entry.cpapHoursUsed ? ` (${entry.cpapHoursUsed}h)` : ''}` : 'Not Used'}
                     </span>
                   </div>

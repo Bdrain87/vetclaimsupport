@@ -179,7 +179,7 @@ export default function BuddyStatements() {
     switch (status) {
       case 'Submitted': return <CheckCircle className="h-4 w-4 text-success" />;
       case 'Received': return <FileText className="h-4 w-4 text-primary" />;
-      case 'Requested': return <Clock className="h-4 w-4 text-warning" />;
+      case 'Requested': return <Clock className="h-4 w-4 text-gold" />;
       default: return <Send className="h-4 w-4 text-muted-foreground" />;
     }
   };
@@ -188,7 +188,7 @@ export default function BuddyStatements() {
     switch (status) {
       case 'Submitted': return 'bg-success/10 text-success ring-success/20';
       case 'Received': return 'bg-primary/10 text-primary ring-primary/20';
-      case 'Requested': return 'bg-warning/10 text-warning ring-warning/20';
+      case 'Requested': return 'bg-gold/10 text-gold ring-gold/20';
       default: return 'bg-muted text-muted-foreground ring-border';
     }
   };
@@ -495,8 +495,8 @@ Date: ${today}`;
                 </pre>
               </CardContent>
             </Card>
-            <div className="px-3 py-2 rounded-md bg-warning/10 border border-warning/20">
-              <p className="text-[11px] text-warning/70">
+            <div className="px-3 py-2 rounded-md bg-gold/10 border border-gold/20">
+              <p className="text-[11px] text-gold/70">
                 This is a template only — not a legal document. Review all content for accuracy
                 and consult with your VSO or attorney before submitting to the VA.
               </p>
@@ -561,8 +561,8 @@ Date: ${today}`;
       </div>
 
       {/* Legal Disclaimer */}
-      <div className="px-4 py-3 rounded-lg bg-warning/10 border border-warning/20">
-        <p className="text-xs text-warning/80">
+      <div className="px-4 py-3 rounded-lg bg-gold/10 border border-gold/20">
+        <p className="text-xs text-gold/80">
           This tool helps organize your thoughts. Generated letters are templates only —
           not legal documents. Review with your VSO or attorney before submitting to the VA.
         </p>

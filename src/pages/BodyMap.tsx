@@ -713,7 +713,7 @@ export default function BodyMap() {
                             <div className="flex-shrink-0 mt-0.5">
                               <MapPin className={`h-4 w-4 ${
                                 pin.severity >= 7 ? 'text-destructive' :
-                                pin.severity >= 4 ? 'text-warning' :
+                                pin.severity >= 4 ? 'text-gold' :
                                 'text-success'
                               }`} />
                             </div>
@@ -732,7 +732,7 @@ export default function BodyMap() {
                                   variant="outline"
                                   className={`text-[10px] px-1.5 py-0 h-4 gap-0.5 ${
                                     pin.severity >= 7 ? 'border-destructive/40 text-destructive' :
-                                    pin.severity >= 4 ? 'border-warning/40 text-warning' :
+                                    pin.severity >= 4 ? 'border-gold/40 text-gold' :
                                     'border-success/40 text-success'
                                   }`}
                                 >
@@ -1094,7 +1094,7 @@ export default function BodyMap() {
                                       variant="outline"
                                       className={`text-[10px] px-1.5 py-0 h-4 gap-0.5 ${
                                         painLevel >= 7 ? 'border-destructive/40 text-destructive' :
-                                        painLevel >= 4 ? 'border-warning/40 text-warning' :
+                                        painLevel >= 4 ? 'border-gold/40 text-gold' :
                                         'border-success/40 text-success'
                                       }`}
                                     >
@@ -1122,7 +1122,7 @@ export default function BodyMap() {
                                 </span>
                                 <span className={`text-[11px] font-bold ml-auto ${
                                   painLevel >= 7 ? 'text-destructive' :
-                                  painLevel >= 4 ? 'text-warning' :
+                                  painLevel >= 4 ? 'text-gold' :
                                   painLevel > 0 ? 'text-success' :
                                   'text-muted-foreground'
                                 }`}>
@@ -1138,7 +1138,7 @@ export default function BodyMap() {
                                     className={`flex-1 h-7 min-h-[28px] rounded-sm text-[10px] font-bold transition-all ${
                                       level <= painLevel
                                         ? level >= 7 ? 'bg-destructive/70 text-white'
-                                          : level >= 4 ? 'bg-warning/60 text-white'
+                                          : level >= 4 ? 'bg-gold/60 text-white'
                                           : 'bg-success/60 text-white'
                                         : 'bg-muted/60 text-muted-foreground hover:bg-muted'
                                     }`}
@@ -1180,7 +1180,7 @@ export default function BodyMap() {
                                 variant="outline"
                                 className={`text-[10px] px-1.5 py-0 h-4 gap-0.5 ${
                                   pin.severity >= 7 ? 'border-destructive/40 text-destructive' :
-                                  pin.severity >= 4 ? 'border-warning/40 text-warning' :
+                                  pin.severity >= 4 ? 'border-gold/40 text-gold' :
                                   'border-success/40 text-success'
                                 }`}
                               >
@@ -1293,7 +1293,7 @@ export default function BodyMap() {
                             </span>
                             {showPainTracking && pain > 0 && (
                               <span className={`text-[10px] font-bold ${
-                                pain >= 7 ? 'text-destructive' : pain >= 4 ? 'text-warning' : 'text-success'
+                                pain >= 7 ? 'text-destructive' : pain >= 4 ? 'text-gold' : 'text-success'
                               }`}>
                                 {pain}/10
                               </span>
@@ -1389,7 +1389,7 @@ export default function BodyMap() {
                     Severity
                     <span className={`ml-2 text-sm font-bold ${
                       pinForm.severity >= 7 ? 'text-destructive' :
-                      pinForm.severity >= 4 ? 'text-warning' :
+                      pinForm.severity >= 4 ? 'text-gold' :
                       'text-success'
                     }`}>
                       {pinForm.severity}/10

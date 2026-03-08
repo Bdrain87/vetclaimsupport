@@ -928,10 +928,10 @@ attorney for official guidance on your specific claim.
             )}
 
             {error && (
-              <Card className="border-warning/30 bg-warning/5">
+              <Card className="border-gold/30 bg-gold/5">
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-3">
-                    <AlertCircle className="h-5 w-5 text-warning flex-shrink-0 mt-0.5" />
+                    <AlertCircle className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
                     <div>
                       <p className="font-medium">Connection Issue</p>
                       <p className="text-sm text-muted-foreground">{error}</p>
@@ -1047,9 +1047,9 @@ attorney for official guidance on your specific claim.
 
                 {/* Evidence Gaps */}
                 {strategy.evidenceGaps.length > 0 && (
-                  <Card className="border-warning/30">
+                  <Card className="border-gold/30">
                     <CardHeader>
-                      <CardTitle className="text-lg flex items-center gap-2 text-warning">
+                      <CardTitle className="text-lg flex items-center gap-2 text-gold">
                         <AlertCircle className="h-5 w-5" />
                         Evidence Gaps to Address
                       </CardTitle>
@@ -1058,7 +1058,7 @@ attorney for official guidance on your specific claim.
                       <ul className="space-y-2">
                         {strategy.evidenceGaps.map((gap, i) => (
                           <li key={i} className="flex items-start gap-2 text-sm">
-                            <span className="text-warning">•</span>
+                            <span className="text-gold">•</span>
                             <span>{gap}</span>
                           </li>
                         ))}

@@ -603,16 +603,16 @@ export default function Dashboard() {
         >
           <button
             onClick={() => navigate('/prep/medication-rule')}
-            className="w-full flex items-center gap-3 p-3 rounded-2xl border border-warning/20 bg-warning/5 text-left"
+            className="w-full flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 text-left"
           >
-            <div className="h-9 w-9 rounded-full bg-warning/10 flex items-center justify-center flex-shrink-0">
-              <ShieldAlert className="h-4 w-4 text-warning" />
+            <div className="h-9 w-9 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
+              <ShieldAlert className="h-4 w-4 text-gold" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-foreground">2026 VA Medication Rule</p>
               <p className="text-xs text-muted-foreground">Check if your {data.medications.length} medication{data.medications.length !== 1 ? 's are' : ' is'} properly documented</p>
             </div>
-            <ChevronRight className="h-4 w-4 text-warning flex-shrink-0" />
+            <ChevronRight className="h-4 w-4 text-gold flex-shrink-0" />
           </button>
         </motion.div>
       )}
@@ -671,7 +671,7 @@ export default function Dashboard() {
             {/* Flare-up toggle */}
             <div className="flex items-center justify-between p-3 rounded-xl border border-border">
               <div className="flex items-center gap-2">
-                <Flame className="h-4 w-4 text-warning" />
+                <Flame className="h-4 w-4 text-gold" />
                 <span className="text-sm font-medium text-foreground">Flare-up today?</span>
               </div>
               <button
@@ -693,7 +693,7 @@ export default function Dashboard() {
 
             {/* Flare-up details (conditional) */}
             {quickLogFlareUp && (
-              <div className="space-y-3 p-3 rounded-xl border border-warning/20 bg-warning/5">
+              <div className="space-y-3 p-3 rounded-xl border border-gold/20 bg-gold/5">
                 {/* Severity */}
                 <div>
                   <label className="text-xs font-medium text-muted-foreground mb-1 block">
@@ -721,7 +721,7 @@ export default function Dashboard() {
                         className={cn(
                           'text-[11px] px-3 py-2 min-h-[36px] rounded-full border transition-colors',
                           quickLogFlareUpDuration === key
-                            ? 'bg-warning/20 border-warning/40 text-warning'
+                            ? 'bg-gold/20 border-gold/40 text-gold'
                             : 'border-border text-muted-foreground hover:bg-accent',
                         )}
                       >
@@ -749,7 +749,7 @@ export default function Dashboard() {
                         className={cn(
                           'text-[11px] px-3 py-2 min-h-[36px] rounded-full border transition-colors',
                           quickLogFlareUpTriggers.includes(trigger)
-                            ? 'bg-warning/20 border-warning/40 text-warning'
+                            ? 'bg-gold/20 border-gold/40 text-gold'
                             : 'border-border text-muted-foreground hover:bg-accent',
                         )}
                       >
@@ -882,7 +882,7 @@ export default function Dashboard() {
                 onClick={() => navigate('/claims/decision-decoder')}
                 className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
               >
-                <AlertTriangle className="h-4 w-4 text-warning flex-shrink-0" />
+                <AlertTriangle className="h-4 w-4 text-gold flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground">Decision Decoder</p>
                   <p className="text-xs text-muted-foreground">Understand your denial in plain English and see your options</p>

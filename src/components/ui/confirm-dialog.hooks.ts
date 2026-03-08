@@ -41,7 +41,7 @@ export function useConfirmDialog() {
     confirmText: 'Sign Out',
     variant: 'warning',
     onConfirm,
-    icon: createElement(LogOut, { className: "h-6 w-6 text-warning" }),
+    icon: createElement(LogOut, { className: "h-6 w-6 text-gold" }),
   });
 
   const confirmClearData = (onConfirm: () => void): ConfirmDialogConfig => ({

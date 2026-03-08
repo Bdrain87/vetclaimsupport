@@ -66,7 +66,6 @@
 .ds-text-secondary { color: var(--text-secondary); }
 .ds-text-tertiary { color: var(--text-tertiary); }
 .ds-text-success { color: var(--text-success); }
-.ds-text-warning { color: var(--text-warning); }
 .ds-text-error { color: var(--text-error); }
 .ds-text-brand { color: var(--text-brand); }
 .ds-text-inverse { color: var(--text-inverse); }
@@ -89,7 +88,6 @@
 .ds-bg-inverse { background: var(--bg-inverse); }
 .ds-bg-brand { background: var(--bg-brand); }
 .ds-bg-success { background: var(--bg-success); }
-.ds-bg-warning { background: var(--bg-warning); }
 .ds-bg-error { background: var(--bg-error); }
 .ds-bg-gold { background: var(--gold-gradient); }
 .ds-bg-gold-subtle { background: var(--gold-gradient-subtle); }

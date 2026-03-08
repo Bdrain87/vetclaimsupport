@@ -310,7 +310,7 @@ export default function ClaimChecklist() {
   const getProgressColor = (current: number, recommended: number) => {
     const ratio = current / recommended;
     if (ratio >= 1) return 'text-success';
-    if (ratio >= 0.5) return 'text-warning';
+    if (ratio >= 0.5) return 'text-gold';
     return 'text-muted-foreground';
   };
 

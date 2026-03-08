@@ -746,7 +746,7 @@ export default function CPExamPrepEnhanced() {
                   <Card>
                     <CardHeader>
                       <CardTitle className="text-lg flex items-center gap-2">
-                        <AlertTriangle className="h-5 w-5 text-warning" />
+                        <AlertTriangle className="h-5 w-5 text-gold" />
                         Common Mistakes to Avoid
                       </CardTitle>
                     </CardHeader>
@@ -828,8 +828,8 @@ export default function CPExamPrepEnhanced() {
                             {aiLoading ? 'Generating Questions...' : 'Generate AI Practice Questions'}
                           </Button>
                           {aiError && !aiLoading && (
-                            <Alert className="border-warning/30 bg-warning/5">
-                              <AlertTriangle className="h-4 w-4 text-warning" />
+                            <Alert className="border-gold/30 bg-gold/5">
+                              <AlertTriangle className="h-4 w-4 text-gold" />
                               <AlertDescription className="text-sm">{aiError}</AlertDescription>
                             </Alert>
                           )}

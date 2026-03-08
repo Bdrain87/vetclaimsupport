@@ -94,9 +94,9 @@ export default function MedicalVisits() {
   return (
     <PageContainer className="space-y-6 animate-fade-in overflow-x-hidden">
       {/* Important Tip Alert */}
-      <Alert className="border-warning/50 bg-warning/10">
-        <AlertTriangle className="h-5 w-5 text-warning" />
-        <AlertTitle className="text-warning font-semibold">Important: Protect Your VA Claim</AlertTitle>
+      <Alert className="border-gold/50 bg-gold/10">
+        <AlertTriangle className="h-5 w-5 text-gold" />
+        <AlertTitle className="text-gold font-semibold">Important: Protect Your VA Claim</AlertTitle>
         <AlertDescription className="text-foreground/90 mt-2">
           <p className="mb-2">
             <strong>After every appointment</strong>, request and review your After-Visit Summary and medical notes. 

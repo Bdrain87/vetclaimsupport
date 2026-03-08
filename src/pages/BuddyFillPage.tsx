@@ -108,7 +108,7 @@ export default function BuddyFillPage() {
         {state.status === 'expired' && (
           <Card>
             <CardContent className="py-12 text-center">
-              <AlertTriangle className="h-8 w-8 mx-auto text-warning mb-3" />
+              <AlertTriangle className="h-8 w-8 mx-auto text-gold mb-3" />
               <p className="text-sm font-medium">Link Expired</p>
               <p className="text-xs text-muted-foreground mt-1">
                 This buddy statement link has expired. Ask the veteran to send a new one.

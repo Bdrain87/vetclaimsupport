@@ -334,9 +334,9 @@ function ClaimStatusTracker() {
 
         {/* Overdue Alert */}
         {isOverdue && currentPhase && !regression && (
-          <Alert className="border-warning/50 bg-warning/10">
-            <AlertTriangle className="h-4 w-4 text-warning" />
-            <AlertDescription className="text-warning">
+          <Alert className="border-gold/50 bg-gold/10">
+            <AlertTriangle className="h-4 w-4 text-gold" />
+            <AlertDescription className="text-gold">
               <strong>Longer than average:</strong> Your claim has been in "{currentPhase.label}" for {daysInPhase} days.
               The VA average for this phase is ~{currentPhase.avgDays} days.
               Consider checking VA.gov or calling the VA hotline (800-827-1000).
@@ -361,7 +361,7 @@ function ClaimStatusTracker() {
               <div className="text-right">
                 <Progress
                   value={Math.min((daysInPhase / currentPhase.avgDays) * 100, 100)}
-                  className={cn('h-2 w-24', isOverdue && '[&>div]:bg-warning')}
+                  className={cn('h-2 w-24', isOverdue && '[&>div]:bg-gold')}
                 />
                 <p className="text-xs text-muted-foreground mt-1">
                   {Math.round((daysInPhase / currentPhase.avgDays) * 100)}% of avg

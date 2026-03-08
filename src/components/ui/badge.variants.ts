@@ -26,7 +26,7 @@ export const badgeVariants = cva(
           "shadow-[inset_0_0_0_1px_hsl(142_76%_46%/0.2)]",
         ],
         warning: [
-          "border-0 bg-warning/15 text-warning",
+          "border-0 bg-gold/15 text-gold",
           "shadow-[inset_0_0_0_1px_hsl(35_100%_55%/0.2)]",
         ],
       },

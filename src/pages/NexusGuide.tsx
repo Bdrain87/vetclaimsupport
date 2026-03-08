@@ -88,8 +88,8 @@ export default function NexusGuide() {
               </div>
             ))}
           </div>
-          <div className="bg-warning/10 border border-warning/20 rounded-lg p-2.5 mt-2">
-            <p className="text-xs text-warning/80">
+          <div className="bg-gold/10 border border-gold/20 rounded-lg p-2.5 mt-2">
+            <p className="text-xs text-gold/80">
               <strong>Red flags:</strong> Generic templates, missing rationale, "possible" or "could be"
               language (too weak), unsigned letters, or letters from providers who didn't review any records.
             </p>
@@ -229,10 +229,10 @@ export default function NexusGuide() {
       </div>
 
       {/* Disclaimer */}
-      <div className="px-4 py-3 rounded-lg bg-warning/10 border border-warning/20">
+      <div className="px-4 py-3 rounded-lg bg-gold/10 border border-gold/20">
         <div className="flex items-start gap-2">
-          <AlertTriangle className="h-4 w-4 text-warning flex-shrink-0 mt-0.5" />
-          <p className="text-xs text-warning/80">
+          <AlertTriangle className="h-4 w-4 text-gold flex-shrink-0 mt-0.5" />
+          <p className="text-xs text-gold/80">
             This guide is for educational purposes only. It does not constitute legal or medical advice.
             Consult with your VSO or attorney for guidance specific to your claim.
           </p>

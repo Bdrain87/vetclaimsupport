@@ -706,8 +706,8 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                     {aiLoading ? 'Analyzing...' : 'Generate Analysis'}
                   </Button>
                   {aiError && !aiLoading && (
-                    <Alert className="border-warning/30 bg-warning/5">
-                      <AlertTriangle className="h-4 w-4 text-warning" />
+                    <Alert className="border-gold/30 bg-gold/5">
+                      <AlertTriangle className="h-4 w-4 text-gold" />
                       <AlertDescription className="text-sm">{aiError}</AlertDescription>
                     </Alert>
                   )}

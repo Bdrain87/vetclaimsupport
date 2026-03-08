@@ -24,7 +24,7 @@ function getConnectionStrength(connection: SecondaryConnection): 'strong' | 'mod
 
 const strengthConfig = {
   strong: { label: 'Strong Connection', color: 'text-success', bg: 'bg-success/10 border-success/20', dot: 'bg-success' },
-  moderate: { label: 'Moderate Connection', color: 'text-warning', bg: 'bg-warning/10 border-warning/20', dot: 'bg-warning' },
+  moderate: { label: 'Moderate Connection', color: 'text-gold', bg: 'bg-gold/10 border-gold/20', dot: 'bg-gold' },
   possible: { label: 'Possible Connection', color: 'text-muted-foreground', bg: 'bg-muted/30 border-border', dot: 'bg-muted-foreground' },
 };
 

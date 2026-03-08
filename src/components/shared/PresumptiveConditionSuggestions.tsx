@@ -230,9 +230,9 @@ export function PresumptiveConditionSuggestions({
                 {group.cfrCitation} — {group.eligibility}
               </p>
               {group.deadline && (
-                <div className="mt-2 flex items-center gap-1.5 px-2 py-1 bg-warning/15 border border-warning/30 rounded-lg">
-                  <Clock className="h-3.5 w-3.5 text-warning flex-shrink-0" />
-                  <span className="text-[11px] font-medium text-warning">
+                <div className="mt-2 flex items-center gap-1.5 px-2 py-1 bg-gold/15 border border-gold/30 rounded-lg">
+                  <Clock className="h-3.5 w-3.5 text-gold flex-shrink-0" />
+                  <span className="text-[11px] font-medium text-gold">
                     {group.deadline}
                   </span>
                 </div>

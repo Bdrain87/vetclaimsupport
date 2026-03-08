@@ -198,7 +198,7 @@ export default function ConditionGuide() {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <AlertCircle className="h-5 w-5 text-warning" />
+                <AlertCircle className="h-5 w-5 text-gold" />
                 C&P Exam Tips
               </CardTitle>
             </CardHeader>
@@ -206,7 +206,7 @@ export default function ConditionGuide() {
               <ul className="space-y-2">
                 {selectedGuide.examTips.map((tip, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm">
-                    <span className="text-warning">•</span>
+                    <span className="text-gold">•</span>
                     <span>{tip}</span>
                   </li>
                 ))}

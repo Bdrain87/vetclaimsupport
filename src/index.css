@@ -555,7 +555,7 @@ body {
     border: 1px solid hsl(var(--success) / 0.2);
   }
   .severity-medium { 
-    @apply bg-warning/15 text-warning;
+    @apply bg-gold/15 text-gold;
     border: 1px solid hsl(var(--warning) / 0.2);
   }
   .severity-high { 

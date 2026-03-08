@@ -73,9 +73,9 @@ export function ConfirmDialog({
       buttonClass: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
     },
     warning: {
-      iconBg: 'bg-warning/10',
-      iconColor: 'text-warning',
-      buttonClass: 'bg-warning text-warning-foreground hover:bg-warning/90',
+      iconBg: 'bg-gold/10',
+      iconColor: 'text-gold',
+      buttonClass: 'bg-gold text-black hover:bg-gold/90',
     },
   };
 

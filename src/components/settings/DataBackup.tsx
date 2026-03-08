@@ -276,7 +276,7 @@ export function DataBackup() {
           {/* Backup Health Indicator */}
           <div className="flex items-center justify-between p-3 rounded-lg border border-border bg-card">
             <div className="flex items-center gap-2">
-              <Clock className={`h-4 w-4 ${lastBackup ? 'text-success' : 'text-warning'}`} />
+              <Clock className={`h-4 w-4 ${lastBackup ? 'text-success' : 'text-gold'}`} />
               <div>
                 <p className="text-xs font-medium text-foreground">{BACKUP_COPY.healthIndicatorLabel}</p>
                 <p className="text-[11px] text-muted-foreground">
@@ -356,7 +356,7 @@ export function DataBackup() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-warning" />
+              <AlertTriangle className="h-5 w-5 text-gold" />
               Confirm Data Restore
             </AlertDialogTitle>
             <AlertDialogDescription asChild>
@@ -369,7 +369,7 @@ export function DataBackup() {
                       : 'unknown date'}
                   </strong>.
                 </p>
-                <p className="text-warning font-medium">
+                <p className="text-gold font-medium">
                   This action cannot be undone. Export your current data first if needed.
                 </p>
                 <p className="text-xs text-muted-foreground">

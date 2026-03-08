@@ -354,7 +354,7 @@ export default function DocumentsHub() {
     switch (status) {
       case 'Submitted': return <Check className="h-4 w-4 text-success" />;
       case 'Obtained': return <FileText className="h-4 w-4 text-gold" />;
-      case 'In Progress': return <Clock className="h-4 w-4 text-warning" />;
+      case 'In Progress': return <Clock className="h-4 w-4 text-gold" />;
       default: return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
     }
   };
@@ -363,7 +363,7 @@ export default function DocumentsHub() {
     switch (status) {
       case 'Submitted': return 'bg-success/10 border-success/20';
       case 'Obtained': return 'bg-gold/10 border-gold/20';
-      case 'In Progress': return 'bg-warning/10 border-warning/20';
+      case 'In Progress': return 'bg-gold/10 border-gold/20';
       default: return 'bg-muted/50 border-border';
     }
   };
@@ -509,10 +509,10 @@ export default function DocumentsHub() {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
+            <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-gold/20">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <Clock className="h-8 w-8 text-warning" />
+                  <Clock className="h-8 w-8 text-gold" />
                   <div>
                     <p className="text-3xl font-bold">{stats.checklistProgress.inProgress}</p>
                     <p className="text-sm text-muted-foreground">In Progress</p>
@@ -819,10 +819,10 @@ export default function DocumentsHub() {
                 </div>
               </CardContent>
             </Card>
-            <Card className="border-warning/20 bg-warning/5">
+            <Card className="border-gold/20 bg-gold/5">
               <CardContent className="pt-4 pb-3">
                 <div className="flex items-center gap-3">
-                  <Clock className="h-6 w-6 text-warning" />
+                  <Clock className="h-6 w-6 text-gold" />
                   <div>
                     <p className="text-xl font-bold">{stats.checklistProgress.inProgress}</p>
                     <p className="text-xs text-muted-foreground">In Progress</p>

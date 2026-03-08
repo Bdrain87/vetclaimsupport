@@ -72,7 +72,7 @@ export function getDocTypeColor(docType: ClaimDocumentType): string {
     case 'buddy-statement':
       return 'bg-info/20 text-info border-info/30';
     case 'medical-records':
-      return 'bg-warning/20 text-warning border-warning/30';
+      return 'bg-gold/20 text-gold border-gold/30';
     case 'service-records':
       return 'bg-secondary/20 text-secondary-foreground border-secondary/30';
     case 'cp-exam-results':

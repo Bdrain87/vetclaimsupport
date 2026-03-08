@@ -156,13 +156,13 @@ function ConditionUpgradeCard({ conditionId, conditionName, currentRating }: {
               {upgradePath.commonMistakes.length > 0 && (
                 <div>
                   <p className="text-sm font-semibold mb-2 flex items-center gap-2">
-                    <AlertTriangle className="h-4 w-4 text-warning" />
+                    <AlertTriangle className="h-4 w-4 text-gold" />
                     Common Mistakes
                   </p>
                   <ul className="space-y-1.5">
                     {upgradePath.commonMistakes.map((mistake, i) => (
                       <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                        <span className="text-warning mt-0.5">•</span>
+                        <span className="text-gold mt-0.5">•</span>
                         {mistake}
                       </li>
                     ))}
@@ -282,7 +282,7 @@ export default function ZeroPercentOptimizer() {
           {lowRated.length > 0 && (
             <div className="space-y-4">
               <h2 className="text-lg font-semibold flex items-center gap-2">
-                <Badge className={cn('text-xs', 'bg-warning/10 text-warning border-warning/30')}>10-20%</Badge>
+                <Badge className={cn('text-xs', 'bg-gold/10 text-gold border-gold/30')}>10-20%</Badge>
                 Low-Rated Conditions
                 <Badge variant="outline" className="ml-auto">{lowRated.length}</Badge>
               </h2>

@@ -346,7 +346,7 @@ export default function Symptoms() {
 
   const getSeverityColor = (severity: number) => {
     if (severity <= 3) return 'bg-success/20 text-success';
-    if (severity <= 6) return 'bg-warning/20 text-warning';
+    if (severity <= 6) return 'bg-gold/20 text-gold';
     return 'bg-destructive/20 text-destructive';
   };
 

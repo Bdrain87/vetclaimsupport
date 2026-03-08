@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'motion/react';
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
-import { Input } from './ui/input';
 import { Clipboard } from '@capacitor/clipboard';
 import { VoiceRecorder } from 'capacitor-voice-recorder';
 import { toast } from '@/hooks/use-toast';
@@ -17,7 +16,7 @@ import { StreamingText } from './ui/StreamingText';
 import { SENTINEL_SYSTEM_PROMPT, SENTINEL_VOICE_BUILD_PROMPT } from '@/lib/ai-prompts';
 import { buildVeteranContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
-import { Mic, MicOff, Copy, Trash2, Sparkles, FileText, Shield, Heart, Scan, Square } from 'lucide-react';
+import { Mic, MicOff, Sparkles, FileText, Shield, Heart, Scan, ArrowUp, ClipboardCheck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const QUICK_PROMPTS: readonly { label: string; icon: React.ElementType; prompt: string | ((conditions: string) => string) }[] = [
@@ -29,30 +28,34 @@ const QUICK_PROMPTS: readonly { label: string; icon: React.ElementType; prompt: 
   { label: 'Stressor Statement', icon: FileText, prompt: (c) => `Generate a sample stressor statement for ${c}. Include specific details about the in-service event, timeframe, and ongoing impact.` },
 ];
 
+const TOOL_CARDS = [
+  { label: 'C&P Simulator', desc: 'Practice exam questions', icon: Shield, route: '/prep/exam-simulator' },
+  { label: 'Post-Exam Debrief', desc: 'Analyze your exam', icon: ClipboardCheck, route: '/prep/post-debrief' },
+  { label: 'Family Statement', desc: 'Generate lay statements', icon: Heart, route: '/prep/family-statement' },
+  { label: 'Evidence Scanner', desc: 'Scan for gaps', icon: Scan, route: '/prep/evidence-scanner' },
+];
+
 function ReadinessRing({ score, label }: { score: number; label: string }) {
   const circumference = 2 * Math.PI * 18;
   const offset = circumference - (score / 100) * circumference;
   const color = score >= 70 ? '#22c55e' : score >= 40 ? '#C5A55A' : '#ef4444';
 
   return (
-    <div className="flex items-center gap-3">
-      <svg width="48" height="48" viewBox="0 0 48 48" className="flex-shrink-0">
-        <circle cx="24" cy="24" r="18" fill="none" stroke="currentColor" strokeOpacity="0.1" strokeWidth="3" />
-        <circle
-          cx="24" cy="24" r="18" fill="none" stroke={color} strokeWidth="3"
-          strokeDasharray={circumference} strokeDashoffset={offset}
-          strokeLinecap="round" transform="rotate(-90 24 24)"
-          className="transition-all duration-700"
-        />
-        <text x="24" y="26" textAnchor="middle" fill="currentColor" fontSize="11" fontWeight="bold">
-          {score}
-        </text>
-      </svg>
-      <div>
-        <p className="text-xs text-muted-foreground uppercase tracking-widest">Readiness</p>
-        <p className="text-sm font-semibold text-foreground">{label}</p>
-      </div>
-    </div>
+    <svg width="48" height="48" viewBox="0 0 48 48" className="flex-shrink-0">
+      <circle cx="24" cy="24" r="18" fill="none" stroke="currentColor" strokeOpacity="0.1" strokeWidth="3" />
+      <circle
+        cx="24" cy="24" r="18" fill="none" stroke={color} strokeWidth="3"
+        strokeDasharray={circumference} strokeDashoffset={offset}
+        strokeLinecap="round" transform="rotate(-90 24 24)"
+        className="transition-all duration-700"
+      />
+      <text x="24" y="22" textAnchor="middle" fill="currentColor" fontSize="11" fontWeight="bold">
+        {score}
+      </text>
+      <text x="24" y="33" textAnchor="middle" fill="currentColor" fontSize="7" opacity="0.5">
+        {label}
+      </text>
+    </svg>
   );
 }
 
@@ -205,12 +208,16 @@ export function SentinelCore() {
     chatRef.current = null;
   };
 
-  const TOOL_LINKS = [
-    { label: 'C&P Simulator', route: '/prep/exam-simulator' },
-    { label: 'Post-Exam Debrief', route: '/prep/post-debrief' },
-    { label: 'Family Statement', route: '/prep/family-statement' },
-    { label: 'Evidence Scanner', route: '/prep/evidence-scanner' },
-  ];
+  const copyChat = async () => {
+    impactMedium();
+    const fullConvo = messages.map(m => `${m.role === 'user' ? 'You' : 'Intel'}: ${m.text}`).join('\n\n');
+    try {
+      await Clipboard.write({ string: fullConvo });
+      toast({ title: 'Conversation copied' });
+    } catch {
+      toast({ title: 'Copy failed', variant: 'destructive' });
+    }
+  };
 
   return (
     <Dialog>
@@ -227,14 +234,11 @@ export function SentinelCore() {
         </motion.button>
       </DialogTrigger>
       <DialogContent className="bg-card border-border rounded-2xl max-h-[85dvh] overflow-y-auto p-6">
-          <DialogHeader>
+          {/* Condensed Header — title left, readiness ring right */}
+          <DialogHeader className="flex-row items-center justify-between space-y-0">
             <DialogTitle className="text-foreground text-lg font-semibold tracking-wide">Intel</DialogTitle>
-          </DialogHeader>
-
-          {/* Readiness Score */}
-          <div className="mt-2 mb-4 p-3 rounded-xl border border-gold/10 bg-gold/5">
             <ReadinessRing score={score} label={label} />
-          </div>
+          </DialogHeader>
 
           {/* Mode Toggle */}
           <div className="flex gap-1 p-1 rounded-lg bg-secondary mb-3" role="tablist" aria-label="Intel mode">
@@ -282,46 +286,19 @@ export function SentinelCore() {
                 {/* Quick prompts — only show when no conversation yet */}
                 {messages.length === 0 && (
                   <div className="grid grid-cols-2 gap-2">
-                    {QUICK_PROMPTS.map(({ label, icon: Icon, prompt }) => (
+                    {QUICK_PROMPTS.map(({ label: promptLabel, icon: Icon, prompt }) => (
                       <Button
-                        key={label}
+                        key={promptLabel}
                         onClick={() => quickPrompt(prompt)}
                         variant="secondary"
                         className="bg-secondary text-foreground/80 text-xs h-auto py-2 px-3 hover:bg-accent justify-start gap-1.5"
                       >
                         <Icon className="h-3 w-3 flex-shrink-0 text-gold/60" />
-                        {label}
+                        {promptLabel}
                       </Button>
                     ))}
                   </div>
                 )}
-
-                <div className="relative">
-                  <Input
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    onKeyDown={(e) => { if (e.key === 'Enter' && !loading) handleAsk(); }}
-                    placeholder={messages.length > 0 ? 'Follow up...' : 'Ask about VA claims, symptoms, etc.'}
-                    className="bg-secondary text-foreground border-border pr-12"
-                  />
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 text-muted-foreground hover:text-foreground"
-                    onClick={toggleVoice}
-                    aria-label={isRecording ? 'Stop recording' : 'Start voice input'}
-                  >
-                    {isRecording ? <MicOff className="h-4 w-4 text-red-400" /> : <Mic className="h-4 w-4" />}
-                  </Button>
-                </div>
-
-                <Button
-                  onClick={handleAsk}
-                  disabled={loading || !query}
-                  className="w-full bg-gold hover:bg-gold/80 text-black font-semibold"
-                >
-                  {loading ? 'Thinking...' : 'Ask Intel'}
-                </Button>
               </>
             )}
 
@@ -358,71 +335,70 @@ export function SentinelCore() {
               </div>
             )}
 
-            {/* Action buttons */}
+            {/* Copy / Clear — lightweight text buttons */}
             {messages.length > 0 && !isStreaming && (
-              <div className="flex gap-2">
-                <Button
-                  onClick={async () => {
-                    impactMedium();
-                    const fullConvo = messages.map(m => `${m.role === 'user' ? 'You' : 'Intel'}: ${m.text}`).join('\n\n');
-                    try {
-                      await Clipboard.write({ string: fullConvo });
-                      toast({ title: 'Conversation copied' });
-                    } catch {
-                      toast({ title: 'Copy failed', variant: 'destructive' });
-                    }
-                  }}
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 border-border text-muted-foreground"
-                >
-                  <Copy className="h-3.5 w-3.5 mr-1.5" />
-                  Copy
-                </Button>
-                <Button
-                  onClick={clearChat}
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 border-border text-muted-foreground"
-                >
-                  <Trash2 className="h-3.5 w-3.5 mr-1.5" />
-                  Clear
-                </Button>
+              <div className="flex items-center gap-3 justify-end">
+                <button onClick={copyChat} className="text-[10px] text-muted-foreground hover:text-foreground transition-colors">Copy</button>
+                <button onClick={clearChat} className="text-[10px] text-muted-foreground hover:text-foreground transition-colors">Clear</button>
               </div>
             )}
 
-            {isStreaming && (
-              <Button
-                onClick={() => { /* Chat streams can't be cancelled easily, so just let it finish */ }}
-                variant="outline"
-                size="sm"
-                className="w-full border-border text-muted-foreground"
-                disabled
-              >
-                <Square className="h-3 w-3 mr-1.5" />
-                Generating...
-              </Button>
+            {/* Unified Chat Bar */}
+            {mode === 'ask' && (
+              <div className="flex items-center gap-2 rounded-xl bg-secondary border border-border px-3 py-2">
+                <input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter' && !loading) handleAsk(); }}
+                  placeholder={messages.length > 0 ? 'Follow up...' : 'Type or ask...'}
+                  className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none min-w-0"
+                />
+                <button
+                  onClick={toggleVoice}
+                  className="flex-shrink-0 h-8 w-8 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label={isRecording ? 'Stop recording' : 'Start voice input'}
+                >
+                  {isRecording ? <MicOff className="h-4 w-4 text-red-400" /> : <Mic className="h-4 w-4" />}
+                </button>
+                <button
+                  onClick={handleAsk}
+                  disabled={loading || !query}
+                  className="flex-shrink-0 h-8 w-8 rounded-full bg-gold text-black flex items-center justify-center disabled:opacity-30 transition-opacity"
+                  aria-label="Send message"
+                >
+                  <ArrowUp className="h-4 w-4" />
+                </button>
+              </div>
             )}
 
-            {/* Tool Links */}
-            <div className="pt-2 border-t border-border">
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-2">AI Tools</p>
-              <div className="grid grid-cols-2 gap-1.5">
-                {TOOL_LINKS.map(({ label, route }) => (
+            {/* Premium AI Tools — Card Grid */}
+            <div className="bg-secondary/20 rounded-xl mx-1 p-4 mt-2">
+              <div className="h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent mb-3" />
+              <p className="text-[11px] font-semibold text-gold/70 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+                <Sparkles className="h-3 w-3" />
+                Premium AI Tools
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                {TOOL_CARDS.map(({ label: cardLabel, desc, icon: Icon, route }) => (
                   <button
                     key={route}
                     onClick={() => { impactMedium(); navigate(route); }}
-                    className="text-[11px] text-muted-foreground hover:text-gold py-1.5 px-2 rounded-lg hover:bg-accent transition-colors text-left"
+                    className="rounded-xl bg-secondary/50 border border-border/50 p-3 hover:border-gold/20 hover:bg-gold/5 transition-all text-left"
                   >
-                    {label} →
+                    <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center mb-2">
+                      <Icon className="h-4 w-4 text-gold" />
+                    </div>
+                    <p className="text-xs font-medium text-foreground">{cardLabel}</p>
+                    <p className="text-[10px] text-muted-foreground">{desc}</p>
                   </button>
                 ))}
               </div>
             </div>
           </div>
 
-          <p className="mt-3 text-[10px] text-muted-foreground text-center italic leading-relaxed">
-            AI outputs are samples based on general knowledge. Verify with VA resources, personalize with your facts, and consult a VSO or attorney. Not legal advice.
+          {/* Compact Disclaimer */}
+          <p className="text-[10px] text-muted-foreground/60 text-center pt-2 pb-1">
+            AI-assisted · Verify with VA resources · Not legal advice
           </p>
       </DialogContent>
     </Dialog>

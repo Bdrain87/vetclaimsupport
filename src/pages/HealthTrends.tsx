@@ -338,7 +338,7 @@ export default function HealthTrends() {
           values={data.flares.values}
           trend={data.flares.trend}
           summary={`${data.stats.totalFlareUps} total flare-ups over ${periodLabel.toLowerCase()}`}
-          color="bg-warning/80"
+          color="bg-gold/80"
           vaNote="Flare-up frequency and duration are key factors in functional loss ratings."
         />
 

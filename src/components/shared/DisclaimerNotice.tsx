@@ -41,11 +41,11 @@ export function DisclaimerNotice({ variant = 'inline', className, dismissible = 
   if (variant === 'card') {
     return (
       <div className={cn(
-        "p-3 rounded-lg bg-warning/10 border border-warning/20",
+        "p-3 rounded-lg bg-gold/10 border border-gold/20",
         className
       )}>
         <div className="flex items-start gap-2">
-          <AlertTriangle className="h-4 w-4 text-warning mt-0.5 flex-shrink-0" />
+          <AlertTriangle className="h-4 w-4 text-gold mt-0.5 flex-shrink-0" />
           <div className="text-xs text-muted-foreground flex-1 min-w-0">
             <p className="font-medium text-foreground mb-1">Educational Tools Only</p>
             <p>
@@ -55,7 +55,7 @@ export function DisclaimerNotice({ variant = 'inline', className, dismissible = 
             {dismissible && (
               <button
                 onClick={() => setAcknowledged(true)}
-                className="mt-2 px-3 py-1.5 rounded-md bg-warning/20 text-foreground text-xs font-medium hover:bg-warning/30 transition-colors"
+                className="mt-2 px-3 py-1.5 rounded-md bg-gold/20 text-foreground text-xs font-medium hover:bg-gold/30 transition-colors"
               >
                 I Acknowledge
               </button>
