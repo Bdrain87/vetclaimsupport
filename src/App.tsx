@@ -27,6 +27,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from './components/ui/input';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { Clipboard } from '@capacitor/clipboard';
+import { toast } from './hooks/use-toast';
 import { OfflineIndicator } from './components/OfflineIndicator';
 import { isWeb } from './lib/platform';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
@@ -579,6 +581,17 @@ function SentinelFAB() {
           {response && (
             <>
               <p className="text-white/90 p-4 bg-slate-800/50 rounded-lg">{response}</p>
+              <Button
+                onClick={async () => {
+                  hapticImpact();
+                  await Clipboard.write({ string: response });
+                  toast({ title: 'Copied to clipboard' });
+                }}
+                variant="outline"
+                className="w-full border-white/20 text-white/80"
+              >
+                Copy Response
+              </Button>
               <Button onClick={() => { hapticImpact(); setQuery(''); setResponse(''); }} variant="outline" className="w-full border-white/20 text-white/80">
                 Clear
               </Button>
