@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
 import './index.css';
-import { initNativeFeatures } from './utils/capacitor';
 import { logger } from './utils/logger';
 
 // ============================================================
 // Fatal error display — uses safe DOM APIs (no innerHTML XSS risk)
+// MUST be registered BEFORE importing App, so module-evaluation
+// errors (e.g. missing env vars) show a styled error page
+// instead of a black screen.
 // ============================================================
 const showFatalError = (label: string, err: unknown) => {
   // Log full details for debugging (only visible in browser dev tools)
@@ -141,14 +142,23 @@ if (!isNative && 'serviceWorker' in navigator) {
 }
 
 // ============================================================
-// BOOT
+// BOOT — Dynamic import so error handlers above catch any
+// module-evaluation failures in App or its dependency tree.
 // ============================================================
-const container = document.getElementById('root');
+async function boot() {
+  const container = document.getElementById('root');
 
-if (!container) {
-  showFatalError('Boot Failure', new Error('#root element missing in HTML'));
-} else {
+  if (!container) {
+    showFatalError('Boot Failure', new Error('#root element missing in HTML'));
+    return;
+  }
+
   try {
+    const [{ default: App }, { initNativeFeatures }] = await Promise.all([
+      import('./App'),
+      import('./utils/capacitor'),
+    ]);
+
     const root = ReactDOM.createRoot(container);
     root.render(
       <React.StrictMode>
@@ -157,6 +167,8 @@ if (!container) {
     );
     initNativeFeatures();
   } catch (error: unknown) {
-    showFatalError('Synchronous Boot Crash', error);
+    showFatalError('Boot Crash', error);
   }
 }
+
+boot();

@@ -9,8 +9,11 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || '';
 const isTestEnv = typeof import.meta.env.VITEST !== 'undefined';
 const isMissingConfig = !supabaseUrl || !supabaseAnonKey || supabaseUrl.includes('placeholder');
 
+/** True when valid Supabase env vars were provided at build time (always true in tests). */
+export const isSupabaseConfigured = !isMissingConfig || isTestEnv;
+
 if (isMissingConfig && !isTestEnv) {
-  throw new Error(
+  console.warn(
     'Supabase configuration missing. Set VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY environment variables.'
   );
 }
@@ -64,12 +67,12 @@ if (isNativeApp) {
   }
 }
 
-// In production the throw above guarantees real values.
-// In test mode, placeholder values allow tests to import this module
-// without requiring real Supabase credentials.
+// When config is missing (test env or misconfigured build), use placeholder
+// values so the module evaluates without crashing. API calls will fail
+// gracefully; the UI checks isSupabaseConfigured and shows an error screen.
 export const supabase = createClient(
-  isTestEnv && !supabaseUrl ? 'https://placeholder.supabase.co' : supabaseUrl,
-  isTestEnv && !supabaseAnonKey ? 'placeholder-key' : supabaseAnonKey,
+  isMissingConfig ? 'https://placeholder.supabase.co' : supabaseUrl,
+  isMissingConfig ? 'placeholder-key' : supabaseAnonKey,
   {
     auth: {
       storage: secureAuthStorage,

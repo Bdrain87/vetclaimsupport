@@ -31,7 +31,7 @@ import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { PremiumGuard } from './components/PremiumGuard';
 import { ensureFreshEntitlement } from './services/entitlements';
 import { startSync, stopSync } from './services/syncEngine';
-import { supabase, getSharedSession } from './lib/supabase';
+import { supabase, getSharedSession, isSupabaseConfigured } from './lib/supabase';
 import { logger } from './utils/logger';
 import { initNativeOAuthListener } from './lib/nativeOAuth';
 import { initializePurchases, loginPurchases, logoutPurchases } from './services/iap';
@@ -655,6 +655,27 @@ function App() {
       stopSync();
     };
   }, []);
+
+  if (!isSupabaseConfigured) {
+    return (
+      <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center px-6 text-center">
+        <div className="max-w-md space-y-4">
+          <h1 className="text-2xl font-semibold text-white">Configuration Error</h1>
+          <p className="text-white/60 leading-relaxed">
+            This build is missing required configuration. Please reinstall the app
+            or try again later.
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-8 py-3 rounded-xl font-semibold text-black"
+            style={{ background: 'linear-gradient(90deg,#A68B3C,#C5A55A,#D9BE6C,#C5A55A,#A68B3C)' }}
+          >
+            Reload
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <ErrorBoundary FallbackComponent={VeteranErrorBoundary}>
