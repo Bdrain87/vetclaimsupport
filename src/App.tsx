@@ -645,6 +645,9 @@ function SentinelFAB() {
           <Button onClick={() => quickPrompt(`Evaluate evidence strength and suggest improvements for ${conditions}.`)} variant="secondary" className="w-full bg-slate-800/50 text-white/90">
             Quick: Evidence Strength Check
           </Button>
+          <Button onClick={() => quickPrompt(`Generate a sample stressor statement for ${conditions}.`)} variant="secondary" className="w-full bg-slate-800/50 text-white/90">
+            Quick: Stressor Statement Help
+          </Button>
           <Button onClick={() => quickPrompt(`Suggest claim strategy optimizations for ${conditions}.`)} variant="secondary" className="w-full bg-slate-800/50 text-white/90">
             Quick: Optimize Strategy
           </Button>
