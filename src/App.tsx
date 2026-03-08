@@ -25,6 +25,7 @@ import { QuickAddFAB } from './components/QuickAddFAB';
 import { Button } from './components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './components/ui/dialog';
 import { Input } from './components/ui/input';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { OfflineIndicator } from './components/OfflineIndicator';
 import { isWeb } from './lib/platform';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
@@ -497,10 +498,23 @@ function AnimatedRoutes() {
 function SentinelFAB() {
   const [query, setQuery] = useState('');
   const [response, setResponse] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleAsk = () => {
-    // Placeholder for Gemini Flash API call
-    setResponse(`Gemini Flash response to: "${query}" (e.g., VA claim tips here)`);
+  const handleAsk = async () => {
+    if (!query) return;
+    setLoading(true);
+    setResponse('');
+
+    try {
+      const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || 'your-api-key-here');
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      const result = await model.generateContent(query);
+      setResponse(result.response.text());
+    } catch {
+      setResponse('Error: Could not get response from Gemini. Check your API key.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -531,8 +545,8 @@ function SentinelFAB() {
             placeholder="Ask about VA claims, symptoms, etc."
             className="bg-slate-800/50 text-white border-white/20"
           />
-          <Button onClick={handleAsk} className="w-full bg-amber-600 hover:bg-amber-500">
-            Ask Gemini
+          <Button onClick={handleAsk} disabled={loading} className="w-full bg-amber-600 hover:bg-amber-500">
+            {loading ? 'Asking...' : 'Ask Gemini'}
           </Button>
           {response && <p className="text-white/90 p-4 bg-slate-800/50 rounded-lg">{response}</p>}
         </div>
