@@ -1,4 +1,5 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
+import React from 'react';
 import { AlertTriangle, Home, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,6 +8,7 @@ import { logger } from '@/utils/logger';
 interface Props {
   children: ReactNode;
   fallback?: ReactNode;
+  FallbackComponent?: React.ComponentType<{ error: Error; resetErrorBoundary: () => void }>;
 }
 
 interface State {
@@ -46,6 +48,10 @@ export class ErrorBoundary extends Component<Props, State> {
 
   public render(): ReactNode {
     if (this.state.hasError) {
+      if (this.props.FallbackComponent) {
+        const FallbackComponent = this.props.FallbackComponent;
+        return <FallbackComponent error={this.state.error!} resetErrorBoundary={this.handleReset} />;
+      }
       if (this.props.fallback) {
         return this.props.fallback;
       }
