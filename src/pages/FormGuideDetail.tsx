@@ -8,10 +8,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { getFormGuideById, type FormField } from '@/data/formGuideData';
 import useAppStore from '@/store/useAppStore';
-import { useProfileStore } from '@/store/useProfileStore';
-import { getAllBranchLabels } from '@/utils/veteranProfile';
-import { useClaims } from '@/hooks/useClaims';
 import { useGemini } from '@/hooks/useGemini';
+import { buildVeteranContext } from '@/utils/veteranContext';
+import { formatContextForAI } from '@/utils/formatContextForAI';
 import { generateFormGuidePDF } from '@/services/exportEngine';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
@@ -38,8 +37,6 @@ function FieldCard({ field, formId: _formId, savedValue, onSave }: FieldCardProp
 
   const { generate, isLoading: aiLoading, cancel: cancelAI } = useGemini('VA_SPEAK_TRANSLATOR');
   const { toast } = useToast();
-  const profile = useProfileStore();
-  const { data } = useClaims();
 
   const handleChange = useCallback(
     (newVal: string) => {
@@ -66,24 +63,14 @@ function FieldCard({ field, formId: _formId, savedValue, onSave }: FieldCardProp
     setAiSuggestion(null);
 
     // Build context
+    const ctx = buildVeteranContext({ maskPII: true });
+    const contextBlock = formatContextForAI(ctx, 'minimal');
+
     const contextParts: string[] = [];
     if (field.aiHelpPrompt) contextParts.push(field.aiHelpPrompt);
     contextParts.push(`Field: ${field.label}`);
     if (value.trim()) contextParts.push(`Veteran's input: ${value}`);
-    if (profile.firstName) contextParts.push(`Name: ${profile.firstName} ${profile.lastName}`);
-    const allBranches = getAllBranchLabels(profile);
-    if (allBranches) contextParts.push(`Branch: ${allBranches}`);
-    if (profile.mosCode) contextParts.push(`MOS: ${profile.mosCode} — ${profile.mosTitle}`);
-    if (profile.serviceDates?.start)
-      contextParts.push(`Service: ${profile.serviceDates.start} to ${profile.serviceDates.end || 'present'}`);
-
-    // Add a few symptom/condition references
-    const conditions = data.claimConditions?.slice(0, 5).map((c) => c.name) || [];
-    if (conditions.length > 0) contextParts.push(`Claimed conditions: ${conditions.join(', ')}`);
-
-    const recentSymptoms = data.symptoms?.slice(0, 3).map((s) => `${s.symptom} (${s.bodyArea}, ${s.severity}/10)`) || [];
-    if (recentSymptoms.length > 0) contextParts.push(`Recent symptoms: ${recentSymptoms.join('; ')}`);
-
+    contextParts.push(contextBlock);
     contextParts.push(
       'Instruction: Rewrite the veteran\'s input using proper VA clinical/legal terminology. Keep it truthful and based only on what they wrote. Do not invent facts.'
     );
@@ -94,7 +81,7 @@ function FieldCard({ field, formId: _formId, savedValue, onSave }: FieldCardProp
     } else {
       setAiError(true);
     }
-  }, [value, field, generate, profile, data]);
+  }, [value, field, generate]);
 
   const handleUseAI = useCallback(() => {
     if (aiSuggestion) {

@@ -41,6 +41,8 @@ import { PageContainer } from '@/components/PageContainer';
 import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
 import { useToolDraft } from '@/hooks/useToolDraft';
 import { getConditionSymptoms, getConditionMedications } from '@/utils/prefillHelpers';
+import { buildConditionContext } from '@/utils/veteranContext';
+import { formatContextForAI } from '@/utils/formatContextForAI';
 import { useFeatureFlag } from '@/store/useFeatureFlagStore';
 import { getConditionById } from '@/data/vaConditions';
 import { useEvidence } from '@/hooks/useEvidence';
@@ -400,10 +402,14 @@ export default function CPExamPrepEnhanced() {
       ? conditionMeds.map(m => m.name)
       : (claimsData.medications || []).map(m => m.name);
 
+    const ctx = buildConditionContext(selectedCondition);
+    const contextBlock = formatContextForAI(ctx, 'detailed');
+
     const prompt = createCPExamPrepPrompt({
       condition: selectedCondition,
       currentSymptoms: userSymptoms.length > 0 ? userSymptoms : ['Symptoms related to condition'],
       currentTreatments: userTreatments.length > 0 ? userTreatments : ['Current treatment regimen'],
+      contextBlock,
     });
 
     const result = await aiGenerate(prompt);

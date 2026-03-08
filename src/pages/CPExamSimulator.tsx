@@ -7,9 +7,14 @@ import { VoiceRecorder } from 'capacitor-voice-recorder';
 import { Clipboard } from '@capacitor/clipboard';
 import { toast } from '@/hooks/use-toast';
 import { impactMedium, notifySuccess } from '@/lib/haptics';
-import { getGeminiModel, isGeminiConfigured } from '@/lib/gemini';
+import { aiTranscribe, isGeminiConfigured } from '@/lib/gemini';
+import { useAIStream } from '@/hooks/useAIStream';
 import { isNativeApp } from '@/lib/platform';
-import { Mic, MicOff, Play, RotateCcw, Copy, ChevronRight, Shield, AlertTriangle } from 'lucide-react';
+import { createCPExamEvalPrompt } from '@/lib/ai-prompts';
+import { buildConditionContext } from '@/utils/veteranContext';
+import { formatContextForAI } from '@/utils/formatContextForAI';
+import { StreamingText } from '@/components/ui/StreamingText';
+import { Mic, MicOff, Play, RotateCcw, Copy, ChevronRight, Shield, AlertTriangle, Square } from 'lucide-react';
 
 // DBQ-based question sets by condition category
 const EXAM_QUESTIONS: Record<string, string[]> = {
@@ -114,6 +119,7 @@ export default function CPExamSimulator() {
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentFeedback, setCurrentFeedback] = useState<ExamAnswer | null>(null);
+  const { streamedText, isStreaming, startStream, cancel: cancelStream } = useAIStream();
 
   const startExam = useCallback((condition: string) => {
     impactMedium();
@@ -163,45 +169,21 @@ export default function CPExamSimulator() {
         return;
       }
 
-      const model = getGeminiModel();
-      const audioPart = {
-        inlineData: {
-          mimeType: recording.value.mimeType || 'audio/wav',
-          data: recording.value.recordDataBase64,
-        },
-      };
-
       // Transcribe
-      const transResult = await model.generateContent([
-        { text: 'Transcribe this audio accurately:' },
-        audioPart,
-      ]);
-      const transcript = transResult.response.text();
+      const transcript = await aiTranscribe({
+        audioBase64: recording.value.recordDataBase64,
+        mimeType: recording.value.mimeType || 'audio/wav',
+        feature: 'cp-exam-simulator',
+      });
 
-      // Evaluate
-      const evalResult = await model.generateContent(
-        `You are a VA C&P exam preparation coach. The veteran is practicing for a ${selectedCondition} exam.
+      // Evaluate (streaming)
+      const ctx = buildConditionContext(selectedCondition);
+      const contextBlock = formatContextForAI(ctx, 'standard');
+      const feedbackText = await startStream({
+        prompt: createCPExamEvalPrompt(selectedCondition, questions[currentQ], transcript, contextBlock),
+        feature: 'cp-exam-simulator',
+      });
 
-Question asked: "${questions[currentQ]}"
-Veteran's answer: "${transcript}"
-
-Evaluate this answer and respond in this EXACT format:
-
-STRENGTH: [Strong/Moderate/Weak]
-
-EVALUATION:
-[2-3 sentences on what was good and what was missing]
-
-WHAT THE EXAMINER LOOKS FOR:
-[2-3 sentences on what the DBQ criteria measure for this question]
-
-STRONGER SAMPLE RESPONSE:
-[A sample way to articulate similar symptoms using VA-recognized terminology. This is a template — the veteran must use their own truthful experiences.]
-
-Remember: Help them accurately describe genuine symptoms in VA terminology. Never coach exaggeration.`
-      );
-
-      const feedbackText = evalResult.response.text();
       const strengthMatch = feedbackText.match(/STRENGTH:\s*(Strong|Moderate|Weak)/i);
       const strength = (strengthMatch?.[1] as 'Strong' | 'Moderate' | 'Weak') || 'Moderate';
 
@@ -220,7 +202,7 @@ Remember: Help them accurately describe genuine symptoms in VA terminology. Neve
     } finally {
       setIsProcessing(false);
     }
-  }, [isRecording, selectedCondition, questions, currentQ]);
+  }, [isRecording, selectedCondition, questions, currentQ, startStream]);
 
   const nextQuestion = useCallback(() => {
     impactMedium();
@@ -235,6 +217,7 @@ Remember: Help them accurately describe genuine symptoms in VA terminology. Neve
   }, [currentQ, questions.length]);
 
   const resetExam = useCallback(() => {
+    cancelStream();
     impactMedium();
     setPhase('select');
     setSelectedCondition('');
@@ -242,7 +225,7 @@ Remember: Help them accurately describe genuine symptoms in VA terminology. Neve
     setCurrentQ(0);
     setAnswers([]);
     setCurrentFeedback(null);
-  }, []);
+  }, [cancelStream]);
 
   const strengthColor = (s: string) =>
     s === 'Strong' ? 'text-green-400' : s === 'Moderate' ? 'text-gold' : 'text-red-400';
@@ -252,8 +235,8 @@ Remember: Help them accurately describe genuine symptoms in VA terminology. Neve
   return (
     <PageContainer className="space-y-4 pb-8">
       {/* Disclaimer */}
-      <div className="flex items-start gap-2 p-3 rounded-xl bg-amber-500/5 border border-amber-500/10">
-        <AlertTriangle className="h-4 w-4 text-amber-400 mt-0.5 flex-shrink-0" />
+      <div className="flex items-start gap-2 p-3 rounded-xl bg-gold/5 border border-gold/10">
+        <AlertTriangle className="h-4 w-4 text-gold mt-0.5 flex-shrink-0" />
         <p className="text-[11px] text-muted-foreground">
           This simulator helps you practice articulating your symptoms. Always describe your genuine experiences truthfully. This is not legal advice — consult a VSO or attorney.
         </p>
@@ -334,9 +317,9 @@ Remember: Help them accurately describe genuine symptoms in VA terminology. Neve
       )}
 
       {/* PHASE: Recording */}
-      {(phase === 'recording' || isProcessing) && (
+      {(phase === 'recording' || (isProcessing && !isStreaming)) && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4 text-center py-6">
-          {isProcessing ? (
+          {isProcessing && !isStreaming ? (
             <>
               <div className="h-20 w-20 mx-auto rounded-full bg-gold/10 border-2 border-gold/30 flex items-center justify-center animate-pulse">
                 <Shield className="h-10 w-10 text-gold" />
@@ -362,8 +345,29 @@ Remember: Help them accurately describe genuine symptoms in VA terminology. Neve
         </motion.div>
       )}
 
+      {/* Streaming evaluation in progress */}
+      {isStreaming && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-muted-foreground">Question {currentQ + 1} of {questions.length}</span>
+            <span className="text-xs text-muted-foreground">Evaluating...</span>
+          </div>
+          <StreamingText
+            text={streamedText}
+            isStreaming={true}
+            className="p-4 rounded-xl border border-border bg-card text-sm text-muted-foreground leading-relaxed"
+          />
+          <Button
+            onClick={() => cancelStream()}
+            variant="outline" size="sm" className="w-full border-red-500/30 text-red-400"
+          >
+            <Square className="h-3 w-3 mr-1.5" /> Stop
+          </Button>
+        </motion.div>
+      )}
+
       {/* PHASE: Feedback */}
-      {phase === 'feedback' && currentFeedback && (
+      {phase === 'feedback' && currentFeedback && !isStreaming && (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
           <div className="flex items-center justify-between">
             <span className="text-xs text-muted-foreground">Question {currentQ + 1} of {questions.length}</span>

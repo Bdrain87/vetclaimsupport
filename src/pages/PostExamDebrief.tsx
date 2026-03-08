@@ -6,9 +6,14 @@ import { VoiceRecorder } from 'capacitor-voice-recorder';
 import { Clipboard } from '@capacitor/clipboard';
 import { toast } from '@/hooks/use-toast';
 import { impactMedium } from '@/lib/haptics';
-import { getGeminiModel, isGeminiConfigured } from '@/lib/gemini';
+import { aiTranscribe, isGeminiConfigured } from '@/lib/gemini';
+import { useAIStream } from '@/hooks/useAIStream';
 import { isNativeApp } from '@/lib/platform';
-import { Mic, MicOff, Copy, RotateCcw, AlertTriangle, FileText, Shield } from 'lucide-react';
+import { createPostDebriefPrompt } from '@/lib/ai-prompts';
+import { buildVeteranContext } from '@/utils/veteranContext';
+import { formatContextForAI } from '@/utils/formatContextForAI';
+import { StreamingText } from '@/components/ui/StreamingText';
+import { Mic, MicOff, Copy, RotateCcw, AlertTriangle, FileText, Shield, Square } from 'lucide-react';
 
 export default function PostExamDebrief() {
   const [isRecording, setIsRecording] = useState(false);
@@ -16,6 +21,7 @@ export default function PostExamDebrief() {
   const [transcript, setTranscript] = useState('');
   const [analysis, setAnalysis] = useState('');
   const [error, setError] = useState('');
+  const { streamedText, isStreaming, startStream, cancel: cancelStream } = useAIStream();
 
   const startRecording = async () => {
     if (!isNativeApp) {
@@ -47,46 +53,22 @@ export default function PostExamDebrief() {
       const recording = await VoiceRecorder.stopRecording();
       if (!recording.value) { setIsProcessing(false); return; }
 
-      const model = getGeminiModel();
-      const audioPart = {
-        inlineData: {
-          mimeType: recording.value.mimeType || 'audio/wav',
-          data: recording.value.recordDataBase64,
-        },
-      };
-
-      const transResult = await model.generateContent([
-        { text: 'Transcribe this audio accurately:' },
-        audioPart,
-      ]);
-      const transcribed = transResult.response.text();
+      const transcribed = await aiTranscribe({
+        audioBase64: recording.value.recordDataBase64,
+        mimeType: recording.value.mimeType || 'audio/wav',
+        feature: 'post-exam-debrief',
+      });
       setTranscript(transcribed);
 
-      const result = await model.generateContent(
-        `You are a VA claims advisor. A veteran just finished their C&P exam and recorded this debrief about what happened:
-
-"${transcribed}"
-
-Provide a structured analysis:
-
-## Key Points from Your Exam
-[Summarize what the examiner asked and what the veteran described happening]
-
-## Potential Concerns
-[Flag anything that might have been missed, misunderstood, or could weaken the claim]
-
-## Recommended Follow-Up Actions
-[List specific actions — e.g., request copy of DBQ within 30 days, file supplemental statement if something was missed]
-
-## Sample Follow-Up Statement
-[If the veteran described something the examiner missed or didn't fully capture, draft a sample follow-up statement they could submit. Mark clearly as SAMPLE — must be personalized.]
-
-## Appeal Assessment
-[Based on what happened, note whether an appeal may be warranted and what type (HLR, Supplemental, Board)]
-
-DISCLAIMER: This is general guidance only. Not legal advice. Consult a VSO or attorney for claim-specific advice.`
-      );
-      setAnalysis(result.response.text());
+      setError('');
+      const ctx = buildVeteranContext({ maskPII: true });
+      const contextBlock = formatContextForAI(ctx, 'standard');
+      const result = await startStream({
+        prompt: createPostDebriefPrompt(transcribed, contextBlock),
+        systemInstruction: 'You are a VA claims advisor helping veterans review their C&P exam experience. Provide actionable guidance. Not legal advice.',
+        feature: 'post-exam-debrief',
+      });
+      setAnalysis(result);
     } catch {
       setError('Failed to process. Please try again.');
     } finally {
@@ -95,6 +77,7 @@ DISCLAIMER: This is general guidance only. Not legal advice. Consult a VSO or at
   };
 
   const reset = () => {
+    cancelStream();
     impactMedium();
     setTranscript('');
     setAnalysis('');
@@ -104,8 +87,8 @@ DISCLAIMER: This is general guidance only. Not legal advice. Consult a VSO or at
   return (
     <PageContainer className="space-y-4 pb-8">
       <h1 className="text-xl font-bold mb-4">Post-Exam Debrief</h1>
-      <div className="flex items-start gap-2 p-3 rounded-xl bg-amber-500/5 border border-amber-500/10">
-        <AlertTriangle className="h-4 w-4 text-amber-400 mt-0.5 flex-shrink-0" />
+      <div className="flex items-start gap-2 p-3 rounded-xl bg-gold/5 border border-gold/10">
+        <AlertTriangle className="h-4 w-4 text-gold mt-0.5 flex-shrink-0" />
         <p className="text-[11px] text-muted-foreground">
           Record your C&P exam experience immediately while it's fresh. This helps identify if anything was missed and whether follow-up action is needed. Not legal advice.
         </p>
@@ -157,7 +140,7 @@ DISCLAIMER: This is general guidance only. Not legal advice. Consult a VSO or at
         </div>
       )}
 
-      {analysis && (
+      {(analysis || isStreaming) && (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
           {transcript && (
             <details className="rounded-xl border border-border bg-card overflow-hidden">
@@ -166,27 +149,40 @@ DISCLAIMER: This is general guidance only. Not legal advice. Consult a VSO or at
             </details>
           )}
 
-          <div className="p-4 rounded-xl border border-border bg-card text-sm whitespace-pre-wrap text-muted-foreground leading-relaxed">
-            {analysis}
-          </div>
+          <StreamingText
+            text={isStreaming ? streamedText : analysis}
+            isStreaming={isStreaming}
+            className="p-4 rounded-xl border border-border bg-card text-sm text-muted-foreground leading-relaxed"
+          />
 
           <div className="flex gap-2">
-            <Button
-              onClick={async () => {
-                try {
-                  await Clipboard.write({ string: analysis });
-                  toast({ title: 'Debrief analysis copied' });
-                } catch {
-                  toast({ title: 'Copy failed', description: 'Could not access clipboard.', variant: 'destructive' });
-                }
-              }}
-              variant="outline" className="flex-1"
-            >
-              <Copy className="h-4 w-4 mr-2" /> Copy
-            </Button>
-            <Button onClick={reset} className="flex-1 bg-gold hover:bg-gold/80 text-black font-semibold">
-              <RotateCcw className="h-4 w-4 mr-2" /> New Debrief
-            </Button>
+            {isStreaming ? (
+              <Button
+                onClick={() => { cancelStream(); setAnalysis(streamedText); }}
+                variant="outline" className="flex-1 border-red-500/30 text-red-400"
+              >
+                <Square className="h-3.5 w-3.5 mr-2" /> Stop
+              </Button>
+            ) : (
+              <>
+                <Button
+                  onClick={async () => {
+                    try {
+                      await Clipboard.write({ string: analysis });
+                      toast({ title: 'Debrief analysis copied' });
+                    } catch {
+                      toast({ title: 'Copy failed', description: 'Could not access clipboard.', variant: 'destructive' });
+                    }
+                  }}
+                  variant="outline" className="flex-1"
+                >
+                  <Copy className="h-4 w-4 mr-2" /> Copy
+                </Button>
+                <Button onClick={reset} className="flex-1 bg-gold hover:bg-gold/80 text-black font-semibold">
+                  <RotateCcw className="h-4 w-4 mr-2" /> New Debrief
+                </Button>
+              </>
+            )}
           </div>
         </motion.div>
       )}

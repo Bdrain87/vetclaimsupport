@@ -7,6 +7,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
+import { buildVeteranContext } from '@/utils/veteranContext';
+import { formatContextForAI } from '@/utils/formatContextForAI';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { PageContainer } from '@/components/PageContainer';
@@ -219,12 +221,17 @@ export default function VASpeakTranslator() {
     setTranslatedText(null);
     setCopied(false);
 
+    const ctx = buildVeteranContext({ maskPII: true });
+    const contextBlock = formatContextForAI(ctx, 'minimal');
+
     const prompt = [
       'Translate the following veteran\'s plain-English symptom description into professional VA clinical terminology.',
       'Use language appropriate for VA Form 21-4138 (Statement in Support of Claim).',
       'Use 38 CFR nomenclature where applicable.',
       'Maintain the truthful meaning -- do not exaggerate or add symptoms.',
       'Return ONLY the translated clinical text, no commentary.',
+      '',
+      contextBlock,
       '',
       `Veteran's description: "${inputText}"`,
     ].join('\n');

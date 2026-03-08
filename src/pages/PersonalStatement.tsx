@@ -49,6 +49,8 @@ import {
 import type { VACondition } from '@/data/vaConditions';
 import { getConditionById } from '@/data/vaConditions';
 import { searchAllConditions } from '@/utils/conditionSearch';
+import { buildConditionContext } from '@/utils/veteranContext';
+import { formatContextForAI } from '@/utils/formatContextForAI';
 import { useEvidence } from '@/hooks/useEvidence';
 import { EvidenceAttachment } from '@/components/shared/EvidenceAttachment';
 
@@ -376,12 +378,16 @@ export default function PersonalStatement() {
 
   const handleAIPolish = useCallback(async () => {
     const raw = generateStatement();
-    const prompt = `Please polish and improve the following VA personal statement. Keep all factual content exactly the same but improve the clarity, grammar, and professional tone. Make it more persuasive for a VA disability claim while keeping the veteran's voice authentic. Do not add any information that is not already present.\n\n${raw}`;
+    const ctx = formData.condition
+      ? buildConditionContext(formData.condition.id || formData.condition.name)
+      : buildConditionContext('');
+    const contextBlock = formatContextForAI(ctx, 'detailed');
+    const prompt = `Please polish and improve the following VA personal statement. Keep all factual content exactly the same but improve the clarity, grammar, and professional tone. Make it more persuasive for a VA disability claim while keeping the veteran's voice authentic. You may reference the veteran's logged data below to enrich the statement, but do not add any claims or facts not supported by the data.\n\n${contextBlock}\n\n${raw}`;
     const result = await aiPolish(prompt);
     if (result) {
       setPolishedStatement(result);
     }
-  }, [generateStatement, aiPolish]);
+  }, [generateStatement, aiPolish, formData.condition]);
 
   const canProceed = useCallback((): boolean => {
     switch (currentStep) {

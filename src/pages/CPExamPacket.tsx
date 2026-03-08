@@ -29,6 +29,8 @@ import useAppStore from '@/store/useAppStore';
 import { getConditionById } from '@/data/vaConditions';
 import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
+import { buildConditionContext } from '@/utils/veteranContext';
+import { formatContextForAI } from '@/utils/formatContextForAI';
 import { generateCPExamPacketPDF } from '@/services/exportEngine';
 import { useToast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
@@ -329,7 +331,9 @@ export default function CPExamPacket() {
     setLoadingQuestions((prev) => new Set(prev).add(conditionName));
 
     try {
-      const prompt = `For a C&P exam for ${conditionName}, list the 8-10 most likely questions the examiner will ask. Focus on functional impact, frequency, severity, and daily life limitations. Format as a numbered list.`;
+      const ctx = buildConditionContext(conditionName);
+      const contextBlock = formatContextForAI(ctx, 'detailed');
+      const prompt = `For a C&P exam for ${conditionName}, list the 8-10 most likely questions the examiner will ask. Focus on functional impact, frequency, severity, and daily life limitations. Format as a numbered list.\n\n${contextBlock}`;
       const result = await aiGenerate(prompt);
       if (result) {
         setExamQuestions((prev) => ({ ...prev, [conditionName]: result }));

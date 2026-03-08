@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'motion/react';
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
@@ -7,18 +7,18 @@ import { Clipboard } from '@capacitor/clipboard';
 import { VoiceRecorder } from 'capacitor-voice-recorder';
 import { toast } from '@/hooks/use-toast';
 import { impactMedium } from '@/lib/haptics';
-import { getGeminiModel, isGeminiConfigured } from '@/lib/gemini';
+import { aiTranscribe, createChat, isGeminiConfigured, type Chat } from '@/lib/gemini';
+import { redactPII } from '@/lib/redaction';
+import { logAISend } from '@/services/aiAuditLog';
 import { isNativeApp } from '@/lib/platform';
 import useAppStore from '@/store/useAppStore';
 import { useSentinel } from '@/hooks/useSentinel';
-import { Mic, MicOff, Copy, Trash2, Sparkles, FileText, Shield, Heart, Scan } from 'lucide-react';
+import { StreamingText } from './ui/StreamingText';
+import { SENTINEL_SYSTEM_PROMPT, SENTINEL_VOICE_BUILD_PROMPT } from '@/lib/ai-prompts';
+import { buildVeteranContext } from '@/utils/veteranContext';
+import { formatContextForAI } from '@/utils/formatContextForAI';
+import { Mic, MicOff, Copy, Trash2, Sparkles, FileText, Shield, Heart, Scan, Square } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
-const SYSTEM_PROMPT = `You are Intel, an AI assistant for VA disability claim preparation. You help veterans understand the claims process and generate SAMPLE statement templates. Important rules:
-- All outputs are sample templates that must be personalized
-- Never provide legal advice — always recommend consulting a VSO or attorney
-- Use military-respectful language and VA-recognized terminology
-- Focus on helping veterans accurately describe their genuine experiences`;
 
 const QUICK_PROMPTS: readonly { label: string; icon: React.ElementType; prompt: string | ((conditions: string) => string) }[] = [
   { label: 'Impact Statement', icon: FileText, prompt: (c) => `Generate a sample VA impact statement for ${c}. Include how the condition affects daily life, work, and relationships using VA-recognized language.` },
@@ -28,16 +28,6 @@ const QUICK_PROMPTS: readonly { label: string; icon: React.ElementType; prompt: 
   { label: 'Evidence Gaps', icon: Scan, prompt: (c) => `Analyze what evidence types are most important for ${c} and suggest what might be missing. Include medical records, lay statements, and service records needed.` },
   { label: 'Stressor Statement', icon: FileText, prompt: (c) => `Generate a sample stressor statement for ${c}. Include specific details about the in-service event, timeframe, and ongoing impact.` },
 ];
-
-const VOICE_BUILD_PROMPT = `You are a VA disability claim writing assistant. The veteran just spoke about their symptoms, experiences, or evidence. Based on their words, generate THREE structured sections in a military-respectful tone:
-
-**Sample Impact Statement Paragraph** — How this condition affects daily life, work, and relationships. Use specific VA-recognized language.
-
-**Sample Nexus/Service Connection Paragraph** — Connect the described condition to military service with specific language patterns the VA looks for.
-
-**Key Evidence Checklist** — Bullet list of evidence types they should gather based on what they described.
-
-IMPORTANT: These are SAMPLE templates only. The veteran must personalize with their own facts and verify with a VSO or attorney. Not legal advice.`;
 
 function ReadinessRing({ score, label }: { score: number; label: string }) {
   const circumference = 2 * Math.PI * 18;
@@ -66,45 +56,104 @@ function ReadinessRing({ score, label }: { score: number; label: string }) {
   );
 }
 
+interface ChatMessage {
+  role: 'user' | 'model';
+  text: string;
+}
+
 type IntelMode = 'ask' | 'voice-build';
 
 export function SentinelCore() {
   const [query, setQuery] = useState('');
-  const [response, setResponse] = useState('');
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [streamedText, setStreamedText] = useState('');
+  const [isStreaming, setIsStreaming] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [mode, setMode] = useState<IntelMode>('ask');
+  const chatRef = useRef<Chat | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const conditions = useAppStore((state) => state.userConditions?.map(c => c.displayName || c.conditionId).join(', ') || 'my conditions');
+  const conditionCount = useAppStore((state) => (state.userConditions || []).length);
+  const prevConditionCountRef = useRef(conditionCount);
   const { score, label } = useSentinel();
   const navigate = useNavigate();
 
-  const askGemini = async (text: string) => {
+  // Auto-scroll to bottom on new messages
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, streamedText]);
+
+  // Recreate chat when conditions change so it picks up new context
+  useEffect(() => {
+    if (prevConditionCountRef.current !== conditionCount) {
+      prevConditionCountRef.current = conditionCount;
+      chatRef.current = null;
+    }
+  }, [conditionCount]);
+
+  const getOrCreateChat = useCallback((systemPrompt: string): Chat => {
+    if (!chatRef.current) {
+      const ctx = buildVeteranContext({ maskPII: true });
+      const contextBlock = formatContextForAI(ctx, 'detailed');
+      chatRef.current = createChat({
+        systemInstruction: `${systemPrompt}\n\n${contextBlock}`,
+        feature: 'sentinel-core',
+      });
+    }
+    return chatRef.current;
+  }, []);
+
+  const sendMessage = async (text: string, systemPrompt: string) => {
     if (!isGeminiConfigured) {
-      setResponse('AI features are not configured. Please contact support.');
+      setMessages(prev => [...prev, { role: 'model', text: 'AI features are not configured. Please contact support.' }]);
       return;
     }
+
+    // PII redact + audit log
+    const { redactedText, redactionCount } = redactPII(text, 'high');
+    logAISend({ feature: 'sentinel-core', redactionMode: 'high', redactionCount, textLengthSent: redactedText.length });
+
+    // Add user message
+    setMessages(prev => [...prev, { role: 'user', text }]);
+    setQuery('');
     setLoading(true);
-    setResponse('');
+    setStreamedText('');
+    setIsStreaming(true);
+
     try {
-      const model = getGeminiModel();
-      const result = await model.generateContent(`${SYSTEM_PROMPT}\n\n${text}`);
-      setResponse(result.response.text());
+      const chat = getOrCreateChat(systemPrompt);
+      const stream = await chat.sendMessageStream({ message: redactedText });
+
+      let fullText = '';
+      for await (const chunk of stream) {
+        const t = chunk.text;
+        if (t) {
+          fullText += t;
+          setStreamedText(fullText);
+        }
+      }
+
+      setMessages(prev => [...prev, { role: 'model', text: fullText }]);
     } catch {
-      setResponse('Something went wrong. Please check your connection and try again.');
+      setMessages(prev => [...prev, { role: 'model', text: 'Something went wrong. Please check your connection and try again.' }]);
     } finally {
       setLoading(false);
+      setIsStreaming(false);
+      setStreamedText('');
     }
   };
 
   const handleAsk = () => {
     if (!query) return;
-    askGemini(query);
+    impactMedium();
+    sendMessage(query, SENTINEL_SYSTEM_PROMPT);
   };
 
   const quickPrompt = (prompt: string | ((c: string) => string)) => {
     const resolved = typeof prompt === 'function' ? prompt(conditions) : prompt;
-    setQuery(resolved);
     impactMedium();
+    sendMessage(resolved, SENTINEL_SYSTEM_PROMPT);
   };
 
   const toggleVoice = async () => {
@@ -118,38 +167,42 @@ export function SentinelCore() {
       const recording = await VoiceRecorder.stopRecording();
       if (!recording.value) return;
 
-      setLoading(true);
       try {
-        const model = getGeminiModel();
-        const audioPart = {
-          inlineData: {
-            mimeType: recording.value.mimeType || 'audio/wav',
-            data: recording.value.recordDataBase64,
-          },
-        };
-        const transResult = await model.generateContent([
-          { text: 'Transcribe this audio accurately:' },
-          audioPart,
-        ]);
-        const transcribed = transResult.response.text();
-        setQuery(transcribed);
+        const transcribed = await aiTranscribe({
+          audioBase64: recording.value.recordDataBase64,
+          mimeType: recording.value.mimeType || 'audio/wav',
+          feature: 'sentinel-core-voice',
+        });
 
-        // If in voice-build mode, auto-generate structured content
+        const systemPrompt = mode === 'voice-build'
+          ? SENTINEL_VOICE_BUILD_PROMPT
+          : SENTINEL_SYSTEM_PROMPT;
         const prompt = mode === 'voice-build'
-          ? `${VOICE_BUILD_PROMPT}\n\nVeteran's words: "${transcribed}"`
-          : `${SYSTEM_PROMPT}\n\n${transcribed}`;
-        const result = await model.generateContent(prompt);
-        setResponse(result.response.text());
+          ? `Veteran's words: "${transcribed}"`
+          : transcribed;
+
+        // For voice-build, create a fresh chat with the build prompt
+        if (mode === 'voice-build') {
+          chatRef.current = null;
+        }
+
+        await sendMessage(prompt, systemPrompt);
       } catch {
-        setQuery('Transcription error: Try again.');
-      } finally {
-        setLoading(false);
+        toast({ title: 'Transcription error. Try again.', variant: 'destructive' });
       }
     } else {
       await VoiceRecorder.requestAudioRecordingPermission();
       await VoiceRecorder.startRecording();
       setIsRecording(true);
     }
+  };
+
+  const clearChat = () => {
+    impactMedium();
+    setMessages([]);
+    setQuery('');
+    setStreamedText('');
+    chatRef.current = null;
   };
 
   const TOOL_LINKS = [
@@ -166,7 +219,7 @@ export function SentinelCore() {
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.3 }}
-          className="fixed right-4 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-gold/90 to-amber-700/90 border border-gold/30 backdrop-blur-md shadow-[0_4px_24px_rgba(197,165,90,0.3)] flex items-center justify-center"
+          className="fixed right-4 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-gold/90 to-gold/70 border border-gold/30 backdrop-blur-md shadow-[0_4px_24px_rgba(197,165,90,0.3)] flex items-center justify-center"
           style={{ bottom: 'calc(9rem + env(safe-area-inset-bottom, 0px))' }}
           aria-label="Open Intel AI"
         >
@@ -222,21 +275,33 @@ export function SentinelCore() {
                     <><Mic className="h-5 w-5 mr-2" /> Speak Your Symptoms</>
                   )}
                 </Button>
-                {query && !loading && (
-                  <div className="text-xs text-muted-foreground p-2 rounded-lg bg-secondary/50 italic">
-                    "{query}"
-                  </div>
-                )}
               </div>
             ) : (
               /* Ask Anything Mode */
               <>
+                {/* Quick prompts — only show when no conversation yet */}
+                {messages.length === 0 && (
+                  <div className="grid grid-cols-2 gap-2">
+                    {QUICK_PROMPTS.map(({ label, icon: Icon, prompt }) => (
+                      <Button
+                        key={label}
+                        onClick={() => quickPrompt(prompt)}
+                        variant="secondary"
+                        className="bg-secondary text-foreground/80 text-xs h-auto py-2 px-3 hover:bg-accent justify-start gap-1.5"
+                      >
+                        <Icon className="h-3 w-3 flex-shrink-0 text-gold/60" />
+                        {label}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+
                 <div className="relative">
                   <Input
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    onKeyDown={(e) => { if (e.key === 'Enter' && !loading) { impactMedium(); handleAsk(); } }}
-                    placeholder="Ask about VA claims, symptoms, etc."
+                    onKeyDown={(e) => { if (e.key === 'Enter' && !loading) handleAsk(); }}
+                    placeholder={messages.length > 0 ? 'Follow up...' : 'Ask about VA claims, symptoms, etc.'}
                     className="bg-secondary text-foreground border-border pr-12"
                   />
                   <Button
@@ -250,66 +315,93 @@ export function SentinelCore() {
                   </Button>
                 </div>
 
-                {/* Quick prompts */}
-                <div className="grid grid-cols-2 gap-2">
-                  {QUICK_PROMPTS.map(({ label, icon: Icon, prompt }) => (
-                    <Button
-                      key={label}
-                      onClick={() => quickPrompt(prompt)}
-                      variant="secondary"
-                      className="bg-secondary text-foreground/80 text-xs h-auto py-2 px-3 hover:bg-accent justify-start gap-1.5"
-                    >
-                      <Icon className="h-3 w-3 flex-shrink-0 text-gold/60" />
-                      {label}
-                    </Button>
-                  ))}
-                </div>
-
                 <Button
-                  onClick={() => { impactMedium(); handleAsk(); }}
+                  onClick={handleAsk}
                   disabled={loading || !query}
                   className="w-full bg-gold hover:bg-gold/80 text-black font-semibold"
                 >
-                  {loading ? 'Asking...' : 'Ask Intel'}
+                  {loading ? 'Thinking...' : 'Ask Intel'}
                 </Button>
               </>
             )}
 
-            {/* Response */}
-            {response && (
-              <div className="space-y-2">
-                <div className="text-foreground text-sm p-4 bg-secondary rounded-xl border border-border whitespace-pre-wrap">
-                  {response}
-                </div>
-                <div className="flex gap-2">
-                  <Button
-                    onClick={async () => {
-                      impactMedium();
-                      try {
-                        await Clipboard.write({ string: response });
-                        toast({ title: 'Copied to clipboard' });
-                      } catch {
-                        toast({ title: 'Copy failed', description: 'Could not access clipboard.', variant: 'destructive' });
-                      }
-                    }}
-                    variant="outline"
-                    size="sm"
-                    className="flex-1 border-border text-muted-foreground"
+            {/* Conversation Messages */}
+            {messages.length > 0 && (
+              <div className="space-y-2 max-h-[40vh] overflow-y-auto rounded-xl border border-border p-3 bg-secondary/30">
+                {messages.map((msg, i) => (
+                  <div
+                    key={i}
+                    className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
-                    <Copy className="h-3.5 w-3.5 mr-1.5" />
-                    Copy
-                  </Button>
-                  <Button
-                    onClick={() => { impactMedium(); setQuery(''); setResponse(''); }}
-                    variant="outline"
-                    size="sm"
-                    className="flex-1 border-border text-muted-foreground"
-                  >
-                    <Trash2 className="h-3.5 w-3.5 mr-1.5" />
-                    Clear
-                  </Button>
-                </div>
+                    <div
+                      className={`max-w-[85%] rounded-xl px-3 py-2 text-sm whitespace-pre-wrap ${
+                        msg.role === 'user'
+                          ? 'bg-gold/20 text-foreground'
+                          : 'bg-card border border-border text-muted-foreground'
+                      }`}
+                    >
+                      {msg.text}
+                    </div>
+                  </div>
+                ))}
+                {/* Streaming response */}
+                {isStreaming && (
+                  <div className="flex justify-start">
+                    <StreamingText
+                      text={streamedText}
+                      isStreaming={true}
+                      className="max-w-[85%] rounded-xl px-3 py-2 text-sm bg-card border border-border text-muted-foreground"
+                    />
+                  </div>
+                )}
+                <div ref={messagesEndRef} />
               </div>
+            )}
+
+            {/* Action buttons */}
+            {messages.length > 0 && !isStreaming && (
+              <div className="flex gap-2">
+                <Button
+                  onClick={async () => {
+                    impactMedium();
+                    const fullConvo = messages.map(m => `${m.role === 'user' ? 'You' : 'Intel'}: ${m.text}`).join('\n\n');
+                    try {
+                      await Clipboard.write({ string: fullConvo });
+                      toast({ title: 'Conversation copied' });
+                    } catch {
+                      toast({ title: 'Copy failed', variant: 'destructive' });
+                    }
+                  }}
+                  variant="outline"
+                  size="sm"
+                  className="flex-1 border-border text-muted-foreground"
+                >
+                  <Copy className="h-3.5 w-3.5 mr-1.5" />
+                  Copy
+                </Button>
+                <Button
+                  onClick={clearChat}
+                  variant="outline"
+                  size="sm"
+                  className="flex-1 border-border text-muted-foreground"
+                >
+                  <Trash2 className="h-3.5 w-3.5 mr-1.5" />
+                  Clear
+                </Button>
+              </div>
+            )}
+
+            {isStreaming && (
+              <Button
+                onClick={() => { /* Chat streams can't be cancelled easily, so just let it finish */ }}
+                variant="outline"
+                size="sm"
+                className="w-full border-border text-muted-foreground"
+                disabled
+              >
+                <Square className="h-3 w-3 mr-1.5" />
+                Generating...
+              </Button>
             )}
 
             {/* Tool Links */}

@@ -5,7 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Clipboard } from '@capacitor/clipboard';
 import { toast } from '@/hooks/use-toast';
 import { impactMedium } from '@/lib/haptics';
-import { getGeminiModel, isGeminiConfigured } from '@/lib/gemini';
+import { aiAnalyzeImage, isGeminiConfigured } from '@/lib/gemini';
+import { EVIDENCE_SCAN_SYSTEM_PROMPT } from '@/lib/ai-prompts';
+import { buildVeteranContext } from '@/utils/veteranContext';
+import { formatContextForAI } from '@/utils/formatContextForAI';
 import { Camera, Upload, Copy, RotateCcw, AlertTriangle, FileSearch, CheckCircle2, XCircle, MinusCircle } from 'lucide-react';
 
 interface Finding {
@@ -47,56 +50,45 @@ export default function EvidenceScanner() {
         new Uint8Array(arrayBuffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
       );
 
-      const model = getGeminiModel();
-      const imagePart = {
-        inlineData: {
-          mimeType: file.type || 'image/jpeg',
-          data: base64,
+      const evidenceSchema = {
+        type: 'object' as const,
+        properties: {
+          documentType: { type: 'string' as const },
+          findings: {
+            type: 'array' as const,
+            items: {
+              type: 'object' as const,
+              properties: {
+                label: { type: 'string' as const },
+                status: { type: 'string' as const, enum: ['present', 'missing', 'weak'] },
+                detail: { type: 'string' as const },
+              },
+              required: ['label', 'status', 'detail'],
+            },
+          },
+          overallStrength: { type: 'string' as const, enum: ['Strong', 'Moderate', 'Weak'] },
+          analysis: { type: 'string' as const },
+          missingElements: { type: 'array' as const, items: { type: 'string' as const } },
+          sampleBuddyRequest: { type: 'string' as const },
         },
+        required: ['documentType', 'findings', 'overallStrength', 'analysis'],
       };
 
-      const result = await model.generateContent([
-        {
-          text: `You are a VA disability claim evidence analyst. Analyze this document image and provide a structured assessment.
+      const ctx = buildVeteranContext({ maskPII: true });
+      const contextBlock = formatContextForAI(ctx, 'minimal');
+      const enrichedSystem = `${EVIDENCE_SCAN_SYSTEM_PROMPT}\n\nThe veteran is claiming:\n${contextBlock}`;
 
-Respond in this EXACT JSON format (no markdown, no code fences, just raw JSON):
-{
-  "documentType": "string describing what type of document this is",
-  "findings": [
-    {
-      "label": "short label",
-      "status": "present|missing|weak",
-      "detail": "explanation"
-    }
-  ],
-  "overallStrength": "Strong|Moderate|Weak",
-  "analysis": "2-3 paragraph detailed analysis of the document's value for a VA claim",
-  "missingElements": ["list of specific things missing that would strengthen the claim"],
-  "sampleBuddyRequest": "If relevant, a sample message the veteran could send to a buddy asking them to write a supporting statement about specific things this document doesn't cover"
-}
+      const text = await aiAnalyzeImage({
+        imageBase64: base64,
+        mimeType: file.type || 'image/jpeg',
+        prompt: 'Analyze this document image and provide a structured assessment of its value for a VA disability claim.',
+        systemInstruction: enrichedSystem,
+        feature: 'evidence-scanner',
+        responseSchema: evidenceSchema,
+      });
 
-Check for these evidence elements:
-- Service connection language (nexus)
-- Current diagnosis with ICD-10 code
-- Severity/frequency of symptoms
-- Functional impact on daily life and work
-- Medical opinion on etiology
-- Specific dates and timeframes
-- Provider credentials/signature
-- Objective findings vs subjective complaints
-
-If the image is not a medical/legal document, still analyze it for any VA claim relevance (photos of injuries, deployment evidence, etc).`
-        },
-        imagePart,
-      ]);
-
-      const text = result.response.text();
-
-      // Try to parse JSON response
       try {
-        // Strip markdown code fences if present
-        const cleaned = text.replace(/```json?\s*/g, '').replace(/```\s*/g, '').trim();
-        const parsed = JSON.parse(cleaned);
+        const parsed = JSON.parse(text);
 
         setFindings(parsed.findings || []);
         setRawAnalysis(
@@ -107,7 +99,7 @@ If the image is not a medical/legal document, still analyze it for any VA claim 
           setBuddyRequest(parsed.sampleBuddyRequest);
         }
       } catch {
-        // Fallback: use raw text
+        // Fallback: use raw text if JSON parse fails
         setRawAnalysis(text);
       }
     } catch {
@@ -142,7 +134,7 @@ If the image is not a medical/legal document, still analyze it for any VA claim 
   const StatusIcon = ({ status }: { status: string }) => {
     if (status === 'present') return <CheckCircle2 className="h-4 w-4 text-green-400 flex-shrink-0" />;
     if (status === 'missing') return <XCircle className="h-4 w-4 text-red-400 flex-shrink-0" />;
-    return <MinusCircle className="h-4 w-4 text-amber-400 flex-shrink-0" />;
+    return <MinusCircle className="h-4 w-4 text-gold flex-shrink-0" />;
   };
 
   return (
@@ -151,8 +143,8 @@ If the image is not a medical/legal document, still analyze it for any VA claim 
       <input ref={fileRef} type="file" accept="image/*,.pdf" className="hidden" onChange={handleFile} />
       <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handleFile} />
 
-      <div className="flex items-start gap-2 p-3 rounded-xl bg-amber-500/5 border border-amber-500/10">
-        <AlertTriangle className="h-4 w-4 text-amber-400 mt-0.5 flex-shrink-0" />
+      <div className="flex items-start gap-2 p-3 rounded-xl bg-gold/5 border border-gold/10">
+        <AlertTriangle className="h-4 w-4 text-gold mt-0.5 flex-shrink-0" />
         <p className="text-[11px] text-muted-foreground">
           Your document is processed by AI for analysis only. Images are not stored or uploaded to any server beyond the AI analysis. Review all suggestions with a VSO or attorney.
         </p>

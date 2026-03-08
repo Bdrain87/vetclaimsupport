@@ -40,6 +40,8 @@ import { ClaimIntelligence } from '@/services/claimIntelligence';
 import { getRatingCriteriaByCondition } from '@/data/vaResources/ratingCriteria';
 import { getDBQByCondition } from '@/data/vaResources/dbqReference';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
+import { buildConditionContext } from '@/utils/veteranContext';
+import { formatContextForAI } from '@/utils/formatContextForAI';
 import useAppStore from '@/store/useAppStore';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
@@ -316,26 +318,15 @@ export default function ConditionDetail() {
   const handleGenerateAIInsights = async () => {
     if (!conditionDetails) return;
 
-    const symptomNames = (data.symptoms || []).map(s => s.symptom);
-    const medicationNames = (data.medications || []).map(m => m.name);
-    const hasNexus = (data.uploadedDocuments || []).some(d =>
-      d.title?.toLowerCase().includes('nexus')
-    );
-    const hasBuddyStatements = (data.buddyContacts || []).length > 0;
+    const ctx = buildConditionContext(conditionDetails.id || conditionDetails.name);
+    const contextBlock = formatContextForAI(ctx, 'detailed');
 
     const prompt = `Analyze a veteran's claim for ${conditionDetails.name} and provide strategic insights.
 
-CONDITION: ${conditionDetails.name}
+${contextBlock}
+
 ${conditionDetails.diagnosticCode ? `DIAGNOSTIC CODE: DC ${conditionDetails.diagnosticCode}` : ''}
 CURRENT RATING: ${userCondition?.rating !== undefined ? `${userCondition.rating}%` : 'Not yet rated'}
-
-EVIDENCE AVAILABLE:
-- Medical visits logged: ${(data.medicalVisits || []).length}
-- Symptoms logged: ${symptomNames.length > 0 ? symptomNames.slice(0, 5).join(', ') : 'None'}
-- Medications: ${medicationNames.length > 0 ? medicationNames.slice(0, 5).join(', ') : 'None'}
-- Doctor summary: ${hasNexus ? 'Yes' : 'No'}
-- Buddy statements: ${hasBuddyStatements ? 'Yes' : 'No'}
-- Service history entries: ${(data.serviceHistory || []).length}
 
 ${conditionReadiness ? `READINESS SCORE: ${conditionReadiness.overallScore}%
 - Medical Evidence: ${conditionReadiness.components.medicalEvidence}%

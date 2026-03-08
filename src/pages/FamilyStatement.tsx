@@ -6,9 +6,14 @@ import { VoiceRecorder } from 'capacitor-voice-recorder';
 import { Clipboard } from '@capacitor/clipboard';
 import { toast } from '@/hooks/use-toast';
 import { impactMedium } from '@/lib/haptics';
-import { getGeminiModel, isGeminiConfigured } from '@/lib/gemini';
+import { aiTranscribe, isGeminiConfigured } from '@/lib/gemini';
+import { useAIStream } from '@/hooks/useAIStream';
 import { isNativeApp } from '@/lib/platform';
-import { Mic, MicOff, Copy, RotateCcw, AlertTriangle, Heart, Users, PenTool } from 'lucide-react';
+import { createFamilyStatementPrompt } from '@/lib/ai-prompts';
+import { buildVeteranContext } from '@/utils/veteranContext';
+import { formatContextForAI } from '@/utils/formatContextForAI';
+import { StreamingText } from '@/components/ui/StreamingText';
+import { Mic, MicOff, Copy, RotateCcw, AlertTriangle, Heart, Users, PenTool, Square } from 'lucide-react';
 
 type Relationship = 'spouse' | 'child' | 'parent' | 'sibling' | 'friend';
 
@@ -20,6 +25,8 @@ const RELATIONSHIP_LABELS: Record<Relationship, string> = {
   friend: 'Close Friend / Battle Buddy',
 };
 
+const FAMILY_STATEMENT_SYSTEM = `You are helping a veteran's family member write a supporting lay statement for a VA disability claim. Generate structured, formal statements with specific observable details the VA values. Always mark as SAMPLE template. Not legal advice.`;
+
 export default function FamilyStatement() {
   const [relationship, setRelationship] = useState<Relationship | null>(null);
   const [isRecording, setIsRecording] = useState(false);
@@ -29,6 +36,7 @@ export default function FamilyStatement() {
   const [useText, setUseText] = useState(false);
   const [textInput, setTextInput] = useState('');
   const [error, setError] = useState('');
+  const { streamedText, isStreaming, startStream, cancel: cancelStream } = useAIStream();
 
   const generateFromText = async (text: string) => {
     if (!isGeminiConfigured) {
@@ -38,39 +46,14 @@ export default function FamilyStatement() {
     setIsProcessing(true);
     setError('');
     try {
-      const model = getGeminiModel();
-      const result = await model.generateContent(
-        `You are helping a veteran's ${relationship} write a supporting lay statement for a VA disability claim.
-
-The ${relationship} described their observations:
-"${text}"
-
-Generate a structured lay statement:
-
-## Sample Lay/Witness Statement
-
-[Write a formal but personal statement from the perspective of the ${relationship}. Include:
-- Their relationship to the veteran and how long they've known them
-- Specific observable changes they've witnessed (before vs. after service, or over time)
-- Concrete examples of how the condition affects daily life, routines, and relationships
-- Specific incidents they've witnessed (flare-ups, bad days, limitations)
-- Impact on the family/household
-- Use first person, specific dates/timeframes where possible]
-
-## Key Observations to Strengthen This Statement
-[Bullet list of specific details the VA values in lay statements — things they mentioned or should add]
-
-## Formatting Tips
-- Use specific dates and timeframes
-- Describe what you personally observed, not medical conclusions
-- Include before/after comparisons when possible
-- Sign and date the statement
-- Include your full name and contact information
-- Notarization is optional but adds credibility
-
-IMPORTANT: This is a SAMPLE template. The writer must personalize with their own genuine observations. Not legal advice.`
-      );
-      setStatement(result.response.text());
+      const ctx = buildVeteranContext({ maskPII: true });
+      const contextBlock = formatContextForAI(ctx, 'standard');
+      const result = await startStream({
+        prompt: createFamilyStatementPrompt(relationship!, text, contextBlock),
+        systemInstruction: FAMILY_STATEMENT_SYSTEM,
+        feature: 'family-statement',
+      });
+      setStatement(result);
     } catch {
       setError('Failed to generate. Please try again.');
     } finally {
@@ -103,29 +86,24 @@ IMPORTANT: This is a SAMPLE template. The writer must personalize with their own
     try {
       const recording = await VoiceRecorder.stopRecording();
       if (!recording.value) { setIsProcessing(false); return; }
+      if (!isGeminiConfigured) { setError('AI features are not configured.'); setIsProcessing(false); return; }
 
-      const model = getGeminiModel();
-      const audioPart = {
-        inlineData: {
-          mimeType: recording.value.mimeType || 'audio/wav',
-          data: recording.value.recordDataBase64,
-        },
-      };
-
-      const transResult = await model.generateContent([
-        { text: 'Transcribe this audio accurately:' },
-        audioPart,
-      ]);
-      const transcribed = transResult.response.text();
+      const transcribed = await aiTranscribe({
+        audioBase64: recording.value.recordDataBase64,
+        mimeType: recording.value.mimeType || 'audio/wav',
+        feature: 'family-statement',
+      });
       setTranscript(transcribed);
       await generateFromText(transcribed);
     } catch {
       setError('Failed to process recording.');
+    } finally {
       setIsProcessing(false);
     }
   };
 
   const reset = () => {
+    cancelStream();
     impactMedium();
     setRelationship(null);
     setTranscript('');
@@ -138,8 +116,8 @@ IMPORTANT: This is a SAMPLE template. The writer must personalize with their own
   return (
     <PageContainer className="space-y-4 pb-8">
       <h1 className="text-xl font-bold mb-4">Family Impact Statement</h1>
-      <div className="flex items-start gap-2 p-3 rounded-xl bg-amber-500/5 border border-amber-500/10">
-        <AlertTriangle className="h-4 w-4 text-amber-400 mt-0.5 flex-shrink-0" />
+      <div className="flex items-start gap-2 p-3 rounded-xl bg-gold/5 border border-gold/10">
+        <AlertTriangle className="h-4 w-4 text-gold mt-0.5 flex-shrink-0" />
         <p className="text-[11px] text-muted-foreground">
           Family lay statements are powerful evidence. The VA values specific observations from people who witness the veteran's daily life. These are sample templates — must be personalized. Not legal advice.
         </p>
@@ -244,7 +222,7 @@ IMPORTANT: This is a SAMPLE template. The writer must personalize with their own
       )}
 
       {/* Result */}
-      {statement && (
+      {(statement || isStreaming) && (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <Users className="h-3.5 w-3.5" />
@@ -258,27 +236,40 @@ IMPORTANT: This is a SAMPLE template. The writer must personalize with their own
             </details>
           )}
 
-          <div className="p-4 rounded-xl border border-border bg-card text-sm whitespace-pre-wrap text-muted-foreground leading-relaxed">
-            {statement}
-          </div>
+          <StreamingText
+            text={isStreaming ? streamedText : statement}
+            isStreaming={isStreaming}
+            className="p-4 rounded-xl border border-border bg-card text-sm text-muted-foreground leading-relaxed"
+          />
 
           <div className="flex gap-2">
-            <Button
-              onClick={async () => {
-                try {
-                  await Clipboard.write({ string: statement });
-                  toast({ title: 'Statement copied' });
-                } catch {
-                  toast({ title: 'Copy failed', description: 'Could not access clipboard.', variant: 'destructive' });
-                }
-              }}
-              variant="outline" className="flex-1"
-            >
-              <Copy className="h-4 w-4 mr-2" /> Copy
-            </Button>
-            <Button onClick={reset} className="flex-1 bg-gold hover:bg-gold/80 text-black font-semibold">
-              <RotateCcw className="h-4 w-4 mr-2" /> Start Over
-            </Button>
+            {isStreaming ? (
+              <Button
+                onClick={() => { cancelStream(); setStatement(streamedText); }}
+                variant="outline" className="flex-1 border-red-500/30 text-red-400"
+              >
+                <Square className="h-3.5 w-3.5 mr-2" /> Stop
+              </Button>
+            ) : (
+              <>
+                <Button
+                  onClick={async () => {
+                    try {
+                      await Clipboard.write({ string: statement });
+                      toast({ title: 'Statement copied' });
+                    } catch {
+                      toast({ title: 'Copy failed', description: 'Could not access clipboard.', variant: 'destructive' });
+                    }
+                  }}
+                  variant="outline" className="flex-1"
+                >
+                  <Copy className="h-4 w-4 mr-2" /> Copy
+                </Button>
+                <Button onClick={reset} className="flex-1 bg-gold hover:bg-gold/80 text-black font-semibold">
+                  <RotateCcw className="h-4 w-4 mr-2" /> Start Over
+                </Button>
+              </>
+            )}
           </div>
         </motion.div>
       )}
