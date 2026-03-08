@@ -511,6 +511,7 @@ function SentinelFAB() {
   const [query, setQuery] = useState('');
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
   const conditions = useAppStore((state) => state.userConditions?.map(c => c.name).join(', ') || 'my conditions');
 
   const handleAsk = async () => {
@@ -545,8 +546,28 @@ function SentinelFAB() {
   const stopVoice = async () => {
     hapticImpact();
     const recording = await VoiceRecorder.stopRecording();
-    // Placeholder for transcription (use Gemini or Speech-to-Text API)
-    setQuery('Transcribed voice query: ' + recording.value);
+    if (!recording.value) return;
+
+    setLoading(true);
+    try {
+      const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || 'your-api-key-here');
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      const audioPart = {
+        inlineData: {
+          mimeType: 'audio/wav' as const, // VoiceRecorder may output audio/m4a on iOS
+          data: recording.value,
+        },
+      };
+      const result = await model.generateContent([
+        { text: 'Transcribe this audio accurately:' },
+        audioPart,
+      ]);
+      setQuery(result.response.text());
+    } catch {
+      setQuery('Transcription error: Try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -587,9 +608,17 @@ function SentinelFAB() {
             <Button
               variant="ghost"
               className="absolute right-2 top-1/2 -translate-y-1/2 text-white/60"
-              onClick={startVoice}
+              onClick={() => {
+                if (isRecording) {
+                  stopVoice();
+                  setIsRecording(false);
+                } else {
+                  startVoice();
+                  setIsRecording(true);
+                }
+              }}
             >
-              🎤
+              {isRecording ? '🛑' : '🎤'}
             </Button>
           </div>
           <Button onClick={() => quickPrompt('Generate a sample VA impact statement for [condition].')} variant="secondary" className="w-full bg-slate-800/50 text-white/90">
