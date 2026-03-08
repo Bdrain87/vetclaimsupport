@@ -121,6 +121,57 @@ Test account available upon request.
 - [ ] Content rating questionnaire (medical reference)
 - [ ] Data safety section matches PRIVACY.md
 
+## Deployment
+
+### Vercel (Web)
+```bash
+# Production deploy (auto-deploys on push to main if connected)
+npx vercel --prod
+
+# Or via Git: push to main triggers auto-deploy
+git push origin main
+
+# Preview deploy (any branch)
+npx vercel
+```
+- [ ] Set environment variables in Vercel dashboard:
+  - `VITE_SUPABASE_URL`
+  - `VITE_SUPABASE_PUBLISHABLE_KEY`
+  - `VITE_GEMINI_API_KEY`
+- [ ] Verify production URL loads correctly
+- [ ] Check Vercel headers (CSP, CORS) in `vercel.json`
+
+### TestFlight (iOS)
+```bash
+# Build web assets and sync to iOS
+npm run ios:build
+
+# Open in Xcode
+npm run ios:open
+
+# In Xcode:
+# 1. Select "Any iOS Device (arm64)" as build target
+# 2. Product > Archive
+# 3. Distribute App > App Store Connect > Upload
+# 4. Wait for processing in App Store Connect (~10-30 min)
+# 5. Add to TestFlight group for distribution
+```
+- [ ] Verify signing certificates and provisioning profiles
+- [ ] Set correct bundle version (CURRENT_PROJECT_VERSION)
+- [ ] Test on physical device before archiving
+
+### Supabase Migrations
+```bash
+# Link to project (one-time)
+npx supabase link --project-ref <your-project-ref>
+
+# Push all pending migrations
+npx supabase db push
+
+# Verify RLS is active
+npx supabase db lint
+```
+
 ## Post-Launch
 
 - [ ] Monitor crash reports (Xcode Organizer / Play Console)
