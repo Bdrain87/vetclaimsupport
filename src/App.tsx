@@ -28,6 +28,7 @@ import { Input } from './components/ui/input';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Clipboard } from '@capacitor/clipboard';
+import { VoiceRecorder } from 'capacitor-voice-recorder';
 import { toast } from './hooks/use-toast';
 import { OfflineIndicator } from './components/OfflineIndicator';
 import { isWeb } from './lib/platform';
@@ -535,6 +536,19 @@ function SentinelFAB() {
     hapticImpact();
   };
 
+  const startVoice = async () => {
+    hapticImpact();
+    await VoiceRecorder.requestAudioRecordingPermission();
+    await VoiceRecorder.startRecording();
+  };
+
+  const stopVoice = async () => {
+    hapticImpact();
+    const recording = await VoiceRecorder.stopRecording();
+    // Placeholder for transcription (use Gemini or Speech-to-Text API)
+    setQuery('Transcribed voice query: ' + recording.value);
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -563,12 +577,21 @@ function SentinelFAB() {
           <DialogTitle className="text-white text-xl font-semibold">Ask Sentinel AI (Gemini Flash)</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
-          <Input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Ask about VA claims, symptoms, etc."
-            className="bg-slate-800/50 text-white border-white/20"
-          />
+          <div className="relative">
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Ask about VA claims, symptoms, etc."
+              className="bg-slate-800/50 text-white border-white/20 pr-12"
+            />
+            <Button
+              variant="ghost"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-white/60"
+              onClick={startVoice}
+            >
+              🎤
+            </Button>
+          </div>
           <Button onClick={() => quickPrompt('Generate a sample VA impact statement for [condition].')} variant="secondary" className="w-full bg-slate-800/50 text-white/90">
             Quick: Impact Statement
           </Button>
