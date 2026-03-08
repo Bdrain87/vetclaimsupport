@@ -9,10 +9,10 @@
 // Version metadata
 // ---------------------------------------------------------------------------
 export const LEGAL_VERSIONS = {
-  app: '1.3.0',
-  terms: { version: '1.2', effectiveDate: '2026-02-19' },
-  privacy: { version: '1.1', effectiveDate: '2026-02-18' },
-  disclaimer: { version: '1.2', effectiveDate: '2026-02-24' },
+  app: '1.4.0',
+  terms: { version: '1.3', effectiveDate: '2026-03-08' },
+  privacy: { version: '1.2', effectiveDate: '2026-03-08' },
+  disclaimer: { version: '1.3', effectiveDate: '2026-03-08' },
 } as const;
 
 export function formatLegalDate(dateStr: string): string {
@@ -120,7 +120,7 @@ export const PREMIUM_COPY = {
   accountNote:
     'Premium follows your account on iPhone and web when signed in.',
   cardPromise:
-    'One-time purchase. Premium unlocks on this device and your signed-in account.',
+    'One-time purchase. Premium unlocks on this device and syncs across platforms when signed in.',
   activeLabel: 'Premium Active',
   restorePurchasesLabel: 'Restore Purchases',
   restorePremiumLabel: 'Restore Premium',
@@ -144,7 +144,7 @@ export const DATA_PRIVACY_COPY = {
   whatStaysLocal:
     'Health data, documents, vault, symptom logs, and claim preparation data stay on your device.',
   whatSyncs:
-    'Premium entitlement and account profile sync when signed in.',
+    'When signed in, conditions, symptoms, medications, medical visits, exposures, service history, premium entitlement, and account profile sync to the cloud for cross-device access.',
   exportWarning:
     'Exported files are outside the app sandbox and are not automatically encrypted.',
   backupWarning:

@@ -39,12 +39,12 @@
   --color-accent-200: rgba(197, 165, 90, 0.2);
   --color-accent-100: rgba(197, 165, 90, 0.1);
 
-  /* Warning Orange */
-  --color-warning-600: #D97706;
-  --color-warning-500: #F59E0B;
-  --color-warning-400: #FBBF24;
-  --color-warning-100: #FEF3C7;
-  --color-warning-50:  #FFFBEB;
+  /* Warning (Gold-adjacent) */
+  --color-warning-600: #A68B3C;
+  --color-warning-500: #C5A55A;
+  --color-warning-400: #D9BE6C;
+  --color-warning-100: #F5F0DC;
+  --color-warning-50:  #FAF8F0;
 
   /* Error Red */
   --color-error-600: #DC2626;
@@ -244,7 +244,7 @@
   --bg-inverse: var(--color-white);
   --bg-brand: var(--color-navy-700);
   --bg-success: rgba(16, 185, 129, 0.1);
-  --bg-warning: rgba(245, 158, 11, 0.1);
+  --bg-warning: rgba(197, 165, 90, 0.1);
   --bg-error: rgba(239, 68, 68, 0.1);
 
   /* Text */
@@ -275,7 +275,7 @@
     --bg-inverse: var(--color-white);
     --bg-brand: var(--color-navy-700);
     --bg-success: rgba(16, 185, 129, 0.1);
-    --bg-warning: rgba(245, 158, 11, 0.1);
+    --bg-warning: rgba(197, 165, 90, 0.1);
     --bg-error: rgba(239, 68, 68, 0.1);
 
     /* Text */

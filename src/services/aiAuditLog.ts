@@ -11,6 +11,7 @@ const MAX_ENTRIES = 100;
 export interface AIAuditEntry {
   id: string;
   timestamp: string;
+  feature: string;
   redactionMode: 'standard' | 'high';
   redactionCount: number;
   textLengthSent: number;

@@ -75,7 +75,7 @@ const PDF_COLORS = {
   border: [226, 232, 240] as [number, number, number],
   background: [241, 245, 249] as [number, number, number],
   success: [16, 185, 129] as [number, number, number],
-  warning: [245, 158, 11] as [number, number, number],
+  warning: [197, 165, 90] as [number, number, number],
   danger: [239, 68, 68] as [number, number, number],
   white: [255, 255, 255] as [number, number, number],
   watermark: [200, 210, 225] as [number, number, number],

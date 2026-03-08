@@ -89,6 +89,9 @@ export default function PrivacyPolicyPage() {
             <strong className="text-foreground">CLOUD STORAGE:</strong> Your data is stored in our secure cloud database (Supabase PostgreSQL), encrypted at rest and in transit. When you create an account, your data is saved to the cloud to enable cross-device access and reliable data persistence. Access controls are in place to ensure only you can access your data.
           </p>
           <p className="text-muted-foreground">
+            <strong className="text-foreground">DATA SYNC:</strong> When signed in, your data syncs to the cloud database. This includes conditions, symptoms, medications, medical visits, exposures, service history, and other claim-related data you enter. Sync enables cross-device access and data persistence, so your information is available on both iOS and web.
+          </p>
+          <p className="text-muted-foreground">
             <strong className="text-foreground">LOCAL CACHING:</strong> VCS may cache data locally on your device using browser localStorage and IndexedDB to improve performance and enable offline access. Local data is encrypted using AES-256-GCM encryption when a vault passcode is set in Settings. Local caching supplements cloud storage but is not the primary storage method.
           </p>
           <p className="text-muted-foreground">
@@ -116,6 +119,9 @@ export default function PrivacyPolicyPage() {
             <strong className="text-foreground">PHI SAFEGUARDS:</strong> Before sending text to our AI provider, VCS automatically strips detectable personally identifiable information (SSNs, phone numbers, email addresses, dates of birth, and street addresses) using pattern-based sanitization. Veteran names are replaced with placeholders before transmission and restored client-side. However, free-text fields may contain information that automated sanitization cannot detect. While we automatically strip common identifiers before processing, we recommend you do not enter your Social Security number, date of birth, or full legal name into AI-powered features.
           </p>
           <p className="text-muted-foreground">
+            <strong className="text-foreground">CONTEXTUAL DATA INCLUSION:</strong> To improve AI response quality, AI features automatically include relevant data you&apos;ve logged in the app (such as conditions, symptoms, medications, and service history) as part of the AI prompt. Your name is replaced with &apos;[VETERAN]&apos; before transmission. This contextual data is subject to the same processing and non-retention terms described above.
+          </p>
+          <p className="text-muted-foreground">
             <strong className="text-foreground">ANONYMOUS USAGE:</strong> If you use AI features without creating an account, an anonymous session is created. Because anonymous sessions are not linked to a known identity, data deletion requests cannot retroactively cover anonymous AI usage. To ensure full control over your data, we recommend creating an account before using AI features.
           </p>
           <p className="text-muted-foreground">
@@ -134,6 +140,9 @@ export default function PrivacyPolicyPage() {
           </p>
           <p className="text-muted-foreground">
             We store the following payment-related data in our database: your Stripe customer ID, purchase date, and entitlement status. This data is used solely to determine your access level and is deleted when you delete your account.
+          </p>
+          <p className="text-muted-foreground">
+            <strong className="text-foreground">iOS Purchases:</strong> On iOS, Premium purchases are processed through Apple&apos;s App Store via <strong className="text-foreground">RevenueCat</strong> (in-app purchase management). Apple collects and processes your payment information directly per Apple&apos;s terms. RevenueCat manages the purchase lifecycle and syncs your entitlement status. VCS stores your RevenueCat customer ID and entitlement status.
           </p>
         </section>
 
@@ -204,6 +213,8 @@ export default function PrivacyPolicyPage() {
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Vercel</strong> (web hosting and deployment)</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Apple Sign-In</strong> (authentication, optional)</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Google Sign-In</strong> (authentication, optional)</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">RevenueCat</strong> (in-app purchase management and entitlement sync on iOS)</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span><strong className="text-foreground">Apple</strong> (App Store In-App Purchase processing on iOS)</li>
           </ul>
           <p className="text-muted-foreground">
             Each third-party service has its own privacy policy.

@@ -49,6 +49,7 @@ import { getConditionDisplayName } from '@/utils/conditionResolver';
 import type { UserCondition } from '@/store/useAppStore';
 import { useToast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
+import { EVIDENCE_CHECKLIST_TOTAL } from '@/constants/evidence';
 
 // Build body system options dynamically from the unified index
 const dynamicCategories = getAllCategories();
@@ -295,8 +296,7 @@ export default function Conditions() {
     return gaps;
   }, [data.claimConditions, userConditions, getConditionDetails]);
 
-  // Must match the 10 items in ConditionDetail.tsx EVIDENCE_ITEMS
-  const EVIDENCE_TOTAL = 10;
+  const EVIDENCE_TOTAL = EVIDENCE_CHECKLIST_TOTAL;
 
   // Search and filter state
   const [searchQuery, setSearchQuery] = useState('');

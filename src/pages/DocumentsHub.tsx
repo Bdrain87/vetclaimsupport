@@ -420,7 +420,7 @@ export default function DocumentsHub() {
                   "h-4 w-4 sm:h-5 sm:w-5 transition-colors",
                   activeTab === tab.value ? "text-gold" : "text-muted-foreground"
                 )} />
-                <span className="hidden xs:inline">{tab.label}</span>
+                <span className="text-[10px] sm:text-sm truncate">{tab.label}</span>
               </TabsTrigger>
             ))}
           </TabsList>

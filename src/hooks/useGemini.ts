@@ -4,6 +4,12 @@ import { supabase } from '@/lib/supabase';
 import { redactPII } from '@/lib/redaction';
 import { logAISend } from '@/services/aiAuditLog';
 
+const PERSONA_FEATURE_MAP: Record<string, string> = {
+  EXAMINER_PERSONA: 'exam-prep',
+  VA_SPEAK_TRANSLATOR: 'va-speak',
+  DOCTOR_SUMMARY_LOGIC: 'doctor-summary',
+};
+
 async function ensureSession(): Promise<boolean> {
   // 1. Check for a cached session
   const { data: { session } } = await supabase.auth.getSession();
@@ -61,6 +67,7 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
       const { redactedText: sanitizedInput, redactionCount } = redactPII(input, 'high');
 
       logAISend({
+        feature: PERSONA_FEATURE_MAP[persona] || persona,
         redactionMode: 'high',
         redactionCount,
         textLengthSent: sanitizedInput.length,
@@ -178,7 +185,7 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
       }
 
       const { redactedText: sanitizedInput, redactionCount } = redactPII(input, 'high');
-      logAISend({ redactionMode: 'high', redactionCount, textLengthSent: sanitizedInput.length });
+      logAISend({ feature: PERSONA_FEATURE_MAP[persona] || persona, redactionMode: 'high', redactionCount, textLengthSent: sanitizedInput.length });
 
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {

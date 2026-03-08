@@ -52,6 +52,8 @@ import { BRANCH_LABELS, type Branch } from '@/store/useProfileStore';
 import { ReadinessDrillDown } from '@/components/ReadinessDrillDown';
 import { SyncStatusBadge } from '@/components/SyncStatusBadge';
 import { AnimatePresence } from 'motion/react';
+import { hasWriteFailures } from '@/lib/encryptedStorage';
+import { useToast } from '@/hooks/use-toast';
 
 const JOURNEY_PHASE_LABELS = ['Research', 'Evidence', 'Filing', 'C&P Exam', 'Decision'];
 
@@ -113,6 +115,17 @@ export default function Dashboard() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => setSession(s));
     return () => subscription.unsubscribe();
   }, []);
+
+  const { toast } = useToast();
+  useEffect(() => {
+    if (hasWriteFailures()) {
+      toast({
+        title: 'Data save issue',
+        description: 'Some changes may not have been saved. Please restart the app.',
+        variant: 'destructive',
+      });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const streak = useStreakTracker();
   const reminders = useSmartReminders();
@@ -692,7 +705,7 @@ export default function Dashboard() {
                     max={10}
                     value={quickLogFlareUpSeverity}
                     onChange={(e) => setQuickLogFlareUpSeverity(Number(e.target.value))}
-                    className="w-full accent-amber-400"
+                    className="w-full accent-gold"
                   />
                 </div>
 

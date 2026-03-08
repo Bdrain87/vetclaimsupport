@@ -20,7 +20,8 @@ let package = Package(
         .package(name: "CapacitorLocalNotifications", path: "../../../node_modules/@capacitor/local-notifications"),
         .package(name: "CapacitorSplashScreen", path: "../../../node_modules/@capacitor/splash-screen"),
         .package(name: "CapacitorStatusBar", path: "../../../node_modules/@capacitor/status-bar"),
-        .package(name: "CapgoCapacitorPurchases", path: "../../../node_modules/@capgo/capacitor-purchases")
+        .package(name: "CapgoCapacitorPurchases", path: "../../../node_modules/@capgo/capacitor-purchases"),
+        .package(name: "CapacitorVoiceRecorder", path: "../../../node_modules/capacitor-voice-recorder")
     ],
     targets: [
         .target(
@@ -36,7 +37,8 @@ let package = Package(
                 .product(name: "CapacitorLocalNotifications", package: "CapacitorLocalNotifications"),
                 .product(name: "CapacitorSplashScreen", package: "CapacitorSplashScreen"),
                 .product(name: "CapacitorStatusBar", package: "CapacitorStatusBar"),
-                .product(name: "CapgoCapacitorPurchases", package: "CapgoCapacitorPurchases")
+                .product(name: "CapgoCapacitorPurchases", package: "CapgoCapacitorPurchases"),
+                .product(name: "CapacitorVoiceRecorder", package: "CapacitorVoiceRecorder")
             ]
         )
     ]

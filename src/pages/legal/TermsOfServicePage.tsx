@@ -122,6 +122,7 @@ export default function TermsOfServicePage() {
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(f) AI features are optional and the app functions fully without them</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(g) VCS makes no warranty as to the accuracy, completeness, or reliability of any AI-generated content</li>
             <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(h) AI-generated content should NOT be submitted to the VA or any other party without thorough personal review and editing &mdash; all AI outputs are drafts intended as starting points, not finished documents</li>
+            <li className="flex items-start gap-2"><span className="text-gold mt-0.5">&#x2022;</span>(i) AI features automatically include relevant data you&apos;ve logged in the app (such as conditions, symptoms, medications, and service history) as context to improve response quality. Your name is replaced with a placeholder before transmission. This contextual data is included in the AI prompt alongside your typed input and is subject to the same processing and non-retention terms described above</li>
           </ul>
         </section>
 
@@ -208,7 +209,13 @@ export default function TermsOfServicePage() {
             <strong className="text-foreground">Refund Policy.</strong> You may request a full refund within <strong className="text-foreground">7 days</strong> of purchase by contacting <a href={`mailto:${ADMIN_EMAIL}`} className="text-primary underline">{ADMIN_EMAIL}</a>. After 7 days, all sales are final. Upon refund, your Premium access will be revoked.
           </p>
           <p className="text-muted-foreground">
-            <strong className="text-foreground">Payment Processing.</strong> All payments are processed securely by <strong className="text-foreground">Stripe, Inc.</strong> VCS does not directly collect, store, or have access to your full payment card information. Your use of Stripe&apos;s services is subject to <a href="https://stripe.com/legal" target="_blank" rel="noopener noreferrer" className="text-primary underline">Stripe&apos;s Terms of Service</a> and <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-primary underline">Privacy Policy</a>.
+            <strong className="text-foreground">Payment Processing (Web).</strong> Web purchases are processed securely by <strong className="text-foreground">Stripe, Inc.</strong> VCS does not directly collect, store, or have access to your full payment card information. Your use of Stripe&apos;s services is subject to <a href="https://stripe.com/legal" target="_blank" rel="noopener noreferrer" className="text-primary underline">Stripe&apos;s Terms of Service</a> and <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-primary underline">Privacy Policy</a>.
+          </p>
+          <p className="text-muted-foreground">
+            <strong className="text-foreground">Payment Processing (iOS).</strong> On iOS, purchases are processed through <strong className="text-foreground">Apple&apos;s App Store</strong> (In-App Purchase) via <strong className="text-foreground">RevenueCat</strong>. Apple&apos;s App Store terms and refund policies apply to iOS purchases. Apple collects and processes your payment information directly. RevenueCat manages the purchase lifecycle and syncs your entitlement status across platforms. For iOS purchase refunds, contact Apple through the App Store.
+          </p>
+          <p className="text-muted-foreground">
+            <strong className="text-foreground">Cross-Platform Access.</strong> Premium purchases sync across iOS and web when you are signed in to the same account, regardless of which platform you purchased on.
           </p>
           <p className="text-muted-foreground">
             <strong className="text-foreground">Feature Scope.</strong> Your purchase grants access to all Premium features available at the time of purchase. Future features or major new modules may be offered separately and are not guaranteed to be included in your existing purchase.

@@ -60,9 +60,9 @@ export function PremiumGuard({ featureName, children }: PremiumGuardProps) {
 
   if (state === 'loading') {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center">
+      <div className="min-h-[60vh] flex items-center justify-center" role="status" aria-live="polite">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-10 h-10 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+          <div className="w-10 h-10 rounded-full border-2 border-primary border-t-transparent animate-spin" aria-hidden="true" />
           <p className="text-sm text-muted-foreground">Checking access...</p>
         </div>
       </div>

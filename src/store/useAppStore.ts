@@ -352,7 +352,7 @@ const useAppStore = create<AppState>()(
         const s = get();
         const totalLogs = s.medicalVisits.length + s.symptoms.length + s.medications.length + s.sleepEntries.length + s.migraines.length + s.exposures.length;
         if (!canAddHealthLog(totalLogs)) { logger.warn('[useAppStore] Free-tier health log limit reached'); return; }
-        set((st) => ({ medicalVisits: [...st.medicalVisits, { ...visit, id: generateId() }] }));
+        set((st) => ({ medicalVisits: [...st.medicalVisits, { id: generateId(), ...visit }] }));
       },
       updateMedicalVisit: (id, visit) => set((s) => ({
         medicalVisits: s.medicalVisits.map((v) => v.id === id ? { ...v, ...visit } : v),
@@ -366,7 +366,7 @@ const useAppStore = create<AppState>()(
         const s = get();
         const totalLogs = s.medicalVisits.length + s.symptoms.length + s.medications.length + s.sleepEntries.length + s.migraines.length + s.exposures.length;
         if (!canAddHealthLog(totalLogs)) { logger.warn('[useAppStore] Free-tier health log limit reached'); return; }
-        set((st) => ({ exposures: [...st.exposures, { ...exposure, id: generateId() }] }));
+        set((st) => ({ exposures: [...st.exposures, { id: generateId(), ...exposure }] }));
       },
       updateExposure: (id, exposure) => set((s) => ({
         exposures: s.exposures.map((e) => e.id === id ? { ...e, ...exposure } : e),
@@ -394,7 +394,7 @@ const useAppStore = create<AppState>()(
         const s = get();
         const totalLogs = s.medicalVisits.length + s.symptoms.length + s.medications.length + s.sleepEntries.length + s.migraines.length + s.exposures.length;
         if (!canAddHealthLog(totalLogs)) { logger.warn('[useAppStore] Free-tier health log limit reached'); return; }
-        set((st) => ({ medications: [...st.medications, { ...medication, id: generateId() }] }));
+        set((st) => ({ medications: [...st.medications, { id: generateId(), ...medication }] }));
       },
       updateMedication: (id, medication) => set((s) => ({
         medications: s.medications.map((m) => m.id === id ? { ...m, ...medication } : m),
@@ -660,10 +660,11 @@ const useAppStore = create<AppState>()(
           conditionTags: sym.conditionTags?.filter((t) => !idsToRemove.includes(t)) ?? [],
         }));
 
-        // Cascade: clear prescribedFor references in medications
+        // Cascade: clear prescribedFor and conditionTags references in medications
         const medications = s.medications.map((m) => ({
           ...m,
           prescribedFor: idsToRemove.includes(m.prescribedFor) ? '' : m.prescribedFor,
+          conditionTags: m.conditionTags?.filter((t) => !idsToRemove.includes(t)) ?? [],
         }));
 
         // Cascade: remove associated form drafts
@@ -680,6 +681,23 @@ const useAppStore = create<AppState>()(
           ),
         );
 
+        // Cascade: remove claim documents linked to the removed condition
+        // ClaimDocument.condition stores a plain-text name (e.g. "PTSD").
+        // Collect all possible name variants for the removed conditions.
+        const removedConditionNames = new Set<string>();
+        for (const rid of idsToRemove) {
+          const uc = s.userConditions.find((c) => c.id === rid);
+          if (uc?.displayName) removedConditionNames.add(uc.displayName.toLowerCase());
+          // Also match against claimConditions name (may differ from displayName)
+          const cc = s.claimConditions.find((c) => c.id === rid);
+          if (cc?.name) removedConditionNames.add(cc.name.toLowerCase());
+        }
+        const claimDocuments = removedConditionNames.size > 0
+          ? s.claimDocuments.filter(
+              (d) => !removedConditionNames.has(d.condition.toLowerCase()),
+            )
+          : s.claimDocuments;
+
         return {
           userConditions: s.userConditions.filter((c) => !idsToRemove.includes(c.id)),
           conditionEvidenceChecks: newChecks,
@@ -688,6 +706,7 @@ const useAppStore = create<AppState>()(
           medications,
           formDrafts,
           evidenceDocuments,
+          claimDocuments,
         };
       }),
 

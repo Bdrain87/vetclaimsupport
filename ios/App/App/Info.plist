@@ -53,6 +53,8 @@
 	<string>Vet Claim Support needs access to your photo library to upload medical documents and records for your disability claim.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Vet Claim Support needs camera access to scan and upload documents for your disability claim.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Vet Claim Support needs microphone access to record voice notes for your C&amp;P exam debrief and statement preparation.</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

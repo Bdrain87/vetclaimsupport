@@ -1,0 +1,220 @@
+diff --git a/node_modules/capacitor-voice-recorder/Package.swift b/node_modules/capacitor-voice-recorder/Package.swift
+new file mode 100644
+index 0000000..25a945f
+--- /dev/null
++++ b/node_modules/capacitor-voice-recorder/Package.swift
+@@ -0,0 +1,25 @@
++// swift-tools-version: 5.9
++import PackageDescription
++
++let package = Package(
++    name: "CapacitorVoiceRecorder",
++    platforms: [.iOS(.v15)],
++    products: [
++        .library(
++            name: "CapacitorVoiceRecorder",
++            targets: ["VoiceRecorderPlugin"])
++    ],
++    dependencies: [
++        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "8.0.0"),
++    ],
++    targets: [
++        .target(
++            name: "VoiceRecorderPlugin",
++            dependencies: [
++                .product(name: "Capacitor", package: "capacitor-swift-pm"),
++                .product(name: "Cordova", package: "capacitor-swift-pm"),
++            ],
++            path: "ios/Sources/VoiceRecorderPlugin"
++        )
++    ]
++)
+diff --git a/node_modules/capacitor-voice-recorder/ios/Sources/VoiceRecorderPlugin/VoiceRecorderPlugin.swift b/node_modules/capacitor-voice-recorder/ios/Sources/VoiceRecorderPlugin/VoiceRecorderPlugin.swift
+new file mode 100644
+index 0000000..26e6aeb
+--- /dev/null
++++ b/node_modules/capacitor-voice-recorder/ios/Sources/VoiceRecorderPlugin/VoiceRecorderPlugin.swift
+@@ -0,0 +1,183 @@
++import Foundation
++import AVFoundation
++import Capacitor
++
++// MARK: - Recording Status
++
++enum RecordingStatus: String {
++    case RECORDING
++    case PAUSED
++    case NONE
++}
++
++// MARK: - Media Recorder
++
++private class MediaRecorder {
++    private var recordingSession: AVAudioSession!
++    private var audioRecorder: AVAudioRecorder!
++    private var audioFilePath: URL!
++    private var originalCategory: AVAudioSession.Category!
++    private var status = RecordingStatus.NONE
++
++    private let settings: [String: Any] = [
++        AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
++        AVSampleRateKey: 44100,
++        AVNumberOfChannelsKey: 1,
++        AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
++    ]
++
++    func startRecording() -> Bool {
++        do {
++            recordingSession = AVAudioSession.sharedInstance()
++            originalCategory = recordingSession.category
++            try recordingSession.setCategory(.playAndRecord)
++            try recordingSession.setActive(true)
++            audioFilePath = URL(fileURLWithPath: NSTemporaryDirectory())
++                .appendingPathComponent("\(UUID().uuidString).aac")
++            audioRecorder = try AVAudioRecorder(url: audioFilePath, settings: settings)
++            audioRecorder.record()
++            status = .RECORDING
++            return true
++        } catch {
++            return false
++        }
++    }
++
++    func stopRecording() {
++        do {
++            audioRecorder.stop()
++            try recordingSession.setActive(false)
++            try recordingSession.setCategory(originalCategory)
++            originalCategory = nil
++            audioRecorder = nil
++            recordingSession = nil
++            status = .NONE
++        } catch {}
++    }
++
++    func getOutputFile() -> URL { audioFilePath }
++
++    func pauseRecording() -> Bool {
++        guard status == .RECORDING else { return false }
++        audioRecorder.pause()
++        status = .PAUSED
++        return true
++    }
++
++    func resumeRecording() -> Bool {
++        guard status == .PAUSED else { return false }
++        audioRecorder.record()
++        status = .RECORDING
++        return true
++    }
++
++    func getCurrentStatus() -> RecordingStatus { status }
++}
++
++// MARK: - Plugin
++
++@objc(VoiceRecorderPlugin)
++public class VoiceRecorderPlugin: CAPPlugin, CAPBridgedPlugin {
++
++    public let identifier = "VoiceRecorderPlugin"
++    public let jsName = "VoiceRecorder"
++    public let pluginMethods: [CAPPluginMethod] = [
++        CAPPluginMethod(name: "canDeviceVoiceRecord", returnType: CAPPluginReturnPromise),
++        CAPPluginMethod(name: "requestAudioRecordingPermission", returnType: CAPPluginReturnPromise),
++        CAPPluginMethod(name: "hasAudioRecordingPermission", returnType: CAPPluginReturnPromise),
++        CAPPluginMethod(name: "startRecording", returnType: CAPPluginReturnPromise),
++        CAPPluginMethod(name: "stopRecording", returnType: CAPPluginReturnPromise),
++        CAPPluginMethod(name: "pauseRecording", returnType: CAPPluginReturnPromise),
++        CAPPluginMethod(name: "resumeRecording", returnType: CAPPluginReturnPromise),
++        CAPPluginMethod(name: "getCurrentStatus", returnType: CAPPluginReturnPromise),
++    ]
++
++    private var recorder: MediaRecorder?
++
++    @objc func canDeviceVoiceRecord(_ call: CAPPluginCall) {
++        call.resolve(["value": true])
++    }
++
++    @objc func requestAudioRecordingPermission(_ call: CAPPluginCall) {
++        AVAudioSession.sharedInstance().requestRecordPermission { granted in
++            call.resolve(["value": granted])
++        }
++    }
++
++    @objc func hasAudioRecordingPermission(_ call: CAPPluginCall) {
++        let granted = AVAudioSession.sharedInstance().recordPermission == .granted
++        call.resolve(["value": granted])
++    }
++
++    @objc func startRecording(_ call: CAPPluginCall) {
++        guard AVAudioSession.sharedInstance().recordPermission == .granted else {
++            call.reject("MISSING_PERMISSION")
++            return
++        }
++        guard recorder == nil else {
++            call.reject("ALREADY_RECORDING")
++            return
++        }
++
++        recorder = MediaRecorder()
++        if recorder!.startRecording() {
++            call.resolve(["value": true])
++        } else {
++            recorder = nil
++            call.reject("CANNOT_RECORD_ON_THIS_PHONE")
++        }
++    }
++
++    @objc func stopRecording(_ call: CAPPluginCall) {
++        guard let rec = recorder else {
++            call.reject("RECORDING_HAS_NOT_STARTED")
++            return
++        }
++
++        rec.stopRecording()
++        let fileUrl = rec.getOutputFile()
++        recorder = nil
++
++        do {
++            let data = try Data(contentsOf: fileUrl)
++            let base64 = data.base64EncodedString()
++            let duration = Int(CMTimeGetSeconds(AVURLAsset(url: fileUrl).duration) * 1000)
++
++            guard !base64.isEmpty, duration >= 0 else {
++                call.reject("EMPTY_RECORDING")
++                return
++            }
++
++            call.resolve([
++                "value": [
++                    "recordDataBase64": base64,
++                    "msDuration": duration,
++                    "mimeType": "audio/aac"
++                ]
++            ])
++        } catch {
++            call.reject("FAILED_TO_FETCH_RECORDING")
++        }
++    }
++
++    @objc func pauseRecording(_ call: CAPPluginCall) {
++        guard let rec = recorder else {
++            call.reject("RECORDING_HAS_NOT_STARTED")
++            return
++        }
++        call.resolve(["value": rec.pauseRecording()])
++    }
++
++    @objc func resumeRecording(_ call: CAPPluginCall) {
++        guard let rec = recorder else {
++            call.reject("RECORDING_HAS_NOT_STARTED")
++            return
++        }
++        call.resolve(["value": rec.resumeRecording()])
++    }
++
++    @objc func getCurrentStatus(_ call: CAPPluginCall) {
++        let status = recorder?.getCurrentStatus() ?? .NONE
++        call.resolve(["status": status.rawValue])
++    }
++}

@@ -36,7 +36,7 @@ export function SyncStatusBadge({ className }: { className?: string }) {
       {isOnline ? (
         <Cloud className="h-3 w-3" />
       ) : (
-        <CloudOff className="h-3 w-3 text-amber-400" />
+        <CloudOff className="h-3 w-3 text-gold" />
       )}
       <span>{isOnline ? `Synced ${timeAgo}` : 'Offline'}</span>
     </div>

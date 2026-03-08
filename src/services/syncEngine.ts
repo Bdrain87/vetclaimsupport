@@ -51,6 +51,12 @@ function isValidHealthLogData(logType: string, data: Record<string, unknown>): b
       return hasString(data, 'date') && typeof data.hoursSlept === 'number';
     case 'migraine':
       return hasString(data, 'date');
+    case 'medication':
+      return hasString(data, 'name');
+    case 'medical_visit':
+      return hasString(data, 'date');
+    case 'exposure':
+      return hasString(data, 'type');
     default:
       return false;
   }
@@ -362,6 +368,65 @@ export async function pullFromCloud(): Promise<void> {
           } as unknown as Parameters<typeof appStore.addMigraine>[0]);
           break;
         }
+        case 'medication': {
+          const byId = appStore.medications.find((m) => m.id === log.id);
+          if (byId) break;
+
+          const cloudName = norm(getString(logData, 'name'));
+          const byContent = appStore.medications.find(
+            (m) => norm(m.name) === cloudName,
+          );
+          if (byContent) {
+            appStore.updateMedication(byContent.id, { id: log.id });
+            break;
+          }
+
+          appStore.addMedication({
+            id: log.id,
+            ...logData,
+          } as unknown as Parameters<typeof appStore.addMedication>[0]);
+          break;
+        }
+        case 'medical_visit': {
+          const byId = appStore.medicalVisits.find((v) => v.id === log.id);
+          if (byId) break;
+
+          const cloudDate = norm(getString(logData, 'date'));
+          const cloudReason = norm(getString(logData, 'reason'));
+          const byContent = appStore.medicalVisits.find(
+            (v) => norm(v.date) === cloudDate && norm(v.reason) === cloudReason,
+          );
+          if (byContent) {
+            appStore.updateMedicalVisit(byContent.id, { id: log.id });
+            break;
+          }
+
+          appStore.addMedicalVisit({
+            id: log.id,
+            ...logData,
+          } as unknown as Parameters<typeof appStore.addMedicalVisit>[0]);
+          break;
+        }
+        case 'exposure': {
+          const byId = appStore.exposures.find((e) => e.id === log.id);
+          if (byId) break;
+
+          const cloudType = norm(getString(logData, 'type'));
+          const cloudLocation = norm(getString(logData, 'location'));
+          const byContent = appStore.exposures.find(
+            (e) => norm(e.type) === cloudType && norm(e.location) === cloudLocation,
+          );
+          if (byContent) {
+            appStore.updateExposure(byContent.id, { id: log.id });
+            break;
+          }
+
+          appStore.addExposure({
+            id: log.id,
+            ...logData,
+          } as unknown as Parameters<typeof appStore.addExposure>[0]);
+          break;
+        }
       }
     }
   }
@@ -551,6 +616,63 @@ export async function pushToCloud(): Promise<string[]> {
     if (error) {
       logger.error('[sync] push migraines failed', error);
       pushErrors.push('migraines');
+    }
+  }
+
+  // Push medications as health logs
+  if (appState.medications.length > 0) {
+    const medRows = appState.medications.map((m) => ({
+      id: m.id,
+      user_id: userId,
+      log_type: 'medication' as const,
+      data: sanitizeRecord(m as unknown as Record<string, unknown>),
+      logged_at: m.startDate || new Date().toISOString(),
+    }));
+    const { error } = await withTimeout(
+      supabase.from('health_logs').upsert(medRows, { onConflict: 'id' }),
+      SYNC_TIMEOUT_MS, 'push medications',
+    );
+    if (error) {
+      logger.error('[sync] push medications failed', error);
+      pushErrors.push('medications');
+    }
+  }
+
+  // Push medical visits as health logs
+  if (appState.medicalVisits.length > 0) {
+    const visitRows = appState.medicalVisits.map((v) => ({
+      id: v.id,
+      user_id: userId,
+      log_type: 'medical_visit' as const,
+      data: sanitizeRecord(v as unknown as Record<string, unknown>),
+      logged_at: v.date || new Date().toISOString(),
+    }));
+    const { error } = await withTimeout(
+      supabase.from('health_logs').upsert(visitRows, { onConflict: 'id' }),
+      SYNC_TIMEOUT_MS, 'push medical visits',
+    );
+    if (error) {
+      logger.error('[sync] push medical visits failed', error);
+      pushErrors.push('medicalVisits');
+    }
+  }
+
+  // Push exposures as health logs
+  if (appState.exposures.length > 0) {
+    const exposureRows = appState.exposures.map((e) => ({
+      id: e.id,
+      user_id: userId,
+      log_type: 'exposure' as const,
+      data: sanitizeRecord(e as unknown as Record<string, unknown>),
+      logged_at: e.date || new Date().toISOString(),
+    }));
+    const { error } = await withTimeout(
+      supabase.from('health_logs').upsert(exposureRows, { onConflict: 'id' }),
+      SYNC_TIMEOUT_MS, 'push exposures',
+    );
+    if (error) {
+      logger.error('[sync] push exposures failed', error);
+      pushErrors.push('exposures');
     }
   }
 

@@ -111,9 +111,9 @@ const CATEGORIES: FeatureCategory[] = [
     id: 'privacy',
     icon: Shield,
     label: 'Privacy First',
-    headline: 'Your data never leaves your device',
+    headline: 'Your data stays in your control',
     description:
-      'Everything is stored locally with optional AES-256 encryption. No server uploads, no third-party analytics, no data selling.',
+      'Local-first by default with optional cloud sync when you sign in. AES-256 encryption, no third-party analytics, no data selling. You choose what syncs.',
     features: [
       'Local-first architecture — no cloud required',
       'Optional AES-256 encryption at rest',
