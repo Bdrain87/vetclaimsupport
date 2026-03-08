@@ -508,6 +508,7 @@ function SentinelFAB() {
   const [query, setQuery] = useState('');
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
+  const conditions = useAppStore((state) => state.userConditions?.map(c => c.name).join(', ') || 'my conditions');
 
   const handleAsk = async () => {
     if (!query) return;
@@ -568,6 +569,9 @@ function SentinelFAB() {
           </Button>
           <Button onClick={() => quickPrompt('Explain VA rating percentages for [condition] and how to calculate combined ratings.')} variant="secondary" className="w-full bg-slate-800/50 text-white/90">
             Quick: Rating Help
+          </Button>
+          <Button onClick={() => quickPrompt(`Suggest claim strategy optimizations for ${conditions}.`)} variant="secondary" className="w-full bg-slate-800/50 text-white/90">
+            Quick: Optimize Strategy
           </Button>
           <Button onClick={() => { hapticImpact(); handleAsk(); }} disabled={loading} className="w-full bg-amber-600 hover:bg-amber-500">
             {loading ? 'Asking...' : 'Ask Gemini'}
