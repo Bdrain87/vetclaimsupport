@@ -32,6 +32,12 @@ vi.mock('@/lib/indexedDB', () => ({
   isIndexedDBAvailable: () => false,
 }));
 
+// Mock entitlements so free-tier limits don't block test data creation
+vi.mock('@/services/entitlements', () => ({
+  canAddCondition: () => true,
+  canAddHealthLog: () => true,
+}));
+
 // Now import the store (the mocks above will be active)
 import useAppStore from '@/store/useAppStore';
 

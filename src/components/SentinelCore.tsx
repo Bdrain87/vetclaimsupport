@@ -285,8 +285,12 @@ export function SentinelCore() {
                   <Button
                     onClick={async () => {
                       impactMedium();
-                      await Clipboard.write({ string: response });
-                      toast({ title: 'Copied to clipboard' });
+                      try {
+                        await Clipboard.write({ string: response });
+                        toast({ title: 'Copied to clipboard' });
+                      } catch {
+                        toast({ title: 'Copy failed', description: 'Could not access clipboard.', variant: 'destructive' });
+                      }
                     }}
                     variant="outline"
                     size="sm"

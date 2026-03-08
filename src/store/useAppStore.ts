@@ -4,6 +4,7 @@ import { encryptedStorage } from '@/lib/encryptedStorage';
 import { createDebouncedStorage } from '@/lib/debouncedStorage';
 import { logger } from '@/utils/logger';
 import { resolveConditionId, isSuspiciousConditionId } from '@/utils/conditionResolver';
+import { canAddCondition, canAddHealthLog } from '@/services/entitlements';
 import type {
   MedicalVisit, Exposure, SymptomEntry, Medication,
   ServiceEntry, BuddyContact, DocumentItem, MigraineEntry,
@@ -347,9 +348,12 @@ const useAppStore = create<AppState>()(
       // ========== CLAIMS DATA METHODS ==========
 
       // Medical Visits
-      addMedicalVisit: (visit) => set((s) => ({
-        medicalVisits: [...s.medicalVisits, { ...visit, id: generateId() }],
-      })),
+      addMedicalVisit: (visit) => {
+        const s = get();
+        const totalLogs = s.medicalVisits.length + s.symptoms.length + s.medications.length + s.sleepEntries.length + s.migraines.length + s.exposures.length;
+        if (!canAddHealthLog(totalLogs)) { logger.warn('[useAppStore] Free-tier health log limit reached'); return; }
+        set((st) => ({ medicalVisits: [...st.medicalVisits, { ...visit, id: generateId() }] }));
+      },
       updateMedicalVisit: (id, visit) => set((s) => ({
         medicalVisits: s.medicalVisits.map((v) => v.id === id ? { ...v, ...visit } : v),
       })),
@@ -358,9 +362,12 @@ const useAppStore = create<AppState>()(
       })),
 
       // Exposures
-      addExposure: (exposure) => set((s) => ({
-        exposures: [...s.exposures, { ...exposure, id: generateId() }],
-      })),
+      addExposure: (exposure) => {
+        const s = get();
+        const totalLogs = s.medicalVisits.length + s.symptoms.length + s.medications.length + s.sleepEntries.length + s.migraines.length + s.exposures.length;
+        if (!canAddHealthLog(totalLogs)) { logger.warn('[useAppStore] Free-tier health log limit reached'); return; }
+        set((st) => ({ exposures: [...st.exposures, { ...exposure, id: generateId() }] }));
+      },
       updateExposure: (id, exposure) => set((s) => ({
         exposures: s.exposures.map((e) => e.id === id ? { ...e, ...exposure } : e),
       })),
@@ -369,9 +376,12 @@ const useAppStore = create<AppState>()(
       })),
 
       // Symptoms
-      addSymptom: (symptom) => set((s) => ({
-        symptoms: [...s.symptoms, { id: generateId(), ...symptom }],
-      })),
+      addSymptom: (symptom) => {
+        const s = get();
+        const totalLogs = s.medicalVisits.length + s.symptoms.length + s.medications.length + s.sleepEntries.length + s.migraines.length + s.exposures.length;
+        if (!canAddHealthLog(totalLogs)) { logger.warn('[useAppStore] Free-tier health log limit reached'); return; }
+        set((st) => ({ symptoms: [...st.symptoms, { id: generateId(), ...symptom }] }));
+      },
       updateSymptom: (id, symptom) => set((s) => ({
         symptoms: s.symptoms.map((sym) => sym.id === id ? { ...sym, ...symptom } : sym),
       })),
@@ -380,9 +390,12 @@ const useAppStore = create<AppState>()(
       })),
 
       // Medications
-      addMedication: (medication) => set((s) => ({
-        medications: [...s.medications, { ...medication, id: generateId() }],
-      })),
+      addMedication: (medication) => {
+        const s = get();
+        const totalLogs = s.medicalVisits.length + s.symptoms.length + s.medications.length + s.sleepEntries.length + s.migraines.length + s.exposures.length;
+        if (!canAddHealthLog(totalLogs)) { logger.warn('[useAppStore] Free-tier health log limit reached'); return; }
+        set((st) => ({ medications: [...st.medications, { ...medication, id: generateId() }] }));
+      },
       updateMedication: (id, medication) => set((s) => ({
         medications: s.medications.map((m) => m.id === id ? { ...m, ...medication } : m),
       })),
@@ -451,9 +464,12 @@ const useAppStore = create<AppState>()(
       })),
 
       // Migraines
-      addMigraine: (migraine) => set((s) => ({
-        migraines: [...s.migraines, { id: generateId(), ...migraine }],
-      })),
+      addMigraine: (migraine) => {
+        const s = get();
+        const totalLogs = s.medicalVisits.length + s.symptoms.length + s.medications.length + s.sleepEntries.length + s.migraines.length + s.exposures.length;
+        if (!canAddHealthLog(totalLogs)) { logger.warn('[useAppStore] Free-tier health log limit reached'); return; }
+        set((st) => ({ migraines: [...st.migraines, { id: generateId(), ...migraine }] }));
+      },
       updateMigraine: (id, migraine) => set((s) => ({
         migraines: s.migraines.map((m) => m.id === id ? { ...m, ...migraine } : m),
       })),
@@ -470,9 +486,12 @@ const useAppStore = create<AppState>()(
       })),
 
       // Sleep Entries
-      addSleepEntry: (entry) => set((s) => ({
-        sleepEntries: [...s.sleepEntries, { id: generateId(), ...entry }],
-      })),
+      addSleepEntry: (entry) => {
+        const s = get();
+        const totalLogs = s.medicalVisits.length + s.symptoms.length + s.medications.length + s.sleepEntries.length + s.migraines.length + s.exposures.length;
+        if (!canAddHealthLog(totalLogs)) { logger.warn('[useAppStore] Free-tier health log limit reached'); return; }
+        set((st) => ({ sleepEntries: [...st.sleepEntries, { id: generateId(), ...entry }] }));
+      },
       updateSleepEntry: (id, entry) => set((s) => ({
         sleepEntries: s.sleepEntries.map((e) => e.id === id ? { ...e, ...entry } : e),
       })),
@@ -605,9 +624,16 @@ const useAppStore = create<AppState>()(
 
       // ========== USER CONDITIONS METHODS ==========
 
-      addUserCondition: (condition) => set((s) => ({
-        userConditions: [...s.userConditions, condition],
-      })),
+      addUserCondition: (condition) => {
+        const current = get().userConditions;
+        if (!canAddCondition(current.length)) {
+          logger.warn('[useAppStore] Free-tier condition limit reached — blocking addUserCondition');
+          return;
+        }
+        set((s) => ({
+          userConditions: [...s.userConditions, condition],
+        }));
+      },
 
       removeUserCondition: (id) => set((s) => {
         const conditionToRemove = s.userConditions.find((c) => c.id === id);

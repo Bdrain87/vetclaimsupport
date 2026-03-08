@@ -384,8 +384,12 @@ Remember: Help them accurately describe genuine symptoms in VA terminology. Neve
           <div className="flex gap-2">
             <Button
               onClick={async () => {
-                await Clipboard.write({ string: currentFeedback.feedback });
-                toast({ title: 'Copied feedback' });
+                try {
+                  await Clipboard.write({ string: currentFeedback.feedback });
+                  toast({ title: 'Copied feedback' });
+                } catch {
+                  toast({ title: 'Copy failed', description: 'Could not access clipboard.', variant: 'destructive' });
+                }
               }}
               variant="outline" size="sm" className="flex-1"
             >

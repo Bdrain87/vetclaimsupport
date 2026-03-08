@@ -173,8 +173,12 @@ DISCLAIMER: This is general guidance only. Not legal advice. Consult a VSO or at
           <div className="flex gap-2">
             <Button
               onClick={async () => {
-                await Clipboard.write({ string: analysis });
-                toast({ title: 'Debrief analysis copied' });
+                try {
+                  await Clipboard.write({ string: analysis });
+                  toast({ title: 'Debrief analysis copied' });
+                } catch {
+                  toast({ title: 'Copy failed', description: 'Could not access clipboard.', variant: 'destructive' });
+                }
               }}
               variant="outline" className="flex-1"
             >

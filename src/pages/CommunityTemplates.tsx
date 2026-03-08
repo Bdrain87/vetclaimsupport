@@ -69,8 +69,12 @@ export default function CommunityTemplates() {
 
   const handleCopy = async (content: string) => {
     impactMedium();
-    await Clipboard.write({ string: content });
-    toast({ title: 'Template copied to clipboard' });
+    try {
+      await Clipboard.write({ string: content });
+      toast({ title: 'Template copied to clipboard' });
+    } catch {
+      toast({ title: 'Copy failed', description: 'Could not access clipboard.', variant: 'destructive' });
+    }
   };
 
   const filtered = templates.filter((t) => {

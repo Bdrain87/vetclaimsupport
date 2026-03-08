@@ -304,34 +304,42 @@ export default function DocumentsHub() {
 
     const { pendingFile, documentType, condition, title, notes, date } = uploadForm;
 
-    await addDocument({
-      fileName: pendingFile.fileName,
-      fileType: pendingFile.fileType,
-      fileSize: pendingFile.fileSize,
-      dataUrl: pendingFile.dataUrl,
-      thumbnailUrl: pendingFile.fileType.startsWith('image/') ? pendingFile.dataUrl : undefined,
-      uploadedAt: new Date().toISOString(),
-      documentType: documentType as ClaimDocumentType,
-      condition,
-      title: title || undefined,
-      notes: notes || undefined,
-      date,
-    });
+    try {
+      await addDocument({
+        fileName: pendingFile.fileName,
+        fileType: pendingFile.fileType,
+        fileSize: pendingFile.fileSize,
+        dataUrl: pendingFile.dataUrl,
+        thumbnailUrl: pendingFile.fileType.startsWith('image/') ? pendingFile.dataUrl : undefined,
+        uploadedAt: new Date().toISOString(),
+        documentType: documentType as ClaimDocumentType,
+        condition,
+        title: title || undefined,
+        notes: notes || undefined,
+        date,
+      });
 
-    toast({
-      title: 'Document Uploaded',
-      description: `${pendingFile.fileName} saved successfully.`,
-    });
+      toast({
+        title: 'Document Uploaded',
+        description: `${pendingFile.fileName} saved successfully.`,
+      });
 
-    setUploadForm({
-      documentType: '',
-      condition: '',
-      title: '',
-      notes: '',
-      date: format(new Date(), 'yyyy-MM-dd'),
-      pendingFile: null,
-    });
-    setIsUploadOpen(false);
+      setUploadForm({
+        documentType: '',
+        condition: '',
+        title: '',
+        notes: '',
+        date: format(new Date(), 'yyyy-MM-dd'),
+        pendingFile: null,
+      });
+      setIsUploadOpen(false);
+    } catch {
+      toast({
+        title: 'Upload Failed',
+        description: 'Could not save the document. Please try again.',
+        variant: 'destructive',
+      });
+    }
   };
 
   // Get file icon

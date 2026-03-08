@@ -38,15 +38,24 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
     );
   }, []);
 
-  // Reset loading when user returns from Stripe checkout (web only)
+  // Reset loading and refresh entitlements when user returns from Stripe checkout (web only)
   useEffect(() => {
     if (!loading || isNativeApp) return;
-    const handleVisibility = () => {
-      if (document.visibilityState === 'visible') setLoading(false);
+    const handleVisibility = async () => {
+      if (document.visibilityState === 'visible') {
+        setLoading(false);
+        invalidateEntitlementCache();
+        const status = await refreshEntitlementFromServer();
+        if (status === 'premium' || status === 'lifetime') {
+          fireConfetti();
+          toast({ title: 'Welcome to Premium!', description: 'All features are now unlocked.' });
+          setTimeout(() => navigate(0), 1500);
+        }
+      }
     };
     document.addEventListener('visibilitychange', handleVisibility);
     return () => document.removeEventListener('visibilitychange', handleVisibility);
-  }, [loading]);
+  }, [loading, navigate, toast]);
 
   const fireConfetti = () => {
     confetti({

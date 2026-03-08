@@ -853,7 +853,7 @@ export default function Dashboard() {
             )}
             {data.buddyContacts.length === 0 && (
               <button
-                onClick={() => navigate('/health/buddy-statements')}
+                onClick={() => navigate('/prep/buddy-statement')}
                 className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
               >
                 <FileText className="h-4 w-4 text-gold flex-shrink-0" />

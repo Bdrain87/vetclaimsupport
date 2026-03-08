@@ -241,8 +241,12 @@ If the image is not a medical/legal document, still analyze it for any VA claim 
               </div>
               <Button
                 onClick={async () => {
-                  await Clipboard.write({ string: buddyRequest });
-                  toast({ title: 'Buddy request copied' });
+                  try {
+                    await Clipboard.write({ string: buddyRequest });
+                    toast({ title: 'Buddy request copied' });
+                  } catch {
+                    toast({ title: 'Copy failed', description: 'Could not access clipboard.', variant: 'destructive' });
+                  }
                 }}
                 variant="outline" size="sm"
               >
@@ -254,9 +258,13 @@ If the image is not a medical/legal document, still analyze it for any VA claim 
           <div className="flex gap-2">
             <Button
               onClick={async () => {
-                const text = rawAnalysis + (buddyRequest ? `\n\nBuddy Statement Request:\n${buddyRequest}` : '');
-                await Clipboard.write({ string: text });
-                toast({ title: 'Analysis copied' });
+                try {
+                  const text = rawAnalysis + (buddyRequest ? `\n\nBuddy Statement Request:\n${buddyRequest}` : '');
+                  await Clipboard.write({ string: text });
+                  toast({ title: 'Analysis copied' });
+                } catch {
+                  toast({ title: 'Copy failed', description: 'Could not access clipboard.', variant: 'destructive' });
+                }
               }}
               variant="outline" className="flex-1"
             >

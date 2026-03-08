@@ -265,8 +265,12 @@ IMPORTANT: This is a SAMPLE template. The writer must personalize with their own
           <div className="flex gap-2">
             <Button
               onClick={async () => {
-                await Clipboard.write({ string: statement });
-                toast({ title: 'Statement copied' });
+                try {
+                  await Clipboard.write({ string: statement });
+                  toast({ title: 'Statement copied' });
+                } catch {
+                  toast({ title: 'Copy failed', description: 'Could not access clipboard.', variant: 'destructive' });
+                }
               }}
               variant="outline" className="flex-1"
             >

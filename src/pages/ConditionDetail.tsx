@@ -1077,7 +1077,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                       variant="ghost"
                       size="sm"
                       className="text-xs h-7"
-                      onClick={() => navigate('/health/buddy-statements')}
+                      onClick={() => navigate('/prep/buddy-statement')}
                     >
                       <Plus className="h-3 w-3 mr-1" />
                       Add

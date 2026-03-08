@@ -4,9 +4,15 @@
  * Tests Zustand stores directly for state transitions,
  * data persistence, and store interactions.
  */
-import { describe, it, expect, beforeEach, beforeAll } from 'vitest';
+import { describe, it, expect, beforeEach, beforeAll, vi } from 'vitest';
 import { useProfileStore } from '@/store/useProfileStore';
 import { useAICacheStore } from '@/store/useAICacheStore';
+
+// Mock entitlements so free-tier limits don't block test data creation
+vi.mock('@/services/entitlements', () => ({
+  canAddCondition: () => true,
+  canAddHealthLog: () => true,
+}));
 
 // ── useAppStore ───────────────────────────────────────────────────────────
 // useAppStore uses encryptedStorage + indexedDB which need dynamic import in jsdom

@@ -4,7 +4,9 @@ import { useProfileStore } from '@/store/useProfileStore';
 import { getAllBranchLabels } from '@/utils/veteranProfile';
 import { getConditionById } from '@/data/vaConditions';
 import { getConditionDisplayName } from '@/utils/conditionResolver';
+import { getFileData } from '@/lib/indexedDB';
 import type { UserCondition } from '@/store/useAppStore';
+import type { EvidenceDocument } from '@/types/documents';
 import type {
   ClaimCondition,
   QuickLogEntry,
@@ -114,11 +116,23 @@ interface GatheredData {
   employmentImpact: EmploymentImpactEntry[];
   dutyStations: { id: string; baseName: string; startDate: string; endDate: string }[];
   formDrafts: Record<string, Record<string, string> & { lastModified: string }>;
+  evidenceDocuments: EvidenceDocument[];
 }
 
-function gatherData(): GatheredData {
+async function gatherData(): Promise<GatheredData> {
   const appState = useAppStore.getState();
   const profileState = useProfileStore.getState();
+
+  // Hydrate IndexedDB-stored evidence documents with their actual data
+  const evidenceDocuments = await Promise.all(
+    appState.evidenceDocuments.map(async (doc) => {
+      if (doc.storageType === 'indexedDB' && !doc.dataUrl) {
+        const data = await getFileData(doc.id);
+        return data ? { ...doc, dataUrl: data } : doc;
+      }
+      return doc;
+    }),
+  );
 
   return {
     firstName: profileState.firstName,
@@ -149,6 +163,7 @@ function gatherData(): GatheredData {
     employmentImpact: appState.employmentImpactEntries || [],
     dutyStations: appState.dutyStations || [],
     formDrafts: appState.formDrafts,
+    evidenceDocuments,
   };
 }
 
@@ -157,7 +172,7 @@ function gatherData(): GatheredData {
 // ============================================================================
 
 export async function generateExport(options: ExportOptions): Promise<ExportResult> {
-  const data = gatherData();
+  const data = await gatherData();
   const dateStr = format(new Date(), 'yyyy-MM-dd');
 
   switch (options.format) {
@@ -252,7 +267,19 @@ function generateJSON(
   if (sections.generatedDocs) {
     output.generatedDocs = {
       buddyContacts: data.buddyContacts,
-      note: 'Generated documents are stored within the app. Buddy contacts listed here may have associated buddy statement drafts.',
+      evidenceDocuments: data.evidenceDocuments.map((doc) => ({
+        id: doc.id,
+        fileName: doc.fileName,
+        fileType: doc.fileType,
+        fileSize: doc.fileSize,
+        category: doc.category,
+        title: doc.title,
+        description: doc.description,
+        uploadedAt: doc.uploadedAt,
+        linkedEntries: doc.linkedEntries,
+        dataUrl: doc.dataUrl || undefined,
+      })),
+      note: 'Generated documents and uploaded evidence files. Buddy contacts listed here may have associated buddy statement drafts.',
     };
   }
 
@@ -462,7 +489,14 @@ function generateText(
         lines.push(`  • ${b.rank ? `${b.rank} ` : ''}${b.name} — ${b.statementStatus}`);
         if (b.whatTheyWitnessed) lines.push(`    Witnessed: ${b.whatTheyWitnessed}`);
       });
-    } else {
+    }
+    if (data.evidenceDocuments.length > 0) {
+      lines.push('  Evidence Documents:');
+      data.evidenceDocuments.forEach((d) => {
+        lines.push(`  • ${d.title || d.fileName} (${d.category}) — uploaded ${safeDate(d.uploadedAt)}`);
+      });
+    }
+    if (data.buddyContacts.length === 0 && data.evidenceDocuments.length === 0) {
       lines.push('  No generated documents recorded yet.');
     }
     lines.push('');
@@ -887,30 +921,50 @@ async function generatePDF(
   // --- 5. Generated Documents ---
   if (sections.generatedDocs) {
     addSectionHeader(`${sectionNum}. GENERATED DOCUMENTS`);
-    if (data.buddyContacts.length === 0) {
+    if (data.buddyContacts.length === 0 && data.evidenceDocuments.length === 0) {
       doc.setFontSize(9);
       doc.setTextColor(...PDF_COLORS.textMuted);
       doc.text('No generated documents recorded yet.', margin + 4, y);
       y += 8;
     } else {
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(...PDF_COLORS.textDark);
-      doc.text('Buddy Contacts / Statement Status:', margin + 4, y);
-      doc.setFont('helvetica', 'normal');
-      y += 6;
-      data.buddyContacts.forEach((b) => {
+      if (data.buddyContacts.length > 0) {
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(...PDF_COLORS.textDark);
+        doc.text('Buddy Contacts / Statement Status:', margin + 4, y);
+        doc.setFont('helvetica', 'normal');
+        y += 6;
+        data.buddyContacts.forEach((b) => {
+          y = checkPageBreak(12);
+          doc.setFontSize(9);
+          doc.setTextColor(...PDF_COLORS.textDark);
+          doc.text(`• ${b.rank ? `${b.rank} ` : ''}${b.name}`, margin + 8, y);
+          const statusColor = b.statementStatus === 'Received' || b.statementStatus === 'Submitted'
+            ? PDF_COLORS.success
+            : PDF_COLORS.warning;
+          doc.setTextColor(...statusColor);
+          doc.text(b.statementStatus, pageWidth - margin - 35, y);
+          y += 6;
+        });
+      }
+      if (data.evidenceDocuments.length > 0) {
         y = checkPageBreak(12);
         doc.setFontSize(9);
+        doc.setFont('helvetica', 'bold');
         doc.setTextColor(...PDF_COLORS.textDark);
-        doc.text(`• ${b.rank ? `${b.rank} ` : ''}${b.name}`, margin + 8, y);
-        const statusColor = b.statementStatus === 'Received' || b.statementStatus === 'Submitted'
-          ? PDF_COLORS.success
-          : PDF_COLORS.warning;
-        doc.setTextColor(...statusColor);
-        doc.text(b.statementStatus, pageWidth - margin - 35, y);
+        doc.text('Evidence Documents:', margin + 4, y);
+        doc.setFont('helvetica', 'normal');
         y += 6;
-      });
+        data.evidenceDocuments.forEach((d) => {
+          y = checkPageBreak(12);
+          doc.setFontSize(9);
+          doc.setTextColor(...PDF_COLORS.textDark);
+          doc.text(`• ${d.title || d.fileName} (${d.category})`, margin + 8, y);
+          doc.setTextColor(...PDF_COLORS.textMuted);
+          doc.text(safeDate(d.uploadedAt), pageWidth - margin - 35, y);
+          y += 6;
+        });
+      }
     }
     y += 6;
     sectionNum++;

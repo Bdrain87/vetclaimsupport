@@ -1,0 +1,369 @@
+diff --git a/node_modules/@capgo/capacitor-purchases/Package.swift b/node_modules/@capgo/capacitor-purchases/Package.swift
+new file mode 100644
+index 0000000..666eafe
+--- /dev/null
++++ b/node_modules/@capgo/capacitor-purchases/Package.swift
+@@ -0,0 +1,27 @@
++// swift-tools-version: 5.9
++import PackageDescription
++
++let package = Package(
++    name: "CapgoCapacitorPurchases",
++    platforms: [.iOS(.v15)],
++    products: [
++        .library(
++            name: "CapgoCapacitorPurchases",
++            targets: ["CapacitorPurchasesPlugin"])
++    ],
++    dependencies: [
++        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "8.0.0"),
++        .package(url: "https://github.com/RevenueCat/purchases-ios-spm.git", from: "5.0.0"),
++    ],
++    targets: [
++        .target(
++            name: "CapacitorPurchasesPlugin",
++            dependencies: [
++                .product(name: "Capacitor", package: "capacitor-swift-pm"),
++                .product(name: "Cordova", package: "capacitor-swift-pm"),
++                .product(name: "RevenueCat", package: "purchases-ios-spm"),
++            ],
++            path: "ios/Sources/CapacitorPurchasesPlugin"
++        )
++    ]
++)
+diff --git a/node_modules/@capgo/capacitor-purchases/ios/Sources/CapacitorPurchasesPlugin/CapacitorPurchasesPlugin.swift b/node_modules/@capgo/capacitor-purchases/ios/Sources/CapacitorPurchasesPlugin/CapacitorPurchasesPlugin.swift
+new file mode 100644
+index 0000000..79baf6d
+--- /dev/null
++++ b/node_modules/@capgo/capacitor-purchases/ios/Sources/CapacitorPurchasesPlugin/CapacitorPurchasesPlugin.swift
+@@ -0,0 +1,330 @@
++import Foundation
++import Capacitor
++import RevenueCat
++import StoreKit
++
++/// Capacitor 8 SPM-compatible RevenueCat plugin.
++/// Replaces the old CocoaPods-only plugin with CAPBridgedPlugin protocol.
++@objc(CapacitorPurchasesPlugin)
++public class CapacitorPurchasesPlugin: CAPPlugin, CAPBridgedPlugin, PurchasesDelegate {
++
++    public let identifier = "CapacitorPurchasesPlugin"
++    public let jsName = "CapacitorPurchases"
++    public let pluginMethods: [CAPPluginMethod] = [
++        CAPPluginMethod(name: "setup", returnType: CAPPluginReturnPromise),
++        CAPPluginMethod(name: "getOfferings", returnType: CAPPluginReturnPromise),
++        CAPPluginMethod(name: "purchasePackage", returnType: CAPPluginReturnPromise),
++        CAPPluginMethod(name: "restorePurchases", returnType: CAPPluginReturnPromise),
++        CAPPluginMethod(name: "setAttributes", returnType: CAPPluginReturnPromise),
++        CAPPluginMethod(name: "logIn", returnType: CAPPluginReturnPromise),
++        CAPPluginMethod(name: "logOut", returnType: CAPPluginReturnPromise),
++        CAPPluginMethod(name: "getCustomerInfo", returnType: CAPPluginReturnPromise),
++        CAPPluginMethod(name: "setDebugLogsEnabled", returnType: CAPPluginReturnPromise),
++    ]
++
++    private let PLUGIN_VERSION = "3.0.0"
++
++    // MARK: - Setup
++
++    @objc func setup(_ call: CAPPluginCall) {
++        let apiKey = call.getString("apiKey") ?? ""
++        let appUserID = call.getString("appUserID")
++        let observerMode = call.getBool("observerMode") ?? false
++
++        guard !apiKey.isEmpty else {
++            call.reject("API key is required")
++            return
++        }
++
++        var builder = Configuration.Builder(withAPIKey: apiKey)
++        if let uid = appUserID, !uid.isEmpty {
++            builder = builder.with(appUserID: uid)
++        }
++        if observerMode {
++            builder = builder.with(purchasesAreCompletedBy: .myApp, storeKitVersion: .storeKit2)
++        }
++        builder = builder.with(platformInfo: Purchases.PlatformInfo(flavor: "capacitor", version: PLUGIN_VERSION))
++
++        Purchases.configure(with: builder.build())
++
++        if call.getBool("enableAdServicesAttribution") == true {
++            if #available(iOS 14.3, *) {
++                Purchases.shared.attribution.enableAdServicesAttributionTokenCollection()
++            }
++        }
++        if call.getBool("collectDeviceIdentifiers") == true {
++            Purchases.shared.attribution.collectDeviceIdentifiers()
++        }
++
++        Purchases.shared.delegate = self
++        call.resolve()
++    }
++
++    // MARK: - PurchasesDelegate
++
++    public func purchases(_ purchases: Purchases, receivedUpdated customerInfo: CustomerInfo) {
++        notifyListeners("purchasesUpdate", data: ["customerInfo": customerInfoDict(customerInfo)])
++    }
++
++    // MARK: - Offerings
++
++    @objc func getOfferings(_ call: CAPPluginCall) {
++        Purchases.shared.getOfferings { offerings, error in
++            if let error = error {
++                call.reject("getOfferings failed: \(error.localizedDescription)")
++                return
++            }
++            guard let offerings = offerings else {
++                call.reject("getOfferings returned nil")
++                return
++            }
++            call.resolve(["offerings": self.offeringsDict(offerings)])
++        }
++    }
++
++    // MARK: - Purchase
++
++    @objc func purchasePackage(_ call: CAPPluginCall) {
++        let pkgIdentifier = call.getString("identifier") ?? ""
++        let offeringIdentifier = call.getString("offeringIdentifier") ?? ""
++
++        guard !pkgIdentifier.isEmpty, !offeringIdentifier.isEmpty else {
++            call.reject("Package identifier and offering identifier are required")
++            return
++        }
++
++        Purchases.shared.getOfferings { offerings, error in
++            if let error = error {
++                call.reject("Failed to get offerings: \(error.localizedDescription)")
++                return
++            }
++            guard let offering = offerings?.offering(identifier: offeringIdentifier) else {
++                call.reject("Offering '\(offeringIdentifier)' not found")
++                return
++            }
++            guard let package = offering.package(identifier: pkgIdentifier) else {
++                call.reject("Package '\(pkgIdentifier)' not found in offering '\(offeringIdentifier)'")
++                return
++            }
++
++            Purchases.shared.purchase(package: package) { _, customerInfo, error, userCancelled in
++                if userCancelled {
++                    call.reject("Purchase cancelled", "1")
++                    return
++                }
++                if let error = error {
++                    call.reject("Purchase failed: \(error.localizedDescription)")
++                    return
++                }
++                guard let info = customerInfo else {
++                    call.reject("Purchase succeeded but customer info is nil")
++                    return
++                }
++                call.resolve(["customerInfo": self.customerInfoDict(info)])
++            }
++        }
++    }
++
++    // MARK: - Restore
++
++    @objc func restorePurchases(_ call: CAPPluginCall) {
++        Purchases.shared.restorePurchases { customerInfo, error in
++            if let error = error {
++                call.reject("Restore failed: \(error.localizedDescription)")
++                return
++            }
++            guard let info = customerInfo else {
++                call.reject("Restore returned nil")
++                return
++            }
++            call.resolve(["customerInfo": self.customerInfoDict(info)])
++        }
++    }
++
++    // MARK: - Attributes
++
++    @objc func setAttributes(_ call: CAPPluginCall) {
++        guard let attributes = call.getObject("attributes") as? [String: String] else {
++            call.reject("attributes must be a string-keyed object")
++            return
++        }
++        Purchases.shared.attribution.setAttributes(attributes)
++        call.resolve()
++    }
++
++    // MARK: - Identity
++
++    @objc func logIn(_ call: CAPPluginCall) {
++        let appUserID = call.getString("appUserID") ?? ""
++        guard !appUserID.isEmpty else {
++            call.reject("appUserID is required")
++            return
++        }
++        Purchases.shared.logIn(appUserID) { customerInfo, created, error in
++            if let error = error {
++                call.reject("Login failed: \(error.localizedDescription)")
++                return
++            }
++            guard let info = customerInfo else {
++                call.reject("Login returned nil")
++                return
++            }
++            call.resolve([
++                "customerInfo": self.customerInfoDict(info),
++                "created": created
++            ])
++        }
++    }
++
++    @objc func logOut(_ call: CAPPluginCall) {
++        Purchases.shared.logOut { customerInfo, error in
++            if let error = error {
++                call.reject("Logout failed: \(error.localizedDescription)")
++                return
++            }
++            guard let info = customerInfo else {
++                call.reject("Logout returned nil")
++                return
++            }
++            call.resolve(["customerInfo": self.customerInfoDict(info)])
++        }
++    }
++
++    // MARK: - Customer Info
++
++    @objc func getCustomerInfo(_ call: CAPPluginCall) {
++        Purchases.shared.getCustomerInfo { customerInfo, error in
++            if let error = error {
++                call.reject("getCustomerInfo failed: \(error.localizedDescription)")
++                return
++            }
++            guard let info = customerInfo else {
++                call.reject("getCustomerInfo returned nil")
++                return
++            }
++            call.resolve(["customerInfo": self.customerInfoDict(info)])
++        }
++    }
++
++    // MARK: - Debug
++
++    @objc func setDebugLogsEnabled(_ call: CAPPluginCall) {
++        let enabled = call.getBool("enabled") ?? false
++        Purchases.logLevel = enabled ? .debug : .error
++        call.resolve()
++    }
++
++    // MARK: - Dictionary Converters
++    // These replace PurchasesHybridCommon's .dictionary extensions,
++    // producing the same structure the JS layer expects.
++
++    private func customerInfoDict(_ info: CustomerInfo) -> [String: Any] {
++        var activeEntitlements: [String: Any] = [:]
++        var allEntitlements: [String: Any] = [:]
++
++        for (id, entitlement) in info.entitlements.all {
++            let entDict: [String: Any] = [
++                "identifier": entitlement.identifier,
++                "isActive": entitlement.isActive,
++                "willRenew": entitlement.willRenew,
++                "productIdentifier": entitlement.productIdentifier,
++                "latestPurchaseDate": entitlement.latestPurchaseDate?.iso8601String ?? "",
++                "originalPurchaseDate": entitlement.originalPurchaseDate?.iso8601String ?? "",
++                "expirationDate": entitlement.expirationDate?.iso8601String ?? "",
++            ]
++            allEntitlements[id] = entDict
++            if entitlement.isActive {
++                activeEntitlements[id] = entDict
++            }
++        }
++
++        return [
++            "entitlements": [
++                "all": allEntitlements,
++                "active": activeEntitlements,
++            ],
++            "originalAppUserId": info.originalAppUserId,
++            "firstSeen": info.firstSeen.iso8601String,
++        ]
++    }
++
++    private func offeringsDict(_ offerings: Offerings) -> [String: Any] {
++        var result: [String: Any] = [:]
++
++        if let current = offerings.current {
++            result["current"] = offeringDict(current)
++        }
++
++        var allOfferings: [String: Any] = [:]
++        for (key, offering) in offerings.all {
++            allOfferings[key] = offeringDict(offering)
++        }
++        result["all"] = allOfferings
++
++        return result
++    }
++
++    private func offeringDict(_ offering: Offering) -> [String: Any] {
++        var dict: [String: Any] = [
++            "identifier": offering.identifier,
++            "serverDescription": offering.serverDescription,
++            "availablePackages": offering.availablePackages.map { packageDict($0) },
++        ]
++
++        // Map named package slots
++        if let pkg = offering.lifetime { dict["lifetime"] = packageDict(pkg) }
++        if let pkg = offering.annual { dict["annual"] = packageDict(pkg) }
++        if let pkg = offering.sixMonth { dict["sixMonth"] = packageDict(pkg) }
++        if let pkg = offering.threeMonth { dict["threeMonth"] = packageDict(pkg) }
++        if let pkg = offering.twoMonth { dict["twoMonth"] = packageDict(pkg) }
++        if let pkg = offering.monthly { dict["monthly"] = packageDict(pkg) }
++        if let pkg = offering.weekly { dict["weekly"] = packageDict(pkg) }
++
++        return dict
++    }
++
++    private func packageDict(_ package: Package) -> [String: Any] {
++        return [
++            "identifier": package.identifier,
++            "offeringIdentifier": package.offeringIdentifier,
++            "packageType": packageTypeString(package.packageType),
++            "product": productDict(package.storeProduct),
++        ]
++    }
++
++    private func productDict(_ product: StoreProduct) -> [String: Any] {
++        return [
++            "identifier": product.productIdentifier,
++            "title": product.localizedTitle,
++            "description": product.localizedDescription,
++            "price": NSDecimalNumber(decimal: product.price).doubleValue,
++            "priceString": product.localizedPriceString,
++            "currencyCode": product.currencyCode ?? "",
++        ]
++    }
++
++    private func packageTypeString(_ type: PackageType) -> String {
++        switch type {
++        case .lifetime: return "LIFETIME"
++        case .annual: return "ANNUAL"
++        case .sixMonth: return "SIX_MONTH"
++        case .threeMonth: return "THREE_MONTH"
++        case .twoMonth: return "TWO_MONTH"
++        case .monthly: return "MONTHLY"
++        case .weekly: return "WEEKLY"
++        case .custom: return "CUSTOM"
++        case .unknown: return "UNKNOWN"
++        @unknown default: return "UNKNOWN"
++        }
++    }
++}
++
++// MARK: - Date Extension
++
++private extension Date {
++    var iso8601String: String {
++        let formatter = ISO8601DateFormatter()
++        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
++        return formatter.string(from: self)
++    }
++}
