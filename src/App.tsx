@@ -139,6 +139,9 @@ const PrivacyPolicyPage = lazyWithRetry(() => import('./pages/legal/PrivacyPolic
 const TermsOfServicePage = lazyWithRetry(() => import('./pages/legal/TermsOfServicePage'));
 const DisclaimerPage = lazyWithRetry(() => import('./pages/legal/DisclaimerPage'));
 
+// Community
+const CommunityTemplates = lazyWithRetry(() => import('./pages/CommunityTemplates'));
+
 // Landing page (web only)
 const LandingPage = lazyWithRetry(() => import('./pages/LandingPage'));
 const Login = lazyWithRetry(() => import('./pages/Login'));
@@ -348,6 +351,7 @@ function AnimatedRoutes() {
           <Route path="/settings/terms" element={<TermsOfServicePage />} />
           <Route path="/settings/disclaimer" element={<DisclaimerPage />} />
           <Route path="/settings/about" element={<AboutVCS />} />
+          <Route path="/settings/community" element={<CommunityTemplates />} />
           <Route path="/settings/export-data" element={<ExportDataPage />} />
           <Route path="/settings/delete-account" element={<DeleteAccountPage />} />
 
