@@ -639,6 +639,9 @@ function SentinelFAB() {
           <Button onClick={() => quickPrompt(`Suggest rating optimizations and combined calculations for ${conditions}.`)} variant="secondary" className="w-full bg-slate-800/50 text-white/90">
             Quick: Optimize Rating
           </Button>
+          <Button onClick={() => quickPrompt(`Generate a sample buddy statement for ${conditions}.`)} variant="secondary" className="w-full bg-slate-800/50 text-white/90">
+            Quick: Buddy Statement Help
+          </Button>
           <Button onClick={() => quickPrompt(`Suggest claim strategy optimizations for ${conditions}.`)} variant="secondary" className="w-full bg-slate-800/50 text-white/90">
             Quick: Optimize Strategy
           </Button>
