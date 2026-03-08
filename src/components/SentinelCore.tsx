@@ -3,11 +3,12 @@ import { motion } from 'motion/react';
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Input } from './ui/input';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Clipboard } from '@capacitor/clipboard';
 import { VoiceRecorder } from 'capacitor-voice-recorder';
 import { toast } from '@/hooks/use-toast';
 import { impactMedium } from '@/lib/haptics';
+import { getGeminiModel, isGeminiConfigured } from '@/lib/gemini';
+import { isNativeApp } from '@/lib/platform';
 import useAppStore from '@/store/useAppStore';
 import { useSentinel } from '@/hooks/useSentinel';
 import { Mic, MicOff, Copy, Trash2, Sparkles, FileText, Shield, Heart, Scan } from 'lucide-react';
@@ -18,11 +19,6 @@ const SYSTEM_PROMPT = `You are Sentinel, a VA disability claim preparation assis
 - Never provide legal advice — always recommend consulting a VSO or attorney
 - Use military-respectful language and VA-recognized terminology
 - Focus on helping veterans accurately describe their genuine experiences`;
-
-function getGeminiModel() {
-  const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || '');
-  return genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
-}
 
 const QUICK_PROMPTS: readonly { label: string; icon: React.ElementType; prompt: string | ((conditions: string) => string) }[] = [
   { label: 'Impact Statement', icon: FileText, prompt: (c) => `Generate a sample VA impact statement for ${c}. Include how the condition affects daily life, work, and relationships using VA-recognized language.` },
@@ -51,20 +47,20 @@ function ReadinessRing({ score, label }: { score: number; label: string }) {
   return (
     <div className="flex items-center gap-3">
       <svg width="48" height="48" viewBox="0 0 48 48" className="flex-shrink-0">
-        <circle cx="24" cy="24" r="18" fill="none" stroke="white" strokeOpacity="0.1" strokeWidth="3" />
+        <circle cx="24" cy="24" r="18" fill="none" stroke="currentColor" strokeOpacity="0.1" strokeWidth="3" />
         <circle
           cx="24" cy="24" r="18" fill="none" stroke={color} strokeWidth="3"
           strokeDasharray={circumference} strokeDashoffset={offset}
           strokeLinecap="round" transform="rotate(-90 24 24)"
           className="transition-all duration-700"
         />
-        <text x="24" y="26" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">
+        <text x="24" y="26" textAnchor="middle" fill="currentColor" fontSize="11" fontWeight="bold">
           {score}
         </text>
       </svg>
       <div>
-        <p className="text-xs text-white/60 uppercase tracking-widest">Readiness</p>
-        <p className="text-sm font-semibold text-white">{label}</p>
+        <p className="text-xs text-muted-foreground uppercase tracking-widest">Readiness</p>
+        <p className="text-sm font-semibold text-foreground">{label}</p>
       </div>
     </div>
   );
@@ -83,6 +79,10 @@ export function SentinelCore() {
   const navigate = useNavigate();
 
   const askGemini = async (text: string) => {
+    if (!isGeminiConfigured) {
+      setResponse('AI features are not configured. Please contact support.');
+      return;
+    }
     setLoading(true);
     setResponse('');
     try {
@@ -108,6 +108,10 @@ export function SentinelCore() {
   };
 
   const toggleVoice = async () => {
+    if (!isNativeApp) {
+      toast({ title: 'Voice recording is only available on mobile' });
+      return;
+    }
     impactMedium();
     if (isRecording) {
       setIsRecording(false);
@@ -162,21 +166,16 @@ export function SentinelCore() {
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.3 }}
-          className="fixed bottom-20 right-4 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-gold/90 to-amber-700/90 border border-gold/30 backdrop-blur-md shadow-[0_4px_24px_rgba(197,165,90,0.3)] flex items-center justify-center"
+          className="fixed right-4 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-gold/90 to-amber-700/90 border border-gold/30 backdrop-blur-md shadow-[0_4px_24px_rgba(197,165,90,0.3)] flex items-center justify-center"
+          style={{ bottom: 'calc(9rem + env(safe-area-inset-bottom, 0px))' }}
           aria-label="Open Sentinel AI"
         >
           <Sparkles className="h-6 w-6 text-white" />
         </motion.button>
       </DialogTrigger>
-      <DialogContent asChild className="glass-card bg-slate-950/95 border-gold/10 backdrop-blur-xl rounded-2xl max-h-[85dvh] overflow-y-auto">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 50 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 50 }}
-          transition={{ duration: 0.3, ease: 'easeOut' }}
-        >
+      <DialogContent className="bg-card border-border rounded-2xl max-h-[85dvh] overflow-y-auto p-6">
           <DialogHeader>
-            <DialogTitle className="text-white text-lg font-semibold tracking-wide">Sentinel AI</DialogTitle>
+            <DialogTitle className="text-foreground text-lg font-semibold tracking-wide">Sentinel AI</DialogTitle>
           </DialogHeader>
 
           {/* Readiness Score */}
@@ -185,16 +184,20 @@ export function SentinelCore() {
           </div>
 
           {/* Mode Toggle */}
-          <div className="flex gap-1 p-1 rounded-lg bg-slate-800/50 mb-3">
+          <div className="flex gap-1 p-1 rounded-lg bg-secondary mb-3" role="tablist" aria-label="Sentinel mode">
             <button
+              role="tab"
+              aria-selected={mode === 'ask'}
               onClick={() => { setMode('ask'); impactMedium(); }}
-              className={`flex-1 text-xs py-1.5 rounded-md transition-colors ${mode === 'ask' ? 'bg-gold/20 text-gold font-semibold' : 'text-white/50 hover:text-white/70'}`}
+              className={`flex-1 text-xs py-1.5 rounded-md transition-colors ${mode === 'ask' ? 'bg-gold/20 text-gold font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
             >
               Ask Anything
             </button>
             <button
+              role="tab"
+              aria-selected={mode === 'voice-build'}
               onClick={() => { setMode('voice-build'); impactMedium(); }}
-              className={`flex-1 text-xs py-1.5 rounded-md transition-colors ${mode === 'voice-build' ? 'bg-gold/20 text-gold font-semibold' : 'text-white/50 hover:text-white/70'}`}
+              className={`flex-1 text-xs py-1.5 rounded-md transition-colors ${mode === 'voice-build' ? 'bg-gold/20 text-gold font-semibold' : 'text-muted-foreground hover:text-foreground'}`}
             >
               Voice Claim Builder
             </button>
@@ -204,7 +207,7 @@ export function SentinelCore() {
             {mode === 'voice-build' ? (
               /* Voice Claim Builder Mode */
               <div className="space-y-3">
-                <p className="text-xs text-white/50 text-center">
+                <p className="text-xs text-muted-foreground text-center">
                   Speak about your symptoms or experience → get instant impact statement, nexus paragraph, and evidence checklist
                 </p>
                 <Button
@@ -220,7 +223,7 @@ export function SentinelCore() {
                   )}
                 </Button>
                 {query && !loading && (
-                  <div className="text-xs text-white/40 p-2 rounded-lg bg-slate-800/30 italic">
+                  <div className="text-xs text-muted-foreground p-2 rounded-lg bg-secondary/50 italic">
                     "{query}"
                   </div>
                 )}
@@ -234,12 +237,12 @@ export function SentinelCore() {
                     onChange={(e) => setQuery(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter' && !loading) { impactMedium(); handleAsk(); } }}
                     placeholder="Ask about VA claims, symptoms, etc."
-                    className="bg-slate-800/50 text-white border-white/10 pr-12"
+                    className="bg-secondary text-foreground border-border pr-12"
                   />
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 text-white/60 hover:text-white"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 text-muted-foreground hover:text-foreground"
                     onClick={toggleVoice}
                     aria-label={isRecording ? 'Stop recording' : 'Start voice input'}
                   >
@@ -254,7 +257,7 @@ export function SentinelCore() {
                       key={label}
                       onClick={() => quickPrompt(prompt)}
                       variant="secondary"
-                      className="bg-slate-800/50 text-white/80 text-xs h-auto py-2 px-3 hover:bg-slate-700/50 justify-start gap-1.5"
+                      className="bg-secondary text-foreground/80 text-xs h-auto py-2 px-3 hover:bg-accent justify-start gap-1.5"
                     >
                       <Icon className="h-3 w-3 flex-shrink-0 text-gold/60" />
                       {label}
@@ -275,7 +278,7 @@ export function SentinelCore() {
             {/* Response */}
             {response && (
               <div className="space-y-2">
-                <div className="text-white/90 text-sm p-4 bg-slate-800/40 rounded-xl border border-white/5 whitespace-pre-wrap">
+                <div className="text-foreground text-sm p-4 bg-secondary rounded-xl border border-border whitespace-pre-wrap">
                   {response}
                 </div>
                 <div className="flex gap-2">
@@ -287,7 +290,7 @@ export function SentinelCore() {
                     }}
                     variant="outline"
                     size="sm"
-                    className="flex-1 border-white/10 text-white/70"
+                    className="flex-1 border-border text-muted-foreground"
                   >
                     <Copy className="h-3.5 w-3.5 mr-1.5" />
                     Copy
@@ -296,7 +299,7 @@ export function SentinelCore() {
                     onClick={() => { impactMedium(); setQuery(''); setResponse(''); }}
                     variant="outline"
                     size="sm"
-                    className="flex-1 border-white/10 text-white/70"
+                    className="flex-1 border-border text-muted-foreground"
                   >
                     <Trash2 className="h-3.5 w-3.5 mr-1.5" />
                     Clear
@@ -306,14 +309,14 @@ export function SentinelCore() {
             )}
 
             {/* Tool Links */}
-            <div className="pt-2 border-t border-white/5">
-              <p className="text-[10px] text-white/30 uppercase tracking-wider mb-2">Voice Tools</p>
+            <div className="pt-2 border-t border-border">
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-2">AI Tools</p>
               <div className="grid grid-cols-2 gap-1.5">
                 {TOOL_LINKS.map(({ label, route }) => (
                   <button
                     key={route}
                     onClick={() => { impactMedium(); navigate(route); }}
-                    className="text-[11px] text-white/50 hover:text-gold py-1.5 px-2 rounded-lg hover:bg-white/5 transition-colors text-left"
+                    className="text-[11px] text-muted-foreground hover:text-gold py-1.5 px-2 rounded-lg hover:bg-accent transition-colors text-left"
                   >
                     {label} →
                   </button>
@@ -322,10 +325,9 @@ export function SentinelCore() {
             </div>
           </div>
 
-          <p className="mt-3 text-[10px] text-white/40 text-center italic leading-relaxed">
+          <p className="mt-3 text-[10px] text-muted-foreground text-center italic leading-relaxed">
             AI outputs are samples based on general knowledge. Verify with VA resources, personalize with your facts, and consult a VSO or attorney. Not legal advice.
           </p>
-        </motion.div>
       </DialogContent>
     </Dialog>
   );

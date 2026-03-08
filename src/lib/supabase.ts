@@ -13,7 +13,9 @@ const isMissingConfig = !supabaseUrl || !supabaseAnonKey || supabaseUrl.includes
 export const isSupabaseConfigured = !isMissingConfig || isTestEnv;
 
 if (isMissingConfig && !isTestEnv) {
-  console.warn(
+  // Use globalThis.console directly since logger may not be initialized yet
+  // at module evaluation time. This only fires in misconfigured builds.
+  globalThis.console?.warn?.(
     'Supabase configuration missing. Set VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY environment variables.'
   );
 }

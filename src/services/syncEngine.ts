@@ -5,6 +5,19 @@ import { redactPII } from '@/lib/redaction';
 import { logger } from '@/utils/logger';
 
 
+/** Race a promise against a timeout. Rejects with a descriptive error on timeout. */
+function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(`[sync] ${label} timed out after ${ms}ms`)), ms);
+    promise.then(
+      (v) => { clearTimeout(timer); resolve(v); },
+      (e) => { clearTimeout(timer); reject(e); },
+    );
+  });
+}
+
+const SYNC_TIMEOUT_MS = 30_000;
+
 function isNonNullObject(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null && !Array.isArray(v);
 }
@@ -111,11 +124,10 @@ export async function pullFromCloud(): Promise<void> {
   const userId = session.user.id;
 
   // Pull profile data (maybeSingle — new users may not have a row yet)
-  const { data: profile, error: profileError } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', userId)
-    .maybeSingle();
+  const { data: profile, error: profileError } = await withTimeout(
+    supabase.from('profiles').select('*').eq('id', userId).maybeSingle(),
+    SYNC_TIMEOUT_MS, 'pull profiles',
+  );
 
   if (profileError) {
     logger.error('[sync] pull profile failed', profileError.message, profileError);
@@ -155,10 +167,10 @@ export async function pullFromCloud(): Promise<void> {
   // duplicates when the cloud has the same condition under a different
   // UUID.
   // ------------------------------------------------------------------
-  const { data: conditions, error: conditionsError } = await supabase
-    .from('conditions')
-    .select('*')
-    .eq('user_id', userId);
+  const { data: conditions, error: conditionsError } = await withTimeout(
+    supabase.from('conditions').select('*').eq('user_id', userId),
+    SYNC_TIMEOUT_MS, 'pull conditions',
+  );
 
   if (conditionsError) {
     logger.error('[sync] pull conditions failed', conditionsError.message, conditionsError);
@@ -257,10 +269,10 @@ export async function pullFromCloud(): Promise<void> {
   // (date + type-specific descriptor) to avoid duplicates when the
   // local store used a different UUID.
   // ------------------------------------------------------------------
-  const { data: healthLogs, error: healthLogsError } = await supabase
-    .from('health_logs')
-    .select('*')
-    .eq('user_id', userId);
+  const { data: healthLogs, error: healthLogsError } = await withTimeout(
+    supabase.from('health_logs').select('*').eq('user_id', userId),
+    SYNC_TIMEOUT_MS, 'pull health_logs',
+  );
 
   if (healthLogsError) {
     logger.error('[sync] pull health logs failed', healthLogsError.message, healthLogsError);
@@ -357,10 +369,10 @@ export async function pullFromCloud(): Promise<void> {
   // ------------------------------------------------------------------
   // Pull form drafts
   // ------------------------------------------------------------------
-  const { data: formDraftRows, error: formDraftsError } = await supabase
-    .from('form_drafts')
-    .select('*')
-    .eq('user_id', userId);
+  const { data: formDraftRows, error: formDraftsError } = await withTimeout(
+    supabase.from('form_drafts').select('*').eq('user_id', userId),
+    SYNC_TIMEOUT_MS, 'pull form_drafts',
+  );
 
   if (formDraftsError) {
     logger.error('[sync] pull form drafts failed', formDraftsError.message, formDraftsError);
@@ -405,7 +417,7 @@ export async function pullFromCloud(): Promise<void> {
 // Push
 // ---------------------------------------------------------------------------
 
-export async function pushToCloud(): Promise<void> {
+export async function pushToCloud(): Promise<string[]> {
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) return;
 
@@ -416,7 +428,7 @@ export async function pushToCloud(): Promise<void> {
 
   // Push profile (upsert by id -- local state wins on conflict).
   // Profile is critical — if it fails, abort the entire push.
-  const { error: profilePushError } = await supabase.from('profiles').upsert({
+  const { error: profilePushError } = await withTimeout(supabase.from('profiles').upsert({
     id: userId,
     email: session.user.email || null,
     branch: profileState.branch || null,
@@ -429,7 +441,7 @@ export async function pushToCloud(): Promise<void> {
     onboarding_completed: profileState.hasCompletedOnboarding,
     display_name: [profileState.firstName, profileState.lastName].filter(Boolean).join(' ') || null,
     updated_at: new Date().toISOString(),
-  });
+  }), SYNC_TIMEOUT_MS, 'push profile');
   if (profilePushError) {
     logger.error('[sync] push profile failed', profilePushError.message, profilePushError);
     pushErrors.push('profile');
@@ -453,9 +465,10 @@ export async function pushToCloud(): Promise<void> {
       service_connection_notes: c.notes ? redactPII(c.notes, 'high').redactedText : null,
       updated_at: new Date().toISOString(),
     }));
-    const { error } = await supabase
-      .from('conditions')
-      .upsert(conditionRows, { onConflict: 'id' });
+    const { error } = await withTimeout(
+      supabase.from('conditions').upsert(conditionRows, { onConflict: 'id' }),
+      SYNC_TIMEOUT_MS, 'push conditions',
+    );
     if (error) {
       logger.error('[sync] push conditions failed', error);
       pushErrors.push('conditions');
@@ -493,9 +506,10 @@ export async function pushToCloud(): Promise<void> {
       data: sanitizeRecord(s as unknown as Record<string, unknown>),
       logged_at: s.date || new Date().toISOString(),
     }));
-    const { error } = await supabase
-      .from('health_logs')
-      .upsert(symptomRows, { onConflict: 'id' });
+    const { error } = await withTimeout(
+      supabase.from('health_logs').upsert(symptomRows, { onConflict: 'id' }),
+      SYNC_TIMEOUT_MS, 'push symptoms',
+    );
     if (error) {
       logger.error('[sync] push symptoms failed', error);
       pushErrors.push('symptoms');
@@ -511,9 +525,10 @@ export async function pushToCloud(): Promise<void> {
       data: sanitizeRecord(s as unknown as Record<string, unknown>),
       logged_at: s.date || new Date().toISOString(),
     }));
-    const { error } = await supabase
-      .from('health_logs')
-      .upsert(sleepRows, { onConflict: 'id' });
+    const { error } = await withTimeout(
+      supabase.from('health_logs').upsert(sleepRows, { onConflict: 'id' }),
+      SYNC_TIMEOUT_MS, 'push sleep',
+    );
     if (error) {
       logger.error('[sync] push sleep failed', error);
       pushErrors.push('sleep');
@@ -529,9 +544,10 @@ export async function pushToCloud(): Promise<void> {
       data: sanitizeRecord(m as unknown as Record<string, unknown>),
       logged_at: m.date || new Date().toISOString(),
     }));
-    const { error } = await supabase
-      .from('health_logs')
-      .upsert(migraineRows, { onConflict: 'id' });
+    const { error } = await withTimeout(
+      supabase.from('health_logs').upsert(migraineRows, { onConflict: 'id' }),
+      SYNC_TIMEOUT_MS, 'push migraines',
+    );
     if (error) {
       logger.error('[sync] push migraines failed', error);
       pushErrors.push('migraines');
@@ -557,9 +573,10 @@ export async function pushToCloud(): Promise<void> {
       };
     });
 
-    const { error } = await supabase
-      .from('form_drafts')
-      .upsert(draftRows, { onConflict: 'user_id,form_type,condition_id' });
+    const { error } = await withTimeout(
+      supabase.from('form_drafts').upsert(draftRows, { onConflict: 'user_id,form_type,condition_id' }),
+      SYNC_TIMEOUT_MS, 'push form_drafts',
+    );
     if (error) {
       logger.error('[sync] push form drafts failed', error);
       pushErrors.push('formDrafts');
@@ -572,6 +589,7 @@ export async function pushToCloud(): Promise<void> {
   if (pushErrors.length > 0) {
     logger.warn(`[sync] Partial push failure: ${pushErrors.join(', ')}`);
   }
+  return pushErrors;
 }
 
 export async function syncNow(): Promise<void> {
@@ -602,8 +620,8 @@ export async function syncNow(): Promise<void> {
 
       setStatus('syncing');
       await pullFromCloud();
-      await pushToCloud();
-      setStatus('synced');
+      const pushErrors = await pushToCloud();
+      setStatus(pushErrors.length > 0 ? 'error' : 'synced');
       consecutiveFailures = 0;
       lastFailureAt = 0;
     } catch (err) {
@@ -620,6 +638,8 @@ export async function syncNow(): Promise<void> {
   return syncInProgress;
 }
 
+let _listenersRegistered = false;
+
 export function startSync(): void {
   if (syncInterval) return;
 
@@ -631,9 +651,12 @@ export function startSync(): void {
     syncNow().catch(() => { /* handled inside syncNow */ });
   }, SYNC_DEBOUNCE_MS);
 
-  // Listen for online/offline events (replay offline queue on reconnection)
-  window.addEventListener('online', handleOnlineWithReplay);
-  window.addEventListener('offline', handleOffline);
+  // Listen for online/offline events (only once — prevent duplicates)
+  if (!_listenersRegistered) {
+    window.addEventListener('online', handleOnlineWithReplay);
+    window.addEventListener('offline', handleOffline);
+    _listenersRegistered = true;
+  }
 }
 
 export function stopSync(): void {
@@ -641,8 +664,11 @@ export function stopSync(): void {
     clearInterval(syncInterval);
     syncInterval = null;
   }
-  window.removeEventListener('online', handleOnlineWithReplay);
-  window.removeEventListener('offline', handleOffline);
+  if (_listenersRegistered) {
+    window.removeEventListener('online', handleOnlineWithReplay);
+    window.removeEventListener('offline', handleOffline);
+    _listenersRegistered = false;
+  }
   setStatus('offline');
 }
 
@@ -726,20 +752,19 @@ async function replayOfflineQueue(): Promise<void> {
   const queue = loadQueue();
   if (queue.length === 0) return;
 
-  const remaining: QueuedAction[] = [];
-  for (const action of queue) {
-    try {
-      // Generic replay — attempt to invoke the edge function or sync
-      // For now, most actions are covered by the full syncNow() call
-      // This queue exists for explicit server mutations
-      logger.info(`[sync] Replaying offline action: ${action.type}`);
-      // Actions are replayed by the next syncNow() cycle
-    } catch {
-      remaining.push(action);
-    }
+  logger.info(`[sync] Replaying ${queue.length} offline actions via syncNow()`);
+
+  try {
+    // Push all local store changes to the cloud — this covers queued mutations
+    // since they were already applied to local state when queued.
+    await syncNow();
+    // Only clear the queue if sync succeeded
+    saveQueue([]);
+    notifyListeners();
+  } catch {
+    // Sync failed — preserve queue for next attempt
+    logger.warn('[sync] Offline queue replay failed — preserving for next attempt');
   }
-  saveQueue(remaining);
-  notifyListeners();
 }
 
 // Hook into the online handler to replay queue

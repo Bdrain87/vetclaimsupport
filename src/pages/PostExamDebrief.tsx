@@ -2,17 +2,13 @@ import { useState } from 'react';
 import { motion } from 'motion/react';
 import { PageContainer } from '@/components/PageContainer';
 import { Button } from '@/components/ui/button';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { VoiceRecorder } from 'capacitor-voice-recorder';
 import { Clipboard } from '@capacitor/clipboard';
 import { toast } from '@/hooks/use-toast';
 import { impactMedium } from '@/lib/haptics';
+import { getGeminiModel, isGeminiConfigured } from '@/lib/gemini';
+import { isNativeApp } from '@/lib/platform';
 import { Mic, MicOff, Copy, RotateCcw, AlertTriangle, FileText, Shield } from 'lucide-react';
-
-function getGeminiModel() {
-  const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || '');
-  return genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
-}
 
 export default function PostExamDebrief() {
   const [isRecording, setIsRecording] = useState(false);
@@ -22,6 +18,14 @@ export default function PostExamDebrief() {
   const [error, setError] = useState('');
 
   const startRecording = async () => {
+    if (!isNativeApp) {
+      setError('Voice recording is only available on mobile');
+      return;
+    }
+    if (!isGeminiConfigured) {
+      setError('AI features are not configured');
+      return;
+    }
     impactMedium();
     setError('');
     try {

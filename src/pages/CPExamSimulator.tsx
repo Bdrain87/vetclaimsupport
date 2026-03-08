@@ -3,17 +3,13 @@ import { motion } from 'motion/react';
 import { PageContainer } from '@/components/PageContainer';
 import { Button } from '@/components/ui/button';
 import { useUserConditions } from '@/hooks/useUserConditions';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { VoiceRecorder } from 'capacitor-voice-recorder';
 import { Clipboard } from '@capacitor/clipboard';
 import { toast } from '@/hooks/use-toast';
 import { impactMedium, notifySuccess } from '@/lib/haptics';
+import { getGeminiModel, isGeminiConfigured } from '@/lib/gemini';
+import { isNativeApp } from '@/lib/platform';
 import { Mic, MicOff, Play, RotateCcw, Copy, ChevronRight, Shield, AlertTriangle } from 'lucide-react';
-
-function getGeminiModel() {
-  const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || '');
-  return genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
-}
 
 // DBQ-based question sets by condition category
 const EXAM_QUESTIONS: Record<string, string[]> = {
@@ -134,6 +130,14 @@ export default function CPExamSimulator() {
   }, []);
 
   const startAnswer = useCallback(async () => {
+    if (!isNativeApp) {
+      toast({ title: 'Voice recording is only available on mobile', variant: 'destructive' });
+      return;
+    }
+    if (!isGeminiConfigured) {
+      toast({ title: 'AI features are not configured', variant: 'destructive' });
+      return;
+    }
     impactMedium();
     try {
       await VoiceRecorder.requestAudioRecordingPermission();

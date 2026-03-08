@@ -61,6 +61,20 @@ const ENCRYPTED_V2_PREFIX = '__encrypted_v2__:';
 
 // ---- write lock for serializing encrypted writes ----------------------------
 
+// Track write failures so the app can warn the user
+let _writeFailureCount = 0;
+let _lastWriteFailureKey: string | null = null;
+
+/** Returns true if any encrypted writes have failed since app start. */
+export function hasWriteFailures(): boolean {
+  return _writeFailureCount > 0;
+}
+
+/** Returns details about write failures for diagnostics. */
+export function getWriteFailureInfo(): { count: number; lastKey: string | null } {
+  return { count: _writeFailureCount, lastKey: _lastWriteFailureKey };
+}
+
 const _writeLocks = new Map<string, Promise<void>>();
 
 function serializedWrite(key: string, fn: () => Promise<void>): void {
@@ -166,6 +180,8 @@ export const encryptedStorage: StateStorage = {
           localStorage.setItem(key, ENCRYPTED_PREFIX + ciphertext);
         }
       } catch (error) {
+        _writeFailureCount++;
+        _lastWriteFailureKey = key;
         logger.error(
           '[encryptedStorage] Encryption/write failed for key "' + key + '":',
           error,

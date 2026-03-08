@@ -150,12 +150,17 @@ export default function MedicalVisits() {
                     ...(file.type.startsWith('image/') ? { thumbnailUrl: dataUrl } : {}),
                   } as (typeof documents)[number]);
                 };
-                reader.onerror = () => resolve(null);
+                reader.onerror = () => {
+                  toast({ title: `Failed to read ${file.name}`, variant: 'destructive' });
+                  resolve(null);
+                };
                 reader.readAsDataURL(file);
               }))).then(results => {
                 const newDocs = results.filter((d): d is NonNullable<typeof d> => d !== null);
                 if (newDocs.length > 0) setAllDocuments([...documents, ...newDocs]);
-              }).catch(() => { /* file read errors are non-fatal */ });
+              }).catch(() => {
+                toast({ title: 'Failed to process files', variant: 'destructive' });
+              });
               if (importFileRef.current) importFileRef.current.value = '';
             }}
             className="hidden"

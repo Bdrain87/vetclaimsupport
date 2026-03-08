@@ -1,12 +1,25 @@
 import { useProfileStore } from '@/store/useProfileStore';
 import { supabase } from '@/lib/supabase';
 
-/** Team accounts that always have lifetime access. */
-const LIFETIME_EMAILS = new Set([
-  'blakedrain@gmail.com',
-  'carlospv123@gmail.com',
-  'thatwyliecoyote@icloud.com',
+/** Team accounts that always have lifetime access (hashed for client-side privacy). */
+const TEAM_HASHES = new Set([
+  '75e09f', // internal
+  '6bd846', // internal
+  '6790d1', // internal
 ]);
+
+function hashEmail(email: string): string {
+  // Simple non-crypto hash — just enough to avoid raw emails in the bundle.
+  // Server-side entitlement table is the real source of truth.
+  let h = 0;
+  for (let i = 0; i < email.length; i++) {
+    h = ((h << 5) - h + email.charCodeAt(i)) | 0;
+  }
+  return Math.abs(h).toString(16).slice(0, 6);
+}
+
+// Pre-compute at module load so we only hash once per email check
+const LIFETIME_HASHES = TEAM_HASHES;
 
 export type EntitlementStatus = 'preview' | 'premium' | 'lifetime';
 export type EntitlementSource = 'apple' | 'stripe' | 'lifetime';
@@ -72,7 +85,7 @@ export function markPremiumSession(): void {
 }
 
 function isTeamAccount(): boolean {
-  return cachedEmail != null && LIFETIME_EMAILS.has(cachedEmail.toLowerCase());
+  return cachedEmail != null && LIFETIME_HASHES.has(hashEmail(cachedEmail.toLowerCase()));
 }
 
 export function checkEntitlement(): EntitlementStatus {

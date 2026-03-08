@@ -2,16 +2,11 @@ import { useState, useRef } from 'react';
 import { motion } from 'motion/react';
 import { PageContainer } from '@/components/PageContainer';
 import { Button } from '@/components/ui/button';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Clipboard } from '@capacitor/clipboard';
 import { toast } from '@/hooks/use-toast';
 import { impactMedium } from '@/lib/haptics';
+import { getGeminiModel, isGeminiConfigured } from '@/lib/gemini';
 import { Camera, Upload, Copy, RotateCcw, AlertTriangle, FileSearch, CheckCircle2, XCircle, MinusCircle } from 'lucide-react';
-
-function getGeminiModel() {
-  const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || '');
-  return genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
-}
 
 interface Finding {
   label: string;
@@ -30,6 +25,10 @@ export default function EvidenceScanner() {
   const cameraRef = useRef<HTMLInputElement>(null);
 
   const processImage = async (file: File) => {
+    if (!isGeminiConfigured) {
+      setError('AI features are not configured.');
+      return;
+    }
     setError('');
     setIsProcessing(true);
     setFindings([]);

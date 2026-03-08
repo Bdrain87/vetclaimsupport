@@ -273,9 +273,14 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
       }
       if (controller.signal.aborted) return null;
 
-      // Fall back to non-streaming on any streaming error
+      // Fall back to non-streaming on any streaming error (only once)
       setIsStreaming(false);
-      return generate(input);
+      try {
+        return await generate(input);
+      } catch {
+        // generate() already sets error state internally
+        return null;
+      }
     } finally {
       clearTimeout(timeoutId);
       setIsLoading(false);

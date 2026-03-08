@@ -2,17 +2,13 @@ import { useState } from 'react';
 import { motion } from 'motion/react';
 import { PageContainer } from '@/components/PageContainer';
 import { Button } from '@/components/ui/button';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { VoiceRecorder } from 'capacitor-voice-recorder';
 import { Clipboard } from '@capacitor/clipboard';
 import { toast } from '@/hooks/use-toast';
 import { impactMedium } from '@/lib/haptics';
+import { getGeminiModel, isGeminiConfigured } from '@/lib/gemini';
+import { isNativeApp } from '@/lib/platform';
 import { Mic, MicOff, Copy, RotateCcw, AlertTriangle, Heart, Users, PenTool } from 'lucide-react';
-
-function getGeminiModel() {
-  const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || '');
-  return genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
-}
 
 type Relationship = 'spouse' | 'child' | 'parent' | 'sibling' | 'friend';
 
@@ -35,6 +31,10 @@ export default function FamilyStatement() {
   const [error, setError] = useState('');
 
   const generateFromText = async (text: string) => {
+    if (!isGeminiConfigured) {
+      setError('AI features are not configured.');
+      return;
+    }
     setIsProcessing(true);
     setError('');
     try {
@@ -79,6 +79,10 @@ IMPORTANT: This is a SAMPLE template. The writer must personalize with their own
   };
 
   const startRecording = async () => {
+    if (!isNativeApp) {
+      setError('Voice recording is only available on mobile');
+      return;
+    }
     impactMedium();
     setError('');
     try {

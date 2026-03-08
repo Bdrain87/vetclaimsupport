@@ -1,11 +1,7 @@
 import { useState, useCallback } from 'react';
 import { VoiceRecorder } from 'capacitor-voice-recorder';
-import { GoogleGenerativeAI } from '@google/generative-ai';
-
-function getGeminiModel() {
-  const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || '');
-  return genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
-}
+import { getGeminiModel, isGeminiConfigured } from '@/lib/gemini';
+import { isNativeApp } from '@/lib/platform';
 
 export type VoiceMode = 'claim-builder' | 'cp-simulator' | 'post-debrief' | 'family-statement' | 'transcribe-only';
 
@@ -59,6 +55,14 @@ export function useVoicePipeline() {
   const [error, setError] = useState<string | null>(null);
 
   const startRecording = useCallback(async () => {
+    if (!isNativeApp) {
+      setError('Voice recording is only available on mobile');
+      return;
+    }
+    if (!isGeminiConfigured) {
+      setError('AI features are not configured');
+      return;
+    }
     setError(null);
     try {
       const perm = await VoiceRecorder.requestAudioRecordingPermission();

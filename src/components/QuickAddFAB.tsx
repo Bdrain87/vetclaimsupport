@@ -84,8 +84,7 @@ export function QuickAddFAB() {
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => { impactLight(); setOpen(!open); }}
-          className="w-14 h-14 rounded-full shadow-lg flex items-center justify-center"
-          style={{ background: 'var(--gold-gradient, linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%))' }}
+          className="w-14 h-14 rounded-2xl shadow-lg flex items-center justify-center bg-gold/90 backdrop-blur-md border border-gold/30"
           aria-label={open ? 'Close quick add menu' : 'Open quick add menu'}
         >
           <motion.div animate={{ rotate: open ? 45 : 0 }} transition={{ duration: 0.2 }}>
