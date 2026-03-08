@@ -648,6 +648,9 @@ function SentinelFAB() {
           <Button onClick={() => quickPrompt(`Generate a sample stressor statement for ${conditions}.`)} variant="secondary" className="w-full bg-slate-800/50 text-white/90">
             Quick: Stressor Statement Help
           </Button>
+          <Button onClick={() => quickPrompt(`Generate a sample nexus letter outline for ${conditions}.`)} variant="secondary" className="w-full bg-slate-800/50 text-white/90">
+            Quick: Nexus Letter Outline
+          </Button>
           <Button onClick={() => quickPrompt(`Suggest claim strategy optimizations for ${conditions}.`)} variant="secondary" className="w-full bg-slate-800/50 text-white/90">
             Quick: Optimize Strategy
           </Button>
