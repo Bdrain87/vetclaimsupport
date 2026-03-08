@@ -552,7 +552,13 @@ function SentinelFAB() {
           </Button>
         </motion.div>
       </DialogTrigger>
-      <DialogContent className="glass-card bg-slate-950/90 border-white/10 backdrop-blur-xl rounded-2xl">
+      <DialogContent asChild className="glass-card bg-slate-950/90 border-white/10 backdrop-blur-xl rounded-2xl">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 50 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 50 }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+        >
         <DialogHeader>
           <DialogTitle className="text-white text-xl font-semibold">Ask Sentinel AI (Gemini Flash)</DialogTitle>
         </DialogHeader>
@@ -598,6 +604,7 @@ function SentinelFAB() {
             </>
           )}
         </div>
+        </motion.div>
       </DialogContent>
     </Dialog>
   );
