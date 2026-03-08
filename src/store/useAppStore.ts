@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { encryptedStorage } from '@/lib/encryptedStorage';
+import { createDebouncedStorage } from '@/lib/debouncedStorage';
 import { logger } from '@/utils/logger';
 import { resolveConditionId, isSuspiciousConditionId } from '@/utils/conditionResolver';
 import type {
@@ -944,7 +945,7 @@ const useAppStore = create<AppState>()(
     {
       name: 'vcs-app-data',
       version: 5,
-      storage: createJSONStorage(() => encryptedStorage),
+      storage: createJSONStorage(() => createDebouncedStorage(encryptedStorage, 300)),
       migrate: (persistedState: unknown, version: number) => {
         let state = persistedState as Record<string, unknown>;
         if (version < 2) {

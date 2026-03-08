@@ -535,6 +535,29 @@ export default function Dashboard() {
         )}
       </motion.div>
 
+      {/* Section 5b: Export Claim Packet */}
+      {userConditions.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={vcsSpring}
+          className="rounded-2xl bg-card border border-gold/20 p-4 overflow-hidden max-w-full"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center flex-shrink-0">
+                <FileText className="h-4 w-4 text-gold" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-foreground">Export Evidence Packet</p>
+                <p className="text-[11px] text-muted-foreground">Download your claim data as a PDF report</p>
+              </div>
+            </div>
+            <ExportButton variant="prominent" />
+          </div>
+        </motion.div>
+      )}
+
       {/* Section 6: 2026 Medication Rule Banner */}
       {hasMedications && !medRuleDismissed && (
         <motion.div

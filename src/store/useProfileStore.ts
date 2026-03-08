@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { encryptedStorage } from '@/lib/encryptedStorage';
+import { createDebouncedStorage } from '@/lib/debouncedStorage';
 import { logger } from '@/utils/logger';
 
 export type Branch = 'army' | 'marines' | 'navy' | 'air_force' | 'coast_guard' | 'space_force';
@@ -148,7 +149,7 @@ export const useProfileStore = create<ProfileState>()(
     {
       name: 'vet-user-profile',
       version: 5,
-      storage: createJSONStorage(() => encryptedStorage),
+      storage: createJSONStorage(() => createDebouncedStorage(encryptedStorage, 300)),
       skipHydration: true,
       onRehydrateStorage: () => {
         return (_state, error) => {
