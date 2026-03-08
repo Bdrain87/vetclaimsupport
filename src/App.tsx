@@ -563,6 +563,12 @@ function SentinelFAB() {
           <Button onClick={() => quickPrompt('Generate a sample VA impact statement for [condition].')} variant="secondary" className="w-full bg-slate-800/50 text-white/90">
             Quick: Impact Statement
           </Button>
+          <Button onClick={() => quickPrompt('Provide tips for preparing for a C&P exam for [condition].')} variant="secondary" className="w-full bg-slate-800/50 text-white/90">
+            Quick: C&P Exam Tips
+          </Button>
+          <Button onClick={() => quickPrompt('Explain VA rating percentages for [condition] and how to calculate combined ratings.')} variant="secondary" className="w-full bg-slate-800/50 text-white/90">
+            Quick: Rating Help
+          </Button>
           <Button onClick={() => { hapticImpact(); handleAsk(); }} disabled={loading} className="w-full bg-amber-600 hover:bg-amber-500">
             {loading ? 'Asking...' : 'Ask Gemini'}
           </Button>
