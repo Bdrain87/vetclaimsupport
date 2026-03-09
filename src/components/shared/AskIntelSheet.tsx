@@ -95,7 +95,7 @@ export function AskIntelSheet() {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0, opacity: 0 }}
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-20 right-4 z-40 w-12 h-12 rounded-full bg-gold text-black shadow-lg flex items-center justify-center hover:bg-gold/90 active:scale-95 transition-all"
+          className="fixed bottom-20 left-4 z-40 w-12 h-12 rounded-full bg-gold text-black shadow-lg flex items-center justify-center hover:bg-gold/90 active:scale-95 transition-all"
           aria-label="Ask Intel"
         >
           <MessageCircle className="h-5 w-5" />

@@ -288,9 +288,9 @@ export default function Conditions() {
       if (c.linkedMedicalVisits.length === 0) missing.push('Medical records');
       if (c.linkedSymptoms.length === 0) missing.push('Symptom logs');
       if (c.linkedBuddyContacts.length === 0) missing.push('Buddy statements');
-      if (missing.length > 0) {
+      if (missing.length > 0 && matchingUserCondition) {
         // Use the userCondition ID for navigation (matches ConditionDetail param)
-        gaps.push({ conditionName: c.name, missing, conditionId: matchingUserCondition?.id || c.id });
+        gaps.push({ conditionName: c.name, missing, conditionId: matchingUserCondition.id });
       }
     });
     return gaps;
