@@ -1,7 +1,7 @@
 /**
  * OnboardingPlan — One-time interstitial shown after completing onboarding.
  * Shows: top conditions with diagnostic codes, recommended secondaries,
- * 3 personalized first actions, estimated combined rating.
+ * 3 personalized first actions, current combined rating of approved conditions.
  */
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
