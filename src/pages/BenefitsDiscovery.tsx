@@ -204,9 +204,9 @@ function BenefitCard({
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-start gap-2">
             {qualified ? (
-              <Star className="h-3.5 w-3.5 text-gold flex-shrink-0 mt-0.5" />
+              <Star className="h-3.5 w-3.5 text-gold shrink-0 mt-0.5" />
             ) : (
-              <Lock className="h-3.5 w-3.5 text-muted-foreground/40 flex-shrink-0 mt-0.5" />
+              <Lock className="h-3.5 w-3.5 text-muted-foreground/40 shrink-0 mt-0.5" />
             )}
             <div>
               <p className="text-xs font-semibold text-foreground">{benefit.name}</p>
@@ -216,9 +216,9 @@ function BenefitCard({
             </div>
           </div>
           {expanded ? (
-            <ChevronDown className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+            <ChevronDown className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
           ) : (
-            <ChevronRight className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+            <ChevronRight className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
           )}
         </div>
       </button>

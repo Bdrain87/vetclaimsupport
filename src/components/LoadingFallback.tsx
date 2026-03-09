@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 
 export function LoadingFallback() {
   return (
-    <div className="min-h-[100dvh] bg-background flex items-center justify-center overflow-hidden">
+    <div className="min-h-dvh bg-background flex items-center justify-center overflow-hidden">
       <motion.div
         initial={{ opacity: 0, scale: 0.92 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -13,7 +13,7 @@ export function LoadingFallback() {
           Loading…
         </p>
         <p className="text-muted-foreground text-sm mt-2">Vet Claim Support</p>
-        <div className="h-px w-20 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mt-10" />
+        <div className="h-px w-20 bg-linear-to-r from-transparent via-gold to-transparent mx-auto mt-10" />
       </motion.div>
     </div>
   );
@@ -33,7 +33,7 @@ export function RouteLoadingFallback() {
           Loading…
         </p>
         <p className="text-muted-foreground text-sm mt-2">Vet Claim Support</p>
-        <div className="h-px w-20 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mt-10" />
+        <div className="h-px w-20 bg-linear-to-r from-transparent via-gold to-transparent mx-auto mt-10" />
       </motion.div>
     </div>
   );

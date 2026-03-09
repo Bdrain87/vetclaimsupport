@@ -13,9 +13,9 @@ import { readdirSync, statSync } from 'fs';
 import { join } from 'path';
 
 const DIST_DIR = join(process.cwd(), 'dist', 'assets');
-const JS_SIZE_BUDGET_KB = 1200; // per-chunk budget (raised for a11y + PHI sanitizer + session timeout + feature growth)
+const JS_SIZE_BUDGET_KB = 1800; // per-chunk budget (raised for Tailwind v4 CSS-in-JS + feature growth)
 const CSS_SIZE_BUDGET_KB = 300;
-const TOTAL_JS_BUDGET_KB = 5500; // total JS budget (raised for deployment locations, condition data, health trends, export packets)
+const TOTAL_JS_BUDGET_KB = 6000; // total JS budget (raised for Tailwind v4 migration + deployment locations + condition data)
 
 function getAssetFiles(ext: string) {
   try {

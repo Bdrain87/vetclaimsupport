@@ -107,9 +107,9 @@ const ProgressRing = React.forwardRef<HTMLDivElement, ProgressRingProps>(
         text: 'text-destructive',
       },
       gold: {
-        track: 'stroke-[var(--gold-md)]/20',
-        progress: 'stroke-[var(--gold-md)]',
-        text: 'text-[var(--gold-md)]',
+        track: 'stroke-(--gold-md)/20',
+        progress: 'stroke-(--gold-md)',
+        text: 'text-(--gold-md)',
       },
     };
 
@@ -207,7 +207,7 @@ const ProgressRingIcon = React.forwardRef<HTMLDivElement, ProgressRingIconProps>
       success: 'text-success',
       warning: 'text-gold-dk dark:text-gold',
       danger: 'text-destructive',
-      gold: 'text-[var(--gold-md)]',
+      gold: 'text-(--gold-md)',
     };
 
     return (

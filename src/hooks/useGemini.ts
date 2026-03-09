@@ -3,6 +3,8 @@ import { AI_CONFIG } from '@/lib/ai-prompts';
 import { supabase } from '@/lib/supabase';
 import { redactPII } from '@/lib/redaction';
 import { logAISend } from '@/services/aiAuditLog';
+import { buildVeteranContext } from '@/utils/veteranContext';
+import { formatContextForAI } from '@/utils/formatContextForAI';
 
 const PERSONA_FEATURE_MAP: Record<string, string> = {
   EXAMINER_PERSONA: 'exam-prep',
@@ -73,8 +75,11 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
         textLengthSent: sanitizedInput.length,
       });
 
+      const ctx = buildVeteranContext({ maskPII: true });
+      const contextBlock = formatContextForAI(ctx, 'minimal');
+
       const body = {
-        prompt: `${AI_CONFIG[persona]}\n\nInput: ${sanitizedInput}`,
+        prompt: `${AI_CONFIG[persona]}\n\n${contextBlock}\n\nInput: ${sanitizedInput}`,
       };
 
       let result = await supabase.functions.invoke('analyze-disabilities', { body });
@@ -187,6 +192,9 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
       const { redactedText: sanitizedInput, redactionCount } = redactPII(input, 'high');
       logAISend({ feature: PERSONA_FEATURE_MAP[persona] || persona, redactionMode: 'high', redactionCount, textLengthSent: sanitizedInput.length });
 
+      const streamCtx = buildVeteranContext({ maskPII: true });
+      const streamContextBlock = formatContextForAI(streamCtx, 'minimal');
+
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         setError('Session expired. Please sign in again.');
@@ -201,7 +209,7 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
           'Authorization': `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({
-          prompt: `${AI_CONFIG[persona]}\n\nInput: ${sanitizedInput}`,
+          prompt: `${AI_CONFIG[persona]}\n\n${streamContextBlock}\n\nInput: ${sanitizedInput}`,
           stream: true,
         }),
         signal: controller.signal,

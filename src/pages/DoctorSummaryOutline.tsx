@@ -44,6 +44,7 @@ import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
 import { useToolDraft } from '@/hooks/useToolDraft';
 import { useEvidence } from '@/hooks/useEvidence';
 import { EvidenceAttachment } from '@/components/shared/EvidenceAttachment';
+import { DataConnectedBadge } from '@/components/shared/DataConnectedBadge';
 
 const getAllConditions = (): string[] => {
   const conditions = new Set<string>();
@@ -412,7 +413,7 @@ export default function DoctorSummaryOutline() {
     return (
       <Card className="border-muted bg-muted/20">
         <CardHeader
-          className="pb-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="pb-2 cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
           onClick={() => setExpandedRating(isExpanded ? null : criteria.conditionId)}
           onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpandedRating(isExpanded ? null : criteria.conditionId); } }}
           tabIndex={0}
@@ -1103,10 +1104,12 @@ export default function DoctorSummaryOutline() {
         <DraftRestoredBanner lastSaved={lastSaved} onStartFresh={clearDraft} />
       )}
 
+      <DataConnectedBadge />
+
       <Card className="border-primary/30 bg-primary/5">
         <CardContent className="pt-4">
           <div className="flex items-start gap-2">
-            <Info className="h-5 w-5 text-primary mt-0.5 shrink-0 flex-shrink-0" />
+            <Info className="h-5 w-5 text-primary mt-0.5 shrink-0 shrink-0" />
             <p className="text-sm text-muted-foreground">
               This tool helps you organize facts, timelines, symptoms, and evidence references into a structured outline. A licensed clinician must independently evaluate you and author any clinical statements or medical opinions. This tool does not generate medical opinions or legal guidance.
             </p>

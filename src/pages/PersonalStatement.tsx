@@ -25,6 +25,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { DataConnectedBadge } from '@/components/shared/DataConnectedBadge';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { ConditionSelector } from '@/components/shared/ConditionSelector';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
@@ -443,7 +444,7 @@ export default function PersonalStatement() {
                   <div className="flex items-start gap-2">
                     <Check className="h-4 w-4 text-success shrink-0 mt-0.5" />
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-foreground break-words">
+                      <p className="text-sm font-medium text-foreground wrap-break-word">
                         {formData.condition.name}
                       </p>
                       <div className="flex items-center gap-2 mt-1 flex-wrap">
@@ -740,7 +741,7 @@ export default function PersonalStatement() {
                 {polishedStatement && (
                   <AIContentBadge timestamp={new Date().toISOString()} className="mb-3" />
                 )}
-                <pre className="whitespace-pre-wrap text-sm font-mono text-foreground overflow-auto max-h-96 leading-relaxed break-words">
+                <pre className="whitespace-pre-wrap text-sm font-mono text-foreground overflow-auto max-h-96 leading-relaxed wrap-break-word">
                   {polishedStatement || generateStatement()}
                 </pre>
               </CardContent>
@@ -838,10 +839,13 @@ export default function PersonalStatement() {
       {/* AI Disclaimer Banner */}
       <AIDisclaimer variant="banner" />
 
+      {/* Data Connected Badge */}
+      <DataConnectedBadge conditionId={formData.condition?.id} />
+
       {/* Info Card */}
       <Card className="bg-primary/5 border-primary/30">
         <CardContent className="pt-6 flex items-start gap-3">
-          <HelpCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+          <HelpCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
           <div className="text-sm text-muted-foreground">
             <p className="font-medium text-foreground mb-1">What is a personal statement?</p>
             <p>

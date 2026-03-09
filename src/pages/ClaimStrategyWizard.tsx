@@ -41,6 +41,7 @@ import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
 import { useToolDraft } from '@/hooks/useToolDraft';
+import { DataConnectedBadge } from '@/components/shared/DataConnectedBadge';
 import { useProfileStore } from '@/store/useProfileStore';
 import { useFeatureFlag } from '@/store/useFeatureFlagStore';
 import { getAllBranchLabels } from '@/utils/veteranProfile';
@@ -133,7 +134,7 @@ const steps = [
   { id: 5, title: 'Plan', icon: Sparkles, description: 'Your personalized claim preparation plan' },
 ];
 
-const commonConditions = [
+const FALLBACK_CONDITIONS = [
   'PTSD', 'Depression', 'Anxiety', 'Tinnitus', 'Hearing Loss',
   'Lower Back Pain', 'Knee Condition', 'Neck Pain', 'Shoulder Condition',
   'Migraines', 'Sleep Apnea', 'TBI', 'GERD', 'Hypertension',
@@ -342,6 +343,14 @@ export default function ClaimStrategyWizard() {
     }
     return suggestions;
   }, [data.healthConditions.conditions]);
+
+  // Dynamic conditions list: user's conditions first, then common fallbacks
+  const commonConditions = useMemo(() => {
+    const userCondNames = userConditions.map((uc) => getConditionDisplayName(uc));
+    const seen = new Set(userCondNames.map((n) => n.toLowerCase()));
+    const fallback = FALLBACK_CONDITIONS.filter((c) => !seen.has(c.toLowerCase()));
+    return [...userCondNames, ...fallback];
+  }, [userConditions]);
 
   const updateServiceInfo = useCallback((field: keyof ServiceInfo, value: string | string[]) => {
     setData(prev => ({
@@ -931,7 +940,7 @@ attorney for official guidance on your specific claim.
               <Card className="border-gold/30 bg-gold/5">
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-3">
-                    <AlertCircle className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
+                    <AlertCircle className="h-5 w-5 text-gold shrink-0 mt-0.5" />
                     <div>
                       <p className="font-medium">Connection Issue</p>
                       <p className="text-sm text-muted-foreground">{error}</p>
@@ -947,7 +956,7 @@ attorney for official guidance on your specific claim.
                   <Card className="border-muted bg-muted/30">
                     <CardContent className="pt-6">
                       <div className="flex items-start gap-3">
-                        <Info className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+                        <Info className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
                         <div>
                           <p className="font-medium text-sm">Offline Guidance</p>
                           <p className="text-xs text-muted-foreground">
@@ -1002,7 +1011,7 @@ attorney for official guidance on your specific claim.
                       {strategy.priorityConditions.map((cond, i) => (
                         <div key={i} className="p-4 rounded-lg border overflow-hidden">
                           <div className="flex items-start justify-between gap-2 mb-2">
-                            <span className="font-semibold min-w-0 break-words">{cond.condition}</span>
+                            <span className="font-semibold min-w-0 wrap-break-word">{cond.condition}</span>
                             <Badge variant="outline" className="shrink-0">{cond.estimatedRating}</Badge>
                           </div>
                           <p className="text-sm text-muted-foreground">{cond.reason}</p>
@@ -1092,7 +1101,7 @@ attorney for official guidance on your specific claim.
                     <ol className="space-y-2">
                       {strategy.nextSteps.map((step, i) => (
                         <li key={i} className="flex items-start gap-3 text-sm">
-                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary text-xs flex items-center justify-center font-medium">
+                          <span className="shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary text-xs flex items-center justify-center font-medium">
                             {i + 1}
                           </span>
                           <span>{step}</span>
@@ -1140,19 +1149,19 @@ attorney for official guidance on your specific claim.
                       </p>
                       <div className="space-y-2 overflow-hidden">
                         <a href="https://www.va.gov/decision-reviews/board-appeal/" target="_blank" rel="noopener noreferrer"
-                           className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm break-words min-w-0">
+                           className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm wrap-break-word min-w-0">
                           Board of Veterans' Appeals (BVA) Decisions
                         </a>
                         <a href="https://www.uscourts.cavc.gov/opinions.php" target="_blank" rel="noopener noreferrer"
-                           className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm break-words min-w-0">
+                           className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm wrap-break-word min-w-0">
                           Court of Appeals for Veterans Claims (CAVC)
                         </a>
                         <a href="https://scholar.google.com/" target="_blank" rel="noopener noreferrer"
-                           className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm break-words min-w-0">
+                           className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm wrap-break-word min-w-0">
                           Google Scholar — Legal Opinions
                         </a>
                         <a href="https://www.law.cornell.edu/uscode/text/38" target="_blank" rel="noopener noreferrer"
-                           className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm break-words min-w-0">
+                           className="flex items-center gap-2 text-gold hover:text-gold-hl text-sm wrap-break-word min-w-0">
                           38 U.S.C. — Veterans' Benefits (Cornell Law)
                         </a>
                       </div>
@@ -1196,6 +1205,8 @@ attorney for official guidance on your specific claim.
       {draftRestored && lastSaved && (
         <DraftRestoredBanner lastSaved={lastSaved} onStartFresh={clearDraft} />
       )}
+
+      <DataConnectedBadge />
 
       {/* Progress Steps */}
       <div className="flex items-center overflow-x-auto pb-2 gap-0">
@@ -1277,7 +1288,7 @@ attorney for official guidance on your specific claim.
       <Card className="bg-muted/30">
         <CardContent className="pt-6">
           <div className="flex items-start gap-3">
-            <Lightbulb className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+            <Lightbulb className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
             <div className="text-xs text-muted-foreground">
               <p className="font-medium mb-1">Disclaimer</p>
               <p>

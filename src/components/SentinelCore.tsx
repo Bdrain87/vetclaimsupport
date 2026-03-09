@@ -7,6 +7,7 @@ import { VoiceRecorder } from 'capacitor-voice-recorder';
 import { toast } from '@/hooks/use-toast';
 import { impactMedium } from '@/lib/haptics';
 import { aiTranscribe, createChat, isGeminiConfigured, type Chat } from '@/lib/gemini';
+import { getModelConfig } from '@/lib/ai-models';
 import { redactPII } from '@/lib/redaction';
 import { logAISend } from '@/services/aiAuditLog';
 import { isNativeApp } from '@/lib/platform';
@@ -16,23 +17,39 @@ import { StreamingText } from './ui/StreamingText';
 import { SENTINEL_SYSTEM_PROMPT, SENTINEL_VOICE_BUILD_PROMPT } from '@/lib/ai-prompts';
 import { buildVeteranContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
-import { Mic, MicOff, Sparkles, FileText, Shield, Heart, Scan, ArrowUp, ClipboardCheck } from 'lucide-react';
+import { Mic, MicOff, Sparkles, FileText, Shield, Heart, Scan, ArrowUp, ClipboardCheck, AlertTriangle, Users, FileSearch, Calculator, BarChart3 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const QUICK_PROMPTS: readonly { label: string; icon: React.ElementType; prompt: string | ((conditions: string) => string) }[] = [
-  { label: 'Impact Statement', icon: FileText, prompt: (c) => `Generate a sample VA impact statement for ${c}. Include how the condition affects daily life, work, and relationships using VA-recognized language.` },
-  { label: 'C&P Exam Tips', icon: Shield, prompt: (c) => `Provide detailed tips for preparing for a C&P exam for ${c}. Include what the examiner looks for, what to bring, and how to describe symptoms accurately.` },
-  { label: 'Buddy Statement', icon: Heart, prompt: (c) => `Generate a sample buddy/lay statement template for ${c}. Include specific observable behaviors and impacts a witness would notice.` },
-  { label: 'Nexus Letter', icon: FileText, prompt: (c) => `Generate a sample nexus letter outline for ${c}. Include the medical opinion structure, "at least as likely as not" language, and what a doctor should address.` },
-  { label: 'Evidence Gaps', icon: Scan, prompt: (c) => `Analyze what evidence types are most important for ${c} and suggest what might be missing. Include medical records, lay statements, and service records needed.` },
-  { label: 'Stressor Statement', icon: FileText, prompt: (c) => `Generate a sample stressor statement for ${c}. Include specific details about the in-service event, timeframe, and ongoing impact.` },
-];
+interface AITool {
+  label: string;
+  desc: string;
+  icon: React.ElementType;
+  route: string;
+}
 
-const TOOL_CARDS = [
-  { label: 'C&P Simulator', desc: 'Practice exam questions', icon: Shield, route: '/prep/exam-simulator' },
-  { label: 'Post-Exam Debrief', desc: 'Analyze your exam', icon: ClipboardCheck, route: '/prep/post-debrief' },
-  { label: 'Family Statement', desc: 'Generate lay statements', icon: Heart, route: '/prep/family-statement' },
-  { label: 'Evidence Scanner', desc: 'Scan for gaps', icon: Scan, route: '/prep/evidence-scanner' },
+const AI_TOOLS: { title: string; tools: AITool[] }[] = [
+  {
+    title: 'Documents',
+    tools: [
+      { label: 'Impact Statement', desc: 'Build your statement', icon: FileText, route: '/prep/personal-statement' },
+      { label: 'Buddy Statement', desc: 'Lay statement builder', icon: Users, route: '/prep/buddy-statement' },
+      { label: 'Nexus Letter Builder', desc: 'Doctor summary outline', icon: FileText, route: '/prep/doctor-summary' },
+      { label: 'Stressor Statement', desc: 'Document stressors', icon: AlertTriangle, route: '/prep/stressor' },
+      { label: 'Family Statement', desc: 'Family lay statements', icon: Heart, route: '/prep/family-statement' },
+    ],
+  },
+  {
+    title: 'Exam & Evidence',
+    tools: [
+      { label: 'C&P Exam Prep', desc: 'Prepare for your exam', icon: ClipboardCheck, route: '/prep/exam' },
+      { label: 'C&P Simulator', desc: 'Practice questions', icon: Shield, route: '/prep/exam-simulator' },
+      { label: 'Post-Exam Debrief', desc: 'Analyze your exam', icon: ClipboardCheck, route: '/prep/post-debrief' },
+      { label: 'Evidence Analyzer', desc: 'Find evidence gaps', icon: Scan, route: '/prep/evidence-scanner' },
+      { label: 'DBQ Analyzer', desc: 'Interactive DBQ prep', icon: ClipboardCheck, route: '/prep/dbq-analyzer' },
+      { label: 'Decision Decoder', desc: 'Decode VA decisions', icon: FileSearch, route: '/claims/decision-decoder' },
+      { label: 'Rating Calculator', desc: 'Calculate your rating', icon: Calculator, route: '/calculator' },
+    ],
+  },
 ];
 
 function ReadinessRing({ score, label }: { score: number; label: string }) {
@@ -41,7 +58,7 @@ function ReadinessRing({ score, label }: { score: number; label: string }) {
   const color = score >= 70 ? '#22c55e' : score >= 40 ? '#C5A55A' : '#ef4444';
 
   return (
-    <svg width="48" height="48" viewBox="0 0 48 48" className="flex-shrink-0">
+    <svg width="48" height="48" viewBox="0 0 48 48" className="shrink-0">
       <circle cx="24" cy="24" r="18" fill="none" stroke="currentColor" strokeOpacity="0.1" strokeWidth="3" />
       <circle
         cx="24" cy="24" r="18" fill="none" stroke={color} strokeWidth="3"
@@ -77,7 +94,6 @@ export function SentinelCore() {
   const [mode, setMode] = useState<IntelMode>('ask');
   const chatRef = useRef<Chat | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const conditions = useAppStore((state) => state.userConditions?.map(c => c.displayName || c.conditionId).join(', ') || 'my conditions');
   const conditionCount = useAppStore((state) => (state.userConditions || []).length);
   const prevConditionCountRef = useRef(conditionCount);
   const { score, label } = useSentinel();
@@ -100,9 +116,11 @@ export function SentinelCore() {
     if (!chatRef.current) {
       const ctx = buildVeteranContext({ maskPII: true });
       const contextBlock = formatContextForAI(ctx, 'detailed');
+      const { temperature } = getModelConfig('sentinel-core');
       chatRef.current = createChat({
         systemInstruction: `${systemPrompt}\n\n${contextBlock}`,
         feature: 'sentinel-core',
+        temperature,
       });
     }
     return chatRef.current;
@@ -152,12 +170,6 @@ export function SentinelCore() {
     if (!query) return;
     impactMedium();
     sendMessage(query, SENTINEL_SYSTEM_PROMPT);
-  };
-
-  const quickPrompt = (prompt: string | ((c: string) => string)) => {
-    const resolved = typeof prompt === 'function' ? prompt(conditions) : prompt;
-    impactMedium();
-    setQuery(resolved);
   };
 
   const toggleVoice = async () => {
@@ -227,14 +239,14 @@ export function SentinelCore() {
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.3 }}
-          className="fixed right-4 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-gold/90 to-gold/70 border border-gold/30 backdrop-blur-md shadow-[0_4px_24px_rgba(197,165,90,0.3)] flex items-center justify-center"
+          className="fixed right-4 z-50 w-14 h-14 rounded-full bg-gold/15 border border-gold/30 backdrop-blur-xl shadow-[0_4px_24px_rgba(197,165,90,0.2)] flex items-center justify-center"
           style={{ bottom: 'calc(9rem + env(safe-area-inset-bottom, 0px))' }}
           aria-label="Open Intel AI"
         >
-          <Sparkles className="h-6 w-6 text-white" />
+          <Sparkles className="h-6 w-6 text-gold" />
         </motion.button>
       </DialogTrigger>
-      <DialogContent className="bg-card border-border rounded-2xl max-h-[85dvh] overflow-y-auto p-6">
+      <DialogContent className="bg-card border-border rounded-2xl p-6">
           {/* Condensed Header — title left, readiness ring right */}
           <DialogHeader className="flex-row items-center justify-between space-y-0">
             <DialogTitle className="text-foreground text-lg font-semibold tracking-wide">Intel</DialogTitle>
@@ -282,25 +294,32 @@ export function SentinelCore() {
                 </Button>
               </div>
             ) : (
-              /* Ask Anything Mode */
-              <>
-                {/* Quick prompts — only show when no conversation yet */}
-                {messages.length === 0 && (
-                  <div className="grid grid-cols-2 gap-2">
-                    {QUICK_PROMPTS.map(({ label: promptLabel, icon: Icon, prompt }) => (
-                      <Button
-                        key={promptLabel}
-                        onClick={() => quickPrompt(prompt)}
-                        variant="secondary"
-                        className="bg-secondary text-foreground/80 text-xs h-auto py-2 px-3 hover:bg-accent justify-start gap-1.5"
-                      >
-                        <Icon className="h-3 w-3 flex-shrink-0 text-gold/60" />
-                        {promptLabel}
-                      </Button>
-                    ))}
-                  </div>
-                )}
-              </>
+              /* Ask Anything Mode — chat input at top */
+              <div className="flex items-end gap-2 rounded-xl bg-secondary border border-border px-3 py-2">
+                <textarea
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey && !loading) { e.preventDefault(); handleAsk(); } }}
+                  placeholder={messages.length > 0 ? 'Follow up...' : 'Ask anything about your claim...'}
+                  rows={3}
+                  className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-hidden min-w-0 resize-none"
+                />
+                <button
+                  onClick={toggleVoice}
+                  className="shrink-0 h-8 w-8 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label={isRecording ? 'Stop recording' : 'Start voice input'}
+                >
+                  {isRecording ? <MicOff className="h-4 w-4 text-red-400" /> : <Mic className="h-4 w-4" />}
+                </button>
+                <button
+                  onClick={handleAsk}
+                  disabled={loading || !query}
+                  className="shrink-0 h-8 w-8 rounded-full bg-gold text-black flex items-center justify-center disabled:opacity-30 transition-opacity"
+                  aria-label="Send message"
+                >
+                  <ArrowUp className="h-4 w-4" />
+                </button>
+              </div>
             )}
 
             {/* Conversation Messages */}
@@ -336,7 +355,7 @@ export function SentinelCore() {
               </div>
             )}
 
-            {/* Copy / Clear — lightweight text buttons */}
+            {/* Copy / Clear */}
             {messages.length > 0 && !isStreaming && (
               <div className="flex items-center gap-3 justify-end">
                 <button onClick={copyChat} className="text-[10px] text-muted-foreground hover:text-foreground transition-colors">Copy</button>
@@ -344,57 +363,30 @@ export function SentinelCore() {
               </div>
             )}
 
-            {/* Unified Chat Bar */}
-            {mode === 'ask' && (
-              <div className="flex items-center gap-2 rounded-xl bg-secondary border border-border px-3 py-2">
-                <input
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === 'Enter' && !loading) handleAsk(); }}
-                  placeholder={messages.length > 0 ? 'Follow up...' : 'Type or ask...'}
-                  className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none min-w-0"
-                />
-                <button
-                  onClick={toggleVoice}
-                  className="flex-shrink-0 h-8 w-8 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label={isRecording ? 'Stop recording' : 'Start voice input'}
-                >
-                  {isRecording ? <MicOff className="h-4 w-4 text-red-400" /> : <Mic className="h-4 w-4" />}
-                </button>
-                <button
-                  onClick={handleAsk}
-                  disabled={loading || !query}
-                  className="flex-shrink-0 h-8 w-8 rounded-full bg-gold text-black flex items-center justify-center disabled:opacity-30 transition-opacity"
-                  aria-label="Send message"
-                >
-                  <ArrowUp className="h-4 w-4" />
-                </button>
+            {/* AI Tools — Unified Card Grid */}
+            {AI_TOOLS.map(({ title, tools }) => (
+              <div key={title}>
+                <p className="text-[11px] font-semibold text-gold/70 uppercase tracking-widest mb-2 flex items-center gap-1.5 px-1">
+                  <Sparkles className="h-3 w-3" />
+                  {title}
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  {tools.map(({ label: cardLabel, desc, icon: Icon, route }) => (
+                    <button
+                      key={route}
+                      onClick={() => { impactMedium(); setOpen(false); setTimeout(() => navigate(route), 150); }}
+                      className="rounded-xl bg-secondary/50 border border-border/50 p-3 hover:border-gold/20 hover:bg-gold/5 transition-all text-left"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center mb-2">
+                        <Icon className="h-4 w-4 text-gold" />
+                      </div>
+                      <p className="text-xs font-medium text-foreground">{cardLabel}</p>
+                      <p className="text-[10px] text-muted-foreground">{desc}</p>
+                    </button>
+                  ))}
+                </div>
               </div>
-            )}
-
-            {/* Premium AI Tools — Card Grid */}
-            <div className="bg-secondary/20 rounded-xl mx-1 p-4 mt-2">
-              <div className="h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent mb-3" />
-              <p className="text-[11px] font-semibold text-gold/70 uppercase tracking-widest mb-3 flex items-center gap-1.5">
-                <Sparkles className="h-3 w-3" />
-                Premium AI Tools
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                {TOOL_CARDS.map(({ label: cardLabel, desc, icon: Icon, route }) => (
-                  <button
-                    key={route}
-                    onClick={() => { impactMedium(); setOpen(false); setTimeout(() => navigate(route), 150); }}
-                    className="rounded-xl bg-secondary/50 border border-border/50 p-3 hover:border-gold/20 hover:bg-gold/5 transition-all text-left"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center mb-2">
-                      <Icon className="h-4 w-4 text-gold" />
-                    </div>
-                    <p className="text-xs font-medium text-foreground">{cardLabel}</p>
-                    <p className="text-[10px] text-muted-foreground">{desc}</p>
-                  </button>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
 
           {/* Compact Disclaimer */}

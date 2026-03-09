@@ -103,12 +103,12 @@ export function ConditionSelector({
                   onClick={() => handleSelectExisting(uc)}
                   className="flex items-center gap-3 w-full text-left px-3 py-2.5 rounded-lg border border-border bg-muted/30 hover:bg-gold/10 hover:border-gold/30 transition-all"
                 >
-                  <span className="h-2 w-2 rounded-full bg-primary flex-shrink-0" />
+                  <span className="h-2 w-2 rounded-full bg-primary shrink-0" />
                   <span className="text-sm font-medium text-foreground truncate flex-1">
                     {displayName}
                   </span>
                   {details?.diagnosticCode && (
-                    <span className="text-[10px] text-muted-foreground flex-shrink-0">
+                    <span className="text-[10px] text-muted-foreground shrink-0">
                       DC {details.diagnosticCode}
                     </span>
                   )}

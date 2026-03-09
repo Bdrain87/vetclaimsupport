@@ -26,7 +26,7 @@ const YEARS = Array.from({ length: 80 }, (_, i) => String(new Date().getFullYear
 
 function MonthYearPicker({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder?: string }) {
   const [year, month] = value ? value.split('-') : ['', ''];
-  const selectClass = 'h-12 px-3 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all appearance-none';
+  const selectClass = 'h-12 px-3 bg-white/9 border border-white/[0.14] rounded-xl text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-gold/40 transition-all appearance-none';
   const handleChange = (newMonth: string, newYear: string) => {
     if (newMonth && newYear) onChange(`${newYear}-${newMonth}`);
     else if (newYear && !newMonth) onChange(`${newYear}-01`);
@@ -38,12 +38,12 @@ function MonthYearPicker({ value, onChange, placeholder }: { value: string; onCh
       {placeholder && <label className="text-white/40 text-xs">{placeholder}</label>}
       <div className="grid grid-cols-2 gap-2">
         <select value={month} onChange={e => handleChange(e.target.value, year)} className={selectClass}>
-          <option value="" className="bg-[#000000]">Month</option>
-          {MONTHS.map(m => <option key={m.value} value={m.value} className="bg-[#000000]">{m.label}</option>)}
+          <option value="" className="bg-navy-900">Month</option>
+          {MONTHS.map(m => <option key={m.value} value={m.value} className="bg-navy-900">{m.label}</option>)}
         </select>
         <select value={year} onChange={e => handleChange(month, e.target.value)} className={selectClass}>
-          <option value="" className="bg-[#000000]">Year</option>
-          {YEARS.map(y => <option key={y} value={y} className="bg-[#000000]">{y}</option>)}
+          <option value="" className="bg-navy-900">Year</option>
+          {YEARS.map(y => <option key={y} value={y} className="bg-navy-900">{y}</option>)}
         </select>
       </div>
     </div>
@@ -155,17 +155,17 @@ function MOSAutocomplete({
         onFocus={() => { if (results.length > 0) setIsOpen(true); }}
         onKeyDown={handleKeyDown}
         placeholder="Type your code or job title..."
-        className="w-full h-12 pl-10 pr-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/50 transition-all"
+        className="w-full h-12 pl-10 pr-4 bg-white/9 border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-hidden focus:ring-2 focus:ring-gold/40 focus:border-gold/50 transition-all"
       />
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-1 z-50 bg-[#111111] border border-white/[0.14] rounded-xl shadow-2xl shadow-black/50 max-h-60 overflow-y-auto">
+        <div className="absolute top-full left-0 right-0 mt-1 z-50 bg-navy-800 border border-white/[0.14] rounded-xl shadow-2xl shadow-black/50 max-h-60 overflow-y-auto">
           {results.map((job, i) => (
             <button
               key={`${job.code}-${job.branch}`}
               ref={i === highlightIdx ? highlightRef : undefined}
               className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-colors ${
                 i === highlightIdx ? 'bg-gold/15 text-white' : 'text-white/80 hover:bg-white/5'
-              } ${i > 0 ? 'border-t border-white/[0.04]' : ''}`}
+              } ${i > 0 ? 'border-t border-white/4' : ''}`}
               onClick={() => handleSelect(job)}
               onMouseEnter={() => setHighlightIdx(i)}
             >
@@ -403,7 +403,7 @@ export default function Onboarding() {
     }
 
     profileStore.completeOnboarding();
-    navigate('/app', { replace: true });
+    navigate('/onboarding/plan', { replace: true });
   };
 
   const handleAddCondition = (condition: VACondition) => {
@@ -475,7 +475,7 @@ export default function Onboarding() {
           <div
             key={i}
             className={`h-2 rounded-full transition-all duration-300 ${
-              i === step ? 'w-8 bg-[image:var(--gold-gradient)]' : i < step ? 'w-2 bg-[var(--gold-md)]/50' : 'w-2 bg-white/10'
+              i === step ? 'w-8 bg-(image:--gold-gradient)' : i < step ? 'w-2 bg-(--gold-md)/50' : 'w-2 bg-white/10'
             }`}
             aria-hidden="true"
           />
@@ -486,7 +486,7 @@ export default function Onboarding() {
   };
 
   return (
-    <div className="min-h-[100dvh] flex flex-col bg-background">
+    <div className="min-h-dvh flex flex-col bg-background">
       <PageContainer className="flex-1 flex flex-col justify-start pt-[15vh] pb-8 overflow-y-auto"
         style={{ paddingBottom: 'calc(2rem + var(--keyboard-height, 0px))' }}>
       <div className="w-full max-w-md mx-auto space-y-8">
@@ -504,7 +504,7 @@ export default function Onboarding() {
             {/* Step 0: Welcome */}
             {step === 0 && (
               <div className="text-center space-y-6">
-                <img src="/app-icon.png" alt="Vet Claim Support" className="w-20 h-20 mx-auto rounded-2xl shadow-lg shadow-[var(--gold-glow)]" />
+                <img src="/app-icon.png" alt="Vet Claim Support" className="w-20 h-20 mx-auto rounded-2xl shadow-lg shadow-(--gold-glow)" />
                 <div>
                   <h1 className="text-2xl font-bold text-white">Welcome to Vet Claim Support</h1>
                   <p className="text-white/50 mt-2 text-sm leading-relaxed">
@@ -512,7 +512,7 @@ export default function Onboarding() {
                     Let&apos;s personalize your experience in under 2 minutes.
                   </p>
                 </div>
-                <div className="rounded-xl border border-[#2a2a2a] p-4 text-left space-y-2">
+                <div className="rounded-xl border border-navy-600 p-4 text-left space-y-2">
                   <p className="text-white/70 text-xs leading-relaxed">
                     <strong className="text-white/90">Vet Claim Support is an educational and organizational tool.</strong>
                   </p>
@@ -526,7 +526,7 @@ export default function Onboarding() {
                 </div>
                 <p className="text-white/40 text-sm">
                   Already have an account?{' '}
-                  <Link to="/login" className="text-[var(--gold-md)] hover:underline font-medium">
+                  <Link to="/login" className="text-(--gold-md) hover:underline font-medium">
                     Sign In
                   </Link>
                 </p>
@@ -537,7 +537,7 @@ export default function Onboarding() {
             {step === 1 && (
               <div className="space-y-5">
                 <div className="text-center">
-                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.09] border border-white/[0.14] flex items-center justify-center mb-4">
+                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/9 border border-white/[0.14] flex items-center justify-center mb-4">
                     <User className="h-7 w-7 text-gold" />
                   </div>
                   <h2 className="text-xl font-bold text-white">What should we call you?</h2>
@@ -551,7 +551,7 @@ export default function Onboarding() {
                       onBlur={() => { if (!firstName.trim()) setNameError('Please enter your first name'); }}
                       placeholder="First Name"
                       autoFocus
-                      className={`w-full h-12 px-4 bg-white/[0.09] border rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all ${
+                      className={`w-full h-12 px-4 bg-white/9 border rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-hidden focus:ring-2 focus:ring-gold/40 transition-all ${
                         nameError ? 'border-destructive/50' : 'border-white/[0.14]'
                       }`}
                     />
@@ -562,7 +562,7 @@ export default function Onboarding() {
                     value={lastName}
                     onChange={e => setLastName(e.target.value)}
                     placeholder="Last Name (optional)"
-                    className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all"
+                    className="w-full h-12 px-4 bg-white/9 border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-hidden focus:ring-2 focus:ring-gold/40 transition-all"
                   />
                 </div>
               </div>
@@ -594,7 +594,7 @@ export default function Onboarding() {
                         className={`w-full flex items-center gap-3 p-4 rounded-xl border transition-all ${
                           isSelected
                             ? 'bg-gold/10 border-gold/40 text-white'
-                            : 'bg-white/[0.07] border-white/[0.12] text-white/70 hover:bg-white/[0.10]'
+                            : 'bg-white/[0.07] border-white/12 text-white/70 hover:bg-white/10'
                         }`}
                       >
                         <div
@@ -618,7 +618,7 @@ export default function Onboarding() {
             {step === 3 && (branch ? (
               <div className="space-y-5">
                 <div className="text-center">
-                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.09] border border-white/[0.14] flex items-center justify-center mb-4">
+                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/9 border border-white/[0.14] flex items-center justify-center mb-4">
                     <Briefcase className="h-7 w-7 text-gold" />
                   </div>
                   <h2 className="text-xl font-bold text-white">What is or was your military job code?</h2>
@@ -645,8 +645,8 @@ export default function Onboarding() {
                     />
                     {mosCode && (
                       <div className="flex items-start gap-2 text-sm text-gold min-w-0">
-                        <Check className="h-4 w-4 flex-shrink-0 mt-0.5" />
-                        <span className="break-words min-w-0">{getCodeTypeForBranch(BRANCH_TO_MOS[branch])}: {mosCode} — {mosTitle}</span>
+                        <Check className="h-4 w-4 shrink-0 mt-0.5" />
+                        <span className="wrap-break-word min-w-0">{getCodeTypeForBranch(BRANCH_TO_MOS[branch])}: {mosCode} — {mosTitle}</span>
                       </div>
                     )}
                     <button
@@ -668,7 +668,7 @@ export default function Onboarding() {
                         setMosCode(e.target.value);
                       }}
                       placeholder="Job Code (e.g., 11B)"
-                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all"
+                      className="w-full h-12 px-4 bg-white/9 border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-hidden focus:ring-2 focus:ring-gold/40 transition-all"
                     />
                     <input
                       type="text"
@@ -678,11 +678,11 @@ export default function Onboarding() {
                         setMosTitle(e.target.value);
                       }}
                       placeholder="Job Title (e.g., Infantryman)"
-                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all"
+                      className="w-full h-12 px-4 bg-white/9 border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-hidden focus:ring-2 focus:ring-gold/40 transition-all"
                     />
                     {manualCode && manualTitle && (
                       <div className="flex items-center gap-2 text-sm text-gold min-w-0">
-                        <Check className="h-4 w-4 flex-shrink-0" />
+                        <Check className="h-4 w-4 shrink-0" />
                         <span className="truncate">{manualCode} — {manualTitle}</span>
                       </div>
                     )}
@@ -706,7 +706,7 @@ export default function Onboarding() {
             {step === 4 && (
               <div className="space-y-5">
                 <div className="text-center">
-                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.09] border border-white/[0.14] flex items-center justify-center mb-4">
+                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/9 border border-white/[0.14] flex items-center justify-center mb-4">
                     <Shield className="h-7 w-7 text-gold" />
                   </div>
                   <h2 className="text-xl font-bold text-white">Are you still on active duty?</h2>
@@ -718,7 +718,7 @@ export default function Onboarding() {
                     className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${
                       stillActiveDuty === true
                         ? 'bg-gold/10 border-gold/40 text-white'
-                        : 'bg-white/[0.07] border-white/[0.12] text-white/70 hover:bg-white/[0.10]'
+                        : 'bg-white/[0.07] border-white/12 text-white/70 hover:bg-white/10'
                     }`}
                   >
                     Yes, active duty
@@ -728,7 +728,7 @@ export default function Onboarding() {
                     className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${
                       stillActiveDuty === false
                         ? 'bg-gold/10 border-gold/40 text-white'
-                        : 'bg-white/[0.07] border-white/[0.12] text-white/70 hover:bg-white/[0.10]'
+                        : 'bg-white/[0.07] border-white/12 text-white/70 hover:bg-white/10'
                     }`}
                   >
                     No, separated / retired
@@ -741,7 +741,7 @@ export default function Onboarding() {
                       type="date"
                       value={separationDate}
                       onChange={e => setSeparationDate(e.target.value)}
-                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/50 transition-all [color-scheme:dark]"
+                      className="w-full h-12 px-4 bg-white/9 border border-white/[0.14] rounded-xl text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-gold/40 focus:border-gold/50 transition-all scheme-dark"
                     />
                     {separationDate && (() => {
                       const daysOut = Math.round((new Date(separationDate).getTime() - Date.now()) / 86400000);
@@ -768,7 +768,7 @@ export default function Onboarding() {
             {step === 5 && (
               <div className="space-y-5">
                 <div className="text-center">
-                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.09] border border-white/[0.14] flex items-center justify-center mb-4">
+                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/9 border border-white/[0.14] flex items-center justify-center mb-4">
                     <MapPin className="h-7 w-7 text-gold" />
                   </div>
                   <h2 className="text-xl font-bold text-white">Where do you or did you serve?</h2>
@@ -778,7 +778,7 @@ export default function Onboarding() {
                 {dutyStations.length > 0 && (
                   <div className="space-y-2">
                     {dutyStations.map((station, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.07] border border-white/[0.12] gap-2">
+                      <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.07] border border-white/12 gap-2">
                         <div className="min-w-0 flex-1">
                           <p className="text-white text-sm font-medium truncate">{station.baseName}</p>
                           {(station.startDate || station.endDate) && (
@@ -798,7 +798,7 @@ export default function Onboarding() {
                 )}
 
                 {showStationForm ? (
-                  <div className="space-y-3 p-4 rounded-xl border border-white/[0.14] bg-white/[0.02]">
+                  <div className="space-y-3 p-4 rounded-xl border border-white/[0.14] bg-white/2">
                     <LocationAutocomplete
                       value={stationBase}
                       onChange={setStationBase}
@@ -813,7 +813,7 @@ export default function Onboarding() {
                       <button
                         onClick={handleAddStation}
                         disabled={!stationBase.trim()}
-                        className="flex-1 h-10 rounded-xl bg-gold text-[#000000] text-sm font-bold disabled:opacity-40 transition-all"
+                        className="flex-1 h-10 rounded-xl bg-gold text-navy-900 text-sm font-bold disabled:opacity-40 transition-all"
                       >
                         Save
                       </button>
@@ -840,7 +840,7 @@ export default function Onboarding() {
             {step === 6 && (
               <div className="space-y-5">
                 <div className="text-center">
-                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.09] border border-white/[0.14] flex items-center justify-center mb-4">
+                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/9 border border-white/[0.14] flex items-center justify-center mb-4">
                     <Plane className="h-7 w-7 text-gold" />
                   </div>
                   <h2 className="text-xl font-bold text-white">Any Deployments or Combat Tours?</h2>
@@ -850,7 +850,7 @@ export default function Onboarding() {
                 {deployments.length > 0 && (
                   <div className="space-y-2">
                     {deployments.map((dep, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.07] border border-white/[0.12] gap-2">
+                      <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.07] border border-white/12 gap-2">
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2 flex-wrap">
                             <p className="text-white text-sm font-medium truncate">{dep.operationName}</p>
@@ -876,15 +876,15 @@ export default function Onboarding() {
                 )}
 
                 {showDeployForm ? (
-                  <div className="space-y-3 p-4 rounded-xl border border-white/[0.14] bg-white/[0.02]">
+                  <div className="space-y-3 p-4 rounded-xl border border-white/[0.14] bg-white/2">
                     <select
                       value={deployOp}
                       onChange={e => setDeployOp(e.target.value)}
-                      className="w-full h-12 px-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-gold/40 transition-all"
+                      className="w-full h-12 px-4 bg-white/9 border border-white/[0.14] rounded-xl text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-gold/40 transition-all"
                     >
-                      <option value="" className="bg-[#000000]">Select Operation/Theater...</option>
+                      <option value="" className="bg-navy-900">Select Operation/Theater...</option>
                       {OPERATIONS.map(op => (
-                        <option key={op} value={op} className="bg-[#000000]">{op}</option>
+                        <option key={op} value={op} className="bg-navy-900">{op}</option>
                       ))}
                     </select>
                     <LocationAutocomplete
@@ -912,7 +912,7 @@ export default function Onboarding() {
                       <button
                         onClick={handleAddDeployment}
                         disabled={!deployOp.trim()}
-                        className="flex-1 h-10 rounded-xl bg-gold text-[#000000] text-sm font-bold disabled:opacity-40 transition-all"
+                        className="flex-1 h-10 rounded-xl bg-gold text-navy-900 text-sm font-bold disabled:opacity-40 transition-all"
                       >
                         Save
                       </button>
@@ -963,7 +963,7 @@ export default function Onboarding() {
                       className={`w-full flex items-start gap-3 p-4 rounded-xl border transition-all text-left ${
                         claimGoal === option.value
                           ? 'bg-gold/10 border-gold/40 text-white'
-                          : 'bg-white/[0.07] border-white/[0.12] text-white/70 hover:bg-white/[0.10]'
+                          : 'bg-white/[0.07] border-white/12 text-white/70 hover:bg-white/10'
                       }`}
                     >
                       <div
@@ -998,7 +998,7 @@ export default function Onboarding() {
                     className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${
                       hasExistingRated === true
                         ? 'bg-gold/10 border-gold/40 text-white'
-                        : 'bg-white/[0.07] border-white/[0.12] text-white/70 hover:bg-white/[0.10]'
+                        : 'bg-white/[0.07] border-white/12 text-white/70 hover:bg-white/10'
                     }`}
                   >
                     Yes, I have rated conditions
@@ -1008,7 +1008,7 @@ export default function Onboarding() {
                     className={`flex-1 p-3 rounded-xl border text-sm font-medium transition-all ${
                       hasExistingRated === false
                         ? 'bg-gold/10 border-gold/40 text-white'
-                        : 'bg-white/[0.07] border-white/[0.12] text-white/70 hover:bg-white/[0.10]'
+                        : 'bg-white/[0.07] border-white/12 text-white/70 hover:bg-white/10'
                     }`}
                   >
                     No, not yet
@@ -1018,7 +1018,7 @@ export default function Onboarding() {
                 {hasExistingRated === true && (
                   <div className="space-y-4">
                     {/* Add new rated condition form */}
-                    <div className="space-y-3 p-4 rounded-xl bg-white/[0.07] border border-white/[0.12]">
+                    <div className="space-y-3 p-4 rounded-xl bg-white/[0.07] border border-white/12">
                       {!newRatedCondition ? (
                         <ConditionAutocomplete
                           onSelect={(condition) => setNewRatedCondition(condition.name)}
@@ -1036,13 +1036,13 @@ export default function Onboarding() {
                         <select
                           value={newRatedRating}
                           onChange={(e) => setNewRatedRating(Number(e.target.value))}
-                          className="flex-1 px-3 py-2.5 rounded-xl bg-white/[0.09] border border-white/[0.12] text-white text-sm focus:outline-none focus:border-gold/40"
+                          className="flex-1 px-3 py-2.5 rounded-xl bg-white/9 border border-white/12 text-white text-sm focus:outline-hidden focus:border-gold/40"
                         >
                           {[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map(v => (
-                            <option key={v} value={v} className="bg-[#000000] text-white">{v}%</option>
+                            <option key={v} value={v} className="bg-navy-900 text-white">{v}%</option>
                           ))}
                         </select>
-                        <div className="flex border border-white/[0.12] rounded-xl overflow-hidden">
+                        <div className="flex border border-white/12 rounded-xl overflow-hidden">
                           <button
                             onClick={() => setNewRatedType('primary')}
                             className={`px-3 py-2 text-xs font-medium transition-colors ${
@@ -1064,7 +1064,7 @@ export default function Onboarding() {
                       <button
                         onClick={handleAddExistingRated}
                         disabled={!newRatedCondition.trim()}
-                        className="w-full h-10 rounded-xl bg-gold text-[#000000] text-sm font-bold disabled:opacity-40 transition-all"
+                        className="w-full h-10 rounded-xl bg-gold text-navy-900 text-sm font-bold disabled:opacity-40 transition-all"
                       >
                         Save
                       </button>
@@ -1074,7 +1074,7 @@ export default function Onboarding() {
                     {existingRated.length > 0 && (
                       <div className="space-y-2">
                         {existingRated.map((rc, idx) => (
-                          <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.07] border border-white/[0.12] gap-2">
+                          <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.07] border border-white/12 gap-2">
                             <div className="flex-1 min-w-0">
                               <p className="text-sm text-white font-medium truncate">{rc.conditionName}</p>
                               <p className="text-xs text-white/40">{rc.rating}% · {rc.type}</p>
@@ -1095,7 +1095,7 @@ export default function Onboarding() {
             {step === 9 && (
               <div className="space-y-5">
                 <div className="text-center">
-                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/[0.09] border border-white/[0.14] flex items-center justify-center mb-4">
+                  <div className="w-14 h-14 mx-auto rounded-xl bg-white/9 border border-white/[0.14] flex items-center justify-center mb-4">
                     <Stethoscope className="h-7 w-7 text-gold" />
                   </div>
                   <h2 className="text-xl font-bold text-white">Are you claiming any conditions?</h2>
@@ -1171,8 +1171,8 @@ export default function Onboarding() {
                       desc: 'Use the Rating Calculator to see how VA math works. The VA combines ratings using a specific formula, not simple addition. Knowing this helps you set realistic expectations and identify where to focus.',
                     },
                   ].map((card) => (
-                    <div key={card.step} className="flex items-start gap-3 p-4 rounded-xl bg-white/[0.07] border border-white/[0.12]">
-                      <div className="w-10 h-10 rounded-lg bg-gold/10 border border-gold/25 flex items-center justify-center flex-shrink-0">
+                    <div key={card.step} className="flex items-start gap-3 p-4 rounded-xl bg-white/[0.07] border border-white/12">
+                      <div className="w-10 h-10 rounded-lg bg-gold/10 border border-gold/25 flex items-center justify-center shrink-0">
                         <card.icon className="h-5 w-5 text-gold" />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -1182,10 +1182,10 @@ export default function Onboarding() {
                     </div>
                   ))}
                 </div>
-                <div className="rounded-xl border border-[#2a2a2a] bg-white/[0.03] p-3">
+                <div className="rounded-xl border border-navy-600 bg-white/3 p-3">
                   <p className="text-white/40 text-xs leading-relaxed text-center">This tool helps you organize and prepare your own claim. It does not file claims, provide legal or medical advice, or guarantee any outcome. Always consult a VA-accredited representative for guidance specific to your situation.</p>
                 </div>
-                <p className="text-center text-white/30 text-xs break-words">By continuing, you agree to our <Link to="/settings/terms" className="text-gold underline">Terms of Service</Link> and <Link to="/settings/privacy" className="text-gold underline">Privacy Policy</Link>.</p>
+                <p className="text-center text-white/30 text-xs wrap-break-word">By continuing, you agree to our <Link to="/settings/terms" className="text-gold underline">Terms of Service</Link> and <Link to="/settings/privacy" className="text-gold underline">Privacy Policy</Link>.</p>
               </div>
             )}
 
@@ -1257,7 +1257,7 @@ export default function Onboarding() {
                 >
                   <button
                     onClick={handleComplete}
-                    className="w-full h-14 rounded-xl text-[#000000] text-base font-bold transition-all hover:brightness-110 hover:shadow-[0_4px_24px_var(--gold-glow)]"
+                    className="w-full h-14 rounded-xl text-navy-900 text-base font-bold transition-all hover:brightness-110 hover:shadow-[0_4px_24px_var(--gold-glow)]"
                     style={{ background: 'var(--gold-gradient)' }}
                   >
                     Get Started
@@ -1288,7 +1288,7 @@ export default function Onboarding() {
               <button
                 onClick={handleNext}
                 disabled={!canProceed}
-                className="flex items-center gap-1 h-11 px-6 rounded-xl bg-gold text-[#000000] text-sm font-bold hover:bg-gold/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                className="flex items-center gap-1 h-11 px-6 rounded-xl bg-gold text-navy-900 text-sm font-bold hover:bg-gold/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               >
                 {step === 0 ? 'Get Started' : 'Continue'}
                 <ChevronRight className="h-4 w-4" />

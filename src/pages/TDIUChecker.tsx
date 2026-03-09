@@ -145,11 +145,11 @@ export default function TDIUChecker() {
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
             {result.eligible ? (
-              <ShieldCheck className="h-6 w-6 text-success flex-shrink-0" />
+              <ShieldCheck className="h-6 w-6 text-success shrink-0" />
             ) : result.pathway === 'extraschedular' ? (
-              <AlertTriangle className="h-6 w-6 text-gold flex-shrink-0" />
+              <AlertTriangle className="h-6 w-6 text-gold shrink-0" />
             ) : (
-              <XCircle className="h-6 w-6 text-muted-foreground flex-shrink-0" />
+              <XCircle className="h-6 w-6 text-muted-foreground shrink-0" />
             )}
             <div className="space-y-1">
               <h3 className={`text-sm font-bold ${result.eligible ? 'text-success' : result.pathway === 'extraschedular' ? 'text-gold' : 'text-foreground'}`}>
@@ -216,9 +216,9 @@ export default function TDIUChecker() {
               className="w-full flex items-start gap-3 text-left"
             >
               {answers[i] ? (
-                <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
+                <CheckCircle2 className="h-4 w-4 text-success shrink-0 mt-0.5" />
               ) : (
-                <Circle className="h-4 w-4 text-muted-foreground/40 flex-shrink-0 mt-0.5" />
+                <Circle className="h-4 w-4 text-muted-foreground/40 shrink-0 mt-0.5" />
               )}
               <span className={`text-xs ${answers[i] ? 'text-foreground' : 'text-muted-foreground'}`}>
                 {q}
@@ -270,7 +270,7 @@ export default function TDIUChecker() {
       {/* Disclaimer */}
       <div className="px-4 py-3 rounded-lg bg-gold/10 border border-gold/20">
         <div className="flex items-start gap-2">
-          <AlertTriangle className="h-4 w-4 text-gold flex-shrink-0 mt-0.5" />
+          <AlertTriangle className="h-4 w-4 text-gold shrink-0 mt-0.5" />
           <p className="text-xs text-gold/80">
             This screening tool is for educational purposes only. It is not a guarantee of eligibility.
             Consult with your VSO or attorney before filing for TDIU.

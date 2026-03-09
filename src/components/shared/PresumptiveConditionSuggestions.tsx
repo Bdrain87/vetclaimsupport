@@ -206,7 +206,7 @@ export function PresumptiveConditionSuggestions({
       </div>
 
       <div className="rounded-xl p-3 flex items-start gap-3 bg-gold/5 border border-gold/20">
-        <AlertTriangle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+        <AlertTriangle className="h-4 w-4 text-primary shrink-0 mt-0.5" />
         <p className="text-xs text-muted-foreground">
           Based on your service locations and exposures, you <strong>may be eligible</strong> for
           these presumptive conditions. The VA assumes these are connected to your service.
@@ -231,7 +231,7 @@ export function PresumptiveConditionSuggestions({
               </p>
               {group.deadline && (
                 <div className="mt-2 flex items-center gap-1.5 px-2 py-1 bg-gold/15 border border-gold/30 rounded-lg">
-                  <Clock className="h-3.5 w-3.5 text-gold flex-shrink-0" />
+                  <Clock className="h-3.5 w-3.5 text-gold shrink-0" />
                   <span className="text-[11px] font-medium text-gold">
                     {group.deadline}
                   </span>
@@ -265,21 +265,21 @@ export function PresumptiveConditionSuggestions({
                       checked={isSelected || isAdded || alreadyHas}
                       disabled={alreadyHas || isAdded}
                       onCheckedChange={() => toggleSelected(key)}
-                      className="flex-shrink-0"
+                      className="shrink-0"
                     />
                     <span className="text-sm text-foreground flex-1">
                       {condition.name}
                     </span>
                     {condition.category && (
-                      <Badge variant="outline" className="text-[9px] px-1.5 py-0 flex-shrink-0">
+                      <Badge variant="outline" className="text-[9px] px-1.5 py-0 shrink-0">
                         {condition.category}
                       </Badge>
                     )}
                     {isAdded && (
-                      <Check className="h-4 w-4 text-success flex-shrink-0" />
+                      <Check className="h-4 w-4 text-success shrink-0" />
                     )}
                     {alreadyHas && !isAdded && (
-                      <span className="text-[10px] text-muted-foreground flex-shrink-0">
+                      <span className="text-[10px] text-muted-foreground shrink-0">
                         Already added
                       </span>
                     )}

@@ -102,7 +102,7 @@ export default function CommunityTemplates() {
 
       {/* Moderation notice */}
       <div className="flex items-start gap-3 p-3 rounded-xl bg-gold/5 border border-gold/20">
-        <Shield className="h-4 w-4 text-gold mt-0.5 flex-shrink-0" />
+        <Shield className="h-4 w-4 text-gold mt-0.5 shrink-0" />
         <p className="text-xs text-muted-foreground">
           All templates are anonymous and moderated before publishing. No personal information is shared. Templates are samples only — not legal advice.
         </p>
@@ -126,7 +126,7 @@ export default function CommunityTemplates() {
               variant={category === cat ? 'default' : 'outline'}
               size="sm"
               onClick={() => setCategory(cat)}
-              className="flex-shrink-0 text-xs"
+              className="shrink-0 text-xs"
             >
               {cat}
             </Button>
@@ -162,7 +162,7 @@ export default function CommunityTemplates() {
                 </div>
                 <button
                   onClick={() => handleUpvote(template.id)}
-                  className="flex items-center gap-1 text-xs text-muted-foreground hover:text-gold transition-colors flex-shrink-0"
+                  className="flex items-center gap-1 text-xs text-muted-foreground hover:text-gold transition-colors shrink-0"
                 >
                   <ThumbsUp className="h-3.5 w-3.5" />
                   {template.upvotes}

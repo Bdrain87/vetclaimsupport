@@ -143,7 +143,7 @@ export default function ConditionGuide() {
                 key={rc.percentage}
                 className="flex items-start gap-3 p-3 rounded-lg bg-muted/50"
               >
-                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">
+                <div className="shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">
                   {rc.percentage}%
                 </div>
                 <p className="text-sm text-muted-foreground pt-2">{rc.criteria}</p>
@@ -164,7 +164,7 @@ export default function ConditionGuide() {
             <ul className="space-y-2">
               {selectedGuide.requiredEvidence.map((evidence, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm">
-                  <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="h-4 w-4 text-success shrink-0 mt-0.5" />
                   <span>{evidence}</span>
                 </li>
               ))}
@@ -266,7 +266,7 @@ export default function ConditionGuide() {
         {filteredGuides.map((guide) => (
           <Card
             key={guide.id}
-            className="cursor-pointer hover:border-primary/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="cursor-pointer hover:border-primary/50 transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
             onClick={() => setSelectedGuide(guide)}
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedGuide(guide); } }}
             tabIndex={0}

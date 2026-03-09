@@ -19,7 +19,7 @@ const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      "fixed inset-0 z-50 bg-black/80 backdrop-blur-sm",
+      "fixed inset-0 z-50 bg-black/80 backdrop-blur-xs",
       "data-[state=open]:animate-in data-[state=closed]:animate-out",
       "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className
@@ -42,8 +42,8 @@ const DialogContent = React.forwardRef<
         "fixed left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%]",
         // Mobile: position near top to avoid keyboard, desktop: centered
         "top-[10%] sm:top-[50%] sm:translate-y-[-50%]",
-        // Mobile: allow scrolling within viewport, max-height to account for keyboard
-        "max-h-[85vh] sm:max-h-[90vh] overflow-y-auto",
+        // Mobile: allow scrolling within viewport, shrink when keyboard opens
+        "max-h-[calc(85vh-var(--keyboard-height,0px))] sm:max-h-[90vh] overflow-y-auto scroll-pb-4",
         "rounded-2xl border border-border bg-card p-0",
         "shadow-lg",
         "duration-200",
@@ -63,7 +63,7 @@ const DialogContent = React.forwardRef<
           "bg-muted text-muted-foreground",
           "opacity-70 transition-all duration-150",
           "hover:opacity-100 hover:bg-muted/80",
-          "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+          "focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2",
           "disabled:pointer-events-none"
         )}
       >

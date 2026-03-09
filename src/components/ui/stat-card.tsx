@@ -131,7 +131,7 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
           {icon && (
             <div
               className={cn(
-                'flex-shrink-0 p-2.5 rounded-xl',
+                'shrink-0 p-2.5 rounded-xl',
                 variant === 'primary'
                   ? 'bg-primary/10 text-primary'
                   : variant === 'success'

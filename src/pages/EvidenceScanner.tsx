@@ -7,9 +7,11 @@ import { toast } from '@/hooks/use-toast';
 import { impactMedium } from '@/lib/haptics';
 import { aiAnalyzeImage, isGeminiConfigured } from '@/lib/gemini';
 import { EVIDENCE_SCAN_SYSTEM_PROMPT } from '@/lib/ai-prompts';
+import { getModelConfig } from '@/lib/ai-models';
 import { buildVeteranContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
 import { Camera, Upload, Copy, RotateCcw, AlertTriangle, FileSearch, CheckCircle2, XCircle, MinusCircle } from 'lucide-react';
+import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 
 interface Finding {
   label: string;
@@ -78,6 +80,7 @@ export default function EvidenceScanner() {
       const contextBlock = formatContextForAI(ctx, 'minimal');
       const enrichedSystem = `${EVIDENCE_SCAN_SYSTEM_PROMPT}\n\nThe veteran is claiming:\n${contextBlock}`;
 
+      const { temperature, timeout } = getModelConfig('evidence-scanner');
       const text = await aiAnalyzeImage({
         imageBase64: base64,
         mimeType: file.type || 'image/jpeg',
@@ -85,6 +88,8 @@ export default function EvidenceScanner() {
         systemInstruction: enrichedSystem,
         feature: 'evidence-scanner',
         responseSchema: evidenceSchema,
+        temperature,
+        timeout,
       });
 
       try {
@@ -132,19 +137,20 @@ export default function EvidenceScanner() {
   };
 
   const StatusIcon = ({ status }: { status: string }) => {
-    if (status === 'present') return <CheckCircle2 className="h-4 w-4 text-green-400 flex-shrink-0" />;
-    if (status === 'missing') return <XCircle className="h-4 w-4 text-red-400 flex-shrink-0" />;
-    return <MinusCircle className="h-4 w-4 text-gold flex-shrink-0" />;
+    if (status === 'present') return <CheckCircle2 className="h-4 w-4 text-green-400 shrink-0" />;
+    if (status === 'missing') return <XCircle className="h-4 w-4 text-red-400 shrink-0" />;
+    return <MinusCircle className="h-4 w-4 text-gold shrink-0" />;
   };
 
   return (
     <PageContainer className="space-y-4 pb-8">
       <h1 className="text-xl font-bold mb-4">Evidence Scanner</h1>
+      <AIDisclaimer variant="banner" />
       <input ref={fileRef} type="file" accept="image/*,.pdf" className="hidden" onChange={handleFile} />
       <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handleFile} />
 
       <div className="flex items-start gap-2 p-3 rounded-xl bg-gold/5 border border-gold/10">
-        <AlertTriangle className="h-4 w-4 text-gold mt-0.5 flex-shrink-0" />
+        <AlertTriangle className="h-4 w-4 text-gold mt-0.5 shrink-0" />
         <p className="text-[11px] text-muted-foreground">
           Your document is processed by AI for analysis only. Images are not stored or uploaded to any server beyond the AI analysis. Review all suggestions with a VSO or attorney.
         </p>

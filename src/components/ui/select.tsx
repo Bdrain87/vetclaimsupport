@@ -29,7 +29,7 @@ const SelectTrigger = React.forwardRef<
       "bg-muted/80 text-foreground",
       "border border-border/50",
       "placeholder:text-muted-foreground/50",
-      "focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50",
+      "focus:outline-hidden focus:ring-2 focus:ring-primary/50 focus:border-primary/50",
       "focus:bg-muted focus:shadow-[0_0_0_4px_hsl(48_82%_59%/0.1)]",
       "data-[state=open]:ring-2 data-[state=open]:ring-primary/50",
       "data-[state=open]:shadow-[0_0_0_4px_hsl(48_82%_59%/0.1)]",
@@ -84,7 +84,7 @@ const SelectContent = React.forwardRef<
     <SelectPrimitive.Content
       ref={ref}
       className={cn(
-        "relative z-[9999] max-h-[400px] min-h-[200px] min-w-[8rem] overflow-hidden",
+        "relative z-9999 max-h-[400px] min-h-[200px] min-w-32 overflow-hidden",
         "rounded-xl border border-border bg-popover text-foreground",
         "shadow-lg",
         "data-[state=open]:animate-in data-[state=closed]:animate-out",
@@ -102,7 +102,7 @@ const SelectContent = React.forwardRef<
       <SelectPrimitive.Viewport
         className={cn(
           "p-1 max-h-[380px] overflow-y-auto",
-          position === "popper" && "w-full min-w-[var(--radix-select-trigger-width)]"
+          position === "popper" && "w-full min-w-(--radix-select-trigger-width)"
         )}
       >
         {children}
@@ -133,8 +133,8 @@ const SelectItem = React.forwardRef<
     ref={ref}
     className={cn(
       "relative flex w-full cursor-default select-none items-center rounded-lg py-3 pl-8 pr-2 text-sm min-h-[44px]",
-      "outline-none transition-colors duration-100",
-      "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "outline-hidden transition-colors duration-100",
+      "data-disabled:pointer-events-none data-disabled:opacity-50",
       "focus:bg-muted focus:text-foreground",
       className
     )}

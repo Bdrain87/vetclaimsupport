@@ -19,6 +19,7 @@ const actions = [
 const FAB_VISIBLE_PREFIXES = [
   '/health',
   '/claims',
+  '/prep',
 ];
 
 /** Exact paths where the FAB should also appear */
@@ -84,11 +85,11 @@ export function QuickAddFAB() {
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => { impactLight(); setOpen(!open); }}
-          className="w-14 h-14 rounded-2xl shadow-lg flex items-center justify-center bg-gold/90 backdrop-blur-md border border-gold/30"
+          className="w-14 h-14 rounded-2xl shadow-lg flex items-center justify-center bg-gold/15 backdrop-blur-xl border border-gold/30"
           aria-label={open ? 'Close quick add menu' : 'Open quick add menu'}
         >
           <motion.div animate={{ rotate: open ? 45 : 0 }} transition={{ duration: 0.2 }}>
-            {open ? <X className="h-6 w-6 text-white" /> : <Plus className="h-6 w-6 text-white" />}
+            {open ? <X className="h-6 w-6 text-gold" /> : <Plus className="h-6 w-6 text-gold" />}
           </motion.div>
         </motion.button>
       </div>

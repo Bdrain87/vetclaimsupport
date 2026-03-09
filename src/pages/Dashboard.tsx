@@ -28,6 +28,8 @@ import {
   Heart,
   Flame,
   Camera,
+  Bell,
+  X,
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { vcsSpring } from '@/constants/animations';
@@ -54,6 +56,7 @@ import { SyncStatusBadge } from '@/components/SyncStatusBadge';
 import { AnimatePresence } from 'motion/react';
 import { hasWriteFailures } from '@/lib/encryptedStorage';
 import { useToast } from '@/hooks/use-toast';
+import { AskIntelSheet } from '@/components/shared/AskIntelSheet';
 
 const JOURNEY_PHASE_LABELS = ['Research', 'Evidence', 'Filing', 'C&P Exam', 'Decision'];
 
@@ -63,7 +66,7 @@ function ReadinessRing({ score }: { score: number }) {
   const color = score >= 70 ? '#22c55e' : score >= 40 ? '#C5A55A' : '#ef4444';
 
   return (
-    <svg width="36" height="36" viewBox="0 0 36 36" className="flex-shrink-0">
+    <svg width="36" height="36" viewBox="0 0 36 36" className="shrink-0">
       <circle cx="18" cy="18" r="14" fill="none" stroke="currentColor" strokeOpacity="0.1" strokeWidth="2.5" />
       <circle
         cx="18" cy="18" r="14" fill="none" stroke={color} strokeWidth="2.5"
@@ -129,6 +132,28 @@ export default function Dashboard() {
 
   const streak = useStreakTracker();
   const reminders = useSmartReminders();
+  const [dismissedReminders, setDismissedReminders] = useState<Set<string>>(() => {
+    try {
+      const stored = localStorage.getItem('vcs_dismissed_reminders');
+      return stored ? new Set(JSON.parse(stored)) : new Set();
+    } catch { return new Set(); }
+  });
+  const dismissReminder = useCallback((id: string) => {
+    setDismissedReminders((prev) => {
+      const next = new Set(prev);
+      next.add(id);
+      localStorage.setItem('vcs_dismissed_reminders', JSON.stringify([...next]));
+      return next;
+    });
+  }, []);
+  const promotedReminders = useMemo(
+    () => reminders.filter((r) => r.priority === 'high' && !dismissedReminders.has(r.id)).slice(0, 2),
+    [reminders, dismissedReminders],
+  );
+  const remainingReminders = useMemo(
+    () => reminders.filter((r) => !promotedReminders.some((p) => p.id === r.id) && !dismissedReminders.has(r.id)).slice(0, 3),
+    [reminders, promotedReminders, dismissedReminders],
+  );
   const isFirstSession = useProfileStore((s) => s.isFirstSession);
   const setFirstSessionComplete = useProfileStore((s) => s.setFirstSessionComplete);
 
@@ -176,6 +201,56 @@ export default function Dashboard() {
 
     return items.slice(0, 5);
   }, [nextSteps, userConditions, symptoms]);
+
+  // Condition Intelligence Cards — per-condition readiness with CTA
+  const conditionCards = useMemo(() => {
+    if (userConditions.length === 0) return [];
+    return userConditions.slice(0, 3).map((uc) => {
+      const readiness = ClaimIntelligence.getConditionReadiness(
+        getConditionDisplayName(uc),
+        data,
+      );
+      const details = getConditionById(uc.conditionId);
+      const name = details?.abbreviation || details?.name || getConditionDisplayName(uc);
+
+      // Pick the most impactful CTA based on lowest component
+      const components = readiness.components;
+      const lowest = Object.entries(components).reduce((a, b) => (a[1] <= b[1] ? a : b));
+      let ctaLabel = 'Review Evidence';
+      let ctaRoute = `/claims`;
+      if (lowest[0] === 'medicalEvidence') {
+        ctaLabel = 'Add Medical Evidence';
+        ctaRoute = '/health/visits';
+      } else if (lowest[0] === 'currentSeverity') {
+        ctaLabel = 'Log Symptoms';
+        ctaRoute = '/health/symptoms';
+      } else if (lowest[0] === 'statements') {
+        ctaLabel = 'Get Buddy Statement';
+        ctaRoute = '/prep/buddy-statement';
+      } else if (lowest[0] === 'examPrep') {
+        ctaLabel = 'Prep for C&P Exam';
+        ctaRoute = '/prep/exam';
+      } else if (lowest[0] === 'serviceConnection') {
+        ctaLabel = 'Strengthen Service Link';
+        ctaRoute = '/claims';
+      }
+
+      return {
+        id: uc.id,
+        name,
+        score: readiness.overallScore,
+        tip: readiness.tips[0] || 'Keep building evidence for this condition.',
+        ctaLabel,
+        ctaRoute,
+      };
+    });
+  }, [userConditions, data]);
+
+  // Claim Insights — rule-based observations
+  const claimInsights = useMemo(
+    () => ClaimIntelligence.getInsights(data, userConditions),
+    [data, userConditions],
+  );
 
   const displayName = profile.firstName
     ? `${profile.firstName}${profile.lastName ? ' ' + profile.lastName : ''}`
@@ -227,13 +302,49 @@ export default function Dashboard() {
       {/* Section 1: Alert Zone */}
       <IntentToFileBanner />
 
+      {/* Promoted Smart Reminders (high priority) */}
+      {promotedReminders.length > 0 && (
+        <div className="space-y-2">
+          {promotedReminders.map((r) => (
+            <motion.div
+              key={r.id}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={vcsSpring}
+              className="flex items-start gap-3 p-3 rounded-2xl border border-gold/30 bg-gold/5"
+            >
+              <Bell className="h-4 w-4 text-gold shrink-0 mt-0.5" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground">{r.title}</p>
+                <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{r.description}</p>
+                {r.actionRoute && (
+                  <button
+                    onClick={() => navigate(r.actionRoute!)}
+                    className="mt-2 text-xs font-medium text-gold hover:text-gold/80 transition-colors"
+                  >
+                    Take action &rarr;
+                  </button>
+                )}
+              </div>
+              <button
+                onClick={() => dismissReminder(r.id)}
+                className="p-1 rounded-lg hover:bg-accent transition-colors shrink-0"
+                aria-label="Dismiss reminder"
+              >
+                <X className="h-3.5 w-3.5 text-muted-foreground" />
+              </button>
+            </motion.div>
+          ))}
+        </div>
+      )}
+
       {/* First Session Welcome Card */}
       {isFirstSession && profile.hasCompletedOnboarding && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={vcsSpring}
-          className="rounded-2xl border border-gold/30 bg-gradient-to-br from-gold/10 to-gold/5 p-5 space-y-3"
+          className="rounded-2xl border border-gold/30 bg-linear-to-br from-gold/10 to-gold/5 p-5 space-y-3"
         >
           <h2 className="text-lg font-bold text-foreground">
             Welcome{profile.firstName ? `, ${profile.firstName}` : ''}!
@@ -282,14 +393,14 @@ export default function Dashboard() {
           onClick={() => navigate('/login')}
           className="w-full flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 active:scale-[0.98] transition-all text-left"
         >
-          <div className="h-9 w-9 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
+          <div className="h-9 w-9 rounded-full bg-gold/10 flex items-center justify-center shrink-0">
             <LogIn className="h-4 w-4 text-gold" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-foreground">Sign in to sync your data</p>
             <p className="text-xs text-muted-foreground">Keep your claim data backed up and accessible across devices</p>
           </div>
-          <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+          <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
         </button>
       )}
 
@@ -302,14 +413,14 @@ export default function Dashboard() {
       {/* Section 2: Compact Greeting Row */}
       <div className="rounded-2xl border border-border bg-card p-3 overflow-hidden max-w-full">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center flex-shrink-0">
+          <div className="h-10 w-10 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0">
             <User className="h-5 w-5 text-gold" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <p className="text-foreground font-semibold truncate">{displayName}</p>
               {streak.currentStreak > 0 && (
-                <span className="flex-shrink-0 text-xs font-bold text-gold bg-gold/10 px-1.5 py-0.5 rounded-full">
+                <span className="shrink-0 text-xs font-bold text-gold bg-gold/10 px-1.5 py-0.5 rounded-full">
                   &#x1F525;{streak.currentStreak}
                 </span>
               )}
@@ -321,7 +432,7 @@ export default function Dashboard() {
           <ExportButton />
           <button
             onClick={() => navigate('/settings/edit-profile')}
-            className="p-2 rounded-lg hover:bg-accent transition-colors flex-shrink-0"
+            className="p-2 rounded-lg hover:bg-accent transition-colors shrink-0"
             aria-label="Edit profile"
           >
             <Pencil className="h-4 w-4 text-muted-foreground" />
@@ -338,7 +449,7 @@ export default function Dashboard() {
           className="rounded-2xl bg-card border border-border p-4 hover:bg-accent/30 transition-colors cursor-pointer overflow-hidden max-w-full"
         >
           <div className="flex items-center gap-4">
-            <div className="relative w-16 h-16 flex-shrink-0">
+            <div className="relative w-16 h-16 shrink-0">
               <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90" role="img" aria-label={`Combined VA rating: ${combinedRating} percent`}>
                 <circle cx="18" cy="18" r="15" fill="none" stroke="currentColor" className="text-muted/30" strokeWidth="3" />
                 <motion.circle
@@ -379,7 +490,7 @@ export default function Dashboard() {
                 );
               })()}
             </div>
-            <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+            <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
           </div>
         </motion.div>
       </Link>
@@ -396,7 +507,7 @@ export default function Dashboard() {
           aria-label={`Documents & Scan — ${vaultDocCount > 0 ? `${vaultDocCount} stored` : 'No docs yet'}`}
           className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors"
         >
-          <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center flex-shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center shrink-0">
             <FolderOpen className="h-4 w-4 text-gold" />
           </div>
           <div className="flex-1 min-w-0">
@@ -405,14 +516,14 @@ export default function Dashboard() {
               {vaultDocCount > 0 ? `${vaultDocCount} stored` : 'No docs yet'}
             </p>
           </div>
-          <Camera className="h-4 w-4 text-gold/60 flex-shrink-0" />
+          <Camera className="h-4 w-4 text-gold/60 shrink-0" />
         </Link>
         <Link
           to="/claims/deadlines"
           aria-label={`Deadlines — ${activeDeadlines > 0 ? `${activeDeadlines} active` : 'None set'}`}
           className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors"
         >
-          <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center flex-shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center shrink-0">
             <Clock className="h-4 w-4 text-gold" />
           </div>
           <div className="min-w-0">
@@ -427,7 +538,7 @@ export default function Dashboard() {
           aria-label={`Journey — ${phaseLabel}`}
           className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors"
         >
-          <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center flex-shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center shrink-0">
             <Map className="h-4 w-4 text-gold" />
           </div>
           <div className="min-w-0">
@@ -453,7 +564,7 @@ export default function Dashboard() {
             aria-label="Add Conditions — Start your claim"
             className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors"
           >
-            <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center flex-shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center shrink-0">
               <Plus className="h-4 w-4 text-gold" />
             </div>
             <div className="min-w-0">
@@ -483,6 +594,80 @@ export default function Dashboard() {
         <SyncStatusBadge />
       </div>
 
+      {/* Section 4b: Condition Intelligence Cards */}
+      {conditionCards.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={vcsSpring}
+          className="rounded-2xl bg-card border border-border p-4 overflow-hidden max-w-full"
+        >
+          <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
+            <Target className="w-4 h-4 text-gold" />
+            Condition Readiness
+          </h3>
+          <div className="space-y-2">
+            {conditionCards.map((card) => (
+              <div
+                key={card.id}
+                className="flex items-center gap-3 p-3 rounded-2xl border border-border bg-secondary/30"
+              >
+                <ReadinessRing score={card.score} />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-foreground">{card.name}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{card.tip}</p>
+                </div>
+                <button
+                  onClick={() => navigate(card.ctaRoute)}
+                  className="shrink-0 text-[11px] font-medium text-gold bg-gold/10 px-2.5 py-1.5 rounded-lg hover:bg-gold/20 transition-colors whitespace-nowrap"
+                >
+                  {card.ctaLabel}
+                </button>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
+      {/* Section 4c: Claim Insights */}
+      {claimInsights.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={vcsSpring}
+          className="rounded-2xl bg-card border border-border p-4 overflow-hidden max-w-full"
+        >
+          <h3 className="font-bold text-sm text-foreground flex items-center gap-2 mb-3">
+            <Activity className="w-4 h-4 text-gold" />
+            Claim Insights
+          </h3>
+          <div className="space-y-2">
+            {claimInsights.map((insight) => (
+              <div
+                key={insight.id}
+                className={cn(
+                  'flex items-start gap-2 p-2.5 rounded-xl text-xs',
+                  insight.category === 'positive'
+                    ? 'bg-green-500/5 border border-green-500/20'
+                    : insight.category === 'actionable'
+                      ? 'bg-gold/5 border border-gold/20'
+                      : 'bg-muted/50 border border-border',
+                )}
+              >
+                <span className={cn(
+                  'shrink-0 mt-0.5 w-1.5 h-1.5 rounded-full',
+                  insight.category === 'positive' ? 'bg-green-500' : insight.category === 'actionable' ? 'bg-gold' : 'bg-muted-foreground',
+                )} />
+                <p className="text-muted-foreground">{insight.text}</p>
+              </div>
+            ))}
+          </div>
+          <p className="text-[9px] text-muted-foreground/50 mt-2">
+            Based on your documented data. Not a rating prediction.
+          </p>
+        </motion.div>
+      )}
+
       {/* Section 5: Your Next Steps (primary CTA — promoted from Section 6) */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -506,14 +691,14 @@ export default function Dashboard() {
                 onClick={() => navigate(route)}
                 className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
               >
-                <span className="flex-shrink-0 w-7 h-7 rounded-full bg-gold/15 flex items-center justify-center text-xs font-bold text-gold">
+                <span className="shrink-0 w-7 h-7 rounded-full bg-gold/15 flex items-center justify-center text-xs font-bold text-gold">
                   {step}
                 </span>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground">{title}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">{desc}</p>
                 </div>
-                <Icon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                <Icon className="h-4 w-4 text-muted-foreground shrink-0" />
               </button>
             ))}
           </div>
@@ -527,7 +712,7 @@ export default function Dashboard() {
               >
                 <span
                   className={cn(
-                    'flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold',
+                    'shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold',
                     item.priority === 'urgent'
                       ? 'bg-gold/20 text-gold'
                       : 'bg-muted text-muted-foreground'
@@ -541,7 +726,7 @@ export default function Dashboard() {
                     <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{item.description}</p>
                   )}
                 </div>
-                <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
               </button>
             ))}
           </div>
@@ -557,14 +742,14 @@ export default function Dashboard() {
                 onClick={() => navigate(step.route)}
                 className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
               >
-                <span className="flex-shrink-0 w-7 h-7 rounded-full bg-gold/15 flex items-center justify-center text-xs font-bold text-gold">
+                <span className="shrink-0 w-7 h-7 rounded-full bg-gold/15 flex items-center justify-center text-xs font-bold text-gold">
                   {i + 1}
                 </span>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground">{step.title}</p>
                   <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{step.description}</p>
                 </div>
-                <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
               </button>
             ))}
           </div>
@@ -581,7 +766,7 @@ export default function Dashboard() {
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center flex-shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center shrink-0">
                 <FileText className="h-4 w-4 text-gold" />
               </div>
               <div className="min-w-0">
@@ -605,14 +790,14 @@ export default function Dashboard() {
             onClick={() => navigate('/prep/medication-rule')}
             className="w-full flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 text-left"
           >
-            <div className="h-9 w-9 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
+            <div className="h-9 w-9 rounded-full bg-gold/10 flex items-center justify-center shrink-0">
               <ShieldAlert className="h-4 w-4 text-gold" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-foreground">2026 VA Medication Rule</p>
               <p className="text-xs text-muted-foreground">Check if your {data.medications.length} medication{data.medications.length !== 1 ? 's are' : ' is'} properly documented</p>
             </div>
-            <ChevronRight className="h-4 w-4 text-gold flex-shrink-0" />
+            <ChevronRight className="h-4 w-4 text-gold shrink-0" />
           </button>
         </motion.div>
       )}
@@ -640,7 +825,7 @@ export default function Dashboard() {
             onClick={() => setQuickLogOpen(true)}
             className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
           >
-            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-gold/15 flex items-center justify-center">
+            <span className="shrink-0 w-7 h-7 rounded-full bg-gold/15 flex items-center justify-center">
               <Plus className="h-3.5 w-3.5 text-gold" />
             </span>
             <div className="flex-1 min-w-0">
@@ -843,12 +1028,12 @@ export default function Dashboard() {
                 onClick={() => navigate('/health/symptoms')}
                 className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
               >
-                <Activity className="h-4 w-4 text-gold flex-shrink-0" />
+                <Activity className="h-4 w-4 text-gold shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground">Start logging symptoms</p>
                   <p className="text-xs text-muted-foreground">Daily symptom logs are one of the strongest evidence types</p>
                 </div>
-                <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
               </button>
             )}
             {symptoms.length >= 3 && (
@@ -856,12 +1041,12 @@ export default function Dashboard() {
                 onClick={() => navigate('/claims/evidence-strength')}
                 className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
               >
-                <Target className="h-4 w-4 text-gold flex-shrink-0" />
+                <Target className="h-4 w-4 text-gold shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground">Evidence Strength Analyzer</p>
                   <p className="text-xs text-muted-foreground">See how your {symptoms.length} symptom logs align with VA rating criteria</p>
                 </div>
-                <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
               </button>
             )}
             {data.buddyContacts.length === 0 && (
@@ -869,12 +1054,12 @@ export default function Dashboard() {
                 onClick={() => navigate('/prep/buddy-statement')}
                 className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
               >
-                <FileText className="h-4 w-4 text-gold flex-shrink-0" />
+                <FileText className="h-4 w-4 text-gold shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground">Get buddy statements</p>
                   <p className="text-xs text-muted-foreground">Third-party evidence strengthens your claim</p>
                 </div>
-                <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
               </button>
             )}
             {userConditions.some((uc) => uc.claimStatus === 'denied') && (
@@ -882,12 +1067,12 @@ export default function Dashboard() {
                 onClick={() => navigate('/claims/decision-decoder')}
                 className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border bg-card hover:bg-accent/50 transition-colors text-left"
               >
-                <AlertTriangle className="h-4 w-4 text-gold flex-shrink-0" />
+                <AlertTriangle className="h-4 w-4 text-gold shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground">Decision Decoder</p>
                   <p className="text-xs text-muted-foreground">Understand your denial in plain English and see your options</p>
                 </div>
-                <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
               </button>
             )}
           </div>
@@ -906,7 +1091,7 @@ export default function Dashboard() {
             to="/prep/compensation"
             className="flex items-center gap-3 p-3 rounded-2xl border border-success/20 bg-success/5 hover:bg-success/10 transition-colors"
           >
-            <div className="w-9 h-9 rounded-xl bg-success/10 flex items-center justify-center flex-shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-success/10 flex items-center justify-center shrink-0">
               <DollarSign className="h-4 w-4 text-success" />
             </div>
             <div className="min-w-0">
@@ -918,7 +1103,7 @@ export default function Dashboard() {
             to="/prep/benefits"
             className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors"
           >
-            <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center flex-shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center shrink-0">
               <Gift className="h-4 w-4 text-gold" />
             </div>
             <div className="min-w-0">
@@ -940,27 +1125,31 @@ export default function Dashboard() {
             onClick={() => navigate('/prep/tdiu')}
             className="w-full flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 active:scale-[0.98] transition-all text-left"
           >
-            <div className="h-9 w-9 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
+            <div className="h-9 w-9 rounded-full bg-gold/10 flex items-center justify-center shrink-0">
               <Briefcase className="h-4 w-4 text-gold" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-foreground">You may qualify for TDIU</p>
               <p className="text-xs text-muted-foreground">Get compensated at the 100% rate — check eligibility</p>
             </div>
-            <ChevronRight className="h-4 w-4 text-gold flex-shrink-0" />
+            <ChevronRight className="h-4 w-4 text-gold shrink-0" />
           </button>
         </motion.div>
       )}
 
-      {/* Section 9: Smart Reminders (conditional) */}
-      {reminders.length > 0 && (
+      {/* Section 9: Remaining Smart Reminders */}
+      {remainingReminders.length > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={vcsSpring}
           className="rounded-2xl bg-card border border-border p-4 space-y-3 overflow-hidden max-w-full"
         >
-          {reminders.slice(0, 3).map((r) => (
+          <h3 className="font-bold text-sm text-foreground flex items-center gap-2">
+            <Bell className="w-4 h-4 text-muted-foreground" />
+            Reminders
+          </h3>
+          {remainingReminders.map((r) => (
             <div
               key={r.id}
               className={cn(
@@ -972,7 +1161,7 @@ export default function Dashboard() {
             >
               <AlertTriangle
                 className={cn(
-                  'h-4 w-4 flex-shrink-0 mt-0.5',
+                  'h-4 w-4 shrink-0 mt-0.5',
                   r.priority === 'high' ? 'text-gold' : 'text-muted-foreground',
                 )}
               />
@@ -980,10 +1169,20 @@ export default function Dashboard() {
                 <p className="text-sm font-medium text-foreground">{r.title}</p>
                 <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{r.description}</p>
               </div>
+              <button
+                onClick={() => dismissReminder(r.id)}
+                className="p-1 rounded-lg hover:bg-accent transition-colors shrink-0"
+                aria-label="Dismiss"
+              >
+                <X className="h-3.5 w-3.5 text-muted-foreground" />
+              </button>
             </div>
           ))}
         </motion.div>
       )}
+
+      {/* Ask Intel — AI Coaching Sheet */}
+      <AskIntelSheet />
     </PageContainer>
   );
 }

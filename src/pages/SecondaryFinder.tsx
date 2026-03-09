@@ -183,7 +183,7 @@ export default function SecondaryFinder() {
         <div className="space-y-4">
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div className="min-w-0 flex-1">
-                <h2 className="text-lg font-bold text-foreground break-words">
+                <h2 className="text-lg font-bold text-foreground wrap-break-word">
                   Common Secondary Conditions for: <span className="text-gold">{selectedPrimary}</span>
                 </h2>
                 <p className="text-muted-foreground text-sm">{currentSecondaries.length} medically-linked conditions found</p>
@@ -216,7 +216,7 @@ export default function SecondaryFinder() {
                     <div className="flex items-start gap-3 mb-3">
                       <div className={`w-3 h-3 rounded-full mt-1 shrink-0 ${cfg.dot}`} />
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-foreground text-sm break-words">{connection.secondaryCondition}</h3>
+                        <h3 className="font-bold text-foreground text-sm wrap-break-word">{connection.secondaryCondition}</h3>
                         <p className={`text-xs ${cfg.color} font-medium`}>{cfg.label}</p>
                       </div>
                       <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/50 shrink-0 hidden sm:block">

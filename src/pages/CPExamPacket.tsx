@@ -466,7 +466,7 @@ export default function CPExamPacket() {
           onClick={() => setViewMode('full')}
           className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
             viewMode === 'full'
-              ? 'bg-gold/20 text-foreground border border-gold/30 shadow-sm'
+              ? 'bg-gold/20 text-foreground border border-gold/30 shadow-xs'
               : 'text-muted-foreground hover:text-foreground'
           }`}
         >
@@ -477,7 +477,7 @@ export default function CPExamPacket() {
           onClick={() => setViewMode('examday')}
           className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-1.5 ${
             viewMode === 'examday'
-              ? 'bg-success/20 text-foreground border border-success/30 shadow-sm'
+              ? 'bg-success/20 text-foreground border border-success/30 shadow-xs'
               : 'text-muted-foreground hover:text-foreground'
           }`}
         >
@@ -505,7 +505,7 @@ export default function CPExamPacket() {
                 'If you have flare-ups, describe how often and how long they last',
               ].map((tip, i) => (
                 <div key={i} className="flex gap-2 text-xs text-muted-foreground">
-                  <span className="text-success flex-shrink-0">•</span>
+                  <span className="text-success shrink-0">•</span>
                   <span>{tip}</span>
                 </div>
               ))}
@@ -537,7 +537,7 @@ export default function CPExamPacket() {
                   <div className="space-y-1">
                     {reminders.map((r, i) => (
                       <div key={i} className="flex gap-2 text-xs text-muted-foreground">
-                        <span className="text-gold flex-shrink-0">•</span>
+                        <span className="text-gold shrink-0">•</span>
                         <span>{r}</span>
                       </div>
                     ))}

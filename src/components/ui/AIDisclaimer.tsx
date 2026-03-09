@@ -12,12 +12,12 @@ export function AIDisclaimer({ className, variant = 'inline' }: AIDisclaimerProp
       <div
         className={cn(
           'flex items-center gap-2 px-3 py-2 rounded-lg',
-          'bg-[var(--color-accent-100)] border border-[var(--color-accent-200)]',
-          'text-[var(--text-secondary)]',
+          'bg-(--color-accent-100) border border-(--color-accent-200)',
+          'text-(--text-secondary)',
           className
         )}
       >
-        <Sparkles className="h-3.5 w-3.5 text-[var(--interactive-primary)] shrink-0" />
+        <Sparkles className="h-3.5 w-3.5 text-(--interactive-primary) shrink-0" />
         <p className="text-xs leading-relaxed">
           AI-assisted — verify all content before use.
         </p>
@@ -28,11 +28,11 @@ export function AIDisclaimer({ className, variant = 'inline' }: AIDisclaimerProp
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 text-[10px] text-[var(--text-tertiary)]',
+        'inline-flex items-center gap-1 text-[10px] text-(--text-tertiary)',
         className
       )}
     >
-      <Sparkles className="h-3 w-3 text-[var(--interactive-primary)]" />
+      <Sparkles className="h-3 w-3 text-(--interactive-primary)" />
       AI-assisted — verify before use.
     </span>
   );

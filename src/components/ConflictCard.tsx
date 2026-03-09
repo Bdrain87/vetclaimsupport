@@ -16,7 +16,7 @@ export function ConflictCard({ conflict, onClick, isSelected }: ConflictCardProp
 
   return (
     <Card
-      className={`cursor-pointer transition-all duration-200 hover:border-primary/50 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+      className={`cursor-pointer transition-all duration-200 hover:border-primary/50 hover:shadow-lg focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary ${
         isSelected ? 'border-primary bg-primary/5 ring-2 ring-primary/20' : ''
       }`}
       onClick={onClick}
@@ -27,7 +27,7 @@ export function ConflictCard({ conflict, onClick, isSelected }: ConflictCardProp
       <CardContent className="p-4">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-gold/10 border border-gold/20 flex-shrink-0" role="img" aria-label={conflict.name}>
+            <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-gold/10 border border-gold/20 shrink-0" role="img" aria-label={conflict.name}>
               {(() => { const Icon = conflictIconMap[conflict.icon]; return Icon ? <Icon className="h-5 w-5 text-gold" /> : null; })()}
             </div>
             <div className="min-w-0">

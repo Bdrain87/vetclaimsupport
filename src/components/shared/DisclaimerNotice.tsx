@@ -31,9 +31,9 @@ export function DisclaimerNotice({ variant = 'inline', className, dismissible = 
           className
         )}
       >
-        <Info className="h-3 w-3 flex-shrink-0" />
+        <Info className="h-3 w-3 shrink-0" />
         <span>Educational tool only — not advice.</span>
-        <ChevronDown className="h-3 w-3 ml-auto flex-shrink-0" />
+        <ChevronDown className="h-3 w-3 ml-auto shrink-0" />
       </button>
     );
   }
@@ -45,7 +45,7 @@ export function DisclaimerNotice({ variant = 'inline', className, dismissible = 
         className
       )}>
         <div className="flex items-start gap-2">
-          <AlertTriangle className="h-4 w-4 text-gold mt-0.5 flex-shrink-0" />
+          <AlertTriangle className="h-4 w-4 text-gold mt-0.5 shrink-0" />
           <div className="text-xs text-muted-foreground flex-1 min-w-0">
             <p className="font-medium text-foreground mb-1">Educational Tools Only</p>
             <p>
@@ -71,14 +71,14 @@ export function DisclaimerNotice({ variant = 'inline', className, dismissible = 
       "flex items-center gap-2 p-2 rounded-lg bg-muted/50 border border-border",
       className
     )}>
-      <Info className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+      <Info className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
       <p className="text-xs text-muted-foreground flex-1 min-w-0">
         Educational tool only — not medical, legal, or VA advice.
       </p>
       {dismissible && (
         <button
           onClick={() => setAcknowledged(true)}
-          className="px-2.5 py-1 rounded-md bg-muted text-xs font-medium text-foreground hover:bg-muted/80 transition-colors flex-shrink-0"
+          className="px-2.5 py-1 rounded-md bg-muted text-xs font-medium text-foreground hover:bg-muted/80 transition-colors shrink-0"
         >
           OK
         </button>

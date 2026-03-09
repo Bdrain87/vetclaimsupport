@@ -288,7 +288,11 @@ export const SENTINEL_SYSTEM_PROMPT = `You are Intel, an AI assistant for VA dis
 - All outputs are sample templates that must be personalized
 - Never provide legal advice — always recommend consulting a VSO or attorney
 - Use military-respectful language and VA-recognized terminology
-- Focus on helping veterans accurately describe their genuine experiences` + AI_ANTI_HALLUCINATION;
+- Focus on helping veterans accurately describe their genuine experiences
+- When the user asks about a specific condition, reference the diagnostic code from 38 CFR Part 4
+- Explain rating criteria thresholds (what evidence supports 10%, 30%, 50%, 70%, 100%)
+- Tailor responses to the user's logged symptoms, medications, and treatments when available in the veteran context
+- When conditions are listed in the veteran context, proactively reference relevant rating criteria and suggest evidence gaps` + AI_ANTI_HALLUCINATION;
 
 export const SENTINEL_VOICE_BUILD_PROMPT = `You are a VA disability claim writing assistant. The veteran just spoke about their symptoms, experiences, or evidence. Based on their words, generate THREE structured sections in a military-respectful tone:
 
@@ -300,61 +304,7 @@ export const SENTINEL_VOICE_BUILD_PROMPT = `You are a VA disability claim writin
 
 IMPORTANT: These are SAMPLE templates only. The veteran must personalize with their own facts and verify with a VSO or attorney. Not legal advice.`;
 
-// ---------------------------------------------------------------------------
-// CPExamSimulator prompt (moved from CPExamSimulator.tsx)
-// ---------------------------------------------------------------------------
-
-export function createCPExamEvalPrompt(condition: string, question: string, transcript: string, contextBlock?: string): string {
-  return `You are a VA C&P exam preparation coach. The veteran is practicing for a ${condition} exam.
-${contextBlock ? `\n${contextBlock}\n` : ''}
-
-Question asked: "${question}"
-Veteran's answer: "${transcript}"
-
-Evaluate this answer and respond in this EXACT format:
-
-STRENGTH: [Strong/Moderate/Weak]
-
-EVALUATION:
-[2-3 sentences on what was good and what was missing]
-
-WHAT THE EXAMINER LOOKS FOR:
-[2-3 sentences on what the DBQ criteria measure for this question]
-
-STRONGER SAMPLE RESPONSE:
-[A sample way to articulate similar symptoms using VA-recognized terminology. This is a template — the veteran must use their own truthful experiences.]
-
-Remember: Help them accurately describe genuine symptoms in VA terminology. Never coach exaggeration.`;
-}
-
-// ---------------------------------------------------------------------------
-// PostExamDebrief prompt (moved from PostExamDebrief.tsx)
-// ---------------------------------------------------------------------------
-
-export function createPostDebriefPrompt(transcript: string, contextBlock?: string): string {
-  return `${contextBlock ? `${contextBlock}\n\n` : ''}A veteran just finished their C&P exam and recorded this debrief about what happened:
-
-"${transcript}"
-
-Provide a structured analysis:
-
-## Key Points from Your Exam
-[Summarize what the examiner asked and what the veteran described happening]
-
-## Potential Concerns
-[Flag anything that might have been missed, misunderstood, or could weaken the claim]
-
-## Recommended Follow-Up Actions
-[List specific actions — e.g., request copy of DBQ within 30 days, file supplemental statement if something was missed]
-
-## Sample Follow-Up Statement
-[If the veteran described something the examiner missed or didn't fully capture, draft a sample follow-up statement they could submit. Mark clearly as SAMPLE — must be personalized.]
-
-## Appeal Assessment
-[Based on what happened, note whether an appeal may be warranted and what type (HLR, Supplemental, Board)]
-
-DISCLAIMER: This is general guidance only. Not legal advice. Consult a VSO or attorney for claim-specific advice.`;
-}
+// V1 prompts (createCPExamEvalPrompt, createPostDebriefPrompt) removed — replaced by V2 versions above.
 
 // ---------------------------------------------------------------------------
 // FamilyStatement prompt (moved from FamilyStatement.tsx)
@@ -388,6 +338,141 @@ Generate a structured lay statement:
 - Notarization is optional but adds credibility
 
 IMPORTANT: This is a SAMPLE template. The writer must personalize with their own genuine observations. Not legal advice.`;
+}
+
+// ---------------------------------------------------------------------------
+// EvidenceScanner prompt (moved from EvidenceScanner.tsx)
+// ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// Rating criteria helpers for prompt injection
+// ---------------------------------------------------------------------------
+
+import { getRatingCriteria, getRatingCriteriaByDC, getAllRatingCriteria, type ConditionRatingCriteria } from '@/data/ratingCriteria';
+
+/**
+ * Find rating criteria by condition name or diagnostic code.
+ * Tries ID match first, then DC match, then fuzzy name match.
+ */
+export function findRatingCriteria(conditionName: string, diagnosticCode?: string): ConditionRatingCriteria | undefined {
+  // 1. Try diagnostic code first (most reliable)
+  if (diagnosticCode) {
+    const byDC = getRatingCriteriaByDC(diagnosticCode);
+    if (byDC) return byDC;
+  }
+
+  // 2. Try exact conditionId match
+  const byId = getRatingCriteria(conditionName.toLowerCase().trim());
+  if (byId) return byId;
+
+  // 3. Fuzzy: check if input name matches any criteria entry
+  const all = getAllRatingCriteria();
+  const lower = conditionName.toLowerCase();
+  return all.find((c) =>
+    c.conditionName.toLowerCase().includes(lower) ||
+    lower.includes(c.conditionId) ||
+    lower.includes(c.conditionName.toLowerCase())
+  );
+}
+
+/**
+ * Format rating criteria into a concise text block for AI prompt injection.
+ */
+export function formatCriteriaForPrompt(criteria: ConditionRatingCriteria): string {
+  const lines = [
+    `RATING CRITERIA: ${criteria.conditionName} (DC ${criteria.diagnosticCode}, ${criteria.cfrReference})`,
+  ];
+  for (const level of criteria.ratingLevels) {
+    lines.push(`  ${level.percent}%: ${level.criteria}`);
+    if (level.keywords.length > 0) {
+      lines.push(`    Key terms: ${level.keywords.join(', ')}`);
+    }
+  }
+  if (criteria.examTips && criteria.examTips.length > 0) {
+    lines.push(`  EXAM TIPS: ${criteria.examTips.join('; ')}`);
+  }
+  if (criteria.commonMistakes && criteria.commonMistakes.length > 0) {
+    lines.push(`  COMMON MISTAKES: ${criteria.commonMistakes.join('; ')}`);
+  }
+  return lines.join('\n');
+}
+
+// ---------------------------------------------------------------------------
+// CPExamSimulator V2 prompt — with VASRD criteria injection
+// ---------------------------------------------------------------------------
+
+export function createCPExamEvalPromptV2(
+  condition: string,
+  question: string,
+  transcript: string,
+  contextBlock?: string,
+  diagnosticCode?: string,
+): string {
+  const criteria = findRatingCriteria(condition, diagnosticCode);
+  const criteriaBlock = criteria ? `\n<rating_criteria>\n${formatCriteriaForPrompt(criteria)}\n</rating_criteria>\n` : '';
+
+  return `You are a VA C&P exam preparation coach. The veteran is practicing for a ${condition} exam.
+${contextBlock ? `\n${contextBlock}\n` : ''}${criteriaBlock}
+Question asked: "${question}"
+Veteran's answer: "${transcript}"
+
+Evaluate this answer against the VASRD rating criteria above and respond in this EXACT format:
+
+STRENGTH: [Strong/Moderate/Weak]
+
+EVALUATION:
+[2-3 sentences on what was good and what was missing. Reference specific rating level criteria when applicable.]
+
+RATING ALIGNMENT:
+[Which rating level (percentage) does this answer best support based on the criteria? What specific evidence language would move them to the next level?]
+
+WHAT THE EXAMINER LOOKS FOR:
+[2-3 sentences on what the DBQ criteria measure for this question. Reference the diagnostic code and specific keywords the VA rater looks for.]
+
+STRONGER SAMPLE RESPONSE:
+[A sample way to articulate similar symptoms using VA-recognized terminology that aligns with specific rating criteria. This is a template — the veteran must use their own truthful experiences.]
+
+Remember: Help them accurately describe genuine symptoms in VA terminology. Never coach exaggeration.`;
+}
+
+// ---------------------------------------------------------------------------
+// PostExamDebrief V2 prompt — with criteria injection
+// ---------------------------------------------------------------------------
+
+export function createPostDebriefPromptV2(
+  transcript: string,
+  contextBlock?: string,
+  condition?: string,
+  diagnosticCode?: string,
+): string {
+  const criteria = condition ? findRatingCriteria(condition, diagnosticCode) : undefined;
+  const criteriaBlock = criteria ? `\n<rating_criteria>\n${formatCriteriaForPrompt(criteria)}\n</rating_criteria>\n` : '';
+
+  return `${contextBlock ? `${contextBlock}\n\n` : ''}${criteriaBlock}A veteran just finished their C&P exam${condition ? ` for ${condition}` : ''} and recorded this debrief about what happened:
+
+"${transcript}"
+
+Provide a structured analysis:
+
+## Key Points from Your Exam
+[Summarize what the examiner asked and what the veteran described happening]
+
+## Rating Criteria Alignment
+[${criteria ? 'Based on the rating criteria above, which rating level does the exam experience suggest? What specific criteria were or were not addressed during the exam?' : 'Based on general VA rating criteria, what rating level does the described exam support?'}]
+
+## Potential Concerns
+[Flag anything that might have been missed, misunderstood, or could weaken the claim. Reference specific rating criteria thresholds if applicable.]
+
+## Recommended Follow-Up Actions
+[List specific actions — e.g., request copy of DBQ within 30 days, file supplemental statement if something was missed]
+
+## Sample Follow-Up Statement
+[If the veteran described something the examiner missed or didn't fully capture, draft a sample follow-up statement they could submit. Mark clearly as SAMPLE — must be personalized.]
+
+## Appeal Assessment
+[Based on what happened, note whether an appeal may be warranted and what type (HLR, Supplemental, Board). Explain the reasoning.]
+
+DISCLAIMER: This is general guidance only. Not legal advice. Consult a VSO or attorney for claim-specific advice.`;
 }
 
 // ---------------------------------------------------------------------------

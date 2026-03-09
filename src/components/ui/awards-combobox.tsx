@@ -175,7 +175,7 @@ export function AwardsCombobox({
             onKeyDown={handleKeyDown}
             onFocus={() => setOpen(true)}
             placeholder={selectedAwards.length === 0 ? placeholder : "Add more..."}
-            className="flex-1 min-w-[120px] bg-transparent outline-none text-sm placeholder:text-muted-foreground"
+            className="flex-1 min-w-[120px] bg-transparent outline-hidden text-sm placeholder:text-muted-foreground"
             autoComplete="off"
             aria-label="Search military awards"
             role="combobox"
@@ -224,7 +224,7 @@ export function AwardsCombobox({
                   <p className="text-xs text-muted-foreground truncate">{award.description}</p>
                 </div>
                 {isSelected && (
-                  <Check className="h-4 w-4 text-primary flex-shrink-0 mt-1" />
+                  <Check className="h-4 w-4 text-primary shrink-0 mt-1" />
                 )}
               </div>
             );

@@ -157,7 +157,7 @@ export default function NexusGuide() {
               'VA decision letters (if this is for an appeal or supplemental claim)',
             ].map((item) => (
               <div key={item} className="flex items-start gap-2">
-                <CheckCircle2 className="h-3.5 w-3.5 text-success flex-shrink-0 mt-0.5" />
+                <CheckCircle2 className="h-3.5 w-3.5 text-success shrink-0 mt-0.5" />
                 <span className="text-[11px]">{item}</span>
               </div>
             ))}
@@ -194,7 +194,7 @@ export default function NexusGuide() {
               'Reference to your in-service event, injury, or exposure',
             ].map((item) => (
               <div key={item} className="flex items-start gap-2">
-                <CheckCircle2 className="h-3.5 w-3.5 text-success flex-shrink-0 mt-0.5" />
+                <CheckCircle2 className="h-3.5 w-3.5 text-success shrink-0 mt-0.5" />
                 <span className="text-[11px]">{item}</span>
               </div>
             ))}
@@ -231,7 +231,7 @@ export default function NexusGuide() {
       {/* Disclaimer */}
       <div className="px-4 py-3 rounded-lg bg-gold/10 border border-gold/20">
         <div className="flex items-start gap-2">
-          <AlertTriangle className="h-4 w-4 text-gold flex-shrink-0 mt-0.5" />
+          <AlertTriangle className="h-4 w-4 text-gold shrink-0 mt-0.5" />
           <p className="text-xs text-gold/80">
             This guide is for educational purposes only. It does not constitute legal or medical advice.
             Consult with your VSO or attorney for guidance specific to your claim.

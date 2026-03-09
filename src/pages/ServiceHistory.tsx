@@ -3,7 +3,7 @@ import { useClaims } from '@/hooks/useClaims';
 import { useEvidence } from '@/hooks/useEvidence';
 import { safeFormatDate } from '@/utils/dateUtils';
 import { Shield, Plus, Trash2, Edit, Calendar, MapPin, Briefcase, AlertTriangle, Download, Sword, Star, Plane, Loader2, Globe } from 'lucide-react';
-import { getSavedServiceDates, saveServiceDates } from '@/utils/veteranProfile';
+import { useProfileStore } from '@/store/useProfileStore';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -87,24 +87,20 @@ export default function ServiceHistory() {
   const [selectedHazards, setSelectedHazards] = useState<string[]>([]);
   const [customHazard, setCustomHazard] = useState('');
 
-  // Load saved service dates on mount
+  // Load saved service dates from profile store on mount
   useEffect(() => {
-    const savedDates = getSavedServiceDates();
-    if (savedDates.startDate || savedDates.endDate) {
+    const { servicePeriods, serviceDates } = useProfileStore.getState();
+    const firstPeriod = servicePeriods[0];
+    const startDate = firstPeriod?.startDate || serviceDates?.start || '';
+    const endDate = firstPeriod?.endDate || serviceDates?.end || '';
+    if (startDate || endDate) {
       setFormData(prev => ({
         ...prev,
-        startDate: prev.startDate || savedDates.startDate,
-        endDate: prev.endDate || savedDates.endDate,
+        startDate: prev.startDate || startDate,
+        endDate: prev.endDate || endDate,
       }));
     }
   }, []);
-
-  // Save service dates to localStorage when form data changes
-  useEffect(() => {
-    if (formData.startDate || formData.endDate) {
-      saveServiceDates(formData.startDate, formData.endDate);
-    }
-  }, [formData.startDate, formData.endDate]);
 
   // Combat form state
   const [isCombatOpen, setIsCombatOpen] = useState(false);
@@ -317,7 +313,7 @@ export default function ServiceHistory() {
         <Button variant="outline" disabled={exporting} onClick={async () => {
           setExporting(true);
           try { await exportServiceHistory(data.serviceHistory); } catch (err) { toast({ title: 'Export failed', description: err instanceof Error ? err.message : 'Could not generate PDF. Please try again.', variant: 'destructive' }); } finally { setExporting(false); }
-        }} className="gap-2 flex-shrink-0">
+        }} className="gap-2 shrink-0">
           {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
           {exporting ? 'Exporting...' : 'Export PDF'}
         </Button>
@@ -327,27 +323,27 @@ export default function ServiceHistory() {
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
           <TabsList className="flex flex-wrap w-full sm:grid sm:w-full sm:grid-cols-5 h-auto gap-1">
-            <TabsTrigger value="duty-stations" className="text-xs sm:text-sm py-2 px-2 sm:px-3 whitespace-nowrap flex-shrink-0">
+            <TabsTrigger value="duty-stations" className="text-xs sm:text-sm py-2 px-2 sm:px-3 whitespace-nowrap shrink-0">
               <MapPin className="h-4 w-4 sm:mr-1" />
               <span className="hidden sm:inline">Duty Stations</span>
               <span className="sm:hidden">Stations</span>
             </TabsTrigger>
-            <TabsTrigger value="conflicts" className="text-xs sm:text-sm py-2 px-2 sm:px-3 whitespace-nowrap flex-shrink-0">
+            <TabsTrigger value="conflicts" className="text-xs sm:text-sm py-2 px-2 sm:px-3 whitespace-nowrap shrink-0">
               <Globe className="h-4 w-4 sm:mr-1" />
               <span className="hidden sm:inline">Conflicts</span>
               <span className="sm:hidden">Conflicts</span>
             </TabsTrigger>
-            <TabsTrigger value="combat" className="text-xs sm:text-sm py-2 px-2 sm:px-3 whitespace-nowrap flex-shrink-0">
+            <TabsTrigger value="combat" className="text-xs sm:text-sm py-2 px-2 sm:px-3 whitespace-nowrap shrink-0">
               <Sword className="h-4 w-4 sm:mr-1" />
               <span className="hidden sm:inline">Combat</span>
               <span className="sm:hidden">Combat</span>
             </TabsTrigger>
-            <TabsTrigger value="events" className="text-xs sm:text-sm py-2 px-2 sm:px-3 whitespace-nowrap flex-shrink-0">
+            <TabsTrigger value="events" className="text-xs sm:text-sm py-2 px-2 sm:px-3 whitespace-nowrap shrink-0">
               <Star className="h-4 w-4 sm:mr-1" />
               <span className="hidden sm:inline">Events</span>
               <span className="sm:hidden">Events</span>
             </TabsTrigger>
-            <TabsTrigger value="deployments" className="text-xs sm:text-sm py-2 px-2 sm:px-3 whitespace-nowrap flex-shrink-0">
+            <TabsTrigger value="deployments" className="text-xs sm:text-sm py-2 px-2 sm:px-3 whitespace-nowrap shrink-0">
               <Plane className="h-4 w-4 sm:mr-1" />
               <span className="hidden sm:inline">Deployments</span>
               <span className="sm:hidden">Deploy</span>
@@ -518,19 +514,19 @@ export default function ServiceHistory() {
                       </div>
                     </div>
                     <CardTitle className="text-lg mt-2 flex items-center gap-2">
-                      <MapPin className="h-5 w-5 text-service flex-shrink-0" />
-                      <span className="break-words min-w-0">{entry.base}</span>
+                      <MapPin className="h-5 w-5 text-service shrink-0" />
+                      <span className="wrap-break-word min-w-0">{entry.base}</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 text-sm">
-                      {entry.unit && <div className="flex items-center gap-2 text-muted-foreground min-w-0"><Shield className="h-4 w-4 flex-shrink-0" /><span className="truncate">{entry.unit}</span></div>}
-                      {entry.afsc && <div className="flex items-center gap-2 text-muted-foreground min-w-0"><Briefcase className="h-4 w-4 flex-shrink-0" /><span className="truncate">{entry.afsc}</span></div>}
+                      {entry.unit && <div className="flex items-center gap-2 text-muted-foreground min-w-0"><Shield className="h-4 w-4 shrink-0" /><span className="truncate">{entry.unit}</span></div>}
+                      {entry.afsc && <div className="flex items-center gap-2 text-muted-foreground min-w-0"><Briefcase className="h-4 w-4 shrink-0" /><span className="truncate">{entry.afsc}</span></div>}
                     </div>
                     {entry.duties && <div><p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Duties</p><p className="text-sm">{entry.duties}</p></div>}
                     {entry.hazards && (
                       <div className="flex items-start gap-2 text-sm bg-exposure/5 border border-exposure/20 rounded-lg p-3">
-                        <AlertTriangle className="h-4 w-4 text-exposure mt-0.5 flex-shrink-0" />
+                        <AlertTriangle className="h-4 w-4 text-exposure mt-0.5 shrink-0" />
                         <div><p className="font-medium text-exposure text-xs uppercase tracking-wide mb-1">Hazards</p><p className="text-foreground/80">{entry.hazards}</p></div>
                       </div>
                     )}
@@ -669,9 +665,9 @@ export default function ServiceHistory() {
                       </div>
                     </div>
                     <CardTitle className="text-lg mt-2 flex items-center gap-2 flex-wrap">
-                      <Sword className="h-5 w-5 text-destructive flex-shrink-0" />
-                      <span className="break-words min-w-0">{entry.location}</span>
-                      <Badge variant="destructive" className="flex-shrink-0">{entry.combatZoneType}</Badge>
+                      <Sword className="h-5 w-5 text-destructive shrink-0" />
+                      <span className="wrap-break-word min-w-0">{entry.location}</span>
+                      <Badge variant="destructive" className="shrink-0">{entry.combatZoneType}</Badge>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
@@ -923,9 +919,9 @@ export default function ServiceHistory() {
                       </div>
                     </div>
                     <CardTitle className="text-lg mt-2 flex items-center gap-2 flex-wrap">
-                      <Plane className="h-5 w-5 text-primary flex-shrink-0" />
-                      <span className="break-words min-w-0">{entry.operationName} - {entry.location}</span>
-                      {entry.combatDeployment && <Badge variant="destructive" className="flex-shrink-0">Combat</Badge>}
+                      <Plane className="h-5 w-5 text-primary shrink-0" />
+                      <span className="wrap-break-word min-w-0">{entry.operationName} - {entry.location}</span>
+                      {entry.combatDeployment && <Badge variant="destructive" className="shrink-0">Combat</Badge>}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
@@ -935,7 +931,7 @@ export default function ServiceHistory() {
                     </div>
                     {entry.hazardsEncountered && (
                       <div className="flex items-start gap-2 text-sm bg-exposure/5 border border-exposure/20 rounded-lg p-3">
-                        <AlertTriangle className="h-4 w-4 text-exposure mt-0.5 flex-shrink-0" />
+                        <AlertTriangle className="h-4 w-4 text-exposure mt-0.5 shrink-0" />
                         <div><p className="font-medium text-exposure text-xs uppercase tracking-wide mb-1">Hazards</p><p className="text-foreground/80">{entry.hazardsEncountered}</p></div>
                       </div>
                     )}

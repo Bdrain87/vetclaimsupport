@@ -246,7 +246,7 @@ export default function Sleep() {
       {/* Premium Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 shadow-[0_0_24px_var(--gold-glow)]">
+          <div className="p-3 rounded-2xl bg-linear-to-br from-gold/20 to-gold/5 shadow-[0_0_24px_var(--gold-glow)]">
             <Moon className="h-6 w-6 text-gold drop-shadow-[0_0_8px_rgba(240,192,0,0.5)]" />
           </div>
           <div>
@@ -260,7 +260,7 @@ export default function Sleep() {
             setExporting(true);
             try { await exportSleepLog(sleepEntries); } catch (err) { toast({ title: 'Export failed', description: err instanceof Error ? err.message : 'Could not generate PDF. Please try again.', variant: 'destructive' }); } finally { setExporting(false); }
           }}
-          className="gap-2 flex-shrink-0"
+          className="gap-2 shrink-0"
           disabled={sleepEntries.length === 0 || exporting}
         >
           {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
@@ -269,7 +269,7 @@ export default function Sleep() {
       </div>
 
       {/* VA Rating Info - Premium Card */}
-      <div className="rounded-2xl bg-gradient-to-br from-gold/10 to-gold/5 border border-gold/30 p-5 shadow-lg" style={{ boxShadow: '0 4px 24px rgba(197, 165, 90, 0.15)' }}>
+      <div className="rounded-2xl bg-linear-to-br from-gold/10 to-gold/5 border border-gold/30 p-5 shadow-lg" style={{ boxShadow: '0 4px 24px rgba(197, 165, 90, 0.15)' }}>
         <div className="flex items-center gap-3 mb-4">
           <div className="p-2 rounded-xl bg-gold/20">
             <Moon className="h-5 w-5 text-gold" />
@@ -390,7 +390,7 @@ export default function Sleep() {
                           <Label className="text-base font-semibold">Do you use a CPAP/breathing device?</Label>
                           <p className="text-sm font-medium text-gold">⭐ Critical for 50% rating</p>
                         </div>
-                        <div className="flex gap-2 flex-shrink-0">
+                        <div className="flex gap-2 shrink-0">
                           <Button
                             type="button"
                             size="sm"

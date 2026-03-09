@@ -1,14 +1,16 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ClipboardCheck, FileText, Users, FileSignature, AlertTriangle,
-  BookOpen, ClipboardList, Languages, DollarSign, Package, FileCheck,
+  ClipboardCheck, FileText, Users, FileSignature, AlertTriangle, Heart,
+  BookOpen, ClipboardList, Languages, DollarSign, Package, FileCheck, Pill,
   Calculator, Scale, Navigation, Clock, Shield, Wrench, Share2, TrendingUp, Target, FileSearch,
-  Search, Briefcase, Stethoscope, HelpCircle, GraduationCap, MapPin, Globe, Camera,
+  Search, Briefcase, Stethoscope, HelpCircle, GraduationCap, MapPin, Globe, Camera, Scan, Compass,
+  Sparkles,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PageContainer } from '@/components/PageContainer';
 import { Input } from '@/components/ui/input';
+import { useRecommendedTools } from '@/hooks/useRecommendedTools';
 
 interface ToolItem {
   label: string;
@@ -30,15 +32,19 @@ const toolCategories: { title: string; tools: ToolItem[] }[] = [
     tools: [
       { label: 'Personal Statement', icon: FileText, route: '/prep/personal-statement', description: 'Generate your personal statement' },
       { label: 'Buddy Statement', icon: Users, route: '/prep/buddy-statement', description: 'Build a buddy/lay statement' },
-      { label: 'Doctor Summary', icon: FileSignature, route: '/prep/doctor-summary', description: 'Organize info for your clinician' },
+      { label: 'Nexus Letter Builder', icon: FileSignature, route: '/prep/doctor-summary', description: 'Doctor summary outline for nexus letters' },
       { label: 'Stressor Statement', icon: AlertTriangle, route: '/prep/stressor', description: 'Document PTSD stressors' },
+      { label: 'Family Statement', icon: Heart, route: '/prep/family-statement', description: 'Family lay statements' },
     ],
   },
   {
     title: 'Exam Prep',
     tools: [
       { label: 'C&P Exam Prep', icon: ClipboardCheck, route: '/prep/exam', description: 'Prepare for your compensation exam' },
-      { label: 'DBQ Prep', icon: ClipboardList, route: '/prep/dbq', description: 'Prep your DBQ talking points' },
+      { label: 'C&P Simulator', icon: Shield, route: '/prep/exam-simulator', description: 'Practice C&P exam questions' },
+      { label: 'Post-Exam Debrief', icon: ClipboardList, route: '/prep/post-debrief', description: 'Analyze how your exam went' },
+      { label: 'DBQ Analyzer', icon: ClipboardList, route: '/prep/dbq-analyzer', description: 'Interactive DBQ rating estimator' },
+      { label: 'Exam Questionnaire Prep', icon: ClipboardList, route: '/prep/dbq', description: 'Prep your DBQ talking points' },
       { label: 'Exam Day Packet', icon: FileCheck, route: '/prep/exam-day', description: 'Day-of checklist and talking points' },
     ],
   },
@@ -48,7 +54,21 @@ const toolCategories: { title: string; tools: ToolItem[] }[] = [
       { label: 'Rating Calculator', icon: Calculator, route: '/claims/calculator', description: 'Calculate combined VA rating' },
       { label: 'Back Pay Estimator', icon: DollarSign, route: '/prep/back-pay', description: 'Estimate potential back pay' },
       { label: 'Lifetime Benefits', icon: TrendingUp, route: '/prep/cost-estimate', description: 'Project total compensation over time' },
+      { label: 'Compensation Ladder', icon: TrendingUp, route: '/prep/compensation', description: 'See monthly rates at each rating level' },
       { label: 'Travel Pay', icon: Navigation, route: '/prep/travel-pay', description: 'Estimate VA travel reimbursement' },
+      { label: 'TDIU Checker', icon: Target, route: '/prep/tdiu', description: 'Check TDIU eligibility criteria' },
+    ],
+  },
+  {
+    title: 'Research & Discovery',
+    tools: [
+      { label: 'MOS Hazard Identifier', icon: Briefcase, route: '/prep/mos-hazards', description: 'Find conditions linked to your military job' },
+      { label: 'PACT Act Checker', icon: Shield, route: '/prep/pact-act', description: 'Check presumptive benefit eligibility' },
+      { label: 'State Benefits Finder', icon: MapPin, route: '/prep/state-benefits', description: 'State-specific veteran benefits' },
+      { label: 'Find a VSO', icon: Users, route: '/prep/vso-locator', description: 'Get free accredited representation' },
+      { label: 'Evidence Analyzer', icon: Scan, route: '/prep/evidence-scanner', description: 'AI-powered document analysis' },
+      { label: 'Benefits Discovery', icon: Compass, route: '/prep/benefits', description: 'Discover benefits you may qualify for' },
+      { label: 'Medication Side Effects', icon: Pill, route: '/prep/medication-rule', description: 'Check medication secondary claim links' },
     ],
   },
   {
@@ -56,17 +76,18 @@ const toolCategories: { title: string; tools: ToolItem[] }[] = [
     tools: [
       { label: 'VA Form Guide', icon: BookOpen, route: '/prep/form-guide', description: 'Step-by-step form filling help' },
       { label: 'Appeals Guide', icon: Scale, route: '/prep/appeals', description: 'Appeal lanes & verified case law' },
-      { label: 'BDD Guide', icon: Clock, route: '/prep/bdd-guide', description: 'Pre-discharge filing guide' },
-      { label: 'VA-Speak Translator', icon: Languages, route: '/prep/va-speak', description: 'Translate VA jargon to plain English' },
+      { label: 'Pre-Discharge Filing Guide', icon: Clock, route: '/prep/bdd-guide', description: 'BDD filing before separation' },
+      { label: 'Nexus Guide', icon: FileSignature, route: '/prep/nexus-guide', description: 'Understand nexus letters and evidence links' },
+      { label: 'VA Jargon Decoder', icon: Languages, route: '/prep/va-speak', description: 'Translate VA-speak to plain English' },
       { label: 'Intent to File', icon: Shield, route: '/claims/itf', description: 'Protect your effective date' },
     ],
   },
   {
     title: 'Analysis',
     tools: [
-      { label: 'Evidence Strength', icon: Target, route: '/claims/evidence-strength', description: 'See how your logs match rating criteria' },
-      { label: 'Decision Decoder', icon: FileSearch, route: '/claims/decision-decoder', description: 'Understand your VA decision letter' },
-      { label: 'Rating Upgrade Paths', icon: TrendingUp, route: '/claims/upgrade-paths', description: 'See criteria to increase low ratings' },
+      { label: 'Rating Evidence Checker', icon: Target, route: '/claims/evidence-strength', description: 'See how your logs match rating criteria' },
+      { label: 'Decision Letter Analyzer', icon: FileSearch, route: '/claims/decision-decoder', description: 'Understand your VA decision letter' },
+      { label: 'How to Increase Your Rating', icon: TrendingUp, route: '/claims/upgrade-paths', description: 'See criteria to increase low ratings' },
       { label: 'Deadline Tracker', icon: Clock, route: '/claims/deadlines', description: 'Track ITF, appeals, and exam dates' },
     ],
   },
@@ -86,7 +107,7 @@ const LEARN_TOOLS: ToolItem[] = [
   { label: 'FAQ', icon: HelpCircle, route: '/settings/faq', description: 'Frequently asked questions' },
   { label: 'Glossary', icon: BookOpen, route: '/settings/glossary', description: 'VA terms & definitions' },
   { label: 'VA Resources', icon: Globe, route: '/settings/resources', description: 'Official VA links & phone numbers' },
-  { label: 'Conditions by Conflict', icon: Shield, route: '/reference/conditions-by-conflict', description: 'Common conditions by era of service' },
+  { label: 'Service-Related Conditions', icon: Shield, route: '/reference/conditions-by-conflict', description: 'Common conditions by era of service' },
   { label: 'Condition Guide', icon: GraduationCap, route: '/reference/condition-guide', description: 'Browse 784+ VA conditions' },
   { label: 'Deployment Locations', icon: MapPin, route: '/reference/deployment-locations', description: 'Presumptive conditions by deployment' },
 ];
@@ -94,11 +115,39 @@ const LEARN_TOOLS: ToolItem[] = [
 export default function PrepHub() {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
+  const recommendedTools = useRecommendedTools();
+
+  // Map recommended tools to ToolItem format with matching icons
+  const ROUTE_ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+    '/prep/stressor': AlertTriangle,
+    '/health/migraines': Heart,
+    '/prep/exam': ClipboardCheck,
+    '/prep/buddy-statement': Users,
+    '/health/symptoms': Heart,
+    '/health/sleep': ClipboardList,
+    '/health/visits': Stethoscope,
+    '/claims/evidence-strength': Target,
+    '/health/ptsd': AlertTriangle,
+    '/health/medications': Pill,
+    '/claims/decision-decoder': FileSearch,
+    '/claims': Shield,
+  };
+
+  const smartRecommended: ToolItem[] = useMemo(() => {
+    if (recommendedTools.length === 0) return MOST_USED;
+    return recommendedTools.map((rt) => ({
+      label: rt.label,
+      icon: ROUTE_ICON_MAP[rt.route] || Sparkles,
+      route: rt.route,
+      description: rt.reason,
+    }));
+  }, [recommendedTools]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const allCategories = useMemo(() => {
-    // Build the full list: Most Used + regular categories + Learn
+    const featuredTitle = recommendedTools.length > 0 ? 'Recommended For You' : 'Most Used';
+    // Build the full list: Smart recommendations + regular categories + Learn
     const all: { title: string; tools: ToolItem[]; featured?: boolean; muted?: boolean }[] = [
-      { title: 'Most Used', tools: MOST_USED, featured: true },
+      { title: featuredTitle, tools: smartRecommended, featured: true },
       ...toolCategories,
       { title: 'Learn', tools: LEARN_TOOLS, muted: true },
     ];
@@ -185,7 +234,7 @@ export default function PrepHub() {
                   )}
                 >
                   <div className={cn(
-                    'p-2 rounded-xl flex-shrink-0',
+                    'p-2 rounded-xl shrink-0',
                     category.muted ? 'bg-muted' : 'bg-gold/10'
                   )}>
                     <tool.icon className={cn('h-4 w-4', category.muted ? 'text-muted-foreground' : 'text-gold')} />

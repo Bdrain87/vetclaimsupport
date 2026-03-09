@@ -216,7 +216,7 @@ export function DocumentUploader({ documents, category, onAdd, onDelete }: Docum
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           {filteredDocs.map((doc) => (
             <Card key={doc.id} className="overflow-hidden group">
-              <div className="relative aspect-[4/3] bg-muted">
+              <div className="relative aspect-4/3 bg-muted">
                 {isImage(doc.fileType) ? (
                   <img
                     src={doc.dataUrl}

@@ -53,7 +53,7 @@ export function SplashScreen({
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          className="fixed inset-0 z-[9999] flex items-center justify-center"
+          className="fixed inset-0 z-9999 flex items-center justify-center"
           style={{ backgroundColor: '#000' }}
           initial={{ opacity: 1 }}
           exit={{

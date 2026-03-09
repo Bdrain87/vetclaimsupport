@@ -127,7 +127,7 @@ export default function DeleteAccountPage() {
           value={confirmText}
           onChange={(e) => setConfirmText(e.target.value)}
           placeholder="Type DELETE"
-          className="w-full h-12 px-4 bg-muted border border-border rounded-xl text-foreground text-sm placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-destructive/40 focus:border-destructive/50 transition-all"
+          className="w-full h-12 px-4 bg-muted border border-border rounded-xl text-foreground text-sm placeholder:text-muted-foreground/50 focus:outline-hidden focus:ring-2 focus:ring-destructive/40 focus:border-destructive/50 transition-all"
           disabled={processing}
         />
       </div>

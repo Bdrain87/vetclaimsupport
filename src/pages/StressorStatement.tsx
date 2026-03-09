@@ -660,7 +660,7 @@ export default function StressorStatement() {
                 <CardTitle className="text-base">Statement Preview</CardTitle>
               </CardHeader>
               <CardContent>
-                <pre className="whitespace-pre-wrap text-sm font-mono text-foreground overflow-auto max-h-96 leading-relaxed break-words">
+                <pre className="whitespace-pre-wrap text-sm font-mono text-foreground overflow-auto max-h-96 leading-relaxed wrap-break-word">
                   {generateStatement()}
                 </pre>
               </CardContent>
@@ -716,7 +716,7 @@ export default function StressorStatement() {
       {/* Info Card */}
       <Card className="bg-primary/5 border-primary/30">
         <CardContent className="pt-6 flex items-start gap-3">
-          <HelpCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+          <HelpCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
           <div className="text-sm text-muted-foreground">
             <p className="font-medium text-foreground mb-1">What is a stressor statement?</p>
             <p>

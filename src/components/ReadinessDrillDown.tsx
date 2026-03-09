@@ -141,7 +141,7 @@ export function ReadinessDrillDown({ onClose }: { onClose?: () => void }) {
               </div>
               <p className="text-[11px] text-muted-foreground leading-relaxed">{item.tip}</p>
             </div>
-            <ChevronRight className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+            <ChevronRight className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
           </Link>
         );
       })}

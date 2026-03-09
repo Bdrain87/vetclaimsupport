@@ -119,7 +119,7 @@ export function BDDCountdown({ separationDate, onSeparationDateChange }: BDDCoun
               {/* BDD Window Status */}
               {bddStatus.isInBDDWindow && (
                 <div className="flex gap-3 p-3 bg-success/10 border border-success/20 rounded-lg">
-                  <CheckCircle2 className="h-5 w-5 text-success flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="h-5 w-5 text-success shrink-0 mt-0.5" />
                   <div>
                     <p className="font-medium text-success">You&apos;re in the BDD window!</p>
                     <p className="text-sm text-foreground/80">
@@ -132,7 +132,7 @@ export function BDDCountdown({ separationDate, onSeparationDateChange }: BDDCoun
 
               {bddStatus.isTooEarly && (
                 <div className="flex gap-3 p-3 bg-primary/10 border border-primary/20 rounded-lg">
-                  <AlertCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                  <AlertCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                   <div>
                     <p className="font-medium text-primary">BDD window opens soon</p>
                     <p className="text-sm text-foreground/80">
@@ -146,7 +146,7 @@ export function BDDCountdown({ separationDate, onSeparationDateChange }: BDDCoun
 
               {bddStatus.isTooLate && (
                 <div className="flex gap-3 p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
-                  <XCircle className="h-5 w-5 text-destructive flex-shrink-0 mt-0.5" />
+                  <XCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
                   <div>
                     <p className="font-medium text-destructive">BDD window has closed</p>
                     <p className="text-sm text-foreground/80">
@@ -159,7 +159,7 @@ export function BDDCountdown({ separationDate, onSeparationDateChange }: BDDCoun
 
               {bddStatus.isPastSeparation && (
                 <div className="flex gap-3 p-3 bg-muted/50 border border-border rounded-lg">
-                  <Info className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+                  <Info className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
                   <div>
                     <p className="font-medium text-foreground">You have separated</p>
                     <p className="text-sm text-foreground/80">

@@ -264,7 +264,7 @@ export default function HelpCenter() {
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-lg">
+          <div className="p-3 rounded-2xl bg-linear-to-br from-primary to-primary/80 text-primary-foreground shadow-lg">
             <HelpCircle className="h-6 w-6" />
           </div>
           <div>
@@ -381,7 +381,7 @@ export default function HelpCenter() {
               <TabsTrigger
                 key={tab.value}
                 value={tab.value}
-                className="flex flex-col sm:flex-row items-center gap-1.5 py-2.5 px-3 data-[state=active]:bg-background data-[state=active]:shadow-sm"
+                className="flex flex-col sm:flex-row items-center gap-1.5 py-2.5 px-3 data-[state=active]:bg-background data-[state=active]:shadow-xs"
               >
                 {tab.icon}
                 <span className="text-xs sm:text-sm">{tab.label}</span>
@@ -391,7 +391,7 @@ export default function HelpCenter() {
 
           {/* Getting Started Tab */}
           <TabsContent value="start" className="space-y-6">
-            <Card className="border-0 shadow-lg bg-gradient-to-br from-primary/5 to-transparent">
+            <Card className="border-0 shadow-lg bg-linear-to-br from-primary/5 to-transparent">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-primary" />
@@ -467,7 +467,7 @@ export default function HelpCenter() {
                 >
                   <AccordionTrigger className="py-4 hover:no-underline">
                     <div className="flex items-start gap-3 text-left">
-                      <MessageSquare className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                      <MessageSquare className="h-5 w-5 text-primary mt-0.5 shrink-0" />
                       <span className="font-medium">{item.question}</span>
                     </div>
                   </AccordionTrigger>
@@ -506,7 +506,7 @@ export default function HelpCenter() {
                         <div className="space-y-4 pt-2">
                           {section.steps.map((step, i) => (
                             <div key={i} className="flex gap-4">
-                              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-semibold text-sm">
+                              <div className="shrink-0 w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-semibold text-sm">
                                 {i + 1}
                               </div>
                               <div className="flex-1">
@@ -514,7 +514,7 @@ export default function HelpCenter() {
                                 <p className="text-sm text-muted-foreground mt-1">{step.content}</p>
                                 {step.tip && (
                                   <div className="flex items-start gap-2 mt-2 p-2 rounded-lg bg-gold/10 text-foreground">
-                                    <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                                    <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
                                     <p className="text-xs">{step.tip}</p>
                                   </div>
                                 )}
@@ -532,7 +532,7 @@ export default function HelpCenter() {
 
           {/* Glossary Tab */}
           <TabsContent value="glossary" className="space-y-6">
-            <div className="flex flex-wrap gap-2 sticky top-0 bg-background/95 backdrop-blur py-2 -my-2 z-10">
+            <div className="flex flex-wrap gap-2 sticky top-0 bg-background/95 backdrop-blur-sm py-2 -my-2 z-10">
               {Object.keys(groupedGlossary).sort().map(letter => (
                 <a
                   key={letter}

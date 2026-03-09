@@ -305,7 +305,7 @@ export default function TravelPayCalculator() {
                 'Veterans whose income does not exceed the maximum VA pension rate',
               ].map((item, i) => (
                 <li key={i} className="flex items-start gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0 mt-2" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-gold shrink-0 mt-2" />
                   <span className="text-sm text-muted-foreground">{item}</span>
                 </li>
               ))}
@@ -378,7 +378,7 @@ export default function TravelPayCalculator() {
                   </p>
                 </div>
               </div>
-              <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-gold transition-colors flex-shrink-0" />
+              <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-gold transition-colors shrink-0" />
             </a>
           </CardContent>
         </Card>

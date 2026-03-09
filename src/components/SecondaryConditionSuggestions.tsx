@@ -176,7 +176,7 @@ export function SecondaryConditionSuggestions({
                 variant={isJustAdded ? "default" : "outline"}
                 size="sm"
                 className={cn(
-                  "h-8 px-3 flex-shrink-0 transition-all",
+                  "h-8 px-3 shrink-0 transition-all",
                   isJustAdded && "bg-success hover:bg-success/90"
                 )}
                 disabled={isAlreadyAdded || isJustAdded}

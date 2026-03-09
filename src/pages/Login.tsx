@@ -125,10 +125,10 @@ export default function Login() {
   };
 
   const inputClass =
-    'w-full h-12 pl-11 pr-4 bg-white/[0.09] border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(240,192,0,0.4)] focus:border-gold/50 transition-all';
+    'w-full h-12 pl-11 pr-4 bg-white/9 border border-white/[0.14] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-hidden focus:ring-2 focus:ring-[rgba(240,192,0,0.4)] focus:border-gold/50 transition-all';
 
   return (
-    <div className="min-h-[100dvh] flex flex-col bg-background">
+    <div className="min-h-dvh flex flex-col bg-background">
       <PageContainer className="flex-1 flex flex-col justify-center py-8">
         <div className="w-full max-w-sm mx-auto space-y-8">
           <button
@@ -143,7 +143,7 @@ export default function Login() {
             <img
               src="/app-icon.png"
               alt="Vet Claim Support"
-              className="w-16 h-16 mx-auto rounded-2xl shadow-lg shadow-[var(--gold-glow)]"
+              className="w-16 h-16 mx-auto rounded-2xl shadow-lg shadow-(--gold-glow)"
             />
             <div>
               <h1 className="text-2xl font-bold text-white">
@@ -240,7 +240,7 @@ export default function Login() {
                       setLoading(false);
                     }
                   }}
-                  className="text-xs text-[var(--gold-md)] hover:underline"
+                  className="text-xs text-(--gold-md) hover:underline"
                 >
                   Forgot Password?
                 </button>
@@ -250,7 +250,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-12 rounded-xl text-[#000000] text-sm font-bold transition-all hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full h-12 rounded-xl text-navy-900 text-sm font-bold transition-all hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ background: 'var(--gold-gradient)' }}
             >
               {loading
@@ -271,7 +271,7 @@ export default function Login() {
             <button
               onClick={() => handleOAuth('google')}
               disabled={loading || !!oauthLoading}
-              className="w-full h-12 rounded-xl bg-white/[0.09] border border-white/[0.14] text-white text-sm font-medium flex items-center justify-center gap-3 hover:bg-white/[0.14] disabled:opacity-50 transition-all"
+              className="w-full h-12 rounded-xl bg-white/9 border border-white/[0.14] text-white text-sm font-medium flex items-center justify-center gap-3 hover:bg-white/[0.14] disabled:opacity-50 transition-all"
             >
               <svg width="18" height="18" viewBox="0 0 24 24">
                 <path
@@ -297,7 +297,7 @@ export default function Login() {
             <button
               onClick={() => handleOAuth('apple')}
               disabled={loading || !!oauthLoading}
-              className="w-full h-12 rounded-xl bg-white/[0.09] border border-white/[0.14] text-white text-sm font-medium flex items-center justify-center gap-3 hover:bg-white/[0.14] disabled:opacity-50 transition-all"
+              className="w-full h-12 rounded-xl bg-white/9 border border-white/[0.14] text-white text-sm font-medium flex items-center justify-center gap-3 hover:bg-white/[0.14] disabled:opacity-50 transition-all"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
                 <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.32 2.32-2.14 4.39-3.74 4.25z" />
@@ -312,7 +312,7 @@ export default function Login() {
                 Don&apos;t have an account?{' '}
                 <button
                   onClick={() => { setMode('signup'); setError(''); setSuccessMsg(''); }}
-                  className="text-[var(--gold-md)] hover:underline font-medium"
+                  className="text-(--gold-md) hover:underline font-medium"
                 >
                   Sign Up
                 </button>
@@ -322,7 +322,7 @@ export default function Login() {
                 Already have an account?{' '}
                 <button
                   onClick={() => { setMode('signin'); setError(''); setSuccessMsg(''); }}
-                  className="text-[var(--gold-md)] hover:underline font-medium"
+                  className="text-(--gold-md) hover:underline font-medium"
                 >
                   Sign In
                 </button>

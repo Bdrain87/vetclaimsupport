@@ -142,7 +142,7 @@ export default function BackPayEstimator() {
                 'flex h-12 min-h-[48px] w-full items-center rounded-xl px-4 py-3 text-base ' +
                 'bg-muted/80 text-foreground border border-border/50 ' +
                 'placeholder:text-muted-foreground/50 ' +
-                'focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 ' +
+                'focus:outline-hidden focus:ring-2 focus:ring-primary/50 focus:border-primary/50 ' +
                 'transition-all duration-200'
               }
             />

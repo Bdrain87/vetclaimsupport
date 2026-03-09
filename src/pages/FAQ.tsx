@@ -219,9 +219,9 @@ export default function FAQ() {
                 >
                   <span className="font-medium text-foreground pr-4">{item.question}</span>
                   {expandedItems.has(item.originalIndex) ? (
-                    <ChevronUp className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                    <ChevronUp className="h-5 w-5 text-muted-foreground shrink-0" />
                   ) : (
-                    <ChevronDown className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                    <ChevronDown className="h-5 w-5 text-muted-foreground shrink-0" />
                   )}
                 </button>
                 {expandedItems.has(item.originalIndex) && (

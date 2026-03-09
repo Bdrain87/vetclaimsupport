@@ -341,7 +341,7 @@ export default function ClaimChecklist() {
 
       {/* Progress Overview */}
       <Card className="overflow-hidden">
-        <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-6">
+        <div className="bg-linear-to-r from-primary/10 to-primary/5 p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
               <div className="flex items-center gap-3">
@@ -378,7 +378,7 @@ export default function ClaimChecklist() {
         <Card className="border-primary/20 bg-primary/5">
           <CardContent className="py-4">
             <div className="flex gap-3">
-              <Lightbulb className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+              <Lightbulb className="h-5 w-5 text-primary shrink-0 mt-0.5" />
               <div>
                 <p className="font-medium text-foreground">Next Priority</p>
                 <p className="text-sm text-muted-foreground">
@@ -433,7 +433,7 @@ export default function ClaimChecklist() {
                 >
                   <div className="p-4">
                     <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 mt-0.5" aria-hidden="true">
+                      <div className="shrink-0 mt-0.5" aria-hidden="true">
                         {item.isComplete ? (
                           <CheckCircle2 className="h-5 w-5 text-success" />
                         ) : (
@@ -454,7 +454,7 @@ export default function ClaimChecklist() {
                             variant={item.isComplete ? "ghost" : "outline"}
                             size="sm"
                             asChild
-                            className="flex-shrink-0"
+                            className="shrink-0"
                           >
                             <Link to={item.link}>
                               {item.isComplete ? 'View' : item.linkText}
@@ -486,7 +486,7 @@ export default function ClaimChecklist() {
                     {/* Guidance text */}
                     {!item.isComplete && (
                       <div className="mt-3 ml-8 flex items-start gap-2 p-3 rounded-md bg-muted/50">
-                        <AlertCircle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                        <AlertCircle className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                         <p className="text-sm text-muted-foreground">{item.guidance}</p>
                       </div>
                     )}

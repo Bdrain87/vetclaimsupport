@@ -77,19 +77,20 @@ const CATEGORIES: FeatureCategory[] = [
     label: 'Strategy & Prep',
     headline: 'Walk into your C&P exam confident',
     description:
-      'Condition-specific exam prep, claim organization tools, and secondary condition discovery — based on publicly available VA rating schedules.',
+      'Condition-specific exam prep, guided pathways, and AI coaching — based on publicly available VA rating schedules.',
     features: [
+      'Guided condition journeys with step-by-step pathways',
+      'Ask Intel — AI claims preparation coach',
       'Claim Strategy Wizard with filing order guidance',
       'C&P Exam Prep with practice questions',
-      'DBQ criteria review and rating breakdowns',
-      'Secondary Condition Finder',
-      'Bilateral Factor and Back Pay calculators',
+      'All 68 VA DBQ forms with interactive prep',
       'C&P Exam Simulator with AI mock exams',
+      'Evidence Strength Analyzer vs VA criteria',
+      'Secondary Condition Finder',
       'Post-exam debrief and analysis',
-      'Zero Percent Optimizer',
-      'TDIU Checker',
       'Exam Day Mode checklist',
       'Decision Decoder',
+      'DBQ Rating Estimator',
     ],
   },
   {
@@ -98,11 +99,13 @@ const CATEGORIES: FeatureCategory[] = [
     label: '800+ Conditions',
     headline: 'Every VA-rated condition, researched',
     description:
-      'Browse the full VA disability database with rating criteria, required evidence, and common secondary connections.',
+      'Browse the full VA disability database with rating criteria, evidence strength analysis, and condition-specific guided preparation.',
     features: [
       'Comprehensive rating criteria for each condition',
+      'Per-condition evidence completeness scoring',
+      'Evidence vs VA criteria comparison',
       'Secondary condition mapping',
-      'Evidence guidance per condition',
+      'Smart tool recommendations based on data gaps',
       'Conditions by conflict and service era',
       'Deployment locations reference',
       'Nexus letter guide',
@@ -177,7 +180,7 @@ export function ProductShowcase() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1, ease: EASE_SMOOTH }}
         >
-          80+ tools designed around how the VA actually evaluates claims.
+          60+ tools and all 68 VA DBQ forms — designed around how the VA actually evaluates claims.
         </motion.p>
 
         {/* Category tabs */}
@@ -288,7 +291,7 @@ export function ProductShowcase() {
                         className="flex items-start gap-3"
                       >
                         <span
-                          className="mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0"
+                          className="mt-2 w-1.5 h-1.5 rounded-full shrink-0"
                           style={{ backgroundColor: '#C5A55A' }}
                         />
                         <span
@@ -325,7 +328,7 @@ export function ProductShowcase() {
             className="inline-block rounded-full px-8 py-3.5 text-sm font-semibold text-black no-underline"
             style={{ background: GOLD_GRADIENT }}
           >
-            Explore All 80+ Tools
+            Explore All Tools
           </Link>
         </motion.div>
       </div>

@@ -158,7 +158,7 @@ export default function AuthPage() {
   };
 
   const inputClass =
-    'w-full h-12 pl-11 pr-4 bg-white/[0.07] border border-white/[0.12] rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[rgba(197,165,90,0.4)] focus:border-[rgba(197,165,90,0.5)] transition-all';
+    'w-full h-12 pl-11 pr-4 bg-white/[0.07] border border-white/12 rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-hidden focus:ring-2 focus:ring-[rgba(197,165,90,0.4)] focus:border-[rgba(197,165,90,0.5)] transition-all';
 
   return (
     <PageContainer noPadding className="min-h-screen flex flex-col bg-black">

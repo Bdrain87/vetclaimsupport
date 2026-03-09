@@ -769,7 +769,7 @@ export function UnifiedRatingCalculator() {
                               <div className="flex items-center justify-between gap-2">
                                 <div className="min-w-0 flex-1">
                                   <span className="font-medium">{condition.abbreviation}</span>
-                                  <span className="text-muted-foreground text-sm ml-2 break-words">
+                                  <span className="text-muted-foreground text-sm ml-2 wrap-break-word">
                                     {condition.name !== condition.abbreviation && condition.name}
                                   </span>
                                 </div>
@@ -1103,7 +1103,7 @@ export function UnifiedRatingCalculator() {
           </Card>
 
           {/* Combined Rating Card */}
-          <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10">
+          <Card className="border-primary/30 bg-linear-to-br from-primary/5 to-primary/10">
             <CardHeader className="pb-2">
               <CardTitle className="text-lg">Combined Rating</CardTitle>
             </CardHeader>
@@ -1252,7 +1252,7 @@ export function UnifiedRatingCalculator() {
           <Card className="bg-muted/30">
             <CardContent className="pt-4">
               <div className="flex items-start gap-2 text-sm text-muted-foreground">
-                <AlertTriangle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
                 <p>
                   This calculator provides estimates only. Your actual VA rating
                   will be determined by the VA based on your complete medical record

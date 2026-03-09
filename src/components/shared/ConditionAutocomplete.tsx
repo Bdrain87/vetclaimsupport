@@ -172,13 +172,13 @@ export function ConditionAutocomplete({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           autoFocus={autoFocus}
-          className="w-full h-12 pl-10 pr-4 bg-muted/50 border border-border rounded-xl text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/50 transition-all"
+          className="w-full h-12 pl-10 pr-4 bg-muted/50 border border-border rounded-xl text-foreground text-sm placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-gold/40 focus:border-gold/50 transition-all"
         />
       </div>
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-1 z-[100] overflow-hidden bg-popover border border-white/[0.14] rounded-xl shadow-2xl shadow-black/20 backdrop-blur-xl max-h-48 sm:max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+        <div className="absolute top-full left-0 right-0 mt-1 z-100 overflow-hidden bg-popover border border-white/[0.14] rounded-xl shadow-2xl shadow-black/20 backdrop-blur-xl max-h-48 sm:max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
           {results.length === 0 && query.length > 1 && (
             <div className="px-4 py-8 text-center text-muted-foreground text-sm">
               No conditions found for &ldquo;{query}&rdquo;
@@ -204,7 +204,7 @@ export function ConditionAutocomplete({
                 )}
               </div>
               {showBodySystem && condition.bodySystem && (
-                <span className="text-xs text-gold/60 whitespace-nowrap flex-shrink-0 max-w-[100px] truncate">
+                <span className="text-xs text-gold/60 whitespace-nowrap shrink-0 max-w-[100px] truncate">
                   {condition.bodySystem}
                 </span>
               )}

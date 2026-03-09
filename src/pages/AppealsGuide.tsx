@@ -304,7 +304,7 @@ function DisclaimerBanner() {
   }
 
   return (
-    <div className="rounded-xl border border-gold/30 bg-gold/10 backdrop-blur-sm p-4 flex gap-3 items-start">
+    <div className="rounded-xl border border-gold/30 bg-gold/10 backdrop-blur-xs p-4 flex gap-3 items-start">
       <AlertTriangle className="h-5 w-5 text-gold mt-0.5 shrink-0" />
       <div className="space-y-1 flex-1 min-w-0">
         <p className="text-sm text-gold-hl/90 font-medium leading-relaxed">
@@ -317,7 +317,7 @@ function DisclaimerBanner() {
           </div>
           <button
             onClick={() => setAcknowledged(true)}
-            className="px-3 py-1.5 rounded-md bg-gold/20 text-foreground-hl text-xs font-medium hover:bg-gold/30 transition-colors flex-shrink-0"
+            className="px-3 py-1.5 rounded-md bg-gold/20 text-foreground-hl text-xs font-medium hover:bg-gold/30 transition-colors shrink-0"
           >
             I Acknowledge
           </button>
@@ -331,13 +331,13 @@ function AppealLaneCard({ lane }: { lane: typeof appealLanes[number] }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="rounded-xl border border-border bg-card/80 backdrop-blur-sm overflow-hidden transition-all">
+    <div className="rounded-xl border border-border bg-card/80 backdrop-blur-xs overflow-hidden transition-all">
       {/* Header */}
       <div className="p-4 space-y-2">
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0 flex-1">
             <Scale className="h-5 w-5 text-gold shrink-0" />
-            <h3 className="text-base font-semibold text-foreground break-words min-w-0">{lane.name}</h3>
+            <h3 className="text-base font-semibold text-foreground wrap-break-word min-w-0">{lane.name}</h3>
           </div>
           <Badge className="shrink-0 text-[10px] bg-muted/60 text-muted-foreground border-border font-mono px-2 py-0.5">
             {lane.formNumber}
@@ -404,7 +404,7 @@ function AppealLaneCard({ lane }: { lane: typeof appealLanes[number] }) {
 
 function CaseLawCard({ caseData }: { caseData: VerifiedCase }) {
   return (
-    <div className="rounded-xl border border-border bg-card/80 backdrop-blur-sm p-4 space-y-3">
+    <div className="rounded-xl border border-border bg-card/80 backdrop-blur-xs p-4 space-y-3">
       {/* Case name + citation */}
       <div className="space-y-1 min-w-0">
         <div className="flex items-start justify-between gap-2">
@@ -412,7 +412,7 @@ function CaseLawCard({ caseData }: { caseData: VerifiedCase }) {
             href={caseData.sourceUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-semibold text-foreground hover:text-gold transition-colors inline-flex items-center gap-1.5 group min-w-0 break-words"
+            className="text-sm font-semibold text-foreground hover:text-gold transition-colors inline-flex items-center gap-1.5 group min-w-0 wrap-break-word"
           >
             {caseData.caseName}
             <ExternalLink className="h-3 w-3 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -468,11 +468,11 @@ function MatchedCaseCard({ matched, context }: { matched: MatchedCase; context: 
   const summary = generateRelevanceSummary(matched, context);
 
   return (
-    <div className="rounded-xl border border-gold/30 bg-card/80 backdrop-blur-sm overflow-hidden">
+    <div className="rounded-xl border border-gold/30 bg-card/80 backdrop-blur-xs overflow-hidden">
       <div className="p-4 space-y-3">
         <div className="flex items-start justify-between gap-2">
           <div className="space-y-1 min-w-0 flex-1">
-            <a href={c.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-foreground hover:text-gold transition-colors inline-flex items-center gap-1.5 group break-words">
+            <a href={c.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-foreground hover:text-gold transition-colors inline-flex items-center gap-1.5 group wrap-break-word">
               {c.caseName}
               <ExternalLink className="h-3 w-3 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
             </a>
@@ -604,7 +604,7 @@ function MyAppealTab() {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-xl border border-gold/20 bg-gold/5 backdrop-blur-sm p-4 space-y-2">
+      <div className="rounded-xl border border-gold/20 bg-gold/5 backdrop-blur-xs p-4 space-y-2">
         <div className="flex items-center gap-2">
           <Crosshair className="h-4 w-4 text-gold" />
           <h3 className="text-sm font-semibold text-foreground">How It Works</h3>
@@ -943,7 +943,7 @@ export default function AppealsGuide() {
                     className={cn(
                       'px-2.5 py-1 rounded-full text-[11px] font-medium border transition-all',
                       activeTopic === chip.value
-                        ? 'bg-gold/20 text-foreground border-gold/40 shadow-sm shadow-gold/10'
+                        ? 'bg-gold/20 text-foreground border-gold/40 shadow-xs shadow-gold/10'
                         : 'bg-muted/40 text-muted-foreground border-border/50 hover:bg-muted/60'
                     )}
                   >

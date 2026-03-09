@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ChevronLeft,
@@ -14,6 +14,8 @@ import {
   ExternalLink,
   Scale,
   ArrowRight,
+  Upload,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -22,6 +24,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { PageContainer } from '@/components/PageContainer';
+import { toast } from '@/hooks/use-toast';
+import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { aiAnalyzeImage, isGeminiConfigured } from '@/lib/gemini';
+import { buildVeteranContext } from '@/utils/veteranContext';
+import { formatContextForAI } from '@/utils/formatContextForAI';
 
 // ---------------------------------------------------------------------------
 // Common VA denial reason patterns and their plain-English explanations
@@ -361,6 +368,32 @@ export default function DecisionDecoder() {
   const [parsed, setParsed] = useState<ParsedDecision | null>(null);
   const [expandedPathways, setExpandedPathways] = useState<Set<string>>(new Set());
   const [copied, setCopied] = useState(false);
+  const [extracting, setExtracting] = useState(false);
+  const uploadRef = useRef<HTMLInputElement>(null);
+
+  const handleImageUpload = useCallback(async (file: File) => {
+    if (!isGeminiConfigured) return;
+    setExtracting(true);
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const base64 = btoa(
+        new Uint8Array(arrayBuffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+      );
+      const ctx = buildVeteranContext({ maskPII: true });
+      const contextBlock = formatContextForAI(ctx, 'minimal');
+      const text = await aiAnalyzeImage({
+        imageBase64: base64,
+        mimeType: file.type as 'image/jpeg' | 'image/png' | 'image/webp',
+        prompt: `${contextBlock}\n\nExtract ALL text from this VA decision letter image. Return ONLY the extracted text, preserving the original formatting as closely as possible. Do not add commentary.`,
+        feature: 'decision-decoder-ocr',
+      });
+      setLetterText(text);
+    } catch {
+      toast({ title: 'Could not extract text from image', description: 'Try a clearer photo or paste the text manually.', variant: 'destructive' });
+    } finally {
+      setExtracting(false);
+    }
+  }, []);
 
   const handleAnalyze = useCallback(() => {
     if (letterText.trim().length < 20) return;
@@ -439,9 +472,11 @@ export default function DecisionDecoder() {
         </div>
       </div>
 
+      <AIDisclaimer variant="banner" />
+
       {/* Disclaimer */}
       <div className="flex gap-3 p-3 rounded-2xl border border-primary/20 bg-primary/5">
-        <Info className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+        <Info className="h-4 w-4 text-primary mt-0.5 shrink-0" />
         <p className="text-xs text-muted-foreground leading-relaxed">
           This tool provides general educational explanations of common VA decision language. It does not
           provide legal advice or recommend specific actions for your claim. For personalized guidance,
@@ -478,6 +513,44 @@ export default function DecisionDecoder() {
                 : 'Tip: Select all text in your decision letter PDF, copy, and paste here.'}
             </p>
           </div>
+
+          {/* Upload image option */}
+          {isGeminiConfigured && (
+            <div className="flex items-center gap-3">
+              <div className="h-px flex-1 bg-border" />
+              <span className="text-xs text-muted-foreground">or</span>
+              <div className="h-px flex-1 bg-border" />
+            </div>
+          )}
+          {isGeminiConfigured && (
+            <>
+              <input
+                ref={uploadRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleImageUpload(file);
+                  e.target.value = '';
+                }}
+              />
+              <Button
+                variant="outline"
+                onClick={() => uploadRef.current?.click()}
+                disabled={extracting}
+                className="w-full gap-2"
+                size="lg"
+              >
+                {extracting ? (
+                  <><Loader2 className="h-5 w-5 animate-spin" /> Extracting text from image...</>
+                ) : (
+                  <><Upload className="h-5 w-5" /> Upload Decision Letter Image</>
+                )}
+              </Button>
+            </>
+          )}
+
           <Button
             onClick={handleAnalyze}
             disabled={letterText.trim().length < 20}
@@ -543,7 +616,7 @@ export default function DecisionDecoder() {
                 </div>
                 {parsed.grantedConditions.map((c, i) => (
                   <div key={i} className="flex items-start gap-2 text-xs text-muted-foreground pl-6">
-                    <span className="text-success flex-shrink-0">•</span>
+                    <span className="text-success shrink-0">•</span>
                     <span>{c}</span>
                   </div>
                 ))}
@@ -563,7 +636,7 @@ export default function DecisionDecoder() {
                 </div>
                 {parsed.deniedConditions.map((c, i) => (
                   <div key={i} className="flex items-start gap-2 text-xs text-muted-foreground pl-6">
-                    <span className="text-destructive/60 flex-shrink-0">•</span>
+                    <span className="text-destructive/60 shrink-0">•</span>
                     <span>{c}</span>
                   </div>
                 ))}
@@ -586,7 +659,7 @@ export default function DecisionDecoder() {
                 </p>
                 {parsed.deferredConditions.map((c, i) => (
                   <div key={i} className="flex items-start gap-2 text-xs text-muted-foreground pl-6">
-                    <span className="text-gold flex-shrink-0">•</span>
+                    <span className="text-gold shrink-0">•</span>
                     <span>{c}</span>
                   </div>
                 ))}
@@ -747,7 +820,7 @@ export default function DecisionDecoder() {
                           </p>
                           {pathway.bestFor.map((item, i) => (
                             <div key={i} className="flex gap-2 text-xs text-muted-foreground">
-                              <CheckCircle2 className="h-3 w-3 text-success flex-shrink-0 mt-0.5" />
+                              <CheckCircle2 className="h-3 w-3 text-success shrink-0 mt-0.5" />
                               <span>{item}</span>
                             </div>
                           ))}
@@ -759,7 +832,7 @@ export default function DecisionDecoder() {
                           </p>
                           {pathway.limitations.map((item, i) => (
                             <div key={i} className="flex gap-2 text-xs text-muted-foreground">
-                              <AlertTriangle className="h-3 w-3 text-gold/60 flex-shrink-0 mt-0.5" />
+                              <AlertTriangle className="h-3 w-3 text-gold/60 shrink-0 mt-0.5" />
                               <span>{item}</span>
                             </div>
                           ))}
@@ -789,7 +862,7 @@ export default function DecisionDecoder() {
           <Card className="border-success/20 bg-success/5">
             <CardContent className="py-4 px-4">
               <div className="flex items-start gap-3">
-                <Info className="h-5 w-5 text-success mt-0.5 flex-shrink-0" />
+                <Info className="h-5 w-5 text-success mt-0.5 shrink-0" />
                 <div className="space-y-2">
                   <p className="text-sm font-semibold text-foreground">Get Free Help</p>
                   <p className="text-xs text-muted-foreground leading-relaxed">

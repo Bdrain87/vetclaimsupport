@@ -83,7 +83,7 @@ export function IntentToFileBanner() {
             </button>
 
             <div className="flex items-start gap-3 pr-8">
-              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gold/15 border border-gold/30 flex-shrink-0">
+              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gold/15 border border-gold/30 shrink-0">
                 <Shield className="h-5 w-5 text-gold" />
               </div>
               <div className="flex-1 min-w-0 space-y-2">

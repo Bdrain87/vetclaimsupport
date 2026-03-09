@@ -50,7 +50,7 @@ export function BottomTabBar() {
                 'relative flex flex-col items-center justify-center gap-0.5',
                 'flex-1 h-full',
                 'transition-colors duration-200 ease-out',
-                'outline-none focus:outline-none focus-visible:outline-none focus-visible:shadow-none',
+                'outline-hidden focus:outline-hidden focus-visible:outline-hidden focus-visible:shadow-none',
               )}
             >
               {isActive && (

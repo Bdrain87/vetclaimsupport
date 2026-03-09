@@ -322,7 +322,7 @@ export default function BuildPacket() {
           <div className="flex items-center gap-4">
             <div className="relative">
               <div className="absolute inset-0 bg-primary/30 blur-2xl rounded-full scale-150 opacity-50" />
-              <div className="relative p-3.5 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 shadow-lg shadow-primary/10">
+              <div className="relative p-3.5 rounded-2xl bg-linear-to-br from-primary/20 to-primary/5 border border-primary/20 shadow-lg shadow-primary/10">
                 <Package className="h-7 w-7 text-primary" />
               </div>
             </div>
@@ -422,7 +422,7 @@ export default function BuildPacket() {
                   />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <Icon className="h-4 w-4 text-primary flex-shrink-0" />
+                      <Icon className="h-4 w-4 text-primary shrink-0" />
                       <span className="font-medium text-foreground">{section.label}</span>
                       <Badge variant="secondary" className="text-xs font-mono">
                         {section.countLabel}
@@ -531,22 +531,22 @@ export default function BuildPacket() {
                 <div className="rounded-lg border border-border bg-muted/30 p-4 space-y-2">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1">
                     <span className="text-muted-foreground">Veteran</span>
-                    <span className="font-medium text-foreground break-words">
+                    <span className="font-medium text-foreground wrap-break-word">
                       {profile.firstName && profile.lastName
                         ? `${profile.firstName} ${profile.lastName}`
                         : 'Not set'}
                     </span>
                     <span className="text-muted-foreground">Branch</span>
-                    <span className="font-medium text-foreground break-words">
+                    <span className="font-medium text-foreground wrap-break-word">
                       {getAllBranchLabels(profile) || 'Not set'}
                     </span>
                     <span className="text-muted-foreground">Service Job Code</span>
-                    <span className="font-medium text-foreground break-words">
+                    <span className="font-medium text-foreground wrap-break-word">
                       {profile.mosCode || 'Not set'}
                       {profile.mosTitle ? ` - ${profile.mosTitle}` : ''}
                     </span>
                     <span className="text-muted-foreground">Claim Type</span>
-                    <span className="font-medium text-foreground capitalize break-words">
+                    <span className="font-medium text-foreground capitalize wrap-break-word">
                       {profile.claimType || 'Not set'}
                     </span>
                     <span className="text-muted-foreground">Evidence Strength</span>
@@ -559,7 +559,7 @@ export default function BuildPacket() {
                       </p>
                       <div className="flex flex-wrap gap-1.5">
                         {(data.claimConditions || []).map((c) => (
-                          <Badge key={c.id} variant="secondary" className="text-xs break-words max-w-full">
+                          <Badge key={c.id} variant="secondary" className="text-xs wrap-break-word max-w-full">
                             {c.name}
                           </Badge>
                         ))}
@@ -595,7 +595,7 @@ export default function BuildPacket() {
                         className="flex items-center justify-between text-xs border-b border-border/50 pb-1.5 last:border-0"
                       >
                         <div className="flex items-center gap-2 min-w-0 flex-1">
-                          <span className="text-muted-foreground w-20 flex-shrink-0">
+                          <span className="text-muted-foreground w-20 shrink-0">
                             {safeFormatDate(s.date)}
                           </span>
                           <span className="font-medium text-foreground line-clamp-1">{s.symptom}</span>
@@ -656,7 +656,7 @@ export default function BuildPacket() {
                         key={v.id}
                         className="flex items-start gap-3 text-xs border-b border-border/50 pb-1.5 last:border-0"
                       >
-                        <span className="text-muted-foreground w-20 flex-shrink-0">
+                        <span className="text-muted-foreground w-20 shrink-0">
                           {safeFormatDate(v.date)}
                         </span>
                         <div className="flex-1 min-w-0">
@@ -669,7 +669,7 @@ export default function BuildPacket() {
                           )}
                         </div>
                         {v.gotAfterVisitSummary && (
-                          <CheckCircle2 className="h-3.5 w-3.5 text-success flex-shrink-0 mt-0.5" />
+                          <CheckCircle2 className="h-3.5 w-3.5 text-success shrink-0 mt-0.5" />
                         )}
                       </div>
                     ))}
@@ -700,7 +700,7 @@ export default function BuildPacket() {
                         className="flex items-center justify-between gap-2 text-xs border-b border-border/50 pb-1.5 last:border-0"
                       >
                         <div className="min-w-0 flex-1 overflow-hidden">
-                          <span className="font-medium text-foreground break-words">{m.name}</span>
+                          <span className="font-medium text-foreground wrap-break-word">{m.name}</span>
                           {m.prescribedFor && (
                             <span className="text-muted-foreground"> -- {m.prescribedFor}</span>
                           )}
@@ -732,7 +732,7 @@ export default function BuildPacket() {
                         className="flex items-center justify-between gap-2 text-xs border-b border-border/50 pb-1.5 last:border-0"
                       >
                         <div className="min-w-0 flex-1">
-                          <span className="font-medium text-foreground break-words block">
+                          <span className="font-medium text-foreground wrap-break-word block">
                             {b.rank ? `${b.rank} ` : ''}
                             {b.name}
                           </span>
@@ -776,7 +776,7 @@ export default function BuildPacket() {
                         key={e.id}
                         className="flex items-start gap-3 text-xs border-b border-border/50 pb-1.5 last:border-0"
                       >
-                        <span className="text-muted-foreground w-20 flex-shrink-0">
+                        <span className="text-muted-foreground w-20 shrink-0">
                           {safeFormatDate(e.date)}
                         </span>
                         <div className="flex-1 min-w-0">

@@ -203,7 +203,7 @@ export function DeploymentLocationPicker({
                         </span>
 
                         {hasHighDioxin && (
-                          <AlertTriangle className="h-3.5 w-3.5 text-gold flex-shrink-0" />
+                          <AlertTriangle className="h-3.5 w-3.5 text-gold shrink-0" />
                         )}
 
                         {location.exposureFlags?.map((flag) => (
@@ -256,14 +256,14 @@ export function DeploymentLocationPicker({
                   key={loc}
                   className="flex items-center gap-3 px-3 py-2 rounded-lg bg-muted/30 border border-border"
                 >
-                  <MapPin className="h-3.5 w-3.5 text-gold flex-shrink-0" />
+                  <MapPin className="h-3.5 w-3.5 text-gold shrink-0" />
                   <span className="text-sm text-foreground flex-1 min-w-0 truncate">
                     {displayName}
                   </span>
                   <button
                     type="button"
                     onClick={() => handleRemoveCustom(loc)}
-                    className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors flex-shrink-0"
+                    className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
                     aria-label={`Remove ${displayName}`}
                   >
                     <X className="h-3.5 w-3.5" />

@@ -371,7 +371,7 @@ export default function Symptoms() {
       {/* Header - Premium Styling */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 shadow-[0_0_24px_var(--gold-glow)]">
+          <div className="p-3 rounded-2xl bg-linear-to-br from-gold/20 to-gold/5 shadow-[0_0_24px_var(--gold-glow)]">
             <Activity className="h-6 w-6 text-gold drop-shadow-[0_0_8px_rgba(240,192,0,0.5)]" />
           </div>
           <div>
@@ -380,7 +380,7 @@ export default function Symptoms() {
           </div>
         </div>
 
-        <div className="flex gap-2 flex-shrink-0">
+        <div className="flex gap-2 shrink-0">
           <Button variant="outline" disabled={exporting} onClick={async () => {
             setExporting(true);
             try { await lazyExportSymptoms(data.symptoms); } catch (err) { toast({ title: 'Export failed', description: err instanceof Error ? err.message : 'Could not generate PDF. Please try again.', variant: 'destructive' }); } finally { setExporting(false); }
@@ -396,9 +396,9 @@ export default function Symptoms() {
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
           {/* Severity Trend Chart */}
           <div className="rounded-2xl bg-card border border-border overflow-hidden shadow-lg" style={{ boxShadow: '0 8px 32px rgba(0, 0, 0, 0.25)' }}>
-            <div className="p-4 border-b border-border/50 bg-gradient-to-r from-gold/5 via-transparent to-transparent">
+            <div className="p-4 border-b border-border/50 bg-linear-to-r from-gold/5 via-transparent to-transparent">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5">
+                <div className="p-2 rounded-xl bg-linear-to-br from-gold/20 to-gold/5">
                   <TrendingUp className="h-5 w-5 text-gold" />
                 </div>
                 <div>
@@ -420,9 +420,9 @@ export default function Symptoms() {
 
           {/* Condition Frequency */}
           <div className="rounded-2xl bg-card border border-border overflow-hidden shadow-lg" style={{ boxShadow: '0 8px 32px rgba(0, 0, 0, 0.25)' }}>
-            <div className="p-4 border-b border-border/50 bg-gradient-to-r from-gold/5 via-transparent to-transparent">
+            <div className="p-4 border-b border-border/50 bg-linear-to-r from-gold/5 via-transparent to-transparent">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5">
+                <div className="p-2 rounded-xl bg-linear-to-br from-gold/20 to-gold/5">
                   <BarChart3 className="h-5 w-5 text-gold" />
                 </div>
                 <div>
@@ -450,7 +450,7 @@ export default function Symptoms() {
           <div className="rounded-2xl bg-card border border-border overflow-hidden">
             <CollapsibleTrigger className="w-full p-4 flex items-center justify-between hover:bg-accent/30 transition-colors">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5">
+                <div className="p-2 rounded-xl bg-linear-to-br from-primary/20 to-primary/5">
                   <Target className="h-5 w-5 text-primary" />
                 </div>
                 <div className="text-left">
@@ -887,7 +887,7 @@ export default function Symptoms() {
           {symptomsByDate.map(([date, symptoms]) => (
             <div key={date} className="relative">
               {/* Date Header */}
-              <div className="sticky top-0 z-10 bg-background/95 backdrop-blur py-2 mb-3">
+              <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm py-2 mb-3">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-primary" />
                   <span className="font-semibold text-sm">
@@ -912,14 +912,14 @@ export default function Symptoms() {
                                 {symptom.bodyArea}
                               </Badge>
                             )}
-                            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium flex-shrink-0 ${getSeverityColor(symptom.severity)}`}>
+                            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium shrink-0 ${getSeverityColor(symptom.severity)}`}>
                               {symptom.severity}/10
                             </span>
                             {symptom.frequency && (
                               <span className="text-xs text-muted-foreground truncate">{symptom.frequency}</span>
                             )}
                           </div>
-                          <p className="font-medium mt-1 break-words">{symptom.symptom}</p>
+                          <p className="font-medium mt-1 wrap-break-word">{symptom.symptom}</p>
                           {symptom.dailyImpact && (
                             <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{symptom.dailyImpact}</p>
                           )}
@@ -960,15 +960,15 @@ export default function Symptoms() {
                               {symptom.bodyArea}
                             </Badge>
                           )}
-                          <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium flex-shrink-0 ${getSeverityColor(symptom.severity)}`}>
+                          <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium shrink-0 ${getSeverityColor(symptom.severity)}`}>
                             {symptom.severity}/10
                           </span>
-                          <span className="text-xs text-muted-foreground flex items-center gap-1 flex-shrink-0">
+                          <span className="text-xs text-muted-foreground flex items-center gap-1 shrink-0">
                             <Calendar className="h-3 w-3" />
                             {format(parseISO(symptom.date), 'MMM d, yyyy')}
                           </span>
                         </div>
-                        <CardTitle className="text-base break-words">{symptom.symptom}</CardTitle>
+                        <CardTitle className="text-base wrap-break-word">{symptom.symptom}</CardTitle>
                       </div>
                       <div className="flex items-center gap-1">
                         {expandedCards.has(symptom.id) ? (

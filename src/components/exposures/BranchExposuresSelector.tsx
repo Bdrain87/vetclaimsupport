@@ -97,7 +97,7 @@ export function BranchExposuresSelector({ onSelectExposure }: BranchExposuresSel
                         {exposure.description}
                       </p>
                     </div>
-                    <Plus className="h-4 w-4 text-muted-foreground group-hover:text-exposure flex-shrink-0 mt-0.5" />
+                    <Plus className="h-4 w-4 text-muted-foreground group-hover:text-exposure shrink-0 mt-0.5" />
                   </button>
                 ))}
               </div>

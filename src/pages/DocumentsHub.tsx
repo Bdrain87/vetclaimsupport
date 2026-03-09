@@ -383,7 +383,7 @@ export default function DocumentsHub() {
         <div className="flex items-center gap-4">
           <div className="relative overflow-hidden">
             <div className="absolute inset-0 bg-gold/30 blur-2xl rounded-full scale-150 opacity-50" />
-            <div className="relative p-3.5 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/20 shadow-lg shadow-gold/10">
+            <div className="relative p-3.5 rounded-2xl bg-linear-to-br from-gold/20 to-gold/5 border border-gold/20 shadow-lg shadow-gold/10">
               <FolderOpen className="h-7 w-7 text-gold" />
             </div>
           </div>
@@ -401,7 +401,7 @@ export default function DocumentsHub() {
       {/* Tab Navigation */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <div className="relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-muted/50 via-muted/30 to-muted/50 rounded-2xl" />
+          <div className="absolute inset-0 bg-linear-to-r from-muted/50 via-muted/30 to-muted/50 rounded-2xl" />
 
           <TabsList className="relative w-full h-auto p-1.5 bg-transparent grid grid-cols-2 sm:grid-cols-4 gap-1">
             {tabConfig.map((tab) => (
@@ -432,7 +432,7 @@ export default function DocumentsHub() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <button
               onClick={() => setActiveTab('my-docs')}
-              className="group p-4 rounded-2xl bg-gradient-to-br from-gold/20 to-gold-hl/10 border border-gold/30 hover:scale-[1.02] transition-all text-left"
+              className="group p-4 rounded-2xl bg-linear-to-br from-gold/20 to-gold-hl/10 border border-gold/30 hover:scale-[1.02] transition-all text-left"
             >
               <div className="flex items-center gap-3 mb-2">
                 <Upload className="h-5 w-5 text-gold-hl" />
@@ -444,7 +444,7 @@ export default function DocumentsHub() {
 
             <button
               onClick={() => setActiveTab('checklist')}
-              className="group p-4 rounded-2xl bg-gradient-to-br from-success/20 to-success/10 border border-success/30 hover:scale-[1.02] transition-all text-left"
+              className="group p-4 rounded-2xl bg-linear-to-br from-success/20 to-success/10 border border-success/30 hover:scale-[1.02] transition-all text-left"
             >
               <div className="flex items-center gap-3 mb-2">
                 <ListChecks className="h-5 w-5 text-success" />
@@ -456,7 +456,7 @@ export default function DocumentsHub() {
 
             <button
               onClick={() => setActiveTab('templates')}
-              className="group p-4 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/10 border border-gold/30 hover:scale-[1.02] transition-all text-left"
+              className="group p-4 rounded-2xl bg-linear-to-br from-gold/20 to-gold/10 border border-gold/30 hover:scale-[1.02] transition-all text-left"
             >
               <div className="flex items-center gap-3 mb-2">
                 <FileSpreadsheet className="h-5 w-5 text-gold-hl" />
@@ -472,7 +472,7 @@ export default function DocumentsHub() {
                 setExporting(true);
                 try { await exportDocuments(data.documents); } catch (err) { toast({ title: 'Export failed', description: err instanceof Error ? err.message : 'Could not generate PDF. Please try again.', variant: 'destructive' }); } finally { setExporting(false); }
               }}
-              className="group p-4 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/10 border border-gold/30 hover:scale-[1.02] transition-all text-left disabled:opacity-50 disabled:pointer-events-none"
+              className="group p-4 rounded-2xl bg-linear-to-br from-gold/20 to-gold/10 border border-gold/30 hover:scale-[1.02] transition-all text-left disabled:opacity-50 disabled:pointer-events-none"
             >
               <div className="flex items-center gap-3 mb-2">
                 <Download className="h-5 w-5 text-gold" />
@@ -485,7 +485,7 @@ export default function DocumentsHub() {
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="bg-gradient-to-br from-gold/10 to-gold/5 border-gold/20">
+            <Card className="bg-linear-to-br from-gold/10 to-gold/5 border-gold/20">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <FolderOpen className="h-8 w-8 text-gold" />
@@ -497,7 +497,7 @@ export default function DocumentsHub() {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
+            <Card className="bg-linear-to-br from-success/10 to-success/5 border-success/20">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <CheckCircle2 className="h-8 w-8 text-success" />
@@ -509,7 +509,7 @@ export default function DocumentsHub() {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-gold/20">
+            <Card className="bg-linear-to-br from-warning/10 to-warning/5 border-gold/20">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <Clock className="h-8 w-8 text-gold" />
@@ -545,7 +545,7 @@ export default function DocumentsHub() {
                     <Card
                       key={cat.type}
                       className={cn(
-                        'flex-shrink-0 w-[140px] cursor-pointer transition-all hover:border-gold/50',
+                        'shrink-0 w-[140px] cursor-pointer transition-all hover:border-gold/50',
                         count > 0 ? 'border-gold/20 bg-gold/5' : ''
                       )}
                       onClick={() => {
@@ -723,7 +723,7 @@ export default function DocumentsHub() {
               {filteredDocuments.map((doc) => (
                 <Card
                   key={doc.id}
-                  className="group hover:border-gold/50 transition-colors cursor-pointer overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                  className="group hover:border-gold/50 transition-colors cursor-pointer overflow-hidden focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-gold"
                   onClick={() => setSelectedDoc(doc)}
                   onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedDoc(doc); } }}
                   tabIndex={0}
@@ -731,7 +731,7 @@ export default function DocumentsHub() {
                   aria-label={`View document ${doc.name}`}
                 >
                   <CardContent className="p-3">
-                    <div className="relative aspect-[4/3] rounded-lg overflow-hidden bg-muted mb-2">
+                    <div className="relative aspect-4/3 rounded-lg overflow-hidden bg-muted mb-2">
                       {doc.thumbnailUrl ? (
                         <img
                           src={doc.thumbnailUrl}
@@ -959,7 +959,7 @@ export default function DocumentsHub() {
                 key={template.id}
                 className={cn(
                   "cursor-pointer transition-all hover:scale-[1.02]",
-                  "bg-gradient-to-br", template.gradient,
+                  "bg-linear-to-br", template.gradient,
                   "border", template.borderColor
                 )}
                 onClick={() => {
@@ -1102,7 +1102,7 @@ export default function DocumentsHub() {
 
           {selectedDoc && (
             <div className="space-y-4">
-              <div className="relative aspect-[4/3] rounded-lg overflow-hidden bg-muted">
+              <div className="relative aspect-4/3 rounded-lg overflow-hidden bg-muted">
                 {selectedDoc.thumbnailUrl || selectedDoc.dataUrl ? (
                   <img
                     src={selectedDoc.thumbnailUrl || selectedDoc.dataUrl}

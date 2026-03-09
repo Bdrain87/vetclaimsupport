@@ -519,7 +519,7 @@ export default function DBQPrepSheet() {
             <div className="flex items-start gap-2">
               <Info className="h-5 w-5 text-primary mt-0.5" />
               <div>
-                <p className="font-medium text-sm mb-2 break-words">
+                <p className="font-medium text-sm mb-2 wrap-break-word">
                   Reminders for {formData.condition}
                 </p>
                 <ul className="space-y-1">
@@ -539,7 +539,7 @@ export default function DBQPrepSheet() {
       {/* Symptoms Section */}
       <Card>
         <CardHeader
-          className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
           tabIndex={0}
           role="button"
           onClick={() => toggleSection('symptoms')}
@@ -627,7 +627,7 @@ export default function DBQPrepSheet() {
       {/* Flare-ups Section */}
       <Card>
         <CardHeader
-          className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
           tabIndex={0}
           role="button"
           onClick={() => toggleSection('flareups')}
@@ -702,7 +702,7 @@ export default function DBQPrepSheet() {
       {/* Functional Impact Section */}
       <Card>
         <CardHeader
-          className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
           tabIndex={0}
           role="button"
           onClick={() => toggleSection('functional')}
@@ -795,7 +795,7 @@ export default function DBQPrepSheet() {
       {/* Medications Section */}
       <Card>
         <CardHeader
-          className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
           tabIndex={0}
           role="button"
           onClick={() => toggleSection('medications')}

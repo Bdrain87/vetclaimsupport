@@ -9,13 +9,20 @@ import { impactMedium } from '@/lib/haptics';
 import { aiTranscribe, isGeminiConfigured } from '@/lib/gemini';
 import { useAIStream } from '@/hooks/useAIStream';
 import { isNativeApp } from '@/lib/platform';
-import { createPostDebriefPrompt } from '@/lib/ai-prompts';
+import { createPostDebriefPromptV2 } from '@/lib/ai-prompts';
 import { buildVeteranContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
+import { useUserConditions } from '@/hooks/useUserConditions';
+import { getModelConfig } from '@/lib/ai-models';
 import { StreamingText } from '@/components/ui/StreamingText';
 import { Mic, MicOff, Copy, RotateCcw, AlertTriangle, FileText, Shield, Square } from 'lucide-react';
+import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { DataConnectedBadge } from '@/components/shared/DataConnectedBadge';
+import { AIConfidenceScore } from '@/components/shared/AIConfidenceScore';
 
 export default function PostExamDebrief() {
+  const { conditions } = useUserConditions();
+  const [selectedCondition, setSelectedCondition] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [transcript, setTranscript] = useState('');
@@ -63,10 +70,14 @@ export default function PostExamDebrief() {
       setError('');
       const ctx = buildVeteranContext({ maskPII: true });
       const contextBlock = formatContextForAI(ctx, 'standard');
+      const { model, temperature, timeout } = getModelConfig('post-exam-debrief');
       const result = await startStream({
-        prompt: createPostDebriefPrompt(transcribed, contextBlock),
+        prompt: createPostDebriefPromptV2(transcribed, contextBlock, selectedCondition || undefined),
         systemInstruction: 'You are a VA claims advisor helping veterans review their C&P exam experience. Provide actionable guidance. Not legal advice.',
         feature: 'post-exam-debrief',
+        model,
+        temperature,
+        timeout,
       });
       setAnalysis(result);
     } catch {
@@ -87,8 +98,10 @@ export default function PostExamDebrief() {
   return (
     <PageContainer className="space-y-4 pb-8">
       <h1 className="text-xl font-bold mb-4">Post-Exam Debrief</h1>
+      <AIDisclaimer variant="banner" />
+      <DataConnectedBadge />
       <div className="flex items-start gap-2 p-3 rounded-xl bg-gold/5 border border-gold/10">
-        <AlertTriangle className="h-4 w-4 text-gold mt-0.5 flex-shrink-0" />
+        <AlertTriangle className="h-4 w-4 text-gold mt-0.5 shrink-0" />
         <p className="text-[11px] text-muted-foreground">
           Record your C&P exam experience immediately while it's fresh. This helps identify if anything was missed and whether follow-up action is needed. Not legal advice.
         </p>
@@ -105,6 +118,30 @@ export default function PostExamDebrief() {
               Tell us what happened — what did the examiner ask? What did you say? Was anything missed? Speak naturally and include as much detail as you remember.
             </p>
           </div>
+
+          {/* Condition selector for criteria-specific analysis */}
+          {conditions.length > 0 && (
+            <div className="space-y-2">
+              <p className="text-xs font-medium text-muted-foreground">Which condition was this exam for? (optional)</p>
+              <div className="flex flex-wrap gap-2">
+                {conditions.map((c) => (
+                  <button
+                    key={c.id}
+                    onClick={() => setSelectedCondition(
+                      selectedCondition === (c.displayName || c.conditionId) ? '' : (c.displayName || c.conditionId)
+                    )}
+                    className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                      selectedCondition === (c.displayName || c.conditionId)
+                        ? 'bg-gold/10 border-gold/30 text-gold'
+                        : 'border-border text-muted-foreground hover:bg-accent'
+                    }`}
+                  >
+                    {c.displayName || c.conditionId}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           {!isRecording ? (
             <Button onClick={startRecording} className="w-full bg-gold hover:bg-gold/80 text-black font-semibold h-14">
@@ -154,6 +191,8 @@ export default function PostExamDebrief() {
             isStreaming={isStreaming}
             className="p-4 rounded-xl border border-border bg-card text-sm text-muted-foreground leading-relaxed"
           />
+
+          {!isStreaming && analysis && <AIConfidenceScore />}
 
           <div className="flex gap-2">
             {isStreaming ? (

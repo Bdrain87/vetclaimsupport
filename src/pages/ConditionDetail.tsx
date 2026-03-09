@@ -25,9 +25,9 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import {
-  ChevronLeft, Scale, FileText, Link2, Stethoscope, CheckCircle2,
+  ChevronLeft, ChevronRight, Scale, FileText, Link2, Stethoscope, CheckCircle2,
   AlertTriangle, Info, ExternalLink, Trash2, BookOpen,
-  Activity, TrendingUp, Clock, Brain, Moon, ArrowRight,
+  Activity, TrendingUp, Clock, Brain, Moon, ArrowRight, Target,
   Sparkles, Loader2, ChevronDown, FileCheck, Plus, Pill, Users, Circle,
 } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -37,8 +37,7 @@ import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { vaConditions, getConditionById } from '@/data/vaConditions';
 import { ClaimIntelligence } from '@/services/claimIntelligence';
-import { getRatingCriteriaByCondition } from '@/data/vaResources/ratingCriteria';
-import { getDBQByCondition } from '@/data/vaResources/dbqReference';
+import { resolveDBQ, resolveRatingCriteria } from '@/utils/dbqLookup';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { buildConditionContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
@@ -48,6 +47,7 @@ import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
 import { PageContainer } from '@/components/PageContainer';
 import { EvidenceGapAlert } from '@/components/EvidenceGapAlert';
+import { EvidenceStrengthCard } from '@/components/EvidenceStrengthCard';
 import { useEvidence } from '@/hooks/useEvidence';
 import { EvidenceAttachment } from '@/components/shared/EvidenceAttachment';
 import { ProgressRing } from '@/components/ui/progress-ring';
@@ -104,12 +104,12 @@ function EvidenceChecklistCard({ conditionId, conditionName, onNavigate }: { con
               onClick={() => toggleCheck(conditionId, item.name)}
               className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 w-full text-left hover:bg-muted/70 transition-colors"
             >
-              <CheckCircle2 className={`h-5 w-5 mt-0.5 flex-shrink-0 transition-colors ${isChecked ? 'text-success' : 'text-muted-foreground/40'}`} />
+              <CheckCircle2 className={`h-5 w-5 mt-0.5 shrink-0 transition-colors ${isChecked ? 'text-success' : 'text-muted-foreground/40'}`} />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 min-w-0">
                   <span className={`font-medium text-sm min-w-0 ${isChecked ? 'line-through text-muted-foreground' : ''}`}>{item.name}</span>
                   {item.required && (
-                    <Badge variant="outline" className="text-xs flex-shrink-0">Required</Badge>
+                    <Badge variant="outline" className="text-xs shrink-0">Required</Badge>
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground mt-0.5">{item.description}</p>
@@ -180,35 +180,16 @@ export default function ConditionDetail() {
   // Whether this is a "browse" view (condition not yet tracked by user)
   const isBrowseMode = !userCondition && !!conditionDetails;
 
-  // Derive a simplified condition key for looking up rating criteria / DBQ data
-  const ratingCriteriaKey = useMemo(() => {
+  // Get rating criteria if available (multi-strategy: id, diagnostic codes)
+  const ratingCriteria = useMemo(() => {
     if (!conditionDetails) return null;
-    return conditionDetails.name.toLowerCase()
-      .replace(/post-traumatic stress disorder/i, 'ptsd')
-      .replace(/lumbosacral strain.*/i, 'lumbar-spine')
-      .replace(/knee.*/i, 'knee')
-      .replace(/sleep apnea.*/i, 'sleep-apnea')
-      .replace(/migraine.*/i, 'migraines')
-      .replace(/tinnitus/i, 'tinnitus');
+    return resolveRatingCriteria(conditionDetails) ?? null;
   }, [conditionDetails]);
 
-  // Get rating criteria if available
-  const ratingCriteria = useMemo(() => {
-    if (!ratingCriteriaKey) return null;
-    return getRatingCriteriaByCondition(ratingCriteriaKey);
-  }, [ratingCriteriaKey]);
-
-  // Get DBQ reference if available
+  // Get DBQ reference if available (multi-strategy: id, diagnostic codes, name fuzzy match)
   const dbqReference = useMemo(() => {
     if (!conditionDetails) return null;
-    const key = conditionDetails.name.toLowerCase()
-      .replace(/post-traumatic stress disorder/i, 'ptsd')
-      .replace(/lumbosacral strain.*/i, 'back-spine')
-      .replace(/knee.*/i, 'knee')
-      .replace(/sleep apnea.*/i, 'sleep-apnea')
-      .replace(/migraine.*/i, 'migraines')
-      .replace(/hearing loss|tinnitus/i, 'hearing-tinnitus');
-    return getDBQByCondition(key);
+    return resolveDBQ(conditionDetails) ?? null;
   }, [conditionDetails]);
 
   // Intelligence: condition readiness
@@ -385,7 +366,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
         <CardHeader>
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
-              <CardTitle className="text-2xl break-words">
+              <CardTitle className="text-2xl wrap-break-word">
                 {conditionDetails.abbreviation || conditionDetails.name}
               </CardTitle>
               {conditionDetails.name !== conditionDetails.abbreviation && (
@@ -465,9 +446,9 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                       {evidenceCompleteness.items.slice(0, 4).map((item) => (
                         <div key={item.label} className="flex items-center gap-1.5 text-xs">
                           {item.complete ? (
-                            <CheckCircle2 className="h-3 w-3 text-success flex-shrink-0" />
+                            <CheckCircle2 className="h-3 w-3 text-success shrink-0" />
                           ) : (
-                            <Circle className="h-3 w-3 text-muted-foreground/40 flex-shrink-0" />
+                            <Circle className="h-3 w-3 text-muted-foreground/40 shrink-0" />
                           )}
                           <span className={item.complete ? 'text-muted-foreground line-through' : 'text-foreground'}>{item.label}</span>
                         </div>
@@ -545,7 +526,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                       onClick={() => navigate(rec.route)}
                       className="w-full text-left flex items-start gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      <ArrowRight className="h-3 w-3 text-primary mt-0.5 flex-shrink-0" />
+                      <ArrowRight className="h-3 w-3 text-primary mt-0.5 shrink-0" />
                       <span>{rec.action} <span className="text-primary font-medium">(+{rec.pointsGain}pts)</span></span>
                     </button>
                   ))}
@@ -645,7 +626,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
       {conditionDetails && ratingCriteriaKey && (
         <ErrorBoundary
           fallback={
-            <Card className="bg-card/80 backdrop-blur-sm border-border">
+            <Card className="bg-card/80 backdrop-blur-xs border-border">
               <CardContent className="py-8 text-center">
                 <AlertTriangle className="h-6 w-6 text-muted-foreground mx-auto mb-2" />
                 <p className="text-sm text-muted-foreground">Rating criteria failed to load.</p>
@@ -655,7 +636,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
         >
           <Suspense
             fallback={
-              <Card className="bg-card/80 backdrop-blur-sm border-border">
+              <Card className="bg-card/80 backdrop-blur-xs border-border">
                 <CardContent className="py-8 text-center">
                   <Scale className="h-6 w-6 text-muted-foreground mx-auto mb-2 animate-pulse" />
                   <p className="text-sm text-muted-foreground">Loading rating criteria...</p>
@@ -669,6 +650,29 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
             />
           </Suspense>
         </ErrorBoundary>
+      )}
+
+      {/* Evidence vs. VA Criteria Comparison */}
+      <EvidenceStrengthCard
+        conditionName={conditionDetails.abbreviation || conditionDetails.name}
+        conditionId={conditionDetails.id}
+      />
+
+      {/* Guided Journey CTA */}
+      {userCondition && (
+        <button
+          onClick={() => navigate(`/claims/condition/${userCondition.id}/journey`)}
+          className="w-full flex items-center gap-3 p-4 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors text-left"
+        >
+          <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center shrink-0">
+            <Target className="h-5 w-5 text-gold" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-foreground">Start Guided Journey</p>
+            <p className="text-xs text-muted-foreground">Step-by-step pathway to prepare your claim for this condition</p>
+          </div>
+          <ChevronRight className="h-4 w-4 text-gold shrink-0" />
+        </button>
       )}
 
       {/* AI Claim Insights */}
@@ -716,7 +720,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                 <div className="space-y-3">
                   <AIDisclaimer variant="banner" />
                   <AIContentBadge timestamp={new Date().toISOString()} />
-                  <div className="p-4 rounded-lg bg-muted/30 border text-sm whitespace-pre-wrap max-h-[400px] overflow-y-auto overflow-x-hidden leading-relaxed break-words">
+                  <div className="p-4 rounded-lg bg-muted/30 border text-sm whitespace-pre-wrap max-h-[400px] overflow-y-auto overflow-x-hidden leading-relaxed wrap-break-word">
                     {aiInsights}
                   </div>
                   <Button
@@ -791,9 +795,9 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
             <div className="space-y-2">
               {relatedLogs.map((log, i) => (
                 <div key={`${log.type}-${log.date}-${i}`} className="flex items-center gap-3 p-2.5 rounded-lg bg-muted/50">
-                  {log.type === 'symptom' && <Activity className="h-4 w-4 text-success flex-shrink-0" />}
-                  {log.type === 'sleep' && <Moon className="h-4 w-4 text-indigo-400 flex-shrink-0" />}
-                  {log.type === 'migraine' && <Brain className="h-4 w-4 text-gold flex-shrink-0" />}
+                  {log.type === 'symptom' && <Activity className="h-4 w-4 text-success shrink-0" />}
+                  {log.type === 'sleep' && <Moon className="h-4 w-4 text-indigo-400 shrink-0" />}
+                  {log.type === 'migraine' && <Brain className="h-4 w-4 text-gold shrink-0" />}
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium line-clamp-2">{log.label}</p>
                     <p className="text-xs text-muted-foreground">{safeFormatDate(log.date)}</p>
@@ -887,7 +891,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                           <ul className="space-y-1">
                             {level.examTips.map((tip, idx) => (
                               <li key={idx} className="text-xs text-muted-foreground flex items-start gap-1">
-                                <CheckCircle2 className="h-3 w-3 text-success mt-0.5 flex-shrink-0" />
+                                <CheckCircle2 className="h-3 w-3 text-success mt-0.5 shrink-0" />
                                 {tip}
                               </li>
                             ))}
@@ -903,7 +907,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                           <ul className="space-y-1">
                             {level.commonMistakes.map((mistake, idx) => (
                               <li key={idx} className="text-xs text-muted-foreground flex items-start gap-1">
-                                <AlertTriangle className="h-3 w-3 text-destructive mt-0.5 flex-shrink-0" />
+                                <AlertTriangle className="h-3 w-3 text-destructive mt-0.5 shrink-0" />
                                 {mistake}
                               </li>
                             ))}
@@ -927,7 +931,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                   <ul className="space-y-2">
                     {ratingCriteria.generalTips.map((tip, idx) => (
                       <li key={idx} className="text-sm text-success flex items-start gap-2">
-                        <CheckCircle2 className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                        <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0" />
                         {tip}
                       </li>
                     ))}
@@ -1100,7 +1104,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
           <Card className="border-primary/20 bg-primary/5">
             <CardContent className="p-4">
               <div className="flex items-start gap-3">
-                <FileText className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                <FileText className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                 <div className="flex-1">
                   <h3 className="text-sm font-semibold text-foreground">Need a nexus letter?</h3>
                   <p className="text-xs text-muted-foreground mt-0.5">
@@ -1146,7 +1150,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                           <ul className="mt-2 space-y-1">
                             {q.tips.map((tip, tipIdx) => (
                               <li key={tipIdx} className="text-xs text-muted-foreground flex items-start gap-1">
-                                <CheckCircle2 className="h-3 w-3 text-success mt-0.5 flex-shrink-0" />
+                                <CheckCircle2 className="h-3 w-3 text-success mt-0.5 shrink-0" />
                                 {tip}
                               </li>
                             ))}
@@ -1165,7 +1169,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                   <ul className="space-y-2">
                     {dbqReference.prepTips.map((tip, idx) => (
                       <li key={idx} className="text-sm flex items-start gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
+                        <CheckCircle2 className="h-4 w-4 text-success mt-0.5 shrink-0" />
                         {tip}
                       </li>
                     ))}
@@ -1180,7 +1184,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                   <ul className="space-y-2">
                     {dbqReference.commonMistakes.map((mistake, idx) => (
                       <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
-                        <AlertTriangle className="h-4 w-4 text-destructive mt-0.5 flex-shrink-0" />
+                        <AlertTriangle className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
                         {mistake}
                       </li>
                     ))}
@@ -1240,7 +1244,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
                     return (
                       <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-muted/50 gap-2 overflow-hidden">
                         <div className="flex items-center gap-2 min-w-0 flex-1">
-                          <Link2 className="h-4 w-4 text-primary flex-shrink-0" />
+                          <Link2 className="h-4 w-4 text-primary shrink-0" />
                           <span className="font-medium text-sm truncate">{secondaryDetails?.name || secondary}</span>
                         </div>
                         <Button variant="ghost" size="sm" onClick={() => navigate(`/claims/${secondary}`)}>

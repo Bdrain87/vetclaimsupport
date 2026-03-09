@@ -1852,6 +1852,112 @@ export const ClaimIntelligence = {
 
     return { score, items, recommendations };
   },
+
+  // -----------------------------------------------------------------------
+  // getInsights — Rule-based observations from tracked data
+  // -----------------------------------------------------------------------
+  getInsights(
+    claimsData: ClaimsData,
+    userConditions: UserCondition[],
+  ): { id: string; text: string; category: 'positive' | 'actionable' | 'info' }[] {
+    const insights: { id: string; text: string; category: 'positive' | 'actionable' | 'info' }[] = [];
+    const now = Date.now();
+
+    // --- Symptom log count insight ---
+    const totalSymptoms = claimsData.symptoms.length;
+    if (totalSymptoms >= 30) {
+      insights.push({
+        id: 'symptom-count',
+        text: `${totalSymptoms} symptom log entries — well-documented for C&P preparation.`,
+        category: 'positive',
+      });
+    } else if (totalSymptoms >= 5) {
+      insights.push({
+        id: 'symptom-count',
+        text: `${totalSymptoms} symptom entries logged. Aim for 30+ for strong documentation.`,
+        category: 'actionable',
+      });
+    }
+
+    // --- Migraine frequency analysis ---
+    const migraines90 = claimsData.migraines.filter(
+      (m) => now - new Date(m.date).getTime() < 90 * 86_400_000,
+    );
+    if (migraines90.length > 0) {
+      const monthlyRate = (migraines90.length / 3);
+      const prostratingCount = migraines90.filter((m) => m.wasProstrating).length;
+      const prostratingMonthly = (prostratingCount / 3);
+      insights.push({
+        id: 'migraine-freq',
+        text: `Your migraine logs show ${monthlyRate.toFixed(1)} episodes/month over 90 days${prostratingCount > 0 ? ` (${prostratingMonthly.toFixed(1)} prostrating/month)` : ''}.`,
+        category: 'info',
+      });
+    }
+
+    // --- Symptom severity trend ---
+    const recent60 = claimsData.symptoms.filter(
+      (s) => now - new Date(s.date).getTime() < 60 * 86_400_000,
+    );
+    const older60to120 = claimsData.symptoms.filter((s) => {
+      const age = now - new Date(s.date).getTime();
+      return age >= 60 * 86_400_000 && age < 120 * 86_400_000;
+    });
+    if (recent60.length >= 3 && older60to120.length >= 3) {
+      const recentAvg = recent60.reduce((s, e) => s + e.severity, 0) / recent60.length;
+      const olderAvg = older60to120.reduce((s, e) => s + e.severity, 0) / older60to120.length;
+      if (recentAvg > olderAvg * 1.15) {
+        const pctIncrease = Math.round(((recentAvg - olderAvg) / olderAvg) * 100);
+        insights.push({
+          id: 'severity-trend',
+          text: `Your symptom severity increased ${pctIncrease}% over the last 60 days — consider documenting with a medical visit.`,
+          category: 'actionable',
+        });
+      }
+    }
+
+    // --- Quick log streak insight ---
+    const quickLogCount = claimsData.quickLogs.length;
+    if (quickLogCount >= 14) {
+      insights.push({
+        id: 'quicklog-streak',
+        text: `${quickLogCount} daily logs recorded — consistent documentation pattern established.`,
+        category: 'positive',
+      });
+    }
+
+    // --- Evidence document count ---
+    const docCount = claimsData.uploadedDocuments.length;
+    if (docCount >= 5) {
+      insights.push({
+        id: 'doc-count',
+        text: `${docCount} documents uploaded to your evidence vault.`,
+        category: 'positive',
+      });
+    }
+
+    // --- Buddy statement gap ---
+    if (claimsData.buddyContacts.length === 0 && userConditions.length > 0) {
+      insights.push({
+        id: 'buddy-gap',
+        text: 'No buddy statements yet — third-party evidence significantly strengthens claims.',
+        category: 'actionable',
+      });
+    }
+
+    // --- Medical visit frequency ---
+    const visits90 = claimsData.medicalVisits.filter(
+      (v) => now - new Date(v.date).getTime() < 90 * 86_400_000,
+    );
+    if (visits90.length === 0 && userConditions.length > 0 && totalSymptoms > 0) {
+      insights.push({
+        id: 'visit-gap',
+        text: 'No medical visits in 90 days — regular treatment strengthens your claim.',
+        category: 'actionable',
+      });
+    }
+
+    return insights.slice(0, 5);
+  },
 };
 
 export type { JobCodeSuggestion, DocumentationStatus, EvidenceItem, RatingOpportunity, ClaimSummary, SymptomAnalysis } from '@/types/intelligence';

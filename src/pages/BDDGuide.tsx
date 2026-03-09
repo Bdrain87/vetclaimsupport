@@ -105,7 +105,7 @@ export default function BDDGuide() {
 
             <div className="p-4 rounded-lg bg-success/5 border border-success/20">
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-success flex-shrink-0 mt-0.5" />
+                <CheckCircle2 className="h-5 w-5 text-success shrink-0 mt-0.5" />
                 <div>
                   <p className="text-sm font-medium text-foreground">Why It Matters</p>
                   <p className="text-sm text-muted-foreground mt-1">
@@ -186,7 +186,7 @@ export default function BDDGuide() {
                 },
               ].map((item) => (
                 <li key={item.title} className="flex items-start gap-3">
-                  <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="h-4 w-4 text-success shrink-0 mt-0.5" />
                   <div>
                     <span className="text-sm font-medium text-foreground">{item.title}</span>
                     <p className="text-xs text-muted-foreground mt-0.5">{item.desc}</p>
@@ -282,7 +282,7 @@ export default function BDDGuide() {
                 'Consider filing an Intent to File (ITF) before your BDD window opens to lock in an even earlier effective date.',
               ].map((tip, i) => (
                 <li key={i} className="flex items-start gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0 mt-2" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-gold shrink-0 mt-2" />
                   <span className="text-sm text-muted-foreground">{tip}</span>
                 </li>
               ))}
@@ -318,7 +318,7 @@ export default function BDDGuide() {
                   </p>
                 </div>
               </div>
-              <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
+              <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
             </a>
           </CardContent>
         </Card>

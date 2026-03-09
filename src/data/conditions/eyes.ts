@@ -828,7 +828,7 @@ export const eyeConditions: VACondition[] = [
       'irregular astigmatism',
       'corneal ectasia',
       'corneal crosslinking',
-      'corneal ring',
+      'corneal ring-3',
       'Intacs',
       'corneal bulging',
     ],

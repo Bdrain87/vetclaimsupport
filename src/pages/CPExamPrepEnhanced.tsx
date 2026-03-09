@@ -36,6 +36,7 @@ import { useClaims } from '@/hooks/useClaims';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { createCPExamPrepPrompt } from '@/lib/ai-prompts';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { DataConnectedBadge } from '@/components/shared/DataConnectedBadge';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { PageContainer } from '@/components/PageContainer';
 import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
@@ -45,6 +46,7 @@ import { buildConditionContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
 import { useFeatureFlag } from '@/store/useFeatureFlagStore';
 import { getConditionById } from '@/data/vaConditions';
+import { conditionRatingCriteria } from '@/data/ratingCriteria';
 import { useEvidence } from '@/hooks/useEvidence';
 import { EvidenceAttachment } from '@/components/shared/EvidenceAttachment';
 
@@ -91,190 +93,29 @@ const dosList = [
   'Mention if you\'re having a good or bad day',
 ];
 
-// VA rating criteria by condition — helps veterans understand what examiners evaluate
-const ratingCriteriaMap: Record<string, { dc: string; levels: { rating: string; criteria: string }[] }> = {
-  'PTSD': {
-    dc: 'DC 9411',
-    levels: [
-      { rating: '0%', criteria: 'Diagnosed but symptoms not severe enough to interfere with functioning' },
-      { rating: '10%', criteria: 'Mild symptoms controlled with medication' },
-      { rating: '30%', criteria: 'Occupational and social impairment with occasional decrease in work efficiency' },
-      { rating: '50%', criteria: 'Reduced reliability and productivity — flattened affect, panic attacks weekly, difficulty understanding complex commands' },
-      { rating: '70%', criteria: 'Deficiencies in most areas — suicidal ideation, near-continuous panic, inability to maintain relationships' },
-      { rating: '100%', criteria: 'Total occupational and social impairment — persistent danger, memory loss, gross impairment in thought processes' },
-    ],
-  },
-  'Depression': {
-    dc: 'DC 9434',
-    levels: [
-      { rating: '0%', criteria: 'Diagnosed but symptoms controlled' },
-      { rating: '30%', criteria: 'Occasional decrease in work efficiency from depressed mood, anxiety, or sleep disturbance' },
-      { rating: '50%', criteria: 'Reduced reliability — disturbances of motivation/mood, difficulty establishing relationships' },
-      { rating: '70%', criteria: 'Deficiencies in most areas — suicidal ideation, neglect of hygiene, inability to maintain relationships' },
-      { rating: '100%', criteria: 'Total impairment — persistent delusions, memory loss for close relatives, gross behavioral issues' },
-    ],
-  },
-  'Anxiety': {
-    dc: 'DC 9400',
-    levels: [
-      { rating: '0%', criteria: 'Diagnosed but symptoms controlled' },
-      { rating: '30%', criteria: 'Occasional decrease in work efficiency' },
-      { rating: '50%', criteria: 'Reduced reliability — panic attacks more than weekly, difficulty with relationships' },
-      { rating: '70%', criteria: 'Deficiencies in most areas' },
-      { rating: '100%', criteria: 'Total occupational and social impairment' },
-    ],
-  },
-  'Migraines': {
-    dc: 'DC 8100',
-    levels: [
-      { rating: '0%', criteria: 'Less frequent attacks' },
-      { rating: '10%', criteria: 'Characteristic prostrating attacks averaging one in 2 months' },
-      { rating: '30%', criteria: 'Characteristic prostrating attacks averaging once a month' },
-      { rating: '50%', criteria: 'Very frequent, completely prostrating and prolonged attacks productive of severe economic inadaptability' },
-    ],
-  },
-  'Sleep Apnea': {
-    dc: 'DC 6847',
-    levels: [
-      { rating: '0%', criteria: 'Asymptomatic but documented sleep disorder' },
-      { rating: '30%', criteria: 'Persistent daytime hypersomnolence' },
-      { rating: '50%', criteria: 'Requires use of CPAP machine' },
-      { rating: '100%', criteria: 'Chronic respiratory failure with carbon dioxide retention, cor pulmonale, or requires tracheostomy' },
-    ],
-  },
-  'Tinnitus': {
-    dc: 'DC 6260',
-    levels: [
-      { rating: '10%', criteria: 'Recurrent tinnitus (maximum schedular rating)' },
-    ],
-  },
-  'Lower Back Pain': {
-    dc: 'DC 5237',
-    levels: [
-      { rating: '10%', criteria: 'Forward flexion greater than 60° but not greater than 85°, or combined ROM greater than 120° but not greater than 235°' },
-      { rating: '20%', criteria: 'Forward flexion greater than 30° but not greater than 60°, or combined ROM not greater than 120°' },
-      { rating: '40%', criteria: 'Forward flexion 30° or less, or favorable ankylosis of the entire thoracolumbar spine' },
-      { rating: '50%', criteria: 'Unfavorable ankylosis of the entire thoracolumbar spine' },
-      { rating: '100%', criteria: 'Unfavorable ankylosis of the entire spine' },
-    ],
-  },
-  'Knee Condition': {
-    dc: 'DC 5260/5261',
-    levels: [
-      { rating: '0%', criteria: 'Flexion limited to 60° or extension limited to 5°' },
-      { rating: '10%', criteria: 'Flexion limited to 45° or extension limited to 10°' },
-      { rating: '20%', criteria: 'Flexion limited to 30° or extension limited to 15°' },
-      { rating: '30%', criteria: 'Flexion limited to 15° or extension limited to 20°' },
-      { rating: '40%', criteria: 'Extension limited to 30°' },
-      { rating: '50%', criteria: 'Extension limited to 45°' },
-    ],
-  },
-  'GERD': {
-    dc: 'DC 7346',
-    levels: [
-      { rating: '10%', criteria: 'Two or more symptoms of less severity than 30% rating' },
-      { rating: '30%', criteria: 'Persistently recurrent epigastric distress with substernal pain, regurgitation, and considerable impairment of health' },
-      { rating: '60%', criteria: 'Symptoms of pain, vomiting, material weight loss and hematemesis or melena with moderate anemia, or other symptom combinations productive of severe impairment of health' },
-    ],
-  },
-  'Hearing Loss': {
-    dc: 'DC 6100',
-    levels: [
-      { rating: '0-100%', criteria: 'Based on puretone threshold average and speech discrimination scores using Table VI/VIA and Table VII' },
-    ],
-  },
-  'Shoulder Condition': {
-    dc: 'DC 5201',
-    levels: [
-      { rating: '20%', criteria: 'Arm motion limited to shoulder level (dominant or non-dominant)' },
-      { rating: '30%', criteria: 'Arm motion limited to midway between side and shoulder level (dominant)' },
-      { rating: '40%', criteria: 'Arm motion limited to 25° from side (dominant)' },
-    ],
-  },
-  'Neck Pain': {
-    dc: 'DC 5237',
-    levels: [
-      { rating: '10%', criteria: 'Forward flexion greater than 30° but not greater than 40°, or combined ROM greater than 170° but not greater than 335°' },
-      { rating: '20%', criteria: 'Forward flexion greater than 15° but not greater than 30°, or combined ROM not greater than 170°' },
-      { rating: '30%', criteria: 'Forward flexion 15° or less, or favorable ankylosis of the entire cervical spine' },
-      { rating: '40%', criteria: 'Unfavorable ankylosis of the entire cervical spine' },
-      { rating: '100%', criteria: 'Unfavorable ankylosis of the entire spine' },
-    ],
-  },
-  'Hip Condition': {
-    dc: 'DC 5252',
-    levels: [
-      { rating: '10%', criteria: 'Flexion limited to 45°' },
-      { rating: '20%', criteria: 'Flexion limited to 30°' },
-      { rating: '30%', criteria: 'Flexion limited to 20°' },
-      { rating: '40%', criteria: 'Flexion limited to 10°' },
-    ],
-  },
-  'Hypertension': {
-    dc: 'DC 7101',
-    levels: [
-      { rating: '10%', criteria: 'Diastolic pressure predominantly 100 or more, or systolic predominantly 160 or more, or continuous medication required' },
-      { rating: '20%', criteria: 'Diastolic pressure predominantly 110 or more, or systolic predominantly 200 or more' },
-      { rating: '40%', criteria: 'Diastolic pressure predominantly 120 or more' },
-      { rating: '60%', criteria: 'Diastolic pressure predominantly 130 or more' },
-    ],
-  },
-  'Asthma': {
-    dc: 'DC 6602',
-    levels: [
-      { rating: '10%', criteria: 'FEV-1 71-80% predicted, or FEV-1/FVC 71-80%, or intermittent inhalational or oral bronchodilator therapy' },
-      { rating: '30%', criteria: 'FEV-1 56-70% predicted, or FEV-1/FVC 56-70%, or daily inhalational or oral bronchodilator therapy' },
-      { rating: '60%', criteria: 'FEV-1 40-55% predicted, or FEV-1/FVC 40-55%, or at least monthly visits to a physician for required care of exacerbations' },
-      { rating: '100%', criteria: 'FEV-1 less than 40% predicted, or more than one attack per week with episodes of respiratory failure, or requires daily use of systemic corticosteroids' },
-    ],
-  },
-  'IBS': {
-    dc: 'DC 7319',
-    levels: [
-      { rating: '0%', criteria: 'Mild disturbances of bowel function with occasional episodes of abdominal distress' },
-      { rating: '10%', criteria: 'Moderate — frequent episodes of bowel disturbance with abdominal distress' },
-      { rating: '30%', criteria: 'Severe — diarrhea or alternating diarrhea and constipation, with more or less constant abdominal distress' },
-    ],
-  },
-  'TBI': {
-    dc: 'DC 8045',
-    levels: [
-      { rating: '0%', criteria: 'No residuals or subjective complaints only' },
-      { rating: '10%', criteria: 'Residuals rated on 3 or fewer facets at level 1' },
-      { rating: '40%', criteria: 'Residuals rated at level 2 on one or more facets' },
-      { rating: '70%', criteria: 'Residuals rated at level 3 on one or more facets' },
-      { rating: '100%', criteria: 'Total impairment of one or more facets' },
-    ],
-  },
-  'Radiculopathy': {
-    dc: 'DC 8520',
-    levels: [
-      { rating: '10%', criteria: 'Mild incomplete paralysis of the sciatic nerve' },
-      { rating: '20%', criteria: 'Moderate incomplete paralysis' },
-      { rating: '40%', criteria: 'Moderately severe incomplete paralysis' },
-      { rating: '60%', criteria: 'Severe incomplete paralysis with marked muscular atrophy' },
-      { rating: '80%', criteria: 'Complete paralysis of the sciatic nerve' },
-    ],
-  },
-  'Sinusitis': {
-    dc: 'DC 6513',
-    levels: [
-      { rating: '0%', criteria: 'Detected by X-ray only' },
-      { rating: '10%', criteria: 'One or two incapacitating episodes per year requiring prolonged antibiotic treatment, or three to six non-incapacitating episodes per year' },
-      { rating: '30%', criteria: 'Three or more incapacitating episodes per year requiring prolonged antibiotic treatment, or more than six non-incapacitating episodes per year' },
-      { rating: '50%', criteria: 'Following radical surgery with chronic osteomyelitis, or near-constant sinusitis with headaches, pain, and purulent discharge' },
-    ],
-  },
-  'Peripheral Neuropathy': {
-    dc: 'DC 8521',
-    levels: [
-      { rating: '10%', criteria: 'Mild incomplete paralysis' },
-      { rating: '20%', criteria: 'Moderate incomplete paralysis' },
-      { rating: '30%', criteria: 'Severe incomplete paralysis' },
-      { rating: '40%', criteria: 'Complete paralysis' },
-    ],
-  },
-};
+/**
+ * Look up VA rating criteria for a selected condition name.
+ * Uses the comprehensive conditionRatingCriteria data (~50 conditions)
+ * instead of a hardcoded map.
+ */
+function findRatingCriteriaForCondition(conditionName: string): { dc: string; levels: { rating: string; criteria: string }[] } | null {
+  const nameLower = conditionName.toLowerCase();
+  const match = conditionRatingCriteria.find((c) => {
+    const cName = c.conditionName.toLowerCase();
+    return cName === nameLower ||
+      cName.includes(nameLower) ||
+      nameLower.includes(cName) ||
+      c.conditionId === nameLower.replace(/\s+/g, '-');
+  });
+  if (!match) return null;
+  return {
+    dc: `DC ${match.diagnosticCode}`,
+    levels: match.ratingLevels.map((l) => ({
+      rating: `${l.percent}%`,
+      criteria: l.criteria,
+    })),
+  };
+}
 
 const dontsList = [
   'Don\'t say "I\'m fine" or minimize symptoms',
@@ -364,6 +205,10 @@ export default function CPExamPrepEnhanced() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const selectedPrepData = selectedCondition ? examPrepData[selectedCondition] : null;
+  const selectedRatingCriteria = useMemo(
+    () => selectedCondition ? findRatingCriteriaForCondition(selectedCondition) : null,
+    [selectedCondition],
+  );
 
   const toggleCheckItem = (id: string) => {
     setCheckedItems(prev => {
@@ -443,6 +288,9 @@ export default function CPExamPrepEnhanced() {
         <DraftRestoredBanner lastSaved={lastSaved} onStartFresh={clearDraft} />
       )}
 
+      {/* Data Connected Badge */}
+      <DataConnectedBadge />
+
       {/* Exam Packet CTA */}
       <Link
         to="/cp-exam-packet"
@@ -505,23 +353,23 @@ export default function CPExamPrepEnhanced() {
               <CardContent>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
+                    <CheckCircle2 className="h-4 w-4 text-success shrink-0 mt-0.5" />
                     <span>You can request a copy of the exam report</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
+                    <CheckCircle2 className="h-4 w-4 text-success shrink-0 mt-0.5" />
                     <span>You can bring someone with you (they may wait outside)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
+                    <CheckCircle2 className="h-4 w-4 text-success shrink-0 mt-0.5" />
                     <span>You can request a same-gender examiner</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
+                    <CheckCircle2 className="h-4 w-4 text-success shrink-0 mt-0.5" />
                     <span>You can reschedule if needed (call in advance)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
+                    <CheckCircle2 className="h-4 w-4 text-success shrink-0 mt-0.5" />
                     <span>You can record the exam in some states</span>
                   </li>
                 </ul>
@@ -666,7 +514,7 @@ export default function CPExamPrepEnhanced() {
             <div className="lg:col-span-2" ref={conditionDetailRef}>
               {selectedPrepData ? (
                 <div className="space-y-4">
-                  <h2 className="text-xl font-bold text-foreground break-words">{selectedCondition}</h2>
+                  <h2 className="text-xl font-bold text-foreground wrap-break-word">{selectedCondition}</h2>
 
                   <Card>
                     <CardHeader>
@@ -679,7 +527,7 @@ export default function CPExamPrepEnhanced() {
                       <ul className="space-y-2">
                         {selectedPrepData.whatToExpect.map((item, i) => (
                           <li key={i} className="flex items-start gap-2 text-sm">
-                            <ChevronRight className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                            <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                             <span>{item}</span>
                           </li>
                         ))}
@@ -688,7 +536,7 @@ export default function CPExamPrepEnhanced() {
                   </Card>
 
                   {/* VA Rating Criteria Card */}
-                  {selectedCondition && ratingCriteriaMap[selectedCondition] && (
+                  {selectedCondition && selectedRatingCriteria && (
                     <Card className="border-primary/20">
                       <CardHeader>
                         <CardTitle className="text-lg flex items-center gap-2">
@@ -701,7 +549,7 @@ export default function CPExamPrepEnhanced() {
                       </CardHeader>
                       <CardContent>
                         <div className="space-y-2">
-                          {ratingCriteriaMap[selectedCondition].levels.map((level, i) => (
+                          {selectedRatingCriteria.levels.map((level, i) => (
                             <div key={i} className="flex items-start gap-3 p-2 rounded-lg bg-muted/40">
                               <Badge
                                 variant={
@@ -735,7 +583,7 @@ export default function CPExamPrepEnhanced() {
                       <ul className="space-y-2">
                         {selectedPrepData.symptomTips.map((item, i) => (
                           <li key={i} className="flex items-start gap-2 text-sm">
-                            <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
+                            <CheckCircle2 className="h-4 w-4 text-success shrink-0 mt-0.5" />
                             <span>{item}</span>
                           </li>
                         ))}
@@ -754,7 +602,7 @@ export default function CPExamPrepEnhanced() {
                       <ul className="space-y-2">
                         {selectedPrepData.mistakesToAvoid.map((item, i) => (
                           <li key={i} className="flex items-start gap-2 text-sm">
-                            <AlertCircle className="h-4 w-4 text-destructive flex-shrink-0 mt-0.5" />
+                            <AlertCircle className="h-4 w-4 text-destructive shrink-0 mt-0.5" />
                             <span>{item}</span>
                           </li>
                         ))}
@@ -944,7 +792,7 @@ export default function CPExamPrepEnhanced() {
                 <ul className="space-y-3">
                   {dosList.map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm">
-                      <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
+                      <CheckCircle2 className="h-4 w-4 text-success shrink-0 mt-0.5" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -963,7 +811,7 @@ export default function CPExamPrepEnhanced() {
                 <ul className="space-y-3">
                   {dontsList.map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm">
-                      <AlertCircle className="h-4 w-4 text-destructive flex-shrink-0 mt-0.5" />
+                      <AlertCircle className="h-4 w-4 text-destructive shrink-0 mt-0.5" />
                       <span>{item}</span>
                     </li>
                   ))}

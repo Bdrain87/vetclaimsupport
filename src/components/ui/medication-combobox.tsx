@@ -203,7 +203,7 @@ export function MedicationCombobox({
                 >
                   <Check
                     className={cn(
-                      "h-4 w-4 mt-0.5 flex-shrink-0",
+                      "h-4 w-4 mt-0.5 shrink-0",
                       inputValue === med.name ? "opacity-100 text-primary" : "opacity-0"
                     )}
                   />
@@ -213,7 +213,7 @@ export function MedicationCombobox({
                       {med.commonlyPrescribedFor}
                     </div>
                   </div>
-                  <Badge variant="outline" className={cn("text-xs flex-shrink-0", getCategoryColor(med.category))}>
+                  <Badge variant="outline" className={cn("text-xs shrink-0", getCategoryColor(med.category))}>
                     {med.category}
                   </Badge>
                 </div>

@@ -239,7 +239,7 @@ export default function EvidenceStrength() {
 
       {/* Educational disclaimer */}
       <div className="flex gap-3 p-3 rounded-2xl border border-primary/20 bg-primary/5">
-        <Info className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+        <Info className="h-4 w-4 text-primary mt-0.5 shrink-0" />
         <p className="text-xs text-muted-foreground leading-relaxed">
           This is an educational reference based on publicly available 38 CFR Part 4 rating criteria.
           It does not predict your rating — your actual rating is determined by VA raters based on your
@@ -276,9 +276,9 @@ export default function EvidenceStrength() {
                       {items.map((item) => (
                         <div key={item.label} className="flex items-center gap-1.5 text-[11px]">
                           {item.complete ? (
-                            <CheckCircle2 className="h-3 w-3 text-success flex-shrink-0" />
+                            <CheckCircle2 className="h-3 w-3 text-success shrink-0" />
                           ) : (
-                            <Circle className="h-3 w-3 text-muted-foreground/30 flex-shrink-0" />
+                            <Circle className="h-3 w-3 text-muted-foreground/30 shrink-0" />
                           )}
                           <span className={item.complete ? 'text-muted-foreground' : 'text-foreground'}>
                             {item.label}
@@ -296,7 +296,7 @@ export default function EvidenceStrength() {
                         onClick={() => navigate(rec.route)}
                         className="w-full text-left flex items-start gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
                       >
-                        <ArrowRight className="h-3 w-3 text-primary mt-0.5 flex-shrink-0" />
+                        <ArrowRight className="h-3 w-3 text-primary mt-0.5 shrink-0" />
                         <span>{rec.action} <span className="text-primary font-medium">(+{rec.pointsGain}pts)</span></span>
                       </button>
                     ))}
@@ -336,7 +336,7 @@ export default function EvidenceStrength() {
                 <div className="p-4 flex items-center gap-3">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <span className="text-sm font-semibold text-foreground break-words">{name}</span>
+                      <span className="text-sm font-semibold text-foreground wrap-break-word">{name}</span>
                       <Badge variant="outline" className="text-[10px] px-1.5">
                         DC {criteria.diagnosticCode}
                       </Badge>
@@ -352,7 +352,7 @@ export default function EvidenceStrength() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 flex-shrink-0">
+                  <div className="flex items-center gap-2 shrink-0">
                     {count > 0 ? (
                       <div className="text-right">
                         <p className={`text-lg font-bold ${getLevelColor(estimate.level)}`}>
@@ -402,9 +402,9 @@ export default function EvidenceStrength() {
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                               {isActive ? (
-                                <CheckCircle2 className="h-4 w-4 text-gold flex-shrink-0" />
+                                <CheckCircle2 className="h-4 w-4 text-gold shrink-0" />
                               ) : (
-                                <Circle className="h-4 w-4 text-muted-foreground/30 flex-shrink-0" />
+                                <Circle className="h-4 w-4 text-muted-foreground/30 shrink-0" />
                               )}
                               <span className={`text-sm font-bold ${isActive ? 'text-gold' : 'text-muted-foreground'}`}>
                                 {rl.percent}%
@@ -458,7 +458,7 @@ export default function EvidenceStrength() {
                       <div className="space-y-1">
                         {criteria.examTips.map((tip, i) => (
                           <div key={i} className="flex gap-2 text-xs text-muted-foreground">
-                            <span className="text-gold flex-shrink-0">•</span>
+                            <span className="text-gold shrink-0">•</span>
                             <span>{tip}</span>
                           </div>
                         ))}
@@ -475,7 +475,7 @@ export default function EvidenceStrength() {
                       <div className="space-y-1">
                         {criteria.commonMistakes.map((mistake, i) => (
                           <div key={i} className="flex gap-2 text-xs text-muted-foreground">
-                            <AlertTriangle className="h-3 w-3 text-destructive flex-shrink-0 mt-0.5" />
+                            <AlertTriangle className="h-3 w-3 text-destructive shrink-0 mt-0.5" />
                             <span>{mistake}</span>
                           </div>
                         ))}

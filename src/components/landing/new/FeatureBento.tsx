@@ -305,6 +305,15 @@ const CARDS: CardData[] = [
     category: 'Strategy',
   },
   {
+    icon: ClipboardList,
+    title: '68 Interactive DBQ Forms',
+    short: 'Every VA DBQ with rating criteria and prep tips',
+    detail: 'All 68 public VA Disability Benefits Questionnaires with key exam questions, rating criteria breakdowns, common mistakes, and condition-specific preparation guidance.',
+    capabilities: ['All 68 VA DBQ forms', 'Rating criteria mapping', 'Key exam questions', 'Condition-specific prep tips', 'Common mistake warnings'],
+    plan: 'Premium ($9.99 one-time)',
+    category: 'Strategy',
+  },
+  {
     icon: Search,
     title: 'Secondary Condition Finder',
     short: 'Discover conditions secondary to your rated disabilities',
@@ -414,7 +423,7 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
     >
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" role="presentation" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-xs" role="presentation" onClick={onClose} />
 
       <motion.div
         className="relative z-10 w-[90%] max-w-[500px] rounded-3xl p-8 sm:p-10"
@@ -463,7 +472,7 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
           <ul className="space-y-1.5">
             {card.capabilities.map((cap) => (
               <li key={cap} className="flex items-start gap-2 text-sm" style={{ color: TEXT_SLATE }}>
-                <span className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: GOLD }} />
+                <span className="mt-1.5 w-1 h-1 rounded-full shrink-0" style={{ backgroundColor: GOLD }} />
                 {cap}
               </li>
             ))}
@@ -623,7 +632,7 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
               >
                 <div className="flex items-start gap-4 mb-4">
                   <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                    className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
                     style={{
                       backgroundColor: 'rgba(197,165,90,0.12)',
                       border: '1px solid rgba(197,165,90,0.25)',

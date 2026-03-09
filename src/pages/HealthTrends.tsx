@@ -262,7 +262,7 @@ export default function HealthTrends() {
             onClick={() => setPeriod(p)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               period === p
-                ? 'bg-background text-foreground shadow-sm'
+                ? 'bg-background text-foreground shadow-xs'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >

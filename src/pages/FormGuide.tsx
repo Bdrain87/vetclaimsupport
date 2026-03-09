@@ -75,7 +75,7 @@ export default function FormGuide() {
         'rounded-xl p-4 flex items-start gap-3',
         'bg-gold/5 border border-gold/20'
       )}>
-        <AlertTriangle className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
+        <AlertTriangle className="h-5 w-5 text-gold shrink-0 mt-0.5" />
         <div>
           <p className="text-sm font-semibold text-foreground">Drafting Assistant, Not Filing</p>
           <p className="text-xs text-muted-foreground mt-1">
@@ -132,10 +132,10 @@ export default function FormGuide() {
                       {priorityLabel(priority)}
                     </Badge>
                   </div>
-                  <h3 className="font-medium text-foreground text-sm break-words">{form.formTitle}</h3>
+                  <h3 className="font-medium text-foreground text-sm wrap-break-word">{form.formTitle}</h3>
                   <p className="text-xs text-muted-foreground mt-1">{form.description}</p>
                 </div>
-                <ChevronRight className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-1" />
+                <ChevronRight className="h-5 w-5 text-muted-foreground shrink-0 mt-1" />
               </div>
             </motion.button>
           );

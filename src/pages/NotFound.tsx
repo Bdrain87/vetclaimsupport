@@ -27,7 +27,7 @@ const NotFound = () => {
             404
           </span>
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="p-4 rounded-2xl bg-muted/50 backdrop-blur-sm">
+            <div className="p-4 rounded-2xl bg-muted/50 backdrop-blur-xs">
               <Search className="h-12 w-12 text-muted-foreground" />
             </div>
           </div>

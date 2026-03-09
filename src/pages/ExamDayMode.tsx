@@ -234,7 +234,7 @@ export default function ExamDayMode() {
               <div className="space-y-1.5">
                 {GENERAL_EXAM_TIPS.map((tip, i) => (
                   <div key={i} className="flex gap-2 text-xs text-muted-foreground">
-                    <CheckCircle2 className="h-3 w-3 text-success flex-shrink-0 mt-0.5" />
+                    <CheckCircle2 className="h-3 w-3 text-success shrink-0 mt-0.5" />
                     <span>{tip}</span>
                   </div>
                 ))}
@@ -243,7 +243,7 @@ export default function ExamDayMode() {
                 <p className="text-xs font-semibold text-destructive/80">Things to Avoid</p>
                 {THINGS_TO_AVOID.map((item, i) => (
                   <div key={i} className="flex gap-2 text-xs text-muted-foreground">
-                    <AlertTriangle className="h-3 w-3 text-destructive/60 flex-shrink-0 mt-0.5" />
+                    <AlertTriangle className="h-3 w-3 text-destructive/60 shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </div>
                 ))}
@@ -347,7 +347,7 @@ export default function ExamDayMode() {
                       </p>
                       {criteria.examTips.map((tip, i) => (
                         <div key={i} className="flex gap-2 text-xs text-muted-foreground">
-                          <span className="text-gold flex-shrink-0">&#x2022;</span>
+                          <span className="text-gold shrink-0">&#x2022;</span>
                           <span>{tip}</span>
                         </div>
                       ))}
@@ -362,7 +362,7 @@ export default function ExamDayMode() {
                       </p>
                       {criteria.commonMistakes.map((m, i) => (
                         <div key={i} className="flex gap-2 text-xs text-muted-foreground">
-                          <AlertTriangle className="h-3 w-3 text-destructive/50 flex-shrink-0 mt-0.5" />
+                          <AlertTriangle className="h-3 w-3 text-destructive/50 shrink-0 mt-0.5" />
                           <span>{m}</span>
                         </div>
                       ))}
@@ -443,7 +443,7 @@ export default function ExamDayMode() {
 
       {/* Disclaimer */}
       <div className="flex gap-3 p-3 rounded-xl border border-border bg-card">
-        <Info className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+        <Info className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
         <p className="text-[10px] text-muted-foreground leading-relaxed">
           This is a personal reference tool showing your own logged data and publicly available exam
           information. It is not legal or medical advice. For personalized guidance, consult a{' '}

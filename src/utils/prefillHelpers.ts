@@ -3,7 +3,7 @@
  * These extract user-entered data from the store and format it for pre-filling form fields.
  */
 
-import type { SymptomEntry, Medication, CombatEntry, MajorEvent, PTSDSymptomEntry, DeploymentEntry } from '@/types/claims';
+import type { SymptomEntry, Medication, CombatEntry, MajorEvent, PTSDSymptomEntry, DeploymentEntry, MigraineEntry, SleepEntry, EmploymentImpactEntry } from '@/types/claims';
 
 /**
  * Filter symptoms by condition name or conditionTags match.
@@ -147,4 +147,119 @@ export function buildStressorPrefill(data: {
   }
 
   return result;
+}
+
+/**
+ * Filter migraines by conditionTags or notes matching condition name.
+ */
+export function getConditionMigraines(
+  conditionName: string,
+  migraines: MigraineEntry[],
+): MigraineEntry[] {
+  const lower = conditionName.toLowerCase();
+  if (!lower.includes('migraine') && !lower.includes('headache')) return migraines;
+  return migraines; // All migraines are relevant for migraine conditions
+}
+
+/**
+ * Filter sleep entries by conditionTags or notes matching condition name.
+ */
+export function getConditionSleepEntries(
+  conditionName: string,
+  sleepEntries: SleepEntry[],
+): SleepEntry[] {
+  const lower = conditionName.toLowerCase();
+  if (lower.includes('sleep') || lower.includes('apnea') || lower.includes('insomnia')) {
+    return sleepEntries;
+  }
+  return sleepEntries.filter(
+    (s) => s.notes?.toLowerCase().includes(lower) || s.conditionTags?.some((t) => t.toLowerCase().includes(lower)),
+  );
+}
+
+/**
+ * Filter PTSD symptom entries.
+ */
+export function getConditionPTSDSymptoms(
+  conditionName: string,
+  ptsdSymptoms: PTSDSymptomEntry[],
+): PTSDSymptomEntry[] {
+  const lower = conditionName.toLowerCase();
+  if (lower.includes('ptsd') || lower.includes('post-traumatic') || lower.includes('anxiety') || lower.includes('depression')) {
+    return ptsdSymptoms;
+  }
+  return ptsdSymptoms.filter(
+    (p) => p.notes?.toLowerCase().includes(lower) || p.triggeredBy?.toLowerCase().includes(lower),
+  );
+}
+
+/**
+ * Filter employment impact entries by condition field.
+ */
+export function getConditionEmploymentImpact(
+  conditionName: string,
+  entries: EmploymentImpactEntry[],
+): EmploymentImpactEntry[] {
+  const lower = conditionName.toLowerCase();
+  return entries.filter((e) => e.condition.toLowerCase().includes(lower));
+}
+
+/**
+ * Build a comprehensive tracker summary for a condition — master prefill function.
+ * Aggregates all tracked data for a condition into a single text block.
+ */
+export function buildTrackerSummary(data: {
+  conditionName: string;
+  symptoms: SymptomEntry[];
+  medications: Medication[];
+  migraines?: MigraineEntry[];
+  sleepEntries?: SleepEntry[];
+  ptsdSymptoms?: PTSDSymptomEntry[];
+  employmentImpact?: EmploymentImpactEntry[];
+}): string {
+  const parts: string[] = [];
+
+  if (data.symptoms.length > 0) {
+    const avgSev = data.symptoms.reduce((s, e) => s + e.severity, 0) / data.symptoms.length;
+    parts.push(
+      `Symptoms (${data.symptoms.length} entries, avg severity ${avgSev.toFixed(1)}/10): ${buildSymptomSummary(data.symptoms.slice(0, 5))}`,
+    );
+  }
+
+  if (data.medications.length > 0) {
+    parts.push(`Medications: ${buildMedicationSummary(data.medications)}`);
+  }
+
+  if (data.migraines && data.migraines.length > 0) {
+    const prostrating = data.migraines.filter((m) => m.wasProstrating).length;
+    parts.push(
+      `Migraines: ${data.migraines.length} logged, ${prostrating} prostrating`,
+    );
+  }
+
+  if (data.sleepEntries && data.sleepEntries.length > 0) {
+    const avgHours =
+      data.sleepEntries.reduce((s, e) => s + e.hoursSlept, 0) / data.sleepEntries.length;
+    const nightmareCount = data.sleepEntries.filter((e) => e.nightmares).length;
+    parts.push(
+      `Sleep: ${data.sleepEntries.length} entries, avg ${avgHours.toFixed(1)} hrs/night, ${nightmareCount} nights with nightmares`,
+    );
+  }
+
+  if (data.ptsdSymptoms && data.ptsdSymptoms.length > 0) {
+    const avgSev =
+      data.ptsdSymptoms.reduce((s, e) => s + e.overallSeverity, 0) / data.ptsdSymptoms.length;
+    parts.push(
+      `PTSD symptoms: ${data.ptsdSymptoms.length} entries, avg severity ${avgSev.toFixed(1)}/10`,
+    );
+  }
+
+  if (data.employmentImpact && data.employmentImpact.length > 0) {
+    const totalHours = data.employmentImpact.reduce((s, e) => s + e.hoursLost, 0);
+    parts.push(
+      `Work impact: ${data.employmentImpact.length} incidents, ${totalHours} total hours lost`,
+    );
+  }
+
+  return parts.join('\n');
 }

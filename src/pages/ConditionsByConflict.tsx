@@ -146,7 +146,7 @@ export default function ConditionsByConflict() {
               {searchResults.map(({ condition, conflict, group }, index) => (
                 <div
                   key={`${condition}-${index}`}
-                  className="flex items-center justify-between p-2 rounded-lg bg-muted/50 hover:bg-muted cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  className="flex items-center justify-between p-2 rounded-lg bg-muted/50 hover:bg-muted cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
                   onClick={() => handleSelectConflict(conflict)}
                   onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSelectConflict(conflict); } }}
                   tabIndex={0}

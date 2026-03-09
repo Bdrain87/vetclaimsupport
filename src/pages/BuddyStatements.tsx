@@ -27,6 +27,7 @@ import { EmptyState } from '@/components/EmptyState';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
 import { useToolDraft } from '@/hooks/useToolDraft';
+import { DataConnectedBadge } from '@/components/shared/DataConnectedBadge';
 
 const statementStatuses = ['Not Requested', 'Requested', 'Received', 'Submitted'] as const;
 
@@ -554,7 +555,7 @@ Date: ${today}`;
         <Button variant="outline" disabled={exporting} onClick={async () => {
           setExporting(true);
           try { await exportBuddyContacts(data.buddyContacts); } catch (err) { toast({ title: 'Export failed', description: err instanceof Error ? err.message : 'Could not generate PDF. Please try again.', variant: 'destructive' }); } finally { setExporting(false); }
-        }} className="gap-2 flex-shrink-0">
+        }} className="gap-2 shrink-0">
           {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
           {exporting ? 'Exporting...' : 'Export PDF'}
         </Button>
@@ -567,6 +568,9 @@ Date: ${today}`;
           not legal documents. Review with your VSO or attorney before submitting to the VA.
         </p>
       </div>
+
+      {/* Data Connected Badge */}
+      <DataConnectedBadge />
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -593,7 +597,7 @@ Date: ${today}`;
                   Add Contact
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+              <DialogContent className="max-w-lg max-h-[calc(90vh-var(--keyboard-height,0px))] overflow-y-auto scroll-pb-4" onFocusCapture={(e) => { const target = e.target as HTMLElement; if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') { setTimeout(() => target.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 300); } }}>
                 <DialogHeader>
                   <DialogTitle>{editingId ? 'Edit Contact' : 'Add Buddy Contact'}</DialogTitle>
                   <DialogDescription className="sr-only">Enter buddy contact details for your statement</DialogDescription>
@@ -717,7 +721,7 @@ Date: ${today}`;
                         </Button>
                       </div>
                     </div>
-                    <CardTitle className="text-base mt-2 break-words">
+                    <CardTitle className="text-base mt-2 wrap-break-word">
                       {contact.rank && `${contact.rank} `}{contact.name}
                     </CardTitle>
                   </CardHeader>
@@ -736,9 +740,9 @@ Date: ${today}`;
                     {contact.contactInfo && (
                       <div className="flex items-center gap-2 text-muted-foreground min-w-0">
                         {contact.contactInfo.includes('@') ? (
-                          <Mail className="h-4 w-4 flex-shrink-0" />
+                          <Mail className="h-4 w-4 shrink-0" />
                         ) : (
-                          <Phone className="h-4 w-4 flex-shrink-0" />
+                          <Phone className="h-4 w-4 shrink-0" />
                         )}
                         <span className="text-xs break-all">{contact.contactInfo}</span>
                       </div>
@@ -784,7 +788,7 @@ Date: ${today}`;
           {/* Info Card */}
           <Card className="bg-primary/5 border-primary/30">
             <CardContent className="pt-6 flex items-start gap-3">
-              <HelpCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+              <HelpCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
               <div className="text-sm text-muted-foreground">
                 <p className="font-medium text-foreground mb-1">What is a Buddy Statement?</p>
                 <p>

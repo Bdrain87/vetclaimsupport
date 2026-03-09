@@ -440,11 +440,11 @@ function ClaimStatusTracker() {
                     )}
                   >
                     <div className={cn(
-                      'w-2 h-2 rounded-full flex-shrink-0',
+                      'w-2 h-2 rounded-full shrink-0',
                       isRegress ? 'bg-destructive' : idx === 0 ? 'bg-primary' : 'bg-muted-foreground/40',
                     )} />
                     <span className="font-medium flex-1">{phase?.label || entry.phase}</span>
-                    {isRegress && <TrendingDown className="h-3.5 w-3.5 text-destructive flex-shrink-0" />}
+                    {isRegress && <TrendingDown className="h-3.5 w-3.5 text-destructive shrink-0" />}
                     <span className="text-xs text-muted-foreground">
                       {safeFormatDate(entry.loggedAt)}
                     </span>
@@ -563,7 +563,7 @@ export default function ClaimJourney() {
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-lg">
+          <div className="p-3 rounded-2xl bg-linear-to-br from-primary to-primary/80 text-primary-foreground shadow-lg">
             <Target className="h-6 w-6" />
           </div>
           <div>
@@ -576,7 +576,7 @@ export default function ClaimJourney() {
 
       {/* Phase Timeline */}
       <Card className="border-0 shadow-lg overflow-hidden">
-        <div className="p-6 bg-gradient-to-r from-primary/5 via-transparent to-primary/5">
+        <div className="p-6 bg-linear-to-r from-primary/5 via-transparent to-primary/5">
           <div className="flex items-center justify-between overflow-x-auto pb-2">
             {journeyPhases.map((phase, index) => {
               const status = getPhaseStatus(index);
@@ -687,9 +687,9 @@ export default function ClaimJourney() {
 
       {/* Current Phase Detail */}
       <Card className="border-0 shadow-lg">
-        <CardHeader className="border-b border-border/50 bg-gradient-to-r from-primary/5 to-transparent">
+        <CardHeader className="border-b border-border/50 bg-linear-to-r from-primary/5 to-transparent">
           <div className="flex items-center gap-4">
-            <div className="p-3 rounded-xl bg-primary/10 text-primary flex-shrink-0">
+            <div className="p-3 rounded-xl bg-primary/10 text-primary shrink-0">
               {currentPhase.icon}
             </div>
             <div className="flex-1 min-w-0">
@@ -714,7 +714,7 @@ export default function ClaimJourney() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {currentPhase.tips.map((tip, i) => (
                 <div key={i} className="flex items-start gap-2 p-3 rounded-xl bg-gold/5 border border-gold/20">
-                  <CheckCircle className="h-4 w-4 text-gold-dk mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="h-4 w-4 text-gold-dk mt-0.5 shrink-0" />
                   <span className="text-sm text-muted-foreground">{tip}</span>
                 </div>
               ))}
@@ -761,7 +761,7 @@ export default function ClaimJourney() {
                       )}
                     </div>
                     {isChecked && (
-                      <Check className="h-5 w-5 text-success flex-shrink-0" />
+                      <Check className="h-5 w-5 text-success shrink-0" />
                     )}
                   </div>
                 );
@@ -907,7 +907,7 @@ export default function ClaimJourney() {
                   <ul className="space-y-2">
                     {selectedPhase.tips.map((tip, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                        <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
                         {tip}
                       </li>
                     ))}

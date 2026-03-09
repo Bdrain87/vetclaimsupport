@@ -105,7 +105,7 @@ function FieldCard({ field, formId: _formId, savedValue, onSave }: FieldCardProp
         <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">
           {field.section}
         </p>
-        <h3 className="font-semibold text-sm text-foreground mt-1 break-words">{field.label}</h3>
+        <h3 className="font-semibold text-sm text-foreground mt-1 wrap-break-word">{field.label}</h3>
       </div>
 
       {/* Plain-language explanation */}
@@ -275,7 +275,7 @@ export default function FormGuideDetail() {
       {/* Header */}
       <div>
         <p className="font-mono text-sm font-semibold text-primary">{formDef.formId}</p>
-        <h1 className="text-xl font-bold text-foreground mt-1 break-words">{formDef.formTitle}</h1>
+        <h1 className="text-xl font-bold text-foreground mt-1 wrap-break-word">{formDef.formTitle}</h1>
       </div>
 
       {/* Form Source Notice */}
@@ -283,7 +283,7 @@ export default function FormGuideDetail() {
         'rounded-xl p-4 flex items-start gap-3',
         'bg-muted/50 border border-border'
       )}>
-        <AlertTriangle className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+        <AlertTriangle className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
         <p className="text-xs text-muted-foreground leading-relaxed">
           Forms change. We link to official VA sources and display the revision date.
           Always verify you are using the latest VA version before submitting.
@@ -296,7 +296,7 @@ export default function FormGuideDetail() {
         <ul className="space-y-2">
           {formDef.whatToGather.map((item, i) => (
             <li key={i} className="flex items-start gap-2 text-xs text-muted-foreground">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0 mt-1.5" />
+              <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0 mt-1.5" />
               {item}
             </li>
           ))}

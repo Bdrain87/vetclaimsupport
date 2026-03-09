@@ -42,7 +42,7 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
 }
 
 const STATS = [
-  { value: 50, suffix: '+', label: 'Tools & Features' },
+  { value: 60, suffix: '+', label: 'Tools & Features' },
   { value: 800, suffix: '+', label: 'VA Conditions' },
   { value: 256, suffix: '-bit', label: 'Encryption' },
   { value: 0, suffix: '', label: 'Veteran Founded', isText: true },

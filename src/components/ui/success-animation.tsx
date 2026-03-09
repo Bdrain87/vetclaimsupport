@@ -247,7 +247,7 @@ const SuccessOverlay = React.forwardRef<HTMLDivElement, SuccessOverlayProps>(
     return (
       <div
         ref={ref}
-        className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm animate-fade-in"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-xs animate-fade-in"
         onClick={onDismiss}
       >
         <div className="p-8 rounded-3xl bg-card border border-border shadow-2xl animate-scale-in">

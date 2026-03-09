@@ -90,6 +90,7 @@ export interface AIAnalyzeImageOpts {
   model?: string;
   timeout?: number;
   signal?: AbortSignal;
+  temperature?: number;
   /** If provided, forces JSON output with the given schema. */
   responseSchema?: Record<string, unknown>;
 }
@@ -102,6 +103,7 @@ export interface AIGenerateJSONOpts<T = unknown> {
   model?: string;
   timeout?: number;
   signal?: AbortSignal;
+  temperature?: number;
   _phantom?: T;
 }
 
@@ -112,12 +114,14 @@ export interface AIStreamOpts {
   model?: string;
   timeout?: number;
   signal?: AbortSignal;
+  temperature?: number;
 }
 
 export interface CreateChatOpts {
   systemInstruction?: string;
   feature: string;
   model?: string;
+  temperature?: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -154,6 +158,7 @@ export async function* aiGenerateStream(opts: AIStreamOpts): AsyncGenerator<stri
   const config: GenerateContentConfig = {
     systemInstruction: opts.systemInstruction,
     abortSignal: signal,
+    temperature: opts.temperature,
   };
 
   const stream = await getAI().models.generateContentStream({
@@ -206,6 +211,7 @@ export async function aiAnalyzeImage(opts: AIAnalyzeImageOpts): Promise<string> 
   const config: GenerateContentConfig = {
     systemInstruction: opts.systemInstruction,
     abortSignal: signal,
+    temperature: opts.temperature,
   };
   if (opts.responseSchema) {
     config.responseMimeType = 'application/json';
@@ -235,6 +241,7 @@ export async function aiGenerateJSON<T>(opts: AIGenerateJSONOpts<T>): Promise<T>
       config: {
         systemInstruction: opts.systemInstruction,
         abortSignal: signal,
+        temperature: opts.temperature,
         responseMimeType: 'application/json',
         responseSchema: opts.responseSchema as GenerateContentConfig['responseSchema'],
       },
@@ -250,7 +257,29 @@ export function createChat(opts: CreateChatOpts): Chat {
     model: opts.model ?? DEFAULT_MODEL,
     config: {
       systemInstruction: opts.systemInstruction,
+      temperature: opts.temperature,
     },
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Context-aware generation wrapper
+// ---------------------------------------------------------------------------
+
+import { buildVeteranContext } from '@/utils/veteranContext';
+import { formatContextForAI } from '@/utils/formatContextForAI';
+
+export interface AIGenerateWithContextOpts extends AIGenerateOpts {
+  detailLevel?: 'minimal' | 'standard' | 'detailed';
+}
+
+/** Wrapper around `aiGenerate` that auto-injects veteran context into the prompt. */
+export async function aiGenerateWithContext(opts: AIGenerateWithContextOpts): Promise<{ text: string; redactionCount: number }> {
+  const ctx = buildVeteranContext({ maskPII: true });
+  const contextBlock = formatContextForAI(ctx, opts.detailLevel ?? 'minimal');
+  return aiGenerate({
+    ...opts,
+    prompt: `${contextBlock}\n\n${opts.prompt}`,
   });
 }
 

@@ -20,6 +20,7 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import useAppStore from '@/store/useAppStore';
 import { EMPLOYMENT_IMPACT_TYPES } from '@/types/claims';
 import type { EmploymentImpactEntry } from '@/types/claims';
+import { getConditionSymptoms, buildSymptomSummary } from '@/utils/prefillHelpers';
 
 const todayStr = () => {
   const d = new Date();
@@ -28,6 +29,7 @@ const todayStr = () => {
 
 export default function WorkImpact() {
   const entries = useAppStore((s) => s.employmentImpactEntries);
+  const allSymptoms = useAppStore((s) => s.symptoms);
   const { addEntry, deleteEntry } = useMemo(() => {
     const s = useAppStore.getState();
     return { addEntry: s.addEmploymentImpact, deleteEntry: s.deleteEmploymentImpact };
@@ -124,7 +126,19 @@ export default function WorkImpact() {
               </div>
               <div className="space-y-1.5">
                 <Label>Related condition</Label>
-                <Select value={formData.condition} onValueChange={(v) => setFormData((p) => ({ ...p, condition: v }))}>
+                <Select value={formData.condition} onValueChange={(v) => {
+                  setFormData((p) => {
+                    const updated = { ...p, condition: v };
+                    // Auto-suggest description from recent symptoms
+                    if (v && v !== 'general' && !p.description) {
+                      const condSymptoms = getConditionSymptoms(v, allSymptoms).slice(-3);
+                      if (condSymptoms.length > 0) {
+                        updated.description = `Recent symptoms: ${buildSymptomSummary(condSymptoms)}`;
+                      }
+                    }
+                    return updated;
+                  });
+                }}>
                   <SelectTrigger><SelectValue placeholder="Select condition" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="general">General</SelectItem>
@@ -147,7 +161,7 @@ export default function WorkImpact() {
 
       {/* Why this matters */}
       <div className="flex gap-3 p-3 rounded-2xl border border-primary/20 bg-primary/5">
-        <AlertTriangle className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+        <AlertTriangle className="h-4 w-4 text-primary mt-0.5 shrink-0" />
         <p className="text-xs text-muted-foreground leading-relaxed">
           Employment impact documentation is critical for TDIU claims and increased ratings. The VA needs
           evidence of how your conditions affect your ability to work, earn income, and perform job duties.

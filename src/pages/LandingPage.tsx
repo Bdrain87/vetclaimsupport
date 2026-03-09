@@ -5,6 +5,9 @@ import { TrustMarquee } from '@/components/landing/new/TrustMarquee';
 import { HowItWorks } from '@/components/landing/new/HowItWorks';
 import { BuiltByVeteran } from '@/components/landing/new/BuiltByVeteran';
 import { ProductShowcase } from '@/components/landing/new/ProductShowcase';
+import { AIShowcase } from '@/components/landing/new/AIShowcase';
+import { PersonalizedDemo } from '@/components/landing/new/PersonalizedDemo';
+import { ComparisonTable } from '@/components/landing/new/ComparisonTable';
 import { Pricing } from '@/components/landing/new/Pricing';
 import { LandingFooter } from '@/components/landing/new/LandingFooter';
 
@@ -44,6 +47,9 @@ export default function LandingPage() {
         <HowItWorks />
         <BuiltByVeteran />
         <ProductShowcase />
+        <AIShowcase />
+        <PersonalizedDemo />
+        <ComparisonTable />
         <Pricing />
       </main>
       <LandingFooter />

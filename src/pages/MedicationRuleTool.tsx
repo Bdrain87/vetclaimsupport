@@ -85,7 +85,7 @@ export default function MedicationRuleTool() {
       <Card className="border-gold/20 bg-gold/5">
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
-            <AlertTriangle className="h-5 w-5 text-gold mt-0.5 flex-shrink-0" />
+            <AlertTriangle className="h-5 w-5 text-gold mt-0.5 shrink-0" />
             <div className="space-y-1.5">
               <h3 className="font-semibold text-sm">What's Changing</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
@@ -145,9 +145,9 @@ export default function MedicationRuleTool() {
                       <div key={item.label} className="flex items-center justify-between gap-2">
                         <div className="flex items-center gap-2 flex-1 min-w-0">
                           {passed ? (
-                            <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0" />
+                            <CheckCircle2 className="h-4 w-4 text-success shrink-0" />
                           ) : (
-                            <Circle className="h-4 w-4 text-muted-foreground/40 flex-shrink-0" />
+                            <Circle className="h-4 w-4 text-muted-foreground/40 shrink-0" />
                           )}
                           <span className={`text-xs ${passed ? 'text-foreground' : 'text-muted-foreground'}`}>
                             {item.label}
@@ -156,7 +156,7 @@ export default function MedicationRuleTool() {
                         {!passed && (
                           <Link
                             to={item.fixRoute}
-                            className="text-[11px] text-gold hover:text-gold/80 flex-shrink-0 flex items-center gap-0.5"
+                            className="text-[11px] text-gold hover:text-gold/80 shrink-0 flex items-center gap-0.5"
                           >
                             Fix <ChevronRight className="h-3 w-3" />
                           </Link>

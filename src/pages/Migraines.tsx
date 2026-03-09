@@ -346,7 +346,7 @@ export default function Migraines() {
       {/* Premium Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 shadow-[0_0_24px_var(--gold-glow)]">
+          <div className="p-3 rounded-2xl bg-linear-to-br from-gold/20 to-gold/5 shadow-[0_0_24px_var(--gold-glow)]">
             <Brain className="h-6 w-6 text-gold drop-shadow-[0_0_8px_rgba(240,192,0,0.5)]" />
           </div>
           <div>
@@ -370,9 +370,9 @@ export default function Migraines() {
       {/* VA Rating Estimator Card - Premium Design */}
       {(data.migraines?.length || 0) > 0 && (
         <div className="rounded-2xl bg-card border border-border overflow-hidden shadow-lg" style={{ boxShadow: '0 8px 32px rgba(0, 0, 0, 0.25)' }}>
-          <div className="p-4 border-b border-border/50 bg-gradient-to-r from-primary/10 via-transparent to-transparent">
+          <div className="p-4 border-b border-border/50 bg-linear-to-r from-primary/10 via-transparent to-transparent">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex-shrink-0">
+              <div className="p-2.5 rounded-xl bg-linear-to-br from-primary/20 to-primary/5 shrink-0">
                 <Target className="h-5 w-5 text-primary" />
               </div>
               <h3 className="text-lg font-bold text-foreground tracking-tight">Estimated VA Rating — Migraines</h3>
@@ -388,7 +388,7 @@ export default function Migraines() {
                   {stats.estimatedRating.description}
                 </p>
               </div>
-              <Badge variant="outline" className="text-xs flex-shrink-0">
+              <Badge variant="outline" className="text-xs shrink-0">
                 {stats.estimatedRating.confidence}
               </Badge>
             </div>
@@ -403,7 +403,7 @@ export default function Migraines() {
               </div>
               <div className="relative h-3 bg-muted rounded-full overflow-hidden">
                 <div 
-                  className="absolute h-full bg-gradient-to-r from-gold/60 via-gold to-gold-hl rounded-full transition-all duration-500"
+                  className="absolute h-full bg-linear-to-r from-gold/60 via-gold to-gold-hl rounded-full transition-all duration-500"
                   style={{ width: `${Math.min(100, (stats.estimatedRating.rating / 50) * 100)}%` }}
                 />
                 {/* Threshold markers */}
@@ -460,7 +460,7 @@ export default function Migraines() {
       </Alert>
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex gap-2 flex-shrink-0">
+        <div className="flex gap-2 shrink-0">
           <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
             <DialogTrigger asChild>
               <Button className="gap-2">
@@ -469,7 +469,7 @@ export default function Migraines() {
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col">
-              <DialogHeader className="flex-shrink-0">
+              <DialogHeader className="shrink-0">
                 <DialogTitle>{editingId ? 'Edit Migraine Entry' : 'Log Migraine Attack'}</DialogTitle>
                 <DialogDescription className="sr-only">Record migraine attack details</DialogDescription>
               </DialogHeader>
@@ -853,7 +853,7 @@ export default function Migraines() {
               </div>
               
               {/* Sticky Footer */}
-              <div className="flex-shrink-0 border-t border-border bg-background pt-4 pb-2 px-1 -mx-1">
+              <div className="shrink-0 border-t border-border bg-background pt-4 pb-2 px-1 -mx-1">
                 <div className="flex justify-end gap-3">
                   <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
                     Cancel
@@ -983,18 +983,18 @@ export default function Migraines() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap min-w-0">
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <Calendar className="h-4 w-4 flex-shrink-0" />
+                  <div className="flex items-center gap-2 shrink-0">
+                    <Calendar className="h-4 w-4 shrink-0" />
                     {safeFormatDate(entry.date)}
                   </div>
                   {entry.time && (
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <Clock className="h-4 w-4 flex-shrink-0" />
+                    <div className="flex items-center gap-2 shrink-0">
+                      <Clock className="h-4 w-4 shrink-0" />
                       {entry.time}
                     </div>
                   )}
                   <div className="flex items-center gap-2 min-w-0">
-                    <AlertTriangle className="h-4 w-4 flex-shrink-0" />
+                    <AlertTriangle className="h-4 w-4 shrink-0" />
                     <span className="line-clamp-2">{entry.impacts?.length ? entry.impacts.join(', ') : entry.impact}</span>
                   </div>
                   {entry.functioningLevel !== undefined && entry.functioningLevel < 50 && (
@@ -1045,7 +1045,7 @@ export default function Migraines() {
 
                 {entry.treatment && (
                   <div className="flex items-center gap-2 flex-wrap min-w-0">
-                    <span className="text-xs text-muted-foreground flex-shrink-0">Treatment: </span>
+                    <span className="text-xs text-muted-foreground shrink-0">Treatment: </span>
                     <span className="text-sm min-w-0">{entry.treatment}</span>
                     {entry.medicationEffective !== undefined && (
                       <Badge variant="outline" className={entry.medicationEffective ? 'text-success border-success/50' : 'text-destructive border-destructive/50'}>

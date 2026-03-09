@@ -168,7 +168,7 @@ export default function Exposures() {
           </div>
         </div>
 
-        <div className="flex gap-2 flex-shrink-0">
+        <div className="flex gap-2 shrink-0">
           <Button variant="outline" disabled={exporting} onClick={async () => {
             setExporting(true);
             try { await exportExposures(data.exposures); } catch (err) { toast({ title: 'Export failed', description: err instanceof Error ? err.message : 'Could not generate PDF. Please try again.', variant: 'destructive' }); } finally { setExporting(false); }
@@ -347,24 +347,24 @@ export default function Exposures() {
               <CardContent className="space-y-3">
                 <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 text-sm">
                   <div className="flex items-center gap-2 text-muted-foreground min-w-0">
-                    <Calendar className="h-4 w-4 flex-shrink-0" />
+                    <Calendar className="h-4 w-4 shrink-0" />
                     <span className="truncate">{safeFormatDate(exposure.date)}</span>
                   </div>
                   {exposure.location && (
                     <div className="flex items-center gap-2 text-muted-foreground min-w-0">
-                      <MapPin className="h-4 w-4 flex-shrink-0" />
+                      <MapPin className="h-4 w-4 shrink-0" />
                       <span className="truncate">{exposure.location}</span>
                     </div>
                   )}
                   {exposure.duration && (
                     <div className="flex items-center gap-2 text-muted-foreground min-w-0">
-                      <Shield className="h-4 w-4 flex-shrink-0" />
+                      <Shield className="h-4 w-4 shrink-0" />
                       <span className="truncate">{exposure.duration}</span>
                     </div>
                   )}
                   {exposure.witnesses && (
                     <div className="flex items-center gap-2 text-muted-foreground min-w-0">
-                      <Users className="h-4 w-4 flex-shrink-0" />
+                      <Users className="h-4 w-4 shrink-0" />
                       <span className="truncate">{exposure.witnesses}</span>
                     </div>
                   )}

@@ -10,11 +10,13 @@ import { impactMedium, notifySuccess } from '@/lib/haptics';
 import { aiTranscribe, isGeminiConfigured } from '@/lib/gemini';
 import { useAIStream } from '@/hooks/useAIStream';
 import { isNativeApp } from '@/lib/platform';
-import { createCPExamEvalPrompt } from '@/lib/ai-prompts';
+import { createCPExamEvalPromptV2 } from '@/lib/ai-prompts';
+import { getModelConfig } from '@/lib/ai-models';
 import { buildConditionContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
 import { StreamingText } from '@/components/ui/StreamingText';
 import { Mic, MicOff, Play, RotateCcw, Copy, ChevronRight, Shield, AlertTriangle, Square } from 'lucide-react';
+import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 
 // DBQ-based question sets by condition category
 const EXAM_QUESTIONS: Record<string, string[]> = {
@@ -176,12 +178,16 @@ export default function CPExamSimulator() {
         feature: 'cp-exam-simulator',
       });
 
-      // Evaluate (streaming)
+      // Evaluate (streaming) — Pro model + VASRD criteria injection
       const ctx = buildConditionContext(selectedCondition);
       const contextBlock = formatContextForAI(ctx, 'standard');
+      const { model, temperature, timeout } = getModelConfig('cp-exam-simulator');
       const feedbackText = await startStream({
-        prompt: createCPExamEvalPrompt(selectedCondition, questions[currentQ], transcript, contextBlock),
+        prompt: createCPExamEvalPromptV2(selectedCondition, questions[currentQ], transcript, contextBlock),
         feature: 'cp-exam-simulator',
+        model,
+        temperature,
+        timeout,
       });
 
       const strengthMatch = feedbackText.match(/STRENGTH:\s*(Strong|Moderate|Weak)/i);
@@ -234,9 +240,11 @@ export default function CPExamSimulator() {
 
   return (
     <PageContainer className="space-y-4 pb-8">
+      <AIDisclaimer variant="banner" />
+
       {/* Disclaimer */}
       <div className="flex items-start gap-2 p-3 rounded-xl bg-gold/5 border border-gold/10">
-        <AlertTriangle className="h-4 w-4 text-gold mt-0.5 flex-shrink-0" />
+        <AlertTriangle className="h-4 w-4 text-gold mt-0.5 shrink-0" />
         <p className="text-[11px] text-muted-foreground">
           This simulator helps you practice articulating your symptoms. Always describe your genuine experiences truthfully. This is not legal advice — consult a VSO or attorney.
         </p>
@@ -256,7 +264,7 @@ export default function CPExamSimulator() {
                   onClick={() => startExam(c.displayName || c.conditionId)}
                   className="w-full flex items-center gap-3 p-3 rounded-xl border border-border bg-card hover:bg-accent transition-colors text-left"
                 >
-                  <Shield className="h-5 w-5 text-gold flex-shrink-0" />
+                  <Shield className="h-5 w-5 text-gold shrink-0" />
                   <span className="flex-1 text-sm font-medium">{c.displayName || c.conditionId}</span>
                   <ChevronRight className="h-4 w-4 text-muted-foreground" />
                 </button>
@@ -273,7 +281,7 @@ export default function CPExamSimulator() {
             onClick={() => startExam('General Condition')}
             className="w-full flex items-center gap-3 p-3 rounded-xl border border-dashed border-border hover:bg-accent transition-colors text-left"
           >
-            <Play className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+            <Play className="h-5 w-5 text-muted-foreground shrink-0" />
             <span className="flex-1 text-sm text-muted-foreground">Practice with general questions</span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </button>

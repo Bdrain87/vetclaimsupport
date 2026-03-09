@@ -154,7 +154,7 @@ export default function Medications() {
             </Button>
           </div>
         </div>
-        <CardTitle className={`text-base mt-2 break-words line-clamp-2 ${isActive ? 'group-hover:text-primary transition-colors' : ''}`}>{med.name}</CardTitle>
+        <CardTitle className={`text-base mt-2 wrap-break-word line-clamp-2 ${isActive ? 'group-hover:text-primary transition-colors' : ''}`}>{med.name}</CardTitle>
         {med.dosage && (
           <p className="text-xs text-muted-foreground">{med.dosage}{med.frequency ? ` · ${med.frequency}` : ''}</p>
         )}
@@ -195,7 +195,7 @@ export default function Medications() {
         )}
         {med.sideEffects && (
           <div className={`flex items-start gap-2 ${isActive ? 'text-destructive/80 bg-destructive/5 border border-destructive/10 rounded-xl p-3' : 'text-muted-foreground bg-muted/50 rounded p-2'} mt-2`}>
-            <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+            <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
             <span className="text-xs line-clamp-3">{med.sideEffects}</span>
           </div>
         )}
@@ -222,7 +222,7 @@ export default function Medications() {
           </div>
         </div>
 
-        <div className="flex gap-2 flex-shrink-0">
+        <div className="flex gap-2 shrink-0">
           <Button variant="outline" disabled={exporting} onClick={async () => {
             setExporting(true);
             try { await exportMedications(data.medications); } catch (err) { toast({ title: 'Export failed', description: err instanceof Error ? err.message : 'Could not generate PDF. Please try again.', variant: 'destructive' }); } finally { setExporting(false); }
@@ -478,19 +478,19 @@ export default function Medications() {
         <div className="space-y-4">
           {/* Side Effect Summary Cards */}
           <div className="grid grid-cols-3 gap-3">
-            <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
+            <Card className="bg-linear-to-br from-primary/10 to-primary/5 border-primary/20">
               <CardContent className="p-3 text-center">
                 <p className="text-2xl font-bold">{sideEffectStats.total}</p>
                 <p className="text-[11px] text-muted-foreground">Total Meds</p>
               </CardContent>
             </Card>
-            <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/20">
+            <Card className="bg-linear-to-br from-destructive/10 to-destructive/5 border-destructive/20">
               <CardContent className="p-3 text-center">
                 <p className="text-2xl font-bold text-destructive">{sideEffectStats.withSideEffects}</p>
                 <p className="text-[11px] text-muted-foreground">With Side Effects</p>
               </CardContent>
             </Card>
-            <Card className="bg-gradient-to-br from-gold/10 to-gold/5 border-gold/20">
+            <Card className="bg-linear-to-br from-gold/10 to-gold/5 border-gold/20">
               <CardContent className="p-3 text-center">
                 <p className="text-2xl font-bold text-gold">{sideEffectStats.currentWithSideEffects}</p>
                 <p className="text-[11px] text-muted-foreground">Active + Side Effects</p>
@@ -502,7 +502,7 @@ export default function Medications() {
           <Card className="border-primary/20 bg-primary/5">
             <CardContent className="p-4">
               <div className="flex items-start gap-3">
-                <Info className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                <Info className="h-5 w-5 text-primary mt-0.5 shrink-0" />
                 <div className="space-y-1.5">
                   <h3 className="font-semibold text-sm">Why Side Effects Matter for VA Claims</h3>
                   <p className="text-xs text-muted-foreground leading-relaxed">

@@ -106,7 +106,7 @@ export function PACTActChecker() {
       {/* Info Banner */}
       <div className="p-4 rounded-xl bg-gold/10 border border-gold/30">
         <div className="flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+          <AlertCircle className="w-5 h-5 text-gold mt-0.5 shrink-0" />
           <div>
             <h3 className="font-semibold text-gold">PACT Act Eligibility Checker</h3>
             <p className="text-sm text-muted-foreground mt-1">
@@ -294,7 +294,7 @@ export function PACTActChecker() {
                       className="flex items-center justify-between gap-2 p-3 bg-muted/50 rounded-lg border border-border"
                     >
                       <div className="min-w-0 flex-1">
-                        <span className="font-medium text-foreground break-words">{condition.condition}</span>
+                        <span className="font-medium text-foreground wrap-break-word">{condition.condition}</span>
                         {condition.description && (
                           <p className="text-xs text-muted-foreground mt-0.5">{condition.description}</p>
                         )}
@@ -332,19 +332,19 @@ export function PACTActChecker() {
           <h4 className="font-semibold text-foreground mb-3">About the PACT Act</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li className="flex items-start gap-2">
-              <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
+              <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
               <span>Signed into law August 10, 2022</span>
             </li>
             <li className="flex items-start gap-2">
-              <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
+              <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
               <span>Expanded VA healthcare eligibility for toxic exposure</span>
             </li>
             <li className="flex items-start gap-2">
-              <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
+              <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
               <span>Added 23+ conditions to presumptive list</span>
             </li>
             <li className="flex items-start gap-2">
-              <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
+              <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
               <span>Covers burn pit exposure, Agent Orange, and Gulf War hazards</span>
             </li>
           </ul>

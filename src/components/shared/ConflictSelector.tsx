@@ -93,7 +93,7 @@ export function ConflictSelector({ className, onConflictChange }: ConflictSelect
 
                 {conflict.dateRange && (
                   <span className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
-                    <Calendar className="h-3 w-3 flex-shrink-0" />
+                    <Calendar className="h-3 w-3 shrink-0" />
                     {conflict.dateRange}
                   </span>
                 )}

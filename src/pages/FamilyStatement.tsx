@@ -8,12 +8,16 @@ import { toast } from '@/hooks/use-toast';
 import { impactMedium } from '@/lib/haptics';
 import { aiTranscribe, isGeminiConfigured } from '@/lib/gemini';
 import { useAIStream } from '@/hooks/useAIStream';
+import { getModelConfig } from '@/lib/ai-models';
 import { isNativeApp } from '@/lib/platform';
 import { createFamilyStatementPrompt } from '@/lib/ai-prompts';
 import { buildVeteranContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
 import { StreamingText } from '@/components/ui/StreamingText';
 import { Mic, MicOff, Copy, RotateCcw, AlertTriangle, Heart, Users, PenTool, Square } from 'lucide-react';
+import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { DataConnectedBadge } from '@/components/shared/DataConnectedBadge';
+import { AIConfidenceScore } from '@/components/shared/AIConfidenceScore';
 
 type Relationship = 'spouse' | 'child' | 'parent' | 'sibling' | 'friend';
 
@@ -48,10 +52,13 @@ export default function FamilyStatement() {
     try {
       const ctx = buildVeteranContext({ maskPII: true });
       const contextBlock = formatContextForAI(ctx, 'standard');
+      const { temperature, timeout } = getModelConfig('family-statement');
       const result = await startStream({
         prompt: createFamilyStatementPrompt(relationship!, text, contextBlock),
         systemInstruction: FAMILY_STATEMENT_SYSTEM,
         feature: 'family-statement',
+        temperature,
+        timeout,
       });
       setStatement(result);
     } catch {
@@ -116,8 +123,10 @@ export default function FamilyStatement() {
   return (
     <PageContainer className="space-y-4 pb-8">
       <h1 className="text-xl font-bold mb-4">Family Impact Statement</h1>
+      <AIDisclaimer variant="banner" />
+      <DataConnectedBadge />
       <div className="flex items-start gap-2 p-3 rounded-xl bg-gold/5 border border-gold/10">
-        <AlertTriangle className="h-4 w-4 text-gold mt-0.5 flex-shrink-0" />
+        <AlertTriangle className="h-4 w-4 text-gold mt-0.5 shrink-0" />
         <p className="text-[11px] text-muted-foreground">
           Family lay statements are powerful evidence. The VA values specific observations from people who witness the veteran's daily life. These are sample templates — must be personalized. Not legal advice.
         </p>
@@ -140,7 +149,7 @@ export default function FamilyStatement() {
                 onClick={() => { impactMedium(); setRelationship(key); }}
                 className="w-full flex items-center gap-3 p-3 rounded-xl border border-border bg-card hover:bg-accent transition-colors text-left"
               >
-                <Users className="h-5 w-5 text-gold flex-shrink-0" />
+                <Users className="h-5 w-5 text-gold shrink-0" />
                 <span className="text-sm font-medium">{label}</span>
               </button>
             ))}
@@ -196,7 +205,7 @@ export default function FamilyStatement() {
                 value={textInput}
                 onChange={(e) => setTextInput(e.target.value)}
                 placeholder={`As the veteran's ${RELATIONSHIP_LABELS[relationship].toLowerCase()}, describe what you've observed about their condition. Include specific examples, changes over time, and daily impacts...`}
-                className="w-full h-40 p-3 rounded-xl border border-border bg-card text-sm resize-none focus:outline-none focus:border-gold/30"
+                className="w-full h-40 p-3 rounded-xl border border-border bg-card text-sm resize-none focus:outline-hidden focus:border-gold/30"
               />
               <Button
                 onClick={() => { impactMedium(); generateFromText(textInput); }}
@@ -241,6 +250,8 @@ export default function FamilyStatement() {
             isStreaming={isStreaming}
             className="p-4 rounded-xl border border-border bg-card text-sm text-muted-foreground leading-relaxed"
           />
+
+          {!isStreaming && statement && <AIConfidenceScore />}
 
           <div className="flex gap-2">
             {isStreaming ? (

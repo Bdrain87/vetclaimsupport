@@ -598,7 +598,7 @@ export default function BodyMap() {
               onClick={() => { setViewMode('front'); setSelectedRegion(null); }}
               className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
                 viewMode === 'front'
-                  ? 'bg-gold/20 text-foreground border border-gold/30 shadow-sm'
+                  ? 'bg-gold/20 text-foreground border border-gold/30 shadow-xs'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
@@ -609,7 +609,7 @@ export default function BodyMap() {
               onClick={() => { setViewMode('back'); setSelectedRegion(null); }}
               className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
                 viewMode === 'back'
-                  ? 'bg-gold/20 text-foreground border border-gold/30 shadow-sm'
+                  ? 'bg-gold/20 text-foreground border border-gold/30 shadow-xs'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
@@ -710,7 +710,7 @@ export default function BodyMap() {
                             key={pin.id}
                             className="flex items-start gap-3 p-3 rounded-lg border border-border bg-muted/20 hover:bg-muted/40 transition-colors"
                           >
-                            <div className="flex-shrink-0 mt-0.5">
+                            <div className="shrink-0 mt-0.5">
                               <MapPin className={`h-4 w-4 ${
                                 pin.severity >= 7 ? 'text-destructive' :
                                 pin.severity >= 4 ? 'text-gold' :
@@ -758,7 +758,7 @@ export default function BodyMap() {
                                 </p>
                               )}
                             </div>
-                            <div className="flex items-center gap-1 flex-shrink-0">
+                            <div className="flex items-center gap-1 shrink-0">
                               <Button
                                 variant="ghost"
                                 size="sm"
@@ -1062,7 +1062,7 @@ export default function BodyMap() {
                           >
                             <div className="flex items-start gap-3">
                               <div
-                                className={`mt-0.5 flex-shrink-0 h-6 w-6 rounded-full border-2 flex items-center justify-center transition-colors ${
+                                className={`mt-0.5 shrink-0 h-6 w-6 rounded-full border-2 flex items-center justify-center transition-colors ${
                                   isAdded
                                     ? 'bg-gold border-gold'
                                     : 'border-white/70'
@@ -1209,7 +1209,7 @@ export default function BodyMap() {
                               </p>
                             )}
                           </div>
-                          <div className="flex items-center gap-1 flex-shrink-0">
+                          <div className="flex items-center gap-1 shrink-0">
                             <Button
                               variant="ghost"
                               size="sm"
@@ -1301,7 +1301,7 @@ export default function BodyMap() {
                             <span className="text-[10px] text-muted-foreground ml-0.5">
                               ({regionLabel})
                             </span>
-                            <X className="h-3 w-3 ml-0.5 flex-shrink-0" />
+                            <X className="h-3 w-3 ml-0.5 shrink-0" />
                           </Badge>
                         );
                       })}
@@ -1327,7 +1327,7 @@ export default function BodyMap() {
           >
             {/* Backdrop */}
             <div
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/60 backdrop-blur-xs"
               onClick={() => setPinDialogOpen(false)}
             />
 
@@ -1379,7 +1379,7 @@ export default function BodyMap() {
                     value={pinForm.symptomType}
                     onChange={(e) => setPinForm((f) => ({ ...f, symptomType: e.target.value }))}
                     placeholder="e.g., Sharp pain, Numbness, Stiffness..."
-                    className="w-full rounded-xl border border-border bg-muted/30 px-4 py-3 min-h-[44px] text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60"
+                    className="w-full rounded-xl border border-border bg-muted/30 px-4 py-3 min-h-[44px] text-sm text-foreground placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-gold/40 focus:border-gold/60"
                   />
                 </div>
 
@@ -1423,7 +1423,7 @@ export default function BodyMap() {
                     id="pin-frequency"
                     value={pinForm.frequency}
                     onChange={(e) => setPinForm((f) => ({ ...f, frequency: e.target.value as BodyMapPin['frequency'] }))}
-                    className="w-full rounded-xl border border-border bg-muted/30 px-4 py-3 min-h-[44px] text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60"
+                    className="w-full rounded-xl border border-border bg-muted/30 px-4 py-3 min-h-[44px] text-sm text-foreground focus:outline-hidden focus:ring-2 focus:ring-gold/40 focus:border-gold/60"
                   >
                     <option value="daily">Daily</option>
                     <option value="weekly">Weekly</option>
@@ -1442,7 +1442,7 @@ export default function BodyMap() {
                     type="date"
                     value={pinForm.onsetDate}
                     onChange={(e) => setPinForm((f) => ({ ...f, onsetDate: e.target.value }))}
-                    className="w-full rounded-xl border border-border bg-muted/30 px-4 py-3 min-h-[44px] text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60"
+                    className="w-full rounded-xl border border-border bg-muted/30 px-4 py-3 min-h-[44px] text-sm text-foreground focus:outline-hidden focus:ring-2 focus:ring-gold/40 focus:border-gold/60"
                   />
                 </div>
 
@@ -1457,7 +1457,7 @@ export default function BodyMap() {
                     value={pinForm.flareTriggers}
                     onChange={(e) => setPinForm((f) => ({ ...f, flareTriggers: e.target.value }))}
                     placeholder="e.g., Cold weather, Lifting, Extended standing..."
-                    className="w-full rounded-xl border border-border bg-muted/30 px-4 py-3 min-h-[44px] text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60"
+                    className="w-full rounded-xl border border-border bg-muted/30 px-4 py-3 min-h-[44px] text-sm text-foreground placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-gold/40 focus:border-gold/60"
                   />
                 </div>
 
@@ -1472,7 +1472,7 @@ export default function BodyMap() {
                     value={pinForm.functionalImpact}
                     onChange={(e) => setPinForm((f) => ({ ...f, functionalImpact: e.target.value }))}
                     placeholder="e.g., Cannot lift above shoulder, Limits walking..."
-                    className="w-full rounded-xl border border-border bg-muted/30 px-4 py-3 min-h-[44px] text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60"
+                    className="w-full rounded-xl border border-border bg-muted/30 px-4 py-3 min-h-[44px] text-sm text-foreground placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-gold/40 focus:border-gold/60"
                   />
                 </div>
 
@@ -1487,7 +1487,7 @@ export default function BodyMap() {
                     value={pinForm.notes}
                     onChange={(e) => setPinForm((f) => ({ ...f, notes: e.target.value }))}
                     placeholder="Any additional details about this symptom..."
-                    className="w-full rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60 resize-none"
+                    className="w-full rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-gold/40 focus:border-gold/60 resize-none"
                   />
                 </div>
               </div>

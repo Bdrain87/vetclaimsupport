@@ -79,6 +79,7 @@ const DoctorSummaryOutline = lazyWithRetry(() => import('./pages/DoctorSummaryOu
 const DocumentsHub = lazyWithRetry(() => import('./pages/DocumentsHub'));
 const CPExamPrepEnhanced = lazyWithRetry(() => import('./pages/CPExamPrepEnhanced'));
 const DBQPrepSheet = lazyWithRetry(() => import('./pages/DBQPrepSheet'));
+const DBQAnalyzer = lazyWithRetry(() => import('./pages/DBQAnalyzer'));
 const VAResources = lazyWithRetry(() => import('./pages/VAResources'));
 const ServiceHistory = lazyWithRetry(() => import('./pages/ServiceHistory'));
 const Glossary = lazyWithRetry(() => import('./pages/Glossary'));
@@ -87,6 +88,8 @@ const FAQ = lazyWithRetry(() => import('./pages/FAQ'));
 const HelpCenter = lazyWithRetry(() => import('./pages/HelpCenter'));
 const NotFound = lazyWithRetry(() => import('./pages/NotFound'));
 const Onboarding = lazyWithRetry(() => import('./pages/Onboarding'));
+const OnboardingPlan = lazyWithRetry(() => import('./pages/OnboardingPlan'));
+const ConditionJourney = lazyWithRetry(() => import('./pages/ConditionJourney'));
 const FormGuide = lazyWithRetry(() => import('./pages/FormGuide'));
 const FormGuideDetail = lazyWithRetry(() => import('./pages/FormGuideDetail'));
 const BuildPacket = lazyWithRetry(() => import('./pages/BuildPacket'));
@@ -137,6 +140,12 @@ const CPExamSimulator = lazyWithRetry(() => import('./pages/CPExamSimulator'));
 const PostExamDebrief = lazyWithRetry(() => import('./pages/PostExamDebrief'));
 const FamilyStatement = lazyWithRetry(() => import('./pages/FamilyStatement'));
 const EvidenceScanner = lazyWithRetry(() => import('./pages/EvidenceScanner'));
+
+// Go-live competitive features
+const MOSHazards = lazyWithRetry(() => import('./pages/MOSHazards'));
+const PACTActStandalone = lazyWithRetry(() => import('./pages/PACTActStandalone'));
+const StateBenefits = lazyWithRetry(() => import('./pages/StateBenefits'));
+const VSOLocator = lazyWithRetry(() => import('./pages/VSOLocator'));
 
 // Account & Legal pages
 const DeleteAccountPage = lazyWithRetry(() => import('./pages/account/DeleteAccountPage'));
@@ -233,7 +242,7 @@ function useFirstTimeRedirect() {
     // redirect. Their profile will sync and restore hasCompletedOnboarding.
     if (hasSession) return;
 
-    const isOnboardingPage = location.pathname === '/onboarding';
+    const isOnboardingPage = location.pathname === '/onboarding' || location.pathname === '/onboarding/plan';
     const isLegalPage = ['/terms', '/privacy', '/disclaimer', '/settings/privacy', '/settings/terms', '/settings/disclaimer', '/profile/privacy', '/profile/terms', '/profile/disclaimer'].includes(location.pathname);
     const isLoginPage = location.pathname === '/login';
     const isAuthPage = location.pathname === '/auth';
@@ -271,6 +280,7 @@ function AnimatedRoutes() {
           )}
           <Route path="/app" element={<Dashboard />} />
           <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/onboarding/plan" element={<OnboardingPlan />} />
           <Route path="/login" element={<Login />} />
           <Route path="/auth" element={<AuthPage />} />
 
@@ -286,6 +296,7 @@ function AnimatedRoutes() {
           <Route path="/claims/calculator" element={<Combination />} />
           <Route path="/claims/bilateral" element={<PremiumGuard featureName="Bilateral Calculator"><BilateralCalculator /></PremiumGuard>} />
           <Route path="/claims/secondary-finder" element={<PremiumGuard featureName="Secondary Condition Finder"><SecondaryFinder /></PremiumGuard>} />
+          <Route path="/claims/condition/:id/journey" element={<ConditionJourney />} />
           <Route path="/claims/checklist" element={<ClaimChecklist />} />
           <Route path="/claims/upgrade-paths" element={<ZeroPercentOptimizer />} />
           <Route path="/claims/evidence-strength" element={<PremiumGuard featureName="Evidence Strength"><EvidenceStrength /></PremiumGuard>} />
@@ -316,6 +327,7 @@ function AnimatedRoutes() {
           <Route path="/prep/form-guide" element={<FormGuide />} />
           <Route path="/prep/form-guide/:formId" element={<FormGuideDetail />} />
           <Route path="/prep/dbq" element={<PremiumGuard featureName="DBQ Prep Sheet"><DBQPrepSheet /></PremiumGuard>} />
+          <Route path="/prep/dbq-analyzer" element={<PremiumGuard featureName="DBQ Analyzer"><DBQAnalyzer /></PremiumGuard>} />
           <Route path="/prep/va-speak" element={<VASpeakTranslator />} />
           <Route path="/prep/back-pay" element={<PremiumGuard featureName="Back Pay Estimator"><BackPayEstimator /></PremiumGuard>} />
           <Route path="/prep/cost-estimate" element={<CostEstimator />} />
@@ -331,6 +343,10 @@ function AnimatedRoutes() {
           <Route path="/prep/post-debrief" element={<PremiumGuard featureName="Post-Exam Debrief"><PostExamDebrief /></PremiumGuard>} />
           <Route path="/prep/family-statement" element={<PremiumGuard featureName="Family Statement"><FamilyStatement /></PremiumGuard>} />
           <Route path="/prep/evidence-scanner" element={<PremiumGuard featureName="Evidence Scanner"><EvidenceScanner /></PremiumGuard>} />
+          <Route path="/prep/mos-hazards" element={<MOSHazards />} />
+          <Route path="/prep/pact-act" element={<PACTActStandalone />} />
+          <Route path="/prep/state-benefits" element={<PremiumGuard featureName="State Benefits"><StateBenefits /></PremiumGuard>} />
+          <Route path="/prep/vso-locator" element={<VSOLocator />} />
           <Route path="/prep/exam-day" element={<ExamDayMode />} />
           <Route path="/prep/exam-packet" element={<CPExamPacket />} />
           <Route path="/prep/medication-rule" element={<MedicationRuleTool />} />
@@ -576,10 +592,10 @@ function AppContent() {
 
   // App shell — requires authentication on web
   const appShell = (
-    <div className="h-[100dvh] overflow-hidden flex flex-row bg-background text-foreground break-words w-full max-w-full">
+    <div className="h-dvh overflow-hidden flex flex-row bg-background text-foreground wrap-break-word w-full max-w-full">
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:text-sm focus:font-medium"
+        className="sr-only focus:not-sr-only focus:absolute focus:z-100 focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:text-sm focus:font-medium"
       >
         Skip to main content
       </a>

@@ -122,7 +122,7 @@ export default function MedicalVisits() {
           </div>
         </div>
 
-        <div className="flex gap-2 flex-shrink-0 flex-wrap">
+        <div className="flex gap-2 shrink-0 flex-wrap">
           <input
             ref={importFileRef}
             type="file"
@@ -410,7 +410,7 @@ export default function MedicalVisits() {
                       </span>
                     )}
                   </div>
-                  <div className="flex gap-2 flex-shrink-0">
+                  <div className="flex gap-2 shrink-0">
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(visit)} className="h-10 w-10 min-h-[44px] min-w-[44px]" aria-label="Edit visit">
                       <Edit className="h-4 w-4" />
                     </Button>
@@ -419,23 +419,23 @@ export default function MedicalVisits() {
                     </Button>
                   </div>
                 </div>
-                <CardTitle className="text-lg mt-2 break-words">{visit.reason || 'Medical Visit'}</CardTitle>
+                <CardTitle className="text-lg mt-2 wrap-break-word">{visit.reason || 'Medical Visit'}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 text-sm">
                   <div className="flex items-center gap-2 text-muted-foreground min-w-0">
-                    <Calendar className="h-4 w-4 flex-shrink-0" />
+                    <Calendar className="h-4 w-4 shrink-0" />
                     <span className="truncate">{safeFormatDate(visit.date)}</span>
                   </div>
                   {visit.location && (
                     <div className="flex items-center gap-2 text-muted-foreground min-w-0">
-                      <MapPin className="h-4 w-4 flex-shrink-0" />
+                      <MapPin className="h-4 w-4 shrink-0" />
                       <span className="truncate">{visit.location}</span>
                     </div>
                   )}
                   {visit.provider && (
                     <div className="flex items-center gap-2 text-muted-foreground min-w-0">
-                      <User className="h-4 w-4 flex-shrink-0" />
+                      <User className="h-4 w-4 shrink-0" />
                       <span className="truncate">{visit.provider}</span>
                     </div>
                   )}
@@ -457,8 +457,8 @@ export default function MedicalVisits() {
 
                 {visit.notes && (
                   <div className="flex items-start gap-2 text-sm text-muted-foreground bg-muted/50 rounded-lg p-3">
-                    <FileText className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                    <p className="break-words min-w-0 line-clamp-3">{visit.notes}</p>
+                    <FileText className="h-4 w-4 mt-0.5 shrink-0" />
+                    <p className="wrap-break-word min-w-0 line-clamp-3">{visit.notes}</p>
                   </div>
                 )}
 

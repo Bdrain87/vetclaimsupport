@@ -105,7 +105,17 @@ export const useProfileStore = create<ProfileState>()(
       setBranch: (branch) => set({ branch }),
       setMOS: (code, title) => set({ mosCode: code, mosTitle: title }),
       setServiceDates: (dates) => set({ serviceDates: dates }),
-      setServicePeriods: (periods) => set({ servicePeriods: periods }),
+      setServicePeriods: (periods) => {
+        // Also sync legacy fields from the first service period so the 49+ files
+        // reading branch/mosCode/mosTitle always get current data
+        const first = periods[0];
+        set({
+          servicePeriods: periods,
+          ...(first?.branch ? { branch: first.branch as Branch | '' } : {}),
+          ...(first?.mos ? { mosCode: first.mos } : {}),
+          ...(first?.jobTitle ? { mosTitle: first.jobTitle } : {}),
+        });
+      },
       addServicePeriod: (period) => set((state) => ({
         servicePeriods: [...state.servicePeriods, period],
       })),

@@ -181,16 +181,17 @@ describe('Section 25C: Icon Library', () => {
 // ---------------------------------------------------------------------------
 
 describe('Section 25D: Design Tokens and CSS Structure', () => {
-  it('tailwind.config.ts exists', () => {
-    expect(fs.existsSync(path.join(rootDir, 'tailwind.config.ts'))).toBe(true);
+  it('tailwind theme is defined in index.css (Tailwind v4 CSS-based config)', () => {
+    const indexCss = fs.readFileSync(path.join(srcDir, 'index.css'), 'utf-8');
+    expect(indexCss).toMatch(/@theme/);
+    expect(indexCss).toMatch(/@import 'tailwindcss'/);
   });
 
-  it('tailwind config uses CSS custom properties via hsl(var(--...)) for core colors', () => {
-    const tw = fs.readFileSync(path.join(rootDir, 'tailwind.config.ts'), 'utf-8');
-    // Verify the design system uses CSS custom properties, not hardcoded hex
-    expect(tw).toMatch(/hsl\(var\(--background\)\)/);
-    expect(tw).toMatch(/hsl\(var\(--foreground\)\)/);
-    expect(tw).toMatch(/hsl\(var\(--primary\)\)/);
+  it('tailwind theme uses CSS custom properties via hsl(var(--...)) for core colors', () => {
+    const indexCss = fs.readFileSync(path.join(srcDir, 'index.css'), 'utf-8');
+    expect(indexCss).toMatch(/hsl\(var\(--background\)\)/);
+    expect(indexCss).toMatch(/hsl\(var\(--foreground\)\)/);
+    expect(indexCss).toMatch(/hsl\(var\(--primary\)\)/);
   });
 
   it('CSS files exist in src/', () => {
@@ -203,8 +204,8 @@ describe('Section 25D: Design Tokens and CSS Structure', () => {
     expect(indexCss).toMatch(/design-tokens\.css/);
   });
 
-  it('dark mode is configured in tailwind config', () => {
-    const tw = fs.readFileSync(path.join(rootDir, 'tailwind.config.ts'), 'utf-8');
-    expect(tw).toMatch(/darkMode/);
+  it('dark mode is configured via @custom-variant', () => {
+    const indexCss = fs.readFileSync(path.join(srcDir, 'index.css'), 'utf-8');
+    expect(indexCss).toMatch(/@custom-variant\s+dark/);
   });
 });

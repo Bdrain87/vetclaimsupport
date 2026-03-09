@@ -366,7 +366,7 @@ export default function DeploymentLocations() {
                   <Button
                     variant={isSelected ? 'default' : 'outline'}
                     size="sm"
-                    className="flex-shrink-0 text-xs gap-1"
+                    className="shrink-0 text-xs gap-1"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleAddToProfile(loc);

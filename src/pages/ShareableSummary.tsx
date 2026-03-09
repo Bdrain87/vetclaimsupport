@@ -211,7 +211,7 @@ export default function ShareableSummary() {
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-lg">
+          <div className="p-3 rounded-2xl bg-linear-to-br from-primary to-primary/80 text-primary-foreground shadow-lg">
             <Share2 className="h-6 w-6" />
           </div>
           <div>
@@ -232,7 +232,7 @@ export default function ShareableSummary() {
 
       {/* Summary Card Preview */}
       <Card className="border-0 shadow-xl overflow-hidden" ref={summaryRef}>
-        <div className="bg-gradient-to-r from-gray-900 to-gray-800 p-6 text-white">
+        <div className="bg-linear-to-r from-gray-900 to-gray-800 p-6 text-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs text-white/60 uppercase tracking-wider">VA Claims Summary</p>
@@ -279,11 +279,11 @@ export default function ShareableSummary() {
                   {summary.conditions.map((c, i) => (
                     <div key={i} className="flex items-center justify-between py-2 px-3 rounded-lg bg-muted/30">
                       <div className="flex items-center gap-2 min-w-0">
-                        {c.status === 'approved' && <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0" />}
-                        {c.status === 'pending' && <Star className="h-4 w-4 text-gold flex-shrink-0" />}
+                        {c.status === 'approved' && <CheckCircle2 className="h-4 w-4 text-success shrink-0" />}
+                        {c.status === 'pending' && <Star className="h-4 w-4 text-gold shrink-0" />}
                         <span className="text-sm truncate">{c.name}</span>
                       </div>
-                      <Badge variant="outline" className="text-xs flex-shrink-0 ml-2">
+                      <Badge variant="outline" className="text-xs shrink-0 ml-2">
                         {c.rating !== undefined ? `${c.rating}%` : 'N/A'}
                       </Badge>
                     </div>

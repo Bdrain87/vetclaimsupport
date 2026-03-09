@@ -100,7 +100,7 @@ function ReadinessRing({ score }: { score: number }) {
   const offset = circ - (score / 100) * circ;
   const color = score >= 70 ? 'text-success' : score >= 40 ? 'text-gold' : 'text-destructive';
   return (
-    <div className="relative flex-shrink-0" title={`Readiness: ${score}%`}>
+    <div className="relative shrink-0" title={`Readiness: ${score}%`}>
       <svg width="36" height="36" viewBox="0 0 36 36">
         <circle cx="18" cy="18" r={r} fill="none" stroke="currentColor" strokeWidth="3" className="text-muted/30" />
         <circle
@@ -124,7 +124,7 @@ function ConditionCard({ userCondition, conditionDetails, readinessScore, onView
 
   return (
     <Card
-      className="cursor-pointer hover:border-gold/50 transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      className="cursor-pointer hover:border-gold/50 transition-all group focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
       onClick={onView}
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onView(); } }}
       tabIndex={0}
@@ -143,7 +143,7 @@ function ConditionCard({ userCondition, conditionDetails, readinessScore, onView
                 </Badge>
               )}
               {userCondition.serviceConnected && (
-                <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-gold/10 text-foreground border-gold/30 flex-shrink-0">
+                <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-gold/10 text-foreground border-gold/30 shrink-0">
                   <Shield className="h-2.5 w-2.5 mr-0.5" />
                   SC
                 </Badge>
@@ -197,7 +197,7 @@ function ConditionCard({ userCondition, conditionDetails, readinessScore, onView
             )}
           </div>
 
-          <div className="flex items-center gap-1 flex-shrink-0">
+          <div className="flex items-center gap-1 shrink-0">
             {readinessScore !== undefined && userCondition.claimStatus !== 'approved' && (
               <ReadinessRing score={readinessScore} />
             )}
@@ -461,7 +461,7 @@ export default function Conditions() {
           className="w-full rounded-xl p-3 text-left bg-gold/5 border border-gold/20 hover:bg-gold/10 active:scale-[0.98] transition-all"
         >
           <div className="flex items-start gap-3">
-            <AlertTriangle className="h-4 w-4 text-gold flex-shrink-0 mt-0.5" />
+            <AlertTriangle className="h-4 w-4 text-gold shrink-0 mt-0.5" />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-foreground">
                 {evidenceGaps.length} condition{evidenceGaps.length !== 1 ? 's' : ''} need more evidence
@@ -470,7 +470,7 @@ export default function Conditions() {
                 {evidenceGaps[0]?.conditionName}: missing {evidenceGaps[0]?.missing?.join(', ')}
               </p>
             </div>
-            <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+            <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
           </div>
         </button>
       )}
@@ -796,11 +796,11 @@ export default function Conditions() {
                 >
                   <div className="flex-1 min-w-0 mr-3">
                     <p className="text-sm font-medium text-foreground truncate">{rec.conditionName}</p>
-                    <p className="text-xs text-muted-foreground line-clamp-2 break-words">
+                    <p className="text-xs text-muted-foreground line-clamp-2 wrap-break-word">
                       {diagnosticCodeResult ? `DC ${diagnosticCodeResult.code} · ` : ''}{rec.reason}
                     </p>
                   </div>
-                  <ChevronRight className="h-4 w-4 text-gold flex-shrink-0" />
+                  <ChevronRight className="h-4 w-4 text-gold shrink-0" />
                 </button>
               );
             })}
@@ -869,12 +869,12 @@ export default function Conditions() {
               </div>
             )}
             {previewCondition?.bodySystem && (
-              <p className="text-muted-foreground break-words">
+              <p className="text-muted-foreground wrap-break-word">
                 <span className="font-medium text-foreground">Body System:</span> {previewCondition.bodySystem}
               </p>
             )}
             {previewRec?.reason && (
-              <p className="text-muted-foreground break-words">
+              <p className="text-muted-foreground wrap-break-word">
                 <span className="font-medium text-foreground">Why consider this:</span> {previewRec.reason}
               </p>
             )}

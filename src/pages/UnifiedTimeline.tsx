@@ -185,13 +185,13 @@ export default function UnifiedTimeline() {
                     const Icon = ev.icon;
                     return (
                       <div key={ev.id} className="flex items-start gap-3 px-4 py-3">
-                        <Icon className={`h-4 w-4 mt-0.5 flex-shrink-0 ${ev.color}`} />
+                        <Icon className={`h-4 w-4 mt-0.5 shrink-0 ${ev.color}`} />
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium text-foreground line-clamp-2">{ev.title}</p>
                           <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{ev.detail}</p>
                         </div>
                         {ev.severity !== undefined && (
-                          <span className={`text-xs font-bold flex-shrink-0 ${ev.severity >= 7 ? 'text-destructive' : ev.severity >= 4 ? 'text-gold' : 'text-success'}`}>
+                          <span className={`text-xs font-bold shrink-0 ${ev.severity >= 7 ? 'text-destructive' : ev.severity >= 4 ? 'text-gold' : 'text-success'}`}>
                             {ev.severity}/10
                           </span>
                         )}

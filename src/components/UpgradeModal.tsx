@@ -62,7 +62,7 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
       particleCount: 100,
       spread: 70,
       origin: { y: 0.6 },
-      colors: ['#C5A55A', '#DAA520', '#FFD700', '#B8860B'],
+      colors: ['#C5A55A', '#D9BE6C', '#A68B3C', '#B8A04E'],
     });
   };
 
@@ -194,7 +194,7 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
           <div className="space-y-3">
             {featureValue.bullets.map((bullet) => (
               <div key={bullet} className="flex items-start gap-3">
-                <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
                   <Check className="h-3 w-3 text-primary" />
                 </div>
                 <span className="text-sm text-foreground">{bullet}</span>

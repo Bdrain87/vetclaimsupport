@@ -84,9 +84,30 @@ function formatDate(date: Date): string {
   });
 }
 
+function formatSepDate(d: string): string {
+  const date = new Date(d + 'T00:00:00');
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+function getBDDInfo(separationDate: string | undefined): { eligible: boolean; monthsOfBackPay: number; sepDateFormatted: string } | null {
+  if (!separationDate) return null;
+  const sep = new Date(separationDate + 'T00:00:00');
+  if (isNaN(sep.getTime())) return null;
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  const diffMs = sep.getTime() - now.getTime();
+  const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+  // BDD: eligible if separation is 90-180 days away
+  if (diffDays >= 90 && diffDays <= 180) {
+    const months = Math.round(diffDays / 30);
+    return { eligible: true, monthsOfBackPay: months, sepDateFormatted: formatSepDate(separationDate) };
+  }
+  return null;
+}
+
 export default function IntentToFile() {
   const navigate = useNavigate();
-  const { intentToFileDate, setIntentToFile } =
+  const { intentToFileDate, setIntentToFile, separationDate } =
     useProfileStore();
 
   const [dateInput, setDateInput] = useState(intentToFileDate ?? '');
@@ -154,6 +175,27 @@ export default function IntentToFile() {
             </div>
           </div>
         </div>
+
+        {/* BDD eligibility banner */}
+        {(() => {
+          const bdd = getBDDInfo(separationDate);
+          if (!bdd) return null;
+          return (
+            <Card className="border-success/30 bg-success/5">
+              <CardContent className="py-4 px-4">
+                <div className="flex items-start gap-3">
+                  <Shield className="h-5 w-5 text-success shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">BDD Eligible</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Your separation date is <strong>{bdd.sepDateFormatted}</strong>. Filing an ITF now protects up to <strong>{bdd.monthsOfBackPay} months</strong> of potential back pay. You're in the Benefits Delivery at Discharge window (90-180 days before separation).
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })()}
 
         {/* Countdown Card - shown when date is saved */}
         {hasSubmitted && timeRemaining && (
@@ -267,7 +309,7 @@ export default function IntentToFile() {
               {/* Urgency Warning */}
               {timeRemaining.isExpiringSoon && !timeRemaining.isExpired && (
                 <div className="mt-4 flex items-start gap-3 p-3 rounded-lg bg-gold/10 border border-gold/20">
-                  <AlertCircle className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
+                  <AlertCircle className="h-5 w-5 text-gold shrink-0 mt-0.5" />
                   <div>
                     <p className="text-sm font-medium text-gold">
                       Your ITF expires in less than 90 days
@@ -284,7 +326,7 @@ export default function IntentToFile() {
 
               {timeRemaining.isExpired && (
                 <div className="mt-4 flex items-start gap-3 p-3 rounded-lg bg-destructive/10 border border-destructive/20">
-                  <AlertCircle className="h-5 w-5 text-destructive flex-shrink-0 mt-0.5" />
+                  <AlertCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
                   <div>
                     <p className="text-sm font-medium text-destructive">
                       Your Intent to File has expired
@@ -386,7 +428,7 @@ export default function IntentToFile() {
 
             <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
               <div className="flex items-start gap-3">
-                <Shield className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                <Shield className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                 <div>
                   <p className="text-sm font-medium text-foreground">
                     Preserves Your Effective Date
@@ -409,35 +451,35 @@ export default function IntentToFile() {
               </h3>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="h-4 w-4 text-success shrink-0 mt-0.5" />
                   <span className="text-sm text-muted-foreground">
                     You have <strong>1 year</strong> from the date of your ITF to
                     submit your completed claim
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="h-4 w-4 text-success shrink-0 mt-0.5" />
                   <span className="text-sm text-muted-foreground">
                     Filing an ITF is free and carries no obligation to file a
                     claim
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="h-4 w-4 text-success shrink-0 mt-0.5" />
                   <span className="text-sm text-muted-foreground">
                     You can file for disability compensation, pension, or
                     Dependency and Indemnity Compensation (DIC)
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="h-4 w-4 text-success shrink-0 mt-0.5" />
                   <span className="text-sm text-muted-foreground">
                     If your ITF expires before you file, you can submit a new one
                     to start a fresh 1-year window
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="h-4 w-4 text-success shrink-0 mt-0.5" />
                   <span className="text-sm text-muted-foreground">
                     Starting a claim on VA.gov automatically creates an ITF for
                     you
@@ -463,7 +505,7 @@ export default function IntentToFile() {
             {/* Online */}
             <div className="p-4 rounded-lg bg-muted/30 border border-border">
               <div className="flex items-start gap-3">
-                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 flex-shrink-0">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 shrink-0">
                   <FileText className="h-4 w-4 text-primary" />
                 </div>
                 <div className="flex-1">
@@ -486,7 +528,7 @@ export default function IntentToFile() {
                     <ExternalLink className="h-3 w-3" />
                   </a>
                 </div>
-                <Badge variant="secondary" className="text-xs flex-shrink-0">
+                <Badge variant="secondary" className="text-xs shrink-0">
                   Fastest
                 </Badge>
               </div>
@@ -495,7 +537,7 @@ export default function IntentToFile() {
             {/* Phone */}
             <div className="p-4 rounded-lg bg-muted/30 border border-border">
               <div className="flex items-start gap-3">
-                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 flex-shrink-0">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 shrink-0">
                   <Phone className="h-4 w-4 text-primary" />
                 </div>
                 <div className="flex-1">
@@ -524,7 +566,7 @@ export default function IntentToFile() {
             {/* In Person */}
             <div className="p-4 rounded-lg bg-muted/30 border border-border">
               <div className="flex items-start gap-3">
-                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 flex-shrink-0">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 shrink-0">
                   <MapPin className="h-4 w-4 text-primary" />
                 </div>
                 <div className="flex-1">
@@ -656,7 +698,7 @@ export default function IntentToFile() {
           <CardContent>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0 mt-2" />
+                <div className="w-1.5 h-1.5 rounded-full bg-gold shrink-0 mt-2" />
                 <span className="text-sm text-muted-foreground">
                   <strong className="text-foreground">
                     Set a reminder at 9 months.
@@ -666,7 +708,7 @@ export default function IntentToFile() {
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0 mt-2" />
+                <div className="w-1.5 h-1.5 rounded-full bg-gold shrink-0 mt-2" />
                 <span className="text-sm text-muted-foreground">
                   <strong className="text-foreground">
                     You can file a new ITF at any time.
@@ -677,7 +719,7 @@ export default function IntentToFile() {
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0 mt-2" />
+                <div className="w-1.5 h-1.5 rounded-full bg-gold shrink-0 mt-2" />
                 <span className="text-sm text-muted-foreground">
                   <strong className="text-foreground">
                     Each benefit type needs its own ITF.
@@ -688,7 +730,7 @@ export default function IntentToFile() {
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-gold flex-shrink-0 mt-2" />
+                <div className="w-1.5 h-1.5 rounded-full bg-gold shrink-0 mt-2" />
                 <span className="text-sm text-muted-foreground">
                   <strong className="text-foreground">
                     Partial submissions count.
@@ -724,7 +766,7 @@ export default function IntentToFile() {
                   </p>
                 </div>
               </div>
-              <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
+              <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
             </a>
           </CardContent>
         </Card>

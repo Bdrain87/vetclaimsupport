@@ -172,7 +172,7 @@ export function MOSCombobox({
           ref={listRef}
           role="listbox"
           aria-label="Job code suggestions"
-          className="absolute z-[9999] w-full mt-1 bg-popover border border-border rounded-lg shadow-lg max-h-[400px] min-h-[200px] overflow-y-auto"
+          className="absolute z-9999 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg max-h-[400px] min-h-[200px] overflow-y-auto"
         >
           {filteredJobs.map((job, index) => (
             <div
@@ -200,7 +200,7 @@ export function MOSCombobox({
                 <p className="text-xs text-muted-foreground/70 truncate">{job.category}</p>
               </div>
               {job.code === value && (
-                <Check className="h-4 w-4 text-primary flex-shrink-0 mt-1" />
+                <Check className="h-4 w-4 text-primary shrink-0 mt-1" />
               )}
             </div>
           ))}

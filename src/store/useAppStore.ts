@@ -111,6 +111,9 @@ interface AppState {
   // --- Form Guide Drafts ---
   formDrafts: Record<string, Record<string, string> & { lastModified: string }>;
 
+  // --- Per-Condition Journey Progress ---
+  conditionJourneyProgress: Record<string, { completedSteps: string[]; startedAt: string }>;
+
   // --- User Conditions (from UserConditionsContext) ---
   userConditions: UserCondition[];
 
@@ -232,6 +235,10 @@ interface AppState {
   setFormDraft: (formId: string, fieldId: string, value: string) => void;
   clearFormDraft: (formId: string) => void;
 
+  // Per-Condition Journey Progress
+  completeConditionJourneyStep: (conditionId: string, stepId: string) => void;
+  resetConditionJourney: (conditionId: string) => void;
+
   // Employment Impact
   addEmploymentImpact: (entry: Omit<EmploymentImpactEntry, 'id'>) => void;
   deleteEmploymentImpact: (id: string) => void;
@@ -317,6 +324,9 @@ const initialState = {
 
   // Form Guide Drafts
   formDrafts: {} as Record<string, Record<string, string> & { lastModified: string }>,
+
+  // Per-Condition Journey Progress
+  conditionJourneyProgress: {} as Record<string, { completedSteps: string[]; startedAt: string }>,
 
   // User conditions
   userConditions: [] as UserCondition[],
@@ -516,9 +526,32 @@ const useAppStore = create<AppState>()(
           logger.warn('[useAppStore] addClaimCondition called with empty name — skipping');
           return;
         }
+        const trimmedName = condition.name.trim();
         set((s) => ({
-          claimConditions: [...s.claimConditions, { ...condition, name: condition.name.trim(), id: (condition as { id?: string }).id || generateId() }],
+          claimConditions: [...s.claimConditions, { ...condition, name: trimmedName, id: (condition as { id?: string }).id || generateId() }],
         }));
+
+        // Also ensure a matching userCondition exists (keeps both stores in sync)
+        const state = get();
+        const nameLower = trimmedName.toLowerCase();
+        const hasUserCondition = state.userConditions.some(
+          (uc) => (uc.displayName || uc.conditionId).toLowerCase() === nameLower
+        );
+        if (!hasUserCondition && canAddCondition(state.userConditions.length)) {
+          const resolved = resolveConditionId(trimmedName);
+          const newUC = {
+            id: (condition as { id?: string }).id || generateId(),
+            conditionId: resolved.conditionId || trimmedName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+            displayName: resolved.displayName || trimmedName,
+            serviceConnected: true,
+            claimStatus: 'pending' as const,
+            isPrimary: true,
+            dateAdded: new Date().toISOString(),
+          };
+          set((s) => ({
+            userConditions: [...s.userConditions, newUC],
+          }));
+        }
       },
       updateClaimCondition: (id, condition) => {
         if (!id || typeof id !== 'string') return;
@@ -612,6 +645,28 @@ const useAppStore = create<AppState>()(
       clearFormDraft: (formId) => set((s) => {
         const { [formId]: _, ...rest } = s.formDrafts;
         return { formDrafts: rest };
+      }),
+
+      // Per-Condition Journey Progress
+      completeConditionJourneyStep: (conditionId, stepId) => set((s) => {
+        const existing = s.conditionJourneyProgress[conditionId] || {
+          completedSteps: [],
+          startedAt: new Date().toISOString(),
+        };
+        if (existing.completedSteps.includes(stepId)) return {};
+        return {
+          conditionJourneyProgress: {
+            ...s.conditionJourneyProgress,
+            [conditionId]: {
+              ...existing,
+              completedSteps: [...existing.completedSteps, stepId],
+            },
+          },
+        };
+      }),
+      resetConditionJourney: (conditionId) => set((s) => {
+        const { [conditionId]: _, ...rest } = s.conditionJourneyProgress;
+        return { conditionJourneyProgress: rest };
       }),
 
       // Employment Impact
@@ -989,7 +1044,7 @@ const useAppStore = create<AppState>()(
     }),
     {
       name: 'vcs-app-data',
-      version: 5,
+      version: 6,
       storage: createJSONStorage(() => createDebouncedStorage(encryptedStorage, 300)),
       migrate: (persistedState: unknown, version: number) => {
         let state = persistedState as Record<string, unknown>;
@@ -1021,6 +1076,9 @@ const useAppStore = create<AppState>()(
         }
         // v5: Extended Medication fields (dosage, frequency, prescriber, etc.)
         // All new fields are optional with defaults — no data transform needed.
+        if (version < 6) {
+          state = { ...state, conditionJourneyProgress: {} };
+        }
         return state;
       },
       onRehydrateStorage: () => {

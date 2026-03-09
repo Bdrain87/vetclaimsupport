@@ -275,7 +275,7 @@ export default function CompensationLadder() {
 
       {/* Disclaimer */}
       <p className="text-[11px] text-muted-foreground/60 text-center px-4">
-        Rates shown are 2025 estimates. Actual compensation may vary. Consult the VA for official rates.
+        Rates shown are 2026 estimates. Actual compensation may vary. Consult the VA for official rates.
       </p>
     </PageContainer>
   );

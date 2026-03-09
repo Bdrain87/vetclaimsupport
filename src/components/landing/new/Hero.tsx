@@ -8,7 +8,7 @@ import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE, APP_STORE_URL, LANDING_BG } from 
 const TRUST_ITEMS = [
   'NOT AFFILIATED WITH THE VA',
   'VETERAN-BUILT',
-  '80+ CLAIM TOOLS',
+  '60+ CLAIM TOOLS',
   'ONE-TIME PURCHASE',
 ];
 
@@ -155,7 +155,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          80+ tools to organize your evidence, build your case, and walk into your VA exam ready.
+          60+ tools and all 68 VA DBQ forms — organize your evidence, build your case, and walk into your exam ready.
         </motion.p>
 
         {/* CTAs */}

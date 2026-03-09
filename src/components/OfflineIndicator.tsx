@@ -37,7 +37,7 @@ export function OfflineIndicator() {
     <div
       className={cn(
         'fixed top-0 left-0 right-0 z-50 flex items-center justify-center gap-2',
-        'bg-muted/95 backdrop-blur-sm border-b border-border',
+        'bg-muted/95 backdrop-blur-xs border-b border-border',
         'px-4 py-2 text-xs text-muted-foreground',
         'animate-fade-in',
       )}

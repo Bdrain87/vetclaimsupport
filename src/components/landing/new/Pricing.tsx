@@ -38,8 +38,9 @@ const INCLUDED_FEATURES = [
     features: [
       'Claim Strategy Wizard', 'C&P Exam Prep',
       'C&P Exam Simulator', 'Post-Exam Debrief',
-      'DBQ Prep Sheet', 'Exam Day Mode',
-      'Decision Decoder', 'Community Templates',
+      '68 Interactive DBQ Prep Sheets', 'Exam Day Mode',
+      'Decision Decoder', 'DBQ Rating Estimator',
+      'Guided Condition Journeys', 'Ask Intel AI Coach',
     ],
   },
   {
@@ -57,6 +58,7 @@ const INCLUDED_FEATURES = [
     features: [
       '800+ Condition Database', 'Conditions by Conflict',
       'Condition Guide', 'Deployment Locations',
+      'Evidence Strength Analyzer',
     ],
   },
   {
@@ -146,7 +148,7 @@ function CompetitorCard({
         y: -4,
         transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
       }}
-      className="group relative rounded-2xl p-[1px]"
+      className="group relative rounded-2xl p-px"
       style={{
         background: 'linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02), rgba(255,255,255,0.05))',
       }}
@@ -265,15 +267,17 @@ export function Pricing() {
 
               <ul className="space-y-2.5 mb-6">
                 {[
-                  '80+ tools & features',
+                  '60+ tools & all 68 VA DBQs',
                   'AI-powered document builders',
-                  'Health & symptom trackers',
+                  'Guided condition journeys',
+                  'Ask Intel — AI claims coach',
+                  'Evidence strength vs VA criteria',
                   'C&P exam simulator',
                   'No subscription required',
                 ].map((feature) => (
                   <li key={feature} className="flex items-center gap-2.5 text-sm" style={{ color: TEXT_PRIMARY }}>
                     <div
-                      className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0"
+                      className="w-4 h-4 rounded-full flex items-center justify-center shrink-0"
                       style={{
                         background: 'rgba(197, 165, 90, 0.15)',
                       }}

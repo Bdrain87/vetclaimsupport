@@ -114,7 +114,7 @@ export function MOSConditionSuggestions({
       </div>
 
       <div className="rounded-xl p-3 flex items-start gap-3 bg-gold/5 border border-gold/20">
-        <AlertTriangle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+        <AlertTriangle className="h-4 w-4 text-primary shrink-0 mt-0.5" />
         <p className="text-xs text-muted-foreground">
           Based on your MOS ({allMosCodes.join(', ')}), veterans commonly claim these conditions.
           This is for informational purposes only — not medical advice.
@@ -151,13 +151,13 @@ export function MOSConditionSuggestions({
                       checked={isSelected || isAdded}
                       disabled={isAdded}
                       onCheckedChange={() => toggleSelected(conditionName)}
-                      className="flex-shrink-0"
+                      className="shrink-0"
                     />
                     <span className="text-sm text-foreground flex-1">
                       {conditionName}
                     </span>
                     {isAdded && (
-                      <Check className="h-4 w-4 text-success flex-shrink-0" />
+                      <Check className="h-4 w-4 text-success shrink-0" />
                     )}
                   </label>
                 );

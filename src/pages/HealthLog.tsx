@@ -171,7 +171,7 @@ export default function HealthLog() {
         <div className="flex items-center gap-4">
           <div className="relative">
             <div className="absolute inset-0 bg-gold/30 blur-2xl rounded-full scale-150 opacity-50" />
-            <div className="relative p-3.5 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/20 shadow-lg shadow-gold/10">
+            <div className="relative p-3.5 rounded-2xl bg-linear-to-br from-gold/20 to-gold/5 border border-gold/20 shadow-lg shadow-gold/10">
               <Heart className="h-7 w-7 text-gold" />
             </div>
           </div>
@@ -190,7 +190,7 @@ export default function HealthLog() {
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <div className="relative">
           {/* Gradient backdrop */}
-          <div className="absolute inset-0 bg-gradient-to-r from-muted/50 via-muted/30 to-muted/50 rounded-2xl" />
+          <div className="absolute inset-0 bg-linear-to-r from-muted/50 via-muted/30 to-muted/50 rounded-2xl" />
 
           <TabsList className="relative w-full h-auto p-1.5 bg-transparent grid grid-cols-5 gap-1">
             {tabConfig.map((tab) => (
@@ -266,7 +266,7 @@ export default function HealthLog() {
                   onClick={() => handleQuickLog(option.type)}
                   className={cn(
                     "group relative overflow-hidden rounded-2xl p-4 text-left",
-                    "bg-gradient-to-br", option.gradient,
+                    "bg-linear-to-br", option.gradient,
                     "border", option.borderColor,
                     "transition-all duration-300",
                     "hover:scale-[1.02] hover:shadow-lg active:scale-[0.98]"
@@ -274,7 +274,7 @@ export default function HealthLog() {
                 >
                   <div className="flex items-start gap-3">
                     <div className={cn(
-                      "p-2.5 rounded-xl bg-background/50 backdrop-blur-sm",
+                      "p-2.5 rounded-xl bg-background/50 backdrop-blur-xs",
                       "border border-white/10"
                     )}>
                       <option.icon className={cn("h-5 w-5", option.iconColor)} />
@@ -306,7 +306,7 @@ export default function HealthLog() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Symptoms Card */}
               <Card
-                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-gold/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-gold/30 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
                 onClick={() => setActiveTab('symptoms')}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveTab('symptoms'); } }}
                 tabIndex={0}
@@ -333,7 +333,7 @@ export default function HealthLog() {
 
               {/* Migraines Card */}
               <Card
-                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-gold/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-gold/30 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
                 onClick={() => setActiveTab('migraines')}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveTab('migraines'); } }}
                 tabIndex={0}
@@ -361,7 +361,7 @@ export default function HealthLog() {
 
               {/* Sleep Card */}
               <Card
-                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-gold/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-gold/30 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
                 onClick={() => setActiveTab('sleep')}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveTab('sleep'); } }}
                 tabIndex={0}
@@ -388,7 +388,7 @@ export default function HealthLog() {
 
               {/* Medications Card */}
               <Card
-                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-gold/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:border-gold/30 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary"
                 onClick={() => setActiveTab('medications')}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveTab('medications'); } }}
                 tabIndex={0}

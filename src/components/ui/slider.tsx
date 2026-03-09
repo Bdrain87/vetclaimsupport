@@ -20,7 +20,7 @@ const Slider = React.forwardRef<
         "block h-6 w-6 rounded-full bg-white",
         "shadow-[0_2px_8px_rgba(0,0,0,0.4),0_0_0_4px_hsl(48_82%_59%/0.2)]",
         "ring-offset-background transition-all duration-150",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         "disabled:pointer-events-none disabled:opacity-50",
         "hover:scale-110 active:scale-95"
       )} 

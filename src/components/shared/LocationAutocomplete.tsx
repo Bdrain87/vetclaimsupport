@@ -206,7 +206,7 @@ export function LocationAutocomplete({
           onKeyDown={handleKeyDown}
           onBlur={handleBlur}
           placeholder={placeholder}
-          className="w-full h-12 pl-10 pr-4 bg-muted/50 border border-border rounded-xl text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/50 transition-all"
+          className="w-full h-12 pl-10 pr-4 bg-muted/50 border border-border rounded-xl text-foreground text-sm placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-gold/40 focus:border-gold/50 transition-all"
         />
       </div>
 
@@ -216,7 +216,7 @@ export function LocationAutocomplete({
           id={listboxId}
           role="listbox"
           aria-label="Military bases and locations"
-          className="absolute top-full left-0 right-0 mt-1 z-[100] overflow-hidden bg-popover border border-white/[0.14] rounded-xl shadow-2xl shadow-black/20 backdrop-blur-xl max-h-48 sm:max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent"
+          className="absolute top-full left-0 right-0 mt-1 z-100 overflow-hidden bg-popover border border-white/[0.14] rounded-xl shadow-2xl shadow-black/20 backdrop-blur-xl max-h-48 sm:max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent"
         >
           {results.length === 0 && value.length > 1 && (
             <div className="px-4 py-8 text-center text-muted-foreground text-sm">

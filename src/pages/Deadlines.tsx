@@ -257,7 +257,7 @@ export default function Deadlines() {
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-destructive to-warning text-white shadow-lg">
+          <div className="p-3 rounded-2xl bg-linear-to-br from-destructive to-warning text-white shadow-lg">
             <Clock className="h-6 w-6" />
           </div>
           <div>

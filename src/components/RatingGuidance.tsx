@@ -43,24 +43,24 @@ function RatingLevelCard({
 
   // Determine badge styling based on percentage tier
   const badgeClasses = cn(
-    'text-sm font-bold tabular-nums min-w-[3.5rem] justify-center',
+    'text-sm font-bold tabular-nums min-w-14 justify-center',
     pct === 0 && 'bg-muted text-muted-foreground',
     pct > 0 && pct < 30 && 'bg-primary/15 text-foreground',
     pct >= 30 && pct < 70 && 'bg-primary/20 text-foreground',
     pct >= 70 &&
-      'text-[var(--gold-dk)] bg-[image:var(--gold-gradient-subtle)] shadow-[inset_0_0_0_1px_var(--gold-border-strong)]',
+      'text-(--gold-dk) bg-(image:--gold-gradient-subtle) shadow-[inset_0_0_0_1px_var(--gold-border-strong)]',
   );
 
   // Gold accent ring for 70%+ cards
   const cardBorderClass = cn(
     isCurrentRating && 'ring-2 ring-primary ring-offset-2 ring-offset-background',
-    pct >= 70 && !isCurrentRating && 'border-[var(--gold-border-strong)]',
+    pct >= 70 && !isCurrentRating && 'border-(--gold-border-strong)',
   );
 
   return (
     <Card
       className={cn(
-        'bg-card/80 backdrop-blur-sm border-border relative overflow-hidden',
+        'bg-card/80 backdrop-blur-xs border-border relative overflow-hidden',
         cardBorderClass,
       )}
     >
@@ -123,7 +123,7 @@ function RatingLevelCard({
                   key={idx}
                   className="text-xs text-muted-foreground flex items-start gap-1.5"
                 >
-                  <CheckCircle2 className="h-3 w-3 text-success mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-3 w-3 text-success mt-0.5 shrink-0" />
                   <span>{tip}</span>
                 </li>
               ))}
@@ -144,7 +144,7 @@ function RatingLevelCard({
                   key={idx}
                   className="text-xs text-muted-foreground flex items-start gap-1.5"
                 >
-                  <AlertTriangle className="h-3 w-3 text-destructive mt-0.5 flex-shrink-0" />
+                  <AlertTriangle className="h-3 w-3 text-destructive mt-0.5 shrink-0" />
                   <span>{mistake}</span>
                 </li>
               ))}
@@ -167,7 +167,7 @@ function ExamTipsSection({ tips }: { tips: string[] }) {
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-      <Card className="bg-card/80 backdrop-blur-sm border-border">
+      <Card className="bg-card/80 backdrop-blur-xs border-border">
         <CollapsibleTrigger asChild>
           <CardHeader className="cursor-pointer hover:bg-muted/30 transition-colors pb-3">
             <div className="flex items-center justify-between">
@@ -192,7 +192,7 @@ function ExamTipsSection({ tips }: { tips: string[] }) {
                   key={idx}
                   className="text-sm flex items-start gap-2 text-foreground/80"
                 >
-                  <CheckCircle2 className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="h-4 w-4 text-success mt-0.5 shrink-0" />
                   <span>{tip}</span>
                 </li>
               ))}
@@ -214,7 +214,7 @@ export default function RatingGuidance({ conditionId, conditionName }: RatingGui
   // Fallback when no data is available
   if (!criteria) {
     return (
-      <Card className="bg-card/80 backdrop-blur-sm border-border border-dashed">
+      <Card className="bg-card/80 backdrop-blur-xs border-border border-dashed">
         <CardContent className="py-8 text-center space-y-3">
           <Scale className="h-8 w-8 text-muted-foreground mx-auto" />
           <p className="text-sm text-muted-foreground max-w-md mx-auto">
