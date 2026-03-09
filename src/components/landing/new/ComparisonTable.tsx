@@ -30,7 +30,7 @@ const COMPARISON_ROWS = [
   {
     feature: 'C&P exam preparation',
     manual: 'Google searches, forum advice',
-    vcs: 'DBQ-specific prep, AI mock exams, condition coaching',
+    vcs: 'DBQ-specific prep, AI mock exams, condition guidance',
   },
   {
     feature: 'Evidence organization',

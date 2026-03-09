@@ -43,7 +43,7 @@ const INCLUDED_FEATURES = [
       'Post-Exam Debrief', '68 Interactive DBQ Prep Sheets',
       'Exam Day Mode', 'Decision Letter Decoder',
       'DBQ Rating Estimator', 'Guided Condition Journeys',
-      'Ask Intel AI Coach', 'How to Increase Your Rating',
+      'Ask Intel AI Assistant', 'How to Increase Your Rating',
     ],
   },
   {
@@ -274,7 +274,7 @@ export function Pricing() {
                   '85+ tools & all 68 VA DBQs',
                   'AI-powered document builders',
                   'Guided condition journeys',
-                  'Ask Intel — AI claims coach',
+                  'Ask Intel — AI claims assistant',
                   'Evidence strength vs VA criteria',
                   'C&P exam simulator',
                   'No subscription required',

@@ -43,7 +43,7 @@ const AI_FEATURES = [
   },
   {
     icon: MessageCircle,
-    title: 'Ask Intel — Claims Coach',
+    title: 'Ask Intel — Claims Assistant',
     description:
       'On-demand AI claims preparation advisor that knows your complete veteran profile. Ask questions, get personalized guidance.',
   },

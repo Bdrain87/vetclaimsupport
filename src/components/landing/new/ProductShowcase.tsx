@@ -79,10 +79,10 @@ const CATEGORIES: FeatureCategory[] = [
     label: 'Strategy & Prep',
     headline: 'Walk into your C&P exam confident',
     description:
-      'Condition-specific exam prep, guided pathways, and AI coaching — based on publicly available VA rating schedules.',
+      'Condition-specific exam prep, guided pathways, and AI assistance — based on publicly available VA rating schedules.',
     features: [
       'Guided condition journeys with step-by-step pathways',
-      'Ask Intel — AI claims preparation coach',
+      'Ask Intel — AI claims preparation assistant',
       'Claim Strategy Wizard with filing order guidance',
       'C&P Exam Prep with condition-specific strategies',
       'All 68 VA DBQ forms with interactive prep',
