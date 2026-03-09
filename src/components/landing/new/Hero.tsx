@@ -139,8 +139,10 @@ export function Hero() {
         >
           You served your country.
           <br />
-          Preparing your claim shouldn't feel like{' '}
-          <span style={GOLD_GRADIENT_TEXT}>a second battle.</span>
+          Preparing your claim shouldn't
+          <br />
+          feel like{' '}
+          <span style={{ ...GOLD_GRADIENT_TEXT, whiteSpace: 'nowrap' }}>a second battle.</span>
         </motion.h1>
 
         {/* Subtitle */}
