@@ -48,6 +48,9 @@ const CATEGORIES: FeatureCategory[] = [
       'Health timeline and trend analysis',
       'Medical visit logger',
       'Exposure and hazard tracker',
+      'Work impact and occupational logger',
+      'Health trends dashboard',
+      'Quick daily log',
     ],
   },
   {
@@ -62,6 +65,10 @@ const CATEGORIES: FeatureCategory[] = [
       'Buddy and lay statement templates',
       'Doctor summary outline for your clinician',
       'Stressor statement writer for PTSD claims',
+      'Family statement builder (AI-assisted)',
+      'C&P exam packet generator',
+      'VSO/attorney packet builder',
+      'Doctor prep packet',
     ],
   },
   {
@@ -77,6 +84,12 @@ const CATEGORIES: FeatureCategory[] = [
       'DBQ criteria review and rating breakdowns',
       'Secondary Condition Finder',
       'Bilateral Factor and Back Pay calculators',
+      'C&P Exam Simulator with AI mock exams',
+      'Post-exam debrief and analysis',
+      'Zero Percent Optimizer',
+      'TDIU Checker',
+      'Exam Day Mode checklist',
+      'Decision Decoder',
     ],
   },
   {
@@ -91,6 +104,8 @@ const CATEGORIES: FeatureCategory[] = [
       'Secondary condition mapping',
       'Evidence guidance per condition',
       'Conditions by conflict and service era',
+      'Deployment locations reference',
+      'Nexus letter guide',
     ],
   },
   {
@@ -105,6 +120,8 @@ const CATEGORIES: FeatureCategory[] = [
       'AES-256 encrypted document vault',
       'Organized sections by condition',
       'PDF export for your records',
+      'Evidence Scanner (AI document analysis)',
+      'Evidence Strength Analyzer',
     ],
   },
   {
@@ -160,7 +177,7 @@ export function ProductShowcase() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1, ease: EASE_SMOOTH }}
         >
-          50+ tools designed around how the VA actually evaluates claims.
+          80+ tools designed around how the VA actually evaluates claims.
         </motion.p>
 
         {/* Category tabs */}
@@ -308,7 +325,7 @@ export function ProductShowcase() {
             className="inline-block rounded-full px-8 py-3.5 text-sm font-semibold text-black no-underline"
             style={{ background: GOLD_GRADIENT }}
           >
-            Explore All 50+ Tools
+            Explore All 80+ Tools
           </Link>
         </motion.div>
       </div>

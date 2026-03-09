@@ -18,6 +18,8 @@ const ROW_1_ITEMS = [
   'Doctor Summary Outline',
   'Medication Tracker',
   'Claim Packet Builder',
+  'C&P Exam Simulator',
+  'Evidence Scanner',
 ];
 
 const ROW_2_ITEMS = [
@@ -37,6 +39,29 @@ const ROW_2_ITEMS = [
   'Service History',
   'Intent to File Guide',
   'Claim Journey',
+  'Family Statement Builder',
+  'Post-Exam Debrief',
+];
+
+const ROW_3_ITEMS = [
+  'Zero Percent Optimizer',
+  'TDIU Checker',
+  'Decision Decoder',
+  'Compensation Ladder',
+  'Cost Estimator',
+  'Work Impact Logger',
+  'Health Trends',
+  'Quick Log',
+  'Exam Day Mode',
+  'Nexus Guide',
+  'Medication Rule Tool',
+  'Evidence Strength Analyzer',
+  'Doctor Prep Packet',
+  'VSO/Attorney Packet',
+  'C&P Exam Packet Generator',
+  'Deployment Locations',
+  'Condition Guide',
+  'Benefits Discovery',
 ];
 
 function MarqueeRow({ items, direction, speed }: { items: string[]; direction: 'left' | 'right'; speed: number }) {
@@ -117,6 +142,9 @@ export function TrustMarquee() {
         </div>
         <div className="py-2" style={{ marginTop: '12px' }}>
           <MarqueeRow items={ROW_2_ITEMS} direction="right" speed={90} />
+        </div>
+        <div className="py-2" style={{ marginTop: '12px' }}>
+          <MarqueeRow items={ROW_3_ITEMS} direction="left" speed={90} />
         </div>
       </div>
     </section>

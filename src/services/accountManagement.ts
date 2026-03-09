@@ -79,40 +79,6 @@ export async function exportAllData(format: 'json' | 'pdf'): Promise<Blob> {
   return blob as Blob;
 }
 
-export async function deleteCloudData(): Promise<void> {
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) throw new Error('Not authenticated');
-
-  const userId = session.user.id;
-
-  // Delete all user data from cloud tables (order matters for FK constraints).
-  // Each call is checked individually so partial failures are surfaced.
-  const tables = [
-    'subscriptions',
-    'user_entitlements',
-    'entitlements',
-    'form_drafts',
-    'documents',
-    'evidence',
-    'health_logs',
-    'conditions',
-  ] as const;
-
-  const errors: string[] = [];
-  for (const table of tables) {
-    const { error } = await supabase.from(table).delete().eq('user_id', userId);
-    if (error) errors.push(table);
-  }
-  if (errors.length > 0) {
-    throw new Error('Some cloud data could not be deleted. Please try again.');
-  }
-
-  const { error: profileError } = await supabase.from('profiles').delete().eq('id', userId);
-  if (profileError) {
-    throw new Error(`Failed to delete profile: ${profileError.message}`);
-  }
-}
-
 export async function deleteAccount(): Promise<void> {
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) throw new Error('Not authenticated');

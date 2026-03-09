@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
-import { Download, Upload, AlertTriangle, CheckCircle2, Trash2, Shield, Clock } from 'lucide-react';
+import { Download, Upload, AlertTriangle, CheckCircle2, Shield, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -21,8 +20,6 @@ import { isEncryptionEnabled } from '@/utils/encryption';
 import { DATA_PRIVACY_COPY, BACKUP_COPY } from '@/data/legalCopy';
 import useAppStore from '@/store/useAppStore';
 import { useProfileStore } from '@/store/useProfileStore';
-import { clearLocalData } from '@/services/accountManagement';
-import { stopSync } from '@/services/syncEngine';
 
 const BACKUP_VERSION = '2.0.0';
 const LAST_BACKUP_KEY = 'vcs-last-backup-date';
@@ -75,13 +72,10 @@ type BackupData = z.infer<typeof backupDataSchema>;
 
 export function DataBackup() {
   const { toast } = useToast();
-  const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
   const [showImportConfirm, setShowImportConfirm] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [pendingImportData, setPendingImportData] = useState<BackupData | null>(null);
 
   const encrypted = isEncryptionEnabled();
@@ -236,30 +230,6 @@ export function DataBackup() {
     }
   };
 
-  const confirmDeleteAll = async () => {
-    setIsDeleting(true);
-    try {
-      stopSync();
-      await clearLocalData();
-
-      toast({
-        title: 'All Data Deleted',
-        description: 'Your data has been permanently deleted. Redirecting...',
-      });
-
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      navigate('/', { replace: true });
-    } catch {
-      toast({
-        title: 'Delete Failed',
-        description: 'Failed to delete all data. Please try again.',
-        variant: 'destructive',
-      });
-      setIsDeleting(false);
-      setShowDeleteConfirm(false);
-    }
-  };
-
   return (
     <>
       <Card>
@@ -337,17 +307,6 @@ export function DataBackup() {
             />
           </div>
 
-          <div className="pt-3 border-t border-border">
-            <Button
-              variant="destructive"
-              onClick={() => setShowDeleteConfirm(true)}
-              disabled={isDeleting}
-              className="w-full sm:w-auto"
-            >
-              <Trash2 className="mr-2 h-4 w-4" />
-              {isDeleting ? 'Deleting...' : 'Delete All My Data'}
-            </Button>
-          </div>
         </CardContent>
       </Card>
 
@@ -388,37 +347,6 @@ export function DataBackup() {
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Delete All Confirmation */}
-      <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2 text-destructive">
-              <Trash2 className="h-5 w-5" />
-              Delete All My Data
-            </AlertDialogTitle>
-            <AlertDialogDescription asChild>
-              <div className="space-y-2">
-                <p>
-                  This will permanently delete all your claim preparation data including conditions, documents, symptom logs, AI-generated drafts, and settings.
-                </p>
-                <p className="text-destructive font-semibold">
-                  This cannot be undone. Are you sure?
-                </p>
-              </div>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmDeleteAll}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              <Trash2 className="mr-2 h-4 w-4" />
-              Delete Everything
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </>
   );
 }

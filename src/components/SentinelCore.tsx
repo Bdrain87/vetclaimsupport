@@ -67,6 +67,7 @@ interface ChatMessage {
 type IntelMode = 'ask' | 'voice-build';
 
 export function SentinelCore() {
+  const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [streamedText, setStreamedText] = useState('');
@@ -156,7 +157,7 @@ export function SentinelCore() {
   const quickPrompt = (prompt: string | ((c: string) => string)) => {
     const resolved = typeof prompt === 'function' ? prompt(conditions) : prompt;
     impactMedium();
-    sendMessage(resolved, SENTINEL_SYSTEM_PROMPT);
+    setQuery(resolved);
   };
 
   const toggleVoice = async () => {
@@ -220,7 +221,7 @@ export function SentinelCore() {
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <motion.button
           initial={{ scale: 0, opacity: 0 }}
@@ -382,7 +383,7 @@ export function SentinelCore() {
                 {TOOL_CARDS.map(({ label: cardLabel, desc, icon: Icon, route }) => (
                   <button
                     key={route}
-                    onClick={() => { impactMedium(); navigate(route); }}
+                    onClick={() => { impactMedium(); setOpen(false); setTimeout(() => navigate(route), 150); }}
                     className="rounded-xl bg-secondary/50 border border-border/50 p-3 hover:border-gold/20 hover:bg-gold/5 transition-all text-left"
                   >
                     <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center mb-2">

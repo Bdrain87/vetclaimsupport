@@ -2,11 +2,11 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import Stripe from "https://esm.sh/stripe@14?target=deno";
 
-// Production-only origins — no localhost allowed
 const ALLOWED_ORIGINS = [
   'https://vetclaimsupport.com',
   'https://www.vetclaimsupport.com',
   'https://vetclaimsupport.vercel.app',
+  'capacitor://localhost',
 ];
 
 const getAllowedOrigin = (origin: string | null): string => {

@@ -6,28 +6,69 @@ import { Check, Shield, ChevronDown } from 'lucide-react';
 
 const INCLUDED_FEATURES = [
   {
-    category: 'Guides & Tools',
-    features: ['Claim Checklist', 'VA Form Guide', 'Intent to File Guide', 'Travel Pay Calculator', 'VA-Speak Translator', 'BDD Guide', 'Glossary'],
+    category: 'Guides & Reference',
+    features: [
+      'Claim Checklist', 'VA Form Guide', 'Intent to File Guide',
+      'BDD Guide', 'Glossary', 'Nexus Guide',
+      'VA-Speak Translator', 'Medication Rule Tool',
+      'Benefits Discovery', 'PACT Act Checker',
+    ],
   },
   {
     category: 'Document Builders',
-    features: ['Personal Statement Builder', 'Buddy Statement Builder', 'Doctor Summary Outline', 'Stressor Statement Writer', 'Shareable Summary', 'C&P Exam Packet Generator'],
+    features: [
+      'Personal Statement Builder', 'Buddy Statement Builder',
+      'Family Statement Builder', 'Doctor Summary Outline',
+      'Stressor Statement Writer', 'Shareable Summary',
+      'C&P Exam Packet Generator', 'Doctor Prep Packet',
+      'VSO/Attorney Packet',
+    ],
   },
   {
     category: 'Health & Symptom Tracking',
-    features: ['Symptom Tracker', 'Sleep Tracker', 'Migraine Tracker', 'Medication Tracker', 'Medical Visit Logger', 'Exposure & Hazard Tracker'],
+    features: [
+      'Symptom Tracker', 'Sleep Tracker', 'Migraine Tracker',
+      'Medication Tracker', 'Medical Visit Logger',
+      'Exposure & Hazard Tracker', 'Work Impact Logger',
+      'Health Trends', 'Quick Log',
+    ],
   },
   {
     category: 'Strategy & Exam Prep',
-    features: ['Claim Strategy Wizard', 'C&P Exam Prep', 'DBQ Prep Sheet', 'Secondary Condition Finder', 'Bilateral Factor Calculator', 'Back Pay Estimator', 'Rating Calculator', 'Zero Percent Optimizer', 'PACT Act Checker'],
+    features: [
+      'Claim Strategy Wizard', 'C&P Exam Prep',
+      'C&P Exam Simulator', 'Post-Exam Debrief',
+      'DBQ Prep Sheet', 'Exam Day Mode',
+      'Decision Decoder', 'Community Templates',
+    ],
   },
   {
-    category: 'Research & Reference',
-    features: ['800+ Condition Database', 'Conditions by Conflict', 'Condition Guide', 'Deployment Locations'],
+    category: 'Calculators & Finders',
+    features: [
+      'Rating Calculator', 'Secondary Condition Finder',
+      'Bilateral Factor Calculator', 'Back Pay Estimator',
+      'Travel Pay Calculator', 'Cost Estimator',
+      'Zero Percent Optimizer', 'TDIU Checker',
+      'Compensation Ladder',
+    ],
+  },
+  {
+    category: 'Research & Database',
+    features: [
+      '800+ Condition Database', 'Conditions by Conflict',
+      'Condition Guide', 'Deployment Locations',
+    ],
   },
   {
     category: 'Package & Export',
-    features: ['Full Claim Packet Builder', 'Document Vault', 'Health Summary & Timeline', 'Interactive Body Map', 'Appeals & Decision Review Guide', 'Deadlines Tracker', 'Service History Manager', 'Claim Journey Tracker'],
+    features: [
+      'Full Claim Packet Builder', 'Document Vault',
+      'Evidence Scanner', 'Evidence Strength Analyzer',
+      'Health Summary & Timeline', 'Interactive Body Map',
+      'Appeals & Decision Review Guide',
+      'Deadlines Tracker', 'Service History Manager',
+      'Claim Journey Tracker',
+    ],
   },
 ];
 
@@ -224,10 +265,10 @@ export function Pricing() {
 
               <ul className="space-y-2.5 mb-6">
                 {[
-                  '800+ VA conditions',
-                  'Guided statements',
-                  'Document vault',
-                  'Symptom trackers',
+                  '80+ tools & features',
+                  'AI-powered document builders',
+                  'Health & symptom trackers',
+                  'C&P exam simulator',
                   'No subscription required',
                 ].map((feature) => (
                   <li key={feature} className="flex items-center gap-2.5 text-sm" style={{ color: TEXT_PRIMARY }}>

@@ -8,7 +8,7 @@ import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE, APP_STORE_URL, LANDING_BG } from 
 const TRUST_ITEMS = [
   'NOT AFFILIATED WITH THE VA',
   'VETERAN-BUILT',
-  '50+ CLAIM TOOLS',
+  '80+ CLAIM TOOLS',
   'ONE-TIME PURCHASE',
 ];
 
@@ -137,10 +137,10 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          You Served Your Country.
+          You served your country.
           <br />
-          You Shouldn't Have to Battle for{' '}
-          <span style={GOLD_GRADIENT_TEXT}>Your Benefits.</span>
+          Preparing your claim shouldn't feel like{' '}
+          <span style={GOLD_GRADIENT_TEXT}>a second battle.</span>
         </motion.h1>
 
         {/* Subtitle */}
@@ -155,7 +155,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          50+ tools to organize your evidence, build your case, and walk into your VA exam ready.
+          80+ tools to organize your evidence, build your case, and walk into your VA exam ready.
         </motion.p>
 
         {/* CTAs */}
