@@ -47,7 +47,7 @@ const RATING_COLORS: Record<string, string> = {
   '80%+': 'bg-orange-500/15 text-orange-400 border-orange-500/20',
   '70%+': 'bg-gold/15 text-gold border-gold/20',
   '50%+': 'bg-gold/10 text-gold/80 border-gold/15',
-  '10%+': 'bg-green-500/15 text-green-400 border-green-500/20',
+  '10%+': 'bg-gold/10 text-gold border-gold/20',
   'any rated': 'bg-blue-500/15 text-blue-400 border-blue-500/20',
   none: 'bg-gold/15 text-gold border-gold/20',
 };

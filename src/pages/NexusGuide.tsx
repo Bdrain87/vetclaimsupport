@@ -212,7 +212,7 @@ export default function NexusGuide() {
   ];
 
   return (
-    <PageContainer className="space-y-6 animate-fade-in pb-8">
+    <PageContainer className="space-y-6 animate-fade-in">
       {/* Header */}
       <div className="section-header">
         <div className="section-icon bg-primary/10">

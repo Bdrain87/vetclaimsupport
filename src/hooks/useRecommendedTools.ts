@@ -145,7 +145,7 @@ export function useRecommendedTools(): RecommendedTool[] {
     if (hasPTSD && ptsdSymptoms.length === 0) {
       recs.push({
         label: 'PTSD Symptom Tracker',
-        route: '/health/ptsd',
+        route: '/health/symptoms',
         description: 'Track PTSD-specific symptoms',
         reason: 'Detailed PTSD symptom tracking strengthens your claim',
       });

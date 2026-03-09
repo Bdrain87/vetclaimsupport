@@ -697,7 +697,7 @@ export default function DocumentsHub() {
               </Select>
             )}
             {(filterDocType !== 'all' || filterCondition !== 'all') && (
-              <Button variant="ghost" size="icon" onClick={() => { setFilterDocType('all'); setFilterCondition('all'); }} aria-label="Clear filters">
+              <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => { setFilterDocType('all'); setFilterCondition('all'); }} aria-label="Clear filters">
                 <X className="h-4 w-4" />
               </Button>
             )}
@@ -885,7 +885,7 @@ export default function DocumentsHub() {
                           <Button
                             variant="outline"
                             size="icon"
-                            className="h-10 w-10"
+                            className="h-10 w-10 min-h-[44px] min-w-[44px]"
                             onClick={() => {
                               if ((doc.count || 0) > 0) {
                                 updateDocument(doc.id, { count: (doc.count || 0) - 1 });
@@ -900,7 +900,7 @@ export default function DocumentsHub() {
                           <Button
                             variant="outline"
                             size="icon"
-                            className="h-10 w-10"
+                            className="h-10 w-10 min-h-[44px] min-w-[44px]"
                             onClick={() => updateDocument(doc.id, { count: (doc.count || 0) + 1 })}
                             aria-label="Increase document count"
                           >

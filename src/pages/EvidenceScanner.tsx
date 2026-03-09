@@ -137,13 +137,13 @@ export default function EvidenceScanner() {
   };
 
   const StatusIcon = ({ status }: { status: string }) => {
-    if (status === 'present') return <CheckCircle2 className="h-4 w-4 text-green-400 shrink-0" />;
+    if (status === 'present') return <CheckCircle2 className="h-4 w-4 text-gold shrink-0" />;
     if (status === 'missing') return <XCircle className="h-4 w-4 text-red-400 shrink-0" />;
     return <MinusCircle className="h-4 w-4 text-gold shrink-0" />;
   };
 
   return (
-    <PageContainer className="space-y-4 pb-8">
+    <PageContainer className="space-y-4">
       <h1 className="text-xl font-bold mb-4">Evidence Scanner</h1>
       <AIDisclaimer variant="banner" />
       <input ref={fileRef} type="file" accept="image/*,.pdf" className="hidden" onChange={handleFile} />

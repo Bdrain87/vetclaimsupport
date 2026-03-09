@@ -1,7 +1,7 @@
 /**
  * AskIntelSheet — Reusable bottom sheet with streaming AI chat,
  * context-aware via buildVeteranContext. NOT a general chatbot — a claims
- * preparation coach.
+ * preparation assistant.
  *
  * System instruction: "You are a VA claims preparation advisor. Never diagnose,
  * never predict ratings, never file claims. Always recommend consulting a VSO."
@@ -68,7 +68,7 @@ export function AskIntelSheet() {
       .map((m) => `${m.role === 'user' ? 'Veteran' : 'Advisor'}: ${m.content}`)
       .join('\n\n');
 
-    const { model, temperature } = getModelConfig('coaching');
+    const { model, temperature } = getModelConfig('assistant');
 
     const prompt = `${SYSTEM_INSTRUCTION}\n\n--- VETERAN DATA ---\n${contextBlock}\n\n--- CONVERSATION ---\n${history}\n\nAdvisor:`;
 
@@ -88,20 +88,6 @@ export function AskIntelSheet() {
 
   return (
     <>
-      {/* Floating Trigger Button */}
-      {!isOpen && (
-        <motion.button
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0, opacity: 0 }}
-          onClick={() => setIsOpen(true)}
-          className="fixed bottom-20 left-4 z-40 w-12 h-12 rounded-full bg-gold text-black shadow-lg flex items-center justify-center hover:bg-gold/90 active:scale-95 transition-all"
-          aria-label="Ask Intel"
-        >
-          <MessageCircle className="h-5 w-5" />
-        </motion.button>
-      )}
-
       {/* Bottom Sheet */}
       <AnimatePresence>
         {isOpen && (
@@ -122,6 +108,7 @@ export function AskIntelSheet() {
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               className="fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border rounded-t-2xl max-h-[70vh] flex flex-col"
+              style={{ paddingBottom: 'calc(var(--keyboard-height, 0px) + env(safe-area-inset-bottom, 0px))' }}
             >
               {/* Header */}
               <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">

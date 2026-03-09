@@ -109,7 +109,7 @@ export default function TDIUChecker() {
   const yesCount = Object.values(answers).filter(Boolean).length;
 
   return (
-    <PageContainer className="space-y-6 animate-fade-in pb-8">
+    <PageContainer className="space-y-6 animate-fade-in">
       {/* Header */}
       <div className="section-header">
         <div className="section-icon bg-gold/10">

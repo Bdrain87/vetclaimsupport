@@ -12,14 +12,6 @@ const MIGRATION_FLAG = 'vcs-encrypted-migration-v2';
 // prevent a permanent black screen on degraded devices.
 const HYDRATION_TIMEOUT_MS = 10_000;
 
-// Module-level flag: set when encryption key init fails so the app can warn
-let _cryptoInitFailed = false;
-
-/** Returns true if encryption key initialization failed during hydration. */
-export function didCryptoInitFail(): boolean {
-  return _cryptoInitFailed;
-}
-
 /**
  * Orchestrates encryption key initialisation and store rehydration.
  *
@@ -61,7 +53,6 @@ export function useHydration(): boolean {
       } catch (error) {
         // Safety net: if key init fails, still allow rehydration with
         // whatever state is available (plaintext reads still work).
-        _cryptoInitFailed = true;
         logger.error('[useHydration] Encryption key init failed:', error);
       }
 

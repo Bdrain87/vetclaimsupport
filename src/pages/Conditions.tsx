@@ -212,21 +212,21 @@ function ConditionCard({ userCondition, conditionDetails, readinessScore, onView
         >
           {conditionDetails && onNavigate && (
             <>
-              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate(`/prep/dbq?condition=${encodeURIComponent(conditionDetails.id)}`)}>
+              <Button variant="ghost" size="sm" className="text-xs h-7 px-2 min-h-[44px]" onClick={() => onNavigate(`/prep/dbq?condition=${encodeURIComponent(conditionDetails.id)}`)}>
                 <FileText className="h-3 w-3 mr-1" />
                 DBQ
               </Button>
-              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate(`/prep/exam?condition=${encodeURIComponent(conditionDetails.id)}`)}>
+              <Button variant="ghost" size="sm" className="text-xs h-7 px-2 min-h-[44px]" onClick={() => onNavigate(`/prep/exam?condition=${encodeURIComponent(conditionDetails.id)}`)}>
                 <Stethoscope className="h-3 w-3 mr-1" />
                 C&P Prep
               </Button>
-              <Button variant="ghost" size="sm" className="text-xs h-7 px-2" onClick={() => onNavigate(`/prep/personal-statement?condition=${encodeURIComponent(conditionDetails.id)}`)}>
+              <Button variant="ghost" size="sm" className="text-xs h-7 px-2 min-h-[44px]" onClick={() => onNavigate(`/prep/personal-statement?condition=${encodeURIComponent(conditionDetails.id)}`)}>
                 <Edit className="h-3 w-3 mr-1" />
                 Statement
               </Button>
             </>
           )}
-          <Button variant="ghost" size="sm" className="text-xs h-7 px-2 text-destructive hover:text-destructive ml-auto" onClick={onRemove}>
+          <Button variant="ghost" size="sm" className="text-xs h-7 px-2 min-h-[44px] text-destructive hover:text-destructive ml-auto" onClick={onRemove}>
             <Trash2 className="h-3 w-3 mr-1" />
             Remove
           </Button>
@@ -438,12 +438,12 @@ export default function Conditions() {
       <ClaimManagementStrip />
 
       {/* Quick Claim Tools */}
-      <div className="grid grid-cols-4 gap-2">
+      <div className="flex flex-wrap gap-2">
         {CLAIM_TOOLS.map((tool) => (
           <Link
             key={tool.route}
             to={tool.route}
-            className="flex flex-col items-center gap-1.5 p-2.5 rounded-xl border border-border bg-card hover:bg-accent/50 transition-colors text-center"
+            className="flex flex-col items-center gap-1.5 p-2.5 rounded-xl border border-border bg-card hover:bg-accent/50 transition-colors text-center flex-1 min-w-[calc(50%-0.25rem)] sm:min-w-0 min-h-[44px]"
           >
             <tool.icon className="h-5 w-5 text-gold" />
             <span className="text-[10px] font-medium text-foreground leading-tight">{tool.label}</span>

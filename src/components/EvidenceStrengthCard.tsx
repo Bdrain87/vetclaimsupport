@@ -35,7 +35,7 @@ export function EvidenceStrengthCard({ conditionName, conditionId }: Props) {
           <div className="space-y-1.5">
             {evidence.dataPoints.map((dp, i) => (
               <div key={i} className="flex items-start gap-2 text-xs">
-                <CheckCircle2 className="h-3.5 w-3.5 text-green-500 shrink-0 mt-0.5" />
+                <CheckCircle2 className="h-3.5 w-3.5 text-gold shrink-0 mt-0.5" />
                 <div>
                   <span className="font-medium text-foreground">{dp.label}:</span>{' '}
                   <span className="text-muted-foreground">{dp.value}</span>
@@ -60,7 +60,7 @@ export function EvidenceStrengthCard({ conditionName, conditionId }: Props) {
                   className={cn(
                     'p-2.5 rounded-xl border text-xs',
                     cm.matchStrength === 'strong'
-                      ? 'border-green-500/20 bg-green-500/5'
+                      ? 'border-gold/20 bg-gold/5'
                       : 'border-gold/20 bg-gold/5',
                   )}
                 >
@@ -70,7 +70,7 @@ export function EvidenceStrengthCard({ conditionName, conditionId }: Props) {
                       className={cn(
                         'text-[10px] font-medium px-1.5 py-0.5 rounded-full',
                         cm.matchStrength === 'strong'
-                          ? 'bg-green-500/10 text-green-600'
+                          ? 'bg-gold/10 text-gold'
                           : 'bg-gold/10 text-gold',
                       )}
                     >
@@ -81,7 +81,7 @@ export function EvidenceStrengthCard({ conditionName, conditionId }: Props) {
                   {cm.matchedKeywords.length > 0 && (
                     <div className="flex flex-wrap gap-1">
                       {cm.matchedKeywords.slice(0, 5).map((kw) => (
-                        <span key={kw} className="text-[10px] px-1.5 py-0.5 rounded-full bg-green-500/10 text-green-600">
+                        <span key={kw} className="text-[10px] px-1.5 py-0.5 rounded-full bg-gold/10 text-gold">
                           {kw}
                         </span>
                       ))}

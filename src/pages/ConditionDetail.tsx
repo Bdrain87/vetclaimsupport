@@ -384,7 +384,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
               <div className="flex gap-2">
                 <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
                   <DialogTrigger asChild>
-                    <Button variant="outline" size="icon" className="text-destructive" aria-label="Remove condition">
+                    <Button variant="outline" size="icon" className="text-destructive min-h-[44px] min-w-[44px]" aria-label="Remove condition">
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </DialogTrigger>
@@ -814,7 +814,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
 
       {/* Tabs */}
       <Tabs defaultValue="criteria" className="space-y-4">
-        <TabsList className="w-full grid grid-cols-4 overflow-hidden">
+        <TabsList className="w-full grid grid-cols-2 sm:grid-cols-4 overflow-hidden">
           <TabsTrigger value="criteria" className="text-xs sm:text-sm">
             <Scale className="h-4 w-4 mr-1 hidden sm:inline" />
             Criteria

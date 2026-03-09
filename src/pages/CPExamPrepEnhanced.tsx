@@ -306,11 +306,11 @@ export default function CPExamPrepEnhanced() {
 
       {/* Tabs */}
       <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="conditions">By Condition</TabsTrigger>
-          <TabsTrigger value="tips">Do's & Don'ts</TabsTrigger>
-          <TabsTrigger value="checklist">Checklist</TabsTrigger>
+        <TabsList className="flex w-full h-auto flex-wrap gap-1.5 bg-transparent p-0 rounded-none">
+          <TabsTrigger value="overview" className="flex-1 min-w-[calc(50%-4px)] rounded-xl border border-border bg-card px-3 py-2 text-xs data-[state=active]:border-gold/40 data-[state=active]:bg-gold/10 data-[state=active]:text-gold data-[state=active]:shadow-none">Overview</TabsTrigger>
+          <TabsTrigger value="conditions" className="flex-1 min-w-[calc(50%-4px)] rounded-xl border border-border bg-card px-3 py-2 text-xs data-[state=active]:border-gold/40 data-[state=active]:bg-gold/10 data-[state=active]:text-gold data-[state=active]:shadow-none">By Condition</TabsTrigger>
+          <TabsTrigger value="tips" className="flex-1 min-w-[calc(50%-4px)] rounded-xl border border-border bg-card px-3 py-2 text-xs data-[state=active]:border-gold/40 data-[state=active]:bg-gold/10 data-[state=active]:text-gold data-[state=active]:shadow-none">Do's & Don'ts</TabsTrigger>
+          <TabsTrigger value="checklist" className="flex-1 min-w-[calc(50%-4px)] rounded-xl border border-border bg-card px-3 py-2 text-xs data-[state=active]:border-gold/40 data-[state=active]:bg-gold/10 data-[state=active]:text-gold data-[state=active]:shadow-none">Checklist</TabsTrigger>
         </TabsList>
 
         {/* Overview Tab */}

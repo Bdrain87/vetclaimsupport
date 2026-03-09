@@ -27,7 +27,7 @@ export function PageContainer({ children, className, noPadding = false, loading,
     <div
       className={cn(
         'w-full mx-auto overflow-x-hidden',
-        !noPadding && 'px-4',
+        !noPadding && 'px-4 pb-24',
         className
       )}
       style={{

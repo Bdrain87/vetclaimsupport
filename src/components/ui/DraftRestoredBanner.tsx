@@ -28,14 +28,14 @@ export function DraftRestoredBanner({ lastSaved, onStartFresh }: DraftRestoredBa
   return (
     <div className="flex items-center gap-3 p-3 rounded-lg border border-primary/30 bg-primary/5 text-sm">
       <Clock className="h-4 w-4 text-primary shrink-0" />
-      <span className="flex-1 text-muted-foreground">
+      <span className="flex-1 min-w-0 text-muted-foreground">
         Draft restored from{' '}
         <span className="font-medium text-foreground">{timeAgo(lastSaved)}</span>
       </span>
       <Button
         variant="ghost"
         size="sm"
-        className="h-7 text-xs text-muted-foreground hover:text-destructive"
+        className="h-7 min-h-[44px] text-xs text-muted-foreground hover:text-destructive"
         onClick={onStartFresh}
       >
         <RotateCcw className="h-3 w-3 mr-1" />
@@ -44,7 +44,7 @@ export function DraftRestoredBanner({ lastSaved, onStartFresh }: DraftRestoredBa
       <Button
         variant="ghost"
         size="icon"
-        className="h-7 w-7 text-muted-foreground"
+        className="h-7 w-7 min-h-[44px] min-w-[44px] text-muted-foreground"
         onClick={() => setDismissed(true)}
         aria-label="Dismiss draft restored notification"
       >

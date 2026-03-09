@@ -121,7 +121,7 @@ export default function FamilyStatement() {
   };
 
   return (
-    <PageContainer className="space-y-4 pb-8">
+    <PageContainer className="space-y-4">
       <h1 className="text-xl font-bold mb-4">Family Impact Statement</h1>
       <AIDisclaimer variant="banner" />
       <DataConnectedBadge />

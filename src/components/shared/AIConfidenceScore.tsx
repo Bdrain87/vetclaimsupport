@@ -60,7 +60,7 @@ export function AIConfidenceScore({ conditionId, className }: AIConfidenceScoreP
     <div
       className={cn(
         'flex items-start gap-2.5 p-3 rounded-xl border text-xs',
-        level === 'high' && 'border-green-500/20 bg-green-500/5',
+        level === 'high' && 'border-gold/20 bg-gold/5',
         level === 'moderate' && 'border-gold/20 bg-gold/5',
         level === 'low' && 'border-muted bg-muted/30',
         className,
@@ -69,7 +69,7 @@ export function AIConfidenceScore({ conditionId, className }: AIConfidenceScoreP
       <Icon
         className={cn(
           'h-3.5 w-3.5 shrink-0 mt-0.5',
-          level === 'high' && 'text-green-500',
+          level === 'high' && 'text-gold',
           level === 'moderate' && 'text-gold',
           level === 'low' && 'text-muted-foreground',
         )}
@@ -78,7 +78,7 @@ export function AIConfidenceScore({ conditionId, className }: AIConfidenceScoreP
         <p
           className={cn(
             'font-semibold',
-            level === 'high' && 'text-green-700 dark:text-green-400',
+            level === 'high' && 'text-gold',
             level === 'moderate' && 'text-gold',
             level === 'low' && 'text-muted-foreground',
           )}

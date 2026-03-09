@@ -509,8 +509,8 @@ export default function ServiceHistory() {
                         {safeFormatDate(entry.startDate)} - {entry.endDate ? safeFormatDate(entry.endDate) : 'Present'}
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => handleEdit(entry)} aria-label="Edit duty station"><Edit className="h-4 w-4" /></Button>
-                        <Button variant="ghost" size="icon" onClick={() => setDeleteTarget({ id: entry.id, type: 'service', label: 'duty station' })} aria-label="Delete duty station"><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                        <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => handleEdit(entry)} aria-label="Edit duty station"><Edit className="h-4 w-4" /></Button>
+                        <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => setDeleteTarget({ id: entry.id, type: 'service', label: 'duty station' })} aria-label="Delete duty station"><Trash2 className="h-4 w-4 text-destructive" /></Button>
                       </div>
                     </div>
                     <CardTitle className="text-lg mt-2 flex items-center gap-2">
@@ -660,8 +660,8 @@ export default function ServiceHistory() {
                         {safeFormatDate(entry.startDate)} - {entry.endDate ? safeFormatDate(entry.endDate) : 'Present'}
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => handleEditCombat(entry)} aria-label="Edit combat entry"><Edit className="h-4 w-4" /></Button>
-                        <Button variant="ghost" size="icon" onClick={() => setDeleteTarget({ id: entry.id, type: 'combat', label: 'combat entry' })} aria-label="Delete combat entry"><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                        <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => handleEditCombat(entry)} aria-label="Edit combat entry"><Edit className="h-4 w-4" /></Button>
+                        <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => setDeleteTarget({ id: entry.id, type: 'combat', label: 'combat entry' })} aria-label="Delete combat entry"><Trash2 className="h-4 w-4 text-destructive" /></Button>
                       </div>
                     </div>
                     <CardTitle className="text-lg mt-2 flex items-center gap-2 flex-wrap">
@@ -787,8 +787,8 @@ export default function ServiceHistory() {
                         </Badge>
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => handleEditEvent(entry)} aria-label="Edit event"><Edit className="h-4 w-4" /></Button>
-                        <Button variant="ghost" size="icon" onClick={() => setDeleteTarget({ id: entry.id, type: 'event', label: 'major event' })} aria-label="Delete event"><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                        <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => handleEditEvent(entry)} aria-label="Edit event"><Edit className="h-4 w-4" /></Button>
+                        <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => setDeleteTarget({ id: entry.id, type: 'event', label: 'major event' })} aria-label="Delete event"><Trash2 className="h-4 w-4 text-destructive" /></Button>
                       </div>
                     </div>
                     <CardTitle className="text-lg mt-2 flex items-center gap-2">
@@ -914,8 +914,8 @@ export default function ServiceHistory() {
                         {safeFormatDate(entry.startDate)} - {entry.endDate ? safeFormatDate(entry.endDate) : 'Present'}
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => handleEditDeploy(entry)} aria-label="Edit deployment"><Edit className="h-4 w-4" /></Button>
-                        <Button variant="ghost" size="icon" onClick={() => setDeleteTarget({ id: entry.id, type: 'deployment', label: 'deployment' })} aria-label="Delete deployment"><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                        <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => handleEditDeploy(entry)} aria-label="Edit deployment"><Edit className="h-4 w-4" /></Button>
+                        <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => setDeleteTarget({ id: entry.id, type: 'deployment', label: 'deployment' })} aria-label="Delete deployment"><Trash2 className="h-4 w-4 text-destructive" /></Button>
                       </div>
                     </div>
                     <CardTitle className="text-lg mt-2 flex items-center gap-2 flex-wrap">

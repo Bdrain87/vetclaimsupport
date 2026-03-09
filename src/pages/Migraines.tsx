@@ -972,10 +972,10 @@ export default function Migraines() {
                     )}
                   </div>
                   <div className="flex gap-1">
-                    <Button variant="ghost" size="icon" onClick={() => handleEdit(entry)} aria-label="Edit migraine">
+                    <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => handleEdit(entry)} aria-label="Edit migraine">
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => setDeleteTarget(entry.id)} aria-label="Delete migraine">
+                    <Button variant="ghost" size="icon" className="min-h-[44px] min-w-[44px]" onClick={() => setDeleteTarget(entry.id)} aria-label="Delete migraine">
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>

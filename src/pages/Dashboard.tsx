@@ -298,7 +298,7 @@ export default function Dashboard() {
   const hasMedications = data.medications.length > 0;
 
   return (
-    <PageContainer className="space-y-4 animate-fade-in pb-4">
+    <PageContainer className="space-y-4 animate-fade-in">
       {/* Section 1: Alert Zone */}
       <IntentToFileBanner />
 
@@ -648,7 +648,7 @@ export default function Dashboard() {
                 className={cn(
                   'flex items-start gap-2 p-2.5 rounded-xl text-xs',
                   insight.category === 'positive'
-                    ? 'bg-green-500/5 border border-green-500/20'
+                    ? 'bg-gold/5 border border-gold/20'
                     : insight.category === 'actionable'
                       ? 'bg-gold/5 border border-gold/20'
                       : 'bg-muted/50 border border-border',
@@ -656,7 +656,7 @@ export default function Dashboard() {
               >
                 <span className={cn(
                   'shrink-0 mt-0.5 w-1.5 h-1.5 rounded-full',
-                  insight.category === 'positive' ? 'bg-green-500' : insight.category === 'actionable' ? 'bg-gold' : 'bg-muted-foreground',
+                  insight.category === 'positive' ? 'bg-gold' : insight.category === 'actionable' ? 'bg-gold' : 'bg-muted-foreground',
                 )} />
                 <p className="text-muted-foreground">{insight.text}</p>
               </div>
@@ -1181,7 +1181,7 @@ export default function Dashboard() {
         </motion.div>
       )}
 
-      {/* Ask Intel — AI Coaching Sheet */}
+      {/* Ask Intel — AI Assistant Sheet */}
       <AskIntelSheet />
     </PageContainer>
   );

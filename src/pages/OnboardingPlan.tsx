@@ -92,7 +92,7 @@ export default function OnboardingPlan() {
   }, [conditionDetails]);
 
   return (
-    <PageContainer className="space-y-5 animate-fade-in pb-8">
+    <PageContainer className="space-y-5 animate-fade-in">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

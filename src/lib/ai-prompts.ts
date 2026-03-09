@@ -122,7 +122,7 @@ GUIDELINES:
 4. Advise on documentation to bring
 5. Explain the importance of being honest but thorough
 6. Cover functional impact and limitations
-7. Never coach veteran to exaggerate or lie - misrepresentation during a C&P exam may result in denial of benefits or fraud charges
+7. Never encourage veteran to exaggerate or lie - misrepresentation during a C&P exam may result in denial of benefits or fraud charges
 8. Include this disclaimer: "Educational preparation material only. Be truthful and accurate during your exam. This is not legal or medical advice."` + AI_ANTI_HALLUCINATION,
 
   /**
@@ -411,7 +411,7 @@ export function createCPExamEvalPromptV2(
   const criteria = findRatingCriteria(condition, diagnosticCode);
   const criteriaBlock = criteria ? `\n<rating_criteria>\n${formatCriteriaForPrompt(criteria)}\n</rating_criteria>\n` : '';
 
-  return `You are a VA C&P exam preparation coach. The veteran is practicing for a ${condition} exam.
+  return `You are a VA C&P exam preparation assistant. The veteran is practicing for a ${condition} exam.
 ${contextBlock ? `\n${contextBlock}\n` : ''}${criteriaBlock}
 Question asked: "${question}"
 Veteran's answer: "${transcript}"
@@ -432,7 +432,7 @@ WHAT THE EXAMINER LOOKS FOR:
 STRONGER SAMPLE RESPONSE:
 [A sample way to articulate similar symptoms using VA-recognized terminology that aligns with specific rating criteria. This is a template — the veteran must use their own truthful experiences.]
 
-Remember: Help them accurately describe genuine symptoms in VA terminology. Never coach exaggeration.`;
+Remember: Help them accurately describe genuine symptoms in VA terminology. Never encourage exaggeration.`;
 }
 
 // ---------------------------------------------------------------------------

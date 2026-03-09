@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import { PageContainer } from '@/components/PageContainer';
 import { Button } from '@/components/ui/button';
@@ -15,7 +15,7 @@ import { getModelConfig } from '@/lib/ai-models';
 import { buildConditionContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
 import { StreamingText } from '@/components/ui/StreamingText';
-import { Mic, MicOff, Play, RotateCcw, Copy, ChevronRight, Shield, AlertTriangle, Square } from 'lucide-react';
+import { Mic, MicOff, Play, RotateCcw, Copy, ChevronRight, Shield, AlertTriangle, Square, Volume2, VolumeX, MessageSquare } from 'lucide-react';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 
 // DBQ-based question sets by condition category
@@ -111,6 +111,129 @@ interface ExamAnswer {
   strength: 'Strong' | 'Moderate' | 'Weak';
 }
 
+/** Extracted so we can use useEffect for auto-speak on mount */
+function QuestionPhase({ question, questionNum, totalQuestions, selectedCondition, conversationMode, isSpeaking, onSpeak, onStopSpeaking, onStartAnswer }: {
+  question: string;
+  questionNum: number;
+  totalQuestions: number;
+  selectedCondition: string;
+  conversationMode: boolean;
+  isSpeaking: boolean;
+  onSpeak: (autoRecord: boolean) => void;
+  onStopSpeaking: () => void;
+  onStartAnswer: () => void;
+}) {
+  const hasAutoSpoken = useRef(false);
+
+  // Auto-speak when entering question phase in conversation mode
+  useEffect(() => {
+    if (conversationMode && !hasAutoSpoken.current) {
+      hasAutoSpoken.current = true;
+      // Small delay so the UI renders first
+      const t = setTimeout(() => onSpeak(true), 300);
+      return () => clearTimeout(t);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return (
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-xs text-muted-foreground shrink-0">Q{questionNum}/{totalQuestions}</span>
+        {conversationMode && (
+          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-gold/10 border border-gold/20 text-gold shrink-0">
+            Conversation
+          </span>
+        )}
+        <span className="text-xs text-muted-foreground truncate text-right">{selectedCondition}</span>
+      </div>
+      <div className="w-full h-1 rounded-full bg-border overflow-hidden">
+        <div className="h-full bg-gold rounded-full transition-all duration-500" style={{ width: `${((questionNum - 1) / totalQuestions) * 100}%` }} />
+      </div>
+      <div className="p-4 rounded-xl border border-gold/20 bg-gold/5">
+        <div className="flex items-start gap-3">
+          <p className="text-sm font-medium flex-1">{question}</p>
+          <button
+            onClick={() => isSpeaking ? onStopSpeaking() : onSpeak(false)}
+            className="shrink-0 h-11 w-11 rounded-full flex items-center justify-center border border-gold/20 bg-gold/10 hover:bg-gold/20 transition-colors"
+            aria-label={isSpeaking ? 'Stop reading' : 'Read question aloud'}
+          >
+            {isSpeaking ? (
+              <VolumeX className="h-4 w-4 text-gold" />
+            ) : (
+              <Volume2 className="h-4 w-4 text-gold" />
+            )}
+          </button>
+        </div>
+      </div>
+      {isSpeaking && conversationMode ? (
+        <p className="text-xs text-muted-foreground text-center">Listening... recording will start automatically</p>
+      ) : (
+        <p className="text-xs text-muted-foreground text-center">Tap the microphone and answer as if speaking to the examiner</p>
+      )}
+      <Button onClick={onStartAnswer} disabled={isSpeaking && conversationMode} className="w-full bg-gold hover:bg-gold/80 text-black font-semibold h-14 disabled:opacity-50">
+        <Mic className="h-5 w-5 mr-2" /> {isSpeaking && conversationMode ? 'Waiting for question...' : 'Start Recording Answer'}
+      </Button>
+    </motion.div>
+  );
+}
+
+// iOS WebKit pauses speechSynthesis after ~15s. This keep-alive nudges it.
+let keepAliveTimer: ReturnType<typeof setInterval> | null = null;
+let cachedVoice: SpeechSynthesisVoice | null = null;
+
+/** Pick the best English voice — prefer enhanced/premium iOS voices over the default robotic one. */
+function getBestVoice(): SpeechSynthesisVoice | null {
+  if (cachedVoice) return cachedVoice;
+  const voices = window.speechSynthesis?.getVoices() ?? [];
+  const en = voices.filter(v => v.lang.startsWith('en'));
+  // iOS enhanced voices contain "Enhanced" or "Premium" in their name
+  // and have higher quality than the default compact voices
+  const enhanced = en.find(v => /enhanced|premium/i.test(v.name));
+  // Fallback: prefer any non-default local voice for slightly better quality
+  const local = en.find(v => v.localService && !v.default);
+  cachedVoice = enhanced ?? local ?? en[0] ?? null;
+  return cachedVoice;
+}
+
+// Pre-load voices — iOS loads them async, so we trigger early
+if (typeof window !== 'undefined' && window.speechSynthesis) {
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.addEventListener?.('voiceschanged', () => { cachedVoice = null; getBestVoice(); });
+}
+
+function stopSpeaking() {
+  if (keepAliveTimer) { clearInterval(keepAliveTimer); keepAliveTimer = null; }
+  window.speechSynthesis?.cancel();
+}
+
+function speakText(text: string, onEnd?: () => void): void {
+  stopSpeaking();
+  const synth = window.speechSynthesis;
+  if (!synth) {
+    toast({ title: 'Text-to-speech not supported on this device', variant: 'destructive' });
+    onEnd?.();
+    return;
+  }
+  const utterance = new SpeechSynthesisUtterance(text);
+  const voice = getBestVoice();
+  if (voice) utterance.voice = voice;
+  utterance.rate = 0.95;
+  utterance.pitch = 1;
+  let finished = false;
+  // Don't touch keepAliveTimer in done — it may belong to a newer speakText call.
+  // The timer self-cleans via its !synth.speaking check, and stopSpeaking() clears it on next call.
+  const done = () => { if (finished) return; finished = true; onEnd?.(); };
+  utterance.onend = done;
+  utterance.onerror = done;
+  synth.speak(utterance);
+  // iOS keep-alive: pause/resume every 10s to prevent silent pause
+  keepAliveTimer = setInterval(() => {
+    if (!synth.speaking) { clearInterval(keepAliveTimer!); keepAliveTimer = null; return; }
+    synth.pause();
+    synth.resume();
+  }, 10_000);
+}
+
 export default function CPExamSimulator() {
   const { conditions } = useUserConditions();
   const [phase, setPhase] = useState<SimPhase>('select');
@@ -122,6 +245,38 @@ export default function CPExamSimulator() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentFeedback, setCurrentFeedback] = useState<ExamAnswer | null>(null);
   const { streamedText, isStreaming, startStream, cancel: cancelStream } = useAIStream();
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [conversationMode, setConversationMode] = useState(false);
+  const conversationModeRef = useRef(false);
+  // Incremented when speech is cancelled manually — prevents stale onEnd from triggering auto-record
+  const speechGenRef = useRef(0);
+
+  // Keep ref in sync so callbacks always see latest value
+  useEffect(() => { conversationModeRef.current = conversationMode; }, [conversationMode]);
+
+  // Cancel speech on unmount
+  useEffect(() => () => stopSpeaking(), []);
+
+  const speakQuestion = useCallback((text: string, autoRecord?: boolean) => {
+    const gen = ++speechGenRef.current;
+    setIsSpeaking(true);
+    speakText(text, () => {
+      // If speech was cancelled (gen changed), don't auto-record
+      if (gen !== speechGenRef.current) return;
+      setIsSpeaking(false);
+      // Only auto-record on native — on web, TTS works but recording doesn't
+      if (autoRecord && conversationModeRef.current && isNativeApp) {
+        // Small delay so the user hears the question end before mic activates
+        setTimeout(() => {
+          if (gen !== speechGenRef.current) return;
+          startAnswerRef.current?.();
+        }, 600);
+      }
+    });
+  }, []);
+
+  // We need a ref to startAnswer so speakQuestion's onEnd can call it without stale closure
+  const startAnswerRef = useRef<(() => void) | null>(null);
 
   const startExam = useCallback((condition: string) => {
     impactMedium();
@@ -146,6 +301,9 @@ export default function CPExamSimulator() {
       toast({ title: 'AI features are not configured', variant: 'destructive' });
       return;
     }
+    speechGenRef.current++; // Invalidate any pending auto-record
+    stopSpeaking();
+    setIsSpeaking(false);
     impactMedium();
     try {
       await VoiceRecorder.requestAudioRecordingPermission();
@@ -156,6 +314,9 @@ export default function CPExamSimulator() {
       toast({ title: 'Microphone access required', variant: 'destructive' });
     }
   }, []);
+
+  // Keep the ref current
+  useEffect(() => { startAnswerRef.current = startAnswer; }, [startAnswer]);
 
   const submitAnswer = useCallback(async () => {
     if (!isRecording) return;
@@ -224,6 +385,9 @@ export default function CPExamSimulator() {
 
   const resetExam = useCallback(() => {
     cancelStream();
+    speechGenRef.current++;
+    stopSpeaking();
+    setIsSpeaking(false);
     impactMedium();
     setPhase('select');
     setSelectedCondition('');
@@ -231,15 +395,16 @@ export default function CPExamSimulator() {
     setCurrentQ(0);
     setAnswers([]);
     setCurrentFeedback(null);
+    setConversationMode(false);
   }, [cancelStream]);
 
   const strengthColor = (s: string) =>
-    s === 'Strong' ? 'text-green-400' : s === 'Moderate' ? 'text-gold' : 'text-red-400';
+    s === 'Strong' ? 'text-gold' : s === 'Moderate' ? 'text-gold' : 'text-red-400';
   const strengthBg = (s: string) =>
-    s === 'Strong' ? 'bg-green-500/10 border-green-500/20' : s === 'Moderate' ? 'bg-gold/10 border-gold/20' : 'bg-red-500/10 border-red-500/20';
+    s === 'Strong' ? 'bg-gold/10 border-gold/20' : s === 'Moderate' ? 'bg-gold/10 border-gold/20' : 'bg-red-500/10 border-red-500/20';
 
   return (
-    <PageContainer className="space-y-4 pb-8">
+    <PageContainer className="space-y-4">
       <AIDisclaimer variant="banner" />
 
       {/* Disclaimer */}
@@ -265,7 +430,7 @@ export default function CPExamSimulator() {
                   className="w-full flex items-center gap-3 p-3 rounded-xl border border-border bg-card hover:bg-accent transition-colors text-left"
                 >
                   <Shield className="h-5 w-5 text-gold shrink-0" />
-                  <span className="flex-1 text-sm font-medium">{c.displayName || c.conditionId}</span>
+                  <span className="flex-1 min-w-0 truncate text-sm font-medium">{c.displayName || c.conditionId}</span>
                   <ChevronRight className="h-4 w-4 text-muted-foreground" />
                 </button>
               ))}
@@ -282,7 +447,7 @@ export default function CPExamSimulator() {
             className="w-full flex items-center gap-3 p-3 rounded-xl border border-dashed border-border hover:bg-accent transition-colors text-left"
           >
             <Play className="h-5 w-5 text-muted-foreground shrink-0" />
-            <span className="flex-1 text-sm text-muted-foreground">Practice with general questions</span>
+            <span className="flex-1 min-w-0 text-sm text-muted-foreground">Practice with general questions</span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </button>
         </motion.div>
@@ -298,30 +463,48 @@ export default function CPExamSimulator() {
           <p className="text-sm text-muted-foreground max-w-md mx-auto">
             You'll be asked {questions.length} questions based on real DBQ criteria. Answer each one by voice — speak naturally as if you're talking to the examiner. You'll get instant feedback on each answer.
           </p>
+
+          {/* Conversation mode toggle */}
+          <button
+            onClick={() => setConversationMode(m => !m)}
+            className={`mx-auto flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-colors ${
+              conversationMode
+                ? 'border-gold/30 bg-gold/10 text-gold'
+                : 'border-border bg-card text-muted-foreground hover:bg-accent'
+            }`}
+          >
+            <MessageSquare className="h-4 w-4" />
+            <span className="text-sm font-medium">Conversation Mode</span>
+            <span className={`ml-1 text-[10px] px-1.5 py-0.5 rounded-full ${conversationMode ? 'bg-gold/20 text-gold' : 'bg-muted text-muted-foreground'}`}>
+              {conversationMode ? 'ON' : 'OFF'}
+            </span>
+          </button>
+          {conversationMode && (
+            <p className="text-xs text-muted-foreground max-w-xs mx-auto">
+              Questions will be read aloud automatically and recording starts after each question finishes — like a real exam.
+            </p>
+          )}
+
           <Button onClick={beginQuestions} className="bg-gold hover:bg-gold/80 text-black font-semibold">
             <Play className="h-4 w-4 mr-2" /> Begin Exam
           </Button>
         </motion.div>
       )}
 
-      {/* PHASE: Question */}
+      {/* PHASE: Question — auto-speak in conversation mode */}
       {phase === 'question' && (
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">Question {currentQ + 1} of {questions.length}</span>
-            <span className="text-xs text-muted-foreground">{selectedCondition}</span>
-          </div>
-          <div className="w-full h-1 rounded-full bg-border overflow-hidden">
-            <div className="h-full bg-gold rounded-full transition-all duration-500" style={{ width: `${((currentQ) / questions.length) * 100}%` }} />
-          </div>
-          <div className="p-4 rounded-xl border border-gold/20 bg-gold/5">
-            <p className="text-sm font-medium">{questions[currentQ]}</p>
-          </div>
-          <p className="text-xs text-muted-foreground text-center">Tap the microphone and answer as if speaking to the examiner</p>
-          <Button onClick={startAnswer} className="w-full bg-gold hover:bg-gold/80 text-black font-semibold h-14">
-            <Mic className="h-5 w-5 mr-2" /> Start Recording Answer
-          </Button>
-        </motion.div>
+        <QuestionPhase
+          key={currentQ}
+          question={questions[currentQ]}
+          questionNum={currentQ + 1}
+          totalQuestions={questions.length}
+          selectedCondition={selectedCondition}
+          conversationMode={conversationMode}
+          isSpeaking={isSpeaking}
+          onSpeak={(autoRecord) => speakQuestion(questions[currentQ], autoRecord)}
+          onStopSpeaking={() => { speechGenRef.current++; stopSpeaking(); setIsSpeaking(false); }}
+          onStartAnswer={startAnswer}
+        />
       )}
 
       {/* PHASE: Recording */}

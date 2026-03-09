@@ -447,7 +447,7 @@ export default function BuildPacket() {
             </p>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-3 gap-3 mb-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
               <Button
                 onClick={handleGeneratePDF}
                 disabled={selectedCount === 0 || exportingPDF}
@@ -475,7 +475,7 @@ export default function BuildPacket() {
                 <span className="text-xs">{exportingJSON ? 'Exporting...' : 'JSON'}</span>
               </Button>
             </div>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <Button
                 variant="outline"
                 onClick={handleShare}

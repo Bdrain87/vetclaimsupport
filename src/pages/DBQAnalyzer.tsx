@@ -29,7 +29,7 @@ function ratingColor(percent: number): string {
   if (percent >= 70) return 'bg-gold/15 text-gold border-gold/30';
   if (percent >= 50) return 'bg-gold/10 text-gold/80 border-gold/20';
   if (percent >= 30) return 'bg-blue-500/15 text-blue-400 border-blue-500/30';
-  if (percent >= 10) return 'bg-green-500/15 text-green-400 border-green-500/30';
+  if (percent >= 10) return 'bg-gold/10 text-gold border-gold/20';
   return 'bg-muted text-muted-foreground border-border';
 }
 

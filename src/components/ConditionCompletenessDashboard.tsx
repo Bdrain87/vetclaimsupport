@@ -139,7 +139,7 @@ export function ConditionCompletenessDashboard({ compact = false }: { compact?: 
             {cp.categories.map((cat) => (
               <div key={cat.label} className="flex items-center gap-2 text-xs">
                 <CheckCircle2
-                  className={`h-3 w-3 shrink-0 ${cat.percent >= 100 ? 'text-green-500' : cat.percent > 0 ? 'text-gold' : 'text-muted-foreground/30'}`}
+                  className={`h-3 w-3 shrink-0 ${cat.percent >= 100 ? 'text-gold' : cat.percent > 0 ? 'text-gold' : 'text-muted-foreground/30'}`}
                 />
                 <span className="text-muted-foreground">
                   {cat.label}: {cat.count}/{cat.target}

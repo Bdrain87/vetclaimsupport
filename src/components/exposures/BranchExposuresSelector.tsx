@@ -89,7 +89,7 @@ export function BranchExposuresSelector({ onSelectExposure }: BranchExposuresSel
                     onClick={() => onSelectExposure(exposure.name)}
                     className="flex items-start gap-3 p-3 text-left bg-background rounded-lg border border-border hover:border-exposure/50 hover:bg-exposure/5 transition-colors group"
                   >
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <p className="font-medium text-foreground text-sm group-hover:text-exposure transition-colors">
                         {exposure.name}
                       </p>

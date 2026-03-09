@@ -40,7 +40,7 @@ export default function ConditionJourney() {
   }
 
   return (
-    <PageContainer className="space-y-5 animate-fade-in pb-8">
+    <PageContainer className="space-y-5 animate-fade-in">
       {/* Header */}
       <div className="flex items-center gap-3">
         <button
@@ -80,11 +80,11 @@ export default function ConditionJourney() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
           onAnimationComplete={() => notifySuccess()}
-          className="flex items-center gap-3 p-4 rounded-2xl border border-green-500/20 bg-green-500/5"
+          className="flex items-center gap-3 p-4 rounded-2xl border border-gold/20 bg-gold/5"
         >
-          <PartyPopper className="h-6 w-6 text-green-500 shrink-0" />
+          <PartyPopper className="h-6 w-6 text-gold shrink-0" />
           <div>
-            <p className="text-sm font-semibold text-green-700 dark:text-green-400">
+            <p className="text-sm font-semibold text-gold">
               Journey Complete!
             </p>
             <p className="text-xs text-muted-foreground">
@@ -106,13 +106,13 @@ export default function ConditionJourney() {
             className={cn(
               'w-full flex items-start gap-3 p-4 rounded-2xl border text-left transition-colors',
               step.isComplete
-                ? 'border-green-500/20 bg-green-500/5'
+                ? 'border-gold/20 bg-gold/5'
                 : 'border-border bg-card hover:bg-accent/50',
             )}
           >
             <div className="mt-0.5 shrink-0">
               {step.isComplete ? (
-                <CheckCircle2 className="h-5 w-5 text-green-500" />
+                <CheckCircle2 className="h-5 w-5 text-gold" />
               ) : (
                 <div className="relative">
                   <Circle className="h-5 w-5 text-muted-foreground/30" />
@@ -132,7 +132,7 @@ export default function ConditionJourney() {
             <div className="flex-1 min-w-0">
               <p className={cn(
                 'text-sm font-medium',
-                step.isComplete ? 'text-green-700 dark:text-green-400' : 'text-foreground',
+                step.isComplete ? 'text-gold' : 'text-foreground',
               )}>
                 {step.title}
               </p>

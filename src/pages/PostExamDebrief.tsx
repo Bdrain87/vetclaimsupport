@@ -96,7 +96,7 @@ export default function PostExamDebrief() {
   };
 
   return (
-    <PageContainer className="space-y-4 pb-8">
+    <PageContainer className="space-y-4">
       <h1 className="text-xl font-bold mb-4">Post-Exam Debrief</h1>
       <AIDisclaimer variant="banner" />
       <DataConnectedBadge />

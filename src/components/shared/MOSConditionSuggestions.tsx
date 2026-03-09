@@ -153,7 +153,7 @@ export function MOSConditionSuggestions({
                       onCheckedChange={() => toggleSelected(conditionName)}
                       className="shrink-0"
                     />
-                    <span className="text-sm text-foreground flex-1">
+                    <span className="text-sm text-foreground flex-1 min-w-0">
                       {conditionName}
                     </span>
                     {isAdded && (

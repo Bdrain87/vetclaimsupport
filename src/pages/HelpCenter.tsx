@@ -119,7 +119,7 @@ const guideSections: GuideSection[] = [
       { title: 'C&P Exam Prep', content: "Before your Compensation & Pension exam, use the Exam Prep tool. It provides condition-specific questions you might be asked and tips for communicating your symptoms.", tip: 'Be honest but thorough. Describe your worst days, not just average days.' },
       { title: 'Documents Checklist', content: 'Use the checklist to ensure you have all required forms and documents before filing. Check items off as you gather them.' },
       { title: 'Rating Calculator', content: "Estimate your combined VA disability rating using the calculator. Remember: VA math isn't simple addition - the calculator shows you how ratings combine.", tip: 'This is an estimate only. Actual ratings are determined by VA raters.' },
-      { title: 'Reference Database', content: 'Search 784+ VA conditions with their rating criteria, required evidence, and common secondary conditions. Use this to understand what the VA is looking for.' },
+      { title: 'Reference Database', content: 'Search 800+ VA conditions with their rating criteria, required evidence, and common secondary conditions. Use this to understand what the VA is looking for.' },
     ],
   },
   {
@@ -203,7 +203,7 @@ const quickStartCards = [
   { icon: <Settings className="h-5 w-5" />, title: 'Set Up Your Profile', description: 'Add service dates and conditions', link: '/settings' },
   { icon: <Activity className="h-5 w-5" />, title: 'Log Your First Symptom', description: 'Start building evidence', link: '/health/symptoms' },
   { icon: <FileText className="h-5 w-5" />, title: 'Upload Documents', description: 'Add medical records', link: '/claims/vault' },
-  { icon: <Shield className="h-5 w-5" />, title: 'Explore Reference', description: 'Search 784+ conditions', link: '/settings/resources' },
+  { icon: <Shield className="h-5 w-5" />, title: 'Explore Reference', description: 'Search 800+ conditions', link: '/settings/resources' },
 ];
 
 // ============================================
@@ -294,7 +294,7 @@ export default function HelpCenter() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8"
+                className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 min-h-[44px] min-w-[44px]"
                 onClick={() => setGlobalSearch('')}
                 aria-label="Clear search"
               >
@@ -370,7 +370,7 @@ export default function HelpCenter() {
       {/* Main Content Tabs */}
       {!searchResults && (
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid grid-cols-5 h-auto p-1 bg-muted/50">
+          <TabsList className="grid grid-cols-3 sm:grid-cols-5 h-auto p-1 bg-muted/50">
             {[
               { value: 'start', label: 'Get Started', icon: <Sparkles className="h-4 w-4" /> },
               { value: 'faq', label: 'FAQ', icon: <MessageSquare className="h-4 w-4" /> },

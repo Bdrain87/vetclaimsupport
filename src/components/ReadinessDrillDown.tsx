@@ -120,7 +120,7 @@ export function ReadinessDrillDown({ onClose }: { onClose?: () => void }) {
           >
             <div className="mt-0.5">
               {isDone ? (
-                <CheckCircle2 className="h-4.5 w-4.5 text-green-400" />
+                <CheckCircle2 className="h-4.5 w-4.5 text-gold" />
               ) : (
                 <Icon className="h-4.5 w-4.5 text-muted-foreground" />
               )}
