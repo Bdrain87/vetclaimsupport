@@ -20,6 +20,9 @@ const ROW_1_ITEMS = [
   'Claim Packet Builder',
   'C&P Exam Simulator',
   'Evidence Scanner',
+  'VSO Locator',
+  'State Benefits Finder',
+  'Dashboard & Smart Reminders',
 ];
 
 const ROW_2_ITEMS = [
@@ -41,6 +44,9 @@ const ROW_2_ITEMS = [
   'Claim Journey',
   'Family Statement Builder',
   'Post-Exam Debrief',
+  'PACT Act Checker',
+  'Military Job Hazard Identifier',
+  'Lifetime Benefits Projector',
 ];
 
 const ROW_3_ITEMS = [
@@ -62,6 +68,9 @@ const ROW_3_ITEMS = [
   'Deployment Locations',
   'Condition Guide',
   'Benefits Discovery',
+  'DBQ Rating Estimator',
+  'Shareable Summary',
+  'Deadlines Tracker',
 ];
 
 function MarqueeRow({ items, direction, speed }: { items: string[]; direction: 'left' | 'right'; speed: number }) {

@@ -62,7 +62,7 @@ const toolCategories: { title: string; tools: ToolItem[] }[] = [
   {
     title: 'Research & Discovery',
     tools: [
-      { label: 'MOS Hazard Identifier', icon: Briefcase, route: '/prep/mos-hazards', description: 'Find conditions linked to your military job' },
+      { label: 'Military Job Hazard Identifier', icon: Briefcase, route: '/prep/mos-hazards', description: 'Find conditions linked to your military job' },
       { label: 'PACT Act Checker', icon: Shield, route: '/prep/pact-act', description: 'Check presumptive benefit eligibility' },
       { label: 'State Benefits Finder', icon: MapPin, route: '/prep/state-benefits', description: 'State-specific veteran benefits' },
       { label: 'Find a VSO', icon: Users, route: '/prep/vso-locator', description: 'Get free accredited representation' },
@@ -108,7 +108,7 @@ const LEARN_TOOLS: ToolItem[] = [
   { label: 'Glossary', icon: BookOpen, route: '/settings/glossary', description: 'VA terms & definitions' },
   { label: 'VA Resources', icon: Globe, route: '/settings/resources', description: 'Official VA links & phone numbers' },
   { label: 'Service-Related Conditions', icon: Shield, route: '/reference/conditions-by-conflict', description: 'Common conditions by era of service' },
-  { label: 'Condition Guide', icon: GraduationCap, route: '/reference/condition-guide', description: 'Browse 784+ VA conditions' },
+  { label: 'Condition Guide', icon: GraduationCap, route: '/reference/condition-guide', description: 'Browse 800+ VA conditions' },
   { label: 'Deployment Locations', icon: MapPin, route: '/reference/deployment-locations', description: 'Presumptive conditions by deployment' },
 ];
 
@@ -127,7 +127,6 @@ export default function PrepHub() {
     '/health/sleep': ClipboardList,
     '/health/visits': Stethoscope,
     '/claims/evidence-strength': Target,
-    '/health/ptsd': AlertTriangle,
     '/health/medications': Pill,
     '/claims/decision-decoder': FileSearch,
     '/claims': Shield,

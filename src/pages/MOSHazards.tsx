@@ -117,7 +117,7 @@ export default function MOSHazards() {
           <Briefcase className="h-6 w-6 text-gold" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-foreground">MOS Hazard Identifier</h1>
+          <h1 className="text-2xl font-bold text-foreground">Military Job Hazard Identifier</h1>
           <p className="text-muted-foreground text-sm">Find conditions linked to your military job</p>
         </div>
       </div>
@@ -135,7 +135,7 @@ export default function MOSHazards() {
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Search by MOS code, job title, or keyword..."
+          placeholder="Search by MOS, AFSC, rate, job title, or keyword..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9 h-10 rounded-xl"

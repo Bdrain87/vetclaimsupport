@@ -10,8 +10,9 @@ const INCLUDED_FEATURES = [
     features: [
       'Claim Checklist', 'VA Form Guide', 'Intent to File Guide',
       'BDD Guide', 'Glossary', 'Nexus Guide',
-      'VA-Speak Translator', 'Medication Rule Tool',
+      'VA-Speak Translator', 'Medication Side Effects Tool',
       'Benefits Discovery', 'PACT Act Checker',
+      'Help Center & FAQ', 'VA Resources',
     ],
   },
   {
@@ -30,17 +31,19 @@ const INCLUDED_FEATURES = [
       'Symptom Tracker', 'Sleep Tracker', 'Migraine Tracker',
       'Medication Tracker', 'Medical Visit Logger',
       'Exposure & Hazard Tracker', 'Work Impact Logger',
-      'Health Trends', 'Quick Log',
+      'Health Trends & Charts', 'Quick Log',
+      'Health Summary Export', '30-Day Health Snapshot',
     ],
   },
   {
     category: 'Strategy & Exam Prep',
     features: [
       'Claim Strategy Wizard', 'C&P Exam Prep',
-      'C&P Exam Simulator', 'Post-Exam Debrief',
-      '68 Interactive DBQ Prep Sheets', 'Exam Day Mode',
-      'Decision Decoder', 'DBQ Rating Estimator',
-      'Guided Condition Journeys', 'Ask Intel AI Coach',
+      'C&P Exam Simulator (Voice & Conversation Mode)',
+      'Post-Exam Debrief', '68 Interactive DBQ Prep Sheets',
+      'Exam Day Mode', 'Decision Letter Decoder',
+      'DBQ Rating Estimator', 'Guided Condition Journeys',
+      'Ask Intel AI Coach', 'How to Increase Your Rating',
     ],
   },
   {
@@ -48,9 +51,10 @@ const INCLUDED_FEATURES = [
     features: [
       'Rating Calculator', 'Secondary Condition Finder',
       'Bilateral Factor Calculator', 'Back Pay Estimator',
-      'Travel Pay Calculator', 'Cost Estimator',
+      'Travel Pay Calculator', 'Lifetime Benefits Projector',
       'Zero Percent Optimizer', 'TDIU Checker',
-      'Compensation Ladder',
+      'Compensation Ladder', 'VSO Locator',
+      'State Benefits Finder',
     ],
   },
   {
@@ -58,7 +62,7 @@ const INCLUDED_FEATURES = [
     features: [
       '800+ Condition Database', 'Conditions by Conflict',
       'Condition Guide', 'Deployment Locations',
-      'Evidence Strength Analyzer',
+      'Evidence Strength Analyzer', 'Military Job Hazard Identifier',
     ],
   },
   {
@@ -267,7 +271,7 @@ export function Pricing() {
 
               <ul className="space-y-2.5 mb-6">
                 {[
-                  '60+ tools & all 68 VA DBQs',
+                  '85+ tools & all 68 VA DBQs',
                   'AI-powered document builders',
                   'Guided condition journeys',
                   'Ask Intel — AI claims coach',

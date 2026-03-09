@@ -49,8 +49,10 @@ const CATEGORIES: FeatureCategory[] = [
       'Medical visit logger',
       'Exposure and hazard tracker',
       'Work impact and occupational logger',
-      'Health trends dashboard',
-      'Quick daily log',
+      'Health trends dashboard with charts',
+      'Quick daily log from any screen',
+      'Health summary export for doctors',
+      '30-day health snapshot on dashboard',
     ],
   },
   {
@@ -82,15 +84,17 @@ const CATEGORIES: FeatureCategory[] = [
       'Guided condition journeys with step-by-step pathways',
       'Ask Intel — AI claims preparation coach',
       'Claim Strategy Wizard with filing order guidance',
-      'C&P Exam Prep with practice questions',
+      'C&P Exam Prep with condition-specific strategies',
       'All 68 VA DBQ forms with interactive prep',
-      'C&P Exam Simulator with AI mock exams',
+      'C&P Exam Simulator with voice & conversation mode',
       'Evidence Strength Analyzer vs VA criteria',
       'Secondary Condition Finder',
       'Post-exam debrief and analysis',
       'Exam Day Mode checklist',
-      'Decision Decoder',
+      'Decision Letter Decoder',
       'DBQ Rating Estimator',
+      'How to Increase Your Rating guide',
+      'Upgrade Paths Optimizer',
     ],
   },
   {
@@ -109,6 +113,9 @@ const CATEGORIES: FeatureCategory[] = [
       'Conditions by conflict and service era',
       'Deployment locations reference',
       'Nexus letter guide',
+      'Military job hazard identifier',
+      'PACT Act presumptive checker',
+      'Medication side effects to secondary claims',
     ],
   },
   {
@@ -125,6 +132,9 @@ const CATEGORIES: FeatureCategory[] = [
       'PDF export for your records',
       'Evidence Scanner (AI document analysis)',
       'Evidence Strength Analyzer',
+      'VSO/Attorney packet builder',
+      'Doctor prep packet',
+      'Shareable claim summary',
     ],
   },
   {
@@ -180,7 +190,7 @@ export function ProductShowcase() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1, ease: EASE_SMOOTH }}
         >
-          60+ tools and all 68 VA DBQ forms — designed around how the VA actually evaluates claims.
+          85+ tools and all 68 VA DBQ forms — designed around how the VA actually evaluates claims.
         </motion.p>
 
         {/* Category tabs */}
