@@ -664,6 +664,9 @@ function App() {
       if (event === 'SIGNED_OUT') {
         stopSync();
         logoutPurchases().catch(() => {});
+        // Reset local profile so stale onboarding/entitlement state doesn't
+        // leak into the next account signed in on this device.
+        useProfileStore.getState().resetProfile();
       }
     });
     return () => {
