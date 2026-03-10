@@ -6,6 +6,7 @@ const TEAM_HASHES = new Set([
   '75e09f', // internal
   '6bd846', // internal
   '6790d1', // internal
+  '4e39f8', // Tommy — Aftertheuniformmedia
 ]);
 
 function hashEmail(email: string): string {
