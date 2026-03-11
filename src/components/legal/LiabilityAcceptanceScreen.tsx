@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { supabase, getSharedSession } from '@/lib/supabase';
 
 const LIABILITY_ACCEPTED_KEY = 'liabilityAccepted';
-const TERMS_VERSION = '1.2';
+const TERMS_VERSION = '1.4';
 
 export function LiabilityAcceptanceScreen() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,14 +17,19 @@ export function LiabilityAcceptanceScreen() {
   useEffect(() => {
     // Check localStorage first (fast), then Supabase (authoritative)
     const localAccepted = localStorage.getItem(LIABILITY_ACCEPTED_KEY);
-    if (localAccepted) return; // Already accepted locally
+    const storedVersion = localStorage.getItem('consentTermsVersion');
+
+    // If accepted AND version matches current, skip modal
+    if (localAccepted && storedVersion === TERMS_VERSION) return;
 
     (async () => {
       try {
         const session = await getSharedSession();
-        if (session?.user?.user_metadata?.liability_accepted) {
-          // They accepted before — restore localStorage and skip modal
+        if (session?.user?.user_metadata?.liability_accepted &&
+            session?.user?.user_metadata?.liability_terms_version === TERMS_VERSION) {
+          // They accepted the current version — restore localStorage and skip modal
           localStorage.setItem(LIABILITY_ACCEPTED_KEY, 'true');
+          localStorage.setItem('consentTermsVersion', TERMS_VERSION);
           return;
         }
       } catch {

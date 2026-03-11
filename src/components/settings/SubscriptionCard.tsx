@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { isNativeApp, openExternalUrl } from '@/lib/platform';
 import { PREMIUM_COPY } from '@/data/legalCopy';
 import { purchaseViaApple, restoreApplePurchases } from '@/services/iap';
+import { trackEvent } from '@/services/analyticsTracker';
 
 export function SubscriptionCard() {
   const entitlement = useProfileStore((s) => s.entitlement);
@@ -22,6 +23,7 @@ export function SubscriptionCard() {
   const isPremium = entitlement === 'premium' || entitlement === 'lifetime';
 
   const handleUpgrade = async () => {
+    trackEvent('upgrade', 'button_clicked', isNativeApp ? 'ios' : 'web');
     if (isNativeApp) {
       setLoading(true);
       try {
@@ -38,7 +40,7 @@ export function SubscriptionCard() {
 
         if (result.success && result.entitlementActive) {
           // Verify with our backend to record entitlement
-          await verifyAppleReceipt('revenuecat').catch(() => {});
+          await verifyAppleReceipt('revenuecat').catch((err) => logger.error('[IAP] verifyAppleReceipt failed:', err));
           // Refresh local entitlement state
           await refreshEntitlementFromServer();
           toast({ title: 'Premium Unlocked', description: 'Welcome to VCS Premium!' });
@@ -97,7 +99,7 @@ export function SubscriptionCard() {
         // Try restoring via Apple IAP first
         const { restored, error } = await restoreApplePurchases();
         if (restored) {
-          await verifyAppleReceipt('revenuecat').catch(() => {});
+          await verifyAppleReceipt('revenuecat').catch((err) => logger.error('[IAP] verifyAppleReceipt failed:', err));
           await refreshEntitlementFromServer();
           toast({ title: 'Premium Restored', description: 'Welcome back! Premium access is active.' });
           return;

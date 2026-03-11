@@ -10,8 +10,8 @@
 // ---------------------------------------------------------------------------
 export const LEGAL_VERSIONS = {
   app: '1.4.0',
-  terms: { version: '1.3', effectiveDate: '2026-03-08' },
-  privacy: { version: '1.2', effectiveDate: '2026-03-08' },
+  terms: { version: '1.4', effectiveDate: '2026-03-11' },
+  privacy: { version: '1.3', effectiveDate: '2026-03-11' },
   disclaimer: { version: '1.3', effectiveDate: '2026-03-08' },
 } as const;
 
@@ -80,7 +80,7 @@ export const AI_COPY = {
     'We do not store the document. The AI provider processes the text you send under their terms.',
 
   aiPromptInstruction:
-    'Do not cite specific legal cases, regulations, or statistics unless the user provides them.',
+    'Do not cite specific rating percentages, diagnostic code criteria, legal cases, regulations, or statistics unless this data was explicitly provided. Never guess or fabricate rating criteria.',
 
   safeModeLevels: {
     0: 'AI only processes text you type. No document upload to AI.',
@@ -114,13 +114,13 @@ export const AI_COPY = {
 // Premium / payment copy
 // ---------------------------------------------------------------------------
 export const PREMIUM_COPY = {
-  ctaLabel: 'Unlock Premium · $9.99 one-time',
+  ctaLabel: 'Unlock Premium · Starting at $14.99/mo',
   subtext: 'Export PDFs, advanced templates, and deeper tracking.',
-  priceDisplay: '$9.99 one-time',
+  priceDisplay: '$14.99/mo · $39.99/3mo · $74.99/6mo · $124.99/yr',
   accountNote:
     'Premium follows your account on iPhone and web when signed in.',
   cardPromise:
-    'One-time purchase. Premium unlocks on this device and syncs across platforms when signed in.',
+    'Subscribe to unlock all premium features. Cancel anytime.',
   activeLabel: 'Premium Active',
   restorePurchasesLabel: 'Restore Purchases',
   restorePremiumLabel: 'Restore Premium',

@@ -10,11 +10,13 @@ import { aiTranscribe, createChat, isGeminiConfigured, type Chat } from '@/lib/g
 import { getModelConfig } from '@/lib/ai-models';
 import { redactPII } from '@/lib/redaction';
 import { logAISend } from '@/services/aiAuditLog';
+import { checkAIRateLimit, trackAICall, AIRateLimitError } from '@/services/aiUsageTracker';
+import { AIUsageBanner } from '@/components/AIUsageBanner';
 import { isNativeApp } from '@/lib/platform';
 import useAppStore from '@/store/useAppStore';
 import { useSentinel } from '@/hooks/useSentinel';
 import { StreamingText } from './ui/StreamingText';
-import { SENTINEL_SYSTEM_PROMPT, SENTINEL_VOICE_BUILD_PROMPT } from '@/lib/ai-prompts';
+import { SENTINEL_SYSTEM_PROMPT, SENTINEL_VOICE_BUILD_PROMPT, buildCriteriaBlockForConditions, buildSecondaryConnectionsBlock } from '@/lib/ai-prompts';
 import { buildVeteranContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
 import { Mic, MicOff, Sparkles, FileText, Shield, Heart, Scan, ArrowUp, ClipboardCheck, AlertTriangle, Users, FileSearch, Calculator, BarChart3 } from 'lucide-react';
@@ -45,7 +47,7 @@ const AI_TOOLS: { title: string; tools: AITool[] }[] = [
       { label: 'C&P Simulator', desc: 'Practice questions', icon: Shield, route: '/prep/exam-simulator' },
       { label: 'Post-Exam Debrief', desc: 'Analyze your exam', icon: ClipboardCheck, route: '/prep/post-debrief' },
       { label: 'Evidence Analyzer', desc: 'Find evidence gaps', icon: Scan, route: '/prep/evidence-scanner' },
-      { label: 'DBQ Analyzer', desc: 'Interactive DBQ prep', icon: ClipboardCheck, route: '/prep/dbq-analyzer' },
+      { label: 'DBQ Self-Assessment', desc: 'Estimate your rating per DBQ', icon: ClipboardCheck, route: '/prep/dbq-analyzer' },
       { label: 'Decision Decoder', desc: 'Decode VA decisions', icon: FileSearch, route: '/claims/decision-decoder' },
       { label: 'Rating Calculator', desc: 'Calculate your rating', icon: Calculator, route: '/calculator' },
     ],
@@ -116,9 +118,17 @@ export function SentinelCore() {
     if (!chatRef.current) {
       const ctx = buildVeteranContext({ maskPII: true });
       const contextBlock = formatContextForAI(ctx, 'detailed');
+      // Inject rating criteria for veteran's logged conditions
+      const conditionsForCriteria = (ctx.conditions || []).map(c => ({
+        name: c.name,
+        diagnosticCode: c.diagnosticCode,
+      }));
+      const criteriaBlock = buildCriteriaBlockForConditions(conditionsForCriteria);
+      const conditionNames = (ctx.conditions || []).map(c => c.name);
+      const secondaryBlock = buildSecondaryConnectionsBlock(conditionNames);
       const { temperature } = getModelConfig('sentinel-core');
       chatRef.current = createChat({
-        systemInstruction: `${systemPrompt}\n\n${contextBlock}`,
+        systemInstruction: `${systemPrompt}\n\n${contextBlock}${criteriaBlock ? `\n\n${criteriaBlock}\nUse ONLY the criteria above when discussing rating levels. For conditions not listed, direct the veteran to the Rating Guidance tool.` : ''}${secondaryBlock ? `\n\n${secondaryBlock}\nWhen the veteran asks about secondary conditions, reference ONLY the connections listed above.` : ''}`,
         feature: 'sentinel-core',
         temperature,
       });
@@ -129,6 +139,13 @@ export function SentinelCore() {
   const sendMessage = async (text: string, systemPrompt: string) => {
     if (!isGeminiConfigured) {
       setMessages(prev => [...prev, { role: 'model', text: 'AI features are not configured. Please contact support.' }]);
+      return;
+    }
+
+    // Rate limit check
+    const { allowed, status: rateLimitStatus } = checkAIRateLimit();
+    if (!allowed) {
+      setMessages(prev => [...prev, { role: 'model', text: new AIRateLimitError(rateLimitStatus).message }]);
       return;
     }
 
@@ -143,6 +160,7 @@ export function SentinelCore() {
     setStreamedText('');
     setIsStreaming(true);
 
+    const sendStart = Date.now();
     try {
       const chat = getOrCreateChat(systemPrompt);
       const stream = await chat.sendMessageStream({ message: redactedText });
@@ -156,8 +174,10 @@ export function SentinelCore() {
         }
       }
 
+      trackAICall({ feature: 'sentinel-core', success: true, durationMs: Date.now() - sendStart, inputLength: redactedText.length });
       setMessages(prev => [...prev, { role: 'model', text: fullText }]);
     } catch {
+      trackAICall({ feature: 'sentinel-core', success: false, durationMs: Date.now() - sendStart, inputLength: redactedText.length });
       setMessages(prev => [...prev, { role: 'model', text: 'Something went wrong. Please check your connection and try again.' }]);
     } finally {
       setLoading(false);
@@ -247,6 +267,7 @@ export function SentinelCore() {
         </motion.button>
       </DialogTrigger>
       <DialogContent className="bg-card border-border rounded-2xl p-6">
+          <AIUsageBanner />
           {/* Condensed Header — title left, readiness ring right */}
           <DialogHeader className="flex-row items-center justify-between space-y-0">
             <DialogTitle className="text-foreground text-lg font-semibold tracking-wide">Intel</DialogTitle>

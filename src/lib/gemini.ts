@@ -1,6 +1,7 @@
 import { GoogleGenAI, type Chat, type GenerateContentConfig, type GenerateContentResponse, type Part } from '@google/genai';
 import { redactPII } from './redaction';
 import { logAISend } from '@/services/aiAuditLog';
+import { checkAIRateLimit, trackAICall, AIRateLimitError } from '@/services/aiUsageTracker';
 
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
 
@@ -54,6 +55,26 @@ async function withRetry<T>(fn: () => Promise<T>): Promise<T> {
       await new Promise(r => setTimeout(r, RETRY_DELAY));
       return fn();
     }
+    throw err;
+  }
+}
+
+/** Wrap an AI call with rate-limit check (before) and usage tracking (after). */
+async function withRateLimitAndTracking<T>(
+  feature: string,
+  inputLength: number,
+  fn: () => Promise<T>,
+): Promise<T> {
+  const { allowed, status } = checkAIRateLimit();
+  if (!allowed) throw new AIRateLimitError(status);
+
+  const start = Date.now();
+  try {
+    const result = await fn();
+    trackAICall({ feature, model: DEFAULT_MODEL, success: true, durationMs: Date.now() - start, inputLength });
+    return result;
+  } catch (err) {
+    trackAICall({ feature, model: DEFAULT_MODEL, success: false, durationMs: Date.now() - start, inputLength });
     throw err;
   }
 }
@@ -131,27 +152,32 @@ export interface CreateChatOpts {
 /** Non-streaming text generation with PII redaction, audit logging, retry, and timeout. */
 export async function aiGenerate(opts: AIGenerateOpts): Promise<{ text: string; redactionCount: number }> {
   const { redactedText, redactionCount } = redactAndLog(opts.prompt, opts.feature);
-  const signal = makeSignal(opts.timeout ?? DEFAULT_TIMEOUT, opts.signal);
 
-  const config: GenerateContentConfig = {
-    systemInstruction: opts.systemInstruction,
-    abortSignal: signal,
-    temperature: opts.temperature,
-  };
+  return withRateLimitAndTracking(opts.feature, redactedText.length, async () => {
+    const signal = makeSignal(opts.timeout ?? DEFAULT_TIMEOUT, opts.signal);
+    const config: GenerateContentConfig = {
+      systemInstruction: opts.systemInstruction,
+      abortSignal: signal,
+      temperature: opts.temperature,
+    };
 
-  const response = await withRetry(() =>
-    getAI().models.generateContent({
-      model: opts.model ?? DEFAULT_MODEL,
-      contents: redactedText,
-      config,
-    })
-  );
+    const response = await withRetry(() =>
+      getAI().models.generateContent({
+        model: opts.model ?? DEFAULT_MODEL,
+        contents: redactedText,
+        config,
+      })
+    );
 
-  return { text: response.text ?? '', redactionCount };
+    return { text: response.text ?? '', redactionCount };
+  });
 }
 
 /** Streaming text generation. Returns an async iterable of text chunks. */
 export async function* aiGenerateStream(opts: AIStreamOpts): AsyncGenerator<string> {
+  const { allowed, status } = checkAIRateLimit();
+  if (!allowed) throw new AIRateLimitError(status);
+
   const { redactedText } = redactAndLog(opts.prompt, opts.feature);
   const signal = makeSignal(opts.timeout ?? DEFAULT_TIMEOUT, opts.signal);
 
@@ -161,15 +187,22 @@ export async function* aiGenerateStream(opts: AIStreamOpts): AsyncGenerator<stri
     temperature: opts.temperature,
   };
 
-  const stream = await getAI().models.generateContentStream({
-    model: opts.model ?? DEFAULT_MODEL,
-    contents: redactedText,
-    config,
-  });
+  const start = Date.now();
+  let success = false;
+  try {
+    const stream = await getAI().models.generateContentStream({
+      model: opts.model ?? DEFAULT_MODEL,
+      contents: redactedText,
+      config,
+    });
 
-  for await (const chunk of stream) {
-    const text = chunk.text;
-    if (text) yield text;
+    for await (const chunk of stream) {
+      const text = chunk.text;
+      if (text) yield text;
+    }
+    success = true;
+  } finally {
+    trackAICall({ feature: opts.feature, model: opts.model ?? DEFAULT_MODEL, success, durationMs: Date.now() - start, inputLength: redactedText.length });
   }
 }
 
@@ -182,73 +215,152 @@ export async function aiTranscribe(opts: AITranscribeOpts): Promise<string> {
     textLengthSent: 0,
   });
 
-  const signal = makeSignal(opts.timeout ?? DEFAULT_TIMEOUT, opts.signal);
+  return withRateLimitAndTracking(opts.feature, opts.audioBase64.length, async () => {
+    const signal = makeSignal(opts.timeout ?? DEFAULT_TIMEOUT, opts.signal);
 
-  const audioPart: Part = {
-    inlineData: { mimeType: opts.mimeType, data: opts.audioBase64 },
-  };
+    const audioPart: Part = {
+      inlineData: { mimeType: opts.mimeType, data: opts.audioBase64 },
+    };
 
-  const response = await withRetry(() =>
-    getAI().models.generateContent({
-      model: opts.model ?? DEFAULT_MODEL,
-      contents: [{ role: 'user', parts: [{ text: 'Transcribe this audio accurately:' }, audioPart] }],
-      config: { abortSignal: signal },
-    })
-  );
+    const response = await withRetry(() =>
+      getAI().models.generateContent({
+        model: opts.model ?? DEFAULT_MODEL,
+        contents: [{ role: 'user', parts: [{ text: 'Transcribe this audio accurately:' }, audioPart] }],
+        config: { abortSignal: signal },
+      })
+    );
 
-  return response.text ?? '';
+    return response.text ?? '';
+  });
 }
 
-/** Vision analysis shortcut. */
+/** Vision / document analysis shortcut. Handles images and PDFs via Gemini's multimodal input. */
 export async function aiAnalyzeImage(opts: AIAnalyzeImageOpts): Promise<string> {
   const { redactedText } = redactAndLog(opts.prompt, opts.feature);
-  const signal = makeSignal(opts.timeout ?? DEFAULT_TIMEOUT, opts.signal);
 
-  const imagePart: Part = {
-    inlineData: { mimeType: opts.mimeType, data: opts.imageBase64 },
-  };
+  return withRateLimitAndTracking(opts.feature, redactedText.length, async () => {
+    const signal = makeSignal(opts.timeout ?? DEFAULT_TIMEOUT, opts.signal);
 
-  const config: GenerateContentConfig = {
-    systemInstruction: opts.systemInstruction,
-    abortSignal: signal,
-    temperature: opts.temperature,
-  };
-  if (opts.responseSchema) {
-    config.responseMimeType = 'application/json';
-    config.responseSchema = opts.responseSchema as GenerateContentConfig['responseSchema'];
-  }
+    const dataPart: Part = {
+      inlineData: { mimeType: opts.mimeType, data: opts.imageBase64 },
+    };
 
-  const response = await withRetry(() =>
-    getAI().models.generateContent({
-      model: opts.model ?? DEFAULT_MODEL,
-      contents: [{ role: 'user', parts: [{ text: redactedText }, imagePart] }],
-      config,
-    })
-  );
+    const config: GenerateContentConfig = {
+      systemInstruction: opts.systemInstruction,
+      abortSignal: signal,
+      temperature: opts.temperature,
+    };
+    if (opts.responseSchema) {
+      config.responseMimeType = 'application/json';
+      config.responseSchema = opts.responseSchema as GenerateContentConfig['responseSchema'];
+    }
 
-  return response.text ?? '';
+    const response = await withRetry(() =>
+      getAI().models.generateContent({
+        model: opts.model ?? DEFAULT_MODEL,
+        contents: [{ role: 'user', parts: [{ text: redactedText }, dataPart] }],
+        config,
+      })
+    );
+
+    return response.text ?? '';
+  });
+}
+
+// ---------------------------------------------------------------------------
+// File Upload API (for PDFs — avoids base64 bloat and inline processing issues)
+// ---------------------------------------------------------------------------
+
+export interface AIAnalyzeFileOpts {
+  file: Blob;
+  mimeType: string;
+  prompt: string;
+  systemInstruction?: string;
+  feature: string;
+  model?: string;
+  timeout?: number;
+  signal?: AbortSignal;
+  temperature?: number;
+  responseSchema?: Record<string, unknown>;
+  /** Called after the file upload completes, before analysis begins. */
+  onUploaded?: () => void;
+}
+
+/** Analyze a file via the Gemini File Upload API (no base64). */
+export async function aiAnalyzeFile(opts: AIAnalyzeFileOpts): Promise<string> {
+  const { redactedText } = redactAndLog(opts.prompt, opts.feature);
+
+  return withRateLimitAndTracking(opts.feature, redactedText.length, async () => {
+    // 1. Upload the file (pass external signal so user can cancel, but no tight timeout —
+    //    uploads on slow connections need room to breathe)
+    const uploaded = await getAI().files.upload({
+      file: opts.file,
+      config: { mimeType: opts.mimeType, abortSignal: opts.signal },
+    });
+
+    // Start the analysis timeout AFTER upload completes
+    opts.onUploaded?.();
+    const signal = makeSignal(opts.timeout ?? DEFAULT_TIMEOUT, opts.signal);
+
+    try {
+      // 2. Build the file data part
+      const filePart: Part = {
+        fileData: { fileUri: uploaded.uri!, mimeType: opts.mimeType },
+      };
+
+      // 3. Configure response
+      const config: GenerateContentConfig = {
+        systemInstruction: opts.systemInstruction,
+        abortSignal: signal,
+        temperature: opts.temperature,
+      };
+      if (opts.responseSchema) {
+        config.responseMimeType = 'application/json';
+        config.responseSchema = opts.responseSchema as GenerateContentConfig['responseSchema'];
+      }
+
+      // 4. Generate (with retry on 429/503)
+      const response = await withRetry(() =>
+        getAI().models.generateContent({
+          model: opts.model ?? DEFAULT_MODEL,
+          contents: [{ role: 'user', parts: [{ text: redactedText }, filePart] }],
+          config,
+        })
+      );
+
+      return response.text ?? '';
+    } finally {
+      // 5. Fire-and-forget cleanup
+      if (uploaded.name) {
+        getAI().files.delete({ name: uploaded.name }).catch(() => { /* cleanup — non-critical */ });
+      }
+    }
+  });
 }
 
 /** Structured JSON output with response schema. */
 export async function aiGenerateJSON<T>(opts: AIGenerateJSONOpts<T>): Promise<T> {
   const { redactedText } = redactAndLog(opts.prompt, opts.feature);
-  const signal = makeSignal(opts.timeout ?? DEFAULT_TIMEOUT, opts.signal);
 
-  const response = await withRetry(() =>
-    getAI().models.generateContent({
-      model: opts.model ?? DEFAULT_MODEL,
-      contents: redactedText,
-      config: {
-        systemInstruction: opts.systemInstruction,
-        abortSignal: signal,
-        temperature: opts.temperature,
-        responseMimeType: 'application/json',
-        responseSchema: opts.responseSchema as GenerateContentConfig['responseSchema'],
-      },
-    })
-  );
+  return withRateLimitAndTracking(opts.feature, redactedText.length, async () => {
+    const signal = makeSignal(opts.timeout ?? DEFAULT_TIMEOUT, opts.signal);
 
-  return JSON.parse(response.text ?? '{}') as T;
+    const response = await withRetry(() =>
+      getAI().models.generateContent({
+        model: opts.model ?? DEFAULT_MODEL,
+        contents: redactedText,
+        config: {
+          systemInstruction: opts.systemInstruction,
+          abortSignal: signal,
+          temperature: opts.temperature,
+          responseMimeType: 'application/json',
+          responseSchema: opts.responseSchema as GenerateContentConfig['responseSchema'],
+        },
+      })
+    );
+
+    return JSON.parse(response.text ?? '{}') as T;
+  });
 }
 
 /** Create a multi-turn chat session. */

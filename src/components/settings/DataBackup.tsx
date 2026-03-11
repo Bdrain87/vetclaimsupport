@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { z } from 'zod';
 import { Download, Upload, AlertTriangle, CheckCircle2, Shield, Clock } from 'lucide-react';
+import { trackEvent } from '@/services/analyticsTracker';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -141,6 +142,7 @@ export function DataBackup() {
       }
 
       setLastBackupDate();
+      trackEvent('backup', 'data_exported');
       toast({
         title: 'Backup Created',
         description: 'Your data has been exported successfully.',

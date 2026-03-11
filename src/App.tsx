@@ -36,9 +36,11 @@ import { logger } from './utils/logger';
 import { initNativeOAuthListener } from './lib/nativeOAuth';
 import { initializePurchases, loginPurchases, logoutPurchases } from './services/iap';
 import { scheduleDeadlineNotifications } from './services/notifications';
+import { initAnalytics, trackPageView } from './services/analyticsTracker';
+import { syncUsageFromServer } from './services/aiUsageTracker';
 
 // Initialize native OAuth deep-link listener (no-op on web)
-initNativeOAuthListener().catch(() => {});
+initNativeOAuthListener().catch((err) => logger.error('[oauth] initNativeOAuthListener failed:', err));
 
 // Run migration before React renders (synchronous, runs once)
 try {
@@ -135,6 +137,9 @@ const TDIUChecker = lazyWithRetry(() => import('./pages/TDIUChecker'));
 const BenefitsDiscovery = lazyWithRetry(() => import('./pages/BenefitsDiscovery'));
 const BuddyFillPage = lazyWithRetry(() => import('./pages/BuddyFillPage'));
 
+// Interactive DBQ
+const InteractiveDBQ = lazyWithRetry(() => import('./pages/InteractiveDBQ'));
+
 // Voice-powered features
 const CPExamSimulator = lazyWithRetry(() => import('./pages/CPExamSimulator'));
 const PostExamDebrief = lazyWithRetry(() => import('./pages/PostExamDebrief'));
@@ -184,6 +189,16 @@ function ScrollToTop() {
       heading.focus({ preventScroll: true });
     }
   }, [pathname]);
+
+  return null;
+}
+
+function RouteTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    trackPageView(location.pathname);
+  }, [location.pathname]);
 
   return null;
 }
@@ -327,7 +342,8 @@ function AnimatedRoutes() {
           <Route path="/prep/form-guide" element={<FormGuide />} />
           <Route path="/prep/form-guide/:formId" element={<FormGuideDetail />} />
           <Route path="/prep/dbq" element={<PremiumGuard featureName="DBQ Prep Sheet"><DBQPrepSheet /></PremiumGuard>} />
-          <Route path="/prep/dbq-analyzer" element={<PremiumGuard featureName="DBQ Analyzer"><DBQAnalyzer /></PremiumGuard>} />
+          <Route path="/prep/dbq-analyzer" element={<PremiumGuard featureName="DBQ Self-Assessment"><DBQAnalyzer /></PremiumGuard>} />
+          <Route path="/prep/interactive-dbq" element={<PremiumGuard featureName="AI DBQ Analyzer"><InteractiveDBQ /></PremiumGuard>} />
           <Route path="/prep/va-speak" element={<VASpeakTranslator />} />
           <Route path="/prep/back-pay" element={<PremiumGuard featureName="Back Pay Estimator"><BackPayEstimator /></PremiumGuard>} />
           <Route path="/prep/cost-estimate" element={<CostEstimator />} />
@@ -629,12 +645,14 @@ function App() {
 
   useEffect(() => {
     checkDataRetention();
+    initAnalytics();
+    syncUsageFromServer();
   }, []);
 
   // Initialize IAP on native platform boot + refresh entitlement and sync.
   useEffect(() => {
     // Initialize IAP (no-op on web, safe to call early)
-    initializePurchases().catch(() => {});
+    initializePurchases().catch((err) => logger.error('[IAP] initializePurchases failed:', err));
 
     // Reschedule push notifications on every app launch
     const profileState = useProfileStore.getState();
@@ -645,25 +663,32 @@ function App() {
       deadlines: (appState.deadlines ?? [])
         .filter((d: { completed?: boolean }) => !d.completed)
         .map((d: { title: string; dueDate: string }) => ({ title: d.title, dueDate: d.dueDate })),
-    }).catch(() => {});
+    }).catch((err) => logger.error('[notifications] scheduleDeadlineNotifications failed:', err));
 
     getSharedSession().then((session) => {
       if (session) {
-        ensureFreshEntitlement().catch(() => {});
+        ensureFreshEntitlement().catch((err) => {
+          logger.error('[entitlement] ensureFreshEntitlement failed, retrying in 5s:', err);
+          setTimeout(() => {
+            ensureFreshEntitlement().catch((retryErr) =>
+              logger.error('[entitlement] ensureFreshEntitlement retry failed:', retryErr)
+            );
+          }, 5000);
+        });
         startSync();
-        loginPurchases(session.user.id).catch(() => {});
+        loginPurchases(session.user.id).catch((err) => logger.error('[IAP] loginPurchases failed:', err));
       }
-    }).catch(() => {});
+    }).catch((err) => logger.error('[auth] getSharedSession failed on startup:', err));
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-        ensureFreshEntitlement().catch(() => {});
+        ensureFreshEntitlement().catch((err) => logger.error('[entitlement] ensureFreshEntitlement failed:', err));
         startSync();
-        if (session) loginPurchases(session.user.id).catch(() => {});
+        if (session) loginPurchases(session.user.id).catch((err) => logger.error('[IAP] loginPurchases failed:', err));
       }
       if (event === 'SIGNED_OUT') {
         stopSync();
-        logoutPurchases().catch(() => {});
+        logoutPurchases().catch((err) => logger.error('[IAP] logoutPurchases failed:', err));
         // Reset local profile so stale onboarding/entitlement state doesn't
         // leak into the next account signed in on this device.
         useProfileStore.getState().resetProfile();
@@ -711,6 +736,7 @@ function App() {
             )}
             <BrowserRouter>
               <ScrollToTop />
+              <RouteTracker />
               <DeepLinkHandler />
               <RetentionWarningBanner />
               {hydrated ? <AppContent /> : <LoadingFallback />}

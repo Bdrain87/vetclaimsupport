@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { safeFormatDateTime } from '@/utils/dateUtils';
-import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Scale, Shield, FileText, AlertTriangle, ChevronRight, User, Plus, Trash2, Briefcase, Info, BookOpen, LogIn, LogOut, Calendar, Database, Crown } from 'lucide-react';
+import { Settings as SettingsIcon, Moon, Sun, Bell, BellOff, Clock, FileDown, Scale, Shield, FileText, AlertTriangle, ChevronRight, User, Plus, Trash2, Briefcase, Info, BookOpen, LogIn, LogOut, Calendar, Database, Crown, BarChart3 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -36,6 +36,7 @@ import { stopSync } from '@/services/syncEngine';
 import { isNativeApp } from '@/lib/platform';
 import { NOTIFICATION_COPY, DATA_PRIVACY_COPY, AI_COPY, CLAIM_DATES_COPY, LEGAL_VERSIONS, formatLegalDate } from '@/data/legalCopy';
 import { getAIAuditLog, clearAIAuditLog, type AIAuditEntry } from '@/services/aiAuditLog';
+import { getUsageStatus } from '@/services/aiUsageTracker';
 import type { Session } from '@supabase/supabase-js';
 
 const REMINDER_SETTINGS_KEY = 'va-claims-reminder-settings';
@@ -72,7 +73,7 @@ export default function Settings() {
   const [auditEntries, setAuditEntries] = useState<AIAuditEntry[]>(() => getAIAuditLog().slice(0, 10));
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session: s } }) => setSession(s)).catch(() => {});
+    supabase.auth.getSession().then(({ data: { session: s } }) => setSession(s)).catch(() => { /* session check non-critical */ });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => setSession(s));
     return () => subscription.unsubscribe();
   }, []);
@@ -824,6 +825,47 @@ export default function Settings() {
           <p className="text-sm font-medium text-muted-foreground">
             {DATA_PRIVACY_COPY.noTracking}
           </p>
+        </CardContent>
+      </Card>
+
+      {/* AI Usage This Month */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <BarChart3 className="h-5 w-5" />
+            AI Usage This Month
+          </CardTitle>
+          <CardDescription>Track your monthly AI call usage</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {(() => {
+            const usage = getUsageStatus();
+            const barColor = usage.percentage >= 100 ? 'bg-destructive' : usage.percentage >= 80 ? 'bg-yellow-500' : 'bg-green-500';
+            return (
+              <>
+                <div className="w-full h-3 rounded-full bg-muted overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-500 ${barColor}`}
+                    style={{ width: `${Math.min(100, usage.percentage)}%` }}
+                  />
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">
+                    <strong className="text-foreground">{usage.used}</strong> / {usage.limit} AI calls used
+                  </span>
+                  <span className="text-muted-foreground text-xs">
+                    Resets {new Date(usage.resetDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}
+                  </span>
+                </div>
+                {usage.isBlocked && (
+                  <p className="text-xs text-destructive font-medium">Monthly limit reached. Usage resets at the start of next month.</p>
+                )}
+                {usage.isWarning && !usage.isBlocked && (
+                  <p className="text-xs text-yellow-600 dark:text-yellow-400">Approaching monthly limit.</p>
+                )}
+              </>
+            );
+          })()}
         </CardContent>
       </Card>
 

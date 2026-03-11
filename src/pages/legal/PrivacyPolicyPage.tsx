@@ -79,6 +79,10 @@ export default function PrivacyPolicyPage() {
               <span className="text-gold mt-0.5">&#x2022;</span>
               <span><strong className="text-foreground">Operational Data:</strong> Minimal crash/performance metrics, device/OS type (no PII)</span>
             </li>
+            <li className="flex items-start gap-2">
+              <span className="text-gold mt-0.5">&#x2022;</span>
+              <span><strong className="text-foreground">Analytics Data:</strong> Anonymous usage metrics including AI call counts, page views, feature engagement frequency, and platform type. This data does not include prompt content, personal information, or any text you enter into the app. Analytics are used solely to improve the Service and monitor usage limits.</span>
+            </li>
           </ul>
         </section>
 
@@ -133,7 +137,7 @@ export default function PrivacyPolicyPage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">5. Payment Processing</h2>
           <p className="text-muted-foreground">
-            Premium access ($9.99 one-time purchase) is processed by <strong className="text-foreground">Stripe, Inc.</strong> When you purchase Premium, Stripe collects and processes your payment information directly. VCS does <strong className="text-foreground">not</strong> collect, store, or have access to your full credit card number, debit card number, or bank account details.
+            Premium access (subscription starting at $14.99/month) is processed by <strong className="text-foreground">Stripe, Inc.</strong> When you subscribe to Premium, Stripe collects and processes your payment information directly. VCS does <strong className="text-foreground">not</strong> collect, store, or have access to your full credit card number, debit card number, or bank account details.
           </p>
           <p className="text-muted-foreground">
             The data shared with Stripe includes your email address and a VCS user identifier to link your purchase to your account. Stripe may collect additional information as described in their <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline">Privacy Policy</a>.

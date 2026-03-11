@@ -5,6 +5,7 @@ import { useClaims } from '@/hooks/useClaims';
 import { safeFormatDate } from '@/utils/dateUtils';
 import { useToast } from '@/hooks/use-toast';
 import { ExportCustomizationModal, ExportSections } from './ExportCustomizationModal';
+import { trackEvent } from '@/services/analyticsTracker';
 
 // Colors (matching the app's design tokens)
 const colors = {
@@ -599,6 +600,7 @@ export function ExportButton({ variant = 'default' }: ExportButtonProps) {
     doc.text(lines, pageWidth / 2, pageHeight - 20, { align: 'center' });
 
     doc.save('custom-evidence-report.pdf');
+    trackEvent('export', 'pdf_generated');
 
     toast({
       title: 'PDF Downloaded',

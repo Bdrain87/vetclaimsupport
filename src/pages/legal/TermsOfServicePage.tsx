@@ -200,13 +200,16 @@ export default function TermsOfServicePage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">13. Payment and Premium Access</h2>
           <p className="text-muted-foreground">
-            VCS offers a free tier with limited features and a paid <strong className="text-foreground">Premium</strong> tier available as a <strong className="text-foreground">one-time purchase of $9.99</strong>. Premium access is permanent and does not require a recurring subscription.
+            VCS offers a free tier with limited features and a paid <strong className="text-foreground">Premium</strong> tier available as a <strong className="text-foreground">subscription</strong> at the following tiers: <strong className="text-foreground">$14.99/month</strong>, <strong className="text-foreground">$39.99/3 months</strong>, <strong className="text-foreground">$74.99/6 months</strong>, or <strong className="text-foreground">$124.99/year</strong>.
           </p>
           <p className="text-muted-foreground">
-            <strong className="text-foreground">One-Time Payment.</strong> By purchasing Premium, you make a single payment that grants you permanent access to all current Premium features. There are no recurring charges, monthly fees, or automatic renewals.
+            <strong className="text-foreground">Auto-Renewal.</strong> Subscriptions automatically renew at the end of each billing period at the then-current rate unless you cancel before the renewal date. You may cancel at any time through your account settings, the App Store, or by contacting <a href={`mailto:${ADMIN_EMAIL}`} className="text-primary underline">{ADMIN_EMAIL}</a>. Cancellation takes effect at the end of the current billing period.
           </p>
           <p className="text-muted-foreground">
-            <strong className="text-foreground">Refund Policy.</strong> You may request a full refund within <strong className="text-foreground">7 days</strong> of purchase by contacting <a href={`mailto:${ADMIN_EMAIL}`} className="text-primary underline">{ADMIN_EMAIL}</a>. After 7 days, all sales are final. Upon refund, your Premium access will be revoked.
+            <strong className="text-foreground">Grandfather Clause.</strong> Users who purchased Premium as a one-time purchase prior to March 11, 2026 retain permanent Premium access under their original purchase terms. This access is not affected by the transition to subscription pricing.
+          </p>
+          <p className="text-muted-foreground">
+            <strong className="text-foreground">Refund Policy.</strong> You may request a full refund within <strong className="text-foreground">7 days</strong> of your initial purchase by contacting <a href={`mailto:${ADMIN_EMAIL}`} className="text-primary underline">{ADMIN_EMAIL}</a>. After 7 days, all sales are final. Upon refund, your Premium access will be revoked.
           </p>
           <p className="text-muted-foreground">
             <strong className="text-foreground">Payment Processing (Web).</strong> Web purchases are processed securely by <strong className="text-foreground">Stripe, Inc.</strong> VCS does not directly collect, store, or have access to your full payment card information. Your use of Stripe&apos;s services is subject to <a href="https://stripe.com/legal" target="_blank" rel="noopener noreferrer" className="text-primary underline">Stripe&apos;s Terms of Service</a> and <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-primary underline">Privacy Policy</a>.
@@ -215,13 +218,30 @@ export default function TermsOfServicePage() {
             <strong className="text-foreground">Payment Processing (iOS).</strong> On iOS, purchases are processed through <strong className="text-foreground">Apple&apos;s App Store</strong> (In-App Purchase) via <strong className="text-foreground">RevenueCat</strong>. Apple&apos;s App Store terms and refund policies apply to iOS purchases. Apple collects and processes your payment information directly. RevenueCat manages the purchase lifecycle and syncs your entitlement status across platforms. For iOS purchase refunds, contact Apple through the App Store.
           </p>
           <p className="text-muted-foreground">
-            <strong className="text-foreground">Cross-Platform Access.</strong> Premium purchases sync across iOS and web when you are signed in to the same account, regardless of which platform you purchased on.
+            <strong className="text-foreground">Cross-Platform Access.</strong> Premium subscriptions sync across iOS and web when you are signed in to the same account, regardless of which platform you subscribed on.
           </p>
           <p className="text-muted-foreground">
-            <strong className="text-foreground">Feature Scope.</strong> Your purchase grants access to all Premium features available at the time of purchase. Future features or major new modules may be offered separately and are not guaranteed to be included in your existing purchase.
+            <strong className="text-foreground">Feature Scope.</strong> Your subscription grants access to all Premium features available during your active subscription period. Future features or major new modules may be offered separately.
           </p>
           <p className="text-muted-foreground">
             <strong className="text-foreground">Service Discontinuation.</strong> If the Service is discontinued, we will provide at least 30 days&apos; notice and data export capabilities.
+          </p>
+        </section>
+
+        {/* Section 13A: AI Usage Limits */}
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-foreground">13A. AI Usage Limits</h2>
+          <p className="text-muted-foreground">
+            AI-powered features are subject to monthly usage limits that vary by plan. The current default limit is <strong className="text-foreground">300 AI calls per month</strong>. Usage resets on the first day of each calendar month.
+          </p>
+          <p className="text-muted-foreground">
+            <strong className="text-foreground">Tracking.</strong> AI usage is tracked locally on your device and synced with our servers for consistency. You can view your current usage in the Settings page.
+          </p>
+          <p className="text-muted-foreground">
+            <strong className="text-foreground">Limit Modifications.</strong> VCS reserves the right to modify usage limits at any time. We will provide reasonable notice of any changes that materially reduce your allocated usage.
+          </p>
+          <p className="text-muted-foreground">
+            <strong className="text-foreground">Plan Variation.</strong> Different subscription tiers may have different AI usage limits. Limits for each plan are displayed in the app at the time of purchase.
           </p>
         </section>
 

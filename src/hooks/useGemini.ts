@@ -3,6 +3,7 @@ import { AI_CONFIG } from '@/lib/ai-prompts';
 import { supabase } from '@/lib/supabase';
 import { redactPII } from '@/lib/redaction';
 import { logAISend } from '@/services/aiAuditLog';
+import { checkAIRateLimit, trackAICall, AIRateLimitError } from '@/services/aiUsageTracker';
 import { buildVeteranContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
 
@@ -59,6 +60,14 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
     const timeoutId = setTimeout(() => controller.abort(), 30_000);
 
     try {
+      // Rate limit check
+      const featureName = PERSONA_FEATURE_MAP[persona] || persona;
+      const { allowed, status: rateLimitStatus } = checkAIRateLimit();
+      if (!allowed) {
+        setError(new AIRateLimitError(rateLimitStatus).message);
+        return null;
+      }
+
       // Ensure we have a valid session (requires real auth — no anonymous fallback)
       const hasSession = await ensureSession();
       if (!hasSession) {
@@ -69,7 +78,7 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
       const { redactedText: sanitizedInput, redactionCount } = redactPII(input, 'high');
 
       logAISend({
-        feature: PERSONA_FEATURE_MAP[persona] || persona,
+        feature: featureName,
         redactionMode: 'high',
         redactionCount,
         textLengthSent: sanitizedInput.length,
@@ -82,6 +91,7 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
         prompt: `${AI_CONFIG[persona]}\n\n${contextBlock}\n\nInput: ${sanitizedInput}`,
       };
 
+      const generateStart = Date.now();
       let result = await supabase.functions.invoke('analyze-disabilities', { body });
 
       if (controller.signal.aborted) return null;
@@ -147,6 +157,7 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
         setError('Unexpected response format from AI service');
         return null;
       }
+      trackAICall({ feature: featureName, success: true, durationMs: Date.now() - generateStart, inputLength: sanitizedInput.length });
       return text;
     } catch (err: unknown) {
       if (err instanceof DOMException && err.name === 'AbortError') {
@@ -183,6 +194,14 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
     const timeoutId = setTimeout(() => controller.abort(), 60_000);
 
     try {
+      // Rate limit check
+      const streamFeatureName = PERSONA_FEATURE_MAP[persona] || persona;
+      const { allowed: streamAllowed, status: streamRateLimitStatus } = checkAIRateLimit();
+      if (!streamAllowed) {
+        setError(new AIRateLimitError(streamRateLimitStatus).message);
+        return null;
+      }
+
       const hasSession = await ensureSession();
       if (!hasSession) {
         setError('Unable to authenticate. Please sign in and try again.');
@@ -190,8 +209,9 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
       }
 
       const { redactedText: sanitizedInput, redactionCount } = redactPII(input, 'high');
-      logAISend({ feature: PERSONA_FEATURE_MAP[persona] || persona, redactionMode: 'high', redactionCount, textLengthSent: sanitizedInput.length });
+      logAISend({ feature: streamFeatureName, redactionMode: 'high', redactionCount, textLengthSent: sanitizedInput.length });
 
+      const streamStart = Date.now();
       const streamCtx = buildVeteranContext({ maskPII: true });
       const streamContextBlock = formatContextForAI(streamCtx, 'minimal');
 
@@ -280,6 +300,9 @@ export const useGemini = (persona: keyof typeof AI_CONFIG) => {
         }
       }
 
+      if (fullText) {
+        trackAICall({ feature: streamFeatureName, success: true, durationMs: Date.now() - streamStart, inputLength: sanitizedInput.length });
+      }
       return fullText || null;
     } catch (err: unknown) {
       if (err instanceof DOMException && err.name === 'AbortError') {
