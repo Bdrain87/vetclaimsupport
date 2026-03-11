@@ -10,7 +10,7 @@ import { aiTranscribe, isGeminiConfigured } from '@/lib/gemini';
 import { useAIStream } from '@/hooks/useAIStream';
 import { getModelConfig } from '@/lib/ai-models';
 import { isNativeApp } from '@/lib/platform';
-import { createFamilyStatementPrompt } from '@/lib/ai-prompts';
+import { createFamilyStatementPrompt, AI_ANTI_HALLUCINATION, buildCriteriaBlockForConditions } from '@/lib/ai-prompts';
 import { buildVeteranContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
 import { StreamingText } from '@/components/ui/StreamingText';
@@ -29,7 +29,7 @@ const RELATIONSHIP_LABELS: Record<Relationship, string> = {
   friend: 'Close Friend / Battle Buddy',
 };
 
-const FAMILY_STATEMENT_SYSTEM = `You are helping a veteran's family member write a supporting lay statement for a VA disability claim. Generate structured, formal statements with specific observable details the VA values. Always mark as SAMPLE template. Not legal advice.`;
+const FAMILY_STATEMENT_SYSTEM = `You are helping a veteran's family member write a supporting lay statement for a VA disability claim. Generate structured, formal statements with specific observable details the VA values. Always mark as SAMPLE template. Not legal advice.${AI_ANTI_HALLUCINATION}`;
 
 export default function FamilyStatement() {
   const [relationship, setRelationship] = useState<Relationship | null>(null);
@@ -52,9 +52,19 @@ export default function FamilyStatement() {
     try {
       const ctx = buildVeteranContext({ maskPII: true });
       const contextBlock = formatContextForAI(ctx, 'standard');
+
+      // Inject real rating criteria so the lay statement describes observable behaviors
+      // that map to actual VA rating criteria (e.g., frequency, severity, functional impact)
+      const criteriaBlock = buildCriteriaBlockForConditions(
+        (ctx.conditions || []).map((c) => ({ name: c.name, diagnosticCode: c.diagnosticCode })),
+      );
+      const enrichedContext = criteriaBlock
+        ? `${contextBlock}\n\n${criteriaBlock}\nUse the rating criteria above to guide which observable behaviors and functional limitations the family member should describe. Do NOT cite specific rating percentages in the lay statement — focus on the observable symptoms and impacts that the criteria evaluate.`
+        : contextBlock;
+
       const { temperature, timeout } = getModelConfig('family-statement');
       const result = await startStream({
-        prompt: createFamilyStatementPrompt(relationship!, text, contextBlock),
+        prompt: createFamilyStatementPrompt(relationship!, text, enrichedContext),
         systemInstruction: FAMILY_STATEMENT_SYSTEM,
         feature: 'family-statement',
         temperature,
@@ -204,6 +214,7 @@ export default function FamilyStatement() {
               <textarea
                 value={textInput}
                 onChange={(e) => setTextInput(e.target.value)}
+                maxLength={5000}
                 placeholder={`As the veteran's ${RELATIONSHIP_LABELS[relationship].toLowerCase()}, describe what you've observed about their condition. Include specific examples, changes over time, and daily impacts...`}
                 className="w-full h-40 p-3 rounded-xl border border-border bg-card text-sm resize-none focus:outline-hidden focus:border-gold/30"
               />

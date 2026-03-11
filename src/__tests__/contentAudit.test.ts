@@ -162,9 +162,10 @@ describe('Section 10B: Prohibited Copy Patterns', () => {
       expect(content).toContain('AI-Assisted Draft');
     });
 
-    it('"Do not cite specific legal cases" exists in ai-prompts.ts', () => {
+    it('anti-hallucination instruction exists in ai-prompts.ts', () => {
       const content = readFile('lib/ai-prompts.ts');
-      expect(content).toContain('Do not cite specific legal cases');
+      expect(content).toContain('Do not cite specific rating percentages');
+      expect(content).toContain('Never guess or fabricate rating criteria');
     });
 
   });

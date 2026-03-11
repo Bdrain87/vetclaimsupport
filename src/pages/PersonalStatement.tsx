@@ -52,6 +52,7 @@ import { getConditionById } from '@/data/vaConditions';
 import { searchAllConditions } from '@/utils/conditionSearch';
 import { buildConditionContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
+import { getConditionCriteriaForPrompt } from '@/lib/ai-prompts';
 import { useEvidence } from '@/hooks/useEvidence';
 import { EvidenceAttachment } from '@/components/shared/EvidenceAttachment';
 
@@ -349,7 +350,9 @@ export default function PersonalStatement() {
           title: 'Saved to Vault',
           action: <ToastAction altText="View in Vault" onClick={() => navigate('/claims/vault')}>View</ToastAction>,
         });
-      }).catch(() => {});
+      }).catch(() => {
+        toast({ title: 'Vault save failed', description: 'PDF exported but could not save to vault.', variant: 'destructive' });
+      });
     } catch {
       toast({ title: 'Export failed', description: 'Could not generate PDF. Please try again.', variant: 'destructive' });
     } finally {
@@ -383,7 +386,16 @@ export default function PersonalStatement() {
       ? buildConditionContext(formData.condition.id || formData.condition.name)
       : buildConditionContext('');
     const contextBlock = formatContextForAI(ctx, 'detailed');
-    const prompt = `Please polish and improve the following VA personal statement. Keep all factual content exactly the same but improve the clarity, grammar, and professional tone. Make it more persuasive for a VA disability claim while keeping the veteran's voice authentic. You may reference the veteran's logged data below to enrich the statement, but do not add any claims or facts not supported by the data.\n\n${contextBlock}\n\n${raw}`;
+
+    // Inject real rating criteria so the AI uses correct VA terminology
+    const criteriaResult = formData.condition
+      ? getConditionCriteriaForPrompt(formData.condition.name, formData.condition.diagnosticCode)
+      : undefined;
+    const criteriaBlock = criteriaResult
+      ? `\n\n<rating_criteria>\n${criteriaResult.text}\n</rating_criteria>\nWhen polishing, use terminology that aligns with the rating criteria above. Do NOT add rating percentages or criteria claims — only use the terminology to improve clinical language.`
+      : '';
+
+    const prompt = `Please polish and improve the following VA personal statement. Keep all factual content exactly the same but improve the clarity, grammar, and professional tone. Make it more persuasive for a VA disability claim while keeping the veteran's voice authentic. You may reference the veteran's logged data below to enrich the statement, but do not add any claims or facts not supported by the data.\n\n${contextBlock}${criteriaBlock}\n\n${raw}`;
     const result = await aiPolish(prompt);
     if (result) {
       setPolishedStatement(result);
@@ -494,6 +506,7 @@ export default function PersonalStatement() {
                 value={formData.serviceConnection}
                 onChange={(e) => updateField('serviceConnection', e.target.value)}
                 rows={8}
+                maxLength={10000}
               />
               <p className="text-xs text-muted-foreground">
                 {formData.serviceConnection.length > 0
@@ -542,6 +555,7 @@ export default function PersonalStatement() {
                 value={formData.currentSymptoms}
                 onChange={(e) => updateField('currentSymptoms', e.target.value)}
                 rows={8}
+                maxLength={10000}
               />
               <p className="text-xs text-muted-foreground">
                 {formData.currentSymptoms.length > 0
@@ -590,6 +604,7 @@ export default function PersonalStatement() {
                 value={formData.treatmentHistory}
                 onChange={(e) => updateField('treatmentHistory', e.target.value)}
                 rows={8}
+                maxLength={10000}
               />
               <p className="text-xs text-muted-foreground">
                 {formData.treatmentHistory.length > 0
@@ -627,6 +642,7 @@ export default function PersonalStatement() {
                 value={formData.dailyImpact}
                 onChange={(e) => updateField('dailyImpact', e.target.value)}
                 rows={8}
+                maxLength={10000}
               />
               <p className="text-xs text-muted-foreground">
                 {formData.dailyImpact.length > 0

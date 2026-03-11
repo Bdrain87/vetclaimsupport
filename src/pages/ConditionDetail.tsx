@@ -41,6 +41,7 @@ import { resolveDBQ, resolveRatingCriteria } from '@/utils/dbqLookup';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { buildConditionContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
+import { getConditionCriteriaForPrompt } from '@/lib/ai-prompts';
 import useAppStore from '@/store/useAppStore';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
@@ -302,6 +303,15 @@ export default function ConditionDetail() {
     const ctx = buildConditionContext(conditionDetails.id || conditionDetails.name);
     const contextBlock = formatContextForAI(ctx, 'detailed');
 
+    // Look up real criteria for this condition
+    const criteriaResult = getConditionCriteriaForPrompt(
+      conditionDetails.name,
+      conditionDetails.diagnosticCode,
+    );
+    const criteriaSection = criteriaResult
+      ? `\n<rating_criteria>\n${criteriaResult.text}\n</rating_criteria>\n`
+      : '';
+
     const prompt = `Analyze a veteran's claim for ${conditionDetails.name} and provide strategic insights.
 
 ${contextBlock}
@@ -313,14 +323,14 @@ ${conditionReadiness ? `READINESS SCORE: ${conditionReadiness.overallScore}%
 - Medical Evidence: ${conditionReadiness.components.medicalEvidence}%
 - Service Connection: ${conditionReadiness.components.serviceConnection}%
 - Current Severity: ${conditionReadiness.components.currentSeverity}%` : ''}
-
+${criteriaSection}
 Provide:
 1. STRENGTH ASSESSMENT: What's strong in this claim, what's weak
 2. EVIDENCE GAPS: Specific evidence that's missing
 3. SUGGESTED NEXT STEPS: Prioritized actions to strengthen the claim
-4. KEY RATING CRITERIA: What the veteran should focus on documenting for this specific condition
+${criteriaResult ? '4. KEY RATING CRITERIA: Based on the rating criteria provided above, what the veteran should focus on documenting' : '4. DOCUMENTATION FOCUS: What functional limitations and symptoms the veteran should focus on documenting (use the Rating Guidance tool for specific rating criteria)'}
 
-Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
+Be specific and actionable.${criteriaResult ? ' Reference ONLY the rating criteria provided above.' : ' Do NOT cite specific rating percentages or criteria — direct the veteran to the Rating Guidance tool for that information.'}`;
 
     const result = await aiGenerate(prompt);
     if (result) setAiInsights(result);
@@ -623,7 +633,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
       </div>
 
       {/* Rating Criteria — lazy loaded */}
-      {conditionDetails && ratingCriteriaKey && (
+      {conditionDetails && ratingCriteria && (
         <ErrorBoundary
           fallback={
             <Card className="bg-card/80 backdrop-blur-xs border-border">
@@ -645,7 +655,7 @@ Be specific and actionable. Reference 38 CFR Part 4 criteria where applicable.`;
             }
           >
             <LazyRatingGuidance
-              conditionId={ratingCriteriaKey}
+              conditionId={conditionDetails.id}
               conditionName={conditionDetails.abbreviation || conditionDetails.name}
             />
           </Suspense>

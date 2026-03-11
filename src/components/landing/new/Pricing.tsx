@@ -41,8 +41,9 @@ const INCLUDED_FEATURES = [
       'Claim Strategy Wizard', 'C&P Exam Prep',
       'C&P Exam Simulator (Voice & Conversation Mode)',
       'Post-Exam Debrief', '68 Interactive DBQ Prep Sheets',
-      'Exam Day Mode', 'Decision Letter Decoder',
-      'DBQ Rating Estimator', 'Guided Condition Journeys',
+      'AI DBQ Rating Analyzer', 'Exam Day Mode',
+      'Decision Letter Decoder',
+      'DBQ Self-Assessment', 'Guided Condition Journeys',
       'Ask Intel AI Assistant', 'How to Increase Your Rating',
     ],
   },
@@ -272,6 +273,7 @@ export function Pricing() {
               <ul className="space-y-2.5 mb-6">
                 {[
                   '85+ tools & all 68 VA DBQs',
+                  'AI DBQ rating analyzer',
                   'AI-powered document builders',
                   'Guided condition journeys',
                   'Ask Intel — AI claims assistant',

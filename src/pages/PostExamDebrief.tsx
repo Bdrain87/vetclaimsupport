@@ -9,7 +9,7 @@ import { impactMedium } from '@/lib/haptics';
 import { aiTranscribe, isGeminiConfigured } from '@/lib/gemini';
 import { useAIStream } from '@/hooks/useAIStream';
 import { isNativeApp } from '@/lib/platform';
-import { createPostDebriefPromptV2 } from '@/lib/ai-prompts';
+import { createPostDebriefPromptV2, AI_ANTI_HALLUCINATION } from '@/lib/ai-prompts';
 import { buildVeteranContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
 import { useUserConditions } from '@/hooks/useUserConditions';
@@ -73,7 +73,7 @@ export default function PostExamDebrief() {
       const { model, temperature, timeout } = getModelConfig('post-exam-debrief');
       const result = await startStream({
         prompt: createPostDebriefPromptV2(transcribed, contextBlock, selectedCondition || undefined),
-        systemInstruction: 'You are a VA claims advisor helping veterans review their C&P exam experience. Provide actionable guidance. Not legal advice.',
+        systemInstruction: `You are a VA claims advisor helping veterans review their C&P exam experience. Provide actionable guidance. Not legal advice.${AI_ANTI_HALLUCINATION}`,
         feature: 'post-exam-debrief',
         model,
         temperature,

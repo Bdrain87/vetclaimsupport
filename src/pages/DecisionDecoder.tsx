@@ -26,7 +26,9 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { PageContainer } from '@/components/PageContainer';
 import { toast } from '@/hooks/use-toast';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
-import { aiAnalyzeImage, isGeminiConfigured } from '@/lib/gemini';
+import { isGeminiConfigured } from '@/lib/gemini';
+import { analyzeDocument, type AnalysisStep } from '@/lib/analyzeDocument';
+import { classifyError } from '@/lib/fileProcessing';
 import { buildVeteranContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
 
@@ -369,27 +371,30 @@ export default function DecisionDecoder() {
   const [expandedPathways, setExpandedPathways] = useState<Set<string>>(new Set());
   const [copied, setCopied] = useState(false);
   const [extracting, setExtracting] = useState(false);
+  const [extractStep, setExtractStep] = useState<AnalysisStep>('reading');
   const uploadRef = useRef<HTMLInputElement>(null);
 
   const handleImageUpload = useCallback(async (file: File) => {
     if (!isGeminiConfigured) return;
+    if (file.size > 20 * 1024 * 1024) {
+      toast({ title: 'File too large', description: 'Please use a file under 20 MB.', variant: 'destructive' });
+      return;
+    }
     setExtracting(true);
+    setExtractStep('reading');
     try {
-      const arrayBuffer = await file.arrayBuffer();
-      const base64 = btoa(
-        new Uint8Array(arrayBuffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
-      );
       const ctx = buildVeteranContext({ maskPII: true });
       const contextBlock = formatContextForAI(ctx, 'minimal');
-      const text = await aiAnalyzeImage({
-        imageBase64: base64,
-        mimeType: file.type as 'image/jpeg' | 'image/png' | 'image/webp',
-        prompt: `${contextBlock}\n\nExtract ALL text from this VA decision letter image. Return ONLY the extracted text, preserving the original formatting as closely as possible. Do not add commentary.`,
+      const { text } = await analyzeDocument({
+        file,
+        prompt: `${contextBlock}\n\nExtract ALL text from this VA decision letter. Return ONLY the extracted text, preserving the original formatting as closely as possible. Do not add commentary.`,
         feature: 'decision-decoder-ocr',
+        onProgress: setExtractStep,
       });
       setLetterText(text);
-    } catch {
-      toast({ title: 'Could not extract text from image', description: 'Try a clearer photo or paste the text manually.', variant: 'destructive' });
+    } catch (err) {
+      const { message } = classifyError(err, file);
+      toast({ title: 'Could not extract text', description: message, variant: 'destructive' });
     } finally {
       setExtracting(false);
     }
@@ -527,7 +532,7 @@ export default function DecisionDecoder() {
               <input
                 ref={uploadRef}
                 type="file"
-                accept="image/*"
+                accept="image/*,application/pdf"
                 className="hidden"
                 onChange={(e) => {
                   const file = e.target.files?.[0];
@@ -543,9 +548,9 @@ export default function DecisionDecoder() {
                 size="lg"
               >
                 {extracting ? (
-                  <><Loader2 className="h-5 w-5 animate-spin" /> Extracting text from image...</>
+                  <><Loader2 className="h-5 w-5 animate-spin" /> {extractStep === 'reading' ? 'Reading file...' : extractStep === 'uploading' ? 'Uploading to AI...' : extractStep === 'ocr-fallback' ? 'Trying text extraction...' : 'Extracting text...'}</>
                 ) : (
-                  <><Upload className="h-5 w-5" /> Upload Decision Letter Image</>
+                  <><Upload className="h-5 w-5" /> Upload Decision Letter (Image or PDF)</>
                 )}
               </Button>
             </>

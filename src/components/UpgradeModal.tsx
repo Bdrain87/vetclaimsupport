@@ -48,7 +48,7 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
         const status = await refreshEntitlementFromServer();
         if (status === 'premium' || status === 'lifetime') {
           fireConfetti();
-          toast({ title: 'Welcome to Premium!', description: 'All features are now unlocked.' });
+          toast({ title: 'Welcome to Premium!', description: 'Premium features are now unlocked.' });
           setTimeout(() => navigate(0), 1500);
         }
       }
@@ -93,7 +93,7 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
           invalidateEntitlementCache();
           await refreshEntitlementFromServer();
           fireConfetti();
-          toast({ title: 'Welcome to Premium!', description: 'All features are now unlocked.' });
+          toast({ title: 'Welcome to Premium!', description: 'Premium features are now unlocked.' });
           // Navigate back to the feature they wanted
           setTimeout(() => navigate(0), 1500);
           return;

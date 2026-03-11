@@ -89,6 +89,14 @@ export default function AuthPage() {
       return;
     }
 
+    // Basic email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      notifyError();
+      toast({ title: 'Invalid email', description: 'Please enter a valid email address.', variant: 'destructive' });
+      return;
+    }
+
     if (mode === 'signup') {
       if (password.length < 6) {
         notifyError();

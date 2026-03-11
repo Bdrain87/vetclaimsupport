@@ -23,13 +23,13 @@ function findRatingCriteria(dbq: DBQReference): ConditionRatingCriteria | undefi
   );
 }
 
-// Rating level color based on percentage
+// Rating level color based on percentage — smooth cool→warm→gold ramp
 function ratingColor(percent: number): string {
-  if (percent === 100) return 'bg-red-500/15 text-red-400 border-red-500/30';
-  if (percent >= 70) return 'bg-gold/15 text-gold border-gold/30';
-  if (percent >= 50) return 'bg-gold/10 text-gold/80 border-gold/20';
-  if (percent >= 30) return 'bg-blue-500/15 text-blue-400 border-blue-500/30';
-  if (percent >= 10) return 'bg-gold/10 text-gold border-gold/20';
+  if (percent === 100) return 'bg-gold/15 text-gold border-gold/30';
+  if (percent >= 70) return 'bg-orange-500/15 text-orange-400 border-orange-500/30';
+  if (percent >= 50) return 'bg-amber-500/15 text-amber-400 border-amber-500/30';
+  if (percent >= 30) return 'bg-teal-500/15 text-teal-400 border-teal-500/30';
+  if (percent >= 10) return 'bg-blue-500/15 text-blue-400 border-blue-500/30';
   return 'bg-muted text-muted-foreground border-border';
 }
 
@@ -330,7 +330,7 @@ export default function DBQAnalyzer() {
           <ClipboardList className="h-6 w-6 text-gold" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-foreground">DBQ Analyzer</h1>
+          <h1 className="text-2xl font-bold text-foreground">DBQ Self-Assessment</h1>
           <p className="text-muted-foreground text-sm">Interactive disability rating estimator</p>
         </div>
       </div>

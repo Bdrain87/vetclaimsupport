@@ -31,6 +31,8 @@ import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { buildConditionContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
+import { getConditionCriteriaForPrompt } from '@/lib/ai-prompts';
+import { examPrepData } from '@/data/cpExamPrep';
 import { generateCPExamPacketPDF } from '@/services/exportEngine';
 import { useToast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
@@ -333,7 +335,31 @@ export default function CPExamPacket() {
     try {
       const ctx = buildConditionContext(conditionName);
       const contextBlock = formatContextForAI(ctx, 'detailed');
-      const prompt = `For a C&P exam for ${conditionName}, list the 8-10 most likely questions the examiner will ask. Focus on functional impact, frequency, severity, and daily life limitations. Format as a numbered list.\n\n${contextBlock}`;
+
+      // Look up the condition's diagnostic code for criteria lookup
+      const conditionEntry = allConditions.find(
+        (c) => c.name.toLowerCase() === conditionName.toLowerCase(),
+      );
+      const criteriaResult = getConditionCriteriaForPrompt(
+        conditionName,
+        conditionEntry?.diagnosticCode,
+      );
+
+      // Check for hardcoded exam prep data
+      const condLower = conditionName.toLowerCase();
+      const prepData = Object.values(examPrepData).find(
+        (ep) => ep.condition.toLowerCase() === condLower,
+      );
+
+      let dataBlock = '';
+      if (criteriaResult) {
+        dataBlock += `\n<rating_criteria>\n${criteriaResult.text}\n</rating_criteria>\n`;
+      }
+      if (prepData?.examinerQuestions?.length) {
+        dataBlock += `\n<known_examiner_questions>\n${prepData.examinerQuestions.map((q) => `- ${q}`).join('\n')}\n</known_examiner_questions>\n`;
+      }
+
+      const prompt = `For a C&P exam for ${conditionName}, list the 8-10 most likely questions the examiner will ask. Focus on functional impact, frequency, severity, and daily life limitations. Format as a numbered list.${criteriaResult ? ' Base questions on the rating criteria provided below — examiners ask questions that map to specific rating levels.' : ''}${prepData?.examinerQuestions?.length ? ' Build on the known examiner questions provided below.' : ''}\n\n${contextBlock}${dataBlock}`;
       const result = await aiGenerate(prompt);
       if (result) {
         setExamQuestions((prev) => ({ ...prev, [conditionName]: result }));
@@ -410,7 +436,9 @@ export default function CPExamPacket() {
           title: 'Saved to Vault',
           action: <ToastAction altText="View in Vault" onClick={() => navigate('/claims/vault')}>View</ToastAction>,
         });
-      }).catch(() => {});
+      }).catch(() => {
+        toast({ title: 'Vault save failed', description: 'PDF exported but could not save to vault.', variant: 'destructive' });
+      });
     } catch (err) {
       logger.error('PDF export failed:', err);
     } finally {

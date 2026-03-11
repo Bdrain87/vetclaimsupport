@@ -17,8 +17,8 @@ describe('Static exports', () => {
   it('AI_ANTI_HALLUCINATION is a non-empty string about not citing fabricated info', () => {
     expect(typeof AI_ANTI_HALLUCINATION).toBe('string');
     expect(AI_ANTI_HALLUCINATION.length).toBeGreaterThan(0);
-    expect(AI_ANTI_HALLUCINATION).toContain('Do not cite specific legal cases');
-    expect(AI_ANTI_HALLUCINATION).toContain('Do not fabricate');
+    expect(AI_ANTI_HALLUCINATION).toContain('Do not cite specific rating percentages');
+    expect(AI_ANTI_HALLUCINATION).toContain('Never guess or fabricate rating criteria');
   });
 
   it('AI_CONFIG has EXAMINER_PERSONA, VA_SPEAK_TRANSLATOR, DOCTOR_SUMMARY_LOGIC', () => {
@@ -306,9 +306,9 @@ describe('createCPExamPrepPrompt', () => {
     expect(result).toContain('8. Questions you can ask');
   });
 
-  it('references 38 CFR Part 4', () => {
+  it('includes anti-hallucination guard when no criteria provided', () => {
     const result = createCPExamPrepPrompt(fullParams);
-    expect(result).toContain('38 CFR Part 4');
+    expect(result).toContain('Do not cite specific rating percentages');
   });
 
   it('includes prompt injection guard', () => {

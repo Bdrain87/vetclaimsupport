@@ -92,7 +92,7 @@ const CATEGORIES: FeatureCategory[] = [
       'Post-exam debrief and analysis',
       'Exam Day Mode checklist',
       'Decision Letter Decoder',
-      'DBQ Rating Estimator',
+      'DBQ Self-Assessment',
       'How to Increase Your Rating guide',
       'Upgrade Paths Optimizer',
     ],

@@ -68,7 +68,7 @@ const ROW_3_ITEMS = [
   'Deployment Locations',
   'Condition Guide',
   'Benefits Discovery',
-  'DBQ Rating Estimator',
+  'DBQ Self-Assessment',
   'Shareable Summary',
   'Deadlines Tracker',
 ];

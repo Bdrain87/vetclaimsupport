@@ -15,12 +15,13 @@ import { buildVeteranContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
 import { StreamingText } from '@/components/ui/StreamingText';
 import { MessageCircle, X, Send, Loader2, AlertTriangle } from 'lucide-react';
+import { AI_ANTI_HALLUCINATION, buildCriteriaBlockForConditions, buildSecondaryConnectionsBlock } from '@/lib/ai-prompts';
 import { cn } from '@/lib/utils';
 
 const SYSTEM_INSTRUCTION = `You are a VA disability claims preparation advisor built into the VetClaimSupport app. Your role:
 
 1. Help veterans understand VA claims processes, evidence requirements, and exam preparation
-2. Answer questions about rating criteria, secondary conditions, and filing strategies
+2. Answer questions about rating criteria using only the criteria data provided in your context, and about secondary conditions and filing strategies
 3. Suggest next steps based on the veteran's documented data
 
 CRITICAL RULES:
@@ -31,7 +32,7 @@ CRITICAL RULES:
 - Always recommend consulting an accredited VSO or attorney for personalized guidance
 - Reference the veteran's logged data when relevant (symptoms, medications, visits)
 - Keep responses concise and actionable
-- Use plain language, not VA jargon`;
+- Use plain language, not VA jargon${AI_ANTI_HALLUCINATION}`;
 
 interface Message {
   role: 'user' | 'assistant';
@@ -63,6 +64,15 @@ export function AskIntelSheet() {
     const ctx = buildVeteranContext({ maskPII: true });
     const contextBlock = formatContextForAI(ctx, 'summary');
 
+    // Inject rating criteria and secondary connections
+    const conditionsForCriteria = (ctx.conditions || []).map((c: { name: string; diagnosticCode?: string }) => ({
+      name: c.name,
+      diagnosticCode: c.diagnosticCode,
+    }));
+    const criteriaBlock = buildCriteriaBlockForConditions(conditionsForCriteria);
+    const conditionNames = (ctx.conditions || []).map((c: { name: string }) => c.name);
+    const secondaryBlock = buildSecondaryConnectionsBlock(conditionNames);
+
     // Build conversation history
     const history = [...messages, userMsg]
       .map((m) => `${m.role === 'user' ? 'Veteran' : 'Advisor'}: ${m.content}`)
@@ -70,7 +80,7 @@ export function AskIntelSheet() {
 
     const { model, temperature } = getModelConfig('assistant');
 
-    const prompt = `${SYSTEM_INSTRUCTION}\n\n--- VETERAN DATA ---\n${contextBlock}\n\n--- CONVERSATION ---\n${history}\n\nAdvisor:`;
+    const prompt = `${SYSTEM_INSTRUCTION}\n\n--- VETERAN DATA ---\n${contextBlock}${criteriaBlock ? `\n\n${criteriaBlock}\nUse ONLY the criteria above. For unlisted conditions, direct the veteran to the Rating Guidance tool.` : ''}${secondaryBlock ? `\n\n${secondaryBlock}\nWhen discussing secondary conditions, reference ONLY the connections listed above.` : ''}\n\n--- CONVERSATION ---\n${history}\n\nAdvisor:`;
 
     try {
       const result = await startStream({

@@ -115,6 +115,7 @@ function FieldCard({ field, formId: _formId, savedValue, onSave }: FieldCardProp
       <Textarea
         value={value}
         onChange={(e) => handleChange(e.target.value)}
+        maxLength={5000}
         placeholder={field.placeholder}
         className="min-h-[80px] text-sm"
       />

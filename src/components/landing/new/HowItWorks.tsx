@@ -27,7 +27,7 @@ const STEPS = [
   {
     num: '03',
     title: 'Prepare for the C&P Exam',
-    desc: 'Practice questions, know what to expect, walk in feeling confident. Use health trackers to log symptoms mapped to rating criteria.',
+    desc: 'Practice questions, prep with all 68 DBQ forms, and analyze your answers against rating criteria with AI. Walk in feeling confident.',
   },
   {
     num: '04',

@@ -5,12 +5,14 @@ import { Button } from '@/components/ui/button';
 import { Clipboard } from '@capacitor/clipboard';
 import { toast } from '@/hooks/use-toast';
 import { impactMedium } from '@/lib/haptics';
-import { aiAnalyzeImage, isGeminiConfigured } from '@/lib/gemini';
-import { EVIDENCE_SCAN_SYSTEM_PROMPT } from '@/lib/ai-prompts';
+import { isGeminiConfigured } from '@/lib/gemini';
+import { EVIDENCE_SCAN_SYSTEM_PROMPT, buildCriteriaBlockForConditions } from '@/lib/ai-prompts';
 import { getModelConfig } from '@/lib/ai-models';
 import { buildVeteranContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
-import { Camera, Upload, Copy, RotateCcw, AlertTriangle, FileSearch, CheckCircle2, XCircle, MinusCircle } from 'lucide-react';
+import { analyzeDocument, type AnalysisStep } from '@/lib/analyzeDocument';
+import { classifyError, detectFileType } from '@/lib/fileProcessing';
+import { Camera, Upload, Copy, RotateCcw, AlertTriangle, FileSearch, FileText, CheckCircle2, XCircle, MinusCircle } from 'lucide-react';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 
 interface Finding {
@@ -21,7 +23,9 @@ interface Finding {
 
 export default function EvidenceScanner() {
   const [isProcessing, setIsProcessing] = useState(false);
+  const [analysisStep, setAnalysisStep] = useState<AnalysisStep>('reading');
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isPDF, setIsPDF] = useState(false);
   const [findings, setFindings] = useState<Finding[]>([]);
   const [rawAnalysis, setRawAnalysis] = useState('');
   const [buddyRequest, setBuddyRequest] = useState('');
@@ -36,22 +40,24 @@ export default function EvidenceScanner() {
     }
     setError('');
     setIsProcessing(true);
+    setAnalysisStep('reading');
     setFindings([]);
     setRawAnalysis('');
     setBuddyRequest('');
 
-    // Show preview
-    const reader = new FileReader();
-    reader.onload = (e) => setImagePreview(e.target?.result as string);
-    reader.readAsDataURL(file);
+    const filePDF = detectFileType(file) === 'pdf';
+    setIsPDF(filePDF);
+
+    // Show preview for images, not PDFs
+    if (!filePDF) {
+      const reader = new FileReader();
+      reader.onload = (e) => setImagePreview(e.target?.result as string);
+      reader.readAsDataURL(file);
+    } else {
+      setImagePreview(null);
+    }
 
     try {
-      // Convert to base64
-      const arrayBuffer = await file.arrayBuffer();
-      const base64 = btoa(
-        new Uint8Array(arrayBuffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
-      );
-
       const evidenceSchema = {
         type: 'object' as const,
         properties: {
@@ -78,18 +84,22 @@ export default function EvidenceScanner() {
 
       const ctx = buildVeteranContext({ maskPII: true });
       const contextBlock = formatContextForAI(ctx, 'minimal');
-      const enrichedSystem = `${EVIDENCE_SCAN_SYSTEM_PROMPT}\n\nThe veteran is claiming:\n${contextBlock}`;
 
-      const { temperature, timeout } = getModelConfig('evidence-scanner');
-      const text = await aiAnalyzeImage({
-        imageBase64: base64,
-        mimeType: file.type || 'image/jpeg',
-        prompt: 'Analyze this document image and provide a structured assessment of its value for a VA disability claim.',
+      // Inject real rating criteria so the scanner knows what evidence elements matter
+      const criteriaBlock = buildCriteriaBlockForConditions(
+        (ctx.conditions || []).map((c) => ({ name: c.name, diagnosticCode: c.diagnosticCode })),
+      );
+      const enrichedSystem = `${EVIDENCE_SCAN_SYSTEM_PROMPT}\n\nThe veteran is claiming:\n${contextBlock}${criteriaBlock ? `\n\n${criteriaBlock}\nWhen assessing evidence strength, check whether the document contains findings that map to the rating criteria above. Flag missing evidence elements that the criteria require.` : ''}`;
+
+      const { temperature } = getModelConfig('evidence-scanner');
+      const { text } = await analyzeDocument({
+        file,
+        prompt: 'Analyze this document and provide a structured assessment of its value for a VA disability claim.',
         systemInstruction: enrichedSystem,
         feature: 'evidence-scanner',
         responseSchema: evidenceSchema,
         temperature,
-        timeout,
+        onProgress: setAnalysisStep,
       });
 
       try {
@@ -107,8 +117,9 @@ export default function EvidenceScanner() {
         // Fallback: use raw text if JSON parse fails
         setRawAnalysis(text);
       }
-    } catch {
-      setError('Failed to analyze document. Please try again.');
+    } catch (err) {
+      const { message } = classifyError(err, file);
+      setError(message);
     } finally {
       setIsProcessing(false);
     }
@@ -128,6 +139,7 @@ export default function EvidenceScanner() {
   const reset = () => {
     impactMedium();
     setImagePreview(null);
+    setIsPDF(false);
     setFindings([]);
     setRawAnalysis('');
     setBuddyRequest('');
@@ -196,10 +208,20 @@ export default function EvidenceScanner() {
           {imagePreview && (
             <img src={imagePreview} alt="Document preview" className="h-32 mx-auto rounded-xl object-cover opacity-50" />
           )}
+          {isPDF && !imagePreview && (
+            <div className="h-20 w-16 mx-auto rounded-lg bg-muted/50 border border-border flex items-center justify-center opacity-50">
+              <FileText className="h-8 w-8 text-muted-foreground" />
+            </div>
+          )}
           <div className="h-12 w-12 mx-auto rounded-full bg-gold/10 border-2 border-gold/30 flex items-center justify-center animate-pulse">
             <FileSearch className="h-6 w-6 text-gold" />
           </div>
-          <p className="text-sm text-muted-foreground">Analyzing document for evidence strength...</p>
+          <p className="text-sm text-muted-foreground">
+            {analysisStep === 'reading' && 'Reading file...'}
+            {analysisStep === 'uploading' && 'Uploading to AI...'}
+            {analysisStep === 'analyzing' && 'Analyzing document for evidence strength...'}
+            {analysisStep === 'ocr-fallback' && 'Trying text extraction...'}
+          </p>
         </div>
       )}
 
@@ -207,6 +229,12 @@ export default function EvidenceScanner() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
           {imagePreview && (
             <img src={imagePreview} alt="Scanned document" className="w-full max-h-48 rounded-xl object-cover border border-border" />
+          )}
+          {isPDF && !imagePreview && (
+            <div className="flex items-center gap-2 p-3 rounded-xl border border-border bg-muted/30">
+              <FileText className="h-5 w-5 text-muted-foreground shrink-0" />
+              <span className="text-sm text-muted-foreground">PDF document analyzed</span>
+            </div>
           )}
 
           {/* Findings checklist */}

@@ -4,6 +4,7 @@ import { ChevronLeft } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import useAppStore from '@/store/useAppStore';
 import { getConditionById } from '@/data/conditions';
+import { isNativeApp } from '@/lib/platform';
 
 const ROOT_TAB_ROUTES = ['/', '/app', '/claims', '/health', '/prep', '/settings'];
 
@@ -68,6 +69,27 @@ const pageLabels: Record<string, string> = {
   '/reference/condition-guide': 'Condition Guide',
   '/reference/deployment-locations': 'Deployment Locations',
   '/cp-exam-packet': 'VA Exam Packet',
+  '/prep/interactive-dbq': 'AI DBQ Analyzer',
+  '/claims/evidence-strength': 'Evidence Strength',
+  '/claims/decision-decoder': 'Decision Decoder',
+  '/health/work-impact': 'Work Impact',
+  '/health/trends': 'Health Trends',
+  '/prep/dbq-analyzer': 'DBQ Self-Assessment',
+  '/prep/nexus-guide': 'Nexus Guide',
+  '/prep/exam-simulator': 'C&P Exam Simulator',
+  '/prep/post-debrief': 'Post-Exam Debrief',
+  '/prep/family-statement': 'Family Statement',
+  '/prep/evidence-scanner': 'Evidence Scanner',
+  '/prep/mos-hazards': 'MOS Hazards',
+  '/prep/pact-act': 'PACT Act',
+  '/prep/state-benefits': 'State Benefits',
+  '/prep/vso-locator': 'VSO Locator',
+  '/prep/exam-packet': 'VA Exam Packet',
+  '/prep/medication-rule': 'Medication Rule',
+  '/prep/compensation': 'Compensation Ladder',
+  '/prep/tdiu': 'TDIU Checker',
+  '/prep/benefits': 'Benefits Discovery',
+  '/prep/cost-estimate': 'Cost Estimator',
 };
 
 function getParentRoute(pathname: string): string {
@@ -105,7 +127,7 @@ export function MobileHeader() {
   return (
     <header
       className="shrink-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50"
-      style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
+      style={isNativeApp ? { paddingTop: 'env(safe-area-inset-top, 0px)' } : undefined}
     >
       <div className="flex items-center justify-between px-3 h-14">
         {/* Left: Back button or VCS logo */}

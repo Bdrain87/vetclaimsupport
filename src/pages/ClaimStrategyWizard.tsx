@@ -45,6 +45,7 @@ import { DataConnectedBadge } from '@/components/shared/DataConnectedBadge';
 import { useProfileStore } from '@/store/useProfileStore';
 import { useFeatureFlag } from '@/store/useFeatureFlagStore';
 import { getAllBranchLabels } from '@/utils/veteranProfile';
+import { AI_ANTI_HALLUCINATION, buildCriteriaBlockForConditions, buildSecondaryConnectionsBlock } from '@/lib/ai-prompts';
 
 interface ServiceInfo {
   branch: string;
@@ -411,6 +412,16 @@ export default function ClaimStrategyWizard() {
     setIsGenerating(true);
     setError(null);
 
+    // Build real criteria and secondary connections for all listed conditions
+    const allConditionNames = [
+      ...data.healthConditions.conditions,
+      ...(data.healthConditions.customConditions ? data.healthConditions.customConditions.split(',').map(s => s.trim()).filter(Boolean) : []),
+    ];
+    const criteriaBlock = buildCriteriaBlockForConditions(
+      allConditionNames.map((name) => ({ name })),
+    );
+    const secondaryBlock = buildSecondaryConnectionsBlock(allConditionNames);
+
     const prompt = `You are a VA disability claims preparation assistant. Based on the following veteran's information, provide a comprehensive claim preparation plan.
 
 VETERAN INFORMATION:
@@ -442,7 +453,7 @@ Provide a strategic claim analysis in the following JSON format:
   "summary": "2-3 sentence overview of the recommended approach",
   "filingType": "BDD/Standard/Supplemental/Increase - explain which and why",
   "priorityConditions": [
-    {"condition": "name", "reason": "why prioritize this", "estimatedRating": "X-Y%"}
+    {"condition": "name", "reason": "why prioritize this", "estimatedRating": "Depends on documented severity"}
   ],
   "evidenceGaps": ["list of missing evidence items needed"],
   "timeline": "realistic timeline for filing and decision",
@@ -450,13 +461,19 @@ Provide a strategic claim analysis in the following JSON format:
   "warnings": ["any cautions or things to be aware of"]
 }
 
+For estimatedRating: Do NOT predict specific rating percentages. Instead, describe what factors will determine the rating (e.g., "Depends on documented severity and frequency", "Based on range of motion findings at C&P exam"). Only reference general rating categories like "compensable" or "higher-level" if applicable.
+
+${criteriaBlock ? `\n${criteriaBlock}\nUse the rating criteria above to inform your evidence gap analysis and priority assessment. Reference what the criteria actually require when recommending evidence to gather.` : ''}
+${secondaryBlock ? `\n${secondaryBlock}\nUse the secondary condition connections above when suggesting additional conditions to claim. Only recommend secondary conditions from this list.` : ''}
+
 Consider:
 - Presumptive conditions based on service era/location
-- Secondary conditions that could be claimed
+- Secondary conditions that could be claimed (use ONLY the secondary connections provided above if available)
 - Anti-pyramiding rules
-- Evidence requirements for each condition
-- Strongest claims to prioritize
-- PACT Act benefits if applicable`;
+- Evidence requirements based on the rating criteria provided above
+- Strongest claims to prioritize based on available evidence vs what criteria require
+- PACT Act benefits if applicable
+${AI_ANTI_HALLUCINATION}`;
 
     try {
       if (!aiStrategyEnabled) {

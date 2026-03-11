@@ -314,6 +314,15 @@ const CARDS: CardData[] = [
     category: 'Strategy',
   },
   {
+    icon: ClipboardCheck,
+    title: 'AI DBQ Analyzer',
+    short: 'Upload a completed DBQ and get AI-powered rating alignment analysis',
+    detail: 'Photograph or upload a completed DBQ form and get instant AI analysis showing how your answers align to VA rating criteria. Color-coded results highlight documentation strengths and gaps.',
+    capabilities: ['Photo/upload DBQ analysis', 'Color-coded rating alignment', 'Strength & gap identification', 'Per-question AI feedback', 'Improvement suggestions'],
+    plan: 'Premium ($9.99 one-time)',
+    category: 'Strategy',
+  },
+  {
     icon: Search,
     title: 'Secondary Condition Finder',
     short: 'Discover conditions secondary to your rated disabilities',

@@ -37,9 +37,9 @@ const AI_FEATURES = [
   },
   {
     icon: Target,
-    title: 'Evidence vs. Criteria Matching',
+    title: 'AI DBQ & Evidence Analyzer',
     description:
-      'Your documented evidence is automatically compared against published VA rating criteria. See exactly where you\'re strong and where gaps exist.',
+      'Upload or photograph a completed DBQ and get instant color-coded rating alignment. Your evidence is compared against VA criteria so you see exactly where you\'re strong and where gaps exist.',
   },
   {
     icon: MessageCircle,

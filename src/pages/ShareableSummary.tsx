@@ -203,7 +203,9 @@ export default function ShareableSummary() {
         title: 'Saved to Vault',
         action: <ToastAction altText="View in Vault" onClick={() => navigate('/claims/vault')}>View</ToastAction>,
       });
-    }).catch(() => {});
+    }).catch(() => {
+      toast({ title: 'Vault save failed', description: 'PDF exported but could not save to vault.', variant: 'destructive' });
+    });
   }, [generateTextSummary, toast, navigate]);
 
   return (

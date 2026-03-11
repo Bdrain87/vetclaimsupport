@@ -369,6 +369,7 @@ Date: ${today}`;
                 value={statementData.howKnown}
                 onChange={(e) => updateField('howKnown', e.target.value)}
                 rows={3}
+                maxLength={5000}
               />
             </div>
             <div className="space-y-2">
@@ -403,6 +404,7 @@ Date: ${today}`;
                 value={statementData.specificObservations}
                 onChange={(e) => updateField('specificObservations', e.target.value)}
                 rows={5}
+                maxLength={5000}
               />
               <p className="text-xs text-muted-foreground">
                 Tip: Include specific examples with dates when possible
@@ -416,6 +418,7 @@ Date: ${today}`;
                 value={statementData.frequencyWitnessed}
                 onChange={(e) => updateField('frequencyWitnessed', e.target.value)}
                 rows={2}
+                maxLength={5000}
               />
             </div>
             {/* Symptom context pre-fill from logged data */}
@@ -456,6 +459,7 @@ Date: ${today}`;
                 value={statementData.impactOnLife}
                 onChange={(e) => updateField('impactOnLife', e.target.value)}
                 rows={5}
+                maxLength={5000}
               />
             </div>
             <div className="space-y-2">
@@ -466,6 +470,7 @@ Date: ${today}`;
                 value={statementData.additionalDetails}
                 onChange={(e) => updateField('additionalDetails', e.target.value)}
                 rows={3}
+                maxLength={5000}
               />
             </div>
             <div className="space-y-2">
@@ -643,6 +648,7 @@ Date: ${today}`;
                       value={formData.whatTheyWitnessed}
                       onChange={(e) => setFormData({ ...formData, whatTheyWitnessed: e.target.value })}
                       rows={3}
+                      maxLength={5000}
                     />
                   </div>
 

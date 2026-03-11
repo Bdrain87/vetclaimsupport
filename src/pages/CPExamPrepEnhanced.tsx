@@ -34,7 +34,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { examCategories, examPrepData } from '@/data/cpExamPrep';
 import { useClaims } from '@/hooks/useClaims';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
-import { createCPExamPrepPrompt } from '@/lib/ai-prompts';
+import { createCPExamPrepPrompt, findRatingCriteria, formatCriteriaForPrompt, getConditionCriteriaForPrompt } from '@/lib/ai-prompts';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { DataConnectedBadge } from '@/components/shared/DataConnectedBadge';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
@@ -250,11 +250,43 @@ export default function CPExamPrepEnhanced() {
     const ctx = buildConditionContext(selectedCondition);
     const contextBlock = formatContextForAI(ctx, 'detailed');
 
+    // Resolve rating criteria via tiered lookup
+    let criteriaBlock = '';
+    const detailedCriteria = findRatingCriteria(selectedCondition);
+    if (detailedCriteria) {
+      criteriaBlock = `<rating_criteria>\n${formatCriteriaForPrompt(detailedCriteria)}\n</rating_criteria>`;
+    } else {
+      const briefCriteria = getConditionCriteriaForPrompt(selectedCondition);
+      if (briefCriteria) {
+        criteriaBlock = `<rating_criteria>\n${briefCriteria.text}\n</rating_criteria>`;
+      }
+    }
+
+    // Inject hardcoded exam prep data so AI builds on real questions
+    let examPrepBlock = '';
+    if (selectedPrepData) {
+      const prepLines = [
+        '<exam_prep_reference>',
+        'WHAT TO EXPECT:',
+        ...selectedPrepData.whatToExpect.map(s => `- ${s}`),
+        '',
+        'EXAMINER QUESTIONS (real examples):',
+        ...selectedPrepData.examinerQuestions.map(s => `- ${s}`),
+        '',
+        'MISTAKES TO AVOID:',
+        ...selectedPrepData.mistakesToAvoid.map(s => `- ${s}`),
+        '</exam_prep_reference>',
+      ];
+      examPrepBlock = prepLines.join('\n');
+    }
+
+    const combinedContext = [contextBlock, examPrepBlock].filter(Boolean).join('\n\n');
     const prompt = createCPExamPrepPrompt({
       condition: selectedCondition,
       currentSymptoms: userSymptoms.length > 0 ? userSymptoms : ['Symptoms related to condition'],
       currentTreatments: userTreatments.length > 0 ? userTreatments : ['Current treatment regimen'],
-      contextBlock,
+      contextBlock: combinedContext,
+      criteriaBlock: criteriaBlock || undefined,
     });
 
     const result = await aiGenerate(prompt);

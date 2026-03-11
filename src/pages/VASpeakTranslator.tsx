@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
 import { buildVeteranContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
+import { buildCriteriaBlockForConditions } from '@/lib/ai-prompts';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { PageContainer } from '@/components/PageContainer';
@@ -224,14 +225,20 @@ export default function VASpeakTranslator() {
     const ctx = buildVeteranContext({ maskPII: true });
     const contextBlock = formatContextForAI(ctx, 'minimal');
 
+    // Inject real rating criteria so translations use exact VA-recognized terminology
+    const criteriaBlock = buildCriteriaBlockForConditions(
+      (ctx.conditions || []).map((c) => ({ name: c.name, diagnosticCode: c.diagnosticCode })),
+    );
+
     const prompt = [
       'Translate the following veteran\'s plain-English symptom description into professional VA clinical terminology.',
       'Use language appropriate for VA Form 21-4138 (Statement in Support of Claim).',
-      'Use 38 CFR nomenclature where applicable.',
+      'Use terminology that maps to the rating criteria keywords provided below when applicable.',
       'Maintain the truthful meaning -- do not exaggerate or add symptoms.',
       'Return ONLY the translated clinical text, no commentary.',
       '',
       contextBlock,
+      criteriaBlock ? `\n${criteriaBlock}` : '',
       '',
       `Veteran's description: "${inputText}"`,
     ].join('\n');
@@ -346,6 +353,7 @@ export default function VASpeakTranslator() {
               id="symptom-input"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
+              maxLength={5000}
               placeholder={"Example: My back hurts all the time and I can't bend over to tie my shoes. My knees pop and ache going up stairs. I get terrible headaches that make me hide in a dark room."}
               className="min-h-[140px] text-sm"
             />

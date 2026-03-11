@@ -295,7 +295,9 @@ export default function StressorStatement() {
           title: 'Saved to Vault',
           action: <ToastAction altText="View in Vault" onClick={() => navigate('/claims/vault')}>View</ToastAction>,
         });
-      }).catch(() => {});
+      }).catch(() => {
+        toast({ title: 'Vault save failed', description: 'PDF exported but could not save to vault.', variant: 'destructive' });
+      });
     } catch {
       toast({ title: 'Export failed', description: 'Could not generate PDF. Please try again.', variant: 'destructive' });
     } finally {
@@ -369,6 +371,7 @@ export default function StressorStatement() {
                 value={formData.whatHappened}
                 onChange={(e) => updateField('whatHappened', e.target.value)}
                 rows={8}
+                maxLength={10000}
               />
               <p className="text-xs text-muted-foreground">
                 {formData.whatHappened.length > 0
@@ -426,6 +429,7 @@ export default function StressorStatement() {
                 value={formData.whenDetails}
                 onChange={(e) => updateField('whenDetails', e.target.value)}
                 rows={4}
+                maxLength={5000}
               />
             </div>
             <GuidanceTip
@@ -474,6 +478,7 @@ export default function StressorStatement() {
                 value={formData.whereDetails}
                 onChange={(e) => updateField('whereDetails', e.target.value)}
                 rows={4}
+                maxLength={5000}
               />
             </div>
             <GuidanceTip
@@ -500,6 +505,7 @@ export default function StressorStatement() {
                 value={formData.whoInvolved}
                 onChange={(e) => updateField('whoInvolved', e.target.value)}
                 rows={4}
+                maxLength={5000}
               />
             </div>
             <div className="space-y-2">
@@ -510,6 +516,7 @@ export default function StressorStatement() {
                 value={formData.whoWitnesses}
                 onChange={(e) => updateField('whoWitnesses', e.target.value)}
                 rows={3}
+                maxLength={5000}
               />
             </div>
             <div className="space-y-2">
@@ -520,6 +527,7 @@ export default function StressorStatement() {
                 value={formData.whoReported}
                 onChange={(e) => updateField('whoReported', e.target.value)}
                 rows={3}
+                maxLength={5000}
               />
               <p className="text-xs text-muted-foreground">
                 If you did not report the event, that is okay. Many stressor events go unreported, and the VA understands this.
@@ -548,6 +556,7 @@ export default function StressorStatement() {
                 value={formData.howAffectedImmediate}
                 onChange={(e) => updateField('howAffectedImmediate', e.target.value)}
                 rows={4}
+                maxLength={10000}
               />
             </div>
             <div className="space-y-2">
@@ -563,6 +572,7 @@ export default function StressorStatement() {
                 value={formData.howAffectedOngoing}
                 onChange={(e) => updateField('howAffectedOngoing', e.target.value)}
                 rows={4}
+                maxLength={10000}
               />
             </div>
             <div className="space-y-2">
@@ -573,6 +583,7 @@ export default function StressorStatement() {
                 value={formData.howAffectedDaily}
                 onChange={(e) => updateField('howAffectedDaily', e.target.value)}
                 rows={4}
+                maxLength={10000}
               />
             </div>
             <div className="space-y-2">
@@ -583,6 +594,7 @@ export default function StressorStatement() {
                 value={formData.howAffectedRelationships}
                 onChange={(e) => updateField('howAffectedRelationships', e.target.value)}
                 rows={4}
+                maxLength={10000}
               />
             </div>
             <GuidanceTip

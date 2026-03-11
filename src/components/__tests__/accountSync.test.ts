@@ -27,7 +27,7 @@ describe('Account Sync — What Gets Synced', () => {
   });
 
   it('what syncs includes premium entitlement', () => {
-    expect(DATA_PRIVACY_COPY.whatSyncs).toContain('Premium entitlement');
+    expect(DATA_PRIVACY_COPY.whatSyncs.toLowerCase()).toContain('premium entitlement');
   });
 
   it('what syncs includes account profile', () => {

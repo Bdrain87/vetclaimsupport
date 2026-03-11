@@ -102,7 +102,11 @@ export default function StateBenefits() {
 6. **Recreation** — hunting/fishing license discounts, state park passes
 7. **Other Benefits** — homestead exemptions, business licenses, any unique state programs
 
-Be specific with disability rating thresholds (e.g., "100% P&T required" vs "any rated veteran"). If a benefit is NOT offered by this state, say so. Keep it factual and concise.`;
+Be specific with disability rating thresholds (e.g., "100% P&T required" vs "any rated veteran"). If a benefit is NOT offered by this state, say so. Keep it factual and concise.
+
+If you are not certain about a specific benefit, threshold, or dollar amount, say "Verify with ${selectedState} DVA" rather than guessing.
+
+End your response with: "These are AI-generated summaries. Verify all benefits, thresholds, and amounts with your state Department of Veterans Affairs."`;
 
       const { text } = await aiGenerateWithContext({
         prompt,
@@ -267,9 +271,9 @@ Be specific with disability rating thresholds (e.g., "100% P&T required" vs "any
             </Button>
           </CardHeader>
           <CardContent>
-            <div className="flex items-center gap-2 mb-3 text-[10px] text-muted-foreground">
-              <AlertTriangle className="h-3 w-3" />
-              AI-generated — verify with your state DVA
+            <div className="flex items-start gap-2 mb-3 p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20">
+              <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+              <p className="text-xs text-amber-200/80 font-medium">AI-generated content — benefits, thresholds, and amounts may be inaccurate. Verify with your state Department of Veterans Affairs.</p>
             </div>
             <div className="text-sm text-foreground whitespace-pre-wrap leading-relaxed">
               {aiResult}
