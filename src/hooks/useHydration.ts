@@ -59,10 +59,15 @@ export function useHydration(): boolean {
       if (cancelled) return;
 
       // Step 4: manually trigger rehydration for all stores
+      // Each rehydrate is wrapped individually so one corrupt store
+      // doesn't block the others from loading.
       await Promise.all([
-        useAppStore.persist.rehydrate(),
-        useProfileStore.persist.rehydrate(),
-        useAICacheStore.persist.rehydrate(),
+        useAppStore.persist.rehydrate().catch((e) =>
+          logger.error('[useHydration] appStore rehydrate failed:', e)),
+        useProfileStore.persist.rehydrate().catch((e) =>
+          logger.error('[useHydration] profileStore rehydrate failed:', e)),
+        useAICacheStore.persist.rehydrate().catch((e) =>
+          logger.error('[useHydration] aiCacheStore rehydrate failed:', e)),
       ]);
 
       if (cancelled) return;

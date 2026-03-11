@@ -893,5 +893,5 @@ async function replayOfflineQueue(): Promise<void> {
 const _originalHandleOnline = handleOnline;
 function handleOnlineWithReplay() {
   _originalHandleOnline();
-  replayOfflineQueue().catch(() => {});
+  replayOfflineQueue().catch((err) => logger.error('[sync] replayOfflineQueue failed:', err));
 }

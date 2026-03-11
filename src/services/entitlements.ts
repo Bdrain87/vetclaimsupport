@@ -74,6 +74,9 @@ export const PREMIUM_ROUTES = [
   '/prep/post-debrief',
   '/prep/family-statement',
   '/prep/evidence-scanner',
+  '/prep/interactive-dbq',
+  '/prep/dbq-analyzer',
+  '/prep/state-benefits',
 ] as const;
 
 export function isPremiumRoute(pathname: string): boolean {

@@ -21,6 +21,25 @@ export function createDebouncedStorage(
   const timers = new Map<string, ReturnType<typeof setTimeout>>();
   const pending = new Map<string, string>();
 
+  // Flush all pending writes synchronously — called on page unload so
+  // edits made in the last debounce window aren't lost.
+  function flushAll() {
+    for (const [key, value] of pending) {
+      const timer = timers.get(key);
+      if (timer) clearTimeout(timer);
+      timers.delete(key);
+      storage.setItem(key, value);
+    }
+    pending.clear();
+  }
+
+  // 'pagehide' fires reliably on iOS/Safari (beforeunload does not).
+  // Both are registered for maximum coverage.
+  if (typeof globalThis.addEventListener === 'function') {
+    globalThis.addEventListener('pagehide', flushAll);
+    globalThis.addEventListener('beforeunload', flushAll);
+  }
+
   return {
     getItem(key: string) {
       // If there's a pending write that hasn't flushed yet, return

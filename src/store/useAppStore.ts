@@ -842,17 +842,24 @@ const useAppStore = create<AppState>()(
 
         if (updates.dataUrl && doc) {
           const newSize = updates.dataUrl.length;
-          const shouldUseIndexedDB = isIndexedDBAvailable() && newSize > INDEXEDDB_THRESHOLD;
+          let useIndexedDB = isIndexedDBAvailable() && newSize > INDEXEDDB_THRESHOLD;
 
-          if (doc.storageType === 'indexedDB' && !shouldUseIndexedDB) {
-            await deleteFileData(id);
+          if (doc.storageType === 'indexedDB' && !useIndexedDB) {
+            try { await deleteFileData(id); } catch (e) {
+              logger.error('[updateEvidenceDocument] IndexedDB delete failed:', e);
+            }
           }
 
-          if (shouldUseIndexedDB) {
-            await storeFileData(id, updates.dataUrl);
+          if (useIndexedDB) {
+            try {
+              await storeFileData(id, updates.dataUrl);
+            } catch (e) {
+              logger.error('[updateEvidenceDocument] IndexedDB write failed, falling back to localStorage:', e);
+              useIndexedDB = false;
+            }
           }
 
-          updates = { ...updates, storageType: shouldUseIndexedDB ? 'indexedDB' : 'localStorage' };
+          updates = { ...updates, storageType: useIndexedDB ? 'indexedDB' : 'localStorage' };
         }
 
         set((s) => ({
@@ -928,9 +935,13 @@ const useAppStore = create<AppState>()(
 
           const updates: Record<string, string> = {};
           for (const doc of docsNeedingData) {
-            const data = await getFileData(doc.id);
-            if (data) {
-              updates[doc.id] = data;
+            try {
+              const data = await getFileData(doc.id);
+              if (data) {
+                updates[doc.id] = data;
+              }
+            } catch (e) {
+              logger.error(`[_hydrateEvidenceDocuments] Failed to load ${doc.id}:`, e);
             }
           }
 
@@ -1004,9 +1015,13 @@ const useAppStore = create<AppState>()(
 
           const updates: Record<string, string> = {};
           for (const doc of docsNeedingData) {
-            const data = await getFileData(doc.id);
-            if (data) {
-              updates[doc.id] = data;
+            try {
+              const data = await getFileData(doc.id);
+              if (data) {
+                updates[doc.id] = data;
+              }
+            } catch (e) {
+              logger.error(`[_hydrateClaimDocuments] Failed to load ${doc.id}:`, e);
             }
           }
 

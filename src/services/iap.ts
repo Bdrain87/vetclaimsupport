@@ -5,7 +5,7 @@
  *   VITE_REVENUECAT_APPLE_API_KEY — RevenueCat Apple API key
  *
  * Product ID configured in App Store Connect / RevenueCat:
- *   vcs_lifetime — one-time $9.99 lifetime unlock
+ *   vcs_lifetime — one-time $9.99 premium unlock
  */
 
 import { isNativeApp } from '@/lib/platform';
