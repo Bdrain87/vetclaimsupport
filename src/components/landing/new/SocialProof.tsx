@@ -50,7 +50,7 @@ const STATS = [
 
 export function SocialProof() {
   return (
-    <section className="py-8 md:py-10" style={{ backgroundColor: LANDING_BG_CARD, borderTop: '1px solid rgba(197,165,90,0.15)', borderBottom: '1px solid rgba(197,165,90,0.15)' }}>
+    <section className="py-4 md:py-6" style={{ backgroundColor: LANDING_BG_CARD, borderTop: '1px solid rgba(197,165,90,0.15)', borderBottom: '1px solid rgba(197,165,90,0.15)' }}>
       <motion.div
         className="mx-auto max-w-5xl px-4 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0"
         variants={staggerContainer}

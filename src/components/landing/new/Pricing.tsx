@@ -1,83 +1,20 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { fadeInUp, staggerContainer, GOLD_GRADIENT_TEXT, GOLD_GRADIENT, EASE_SMOOTH, HEADING_H2_STYLE, LANDING_BG_ELEVATED, LANDING_BG, TEXT_TERTIARY, TEXT_DIM, TEXT_SECONDARY, TEXT_PRIMARY, TEXT_BRIGHT, GOLD } from '@/lib/landing-animations';
+import { fadeInUp, fanOut, staggerContainer, GOLD_GRADIENT_TEXT, GOLD_GRADIENT, EASE_SMOOTH, HEADING_H2_STYLE, LANDING_BG_ELEVATED, LANDING_BG, TEXT_TERTIARY, TEXT_DIM, TEXT_SECONDARY, TEXT_PRIMARY, TEXT_BRIGHT, GOLD } from '@/lib/landing-animations';
+import { MagneticButton } from './MagneticButton';
 import { Check, Shield, ChevronDown } from 'lucide-react';
 
-const INCLUDED_FEATURES = [
-  {
-    category: 'Guides & Reference',
-    features: [
-      'Claim Checklist', 'VA Form Guide', 'Intent to File Guide',
-      'BDD Guide', 'Glossary', 'Nexus Guide',
-      'VA-Speak Translator', 'Medication Side Effects Tool',
-      'Benefits Discovery', 'PACT Act Checker',
-      'Help Center & FAQ', 'VA Resources',
-    ],
-  },
-  {
-    category: 'Document Builders',
-    features: [
-      'Personal Statement Builder', 'Buddy Statement Builder',
-      'Family Statement Builder', 'Doctor Summary Outline',
-      'Stressor Statement Writer', 'Shareable Summary',
-      'C&P Exam Packet Generator', 'Doctor Prep Packet',
-      'VSO/Attorney Packet',
-    ],
-  },
-  {
-    category: 'Health & Symptom Tracking',
-    features: [
-      'Symptom Tracker', 'Sleep Tracker', 'Migraine Tracker',
-      'Medication Tracker', 'Medical Visit Logger',
-      'Exposure & Hazard Tracker', 'Work Impact Logger',
-      'Health Trends & Charts', 'Quick Log',
-      'Health Summary Export', '30-Day Health Snapshot',
-    ],
-  },
-  {
-    category: 'Strategy & Exam Prep',
-    features: [
-      'Claim Strategy Wizard', 'C&P Exam Prep',
-      'C&P Exam Simulator (Voice & Conversation Mode)',
-      'Post-Exam Debrief', '70 Interactive DBQ Prep Sheets',
-      'AI DBQ Rating Analyzer', 'Exam Day Mode',
-      'Decision Letter Decoder',
-      'DBQ Self-Assessment', 'Guided Condition Journeys',
-      'Ask Intel AI Assistant', 'How to Increase Your Rating',
-    ],
-  },
-  {
-    category: 'Calculators & Finders',
-    features: [
-      'Rating Calculator', 'Secondary Condition Finder',
-      'Bilateral Factor Calculator', 'Back Pay Estimator',
-      'Travel Pay Calculator', 'Lifetime Benefits Projector',
-      'Zero Percent Optimizer', 'TDIU Checker',
-      'Compensation Ladder', 'VSO Locator',
-      'State Benefits Finder',
-    ],
-  },
-  {
-    category: 'Research & Database',
-    features: [
-      '790+ Condition Database', 'Conditions by Conflict',
-      'Condition Guide', 'Deployment Locations',
-      'Evidence Strength Analyzer', 'Military Job Hazard Identifier',
-    ],
-  },
-  {
-    category: 'Package & Export',
-    features: [
-      'Full Claim Packet Builder', 'Document Vault',
-      'Evidence Scanner', 'Evidence Strength Analyzer',
-      'Health Summary & Timeline', 'Interactive Body Map',
-      'Appeals & Decision Review Guide',
-      'Deadlines Tracker', 'Service History Manager',
-      'Claim Journey Tracker',
-    ],
-  },
+const FEATURE_CATEGORIES = [
+  { label: 'Guides', features: ['Claim Checklist', 'VA Form Guide', 'Intent to File Guide', 'BDD Guide', 'Nexus Guide', 'VA-Speak Translator', 'Medication Side Effects Tool', 'Benefits Discovery', 'PACT Act Checker', 'Help Center & FAQ', 'VA Resources'] },
+  { label: 'Documents', features: ['Personal Statement Builder', 'Buddy Statement Builder', 'Family Statement Builder', 'Doctor Summary Outline', 'Stressor Statement Writer', 'Shareable Summary', 'C&P Exam Packet Generator', 'Doctor Prep Packet', 'VSO/Attorney Packet'] },
+  { label: 'Health Tracking', features: ['Symptom Tracker', 'Sleep Tracker', 'Migraine Tracker', 'Medication Tracker', 'Medical Visit Logger', 'Exposure & Hazard Tracker', 'Work Impact Logger', 'Health Trends & Charts', 'Quick Log', 'Health Summary Export', '30-Day Health Snapshot'] },
+  { label: 'Strategy & Prep', features: ['Claim Strategy Wizard', 'C&P Exam Prep', 'C&P Exam Simulator', 'Post-Exam Debrief', '70 Interactive DBQ Prep Sheets', 'AI DBQ Rating Analyzer', 'Exam Day Mode', 'Decision Letter Decoder', 'DBQ Self-Assessment', 'Ask Intel AI Assistant', 'How to Increase Your Rating'] },
+  { label: 'Calculators', features: ['Rating Calculator', 'Secondary Condition Finder', 'Bilateral Factor Calculator', 'Back Pay Estimator', 'Travel Pay Calculator', 'Lifetime Benefits Projector', 'Zero Percent Optimizer', 'TDIU Checker', 'Compensation Ladder', 'VSO Locator', 'State Benefits Finder'] },
+  { label: 'Research', features: ['790+ Condition Database', 'Conditions by Conflict', 'Condition Guide', 'Deployment Locations', 'Evidence Strength Analyzer', 'Military Job Hazard Identifier'] },
+  { label: 'Package & Export', features: ['Full Claim Packet Builder', 'Document Vault', 'Evidence Scanner', 'Evidence Strength Analyzer', 'Health Summary & Timeline', 'Interactive Body Map', 'Appeals & Decision Review Guide', 'Deadlines Tracker', 'Service History Manager', 'Claim Journey Tracker'] },
 ];
+
 
 /**
  * Animated rotating conic-gradient border for the featured card.
@@ -102,7 +39,7 @@ function RotatingBorderCard({ children }: { children: React.ReactNode }) {
 
   return (
     <motion.div
-      variants={fadeInUp}
+      variants={fanOut}
       whileHover={{
         y: -8,
         transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
@@ -148,7 +85,7 @@ function CompetitorCard({
 }) {
   return (
     <motion.div
-      variants={fadeInUp}
+      variants={fanOut}
       whileHover={{
         y: -4,
         transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
@@ -189,14 +126,111 @@ function CompetitorCard({
   );
 }
 
-export function Pricing() {
+function FeatureTabs() {
   const [showFeatures, setShowFeatures] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
 
   return (
-    <section id="pricing" className="py-16 md:py-24 px-4" style={{ backgroundColor: LANDING_BG }}>
-      <div className="max-w-4xl mx-auto">
+    <motion.div
+      className="text-center"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+    >
+      <button
+        onClick={() => setShowFeatures(!showFeatures)}
+        className="inline-flex items-center gap-2 bg-transparent border-none cursor-pointer text-sm font-medium transition-colors"
+        style={{ color: GOLD }}
+      >
+        What's included in Premium?
+        <motion.span
+          animate={{ rotate: showFeatures ? 180 : 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <ChevronDown size={16} />
+        </motion.span>
+      </button>
+
+      <AnimatePresence>
+        {showFeatures && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: EASE_SMOOTH }}
+            className="overflow-hidden"
+          >
+            {/* Tab bar */}
+            <div className="mt-8 mb-6 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+              <style>{`.hide-scrollbar::-webkit-scrollbar { display: none; }`}</style>
+              <div className="hide-scrollbar flex gap-2 justify-center flex-nowrap min-w-max px-2">
+                {FEATURE_CATEGORIES.map((cat, i) => (
+                  <button
+                    key={cat.label}
+                    onClick={() => setActiveTab(i)}
+                    className="px-4 py-2 rounded-full text-xs font-medium cursor-pointer transition-all duration-200 whitespace-nowrap"
+                    style={{
+                      backgroundColor: i === activeTab ? 'rgba(197,165,90,0.12)' : 'transparent',
+                      border: i === activeTab ? '1px solid rgba(197,165,90,0.25)' : '1px solid rgba(255,255,255,0.08)',
+                      color: i === activeTab ? GOLD : 'rgba(255,255,255,0.4)',
+                    }}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Content area */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.2 }}
+                className="relative text-left max-w-3xl mx-auto"
+              >
+                <div
+                  className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 overflow-y-auto pr-2"
+                  style={{ maxHeight: '260px' }}
+                >
+                  {FEATURE_CATEGORIES[activeTab].features.map((f) => (
+                    <div key={f} className="flex items-center gap-2.5 py-1">
+                      <Check size={14} className="shrink-0" style={{ color: GOLD }} />
+                      <span className="text-sm" style={{ color: TEXT_BRIGHT }}>{f}</span>
+                    </div>
+                  ))}
+                </div>
+                {/* Bottom fade mask if content overflows */}
+                <div
+                  className="absolute bottom-0 left-0 right-0 h-8 pointer-events-none"
+                  style={{
+                    background: `linear-gradient(to top, ${LANDING_BG}, transparent)`,
+                  }}
+                />
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Bottom note */}
+            <p className="mt-4 text-xs" style={{ color: TEXT_SECONDARY }}>
+              All 85+ tools included in every plan.
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
+export function Pricing() {
+
+  return (
+    <section id="pricing" className="py-10 md:py-14 px-4" style={{ backgroundColor: LANDING_BG }}>
+      <div className="max-w-5xl mx-auto">
         <motion.h2
-          className="text-center text-3xl md:text-5xl text-white mb-4"
+          className="text-center text-3xl md:text-4xl lg:text-5xl text-white mb-4"
           style={HEADING_H2_STYLE}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -326,20 +360,22 @@ export function Pricing() {
                 ))}
               </ul>
 
-              <motion.div
-                whileHover={{
-                  boxShadow: '0 4px 20px rgba(197,165,90,0.35)',
-                }}
-                style={{ borderRadius: '9999px' }}
-              >
-                <Link
-                  to="/auth"
-                  className="block text-center rounded-full px-6 py-3 text-sm font-semibold text-black no-underline"
-                  style={{ background: GOLD_GRADIENT }}
+              <MagneticButton>
+                <motion.div
+                  whileHover={{
+                    boxShadow: '0 4px 20px rgba(197,165,90,0.35)',
+                  }}
+                  style={{ borderRadius: '9999px' }}
                 >
-                  Get Started — $14.99/mo
-                </Link>
-              </motion.div>
+                  <Link
+                    to="/auth"
+                    className="block text-center rounded-full px-6 py-3 text-sm font-semibold text-black no-underline"
+                    style={{ background: GOLD_GRADIENT }}
+                  >
+                    Get Started — $14.99/mo
+                  </Link>
+                </motion.div>
+              </MagneticButton>
             </div>
           </RotatingBorderCard>
 
@@ -356,61 +392,8 @@ export function Pricing() {
           />
         </motion.div>
 
-        {/* Expandable feature list */}
-        <motion.div
-          className="text-center"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <button
-            onClick={() => setShowFeatures(!showFeatures)}
-            className="inline-flex items-center gap-2 bg-transparent border-none cursor-pointer text-sm font-medium transition-colors"
-            style={{ color: GOLD }}
-          >
-            What's included in Premium?
-            <motion.span
-              animate={{ rotate: showFeatures ? 180 : 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <ChevronDown size={16} />
-            </motion.span>
-          </button>
-
-          <AnimatePresence>
-            {showFeatures && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3, ease: EASE_SMOOTH }}
-                className="overflow-hidden"
-              >
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6 mt-8 text-left max-w-3xl mx-auto">
-                  {INCLUDED_FEATURES.map((group) => (
-                    <div key={group.category}>
-                      <p
-                        className="text-[10px] font-bold uppercase tracking-widest mb-2"
-                        style={{ color: GOLD }}
-                      >
-                        {group.category}
-                      </p>
-                      <ul className="space-y-1.5">
-                        {group.features.map((f) => (
-                          <li key={f} className="flex items-center gap-2.5 text-sm">
-                            <Check size={14} className="shrink-0" style={{ color: GOLD }} />
-                            <span style={{ color: TEXT_BRIGHT }}>{f}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
+        {/* Expandable feature list — tabbed categories */}
+        <FeatureTabs />
       </div>
     </section>
   );

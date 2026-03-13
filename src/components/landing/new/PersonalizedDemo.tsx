@@ -109,7 +109,7 @@ export function PersonalizedDemo() {
   const allTools = [...new Set(selectedConditions.flatMap((c) => c.tools))].slice(0, 8);
 
   return (
-    <section className="relative py-24 px-4" style={{ backgroundColor: '#0F0F0F' }}>
+    <section className="relative py-10 md:py-14 px-4" style={{ backgroundColor: '#0F0F0F' }}>
       {/* Top separator */}
       <div
         className="absolute inset-x-0 top-0 h-px"
@@ -130,7 +130,7 @@ export function PersonalizedDemo() {
               See It In Action
             </span>
           </motion.div>
-          <motion.h2 variants={fadeInUp} style={HEADING_H2_STYLE}>
+          <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl lg:text-5xl text-white" style={HEADING_H2_STYLE}>
             Your Claim,{' '}
             <span style={GOLD_GRADIENT_TEXT}>Personalized</span>
           </motion.h2>

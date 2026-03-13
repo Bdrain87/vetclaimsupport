@@ -3,6 +3,7 @@ import { Home, Shield, Activity, Wrench, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { isWeb } from '@/lib/platform';
 import { selectionTap } from '@/lib/haptics';
+import { useSmartReminders } from '@/hooks/useSmartReminders';
 
 const tabs = [
   { to: isWeb ? '/app' : '/', icon: Home, label: 'Home' },
@@ -20,6 +21,8 @@ const isTabActive = (tabPath: string, pathname: string) => {
 export function BottomTabBar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const reminders = useSmartReminders();
+  const hasHighPriorityReminder = reminders.some((r) => r.priority === 'high');
 
   // Hide on onboarding
   if (location.pathname === '/onboarding') {
@@ -56,6 +59,9 @@ export function BottomTabBar() {
               {isActive && (
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full"
                      style={{ background: 'var(--gold-gradient)' }} />
+              )}
+              {tab.label === 'Home' && hasHighPriorityReminder && !isActive && (
+                <div className="absolute top-1.5 right-1/2 translate-x-3.5 w-2 h-2 rounded-full bg-destructive" />
               )}
               <tab.icon
                 className={cn(

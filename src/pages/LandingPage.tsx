@@ -14,6 +14,16 @@ import { Pricing } from '@/components/landing/new/Pricing';
 import { FAQ } from '@/components/landing/new/FAQ';
 import { FinalCTA } from '@/components/landing/new/FinalCTA';
 import { LandingFooter } from '@/components/landing/new/LandingFooter';
+import { SECTION_DIVIDER, NOISE_OVERLAY, MESH_GRADIENT_1, MESH_GRADIENT_2, MESH_GRADIENT_3 } from '@/lib/landing-animations';
+
+function SectionDivider() {
+  return (
+    <div
+      className="max-w-5xl mx-auto h-px"
+      style={{ background: SECTION_DIVIDER }}
+    />
+  );
+}
 
 export default function LandingPage() {
   useEffect(() => {
@@ -43,20 +53,78 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#0A0A0A' }}>
+    <div className="min-h-screen relative" style={{ backgroundColor: '#0A0A0A' }}>
+      {/* Noise texture overlay — subtle film grain for premium depth */}
+      <div
+        className="fixed inset-0 z-50 pointer-events-none"
+        style={{
+          backgroundImage: NOISE_OVERLAY,
+          backgroundRepeat: 'repeat',
+          backgroundSize: '256px 256px',
+          opacity: 0.03,
+          mixBlendMode: 'overlay',
+        }}
+      />
+
+      {/* Ambient gradient pools for spatial depth */}
+      <div
+        className="fixed pointer-events-none"
+        style={{
+          top: '15%',
+          left: '-10%',
+          width: '60%',
+          height: '50%',
+          background: MESH_GRADIENT_1,
+          filter: 'blur(60px)',
+          zIndex: 0,
+        }}
+      />
+      <div
+        className="fixed pointer-events-none"
+        style={{
+          top: '55%',
+          right: '-10%',
+          width: '50%',
+          height: '40%',
+          background: MESH_GRADIENT_2,
+          filter: 'blur(80px)',
+          zIndex: 0,
+        }}
+      />
+      <div
+        className="fixed pointer-events-none"
+        style={{
+          top: '80%',
+          left: '20%',
+          width: '60%',
+          height: '30%',
+          background: MESH_GRADIENT_3,
+          filter: 'blur(70px)',
+          zIndex: 0,
+        }}
+      />
+
       <StickyNav />
-      <main>
+      <main className="relative z-10">
         <Hero />
         <TrustMarquee />
         <SocialProof />
         <AIHero />
+        <SectionDivider />
         <HowItWorks />
+        <SectionDivider />
         <OnlyInVCS />
+        <SectionDivider />
         <ProductShowcase />
+        <SectionDivider />
         <CompetitorComparison />
+        <SectionDivider />
         <PersonalizedDemo />
+        <SectionDivider />
         <BuiltByVeteran />
+        <SectionDivider />
         <Pricing />
+        <SectionDivider />
         <FAQ />
         <FinalCTA />
       </main>

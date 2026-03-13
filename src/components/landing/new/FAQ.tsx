@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import {
   HEADING_H2_STYLE,
   fadeInUp,
+  fadeInRight,
   staggerContainerFast,
   LANDING_BG,
   LANDING_BG_CARD,
@@ -66,7 +67,7 @@ function FAQAccordionItem({ item }: { item: FAQItem }) {
 
   return (
     <motion.div
-      variants={fadeInUp}
+      variants={fadeInRight}
       className="border-b border-white/5 last:border-b-0"
     >
       <button
@@ -106,7 +107,7 @@ function FAQAccordionItem({ item }: { item: FAQItem }) {
 
 export function FAQ() {
   return (
-    <section id="faq" className="relative py-20 md:py-28 px-4" style={{ backgroundColor: LANDING_BG }}>
+    <section id="faq" className="relative py-10 md:py-14 px-4" style={{ backgroundColor: LANDING_BG }}>
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <motion.div
@@ -118,7 +119,7 @@ export function FAQ() {
         >
           <motion.h2
             variants={fadeInUp}
-            className="text-3xl md:text-5xl text-white"
+            className="text-3xl md:text-4xl lg:text-5xl text-white"
             style={HEADING_H2_STYLE}
           >
             Frequently Asked{' '}

@@ -8,6 +8,8 @@ import {
   HEADING_H2_STYLE,
   PILL_STYLE,
   fadeInUp,
+  fadeInLeft,
+  fadeInRight,
   staggerContainerFast,
   LANDING_BG,
   LANDING_BG_CARD,
@@ -19,6 +21,7 @@ import {
   CARD_SHADOW,
   viewportOnce,
 } from '@/lib/landing-animations';
+import { TiltCard } from './TiltCard';
 import {
   Brain,
   FileText,
@@ -81,7 +84,7 @@ const AI_TOOLS = [
 
 export function AIHero() {
   return (
-    <section className="relative py-20 md:py-28 px-4" style={{ backgroundColor: LANDING_BG }}>
+    <section className="relative py-10 md:py-14 px-4" style={{ backgroundColor: LANDING_BG }}>
       {/* Top accent line */}
       <div
         className="absolute inset-x-0 top-0 h-px"
@@ -95,14 +98,14 @@ export function AIHero() {
           whileInView="visible"
           viewport={viewportOnce}
           variants={staggerContainerFast}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <motion.div variants={fadeInUp} className="mb-4">
             <span style={PILL_STYLE}>AI-Powered Preparation</span>
           </motion.div>
           <motion.h2
             variants={fadeInUp}
-            className="text-3xl md:text-5xl text-white"
+            className="text-3xl md:text-4xl lg:text-5xl text-white"
             style={HEADING_H2_STYLE}
           >
             AI That Works With{' '}
@@ -206,23 +209,26 @@ export function AIHero() {
           variants={staggerContainerFast}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
         >
-          {AI_TOOLS.map((tool) => (
+          {AI_TOOLS.map((tool, i) => (
             <motion.div
               key={tool.title}
-              variants={fadeInUp}
-              className="rounded-2xl p-6 border border-white/5 hover:border-white/10 transition-colors"
-              style={{ backgroundColor: LANDING_BG_CARD, boxShadow: CARD_SHADOW }}
+              variants={i % 2 === 0 ? fadeInLeft : fadeInRight}
             >
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
-                style={{ backgroundColor: `${GOLD}15` }}
+              <TiltCard
+                className="relative rounded-2xl p-6 border border-white/5 hover:border-white/10 transition-colors h-full"
+                style={{ backgroundColor: LANDING_BG_CARD, boxShadow: CARD_SHADOW }}
               >
-                <tool.icon className="h-5 w-5" style={{ color: GOLD }} />
-              </div>
-              <h3 className="text-base font-semibold text-white mb-2">{tool.title}</h3>
-              <p className="text-sm leading-relaxed" style={{ color: TEXT_SECONDARY }}>
-                {tool.description}
-              </p>
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
+                  style={{ backgroundColor: `${GOLD}15` }}
+                >
+                  <tool.icon className="h-5 w-5" style={{ color: GOLD }} />
+                </div>
+                <h3 className="text-base font-semibold text-white mb-2">{tool.title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: TEXT_SECONDARY }}>
+                  {tool.description}
+                </p>
+              </TiltCard>
             </motion.div>
           ))}
         </motion.div>

@@ -10,6 +10,7 @@ import {
   LANDING_BG,
   TEXT_BRIGHT,
 } from '@/lib/landing-animations';
+import { MagneticButton } from './MagneticButton';
 
 export function FinalCTA() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -24,7 +25,7 @@ export function FinalCTA() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-12 md:py-16 overflow-hidden"
+      className="relative py-14 md:py-20 overflow-hidden"
       style={{ backgroundColor: LANDING_BG }}
     >
       <motion.div
@@ -51,21 +52,21 @@ export function FinalCTA() {
       <div className="relative z-10 mx-auto max-w-3xl px-4 sm:px-6 text-center">
         <motion.div
           className="mb-8"
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+          transition={{ type: 'spring', stiffness: 200, damping: 20, duration: 0.8 }}
         >
           <span style={PILL_STYLE}>Get Started Today</span>
         </motion.div>
 
         <motion.h2
-          className="text-4xl md:text-5xl lg:text-6xl text-white mb-6"
+          className="text-4xl md:text-5xl text-white mb-6"
           style={HEADING_H2_STYLE}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: EASE_SMOOTH }}
+          transition={{ duration: 0.8, ease: EASE_SMOOTH }}
         >
           Start Building{' '}
           <span className="block md:inline" style={GOLD_GRADIENT_TEXT}>
@@ -90,33 +91,35 @@ export function FinalCTA() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <motion.div
-            className="inline-block"
-            whileHover={{
-              scale: 1.05,
-              boxShadow: '0 0 40px rgba(197, 165, 90, 0.35), 0 0 80px rgba(197, 165, 90, 0.15)',
-            }}
-            whileTap={{ scale: 0.97 }}
-            animate={{
-              boxShadow: [
-                '0 0 20px rgba(197, 165, 90, 0.08)',
-                '0 0 40px rgba(197, 165, 90, 0.2)',
-                '0 0 20px rgba(197, 165, 90, 0.08)',
-              ],
-            }}
-            transition={{
-              boxShadow: { duration: 3, repeat: Infinity, ease: 'easeInOut' },
-            }}
-            style={{ borderRadius: '9999px' }}
-          >
-            <Link
-              to="/auth"
-              className="inline-block px-12 py-4 text-lg font-semibold text-black no-underline"
-              style={{ background: GOLD_GRADIENT, borderRadius: '9999px' }}
+          <MagneticButton>
+            <motion.div
+              className="inline-block"
+              whileHover={{
+                scale: 1.05,
+                boxShadow: '0 0 40px rgba(197, 165, 90, 0.35), 0 0 80px rgba(197, 165, 90, 0.15)',
+              }}
+              whileTap={{ scale: 0.97 }}
+              animate={{
+                boxShadow: [
+                  '0 0 20px rgba(197, 165, 90, 0.08)',
+                  '0 0 40px rgba(197, 165, 90, 0.2)',
+                  '0 0 20px rgba(197, 165, 90, 0.08)',
+                ],
+              }}
+              transition={{
+                boxShadow: { duration: 3, repeat: Infinity, ease: 'easeInOut' },
+              }}
+              style={{ borderRadius: '9999px' }}
             >
-              Start Free
-            </Link>
-          </motion.div>
+              <Link
+                to="/auth"
+                className="inline-block px-12 py-4 text-lg font-semibold text-black no-underline"
+                style={{ background: GOLD_GRADIENT, borderRadius: '9999px' }}
+              >
+                Start Free
+              </Link>
+            </motion.div>
+          </MagneticButton>
         </motion.div>
 
         <motion.p

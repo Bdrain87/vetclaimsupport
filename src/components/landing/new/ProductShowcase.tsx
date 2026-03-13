@@ -161,19 +161,14 @@ export function ProductShowcase() {
   return (
     <section
       id="features"
-      className="py-16 md:py-24"
+      className="py-10 md:py-14"
       style={{ backgroundColor: LANDING_BG, scrollMarginTop: '5rem' }}
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         {/* Header */}
         <motion.h2
-          className="text-white text-center mb-4 px-4"
-          style={{
-            ...HEADING_H2_STYLE,
-            fontSize: 'clamp(2rem, 4vw, 3.5rem)',
-            lineHeight: 1.1,
-            letterSpacing: '-0.02em',
-          }}
+          className="text-white text-center text-3xl md:text-4xl lg:text-5xl mb-4 px-4"
+          style={HEADING_H2_STYLE}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -183,7 +178,7 @@ export function ProductShowcase() {
           <span style={GOLD_GRADIENT_TEXT}>prepare</span>
         </motion.h2>
         <motion.p
-          className="text-center mb-16 text-lg max-w-2xl mx-auto"
+          className="text-center mb-12 text-lg max-w-2xl mx-auto"
           style={{ color: TEXT_SECONDARY }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

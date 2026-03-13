@@ -51,7 +51,7 @@ function GoldFlag() {
 
 export function BuiltByVeteran() {
   return (
-    <section className="py-16 md:py-24 px-4" style={{ backgroundColor: LANDING_BG }}>
+    <section className="py-10 md:py-14 px-4" style={{ backgroundColor: LANDING_BG }}>
       <div className="mx-auto max-w-3xl">
         {/* Gold flag */}
         <motion.div
@@ -70,10 +70,10 @@ export function BuiltByVeteran() {
             borderLeft: '3px solid transparent',
             borderImage: 'linear-gradient(180deg, #D9BE6C, #C5A55A, #A68B3C, #C5A55A, #D9BE6C) 1',
           }}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: -40 }}
+          whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: EASE_SMOOTH }}
+          transition={{ duration: 0.7, ease: EASE_SMOOTH }}
         >
           <p
             className="text-lg md:text-xl italic leading-relaxed mb-6"

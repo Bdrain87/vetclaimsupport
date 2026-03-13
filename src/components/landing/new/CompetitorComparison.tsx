@@ -6,6 +6,7 @@ import { motion } from 'motion/react';
 import {
   HEADING_H2_STYLE,
   fadeInUp,
+  clipReveal,
   staggerContainerFast,
   LANDING_BG,
   LANDING_BG_CARD,
@@ -101,7 +102,7 @@ function CellIcon({ value }: { value: string }) {
 
 export function CompetitorComparison() {
   return (
-    <section className="relative py-20 md:py-28 px-4" style={{ backgroundColor: LANDING_BG }}>
+    <section className="relative py-10 md:py-14 px-4" style={{ backgroundColor: LANDING_BG }}>
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <motion.div
@@ -113,7 +114,7 @@ export function CompetitorComparison() {
         >
           <motion.h2
             variants={fadeInUp}
-            className="text-3xl md:text-5xl text-white"
+            className="text-3xl md:text-4xl lg:text-5xl text-white"
             style={HEADING_H2_STYLE}
           >
             How VCS{' '}
@@ -153,7 +154,7 @@ export function CompetitorComparison() {
           {ROWS.map((row, i) => (
             <motion.div
               key={row.feature}
-              variants={fadeInUp}
+              variants={clipReveal}
               className="grid grid-cols-1 sm:grid-cols-[1.4fr_1fr_1fr_1fr] gap-0 border-b border-white/5 last:border-b-0"
               style={{ backgroundColor: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)' }}
             >

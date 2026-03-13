@@ -1,7 +1,8 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE, APP_STORE_URL, LANDING_BG } from '@/lib/landing-animations';
+import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE, APP_STORE_URL, LANDING_BG, GOLD } from '@/lib/landing-animations';
+import { MagneticButton } from './MagneticButton';
 
 // Rotating words removed — headline is now static with gold accent on "Your Benefits."
 
@@ -94,7 +95,7 @@ export function Hero() {
       className="relative flex flex-col items-center justify-center overflow-hidden"
       style={{ backgroundColor: LANDING_BG }}
     >
-      {/* Parallax background */}
+      {/* Parallax background with product tease */}
       <motion.div
         className="absolute inset-0"
         style={{
@@ -107,7 +108,36 @@ export function Hero() {
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 text-center py-16 md:py-20">
+      {/* Floating app mockup behind text — product visibility */}
+      <motion.div
+        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        style={{ y: bgY }}
+      >
+        <div
+          className="w-[320px] h-[640px] rounded-[40px] border opacity-[0.04]"
+          style={{
+            borderColor: 'rgba(197,165,90,0.3)',
+            background: 'linear-gradient(145deg, rgba(197,165,90,0.08), rgba(10,10,10,0.5))',
+            filter: 'blur(1px)',
+            boxShadow: '0 0 80px rgba(197,165,90,0.05)',
+          }}
+        >
+          {/* Simplified app screen lines */}
+          <div className="p-8 pt-16 space-y-4">
+            <div className="h-3 rounded-full bg-white/[0.03] w-2/3" />
+            <div className="h-2 rounded-full bg-white/[0.02] w-full" />
+            <div className="h-2 rounded-full bg-white/[0.02] w-4/5" />
+            <div className="mt-6 grid grid-cols-2 gap-3">
+              {[1,2,3,4].map(n => (
+                <div key={n} className="h-16 rounded-xl bg-white/[0.02]" />
+              ))}
+            </div>
+            <div className="mt-4 h-10 rounded-full" style={{ background: 'rgba(197,165,90,0.04)' }} />
+          </div>
+        </div>
+      </motion.div>
+
+      <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 text-center py-14 md:py-20">
         {/* Intro line */}
         <motion.p
           className="uppercase tracking-[0.25em] text-sm font-medium mb-6"
@@ -168,25 +198,27 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          <motion.div
-            whileHover={{
-              y: -2,
-              boxShadow: '0 8px 24px rgba(197, 165, 90, 0.35)',
-            }}
-            whileTap={{ y: 0 }}
-            style={{ borderRadius: '12px' }}
-          >
-            <Link
-              to="/auth"
-              className="inline-block px-8 py-3.5 text-base font-semibold text-black no-underline"
-              style={{
-                background: 'linear-gradient(135deg, #A68B3C, #C5A55A, #D9BE6C, #C5A55A, #A68B3C)',
-                borderRadius: '12px',
+          <MagneticButton>
+            <motion.div
+              whileHover={{
+                y: -2,
+                boxShadow: '0 8px 24px rgba(197, 165, 90, 0.35)',
               }}
+              whileTap={{ y: 0 }}
+              style={{ borderRadius: '12px' }}
             >
-              Start Free
-            </Link>
-          </motion.div>
+              <Link
+                to="/auth"
+                className="inline-block px-8 py-3.5 text-base font-semibold text-black no-underline"
+                style={{
+                  background: 'linear-gradient(135deg, #A68B3C, #C5A55A, #D9BE6C, #C5A55A, #A68B3C)',
+                  borderRadius: '12px',
+                }}
+              >
+                Start Free
+              </Link>
+            </motion.div>
+          </MagneticButton>
           <motion.button
             onClick={scrollToHowItWorks}
             className="inline-block px-8 py-3.5 text-base font-semibold text-white bg-transparent cursor-pointer"

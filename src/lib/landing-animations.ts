@@ -230,21 +230,26 @@ export const NAV_GLASS = {
   borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
 } as React.CSSProperties;
 
-// --- HEADING STYLE TOKENS ---
+// --- HEADING STYLE TOKENS (Inter font for landing page) ---
+const HEADING_FONT = "'Inter', system-ui, -apple-system, sans-serif";
+
 export const HEADING_H1_STYLE = {
-  letterSpacing: '-0.03em',
+  fontFamily: HEADING_FONT,
+  letterSpacing: '-0.04em',
   fontWeight: 600,
   lineHeight: 1.1,
 } as React.CSSProperties;
 
 export const HEADING_H2_STYLE = {
-  letterSpacing: '-0.025em',
+  fontFamily: HEADING_FONT,
+  letterSpacing: '-0.035em',
   fontWeight: 500,
   lineHeight: 1.15,
 } as React.CSSProperties;
 
 export const HEADING_H3_STYLE = {
-  letterSpacing: '-0.02em',
+  fontFamily: HEADING_FONT,
+  letterSpacing: '-0.025em',
   fontWeight: 500,
   lineHeight: 1.2,
 } as React.CSSProperties;
@@ -279,6 +284,41 @@ export const MARQUEE_STYLES = `
 }
 `;
 
+// --- SPACING TOKENS ---
+export const SECTION_PY_COMPACT = 'py-4 md:py-6';
+export const SECTION_PY_STANDARD = 'py-10 md:py-14';
+export const SECTION_PY_HERO = 'py-14 md:py-20';
+export const SECTION_DIVIDER = 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.06) 70%, transparent 100%)';
+
 // --- VIEWPORT PRESETS ---
 export const viewportOnce: { once: true; margin: string } = { once: true, margin: '-80px' };
 export const viewportOnceEager = { once: true, amount: 0.2 };
+
+// --- NOISE OVERLAY (Linear/Raycast-style film grain) ---
+export const NOISE_OVERLAY = `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E")`;
+
+// --- AMBIENT MESH GRADIENTS (depth pools behind key sections) ---
+export const MESH_GRADIENT_1 = 'radial-gradient(ellipse 80% 50% at 30% 50%, rgba(197,165,90,0.06) 0%, transparent 70%)';
+export const MESH_GRADIENT_2 = 'radial-gradient(ellipse 60% 60% at 70% 40%, rgba(100,130,180,0.04) 0%, transparent 70%)';
+export const MESH_GRADIENT_3 = 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(197,165,90,0.05) 0%, transparent 60%)';
+
+// --- CLIP-REVEAL ANIMATION (wipe-in from left) ---
+export const clipReveal: Variants = {
+  hidden: { opacity: 0, clipPath: 'inset(0 100% 0 0)' },
+  visible: {
+    opacity: 1,
+    clipPath: 'inset(0 0% 0 0)',
+    transition: { duration: 0.7, ease: EASE_SMOOTH },
+  },
+};
+
+// --- FAN-OUT ANIMATION (cards fan from center) ---
+export const fanOut: Variants = {
+  hidden: { opacity: 0, scale: 0.9, rotate: 3 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    rotate: 0,
+    transition: { duration: 0.7, ease: EASE_DEVIN },
+  },
+};
