@@ -117,7 +117,7 @@ export function TrustMarquee() {
                 `,
                 backgroundSize: '200% 100%',
                 backgroundPosition: '-200% center',
-                animation: 'trust-shimmer 4s ease-in-out infinite',
+                animation: 'trust-shimmer 8s ease-in-out infinite',
                 animationDelay: `${Math.random() * 3}s`,
               }}
             >
