@@ -50,10 +50,14 @@ export function resolveDBQ(condition: {
   if (condition.diagnosticCode) codes.add(condition.diagnosticCode);
   if (condition.diagnosticCodes) condition.diagnosticCodes.forEach((c) => codes.add(c));
 
-  // Strategy 2: diagnostic code overlap
+  // Strategy 2: diagnostic code overlap (range-aware)
   if (codes.size > 0) {
     const byCode = dbqQuickReference.find((d) =>
-      d.diagnosticCodes.some((dc) => codes.has(dc)),
+      d.diagnosticCodes.some((dc) =>
+        Array.from(codes).some((code) =>
+          code === dc || dcMatches(dc, code) || dcMatches(code, dc),
+        ),
+      ),
     );
     if (byCode) return byCode;
   }
@@ -157,7 +161,9 @@ export function resolveLegacyRatingCriteria(condition: {
 
   if (codes.size > 0) {
     const byCode = conditionRatingCriteria.find((c) =>
-      Array.from(codes).some((code) => dcMatches(c.diagnosticCode, code)),
+      Array.from(codes).some((code) =>
+        dcMatches(c.diagnosticCode, code) || dcMatches(code, c.diagnosticCode),
+      ),
     );
     if (byCode) return byCode;
   }

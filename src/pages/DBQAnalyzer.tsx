@@ -11,16 +11,18 @@ import { cn } from '@/lib/utils';
 import { PageContainer } from '@/components/PageContainer';
 import { dbqQuickReference, type DBQReference } from '@/data/vaResources/dbqReference';
 import { conditionRatingCriteria, type ConditionRatingCriteria, type RatingLevel } from '@/data/ratingCriteria';
-import { findDBQsForUserCondition } from '@/utils/dbqLookup';
+import { findDBQsForUserCondition, resolveAllMatchingCriteria } from '@/utils/dbqLookup';
 import { useClaims } from '@/hooks/useClaims';
 import useAppStore from '@/store/useAppStore';
 
-// Map DBQ IDs to rating criteria condition IDs
+// Map DBQ IDs to rating criteria condition IDs (range-aware)
 function findRatingCriteria(dbq: DBQReference): ConditionRatingCriteria | undefined {
-  return conditionRatingCriteria.find(c =>
-    c.conditionId === dbq.id ||
-    dbq.diagnosticCodes.some(dc => c.diagnosticCode === dc || c.diagnosticCode.includes(dc))
-  );
+  // Direct conditionId match
+  const byId = conditionRatingCriteria.find(c => c.conditionId === dbq.id);
+  if (byId) return byId;
+  // Use resolveAllMatchingCriteria for range-aware DC matching
+  const all = resolveAllMatchingCriteria(dbq);
+  return all.length > 0 ? all[0] : undefined;
 }
 
 // Rating level color based on percentage — smooth cool→warm→gold ramp

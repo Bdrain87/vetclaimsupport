@@ -577,7 +577,7 @@ Important: Focus on the medical findings and how they align with 38 CFR Part 4 r
                 {uploadPreview && (
                   <img src={uploadPreview} alt="Uploaded DBQ" className="w-full rounded-lg max-h-48 object-contain bg-black/5" />
                 )}
-                <UploadAnalysisResult result={uploadResult} hasCriteria />
+                <UploadAnalysisResult result={uploadResult} />
               </div>
             )}
           </div>
@@ -776,7 +776,7 @@ Important: Focus on the medical findings and how they align with 38 CFR Part 4 r
             )}
             {uploadResult && !isUploadProcessing && (
               <div className="mt-2">
-                <UploadAnalysisResult result={uploadResult} hasCriteria />
+                <UploadAnalysisResult result={uploadResult} />
               </div>
             )}
           </div>
@@ -902,8 +902,17 @@ Important: Focus on the medical findings and how they align with 38 CFR Part 4 r
 
 // --- Upload Analysis Result Component ---
 
-function UploadAnalysisResult({ result, hasCriteria = true }: { result: DBQImageAnalysis; hasCriteria?: boolean }) {
+function UploadAnalysisResult({ result }: { result: DBQImageAnalysis }) {
   const uploadColor = result.suggestedPercent != null ? getRatingColor(result.suggestedPercent) : null;
+
+  // Self-resolve criteria availability from the result itself — never depend on parent state timing
+  const hasCriteria = useMemo(() => {
+    if (result.suggestedPercent != null) return true; // AI already matched criteria
+    if (!result.formNumber && !result.conditionName) return false;
+    const dbq = resolveDBQ({ id: '', name: result.conditionName || '', formNumber: result.formNumber });
+    if (!dbq) return false;
+    return resolveAllMatchingCriteria(dbq).length > 0;
+  }, [result]);
 
   return (
     <div className="space-y-3">
@@ -913,7 +922,7 @@ function UploadAnalysisResult({ result, hasCriteria = true }: { result: DBQImage
       </div>
 
       {/* Color-coded rating alignment */}
-      {hasCriteria && uploadColor && result.suggestedPercent != null && (
+      {uploadColor && result.suggestedPercent != null && (
         <div
           className="rounded-xl border p-3 space-y-2 bg-card"
           style={{ borderColor: `${uploadColor.hex}50` }}
@@ -941,8 +950,8 @@ function UploadAnalysisResult({ result, hasCriteria = true }: { result: DBQImage
         </div>
       )}
 
-      {/* No criteria note */}
-      {!hasCriteria && (
+      {/* No criteria note — only when AI couldn't determine rating AND no local criteria exist */}
+      {!hasCriteria && result.suggestedPercent == null && (
         <div className="p-3 rounded-lg bg-amber-500/5 border border-amber-500/20 text-xs text-muted-foreground flex gap-1.5">
           <AlertTriangle className="h-3.5 w-3.5 text-amber-400 shrink-0 mt-0.5" />
           <span>Rating criteria not available for this condition. Rating alignment cannot be determined. Use the Rating Guidance tool for criteria details.</span>
