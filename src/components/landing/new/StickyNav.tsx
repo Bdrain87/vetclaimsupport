@@ -103,28 +103,12 @@ export function StickyNav() {
         }}
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-          {/* Logo */}
+          {/* Logo — icon only, brand name lives in the hero */}
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="flex items-center gap-2.5 cursor-pointer bg-transparent border-none"
+            className="flex items-center cursor-pointer bg-transparent border-none"
           >
-            <img src="/app-icon.png" alt="Vet Claim Support" width={32} height={32} style={{ borderRadius: 8 }} />
-            <span
-              className="font-bold text-lg"
-              style={{
-                fontFamily: "'Inter', system-ui, sans-serif",
-                letterSpacing: '-0.02em',
-                background: 'linear-gradient(90deg, #C5A55A 0%, #C5A55A 40%, #FFF8E7 50%, #C5A55A 60%, #C5A55A 100%)',
-                backgroundSize: '250% 100%',
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                animation: 'nav-shimmer 4s linear infinite',
-              }}
-            >
-              Vet Claim Support
-            </span>
-            <style>{`@keyframes nav-shimmer { 0% { background-position: 100% center; } 100% { background-position: -100% center; } }`}</style>
+            <img src="/app-icon.png" alt="Vet Claim Support" width={36} height={36} style={{ borderRadius: 10 }} />
           </button>
 
           {/* Desktop links */}
