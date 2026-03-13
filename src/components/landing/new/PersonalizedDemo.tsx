@@ -109,7 +109,7 @@ export function PersonalizedDemo() {
   const allTools = [...new Set(selectedConditions.flatMap((c) => c.tools))].slice(0, 8);
 
   return (
-    <section className="relative py-10 md:py-14 px-4" style={{ backgroundColor: '#0F0F0F' }}>
+    <section className="relative py-16 md:py-24 px-4" style={{ backgroundColor: '#0F0F0F' }}>
       {/* Top separator */}
       <div
         className="absolute inset-x-0 top-0 h-px"

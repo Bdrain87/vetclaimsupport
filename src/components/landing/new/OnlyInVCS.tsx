@@ -69,7 +69,7 @@ const UNIQUE_FEATURES = [
 
 export function OnlyInVCS() {
   return (
-    <section id="features" className="relative py-10 md:py-14 px-4" style={{ backgroundColor: LANDING_BG }}>
+    <section id="features" className="relative py-16 md:py-24 px-4" style={{ backgroundColor: LANDING_BG }}>
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <motion.div
@@ -87,9 +87,15 @@ export function OnlyInVCS() {
             className="text-3xl md:text-4xl lg:text-5xl text-white"
             style={HEADING_H2_STYLE}
           >
-            Features{' '}
-            <span style={GOLD_GRADIENT_TEXT}>No Other Tool Has</span>
+            <span style={GOLD_GRADIENT_TEXT}>Purpose-Built</span> for VA Claims
           </motion.h2>
+          <motion.p
+            variants={fadeInUp}
+            className="mt-4 text-lg max-w-2xl mx-auto"
+            style={{ color: TEXT_SECONDARY }}
+          >
+            Every tool designed around the VA disability claims process — not adapted from something else.
+          </motion.p>
         </motion.div>
 
         {/* 2x3 grid */}

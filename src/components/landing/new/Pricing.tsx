@@ -193,8 +193,7 @@ function FeatureTabs() {
                 className="relative text-left max-w-3xl mx-auto"
               >
                 <div
-                  className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 overflow-y-auto pr-2"
-                  style={{ maxHeight: '260px' }}
+                  className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2.5 px-4"
                 >
                   {FEATURE_CATEGORIES[activeTab].features.map((f) => (
                     <div key={f} className="flex items-center gap-2.5 py-1">
@@ -203,13 +202,6 @@ function FeatureTabs() {
                     </div>
                   ))}
                 </div>
-                {/* Bottom fade mask if content overflows */}
-                <div
-                  className="absolute bottom-0 left-0 right-0 h-8 pointer-events-none"
-                  style={{
-                    background: `linear-gradient(to top, ${LANDING_BG}, transparent)`,
-                  }}
-                />
               </motion.div>
             </AnimatePresence>
 
@@ -227,7 +219,7 @@ function FeatureTabs() {
 export function Pricing() {
 
   return (
-    <section id="pricing" className="py-10 md:py-14 px-4" style={{ backgroundColor: LANDING_BG }}>
+    <section id="pricing" className="py-16 md:py-24 px-4" style={{ backgroundColor: LANDING_BG }}>
       <div className="max-w-5xl mx-auto">
         <motion.h2
           className="text-center text-3xl md:text-4xl lg:text-5xl text-white mb-4"

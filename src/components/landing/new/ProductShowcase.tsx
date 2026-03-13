@@ -161,7 +161,7 @@ export function ProductShowcase() {
   return (
     <section
       id="features"
-      className="py-10 md:py-14"
+      className="py-16 md:py-24"
       style={{ backgroundColor: LANDING_BG, scrollMarginTop: '5rem' }}
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">

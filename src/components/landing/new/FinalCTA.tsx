@@ -1,8 +1,6 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
-import { Link } from 'react-router-dom';
 import {
-  GOLD_GRADIENT,
   GOLD_GRADIENT_TEXT,
   HEADING_H2_STYLE,
   PILL_STYLE,
@@ -10,7 +8,7 @@ import {
   LANDING_BG,
   TEXT_BRIGHT,
 } from '@/lib/landing-animations';
-import { MagneticButton } from './MagneticButton';
+import { OrbitButton } from './OrbitButton';
 
 export function FinalCTA() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -25,7 +23,7 @@ export function FinalCTA() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-14 md:py-20 overflow-hidden"
+      className="relative py-16 md:py-24 overflow-hidden"
       style={{ backgroundColor: LANDING_BG }}
     >
       <motion.div
@@ -91,35 +89,9 @@ export function FinalCTA() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <MagneticButton>
-            <motion.div
-              className="inline-block"
-              whileHover={{
-                scale: 1.05,
-                boxShadow: '0 0 40px rgba(197, 165, 90, 0.35), 0 0 80px rgba(197, 165, 90, 0.15)',
-              }}
-              whileTap={{ scale: 0.97 }}
-              animate={{
-                boxShadow: [
-                  '0 0 20px rgba(197, 165, 90, 0.08)',
-                  '0 0 40px rgba(197, 165, 90, 0.2)',
-                  '0 0 20px rgba(197, 165, 90, 0.08)',
-                ],
-              }}
-              transition={{
-                boxShadow: { duration: 3, repeat: Infinity, ease: 'easeInOut' },
-              }}
-              style={{ borderRadius: '9999px' }}
-            >
-              <Link
-                to="/auth"
-                className="inline-block px-12 py-4 text-lg font-semibold text-black no-underline"
-                style={{ background: GOLD_GRADIENT, borderRadius: '9999px' }}
-              >
-                Start Free
-              </Link>
-            </motion.div>
-          </MagneticButton>
+          <OrbitButton to="/auth" pill className="px-12 py-4 text-lg">
+            Start Free
+          </OrbitButton>
         </motion.div>
 
         <motion.p

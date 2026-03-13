@@ -84,7 +84,7 @@ const AI_TOOLS = [
 
 export function AIHero() {
   return (
-    <section className="relative py-10 md:py-14 px-4" style={{ backgroundColor: LANDING_BG }}>
+    <section className="relative py-16 md:py-24 px-4" style={{ backgroundColor: LANDING_BG }}>
       {/* Top accent line */}
       <div
         className="absolute inset-x-0 top-0 h-px"

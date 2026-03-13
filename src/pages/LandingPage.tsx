@@ -19,7 +19,7 @@ import { SECTION_DIVIDER, NOISE_OVERLAY, MESH_GRADIENT_1, MESH_GRADIENT_2, MESH_
 function SectionDivider() {
   return (
     <div
-      className="max-w-5xl mx-auto h-px"
+      className="max-w-5xl mx-auto h-px my-2"
       style={{ background: SECTION_DIVIDER }}
     />
   );

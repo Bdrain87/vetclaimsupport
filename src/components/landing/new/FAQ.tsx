@@ -107,7 +107,7 @@ function FAQAccordionItem({ item }: { item: FAQItem }) {
 
 export function FAQ() {
   return (
-    <section id="faq" className="relative py-10 md:py-14 px-4" style={{ backgroundColor: LANDING_BG }}>
+    <section id="faq" className="relative py-16 md:py-24 px-4" style={{ backgroundColor: LANDING_BG }}>
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <motion.div

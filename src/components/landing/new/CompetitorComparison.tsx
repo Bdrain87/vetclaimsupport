@@ -102,7 +102,7 @@ function CellIcon({ value }: { value: string }) {
 
 export function CompetitorComparison() {
   return (
-    <section className="relative py-10 md:py-14 px-4" style={{ backgroundColor: LANDING_BG }}>
+    <section className="relative py-16 md:py-24 px-4" style={{ backgroundColor: LANDING_BG }}>
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <motion.div

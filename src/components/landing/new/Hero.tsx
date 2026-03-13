@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE, APP_STORE_URL, LANDING_BG, GOLD } from '@/lib/landing-animations';
-import { MagneticButton } from './MagneticButton';
+import { OrbitButton } from './OrbitButton';
 
 // Rotating words removed — headline is now static with gold accent on "Your Benefits."
 
@@ -149,7 +149,7 @@ export function Hero() {
         }
       `}</style>
 
-      <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 text-center py-14 md:py-20">
+      <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 text-center py-16 md:py-24">
         {/* Brand name — proud, centered, gold shimmer */}
         <motion.div
           className="relative mb-8"
@@ -248,27 +248,9 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          <MagneticButton>
-            <motion.div
-              whileHover={{
-                y: -2,
-                boxShadow: '0 8px 24px rgba(197, 165, 90, 0.35)',
-              }}
-              whileTap={{ y: 0 }}
-              style={{ borderRadius: '12px' }}
-            >
-              <Link
-                to="/auth"
-                className="inline-block px-8 py-3.5 text-base font-semibold text-black no-underline"
-                style={{
-                  background: 'linear-gradient(135deg, #A68B3C, #C5A55A, #D9BE6C, #C5A55A, #A68B3C)',
-                  borderRadius: '12px',
-                }}
-              >
-                Start Free
-              </Link>
-            </motion.div>
-          </MagneticButton>
+          <OrbitButton to="/auth" className="px-8 py-3.5 text-base">
+            Start Free
+          </OrbitButton>
           <motion.button
             onClick={scrollToHowItWorks}
             className="inline-block px-8 py-3.5 text-base font-semibold text-white bg-transparent cursor-pointer"
