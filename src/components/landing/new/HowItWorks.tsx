@@ -20,28 +20,24 @@ const STEPS = [
     title: 'Map Your Service',
     desc: 'Enter your service history, conditions, and exposures. Document duty stations, deployments, and job codes in one place.',
     icon: MapPin,
-    accent: '#C5A55A',
   },
   {
     num: '02',
     title: 'Build Your Case',
     desc: 'Your evidence is organized by condition with supporting documentation. Link medical records, buddy statements, and personal statements.',
     icon: FileSearch,
-    accent: '#5A9EC5',
   },
   {
     num: '03',
     title: 'Prepare for the C&P Exam',
     desc: 'Practice questions, prep with all 70 DBQ forms, and analyze your answers against rating criteria with AI. Walk in feeling confident.',
     icon: Mic,
-    accent: '#5AC57A',
   },
   {
     num: '04',
     title: 'Export Your Packet',
     desc: 'Everything organized, nothing missed. Export your complete packet and review it before bringing it to your VSO or representative.',
     icon: FolderArchive,
-    accent: '#C55A8A',
   },
 ];
 
@@ -54,13 +50,13 @@ function StepIndicators({ active, onSelect }: { active: number; onSelect: (i: nu
             onClick={() => onSelect(i)}
             className="relative flex items-center justify-center w-10 h-10 rounded-full cursor-pointer transition-all duration-300 bg-transparent"
             style={{
-              backgroundColor: i === active ? `${step.accent}20` : 'rgba(255,255,255,0.04)',
-              border: i <= active ? `2px solid ${i === active ? step.accent : 'rgba(197,165,90,0.3)'}` : '2px solid rgba(255,255,255,0.08)',
+              backgroundColor: i === active ? 'rgba(197,165,90,0.12)' : 'rgba(255,255,255,0.04)',
+              border: i <= active ? `2px solid ${i === active ? GOLD : 'rgba(197,165,90,0.3)'}` : '2px solid rgba(255,255,255,0.08)',
             }}
           >
             <span
               className="text-xs font-bold transition-colors duration-300"
-              style={{ color: i === active ? step.accent : i < active ? GOLD : 'rgba(255,255,255,0.3)' }}
+              style={{ color: i <= active ? GOLD : 'rgba(255,255,255,0.3)' }}
             >
               {step.num}
             </span>
@@ -135,7 +131,7 @@ export function HowItWorks() {
                 <span
                   className="absolute text-[8rem] md:text-[10rem] font-black select-none pointer-events-none"
                   style={{
-                    color: `${step.accent}08`,
+                    color: 'rgba(197,165,90,0.03)',
                     lineHeight: 1,
                     fontFamily: "'Inter', system-ui, sans-serif",
                   }}
@@ -146,11 +142,11 @@ export function HowItWorks() {
                 <div
                   className="relative w-16 h-16 rounded-2xl flex items-center justify-center"
                   style={{
-                    backgroundColor: `${step.accent}15`,
-                    border: `1px solid ${step.accent}30`,
+                    backgroundColor: 'rgba(197,165,90,0.08)',
+                    border: '1px solid rgba(197,165,90,0.18)',
                   }}
                 >
-                  <Icon className="w-8 h-8" style={{ color: step.accent }} />
+                  <Icon className="w-8 h-8" style={{ color: GOLD }} />
                 </div>
               </div>
 
@@ -158,9 +154,9 @@ export function HowItWorks() {
               <div className="flex-1 text-center md:text-left">
                 <div
                   className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4"
-                  style={{ backgroundColor: `${step.accent}12`, border: `1px solid ${step.accent}25` }}
+                  style={{ backgroundColor: 'rgba(197,165,90,0.07)', border: '1px solid rgba(197,165,90,0.15)' }}
                 >
-                  <span className="text-xs font-bold" style={{ color: step.accent }}>
+                  <span className="text-xs font-bold" style={{ color: GOLD }}>
                     Step {step.num}
                   </span>
                 </div>

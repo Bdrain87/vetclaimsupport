@@ -137,11 +137,11 @@ export function Hero() {
         </div>
       </motion.div>
 
-      {/* Brand shimmer keyframes */}
+      {/* Brand animation keyframes */}
       <style>{`
-        @keyframes brand-shimmer {
-          0% { background-position: 100% center; }
-          100% { background-position: -100% center; }
+        @keyframes brand-breathe {
+          0%, 100% { filter: drop-shadow(0 0 20px rgba(197,165,90,0.08)) brightness(1); }
+          50% { filter: drop-shadow(0 0 30px rgba(197,165,90,0.18)) brightness(1.12); }
         }
         @keyframes glow-pulse {
           0%, 100% { opacity: 0.12; }
@@ -175,13 +175,11 @@ export function Hero() {
               fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
               letterSpacing: '-0.03em',
               lineHeight: 1.1,
-              background: 'linear-gradient(90deg, #A68B3C 0%, #C5A55A 20%, #FFF8E7 50%, #C5A55A 80%, #A68B3C 100%)',
-              backgroundSize: '250% 100%',
+              background: 'linear-gradient(135deg, #A68B3C 0%, #C5A55A 30%, #D9BE6C 50%, #C5A55A 70%, #A68B3C 100%)',
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              animation: 'brand-shimmer 4s linear infinite',
-              filter: 'drop-shadow(0 0 30px rgba(197,165,90,0.12))',
+              animation: 'brand-breathe 5s ease-in-out infinite',
             }}
           >
             Vet Claim Support
