@@ -4,8 +4,9 @@
  * Configure via environment variable:
  *   VITE_REVENUECAT_APPLE_API_KEY — RevenueCat Apple API key
  *
- * Product ID configured in App Store Connect / RevenueCat:
- *   vcs_lifetime — one-time $9.99 premium unlock
+ * Product IDs configured in App Store Connect / RevenueCat:
+ *   Subscription tiers: $14.99/mo, $39.99/3mo, $74.99/6mo, $124.99/yr
+ *   Legacy: vcs_lifetime — one-time $9.99 (grandfathered)
  */
 
 import { isNativeApp } from '@/lib/platform';

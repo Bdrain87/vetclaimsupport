@@ -9,7 +9,7 @@ const TRUST_ITEMS = [
   'NOT AFFILIATED WITH THE VA',
   'VETERAN-BUILT',
   '85+ CLAIM TOOLS',
-  'ONE-TIME PURCHASE',
+  'FROM $14.99/MO',
 ];
 
 function AppStoreBadge() {
@@ -183,7 +183,7 @@ export function Hero() {
                 borderRadius: '12px',
               }}
             >
-              Get Started — $9.99
+              Get Started — $14.99/mo
             </Link>
           </motion.div>
           <motion.button

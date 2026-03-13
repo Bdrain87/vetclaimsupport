@@ -219,7 +219,7 @@ export default function AuthPage() {
                 </div>
               ))}
               <p className="text-xs font-medium mt-3" style={{ color: 'rgba(197,165,90,0.9)', letterSpacing: '0.02em' }}>
-                $9.99 one-time — No subscription
+                Starting at $14.99/mo — Cancel anytime
               </p>
             </div>
           )}

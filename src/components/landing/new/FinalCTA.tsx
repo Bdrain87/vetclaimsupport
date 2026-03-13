@@ -114,7 +114,7 @@ export function FinalCTA() {
               className="inline-block px-12 py-4 text-lg font-semibold text-black no-underline"
               style={{ background: GOLD_GRADIENT, borderRadius: '9999px' }}
             >
-              Get Started — $9.99
+              Get Started — $14.99/mo
             </Link>
           </motion.div>
         </motion.div>

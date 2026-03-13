@@ -260,14 +260,19 @@ export function Pricing() {
                 <h3 className="text-base font-semibold" style={GOLD_GRADIENT_TEXT}>Vet Claim Support</h3>
               </div>
 
-              <div className="mb-5">
+              <div className="mb-2">
                 <span
                   className="text-4xl font-bold"
                   style={GOLD_GRADIENT_TEXT}
                 >
-                  $9.99
+                  $14.99
                 </span>
-                <span className="text-xs ml-2" style={{ color: TEXT_SECONDARY }}>one-time</span>
+                <span className="text-xs ml-2" style={{ color: TEXT_SECONDARY }}>/month</span>
+              </div>
+              <div className="flex flex-wrap gap-x-4 gap-y-0.5 mb-5 text-[11px]" style={{ color: TEXT_TERTIARY }}>
+                <span>3 mo — $39.99</span>
+                <span>6 mo — $74.99</span>
+                <span>Annual — $124.99</span>
               </div>
 
               <ul className="space-y-2.5 mb-6">
@@ -279,7 +284,7 @@ export function Pricing() {
                   'Ask Intel — AI claims assistant',
                   'Evidence strength vs VA criteria',
                   'C&P exam simulator',
-                  'No subscription required',
+                  'Cancel anytime',
                 ].map((feature) => (
                   <li key={feature} className="flex items-center gap-2.5 text-sm" style={{ color: TEXT_PRIMARY }}>
                     <div
@@ -306,7 +311,7 @@ export function Pricing() {
                   className="block text-center rounded-full px-6 py-3 text-sm font-semibold text-black no-underline"
                   style={{ background: GOLD_GRADIENT }}
                 >
-                  Get Started — $9.99
+                  Get Started — $14.99/mo
                 </Link>
               </motion.div>
             </div>

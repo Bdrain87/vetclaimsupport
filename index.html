@@ -39,8 +39,10 @@
       "operatingSystem": "iOS, Web",
       "offers": {
         "@type": "Offer",
-        "price": "9.99",
-        "priceCurrency": "USD"
+        "price": "14.99",
+        "priceCurrency": "USD",
+        "priceValidUntil": "2027-03-13",
+        "availability": "https://schema.org/InStock"
       },
       "creator": {
         "@type": "Organization",
@@ -84,7 +86,7 @@
           "name": "What is Vet Claim Support?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Vet Claim Support is a free app with Premium tools starting at $9.99 that helps veterans organize evidence, track symptoms, generate personal statements, and prepare for C&P exams for VA disability claims. It covers 800+ VA conditions, all 68 VA DBQ forms, and provides 85+ tools."
+            "text": "Vet Claim Support is a free app with Premium tools starting at $14.99/month that helps veterans organize evidence, track symptoms, generate personal statements, and prepare for C&P exams for VA disability claims. It covers 800+ VA conditions, all 68 VA DBQ forms, and provides 85+ tools."
           }
         },
         {
@@ -121,7 +123,7 @@
       // and reloading can interfere with the native splash screen lifecycle.
       (function(){
         if(window.Capacitor)return;
-        var V='vcs_deploy_v',C='13';
+        var V='vcs_deploy_v',C='14';
         try{
           if(localStorage.getItem(V)!==C){
             localStorage.setItem(V,C);

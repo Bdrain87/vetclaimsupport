@@ -19,7 +19,7 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [restoring, setRestoring] = useState(false);
-  const [priceString, setPriceString] = useState('$9.99');
+  const [priceString, setPriceString] = useState('$14.99');
   const { toast } = useToast();
 
   const featureValue = getFeatureValue(featureName);
@@ -183,11 +183,16 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
           </div>
 
           {/* Pricing */}
-          <div className="text-center space-y-1">
+          <div className="text-center space-y-2">
             <p className="text-3xl font-bold text-foreground">
-              {priceString}<span className="text-base font-normal text-muted-foreground"> one-time</span>
+              {priceString}<span className="text-base font-normal text-muted-foreground">/month</span>
             </p>
-            <p className="text-xs text-muted-foreground">Less than a single copay. No subscription. One-time purchase.</p>
+            <div className="flex justify-center gap-3 text-[11px] text-muted-foreground">
+              <span>3 mo — $39.99</span>
+              <span>6 mo — $74.99</span>
+              <span>Annual — $124.99</span>
+            </div>
+            <p className="text-xs text-muted-foreground">Less than a single copay. Cancel anytime.</p>
           </div>
 
           {/* Contextual feature bullets */}
@@ -216,7 +221,7 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
               disabled={loading}
               className="w-full h-12 text-base font-semibold"
             >
-              {loading ? 'Processing...' : `Get Premium — ${priceString}`}
+              {loading ? 'Processing...' : `Get Premium — ${priceString}/mo`}
             </Button>
 
             {/* Restore Purchases (Apple requirement on native) */}
