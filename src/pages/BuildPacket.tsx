@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { useProfileStore } from '@/store/useProfileStore';
+import useAppStore from '@/store/useAppStore';
 import { getAllBranchLabels } from '@/utils/veteranProfile';
 import { safeFormatDate } from '@/utils/dateUtils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,11 +21,15 @@ import {
   FileJson,
   Copy,
   Loader2,
+  TrendingUp,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'motion/react';
 import { generateExport, downloadExport } from '@/services/exportEngine';
+import { exportEvidenceSummaryReport } from '@/utils/pdfExport';
 import { PageContainer } from '@/components/PageContainer';
+import { IntelInsightsCard, type InsightItem } from '@/components/shared/IntelInsightsCard';
+import { ClaimIntelligence } from '@/services/claimIntelligence';
 
 interface PacketSection {
   id: string;
@@ -57,6 +62,7 @@ export default function BuildPacket() {
     buddyContacts: true,
     exposures: true,
     evidenceChecklist: true,
+    evidenceSummaryReport: true,
   });
 
   const [exportMessage, setExportMessage] = useState<string | null>(null);
@@ -75,10 +81,12 @@ export default function BuildPacket() {
   const migraineCount = (data.migraines || []).length;
   const sleepCount = (data.sleepEntries || []).length;
   const documentCount = (data.uploadedDocuments || []).length;
+  const employmentImpactCount = (useAppStore.getState().employmentImpactEntries || []).length;
   const checklistObtained = (data.documents || []).filter(
     (d) => d.status === 'Obtained' || d.status === 'Submitted',
   ).length;
   const checklistTotal = (data.documents || []).length;
+  const evidenceDataPoints = symptomCount + medicationCount + migraineCount + sleepCount + employmentImpactCount;
 
   // --------------- section definitions ---------------
 
@@ -140,6 +148,14 @@ export default function BuildPacket() {
         countLabel: `${checklistObtained}/${checklistTotal} complete`,
         count: checklistObtained,
       },
+      {
+        id: 'evidenceSummaryReport',
+        label: 'Evidence Summary Report',
+        description: 'Data-backed symptom trends, medication compliance, and employment impact summary',
+        icon: TrendingUp,
+        countLabel: `${evidenceDataPoints} data point${evidenceDataPoints !== 1 ? 's' : ''}`,
+        count: evidenceDataPoints,
+      },
     ],
     [
       conditionsCount,
@@ -150,6 +166,7 @@ export default function BuildPacket() {
       exposureCount,
       checklistObtained,
       checklistTotal,
+      evidenceDataPoints,
     ],
   );
 
@@ -181,6 +198,9 @@ export default function BuildPacket() {
         sections: getSectionMapping(),
       });
       downloadExport(result);
+      if (selected.evidenceSummaryReport) {
+        await exportEvidenceSummaryReport();
+      }
     } catch {
       showMessage('Unable to generate PDF. Please try again.');
     } finally {
@@ -306,6 +326,68 @@ export default function BuildPacket() {
     checklistTotal,
   ]);
 
+  // --------------- intel insights ---------------
+
+  const intelInsights = useMemo(() => {
+    const claimsData = {
+      medicalVisits: data.medicalVisits || [],
+      exposures: data.exposures || [],
+      symptoms: data.symptoms || [],
+      medications: data.medications || [],
+      serviceHistory: useAppStore.getState().serviceHistory,
+      combatHistory: useAppStore.getState().combatHistory || [],
+      majorEvents: useAppStore.getState().majorEvents || [],
+      deployments: useAppStore.getState().deployments || [],
+      buddyContacts: data.buddyContacts || [],
+      documents: data.documents || [],
+      migraines: data.migraines || [],
+      sleepEntries: data.sleepEntries || [],
+      ptsdSymptoms: useAppStore.getState().ptsdSymptoms || [],
+      separationDate: profile.separationDate ?? null,
+      uploadedDocuments: data.uploadedDocuments || [],
+      claimConditions: data.claimConditions || [],
+      quickLogs: useAppStore.getState().quickLogs || [],
+      deadlines: useAppStore.getState().deadlines || [],
+      documentScanDisclaimerShown: useAppStore.getState().documentScanDisclaimerShown,
+      milestonesAchieved: useAppStore.getState().milestonesAchieved || [],
+      approvedConditions: useAppStore.getState().approvedConditions || [],
+      journeyProgress: useAppStore.getState().journeyProgress || { currentPhase: 0, completedChecklist: {} },
+    };
+
+    const readiness = ClaimIntelligence.getOverallReadiness(userConditions, claimsData, profile);
+    const nextSteps = ClaimIntelligence.getNextSteps(profile, userConditions, claimsData);
+
+    const insights: InsightItem[] = [
+      { label: 'Evidence strength', value: `${evidenceScore}%` },
+      { label: 'Claim readiness', value: `${readiness}%` },
+      { label: 'Conditions tracked', value: `${conditionsCount}` },
+      { label: 'Evidence checklist', value: `${checklistObtained}/${checklistTotal}`, route: '/claims/checklist' },
+    ];
+
+    const tips: string[] = nextSteps
+      .slice(0, 3)
+      .map((step) => step.description);
+
+    if (symptomCount < 5) {
+      tips.push('Log at least 5 symptom entries to strengthen your evidence packet.');
+    }
+    if (buddyCount === 0) {
+      tips.push('Add buddy contacts — lay statements are powerful supporting evidence.');
+    }
+
+    return { score: readiness, insights, tips };
+  }, [
+    data,
+    profile,
+    userConditions,
+    evidenceScore,
+    conditionsCount,
+    checklistObtained,
+    checklistTotal,
+    symptomCount,
+    buddyCount,
+  ]);
+
   // --------------- render ---------------
 
   return (
@@ -363,8 +445,21 @@ export default function BuildPacket() {
         </motion.div>
       )}
 
+      {/* ===== Intel Insights ===== */}
+      {intelInsights.insights.length > 0 && (
+        <motion.div variants={fadeUp} custom={1}>
+          <IntelInsightsCard
+            title="Packet Strength Intel"
+            readinessScore={intelInsights.score}
+            insights={intelInsights.insights}
+            tips={intelInsights.tips}
+            defaultExpanded={false}
+          />
+        </motion.div>
+      )}
+
       {/* ===== Summary Stats ===== */}
-      <motion.div variants={fadeUp} custom={1}>
+      <motion.div variants={fadeUp} custom={2}>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
             { label: 'Conditions', value: conditionsCount, color: 'text-primary' },
@@ -383,7 +478,7 @@ export default function BuildPacket() {
       </motion.div>
 
       {/* ===== Section Selection ===== */}
-      <motion.div variants={fadeUp} custom={2}>
+      <motion.div variants={fadeUp} custom={3}>
         <Card className="glass-card">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
@@ -438,7 +533,7 @@ export default function BuildPacket() {
       </motion.div>
 
       {/* ===== Export Actions ===== */}
-      <motion.div variants={fadeUp} custom={3}>
+      <motion.div variants={fadeUp} custom={4}>
         <Card className="glass-card">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg">Export Your Packet</CardTitle>
@@ -509,7 +604,7 @@ export default function BuildPacket() {
       </motion.div>
 
       {/* ===== Preview Section ===== */}
-      <motion.div variants={fadeUp} custom={4}>
+      <motion.div variants={fadeUp} custom={5}>
         <Card className="glass-card">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg flex items-center gap-2">

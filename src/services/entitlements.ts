@@ -26,9 +26,9 @@ export type EntitlementStatus = 'preview' | 'premium' | 'lifetime';
 export type EntitlementSource = 'apple' | 'stripe' | 'lifetime';
 
 export const PREVIEW_LIMITS = {
-  maxConditions: 1,
-  maxHealthLogs: 10,
-  maxDocumentUploads: 0,
+  maxConditions: 3,
+  maxHealthLogs: 25,
+  maxDocumentUploads: 1,
   exportEnabled: false,
   cloudSyncEnabled: false,
   formGuideDraftingEnabled: false,
@@ -62,7 +62,7 @@ export const PREMIUM_ROUTES = [
   '/prep/appeals',
   // Claims (continued)
   '/claims/vault',
-  '/claims/decision-decoder',
+  // '/claims/decision-decoder' — free (regex mode free, AI gated by quota)
   '/claims/evidence-strength',
   // Health (continued)
   '/health/work-impact',
@@ -77,6 +77,9 @@ export const PREMIUM_ROUTES = [
   '/prep/interactive-dbq',
   '/prep/dbq-analyzer',
   '/prep/state-benefits',
+  '/prep/cfile-intel',
+  '/prep/ask-intel',
+  '/prep/medication-compliance',
 ] as const;
 
 export function isPremiumRoute(pathname: string): boolean {

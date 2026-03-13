@@ -26,6 +26,10 @@ const FEATURE_CONFIG: Record<string, { model: ModelId; temperature: number; time
   'personal-statement': { model: MODELS.FLASH, temperature: 0.6, timeout: 30_000 },
   'family-statement': { model: MODELS.FLASH, temperature: 0.6, timeout: 30_000 },
   'state-benefits': { model: MODELS.FLASH, temperature: 0.3, timeout: 30_000 },
+  'cfile-intel': { model: MODELS.FLASH, temperature: 0.2, timeout: 120_000 },
+  'decision-decoder-ai': { model: MODELS.FLASH, temperature: 0.2, timeout: 45_000 },
+  'doctor-summary-enhanced': { model: MODELS.FLASH, temperature: 0.3, timeout: 45_000 },
+  'ask-intel-full': { model: MODELS.FLASH, temperature: 0.5, timeout: 45_000 },
 };
 
 /**

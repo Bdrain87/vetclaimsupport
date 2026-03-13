@@ -96,10 +96,10 @@ export function ComparisonTable() {
           className="rounded-2xl overflow-hidden border border-white/5"
           style={{ backgroundColor: LANDING_BG_CARD, boxShadow: CARD_SHADOW }}
         >
-          {/* Header row */}
+          {/* Header row — hidden on mobile (labels shown inline instead) */}
           <motion.div
             variants={fadeInUp}
-            className="grid grid-cols-[1fr_1fr_1fr] gap-0 border-b border-white/5"
+            className="hidden sm:grid sm:grid-cols-[1fr_1fr_1fr] gap-0 border-b border-white/5"
           >
             <div className="p-4 text-xs font-semibold uppercase tracking-widest" style={{ color: TEXT_SECONDARY }}>
               Feature
@@ -117,19 +117,19 @@ export function ComparisonTable() {
             <motion.div
               key={row.feature}
               variants={fadeInUp}
-              className="grid grid-cols-[1fr_1fr_1fr] gap-0 border-b border-white/5 last:border-b-0"
+              className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_1fr] gap-0 border-b border-white/5 last:border-b-0"
               style={{ backgroundColor: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)' }}
             >
-              <div className="p-4 text-sm font-medium text-white">
+              <div className="p-4 pb-1 sm:pb-4 text-sm font-medium text-white">
                 {row.feature}
               </div>
-              <div className="p-4 text-sm flex items-start gap-2" style={{ color: TEXT_SECONDARY }}>
+              <div className="px-4 py-2 sm:p-4 text-sm flex items-start gap-2" style={{ color: TEXT_SECONDARY }}>
                 <X className="h-4 w-4 shrink-0 mt-0.5 text-red-400/60" />
-                <span className="text-xs leading-relaxed">{row.manual}</span>
+                <span className="text-xs leading-relaxed"><span className="sm:hidden font-semibold text-red-400/60 mr-1">Manual:</span>{row.manual}</span>
               </div>
-              <div className="p-4 text-sm flex items-start gap-2">
+              <div className="px-4 pt-2 pb-4 sm:p-4 text-sm flex items-start gap-2">
                 <Check className="h-4 w-4 shrink-0 mt-0.5" style={{ color: GOLD }} />
-                <span className="text-xs leading-relaxed text-white/90">{row.vcs}</span>
+                <span className="text-xs leading-relaxed text-white/90"><span className="sm:hidden font-semibold mr-1" style={{ color: GOLD }}>VCS:</span>{row.vcs}</span>
               </div>
             </motion.div>
           ))}

@@ -24,7 +24,7 @@ const BANNED_PHRASES: string[] = [
   'it is my professional opinion',
 ];
 
-const CONCLUSION_PHRASES: RegExp[] = [
+export const CONCLUSION_PHRASES: RegExp[] = [
   /\bdirectly related to\b/i,
   /\bdue to\b/i,
   /\bcaused by\b/i,

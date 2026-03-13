@@ -13,6 +13,8 @@ import { resolveConditionId } from '@/utils/conditionResolver';
 import useAppStore, { type DutyStation } from '@/store/useAppStore';
 import { SuccessAnimation } from '@/components/ui/success-animation';
 import { PageContainer } from '@/components/PageContainer';
+import { useRecommendedTools } from '@/hooks/useRecommendedTools';
+import { ClaimIntelligence } from '@/services/claimIntelligence';
 
 const TOTAL_STEPS = 12;
 
@@ -215,6 +217,38 @@ export default function Onboarding() {
   const [manualCode, setManualCode] = useState(cached?.manualCode ?? '');
   const [manualTitle, setManualTitle] = useState(cached?.manualTitle ?? '');
 
+  // Personalized tool recommendations for the final step
+  const recommendedTools = useRecommendedTools();
+  const overallReadiness = useMemo(() => {
+    const s = useAppStore.getState();
+    const profile = useProfileStore.getState();
+    return ClaimIntelligence.getOverallReadiness(
+      s.userConditions || [],
+      {
+        medicalVisits: s.medicalVisits || [],
+        exposures: s.exposures || [],
+        symptoms: s.symptoms || [],
+        medications: s.medications || [],
+        serviceHistory: s.serviceHistory || [],
+        combatHistory: s.combatHistory || [],
+        majorEvents: s.majorEvents || [],
+        deployments: s.deployments || [],
+        buddyContacts: s.buddyContacts || [],
+        documents: s.documents || [],
+        migraines: s.migraines || [],
+        sleepEntries: s.sleepEntries || [],
+        ptsdSymptoms: s.ptsdSymptoms || [],
+        separationDate: profile.separationDate || null,
+        uploadedDocuments: s.uploadedDocuments || [],
+        claimConditions: [],
+        quickLogs: s.quickLogs || [],
+        deadlines: s.deadlines || [],
+      },
+      profile,
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
+
   // Duty Stations
   const [dutyStations, setDutyStations] = useState<Omit<DutyStation, 'id'>[]>([]);
   const [showStationForm, setShowStationForm] = useState(false);
@@ -268,7 +302,7 @@ export default function Onboarding() {
 
   useEffect(() => {
     if (profileStore.hasCompletedOnboarding) {
-      localStorage.removeItem('vcs_onboarding_progress');
+      try { localStorage.removeItem('vcs_onboarding_progress'); } catch { /* storage error — ignore */ }
       navigate('/app', { replace: true });
     }
   }, [profileStore.hasCompletedOnboarding, navigate]);
@@ -1189,45 +1223,15 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 11: Thank You */}
+            {/* Step 11: Personalized Plan */}
             {step === 11 && (
-              <div className="text-center space-y-6">
-                <style>{`
-                  @keyframes flagWave {
-                    0% { transform: perspective(400px) rotateY(0deg); }
-                    25% { transform: perspective(400px) rotateY(3deg) skewY(-1deg); }
-                    50% { transform: perspective(400px) rotateY(0deg); }
-                    75% { transform: perspective(400px) rotateY(-3deg) skewY(1deg); }
-                    100% { transform: perspective(400px) rotateY(0deg); }
-                  }
-                `}</style>
+              <div className="text-center space-y-5">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0, duration: 0.5 }}
-                  className="flex justify-center"
                 >
-                  <div style={{ animation: 'flagWave 4s ease-in-out infinite', transformOrigin: 'left center' }}>
-                    <svg width="120" height="80" viewBox="0 0 190 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="American flag">
-                      {/* 13 stripes */}
-                      {Array.from({ length: 13 }).map((_, i) => (
-                        <rect key={i} x="0" y={i * (100 / 13)} width="190" height={100 / 13 + 0.5} fill={i % 2 === 0 ? '#B22234' : '#FFFFFF'} />
-                      ))}
-                      {/* Blue canton */}
-                      <rect x="0" y="0" width="76" height={100 * 7 / 13} rx="0" fill="#3C3B6E" />
-                      {/* Stars - 5 rows of 6 + 4 rows of 5 = 50 stars */}
-                      {[0, 1, 2, 3, 4].map(row =>
-                        [0, 1, 2, 3, 4, 5].map(col => (
-                          <circle key={`a${row}-${col}`} cx={6.5 + col * 12.5} cy={4.5 + row * 10.8} r="2" fill="#FFFFFF" />
-                        ))
-                      )}
-                      {[0, 1, 2, 3].map(row =>
-                        [0, 1, 2, 3, 4].map(col => (
-                          <circle key={`b${row}-${col}`} cx={12.75 + col * 12.5} cy={9.9 + row * 10.8} r="2" fill="#FFFFFF" />
-                        ))
-                      )}
-                    </svg>
-                  </div>
+                  <SuccessAnimation show={true} variant="celebration" size="lg" />
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -1235,21 +1239,49 @@ export default function Onboarding() {
                   transition={{ delay: 0.3, duration: 0.5 }}
                 >
                   <h2 className="text-2xl font-bold text-white">Thank You for Your Service</h2>
+                  <p className="text-lg text-gold font-medium mt-1">Your Personalized Plan</p>
                 </motion.div>
+
+                {/* Readiness score */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6, duration: 0.5 }}
+                  transition={{ delay: 0.5, duration: 0.5 }}
+                  className="p-4 rounded-2xl bg-white/[0.07] border border-white/12"
                 >
-                  <p className="text-lg text-gold font-medium">God Bless America</p>
+                  <p className="text-xs text-white/60 uppercase tracking-wider mb-1">Claim Readiness</p>
+                  <p className="text-3xl font-bold text-gold">{overallReadiness}%</p>
+                  <p className="text-xs text-white/50 mt-1">Let&apos;s build this up together</p>
                 </motion.div>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.8, duration: 0.5 }}
-                >
-                  <SuccessAnimation show={true} variant="celebration" size="lg" />
-                </motion.div>
+
+                {/* Recommended tools */}
+                {recommendedTools.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.7, duration: 0.5 }}
+                    className="space-y-2 text-left"
+                  >
+                    <p className="text-xs text-white/60 uppercase tracking-wider text-center">Based on your profile, start here:</p>
+                    {recommendedTools.slice(0, 4).map((tool) => (
+                      <button
+                        key={tool.route}
+                        onClick={() => {
+                          handleComplete();
+                          setTimeout(() => navigate(tool.route), 100);
+                        }}
+                        className="w-full flex items-center gap-3 p-3 rounded-xl bg-white/[0.07] border border-white/12 hover:border-gold/40 hover:bg-gold/5 transition-colors"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <span className="text-sm font-medium text-white block">{tool.label}</span>
+                          <span className="text-xs text-white/50 block truncate">{tool.reason}</span>
+                        </div>
+                        <ChevronRight className="h-4 w-4 text-gold shrink-0" />
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -1260,7 +1292,7 @@ export default function Onboarding() {
                     className="w-full h-14 rounded-xl text-navy-900 text-base font-bold transition-all hover:brightness-110 hover:shadow-[0_4px_24px_var(--gold-glow)]"
                     style={{ background: 'var(--gold-gradient)' }}
                   >
-                    Get Started
+                    Go to Dashboard
                   </button>
                 </motion.div>
               </div>

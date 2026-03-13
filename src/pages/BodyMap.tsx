@@ -1020,6 +1020,16 @@ export default function BodyMap() {
                         <Button
                           variant="ghost"
                           size="sm"
+                          onClick={() => navigate(`/health/symptoms?bodyArea=${encodeURIComponent(disambiguatedLabel(activeRegion))}`)}
+                          className="text-gold hover:text-gold/80 h-8 px-2 gap-1"
+                          title="Log symptoms for this area"
+                        >
+                          <Activity className="h-3.5 w-3.5" />
+                          <span className="text-xs">Log</span>
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
                           onClick={() => openPinDialog(activeRegion.id)}
                           className="text-primary hover:text-primary/80 h-8 px-2 gap-1"
                           title="Add a pin to this region"

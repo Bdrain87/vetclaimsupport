@@ -9,6 +9,10 @@ import { searchAllConditions } from '@/utils/conditionSearch';
 import { Link, useSearchParams } from 'react-router-dom';
 import { PageContainer } from '@/components/PageContainer';
 import { SecondaryConditionSuggestions } from '@/components/SecondaryConditionSuggestions';
+import { IntelInsightsCard, type InsightItem } from '@/components/shared/IntelInsightsCard';
+import { ClaimIntelligence } from '@/services/claimIntelligence';
+import { useProfileStore } from '@/store/useProfileStore';
+import { useToast } from '@/hooks/use-toast';
 
 // Connection strength heuristic based on data
 function getConnectionStrength(connection: SecondaryConnection): 'strong' | 'moderate' | 'possible' {
@@ -33,6 +37,34 @@ export default function SecondaryFinder() {
   const [selectedPrimary, setSelectedPrimary] = useState<string | null>(null);
   const { conditions: userConditions, addCondition, hasCondition } = useUserConditions();
   const { data: claimsData } = useClaims();
+  const profile = useProfileStore();
+  const { toast } = useToast();
+
+  // Intel insights: surface secondary condition opportunities from ClaimIntelligence
+  const intelInsights = useMemo(() => {
+    const recs = ClaimIntelligence.getRecommendations(profile, userConditions, claimsData);
+    if (recs.length === 0) return { insights: [], tips: [] };
+
+    const strengthLabel = { strong: 'Strong', moderate: 'Moderate', possible: 'Possible' };
+    const insights: InsightItem[] = recs.slice(0, 6).map((rec) => ({
+      label: rec.conditionName,
+      value: `${strengthLabel[rec.strength]} — ${rec.sourceCondition ? `via ${rec.sourceCondition}` : rec.source}`,
+      route: `/tools/secondary-finder?condition=${encodeURIComponent(rec.conditionId)}`,
+    }));
+
+    const tips: string[] = [];
+    if (recs.some((r) => r.strength === 'strong')) {
+      tips.push('You have strong secondary connections — consider filing these first.');
+    }
+    if (recs.some((r) => r.source === 'symptom')) {
+      tips.push('Some recommendations are based on your logged symptoms. Keep logging to surface more.');
+    }
+    if (recs.length > 6) {
+      tips.push(`${recs.length - 6} more potential secondaries found. Explore your conditions above.`);
+    }
+
+    return { insights, tips };
+  }, [profile, userConditions, claimsData]);
 
   // Get user's claimed conditions from BOTH state systems (unified view)
   const claimedConditions = useMemo(() => {
@@ -93,7 +125,7 @@ export default function SecondaryFinder() {
     setSelectedPrimary(name);
   };
 
-  // Handle adding secondary to claim
+  // Handle adding secondary to claim — auto-links to the selected primary
   const handleAddToClaim = (secondaryName: string) => {
     const match = vaConditions.find(c =>
       c.name.toLowerCase().includes(secondaryName.toLowerCase()) ||
@@ -101,7 +133,29 @@ export default function SecondaryFinder() {
       secondaryName.toLowerCase().includes(c.name.toLowerCase())
     );
     if (match) {
-      addCondition(match.id);
+      // Find the user's primary condition record to link against
+      const primaryUserCondition = userConditions.find(uc => {
+        const details = getConditionById(uc.conditionId);
+        return details && (
+          details.name.toLowerCase() === selectedPrimary?.toLowerCase() ||
+          details.abbreviation?.toLowerCase() === selectedPrimary?.toLowerCase()
+        );
+      });
+
+      const added = addCondition(match.id, {
+        isPrimary: false,
+        ...(primaryUserCondition ? { linkedPrimaryId: primaryUserCondition.id } : {}),
+      });
+
+      if (added) {
+        const primaryLabel = primaryUserCondition
+          ? (getConditionById(primaryUserCondition.conditionId)?.abbreviation || selectedPrimary)
+          : selectedPrimary;
+        toast({
+          title: 'Secondary condition added',
+          description: `Added ${match.abbreviation || match.name} as secondary to ${primaryLabel}`,
+        });
+      }
     }
   };
 
@@ -131,6 +185,14 @@ export default function SecondaryFinder() {
       <p className="text-xs text-muted-foreground/70 text-center">
         Conditions must be diagnosed before filing. Consult a doctor or VSO.
       </p>
+
+      {intelInsights.insights.length > 0 && (
+        <IntelInsightsCard
+          title="Secondary Condition Opportunities"
+          insights={intelInsights.insights}
+          tips={intelInsights.tips}
+        />
+      )}
 
       {/* Autocomplete search */}
       <ConditionSelector

@@ -9,13 +9,17 @@ import { cn } from '@/lib/utils';
 import { PageContainer } from '@/components/PageContainer';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
+import { IntelInsightsCard, type InsightItem } from '@/components/shared/IntelInsightsCard';
+import { ClaimIntelligence } from '@/services/claimIntelligence';
+import { useClaims } from '@/hooks/useClaims';
 import { useToolDraft } from '@/hooks/useToolDraft';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { useToast } from '@/hooks/use-toast';
-import { resolveLegacyRatingCriteria, findDBQsForUserCondition } from '@/utils/dbqLookup';
+import { resolveDBQ, resolveLegacyRatingCriteria, resolveAllMatchingCriteria, findDBQsForUserCondition } from '@/utils/dbqLookup';
 import { dbqQuickReference, type DBQReference } from '@/data/vaResources/dbqReference';
-import type { ConditionRatingCriteria } from '@/data/ratingCriteria';
+import { conditionRatingCriteria, type ConditionRatingCriteria } from '@/data/ratingCriteria';
 import { aiGenerateJSON, isGeminiConfigured } from '@/lib/gemini';
+import { scanAIOutput, AI_OUTPUT_WARNING } from '@/utils/aiOutputGuard';
 import { analyzeDocument, type AnalysisStep } from '@/lib/analyzeDocument';
 import { classifyError } from '@/lib/fileProcessing';
 import { AI_ANTI_HALLUCINATION, formatCriteriaForPrompt, getConditionCriteriaForPrompt } from '@/lib/ai-prompts';
@@ -34,12 +38,33 @@ import { getRatingColor } from '@/utils/ratingColors';
 
 const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB
 
+/**
+ * Build a condensed lookup table of ALL rating criteria keyed by form number.
+ * Included in the upload prompt so the AI can always match the DBQ to criteria,
+ * even when the user hasn't pre-selected a condition.
+ * Cached at module level — built once, ~3-4K tokens.
+ */
+const CONDENSED_CRITERIA_LOOKUP = (() => {
+  const lines: string[] = ['RATING CRITERIA LOOKUP TABLE — match the DBQ form number to find criteria:'];
+  for (const dbq of dbqQuickReference) {
+    // Find all matching criteria for this DBQ's diagnostic codes
+    const criteria = resolveAllMatchingCriteria(dbq);
+    if (criteria.length === 0) continue;
+    for (const c of criteria) {
+      const levels = c.ratingLevels.map((l) => `${l.percent}%: ${l.criteria}`).join(' | ');
+      lines.push(`[${dbq.formNumber}] ${c.conditionName} (DC ${c.diagnosticCode}): ${levels}`);
+    }
+  }
+  return lines.join('\n');
+})();
+
 const DISCLAIMER_TEXT = 'Educational preparation tool only. Shows how your documented symptoms align with published VA rating criteria (38 CFR Part 4). This is NOT a rating prediction. Actual ratings are determined solely by the VA based on C&P exam findings. Be truthful and accurate — never exaggerate symptoms.';
 
-type Phase = 'select' | 'form' | 'summary';
+type Phase = 'select' | 'condition-select' | 'form' | 'summary';
 
 interface FormData {
   selectedDBQId: string;
+  selectedConditionId: string;
   answers: string;
   analysisResults: string;
   uploadedImageAnalysis: string;
@@ -47,6 +72,7 @@ interface FormData {
 
 const initialFormData: FormData = {
   selectedDBQId: '',
+  selectedConditionId: '',
   answers: '{}',
   analysisResults: '{}',
   uploadedImageAnalysis: '',
@@ -75,7 +101,7 @@ const dbqImageAnalysisSchema = {
     suggestedPercent: { type: 'NUMBER' as const, description: 'Numeric rating percentage the findings best align with (0, 10, 20, 30, 40, 50, 60, 70, 80, or 100)' },
     gaps: { type: 'ARRAY' as const, items: { type: 'STRING' as const }, description: 'Documentation gaps or missing information' },
   },
-  required: ['conditionName', 'extractedAnswers', 'overallAssessment', 'gaps'],
+  required: ['conditionName', 'extractedAnswers', 'overallAssessment', 'suggestedRatingAlignment', 'suggestedPercent', 'gaps'],
 };
 
 interface DBQImageAnalysis {
@@ -83,13 +109,14 @@ interface DBQImageAnalysis {
   formNumber?: string;
   extractedAnswers: Array<{ question: string; answer: string; ratingRelevance: string }>;
   overallAssessment: string;
-  suggestedRatingAlignment?: string;
-  suggestedPercent?: number;
+  suggestedRatingAlignment: string;
+  suggestedPercent: number;
   gaps: string[];
 }
 
 export default function InteractiveDBQ() {
   const { conditions } = useUserConditions();
+  const { data } = useClaims();
   const { toast } = useToast();
 
   const {
@@ -110,11 +137,22 @@ export default function InteractiveDBQ() {
   }, [formData.analysisResults]);
 
   // Local state
-  const [phase, setPhase] = useState<Phase>(() => formData.selectedDBQId ? 'form' : 'select');
+  const [phase, setPhase] = useState<Phase>(() => {
+    if (!formData.selectedDBQId) return 'select';
+    if (formData.selectedConditionId) return 'form';
+    // Check if this DBQ covers multiple conditions
+    const dbq = dbqQuickReference.find((d) => d.id === formData.selectedDBQId);
+    if (dbq) {
+      const allCriteria = resolveAllMatchingCriteria(dbq);
+      if (allCriteria.length > 1) return 'condition-select';
+    }
+    return 'form';
+  });
   const [searchQuery, setSearchQuery] = useState('');
   const [analyzingIndex, setAnalyzingIndex] = useState<number | null>(null);
   const [overallResult, setOverallResult] = useState<OverallAnalysisResult | null>(null);
   const [isOverallLoading, setIsOverallLoading] = useState(false);
+  const [aiWarning, setAiWarning] = useState(false);
 
   // Upload state
   const [isUploadProcessing, setIsUploadProcessing] = useState(false);
@@ -131,19 +169,48 @@ export default function InteractiveDBQ() {
     [formData.selectedDBQId],
   );
 
+  // All matching criteria for multi-condition DBQs
+  const allMatchingCriteria = useMemo(() => {
+    if (!selectedDBQ) return [];
+    return resolveAllMatchingCriteria(selectedDBQ);
+  }, [selectedDBQ]);
+
   const ratingCriteria: ConditionRatingCriteria | undefined = useMemo(() => {
     if (!selectedDBQ) return undefined;
+    // If a specific condition was selected from multi-condition picker, use it
+    if (formData.selectedConditionId) {
+      const selected = allMatchingCriteria.find((c) => c.conditionId === formData.selectedConditionId);
+      if (selected) return selected;
+    }
+    // Fallback to first match or legacy resolution
+    if (allMatchingCriteria.length > 0) return allMatchingCriteria[0];
     return resolveLegacyRatingCriteria({
       id: selectedDBQ.id,
       diagnosticCode: selectedDBQ.diagnosticCodes[0],
       diagnosticCodes: selectedDBQ.diagnosticCodes,
     });
-  }, [selectedDBQ]);
+  }, [selectedDBQ, formData.selectedConditionId, allMatchingCriteria]);
 
   const availablePercents = useMemo(
     () => ratingCriteria?.ratingLevels.map((l) => l.percent) ?? [],
     [ratingCriteria],
   );
+
+  // Intel Insights for the selected condition
+  const intelInsights = useMemo(() => {
+    const conditionName = ratingCriteria?.conditionName || selectedDBQ?.name || '';
+    if (!conditionName) return { score: 0, insights: [] as InsightItem[], tips: [] as string[] };
+    const readiness = ClaimIntelligence.getConditionReadiness(conditionName, data);
+    if (!readiness) return { score: 0, insights: [] as InsightItem[], tips: [] as string[] };
+    const insights: InsightItem[] = [
+      { label: 'Medical evidence', value: `${readiness.components.medicalEvidence}%` },
+      { label: 'Service connection', value: `${readiness.components.serviceConnection}%` },
+      { label: 'Current severity', value: `${readiness.components.currentSeverity}%` },
+      { label: 'Statements', value: `${readiness.components.statements}%` },
+      { label: 'Exam prep', value: `${readiness.components.examPrep}%` },
+    ];
+    return { score: readiness.overallScore, insights, tips: readiness.tips };
+  }, [ratingCriteria, selectedDBQ, data]);
 
   // Group user conditions with matching DBQs at top
   const userDBQMatches = useMemo(() => {
@@ -193,16 +260,28 @@ export default function InteractiveDBQ() {
 
   const handleSelectDBQ = useCallback((dbq: DBQReference) => {
     updateField('selectedDBQId', dbq.id);
+    updateField('selectedConditionId', '');
     // Clear answers/results from prior DBQ selection
     updateField('answers', '{}');
     updateField('analysisResults', '{}');
-    setPhase('form');
     setCurrentStep(0);
     setOverallResult(null);
     // Clear upload state from prior selection
     setUploadResult(null);
     setUploadPreview(null);
+    // Check if this DBQ covers multiple conditions
+    const allCriteria = resolveAllMatchingCriteria(dbq);
+    if (allCriteria.length > 1) {
+      setPhase('condition-select');
+    } else {
+      setPhase('form');
+    }
   }, [updateField, setCurrentStep]);
+
+  const handleSelectCondition = useCallback((conditionId: string) => {
+    updateField('selectedConditionId', conditionId);
+    setPhase('form');
+  }, [updateField]);
 
   const handleAnswerChange = useCallback((index: number, value: string) => {
     const updated = { ...answers, [index]: value };
@@ -230,6 +309,11 @@ export default function InteractiveDBQ() {
         feature: 'interactive-dbq-question',
         temperature: 0.3,
       });
+
+      // Scan AI output for banned phrases
+      const scanText = [result.explanation, result.improvementSuggestion].filter(Boolean).join(' ');
+      const scan = scanAIOutput(scanText);
+      if (!scan.clean) setAiWarning(true);
 
       // Snap alignedPercent to nearest valid value
       if (availablePercents.length === 0) return;
@@ -270,6 +354,11 @@ export default function InteractiveDBQ() {
         feature: 'interactive-dbq-summary',
         temperature: 0.3,
       });
+
+      // Scan AI output for banned phrases
+      const scanText = [...result.strengths, ...result.gaps, ...result.nextSteps, ...result.questionBreakdown.map((q) => q.summary)].filter(Boolean).join(' ');
+      const scan = scanAIOutput(scanText);
+      if (!scan.clean) setAiWarning(true);
 
       if (availablePercents.length === 0) return;
       if (!availablePercents.includes(result.overallAlignedPercent)) {
@@ -329,17 +418,24 @@ export default function InteractiveDBQ() {
         }
       }
 
-      const hasCriteriaForUpload = criteriaBlock.length > 0;
+      // Fallback: no DBQ selected yet (upload from select phase) — inject the full condensed lookup table
+      // so the AI can match the form number it sees in the document to the correct criteria
+      if (!criteriaBlock) {
+        criteriaBlock = `\n\n<rating_criteria>\n${CONDENSED_CRITERIA_LOOKUP}\n</rating_criteria>\n\nIMPORTANT: Identify the DBQ form number from the uploaded document, then look it up in the rating criteria table above. Use ONLY those criteria when discussing rating levels. You MUST provide a suggestedPercent based on the matching criteria.`;
+      }
+
       const { text } = await analyzeDocument({
         file,
         prompt: `Analyze this VA Disability Benefits Questionnaire (DBQ) form. Extract:
 1. The condition name this DBQ is for
-2. The VA form number if visible
+2. The VA form number if visible (look for "VA FORM" followed by a number like 21-0960X-X)
 3. Each question and the examiner's documented answer/findings
-${hasCriteriaForUpload ? '4. How each finding relates to the VA rating criteria for this condition\n5. An overall assessment of what rating level the documented findings support\n6. Any gaps or missing information' : '4. Any gaps or missing information'}
+4. How each finding relates to the VA rating criteria for this condition
+5. An overall assessment of what rating level the documented findings support — you MUST provide a suggestedPercent value
+6. Any gaps or missing information
 ${criteriaBlock}
 
-Important: Focus on the medical findings${hasCriteriaForUpload ? ' and how they align with 38 CFR Part 4 rating criteria' : ''}. This is for educational purposes to help veterans understand their documentation.${!hasCriteriaForUpload ? ' Rating criteria are not available for this condition — do NOT cite specific rating percentages or criteria.' : ''}`,
+Important: Focus on the medical findings and how they align with 38 CFR Part 4 rating criteria. This is for educational purposes to help veterans understand their documentation. You MUST always provide a suggestedPercent numeric value based on the criteria match.`,
         systemInstruction: `You are a VA disability claims documentation analyst. Extract and analyze DBQ form contents against published rating criteria. Be factual and objective. Only cite rating percentages and criteria that were explicitly provided to you — never fabricate criteria from memory. This is an educational tool — not a rating prediction.${AI_ANTI_HALLUCINATION}`,
         feature: 'interactive-dbq-upload',
         responseSchema: dbqImageAnalysisSchema,
@@ -348,6 +444,33 @@ Important: Focus on the medical findings${hasCriteriaForUpload ? ' and how they 
       });
 
       const parsed: DBQImageAnalysis = JSON.parse(text);
+
+      // Scan AI output for banned phrases
+      const uploadScanText = [parsed.overallAssessment, parsed.suggestedRatingAlignment, ...parsed.gaps, ...parsed.extractedAnswers.map((a) => `${a.answer} ${a.ratingRelevance}`)].filter(Boolean).join(' ');
+      const uploadScan = scanAIOutput(uploadScanText);
+      if (!uploadScan.clean) setAiWarning(true);
+
+      // Auto-resolve DBQ from parsed result so ratingCriteria populates for the display
+      if (!selectedDBQ && (parsed.conditionName || parsed.formNumber)) {
+        const resolved = resolveDBQ({
+          id: '',
+          name: parsed.conditionName || '',
+          diagnosticCode: '',
+          formNumber: parsed.formNumber,
+        });
+        if (resolved) {
+          updateField('selectedDBQId', resolved.id);
+          // If multi-condition DBQ, try to auto-select the right condition
+          const allCriteria = resolveAllMatchingCriteria(resolved);
+          if (allCriteria.length === 1) {
+            updateField('selectedConditionId', allCriteria[0].conditionId);
+          } else if (allCriteria.length > 1 && parsed.conditionName) {
+            const match = allCriteria.find((c) => c.conditionName.toLowerCase().includes(parsed.conditionName.toLowerCase()) || parsed.conditionName.toLowerCase().includes(c.conditionName.toLowerCase()));
+            if (match) updateField('selectedConditionId', match.conditionId);
+          }
+        }
+      }
+
       setUploadResult(parsed);
       updateField('uploadedImageAnalysis', JSON.stringify(parsed));
     } catch (err) {
@@ -388,6 +511,14 @@ Important: Focus on the medical findings${hasCriteriaForUpload ? ' and how they 
         <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
         <span>{DISCLAIMER_TEXT}</span>
       </div>
+
+      {/* AI output warning */}
+      {aiWarning && (
+        <div className="p-3 rounded-lg bg-red-500/5 border border-red-500/20 text-xs text-red-400 flex gap-2">
+          <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+          <span>{AI_OUTPUT_WARNING}</span>
+        </div>
+      )}
 
       {/* Draft restored */}
       {draftRestored && lastSaved && (
@@ -446,7 +577,7 @@ Important: Focus on the medical findings${hasCriteriaForUpload ? ' and how they 
                 {uploadPreview && (
                   <img src={uploadPreview} alt="Uploaded DBQ" className="w-full rounded-lg max-h-48 object-contain bg-black/5" />
                 )}
-                <UploadAnalysisResult result={uploadResult} hasCriteria={!!ratingCriteria} />
+                <UploadAnalysisResult result={uploadResult} hasCriteria />
               </div>
             )}
           </div>
@@ -525,6 +656,50 @@ Important: Focus on the medical findings${hasCriteriaForUpload ? ' and how they 
         </div>
       )}
 
+      {/* ── CONDITION-SELECT PHASE (multi-condition DBQs) ── */}
+      {phase === 'condition-select' && selectedDBQ && allMatchingCriteria.length > 1 && (
+        <div className="space-y-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="min-h-[44px]"
+            onClick={() => { updateField('selectedDBQId', ''); setPhase('select'); }}
+          >
+            <ChevronLeft className="h-4 w-4 mr-1" />
+            Back to DBQ Selection
+          </Button>
+
+          <div className="text-center space-y-2">
+            <ClipboardList className="h-8 w-8 text-gold mx-auto" />
+            <h2 className="text-lg font-semibold text-foreground">{selectedDBQ.name}</h2>
+            <p className="text-sm text-muted-foreground">
+              This DBQ covers multiple conditions. Which are you preparing for?
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            {allMatchingCriteria.map((criteria) => (
+              <button
+                key={criteria.conditionId}
+                onClick={() => handleSelectCondition(criteria.conditionId)}
+                className="w-full flex items-center gap-3 p-3 rounded-xl border border-border hover:border-gold/40 hover:bg-gold/5 transition-colors text-left"
+              >
+                <div className="p-2 rounded-xl bg-gold/10 shrink-0">
+                  <BarChart3 className="h-4 w-4 text-gold" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-sm font-medium text-foreground block">{criteria.conditionName}</span>
+                  <span className="text-xs text-muted-foreground block">
+                    DC {criteria.diagnosticCode} · {criteria.ratingLevels.length} rating levels
+                  </span>
+                </div>
+                <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* ── FORM PHASE ── */}
       {phase === 'form' && selectedDBQ && (
         <div className="space-y-4">
@@ -534,7 +709,13 @@ Important: Focus on the medical findings${hasCriteriaForUpload ? ' and how they 
               variant="ghost"
               size="sm"
               className="min-h-[44px]"
-              onClick={() => setPhase('select')}
+              onClick={() => {
+                if (allMatchingCriteria.length > 1) {
+                  setPhase('condition-select');
+                } else {
+                  setPhase('select');
+                }
+              }}
             >
               <ChevronLeft className="h-4 w-4 mr-1" />
               Back
@@ -563,6 +744,17 @@ Important: Focus on the medical findings${hasCriteriaForUpload ? ' and how they 
             )}
           </div>
 
+          {/* Intel Insights */}
+          {intelInsights.insights.length > 0 && (
+            <IntelInsightsCard
+              title="Symptom Analysis"
+              readinessScore={intelInsights.score}
+              insights={intelInsights.insights}
+              tips={intelInsights.tips}
+              defaultExpanded={false}
+            />
+          )}
+
           {/* Upload in form phase */}
           <div className="rounded-xl border border-border bg-card p-3">
             <div className="flex items-center justify-between">
@@ -584,7 +776,7 @@ Important: Focus on the medical findings${hasCriteriaForUpload ? ' and how they 
             )}
             {uploadResult && !isUploadProcessing && (
               <div className="mt-2">
-                <UploadAnalysisResult result={uploadResult} hasCriteria={!!ratingCriteria} />
+                <UploadAnalysisResult result={uploadResult} hasCriteria />
               </div>
             )}
           </div>

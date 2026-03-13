@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useShallow } from 'zustand/react/shallow';
-import { Activity, Moon, Brain, Pill, Stethoscope, AlertTriangle, BarChart3, PersonStanding, Clock, Briefcase, TrendingUp } from 'lucide-react';
+import { Activity, Moon, Brain, Pill, Stethoscope, AlertTriangle, BarChart3, PersonStanding, Clock, Briefcase, TrendingUp, ChevronRight } from 'lucide-react';
 import useAppStore from '@/store/useAppStore';
 import { PageContainer } from '@/components/PageContainer';
+import { useSmartReminders } from '@/hooks/useSmartReminders';
 
 const healthCards = [
   { label: 'Symptoms', icon: Activity, route: '/health/symptoms', storeKey: 'symptoms' as const },
@@ -50,6 +51,14 @@ export default function HealthHub() {
     })),
   );
 
+  // Health-specific smart reminders
+  const allReminders = useSmartReminders();
+  const healthReminders = useMemo(() => {
+    const healthCategories = new Set(['logging']);
+    const healthIds = new Set(['symptom-gap', 'sleep-gap', 'migraine-gap', 'migraine-threshold', 'work-impact-gap', 'medical-visit', 'streak-at-risk', 'medication-mention']);
+    return allReminders.filter((r) => healthCategories.has(r.category) || healthIds.has(r.id)).slice(0, 3);
+  }, [allReminders]);
+
   // 30-Day Summary Stats
   const thirtyDayStats = useMemo(() => {
     const cutoff = new Date();
@@ -87,6 +96,25 @@ export default function HealthHub() {
           <p className="text-muted-foreground text-sm">Log health data to strengthen your VA evidence.</p>
         </div>
       </div>
+
+      {/* Health Reminders */}
+      {healthReminders.length > 0 && (
+        <div className="space-y-1.5">
+          {healthReminders.map((r) => (
+            <button
+              key={r.id}
+              onClick={() => r.actionRoute && navigate(r.actionRoute)}
+              className="w-full flex items-center gap-2.5 p-2.5 rounded-xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors text-left"
+            >
+              <AlertTriangle className={`h-3.5 w-3.5 shrink-0 ${r.priority === 'high' ? 'text-destructive' : 'text-gold'}`} />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-medium text-foreground truncate">{r.title}</p>
+              </div>
+              {r.actionRoute && <ChevronRight className="h-3.5 w-3.5 text-muted-foreground shrink-0" />}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* 30-Day Summary Card */}
       <button

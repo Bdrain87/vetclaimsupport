@@ -16,6 +16,7 @@ import {
   FileText,
   Stethoscope,
   ArrowRight,
+  Scale,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -26,7 +27,7 @@ import { useUserConditions } from '@/hooks/useUserConditions';
 import { getConditionDisplayName } from '@/utils/conditionResolver';
 import useAppStore from '@/store/useAppStore';
 import { useClaims } from '@/hooks/useClaims';
-import { ClaimIntelligence } from '@/services/claimIntelligence';
+import { ClaimIntelligence, type RatingThresholdResult } from '@/services/claimIntelligence';
 import { ProgressRing } from '@/components/ui/progress-ring';
 import {
   conditionRatingCriteria,
@@ -184,6 +185,42 @@ export default function EvidenceStrength() {
       return { uc, name, criteria, texts, avgSeverity, count, recentDate, estimate };
     });
   }, [userConditions, conditionEvidence]);
+
+  // Rating threshold analysis per condition
+  const ratingThresholds = useMemo(() => {
+    const results: { uc: typeof userConditions[0]; name: string; analysis: RatingThresholdResult }[] = [];
+    for (const uc of userConditions) {
+      const name = getConditionDisplayName(uc);
+      const analysis = ClaimIntelligence.getRatingThresholdAnalysis(name);
+      if (analysis) {
+        results.push({ uc, name, analysis });
+      }
+    }
+    return results;
+  }, [userConditions]);
+
+  const [expandedThresholds, setExpandedThresholds] = useState<Set<string>>(new Set());
+
+  const toggleThreshold = (id: string) => {
+    setExpandedThresholds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const getAlignmentColor = (alignment: 'meets' | 'partial' | 'gap') => {
+    if (alignment === 'meets') return 'border-success/30 bg-success/5';
+    if (alignment === 'partial') return 'border-gold/30 bg-gold/5';
+    return 'border-border bg-card';
+  };
+
+  const getAlignmentBadge = (alignment: 'meets' | 'partial' | 'gap') => {
+    if (alignment === 'meets') return { text: 'Aligns', className: 'bg-success/15 text-success border-success/20' };
+    if (alignment === 'partial') return { text: 'Partial', className: 'bg-gold/15 text-gold border-gold/20' };
+    return { text: 'Gap', className: 'bg-muted text-muted-foreground border-border' };
+  };
 
   const toggleExpand = (id: string) => {
     setExpandedConditions((prev) => {
@@ -542,6 +579,159 @@ export default function EvidenceStrength() {
           </Card>
         );
       })}
+
+      {/* Rating Criteria Comparison */}
+      {ratingThresholds.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 px-1">
+            <Scale className="h-4 w-4 text-primary" />
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Rating Criteria Comparison
+            </p>
+          </div>
+          <p className="text-xs text-muted-foreground px-1">
+            Side-by-side view of your documented evidence against VA rating criteria at each level.
+          </p>
+
+          {ratingThresholds.map(({ uc, name, analysis }) => {
+            const isOpen = expandedThresholds.has(uc.id);
+            return (
+              <Card key={`threshold-${uc.id}`} className="overflow-hidden rounded-2xl">
+                <Collapsible open={isOpen} onOpenChange={() => toggleThreshold(uc.id)}>
+                  <CollapsibleTrigger className="w-full text-left">
+                    <div className="p-4 flex items-center gap-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
+                          <span className="text-sm font-semibold text-foreground">{name}</span>
+                          <Badge variant="outline" className="text-[10px] px-1.5">
+                            DC {analysis.diagnosticCode}
+                          </Badge>
+                        </div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {analysis.levels.map((lvl) => {
+                            const badge = getAlignmentBadge(lvl.alignment);
+                            return (
+                              <span
+                                key={lvl.percent}
+                                className={`inline-flex items-center text-[10px] px-1.5 py-0.5 rounded-full border ${badge.className}`}
+                              >
+                                {lvl.level} {badge.text}
+                              </span>
+                            );
+                          })}
+                        </div>
+                      </div>
+                      {isOpen ? (
+                        <ChevronUp className="h-4 w-4 text-muted-foreground shrink-0" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4 text-muted-foreground shrink-0" />
+                      )}
+                    </div>
+                  </CollapsibleTrigger>
+
+                  <CollapsibleContent>
+                    <div className="border-t border-border px-4 pb-4 pt-3 space-y-3">
+                      {analysis.levels.map((lvl) => {
+                        const badge = getAlignmentBadge(lvl.alignment);
+                        return (
+                          <div
+                            key={lvl.percent}
+                            className={`rounded-lg border p-3 space-y-2 ${getAlignmentColor(lvl.alignment)}`}
+                          >
+                            {/* Level header */}
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                {lvl.alignment === 'meets' ? (
+                                  <CheckCircle2 className="h-4 w-4 text-success shrink-0" />
+                                ) : lvl.alignment === 'partial' ? (
+                                  <AlertTriangle className="h-4 w-4 text-gold shrink-0" />
+                                ) : (
+                                  <Circle className="h-4 w-4 text-muted-foreground/30 shrink-0" />
+                                )}
+                                <span className={`text-sm font-bold ${
+                                  lvl.alignment === 'meets' ? 'text-success' :
+                                  lvl.alignment === 'partial' ? 'text-gold' :
+                                  'text-muted-foreground'
+                                }`}>
+                                  {lvl.level}
+                                </span>
+                              </div>
+                              <Badge className={`text-[10px] ${badge.className}`}>
+                                {badge.text}
+                              </Badge>
+                            </div>
+
+                            {/* Two-column: criteria vs evidence */}
+                            <div className="grid grid-cols-1 gap-2">
+                              <div>
+                                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                                  VA Rating Criteria
+                                </p>
+                                <p className="text-xs text-muted-foreground leading-relaxed">
+                                  {lvl.criteria}
+                                </p>
+                              </div>
+                              <div>
+                                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                                  Your Documented Evidence
+                                </p>
+                                <p className="text-xs text-foreground leading-relaxed">
+                                  {lvl.evidence}
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Gaps */}
+                            {lvl.gaps.length > 0 && (
+                              <div className="space-y-1 pt-1">
+                                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                                  Documentation Gaps
+                                </p>
+                                {lvl.gaps.map((gap, i) => (
+                                  <div key={i} className="flex gap-2 text-xs text-muted-foreground">
+                                    <ArrowRight className="h-3 w-3 text-primary shrink-0 mt-0.5" />
+                                    <span>{gap}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+
+                      {/* Next steps */}
+                      {analysis.nextSteps.length > 0 && (
+                        <div className="space-y-2 pt-1">
+                          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                            Strengthen Your Documentation
+                          </p>
+                          <div className="flex flex-wrap gap-2">
+                            {analysis.nextSteps.map((step, i) => (
+                              <Button
+                                key={i}
+                                variant="outline"
+                                size="sm"
+                                className="text-xs gap-1.5"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  navigate(step.route);
+                                }}
+                              >
+                                <ArrowRight className="h-3 w-3" />
+                                {step.label}
+                              </Button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
+              </Card>
+            );
+          })}
+        </div>
+      )}
 
       {/* Conditions without criteria data */}
       {withoutCriteria.length > 0 && (

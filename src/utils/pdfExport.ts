@@ -1,8 +1,27 @@
 // PDF Export Utilities for Vet Claim Support
 import type jsPDFType from 'jspdf';
-import type { ServiceEntry, MedicalVisit, SymptomEntry, Medication, Exposure, DocumentItem, BuddyContact, ClaimsData, ClaimCondition, MigraineEntry, SleepEntry } from '@/types/claims';
+import type { ServiceEntry, MedicalVisit, SymptomEntry, Medication, Exposure, DocumentItem, BuddyContact, ClaimsData, ClaimCondition, MigraineEntry, SleepEntry, EmploymentImpactEntry } from '@/types/claims';
 import { DOCTOR_SUMMARY_DISCLAIMER } from '@/utils/bannedPhrases';
+import { guardExport, type ExportGuardResult } from '@/utils/exportGuard';
 import { logger } from '@/utils/logger';
+
+/** Error thrown when an export is blocked due to banned phrases. */
+export class ExportBlockedError extends Error {
+  guardResult: ExportGuardResult;
+  constructor(result: ExportGuardResult) {
+    super(result.message);
+    this.name = 'ExportBlockedError';
+    this.guardResult = result;
+  }
+}
+
+/** Run guardExport on text; throw ExportBlockedError if blocked. */
+function assertExportClean(text: string): void {
+  const result = guardExport(text);
+  if (!result.allowed) {
+    throw new ExportBlockedError(result);
+  }
+}
 
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import('jspdf');
@@ -1034,6 +1053,16 @@ export const exportAllEvidence = async (data: ClaimsData, options?: { returnBlob
     });
   }
 
+  // Guard: scan all free-text content for banned phrases before finalizing
+  const freeTextParts: string[] = [];
+  data.symptoms?.forEach((s) => { if (s.notes) freeTextParts.push(s.notes); });
+  data.medicalVisits?.forEach((v) => { if (v.reason) freeTextParts.push(v.reason); if (v.diagnosis) freeTextParts.push(v.diagnosis); });
+  data.medications?.forEach((m) => { if (m.sideEffects) freeTextParts.push(m.sideEffects); });
+  data.buddyContacts?.forEach((c) => { if (c.whatTheyWitnessed) freeTextParts.push(c.whatTheyWitnessed); });
+  if (freeTextParts.length > 0) {
+    assertExportClean(freeTextParts.join('\n'));
+  }
+
   addPDFFooter(doc);
 
   if (options?.returnBlob) {
@@ -1720,6 +1749,7 @@ export const exportSleepLog = async (entries: SleepEntry[]) => {
 
 // Buddy Statement Export (Generated Statement)
 export const exportBuddyStatement = async (statementText: string, witnessName: string) => {
+  assertExportClean(statementText);
   const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -1771,6 +1801,7 @@ export const exportBuddyStatement = async (statementText: string, witnessName: s
 
 // Stressor Statement Export (PTSD)
 export const exportStressorStatement = async (statementText: string) => {
+  assertExportClean(statementText);
   const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -1800,6 +1831,7 @@ export const exportStressorStatement = async (statementText: string) => {
 
 // Personal Statement Export
 export const exportPersonalStatement = async (statementText: string, conditionName?: string) => {
+  assertExportClean(statementText);
   const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -1830,6 +1862,7 @@ export const exportPersonalStatement = async (statementText: string, conditionNa
 
 // Claim Preparation Export
 export const exportClaimStrategy = async (statementText: string) => {
+  assertExportClean(statementText);
   const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -1859,6 +1892,7 @@ export const exportClaimStrategy = async (statementText: string) => {
 
 // Buddy Statement Template Export
 export const exportBuddyStatementTemplate = async (templateText: string, templateTitle?: string) => {
+  assertExportClean(templateText);
   const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -2295,6 +2329,12 @@ const addOutlineSection = (
 };
 
 export const exportDoctorSummaryOutlinePDF = async (data: OutlineFormDataForPDF) => {
+  // Guard text fields that may contain AI-generated content
+  const textToCheck = [
+    data.currentSymptoms, data.functionalImpact, data.currentMedications,
+    data.medicationResponse,
+  ].filter(Boolean).join('\n');
+  if (textToCheck) assertExportClean(textToCheck);
   const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -2464,4 +2504,443 @@ export const exportDoctorSummaryOutlinePDF = async (data: OutlineFormDataForPDF)
   void pageCount;
 
   doc.save('doctor-summary-outline-patient-prepared.pdf');
+};
+
+// Evidence Summary Report Export
+export const exportEvidenceSummaryReport = async () => {
+  const { default: useAppStore } = await import('@/store/useAppStore');
+  const state = useAppStore.getState();
+
+  const symptoms: SymptomEntry[] = state.symptoms || [];
+  const medications: Medication[] = state.medications || [];
+  const migraines: MigraineEntry[] = state.migraines || [];
+  const sleepEntries: SleepEntry[] = state.sleepEntries || [];
+  const employmentImpactEntries: EmploymentImpactEntry[] = state.employmentImpactEntries || [];
+
+  // Run export guard on a representative text blob
+  const guardText = [
+    'Evidence Summary Report',
+    ...symptoms.map((s) => `${s.symptom} ${s.notes}`),
+    ...medications.map((m) => `${m.name} ${m.sideEffects}`),
+  ].join(' ');
+  assertExportClean(guardText);
+
+  const jsPDF = await loadJsPDF();
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const now = new Date();
+
+  const footerText = 'Generated by VetClaimSupport. For informational purposes only.';
+
+  const addReportFooter = () => {
+    const totalPages = doc.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+      doc.setPage(i);
+      const pageHeight = doc.internal.pageSize.getHeight();
+      doc.setFontSize(7);
+      doc.setTextColor(...colors.muted);
+      doc.setFont('helvetica', 'normal');
+      doc.text(footerText, pageWidth / 2, pageHeight - 8, { align: 'center' });
+    }
+  };
+
+  let yPos = addPDFHeader(doc, {
+    title: `Evidence Summary Report`,
+    subtitle: `Prepared ${now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`,
+  });
+
+  // ─── Helper: get week bucket key (ISO week start) ───
+  const getWeekKey = (dateStr: string): string => {
+    const d = new Date(dateStr);
+    const day = d.getDay();
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+    const monday = new Date(d.setDate(diff));
+    return monday.toISOString().split('T')[0];
+  };
+
+  // ─── Helper: get month key ───
+  const getMonthKey = (dateStr: string): string => {
+    const d = new Date(dateStr);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  };
+
+  // ─── 90-day window ───
+  const ninetyDaysAgo = new Date();
+  ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+  const recentSymptoms = symptoms.filter((s) => new Date(s.date) >= ninetyDaysAgo);
+
+  // ================================================================
+  // (a) Symptom Frequency Summary — weekly buckets over 90 days
+  // ================================================================
+  doc.setFontSize(13);
+  doc.setTextColor(...colors.secondary);
+  doc.setFont('helvetica', 'bold');
+  doc.text('1. Symptom Frequency Summary (Last 90 Days)', 20, yPos);
+  yPos += 8;
+
+  if (recentSymptoms.length === 0) {
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...colors.muted);
+    doc.text('No symptom entries in the last 90 days.', 25, yPos);
+    yPos += 8;
+  } else {
+    // Weekly buckets
+    const weeklyBuckets: Record<string, SymptomEntry[]> = {};
+    recentSymptoms.forEach((s) => {
+      const key = getWeekKey(s.date);
+      if (!weeklyBuckets[key]) weeklyBuckets[key] = [];
+      weeklyBuckets[key].push(s);
+    });
+
+    const sortedWeeks = Object.keys(weeklyBuckets).sort();
+
+    // Table header
+    doc.setFillColor(...colors.background);
+    doc.rect(20, yPos - 4, pageWidth - 40, 8, 'F');
+    doc.setFontSize(8);
+    doc.setTextColor(...colors.secondary);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Week Starting', 25, yPos);
+    doc.text('Entries', 80, yPos);
+    doc.text('Conditions / Symptoms', 105, yPos);
+    yPos += 8;
+
+    doc.setFont('helvetica', 'normal');
+    sortedWeeks.forEach((week) => {
+      yPos = checkPageBreak(doc, yPos, 10);
+      const entries = weeklyBuckets[week];
+      const conditionSet = new Set(entries.map((e) => e.symptom || e.bodyArea || 'General'));
+      doc.setFontSize(8);
+      doc.setTextColor(...colors.secondary);
+      doc.text(safeDate(week), 25, yPos);
+      doc.text(String(entries.length), 85, yPos);
+      const condText = Array.from(conditionSet).slice(0, 4).join(', ');
+      const condLines = wrapText(doc, condText, pageWidth - 130);
+      doc.setTextColor(...colors.muted);
+      doc.text(condLines[0] || '', 105, yPos);
+      yPos += 6;
+    });
+    yPos += 4;
+  }
+
+  // ================================================================
+  // (b) Severity Trajectory — average severity per week
+  // ================================================================
+  yPos = checkPageBreak(doc, yPos, 30);
+  doc.setFontSize(13);
+  doc.setTextColor(...colors.secondary);
+  doc.setFont('helvetica', 'bold');
+  doc.text('2. Severity Trajectory', 20, yPos);
+  yPos += 8;
+
+  if (recentSymptoms.length === 0) {
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...colors.muted);
+    doc.text('Insufficient data to determine severity trajectory.', 25, yPos);
+    yPos += 8;
+  } else {
+    const weeklyAvg: { week: string; avg: number }[] = [];
+    const weekBuckets: Record<string, number[]> = {};
+    recentSymptoms.forEach((s) => {
+      const key = getWeekKey(s.date);
+      if (!weekBuckets[key]) weekBuckets[key] = [];
+      weekBuckets[key].push(s.severity || 0);
+    });
+
+    Object.keys(weekBuckets)
+      .sort()
+      .forEach((week) => {
+        const vals = weekBuckets[week];
+        const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+        weeklyAvg.push({ week, avg });
+      });
+
+    // Table
+    doc.setFillColor(...colors.background);
+    doc.rect(20, yPos - 4, pageWidth - 40, 8, 'F');
+    doc.setFontSize(8);
+    doc.setTextColor(...colors.secondary);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Week Starting', 25, yPos);
+    doc.text('Avg Severity', 80, yPos);
+    yPos += 8;
+
+    doc.setFont('helvetica', 'normal');
+    weeklyAvg.forEach((entry) => {
+      yPos = checkPageBreak(doc, yPos, 8);
+      doc.setFontSize(8);
+      doc.setTextColor(...colors.secondary);
+      doc.text(safeDate(entry.week), 25, yPos);
+      doc.text(entry.avg.toFixed(1), 85, yPos);
+      yPos += 6;
+    });
+
+    // Determine trend
+    yPos += 2;
+    let trend = 'Stable';
+    if (weeklyAvg.length >= 2) {
+      const firstHalf = weeklyAvg.slice(0, Math.floor(weeklyAvg.length / 2));
+      const secondHalf = weeklyAvg.slice(Math.floor(weeklyAvg.length / 2));
+      const firstAvg = firstHalf.reduce((a, b) => a + b.avg, 0) / firstHalf.length;
+      const secondAvg = secondHalf.reduce((a, b) => a + b.avg, 0) / secondHalf.length;
+      if (secondAvg - firstAvg > 0.5) trend = 'Worsening';
+      else if (firstAvg - secondAvg > 0.5) trend = 'Improving';
+    }
+
+    const trendColor = trend === 'Worsening' ? colors.danger : trend === 'Improving' ? colors.success : colors.warning;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...trendColor);
+    doc.text(`Overall Trend: ${trend}`, 25, yPos);
+    yPos += 10;
+  }
+
+  // ================================================================
+  // (c) Medication Compliance
+  // ================================================================
+  yPos = checkPageBreak(doc, yPos, 30);
+  doc.setFontSize(13);
+  doc.setTextColor(...colors.secondary);
+  doc.setFont('helvetica', 'bold');
+  doc.text('3. Medication Compliance', 20, yPos);
+  yPos += 8;
+
+  if (medications.length === 0) {
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...colors.muted);
+    doc.text('No medications documented.', 25, yPos);
+    yPos += 8;
+  } else {
+    doc.setFillColor(...colors.background);
+    doc.rect(20, yPos - 4, pageWidth - 40, 8, 'F');
+    doc.setFontSize(8);
+    doc.setTextColor(...colors.secondary);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Medication', 25, yPos);
+    doc.text('Prescriber', 75, yPos);
+    doc.text('On/Off Impact', 125, yPos);
+    doc.text('Side Effects', 160, yPos);
+    yPos += 8;
+
+    doc.setFont('helvetica', 'normal');
+    medications.forEach((med) => {
+      yPos = checkPageBreak(doc, yPos, 10);
+      doc.setFontSize(8);
+      doc.setTextColor(...colors.secondary);
+      doc.text((med.name || '').substring(0, 25), 25, yPos);
+      doc.text((med.prescriber || 'N/A').substring(0, 22), 75, yPos);
+      const hasOnOff = !!(med.functionalImpactOnMed || med.functionalImpactOffMed);
+      doc.setTextColor(hasOnOff ? colors.success[0] : colors.danger[0], hasOnOff ? colors.success[1] : colors.danger[1], hasOnOff ? colors.success[2] : colors.danger[2]);
+      doc.text(hasOnOff ? 'Yes' : 'No', 132, yPos);
+      doc.setTextColor(...colors.muted);
+      doc.text((med.sideEffects || 'None').substring(0, 20), 160, yPos);
+      yPos += 6;
+    });
+    yPos += 4;
+  }
+
+  // ================================================================
+  // (d) Employment Impact
+  // ================================================================
+  yPos = checkPageBreak(doc, yPos, 30);
+  doc.setFontSize(13);
+  doc.setTextColor(...colors.secondary);
+  doc.setFont('helvetica', 'bold');
+  doc.text('4. Employment Impact', 20, yPos);
+  yPos += 8;
+
+  if (employmentImpactEntries.length === 0) {
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...colors.muted);
+    doc.text('No employment impact entries documented.', 25, yPos);
+    yPos += 8;
+  } else {
+    // Group by month
+    const monthlyHours: Record<string, number> = {};
+    const monthlyMissedDays: Record<string, number> = {};
+
+    employmentImpactEntries.forEach((entry) => {
+      const key = getMonthKey(entry.date);
+      monthlyHours[key] = (monthlyHours[key] || 0) + (entry.hoursLost || 0);
+      if (entry.type === 'missed-work') {
+        monthlyMissedDays[key] = (monthlyMissedDays[key] || 0) + 1;
+      }
+    });
+
+    doc.setFillColor(...colors.background);
+    doc.rect(20, yPos - 4, pageWidth - 40, 8, 'F');
+    doc.setFontSize(8);
+    doc.setTextColor(...colors.secondary);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Month', 25, yPos);
+    doc.text('Hours Lost', 80, yPos);
+    doc.text('Days Missed', 120, yPos);
+    yPos += 8;
+
+    doc.setFont('helvetica', 'normal');
+    const sortedMonths = Object.keys(monthlyHours).sort();
+    sortedMonths.forEach((month) => {
+      yPos = checkPageBreak(doc, yPos, 8);
+      doc.setFontSize(8);
+      doc.setTextColor(...colors.secondary);
+      doc.text(month, 25, yPos);
+      doc.text(String(monthlyHours[month].toFixed(1)), 85, yPos);
+      doc.text(String(monthlyMissedDays[month] || 0), 125, yPos);
+      yPos += 6;
+    });
+
+    // Totals
+    const totalHours = Object.values(monthlyHours).reduce((a, b) => a + b, 0);
+    const totalMissed = Object.values(monthlyMissedDays).reduce((a, b) => a + b, 0);
+    yPos += 2;
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...colors.secondary);
+    doc.text(`Total: ${totalHours.toFixed(1)} hours lost, ${totalMissed} days missed`, 25, yPos);
+    yPos += 10;
+  }
+
+  // ================================================================
+  // (e) Flare-up Frequency — severity >= 8 or marked as flare per month
+  // ================================================================
+  yPos = checkPageBreak(doc, yPos, 30);
+  doc.setFontSize(13);
+  doc.setTextColor(...colors.secondary);
+  doc.setFont('helvetica', 'bold');
+  doc.text('5. Flare-up Frequency', 20, yPos);
+  yPos += 8;
+
+  const flareUps = symptoms.filter((s) => s.severity >= 8);
+  if (flareUps.length === 0) {
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...colors.muted);
+    doc.text('No flare-ups recorded (severity >= 8).', 25, yPos);
+    yPos += 8;
+  } else {
+    const monthlyFlares: Record<string, number> = {};
+    flareUps.forEach((s) => {
+      const key = getMonthKey(s.date);
+      monthlyFlares[key] = (monthlyFlares[key] || 0) + 1;
+    });
+
+    doc.setFillColor(...colors.background);
+    doc.rect(20, yPos - 4, pageWidth - 40, 8, 'F');
+    doc.setFontSize(8);
+    doc.setTextColor(...colors.secondary);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Month', 25, yPos);
+    doc.text('Flare-ups (Severity >= 8)', 80, yPos);
+    yPos += 8;
+
+    doc.setFont('helvetica', 'normal');
+    Object.keys(monthlyFlares)
+      .sort()
+      .forEach((month) => {
+        yPos = checkPageBreak(doc, yPos, 8);
+        doc.setFontSize(8);
+        doc.setTextColor(...colors.secondary);
+        doc.text(month, 25, yPos);
+        doc.text(String(monthlyFlares[month]), 95, yPos);
+        yPos += 6;
+      });
+
+    yPos += 2;
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Total flare-ups: ${flareUps.length}`, 25, yPos);
+    yPos += 10;
+  }
+
+  // ================================================================
+  // (f) Sleep Quality (if sleep entries exist)
+  // ================================================================
+  if (sleepEntries.length > 0) {
+    yPos = checkPageBreak(doc, yPos, 30);
+    doc.setFontSize(13);
+    doc.setTextColor(...colors.secondary);
+    doc.setFont('helvetica', 'bold');
+    doc.text('6. Sleep Quality Summary', 20, yPos);
+    yPos += 8;
+
+    const avgHours =
+      sleepEntries.reduce((sum, e) => sum + (e.hoursSlept || 0), 0) / sleepEntries.length;
+
+    const qualityMap: Record<string, number> = {
+      'Very Poor': 1,
+      Poor: 2,
+      Fair: 3,
+      Good: 4,
+      Excellent: 5,
+    };
+    const qualityScores = sleepEntries
+      .map((e) => qualityMap[e.quality] || 0)
+      .filter((v) => v > 0);
+    const avgQuality =
+      qualityScores.length > 0
+        ? qualityScores.reduce((a, b) => a + b, 0) / qualityScores.length
+        : 0;
+    const qualityLabel =
+      avgQuality <= 1.5
+        ? 'Very Poor'
+        : avgQuality <= 2.5
+          ? 'Poor'
+          : avgQuality <= 3.5
+            ? 'Fair'
+            : avgQuality <= 4.5
+              ? 'Good'
+              : 'Excellent';
+
+    yPos = drawSummaryBox(
+      doc,
+      [
+        { value: sleepEntries.length, label: 'Total Entries' },
+        { value: avgHours.toFixed(1), label: 'Avg Hours' },
+        { value: qualityLabel, label: 'Avg Quality' },
+      ],
+      yPos,
+    );
+  }
+
+  // ================================================================
+  // (g) Migraine Summary (if migraine entries exist)
+  // ================================================================
+  if (migraines.length > 0) {
+    yPos = checkPageBreak(doc, yPos, 30);
+    const sectionNum = sleepEntries.length > 0 ? '7' : '6';
+    doc.setFontSize(13);
+    doc.setTextColor(...colors.secondary);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`${sectionNum}. Migraine Summary`, 20, yPos);
+    yPos += 8;
+
+    const prostratingCount = migraines.filter((m) => m.wasProstrating || m.severity === 'Prostrating').length;
+
+    // Compute months spanned
+    const migraineDates = migraines.map((m) => new Date(m.date).getTime()).filter((t) => !isNaN(t));
+    let avgPerMonth = 0;
+    if (migraineDates.length > 0) {
+      const earliest = Math.min(...migraineDates);
+      const latest = Math.max(...migraineDates);
+      const monthsSpanned = Math.max(1, (latest - earliest) / (1000 * 60 * 60 * 24 * 30));
+      avgPerMonth = migraines.length / monthsSpanned;
+    }
+
+    yPos = drawSummaryBox(
+      doc,
+      [
+        { value: migraines.length, label: 'Total Episodes' },
+        { value: prostratingCount, label: 'Prostrating' },
+        { value: avgPerMonth.toFixed(1), label: 'Avg / Month' },
+      ],
+      yPos,
+    );
+  }
+
+  // Apply footer to all pages
+  addReportFooter();
+
+  doc.save('evidence-summary-report.pdf');
 };

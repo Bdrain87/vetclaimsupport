@@ -18,6 +18,7 @@ import { Mic, MicOff, Copy, RotateCcw, AlertTriangle, Heart, Users, PenTool, Squ
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { DataConnectedBadge } from '@/components/shared/DataConnectedBadge';
 import { AIConfidenceScore } from '@/components/shared/AIConfidenceScore';
+import { scanAIOutput, AI_OUTPUT_WARNING } from '@/utils/aiOutputGuard';
 
 type Relationship = 'spouse' | 'child' | 'parent' | 'sibling' | 'friend';
 
@@ -40,6 +41,7 @@ export default function FamilyStatement() {
   const [useText, setUseText] = useState(false);
   const [textInput, setTextInput] = useState('');
   const [error, setError] = useState('');
+  const [aiWarning, setAiWarning] = useState(false);
   const { streamedText, isStreaming, startStream, cancel: cancelStream } = useAIStream();
 
   const generateFromText = async (text: string) => {
@@ -70,6 +72,9 @@ export default function FamilyStatement() {
         temperature,
         timeout,
       });
+      // Scan AI output for banned phrases
+      const scan = scanAIOutput(result);
+      if (!scan.clean) setAiWarning(true);
       setStatement(result);
     } catch {
       setError('Failed to generate. Please try again.');
@@ -128,6 +133,7 @@ export default function FamilyStatement() {
     setTextInput('');
     setUseText(false);
     setError('');
+    setAiWarning(false);
   };
 
   return (
@@ -254,6 +260,13 @@ export default function FamilyStatement() {
               <summary className="p-3 text-sm font-medium cursor-pointer hover:bg-accent transition-colors">Voice transcript</summary>
               <p className="px-3 pb-3 text-sm text-muted-foreground italic border-t border-border pt-2">"{transcript}"</p>
             </details>
+          )}
+
+          {aiWarning && !isStreaming && (
+            <div className="p-3 rounded-lg bg-red-500/5 border border-red-500/20 text-xs text-red-400 flex gap-2">
+              <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+              <span>{AI_OUTPUT_WARNING}</span>
+            </div>
           )}
 
           <StreamingText

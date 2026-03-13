@@ -18,7 +18,14 @@ import { useProfileStore } from '@/store/useProfileStore';
 import type { UserProfile, Branch } from '@/store/useProfileStore';
 import { getConditionsForHazards, hazardConditionMap } from '@/data/hazardConditionMap';
 import { getAllBranchLabels } from '@/utils/veteranProfile';
+import { ALL_LOCATIONS } from '@/data/deployment-locations';
+import { HAZARD_SECONDARIES } from '@/data/deployment-locations/hazard-conditions';
 import type { JobCodeSuggestion, DocumentationStatus, EvidenceItem, RatingOpportunity, ClaimSummary, SymptomAnalysis } from '@/types/intelligence';
+import {
+  conditionRatingCriteria as ratingCriteriaData,
+  type ConditionRatingCriteria as RatingCriteriaType,
+  type RatingLevel as RatingLevelType,
+} from '@/data/ratingCriteria';
 
 // ---------------------------------------------------------------------------
 // Exported interfaces
@@ -76,6 +83,22 @@ export interface FrequencyReport {
   symptomCounts: Record<string, number>;
   averageSeverity: number;
   trend: 'improving' | 'stable' | 'worsening' | 'insufficient-data';
+}
+
+export interface RatingLevelAnalysis {
+  level: string;
+  percent: number;
+  criteria: string;
+  alignment: 'meets' | 'partial' | 'gap';
+  evidence: string;
+  gaps: string[];
+}
+
+export interface RatingThresholdResult {
+  conditionName: string;
+  diagnosticCode: string;
+  levels: RatingLevelAnalysis[];
+  nextSteps: { label: string; route: string }[];
 }
 
 // ---------------------------------------------------------------------------
@@ -861,6 +884,38 @@ export const ClaimIntelligence = {
               reason: `Your recent logs mention ${matchedKeywords.slice(0, 3).join(', ')} which may indicate this condition.`,
               source: 'symptom',
               strength: matchedKeywords.length >= 3 ? 'strong' : matchedKeywords.length >= 2 ? 'moderate' : 'possible',
+            });
+          }
+        }
+      }
+    }
+
+    // === Layer 4: Deployment location → exposure → condition recommendations ===
+    const appState = useAppStore.getState();
+    const selectedLocations = appState.selectedLocations || [];
+    if (selectedLocations.length > 0) {
+      for (const locationKey of selectedLocations) {
+        const [conflictId, locationName] = locationKey.split('::');
+        if (!conflictId || !locationName) continue;
+
+        const enrichedLoc = ALL_LOCATIONS.find(
+          (l) => l.conflictId === conflictId && l.name === locationName,
+        );
+        if (!enrichedLoc || enrichedLoc.hazards.length === 0) continue;
+
+        for (const hazard of enrichedLoc.hazards) {
+          const conditionIds = HAZARD_SECONDARIES[hazard];
+          if (!conditionIds) continue;
+
+          for (const condId of conditionIds) {
+            const resolved = resolveConditionId(condId);
+            const vaCondition = getConditionById(resolved.conditionId);
+            addRec({
+              conditionId: resolved.conditionId,
+              conditionName: vaCondition?.name ?? resolved.displayName,
+              reason: `Your deployment to ${enrichedLoc.name} (${enrichedLoc.country}) involved ${hazard.replace(/_/g, ' ')} exposure, which is associated with this condition.`,
+              source: 'service',
+              strength: enrichedLoc.pactActEligible ? 'strong' : 'moderate',
             });
           }
         }
@@ -1957,6 +2012,218 @@ export const ClaimIntelligence = {
     }
 
     return insights.slice(0, 5);
+  },
+
+  // -----------------------------------------------------------------------
+  // getRatingThresholdAnalysis — Compare logged data against each rating level
+  // -----------------------------------------------------------------------
+  getRatingThresholdAnalysis(
+    conditionName: string,
+  ): RatingThresholdResult | null {
+    const claimsData = getClaimsDataFromStore();
+    const lowerName = conditionName.toLowerCase();
+
+    // Find rating criteria for the condition
+    const criteria = ratingCriteriaData.find(
+      (c) =>
+        c.conditionId.toLowerCase() === lowerName ||
+        c.conditionName.toLowerCase().includes(lowerName) ||
+        lowerName.includes(c.conditionId.toLowerCase()),
+    );
+
+    if (!criteria) return null;
+
+    // Gather symptom data (90 and 180 day windows)
+    const matchTerms = [lowerName];
+    const vaCondition = vaConditions.find(
+      (c) =>
+        c.name.toLowerCase() === lowerName ||
+        c.abbreviation.toLowerCase() === lowerName ||
+        c.id.toLowerCase() === lowerName.replace(/\s+/g, '-'),
+    );
+    if (vaCondition) {
+      matchTerms.push(vaCondition.id.toLowerCase());
+      matchTerms.push(vaCondition.abbreviation.toLowerCase());
+      matchTerms.push(...vaCondition.keywords.map((k) => k.toLowerCase()));
+    }
+
+    // Count symptom entries in 90 and 180 day windows
+    const symptoms90 = claimsData.symptoms.filter(
+      (s) =>
+        isWithinDays(s.date, 90) &&
+        matchTerms.some((t) => [s.symptom, s.bodyArea, s.notes].join(' ').toLowerCase().includes(t)),
+    );
+    const symptoms180 = claimsData.symptoms.filter(
+      (s) =>
+        isWithinDays(s.date, 180) &&
+        matchTerms.some((t) => [s.symptom, s.bodyArea, s.notes].join(' ').toLowerCase().includes(t)),
+    );
+
+    const avgSeverity90 =
+      symptoms90.length > 0
+        ? symptoms90.reduce((sum, s) => sum + (s.severity || 0), 0) / symptoms90.length
+        : 0;
+
+    // Medication data
+    const medications = useAppStore.getState().medications.filter(
+      (m) => textMatchesAny(m.condition + ' ' + m.name, matchTerms),
+    );
+
+    // Employment impact entries
+    const employmentEntries = useAppStore.getState().employmentImpactEntries.filter(
+      (e) => textMatchesAny(e.condition + ' ' + e.description, matchTerms),
+    );
+
+    // Quick logs / flare-ups
+    const flareUps90 = claimsData.quickLogs.filter(
+      (q) => isWithinDays(q.date, 90) && q.hadFlareUp && textMatchesAny(q.flareUpNote, matchTerms),
+    );
+
+    // PTSD-specific data
+    const ptsdTerms = ['ptsd', 'post-traumatic', 'anxiety', 'mental health', 'depression'];
+    const isPTSD = matchTerms.some((t) => ptsdTerms.includes(t));
+    const ptsdEntries90 = isPTSD
+      ? claimsData.ptsdSymptoms.filter((p) => isWithinDays(p.date, 90))
+      : [];
+
+    // Migraine-specific data (DC 8100)
+    const migraineTerms = ['migraine', 'headache', 'migraines'];
+    const isMigraine = matchTerms.some((t) => migraineTerms.includes(t));
+    const migraines90 = isMigraine
+      ? claimsData.migraines.filter((m) => isWithinDays(m.date, 90))
+      : [];
+    const migraines180 = isMigraine
+      ? claimsData.migraines.filter((m) => isWithinDays(m.date, 180))
+      : [];
+    const prostratingCount90 = migraines90.filter((m) => m.wasProstrating || m.severity === 'Prostrating').length;
+    const prostratingPerMonth = migraines180.length > 0
+      ? migraines180.filter((m) => m.wasProstrating || m.severity === 'Prostrating').length / 6
+      : 0;
+    const missedWorkMigraines = migraines90.filter(
+      (m) => m.couldNotWork || m.impact === 'Missed work/duty' || m.economicImpact === 'missed_full_day',
+    ).length;
+
+    // Build all symptom text for keyword matching
+    const allTexts = [
+      ...symptoms180.map((s) => [s.symptom, s.notes, s.frequency, s.dailyImpact].filter(Boolean).join(' ')),
+      ...claimsData.quickLogs
+        .filter((q) => isWithinDays(q.date, 180))
+        .map((q) => q.flareUpNote),
+      ...ptsdEntries90.map((p) => [p.occupationalImpairment, p.socialImpairment, p.notes].join(' ')),
+    ];
+    const combinedText = allTexts.join(' ').toLowerCase();
+
+    // Analyze each rating level
+    const levels: RatingLevelAnalysis[] = criteria.ratingLevels
+      .filter((rl: RatingLevelType) => rl.percent > 0)
+      .map((rl: RatingLevelType) => {
+        const gaps: string[] = [];
+        let evidenceParts: string[] = [];
+        let matchedKeywords = 0;
+
+        // Keyword matching
+        for (const kw of rl.keywords) {
+          const kwWords = kw.toLowerCase().split(/\s+/).filter((w) => w.length > 3);
+          const found = kwWords.length > 0
+            ? kwWords.some((w) => combinedText.includes(w))
+            : combinedText.includes(kw.toLowerCase());
+          if (found) {
+            matchedKeywords++;
+          } else {
+            gaps.push(`Documentation does not yet reflect "${kw}" — consider logging when this applies`);
+          }
+        }
+        const kwPct = rl.keywords.length > 0 ? matchedKeywords / rl.keywords.length : 0;
+
+        // Build evidence summary based on condition type
+        if (isMigraine) {
+          // Migraine-specific evidence
+          if (rl.percent === 10) {
+            evidenceParts.push(`${prostratingCount90} prostrating episodes in 90 days (criteria: ~1 per 2 months)`);
+            if (prostratingPerMonth >= 0.5) evidenceParts.push('Frequency aligns with this level');
+            else gaps.push('For 10%, VA looks for prostrating attacks averaging 1 per 2 months — log prostrating episodes consistently');
+          } else if (rl.percent === 30) {
+            evidenceParts.push(`${prostratingCount90} prostrating episodes in 90 days (criteria: ~1 per month)`);
+            if (prostratingPerMonth >= 1) evidenceParts.push('Frequency aligns with this level');
+            else gaps.push('For 30%, VA looks for prostrating attacks averaging once per month — document each prostrating episode');
+          } else if (rl.percent === 50) {
+            evidenceParts.push(`${prostratingCount90} prostrating episodes in 90 days`);
+            evidenceParts.push(`${missedWorkMigraines} entries with documented work impact`);
+            if (prostratingPerMonth < 2) gaps.push('For 50%, VA looks for "very frequent completely prostrating" attacks — log every episode');
+            if (missedWorkMigraines === 0) gaps.push('For 50%, VA requires evidence of "severe economic inadaptability" — document missed work, lost hours, and economic impact');
+          }
+        } else if (isPTSD) {
+          // PTSD / mental health evidence
+          evidenceParts.push(`${ptsdEntries90.length} PTSD symptom entries in 90 days`);
+          evidenceParts.push(`${symptoms90.length} symptom logs, avg severity ${avgSeverity90.toFixed(1)}/10`);
+          if (employmentEntries.length > 0) {
+            evidenceParts.push(`${employmentEntries.length} work impact entries documented`);
+          }
+          if (rl.percent >= 50 && employmentEntries.length === 0) {
+            gaps.push(`For ${rl.percent}% PTSD, VA looks for "${rl.percent === 50 ? 'occupational and social impairment with reduced reliability' : 'deficiencies in most areas'}." Your logs show ${employmentEntries.length} work impact entries — use the Employment Impact tracker to document these`);
+          }
+          if (rl.percent >= 70 && ptsdEntries90.length < 5) {
+            gaps.push('Higher ratings require robust documentation — aim for regular PTSD symptom entries (at least weekly)');
+          }
+        } else {
+          // General condition evidence
+          evidenceParts.push(`${symptoms90.length} symptom entries in 90 days (avg severity: ${avgSeverity90.toFixed(1)}/10)`);
+          if (medications.length > 0) evidenceParts.push(`${medications.length} medication(s) on record`);
+          if (flareUps90.length > 0) evidenceParts.push(`${flareUps90.length} flare-up(s) documented`);
+          if (employmentEntries.length > 0) evidenceParts.push(`${employmentEntries.length} work impact entries`);
+          if (symptoms90.length < 5) gaps.push('More consistent symptom logging strengthens your documentation — aim for regular entries');
+          if (rl.percent >= 50 && employmentEntries.length === 0) {
+            gaps.push(`Higher ratings consider functional and occupational impact — document how this condition affects your work`);
+          }
+        }
+
+        // Determine alignment
+        let alignment: RatingLevelAnalysis['alignment'] = 'gap';
+        if (isMigraine) {
+          if (rl.percent === 10 && prostratingPerMonth >= 0.5) alignment = kwPct >= 0.5 ? 'meets' : 'partial';
+          else if (rl.percent === 30 && prostratingPerMonth >= 1) alignment = kwPct >= 0.5 ? 'meets' : 'partial';
+          else if (rl.percent === 50 && prostratingPerMonth >= 2 && missedWorkMigraines > 0) alignment = kwPct >= 0.5 ? 'meets' : 'partial';
+          else if (kwPct >= 0.5) alignment = 'partial';
+        } else {
+          if (kwPct >= 0.6 && symptoms90.length >= 5) alignment = 'meets';
+          else if (kwPct >= 0.3 || symptoms90.length >= 3) alignment = 'partial';
+        }
+
+        return {
+          level: `${rl.percent}%`,
+          percent: rl.percent,
+          criteria: rl.criteria,
+          alignment,
+          evidence: evidenceParts.length > 0 ? evidenceParts.join('. ') + '.' : 'No documentation found for this condition yet.',
+          gaps: gaps.slice(0, 3), // Limit to most actionable
+        };
+      });
+
+    // Build next steps
+    const nextSteps: { label: string; route: string }[] = [];
+    if (isMigraine && migraines90.length < 10) {
+      nextSteps.push({ label: 'Log migraine episodes to build frequency evidence', route: '/health/migraines' });
+    }
+    if (isPTSD && ptsdEntries90.length < 5) {
+      nextSteps.push({ label: 'Track PTSD symptoms to document pattern and severity', route: '/health/ptsd' });
+    }
+    if (symptoms90.length < 10) {
+      nextSteps.push({ label: 'Log more symptoms to strengthen documentation', route: '/health/symptoms' });
+    }
+    if (employmentEntries.length === 0) {
+      nextSteps.push({ label: 'Document work impact with the Employment tracker', route: '/health/employment-impact' });
+    }
+    if (medications.length === 0) {
+      nextSteps.push({ label: 'Add medications to show treatment history', route: '/health/medications' });
+    }
+    nextSteps.push({ label: 'Write a personal statement for this condition', route: `/prep/personal-statement?condition=${encodeURIComponent(conditionName)}` });
+
+    return {
+      conditionName,
+      diagnosticCode: criteria.diagnosticCode,
+      levels,
+      nextSteps: nextSteps.slice(0, 4),
+    };
   },
 };
 

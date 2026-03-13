@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import {
   ChevronLeft,
@@ -16,6 +16,7 @@ import {
   Activity,
   Pill,
   Briefcase,
+  AlertTriangle,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -47,6 +48,10 @@ import {
   buildMedicationSummary,
   buildFunctionalImpactSummary,
 } from '@/utils/prefillHelpers';
+import { IntelInsightsCard, type InsightItem } from '@/components/shared/IntelInsightsCard';
+import { WhatNextCard } from '@/components/shared/WhatNextCard';
+import { ClaimIntelligence } from '@/services/claimIntelligence';
+import { getNextAction } from '@/utils/whatNext';
 import type { VACondition } from '@/data/vaConditions';
 import { getConditionById } from '@/data/vaConditions';
 import { searchAllConditions } from '@/utils/conditionSearch';
@@ -55,6 +60,7 @@ import { formatContextForAI } from '@/utils/formatContextForAI';
 import { getConditionCriteriaForPrompt } from '@/lib/ai-prompts';
 import { useEvidence } from '@/hooks/useEvidence';
 import { EvidenceAttachment } from '@/components/shared/EvidenceAttachment';
+import { scanAIOutput, AI_OUTPUT_WARNING } from '@/utils/aiOutputGuard';
 
 interface PersonalStatementFormData {
   condition: VACondition | null;
@@ -200,14 +206,34 @@ export default function PersonalStatement() {
   const { documents, setAllDocuments } = useEvidence();
   const [copied, setCopied] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [exported, setExported] = useState(false);
   const [polishedStatement, setPolishedStatement] = useState<string | null>(null);
+  const [aiWarning, setAiWarning] = useState(false);
   const [prefilled, setPrefilled] = useState<Record<string, boolean>>({});
   const { generate: aiPolish, isLoading: isPolishing, error: aiError } = useAIGenerate('VA_SPEAK_TRANSLATOR');
+
+  const intelData = useMemo(() => {
+    const conditionName = formData.condition?.name;
+    if (!conditionName) return null;
+    const readiness = ClaimIntelligence.getConditionReadiness(conditionName, claimsData);
+    const symptoms = ClaimIntelligence.getSymptomPatterns(formData.condition?.id);
+    if (!readiness) return null;
+    const insights: InsightItem[] = [
+      { label: 'Evidence readiness', value: `${readiness.overallScore}%` },
+      { label: 'Medical evidence', value: `${readiness.components.medicalEvidence}%` },
+      { label: 'Severity documented', value: `${readiness.components.currentSeverity}%` },
+    ];
+    if (symptoms?.severityTrend && symptoms.severityTrend !== 'insufficient_data') {
+      insights.push({ label: 'Symptom trend', value: symptoms.severityTrend });
+    }
+    return { score: readiness.overallScore, insights, tips: readiness.tips };
+  }, [formData.condition?.name, formData.condition?.id, claimsData]);
 
   const updateField = useCallback(
     <K extends keyof PersonalStatementFormData>(field: K, value: PersonalStatementFormData[K]) => {
       _draftUpdateField(field, value);
       setPolishedStatement(null);
+      setAiWarning(false);
       // Clear prefill badge for this field if user manually changes it
       if (typeof value === 'string') {
         setPrefilled((prev) => ({ ...prev, [field]: false }));
@@ -339,6 +365,7 @@ export default function PersonalStatement() {
       const conditionName = formData.condition?.name || '';
       await exportPersonalStatement(statement, conditionName || undefined);
       markJourneyItem('personal-statement');
+      setExported(true);
       saveToVault({
         documentType: 'personal-statement',
         condition: conditionName,
@@ -365,6 +392,7 @@ export default function PersonalStatement() {
     try {
       await navigator.clipboard.writeText(statement);
       setCopied(true);
+      setExported(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
       const textarea = document.createElement('textarea');
@@ -396,8 +424,11 @@ export default function PersonalStatement() {
       : '';
 
     const prompt = `Please polish and improve the following VA personal statement. Keep all factual content exactly the same but improve the clarity, grammar, and professional tone. Make it more persuasive for a VA disability claim while keeping the veteran's voice authentic. You may reference the veteran's logged data below to enrich the statement, but do not add any claims or facts not supported by the data.\n\n${contextBlock}${criteriaBlock}\n\n${raw}`;
+    setAiWarning(false);
     const result = await aiPolish(prompt);
     if (result) {
+      const scan = scanAIOutput(result);
+      if (!scan.clean) setAiWarning(true);
       setPolishedStatement(result);
     }
   }, [generateStatement, aiPolish, formData.condition]);
@@ -757,6 +788,12 @@ export default function PersonalStatement() {
                 {polishedStatement && (
                   <AIContentBadge timestamp={new Date().toISOString()} className="mb-3" />
                 )}
+                {aiWarning && polishedStatement && (
+                  <div className="p-3 rounded-lg bg-red-500/5 border border-red-500/20 text-xs text-red-400 flex gap-2 mb-3">
+                    <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+                    <span>{AI_OUTPUT_WARNING}</span>
+                  </div>
+                )}
                 <pre className="whitespace-pre-wrap text-sm font-mono text-foreground overflow-auto max-h-96 leading-relaxed wrap-break-word">
                   {polishedStatement || generateStatement()}
                 </pre>
@@ -798,7 +835,7 @@ export default function PersonalStatement() {
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={() => setPolishedStatement(null)}
+                          onClick={() => { setPolishedStatement(null); setAiWarning(false); }}
                           className="text-xs text-muted-foreground"
                         >
                           Revert to original
@@ -825,6 +862,11 @@ export default function PersonalStatement() {
                 {exporting ? 'Exporting...' : 'Download PDF'}
               </Button>
             </div>
+
+            {/* What Next */}
+            {exported && (
+              <WhatNextCard actions={getNextAction('export-personal-statement', formData.condition?.id)} />
+            )}
           </div>
         );
 
@@ -854,6 +896,16 @@ export default function PersonalStatement() {
 
       {/* AI Disclaimer Banner */}
       <AIDisclaimer variant="banner" />
+
+      {/* Intel Insights */}
+      {intelData && (
+        <IntelInsightsCard
+          title="Intel Insights"
+          readinessScore={intelData.score}
+          insights={intelData.insights}
+          tips={intelData.tips}
+        />
+      )}
 
       {/* Data Connected Badge */}
       <DataConnectedBadge conditionId={formData.condition?.id} />

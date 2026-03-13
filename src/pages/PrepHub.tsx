@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import { PageContainer } from '@/components/PageContainer';
 import { Input } from '@/components/ui/input';
 import { useRecommendedTools } from '@/hooks/useRecommendedTools';
+import { useSmartReminders } from '@/hooks/useSmartReminders';
 
 interface ToolItem {
   label: string;
@@ -32,7 +33,7 @@ const toolCategories: { title: string; tools: ToolItem[] }[] = [
     tools: [
       { label: 'Personal Statement', icon: FileText, route: '/prep/personal-statement', description: 'Generate your personal statement' },
       { label: 'Buddy Statement', icon: Users, route: '/prep/buddy-statement', description: 'Build a buddy/lay statement' },
-      { label: 'Nexus Letter Builder', icon: FileSignature, route: '/prep/doctor-summary', description: 'Doctor summary outline for nexus letters' },
+      { label: 'Doctor Summary Builder', icon: FileSignature, route: '/prep/doctor-summary', description: 'Medical evidence outline for your physician' },
       { label: 'Stressor Statement', icon: AlertTriangle, route: '/prep/stressor', description: 'Document PTSD stressors' },
       { label: 'Family Statement', icon: Heart, route: '/prep/family-statement', description: 'Family lay statements' },
     ],
@@ -67,6 +68,7 @@ const toolCategories: { title: string; tools: ToolItem[] }[] = [
       { label: 'PACT Act Checker', icon: Shield, route: '/prep/pact-act', description: 'Check presumptive benefit eligibility' },
       { label: 'State Benefits Finder', icon: MapPin, route: '/prep/state-benefits', description: 'State-specific veteran benefits' },
       { label: 'Find a VSO', icon: Users, route: '/prep/vso-locator', description: 'Get free accredited representation' },
+      { label: 'C-File Intel', icon: FileSearch, route: '/prep/cfile-intel', description: 'AI analysis of your VA Claims File' },
       { label: 'Evidence Analyzer', icon: Scan, route: '/prep/evidence-scanner', description: 'AI-powered document analysis' },
       { label: 'Benefits Discovery', icon: Compass, route: '/prep/benefits', description: 'Discover benefits you may qualify for' },
       { label: 'Medication Side Effects', icon: Pill, route: '/prep/medication-rule', description: 'Check medication secondary claim links' },
@@ -117,6 +119,12 @@ export default function PrepHub() {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const recommendedTools = useRecommendedTools();
+  const allReminders = useSmartReminders();
+  const prepReminders = useMemo(() => {
+    const prepIds = new Set(['itf-expiring', 'bdd-window', 'missing-docs']);
+    const prepCategories = new Set(['deadline', 'exam', 'evidence']);
+    return allReminders.filter((r) => prepIds.has(r.id) || prepCategories.has(r.category) || r.id.startsWith('exam-prep-') || r.id.startsWith('deadline-') || r.id.startsWith('buddy-followup-')).slice(0, 3);
+  }, [allReminders]);
 
   // Map recommended tools to ToolItem format with matching icons
   const ROUTE_ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -175,6 +183,29 @@ export default function PrepHub() {
           <p className="text-muted-foreground text-sm">Everything you need to prepare and strengthen your claim.</p>
         </div>
       </div>
+
+      {/* Prep Reminders */}
+      {prepReminders.length > 0 && (
+        <div className="space-y-1.5">
+          {prepReminders.map((r) => (
+            <button
+              key={r.id}
+              onClick={() => r.actionRoute && navigate(r.actionRoute)}
+              className="w-full flex items-center gap-2.5 p-2.5 rounded-xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors text-left"
+            >
+              {r.id.startsWith('exam-prep-') ? (
+                <Clock className="h-3.5 w-3.5 shrink-0 text-destructive" />
+              ) : (
+                <AlertTriangle className={`h-3.5 w-3.5 shrink-0 ${r.priority === 'high' ? 'text-destructive' : 'text-gold'}`} />
+              )}
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-medium text-foreground truncate">{r.title}</p>
+              </div>
+              {r.actionRoute && <Compass className="h-3.5 w-3.5 text-muted-foreground shrink-0" />}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Search */}
       <div className="relative">

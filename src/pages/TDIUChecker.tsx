@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { calculateCombinedRating, getMonthlyCompensation } from '@/services/vaCompensation';
+import useAppStore from '@/store/useAppStore';
 import {
   Briefcase,
   CheckCircle2,
@@ -11,9 +12,13 @@ import {
   ChevronRight,
   ShieldCheck,
   XCircle,
+  Clock,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PageContainer } from '@/components/PageContainer';
+import { IntelInsightsCard, type InsightItem } from '@/components/shared/IntelInsightsCard';
+import { ClaimIntelligence } from '@/services/claimIntelligence';
+import { useClaims } from '@/hooks/useClaims';
 
 type TDIUPathway = 'schedular' | 'extraschedular' | 'none';
 
@@ -88,7 +93,9 @@ const EMPLOYMENT_QUESTIONS = [
 
 export default function TDIUChecker() {
   const { conditions } = useUserConditions();
+  const { data: claimsData } = useClaims();
   const [answers, setAnswers] = useState<Record<number, boolean>>({});
+  const employmentImpactEntries = useAppStore((s) => s.employmentImpactEntries);
 
   const approvedWithRatings = useMemo(
     () =>
@@ -107,6 +114,24 @@ export default function TDIUChecker() {
   const monthlyIncrease = tdiu100Monthly - currentMonthly;
 
   const yesCount = Object.values(answers).filter(Boolean).length;
+
+  // Intel Insights — aggregate readiness across all rated conditions
+  const intelData = useMemo(() => {
+    if (approvedWithRatings.length === 0 || !claimsData) return null;
+    const conditionReadiness = approvedWithRatings.map((r) =>
+      ClaimIntelligence.getConditionReadiness(r.name, claimsData),
+    ).filter(Boolean);
+    if (conditionReadiness.length === 0) return null;
+    const avgScore = Math.round(conditionReadiness.reduce((sum, r) => sum + r!.overallScore, 0) / conditionReadiness.length);
+    const allTips = conditionReadiness.flatMap((r) => r!.tips).slice(0, 5);
+    const insights: InsightItem[] = [
+      { label: 'Avg. evidence readiness', value: `${avgScore}%` },
+      { label: 'Conditions rated', value: `${approvedWithRatings.length}` },
+      { label: 'Combined rating', value: `${currentCombined}%` },
+      { label: 'Work impact entries', value: `${employmentImpactEntries.length}` },
+    ];
+    return { score: avgScore, insights, tips: allTips };
+  }, [approvedWithRatings, claimsData, currentCombined, employmentImpactEntries.length]);
 
   return (
     <PageContainer className="space-y-6 animate-fade-in">
@@ -140,6 +165,17 @@ export default function TDIUChecker() {
         </CardContent>
       </Card>
 
+      {/* Intel Insights */}
+      {intelData && (
+        <IntelInsightsCard
+          title="TDIU Readiness Intel"
+          readinessScore={intelData.score}
+          insights={intelData.insights}
+          tips={intelData.tips}
+          defaultExpanded={false}
+        />
+      )}
+
       {/* Eligibility Result */}
       <Card>
         <CardContent className="p-4">
@@ -166,6 +202,48 @@ export default function TDIUChecker() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Employment Impact Data */}
+      {employmentImpactEntries.length > 0 && (
+        <Card className="border-gold/20">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm flex items-center gap-2">
+              <Clock className="h-4 w-4 text-gold" />
+              Your Work Impact Data
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {(() => {
+              const now = new Date();
+              const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+              const recent = employmentImpactEntries.filter(
+                (e) => new Date(e.date) >= ninetyDaysAgo,
+              );
+              const totalHours = recent.reduce((sum, e) => sum + e.hoursLost, 0);
+              const weeklyAvg = totalHours / 13; // 90 days ≈ 13 weeks
+              return (
+                <>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">Incidents (last 90 days)</span>
+                    <span className="font-bold text-foreground">{recent.length}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">Total hours lost</span>
+                    <span className="font-bold text-foreground">{totalHours.toFixed(1)} hrs</span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">Average per week</span>
+                    <span className="font-bold text-foreground">{weeklyAvg.toFixed(1)} hrs/week</span>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground pt-1 border-t border-border">
+                    This data from your Work Impact tracker supports your TDIU claim by documenting employment limitations.
+                  </p>
+                </>
+              );
+            })()}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Your Ratings */}
       {approvedWithRatings.length > 0 ? (

@@ -58,12 +58,23 @@ export function useConditionJourney(conditionId: string, conditionName: string):
     const stmtProgress = hasDraft ? 100 : 0;
     const stmtComplete = hasDraft;
 
-    // Step 5: C&P Exam Prep
+    // Step 5: Buddy Statements (reactive — auto-tracks received/submitted)
+    const buddyContacts = condData.buddyContacts;
+    const buddyTotal = buddyContacts.length;
+    const buddyReceived = buddyContacts.filter(
+      (b) => b.statementStatus === 'Received' || b.statementStatus === 'Submitted',
+    ).length;
+    const buddyProgress = buddyTotal > 0
+      ? Math.round((buddyReceived / buddyTotal) * 100)
+      : 0;
+    const buddyComplete = buddyReceived >= 1;
+
+    // Step 6: C&P Exam Prep
     const hasExamDraft = !!formDrafts['tool:cp-exam-prep'];
     const examProgress = hasExamDraft ? 100 : 0;
     const examComplete = hasExamDraft;
 
-    // Step 6: Secondary Connections
+    // Step 7: Secondary Connections
     const secondaryCount = profile?.possibleSecondaries?.length ?? 0;
     const secProgress = secondaryCount > 0 ? 100 : 0;
     const secComplete = secondaryCount > 0;
@@ -104,6 +115,17 @@ export function useConditionJourney(conditionId: string, conditionName: string):
         isComplete: stmtComplete,
         progress: stmtProgress,
         detail: hasDraft ? 'Draft saved' : undefined,
+      },
+      {
+        id: 'buddy',
+        title: 'Get Buddy Statements',
+        description: 'Collect witness statements from people who know your condition',
+        route: '/prep/buddy-statements',
+        isComplete: buddyComplete,
+        progress: buddyProgress,
+        detail: buddyTotal > 0
+          ? `${buddyReceived} of ${buddyTotal} received`
+          : undefined,
       },
       {
         id: 'exam',

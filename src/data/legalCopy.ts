@@ -94,7 +94,7 @@ export const AI_COPY = {
   preSendBody:
     'We will automatically remove identifiers like name, SSN, address, and claim numbers before sending text to the AI service. Review redactions before continuing.',
   whatGetsSent:
-    'Only the redacted text you approve is sent. We do not upload your original PDF or images.',
+    'Only the redacted text you approve is sent. We do not upload your original PDF or images. Some features (C-File Intel, Evidence Scanner) upload documents to the AI service with PII automatically redacted — you will be asked for consent before any upload.',
   yourControl:
     'You can skip AI entirely. The app works without it.',
 
@@ -109,6 +109,50 @@ export const AI_COPY = {
   defaultOffPerUpload:
     'AI analysis is off by default. You must opt in for each document.',
 } as const;
+
+// ---------------------------------------------------------------------------
+// Export confirmation copy
+// ---------------------------------------------------------------------------
+export const EXPORT_CONFIRMATION = {
+  title: 'Before You Export',
+  body: 'If you plan to submit this to the VA, please verify:',
+  checks: [
+    'All content is accurate and truthful',
+    'AI-generated content has been reviewed for accuracy',
+    'Medical opinions are authored by a licensed clinician, not AI',
+    'Consider consulting a VA-accredited VSO before filing',
+  ],
+  acknowledgment:
+    'I understand this content is my responsibility and I have reviewed it for accuracy.',
+} as const;
+
+// ---------------------------------------------------------------------------
+// C-File upload consent copy
+// ---------------------------------------------------------------------------
+export const C_FILE_CONSENT = {
+  title: 'C-File Upload Consent',
+  body: 'Your C-File PDF will be uploaded to Google\'s AI service for analysis.',
+  details: [
+    'Personal identifiers (SSN, names, addresses, claim numbers) are automatically redacted before upload',
+    'The file is deleted from Google\'s servers immediately after analysis',
+    'Results are stored only on your device, encrypted',
+    'You can cancel anytime during processing',
+  ],
+  acknowledgment:
+    'I consent to uploading my redacted C-File for AI analysis under the terms described above.',
+} as const;
+
+// ---------------------------------------------------------------------------
+// AI analysis disclosure (two-mode features)
+// ---------------------------------------------------------------------------
+export const AI_ANALYSIS_DISCLOSURE =
+  'This feature has two modes: Local analysis is processed entirely on your device — no data leaves your phone. AI analysis sends redacted text to Google\'s AI service for deeper insights. You choose which mode to use.';
+
+// ---------------------------------------------------------------------------
+// Doctor Summary AI disclaimer
+// ---------------------------------------------------------------------------
+export const DOCTOR_SUMMARY_AI_DISCLAIMER =
+  'This AI-enhanced outline organizes your documented evidence for physician review. It does NOT contain medical opinions. All sections marked [CLINICIAN TO PROVIDE] require independent evaluation by a licensed clinician. This is not a medical document — it is an organizational tool.';
 
 // ---------------------------------------------------------------------------
 // Premium / payment copy

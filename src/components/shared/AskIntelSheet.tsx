@@ -14,9 +14,12 @@ import { isGeminiConfigured } from '@/lib/gemini';
 import { buildVeteranContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
 import { StreamingText } from '@/components/ui/StreamingText';
-import { MessageCircle, X, Send, Loader2, AlertTriangle } from 'lucide-react';
+import { MessageCircle, X, Send, Loader2, AlertTriangle, Maximize2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { AI_ANTI_HALLUCINATION, buildCriteriaBlockForConditions, buildSecondaryConnectionsBlock } from '@/lib/ai-prompts';
 import { cn } from '@/lib/utils';
+import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { scanAIOutput, AI_OUTPUT_WARNING } from '@/utils/aiOutputGuard';
 
 const SYSTEM_INSTRUCTION = `You are a VA disability claims preparation advisor built into the VetClaimSupport app. Your role:
 
@@ -37,9 +40,11 @@ CRITICAL RULES:
 interface Message {
   role: 'user' | 'assistant';
   content: string;
+  hasWarning?: boolean;
 }
 
 export function AskIntelSheet() {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
@@ -88,7 +93,8 @@ export function AskIntelSheet() {
         model,
         temperature,
       });
-      setMessages((prev) => [...prev, { role: 'assistant', content: result }]);
+      const scan = scanAIOutput(result);
+      setMessages((prev) => [...prev, { role: 'assistant', content: result, hasWarning: !scan.clean }]);
     } catch {
       // Error is handled in useAIStream
     }
@@ -127,13 +133,27 @@ export function AskIntelSheet() {
                   <h3 className="text-sm font-bold text-foreground">Ask Intel</h3>
                   <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-gold/10 text-gold font-medium">AI</span>
                 </div>
-                <button
-                  onClick={() => { cancel(); setIsOpen(false); }}
-                  className="p-1.5 rounded-lg hover:bg-accent transition-colors"
-                  aria-label="Close"
-                >
-                  <X className="h-4 w-4 text-muted-foreground" />
-                </button>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => { cancel(); setIsOpen(false); navigate('/prep/ask-intel'); }}
+                    className="p-1.5 rounded-lg hover:bg-accent transition-colors"
+                    aria-label="Full screen"
+                  >
+                    <Maximize2 className="h-4 w-4 text-muted-foreground" />
+                  </button>
+                  <button
+                    onClick={() => { cancel(); setIsOpen(false); }}
+                    className="p-1.5 rounded-lg hover:bg-accent transition-colors"
+                    aria-label="Close"
+                  >
+                    <X className="h-4 w-4 text-muted-foreground" />
+                  </button>
+                </div>
+              </div>
+
+              {/* AI Disclaimer */}
+              <div className="px-4 pt-2">
+                <AIDisclaimer variant="banner" />
               </div>
 
               {/* Messages */}
@@ -168,6 +188,12 @@ export function AskIntelSheet() {
                         : 'bg-secondary text-foreground',
                     )}
                   >
+                    {msg.role === 'assistant' && msg.hasWarning && (
+                      <div className="flex items-center gap-1 text-[10px] text-gold mb-1">
+                        <AlertTriangle className="h-3 w-3" />
+                        <span>{AI_OUTPUT_WARNING}</span>
+                      </div>
+                    )}
                     {msg.content}
                   </div>
                 ))}

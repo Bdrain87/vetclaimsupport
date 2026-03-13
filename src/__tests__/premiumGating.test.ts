@@ -88,11 +88,13 @@ describe('Premium Gating', () => {
       expect(canAddCondition(0)).toBe(true);
     });
 
-    it('free user cannot add 2nd condition (at count=1)', () => {
-      expect(canAddCondition(1)).toBe(false);
+    it('free user can add conditions up to limit (at count=1,2)', () => {
+      expect(canAddCondition(1)).toBe(true);
+      expect(canAddCondition(2)).toBe(true);
     });
 
-    it('free user cannot add beyond limit (at count=5)', () => {
+    it('free user cannot add beyond limit (at count=3,5)', () => {
+      expect(canAddCondition(3)).toBe(false);
       expect(canAddCondition(5)).toBe(false);
     });
 
@@ -106,7 +108,7 @@ describe('Premium Gating', () => {
     });
 
     it('free user cannot add health logs beyond limit', () => {
-      expect(canAddHealthLog(10)).toBe(false);
+      expect(canAddHealthLog(25)).toBe(false);
       expect(canAddHealthLog(100)).toBe(false);
     });
 
@@ -180,16 +182,16 @@ describe('Premium Gating', () => {
   // PREVIEW_LIMITS constants
   // -----------------------------------------------------------------------
   describe('PREVIEW_LIMITS', () => {
-    it('maxConditions is 1', () => {
-      expect(PREVIEW_LIMITS.maxConditions).toBe(1);
+    it('maxConditions is 3', () => {
+      expect(PREVIEW_LIMITS.maxConditions).toBe(3);
     });
 
-    it('maxHealthLogs is 10', () => {
-      expect(PREVIEW_LIMITS.maxHealthLogs).toBe(10);
+    it('maxHealthLogs is 25', () => {
+      expect(PREVIEW_LIMITS.maxHealthLogs).toBe(25);
     });
 
-    it('maxDocumentUploads is 0', () => {
-      expect(PREVIEW_LIMITS.maxDocumentUploads).toBe(0);
+    it('maxDocumentUploads is 1', () => {
+      expect(PREVIEW_LIMITS.maxDocumentUploads).toBe(1);
     });
 
     it('exportEnabled is false', () => {

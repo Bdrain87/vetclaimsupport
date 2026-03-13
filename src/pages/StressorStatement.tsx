@@ -1,5 +1,5 @@
-import { useState, useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { safeFormatDate } from '@/utils/dateUtils';
 import {
   ChevronLeft,
@@ -37,6 +37,8 @@ import { useToolDraft } from '@/hooks/useToolDraft';
 import { buildStressorPrefill } from '@/utils/prefillHelpers';
 import { useEvidence } from '@/hooks/useEvidence';
 import { EvidenceAttachment } from '@/components/shared/EvidenceAttachment';
+import { WhatNextCard } from '@/components/shared/WhatNextCard';
+import { getNextAction } from '@/utils/whatNext';
 
 interface StressorFormData {
   whatHappened: string;
@@ -136,6 +138,8 @@ function GuidanceTip({ tips }: GuidanceTipProps) {
 
 export default function StressorStatement() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const conditionParam = searchParams.get('condition');
   const { data: claimsData } = useClaims();
   const { documents, setAllDocuments } = useEvidence();
   const { toast } = useToast();
@@ -175,6 +179,7 @@ export default function StressorStatement() {
   });
   const [copied, setCopied] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [showWhatNext, setShowWhatNext] = useState(false);
 
   const generateStatement = useCallback((): string => {
     const today = new Date().toLocaleDateString('en-US', {
@@ -284,12 +289,14 @@ export default function StressorStatement() {
     try {
       const statement = generateStatement();
       await exportStressorStatement(statement);
+      setShowWhatNext(true);
+      const vaultCondition = conditionParam || 'PTSD';
       saveToVault({
         documentType: 'stressor-statement',
-        condition: 'PTSD',
-        title: 'Stressor Statement - PTSD',
+        condition: vaultCondition,
+        title: `Stressor Statement - ${vaultCondition}`,
         content: statement,
-        fileName: 'stressor-statement-ptsd.txt',
+        fileName: `stressor-statement-${vaultCondition.toLowerCase().replace(/\s+/g, '-')}.txt`,
       }).then(() => {
         toast({
           title: 'Saved to Vault',
@@ -310,6 +317,7 @@ export default function StressorStatement() {
     try {
       await navigator.clipboard.writeText(statement);
       setCopied(true);
+      setShowWhatNext(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
       // Fallback for older browsers
@@ -322,6 +330,7 @@ export default function StressorStatement() {
       document.execCommand('copy');
       document.body.removeChild(textarea);
       setCopied(true);
+      setShowWhatNext(true);
       setTimeout(() => setCopied(false), 2000);
     }
   }, [generateStatement]);
@@ -689,6 +698,9 @@ export default function StressorStatement() {
                 {exporting ? 'Exporting...' : 'Download PDF'}
               </Button>
             </div>
+            {showWhatNext && (
+              <WhatNextCard actions={getNextAction('generate-stressor-statement')} className="mt-4" />
+            )}
           </div>
         );
 
@@ -713,7 +725,7 @@ export default function StressorStatement() {
         <div>
           <h1 className="text-2xl font-bold text-foreground">Stressor Statement Builder</h1>
           <p className="text-muted-foreground text-sm">
-            Guided tool for writing your PTSD/MST stressor statement
+            Guided tool for writing your {conditionParam || 'PTSD/MST'} stressor statement
           </p>
         </div>
       </div>

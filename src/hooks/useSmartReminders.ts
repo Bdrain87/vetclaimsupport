@@ -348,6 +348,56 @@ export function useSmartReminders(): SmartReminder[] {
       }
     }
 
+    // ── Post-filing claim tracking reminders ────────────────────────────
+    for (const uc of userConditions) {
+      const condName = uc.displayName || uc.conditionId;
+
+      // If filed and no C&P exam date after 60 days
+      if (uc.filedDate && !uc.cpExamDate && !uc.decisionDate) {
+        const daysFiled = daysSince(uc.filedDate);
+        if (daysFiled > 60) {
+          reminders.push({
+            id: `no-cp-exam-${uc.id}`,
+            title: `No C&P exam scheduled for ${condName}`,
+            description: `Your claim was filed ${daysFiled} days ago with no C&P exam scheduled. Check eBenefits or VA.gov for updates.`,
+            priority: 'high',
+            category: 'exam',
+          });
+        }
+      }
+
+      // If filed > 125 days and no decision
+      if (uc.filedDate && !uc.decisionDate) {
+        const daysFiled = daysSince(uc.filedDate);
+        if (daysFiled > 125) {
+          reminders.push({
+            id: `claim-pending-${uc.id}`,
+            title: `${condName} claim pending ${daysFiled} days`,
+            description: `Your claim has been pending for ${daysFiled} days. Average VA processing is 125-150 days. Check VA.gov for status updates.`,
+            priority: 'medium',
+            category: 'filing',
+          });
+        }
+      }
+
+      // If C&P exam date is within 7 days
+      if (uc.cpExamDate && !uc.cpExamCompleted) {
+        const daysToExam = daysUntil(uc.cpExamDate);
+        if (daysToExam >= 0 && daysToExam <= 7) {
+          reminders.push({
+            id: `cp-exam-soon-${uc.id}`,
+            title: `C&P exam for ${condName} in ${daysToExam} days`,
+            description: daysToExam === 0
+              ? 'Your C&P exam is today. Arrive 15 min early. Describe your worst days.'
+              : `Prepare for your upcoming C&P exam. Review your symptoms, medications, and talking points.`,
+            priority: 'high',
+            category: 'exam',
+            actionRoute: '/prep/exam-day',
+          });
+        }
+      }
+    }
+
     return reminders.sort((a, b) => {
       const p = { high: 0, medium: 1, low: 2 };
       return p[a.priority] - p[b.priority];

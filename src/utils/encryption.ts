@@ -423,8 +423,10 @@ export async function enableEncryption(password: string): Promise<void> {
 
 // Disable encryption
 export function disableEncryption(): void {
-  localStorage.removeItem(PASSWORD_HASH_KEY);
-  localStorage.removeItem(ENCRYPTION_ENABLED_KEY);
+  try {
+    localStorage.removeItem(PASSWORD_HASH_KEY);
+    localStorage.removeItem(ENCRYPTION_ENABLED_KEY);
+  } catch { /* storage error — ignore */ }
 }
 
 // Verify password against the stored hash

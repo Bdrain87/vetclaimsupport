@@ -1,6 +1,7 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, Calculator, DollarSign, Calendar, Users, Info, Download, Loader2 } from 'lucide-react';
+import { useProfileStore } from '@/store/useProfileStore';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -35,9 +36,19 @@ const COUNT_OPTIONS = Array.from({ length: 11 }, (_, i) => i);
 export default function BackPayEstimator() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const intentToFileDate = useProfileStore((s) => s.intentToFileDate);
 
   // Form state
   const [effectiveDate, setEffectiveDate] = useState('');
+  const [itfAutoFilled, setItfAutoFilled] = useState(false);
+
+  // Auto-fill effective date from ITF when available and user hasn't manually entered one
+  useEffect(() => {
+    if (intentToFileDate && !effectiveDate) {
+      setEffectiveDate(intentToFileDate);
+      setItfAutoFilled(true);
+    }
+  }, [intentToFileDate]); // intentional: only run when ITF date changes, not on every effectiveDate change
   const [currentRating, setCurrentRating] = useState<string>('');
   const [newRating, setNewRating] = useState<string>('');
   const [hasSpouse, setHasSpouse] = useState(false);
@@ -136,7 +147,7 @@ export default function BackPayEstimator() {
             <input
               type="date"
               value={effectiveDate}
-              onChange={(e) => setEffectiveDate(e.target.value)}
+              onChange={(e) => { setEffectiveDate(e.target.value); setItfAutoFilled(false); }}
               max={new Date().toISOString().split('T')[0]}
               className={
                 'flex h-12 min-h-[48px] w-full items-center rounded-xl px-4 py-3 text-base ' +
@@ -146,6 +157,17 @@ export default function BackPayEstimator() {
                 'transition-all duration-200'
               }
             />
+            {itfAutoFilled && intentToFileDate && (
+              <p className="text-xs text-primary flex items-center gap-1.5 mt-1">
+                <Info className="h-3.5 w-3.5 shrink-0" />
+                Using your Intent to File date from{' '}
+                {new Date(intentToFileDate + 'T00:00:00').toLocaleDateString('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric',
+                })}
+              </p>
+            )}
           </div>
 
           {/* Rating Selectors */}

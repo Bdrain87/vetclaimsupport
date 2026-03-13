@@ -29,6 +29,7 @@ import useAppStore from '@/store/useAppStore';
 import { getConditionById } from '@/data/vaConditions';
 import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
+import { scanAIOutput, AI_OUTPUT_WARNING } from '@/utils/aiOutputGuard';
 import { buildConditionContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
 import { getConditionCriteriaForPrompt } from '@/lib/ai-prompts';
@@ -163,6 +164,7 @@ export default function CPExamPacket() {
   // State
   const [examQuestions, setExamQuestions] = useState<Record<string, string>>({});
   const [loadingQuestions, setLoadingQuestions] = useState<Set<string>>(new Set());
+  const [aiWarnings, setAiWarnings] = useState<Set<string>>(new Set());
   const [pdfExporting, setPdfExporting] = useState(false);
   const [viewMode, setViewMode] = useState<'full' | 'examday'>('full');
 
@@ -362,6 +364,10 @@ export default function CPExamPacket() {
       const prompt = `For a C&P exam for ${conditionName}, list the 8-10 most likely questions the examiner will ask. Focus on functional impact, frequency, severity, and daily life limitations. Format as a numbered list.${criteriaResult ? ' Base questions on the rating criteria provided below — examiners ask questions that map to specific rating levels.' : ''}${prepData?.examinerQuestions?.length ? ' Build on the known examiner questions provided below.' : ''}\n\n${contextBlock}${dataBlock}`;
       const result = await aiGenerate(prompt);
       if (result) {
+        const scan = scanAIOutput(result);
+        if (!scan.clean) {
+          setAiWarnings((prev) => new Set(prev).add(conditionName));
+        }
         setExamQuestions((prev) => ({ ...prev, [conditionName]: result }));
       }
     } catch (err) {
@@ -927,6 +933,12 @@ export default function CPExamPacket() {
                   </div>
                   {examQuestions[condition.name] ? (
                     <>
+                    {aiWarnings.has(condition.name) && (
+                      <div className="p-3 rounded-lg bg-red-500/5 border border-red-500/20 text-xs text-red-400 flex gap-2">
+                        <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+                        <span>{AI_OUTPUT_WARNING}</span>
+                      </div>
+                    )}
                     <AIContentBadge timestamp={new Date().toISOString()} />
                     <div className="p-3 rounded-lg bg-muted/30 border text-sm whitespace-pre-wrap leading-relaxed">
                       {examQuestions[condition.name]}

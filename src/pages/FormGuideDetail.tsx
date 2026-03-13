@@ -16,6 +16,20 @@ import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { PageContainer } from '@/components/PageContainer';
 import { useToast } from '@/hooks/use-toast';
+import { useUserConditions } from '@/hooks/useUserConditions';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
+
+// ---------------------------------------------------------------------------
+// Form → Condition relevance mapping
+// Maps form IDs to condition keywords (matched case-insensitively against
+// the user's condition display names).
+// ---------------------------------------------------------------------------
+const formConditionKeywords: Record<string, string[]> = {
+  '21-0781': ['ptsd', 'post-traumatic', 'posttraumatic'],
+  '21-526EZ': [], // General form — relevant to all conditions
+  '21-4138': [], // General statement — relevant to all conditions
+  '21-8940': [], // TDIU — relevant when any condition prevents employment
+};
 
 // ---------------------------------------------------------------------------
 // Field Card — each field in the form
@@ -209,6 +223,19 @@ export default function FormGuideDetail() {
   const formDef = formId ? getFormGuideById(formId) : undefined;
   const drafts: Record<string, string> = (formId && formDrafts[formId]) || {};
 
+  // Check which user conditions are relevant to this form
+  const { conditions: userConditions } = useUserConditions();
+  const relevantConditions = useMemo(() => {
+    if (!formDef || userConditions.length === 0) return [];
+    const keywords = formConditionKeywords[formDef.formId];
+    // If no keywords defined, this form is general-purpose — not condition-specific
+    if (!keywords || keywords.length === 0) return [];
+    return userConditions.filter((uc) => {
+      const name = getConditionDisplayName(uc).toLowerCase();
+      return keywords.some((kw) => name.includes(kw));
+    });
+  }, [formDef, userConditions]);
+
   // Track which sections are expanded
   const sections = useMemo(() => {
     if (!formDef) return [];
@@ -303,6 +330,18 @@ export default function FormGuideDetail() {
           ))}
         </ul>
       </div>
+
+      {/* Relevant Conditions */}
+      {relevantConditions.length > 0 && (
+        <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 space-y-2">
+          <h2 className="font-semibold text-sm text-foreground">Relevant to Your Conditions</h2>
+          {relevantConditions.map((uc) => (
+            <p key={uc.id} className="text-xs text-muted-foreground leading-relaxed">
+              You have <span className="font-medium text-foreground">{getConditionDisplayName(uc)}</span> — this form is relevant to your claim.
+            </p>
+          ))}
+        </div>
+      )}
 
       {/* Field-by-Field Guide */}
       <div className="space-y-3">

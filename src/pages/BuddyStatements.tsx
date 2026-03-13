@@ -1,5 +1,5 @@
-import { useState, useMemo, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useClaims } from '@/hooks/useClaims';
 import { useProfileStore } from '@/store/useProfileStore';
 import { Users, Plus, Trash2, Edit, Phone, Mail, FileText, CheckCircle, Clock, Send, Download, Camera, Copy, Check, ChevronRight, ChevronLeft, HelpCircle, Loader2, Share2, Activity } from 'lucide-react';
@@ -21,13 +21,15 @@ import { useToast } from '@/hooks/use-toast';
 import { useEvidence } from '@/hooks/useEvidence';
 import { EvidenceAttachment } from '@/components/shared/EvidenceAttachment';
 import type { BuddyContact } from '@/types/claims';
-import { createBuddyShareLink, shareBuddyLink } from '@/services/buddyShare';
+import { createBuddyShareLink, shareBuddyLink, checkBuddyShareStatuses } from '@/services/buddyShare';
 import { PageContainer } from '@/components/PageContainer';
 import { EmptyState } from '@/components/EmptyState';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
 import { useToolDraft } from '@/hooks/useToolDraft';
 import { DataConnectedBadge } from '@/components/shared/DataConnectedBadge';
+import { WhatNextCard } from '@/components/shared/WhatNextCard';
+import { getNextAction } from '@/utils/whatNext';
 
 const statementStatuses = ['Not Requested', 'Requested', 'Received', 'Submitted'] as const;
 
@@ -72,6 +74,8 @@ const steps = [
 export default function BuddyStatements() {
   const { data, addBuddyContact, updateBuddyContact, deleteBuddyContact, addUploadedDocument, deleteUploadedDocument } = useClaims();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const conditionParam = searchParams.get('condition');
   const profile = useProfileStore();
   const { documents, setAllDocuments } = useEvidence();
   const { toast } = useToast();
@@ -80,6 +84,7 @@ export default function BuddyStatements() {
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
   const [exportingStatement, setExportingStatement] = useState(false);
+  const [showWhatNext, setShowWhatNext] = useState(false);
 
   // Build condition-aware description for pre-fill
   const conditionSummary = useMemo(() => {
@@ -138,6 +143,48 @@ export default function BuddyStatements() {
     initialData: statementInitial,
   });
   const [copied, setCopied] = useState(false);
+
+  // Deep link: pre-fill conditionWitnessed from ?condition= URL param
+  useEffect(() => {
+    if (conditionParam && !statementData.conditionWitnessed) {
+      updateStatementField('conditionWitnessed', conditionParam);
+    }
+  }, [conditionParam]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Auto-sync buddy share statuses: check if any buddies have submitted
+  const syncRanRef = useRef(false);
+  useEffect(() => {
+    if (syncRanRef.current) return;
+    syncRanRef.current = true;
+
+    checkBuddyShareStatuses().then(({ submitted }) => {
+      if (submitted.length === 0) return;
+      // Match submitted buddy names against local contacts and update status
+      for (const sub of submitted) {
+        const match = data.buddyContacts.find(
+          (c) =>
+            c.statementStatus !== 'Received' &&
+            c.statementStatus !== 'Submitted' &&
+            (c.name.toLowerCase() === sub.buddyName.toLowerCase() ||
+              (c.contactInfo && sub.buddyContact && c.contactInfo.toLowerCase() === sub.buddyContact.toLowerCase())),
+        );
+        if (match) {
+          updateBuddyContact(match.id, { statementStatus: 'Received' });
+        }
+      }
+    }).catch(() => {
+      // Silently fail — status sync is best-effort
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Response tracking stats
+  const buddyResponseStats = useMemo(() => {
+    const total = data.buddyContacts.length;
+    const responded = data.buddyContacts.filter(
+      (c) => c.statementStatus === 'Received' || c.statementStatus === 'Submitted',
+    ).length;
+    return { total, responded };
+  }, [data.buddyContacts]);
 
   // Contacts functions
   const resetForm = () => {
@@ -265,6 +312,7 @@ Date: ${today}`;
     try {
       await navigator.clipboard.writeText(statement);
       setCopied(true);
+      setShowWhatNext(true);
       toast({ title: 'Copied to clipboard', description: 'Statement has been copied.' });
       setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -278,6 +326,7 @@ Date: ${today}`;
       const statement = generateStatement();
       await exportBuddyStatement(statement, statementData.witnessName);
       markJourneyItem('buddy-statements');
+      setShowWhatNext(true);
       const condition = statementData.conditionWitnessed || '';
       saveToVault({
         documentType: 'buddy-statement',
@@ -538,6 +587,9 @@ Date: ${today}`;
               <Share2 className="h-4 w-4" />
               Share with Buddy
             </Button>
+            {showWhatNext && (
+              <WhatNextCard actions={getNextAction('generate-buddy-statement')} className="mt-4" />
+            )}
           </div>
         );
     }
@@ -576,6 +628,23 @@ Date: ${today}`;
 
       {/* Data Connected Badge */}
       <DataConnectedBadge />
+
+      {/* Buddy Response Tracker */}
+      {buddyResponseStats.total > 0 && (
+        <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-card border border-border">
+          <div className="flex items-center gap-2">
+            <CheckCircle className={`h-4 w-4 ${buddyResponseStats.responded > 0 ? 'text-success' : 'text-muted-foreground'}`} />
+            <span className="text-sm font-medium text-foreground">
+              {buddyResponseStats.responded} of {buddyResponseStats.total} {buddyResponseStats.total === 1 ? 'buddy has' : 'buddies have'} responded
+            </span>
+          </div>
+          {buddyResponseStats.responded > 0 && buddyResponseStats.responded < buddyResponseStats.total && (
+            <span className="text-xs text-muted-foreground">
+              {buddyResponseStats.total - buddyResponseStats.responded} still pending
+            </span>
+          )}
+        </div>
+      )}
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>

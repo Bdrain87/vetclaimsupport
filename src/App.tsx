@@ -131,6 +131,7 @@ const DoctorPacket = lazyWithRetry(() => import('./pages/DoctorPacket'));
 
 // Sprint 3-5 new pages
 const MedicationRuleTool = lazyWithRetry(() => import('./pages/MedicationRuleTool'));
+const MedicationCompliance = lazyWithRetry(() => import('./pages/MedicationCompliance'));
 const CompensationLadder = lazyWithRetry(() => import('./pages/CompensationLadder'));
 const NexusGuide = lazyWithRetry(() => import('./pages/NexusGuide'));
 const TDIUChecker = lazyWithRetry(() => import('./pages/TDIUChecker'));
@@ -139,6 +140,10 @@ const BuddyFillPage = lazyWithRetry(() => import('./pages/BuddyFillPage'));
 
 // Interactive DBQ
 const InteractiveDBQ = lazyWithRetry(() => import('./pages/InteractiveDBQ'));
+
+// C-File Intel
+const CFileIntel = lazyWithRetry(() => import('./pages/CFileIntel'));
+const AskIntel = lazyWithRetry(() => import('./pages/AskIntel'));
 
 // Voice-powered features
 const CPExamSimulator = lazyWithRetry(() => import('./pages/CPExamSimulator'));
@@ -258,7 +263,7 @@ function useFirstTimeRedirect() {
     if (hasSession) return;
 
     const isOnboardingPage = location.pathname === '/onboarding' || location.pathname === '/onboarding/plan';
-    const isLegalPage = ['/terms', '/privacy', '/disclaimer', '/settings/privacy', '/settings/terms', '/settings/disclaimer', '/profile/privacy', '/profile/terms', '/profile/disclaimer'].includes(location.pathname);
+    const isLegalPage = ['/terms', '/privacy', '/disclaimer', '/settings/privacy', '/settings/terms', '/settings/disclaimer', '/settings/faq', '/settings/about', '/profile/privacy', '/profile/terms', '/profile/disclaimer'].includes(location.pathname);
     const isLoginPage = location.pathname === '/login';
     const isAuthPage = location.pathname === '/auth';
 
@@ -315,7 +320,7 @@ function AnimatedRoutes() {
           <Route path="/claims/checklist" element={<ClaimChecklist />} />
           <Route path="/claims/upgrade-paths" element={<ZeroPercentOptimizer />} />
           <Route path="/claims/evidence-strength" element={<PremiumGuard featureName="Evidence Strength"><EvidenceStrength /></PremiumGuard>} />
-          <Route path="/claims/decision-decoder" element={<PremiumGuard featureName="Decision Decoder"><DecisionDecoder /></PremiumGuard>} />
+          <Route path="/claims/decision-decoder" element={<DecisionDecoder />} />
           <Route path="/claims/:id" element={<ConditionDetail />} />
 
           {/* === HEALTH === */}
@@ -344,6 +349,8 @@ function AnimatedRoutes() {
           <Route path="/prep/dbq" element={<PremiumGuard featureName="DBQ Prep Sheet"><DBQPrepSheet /></PremiumGuard>} />
           <Route path="/prep/dbq-analyzer" element={<PremiumGuard featureName="DBQ Self-Assessment"><DBQAnalyzer /></PremiumGuard>} />
           <Route path="/prep/interactive-dbq" element={<PremiumGuard featureName="AI DBQ Analyzer"><InteractiveDBQ /></PremiumGuard>} />
+          <Route path="/prep/cfile-intel" element={<PremiumGuard featureName="C-File Intel"><CFileIntel /></PremiumGuard>} />
+          <Route path="/prep/ask-intel" element={<PremiumGuard featureName="Ask Intel"><AskIntel /></PremiumGuard>} />
           <Route path="/prep/va-speak" element={<VASpeakTranslator />} />
           <Route path="/prep/back-pay" element={<PremiumGuard featureName="Back Pay Estimator"><BackPayEstimator /></PremiumGuard>} />
           <Route path="/prep/cost-estimate" element={<CostEstimator />} />
@@ -366,6 +373,7 @@ function AnimatedRoutes() {
           <Route path="/prep/exam-day" element={<ExamDayMode />} />
           <Route path="/prep/exam-packet" element={<CPExamPacket />} />
           <Route path="/prep/medication-rule" element={<MedicationRuleTool />} />
+          <Route path="/prep/medication-compliance" element={<PremiumGuard featureName="Medication Compliance"><MedicationCompliance /></PremiumGuard>} />
           <Route path="/prep/compensation" element={<CompensationLadder />} />
           <Route path="/prep/tdiu" element={<TDIUChecker />} />
           <Route path="/prep/benefits" element={<BenefitsDiscovery />} />
@@ -647,6 +655,8 @@ function App() {
     checkDataRetention();
     initAnalytics();
     syncUsageFromServer();
+    // Trigger weekly readiness snapshot on app open
+    useAppStore.getState().triggerReadinessSnapshot();
   }, []);
 
   // Initialize IAP on native platform boot + refresh entitlement and sync.

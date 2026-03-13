@@ -29,16 +29,19 @@ import {
   AlertTriangle, Info, ExternalLink, Trash2, BookOpen,
   Activity, TrendingUp, Clock, Brain, Moon, ArrowRight, Target,
   Sparkles, Loader2, ChevronDown, FileCheck, Plus, Pill, Users, Circle,
+  CalendarDays, Gavel, Send,
 } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
+import { useSmartReminders, type SmartReminder } from '@/hooks/useSmartReminders';
 import { vaConditions, getConditionById } from '@/data/vaConditions';
 import { ClaimIntelligence } from '@/services/claimIntelligence';
 import { resolveDBQ, resolveRatingCriteria } from '@/utils/dbqLookup';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
+import { scanAIOutput, AI_OUTPUT_WARNING } from '@/utils/aiOutputGuard';
 import { buildConditionContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
 import { getConditionCriteriaForPrompt } from '@/lib/ai-prompts';
@@ -193,6 +196,26 @@ export default function ConditionDetail() {
     return resolveDBQ(conditionDetails) ?? null;
   }, [conditionDetails]);
 
+  // Smart reminders filtered to this condition
+  const allReminders = useSmartReminders();
+  const conditionReminders = useMemo(() => {
+    if (!conditionDetails) return [];
+    const name = conditionDetails.name.toLowerCase();
+    const condId = conditionDetails.id?.toLowerCase() ?? '';
+    return allReminders.filter((r) => {
+      // Show logging reminders relevant to this condition type
+      if (r.id === 'symptom-gap' || r.id === 'streak-at-risk') return true;
+      if (r.id === 'sleep-gap' && (name.includes('sleep') || name.includes('apnea'))) return true;
+      if (r.id === 'migraine-gap' && (name.includes('migraine') || name.includes('headache'))) return true;
+      if (r.id === 'migraine-threshold' && (name.includes('migraine') || name.includes('headache'))) return true;
+      if (r.id === 'missing-docs') return true;
+      if (r.id === 'work-impact-gap') return true;
+      if (r.id === 'medical-visit') return true;
+      if (r.id.startsWith('exam-prep-')) return true;
+      return false;
+    }).slice(0, 3); // Max 3 per condition page
+  }, [allReminders, conditionDetails]);
+
   // Intelligence: condition readiness
   const conditionReadiness = useMemo(() => {
     if (!conditionDetails) return null;
@@ -240,12 +263,25 @@ export default function ConditionDetail() {
   const { generate: aiGenerate, isLoading: aiLoading, error: aiError } = useAIGenerate('VA_SPEAK_TRANSLATOR');
   const [aiInsights, setAiInsights] = useState<string | null>(null);
   const [aiInsightsOpen, setAiInsightsOpen] = useState(false);
+  const [aiWarning, setAiWarning] = useState(false);
 
   // Local state for editing
   const [editRating, setEditRating] = useState<string>(
     userCondition?.rating?.toString() || 'not-rated'
   );
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  // Filing status state
+  const [filingDate, setFilingDate] = useState(userCondition?.filedDate || new Date().toISOString().slice(0, 10));
+  const [cpExamDateInput, setCpExamDateInput] = useState(userCondition?.cpExamDate || '');
+  const [decisionOutcome, setDecisionOutcome] = useState<'granted' | 'denied' | 'deferred'>('granted');
+  const [decisionRating, setDecisionRating] = useState('');
+  const [showDecisionDialog, setShowDecisionDialog] = useState(false);
+
+  // Store actions for filing
+  const markConditionFiled = useAppStore((s) => s.markConditionFiled);
+  const updateConditionDecision = useAppStore((s) => s.updateConditionDecision);
+  const readinessHistory = useAppStore((s) => s.readinessHistory);
 
   // Reset editRating when the condition changes (navigating between conditions)
   useEffect(() => {
@@ -333,7 +369,11 @@ ${criteriaResult ? '4. KEY RATING CRITERIA: Based on the rating criteria provide
 Be specific and actionable.${criteriaResult ? ' Reference ONLY the rating criteria provided above.' : ' Do NOT cite specific rating percentages or criteria — direct the veteran to the Rating Guidance tool for that information.'}`;
 
     const result = await aiGenerate(prompt);
-    if (result) setAiInsights(result);
+    if (result) {
+      const scan = scanAIOutput(result);
+      if (!scan.clean) setAiWarning(true);
+      setAiInsights(result);
+    }
   };
 
   // Evidence completion percentage — computed from linked items on the claim condition
@@ -729,6 +769,12 @@ Be specific and actionable.${criteriaResult ? ' Reference ONLY the rating criter
               ) : (
                 <div className="space-y-3">
                   <AIDisclaimer variant="banner" />
+                  {aiWarning && (
+                    <div className="p-3 rounded-lg bg-red-500/5 border border-red-500/20 text-xs text-red-400 flex gap-2">
+                      <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+                      <span>{AI_OUTPUT_WARNING}</span>
+                    </div>
+                  )}
                   <AIContentBadge timestamp={new Date().toISOString()} />
                   <div className="p-4 rounded-lg bg-muted/30 border text-sm whitespace-pre-wrap max-h-[400px] overflow-y-auto overflow-x-hidden leading-relaxed wrap-break-word">
                     {aiInsights}
@@ -738,6 +784,7 @@ Be specific and actionable.${criteriaResult ? ' Reference ONLY the rating criter
                     size="sm"
                     onClick={() => {
                       setAiInsights(null);
+                      setAiWarning(false);
                       handleGenerateAIInsights();
                     }}
                     disabled={aiLoading}
@@ -818,6 +865,28 @@ Be specific and actionable.${criteriaResult ? ' Reference ONLY the rating criter
                 </div>
               ))}
             </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Condition-Specific Reminders */}
+      {conditionReminders.length > 0 && !isBrowseMode && (
+        <Card className="border-gold/20 bg-gold/5">
+          <CardContent className="p-3 space-y-2">
+            {conditionReminders.map((r) => (
+              <button
+                key={r.id}
+                onClick={() => r.actionRoute && navigate(r.actionRoute)}
+                className="w-full flex items-start gap-2 text-left"
+              >
+                <AlertTriangle className={`h-3.5 w-3.5 shrink-0 mt-0.5 ${r.priority === 'high' ? 'text-destructive' : 'text-gold'}`} />
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-medium text-foreground">{r.title}</p>
+                  <p className="text-[11px] text-muted-foreground line-clamp-2">{r.description}</p>
+                </div>
+                {r.actionRoute && <ArrowRight className="h-3.5 w-3.5 text-muted-foreground shrink-0 mt-0.5" />}
+              </button>
+            ))}
           </CardContent>
         </Card>
       )}
@@ -1294,6 +1363,307 @@ Be specific and actionable.${criteriaResult ? ' Reference ONLY the rating criter
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Readiness Progress */}
+      {!isBrowseMode && conditionReadiness && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-primary" />
+              Readiness Progress
+            </CardTitle>
+            <CardDescription>
+              How prepared your claim is for filing
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Current score */}
+            <div className="flex items-center gap-4">
+              <div className="text-3xl font-bold text-primary">{conditionReadiness.overallScore}%</div>
+              <div className="flex-1">
+                <div className="h-3 bg-muted rounded-full overflow-hidden">
+                  <div
+                    className="h-full rounded-full transition-all duration-500"
+                    style={{
+                      width: `${conditionReadiness.overallScore}%`,
+                      background: conditionReadiness.overallScore >= 75 ? '#22c55e'
+                        : conditionReadiness.overallScore >= 50 ? '#eab308'
+                        : '#ef4444',
+                    }}
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {conditionReadiness.overallScore >= 75 ? 'Strong — ready to file'
+                    : conditionReadiness.overallScore >= 50 ? 'Moderate — gather more evidence'
+                    : 'Needs work — keep building your case'}
+                </p>
+              </div>
+            </div>
+
+            {/* History comparison */}
+            {(() => {
+              const condName = userCondition?.displayName || conditionDetails.name;
+              const historyForCondition = readinessHistory
+                .filter((h) => h.scores[condName] !== undefined)
+                .slice(-4);
+              if (historyForCondition.length === 0) return null;
+
+              const firstScore = historyForCondition[0].scores[condName];
+              const currentScore = conditionReadiness.overallScore;
+              const diff = currentScore - firstScore;
+
+              return (
+                <div className="space-y-3 pt-2 border-t">
+                  <p className="text-sm font-medium">
+                    Started at {firstScore}% → Now at {currentScore}%{' '}
+                    <span className={diff >= 0 ? 'text-green-600' : 'text-red-500'}>
+                      ({diff >= 0 ? '+' : ''}{diff}% {diff >= 0 ? 'improvement' : 'change'})
+                    </span>
+                  </p>
+                  <div className="space-y-2">
+                    {historyForCondition.map((entry) => (
+                      <div key={entry.date} className="flex items-center gap-3 text-sm">
+                        <span className="text-muted-foreground w-24 shrink-0">{entry.date}</span>
+                        <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-primary rounded-full"
+                            style={{ width: `${entry.scores[condName]}%` }}
+                          />
+                        </div>
+                        <span className="font-medium w-10 text-right">{entry.scores[condName]}%</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Filing Status */}
+      {!isBrowseMode && userCondition && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Send className="h-5 w-5 text-primary" />
+              Filing Status
+            </CardTitle>
+            <CardDescription>
+              Track your claim from filing through decision
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {!userCondition.filedDate ? (
+              /* Not filed yet */
+              <div className="space-y-3">
+                <p className="text-sm text-muted-foreground">
+                  Mark this condition as filed when you submit your claim to the VA.
+                </p>
+                <div className="flex items-end gap-3">
+                  <div className="flex-1 space-y-1.5">
+                    <label htmlFor="filing-date" className="text-sm font-medium">Filing Date</label>
+                    <input
+                      id="filing-date"
+                      type="date"
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      value={filingDate}
+                      onChange={(e) => setFilingDate(e.target.value)}
+                    />
+                  </div>
+                  <Button
+                    onClick={() => {
+                      if (userCondition.id && filingDate) {
+                        markConditionFiled(userCondition.id, filingDate);
+                      }
+                    }}
+                  >
+                    <Send className="h-4 w-4 mr-2" />
+                    Mark as Filed
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              /* Filed — show timeline */
+              <div className="space-y-4">
+                {/* Filed milestone */}
+                <div className="flex items-start gap-3">
+                  <div className="flex flex-col items-center">
+                    <CheckCircle2 className="h-5 w-5 text-green-600" />
+                    <div className="w-0.5 h-8 bg-green-600/30 mt-1" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">Filed</p>
+                    <p className="text-xs text-muted-foreground">{safeFormatDate(userCondition.filedDate)}</p>
+                  </div>
+                </div>
+
+                {/* C&P Exam milestone */}
+                <div className="flex items-start gap-3">
+                  <div className="flex flex-col items-center">
+                    {userCondition.cpExamCompleted ? (
+                      <CheckCircle2 className="h-5 w-5 text-green-600" />
+                    ) : userCondition.cpExamDate ? (
+                      <CalendarDays className="h-5 w-5 text-yellow-600" />
+                    ) : (
+                      <Circle className="h-5 w-5 text-muted-foreground" />
+                    )}
+                    <div className="w-0.5 h-8 bg-muted mt-1" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium text-sm">C&P Exam</p>
+                    {userCondition.cpExamDate ? (
+                      <div className="space-y-2">
+                        <p className="text-xs text-muted-foreground">
+                          {safeFormatDate(userCondition.cpExamDate)}
+                          {userCondition.cpExamCompleted && ' — Completed'}
+                        </p>
+                        {!userCondition.cpExamCompleted && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => updateCondition(userCondition.id, { cpExamCompleted: true })}
+                          >
+                            Mark Completed
+                          </Button>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="space-y-2">
+                        <p className="text-xs text-muted-foreground">Not yet scheduled</p>
+                        <div className="flex items-end gap-2">
+                          <input
+                            type="date"
+                            className="w-40 h-8 text-xs rounded-md border border-input bg-background px-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                            value={cpExamDateInput}
+                            onChange={(e) => setCpExamDateInput(e.target.value)}
+                          />
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            disabled={!cpExamDateInput}
+                            onClick={() => {
+                              if (cpExamDateInput) {
+                                updateCondition(userCondition.id, { cpExamDate: cpExamDateInput });
+                              }
+                            }}
+                          >
+                            Set Date
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Decision milestone */}
+                <div className="flex items-start gap-3">
+                  <div className="flex flex-col items-center">
+                    {userCondition.decisionDate ? (
+                      <Gavel className="h-5 w-5 text-primary" />
+                    ) : (
+                      <Circle className="h-5 w-5 text-muted-foreground" />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium text-sm">Decision</p>
+                    {userCondition.decisionDate ? (
+                      <div className="space-y-1">
+                        <p className="text-xs text-muted-foreground">
+                          {safeFormatDate(userCondition.decisionDate)}
+                        </p>
+                        <Badge variant={
+                          userCondition.decisionOutcome === 'granted' ? 'default'
+                            : userCondition.decisionOutcome === 'denied' ? 'destructive'
+                            : 'secondary'
+                        }>
+                          {userCondition.decisionOutcome === 'granted' ? 'Granted' : userCondition.decisionOutcome === 'denied' ? 'Denied' : 'Deferred'}
+                          {userCondition.ratingReceived !== undefined && ` — ${userCondition.ratingReceived}%`}
+                        </Badge>
+                        {userCondition.decisionOutcome === 'denied' && (
+                          <Button variant="outline" size="sm" className="mt-2" onClick={() => navigate('/prep/appeals')}>
+                            <Gavel className="h-4 w-4 mr-2" />
+                            Appeal This Decision
+                          </Button>
+                        )}
+                        {userCondition.decisionOutcome === 'granted' && (
+                          <Button variant="outline" size="sm" className="mt-2" onClick={() => navigate('/claims/calculator')}>
+                            <Scale className="h-4 w-4 mr-2" />
+                            Update Your Calculator
+                          </Button>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="space-y-2">
+                        <p className="text-xs text-muted-foreground">Pending</p>
+                        <Dialog open={showDecisionDialog} onOpenChange={setShowDecisionDialog}>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" size="sm">
+                              Record Decision
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Record VA Decision</DialogTitle>
+                              <DialogDescription>
+                                Enter the outcome of your claim for {conditionDetails.abbreviation || conditionDetails.name}
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="space-y-4 py-4">
+                              <div className="space-y-1.5">
+                                <label className="text-sm font-medium">Outcome</label>
+                                <Select value={decisionOutcome} onValueChange={(v) => setDecisionOutcome(v as 'granted' | 'denied' | 'deferred')}>
+                                  <SelectTrigger>
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="granted">Granted</SelectItem>
+                                    <SelectItem value="denied">Denied</SelectItem>
+                                    <SelectItem value="deferred">Deferred</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              {decisionOutcome === 'granted' && (
+                                <div className="space-y-1.5">
+                                  <label className="text-sm font-medium">Rating Received (%)</label>
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    max="100"
+                                    step="10"
+                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                    value={decisionRating}
+                                    onChange={(e) => setDecisionRating(e.target.value)}
+                                    placeholder="e.g. 30"
+                                  />
+                                </div>
+                              )}
+                            </div>
+                            <DialogFooter>
+                              <Button
+                                onClick={() => {
+                                  updateConditionDecision(
+                                    userCondition.id,
+                                    decisionOutcome,
+                                    decisionOutcome === 'granted' && decisionRating ? parseInt(decisionRating, 10) : undefined,
+                                  );
+                                  setShowDecisionDialog(false);
+                                }}
+                              >
+                                Save Decision
+                              </Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Attach Evidence for This Condition */}
       {id && (

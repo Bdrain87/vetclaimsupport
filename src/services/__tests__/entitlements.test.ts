@@ -196,16 +196,16 @@ describe('Section 3C — Preview Limits Enforcement', () => {
 
   // --- PREVIEW_LIMITS constants ---
 
-  it('PREVIEW_LIMITS.maxConditions is 1', () => {
-    expect(PREVIEW_LIMITS.maxConditions).toBe(1);
+  it('PREVIEW_LIMITS.maxConditions is 3', () => {
+    expect(PREVIEW_LIMITS.maxConditions).toBe(3);
   });
 
-  it('PREVIEW_LIMITS.maxHealthLogs is 10', () => {
-    expect(PREVIEW_LIMITS.maxHealthLogs).toBe(10);
+  it('PREVIEW_LIMITS.maxHealthLogs is 25', () => {
+    expect(PREVIEW_LIMITS.maxHealthLogs).toBe(25);
   });
 
-  it('PREVIEW_LIMITS.maxDocumentUploads is 0', () => {
-    expect(PREVIEW_LIMITS.maxDocumentUploads).toBe(0);
+  it('PREVIEW_LIMITS.maxDocumentUploads is 1', () => {
+    expect(PREVIEW_LIMITS.maxDocumentUploads).toBe(1);
   });
 
   it('PREVIEW_LIMITS.exportEnabled is false', () => {
@@ -226,8 +226,8 @@ describe('Section 3C — Preview Limits Enforcement', () => {
     expect(canAddCondition(0)).toBe(true);
   });
 
-  it('canAddCondition blocks second condition for free user (count=1)', () => {
-    expect(canAddCondition(1)).toBe(false);
+  it('canAddCondition blocks fourth condition for free user (count=3)', () => {
+    expect(canAddCondition(3)).toBe(false);
   });
 
   it('canAddCondition blocks higher counts for free user (count=5)', () => {
@@ -251,18 +251,18 @@ describe('Section 3C — Preview Limits Enforcement', () => {
 
   // --- canAddHealthLog ---
 
-  it('canAddHealthLog allows up to 10 for free user', () => {
-    for (let i = 0; i < 10; i++) {
+  it('canAddHealthLog allows up to 25 for free user', () => {
+    for (let i = 0; i < 25; i++) {
       expect(canAddHealthLog(i)).toBe(true);
     }
   });
 
-  it('canAddHealthLog blocks at 10 for free user', () => {
-    expect(canAddHealthLog(10)).toBe(false);
+  it('canAddHealthLog blocks at 25 for free user', () => {
+    expect(canAddHealthLog(25)).toBe(false);
   });
 
-  it('canAddHealthLog blocks above 10 for free user', () => {
-    expect(canAddHealthLog(15)).toBe(false);
+  it('canAddHealthLog blocks above 25 for free user', () => {
+    expect(canAddHealthLog(30)).toBe(false);
     expect(canAddHealthLog(100)).toBe(false);
   });
 
@@ -355,12 +355,12 @@ describe('Section 3D — Premium Feature Gating', () => {
       useProfileStore.setState({ entitlement: 'preview' });
     });
 
-    it('free users cannot add a second condition', () => {
-      expect(canAddCondition(1)).toBe(false);
+    it('free users cannot add a fourth condition', () => {
+      expect(canAddCondition(3)).toBe(false);
     });
 
     it('free users cannot exceed health log limit', () => {
-      expect(canAddHealthLog(10)).toBe(false);
+      expect(canAddHealthLog(25)).toBe(false);
     });
 
     it('free users cannot export', () => {

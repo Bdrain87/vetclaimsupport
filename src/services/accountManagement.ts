@@ -147,7 +147,7 @@ export async function clearLocalData(): Promise<void> {
 
   // Clear ALL known localStorage keys so no user data lingers on disk
   for (const key of ALL_LOCAL_STORAGE_KEYS) {
-    localStorage.removeItem(key);
+    try { localStorage.removeItem(key); } catch { /* storage error — ignore */ }
   }
 
   // Clear sessionStorage (chunk reload flags, post-login redirects, etc.)

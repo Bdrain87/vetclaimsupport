@@ -1,12 +1,13 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, Languages, Sparkles, Loader2, BookOpen, Search } from 'lucide-react';
+import { ChevronLeft, Languages, Sparkles, Loader2, BookOpen, Search, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { useAIGenerate } from '@/hooks/useAIGenerate';
+import { scanAIOutput, AI_OUTPUT_WARNING } from '@/utils/aiOutputGuard';
 import { buildVeteranContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
 import { buildCriteriaBlockForConditions } from '@/lib/ai-prompts';
@@ -207,6 +208,7 @@ export default function VASpeakTranslator() {
   const [inputText, setInputText] = useState('');
   const [translatedText, setTranslatedText] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [aiWarning, setAiWarning] = useState(false);
 
   // Glossary state
   const [glossarySearch, setGlossarySearch] = useState('');
@@ -221,6 +223,7 @@ export default function VASpeakTranslator() {
 
     setTranslatedText(null);
     setCopied(false);
+    setAiWarning(false);
 
     const ctx = buildVeteranContext({ maskPII: true });
     const contextBlock = formatContextForAI(ctx, 'minimal');
@@ -245,6 +248,8 @@ export default function VASpeakTranslator() {
 
     const result = await generate(prompt);
     if (result) {
+      const scan = scanAIOutput(result);
+      if (!scan.clean) setAiWarning(true);
       setTranslatedText(result);
     }
   }, [inputText, isLoading, generate]);
@@ -264,6 +269,7 @@ export default function VASpeakTranslator() {
     setInputText('');
     setTranslatedText(null);
     setCopied(false);
+    setAiWarning(false);
   }, []);
 
   // -------------------------------------------------------------------------
@@ -406,6 +412,13 @@ export default function VASpeakTranslator() {
                   38 CFR
                 </Badge>
               </div>
+
+              {aiWarning && (
+                <div className="p-3 rounded-lg bg-red-500/5 border border-red-500/20 text-xs text-red-400 flex gap-2">
+                  <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+                  <span>{AI_OUTPUT_WARNING}</span>
+                </div>
+              )}
 
               <AIContentBadge timestamp={new Date().toISOString()} />
               <div className="rounded-lg border border-success/20 bg-success/5 p-4">

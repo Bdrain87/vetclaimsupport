@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { safeFormatDate } from '@/utils/dateUtils';
 import {
@@ -19,6 +19,7 @@ import {
   ChevronDown,
   ChevronUp,
   Loader2,
+  Sparkles,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -37,7 +38,8 @@ import { exportDoctorSummaryOutlinePDF } from '@/utils/pdfExport';
 import { saveToVault } from '@/utils/vaultAutoSave';
 import { markJourneyItem } from '@/utils/journeySync';
 import { ToastAction } from '@/components/ui/toast';
-import { containsBannedPhrases, EXPORT_BLOCKED_MESSAGE } from '@/utils/bannedPhrases';
+import { containsBannedPhrases, EXPORT_BLOCKED_MESSAGE, CONCLUSION_PHRASES } from '@/utils/bannedPhrases';
+import { scanAIOutput, AI_OUTPUT_WARNING } from '@/utils/aiOutputGuard';
 import { conditionRatingCriteria } from '@/data/ratingCriteria';
 import { useToast } from '@/hooks/use-toast';
 import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
@@ -45,6 +47,19 @@ import { useToolDraft } from '@/hooks/useToolDraft';
 import { useEvidence } from '@/hooks/useEvidence';
 import { EvidenceAttachment } from '@/components/shared/EvidenceAttachment';
 import { DataConnectedBadge } from '@/components/shared/DataConnectedBadge';
+import { IntelInsightsCard, type InsightItem } from '@/components/shared/IntelInsightsCard';
+import { WhatNextCard } from '@/components/shared/WhatNextCard';
+import { ClaimIntelligence } from '@/services/claimIntelligence';
+import { getNextAction } from '@/utils/whatNext';
+import { aiGenerate } from '@/lib/gemini';
+import { createEnhancedDoctorSummaryPrompt, buildSecondaryConnectionsBlock, getConditionCriteriaForPrompt, SYSTEM_PROMPTS } from '@/lib/ai-prompts';
+import { buildVeteranContext } from '@/utils/veteranContext';
+import { formatContextForAI } from '@/utils/formatContextForAI';
+import { requireOnline } from '@/utils/networkCheck';
+import { checkAIRateLimit } from '@/services/aiUsageTracker';
+import { hasPremiumAccess } from '@/services/entitlements';
+import { DOCTOR_SUMMARY_AI_DISCLAIMER } from '@/data/legalCopy';
+import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 
 const getAllConditions = (): string[] => {
   const conditions = new Set<string>();
@@ -207,6 +222,14 @@ export default function DoctorSummaryOutline() {
 
   const [exportError, setExportError] = useState('');
   const [exporting, setExporting] = useState(false);
+  const [exported, setExported] = useState(false);
+
+  // AI-Enhanced Draft state (Phase 4C)
+  const [aiMode, setAiMode] = useState(false);
+  const [aiDraft, setAiDraft] = useState('');
+  const [aiGenerating, setAiGenerating] = useState(false);
+  const [aiError, setAiError] = useState('');
+  const [aiWarning, setAiWarning] = useState('');
   const [primarySearch, setPrimarySearch] = useState(formData.primaryCondition || searchParams.get('primary') || '');
   const [secondarySearch, setSecondarySearch] = useState(formData.secondaryCondition || searchParams.get('secondary') || '');
   const [showPrimaryDropdown, setShowPrimaryDropdown] = useState(false);
@@ -226,6 +249,21 @@ export default function DoctorSummaryOutline() {
       c.toLowerCase().includes(secondarySearch.toLowerCase())
     ).slice(0, 50);
   }, [secondarySearch]);
+
+  const intelInsights = useMemo(() => {
+    const conditionName = formData.primaryCondition || '';
+    if (!conditionName) return { score: 0, insights: [], tips: [] };
+    const readiness = ClaimIntelligence.getConditionReadiness(conditionName, data);
+    if (!readiness) return { score: 0, insights: [], tips: [] };
+    const insights: InsightItem[] = [
+      { label: 'Medical evidence', value: `${readiness.components.medicalEvidence}%` },
+      { label: 'Service connection', value: `${readiness.components.serviceConnection}%` },
+      { label: 'Current severity', value: `${readiness.components.currentSeverity}%` },
+      { label: 'Statements', value: `${readiness.components.statements}%` },
+      { label: 'Exam prep', value: `${readiness.components.examPrep}%` },
+    ];
+    return { score: readiness.overallScore, insights, tips: readiness.tips };
+  }, [formData.primaryCondition, data]);
 
   const updateField = draftUpdateField;
 
@@ -267,6 +305,152 @@ export default function DoctorSummaryOutline() {
       updateField('customExposure', '');
     }
   };
+
+  // ---------------------------------------------------------------------------
+  // AI Compliance Pipeline (Phase 4C)
+  // ---------------------------------------------------------------------------
+
+  const runCompliancePipeline = useCallback((text: string): { cleaned: string; hasWarnings: boolean } => {
+    let cleaned = text;
+
+    // Step a: Auto-replace banned phrases
+    cleaned = cleaned.replace(/\bmedical nexus\b/gi, 'medical connection documentation');
+    cleaned = cleaned.replace(/\bnexus\b/gi, 'service connection documentation');
+    cleaned = cleaned.replace(/\bat least as likely as not\b/gi, '[CLINICIAN TO STATE MEDICAL PROBABILITY]');
+    cleaned = cleaned.replace(/\bmore likely than not\b/gi, '[CLINICIAN TO STATE MEDICAL PROBABILITY]');
+    cleaned = cleaned.replace(/\bless likely than not\b/gi, '[CLINICIAN TO STATE MEDICAL PROBABILITY]');
+    cleaned = cleaned.replace(/\breasonable medical certainty\b/gi, '[CLINICIAN TO STATE MEDICAL PROBABILITY]');
+    cleaned = cleaned.replace(/\bwithin a reasonable degree of medical probability\b/gi, '[CLINICIAN TO STATE MEDICAL PROBABILITY]');
+
+    // Step b: Wrap CONCLUSION_PHRASES in clinician review markers
+    for (const regex of CONCLUSION_PHRASES) {
+      const globalRegex = new RegExp(regex.source, 'gi');
+      cleaned = cleaned.replace(globalRegex, (match) => {
+        // Don't double-wrap if already inside brackets
+        const idx = cleaned.indexOf(match);
+        const before = cleaned.slice(Math.max(0, idx - 30), idx);
+        if (before.includes('[CLINICIAN TO INDEPENDENTLY EVALUATE')) return match;
+        return `[CLINICIAN TO INDEPENDENTLY EVALUATE: ${match}]`;
+      });
+    }
+
+    // Step c: Insert [CLINICIAN REVIEW REQUIRED] at medical opinion sections
+    // Look for section headers that discuss opinions/conclusions without the marker
+    cleaned = cleaned.replace(
+      /^(#{1,3}\s*(?:.*(?:opinion|conclusion|connection|causation|probability|rationale).*))$/gim,
+      (match) => {
+        if (match.includes('[CLINICIAN REVIEW REQUIRED]')) return match;
+        return `${match} [CLINICIAN REVIEW REQUIRED]`;
+      }
+    );
+
+    // Step d: Scan via aiOutputGuard
+    const scanResult = scanAIOutput(cleaned);
+
+    return { cleaned, hasWarnings: !scanResult.clean };
+  }, []);
+
+  const handleGenerateAIDraft = useCallback(async () => {
+    setAiError('');
+    setAiWarning('');
+    setAiDraft('');
+
+    // Pre-checks
+    if (!hasPremiumAccess()) {
+      setAiError('AI-Enhanced Draft requires a premium subscription.');
+      return;
+    }
+
+    const { allowed, status } = checkAIRateLimit();
+    if (!allowed) {
+      setAiError(`Monthly AI limit reached (${status.used}/${status.limit}). Resets ${status.resetDate}.`);
+      return;
+    }
+
+    if (!requireOnline('AI-Enhanced Draft')) {
+      setAiError('AI features require an internet connection.');
+      return;
+    }
+
+    setAiGenerating(true);
+    try {
+      // Build veteran context
+      const ctx = buildVeteranContext({ maskPII: true });
+      const contextBlock = formatContextForAI(ctx, 'detailed');
+
+      // Build secondary connections block
+      const conditionNames = [formData.primaryCondition, formData.secondaryCondition].filter(Boolean);
+      const secondaryConnectionsBlock = buildSecondaryConnectionsBlock(conditionNames);
+
+      // Get rating criteria
+      const conditionName = formData.primaryCondition || formData.secondaryCondition;
+      const criteriaResult = getConditionCriteriaForPrompt(conditionName);
+      const criteriaBlock = criteriaResult
+        ? `<rating_criteria>\n${criteriaResult.text}\n</rating_criteria>`
+        : '';
+
+      // Build symptoms list from wizard data
+      const symptoms: string[] = [];
+      if (formData.currentSymptomsDetail) symptoms.push(formData.currentSymptomsDetail);
+      if (formData.symptomFrequency) symptoms.push(`Frequency: ${formData.symptomFrequency}`);
+      if (formData.symptomSeverity) symptoms.push(`Severity: ${formData.symptomSeverity}`);
+      if (formData.symptomTriggers) symptoms.push(`Triggers: ${formData.symptomTriggers}`);
+      if (formData.currentSymptoms) symptoms.push(formData.currentSymptoms);
+
+      // Build medical history from wizard data
+      const historyParts: string[] = [];
+      if (formData.inServiceEvent) historyParts.push(`In-service event: ${formData.inServiceEvent}`);
+      if (formData.onsetTimeline) historyParts.push(`Onset: ${formData.onsetTimeline}`);
+      if (formData.continuityDescription) historyParts.push(`Continuity: ${formData.continuityDescription}`);
+      if (formData.dutyContext) historyParts.push(`Duty context: ${formData.dutyContext}`);
+      if (formData.baselineSymptoms) historyParts.push(`Baseline: ${formData.baselineSymptoms}`);
+      if (formData.worseningOverTime) historyParts.push(`Progression: ${formData.worseningOverTime}`);
+      if (formData.currentMedications) historyParts.push(`Medications: ${formData.currentMedications}`);
+      if (formData.medicationResponse) historyParts.push(`Treatment response: ${formData.medicationResponse}`);
+
+      // Build evidence references
+      const evidenceRefs = formData.evidenceReferences
+        .filter(r => r.type || r.title)
+        .map(r => `${r.type}${r.date ? ` (${r.date})` : ''}${r.provider ? ` - ${r.provider}` : ''}${r.title ? `: ${r.title}` : ''}`);
+
+      const prompt = createEnhancedDoctorSummaryPrompt({
+        conditionName: formData.primaryCondition || formData.secondaryCondition,
+        primaryCondition: formData.secondaryCondition ? formData.primaryCondition : undefined,
+        serviceStart: formData.serviceStartDate,
+        serviceEnd: formData.serviceEndDate,
+        branchOfService: formData.branchOfService,
+        mosOrJobCode: formData.mosOrJobCode,
+        symptoms,
+        medicalHistory: historyParts.join('\n'),
+        functionalImpact: formData.functionalImpact,
+        exposures: formData.exposures,
+        evidenceReferences: evidenceRefs,
+        contextBlock,
+        secondaryConnectionsBlock,
+        criteriaBlock,
+      });
+
+      const result = await aiGenerate({
+        prompt,
+        systemInstruction: SYSTEM_PROMPTS.doctorSummaryBuilder,
+        feature: 'doctor-summary-ai-enhanced',
+        timeout: 45_000,
+      });
+
+      // Run compliance pipeline
+      const { cleaned, hasWarnings } = runCompliancePipeline(result.text);
+
+      setAiDraft(cleaned);
+      if (hasWarnings) {
+        setAiWarning(AI_OUTPUT_WARNING);
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to generate AI draft. Please try again.';
+      setAiError(message);
+    } finally {
+      setAiGenerating(false);
+    }
+  }, [formData, runCompliancePipeline]);
 
   const hasPrimary = formData.primaryCondition.trim() !== '';
   const hasSecondary = formData.secondaryCondition.trim() !== '';
@@ -312,6 +496,7 @@ export default function DoctorSummaryOutline() {
     try {
       await exportDoctorSummaryOutlinePDF(formData);
       markJourneyItem('nexus-letter');
+      setExported(true);
       const condition = formData.primaryCondition || '';
       const outlineText = [
         `DOCTOR SUMMARY OUTLINE - ${condition || 'General'}`,
@@ -965,102 +1150,243 @@ export default function DoctorSummaryOutline() {
               </CardContent>
             </Card>
 
-            <div className="space-y-4 text-sm">
-              <ReviewSection title="Veteran and Service Details">
-                <ReviewField label="Name" value={formData.veteranName} />
-                <ReviewField label="Branch" value={formData.branchOfService} />
-                <ReviewField label="MOS / Job Code" value={formData.mosOrJobCode} />
-                <ReviewField label="Service Dates" value={
-                  formData.serviceStartDate && formData.serviceEndDate
-                    ? `${safeFormatDate(formData.serviceStartDate)} - ${safeFormatDate(formData.serviceEndDate)}`
-                    : ''
-                } />
-              </ReviewSection>
-
-              <ReviewSection title="Conditions Selected">
-                {hasPrimary && <ReviewField label="Primary" value={formData.primaryCondition} />}
-                {hasSecondary && <ReviewField label="Secondary" value={formData.secondaryCondition} />}
-              </ReviewSection>
-
-              {(formData.inServiceEvent || formData.onsetTimeline || formData.continuityDescription || formData.dutyContext) && (
-                <ReviewSection title="Service History Context (Patient-Reported)">
-                  <ReviewField label="In-service event" value={formData.inServiceEvent} />
-                  <ReviewField label="Onset timeline" value={formData.onsetTimeline} />
-                  <ReviewField label="Continuity" value={formData.continuityDescription} />
-                  <ReviewField label="Duty context" value={formData.dutyContext} />
-                </ReviewSection>
-              )}
-
-              {(formData.symptomTiming || formData.medicationEffects || formData.flarePatterns || formData.functionalInterplay) && (
-                <ReviewSection title="Relationship Context (Patient-Reported)">
-                  <ReviewField label="Symptom timing" value={formData.symptomTiming} />
-                  <ReviewField label="Medication effects" value={formData.medicationEffects} />
-                  <ReviewField label="Flare patterns" value={formData.flarePatterns} />
-                  <ReviewField label="Functional interplay" value={formData.functionalInterplay} />
-                </ReviewSection>
-              )}
-
-              {(formData.baselineSymptoms || formData.currentSymptoms || formData.worseningOverTime) && (
-                <ReviewSection title="Worsening Over Time (Patient-Reported)">
-                  <ReviewField label="Baseline" value={formData.baselineSymptoms} />
-                  <ReviewField label="Current" value={formData.currentSymptoms} />
-                  <ReviewField label="Progression" value={formData.worseningOverTime} />
-                </ReviewSection>
-              )}
-
-              {formData.exposures.length > 0 && (
-                <ReviewSection title="Exposures (Patient-Reported)">
-                  <div className="flex flex-wrap gap-1">
-                    {formData.exposures.map(e => <Badge key={e} variant="secondary" className="text-xs">{e}</Badge>)}
-                  </div>
-                </ReviewSection>
-              )}
-
-              {(formData.currentSymptomsDetail || formData.functionalImpact) && (
-                <ReviewSection title="Current Symptoms and Functional Impact (Patient-Reported)">
-                  <ReviewField label="Symptoms" value={formData.currentSymptomsDetail} />
-                  <ReviewField label="Frequency" value={formData.symptomFrequency} />
-                  <ReviewField label="Severity" value={formData.symptomSeverity} />
-                  <ReviewField label="Triggers" value={formData.symptomTriggers} />
-                  <ReviewField label="Medications" value={formData.currentMedications} />
-                  <ReviewField label="Treatment response" value={formData.medicationResponse} />
-                  <ReviewField label="Functional impact" value={formData.functionalImpact} />
-                </ReviewSection>
-              )}
-
-              {formData.evidenceReferences.length > 0 && (
-                <ReviewSection title="Evidence References">
-                  {formData.evidenceReferences.map(ref => (
-                    <div key={ref.id} className="text-xs text-muted-foreground">
-                      {ref.type}{ref.date ? ` (${safeFormatDate(ref.date)})` : ''}{ref.provider ? ` - ${ref.provider}` : ''}{ref.title ? `: ${ref.title}` : ''}
+            {/* AI Mode Toggle */}
+            <Card className="border-primary/20">
+              <CardContent className="pt-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={cn(
+                      'p-2 rounded-lg',
+                      aiMode ? 'bg-primary/10' : 'bg-muted'
+                    )}>
+                      {aiMode ? <Sparkles className="h-5 w-5 text-primary" /> : <FileText className="h-5 w-5 text-muted-foreground" />}
                     </div>
-                  ))}
-                </ReviewSection>
-              )}
+                    <div>
+                      <p className="font-medium text-sm">
+                        {aiMode ? 'AI-Enhanced Draft' : 'Standard Template'}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {aiMode
+                          ? 'AI organizes your data into a comprehensive outline'
+                          : 'Manual review of your entered information'}
+                      </p>
+                    </div>
+                  </div>
+                  <Switch
+                    checked={aiMode}
+                    onCheckedChange={(v) => {
+                      setAiMode(v);
+                      if (!v) {
+                        setAiDraft('');
+                        setAiError('');
+                        setAiWarning('');
+                      }
+                    }}
+                    aria-label="Toggle AI-enhanced draft mode"
+                  />
+                </div>
+              </CardContent>
+            </Card>
 
-              {formData.personalStatementEnabled && (
-                <ReviewSection title="Personal Statement Outline (Patient-Prepared)">
-                  <ReviewField label="Timeline" value={formData.personalStatementTimeline} />
-                  <ReviewField label="Frequency/Severity" value={formData.personalStatementFrequency} />
-                  <ReviewField label="Functional Impact" value={formData.personalStatementFunctionalImpact} />
-                  <ReviewField label="Treatment Response" value={formData.personalStatementTreatmentResponse} />
-                  <ReviewField label="Triggers" value={formData.personalStatementTriggers} />
-                  <ReviewField label="Missed Work" value={formData.personalStatementMissedWork} />
-                  <ReviewField label="Examples" value={formData.personalStatementExamples} />
-                </ReviewSection>
-              )}
+            {/* Data Completeness Card (shown in AI mode) */}
+            {aiMode && formData.primaryCondition && intelInsights.insights.length > 0 && (
+              <IntelInsightsCard
+                readinessScore={intelInsights.score}
+                insights={intelInsights.insights}
+                tips={intelInsights.tips}
+              />
+            )}
 
-              <ReviewSection title="Clinician Documentation Prompts (Optional)">
-                <p className="text-xs text-muted-foreground italic">
-                  Included in PDF: Neutral prompts for the clinician to consider during evaluation.
-                </p>
-              </ReviewSection>
+            {/* AI Mode: Generate + Draft Display */}
+            {aiMode && (
+              <div className="space-y-4">
+                {!aiDraft && !aiGenerating && (
+                  <Button
+                    onClick={handleGenerateAIDraft}
+                    disabled={aiGenerating}
+                    className="w-full gap-2"
+                    size="lg"
+                  >
+                    <Sparkles className="h-5 w-5" />
+                    Generate AI-Enhanced Draft
+                  </Button>
+                )}
 
-              <div className="p-3 rounded-lg bg-muted/50 border border-border">
-                <p className="text-xs text-muted-foreground italic">
-                  DISCLAIMER: This document was prepared by the veteran to organize information for a clinical visit. It is not medical or legal advice and does not provide a medical opinion or determine service connection. A licensed clinician must independently evaluate the veteran and author any clinical statements or medical opinions.
-                </p>
+                {aiGenerating && (
+                  <Card className="border-primary/30">
+                    <CardContent className="pt-4">
+                      <div className="flex items-center gap-3">
+                        <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                        <div>
+                          <p className="font-medium text-sm">Generating AI-Enhanced Draft...</p>
+                          <p className="text-xs text-muted-foreground">
+                            Organizing your data with compliance checks. This may take a moment.
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {aiError && (
+                  <Card className="border-destructive/30 bg-destructive/5">
+                    <CardContent className="pt-4">
+                      <div className="flex items-start gap-2">
+                        <AlertCircle className="h-5 w-5 text-destructive mt-0.5 shrink-0" />
+                        <div>
+                          <p className="text-sm text-destructive font-medium">AI Generation Error</p>
+                          <p className="text-sm text-destructive/80">{aiError}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {aiWarning && aiDraft && (
+                  <Card className="border-amber-500/30 bg-amber-500/5">
+                    <CardContent className="pt-4">
+                      <div className="flex items-start gap-2">
+                        <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5 shrink-0" />
+                        <div>
+                          <p className="text-sm text-amber-700 font-medium">Compliance Warning</p>
+                          <p className="text-xs text-amber-600">{aiWarning}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {aiDraft && (
+                  <>
+                    <Card className="border-primary/20 bg-primary/5">
+                      <CardContent className="pt-4">
+                        <div className="flex items-start gap-2 mb-3">
+                          <Sparkles className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                          <p className="text-xs text-muted-foreground italic">
+                            {DOCTOR_SUMMARY_AI_DISCLAIMER}
+                          </p>
+                        </div>
+                        <div className="prose prose-sm dark:prose-invert max-w-none">
+                          <pre className="whitespace-pre-wrap text-xs font-sans bg-background p-4 rounded-lg border border-border overflow-auto max-h-[600px]">
+                            {aiDraft}
+                          </pre>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Button
+                      variant="outline"
+                      onClick={handleGenerateAIDraft}
+                      disabled={aiGenerating}
+                      className="w-full gap-2"
+                    >
+                      <Sparkles className="h-4 w-4" />
+                      Regenerate AI Draft
+                    </Button>
+                  </>
+                )}
               </div>
+            )}
+
+            {/* Standard Template Review (always shown when not in AI mode, or alongside AI draft) */}
+            {!aiMode && (
+              <div className="space-y-4 text-sm">
+                <ReviewSection title="Veteran and Service Details">
+                  <ReviewField label="Name" value={formData.veteranName} />
+                  <ReviewField label="Branch" value={formData.branchOfService} />
+                  <ReviewField label="MOS / Job Code" value={formData.mosOrJobCode} />
+                  <ReviewField label="Service Dates" value={
+                    formData.serviceStartDate && formData.serviceEndDate
+                      ? `${safeFormatDate(formData.serviceStartDate)} - ${safeFormatDate(formData.serviceEndDate)}`
+                      : ''
+                  } />
+                </ReviewSection>
+
+                <ReviewSection title="Conditions Selected">
+                  {hasPrimary && <ReviewField label="Primary" value={formData.primaryCondition} />}
+                  {hasSecondary && <ReviewField label="Secondary" value={formData.secondaryCondition} />}
+                </ReviewSection>
+
+                {(formData.inServiceEvent || formData.onsetTimeline || formData.continuityDescription || formData.dutyContext) && (
+                  <ReviewSection title="Service History Context (Patient-Reported)">
+                    <ReviewField label="In-service event" value={formData.inServiceEvent} />
+                    <ReviewField label="Onset timeline" value={formData.onsetTimeline} />
+                    <ReviewField label="Continuity" value={formData.continuityDescription} />
+                    <ReviewField label="Duty context" value={formData.dutyContext} />
+                  </ReviewSection>
+                )}
+
+                {(formData.symptomTiming || formData.medicationEffects || formData.flarePatterns || formData.functionalInterplay) && (
+                  <ReviewSection title="Relationship Context (Patient-Reported)">
+                    <ReviewField label="Symptom timing" value={formData.symptomTiming} />
+                    <ReviewField label="Medication effects" value={formData.medicationEffects} />
+                    <ReviewField label="Flare patterns" value={formData.flarePatterns} />
+                    <ReviewField label="Functional interplay" value={formData.functionalInterplay} />
+                  </ReviewSection>
+                )}
+
+                {(formData.baselineSymptoms || formData.currentSymptoms || formData.worseningOverTime) && (
+                  <ReviewSection title="Worsening Over Time (Patient-Reported)">
+                    <ReviewField label="Baseline" value={formData.baselineSymptoms} />
+                    <ReviewField label="Current" value={formData.currentSymptoms} />
+                    <ReviewField label="Progression" value={formData.worseningOverTime} />
+                  </ReviewSection>
+                )}
+
+                {formData.exposures.length > 0 && (
+                  <ReviewSection title="Exposures (Patient-Reported)">
+                    <div className="flex flex-wrap gap-1">
+                      {formData.exposures.map(e => <Badge key={e} variant="secondary" className="text-xs">{e}</Badge>)}
+                    </div>
+                  </ReviewSection>
+                )}
+
+                {(formData.currentSymptomsDetail || formData.functionalImpact) && (
+                  <ReviewSection title="Current Symptoms and Functional Impact (Patient-Reported)">
+                    <ReviewField label="Symptoms" value={formData.currentSymptomsDetail} />
+                    <ReviewField label="Frequency" value={formData.symptomFrequency} />
+                    <ReviewField label="Severity" value={formData.symptomSeverity} />
+                    <ReviewField label="Triggers" value={formData.symptomTriggers} />
+                    <ReviewField label="Medications" value={formData.currentMedications} />
+                    <ReviewField label="Treatment response" value={formData.medicationResponse} />
+                    <ReviewField label="Functional impact" value={formData.functionalImpact} />
+                  </ReviewSection>
+                )}
+
+                {formData.evidenceReferences.length > 0 && (
+                  <ReviewSection title="Evidence References">
+                    {formData.evidenceReferences.map(ref => (
+                      <div key={ref.id} className="text-xs text-muted-foreground">
+                        {ref.type}{ref.date ? ` (${safeFormatDate(ref.date)})` : ''}{ref.provider ? ` - ${ref.provider}` : ''}{ref.title ? `: ${ref.title}` : ''}
+                      </div>
+                    ))}
+                  </ReviewSection>
+                )}
+
+                {formData.personalStatementEnabled && (
+                  <ReviewSection title="Personal Statement Outline (Patient-Prepared)">
+                    <ReviewField label="Timeline" value={formData.personalStatementTimeline} />
+                    <ReviewField label="Frequency/Severity" value={formData.personalStatementFrequency} />
+                    <ReviewField label="Functional Impact" value={formData.personalStatementFunctionalImpact} />
+                    <ReviewField label="Treatment Response" value={formData.personalStatementTreatmentResponse} />
+                    <ReviewField label="Triggers" value={formData.personalStatementTriggers} />
+                    <ReviewField label="Missed Work" value={formData.personalStatementMissedWork} />
+                    <ReviewField label="Examples" value={formData.personalStatementExamples} />
+                  </ReviewSection>
+                )}
+
+                <ReviewSection title="Clinician Documentation Prompts (Optional)">
+                  <p className="text-xs text-muted-foreground italic">
+                    Included in PDF: Neutral prompts for the clinician to consider during evaluation.
+                  </p>
+                </ReviewSection>
+              </div>
+            )}
+
+            <div className="p-3 rounded-lg bg-muted/50 border border-border">
+              <p className="text-xs text-muted-foreground italic">
+                DISCLAIMER: This document was prepared by the veteran to organize information for a clinical visit. It is not medical or legal advice and does not provide a medical opinion or determine service connection. A licensed clinician must independently evaluate the veteran and author any clinical statements or medical opinions.
+              </p>
             </div>
 
             {exportError && (
@@ -1088,6 +1414,7 @@ export default function DoctorSummaryOutline() {
 
   return (
     <PageContainer className="space-y-6 animate-fade-in">
+      <AIDisclaimer variant="banner" />
       <div className="section-header">
         <div className="section-icon">
           <FileText className="h-5 w-5" />
@@ -1116,6 +1443,14 @@ export default function DoctorSummaryOutline() {
           </div>
         </CardContent>
       </Card>
+
+      {formData.primaryCondition && intelInsights.insights.length > 0 && (
+        <IntelInsightsCard
+          readinessScore={intelInsights.score}
+          insights={intelInsights.insights}
+          tips={intelInsights.tips}
+        />
+      )}
 
       <div className="flex items-center justify-between overflow-x-auto pb-2 -mx-1 px-1 scrollbar-thin gap-0">
         {STEPS.map((step, index) => (
@@ -1212,6 +1547,15 @@ export default function DoctorSummaryOutline() {
           </Button>
         ) : null}
       </div>
+
+      {currentStep === 5 && exported && (
+        <WhatNextCard
+          actions={getNextAction(
+            'export-doctor-summary',
+            formData.primaryCondition?.toLowerCase().replace(/\s+/g, '-'),
+          )}
+        />
+      )}
     </PageContainer>
   );
 }

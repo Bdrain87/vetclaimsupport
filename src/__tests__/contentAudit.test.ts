@@ -237,3 +237,103 @@ describe('Section 10D: Admin Email Consistency', () => {
     expect(match![1]).toBe('admin@vetclaimsupport.com');
   });
 });
+
+// ---------------------------------------------------------------------------
+// Section 10E: AI Pages Must Show AIDisclaimer
+// ---------------------------------------------------------------------------
+
+describe('Section 10E: AI Pages Must Show AIDisclaimer', () => {
+  it('every file importing from gemini.ts or ai-prompts.ts also imports AIDisclaimer', () => {
+    const files = getAllSourceFiles();
+    const aiFiles = files.filter(
+      (f) =>
+        (f.content.includes("from '@/lib/gemini'") ||
+          f.content.includes("from '@/lib/ai-prompts'")) &&
+        // Only check page and component files, not utility/service files
+        (f.path.includes('/pages/') || f.path.includes('/components/')),
+    );
+
+    const missing = aiFiles.filter(
+      (f) => !f.content.includes('AIDisclaimer'),
+    );
+
+    expect(
+      missing.map((m) => path.relative(srcDir, m.path)),
+    ).toEqual([]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Section 10F: Export Functions Must Use Export Guard
+// ---------------------------------------------------------------------------
+
+describe('Section 10F: Export Guard Enforcement', () => {
+  it('pdfExport.ts imports from exportGuard', () => {
+    const content = readFile('utils/pdfExport.ts');
+    expect(content).toContain('exportGuard');
+  });
+
+  it('exportGuard.ts exists and exports guardExport', () => {
+    const guardPath = path.join(srcDir, 'utils', 'exportGuard.ts');
+    expect(fs.existsSync(guardPath)).toBe(true);
+    const content = fs.readFileSync(guardPath, 'utf-8');
+    expect(content).toMatch(/export\s+function\s+guardExport/);
+  });
+
+  it('aiOutputGuard.ts exists and exports scanAIOutput', () => {
+    const guardPath = path.join(srcDir, 'utils', 'aiOutputGuard.ts');
+    expect(fs.existsSync(guardPath)).toBe(true);
+    const content = fs.readFileSync(guardPath, 'utf-8');
+    expect(content).toMatch(/export\s+function\s+scanAIOutput/);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Section 10G: No "nexus letter" in User-Facing UI Strings
+// ---------------------------------------------------------------------------
+
+describe('Section 10G: Banned UI Strings', () => {
+  it('SentinelCore does not label any VCS tool as "Nexus Letter"', () => {
+    const content = readFile('components/SentinelCore.tsx');
+    // VCS tool labels should not use "nexus letter" — that term is reserved
+    // for educational content. VCS tools should be called "Doctor Summary".
+    expect(content).not.toMatch(/label:\s*['"]Nexus Letter/i);
+  });
+
+  it('bannedPhrases.ts includes "nexus letter" and "nexus" as banned', () => {
+    const content = readFile('utils/bannedPhrases.ts');
+    expect(content).toContain("'nexus letter'");
+    expect(content).toContain("'nexus'");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Section 10H: New Legal Copy Entries Are Non-Empty
+// ---------------------------------------------------------------------------
+
+describe('Section 10H: New Legal Copy Entries', () => {
+  const newExports = [
+    'EXPORT_CONFIRMATION',
+    'C_FILE_CONSENT',
+    'AI_ANALYSIS_DISCLOSURE',
+    'DOCTOR_SUMMARY_AI_DISCLAIMER',
+  ];
+
+  const legalContent = readFile('data/legalCopy.ts');
+
+  newExports.forEach((name) => {
+    it(`legalCopy.ts exports ${name}`, () => {
+      const exportPattern = new RegExp(`export\\s+(const|function|let|var)\\s+${name}\\b`);
+      expect(legalContent).toMatch(exportPattern);
+    });
+  });
+
+  it('all new prompt files include AI_ANTI_HALLUCINATION', () => {
+    const promptFiles = getAllSourceFiles().filter(
+      (f) => f.path.includes('prompts') && f.path.endsWith('.ts'),
+    );
+    promptFiles.forEach((f) => {
+      expect(f.content).toContain('AI_ANTI_HALLUCINATION');
+    });
+  });
+});

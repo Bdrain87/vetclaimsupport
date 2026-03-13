@@ -106,6 +106,7 @@ export default function Dashboard() {
   const [quickLogFlareUpDuration, setQuickLogFlareUpDuration] = useState<string>('');
   const [quickLogFlareUpTriggers, setQuickLogFlareUpTriggers] = useState<string[]>([]);
   const [quickLogFlareUpActivities, setQuickLogFlareUpActivities] = useState('');
+  const [quickLogFollowUp, setQuickLogFollowUp] = useState(false);
 
   const todayLogged = useMemo(() => {
     const today = new Date().toISOString().slice(0, 10);
@@ -114,7 +115,7 @@ export default function Dashboard() {
 
   const [session, setSession] = useState<Session | null>(null);
   useEffect(() => {
-    getSharedSession().then((s) => setSession(s));
+    getSharedSession().then((s) => setSession(s)).catch(() => { /* session check failed */ });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => setSession(s));
     return () => subscription.unsubscribe();
   }, []);
@@ -992,6 +993,10 @@ export default function Dashboard() {
                     flareUpActivitiesAffected: quickLogFlareUp && quickLogFlareUpActivities ? quickLogFlareUpActivities : undefined,
                     createdAt: new Date().toISOString(),
                   });
+                  // Follow-up: if feeling is low or flare-up, suggest logging symptoms
+                  if (quickLogFeeling <= 3 || quickLogFlareUp) {
+                    setQuickLogFollowUp(true);
+                  }
                   setQuickLogOpen(false);
                   setQuickLogFeeling(5);
                   setQuickLogFlareUp(false);
@@ -1009,6 +1014,34 @@ export default function Dashboard() {
           </div>
         )}
       </motion.div>
+
+      {/* Quick Log Follow-up: suggest logging detailed symptoms */}
+      {quickLogFollowUp && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="rounded-2xl bg-gold/5 border border-gold/20 p-4"
+        >
+          <p className="text-sm font-semibold text-foreground mb-1">Tough day? Document it.</p>
+          <p className="text-xs text-muted-foreground mb-3">
+            Detailed symptom logs strengthen your claim. Log what you&apos;re experiencing while it&apos;s fresh.
+          </p>
+          <div className="flex gap-2">
+            <button
+              onClick={() => navigate('/health/symptoms')}
+              className="flex-1 py-2 rounded-xl bg-gold text-black font-semibold text-sm hover:bg-gold/90 transition-colors"
+            >
+              Log Symptoms
+            </button>
+            <button
+              onClick={() => setQuickLogFollowUp(false)}
+              className="px-4 py-2 rounded-xl border border-border text-muted-foreground text-sm hover:bg-accent transition-colors"
+            >
+              Later
+            </button>
+          </div>
+        </motion.div>
+      )}
 
       {/* Section 6c: Contextual Feature Discovery */}
       {userConditions.length > 0 && (

@@ -10,6 +10,9 @@ import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { conditionRatingCriteria } from '@/data/ratingCriteria';
 import { EMPLOYMENT_IMPACT_TYPES, FLARE_UP_DURATIONS } from '@/types/claims';
 import type { UserCondition } from '@/store/useAppStore';
+import { guardExport } from '@/utils/exportGuard';
+
+export { ExportBlockedError } from '@/utils/pdfExport';
 
 function formatDate(d: string | undefined | null): string {
   if (!d) return 'N/A';

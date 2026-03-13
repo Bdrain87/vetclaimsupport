@@ -54,6 +54,18 @@ export interface UserCondition {
   usageCount?: number;
   /** Last time this condition was selected in any tool */
   lastUsed?: string;
+  /** Date the condition was filed with the VA */
+  filedDate?: string;
+  /** Date of scheduled C&P exam */
+  cpExamDate?: string;
+  /** Whether the C&P exam has been completed */
+  cpExamCompleted?: boolean;
+  /** Date the VA decision was received */
+  decisionDate?: string;
+  /** Outcome of the VA decision */
+  decisionOutcome?: 'granted' | 'denied' | 'deferred';
+  /** Rating percentage received */
+  ratingReceived?: number;
 }
 
 // ===== DEFAULT DOCUMENTS CHECKLIST =====
@@ -276,6 +288,17 @@ interface AppState {
   deleteClaimDocument: (id: string) => Promise<void>;
   _hydrateClaimDocuments: () => Promise<void>;
 
+  // ========== READINESS HISTORY ==========
+
+  readinessHistory: Array<{ date: string; scores: Record<string, number> }>;
+  snapshotReadiness: () => void;
+  triggerReadinessSnapshot: () => void;
+
+  // ========== POST-FILING ACTIONS ==========
+
+  markConditionFiled: (id: string, date: string) => void;
+  updateConditionDecision: (id: string, outcome: 'granted' | 'denied' | 'deferred', rating?: number, date?: string) => void;
+
   // ========== EVIDENCE CHECKLIST (per condition) ==========
 
   conditionEvidenceChecks: Record<string, string[]>;
@@ -346,6 +369,9 @@ const initialState = {
 
   // Evidence checklist per condition
   conditionEvidenceChecks: {} as Record<string, string[]>,
+
+  // Readiness history (weekly snapshots)
+  readinessHistory: [] as Array<{ date: string; scores: Record<string, number> }>,
 };
 
 // ===== THE ONE STORE =====
@@ -1052,6 +1078,92 @@ const useAppStore = create<AppState>()(
           },
         };
       }),
+
+      // ========== READINESS HISTORY ==========
+
+      snapshotReadiness: () => {
+        const s = get();
+        const today = new Date().toISOString().slice(0, 10);
+        const lastEntry = s.readinessHistory[s.readinessHistory.length - 1];
+        if (lastEntry) {
+          const daysSinceLast = Math.floor((Date.now() - new Date(lastEntry.date).getTime()) / 86_400_000);
+          if (daysSinceLast < 7) return; // Too soon
+        }
+
+        // Build ClaimsData-like object from store state
+        const claimsData = {
+          medicalVisits: s.medicalVisits,
+          exposures: s.exposures,
+          symptoms: s.symptoms,
+          medications: s.medications,
+          serviceHistory: s.serviceHistory,
+          combatHistory: s.combatHistory,
+          majorEvents: s.majorEvents,
+          deployments: s.deployments,
+          buddyContacts: s.buddyContacts,
+          documents: s.documents,
+          migraines: s.migraines,
+          sleepEntries: s.sleepEntries,
+          ptsdSymptoms: s.ptsdSymptoms,
+          separationDate: null,
+          uploadedDocuments: s.uploadedDocuments,
+          claimConditions: s.claimConditions,
+          quickLogs: s.quickLogs,
+          deadlines: s.deadlines,
+        };
+
+        // Dynamically import to avoid circular dependency with claimIntelligence
+        import('@/services/claimIntelligence').then(({ ClaimIntelligence }) => {
+          const scores: Record<string, number> = {};
+          for (const uc of s.userConditions) {
+            const name = uc.displayName || uc.conditionId;
+            try {
+              const readiness = ClaimIntelligence.getConditionReadiness(name, claimsData);
+              scores[name] = readiness.overallScore;
+            } catch {
+              // Skip if intelligence engine fails
+            }
+          }
+
+          if (Object.keys(scores).length === 0) return;
+
+          const newHistory = [...s.readinessHistory, { date: today, scores }].slice(-52);
+          set({ readinessHistory: newHistory });
+        }).catch(() => {
+          // Skip if module import fails
+        });
+      },
+
+      triggerReadinessSnapshot: () => {
+        const s = get();
+        if (s.userConditions.length === 0) return;
+        s.snapshotReadiness();
+      },
+
+      // ========== POST-FILING ACTIONS ==========
+
+      markConditionFiled: (id, date) => set((s) => ({
+        userConditions: s.userConditions.map((c) =>
+          c.id === id ? { ...c, filedDate: date, claimStatus: 'pending' as const } : c
+        ),
+      })),
+
+      updateConditionDecision: (id, outcome, rating?, date?) => set((s) => ({
+        userConditions: s.userConditions.map((c) =>
+          c.id === id
+            ? {
+                ...c,
+                decisionDate: date || new Date().toISOString().slice(0, 10),
+                decisionOutcome: outcome,
+                ratingReceived: rating,
+                claimStatus: outcome === 'granted' ? 'approved' as const
+                  : outcome === 'denied' ? 'denied' as const
+                  : 'pending' as const,
+                rating: outcome === 'granted' && rating !== undefined ? rating : c.rating,
+              }
+            : c
+        ),
+      })),
 
       // ========== GLOBAL ==========
 

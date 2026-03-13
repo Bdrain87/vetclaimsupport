@@ -14,6 +14,6 @@ export const secureAuthStorage = {
     localStorage.setItem(key, value);
   },
   removeItem(key: string): void {
-    localStorage.removeItem(key);
+    try { localStorage.removeItem(key); } catch { /* storage error — ignore */ }
   },
 };

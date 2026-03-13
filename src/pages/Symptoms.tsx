@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { useEvidence } from '@/hooks/useEvidence';
@@ -34,6 +35,8 @@ const SeverityTrendChart = lazy(() => import('@/components/symptoms/SymptomChart
 const ConditionStatsChart = lazy(() => import('@/components/symptoms/SymptomCharts').then(m => ({ default: m.ConditionStatsChart })));
 import { format, subDays, startOfDay, parseISO } from 'date-fns';
 import { PageContainer } from '@/components/PageContainer';
+import { WhatNextCard } from '@/components/shared/WhatNextCard';
+import { getNextAction } from '@/utils/whatNext';
 import type { SymptomEntry, SymptomFrequency } from '@/types/claims';
 
 // Simplified VA-relevant frequency options
@@ -114,6 +117,7 @@ interface ExtendedSymptomForm {
 }
 
 export default function Symptoms() {
+  const [searchParams] = useSearchParams();
   const today = new Date().toISOString().split('T')[0];
   const { data, addSymptom, updateSymptom, deleteSymptom } = useClaims();
   const { documents, setAllDocuments } = useEvidence();
@@ -128,6 +132,8 @@ export default function Symptoms() {
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
+  const [showWhatNext, setShowWhatNext] = useState(false);
+  const [lastLoggedConditionId, setLastLoggedConditionId] = useState<string | undefined>();
 
   const [formData, setFormData] = useState<ExtendedSymptomForm>({
     date: '',
@@ -142,6 +148,18 @@ export default function Symptoms() {
     notes: '',
   });
   const [selectedConditionTags, setSelectedConditionTags] = useState<string[]>([]);
+
+  // Pre-fill from URL params (e.g., ?bodyArea=Knee&condition=PTSD)
+  useEffect(() => {
+    const bodyArea = searchParams.get('bodyArea');
+    const condition = searchParams.get('condition');
+    const prefill = bodyArea || condition;
+    if (prefill && !formData.conditionTitle) {
+      setFormData((prev) => ({ ...prev, conditionTitle: prefill }));
+      setIsOpen(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Get user's claimed conditions for tagging
   const { conditions: userConditions } = useUserConditions();
@@ -305,7 +323,17 @@ export default function Symptoms() {
       
       setIsOpen(false);
       resetForm();
-      toast({ title: 'Symptom logged', description: 'Consistent logging builds the evidence trail VA raters look for.' });
+      setLastLoggedConditionId(selectedConditionTags[0] || undefined);
+      setShowWhatNext(true);
+      // Smart reminders auto-refresh because useSmartReminders reads from the
+      // same Zustand store that addSymptom/updateSymptom write to.
+      const condName = symptomData.bodyArea;
+      toast({
+        title: 'Symptom logged',
+        description: condName
+          ? `Logged! Your ${condName} evidence just got stronger.`
+          : 'Consistent logging builds the evidence trail VA raters look for.',
+      });
     } catch {
       toast({
         title: 'Save Failed',
@@ -879,6 +907,22 @@ export default function Symptoms() {
                 ? 'Try adjusting your search or filter.'
                 : 'Regular journaling strengthens your claim.'}
             </p>
+            {!searchQuery && filterCondition === 'all' && data.symptoms.length === 0 && (
+              <div className="mt-4 p-4 rounded-xl bg-gold/5 border border-gold/20 text-left max-w-sm">
+                <p className="text-xs font-semibold text-gold mb-2">First Symptom Guide</p>
+                <p className="text-xs text-muted-foreground leading-relaxed mb-2">
+                  For VA claims, describe each entry with:
+                </p>
+                <ul className="text-xs text-muted-foreground space-y-1">
+                  <li>• <strong>What hurts</strong> — specific body area or symptom</li>
+                  <li>• <strong>How bad (1-10)</strong> — rate severity honestly</li>
+                  <li>• <strong>How it affects your day</strong> — work, sleep, activities</li>
+                </ul>
+                <p className="text-xs text-muted-foreground mt-2 italic">
+                  Example: &quot;Sharp pain in lower back, 7/10. Could not bend to pick up my child. Had to leave work early.&quot;
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
       ) : viewMode === 'timeline' ? (
@@ -1027,6 +1071,12 @@ export default function Symptoms() {
             </Collapsible>
           ))}
         </div>
+      )}
+      {showWhatNext && (
+        <WhatNextCard
+          actions={getNextAction('log-symptom', lastLoggedConditionId)}
+          className="mt-4"
+        />
       )}
       <ConfirmDialog
         open={!!deleteTarget}

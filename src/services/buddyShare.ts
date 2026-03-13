@@ -183,3 +183,45 @@ export async function submitBuddyStatement(
     return { success: false, error: 'An unexpected error occurred.' };
   }
 }
+
+/**
+ * Check all buddy_shares for the current user and return which ones
+ * have been submitted (buddy filled out the form).
+ * Used to auto-update local buddyContact statuses to "Received".
+ */
+export async function checkBuddyShareStatuses(): Promise<{
+  submitted: Array<{
+    token: string;
+    buddyName: string;
+    buddyContact: string;
+    conditionName: string;
+    submittedAt: string;
+  }>;
+}> {
+  try {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (!session) return { submitted: [] };
+
+    const { data, error } = await supabase
+      .from('buddy_shares')
+      .select('token, buddy_name, buddy_contact, condition_name, submitted_at')
+      .eq('user_id', session.user.id)
+      .not('submitted_at', 'is', null);
+
+    if (error || !data) return { submitted: [] };
+
+    return {
+      submitted: data.map((row) => ({
+        token: row.token as string,
+        buddyName: (row.buddy_name as string) || '',
+        buddyContact: (row.buddy_contact as string) || '',
+        conditionName: (row.condition_name as string) || '',
+        submittedAt: row.submitted_at as string,
+      })),
+    };
+  } catch {
+    return { submitted: [] };
+  }
+}

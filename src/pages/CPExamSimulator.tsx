@@ -12,11 +12,14 @@ import { useAIStream } from '@/hooks/useAIStream';
 import { isNativeApp } from '@/lib/platform';
 import { createCPExamEvalPromptV2 } from '@/lib/ai-prompts';
 import { getModelConfig } from '@/lib/ai-models';
+import { scanAIOutput, AI_OUTPUT_WARNING } from '@/utils/aiOutputGuard';
 import { buildConditionContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
 import { StreamingText } from '@/components/ui/StreamingText';
 import { Mic, MicOff, Play, RotateCcw, Copy, ChevronRight, Shield, AlertTriangle, Square, Volume2, VolumeX, MessageSquare } from 'lucide-react';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { WhatNextCard } from '@/components/shared/WhatNextCard';
+import { getNextAction } from '@/utils/whatNext';
 
 // DBQ-based question sets by condition category
 const EXAM_QUESTIONS: Record<string, string[]> = {
@@ -247,6 +250,8 @@ export default function CPExamSimulator() {
   const { streamedText, isStreaming, startStream, cancel: cancelStream } = useAIStream();
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [conversationMode, setConversationMode] = useState(false);
+  const [showWhatNext, setShowWhatNext] = useState(false);
+  const [aiWarning, setAiWarning] = useState(false);
   const conversationModeRef = useRef(false);
   // Incremented when speech is cancelled manually — prevents stale onEnd from triggering auto-record
   const speechGenRef = useRef(0);
@@ -351,6 +356,9 @@ export default function CPExamSimulator() {
         timeout,
       });
 
+      const scan = scanAIOutput(feedbackText);
+      if (!scan.clean) setAiWarning(true);
+
       const strengthMatch = feedbackText.match(/STRENGTH:\s*(Strong|Moderate|Weak)/i);
       const strength = (strengthMatch?.[1] as 'Strong' | 'Moderate' | 'Weak') || 'Moderate';
 
@@ -375,6 +383,7 @@ export default function CPExamSimulator() {
     impactMedium();
     if (currentQ + 1 >= questions.length) {
       notifySuccess();
+      setShowWhatNext(true);
       setPhase('summary');
     } else {
       setCurrentQ(prev => prev + 1);
@@ -396,6 +405,8 @@ export default function CPExamSimulator() {
     setAnswers([]);
     setCurrentFeedback(null);
     setConversationMode(false);
+    setShowWhatNext(false);
+    setAiWarning(false);
   }, [cancelStream]);
 
   const strengthColor = (s: string) =>
@@ -572,6 +583,13 @@ export default function CPExamSimulator() {
             <p className="text-sm italic">"{currentFeedback.transcript}"</p>
           </div>
 
+          {aiWarning && (
+            <div className="p-3 rounded-lg bg-red-500/5 border border-red-500/20 text-xs text-red-400 flex gap-2">
+              <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+              <span>{AI_OUTPUT_WARNING}</span>
+            </div>
+          )}
+
           <div className="p-4 rounded-xl border border-border bg-card text-sm whitespace-pre-wrap text-muted-foreground leading-relaxed">
             {currentFeedback.feedback}
           </div>
@@ -657,6 +675,10 @@ export default function CPExamSimulator() {
           <p className="text-[10px] text-muted-foreground text-center italic">
             This practice exam is for preparation only. Always describe your genuine experiences truthfully. Consult a VSO or attorney for claim advice.
           </p>
+
+          {showWhatNext && (
+            <WhatNextCard actions={getNextAction('complete-exam-simulator')} className="mt-2" />
+          )}
         </motion.div>
       )}
     </PageContainer>

@@ -42,6 +42,8 @@ import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
 import { useToolDraft } from '@/hooks/useToolDraft';
 import { DataConnectedBadge } from '@/components/shared/DataConnectedBadge';
+import { IntelInsightsCard, type InsightItem } from '@/components/shared/IntelInsightsCard';
+import { ClaimIntelligence } from '@/services/claimIntelligence';
 import { useProfileStore } from '@/store/useProfileStore';
 import { useFeatureFlag } from '@/store/useFeatureFlagStore';
 import { getAllBranchLabels } from '@/utils/veteranProfile';
@@ -315,6 +317,38 @@ export default function ClaimStrategyWizard() {
   const aiStrategyEnabled = useFeatureFlag('aiClaimStrategy');
   const [exportingStrategy, setExportingStrategy] = useState(false);
   const { toast } = useToast();
+
+  // Build per-condition readiness insights ranked by filing order
+  const conditionInsights = useMemo(() => {
+    const conditionNames = data.healthConditions.conditions.filter(Boolean);
+    if (conditionNames.length === 0) return { avgScore: 0, items: [] as InsightItem[], tips: [] as string[] };
+
+    const scored = conditionNames.map((name) => {
+      const readiness = ClaimIntelligence.getConditionReadiness(name, claimsData);
+      return { name, score: readiness?.overallScore ?? 0, tips: readiness?.tips ?? [] };
+    });
+
+    // Sort descending by readiness score (best first = file first)
+    scored.sort((a, b) => b.score - a.score);
+
+    const items: InsightItem[] = scored.map((c, i) => ({
+      label: `#${i + 1}`,
+      value: `File ${c.name} ${i === 0 ? 'first' : 'next'} (${c.score}% ready)`,
+    }));
+
+    const avgScore = scored.length > 0
+      ? Math.round(scored.reduce((sum, c) => sum + c.score, 0) / scored.length)
+      : 0;
+
+    // Gather unique tips from the weakest conditions (bottom half)
+    const weakCount = Math.max(1, Math.ceil(scored.length / 2));
+    const weakConditions = scored.slice(-weakCount);
+    const tipSet = new Set<string>();
+    weakConditions.forEach((c) => c.tips.forEach((t) => tipSet.add(t)));
+    const tips = [...tipSet].slice(0, 4);
+
+    return { avgScore, items, tips };
+  }, [data.healthConditions.conditions, claimsData]);
 
   // Sync form data when profile/claims load asynchronously, but only while
   // the user hasn't advanced past the first step and no draft was restored.
@@ -1224,6 +1258,16 @@ attorney for official guidance on your specific claim.
       )}
 
       <DataConnectedBadge />
+
+      {conditionInsights.items.length > 0 && (
+        <IntelInsightsCard
+          title="Filing Order & Readiness"
+          readinessScore={conditionInsights.avgScore}
+          insights={conditionInsights.items}
+          tips={conditionInsights.tips}
+          defaultExpanded={false}
+        />
+      )}
 
       {/* Progress Steps */}
       <div className="flex items-center overflow-x-auto pb-2 gap-0">

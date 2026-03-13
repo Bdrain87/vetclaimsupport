@@ -12,6 +12,7 @@ import { redactPII } from '@/lib/redaction';
 import { logAISend } from '@/services/aiAuditLog';
 import { checkAIRateLimit, trackAICall, AIRateLimitError } from '@/services/aiUsageTracker';
 import { AIUsageBanner } from '@/components/AIUsageBanner';
+import { scanAIOutput, AI_OUTPUT_WARNING } from '@/utils/aiOutputGuard';
 import { isNativeApp } from '@/lib/platform';
 import useAppStore from '@/store/useAppStore';
 import { useSentinel } from '@/hooks/useSentinel';
@@ -20,6 +21,7 @@ import { SENTINEL_SYSTEM_PROMPT, SENTINEL_VOICE_BUILD_PROMPT, buildCriteriaBlock
 import { buildVeteranContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
 import { Mic, MicOff, Sparkles, FileText, Shield, Heart, Scan, ArrowUp, ClipboardCheck, AlertTriangle, Users, FileSearch, Calculator, BarChart3 } from 'lucide-react';
+import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { useNavigate } from 'react-router-dom';
 
 interface AITool {
@@ -35,7 +37,7 @@ const AI_TOOLS: { title: string; tools: AITool[] }[] = [
     tools: [
       { label: 'Impact Statement', desc: 'Build your statement', icon: FileText, route: '/prep/personal-statement' },
       { label: 'Buddy Statement', desc: 'Lay statement builder', icon: Users, route: '/prep/buddy-statement' },
-      { label: 'Nexus Letter Builder', desc: 'Doctor summary outline', icon: FileText, route: '/prep/doctor-summary' },
+      { label: 'Doctor Summary Builder', desc: 'Doctor summary outline', icon: FileText, route: '/prep/doctor-summary' },
       { label: 'Stressor Statement', desc: 'Document stressors', icon: AlertTriangle, route: '/prep/stressor' },
       { label: 'Family Statement', desc: 'Family lay statements', icon: Heart, route: '/prep/family-statement' },
     ],
@@ -81,6 +83,7 @@ function ReadinessRing({ score, label }: { score: number; label: string }) {
 interface ChatMessage {
   role: 'user' | 'model';
   text: string;
+  hasWarning?: boolean;
 }
 
 type IntelMode = 'ask' | 'voice-build';
@@ -175,7 +178,8 @@ export function SentinelCore() {
       }
 
       trackAICall({ feature: 'sentinel-core', success: true, durationMs: Date.now() - sendStart, inputLength: redactedText.length });
-      setMessages(prev => [...prev, { role: 'model', text: fullText }]);
+      const scan = scanAIOutput(fullText);
+      setMessages(prev => [...prev, { role: 'model', text: fullText, hasWarning: !scan.clean }]);
     } catch {
       trackAICall({ feature: 'sentinel-core', success: false, durationMs: Date.now() - sendStart, inputLength: redactedText.length });
       setMessages(prev => [...prev, { role: 'model', text: 'Something went wrong. Please check your connection and try again.' }]);
@@ -267,6 +271,7 @@ export function SentinelCore() {
         </motion.button>
       </DialogTrigger>
       <DialogContent className="bg-card border-border rounded-2xl p-6">
+          <AIDisclaimer variant="banner" />
           <AIUsageBanner />
           {/* Condensed Header — title left, readiness ring right */}
           <DialogHeader className="flex-row items-center justify-between space-y-0">
@@ -358,6 +363,12 @@ export function SentinelCore() {
                           : 'bg-card border border-border text-muted-foreground'
                       }`}
                     >
+                      {msg.role === 'model' && msg.hasWarning && (
+                        <div className="flex items-center gap-1 text-[10px] text-gold mb-1">
+                          <AlertTriangle className="h-3 w-3" />
+                          <span>{AI_OUTPUT_WARNING}</span>
+                        </div>
+                      )}
                       {msg.text}
                     </div>
                   </div>

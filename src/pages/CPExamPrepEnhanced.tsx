@@ -39,6 +39,10 @@ import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { DataConnectedBadge } from '@/components/shared/DataConnectedBadge';
 import { AIContentBadge } from '@/components/ui/AIContentBadge';
 import { PageContainer } from '@/components/PageContainer';
+import { IntelInsightsCard, type InsightItem } from '@/components/shared/IntelInsightsCard';
+import { WhatNextCard } from '@/components/shared/WhatNextCard';
+import { ClaimIntelligence } from '@/services/claimIntelligence';
+import { getNextAction } from '@/utils/whatNext';
 import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
 import { useToolDraft } from '@/hooks/useToolDraft';
 import { getConditionSymptoms, getConditionMedications } from '@/utils/prefillHelpers';
@@ -49,6 +53,7 @@ import { getConditionById } from '@/data/vaConditions';
 import { conditionRatingCriteria } from '@/data/ratingCriteria';
 import { useEvidence } from '@/hooks/useEvidence';
 import { EvidenceAttachment } from '@/components/shared/EvidenceAttachment';
+import { scanAIOutput, AI_OUTPUT_WARNING } from '@/utils/aiOutputGuard';
 
 interface ChecklistItem {
   id: string;
@@ -152,6 +157,7 @@ export default function CPExamPrepEnhanced() {
   const [searchQuery, setSearchQuery] = useState('');
   const showAIPractice = useFeatureFlag('aiPracticeQuestions');
   const { generate: aiGenerate, isLoading: aiLoading, error: aiError } = useAIGenerate('EXAMINER_PERSONA');
+  const [aiWarning, setAiWarning] = useState(false);
   const [aiQuestions, setAiQuestions] = useState<string[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [showSuggestion, setShowSuggestion] = useState(false);
@@ -228,12 +234,40 @@ export default function CPExamPrepEnhanced() {
     return Math.round((checked / total) * 100);
   }, [checkedItems]);
 
+  // Resolve condition ID from URL param or selected condition name
+  const conditionId = useMemo(() => {
+    const urlId = searchParams.get('condition');
+    if (urlId) {
+      const byId = getConditionById(urlId);
+      if (byId) return byId.id;
+    }
+    if (!selectedCondition) return undefined;
+    // Try to resolve name back to an ID
+    const nameLower = selectedCondition.toLowerCase();
+    // getConditionById also works with slugified names
+    const bySlug = getConditionById(nameLower.replace(/\s+/g, '-'));
+    return bySlug?.id;
+  }, [searchParams, selectedCondition]);
+
+  const intelData = useMemo(() => {
+    if (!selectedCondition || !claimsData) return null;
+    const readiness = ClaimIntelligence.getConditionReadiness(selectedCondition, claimsData);
+    if (!readiness) return null;
+    const insights: InsightItem[] = [
+      { label: 'Evidence readiness', value: `${readiness.overallScore}%` },
+      { label: 'Severity documented', value: `${readiness.components.currentSeverity}%` },
+      { label: 'Exam prep', value: `${readiness.components.examPrep}%` },
+    ];
+    return { score: readiness.overallScore, insights, tips: readiness.tips };
+  }, [selectedCondition, claimsData]);
+
   const handleGenerateAIQuestions = async () => {
     if (!selectedCondition) return;
     setAiQuestions([]);
     setCurrentQuestionIndex(0);
     setShowSuggestion(false);
     setUserAnswer('');
+    setAiWarning(false);
 
     // Filter symptoms and medications by the selected condition
     const conditionSymptoms = getConditionSymptoms(selectedCondition, claimsData.symptoms || []);
@@ -291,6 +325,8 @@ export default function CPExamPrepEnhanced() {
 
     const result = await aiGenerate(prompt);
     if (result) {
+      const scan = scanAIOutput(result);
+      if (!scan.clean) setAiWarning(true);
       // Parse questions from AI response
       const lines = result.split('\n').filter(line => {
         const trimmed = line.trim();
@@ -322,6 +358,17 @@ export default function CPExamPrepEnhanced() {
 
       {/* Data Connected Badge */}
       <DataConnectedBadge />
+
+      {/* Intel Insights */}
+      {intelData && (
+        <IntelInsightsCard
+          title="Exam Prep Intel"
+          readinessScore={intelData.score}
+          insights={intelData.insights}
+          tips={intelData.tips}
+          defaultExpanded
+        />
+      )}
 
       {/* Exam Packet CTA */}
       <Link
@@ -718,6 +765,12 @@ export default function CPExamPrepEnhanced() {
                         <>
                           <AIDisclaimer variant="banner" />
                           <AIContentBadge timestamp={new Date().toISOString()} />
+                          {aiWarning && (
+                            <div className="p-3 rounded-lg bg-red-500/5 border border-red-500/20 text-xs text-red-400 flex gap-2">
+                              <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+                              <span>{AI_OUTPUT_WARNING}</span>
+                            </div>
+                          )}
                           <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
                             <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
                               <Badge variant="outline">
@@ -787,6 +840,7 @@ export default function CPExamPrepEnhanced() {
                               setCurrentQuestionIndex(0);
                               setUserAnswer('');
                               setShowSuggestion(false);
+                              setAiWarning(false);
                             }}
                           >
                             Generate New Questions
@@ -948,6 +1002,10 @@ export default function CPExamPrepEnhanced() {
               </Link>
             </Button>
           </div>
+
+          {checklistProgress === 100 && (
+            <WhatNextCard actions={getNextAction('complete-exam-prep', conditionId)} />
+          )}
         </TabsContent>
       </Tabs>
 

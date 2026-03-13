@@ -34,7 +34,7 @@ export function isRetentionWarningPending(): boolean {
 
 /** Dismiss the retention warning after user has acknowledged it. */
 export function dismissRetentionWarning(): void {
-  localStorage.removeItem(RETENTION_WARNING_KEY);
+  try { localStorage.removeItem(RETENTION_WARNING_KEY); } catch { /* storage error — ignore */ }
 }
 
 /**

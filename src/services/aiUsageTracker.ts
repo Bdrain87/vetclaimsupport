@@ -90,11 +90,22 @@ let cachedLimit = DEFAULT_MONTHLY_LIMIT;
 let configFetchedAt = 0;
 const CONFIG_TTL = 5 * 60 * 1000; // 5 minutes
 
+/** Monthly AI call limit for free/preview users. */
+const PREVIEW_AI_LIMIT = 3;
+
 async function fetchLimit(): Promise<number> {
   if (Date.now() - configFetchedAt < CONFIG_TTL) return cachedLimit;
 
   try {
     const entitlement = checkEntitlement();
+
+    // Preview (free) users get a very limited AI allowance
+    if (entitlement === 'preview') {
+      cachedLimit = PREVIEW_AI_LIMIT;
+      configFetchedAt = Date.now();
+      return cachedLimit;
+    }
+
     const plan = entitlement === 'lifetime' ? 'lifetime' : 'premium';
 
     const { data } = await supabase
@@ -176,7 +187,9 @@ export function trackAICall(params: TrackAICallParams): void {
 /** Synchronous read of current usage status. */
 export function getUsageStatus(): UsageStatus {
   const used = getLocalCount();
-  const limit = cachedLimit;
+  // If entitlement hasn't been fetched yet but user is preview, enforce low limit
+  const entitlement = checkEntitlement();
+  const limit = entitlement === 'preview' ? PREVIEW_AI_LIMIT : cachedLimit;
   const remaining = Math.max(0, limit - used);
   const percentage = limit > 0 ? Math.min(100, Math.round((used / limit) * 100)) : 0;
 

@@ -32,7 +32,15 @@ export function resolveDBQ(condition: {
   name: string;
   diagnosticCode?: string;
   diagnosticCodes?: string[];
+  formNumber?: string;
 }): DBQReference | undefined {
+  // Strategy 0: form number match (most reliable for uploaded DBQs)
+  if (condition.formNumber) {
+    const normalized = condition.formNumber.replace(/\s+/g, '').toUpperCase();
+    const byForm = dbqQuickReference.find((d) => d.formNumber.replace(/\s+/g, '').toUpperCase() === normalized);
+    if (byForm) return byForm;
+  }
+
   // Strategy 1: direct id match
   const byId = dbqQuickReference.find((d) => d.id === condition.id);
   if (byId) return byId;
@@ -114,6 +122,25 @@ export function resolveRatingCriteria(condition: {
  * Find legacy conditionRatingCriteria for a condition.
  * Tries: conditionId match, then diagnostic code match.
  */
+/**
+ * Check if a diagnostic code matches a DC specifier which may be:
+ * - An exact code ("6602")
+ * - A range ("6600-6847") — the code must fall numerically within the range
+ */
+function dcMatches(specifier: string, code: string): boolean {
+  if (specifier === code) return true;
+  const rangeMatch = specifier.match(/^(\d+)-(\d+)$/);
+  if (rangeMatch) {
+    const lo = parseInt(rangeMatch[1], 10);
+    const hi = parseInt(rangeMatch[2], 10);
+    const num = parseInt(code, 10);
+    if (!isNaN(lo) && !isNaN(hi) && !isNaN(num)) {
+      return num >= lo && num <= hi;
+    }
+  }
+  return false;
+}
+
 export function resolveLegacyRatingCriteria(condition: {
   id: string;
   diagnosticCode?: string;
@@ -123,18 +150,59 @@ export function resolveLegacyRatingCriteria(condition: {
   const byId = conditionRatingCriteria.find((c) => c.conditionId === condition.id);
   if (byId) return byId;
 
-  // Diagnostic code match
+  // Diagnostic code match (range-aware)
   const codes = new Set<string>();
   if (condition.diagnosticCode) codes.add(condition.diagnosticCode);
   if (condition.diagnosticCodes) condition.diagnosticCodes.forEach((c) => codes.add(c));
 
   if (codes.size > 0) {
-    return conditionRatingCriteria.find((c) =>
-      codes.has(c.diagnosticCode) || c.diagnosticCode.split('-').some((part) => codes.has(part)),
+    const byCode = conditionRatingCriteria.find((c) =>
+      Array.from(codes).some((code) => dcMatches(c.diagnosticCode, code)),
     );
+    if (byCode) return byCode;
   }
 
   return undefined;
+}
+
+/**
+ * Resolve ALL matching rating criteria for a DBQ that covers multiple conditions.
+ * For example, the "Respiratory Conditions" DBQ (DC 6600-6847) covers Sleep Apnea,
+ * Asthma, COPD, etc. Returns all matching ConditionRatingCriteria entries.
+ */
+export function resolveAllMatchingCriteria(dbq: {
+  diagnosticCodes: string[];
+  conditionsCovered: string[];
+}): ConditionRatingCriteria[] {
+  const results: ConditionRatingCriteria[] = [];
+  const seen = new Set<string>();
+
+  for (const criteria of conditionRatingCriteria) {
+    if (seen.has(criteria.conditionId)) continue;
+
+    // Check DC match (range-aware)
+    const codeMatch = dbq.diagnosticCodes.some((dc) =>
+      dcMatches(dc, criteria.diagnosticCode),
+    );
+    if (codeMatch) {
+      results.push(criteria);
+      seen.add(criteria.conditionId);
+      continue;
+    }
+
+    // Name-based fallback: fuzzy match conditionsCovered against conditionName
+    const criteriaNameLower = criteria.conditionName.toLowerCase();
+    const nameMatch = dbq.conditionsCovered.some((covered) => {
+      const coveredLower = covered.toLowerCase();
+      return coveredLower.includes(criteriaNameLower) || criteriaNameLower.includes(coveredLower);
+    });
+    if (nameMatch) {
+      results.push(criteria);
+      seen.add(criteria.conditionId);
+    }
+  }
+
+  return results;
 }
 
 // ── DBQ match for UserCondition (used in DBQAnalyzer) ─────────

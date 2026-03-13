@@ -10,6 +10,7 @@ import { aiTranscribe, isGeminiConfigured } from '@/lib/gemini';
 import { useAIStream } from '@/hooks/useAIStream';
 import { isNativeApp } from '@/lib/platform';
 import { createPostDebriefPromptV2, AI_ANTI_HALLUCINATION } from '@/lib/ai-prompts';
+import { scanAIOutput, AI_OUTPUT_WARNING } from '@/utils/aiOutputGuard';
 import { buildVeteranContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
 import { useUserConditions } from '@/hooks/useUserConditions';
@@ -19,6 +20,8 @@ import { Mic, MicOff, Copy, RotateCcw, AlertTriangle, FileText, Shield, Square }
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { DataConnectedBadge } from '@/components/shared/DataConnectedBadge';
 import { AIConfidenceScore } from '@/components/shared/AIConfidenceScore';
+import { WhatNextCard } from '@/components/shared/WhatNextCard';
+import { getNextAction } from '@/utils/whatNext';
 
 export default function PostExamDebrief() {
   const { conditions } = useUserConditions();
@@ -28,6 +31,8 @@ export default function PostExamDebrief() {
   const [transcript, setTranscript] = useState('');
   const [analysis, setAnalysis] = useState('');
   const [error, setError] = useState('');
+  const [showWhatNext, setShowWhatNext] = useState(false);
+  const [aiWarning, setAiWarning] = useState(false);
   const { streamedText, isStreaming, startStream, cancel: cancelStream } = useAIStream();
 
   const startRecording = async () => {
@@ -79,7 +84,10 @@ export default function PostExamDebrief() {
         temperature,
         timeout,
       });
+      const scan = scanAIOutput(result);
+      if (!scan.clean) setAiWarning(true);
       setAnalysis(result);
+      setShowWhatNext(true);
     } catch {
       setError('Failed to process. Please try again.');
     } finally {
@@ -93,6 +101,8 @@ export default function PostExamDebrief() {
     setTranscript('');
     setAnalysis('');
     setError('');
+    setAiWarning(false);
+    setShowWhatNext(false);
   };
 
   return (
@@ -186,6 +196,13 @@ export default function PostExamDebrief() {
             </details>
           )}
 
+          {aiWarning && !isStreaming && (
+            <div className="p-3 rounded-lg bg-red-500/5 border border-red-500/20 text-xs text-red-400 flex gap-2">
+              <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+              <span>{AI_OUTPUT_WARNING}</span>
+            </div>
+          )}
+
           <StreamingText
             text={isStreaming ? streamedText : analysis}
             isStreaming={isStreaming}
@@ -223,6 +240,10 @@ export default function PostExamDebrief() {
               </>
             )}
           </div>
+
+          {showWhatNext && !isStreaming && (
+            <WhatNextCard actions={getNextAction('complete-exam-debrief')} className="mt-2" />
+          )}
         </motion.div>
       )}
     </PageContainer>
