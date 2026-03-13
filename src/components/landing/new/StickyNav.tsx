@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import { APP_STORE_URL } from '@/lib/landing-animations';
+import { APP_STORE_URL, GOLD_GRADIENT, MARQUEE_STYLES } from '@/lib/landing-animations';
 
 const NAV_LINKS = [
   { label: 'Features', href: '#features' },
@@ -109,9 +109,22 @@ export function StickyNav() {
             className="flex items-center gap-2.5 cursor-pointer bg-transparent border-none"
           >
             <img src="/app-icon.png" alt="Vet Claim Support" width={32} height={32} style={{ borderRadius: 8 }} />
-            <span className="text-white font-semibold text-lg tracking-tight">
+            <span
+              className="font-bold text-lg"
+              style={{
+                fontFamily: "'Inter', system-ui, sans-serif",
+                letterSpacing: '-0.02em',
+                background: 'linear-gradient(90deg, #C5A55A 0%, #C5A55A 40%, #FFF8E7 50%, #C5A55A 60%, #C5A55A 100%)',
+                backgroundSize: '250% 100%',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                animation: 'nav-shimmer 4s linear infinite',
+              }}
+            >
               Vet Claim Support
             </span>
+            <style>{`@keyframes nav-shimmer { 0% { background-position: 100% center; } 100% { background-position: -100% center; } }`}</style>
           </button>
 
           {/* Desktop links */}

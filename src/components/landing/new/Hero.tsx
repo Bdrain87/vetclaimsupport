@@ -137,7 +137,57 @@ export function Hero() {
         </div>
       </motion.div>
 
+      {/* Brand shimmer keyframes */}
+      <style>{`
+        @keyframes brand-shimmer {
+          0% { background-position: 100% center; }
+          100% { background-position: -100% center; }
+        }
+        @keyframes glow-pulse {
+          0%, 100% { opacity: 0.12; }
+          50% { opacity: 0.25; }
+        }
+      `}</style>
+
       <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 text-center py-14 md:py-20">
+        {/* Brand name — proud, centered, gold shimmer */}
+        <motion.div
+          className="relative mb-8"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {/* Ambient glow behind brand name */}
+          <div
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+            style={{
+              width: '500px',
+              height: '120px',
+              background: 'radial-gradient(ellipse at center, rgba(197,165,90,0.15) 0%, rgba(197,165,90,0.05) 40%, transparent 70%)',
+              filter: 'blur(50px)',
+              animation: 'glow-pulse 4s ease-in-out infinite',
+            }}
+          />
+          <h2
+            className="relative font-bold"
+            style={{
+              fontFamily: "'Inter', system-ui, sans-serif",
+              fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
+              letterSpacing: '-0.03em',
+              lineHeight: 1.1,
+              background: 'linear-gradient(90deg, #A68B3C 0%, #C5A55A 20%, #FFF8E7 50%, #C5A55A 80%, #A68B3C 100%)',
+              backgroundSize: '250% 100%',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              animation: 'brand-shimmer 4s linear infinite',
+              filter: 'drop-shadow(0 0 30px rgba(197,165,90,0.12))',
+            }}
+          >
+            Vet Claim Support
+          </h2>
+        </motion.div>
+
         {/* Intro line */}
         <motion.p
           className="uppercase tracking-[0.25em] text-sm font-medium mb-6"
@@ -149,7 +199,7 @@ export function Hero() {
           }}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
         >
           Built for Service Members &amp; Veterans
         </motion.p>
