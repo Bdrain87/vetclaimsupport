@@ -40,7 +40,7 @@ const INCLUDED_FEATURES = [
     features: [
       'Claim Strategy Wizard', 'C&P Exam Prep',
       'C&P Exam Simulator (Voice & Conversation Mode)',
-      'Post-Exam Debrief', '68 Interactive DBQ Prep Sheets',
+      'Post-Exam Debrief', '70 Interactive DBQ Prep Sheets',
       'AI DBQ Rating Analyzer', 'Exam Day Mode',
       'Decision Letter Decoder',
       'DBQ Self-Assessment', 'Guided Condition Journeys',
@@ -61,7 +61,7 @@ const INCLUDED_FEATURES = [
   {
     category: 'Research & Database',
     features: [
-      '800+ Condition Database', 'Conditions by Conflict',
+      '790+ Condition Database', 'Conditions by Conflict',
       'Condition Guide', 'Deployment Locations',
       'Evidence Strength Analyzer', 'Military Job Hazard Identifier',
     ],
@@ -206,7 +206,7 @@ export function Pricing() {
           Know What You're Paying For
         </motion.h2>
         <motion.p
-          className="text-center mb-14 text-lg"
+          className="text-center mb-6 text-lg"
           style={{ color: TEXT_SECONDARY }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -214,6 +214,32 @@ export function Pricing() {
           transition={{ duration: 0.5, delay: 0.1 }}
         >
           Most veterans don't realize they have options.
+        </motion.p>
+
+        {/* Free tier banner */}
+        <motion.div
+          className="text-center mb-6 rounded-xl px-6 py-4 border border-white/5"
+          style={{ backgroundColor: 'rgba(197, 165, 90, 0.06)' }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+        >
+          <p className="text-sm" style={{ color: TEXT_BRIGHT }}>
+            Start with free tools — rating calculator, condition database, and more. No account required.
+          </p>
+        </motion.div>
+
+        {/* Annual emphasis */}
+        <motion.p
+          className="text-center mb-14 text-sm font-medium"
+          style={{ color: GOLD }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          Save 30% with annual — $124.99/year ($10.42/mo)
         </motion.p>
 
         {/* Three-column comparison */}
@@ -277,7 +303,7 @@ export function Pricing() {
 
               <ul className="space-y-2.5 mb-6">
                 {[
-                  '85+ tools & all 68 VA DBQs',
+                  '85+ tools & all 70 VA DBQs',
                   'AI DBQ rating analyzer',
                   'AI-powered document builders',
                   'Guided condition journeys',

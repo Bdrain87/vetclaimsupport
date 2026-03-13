@@ -43,9 +43,9 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
 
 const STATS = [
   { value: 85, suffix: '+', label: 'Tools & Features' },
-  { value: 800, suffix: '+', label: 'VA Conditions' },
-  { value: 256, suffix: '-bit', label: 'Encryption' },
-  { value: 0, suffix: '', label: 'Veteran Founded', isText: true },
+  { value: 70, suffix: '', label: 'VA DBQ Forms' },
+  { value: 790, suffix: '+', label: 'Conditions Covered' },
+  { value: 10, suffix: '', label: 'Health Trackers' },
 ];
 
 export function SocialProof() {
@@ -66,60 +66,19 @@ export function SocialProof() {
               i < STATS.length - 1 ? 'md:border-r md:border-gray-700' : ''
             }`}
           >
-            {stat.isText ? (
-              <div className="flex items-center justify-center h-[36px] md:h-[40px]">
-                <svg width="52" height="36" viewBox="-2 -2 64 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="gold-flag-light" x1="0" y1="0" x2="60" y2="40" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stopColor="#D9BE6C"/>
-                      <stop offset="100%" stopColor="#C5A55A"/>
-                    </linearGradient>
-                    <linearGradient id="silver-border" x1="0" y1="0" x2="60" y2="40" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stopColor="#E8E8E8"/>
-                      <stop offset="30%" stopColor="#B0B0B0"/>
-                      <stop offset="50%" stopColor="#F0F0F0"/>
-                      <stop offset="70%" stopColor="#A8A8A8"/>
-                      <stop offset="100%" stopColor="#D0D0D0"/>
-                    </linearGradient>
-                  </defs>
-                  {/* Metallic silver border */}
-                  <rect x="-1.5" y="-1.5" width="63" height="43" rx="4.5" fill="none" stroke="url(#silver-border)" strokeWidth="2"/>
-                  {/* Flag body — light gold */}
-                  <rect x="0" y="0" width="60" height="40" rx="3" fill="url(#gold-flag-light)"/>
-                  {/* Stripes — alternating darker gold bands */}
-                  <rect x="0" y="6.15" width="60" height="3.08" fill="#A68B3C"/>
-                  <rect x="0" y="12.3" width="60" height="3.08" fill="#A68B3C"/>
-                  <rect x="0" y="18.45" width="60" height="3.08" fill="#A68B3C"/>
-                  <rect x="0" y="24.6" width="60" height="3.08" fill="#A68B3C"/>
-                  <rect x="0" y="30.75" width="60" height="3.08" fill="#A68B3C"/>
-                  <rect x="0" y="36.9" width="60" height="3.1" fill="#A68B3C"/>
-                  {/* Star field — solid dark gold */}
-                  <rect x="0" y="0" width="24" height="21.5" rx="2" fill="#A68B3C"/>
-                  {/* Stars — lighter gold */}
-                  <circle cx="5" cy="4" r="1.2" fill="#C5A55A"/>
-                  <circle cx="12" cy="4" r="1.2" fill="#C5A55A"/>
-                  <circle cx="19" cy="4" r="1.2" fill="#C5A55A"/>
-                  <circle cx="8.5" cy="7.5" r="1.2" fill="#C5A55A"/>
-                  <circle cx="15.5" cy="7.5" r="1.2" fill="#C5A55A"/>
-                  <circle cx="5" cy="11" r="1.2" fill="#C5A55A"/>
-                  <circle cx="12" cy="11" r="1.2" fill="#C5A55A"/>
-                  <circle cx="19" cy="11" r="1.2" fill="#C5A55A"/>
-                  <circle cx="8.5" cy="14.5" r="1.2" fill="#C5A55A"/>
-                  <circle cx="15.5" cy="14.5" r="1.2" fill="#C5A55A"/>
-                  <circle cx="5" cy="18" r="1.2" fill="#C5A55A"/>
-                  <circle cx="12" cy="18" r="1.2" fill="#C5A55A"/>
-                  <circle cx="19" cy="18" r="1.2" fill="#C5A55A"/>
-                </svg>
-              </div>
-            ) : (
-              <AnimatedNumber value={stat.value} suffix={stat.suffix} />
-            )}
+            <AnimatedNumber value={stat.value} suffix={stat.suffix} />
             <span className="text-sm" style={{ color: TEXT_SECONDARY }}>
               {stat.label}
             </span>
           </motion.div>
         ))}
       </motion.div>
+      <p
+        className="text-center mt-4 text-xs"
+        style={{ color: 'rgba(255, 255, 255, 0.40)' }}
+      >
+        Veteran-built. 256-bit encrypted. Not affiliated with the VA.
+      </p>
     </section>
   );
 }

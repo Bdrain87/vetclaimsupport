@@ -1,6 +1,6 @@
 /**
  * VA Condition Database — Master Index
- * 800+ conditions across 15 body systems
+ * 790+ conditions across 15 body systems
  *
  * This is the canonical import path for all condition data.
  * All old imports from '@/data/vaConditions' are re-exported here for backward compatibility.

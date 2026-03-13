@@ -35,7 +35,7 @@ const ROW_2_ITEMS = [
   'Appeals Guide',
   'VA Form Guide',
   'Claim Checklist',
-  '800+ Condition Database',
+  '790+ Condition Database',
   'Travel Pay Calculator',
   'Health Summary',
   'BDD Guide',

@@ -8,7 +8,8 @@ import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE, APP_STORE_URL, LANDING_BG } from 
 const TRUST_ITEMS = [
   'NOT AFFILIATED WITH THE VA',
   'VETERAN-BUILT',
-  '85+ CLAIM TOOLS',
+  '85+ AI-POWERED TOOLS',
+  'ALL 70 VA DBQs',
   'FROM $14.99/MO',
 ];
 
@@ -157,7 +158,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
-          85+ tools and all 68 VA DBQ forms — organize your evidence, build your case, and walk into your exam ready.
+          85+ AI-powered tools, all 70 VA DBQ forms, and the only health tracking suite built for VA claims.
         </motion.p>
 
         {/* CTAs */}
@@ -183,7 +184,7 @@ export function Hero() {
                 borderRadius: '12px',
               }}
             >
-              Get Started — $14.99/mo
+              Start Free
             </Link>
           </motion.div>
           <motion.button
@@ -204,21 +205,16 @@ export function Hero() {
           </motion.button>
         </motion.div>
 
-        {/* Free calculator CTA */}
-        <motion.div
-          className="flex items-center justify-center mb-6"
+        {/* No credit card note */}
+        <motion.p
+          className="text-center text-sm mb-6"
+          style={{ color: 'rgba(255, 255, 255, 0.50)' }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.7 }}
         >
-          <Link
-            to="/calculator"
-            className="text-sm font-medium no-underline"
-            style={{ color: 'rgba(197, 165, 90, 0.85)' }}
-          >
-            Try the free rating calculator — no account needed
-          </Link>
-        </motion.div>
+          No credit card required
+        </motion.p>
 
         {/* Trust Bar */}
         <motion.div

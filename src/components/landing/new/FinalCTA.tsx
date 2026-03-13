@@ -114,10 +114,21 @@ export function FinalCTA() {
               className="inline-block px-12 py-4 text-lg font-semibold text-black no-underline"
               style={{ background: GOLD_GRADIENT, borderRadius: '9999px' }}
             >
-              Get Started — $14.99/mo
+              Start Free
             </Link>
           </motion.div>
         </motion.div>
+
+        <motion.p
+          className="text-center mt-5 text-sm"
+          style={{ color: TEXT_BRIGHT, opacity: 0.6 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 0.6 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          $14.99/mo for full access. Cancel anytime.
+        </motion.p>
 
       </div>
     </section>

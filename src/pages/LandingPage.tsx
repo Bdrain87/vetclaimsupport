@@ -2,14 +2,16 @@ import { useEffect } from 'react';
 import { StickyNav } from '@/components/landing/new/StickyNav';
 import { Hero } from '@/components/landing/new/Hero';
 import { TrustMarquee } from '@/components/landing/new/TrustMarquee';
-import { HowItWorks } from '@/components/landing/new/HowItWorks';
-import { BuiltByVeteran } from '@/components/landing/new/BuiltByVeteran';
-import { ProductShowcase } from '@/components/landing/new/ProductShowcase';
-import { AIShowcase } from '@/components/landing/new/AIShowcase';
-import { PersonalizedDemo } from '@/components/landing/new/PersonalizedDemo';
-import { ComparisonTable } from '@/components/landing/new/ComparisonTable';
-import { Pricing } from '@/components/landing/new/Pricing';
 import { SocialProof } from '@/components/landing/new/SocialProof';
+import { AIHero } from '@/components/landing/new/AIHero';
+import { HowItWorks } from '@/components/landing/new/HowItWorks';
+import { OnlyInVCS } from '@/components/landing/new/OnlyInVCS';
+import { ProductShowcase } from '@/components/landing/new/ProductShowcase';
+import { CompetitorComparison } from '@/components/landing/new/CompetitorComparison';
+import { PersonalizedDemo } from '@/components/landing/new/PersonalizedDemo';
+import { BuiltByVeteran } from '@/components/landing/new/BuiltByVeteran';
+import { Pricing } from '@/components/landing/new/Pricing';
+import { FAQ } from '@/components/landing/new/FAQ';
 import { FinalCTA } from '@/components/landing/new/FinalCTA';
 import { LandingFooter } from '@/components/landing/new/LandingFooter';
 
@@ -46,14 +48,16 @@ export default function LandingPage() {
       <main>
         <Hero />
         <TrustMarquee />
-        <HowItWorks />
-        <BuiltByVeteran />
-        <ProductShowcase />
-        <AIShowcase />
-        <PersonalizedDemo />
-        <ComparisonTable />
-        <Pricing />
         <SocialProof />
+        <AIHero />
+        <HowItWorks />
+        <OnlyInVCS />
+        <ProductShowcase />
+        <CompetitorComparison />
+        <PersonalizedDemo />
+        <BuiltByVeteran />
+        <Pricing />
+        <FAQ />
         <FinalCTA />
       </main>
       <LandingFooter />

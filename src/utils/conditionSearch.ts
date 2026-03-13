@@ -1,7 +1,7 @@
 /**
  * Unified VA Condition Search
  *
- * Merges both the rich VACondition data (~800+ from conditions/)
+ * Merges both the rich VACondition data (~790+ from conditions/)
  * and the 780+ VADisability data from vaDisabilities.ts into a
  * single searchable index with deduplication and scored ranking.
  *

@@ -27,7 +27,7 @@ const STEPS = [
   {
     num: '03',
     title: 'Prepare for the C&P Exam',
-    desc: 'Practice questions, prep with all 68 DBQ forms, and analyze your answers against rating criteria with AI. Walk in feeling confident.',
+    desc: 'Practice questions, prep with all 70 DBQ forms, and analyze your answers against rating criteria with AI. Walk in feeling confident.',
   },
   {
     num: '04',

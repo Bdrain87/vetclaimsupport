@@ -1,4 +1,4 @@
-// Comprehensive list of 500+ secondary condition relationships based on VA claims patterns
+// Comprehensive list of 700+ secondary condition relationships based on VA claims patterns
 
 export interface SecondaryConnection {
   primaryCondition: string;

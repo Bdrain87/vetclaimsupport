@@ -40,12 +40,12 @@ const COMPARISON_ROWS = [
   {
     feature: 'Secondary conditions',
     manual: 'Word of mouth, guesswork',
-    vcs: '500+ mapped secondary connections with nexus guidance',
+    vcs: '700+ mapped secondary connections with evidence guidance',
   },
   {
     feature: 'Rating criteria research',
     manual: 'Reading 38 CFR Part 4 yourself',
-    vcs: 'Plain-language criteria for 800+ conditions',
+    vcs: 'Plain-language criteria for 790+ conditions',
   },
   {
     feature: 'Data-connected AI tools',

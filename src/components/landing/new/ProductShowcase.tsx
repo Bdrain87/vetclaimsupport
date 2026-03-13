@@ -85,7 +85,7 @@ const CATEGORIES: FeatureCategory[] = [
       'Ask Intel — AI claims preparation assistant',
       'Claim Strategy Wizard with filing order guidance',
       'C&P Exam Prep with condition-specific strategies',
-      'All 68 VA DBQ forms with interactive prep',
+      'All 70 VA DBQ forms with interactive prep',
       'C&P Exam Simulator with voice & conversation mode',
       'Evidence Strength Analyzer vs VA criteria',
       'Secondary Condition Finder',
@@ -100,7 +100,7 @@ const CATEGORIES: FeatureCategory[] = [
   {
     id: 'database',
     icon: Database,
-    label: '800+ Conditions',
+    label: '790+ Conditions',
     headline: 'Every VA-rated condition, researched',
     description:
       'Browse the full VA disability database with rating criteria, evidence strength analysis, and condition-specific guided preparation.',
@@ -190,7 +190,7 @@ export function ProductShowcase() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1, ease: EASE_SMOOTH }}
         >
-          85+ tools and all 68 VA DBQ forms — designed around how the VA actually evaluates claims.
+          85+ tools and all 70 VA DBQ forms — designed around how the VA actually evaluates claims.
         </motion.p>
 
         {/* Category tabs */}

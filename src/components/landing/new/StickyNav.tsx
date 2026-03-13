@@ -8,6 +8,7 @@ const NAV_LINKS = [
   { label: 'Features', href: '#features' },
   { label: 'How It Works', href: '#how-it-works' },
   { label: 'Pricing', href: '#pricing' },
+  { label: 'FAQ', href: '#faq' },
   { label: 'Sign In', href: '/auth', isRoute: true },
 ];
 
@@ -147,7 +148,7 @@ export function StickyNav() {
                   'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)',
               }}
             >
-              Launch App
+              Try Free
             </Link>
           </div>
 
@@ -201,7 +202,7 @@ export function StickyNav() {
                   'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)',
               }}
             >
-              Launch App
+              Try Free
             </Link>
             <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
               <AppStoreBadge />
