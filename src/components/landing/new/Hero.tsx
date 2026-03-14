@@ -81,9 +81,9 @@ export function Hero() {
             }}
             variants={fadeInUp}
           >
-            Prepare your VA claim
+            You served your country.
             <br />
-            <span style={GOLD_GRADIENT_TEXT}>with confidence.</span>
+            <span style={GOLD_GRADIENT_TEXT}>Preparing your claim shouldn't feel like a second battle.</span>
           </motion.h1>
 
           {/* Subtitle */}
