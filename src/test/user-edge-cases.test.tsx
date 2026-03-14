@@ -159,7 +159,12 @@ describe('Onboarding Edge Cases', () => {
       expect(screen.getByText(/get started/i)).toBeInTheDocument();
     });
 
+    // Welcome -> C-File Fast Track -> Name
     await user.click(screen.getByText(/get started/i).closest('button')!);
+    await waitFor(() => {
+      expect(screen.getByText(/skip for now/i)).toBeInTheDocument();
+    });
+    await user.click(screen.getByText(/skip for now/i).closest('button')!);
 
     await waitFor(() => {
       expect(screen.getByPlaceholderText(/first name/i)).toBeInTheDocument();
@@ -193,7 +198,12 @@ describe('Onboarding Edge Cases', () => {
       expect(screen.getByText(/get started/i)).toBeInTheDocument();
     });
 
+    // Welcome -> C-File Fast Track -> Name
     await user.click(screen.getByText(/get started/i).closest('button')!);
+    await waitFor(() => {
+      expect(screen.getByText(/skip for now/i)).toBeInTheDocument();
+    });
+    await user.click(screen.getByText(/skip for now/i).closest('button')!);
 
     await waitFor(() => {
       expect(screen.getByPlaceholderText(/first name/i)).toBeInTheDocument();

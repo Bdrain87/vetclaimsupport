@@ -269,7 +269,7 @@ export default function Sleep() {
       </div>
 
       {/* VA Rating Info - Premium Card */}
-      <div className="rounded-2xl bg-linear-to-br from-gold/10 to-gold/5 border border-gold/30 p-5 shadow-lg" style={{ boxShadow: '0 4px 24px rgba(184, 171, 128, 0.15)' }}>
+      <div className="rounded-2xl bg-linear-to-br from-gold/10 to-gold/5 border border-gold/30 p-5 shadow-lg" style={{ boxShadow: '0 4px 24px rgba(176, 153, 78, 0.15)' }}>
         <div className="flex items-center gap-3 mb-4">
           <div className="p-2 rounded-xl bg-gold/20">
             <Moon className="h-5 w-5 text-gold" />
@@ -302,7 +302,7 @@ export default function Sleep() {
       {/* Add Log Button */}
       <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) resetForm(); }}>
         <DialogTrigger asChild>
-          <Button className="gap-2 bg-gold hover:bg-gold/80 text-background shadow-[0_4px_16px_rgba(184,171,128,0.3)]">
+          <Button className="gap-2 bg-gold hover:bg-gold/80 text-background shadow-[0_4px_16px_rgba(176,153,78,0.3)]">
             <Plus className="h-4 w-4" />
             Log Sleep
           </Button>
@@ -388,7 +388,7 @@ export default function Sleep() {
                       <div className="flex items-center justify-between gap-3 flex-wrap">
                         <div className="space-y-1 min-w-0 flex-1">
                           <Label className="text-base font-semibold">Do you use a CPAP/breathing device?</Label>
-                          <p className="text-sm font-medium text-gold">⭐ Critical for 50% rating</p>
+                          <p className="text-sm font-medium text-muted-foreground">⭐ Critical for 50% rating</p>
                         </div>
                         <div className="flex gap-2 shrink-0">
                           <Button

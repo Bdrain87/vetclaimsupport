@@ -10,9 +10,10 @@ import { useConditionJourney } from '@/hooks/useConditionJourney';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { getConditionById } from '@/data/vaConditions';
 import { getConditionDisplayName } from '@/utils/conditionResolver';
-import { ChevronRight, CheckCircle2, Circle, ArrowLeft, Target, PartyPopper } from 'lucide-react';
+import { ChevronRight, CheckCircle2, Circle, ArrowLeft, Target, PartyPopper, FileSearch } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { notifySuccess } from '@/lib/haptics';
+import useAppStore from '@/store/useAppStore';
 
 export default function ConditionJourney() {
   const { id } = useParams<{ id: string }>();
@@ -84,7 +85,7 @@ export default function ConditionJourney() {
         >
           <PartyPopper className="h-6 w-6 text-gold shrink-0" />
           <div>
-            <p className="text-sm font-semibold text-gold">
+            <p className="text-sm font-semibold text-foreground">
               Journey Complete!
             </p>
             <p className="text-xs text-muted-foreground">
@@ -93,6 +94,9 @@ export default function ConditionJourney() {
           </div>
         </motion.div>
       )}
+
+      {/* C-File Evidence Badge */}
+      <CFileEvidenceBadge conditionName={conditionName} />
 
       {/* Steps */}
       <div className="space-y-3">
@@ -120,7 +124,7 @@ export default function ConditionJourney() {
                     <svg className="absolute inset-0 h-5 w-5 -rotate-90" viewBox="0 0 20 20">
                       <circle
                         cx="10" cy="10" r="8" fill="none"
-                        stroke="var(--gold-md, #B8AB80)" strokeWidth="2"
+                        stroke="var(--gold-md, #B0994E)" strokeWidth="2"
                         strokeDasharray={`${(step.progress / 100) * 50.3} 50.3`}
                         strokeLinecap="round"
                       />
@@ -132,13 +136,13 @@ export default function ConditionJourney() {
             <div className="flex-1 min-w-0">
               <p className={cn(
                 'text-sm font-medium',
-                step.isComplete ? 'text-gold' : 'text-foreground',
+                step.isComplete ? 'text-foreground' : 'text-foreground',
               )}>
                 {step.title}
               </p>
               <p className="text-xs text-muted-foreground mt-0.5">{step.description}</p>
               {step.detail && (
-                <p className="text-xs text-gold mt-1 font-medium">{step.detail}</p>
+                <p className="text-xs text-muted-foreground mt-1 font-medium">{step.detail}</p>
               )}
             </div>
             <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0 mt-1" />
@@ -155,5 +159,37 @@ export default function ConditionJourney() {
         </p>
       </div>
     </PageContainer>
+  );
+}
+
+function CFileEvidenceBadge({ conditionName }: { conditionName: string }) {
+  const cfileData = useAppStore((s) => s.cfileExtractedData);
+  if (!cfileData) return null;
+
+  const lower = conditionName.toLowerCase();
+  const matchedCondition = cfileData.conditions.find(
+    (c) => c.conditionName.toLowerCase().includes(lower) || lower.includes(c.conditionName.toLowerCase()),
+  );
+  const matchedVisits = cfileData.medicalVisits.filter(
+    (v) => v.relatedCondition?.toLowerCase().includes(lower) || v.reason?.toLowerCase().includes(lower),
+  );
+  const matchedMeds = cfileData.medications.filter(
+    (m) => m.prescribedFor?.toLowerCase().includes(lower),
+  );
+
+  if (!matchedCondition && matchedVisits.length === 0 && matchedMeds.length === 0) return null;
+
+  const parts: string[] = [];
+  if (matchedCondition) parts.push('condition documented');
+  if (matchedVisits.length > 0) parts.push(`${matchedVisits.length} visit${matchedVisits.length !== 1 ? 's' : ''}`);
+  if (matchedMeds.length > 0) parts.push(`${matchedMeds.length} medication${matchedMeds.length !== 1 ? 's' : ''}`);
+
+  return (
+    <div className="flex items-center gap-2 p-2.5 rounded-xl border border-gold/20 bg-gold/5">
+      <FileSearch className="h-4 w-4 text-gold shrink-0" />
+      <p className="text-xs text-muted-foreground">
+        <span className="font-medium text-foreground">From your C-File:</span> {parts.join(', ')}
+      </p>
+    </div>
   );
 }

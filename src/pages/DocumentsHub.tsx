@@ -655,7 +655,7 @@ export default function DocumentsHub() {
             <p className="text-xs text-muted-foreground">
               Supports images, PDFs, and documents up to 10MB
             </p>
-            <p className="text-xs text-gold/80 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Documents are stored locally on this device only and are not synced to the cloud. Use Settings &gt; Export Backup regularly.
             </p>
           </div>
@@ -939,7 +939,7 @@ export default function DocumentsHub() {
           {/* Tips */}
           <Card className="bg-gold/5 border-gold/20">
             <CardHeader className="pb-2">
-              <CardTitle className="text-base text-gold">Tips for Gathering Documents</CardTitle>
+              <CardTitle className="text-base text-foreground">Tips for Gathering Documents</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 text-sm text-foreground/80">
               <p>• <strong>STRs:</strong> Request from NPRC or your local MTF</p>

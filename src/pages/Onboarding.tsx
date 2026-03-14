@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronRight, ChevronLeft, X, Search, Shield, User, Briefcase, Stethoscope, Check, MapPin, Plane, ClipboardList, Activity, FileText, Users, Calculator } from 'lucide-react';
+import { ChevronRight, ChevronLeft, X, Search, Shield, User, Briefcase, Stethoscope, Check, CheckCircle2, MapPin, Plane, ClipboardList, Activity, FileText, Users, Calculator, FileSearch, Loader2 } from 'lucide-react';
 import { useProfileStore, BRANCH_LABELS, BRANCH_COLORS, type Branch, type ClaimGoal } from '@/store/useProfileStore';
 import { searchMilitaryJobs, getCodeTypeForBranch, type MilitaryJobCode } from '@/data/militaryMOS';
 import { ConditionAutocomplete } from '@/components/shared/ConditionAutocomplete';
@@ -17,8 +17,19 @@ import { useRecommendedTools } from '@/hooks/useRecommendedTools';
 import { ClaimIntelligence } from '@/services/claimIntelligence';
 import { combineRatings } from '@/utils/vaMath';
 import { conditionProfiles } from '@/data/secondaryConditions';
+import { analyzeDocument } from '@/lib/analyzeDocument';
+import { buildCFileIntelPrompt, CFILE_RESPONSE_SCHEMA, type CFileExtractedData } from '@/lib/cfile-prompts';
+import { buildVeteranContext } from '@/utils/veteranContext';
+import { formatContextForAI } from '@/utils/formatContextForAI';
+import { applyCFileToStores } from '@/utils/cfileStoreSeeder';
+import { isGeminiConfigured } from '@/lib/gemini';
+import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
+import { checkAIRateLimit, trackAICall } from '@/services/aiUsageTracker';
+import { requireOnline } from '@/utils/networkCheck';
+import { scanAIOutput } from '@/utils/aiOutputGuard';
+import { useToast } from '@/hooks/use-toast';
 
-const TOTAL_STEPS = 12;
+const TOTAL_STEPS = 13;
 
 const MONTHS = [
   { value: '01', label: 'Jan' }, { value: '02', label: 'Feb' }, { value: '03', label: 'Mar' },
@@ -124,7 +135,7 @@ function MOSAutocomplete({
 
   const handleSelect = (job: MilitaryJobCode) => {
     onSelect(job);
-    setQuery(`${job.code} — ${job.title}`);
+    setQuery(`${job.code} - ${job.title}`);
     setIsOpen(false);
   };
 
@@ -212,6 +223,12 @@ export default function Onboarding() {
   );
   const [mosCode, setMosCode] = useState(cached?.mosCode ?? profileStore.mosCode);
   const [mosTitle, setMosTitle] = useState(cached?.mosTitle ?? profileStore.mosTitle);
+  const { toast } = useToast();
+  const [cfileUploading, setCFileUploading] = useState(false);
+  const [cfileProgress, setCFileProgress] = useState(0);
+  const [cfileResult, setCFileResult] = useState<CFileExtractedData | null>(null);
+  const [cfileSkipped, setCFileSkipped] = useState(false);
+  const cfileUploadRef = useRef<HTMLInputElement>(null);
   const [addedConditions, setAddedConditions] = useState<string[]>(cached?.addedConditions ?? []);
   const [claimGoal, setClaimGoal] = useState<ClaimGoal | ''>(cached?.claimGoal ?? '');
   const [nameError, setNameError] = useState('');
@@ -304,7 +321,7 @@ export default function Onboarding() {
 
   useEffect(() => {
     if (profileStore.hasCompletedOnboarding) {
-      try { localStorage.removeItem('vcs_onboarding_progress'); } catch { /* storage error — ignore */ }
+      try { localStorage.removeItem('vcs_onboarding_progress'); } catch { /* storage error - ignore */ }
       navigate('/app', { replace: true });
     }
   }, [profileStore.hasCompletedOnboarding, navigate]);
@@ -312,23 +329,24 @@ export default function Onboarding() {
   const canProceed = useMemo(() => {
     switch (step) {
       case 0: return true;
-      case 1: return firstName.trim().length > 0;
-      case 2: return selectedBranches.length > 0;
-      case 3: return true;
-      case 4: return true; // Service Status
-      case 5: return true; // Duty Stations
-      case 6: return true; // Deployments
-      case 7: return true; // Goal
-      case 8: return true; // Existing Ratings
-      case 9: return true; // Conditions
-      case 10: return true; // Getting Started
-      case 11: return true; // Complete
+      case 1: return true; // C-File Fast Track
+      case 2: return firstName.trim().length > 0;
+      case 3: return selectedBranches.length > 0;
+      case 4: return true;
+      case 5: return true; // Service Status
+      case 6: return true; // Duty Stations
+      case 7: return true; // Deployments
+      case 8: return true; // Goal
+      case 9: return true; // Existing Ratings
+      case 10: return true; // Conditions
+      case 11: return true; // Getting Started
+      case 12: return true; // Complete
       default: return true;
     }
   }, [step, firstName, selectedBranches.length]);
 
   const handleNext = () => {
-    if (step === 1 && !firstName.trim()) {
+    if (step === 2 && !firstName.trim()) {
       setNameError('Please enter your first name');
       return;
     }
@@ -442,6 +460,84 @@ export default function Onboarding() {
     navigate('/onboarding/plan', { replace: true });
   };
 
+  const handleCFileUpload = async (file: File) => {
+    if (!requireOnline('C-File upload')) return;
+    const { allowed } = checkAIRateLimit();
+    if (!allowed) {
+      toast({ title: 'AI limit reached', description: 'Try again later.', variant: 'destructive' });
+      return;
+    }
+
+    setCFileUploading(true);
+    setCFileProgress(10);
+
+    const ctx = buildVeteranContext({ maskPII: true });
+    const contextBlock = formatContextForAI(ctx, 'detailed');
+    const systemPrompt = buildCFileIntelPrompt({
+      veteranContext: contextBlock,
+      currentConditions: [],
+    });
+
+    const start = Date.now();
+    try {
+      setCFileProgress(30);
+      const { text } = await analyzeDocument({
+        file,
+        prompt: 'Analyze this VA C-File (Claims File). Extract ALL structured data and provide analysis. Return structured JSON.',
+        systemInstruction: systemPrompt,
+        feature: 'cfile-intel-onboarding',
+        responseSchema: CFILE_RESPONSE_SCHEMA,
+        temperature: 0.2,
+        onProgress: (s) => {
+          if (s === 'uploading') setCFileProgress(40);
+          if (s === 'analyzing') setCFileProgress(70);
+        },
+      });
+
+      setCFileProgress(90);
+      const parsed: CFileExtractedData = JSON.parse(text);
+      scanAIOutput(JSON.stringify(parsed));
+      trackAICall({ feature: 'cfile-intel-onboarding', model: 'gemini-2.5-flash', success: true, durationMs: Date.now() - start, inputLength: file.size });
+
+      // Store and apply ALL sections
+      useAppStore.getState().setCFileData(parsed, file.name);
+      applyCFileToStores(parsed, {
+        sections: ['profile', 'conditions', 'medications', 'visits', 'service', 'exposures'],
+      });
+
+      setCFileResult(parsed);
+      setCFileProgress(100);
+
+      // Auto-populate onboarding fields from C-File data
+      if (parsed.branch) {
+        const branchMap: Record<string, string> = {
+          army: 'army', marines: 'marines', 'marine corps': 'marines',
+          navy: 'navy', 'air force': 'air_force', 'coast guard': 'coast_guard', 'space force': 'space_force',
+        };
+        const mapped = branchMap[parsed.branch.toLowerCase()] as Branch | undefined;
+        if (mapped) {
+          setBranch(mapped);
+          setSelectedBranches([mapped]);
+        }
+      }
+      if (parsed.militarySpecialty) {
+        setMosCode(parsed.militarySpecialty);
+        setMosTitle(parsed.specialtyTitle ?? '');
+      }
+      if (parsed.separationDate) {
+        setSeparationDate(parsed.separationDate);
+      }
+
+      // Skip to step 10 (Conditions confirmation) - profile, branch, MOS, etc. already populated
+      setTimeout(() => setStep(10), 500);
+    } catch (err) {
+      trackAICall({ feature: 'cfile-intel-onboarding', success: false, durationMs: Date.now() - start });
+      setCFileUploading(false);
+      setCFileProgress(0);
+      toast({ title: 'Analysis failed', description: err instanceof Error ? err.message : 'Please try again or skip this step.', variant: 'destructive' });
+    }
+  };
+
   const handleAddCondition = (condition: VACondition) => {
     addCondition(condition.id);
     setAddedConditions(prev => [...prev, condition.id]);
@@ -490,7 +586,7 @@ export default function Onboarding() {
   };
 
   const STEP_LABELS = [
-    'Welcome', 'Your Name', 'Branch of Service', 'Military Job',
+    'Welcome', 'C-File Fast Track', 'Your Name', 'Branch of Service', 'Military Job',
     'Service Status', 'Duty Stations', 'Deployments',
     'Claim Goal', 'Existing Ratings', 'Conditions',
     'Getting Started', 'Complete',
@@ -569,8 +665,81 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 1: Name */}
+            {/* Step 1: C-File Fast Track */}
             {step === 1 && (
+              <div className="text-center space-y-6">
+                <AIDisclaimer variant="inline" />
+                <div className="w-14 h-14 mx-auto rounded-xl bg-white/9 border border-white/[0.14] flex items-center justify-center">
+                  <FileSearch className="h-7 w-7 text-gold" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-white">Have Your VA Claims File?</h2>
+                  <p className="text-white/50 mt-2 text-sm leading-relaxed">
+                    Upload your C-File and we'll set up your entire claim workspace in under a minute. You can also add it later from the Tools page.
+                  </p>
+                </div>
+
+                {cfileUploading ? (
+                  <div className="space-y-4">
+                    <Loader2 className="h-8 w-8 text-gold animate-spin mx-auto" />
+                    <p className="text-white/60 text-sm">
+                      {cfileProgress < 40 ? 'Uploading...' : cfileProgress < 70 ? 'Analyzing your C-File...' : 'Extracting data...'}
+                    </p>
+                    <div className="w-48 mx-auto h-1.5 rounded-full bg-white/10 overflow-hidden">
+                      <div className="h-full bg-gold rounded-full transition-all duration-500" style={{ width: `${cfileProgress}%` }} />
+                    </div>
+                  </div>
+                ) : cfileResult ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-center gap-2 p-3 rounded-xl bg-success/10 border border-success/20">
+                      <CheckCircle2 className="h-4 w-4 text-success" />
+                      <span className="text-xs text-success font-medium">
+                        Found {cfileResult.conditions.length} conditions, {cfileResult.medications.length} medications, {cfileResult.medicalVisits.length} visits
+                      </span>
+                    </div>
+                    <p className="text-white/40 text-xs">Data has been applied. Proceeding to confirmation...</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <input
+                      ref={cfileUploadRef}
+                      type="file"
+                      accept=".pdf,application/pdf"
+                      onChange={(e) => {
+                        const f = e.target.files?.[0];
+                        if (f && f.type.includes('pdf') && f.size <= 50 * 1024 * 1024) {
+                          handleCFileUpload(f);
+                        }
+                      }}
+                      className="hidden"
+                    />
+                    {isGeminiConfigured ? (
+                      <button
+                        onClick={() => cfileUploadRef.current?.click()}
+                        className="w-full p-4 rounded-xl bg-gold/10 border border-gold/30 hover:bg-gold/20 transition-colors"
+                      >
+                        <FileSearch className="h-6 w-6 text-gold mx-auto mb-2" />
+                        <span className="text-white text-sm font-medium block">Upload My C-File</span>
+                        <span className="text-white/40 text-xs block mt-1">PDF, up to 50MB</span>
+                      </button>
+                    ) : (
+                      <div className="p-3 rounded-xl bg-white/5 border border-white/10">
+                        <p className="text-white/40 text-xs">C-File upload is not available right now. You can add it later from the Tools page.</p>
+                      </div>
+                    )}
+                    <button
+                      onClick={() => { setCFileSkipped(true); handleNext(); }}
+                      className="w-full text-center text-sm text-white/30 hover:text-white/50 transition-colors"
+                    >
+                      Skip for now
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Step 2: Name */}
+            {step === 2 && (
               <div className="space-y-5">
                 <div className="text-center">
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/9 border border-white/[0.14] flex items-center justify-center mb-4">
@@ -604,8 +773,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 2: Branch (Multi-select) */}
-            {step === 2 && (
+            {/* Step 3: Branch (Multi-select) */}
+            {step === 3 && (
               <div className="space-y-5">
                 <div className="text-center">
                   <h2 className="text-xl font-bold text-white">Which branch(es) did you serve in?</h2>
@@ -650,8 +819,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 3: MOS */}
-            {step === 3 && (branch ? (
+            {/* Step 4: MOS */}
+            {step === 4 && (branch ? (
               <div className="space-y-5">
                 <div className="text-center">
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/9 border border-white/[0.14] flex items-center justify-center mb-4">
@@ -672,7 +841,7 @@ export default function Onboarding() {
                   <>
                     <MOSAutocomplete
                       branch={branch}
-                      value={mosCode ? `${mosCode} — ${mosTitle}` : ''}
+                      value={mosCode ? `${mosCode} - ${mosTitle}` : ''}
                       onSelect={(job) => {
                         setMosCode(job.code);
                         setMosTitle(job.title);
@@ -682,7 +851,7 @@ export default function Onboarding() {
                     {mosCode && (
                       <div className="flex items-start gap-2 text-sm text-gold min-w-0">
                         <Check className="h-4 w-4 shrink-0 mt-0.5" />
-                        <span className="wrap-break-word min-w-0">{getCodeTypeForBranch(BRANCH_TO_MOS[branch])}: {mosCode} — {mosTitle}</span>
+                        <span className="wrap-break-word min-w-0">{getCodeTypeForBranch(BRANCH_TO_MOS[branch])}: {mosCode} - {mosTitle}</span>
                       </div>
                     )}
                     <button
@@ -719,7 +888,7 @@ export default function Onboarding() {
                     {manualCode && manualTitle && (
                       <div className="flex items-center gap-2 text-sm text-gold min-w-0">
                         <Check className="h-4 w-4 shrink-0" />
-                        <span className="truncate">{manualCode} — {manualTitle}</span>
+                        <span className="truncate">{manualCode} - {manualTitle}</span>
                       </div>
                     )}
                     <button
@@ -738,8 +907,8 @@ export default function Onboarding() {
               </div>
             ))}
 
-            {/* Step 4: Service Status (Active Duty / BDD) */}
-            {step === 4 && (
+            {/* Step 5: Service Status (Active Duty / BDD) */}
+            {step === 5 && (
               <div className="space-y-5">
                 <div className="text-center">
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/9 border border-white/[0.14] flex items-center justify-center mb-4">
@@ -790,7 +959,7 @@ export default function Onboarding() {
                         );
                       } else if (daysOut > 0 && daysOut < 90) {
                         return (
-                          <p className="text-xs text-gold/80 px-1">Your separation is less than 90 days out — standard filing recommended.</p>
+                          <p className="text-xs text-gold/80 px-1">Your separation is less than 90 days out - standard filing recommended.</p>
                         );
                       }
                       return null;
@@ -800,8 +969,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 5: Duty Stations */}
-            {step === 5 && (
+            {/* Step 6: Duty Stations */}
+            {step === 6 && (
               <div className="space-y-5">
                 <div className="text-center">
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/9 border border-white/[0.14] flex items-center justify-center mb-4">
@@ -818,7 +987,7 @@ export default function Onboarding() {
                         <div className="min-w-0 flex-1">
                           <p className="text-white text-sm font-medium truncate">{station.baseName}</p>
                           {(station.startDate || station.endDate) && (
-                            <p className="text-white/40 text-xs">{station.startDate} — {station.endDate}</p>
+                            <p className="text-white/40 text-xs">{station.startDate} - {station.endDate}</p>
                           )}
                         </div>
                         <button
@@ -872,8 +1041,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 6: Deployments */}
-            {step === 6 && (
+            {/* Step 7: Deployments */}
+            {step === 7 && (
               <div className="space-y-5">
                 <div className="text-center">
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/9 border border-white/[0.14] flex items-center justify-center mb-4">
@@ -896,7 +1065,7 @@ export default function Onboarding() {
                           </div>
                           {dep.location && <p className="text-white/40 text-xs truncate">{dep.location}</p>}
                           {(dep.startDate || dep.endDate) && (
-                            <p className="text-white/30 text-xs">{dep.startDate} — {dep.endDate}</p>
+                            <p className="text-white/30 text-xs">{dep.startDate} - {dep.endDate}</p>
                           )}
                         </div>
                         <button
@@ -978,8 +1147,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 7: What's Your Goal? */}
-            {step === 7 && (
+            {/* Step 8: What's Your Goal? */}
+            {step === 8 && (
               <div className="space-y-5">
                 <div className="text-center">
                   <h2 className="text-xl font-bold text-white">What are you trying to do?</h2>
@@ -991,7 +1160,7 @@ export default function Onboarding() {
                     { value: 'increase' as ClaimGoal, label: 'Increase an existing rating', desc: 'Condition has gotten worse' },
                     { value: 'secondary' as ClaimGoal, label: 'File for secondary conditions', desc: 'Conditions caused by a rated disability' },
                     { value: 'appeal' as ClaimGoal, label: 'Appeal a denied claim', desc: 'Request a review of a VA decision' },
-                    { value: 'exploring' as ClaimGoal, label: 'Not sure yet \u2014 just exploring', desc: 'Learn what tools are available' },
+                    { value: 'exploring' as ClaimGoal, label: 'Not sure yet - just exploring', desc: 'Learn what tools are available' },
                   ]).map(option => (
                     <button
                       key={option.value}
@@ -1020,8 +1189,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 8: Existing Rated Conditions */}
-            {step === 8 && (
+            {/* Step 9: Existing Rated Conditions */}
+            {step === 9 && (
               <div className="space-y-5">
                 <div className="text-center">
                   <h2 className="text-xl font-bold text-white">Do you have any VA-rated conditions?</h2>
@@ -1136,8 +1305,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 9: Conditions */}
-            {step === 9 && (
+            {/* Step 10: Conditions */}
+            {step === 10 && (
               <div className="space-y-5">
                 <div className="text-center">
                   <div className="w-14 h-14 mx-auto rounded-xl bg-white/9 border border-white/[0.14] flex items-center justify-center mb-4">
@@ -1221,8 +1390,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 10: How to Get Results */}
-            {step === 10 && (
+            {/* Step 11: How to Get Results */}
+            {step === 11 && (
               <div className="space-y-5">
                 <div className="text-center">
                   <h2 className="text-xl font-bold text-white">How to Get Results</h2>
@@ -1285,8 +1454,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 11: Personalized Plan */}
-            {step === 11 && (
+            {/* Step 12: Personalized Plan */}
+            {step === 12 && (
               <div className="text-center space-y-5">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -1374,7 +1543,7 @@ export default function Onboarding() {
               )}
             </div>
             <div className="flex items-center gap-2">
-              {(step >= 3 && step <= 9) && (
+              {(step >= 4 && step <= 10) && (
                 <button onClick={handleSkip} className="text-sm text-white/40 hover:text-white/60 transition-colors h-11 px-4">
                   Skip
                 </button>

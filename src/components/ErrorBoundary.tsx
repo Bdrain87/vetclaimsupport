@@ -70,7 +70,7 @@ export class ErrorBoundary extends Component<Props, State> {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex flex-col gap-2">
-                <Button onClick={this.handleReset} variant="default" className="w-full">
+                <Button onClick={this.handleReset} variant="outline" className="w-full">
                   <RefreshCw className="mr-2 h-4 w-4" />
                   Try Again
                 </Button>

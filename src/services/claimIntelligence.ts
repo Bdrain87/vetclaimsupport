@@ -475,6 +475,37 @@ export const ClaimIntelligence = {
       });
     }
 
+    // --- C-File findings needing attention ---
+    {
+      const cfileData = useAppStore.getState().cfileExtractedData;
+      if (cfileData?.analysis) {
+        const analysis = cfileData.analysis;
+        // Surface unclaimed conditions from C-File
+        if (analysis.missedConditions.length > 0) {
+          const condNames = analysis.missedConditions.slice(0, 3).map(c => c.conditionName).join(', ');
+          steps.push({
+            id: nextId(),
+            title: `C-File: ${analysis.missedConditions.length} potential unclaimed condition${analysis.missedConditions.length !== 1 ? 's' : ''}`,
+            description: `Your C-File mentions ${condNames}${analysis.missedConditions.length > 3 ? ', and more' : ''} that you haven't claimed yet. Review them in C-File Intel.`,
+            priority: 'high',
+            category: 'conditions',
+            actionRoute: '/prep/cfile-intel',
+          });
+        }
+        // Surface secondary opportunities
+        if (analysis.secondaryOpportunities.length > 0) {
+          steps.push({
+            id: nextId(),
+            title: `C-File: ${analysis.secondaryOpportunities.length} secondary connection${analysis.secondaryOpportunities.length !== 1 ? 's' : ''} found`,
+            description: 'Your C-File shows evidence supporting secondary conditions. Explore them before filing.',
+            priority: 'medium',
+            category: 'conditions',
+            actionRoute: '/prep/cfile-intel',
+          });
+        }
+      }
+    }
+
     // --- Profile incomplete ---
     if (profile) {
       const missing: string[] = [];
@@ -519,7 +550,7 @@ export const ClaimIntelligence = {
     // Only score readiness for non-approved conditions
     const claimableConditions = userConditions.filter((uc) => uc.claimStatus !== 'approved');
 
-    // If user only has approved conditions, readiness is not applicable — return 100
+    // If user only has approved conditions, readiness is not applicable - return 100
     if (claimableConditions.length === 0 && userConditions.length > 0) return 100;
 
     // Weights: hasConditions(15), hasEvidence(25), hasLogs(20),
@@ -948,7 +979,7 @@ export const ClaimIntelligence = {
       title: 'Intent to File a Claim for Compensation',
       priority: 'urgent',
       reason:
-        'Locks in your effective date. File this first to protect your benefits start date — gives you 1 year to submit your full claim.',
+        'Locks in your effective date. File this first to protect your benefits start date. Gives you 1 year to submit your full claim.',
       url: 'https://www.va.gov/find-forms/about-form-21-0966/',
     });
 
@@ -1000,7 +1031,7 @@ export const ClaimIntelligence = {
                 formNumber: form.formNumber,
                 title: form.name,
                 priority: 'recommended',
-                reason: `${form.description} — relevant to your claimed condition: ${vaCondition.abbreviation}.`,
+                reason: `${form.description} - relevant to your claimed condition: ${vaCondition.abbreviation}.`,
                 url: form.url,
               });
             }
@@ -1909,7 +1940,7 @@ export const ClaimIntelligence = {
   },
 
   // -----------------------------------------------------------------------
-  // getInsights — Rule-based observations from tracked data
+  // getInsights - Rule-based observations from tracked data
   // -----------------------------------------------------------------------
   getInsights(
     claimsData: ClaimsData,
@@ -1923,7 +1954,7 @@ export const ClaimIntelligence = {
     if (totalSymptoms >= 30) {
       insights.push({
         id: 'symptom-count',
-        text: `${totalSymptoms} symptom log entries — well-documented for C&P preparation.`,
+        text: `${totalSymptoms} symptom log entries - well-documented for C&P preparation.`,
         category: 'positive',
       });
     } else if (totalSymptoms >= 5) {
@@ -1964,7 +1995,7 @@ export const ClaimIntelligence = {
         const pctIncrease = Math.round(((recentAvg - olderAvg) / olderAvg) * 100);
         insights.push({
           id: 'severity-trend',
-          text: `Your symptom severity increased ${pctIncrease}% over the last 60 days — consider documenting with a medical visit.`,
+          text: `Your symptom severity increased ${pctIncrease}% over the last 60 days - consider documenting with a medical visit.`,
           category: 'actionable',
         });
       }
@@ -1975,7 +2006,7 @@ export const ClaimIntelligence = {
     if (quickLogCount >= 14) {
       insights.push({
         id: 'quicklog-streak',
-        text: `${quickLogCount} daily logs recorded — consistent documentation pattern established.`,
+        text: `${quickLogCount} daily logs recorded - consistent documentation pattern established.`,
         category: 'positive',
       });
     }
@@ -1994,7 +2025,7 @@ export const ClaimIntelligence = {
     if (claimsData.buddyContacts.length === 0 && userConditions.length > 0) {
       insights.push({
         id: 'buddy-gap',
-        text: 'No buddy statements yet — third-party evidence significantly strengthens claims.',
+        text: 'No buddy statements yet - third-party evidence significantly strengthens claims.',
         category: 'actionable',
       });
     }
@@ -2006,7 +2037,7 @@ export const ClaimIntelligence = {
     if (visits90.length === 0 && userConditions.length > 0 && totalSymptoms > 0) {
       insights.push({
         id: 'visit-gap',
-        text: 'No medical visits in 90 days — regular treatment strengthens your claim.',
+        text: 'No medical visits in 90 days - regular treatment strengthens your claim.',
         category: 'actionable',
       });
     }
@@ -2015,7 +2046,7 @@ export const ClaimIntelligence = {
   },
 
   // -----------------------------------------------------------------------
-  // getRatingThresholdAnalysis — Compare logged data against each rating level
+  // getRatingThresholdAnalysis - Compare logged data against each rating level
   // -----------------------------------------------------------------------
   getRatingThresholdAnalysis(
     conditionName: string,
@@ -2130,7 +2161,7 @@ export const ClaimIntelligence = {
           if (found) {
             matchedKeywords++;
           } else {
-            gaps.push(`Documentation does not yet reflect "${kw}" — consider logging when this applies`);
+            gaps.push(`Documentation does not yet reflect "${kw}" - consider logging when this applies`);
           }
         }
         const kwPct = rl.keywords.length > 0 ? matchedKeywords / rl.keywords.length : 0;
@@ -2141,16 +2172,16 @@ export const ClaimIntelligence = {
           if (rl.percent === 10) {
             evidenceParts.push(`${prostratingCount90} prostrating episodes in 90 days (criteria: ~1 per 2 months)`);
             if (prostratingPerMonth >= 0.5) evidenceParts.push('Frequency aligns with this level');
-            else gaps.push('For 10%, VA looks for prostrating attacks averaging 1 per 2 months — log prostrating episodes consistently');
+            else gaps.push('For 10%, VA looks for prostrating attacks averaging 1 per 2 months - log prostrating episodes consistently');
           } else if (rl.percent === 30) {
             evidenceParts.push(`${prostratingCount90} prostrating episodes in 90 days (criteria: ~1 per month)`);
             if (prostratingPerMonth >= 1) evidenceParts.push('Frequency aligns with this level');
-            else gaps.push('For 30%, VA looks for prostrating attacks averaging once per month — document each prostrating episode');
+            else gaps.push('For 30%, VA looks for prostrating attacks averaging once per month - document each prostrating episode');
           } else if (rl.percent === 50) {
             evidenceParts.push(`${prostratingCount90} prostrating episodes in 90 days`);
             evidenceParts.push(`${missedWorkMigraines} entries with documented work impact`);
-            if (prostratingPerMonth < 2) gaps.push('For 50%, VA looks for "very frequent completely prostrating" attacks — log every episode');
-            if (missedWorkMigraines === 0) gaps.push('For 50%, VA requires evidence of "severe economic inadaptability" — document missed work, lost hours, and economic impact');
+            if (prostratingPerMonth < 2) gaps.push('For 50%, VA looks for "very frequent completely prostrating" attacks - log every episode');
+            if (missedWorkMigraines === 0) gaps.push('For 50%, VA requires evidence of "severe economic inadaptability" - document missed work, lost hours, and economic impact');
           }
         } else if (isPTSD) {
           // PTSD / mental health evidence
@@ -2160,10 +2191,10 @@ export const ClaimIntelligence = {
             evidenceParts.push(`${employmentEntries.length} work impact entries documented`);
           }
           if (rl.percent >= 50 && employmentEntries.length === 0) {
-            gaps.push(`For ${rl.percent}% PTSD, VA looks for "${rl.percent === 50 ? 'occupational and social impairment with reduced reliability' : 'deficiencies in most areas'}." Your logs show ${employmentEntries.length} work impact entries — use the Employment Impact tracker to document these`);
+            gaps.push(`For ${rl.percent}% PTSD, VA looks for "${rl.percent === 50 ? 'occupational and social impairment with reduced reliability' : 'deficiencies in most areas'}." Your logs show ${employmentEntries.length} work impact entries - use the Employment Impact tracker to document these`);
           }
           if (rl.percent >= 70 && ptsdEntries90.length < 5) {
-            gaps.push('Higher ratings require robust documentation — aim for regular PTSD symptom entries (at least weekly)');
+            gaps.push('Higher ratings require robust documentation - aim for regular PTSD symptom entries (at least weekly)');
           }
         } else {
           // General condition evidence
@@ -2171,9 +2202,9 @@ export const ClaimIntelligence = {
           if (medications.length > 0) evidenceParts.push(`${medications.length} medication(s) on record`);
           if (flareUps90.length > 0) evidenceParts.push(`${flareUps90.length} flare-up(s) documented`);
           if (employmentEntries.length > 0) evidenceParts.push(`${employmentEntries.length} work impact entries`);
-          if (symptoms90.length < 5) gaps.push('More consistent symptom logging strengthens your documentation — aim for regular entries');
+          if (symptoms90.length < 5) gaps.push('More consistent symptom logging strengthens your documentation - aim for regular entries');
           if (rl.percent >= 50 && employmentEntries.length === 0) {
-            gaps.push(`Higher ratings consider functional and occupational impact — document how this condition affects your work`);
+            gaps.push(`Higher ratings consider functional and occupational impact - document how this condition affects your work`);
           }
         }
 

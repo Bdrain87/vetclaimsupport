@@ -47,7 +47,7 @@ export class RouteErrorBoundary extends Component<Props, State> {
               <ArrowLeft className="h-4 w-4 mr-2" />
               Go Back
             </Button>
-            <Button onClick={this.handleRetry}>
+            <Button variant="outline" onClick={this.handleRetry}>
               <RefreshCw className="h-4 w-4 mr-2" />
               Try Again
             </Button>

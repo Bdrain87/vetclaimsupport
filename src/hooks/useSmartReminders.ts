@@ -93,7 +93,7 @@ export function useSmartReminders(): SmartReminder[] {
       reminders.push({
         id: 'migraine-gap',
         title: 'Update migraine log',
-        description: 'Track migraine frequency — the VA requires documentation of prostrating episodes for higher ratings.',
+        description: 'Track migraine frequency - the VA requires documentation of prostrating episodes for higher ratings.',
         priority: 'medium',
         category: 'logging',
         actionRoute: '/health/migraines',
@@ -178,7 +178,7 @@ export function useSmartReminders(): SmartReminder[] {
           title: 'Log work impact',
           description: lastImpact
             ? `It's been ${daysSince(lastImpact.date)} days since your last work impact entry. Employment documentation is critical for TDIU and increased ratings.`
-            : 'Start tracking how your conditions affect work — this is key evidence for TDIU claims and rating increases.',
+            : 'Start tracking how your conditions affect work - this is key evidence for TDIU claims and rating increases.',
           priority: 'medium',
           category: 'logging',
           actionRoute: '/health/work-impact',
@@ -228,7 +228,7 @@ export function useSmartReminders(): SmartReminder[] {
         if (streak >= 5 && daysSinceLastLog === 1) {
           reminders.push({
             id: 'streak-at-risk',
-            title: `${streak}-day streak — log today to keep it`,
+            title: `${streak}-day streak - log today to keep it`,
             description: `You've logged health data ${streak} days in a row. Consistent logging builds stronger VA evidence.`,
             priority: 'medium',
             category: 'logging',
@@ -290,7 +290,7 @@ export function useSmartReminders(): SmartReminder[] {
       reminders.push({
         id: `buddy-followup-${buddy.id}`,
         title: `Follow up with ${buddy.name}`,
-        description: `Buddy statement requested but not received. A gentle reminder can help — service members are busy.`,
+        description: `Buddy statement requested but not received. A gentle reminder can help - service members are busy.`,
         priority: 'medium',
         category: 'evidence',
         actionRoute: '/prep/buddy-statement',
@@ -395,6 +395,27 @@ export function useSmartReminders(): SmartReminder[] {
             actionRoute: '/prep/exam-day',
           });
         }
+      }
+    }
+
+    // ── C-File findings to act on ──────────────────────────────────────
+    const cfileData = useAppStore.getState().cfileExtractedData;
+    if (cfileData?.analysis) {
+      const missed = cfileData.analysis.missedConditions.length;
+      const secondaries = cfileData.analysis.secondaryOpportunities.length;
+      if (missed > 0 || secondaries > 0) {
+        const desc = [
+          missed > 0 ? `${missed} potential missed condition${missed !== 1 ? 's' : ''}` : '',
+          secondaries > 0 ? `${secondaries} secondary opportunity${secondaries !== 1 ? 'ies' : 'y'}` : '',
+        ].filter(Boolean).join(' and ');
+        reminders.push({
+          id: 'cfile-findings',
+          title: 'Review C-File findings',
+          description: `Your C-File analysis found ${desc}. Explore them before filing.`,
+          priority: 'medium',
+          category: 'evidence',
+          actionRoute: '/prep/cfile-intel',
+        });
       }
     }
 

@@ -6,7 +6,7 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         default: [
-          "text-navy-900 font-bold rounded-xl",
+          "text-black font-bold rounded-xl",
           "bg-(image:--gold-gradient)",
           "shadow-[0_2px_8px_var(--gold-glow),inset_0_1px_0_rgba(255,255,255,0.25)]",
           "hover:brightness-110 hover:shadow-[0_4px_16px_var(--gold-glow)] hover:-translate-y-px",
@@ -34,7 +34,7 @@ export const buttonVariants = cva(
           "active:scale-[0.97] active:bg-muted",
         ],
         gold: [
-          "text-navy-900 font-bold rounded-xl",
+          "text-black font-bold rounded-xl",
           "bg-(image:--gold-gradient)",
           "shadow-[0_2px_8px_var(--gold-glow),inset_0_1px_0_rgba(255,255,255,0.25)]",
           "hover:brightness-110 hover:shadow-[0_4px_16px_var(--gold-glow)] hover:-translate-y-px",

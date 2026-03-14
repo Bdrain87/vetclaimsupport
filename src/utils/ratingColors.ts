@@ -31,7 +31,7 @@ const RATING_COLORS: RatingColorInfo[] = [
   { percent: 60,  label: 'Significant',      textClass: 'text-amber-400',   bgClass: 'bg-amber-400',   borderClass: 'border-amber-400',   hex: '#fbbf24' },
   { percent: 70,  label: 'Severe',           textClass: 'text-orange-400',  bgClass: 'bg-orange-400',  borderClass: 'border-orange-400',  hex: '#fb923c' },
   { percent: 80,  label: 'Very Severe',      textClass: 'text-orange-300',  bgClass: 'bg-orange-300',  borderClass: 'border-orange-300',  hex: '#fdba74' },
-  { percent: 100, label: 'Total',            textClass: 'text-[#B8AB80]',   bgClass: 'bg-[#B8AB80]',   borderClass: 'border-[#B8AB80]',   hex: '#B8AB80' },
+  { percent: 100, label: 'Total',            textClass: 'text-[#B0994E]',   bgClass: 'bg-[#B0994E]',   borderClass: 'border-[#B0994E]',   hex: '#B0994E' },
 ];
 
 /** Get color info for a given rating percent. Falls back to 0% if not found. */

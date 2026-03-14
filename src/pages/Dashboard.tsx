@@ -63,7 +63,7 @@ const JOURNEY_PHASE_LABELS = ['Research', 'Evidence', 'Filing', 'C&P Exam', 'Dec
 function ReadinessRing({ score }: { score: number }) {
   const circumference = 2 * Math.PI * 14;
   const offset = circumference - (score / 100) * circumference;
-  const color = score >= 70 ? '#22c55e' : score >= 40 ? '#B8AB80' : '#ef4444';
+  const color = score >= 70 ? '#22c55e' : score >= 40 ? '#B0994E' : '#ef4444';
 
   return (
     <svg width="36" height="36" viewBox="0 0 36 36" className="shrink-0">
@@ -411,6 +411,9 @@ export default function Dashboard() {
         </motion.div>
       )}
 
+      {/* C-File Intel Card */}
+      <CFileIntelCard />
+
       {/* Section 2: Compact Greeting Row */}
       <div className="rounded-2xl border border-border bg-card p-3 overflow-hidden max-w-full">
         <div className="flex items-center gap-3">
@@ -455,7 +458,7 @@ export default function Dashboard() {
                 <circle cx="18" cy="18" r="15" fill="none" stroke="currentColor" className="text-muted/30" strokeWidth="3" />
                 <motion.circle
                   cx="18" cy="18" r="15" fill="none"
-                  stroke="var(--gold-md, #B8AB80)" strokeWidth="3"
+                  stroke="var(--gold-md, #B0994E)" strokeWidth="3"
                   strokeLinecap="round"
                   strokeDasharray={`${combinedRating}, 100`}
                   initial={{ strokeDasharray: '0, 100' }}
@@ -505,7 +508,7 @@ export default function Dashboard() {
       >
         <Link
           to="/claims/vault"
-          aria-label={`Documents & Scan — ${vaultDocCount > 0 ? `${vaultDocCount} stored` : 'No docs yet'}`}
+          aria-label={`Documents & Scan - ${vaultDocCount > 0 ? `${vaultDocCount} stored` : 'No docs yet'}`}
           className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors"
         >
           <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center shrink-0">
@@ -521,7 +524,7 @@ export default function Dashboard() {
         </Link>
         <Link
           to="/claims/deadlines"
-          aria-label={`Deadlines — ${activeDeadlines > 0 ? `${activeDeadlines} active` : 'None set'}`}
+          aria-label={`Deadlines - ${activeDeadlines > 0 ? `${activeDeadlines} active` : 'None set'}`}
           className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors"
         >
           <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center shrink-0">
@@ -536,7 +539,7 @@ export default function Dashboard() {
         </Link>
         <Link
           to="/claims/journey"
-          aria-label={`Journey — ${phaseLabel}`}
+          aria-label={`Journey - ${phaseLabel}`}
           className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors"
         >
           <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center shrink-0">
@@ -550,7 +553,7 @@ export default function Dashboard() {
         {userConditions.length > 0 ? (
           <button
             onClick={() => { impactMedium(); setShowDrillDown(!showDrillDown); }}
-            aria-label={`Readiness — ${readinessScore}% — ${readinessLabel}`}
+            aria-label={`Readiness - ${readinessScore}% - ${readinessLabel}`}
             className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors text-left"
           >
             <ReadinessRing score={readinessScore} />
@@ -562,7 +565,7 @@ export default function Dashboard() {
         ) : (
           <Link
             to="/claims"
-            aria-label="Add Conditions — Start your claim"
+            aria-label="Add Conditions - Start your claim"
             className="flex items-center gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors"
           >
             <div className="w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center shrink-0">
@@ -1163,7 +1166,7 @@ export default function Dashboard() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-foreground">You may qualify for TDIU</p>
-              <p className="text-xs text-muted-foreground">Get compensated at the 100% rate — check eligibility</p>
+              <p className="text-xs text-muted-foreground">Get compensated at the 100% rate - check eligibility</p>
             </div>
             <ChevronRight className="h-4 w-4 text-gold shrink-0" />
           </button>
@@ -1214,8 +1217,60 @@ export default function Dashboard() {
         </motion.div>
       )}
 
-      {/* Ask Intel — AI Assistant Sheet */}
+      {/* Ask Intel - AI Assistant Sheet */}
       <AskIntelSheet />
     </PageContainer>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// C-File Intel Dashboard Card
+// ---------------------------------------------------------------------------
+
+function CFileIntelCard() {
+  const navigate = useNavigate();
+  const cfileData = useAppStore((s) => s.cfileExtractedData);
+  const cfileFileName = useAppStore((s) => s.cfileFileName);
+
+  if (!cfileData) return null;
+
+  const analysis = cfileData.analysis;
+  const totalFindings =
+    analysis.missedConditions.length +
+    analysis.ratingDiscrepancies.length +
+    analysis.secondaryOpportunities.length +
+    analysis.evidenceGaps.length;
+
+  if (totalFindings === 0) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={vcsSpring}
+    >
+      <button
+        onClick={() => navigate('/prep/cfile-intel')}
+        className="w-full flex items-start gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors text-left"
+      >
+        <div className="h-9 w-9 rounded-xl bg-gold/10 flex items-center justify-center shrink-0">
+          <FileText className="h-4 w-4 text-gold" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium text-foreground">
+            C-File Intel: {totalFindings} finding{totalFindings !== 1 ? 's' : ''} need attention
+          </p>
+          <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+            {analysis.missedConditions.length > 0 && `${analysis.missedConditions.length} potential missed conditions. `}
+            {analysis.ratingDiscrepancies.length > 0 && `${analysis.ratingDiscrepancies.length} rating discrepancies. `}
+            {analysis.secondaryOpportunities.length > 0 && `${analysis.secondaryOpportunities.length} secondary opportunities.`}
+          </p>
+          {cfileFileName && (
+            <p className="text-[10px] text-muted-foreground/50 mt-1">From: {cfileFileName}</p>
+          )}
+        </div>
+        <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0 mt-1" />
+      </button>
+    </motion.div>
   );
 }

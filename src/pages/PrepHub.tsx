@@ -259,7 +259,7 @@ export default function PrepHub() {
                   key={tool.route}
                   onClick={() => navigate(tool.route)}
                   className={cn(
-                    'w-full flex items-center gap-3 p-3 rounded-2xl border bg-card',
+                    'w-full flex items-center gap-3 p-3 rounded-2xl border bg-card min-h-[72px]',
                     'hover:bg-accent/50 active:scale-[0.98] transition-all text-left',
                     category.muted ? 'border-border/50' : 'border-border'
                   )}

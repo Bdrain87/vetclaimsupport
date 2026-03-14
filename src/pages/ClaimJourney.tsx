@@ -508,7 +508,7 @@ export default function ClaimJourney() {
           particleCount: 100,
           spread: 70,
           origin: { y: 0.6 },
-          colors: ['#22c55e', '#D0C6A0', '#B8AB80', '#ec4899'],
+          colors: ['#22c55e', '#C9B76C', '#B0994E', '#ec4899'],
         });
 
         // Update progress

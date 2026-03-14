@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   FileSearch, Upload, Loader2, CheckCircle2, AlertTriangle,
   ChevronRight, ShieldCheck, Plus, TrendingUp, Link2, FileText,
-  X, Info,
+  X, Info, Pill, Stethoscope, MapPin, Shield, Zap,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,7 +15,7 @@ import { toast } from '@/hooks/use-toast';
 import { analyzeDocument, type AnalysisStep } from '@/lib/analyzeDocument';
 import { buildVeteranContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
-import { buildCFileIntelPrompt, CFILE_RESPONSE_SCHEMA, type CFileAnalysisResult } from '@/lib/cfile-prompts';
+import { buildCFileIntelPrompt, CFILE_RESPONSE_SCHEMA, type CFileExtractedData, type CFileAnalysisResult } from '@/lib/cfile-prompts';
 import { buildSecondaryConnectionsBlock, buildCriteriaBlockForConditions } from '@/lib/ai-prompts';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { getConditionDisplayName } from '@/utils/conditionResolver';
@@ -25,6 +25,9 @@ import { trackAICall } from '@/services/aiUsageTracker';
 import { scanAIOutput, AI_OUTPUT_WARNING } from '@/utils/aiOutputGuard';
 import { C_FILE_CONSENT } from '@/data/legalCopy';
 import { buildToolLink } from '@/lib/toolRouting';
+import { applyCFileToStores, type CFileSeedSection, type ApplyResult } from '@/utils/cfileStoreSeeder';
+import useAppStore from '@/store/useAppStore';
+import { isGeminiConfigured } from '@/lib/gemini';
 
 type Phase = 'consent' | 'upload' | 'analyzing' | 'results';
 
@@ -44,14 +47,17 @@ export default function CFileIntel() {
   const uploadRef = useRef<HTMLInputElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
+  const cfileAppliedSections = useAppStore((s) => s.cfileAppliedSections);
+
   const [phase, setPhase] = useState<Phase>(hasConsent() ? 'upload' : 'consent');
   const [consentChecked, setConsentChecked] = useState(false);
   const [file, setFile] = useState<File | null>(null);
-  const [step, setStep] = useState<AnalysisStep>('reading');
+  const [analysisStep, setAnalysisStep] = useState<AnalysisStep>('reading');
   const [progress, setProgress] = useState(0);
-  const [result, setResult] = useState<CFileAnalysisResult | null>(null);
+  const [extractedData, setExtractedData] = useState<CFileExtractedData | null>(null);
   const [aiWarning, setAiWarning] = useState(false);
   const [error, setError] = useState('');
+  const [applyResult, setApplyResult] = useState<ApplyResult | null>(null);
 
   const currentConditionNames = useMemo(
     () => conditions.map(c => getConditionDisplayName(c)),
@@ -117,19 +123,19 @@ export default function CFileIntel() {
     const start = Date.now();
 
     try {
-      setStep('uploading');
+      setAnalysisStep('uploading');
       setProgress(25);
 
       const { text } = await analyzeDocument({
         file,
-        prompt: 'Analyze this VA C-File (Claims File) and return structured findings as JSON.',
+        prompt: 'Analyze this VA C-File (Claims File). Extract ALL structured data (conditions, medications, visits, service history, deployments, exposures) AND provide analysis findings. Return structured JSON.',
         systemInstruction: systemPrompt,
         feature: 'cfile-intel',
         responseSchema: CFILE_RESPONSE_SCHEMA,
         temperature: 0.2,
         signal: abort.signal,
         onProgress: (s) => {
-          setStep(s);
+          setAnalysisStep(s);
           if (s === 'uploading') setProgress(30);
           if (s === 'analyzing') setProgress(60);
         },
@@ -137,7 +143,7 @@ export default function CFileIntel() {
 
       setProgress(90);
 
-      let parsed: CFileAnalysisResult;
+      let parsed: CFileExtractedData;
       try {
         parsed = JSON.parse(text);
       } catch {
@@ -161,7 +167,10 @@ export default function CFileIntel() {
         inputLength: file.size,
       });
 
-      setResult(parsed);
+      // Store in app state
+      useAppStore.getState().setCFileData(parsed, file.name);
+
+      setExtractedData(parsed);
       setProgress(100);
       setPhase('results');
     } catch (err) {
@@ -172,7 +181,7 @@ export default function CFileIntel() {
       setPhase('upload');
       toast({ title: 'Analysis failed', description: msg, variant: 'destructive' });
     }
-  }, [file, currentConditionNames]);
+  }, [file, currentConditionNames, conditions]);
 
   const handleCancel = () => {
     abortRef.current?.abort();
@@ -180,9 +189,52 @@ export default function CFileIntel() {
     setProgress(0);
   };
 
-  const totalFindings = result
-    ? result.missedConditions.length + result.ratingDiscrepancies.length + result.secondaryOpportunities.length + result.evidenceGaps.length
+  const handleApplySection = (section: CFileSeedSection) => {
+    if (!extractedData) return;
+    const result = applyCFileToStores(extractedData, { sections: [section] });
+    setApplyResult((prev) => prev ? mergeResults(prev, result) : result);
+    toast({ title: 'Applied to your claim', description: getSectionSummary(section, result) });
+  };
+
+  const handleApplyAll = () => {
+    if (!extractedData) return;
+    const sections: CFileSeedSection[] = ['profile', 'conditions', 'medications', 'visits', 'service', 'exposures'];
+    const result = applyCFileToStores(extractedData, { sections });
+    setApplyResult(result);
+    toast({ title: 'All data applied', description: `${result.conditionsAdded} conditions, ${result.medicationsAdded} meds, ${result.visitsAdded} visits added.` });
+  };
+
+  const analysis = extractedData?.analysis;
+  const totalFindings = analysis
+    ? analysis.missedConditions.length + analysis.ratingDiscrepancies.length + analysis.secondaryOpportunities.length + analysis.evidenceGaps.length
     : 0;
+
+  // Gemini not configured - show friendly message
+  if (!isGeminiConfigured) {
+    return (
+      <PageContainer className="space-y-6 animate-fade-in">
+        <div className="section-header">
+          <div className="section-icon bg-gold/10">
+            <FileSearch className="h-5 w-5 text-gold" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">C-File Intel</h1>
+            <p className="text-muted-foreground text-sm">AI-powered analysis of your VA Claims File</p>
+          </div>
+        </div>
+        <Card>
+          <CardContent className="py-8 text-center space-y-3">
+            <AlertTriangle className="h-8 w-8 text-muted-foreground mx-auto" />
+            <h3 className="text-base font-semibold text-foreground">AI Service Not Configured</h3>
+            <p className="text-xs text-muted-foreground max-w-sm mx-auto">
+              The AI analysis service is not available right now. Please check back later or contact support if this persists.
+            </p>
+            <Button variant="outline" onClick={() => navigate(-1)}>Go Back</Button>
+          </CardContent>
+        </Card>
+      </PageContainer>
+    );
+  }
 
   return (
     <PageContainer className="space-y-6 animate-fade-in">
@@ -247,8 +299,8 @@ export default function CFileIntel() {
               <div>
                 <h3 className="text-base font-semibold text-foreground">Upload Your C-File</h3>
                 <p className="text-xs text-muted-foreground mt-1 max-w-sm">
-                  Upload your VA Claims File (PDF, up to 50MB). Personal identifiers are
-                  automatically redacted before analysis.
+                  Upload your VA Claims File (PDF, up to 50MB). We'll extract your conditions,
+                  medications, service history, and more to populate your entire claim workspace.
                 </p>
               </div>
               {file && (
@@ -308,10 +360,10 @@ export default function CFileIntel() {
               <div>
                 <h3 className="text-base font-semibold text-foreground">Analyzing Your C-File</h3>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {step === 'reading' && 'Reading document...'}
-                  {step === 'uploading' && 'Uploading to analysis service...'}
-                  {step === 'analyzing' && 'AI is reviewing your file...'}
-                  {step === 'ocr-fallback' && 'Using text extraction fallback...'}
+                  {analysisStep === 'reading' && 'Reading document...'}
+                  {analysisStep === 'uploading' && 'Uploading to analysis service...'}
+                  {analysisStep === 'analyzing' && 'AI is extracting data and analyzing findings...'}
+                  {analysisStep === 'ocr-fallback' && 'Using text extraction fallback...'}
                 </p>
               </div>
               <Progress value={progress} className="w-64" />
@@ -324,13 +376,13 @@ export default function CFileIntel() {
       )}
 
       {/* Results Phase */}
-      {phase === 'results' && result && (
+      {phase === 'results' && extractedData && (
         <>
           {/* AI Warning */}
           {aiWarning && (
             <div className="flex items-start gap-2 p-3 rounded-lg bg-gold/10 border border-gold/20">
               <AlertTriangle className="h-4 w-4 text-gold shrink-0 mt-0.5" />
-              <p className="text-xs text-gold">{AI_OUTPUT_WARNING}</p>
+              <p className="text-xs text-muted-foreground">{AI_OUTPUT_WARNING}</p>
             </div>
           )}
 
@@ -341,25 +393,139 @@ export default function CFileIntel() {
                 <CheckCircle2 className="h-5 w-5 text-success shrink-0 mt-0.5" />
                 <div>
                   <h3 className="text-sm font-semibold text-foreground">
-                    Analysis Complete — {totalFindings} finding{totalFindings !== 1 ? 's' : ''}
+                    Analysis Complete - {totalFindings} finding{totalFindings !== 1 ? 's' : ''}
                   </h3>
-                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{result.summary}</p>
+                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{analysis?.summary}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
+          {/* ====== APPLY TO MY CLAIM SECTION ====== */}
+          {!applyResult && !cfileAppliedSections.includes('conditions') && (
+            <Card className="border-gold/20">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm flex items-center gap-2">
+                  <Zap className="h-4 w-4 text-gold" />
+                  Apply to My Claim
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <p className="text-xs text-muted-foreground">
+                  We extracted data from your C-File. Apply it to populate your claim workspace automatically.
+                </p>
+
+                {/* Conditions */}
+                {extractedData.conditions.length > 0 && (
+                  <SeedSection
+                    icon={<Plus className="h-4 w-4 text-gold" />}
+                    title={`${extractedData.conditions.length} Conditions`}
+                    items={extractedData.conditions.map(c => c.conditionName)}
+                    applied={cfileAppliedSections.includes('conditions')}
+                    onApply={() => handleApplySection('conditions')}
+                  />
+                )}
+
+                {/* Medications */}
+                {extractedData.medications.length > 0 && (
+                  <SeedSection
+                    icon={<Pill className="h-4 w-4 text-gold" />}
+                    title={`${extractedData.medications.length} Medications`}
+                    items={extractedData.medications.map(m => m.name)}
+                    applied={cfileAppliedSections.includes('medications')}
+                    onApply={() => handleApplySection('medications')}
+                  />
+                )}
+
+                {/* Medical Visits */}
+                {extractedData.medicalVisits.length > 0 && (
+                  <SeedSection
+                    icon={<Stethoscope className="h-4 w-4 text-gold" />}
+                    title={`${extractedData.medicalVisits.length} Medical Visits`}
+                    items={extractedData.medicalVisits.slice(0, 5).map(v => `${v.date ?? 'Unknown date'} - ${v.reason ?? v.diagnosis ?? 'Visit'}`)}
+                    applied={cfileAppliedSections.includes('visits')}
+                    onApply={() => handleApplySection('visits')}
+                  />
+                )}
+
+                {/* Service History */}
+                {(extractedData.dutyStations.length > 0 || extractedData.deployments.length > 0) && (
+                  <SeedSection
+                    icon={<MapPin className="h-4 w-4 text-gold" />}
+                    title="Service History"
+                    items={[
+                      ...extractedData.dutyStations.map(s => s.baseName),
+                      ...extractedData.deployments.map(d => `${d.operationName} - ${d.location}`),
+                    ]}
+                    applied={cfileAppliedSections.includes('service')}
+                    onApply={() => handleApplySection('service')}
+                  />
+                )}
+
+                {/* Exposures */}
+                {extractedData.exposures.length > 0 && (
+                  <SeedSection
+                    icon={<Shield className="h-4 w-4 text-gold" />}
+                    title={`${extractedData.exposures.length} Exposures`}
+                    items={extractedData.exposures.map(e => `${e.type}${e.location ? ` (${e.location})` : ''}`)}
+                    applied={cfileAppliedSections.includes('exposures')}
+                    onApply={() => handleApplySection('exposures')}
+                  />
+                )}
+
+                {/* Profile */}
+                {(extractedData.branch || extractedData.militarySpecialty) && (
+                  <SeedSection
+                    icon={<FileText className="h-4 w-4 text-gold" />}
+                    title="Profile Info"
+                    items={[
+                      extractedData.branch && `Branch: ${extractedData.branch}`,
+                      extractedData.militarySpecialty && `Specialty: ${extractedData.militarySpecialty}`,
+                      extractedData.separationDate && `Separation: ${extractedData.separationDate}`,
+                    ].filter(Boolean) as string[]}
+                    applied={cfileAppliedSections.includes('profile')}
+                    onApply={() => handleApplySection('profile')}
+                  />
+                )}
+
+                <Button onClick={handleApplyAll} className="w-full gap-2">
+                  <Zap className="h-4 w-4" />
+                  Apply All to My Claim
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Applied Summary */}
+          {applyResult && (
+            <Card className="border-success/20 bg-success/5">
+              <CardContent className="p-4">
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-success shrink-0 mt-0.5" />
+                  <div>
+                    <h3 className="text-sm font-semibold text-foreground">Data Applied Successfully</h3>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {buildApplySummary(applyResult)}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* ====== ANALYSIS FINDINGS ====== */}
+
           {/* Missed Conditions */}
-          {result.missedConditions.length > 0 && (
+          {analysis && analysis.missedConditions.length > 0 && (
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
                   <Plus className="h-4 w-4 text-gold" />
-                  Potential Missed Conditions ({result.missedConditions.length})
+                  Potential Missed Conditions ({analysis.missedConditions.length})
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {result.missedConditions.map((mc, i) => (
+                {analysis.missedConditions.map((mc, i) => (
                   <div key={i} className="p-3 rounded-lg border border-border space-y-1.5">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium text-foreground">{mc.conditionName}</span>
@@ -380,16 +546,16 @@ export default function CFileIntel() {
           )}
 
           {/* Rating Discrepancies */}
-          {result.ratingDiscrepancies.length > 0 && (
+          {analysis && analysis.ratingDiscrepancies.length > 0 && (
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
                   <TrendingUp className="h-4 w-4 text-gold" />
-                  Rating Discrepancies ({result.ratingDiscrepancies.length})
+                  Rating Discrepancies ({analysis.ratingDiscrepancies.length})
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {result.ratingDiscrepancies.map((rd, i) => (
+                {analysis.ratingDiscrepancies.map((rd, i) => (
                   <div key={i} className="p-3 rounded-lg border border-border space-y-1.5">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium text-foreground">{rd.conditionName}</span>
@@ -410,16 +576,16 @@ export default function CFileIntel() {
           )}
 
           {/* Secondary Opportunities */}
-          {result.secondaryOpportunities.length > 0 && (
+          {analysis && analysis.secondaryOpportunities.length > 0 && (
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
                   <Link2 className="h-4 w-4 text-gold" />
-                  Secondary Opportunities ({result.secondaryOpportunities.length})
+                  Secondary Opportunities ({analysis.secondaryOpportunities.length})
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {result.secondaryOpportunities.map((so, i) => (
+                {analysis.secondaryOpportunities.map((so, i) => (
                   <div key={i} className="p-3 rounded-lg border border-border space-y-1.5">
                     <p className="text-sm font-medium text-foreground">
                       {so.secondaryCondition} <span className="text-xs text-muted-foreground font-normal">secondary to {so.primaryCondition}</span>
@@ -439,20 +605,20 @@ export default function CFileIntel() {
           )}
 
           {/* Evidence Gaps */}
-          {result.evidenceGaps.length > 0 && (
+          {analysis && analysis.evidenceGaps.length > 0 && (
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
                   <AlertTriangle className="h-4 w-4 text-gold" />
-                  Evidence Gaps ({result.evidenceGaps.length})
+                  Evidence Gaps ({analysis.evidenceGaps.length})
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {result.evidenceGaps.map((eg, i) => (
+                {analysis.evidenceGaps.map((eg, i) => (
                   <div key={i} className="p-3 rounded-lg border border-border space-y-1.5">
                     <span className="text-sm font-medium text-foreground">{eg.condition}</span>
                     <p className="text-xs text-muted-foreground">{eg.missingEvidence}</p>
-                    <p className="text-xs text-gold">{eg.recommendation}</p>
+                    <p className="text-xs text-foreground">{eg.recommendation}</p>
                   </div>
                 ))}
               </CardContent>
@@ -460,7 +626,7 @@ export default function CFileIntel() {
           )}
 
           {/* Action Plan */}
-          {result.actionPlan.length > 0 && (
+          {analysis && analysis.actionPlan.length > 0 && (
             <Card className="border-gold/20">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
@@ -469,10 +635,10 @@ export default function CFileIntel() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
-                {result.actionPlan.map((step, i) => (
+                {analysis.actionPlan.map((actionStep, i) => (
                   <div key={i} className="flex items-start gap-2 text-xs">
                     <span className="text-gold font-bold shrink-0">{i + 1}.</span>
-                    <span className="text-muted-foreground">{step}</span>
+                    <span className="text-muted-foreground">{actionStep}</span>
                   </div>
                 ))}
               </CardContent>
@@ -480,7 +646,7 @@ export default function CFileIntel() {
           )}
 
           {/* Analyze Another */}
-          <Button variant="outline" onClick={() => { setPhase('upload'); setFile(null); setResult(null); setAiWarning(false); }} className="w-full">
+          <Button variant="outline" onClick={() => { setPhase('upload'); setFile(null); setExtractedData(null); setAiWarning(false); setApplyResult(null); }} className="w-full">
             Analyze Another C-File
           </Button>
 
@@ -488,7 +654,7 @@ export default function CFileIntel() {
           <div className="px-4 py-3 rounded-lg bg-gold/10 border border-gold/20">
             <div className="flex items-start gap-2">
               <AlertTriangle className="h-4 w-4 text-gold shrink-0 mt-0.5" />
-              <p className="text-xs text-gold/80">
+              <p className="text-xs text-muted-foreground">
                 This analysis is for educational purposes only. It does not constitute legal or medical advice.
                 Consult a VA-accredited VSO, attorney, or claims agent before taking action on these findings.
               </p>
@@ -498,4 +664,101 @@ export default function CFileIntel() {
       )}
     </PageContainer>
   );
+}
+
+// ---------------------------------------------------------------------------
+// Seed Section Component
+// ---------------------------------------------------------------------------
+
+function SeedSection({
+  icon,
+  title,
+  items,
+  applied,
+  onApply,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  items: string[];
+  applied: boolean;
+  onApply: () => void;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const displayItems = expanded ? items : items.slice(0, 3);
+
+  return (
+    <div className="p-3 rounded-lg border border-border space-y-2">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          {icon}
+          <span className="text-sm font-medium text-foreground">{title}</span>
+        </div>
+        {applied ? (
+          <div className="flex items-center gap-1 text-success">
+            <CheckCircle2 className="h-4 w-4" />
+            <span className="text-xs font-medium">Applied</span>
+          </div>
+        ) : (
+          <Button variant="outline" size="sm" onClick={onApply} className="h-8 text-xs">
+            Apply
+          </Button>
+        )}
+      </div>
+      <div className="space-y-1">
+        {displayItems.map((item, i) => (
+          <p key={i} className="text-xs text-muted-foreground pl-6">{item}</p>
+        ))}
+        {items.length > 3 && !expanded && (
+          <button onClick={() => setExpanded(true)} className="text-xs text-gold hover:text-gold/80 pl-6">
+            +{items.length - 3} more
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function mergeResults(a: ApplyResult, b: ApplyResult): ApplyResult {
+  return {
+    conditionsAdded: a.conditionsAdded + b.conditionsAdded,
+    conditionsUpdated: a.conditionsUpdated + b.conditionsUpdated,
+    medicationsAdded: a.medicationsAdded + b.medicationsAdded,
+    visitsAdded: a.visitsAdded + b.visitsAdded,
+    dutyStationsAdded: a.dutyStationsAdded + b.dutyStationsAdded,
+    deploymentsAdded: a.deploymentsAdded + b.deploymentsAdded,
+    exposuresAdded: a.exposuresAdded + b.exposuresAdded,
+    majorEventsAdded: a.majorEventsAdded + b.majorEventsAdded,
+    profileUpdated: a.profileUpdated || b.profileUpdated,
+  };
+}
+
+function buildApplySummary(r: ApplyResult): string {
+  const parts: string[] = [];
+  if (r.conditionsAdded > 0) parts.push(`${r.conditionsAdded} conditions added`);
+  if (r.conditionsUpdated > 0) parts.push(`${r.conditionsUpdated} conditions updated`);
+  if (r.medicationsAdded > 0) parts.push(`${r.medicationsAdded} medications added`);
+  if (r.visitsAdded > 0) parts.push(`${r.visitsAdded} medical visits added`);
+  if (r.dutyStationsAdded > 0) parts.push(`${r.dutyStationsAdded} duty stations added`);
+  if (r.deploymentsAdded > 0) parts.push(`${r.deploymentsAdded} deployments added`);
+  if (r.exposuresAdded > 0) parts.push(`${r.exposuresAdded} exposures added`);
+  if (r.majorEventsAdded > 0) parts.push(`${r.majorEventsAdded} major events added`);
+  if (r.profileUpdated) parts.push('profile updated');
+  if (parts.length === 0) return 'No new data to add - your claim data was already up to date.';
+  return parts.join(', ') + '.';
+}
+
+function getSectionSummary(section: CFileSeedSection, r: ApplyResult): string {
+  switch (section) {
+    case 'conditions': return `${r.conditionsAdded} added, ${r.conditionsUpdated} updated`;
+    case 'medications': return `${r.medicationsAdded} medications added`;
+    case 'visits': return `${r.visitsAdded} medical visits added`;
+    case 'service': return `${r.dutyStationsAdded} stations, ${r.deploymentsAdded} deployments added`;
+    case 'exposures': return `${r.exposuresAdded} exposures added`;
+    case 'profile': return r.profileUpdated ? 'Profile updated' : 'Profile already up to date';
+    default: return 'Applied';
+  }
 }

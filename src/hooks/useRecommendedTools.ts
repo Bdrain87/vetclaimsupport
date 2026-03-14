@@ -59,7 +59,7 @@ export function useRecommendedTools(): RecommendedTool[] {
         label: 'Stressor Statement',
         route: '/prep/stressor',
         description: 'Document your PTSD stressors for your claim',
-        reason: 'You have PTSD — a stressor statement is essential',
+        reason: 'You have PTSD - a stressor statement is essential',
       });
     }
 
@@ -69,7 +69,7 @@ export function useRecommendedTools(): RecommendedTool[] {
         label: 'Migraine Log',
         route: '/health/migraines',
         description: 'Track migraine frequency and severity',
-        reason: `Only ${migraines.length} migraine${migraines.length !== 1 ? 's' : ''} logged — VA looks at monthly frequency`,
+        reason: `Only ${migraines.length} migraine${migraines.length !== 1 ? 's' : ''} logged - VA looks at monthly frequency`,
       });
     }
 
@@ -87,7 +87,7 @@ export function useRecommendedTools(): RecommendedTool[] {
         label: 'C&P Exam Prep',
         route: '/prep/exam',
         description: 'Prepare for your compensation exam',
-        reason: 'Your exam is coming up — get ready now',
+        reason: 'Your exam is coming up - get ready now',
       });
     }
 
@@ -107,7 +107,7 @@ export function useRecommendedTools(): RecommendedTool[] {
         label: 'Symptom Log',
         route: '/health/symptoms',
         description: 'Log daily symptoms to build evidence',
-        reason: 'No symptoms logged yet — the VA values consistent documentation',
+        reason: 'No symptoms logged yet - the VA values consistent documentation',
       });
     }
 
@@ -137,7 +137,7 @@ export function useRecommendedTools(): RecommendedTool[] {
         label: 'Evidence Strength',
         route: '/claims/evidence-strength',
         description: 'See how your logs align with rating criteria',
-        reason: `${symptoms.length} symptom logs — check your evidence alignment`,
+        reason: `${symptoms.length} symptom logs - check your evidence alignment`,
       });
     }
 
@@ -181,6 +181,17 @@ export function useRecommendedTools(): RecommendedTool[] {
         route: '/claims',
         description: 'Discover secondary conditions linked to your primaries',
         reason: 'Find secondary conditions to strengthen your claim',
+      });
+    }
+
+    // --- C-File secondary conditions to explore ---
+    const cfileData = useAppStore.getState().cfileExtractedData;
+    if (cfileData?.analysis?.secondaryOpportunities && cfileData.analysis.secondaryOpportunities.length > 0) {
+      recs.push({
+        label: 'C-File Intel',
+        route: '/prep/cfile-intel',
+        description: 'Review C-File findings and secondary opportunities',
+        reason: `Your C-File shows ${cfileData.analysis.secondaryOpportunities.length} secondary connection${cfileData.analysis.secondaryOpportunities.length !== 1 ? 's' : ''}`,
       });
     }
 

@@ -142,6 +142,12 @@ interface AppState {
   claimDocuments: ClaimDocument[];
   _claimDocLoading: Set<string>;
 
+  // --- C-File Analysis ---
+  cfileExtractedData: import('@/lib/cfile-prompts').CFileExtractedData | null;
+  cfileAnalyzedAt: string | null;
+  cfileFileName: string | null;
+  cfileAppliedSections: string[];
+
   // ========== CLAIMS DATA METHODS ==========
 
   // Medical Visits
@@ -304,6 +310,12 @@ interface AppState {
   conditionEvidenceChecks: Record<string, string[]>;
   toggleEvidenceCheck: (conditionId: string, item: string) => void;
 
+  // ========== C-FILE METHODS ==========
+
+  setCFileData: (data: import('@/lib/cfile-prompts').CFileExtractedData, fileName: string) => void;
+  clearCFileData: () => void;
+  markCFileSectionApplied: (section: string) => void;
+
   // ========== GLOBAL ==========
 
   resetAllData: () => void;
@@ -366,6 +378,12 @@ const initialState = {
   // Claim documents
   claimDocuments: [] as ClaimDocument[],
   _claimDocLoading: new Set<string>(),
+
+  // C-File analysis
+  cfileExtractedData: null as import('@/lib/cfile-prompts').CFileExtractedData | null,
+  cfileAnalyzedAt: null as string | null,
+  cfileFileName: null as string | null,
+  cfileAppliedSections: [] as string[],
 
   // Evidence checklist per condition
   conditionEvidenceChecks: {} as Record<string, string[]>,
@@ -549,7 +567,7 @@ const useAppStore = create<AppState>()(
       // Claim Conditions
       addClaimCondition: (condition) => {
         if (!condition.name || typeof condition.name !== 'string' || !condition.name.trim()) {
-          logger.warn('[useAppStore] addClaimCondition called with empty name — skipping');
+          logger.warn('[useAppStore] addClaimCondition called with empty name - skipping');
           return;
         }
         const trimmedName = condition.name.trim();
@@ -582,7 +600,7 @@ const useAppStore = create<AppState>()(
       updateClaimCondition: (id, condition) => {
         if (!id || typeof id !== 'string') return;
         if (condition.name !== undefined && (!condition.name || !condition.name.trim())) {
-          logger.warn('[useAppStore] updateClaimCondition called with empty name — skipping');
+          logger.warn('[useAppStore] updateClaimCondition called with empty name - skipping');
           return;
         }
         set((s) => ({
@@ -708,7 +726,7 @@ const useAppStore = create<AppState>()(
       addUserCondition: (condition) => {
         const current = get().userConditions;
         if (!canAddCondition(current.length)) {
-          logger.warn('[useAppStore] Free-tier condition limit reached — blocking addUserCondition');
+          logger.warn('[useAppStore] Free-tier condition limit reached - blocking addUserCondition');
           return;
         }
         set((s) => ({
@@ -1163,6 +1181,25 @@ const useAppStore = create<AppState>()(
               }
             : c
         ),
+      })),
+
+      // ========== C-FILE METHODS ==========
+
+      setCFileData: (data, fileName) => set({
+        cfileExtractedData: data,
+        cfileAnalyzedAt: new Date().toISOString(),
+        cfileFileName: fileName,
+      }),
+      clearCFileData: () => set({
+        cfileExtractedData: null,
+        cfileAnalyzedAt: null,
+        cfileFileName: null,
+        cfileAppliedSections: [],
+      }),
+      markCFileSectionApplied: (section) => set((s) => ({
+        cfileAppliedSections: s.cfileAppliedSections.includes(section)
+          ? s.cfileAppliedSections
+          : [...s.cfileAppliedSections, section],
       })),
 
       // ========== GLOBAL ==========

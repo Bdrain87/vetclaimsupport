@@ -29,7 +29,7 @@ interface ConditionProgress {
 function MiniProgressRing({ percent }: { percent: number }) {
   const circumference = 2 * Math.PI * 12;
   const offset = circumference - (percent / 100) * circumference;
-  const color = percent >= 70 ? '#22c55e' : percent >= 40 ? '#B8AB80' : '#ef4444';
+  const color = percent >= 70 ? '#22c55e' : percent >= 40 ? '#B0994E' : '#ef4444';
 
   return (
     <svg width="32" height="32" viewBox="0 0 32 32" className="shrink-0">

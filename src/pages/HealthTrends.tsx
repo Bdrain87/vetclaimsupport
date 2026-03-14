@@ -227,7 +227,7 @@ function TrendCard({
           </div>
         )}
         {vaNote && hasData && (
-          <p className="text-[10px] text-gold/80 leading-tight">{vaNote}</p>
+          <p className="text-[10px] text-muted-foreground leading-tight">{vaNote}</p>
         )}
       </CardContent>
     </Card>

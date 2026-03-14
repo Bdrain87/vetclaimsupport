@@ -60,7 +60,7 @@ const AI_TOOLS: { title: string; tools: AITool[] }[] = [
 function ReadinessRing({ score, label }: { score: number; label: string }) {
   const circumference = 2 * Math.PI * 18;
   const offset = circumference - (score / 100) * circumference;
-  const color = score >= 70 ? '#22c55e' : score >= 40 ? '#B8AB80' : '#ef4444';
+  const color = score >= 70 ? '#22c55e' : score >= 40 ? '#B0994E' : '#ef4444';
 
   return (
     <svg width="48" height="48" viewBox="0 0 48 48" className="shrink-0">
@@ -139,8 +139,22 @@ export function SentinelCore() {
       const evidenceBlock = buildEvidenceRequirementsBlock(conditionIds);
       const cpExamBlock = buildCPExamBlock(conditionIds);
       const { temperature } = getModelConfig('sentinel-core');
+      // C-File context if available
+      const cfileData = useAppStore.getState().cfileExtractedData;
+      let cfileBlock = '';
+      if (cfileData?.analysis) {
+        const a = cfileData.analysis;
+        const parts: string[] = ['C-FILE ANALYSIS FINDINGS (from veteran\'s uploaded Claims File):'];
+        if (a.summary) parts.push(`Summary: ${a.summary}`);
+        if (a.missedConditions.length > 0) parts.push(`Missed Conditions: ${a.missedConditions.map(c => c.conditionName).join(', ')}`);
+        if (a.ratingDiscrepancies.length > 0) parts.push(`Rating Discrepancies: ${a.ratingDiscrepancies.map(c => `${c.conditionName} (${c.currentRating ?? '?'}%)`).join(', ')}`);
+        if (a.secondaryOpportunities.length > 0) parts.push(`Secondary Opportunities: ${a.secondaryOpportunities.map(s => `${s.secondaryCondition} secondary to ${s.primaryCondition}`).join(', ')}`);
+        if (cfileData.conditions.length > 0) parts.push(`All C-File conditions: ${cfileData.conditions.map(c => `${c.conditionName}${c.rating != null ? ` (${c.rating}%)` : ''}`).join(', ')}`);
+        cfileBlock = `\n\n${parts.join('\n')}`;
+      }
+
       chatRef.current = createChat({
-        systemInstruction: `${systemPrompt}\n\n${contextBlock}${criteriaBlock ? `\n\n${criteriaBlock}\nUse ONLY the criteria above when discussing rating levels. For conditions not listed, direct the veteran to the Rating Guidance tool.` : ''}${secondaryBlock ? `\n\n${secondaryBlock}\nWhen the veteran asks about secondary conditions, reference ONLY the connections listed above.` : ''}${compensationBlock ? `\n\n${compensationBlock}` : ''}${appealBlock ? `\n\n${appealBlock}` : ''}${m21Block ? `\n\n${m21Block}` : ''}${medLitBlock ? `\n\n${medLitBlock}` : ''}${outcomesBlock ? `\n\n${outcomesBlock}` : ''}${evidenceBlock ? `\n\n${evidenceBlock}` : ''}${cpExamBlock ? `\n\n${cpExamBlock}` : ''}`,
+        systemInstruction: `${systemPrompt}\n\n${contextBlock}${criteriaBlock ? `\n\n${criteriaBlock}\nUse ONLY the criteria above when discussing rating levels. For conditions not listed, direct the veteran to the Rating Guidance tool.` : ''}${secondaryBlock ? `\n\n${secondaryBlock}\nWhen the veteran asks about secondary conditions, reference ONLY the connections listed above.` : ''}${compensationBlock ? `\n\n${compensationBlock}` : ''}${appealBlock ? `\n\n${appealBlock}` : ''}${m21Block ? `\n\n${m21Block}` : ''}${medLitBlock ? `\n\n${medLitBlock}` : ''}${outcomesBlock ? `\n\n${outcomesBlock}` : ''}${evidenceBlock ? `\n\n${evidenceBlock}` : ''}${cpExamBlock ? `\n\n${cpExamBlock}` : ''}${cfileBlock}`,
         feature: 'sentinel-core',
         temperature,
       });
@@ -272,7 +286,7 @@ export function SentinelCore() {
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.3 }}
-          className="fixed right-4 z-50 w-14 h-14 rounded-full bg-gold/15 border border-gold/30 backdrop-blur-xl shadow-[0_4px_24px_rgba(184,171,128,0.2)] flex items-center justify-center"
+          className="fixed right-4 z-50 w-14 h-14 rounded-full bg-gold/15 border border-gold/30 backdrop-blur-xl shadow-[0_4px_24px_rgba(176,153,78,0.2)] flex items-center justify-center"
           style={{ bottom: 'calc(9rem + env(safe-area-inset-bottom, 0px))' }}
           aria-label="Open Intel AI"
         >

@@ -35,6 +35,26 @@ beforeEach(async () => {
   Onboarding = mod.default;
 });
 
+/** Helper to advance past Welcome + C-File Fast Track steps to reach the Name step */
+async function advanceToNameStep(user: ReturnType<typeof userEvent.setup>) {
+  // Step 0: Welcome - click Get Started
+  await waitFor(() => {
+    expect(screen.getByText(/get started/i)).toBeInTheDocument();
+  });
+  await user.click(screen.getByText(/get started/i).closest('button')!);
+
+  // Step 1: C-File Fast Track - click Skip for now
+  await waitFor(() => {
+    expect(screen.getByText(/skip for now/i)).toBeInTheDocument();
+  });
+  await user.click(screen.getByText(/skip for now/i).closest('button')!);
+
+  // Step 2: Name
+  await waitFor(() => {
+    expect(screen.getByPlaceholderText(/first name/i)).toBeInTheDocument();
+  });
+}
+
 describe('Onboarding User Flow', () => {
   it('renders the welcome step initially', async () => {
     render(
@@ -48,7 +68,7 @@ describe('Onboarding User Flow', () => {
     });
   });
 
-  it('shows the name input step after clicking Get Started', async () => {
+  it('shows the name input step after clicking Get Started and skipping C-File', async () => {
     const user = userEvent.setup();
     render(
       <TestWrapper>
@@ -56,16 +76,8 @@ describe('Onboarding User Flow', () => {
       </TestWrapper>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByText(/get started/i)).toBeInTheDocument();
-    });
-
-    const getStarted = screen.getByText(/get started/i).closest('button')!;
-    await user.click(getStarted);
-
-    await waitFor(() => {
-      expect(screen.getByPlaceholderText(/first name/i)).toBeInTheDocument();
-    });
+    await advanceToNameStep(user);
+    expect(screen.getByPlaceholderText(/first name/i)).toBeInTheDocument();
   });
 
   it('validates that first name is required before continuing', async () => {
@@ -76,16 +88,7 @@ describe('Onboarding User Flow', () => {
       </TestWrapper>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByText(/get started/i)).toBeInTheDocument();
-    });
-
-    // Go to name step
-    await user.click(screen.getByText(/get started/i).closest('button')!);
-
-    await waitFor(() => {
-      expect(screen.getByPlaceholderText(/first name/i)).toBeInTheDocument();
-    });
+    await advanceToNameStep(user);
 
     // Try to continue without entering a name
     const continueButton = screen.getByText(/continue/i).closest('button')!;
@@ -105,15 +108,7 @@ describe('Onboarding User Flow', () => {
       </TestWrapper>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByText(/get started/i)).toBeInTheDocument();
-    });
-
-    await user.click(screen.getByText(/get started/i).closest('button')!);
-
-    await waitFor(() => {
-      expect(screen.getByPlaceholderText(/first name/i)).toBeInTheDocument();
-    });
+    await advanceToNameStep(user);
 
     // Enter a first name
     await user.type(screen.getByPlaceholderText(/first name/i), 'Blake');
@@ -136,15 +131,7 @@ describe('Onboarding User Flow', () => {
       </TestWrapper>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByText(/get started/i)).toBeInTheDocument();
-    });
-
-    // Navigate through welcome → name → branch
-    await user.click(screen.getByText(/get started/i).closest('button')!);
-    await waitFor(() => {
-      expect(screen.getByPlaceholderText(/first name/i)).toBeInTheDocument();
-    });
+    await advanceToNameStep(user);
 
     await user.type(screen.getByPlaceholderText(/first name/i), 'Test');
     await user.click(screen.getByText(/continue/i).closest('button')!);

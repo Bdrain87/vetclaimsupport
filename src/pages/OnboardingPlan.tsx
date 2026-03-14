@@ -165,7 +165,7 @@ export default function OnboardingPlan() {
                 <circle cx="18" cy="18" r="15" fill="none" stroke="currentColor" className="text-muted/30" strokeWidth="3" />
                 <motion.circle
                   cx="18" cy="18" r="15" fill="none"
-                  stroke="var(--gold-md, #B8AB80)" strokeWidth="3"
+                  stroke="var(--gold-md, #B0994E)" strokeWidth="3"
                   strokeLinecap="round"
                   strokeDasharray={`${estimatedCombined}, 100`}
                   initial={{ strokeDasharray: '0, 100' }}
