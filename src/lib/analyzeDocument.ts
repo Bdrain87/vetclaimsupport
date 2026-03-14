@@ -20,6 +20,8 @@ export interface AnalyzeDocumentOpts {
   /** JSON response schema for structured output. */
   responseSchema?: Record<string, unknown>;
   temperature?: number;
+  /** Override the default file-based timeout (ms). */
+  timeout?: number;
   signal?: AbortSignal;
   /** Called as the analysis progresses through steps. */
   onProgress?: (step: AnalysisStep) => void;
@@ -43,10 +45,10 @@ export interface AnalyzeDocumentResult {
  * 3. If Gemini fails on an image → try tesseract.js OCR, send extracted text to Gemini
  */
 export async function analyzeDocument(opts: AnalyzeDocumentOpts): Promise<AnalyzeDocumentResult> {
-  const { file, prompt, systemInstruction, feature, responseSchema, temperature, signal, onProgress } = opts;
+  const { file, prompt, systemInstruction, feature, responseSchema, temperature, timeout: customTimeout, signal, onProgress } = opts;
 
   const fileType = detectFileType(file);
-  const timeout = getTimeoutForFile(file);
+  const timeout = customTimeout ?? getTimeoutForFile(file);
 
   // ---------------------------------------------------------------------------
   // PDF path — use File Upload API (no base64 bloat) + text-extraction fallback

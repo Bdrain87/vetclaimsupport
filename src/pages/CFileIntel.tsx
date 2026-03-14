@@ -20,11 +20,11 @@ import { buildSecondaryConnectionsBlock, buildCriteriaBlockForConditions } from 
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { requireOnline } from '@/utils/networkCheck';
-import { checkAIRateLimit } from '@/services/aiUsageTracker';
-import { trackAICall } from '@/services/aiUsageTracker';
+import { AIRateLimitError } from '@/services/aiUsageTracker';
 import { scanAIOutput, AI_OUTPUT_WARNING } from '@/utils/aiOutputGuard';
 import { C_FILE_CONSENT } from '@/data/legalCopy';
 import { buildToolLink } from '@/lib/toolRouting';
+import { getModelConfig } from '@/lib/ai-models';
 import { applyCFileToStores, type CFileSeedSection, type ApplyResult } from '@/utils/cfileStoreSeeder';
 import useAppStore from '@/store/useAppStore';
 import { isGeminiConfigured } from '@/lib/gemini';
@@ -48,13 +48,18 @@ export default function CFileIntel() {
   const abortRef = useRef<AbortController | null>(null);
 
   const cfileAppliedSections = useAppStore((s) => s.cfileAppliedSections);
+  const storedData = useAppStore((s) => s.cfileExtractedData);
+  const storedFileName = useAppStore((s) => s.cfileFileName);
 
-  const [phase, setPhase] = useState<Phase>(hasConsent() ? 'upload' : 'consent');
+  const [phase, setPhase] = useState<Phase>(() => {
+    if (storedData) return 'results';
+    return hasConsent() ? 'upload' : 'consent';
+  });
   const [consentChecked, setConsentChecked] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [analysisStep, setAnalysisStep] = useState<AnalysisStep>('reading');
   const [progress, setProgress] = useState(0);
-  const [extractedData, setExtractedData] = useState<CFileExtractedData | null>(null);
+  const [extractedData, setExtractedData] = useState<CFileExtractedData | null>(storedData);
   const [aiWarning, setAiWarning] = useState(false);
   const [error, setError] = useState('');
   const [applyResult, setApplyResult] = useState<ApplyResult | null>(null);
@@ -87,16 +92,6 @@ export default function CFileIntel() {
     if (!file) return;
     if (!requireOnline('C-File Intel')) return;
 
-    const { allowed, status } = checkAIRateLimit();
-    if (!allowed) {
-      toast({
-        title: 'AI limit reached',
-        description: `Monthly limit (${status.used}/${status.limit}). Resets ${status.resetDate}.`,
-        variant: 'destructive',
-      });
-      return;
-    }
-
     setError('');
     setPhase('analyzing');
     setProgress(10);
@@ -120,12 +115,11 @@ export default function CFileIntel() {
       ratingCriteria: criteria || undefined,
     });
 
-    const start = Date.now();
-
     try {
       setAnalysisStep('uploading');
       setProgress(25);
 
+      const { timeout: cfileTimeout } = getModelConfig('cfile-intel');
       const { text } = await analyzeDocument({
         file,
         prompt: 'Analyze this VA C-File (Claims File). Extract ALL structured data (conditions, medications, visits, service history, deployments, exposures) AND provide analysis findings. Return structured JSON.',
@@ -133,6 +127,7 @@ export default function CFileIntel() {
         feature: 'cfile-intel',
         responseSchema: CFILE_RESPONSE_SCHEMA,
         temperature: 0.2,
+        timeout: cfileTimeout,
         signal: abort.signal,
         onProgress: (s) => {
           setAnalysisStep(s);
@@ -159,14 +154,6 @@ export default function CFileIntel() {
         setAiWarning(true);
       }
 
-      trackAICall({
-        feature: 'cfile-intel',
-        model: 'gemini-2.5-flash',
-        success: true,
-        durationMs: Date.now() - start,
-        inputLength: file.size,
-      });
-
       // Store in app state
       useAppStore.getState().setCFileData(parsed, file.name);
 
@@ -175,7 +162,15 @@ export default function CFileIntel() {
       setPhase('results');
     } catch (err) {
       if (abort.signal.aborted) return;
-      trackAICall({ feature: 'cfile-intel', success: false, durationMs: Date.now() - start });
+      if (err instanceof AIRateLimitError) {
+        toast({
+          title: 'AI limit reached',
+          description: `Monthly limit (${err.status.used}/${err.status.limit}). Resets ${err.status.resetDate}.`,
+          variant: 'destructive',
+        });
+        setPhase('upload');
+        return;
+      }
       const msg = err instanceof Error ? err.message : 'Analysis failed. Please try again.';
       setError(msg);
       setPhase('upload');
@@ -395,6 +390,9 @@ export default function CFileIntel() {
                   <h3 className="text-sm font-semibold text-foreground">
                     Analysis Complete - {totalFindings} finding{totalFindings !== 1 ? 's' : ''}
                   </h3>
+                  {(file?.name || storedFileName) && (
+                    <p className="text-[11px] text-muted-foreground mt-0.5">{file?.name || storedFileName}</p>
+                  )}
                   <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{analysis?.summary}</p>
                 </div>
               </div>
