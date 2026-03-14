@@ -176,8 +176,8 @@ export function AIHero() {
                   key={chat}
                   className="rounded-xl px-4 py-3 text-sm"
                   style={{
-                    backgroundColor: 'rgba(184, 171, 128, 0.08)',
-                    border: '1px solid rgba(184, 171, 128, 0.12)',
+                    backgroundColor: 'rgba(184, 155, 62, 0.08)',
+                    border: '1px solid rgba(184, 155, 62, 0.12)',
                     color: TEXT_BRIGHT,
                   }}
                 >
@@ -187,7 +187,7 @@ export function AIHero() {
             </div>
 
             <motion.div
-              whileHover={{ boxShadow: '0 4px 20px rgba(184,171,128,0.35)' }}
+              whileHover={{ boxShadow: '0 4px 20px rgba(184,155,62,0.35)' }}
               style={{ borderRadius: '9999px' }}
             >
               <Link

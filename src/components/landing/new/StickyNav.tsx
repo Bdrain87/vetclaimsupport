@@ -77,7 +77,7 @@ export function StickyNav() {
               className="rounded-full px-5 py-2 text-sm font-semibold text-black no-underline transition-shadow hover:shadow-[0_0_20px_rgba(236,196,64,0.3)]"
               style={{
                 background:
-                  'linear-gradient(90deg, #B8AB80 0%, #C8BA8A 25%, #DDD3B2 50%, #C8BA8A 75%, #B8AB80 100%)',
+                  'linear-gradient(90deg, #9E8A3C 0%, #B89B3E 25%, #CEAF4A 50%, #B89B3E 75%, #9E8A3C 100%)',
               }}
             >
               Try Free
@@ -131,7 +131,7 @@ export function StickyNav() {
               className="rounded-full px-8 py-3 text-lg font-semibold text-black no-underline mt-4"
               style={{
                 background:
-                  'linear-gradient(90deg, #B8AB80 0%, #C8BA8A 25%, #DDD3B2 50%, #C8BA8A 75%, #B8AB80 100%)',
+                  'linear-gradient(90deg, #9E8A3C 0%, #B89B3E 25%, #CEAF4A 50%, #B89B3E 75%, #9E8A3C 100%)',
               }}
             >
               Try Free

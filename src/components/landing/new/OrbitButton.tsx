@@ -32,7 +32,7 @@ export function OrbitButton({ to, children, className = '', pill = false }: Orbi
       angleRef.current = (angleRef.current + speedRef.current) % 360;
 
       if (borderRef.current) {
-        borderRef.current.style.background = `conic-gradient(from ${angleRef.current}deg, transparent 70%, rgba(184,171,128,${hovered ? 0.7 : 0.4}) 85%, ${hovered ? '#D0C6A0' : 'rgba(208, 198, 160,0.8)'} 95%, transparent 100%)`;
+        borderRef.current.style.background = `conic-gradient(from ${angleRef.current}deg, transparent 70%, rgba(184,155,62,${hovered ? 0.7 : 0.4}) 85%, ${hovered ? '#CEAF4A' : 'rgba(206, 175, 74,0.8)'} 95%, transparent 100%)`;
       }
       raf = requestAnimationFrame(tick);
     };
@@ -59,7 +59,7 @@ export function OrbitButton({ to, children, className = '', pill = false }: Orbi
           to={to}
           className={`relative z-10 inline-block no-underline text-black font-semibold ${className}`}
           style={{
-            background: 'linear-gradient(135deg, #B8AB80, #C8BA8A, #DDD3B2, #C8BA8A, #B8AB80)',
+            background: 'linear-gradient(135deg, #9E8A3C, #B89B3E, #CEAF4A, #B89B3E, #9E8A3C)',
             borderRadius: innerRadius,
             transition: 'filter 200ms ease',
             filter: hovered ? 'brightness(1.08)' : 'brightness(1)',

@@ -50,8 +50,8 @@ function StepIndicators({ active, onSelect }: { active: number; onSelect: (i: nu
             onClick={() => onSelect(i)}
             className="relative flex items-center justify-center w-10 h-10 rounded-full cursor-pointer transition-all duration-300 bg-transparent"
             style={{
-              backgroundColor: i === active ? 'rgba(184,171,128,0.12)' : 'rgba(255,255,255,0.04)',
-              border: i <= active ? `2px solid ${i === active ? GOLD : 'rgba(184,171,128,0.3)'}` : '2px solid rgba(255,255,255,0.08)',
+              backgroundColor: i === active ? 'rgba(184,155,62,0.12)' : 'rgba(255,255,255,0.04)',
+              border: i <= active ? `2px solid ${i === active ? GOLD : 'rgba(184,155,62,0.3)'}` : '2px solid rgba(255,255,255,0.08)',
             }}
           >
             <span
@@ -65,7 +65,7 @@ function StepIndicators({ active, onSelect }: { active: number; onSelect: (i: nu
             <div
               className="w-8 sm:w-12 md:w-16 h-0.5 transition-colors duration-500"
               style={{
-                backgroundColor: i < active ? 'rgba(184,171,128,0.3)' : 'rgba(255,255,255,0.06)',
+                backgroundColor: i < active ? 'rgba(184,155,62,0.3)' : 'rgba(255,255,255,0.06)',
               }}
             />
           )}
@@ -131,7 +131,7 @@ export function HowItWorks() {
                 <span
                   className="absolute text-[8rem] md:text-[10rem] font-black select-none pointer-events-none"
                   style={{
-                    color: 'rgba(184,171,128,0.03)',
+                    color: 'rgba(184,155,62,0.03)',
                     lineHeight: 1,
                     fontFamily: "'Inter', system-ui, sans-serif",
                   }}
@@ -142,8 +142,8 @@ export function HowItWorks() {
                 <div
                   className="relative w-16 h-16 rounded-2xl flex items-center justify-center"
                   style={{
-                    backgroundColor: 'rgba(184,171,128,0.08)',
-                    border: '1px solid rgba(184,171,128,0.18)',
+                    backgroundColor: 'rgba(184,155,62,0.08)',
+                    border: '1px solid rgba(184,155,62,0.18)',
                   }}
                 >
                   <Icon className="w-8 h-8" style={{ color: GOLD }} />
@@ -154,7 +154,7 @@ export function HowItWorks() {
               <div className="flex-1 text-center md:text-left">
                 <div
                   className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4"
-                  style={{ backgroundColor: 'rgba(184,171,128,0.07)', border: '1px solid rgba(184,171,128,0.15)' }}
+                  style={{ backgroundColor: 'rgba(184,155,62,0.07)', border: '1px solid rgba(184,155,62,0.15)' }}
                 >
                   <span className="text-xs font-bold" style={{ color: GOLD }}>
                     Step {step.num}

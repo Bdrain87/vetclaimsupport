@@ -206,11 +206,11 @@ export function ProductShowcase() {
                 className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium cursor-pointer border-none transition-all duration-300"
                 style={{
                   backgroundColor: isActive
-                    ? 'rgba(184, 171, 128, 0.15)'
+                    ? 'rgba(184, 155, 62, 0.15)'
                     : 'rgba(255, 255, 255, 0.04)',
-                  color: isActive ? '#B8AB80' : TEXT_SECONDARY,
+                  color: isActive ? '#9E8A3C' : TEXT_SECONDARY,
                   border: isActive
-                    ? '1px solid rgba(184, 171, 128, 0.3)'
+                    ? '1px solid rgba(184, 155, 62, 0.3)'
                     : '1px solid rgba(255, 255, 255, 0.06)',
                 }}
               >
@@ -241,7 +241,7 @@ export function ProductShowcase() {
               {/* Top gold accent line */}
               <div
                 className="absolute top-0 left-0 right-0 h-px"
-                style={{ background: 'linear-gradient(90deg, transparent, rgba(184, 171, 128, 0.4), transparent)' }}
+                style={{ background: 'linear-gradient(90deg, transparent, rgba(184, 155, 62, 0.4), transparent)' }}
               />
 
               <div className="grid md:grid-cols-2 gap-0">
@@ -250,11 +250,11 @@ export function ProductShowcase() {
                   <div
                     className="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
                     style={{
-                      background: 'rgba(184, 171, 128, 0.1)',
-                      border: '1px solid rgba(184, 171, 128, 0.2)',
+                      background: 'rgba(184, 155, 62, 0.1)',
+                      border: '1px solid rgba(184, 155, 62, 0.2)',
                     }}
                   >
-                    <ActiveIcon size={22} style={{ color: '#B8AB80' }} />
+                    <ActiveIcon size={22} style={{ color: '#9E8A3C' }} />
                   </div>
                   <h3
                     className="text-2xl md:text-3xl text-white mb-4"
@@ -271,7 +271,7 @@ export function ProductShowcase() {
                   <Link
                     to="/auth"
                     className="inline-flex items-center gap-2 text-sm font-semibold no-underline"
-                    style={{ color: '#B8AB80' }}
+                    style={{ color: '#9E8A3C' }}
                   >
                     Get started <ChevronRight size={16} />
                   </Link>
@@ -297,7 +297,7 @@ export function ProductShowcase() {
                       >
                         <span
                           className="mt-2 w-1.5 h-1.5 rounded-full shrink-0"
-                          style={{ backgroundColor: '#B8AB80' }}
+                          style={{ backgroundColor: '#9E8A3C' }}
                         />
                         <span
                           className="text-[15px] leading-relaxed"
@@ -314,7 +314,7 @@ export function ProductShowcase() {
               {/* Bottom gold accent line */}
               <div
                 className="absolute bottom-0 left-0 right-0 h-px"
-                style={{ background: 'linear-gradient(90deg, transparent, rgba(184, 171, 128, 0.2), transparent)' }}
+                style={{ background: 'linear-gradient(90deg, transparent, rgba(184, 155, 62, 0.2), transparent)' }}
               />
             </div>
           </motion.div>

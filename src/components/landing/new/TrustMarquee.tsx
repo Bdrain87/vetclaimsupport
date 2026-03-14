@@ -109,9 +109,9 @@ export function TrustMarquee() {
                 background: `
                   linear-gradient(90deg,
                     transparent 0%,
-                    rgba(184, 171, 128, 0.08) 45%,
-                    rgba(184, 171, 128, 0.15) 50%,
-                    rgba(184, 171, 128, 0.08) 55%,
+                    rgba(184, 155, 62, 0.08) 45%,
+                    rgba(184, 155, 62, 0.15) 50%,
+                    rgba(184, 155, 62, 0.08) 55%,
                     transparent 100%
                   )
                 `,

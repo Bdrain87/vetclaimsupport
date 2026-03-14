@@ -46,8 +46,8 @@ export function Hero() {
         style={{
           y: bgY,
           background: `
-            radial-gradient(ellipse at 20% 50%, rgba(176,153,78,0.08) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 20%, rgba(176,153,78,0.05) 0%, transparent 50%),
+            radial-gradient(ellipse at 20% 50%, rgba(184,155,62,0.08) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 20%, rgba(184,155,62,0.05) 0%, transparent 50%),
             ${LANDING_BG}
           `,
         }}

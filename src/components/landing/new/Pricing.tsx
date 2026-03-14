@@ -29,7 +29,7 @@ function RotatingBorderCard({ children }: { children: React.ReactNode }) {
     const tick = () => {
       angleRef.current = (angleRef.current + 0.4) % 360;
       if (borderRef.current) {
-        borderRef.current.style.background = `conic-gradient(from ${angleRef.current}deg, rgba(184,171,128,0.05), rgba(184,171,128,0.7), rgba(184,171,128,0.9), rgba(184,171,128,0.7), rgba(184,171,128,0.05), rgba(184,171,128,0.02), rgba(184,171,128,0.05))`;
+        borderRef.current.style.background = `conic-gradient(from ${angleRef.current}deg, rgba(184,155,62,0.05), rgba(184,155,62,0.7), rgba(184,155,62,0.9), rgba(184,155,62,0.7), rgba(184,155,62,0.05), rgba(184,155,62,0.02), rgba(184,155,62,0.05))`;
       }
       raf = requestAnimationFrame(tick);
     };
@@ -54,7 +54,7 @@ function RotatingBorderCard({ children }: { children: React.ReactNode }) {
         }}
         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
         style={{
-          background: 'radial-gradient(ellipse at center, rgba(184,171,128,0.15), transparent 70%)',
+          background: 'radial-gradient(ellipse at center, rgba(184,155,62,0.15), transparent 70%)',
           filter: 'blur(20px)',
         }}
       />
@@ -171,8 +171,8 @@ function FeatureTabs() {
                     onClick={() => setActiveTab(i)}
                     className="px-4 py-2 rounded-full text-xs font-medium cursor-pointer transition-all duration-200 whitespace-nowrap"
                     style={{
-                      backgroundColor: i === activeTab ? 'rgba(184,171,128,0.12)' : 'transparent',
-                      border: i === activeTab ? '1px solid rgba(184,171,128,0.25)' : '1px solid rgba(255,255,255,0.08)',
+                      backgroundColor: i === activeTab ? 'rgba(184,155,62,0.12)' : 'transparent',
+                      border: i === activeTab ? '1px solid rgba(184,155,62,0.25)' : '1px solid rgba(255,255,255,0.08)',
                       color: i === activeTab ? GOLD : 'rgba(255,255,255,0.4)',
                     }}
                   >
@@ -245,7 +245,7 @@ export function Pricing() {
         {/* Free tier banner */}
         <motion.div
           className="text-center mb-6 rounded-xl px-6 py-4 border border-white/5"
-          style={{ backgroundColor: 'rgba(184, 171, 128, 0.06)' }}
+          style={{ backgroundColor: 'rgba(184, 155, 62, 0.06)' }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -303,8 +303,8 @@ export function Pricing() {
                 <div
                   className="w-8 h-8 rounded-lg flex items-center justify-center"
                   style={{
-                    background: 'rgba(184, 171, 128, 0.12)',
-                    border: '1px solid rgba(184, 171, 128, 0.2)',
+                    background: 'rgba(184, 155, 62, 0.12)',
+                    border: '1px solid rgba(184, 155, 62, 0.2)',
                   }}
                 >
                   <Shield size={16} style={{ color: GOLD }} />
@@ -342,7 +342,7 @@ export function Pricing() {
                     <div
                       className="w-4 h-4 rounded-full flex items-center justify-center shrink-0"
                       style={{
-                        background: 'rgba(184, 171, 128, 0.15)',
+                        background: 'rgba(184, 155, 62, 0.15)',
                       }}
                     >
                       <Check size={10} style={{ color: GOLD }} />
@@ -355,7 +355,7 @@ export function Pricing() {
               <MagneticButton>
                 <motion.div
                   whileHover={{
-                    boxShadow: '0 4px 20px rgba(184,171,128,0.35)',
+                    boxShadow: '0 4px 20px rgba(184,155,62,0.35)',
                   }}
                   style={{ borderRadius: '9999px' }}
                 >
