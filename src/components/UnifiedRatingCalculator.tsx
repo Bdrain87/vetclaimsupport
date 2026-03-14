@@ -909,7 +909,7 @@ export function UnifiedRatingCalculator() {
                             if (!isNaN(rating)) updateConditionRating(condition.id, rating);
                           }}
                         >
-                          <SelectTrigger className="w-20 h-8">
+                          <SelectTrigger className="w-[5.5rem] h-8">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>

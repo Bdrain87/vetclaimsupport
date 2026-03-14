@@ -30,21 +30,21 @@
   --color-success-100: #D1FAE5;
   --color-success-50:  #ECFDF5;
 
-  /* METALLIC GOLD SYSTEM — warm, desaturated, real metallic gold */
-  --color-accent-700: #9E9370;
-  --color-accent-600: #B59847;
-  --color-accent-500: #B8AB80;
-  --color-accent-400: #D0C6A0;
-  --color-accent-300: #E6D48E;
-  --color-accent-200: rgba(184, 171, 128, 0.2);
-  --color-accent-100: rgba(184, 171, 128, 0.1);
+  /* METALLIC GOLD SYSTEM — rich, saturated, true metallic gold */
+  --color-accent-700: #8E7B3A;
+  --color-accent-600: #9E8A42;
+  --color-accent-500: #B0994E;
+  --color-accent-400: #C9B76C;
+  --color-accent-300: #D4C47E;
+  --color-accent-200: rgba(176, 153, 78, 0.2);
+  --color-accent-100: rgba(176, 153, 78, 0.1);
 
   /* Warning (Gold-adjacent) */
-  --color-warning-600: #9E9370;
-  --color-warning-500: #B8AB80;
-  --color-warning-400: #D0C6A0;
-  --color-warning-100: #F5F0DC;
-  --color-warning-50:  #FAF8F0;
+  --color-warning-600: #8E7B3A;
+  --color-warning-500: #B0994E;
+  --color-warning-400: #C9B76C;
+  --color-warning-100: #F2ECCE;
+  --color-warning-50:  #F9F6E8;
 
   /* Error Red */
   --color-error-600: #DC2626;
@@ -192,27 +192,27 @@
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
   /* Focus Rings */
-  --shadow-focus: 0 0 0 3px rgba(184, 171, 128, 0.4);
+  --shadow-focus: 0 0 0 3px rgba(176, 153, 78, 0.4);
   --shadow-focus-error: 0 0 0 3px rgba(239, 68, 68, 0.4);
 
   /* ═══════════════════════════════════════════════════════════════
      GOLD ACCENT SYSTEM — Metallic "Real Gold" Palette
      ═══════════════════════════════════════════════════════════════ */
 
-  /* Core metallic gold tones — warm, desaturated real-gold */
-  --gold-hl: #D0C6A0;
-  --gold-md: #B8AB80;
-  --gold-dk: #9E9370;
+  /* Core metallic gold tones — rich, saturated true-metallic gold */
+  --gold-hl: #C9B76C;
+  --gold-md: #B0994E;
+  --gold-dk: #8E7B3A;
 
   /* Gold transparency variants */
-  --gold-glow: rgba(184, 171, 128, 0.45);
-  --gold-border: rgba(184, 171, 128, 0.18);
-  --gold-border-strong: rgba(184, 171, 128, 0.35);
+  --gold-glow: rgba(176, 153, 78, 0.45);
+  --gold-border: rgba(176, 153, 78, 0.18);
+  --gold-border-strong: rgba(176, 153, 78, 0.35);
 
   /* Metallic gradient — warm gold horizontal sheen matching landing page */
-  --gold-gradient: linear-gradient(90deg, #9E9370 0%, #B8AB80 25%, #D0C6A0 50%, #B8AB80 75%, #9E9370 100%);
-  --gold-gradient-subtle: linear-gradient(90deg, rgba(166, 139, 60, 0.12) 0%, rgba(184, 171, 128, 0.08) 50%, rgba(166, 139, 60, 0.06) 100%);
-  --gold-gradient-shimmer: linear-gradient(90deg, transparent 0%, rgba(217, 190, 108, 0.5) 50%, transparent 100%);
+  --gold-gradient: linear-gradient(90deg, #8E7B3A 0%, #B0994E 25%, #C9B76C 50%, #B0994E 75%, #8E7B3A 100%);
+  --gold-gradient-subtle: linear-gradient(90deg, rgba(142, 123, 58, 0.12) 0%, rgba(176, 153, 78, 0.08) 50%, rgba(142, 123, 58, 0.06) 100%);
+  --gold-gradient-shimmer: linear-gradient(90deg, transparent 0%, rgba(201, 183, 108, 0.5) 50%, transparent 100%);
 
   /* Gold focus ring */
   --shadow-focus-gold: 0 0 0 2px var(--gold-md), 0 0 12px var(--gold-glow);
@@ -314,14 +314,10 @@
 }
 
 .gold-glow {
-  box-shadow: 0 0 20px rgba(184, 171, 128, 0.35), 0 0 40px rgba(184, 171, 128, 0.15);
+  box-shadow: 0 0 20px rgba(176, 153, 78, 0.35), 0 0 40px rgba(176, 153, 78, 0.15);
 }
 
-.gold-border-glow {
-  border: 2px solid transparent;
-  border-image: var(--gold-gradient) 1;
-  box-shadow: 0 0 15px rgba(184, 171, 128, 0.35), inset 0 0 15px rgba(184, 171, 128, 0.08);
-}
+/* gold-border-glow removed - do not add gold bordered boxes around text */
 
 @keyframes goldShimmer {
   0% { background-position: -200% center; }
@@ -331,12 +327,12 @@
 .gold-shimmer {
   background: linear-gradient(
     90deg,
-    #9E9370 0%,
-    #B8AB80 20%,
-    #D0C6A0 40%,
-    #B8AB80 60%,
-    #9E9370 80%,
-    #B8AB80 100%
+    #8E7B3A 0%,
+    #B0994E 20%,
+    #C9B76C 40%,
+    #B0994E 60%,
+    #8E7B3A 80%,
+    #B0994E 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;

@@ -36,6 +36,8 @@ import { cn } from '@/lib/utils';
 import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { exportDBQPrepSheet } from '@/utils/pdfExport';
+import { generateDBQPrepSheetPDF, getDBQPrepSheetFilename } from '@/utils/exports/dbqPrepSheet';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { PageContainer } from '@/components/PageContainer';
 import { PrefillBadge } from '@/components/ui/PrefillBadge';
 import { DraftRestoredBanner } from '@/components/ui/DraftRestoredBanner';
@@ -398,6 +400,40 @@ export default function DBQPrepSheet() {
       await exportDBQPrepSheet(formData);
     } catch {
       toast({ title: 'Export failed', description: 'Could not generate PDF. Please try again.', variant: 'destructive' });
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  const handleConditionAwarePDF = async () => {
+    // Find matching UserCondition for the selected condition
+    const matchingUC = userConditions.find(uc => {
+      const name = getConditionDisplayName(uc);
+      return name.toLowerCase() === formData.condition.toLowerCase() ||
+        uc.conditionId.toLowerCase() === formData.condition.toLowerCase() ||
+        name.toLowerCase().includes(formData.condition.toLowerCase()) ||
+        formData.condition.toLowerCase().includes(name.toLowerCase());
+    });
+    if (!matchingUC) {
+      toast({ title: 'No matching condition', description: 'Select a condition from your tracked conditions to use the enhanced export.', variant: 'destructive' });
+      return;
+    }
+    setExporting(true);
+    try {
+      const displayName = getConditionDisplayName(matchingUC);
+      const blob = await generateDBQPrepSheetPDF(matchingUC);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = getDBQPrepSheetFilename(displayName);
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast({ title: 'PDF exported', description: `Enhanced DBQ prep sheet for ${displayName} downloaded.` });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Export failed';
+      toast({ title: 'Export failed', description: msg, variant: 'destructive' });
     } finally {
       setExporting(false);
     }
@@ -869,6 +905,10 @@ export default function DBQPrepSheet() {
         <Button variant="outline" disabled={exporting} onClick={handleDownloadPDF} className="gap-2">
           {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
           {exporting ? 'Exporting...' : 'Download PDF'}
+        </Button>
+        <Button variant="outline" disabled={exporting} onClick={handleConditionAwarePDF} className="gap-2">
+          {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+          Enhanced PDF
         </Button>
       </div>
 

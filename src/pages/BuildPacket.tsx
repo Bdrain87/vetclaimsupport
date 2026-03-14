@@ -27,6 +27,9 @@ import { cn } from '@/lib/utils';
 import { motion } from 'motion/react';
 import { generateExport, downloadExport } from '@/services/exportEngine';
 import { exportEvidenceSummaryReport } from '@/utils/pdfExport';
+import { generateUnifiedClaimPacketPDF, getUnifiedPacketFilename } from '@/utils/exports/unifiedClaimPacket';
+import { generateConditionEvidencePackagePDF, getEvidencePackageFilename } from '@/utils/exports/conditionEvidencePackage';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
 import { PageContainer } from '@/components/PageContainer';
 import { IntelInsightsCard, type InsightItem } from '@/components/shared/IntelInsightsCard';
 import { ClaimIntelligence } from '@/services/claimIntelligence';
@@ -208,6 +211,49 @@ export default function BuildPacket() {
     }
   };
 
+  const handleUnifiedPacket = async () => {
+    setExportingPDF(true);
+    try {
+      const blob = await generateUnifiedClaimPacketPDF();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = getUnifiedPacketFilename();
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showMessage('Unified claim packet downloaded.');
+    } catch (err) {
+      showMessage(err instanceof Error ? err.message : 'Unable to generate unified packet.');
+    } finally {
+      setExportingPDF(false);
+    }
+  };
+
+  const handleConditionEvidence = async (ucId: string) => {
+    const uc = userConditions.find(c => c.id === ucId);
+    if (!uc) return;
+    setExportingPDF(true);
+    try {
+      const displayName = getConditionDisplayName(uc);
+      const blob = await generateConditionEvidencePackagePDF(uc);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = getEvidencePackageFilename(displayName);
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showMessage(`Evidence package for ${displayName} downloaded.`);
+    } catch (err) {
+      showMessage(err instanceof Error ? err.message : 'Unable to generate evidence package.');
+    } finally {
+      setExportingPDF(false);
+    }
+  };
+
   const handlePrint = () => {
     if (typeof window.print === 'function' && !('Capacitor' in window)) {
       window.print();
@@ -372,7 +418,7 @@ export default function BuildPacket() {
       tips.push('Log at least 5 symptom entries to strengthen your evidence packet.');
     }
     if (buddyCount === 0) {
-      tips.push('Add buddy contacts — lay statements are powerful supporting evidence.');
+      tips.push('Add buddy contacts - lay statements are powerful supporting evidence.');
     }
 
     return { score: readiness, insights, tips };
@@ -602,6 +648,48 @@ export default function BuildPacket() {
           </CardContent>
         </Card>
       </motion.div>
+
+      {/* ===== Condition-Centric Exports ===== */}
+      {userConditions.length > 0 && (
+        <motion.div variants={fadeUp} custom={4.5}>
+          <Card className="glass-card">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg">Condition-Centric Exports</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Branded PDFs organized around each condition with auto-populated data from your logs
+              </p>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <Button
+                onClick={handleUnifiedPacket}
+                disabled={exportingPDF}
+                className="w-full gap-2 primary-button"
+              >
+                {exportingPDF ? <Loader2 className="h-4 w-4 animate-spin" /> : <Package className="h-4 w-4" />}
+                {exportingPDF ? 'Generating...' : 'Unified Claim Packet (All Conditions)'}
+              </Button>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {userConditions.map((uc) => {
+                  const name = getConditionDisplayName(uc);
+                  return (
+                    <Button
+                      key={uc.id}
+                      variant="outline"
+                      size="sm"
+                      className="gap-1.5 justify-start"
+                      disabled={exportingPDF}
+                      onClick={() => handleConditionEvidence(uc.id)}
+                    >
+                      <FileText className="h-3.5 w-3.5 flex-shrink-0" />
+                      <span className="truncate">{name}</span>
+                    </Button>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
 
       {/* ===== Preview Section ===== */}
       <motion.div variants={fadeUp} custom={5}>
