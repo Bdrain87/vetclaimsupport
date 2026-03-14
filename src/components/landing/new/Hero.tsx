@@ -1,79 +1,151 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
-import { Link } from 'react-router-dom';
-import { GOLD_GRADIENT_TEXT, HEADING_H1_STYLE, APP_STORE_URL, LANDING_BG, GOLD } from '@/lib/landing-animations';
+import {
+  GOLD_GRADIENT_TEXT,
+  HEADING_H1_STYLE,
+  PILL_STYLE,
+  LANDING_BG,
+  fadeInUp,
+  fadeInRight,
+  staggerContainer,
+} from '@/lib/landing-animations';
 import { OrbitButton } from './OrbitButton';
 
-// Rotating words removed — headline is now static with gold accent on "Your Benefits."
+/* ------------------------------------------------------------------ */
+/*  BrowserFrame — CSS-rendered product mockup                         */
+/* ------------------------------------------------------------------ */
 
-const TRUST_ITEMS = [
-  'NOT AFFILIATED WITH THE VA',
-  'VETERAN-BUILT',
-  '85+ AI-POWERED TOOLS',
-  'ALL 70 VA DBQs',
-  'FROM $14.99/MO',
+const SIDEBAR_ITEMS = [
+  { label: 'Dashboard', active: true },
+  { label: 'My Claims', active: false },
+  { label: 'DBQ Forms', active: false },
+  { label: 'Health Log', active: false },
+  { label: 'AI Tools', active: false },
 ];
 
-function AppStoreBadge() {
+const STAT_CARDS = [
+  { label: 'Claims in Progress', value: '3', color: '#D4AF37' },
+  { label: 'DBQs Completed', value: '12', color: '#60A5FA' },
+  { label: 'Health Entries', value: '47', color: '#34D399' },
+  { label: 'AI Reports', value: '8', color: '#F472B6' },
+];
+
+function BrowserFrame() {
   return (
-    <a
-      href={APP_STORE_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center opacity-70 hover:opacity-100 transition-opacity"
+    <div
+      className="w-full max-w-[520px] select-none"
+      style={{
+        perspective: '1200px',
+      }}
     >
-      <svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
-        <rect width="120" height="40" rx="6" fill="#000" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
-        <g fill="#fff">
-          <path d="M24.769 20.3a4.949 4.949 0 0 1 2.356-4.152 5.066 5.066 0 0 0-3.99-2.158c-1.68-.176-3.308 1.005-4.164 1.005-.872 0-2.19-.988-3.608-.958a5.315 5.315 0 0 0-4.473 2.728c-1.934 3.348-.491 8.269 1.361 10.976.927 1.325 2.01 2.805 3.428 2.753 1.387-.058 1.905-.885 3.58-.885 1.658 0 2.144.885 3.59.852 1.489-.025 2.426-1.332 3.32-2.669a10.962 10.962 0 0 0 1.52-3.092 4.782 4.782 0 0 1-2.92-4.4zM22.037 12.21a4.872 4.872 0 0 0 1.115-3.49 4.957 4.957 0 0 0-3.208 1.66 4.636 4.636 0 0 0-1.144 3.36 4.1 4.1 0 0 0 3.237-1.53z" />
-          <text x="38" y="15" fontSize="8" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="400" fill="rgba(255,255,255,0.8)" letterSpacing="0.03em">Download on the</text>
-          <text x="38" y="28" fontSize="14" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="600" letterSpacing="-0.01em">App Store</text>
-        </g>
-      </svg>
-    </a>
+      <div
+        style={{
+          transform: 'rotateY(-2deg) rotateX(1deg)',
+          borderRadius: '12px',
+          overflow: 'hidden',
+          boxShadow:
+            '0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(197,165,90,0.05)',
+          border: '1px solid rgba(255,255,255,0.08)',
+        }}
+      >
+        {/* Chrome bar */}
+        <div
+          className="flex items-center gap-2 px-4 py-2.5"
+          style={{ backgroundColor: '#1a1a1a' }}
+        >
+          <div className="flex gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+            <div className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
+            <div className="w-2.5 h-2.5 rounded-full bg-[#28c940]" />
+          </div>
+          <div
+            className="flex-1 mx-3 px-3 py-1 rounded-md text-xs"
+            style={{
+              backgroundColor: 'rgba(255,255,255,0.06)',
+              color: 'rgba(255,255,255,0.4)',
+              fontFamily: 'monospace',
+              fontSize: '11px',
+            }}
+          >
+            vetclaimsupport.com/dashboard
+          </div>
+        </div>
+
+        {/* App body */}
+        <div
+          className="flex"
+          style={{ backgroundColor: '#0f0f0f', minHeight: '280px' }}
+        >
+          {/* Sidebar */}
+          <div
+            className="hidden sm:flex flex-col gap-0.5 py-3 px-2"
+            style={{
+              width: '140px',
+              borderRight: '1px solid rgba(255,255,255,0.06)',
+            }}
+          >
+            {SIDEBAR_ITEMS.map((item) => (
+              <div
+                key={item.label}
+                className="px-3 py-2 rounded-lg text-xs font-medium"
+                style={{
+                  backgroundColor: item.active
+                    ? 'rgba(197,165,90,0.12)'
+                    : 'transparent',
+                  color: item.active
+                    ? '#D4AF37'
+                    : 'rgba(255,255,255,0.4)',
+                  fontSize: '12px',
+                }}
+              >
+                {item.label}
+              </div>
+            ))}
+          </div>
+
+          {/* Main content */}
+          <div className="flex-1 p-4">
+            <div
+              className="text-sm font-semibold mb-3"
+              style={{ color: 'rgba(255,255,255,0.9)', fontSize: '14px' }}
+            >
+              Dashboard
+            </div>
+            <div className="grid grid-cols-2 gap-2.5">
+              {STAT_CARDS.map((card) => (
+                <div
+                  key={card.label}
+                  className="rounded-lg p-3"
+                  style={{
+                    backgroundColor: 'rgba(255,255,255,0.03)',
+                    border: '1px solid rgba(255,255,255,0.06)',
+                  }}
+                >
+                  <div
+                    className="text-xs mb-1"
+                    style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px' }}
+                  >
+                    {card.label}
+                  </div>
+                  <div
+                    className="text-xl font-bold"
+                    style={{ color: card.color, fontSize: '22px' }}
+                  >
+                    {card.value}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
-function GooglePlayBadge() {
-  return (
-    <span
-      className="inline-flex items-center opacity-50 cursor-default"
-      title="Coming soon to Google Play"
-    >
-      <svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
-        <rect width="120" height="40" rx="6" fill="#000" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
-        <g>
-          <path d="M21.2 18.07l-7.49-7.52a1.61 1.61 0 0 0-.47 1.14v16.62a1.6 1.6 0 0 0 .47 1.14l.08.07 8.38-8.38v-.2l-.97-.87z" fill="#4285F4" />
-          <path d="M24.37 21.24l-3.17-3.17v-.2l3.17-3.17.07.04 3.76 2.13c1.07.61 1.07 1.61 0 2.22l-3.76 2.13-.07.02z" fill="#FBBC04" />
-          <path d="M24.44 21.22l-3.24-3.24-7.96 7.96c.35.38.93.42 1.59.05l9.61-4.77" fill="#EA4335" />
-          <path d="M24.44 14.74l-9.61-4.77c-.66-.37-1.24-.33-1.59.05l7.96 7.96 3.24-3.24z" fill="#34A853" />
-          <text x="38" y="15" fontSize="8" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="400" fill="rgba(255,255,255,0.8)" letterSpacing="0.03em">GET IT ON</text>
-          <text x="38" y="28" fontSize="13" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="600" fill="#fff" letterSpacing="-0.01em">Google Play</text>
-        </g>
-      </svg>
-    </span>
-  );
-}
-
-function WebAppBadge() {
-  return (
-    <Link
-      to="/auth"
-      className="inline-flex items-center opacity-70 hover:opacity-100 transition-opacity no-underline"
-    >
-      <svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
-        <rect width="120" height="40" rx="6" fill="#000" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
-        <g fill="#fff">
-          <circle cx="22" cy="20" r="9" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" />
-          <ellipse cx="22" cy="20" rx="4" ry="9" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" />
-          <line x1="13" y1="20" x2="31" y2="20" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" />
-          <text x="38" y="15" fontSize="8" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="400" fill="rgba(255,255,255,0.8)" letterSpacing="0.03em">Available on the</text>
-          <text x="38" y="28" fontSize="14" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="600" letterSpacing="-0.01em">Web</text>
-        </g>
-      </svg>
-    </Link>
-  );
-}
+/* ------------------------------------------------------------------ */
+/*  Hero                                                                */
+/* ------------------------------------------------------------------ */
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -92,10 +164,14 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex flex-col items-center justify-center overflow-hidden"
-      style={{ backgroundColor: LANDING_BG }}
+      className="relative overflow-hidden"
+      style={{
+        backgroundColor: LANDING_BG,
+        minHeight: 'calc(100vh - 4rem)',
+        maxHeight: '900px',
+      }}
     >
-      {/* Parallax background with product tease */}
+      {/* Parallax background */}
       <motion.div
         className="absolute inset-0"
         style={{
@@ -108,216 +184,102 @@ export function Hero() {
         }}
       />
 
-      {/* Floating app mockup behind text — product visibility */}
-      <motion.div
-        className="absolute inset-0 flex items-center justify-center pointer-events-none"
-        style={{ y: bgY }}
+      {/* Two-column grid */}
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-full flex items-center"
+        style={{ minHeight: 'calc(100vh - 4rem)', maxHeight: '900px' }}
       >
-        <div
-          className="w-[320px] h-[640px] rounded-[40px] border opacity-[0.04]"
-          style={{
-            borderColor: 'rgba(197,165,90,0.3)',
-            background: 'linear-gradient(145deg, rgba(197,165,90,0.08), rgba(10,10,10,0.5))',
-            filter: 'blur(1px)',
-            boxShadow: '0 0 80px rgba(197,165,90,0.05)',
-          }}
-        >
-          {/* Simplified app screen lines */}
-          <div className="p-8 pt-16 space-y-4">
-            <div className="h-3 rounded-full bg-white/[0.03] w-2/3" />
-            <div className="h-2 rounded-full bg-white/[0.02] w-full" />
-            <div className="h-2 rounded-full bg-white/[0.02] w-4/5" />
-            <div className="mt-6 grid grid-cols-2 gap-3">
-              {[1,2,3,4].map(n => (
-                <div key={n} className="h-16 rounded-xl bg-white/[0.02]" />
-              ))}
-            </div>
-            <div className="mt-4 h-10 rounded-full" style={{ background: 'rgba(197,165,90,0.04)' }} />
-          </div>
-        </div>
-      </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_0.82fr] gap-8 md:gap-12 items-center w-full py-16 md:py-0">
 
-      {/* Brand animation keyframes */}
-      <style>{`
-        @keyframes brand-breathe {
-          0%, 100% { filter: drop-shadow(0 0 20px rgba(197,165,90,0.08)) brightness(1); }
-          50% { filter: drop-shadow(0 0 30px rgba(197,165,90,0.18)) brightness(1.12); }
-        }
-        @keyframes glow-pulse {
-          0%, 100% { opacity: 0.12; }
-          50% { opacity: 0.25; }
-        }
-      `}</style>
-
-      <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 text-center py-16 md:py-24">
-        {/* Brand name — proud, centered, gold shimmer */}
-        <motion.div
-          className="relative mb-8"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        >
-          {/* Ambient glow behind brand name */}
-          <div
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-            style={{
-              width: '500px',
-              height: '120px',
-              background: 'radial-gradient(ellipse at center, rgba(197,165,90,0.15) 0%, rgba(197,165,90,0.05) 40%, transparent 70%)',
-              filter: 'blur(50px)',
-              animation: 'glow-pulse 4s ease-in-out infinite',
-            }}
-          />
-          <h2
-            className="relative font-bold"
-            style={{
-              fontFamily: "'Inter', system-ui, sans-serif",
-              fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
-              letterSpacing: '-0.03em',
-              lineHeight: 1.1,
-              background: 'linear-gradient(135deg, #A68B3C 0%, #C5A55A 30%, #D9BE6C 50%, #C5A55A 70%, #A68B3C 100%)',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              animation: 'brand-breathe 5s ease-in-out infinite',
-            }}
+          {/* LEFT — Text column */}
+          <motion.div
+            className="flex flex-col items-start"
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
           >
-            Vet Claim Support
-          </h2>
-        </motion.div>
+            {/* Pill */}
+            <motion.div variants={fadeInUp}>
+              <span style={PILL_STYLE}>
+                VETERAN-BUILT&nbsp;&nbsp;&middot;&nbsp;&nbsp;85+ AI TOOLS
+              </span>
+            </motion.div>
 
-        {/* Intro line */}
-        <motion.p
-          className="uppercase tracking-[0.25em] text-sm font-medium mb-6"
-          style={{
-            background: 'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-          }}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-        >
-          Built for Service Members &amp; Veterans
-        </motion.p>
-
-        {/* Main heading — Option A */}
-        <motion.h1
-          className="text-white mb-6"
-          style={{
-            ...HEADING_H1_STYLE,
-            fontSize: 'clamp(2.75rem, 5.5vw, 5.375rem)',
-            lineHeight: 1.05,
-            letterSpacing: '-0.03em',
-            fontWeight: 700,
-          }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
-          You served your country.
-          <br />
-          Preparing your claim shouldn't
-          <br />
-          feel like{' '}
-          <span style={{ ...GOLD_GRADIENT_TEXT, whiteSpace: 'nowrap' }}>a second battle.</span>
-        </motion.h1>
-
-        {/* Subtitle */}
-        <motion.p
-          className="max-w-2xl mx-auto mb-10"
-          style={{
-            color: 'rgba(255, 255, 255, 0.80)',
-            fontSize: 'clamp(1.125rem, 1.5vw, 1.375rem)',
-            lineHeight: 1.6,
-          }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-        >
-          85+ AI-powered tools, all 70 VA DBQ forms, and the only health tracking suite built for VA claims.
-        </motion.p>
-
-        {/* CTAs */}
-        <motion.div
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-        >
-          <OrbitButton to="/auth" className="px-8 py-3.5 text-base">
-            Start Free
-          </OrbitButton>
-          <motion.button
-            onClick={scrollToHowItWorks}
-            className="inline-block px-8 py-3.5 text-base font-semibold text-white bg-transparent cursor-pointer"
-            style={{
-              borderRadius: '12px',
-              border: '1px solid rgba(255, 255, 255, 0.20)',
-              transition: 'border-color 150ms ease-out',
-            }}
-            whileHover={{
-              y: -2,
-              borderColor: 'rgba(255, 255, 255, 0.40)',
-            }}
-            whileTap={{ y: 0 }}
-          >
-            See How It Works
-          </motion.button>
-        </motion.div>
-
-        {/* No credit card note */}
-        <motion.p
-          className="text-center text-sm mb-6"
-          style={{ color: 'rgba(255, 255, 255, 0.50)' }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
-        >
-          No credit card required
-        </motion.p>
-
-        {/* Trust Bar */}
-        <motion.div
-          className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 mt-6"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1 }}
-        >
-          {TRUST_ITEMS.map((item, i) => (
-            <span
-              key={item}
-              className="flex items-center gap-2"
+            {/* Headline */}
+            <motion.h1
+              className="text-white mt-6 mb-4"
               style={{
-                color: 'rgba(255, 255, 255, 0.55)',
-                fontSize: '0.8125rem',
-                lineHeight: 1.4,
-                letterSpacing: '0.04em',
-                fontWeight: 500,
+                ...HEADING_H1_STYLE,
+                fontSize: 'clamp(2.25rem, 4.5vw, 3.75rem)',
+                lineHeight: 1.08,
+                letterSpacing: '-0.03em',
+                fontWeight: 700,
               }}
+              variants={fadeInUp}
             >
-              {i > 0 && (
-                <span style={{ color: 'rgba(255, 255, 255, 0.55)' }}>
-                  &middot;
-                </span>
-              )}
-              {item}
-            </span>
-          ))}
-        </motion.div>
+              Prepare your VA claim
+              <br />
+              <span style={GOLD_GRADIENT_TEXT}>with confidence.</span>
+            </motion.h1>
 
-        {/* App Store Badges */}
-        <motion.div
-          className="flex flex-wrap items-center justify-center gap-3 mt-8"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.2 }}
-        >
-          <AppStoreBadge />
-          <GooglePlayBadge />
-          <WebAppBadge />
-        </motion.div>
+            {/* Subtitle */}
+            <motion.p
+              className="max-w-lg mb-8"
+              style={{
+                color: 'rgba(255, 255, 255, 0.70)',
+                fontSize: 'clamp(1rem, 1.3vw, 1.25rem)',
+                lineHeight: 1.6,
+              }}
+              variants={fadeInUp}
+            >
+              All 70 VA DBQs, health tracking, and AI-powered claim preparation in one place.
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div
+              className="flex flex-col sm:flex-row items-start gap-3"
+              variants={fadeInUp}
+            >
+              <OrbitButton to="/auth" className="px-8 py-3.5 text-base">
+                Start Free
+              </OrbitButton>
+              <motion.button
+                onClick={scrollToHowItWorks}
+                className="inline-block px-8 py-3.5 text-base font-semibold text-white bg-transparent cursor-pointer"
+                style={{
+                  borderRadius: '12px',
+                  border: '1px solid rgba(255, 255, 255, 0.20)',
+                  transition: 'border-color 150ms ease-out',
+                }}
+                whileHover={{
+                  y: -2,
+                  borderColor: 'rgba(255, 255, 255, 0.40)',
+                }}
+                whileTap={{ y: 0 }}
+              >
+                See How It Works
+              </motion.button>
+            </motion.div>
+
+            {/* Micro-text */}
+            <motion.p
+              className="mt-4 text-sm"
+              style={{ color: 'rgba(255, 255, 255, 0.40)' }}
+              variants={fadeInUp}
+            >
+              No credit card required&nbsp;&nbsp;&middot;&nbsp;&nbsp;From $14.99/mo
+            </motion.p>
+          </motion.div>
+
+          {/* RIGHT — Browser frame (desktop only) */}
+          <motion.div
+            className="hidden md:flex justify-end"
+            variants={fadeInRight}
+            initial="hidden"
+            animate="visible"
+          >
+            <BrowserFrame />
+          </motion.div>
+        </div>
       </div>
     </section>
   );

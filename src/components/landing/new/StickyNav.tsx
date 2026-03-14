@@ -106,9 +106,10 @@ export function StickyNav() {
           {/* Logo — icon only, brand name lives in the hero */}
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="flex items-center cursor-pointer bg-transparent border-none"
+            className="flex items-center gap-2 cursor-pointer bg-transparent border-none"
           >
-            <img src="/app-icon.png" alt="Vet Claim Support" width={36} height={36} style={{ borderRadius: 10 }} />
+            <img src="/app-icon.png" alt="VCS" width={32} height={32} style={{ borderRadius: 8 }} />
+            <span className="text-white font-semibold text-sm">Vet Claim Support</span>
           </button>
 
           {/* Desktop links */}
@@ -134,7 +135,6 @@ export function StickyNav() {
             ))}
             <div className="hidden lg:flex items-center gap-3">
               <AppStoreBadge />
-              <GooglePlayBadge />
               <WebAppBadge />
             </div>
             <Link
@@ -142,7 +142,7 @@ export function StickyNav() {
               className="rounded-full px-5 py-2 text-sm font-semibold text-black no-underline transition-shadow hover:shadow-[0_0_20px_rgba(236,196,64,0.3)]"
               style={{
                 background:
-                  'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)',
+                  'linear-gradient(90deg, #C5A55A 0%, #D4AF37 25%, #E8CC6C 50%, #D4AF37 75%, #C5A55A 100%)',
               }}
             >
               Try Free
@@ -196,14 +196,13 @@ export function StickyNav() {
               className="rounded-full px-8 py-3 text-lg font-semibold text-black no-underline mt-4"
               style={{
                 background:
-                  'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)',
+                  'linear-gradient(90deg, #C5A55A 0%, #D4AF37 25%, #E8CC6C 50%, #D4AF37 75%, #C5A55A 100%)',
               }}
             >
               Try Free
             </Link>
             <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
               <AppStoreBadge />
-              <GooglePlayBadge />
               <WebAppBadge />
             </div>
           </motion.div>
