@@ -101,7 +101,11 @@ export default function CFileIntel() {
     const ctx = buildVeteranContext({ maskPII: true });
     const contextBlock = formatContextForAI(ctx, 'detailed');
     const secondaries = buildSecondaryConnectionsBlock(currentConditionNames);
-    const criteria = buildCriteriaBlockForConditions(currentConditionNames.map(name => ({ name })));
+    const criteriaInput = conditions.map(c => {
+      const displayName = getConditionDisplayName(c);
+      return { name: displayName, diagnosticCode: c.vaDiagnosticCode };
+    });
+    const criteria = buildCriteriaBlockForConditions(criteriaInput);
 
     const systemPrompt = buildCFileIntelPrompt({
       veteranContext: contextBlock,

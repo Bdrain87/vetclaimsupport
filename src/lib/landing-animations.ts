@@ -166,17 +166,18 @@ export const TEXT_SLATE_DIM = '#CBD5E1';
 export const BORDER_DIM = '#374151';
 
 // --- LUXURY GOLD PALETTE ---
-// Dark: #A68B3C | Primary: #C5A55A | Light: #D9BE6C
-// RGBA base: rgba(197, 165, 90, opacity)
-export const GOLD = '#C5A55A';
-export const GOLD_DARK = '#A68B3C';
-export const GOLD_LIGHT = '#D9BE6C';
-export const GOLD_GRADIENT = 'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)';
+// Dark: #C5A55A | Primary: #D4AF37 | Light: #E8CC6C
+// RGBA base: rgba(212, 175, 55, opacity)
+export const GOLD = '#D4AF37';
+export const GOLD_DARK = '#C5A55A';
+export const GOLD_LIGHT = '#E8CC6C';
+export const GOLD_GRADIENT = 'linear-gradient(90deg, #C5A55A 0%, #D4AF37 25%, #E8CC6C 50%, #D4AF37 75%, #C5A55A 100%)';
 export const GOLD_GRADIENT_TEXT = {
   background: GOLD_GRADIENT,
   WebkitBackgroundClip: 'text',
   WebkitTextFillColor: 'transparent',
   backgroundClip: 'text',
+  color: 'transparent',
 } as React.CSSProperties;
 
 export const SILVER_GRADIENT = 'linear-gradient(135deg, #D0D0D0 0%, #A0A0A0 50%, #B8B8B8 100%)';
@@ -185,6 +186,7 @@ export const SILVER_GRADIENT_TEXT = {
   WebkitBackgroundClip: 'text',
   WebkitTextFillColor: 'transparent',
   backgroundClip: 'text',
+  color: 'transparent',
 } as React.CSSProperties;
 
 // --- PREMIUM CARD STYLING (Antimetal 3-layer shadow + Raycast borders) ---
@@ -208,10 +210,11 @@ export const SECTION_TOP_GLOW_GOLD = 'linear-gradient(180deg, rgba(197,165,90,0.
 
 // --- PILL LABEL STYLE ---
 export const PILL_STYLE = {
-  background: 'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)',
+  background: 'linear-gradient(90deg, #C5A55A 0%, #D4AF37 25%, #E8CC6C 50%, #D4AF37 75%, #C5A55A 100%)',
   WebkitBackgroundClip: 'text',
   WebkitTextFillColor: 'transparent',
   backgroundClip: 'text' as const,
+  color: 'transparent' as const,
   border: '1px solid rgba(197, 165, 90, 0.25)',
   borderRadius: '9999px',
   fontSize: '13px',

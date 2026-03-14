@@ -5,6 +5,7 @@
  * using multi-strategy matching (id, diagnostic codes, name fuzzy match).
  * Replaces the old hardcoded regex approach in ConditionDetail.
  */
+import { dcMatches } from '@/utils/dcMatch';
 import {
   dbqQuickReference,
   type DBQReference,
@@ -55,7 +56,7 @@ export function resolveDBQ(condition: {
     const byCode = dbqQuickReference.find((d) =>
       d.diagnosticCodes.some((dc) =>
         Array.from(codes).some((code) =>
-          code === dc || dcMatches(dc, code) || dcMatches(code, dc),
+          dcMatches(dc, code),
         ),
       ),
     );
@@ -126,24 +127,6 @@ export function resolveRatingCriteria(condition: {
  * Find legacy conditionRatingCriteria for a condition.
  * Tries: conditionId match, then diagnostic code match.
  */
-/**
- * Check if a diagnostic code matches a DC specifier which may be:
- * - An exact code ("6602")
- * - A range ("6600-6847") — the code must fall numerically within the range
- */
-function dcMatches(specifier: string, code: string): boolean {
-  if (specifier === code) return true;
-  const rangeMatch = specifier.match(/^(\d+)-(\d+)$/);
-  if (rangeMatch) {
-    const lo = parseInt(rangeMatch[1], 10);
-    const hi = parseInt(rangeMatch[2], 10);
-    const num = parseInt(code, 10);
-    if (!isNaN(lo) && !isNaN(hi) && !isNaN(num)) {
-      return num >= lo && num <= hi;
-    }
-  }
-  return false;
-}
 
 export function resolveLegacyRatingCriteria(condition: {
   id: string;
@@ -162,7 +145,7 @@ export function resolveLegacyRatingCriteria(condition: {
   if (codes.size > 0) {
     const byCode = conditionRatingCriteria.find((c) =>
       Array.from(codes).some((code) =>
-        dcMatches(c.diagnosticCode, code) || dcMatches(code, c.diagnosticCode),
+        dcMatches(c.diagnosticCode, code),
       ),
     );
     if (byCode) return byCode;

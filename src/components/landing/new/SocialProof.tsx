@@ -29,10 +29,11 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
       <span
         className="block text-3xl md:text-4xl font-bold"
         style={{
-          background: 'linear-gradient(90deg, #A68B3C 0%, #C5A55A 25%, #D9BE6C 50%, #C5A55A 75%, #A68B3C 100%)',
+          background: 'linear-gradient(90deg, #C5A55A 0%, #D4AF37 25%, #E8CC6C 50%, #D4AF37 75%, #C5A55A 100%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',
+          color: 'transparent',
         }}
       >
         {display}{suffix}

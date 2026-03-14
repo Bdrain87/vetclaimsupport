@@ -5,6 +5,14 @@
  * Uses consistent structure and VA-specific terminology.
  */
 
+import * as compRulesData from '@/data/vaCompensationRules';
+import * as appealData from '@/data/appealProcedures';
+import { m21Rules } from '@/data/m21Manual';
+import { getCitationsForCondition, type MedicalCitation } from '@/data/medicalLiterature';
+import { conditionOutcomes, appealOutcomes } from '@/data/claimOutcomeData';
+import { getEvidenceRequirements } from '@/data/evidenceRequirements';
+import { getCPExamDetails } from '@/data/cpExamDetails';
+
 /**
  * Anti-hallucination instruction appended to every AI prompt.
  * Prevents the model from fabricating legal citations or statistics.
@@ -290,7 +298,10 @@ export const SENTINEL_SYSTEM_PROMPT = `You are Intel, an AI assistant for VA dis
 - Use military-respectful language and VA-recognized terminology
 - Focus on helping veterans accurately describe their genuine experiences
 - When discussing rating criteria, use ONLY the criteria data provided in your context. If a veteran asks about a condition whose criteria is not in your context, tell them to use the Rating Guidance tool or consult a VSO.
-- Tailor responses to the user's logged symptoms, medications, and treatments when available in the veteran context` + AI_ANTI_HALLUCINATION;
+- Tailor responses to the user's logged symptoms, medications, and treatments when available in the veteran context
+- When asked about compensation rates, SMC, TDIU, effective dates, or VA math, use the compensation_rules data if provided in your context
+- When asked about appeals, HLR, supplemental claims, or Board appeals, use the appeal_procedures data if provided in your context
+- When asked about benefits, refer to the benefits data. For state-specific benefits, mention that benefits vary by state and suggest checking their state VA website` + AI_ANTI_HALLUCINATION;
 
 export const SENTINEL_VOICE_BUILD_PROMPT = `You are a VA disability claim writing assistant. The veteran just spoke about their symptoms, experiences, or evidence. Based on their words, generate THREE structured sections in a military-respectful tone:
 
@@ -501,6 +512,131 @@ export function buildSecondaryConnectionsBlock(
   }
   if (lines.length === 0) return '';
   return `<secondary_connections>\n${lines.join('\n')}\n</secondary_connections>`;
+}
+
+// ---------------------------------------------------------------------------
+// Compensation rules context block (for Intel)
+// ---------------------------------------------------------------------------
+
+export function buildCompensationRulesBlock(): string {
+  try {
+    const {
+      effectiveDateRules,
+      compensationRates2024: compensationRates,
+      smcLevels,
+      tdiuRules: tdiu,
+      protectionRules,
+      vaMathSteps,
+      bilateralFactor,
+    } = compRulesData;
+
+    const lines: string[] = [];
+
+    // Effective date rules
+    if (effectiveDateRules?.length) {
+      lines.push('EFFECTIVE DATE RULES:');
+      for (const r of effectiveDateRules) {
+        lines.push(`- ${r.name}: ${r.description} (${r.legalBasis})`);
+      }
+    }
+
+    // SMC summary
+    if (smcLevels?.length) {
+      lines.push('\nSPECIAL MONTHLY COMPENSATION (SMC) LEVELS:');
+      for (const s of smcLevels) {
+        lines.push(`- ${s.level}: $${s.monthlyRate.toLocaleString()}/mo — ${s.description}`);
+      }
+    }
+
+    // TDIU
+    if (tdiu) {
+      lines.push('\nTDIU (TOTAL DISABILITY INDIVIDUAL UNEMPLOYABILITY):');
+      lines.push(`- Schedular: ${tdiu.schedularCriteria}`);
+      lines.push(`- Extraschedular: ${tdiu.extraschedularCriteria}`);
+      lines.push(`- Income threshold: ~$${tdiu.incomeThreshold.toLocaleString()}/year`);
+    }
+
+    // Protection rules
+    if (protectionRules?.length) {
+      lines.push('\nRATING PROTECTION RULES:');
+      for (const p of protectionRules) {
+        lines.push(`- ${p.name} (${p.yearsRequired}yr): ${p.description}`);
+      }
+    }
+
+    // VA math
+    if (vaMathSteps?.length) {
+      lines.push('\nVA COMBINED RATINGS MATH:');
+      for (const step of vaMathSteps) {
+        lines.push(`- Step ${step.step}: ${step.instruction} (e.g., ${step.example})`);
+      }
+      if (bilateralFactor) {
+        lines.push(`- Bilateral factor: ${bilateralFactor.description}`);
+      }
+    }
+
+    // Compensation rates (just a summary, not the whole table)
+    if (compensationRates?.length) {
+      lines.push('\n2024 BASE COMPENSATION RATES (veteran alone):');
+      for (const r of compensationRates) {
+        lines.push(`- ${r.ratingPercent}%: $${r.veteranAlone.toLocaleString()}/mo`);
+      }
+    }
+
+    if (lines.length === 0) return '';
+    return `<compensation_rules>\n${lines.join('\n')}\n</compensation_rules>`;
+  } catch {
+    return '';
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Appeal procedures context block (for Intel)
+// ---------------------------------------------------------------------------
+
+export function buildAppealProceduresBlock(): string {
+  try {
+    const {
+      appealLanes,
+      appealDeadlines,
+      appealStrategyGuidance,
+    } = appealData;
+
+    const lines: string[] = [];
+
+    if (appealLanes?.length) {
+      lines.push('VA APPEAL LANES (AMA):');
+      for (const lane of appealLanes) {
+        lines.push(`\n${lane.name} (${lane.form}):`);
+        lines.push(`  Timeline: ${lane.timeline}`);
+        lines.push(`  New evidence: ${lane.newEvidenceAllowed ? 'Yes' : 'No'}`);
+        lines.push(`  Hearing: ${lane.hearingAvailable ? 'Yes' : 'No'}`);
+        lines.push(`  Best for: ${lane.bestFor.join('; ')}`);
+        if (lane.tips?.length) {
+          lines.push(`  Tips: ${lane.tips.join(' | ')}`);
+        }
+      }
+    }
+
+    if (appealDeadlines?.length) {
+      lines.push('\nAPPEAL DEADLINES:');
+      for (const d of appealDeadlines) {
+        lines.push(`- ${d.situation}: ${d.deadline} (${d.notes})`);
+      }
+    }
+
+    if (appealStrategyGuidance) {
+      lines.push('\nAPPEAL STRATEGY GUIDANCE:');
+      for (const [key, value] of Object.entries(appealStrategyGuidance)) {
+        lines.push(`- ${key}: ${value}`);
+      }
+    }
+
+    if (lines.length === 0) return '';
+    return `<appeal_procedures>\n${lines.join('\n')}\n</appeal_procedures>`;
+  } catch {
+    return '';
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -740,3 +876,211 @@ Check for these evidence elements:
 - Objective findings vs subjective complaints
 
 If the image is not a medical/legal document, still analyze it for any VA claim relevance (photos of injuries, deployment evidence, etc).${AI_ANTI_HALLUCINATION}`;
+
+// ---------------------------------------------------------------------------
+// M21-1 Manual context block
+// ---------------------------------------------------------------------------
+
+export function buildM21Block(categories?: string[]): string {
+  try {
+    const rules = categories
+      ? m21Rules.filter(r => categories.some(c => r.category.toLowerCase().includes(c.toLowerCase())))
+      : m21Rules;
+
+    if (rules.length === 0) return '';
+
+    const lines: string[] = ['M21-1 ADJUDICATION MANUAL RULES:'];
+    for (const r of rules) {
+      lines.push(`\n[${r.section}] ${r.title}`);
+      lines.push(`Rule: ${r.rule}`);
+      lines.push(`Veteran impact: ${r.practicalImplication}`);
+      if (r.commonRaterErrors) {
+        lines.push(`Common rater error: ${r.commonRaterErrors}`);
+      }
+      if (r.legalBasis) {
+        lines.push(`Legal basis: ${r.legalBasis}`);
+      }
+    }
+
+    return `<m21_manual>\n${lines.join('\n')}\n</m21_manual>`;
+  } catch {
+    return '';
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Medical literature context block
+// ---------------------------------------------------------------------------
+
+export function buildMedicalLiteratureBlock(conditionIds: string[]): string {
+  try {
+    const allCitations: MedicalCitation[] = [];
+    const seen = new Set<string>();
+    for (const id of conditionIds) {
+      for (const c of getCitationsForCondition(id)) {
+        if (!seen.has(c.id)) {
+          seen.add(c.id);
+          allCitations.push(c);
+        }
+      }
+    }
+
+    if (allCitations.length === 0) return '';
+
+    const lines: string[] = ['MEDICAL LITERATURE CITATIONS:'];
+    for (const c of allCitations) {
+      lines.push(`\n${c.conditionName}:`);
+      lines.push(`  Study: ${c.studyTitle} (${c.journal}, ${c.year})`);
+      lines.push(`  Finding: ${c.keyFinding}`);
+      lines.push(`  Service connection relevance: ${c.serviceConnectionRelevance}`);
+    }
+
+    return `<medical_literature>\n${lines.join('\n')}\n</medical_literature>`;
+  } catch {
+    return '';
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Claim outcome data context block
+// ---------------------------------------------------------------------------
+
+export function buildOutcomesBlock(categories?: string[]): string {
+  try {
+    const outcomes = categories
+      ? conditionOutcomes.filter(o => categories.some(c =>
+          o.category.toLowerCase().includes(c.toLowerCase()) ||
+          o.conditions.some(cn => cn.toLowerCase().includes(c.toLowerCase()))
+        ))
+      : conditionOutcomes;
+
+    if (outcomes.length === 0 && !categories) return '';
+
+    const lines: string[] = ['CLAIM OUTCOME DATA (based on BVA public records):'];
+
+    for (const o of outcomes) {
+      lines.push(`\n${o.category}:`);
+      lines.push(`  Grant rate: ${o.grantRate}% | Remand: ${o.remandRate}% | Denial: ${o.denialRate}%`);
+      lines.push(`  Top denial reasons: ${o.topDenialReasons.join('; ')}`);
+      lines.push(`  Winning evidence: ${o.winningEvidenceTypes.join('; ')}`);
+      lines.push(`  Avg processing: ${o.averageProcessingDays} days`);
+    }
+
+    // Include appeal lane data
+    if (appealOutcomes?.length) {
+      lines.push('\nAPPEAL LANE SUCCESS RATES:');
+      for (const a of appealOutcomes) {
+        lines.push(`  ${a.lane}: ${a.overallSuccessRate}% success, ~${a.averageProcessingDays} days avg`);
+        lines.push(`    Best for: ${a.bestFor.join('; ')}`);
+      }
+    }
+
+    return `<claim_outcomes>\n${lines.join('\n')}\n</claim_outcomes>`;
+  } catch {
+    return '';
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Evidence requirements context block
+// ---------------------------------------------------------------------------
+
+export function buildEvidenceRequirementsBlock(conditionIds: string[]): string {
+  try {
+    const blocks: string[] = [];
+    for (const id of conditionIds) {
+      const ev = getEvidenceRequirements(id);
+      if (!ev) continue;
+
+      const lines: string[] = [`EVIDENCE REQUIREMENTS: ${ev.conditionName} (DC ${ev.diagnosticCode})`];
+
+      if (ev.requiredEvidence.length > 0) {
+        lines.push('  Required:');
+        for (const e of ev.requiredEvidence) {
+          lines.push(`    - ${e.description}${e.dbqForm ? ` (${e.dbqForm})` : ''}`);
+        }
+      }
+      if (ev.recommendedEvidence.length > 0) {
+        lines.push('  Recommended:');
+        for (const e of ev.recommendedEvidence) {
+          lines.push(`    - ${e.description}${e.dbqForm ? ` (${e.dbqForm})` : ''}`);
+        }
+      }
+      if (ev.commonEvidenceGaps.length > 0) {
+        lines.push(`  Common gaps: ${ev.commonEvidenceGaps.join('; ')}`);
+      }
+      if (ev.ratingLevelEvidence.length > 0) {
+        lines.push('  Per-rating evidence:');
+        for (const r of ev.ratingLevelEvidence) {
+          lines.push(`    ${r.ratingPercent}%: ${r.keyEvidence.join('; ')}`);
+        }
+      }
+      if (ev.tips.length > 0) {
+        lines.push(`  Tips: ${ev.tips.join('; ')}`);
+      }
+
+      blocks.push(lines.join('\n'));
+    }
+
+    if (blocks.length === 0) return '';
+    return `<evidence_requirements>\n${blocks.join('\n\n')}\n</evidence_requirements>`;
+  } catch {
+    return '';
+  }
+}
+
+// ---------------------------------------------------------------------------
+// C&P exam intelligence context block
+// ---------------------------------------------------------------------------
+
+export function buildCPExamBlock(conditionIds: string[]): string {
+  try {
+    const blocks: string[] = [];
+    for (const id of conditionIds) {
+      const exam = getCPExamDetails(id);
+      if (!exam) continue;
+
+      const lines: string[] = [`C&P EXAM DETAILS: ${exam.conditionName} (DC ${exam.diagnosticCode})`];
+      lines.push(`  Exam type: ${exam.examType}${exam.dbqFormNumber ? ` (${exam.dbqFormNumber})` : ''}`);
+      lines.push(`  Duration: ${exam.typicalDuration}`);
+
+      if (exam.whatToExpect.length > 0) {
+        lines.push(`  What to expect: ${exam.whatToExpect.join('; ')}`);
+      }
+      if (exam.physicalTests.length > 0) {
+        lines.push('  Tests performed:');
+        for (const t of exam.physicalTests) {
+          lines.push(`    - ${t.name}: ${t.purpose} (Rating impact: ${t.ratingImpact})`);
+        }
+      }
+      if (exam.romRanges && exam.romRanges.length > 0) {
+        lines.push('  ROM thresholds:');
+        for (const rom of exam.romRanges) {
+          lines.push(`    ${rom.movement} (normal: ${rom.normalRange}):`);
+          for (const t of rom.ratingThresholds) {
+            lines.push(`      ${t.percent}%: ${t.range}`);
+          }
+        }
+      }
+      if (exam.redFlags.length > 0) {
+        lines.push(`  Red flags: ${exam.redFlags.join('; ')}`);
+      }
+      if (exam.flareUpGuidance) {
+        lines.push(`  Flare-up guidance: ${exam.flareUpGuidance.documentationNeeded} (${exam.flareUpGuidance.legalBasis})`);
+      }
+      if (exam.functionalLimitationTips.length > 0) {
+        lines.push(`  Functional limitation tips: ${exam.functionalLimitationTips.join('; ')}`);
+      }
+      if (exam.commonPitfalls.length > 0) {
+        lines.push(`  Common pitfalls: ${exam.commonPitfalls.join('; ')}`);
+      }
+
+      blocks.push(lines.join('\n'));
+    }
+
+    if (blocks.length === 0) return '';
+    return `<cp_exam_intelligence>\n${blocks.join('\n\n')}\n</cp_exam_intelligence>`;
+  } catch {
+    return '';
+  }
+}

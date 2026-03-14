@@ -203,18 +203,6 @@ export const vaBenefits: VABenefit[] = [
     url: 'https://www.va.gov/survivors/dependency-indemnity-compensation/',
     category: 'family',
   },
-  {
-    id: 'dependent-education',
-    name: 'Dependents\' Educational Assistance (Chapter 35)',
-    description:
-      'Up to 45 months of education benefits for eligible dependents of veterans who are permanently and totally disabled or who died from service-connected conditions. Can be used for degree programs, certificates, apprenticeships, and on-the-job training.',
-    eligibilityCriteria:
-      'Spouses and children of veterans with a permanent and total (100% P&T) service-connected disability, veterans who died in service or from a service-connected disability, or service members MIA or captured in the line of duty.',
-    ratingThreshold: 100,
-    url: 'https://www.va.gov/education/survivor-dependent-benefits/',
-    category: 'family',
-  },
-
   // ─── Employment ──────────────────────────────────────────────────────
   {
     id: 'vocational-rehab',
@@ -247,6 +235,214 @@ export const vaBenefits: VABenefit[] = [
       'Available to all veterans and eligible spouses. Priority of service is given to veterans and eligible spouses for all DOL-funded job training programs. No minimum disability rating required.',
     ratingThreshold: 0,
     url: 'https://www.va.gov/careers-employment/',
+    category: 'employment',
+  },
+
+  // ─── Healthcare (additional) ────────────────────────────────────────
+  {
+    id: 'vet-centers',
+    name: 'Vet Centers (Readjustment Counseling)',
+    description:
+      'Community-based counseling centers providing readjustment counseling, bereavement counseling, military sexual trauma counseling, and referral services. Over 300 locations nationwide with extended hours and a welcoming, non-clinical environment.',
+    eligibilityCriteria:
+      'Veterans who served in a combat zone or area of hostility, experienced military sexual trauma, provided direct emergency medical or mental health care to casualties of war, or served as drone crew members. Active-duty service members and their families are also eligible.',
+    ratingThreshold: 0,
+    url: 'https://www.va.gov/vet-center/',
+    category: 'healthcare',
+  },
+  {
+    id: 'community-care',
+    name: 'Community Care (MISSION Act)',
+    description:
+      'Allows eligible veterans to receive health care from community providers outside the VA system when VA care is not feasible. Covers situations where VA wait times exceed access standards, the veteran lives too far from a VA facility, or the needed service is not available at VA.',
+    eligibilityCriteria:
+      'Veterans enrolled in VA health care who meet one or more eligibility criteria: drive time or wait time access standards not met, the needed service is not available at VA, the veteran\'s state has no full-service VA medical facility, or the veteran qualifies under the grandfather provision from the Veterans Choice Program.',
+    ratingThreshold: 0,
+    url: 'https://www.va.gov/communitycare/',
+    category: 'healthcare',
+  },
+  {
+    id: 'va-telehealth',
+    name: 'VA Telehealth',
+    description:
+      'Virtual health care services including video visits, phone appointments, secure messaging, and remote patient monitoring. Includes VA Video Connect for real-time video appointments from home and access through the VA Health Chat app.',
+    eligibilityCriteria:
+      'Available to all veterans enrolled in VA health care. No minimum disability rating required. Veterans need a smartphone, tablet, or computer with internet access for video visits.',
+    ratingThreshold: 0,
+    url: 'https://www.va.gov/health-care/get-medical-records/share-health-information/',
+    category: 'healthcare',
+  },
+  {
+    id: 'prosthetics-sensory-aids',
+    name: 'Prosthetics & Sensory Aids',
+    description:
+      'Comprehensive prosthetic and orthotic services, hearing aids, eyeglasses, and other assistive devices. Includes custom prosthetic limbs, wheelchairs, artificial eyes, communication devices, and home medical equipment.',
+    eligibilityCriteria:
+      'Available to veterans with a service-connected disability requiring prosthetic or sensory aid devices. Also available to veterans enrolled in VA health care who have a clinical need for these devices as part of their treatment plan.',
+    ratingThreshold: 0,
+    url: 'https://www.va.gov/health-care/about-va-health-benefits/vision-care/',
+    category: 'healthcare',
+  },
+
+  // ─── Financial & Compensation (additional) ──────────────────────────
+  {
+    id: 'crsc',
+    name: 'Combat-Related Special Compensation (CRSC)',
+    description:
+      'Tax-free monthly compensation for military retirees with combat-related disabilities. Restores the VA disability offset from military retired pay for disabilities directly caused by combat, hazardous duty, instrumentality of war, or armed conflict.',
+    eligibilityCriteria:
+      'Military retirees with at least 20 years of service (or medically retired) who have VA-rated disabilities that are combat-related. The disability must be the direct result of armed conflict, hazardous duty, conditions simulating war, or an instrumentality of war.',
+    ratingThreshold: 10,
+    url: 'https://www.va.gov/disability/',
+    category: 'financial',
+  },
+  {
+    id: 'crdp',
+    name: 'Concurrent Retirement and Disability Pay (CRDP)',
+    description:
+      'Allows military retirees with 50% or higher VA disability rating to receive both full military retirement pay and VA disability compensation without offset. CRDP is phased in and is taxable as military retirement pay.',
+    eligibilityCriteria:
+      'Military retirees with 20+ years of service (or medical retirees under Chapter 61) who have a VA disability rating of 50% or higher. CRDP is automatically applied — no application needed. Cannot receive both CRDP and CRSC; the higher amount is paid.',
+    ratingThreshold: 50,
+    url: 'https://www.va.gov/disability/',
+    category: 'financial',
+  },
+  {
+    id: 'va-pension',
+    name: 'VA Pension (Non-Service-Connected)',
+    description:
+      'Needs-based monthly benefit for wartime veterans who are 65 or older, or permanently and totally disabled (not due to service). Provides supplemental income to bring the veteran\'s total income up to the Maximum Annual Pension Rate (MAPR).',
+    eligibilityCriteria:
+      'Veterans with at least 90 days of active-duty service (at least one day during a wartime period) who are 65+ or permanently and totally disabled, and whose countable income and net worth fall below VA thresholds. Must have been discharged under other than dishonorable conditions.',
+    ratingThreshold: 0,
+    url: 'https://www.va.gov/pension/',
+    category: 'financial',
+  },
+  {
+    id: 'survivors-pension',
+    name: 'Survivors Pension (Death Pension)',
+    description:
+      'Tax-free monthly benefit for the surviving spouse or unmarried dependent child of a deceased wartime veteran. Provides supplemental income based on the difference between the survivor\'s countable income and the annual pension limit.',
+    eligibilityCriteria:
+      'Unremarried surviving spouse or unmarried dependent child of a deceased veteran who served during a wartime period, had at least 90 days of active-duty service, and was discharged under other than dishonorable conditions. Income and net worth limits apply.',
+    ratingThreshold: 0,
+    url: 'https://www.va.gov/pension/survivors-pension/',
+    category: 'financial',
+  },
+
+  // ─── Family & Survivor Benefits (additional) ────────────────────────
+  {
+    id: 'burial-benefits',
+    name: 'Burial Benefits',
+    description:
+      'Burial allowances to help cover burial, funeral, and transportation costs. Also includes government headstones, markers, and medallions for any deceased veteran, and Presidential Memorial Certificates and burial flags.',
+    eligibilityCriteria:
+      'Available to any veteran who was discharged under other than dishonorable conditions. Burial allowance amounts vary based on whether the death was service-connected. National cemetery burial is available to veterans, their spouses, and dependent children.',
+    ratingThreshold: 0,
+    url: 'https://www.va.gov/burials-memorials/',
+    category: 'family',
+  },
+  {
+    id: 'sgli-vgli',
+    name: 'SGLI / VGLI Life Insurance',
+    description:
+      'Servicemembers\' Group Life Insurance (SGLI) provides low-cost group life insurance up to $500,000 for active-duty members. Veterans\' Group Life Insurance (VGLI) allows separated veterans to convert SGLI coverage to renewable term insurance without medical underwriting if applied for within 240 days of separation.',
+    eligibilityCriteria:
+      'SGLI is available to active-duty service members, Ready Reserve/National Guard members, cadets, and midshipmen. VGLI is available to veterans within 1 year and 120 days of separation from service. No disability rating required.',
+    ratingThreshold: 0,
+    url: 'https://www.va.gov/life-insurance/',
+    category: 'family',
+  },
+  {
+    id: 'fry-scholarship',
+    name: 'Fry Scholarship (Chapter 33 for Survivors)',
+    description:
+      'Provides Post-9/11 GI Bill benefits to children and surviving spouses of service members who died in the line of duty after September 10, 2001. Covers tuition, fees, a monthly housing allowance, and a books and supplies stipend for up to 36 months.',
+    eligibilityCriteria:
+      'Children and surviving spouses of an active-duty member of the Armed Forces who died in the line of duty on or after September 11, 2001. Children may use the benefit between ages 18 and 33. Surviving spouses lose eligibility upon remarriage.',
+    ratingThreshold: 0,
+    url: 'https://www.va.gov/education/survivor-dependent-benefits/fry-scholarship/',
+    category: 'family',
+  },
+  {
+    id: 'camp-lejeune',
+    name: 'Camp Lejeune Family Member Program',
+    description:
+      'Provides health care benefits to family members of veterans who served at Camp Lejeune between August 1, 1953, and December 31, 1987, and were exposed to contaminated drinking water. Covers treatment for 15 specified medical conditions.',
+    eligibilityCriteria:
+      'Family members who resided at Camp Lejeune for at least 30 cumulative days between August 1953 and December 1987 and have one of the 15 covered conditions (including cancers, birth defects, and other illnesses). The veteran must have served at Camp Lejeune during the same period.',
+    ratingThreshold: 0,
+    url: 'https://www.va.gov/disability/eligibility/hazardous-materials-exposure/camp-lejeune-water-contamination/',
+    category: 'family',
+  },
+
+  // ─── Housing (additional) ───────────────────────────────────────────
+  {
+    id: 'sha-grant',
+    name: 'Special Housing Adaptation (SHA) Grant',
+    description:
+      'Grants to help veterans with certain service-connected disabilities adapt an existing home to meet their needs. Can be used to modify an existing home owned by the veteran or a family member. Maximum grant amount is approximately $22,036 (adjusted annually).',
+    eligibilityCriteria:
+      'Veterans with service-connected disabilities including blindness in both eyes (with 20/200 acuity or less), loss or loss of use of both hands, certain severe burns, or certain severe respiratory injuries.',
+    ratingThreshold: 0,
+    url: 'https://www.va.gov/housing-assistance/disability-housing-grants/',
+    category: 'housing',
+  },
+  {
+    id: 'tra-grant',
+    name: 'Temporary Residence Adaptation (TRA) Grant',
+    description:
+      'A grant for veterans who are temporarily living in a family member\'s home and need to adapt it for their disability-related needs. The TRA grant provides a portion of the SAH or SHA grant amount for use on a family member\'s home.',
+    eligibilityCriteria:
+      'Veterans who qualify for SAH or SHA grants and are temporarily residing in a family member\'s home. The adaptation must be to the family member\'s residence. Veterans can use this while deciding on a permanent home.',
+    ratingThreshold: 0,
+    url: 'https://www.va.gov/housing-assistance/disability-housing-grants/',
+    category: 'housing',
+  },
+  {
+    id: 'homeless-veteran-programs',
+    name: 'Homeless Veteran Programs (HUD-VASH, SSVF, GPD)',
+    description:
+      'Comprehensive programs for homeless and at-risk veterans. HUD-VASH combines housing vouchers with VA case management. Supportive Services for Veteran Families (SSVF) provides rapid re-housing and homelessness prevention. Grant and Per Diem (GPD) funds community organizations providing transitional housing.',
+    eligibilityCriteria:
+      'Veterans who are homeless or at imminent risk of homelessness. HUD-VASH requires VA health care eligibility and chronic homelessness or other risk factors. SSVF serves very low-income veteran families. Contact the National Call Center for Homeless Veterans at 1-877-4AID-VET.',
+    ratingThreshold: 0,
+    url: 'https://www.va.gov/homeless/',
+    category: 'housing',
+  },
+
+  // ─── Employment (additional) ────────────────────────────────────────
+  {
+    id: 'vosb-certification',
+    name: 'Veteran-Owned Small Business (VOSB) Certification',
+    description:
+      'Federal certification for businesses owned and controlled by veterans. Provides access to sole-source and set-aside contracting opportunities with the federal government. Service-Disabled Veteran-Owned Small Businesses (SDVOSB) receive additional contracting preferences.',
+    eligibilityCriteria:
+      'The veteran must own at least 51% of the business, control day-to-day management and decision-making, and hold the highest officer position. For SDVOSB, the veteran must also have a service-connected disability rating. Business must be small per SBA size standards.',
+    ratingThreshold: 0,
+    url: 'https://www.va.gov/careers-employment/veteran-owned-business-support/',
+    category: 'employment',
+  },
+  {
+    id: 'tap',
+    name: 'Transition Assistance Program (TAP)',
+    description:
+      'Mandatory program for separating service members providing employment workshops, benefits briefings, financial planning, and career counseling. Includes the VA Benefits Briefing, Department of Labor Employment Workshop, and optional tracks for education, entrepreneurship, and career technical training.',
+    eligibilityCriteria:
+      'Required for all separating active-duty service members. Must begin no later than 365 days before separation. Available to National Guard and Reserve members upon demobilization. Spouses and caregivers may attend select modules.',
+    ratingThreshold: 0,
+    url: 'https://www.va.gov/careers-employment/education-and-career-counseling/',
+    category: 'employment',
+  },
+  {
+    id: 'compensated-work-therapy',
+    name: 'Compensated Work Therapy (CWT)',
+    description:
+      'Vocational rehabilitation program that provides competitive work opportunities for veterans with disabilities who are receiving VA treatment. Includes Sheltered Workshop, Transitional Work, and Supported Employment components to help veterans build skills and reintegrate into the workforce.',
+    eligibilityCriteria:
+      'Veterans with physical or mental disabilities who are enrolled in VA treatment programs. Participants are matched to work assignments based on their abilities, interests, and treatment goals. Referral from a VA treatment team is required.',
+    ratingThreshold: 0,
+    url: 'https://www.va.gov/careers-employment/vocational-rehabilitation/',
     category: 'employment',
   },
 ];

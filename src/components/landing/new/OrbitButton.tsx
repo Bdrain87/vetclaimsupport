@@ -59,7 +59,7 @@ export function OrbitButton({ to, children, className = '', pill = false }: Orbi
           to={to}
           className={`relative z-10 inline-block no-underline text-black font-semibold ${className}`}
           style={{
-            background: 'linear-gradient(135deg, #A68B3C, #C5A55A, #D9BE6C, #C5A55A, #A68B3C)',
+            background: 'linear-gradient(135deg, #C5A55A, #D4AF37, #E8CC6C, #D4AF37, #C5A55A)',
             borderRadius: innerRadius,
             transition: 'filter 200ms ease',
             filter: hovered ? 'brightness(1.08)' : 'brightness(1)',

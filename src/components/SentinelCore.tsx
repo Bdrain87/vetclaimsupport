@@ -17,7 +17,8 @@ import { isNativeApp } from '@/lib/platform';
 import useAppStore from '@/store/useAppStore';
 import { useSentinel } from '@/hooks/useSentinel';
 import { StreamingText } from './ui/StreamingText';
-import { SENTINEL_SYSTEM_PROMPT, SENTINEL_VOICE_BUILD_PROMPT, buildCriteriaBlockForConditions, buildSecondaryConnectionsBlock } from '@/lib/ai-prompts';
+import { SENTINEL_SYSTEM_PROMPT, SENTINEL_VOICE_BUILD_PROMPT, buildCriteriaBlockForConditions, buildSecondaryConnectionsBlock, buildCompensationRulesBlock, buildAppealProceduresBlock, buildM21Block, buildMedicalLiteratureBlock, buildOutcomesBlock, buildEvidenceRequirementsBlock, buildCPExamBlock } from '@/lib/ai-prompts';
+import { detectRelevantBlocks, shouldIncludeBlock } from '@/lib/contextRouter';
 import { buildVeteranContext } from '@/utils/veteranContext';
 import { formatContextForAI } from '@/utils/formatContextForAI';
 import { Mic, MicOff, Sparkles, FileText, Shield, Heart, Scan, ArrowUp, ClipboardCheck, AlertTriangle, Users, FileSearch, Calculator, BarChart3 } from 'lucide-react';
@@ -128,10 +129,18 @@ export function SentinelCore() {
       }));
       const criteriaBlock = buildCriteriaBlockForConditions(conditionsForCriteria);
       const conditionNames = (ctx.conditions || []).map(c => c.name);
+      const conditionIds = (ctx.conditions || []).map(c => c.id || c.name.toLowerCase().replace(/\s+/g, '-'));
       const secondaryBlock = buildSecondaryConnectionsBlock(conditionNames);
+      const compensationBlock = buildCompensationRulesBlock();
+      const appealBlock = buildAppealProceduresBlock();
+      const m21Block = buildM21Block();
+      const medLitBlock = buildMedicalLiteratureBlock(conditionIds);
+      const outcomesBlock = buildOutcomesBlock();
+      const evidenceBlock = buildEvidenceRequirementsBlock(conditionIds);
+      const cpExamBlock = buildCPExamBlock(conditionIds);
       const { temperature } = getModelConfig('sentinel-core');
       chatRef.current = createChat({
-        systemInstruction: `${systemPrompt}\n\n${contextBlock}${criteriaBlock ? `\n\n${criteriaBlock}\nUse ONLY the criteria above when discussing rating levels. For conditions not listed, direct the veteran to the Rating Guidance tool.` : ''}${secondaryBlock ? `\n\n${secondaryBlock}\nWhen the veteran asks about secondary conditions, reference ONLY the connections listed above.` : ''}`,
+        systemInstruction: `${systemPrompt}\n\n${contextBlock}${criteriaBlock ? `\n\n${criteriaBlock}\nUse ONLY the criteria above when discussing rating levels. For conditions not listed, direct the veteran to the Rating Guidance tool.` : ''}${secondaryBlock ? `\n\n${secondaryBlock}\nWhen the veteran asks about secondary conditions, reference ONLY the connections listed above.` : ''}${compensationBlock ? `\n\n${compensationBlock}` : ''}${appealBlock ? `\n\n${appealBlock}` : ''}${m21Block ? `\n\n${m21Block}` : ''}${medLitBlock ? `\n\n${medLitBlock}` : ''}${outcomesBlock ? `\n\n${outcomesBlock}` : ''}${evidenceBlock ? `\n\n${evidenceBlock}` : ''}${cpExamBlock ? `\n\n${cpExamBlock}` : ''}`,
         feature: 'sentinel-core',
         temperature,
       });
