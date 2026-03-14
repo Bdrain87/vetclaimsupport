@@ -24,10 +24,10 @@ const SIDEBAR_ITEMS = [
 ];
 
 const STAT_CARDS = [
-  { label: 'Claims in Progress', value: '3', color: '#D4AF37' },
-  { label: 'DBQs Completed', value: '12', color: '#60A5FA' },
-  { label: 'Health Entries', value: '47', color: '#34D399' },
-  { label: 'AI Reports', value: '8', color: '#F472B6' },
+  { label: 'Claims in Progress', value: '3' },
+  { label: 'DBQs Completed', value: '12' },
+  { label: 'Health Entries', value: '47' },
+  { label: 'AI Reports', value: '8' },
 ];
 
 function BrowserFrame() {
@@ -129,7 +129,7 @@ function BrowserFrame() {
                   </div>
                   <div
                     className="text-xl font-bold"
-                    style={{ color: card.color, fontSize: '22px' }}
+                    style={{ color: '#D4AF37', fontSize: '22px' }}
                   >
                     {card.value}
                   </div>
