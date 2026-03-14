@@ -198,6 +198,10 @@ export const exportServiceHistory = async (entries: ServiceEntry[]) => {
     return;
   }
 
+  // Guard user free-text fields
+  const freeText = entries.map(e => [e.duties, e.hazards, e.unit, e.notes].filter(Boolean).join(' ')).join('\n');
+  if (freeText.trim()) assertExportClean(freeText);
+
   const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -299,6 +303,10 @@ export const exportMedicalVisits = async (visits: MedicalVisit[]) => {
     return;
   }
 
+  // Guard free-text fields against banned phrases
+  const freeText = visits.map(v => [v.notes, v.diagnosis, v.reason, v.treatment].filter(Boolean).join(' ')).join('\n');
+  if (freeText.trim()) assertExportClean(freeText);
+
   const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -393,6 +401,10 @@ export const exportSymptoms = async (symptoms: SymptomEntry[]) => {
     return;
   }
 
+  // Guard free-text fields against banned phrases
+  const freeText = symptoms.map(s => [s.symptom, s.notes, s.dailyImpact].filter(Boolean).join(' ')).join('\n');
+  if (freeText.trim()) assertExportClean(freeText);
+
   const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -481,6 +493,10 @@ export const exportMedications = async (medications: Medication[]) => {
     logger.warn('No medications to export');
     return;
   }
+
+  // Guard user free-text fields
+  const freeText = medications.map(m => [m.sideEffects, m.notes, m.prescribedFor].filter(Boolean).join(' ')).join('\n');
+  if (freeText.trim()) assertExportClean(freeText);
 
   const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
@@ -577,6 +593,10 @@ export const exportExposures = async (exposures: Exposure[]) => {
     logger.warn('No exposures to export');
     return;
   }
+
+  // Guard user free-text fields
+  const freeText = exposures.map(e => [e.description, e.notes, e.details, e.witnesses].filter(Boolean).join(' ')).join('\n');
+  if (freeText.trim()) assertExportClean(freeText);
 
   const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
@@ -675,6 +695,10 @@ export const exportDocuments = async (documents: DocumentItem[]) => {
     return;
   }
 
+  // Guard user free-text fields
+  const freeText = documents.map(d => d.notes).filter(Boolean).join('\n');
+  if (freeText.trim()) assertExportClean(freeText);
+
   const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -749,6 +773,10 @@ export const exportBuddyContacts = async (contacts: BuddyContact[]) => {
     logger.warn('No buddy contacts to export');
     return;
   }
+
+  // Guard user free-text fields
+  const freeText = contacts.map(c => c.whatTheyWitnessed).filter(Boolean).join('\n');
+  if (freeText.trim()) assertExportClean(freeText);
 
   const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
@@ -1079,6 +1107,10 @@ export const exportMigraines = async (migraines: MigraineEntry[], stats?: { tota
     return;
   }
 
+  // Guard user free-text fields
+  const freeText = migraines.map(m => [m.notes, m.treatment].filter(Boolean).join(' ')).join('\n');
+  if (freeText.trim()) assertExportClean(freeText);
+
   const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -1223,6 +1255,14 @@ export const exportConditionEvidence = async (
   linkedExposures: Exposure[],
   linkedBuddyContacts: BuddyContact[]
 ) => {
+  // Guard aggregated free-text fields against banned phrases
+  const textParts = [
+    ...linkedSymptoms.map(s => [s.symptom, s.notes, s.dailyImpact].filter(Boolean).join(' ')),
+    ...linkedMedicalVisits.map(v => [v.notes, v.diagnosis].filter(Boolean).join(' ')),
+  ];
+  const freeText = textParts.join('\n');
+  if (freeText.trim()) assertExportClean(freeText);
+
   const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -1586,6 +1626,10 @@ export const exportSleepLog = async (entries: SleepEntry[]) => {
     logger.warn('No sleep entries to export');
     return;
   }
+
+  // Guard user free-text fields
+  const freeText = entries.map(e => [e.impactOnWork, e.notes].filter(Boolean).join(' ')).join('\n');
+  if (freeText.trim()) assertExportClean(freeText);
 
   const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
@@ -1969,6 +2013,13 @@ export interface DBQPrepSheetData {
 }
 
 export const exportDBQPrepSheet = async (data: DBQPrepSheetData) => {
+  // Guard free-text fields against banned phrases
+  const freeText = [
+    data.customSymptoms, data.flareupTriggers, data.flareupLimitations,
+    data.sleepImpact, data.workImpact, data.sideEffects, data.additionalNotes,
+  ].filter(Boolean).join('\n');
+  if (freeText.trim()) assertExportClean(freeText);
+
   const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();

@@ -157,6 +157,11 @@ const PACTActStandalone = lazyWithRetry(() => import('./pages/PACTActStandalone'
 const StateBenefits = lazyWithRetry(() => import('./pages/StateBenefits'));
 const VSOLocator = lazyWithRetry(() => import('./pages/VSOLocator'));
 
+// Phase 5 Innovation
+const RatingGapAnalyzer = lazyWithRetry(() => import('./pages/RatingGapAnalyzer'));
+const ReadinessTimeline = lazyWithRetry(() => import('./pages/ReadinessTimeline'));
+const PostFilingTracker = lazyWithRetry(() => import('./pages/PostFilingTracker'));
+
 // Account & Legal pages
 const DeleteAccountPage = lazyWithRetry(() => import('./pages/account/DeleteAccountPage'));
 const ExportDataPage = lazyWithRetry(() => import('./pages/account/ExportDataPage'));
@@ -315,19 +320,22 @@ function AnimatedRoutes() {
           <Route path="/claims/body-map" element={<PremiumGuard featureName="Body Map"><BodyMap /></PremiumGuard>} />
           <Route path="/claims/calculator" element={<Combination />} />
           <Route path="/claims/bilateral" element={<PremiumGuard featureName="Bilateral Calculator"><BilateralCalculator /></PremiumGuard>} />
-          <Route path="/claims/secondary-finder" element={<PremiumGuard featureName="Secondary Condition Finder"><SecondaryFinder /></PremiumGuard>} />
+          <Route path="/claims/secondary-finder" element={<SecondaryFinder />} />
           <Route path="/claims/condition/:id/journey" element={<ConditionJourney />} />
           <Route path="/claims/checklist" element={<ClaimChecklist />} />
           <Route path="/claims/upgrade-paths" element={<ZeroPercentOptimizer />} />
           <Route path="/claims/evidence-strength" element={<PremiumGuard featureName="Evidence Strength"><EvidenceStrength /></PremiumGuard>} />
           <Route path="/claims/decision-decoder" element={<DecisionDecoder />} />
+          <Route path="/claims/rating-gaps" element={<PremiumGuard featureName="Rating Gap Analyzer"><RatingGapAnalyzer /></PremiumGuard>} />
+          <Route path="/claims/readiness" element={<PremiumGuard featureName="Readiness Timeline"><ReadinessTimeline /></PremiumGuard>} />
+          <Route path="/claims/post-filing" element={<PostFilingTracker />} />
           <Route path="/claims/:id" element={<ConditionDetail />} />
 
           {/* === HEALTH === */}
           <Route path="/health" element={<HealthHub />} />
-          <Route path="/health/symptoms" element={<PremiumGuard featureName="Symptom Tracker"><Symptoms /></PremiumGuard>} />
-          <Route path="/health/sleep" element={<PremiumGuard featureName="Sleep Tracker"><Sleep /></PremiumGuard>} />
-          <Route path="/health/migraines" element={<PremiumGuard featureName="Migraine Tracker"><Migraines /></PremiumGuard>} />
+          <Route path="/health/symptoms" element={<Symptoms />} />
+          <Route path="/health/sleep" element={<Sleep />} />
+          <Route path="/health/migraines" element={<Migraines />} />
           <Route path="/health/medications" element={<PremiumGuard featureName="Medication Tracker"><Medications /></PremiumGuard>} />
           <Route path="/health/visits" element={<PremiumGuard featureName="Medical Visits"><MedicalVisits /></PremiumGuard>} />
           <Route path="/health/exposures" element={<PremiumGuard featureName="Exposure Tracker"><Exposures /></PremiumGuard>} />
@@ -338,7 +346,7 @@ function AnimatedRoutes() {
 
           {/* === PREP === */}
           <Route path="/prep" element={<PrepHub />} />
-          <Route path="/prep/exam" element={<PremiumGuard featureName="C&P Exam Prep"><CPExamPrepEnhanced /></PremiumGuard>} />
+          <Route path="/prep/exam" element={<CPExamPrepEnhanced />} />
           <Route path="/prep/personal-statement" element={<PremiumGuard featureName="Personal Statement Builder"><PersonalStatement /></PremiumGuard>} />
           <Route path="/prep/buddy-statement" element={<PremiumGuard featureName="Buddy Statement Builder"><BuddyStatements /></PremiumGuard>} />
           <Route path="/prep/doctor-summary" element={<PremiumGuard featureName="Doctor Summary Outline"><DoctorSummaryOutline /></PremiumGuard>} />
@@ -352,7 +360,7 @@ function AnimatedRoutes() {
           <Route path="/prep/cfile-intel" element={<PremiumGuard featureName="C-File Intel"><CFileIntel /></PremiumGuard>} />
           <Route path="/prep/ask-intel" element={<PremiumGuard featureName="Ask Intel"><AskIntel /></PremiumGuard>} />
           <Route path="/prep/va-speak" element={<VASpeakTranslator />} />
-          <Route path="/prep/back-pay" element={<PremiumGuard featureName="Back Pay Estimator"><BackPayEstimator /></PremiumGuard>} />
+          <Route path="/prep/back-pay" element={<BackPayEstimator />} />
           <Route path="/prep/cost-estimate" element={<CostEstimator />} />
           <Route path="/prep/travel-pay" element={<TravelPayCalculator />} />
           <Route path="/prep/bdd-guide" element={<BDDGuide />} />
@@ -368,7 +376,7 @@ function AnimatedRoutes() {
           <Route path="/prep/evidence-scanner" element={<PremiumGuard featureName="Evidence Scanner"><EvidenceScanner /></PremiumGuard>} />
           <Route path="/prep/mos-hazards" element={<MOSHazards />} />
           <Route path="/prep/pact-act" element={<PACTActStandalone />} />
-          <Route path="/prep/state-benefits" element={<PremiumGuard featureName="State Benefits"><StateBenefits /></PremiumGuard>} />
+          <Route path="/prep/state-benefits" element={<StateBenefits />} />
           <Route path="/prep/vso-locator" element={<VSOLocator />} />
           <Route path="/prep/exam-day" element={<ExamDayMode />} />
           <Route path="/prep/exam-packet" element={<CPExamPacket />} />
@@ -610,6 +618,17 @@ function AppContent() {
             </div>
           </div>
         </div>
+      </Suspense>
+    );
+  }
+
+  // Public legal/info pages — accessible without auth
+  const isLegalRoute = ['/settings/terms', '/settings/privacy', '/settings/faq',
+    '/settings/about', '/settings/disclaimer', '/terms', '/privacy', '/faq', '/disclaimer'].includes(location.pathname);
+  if (isLegalRoute) {
+    return (
+      <Suspense fallback={<LoadingFallback />}>
+        <AnimatedRoutes />
       </Suspense>
     );
   }

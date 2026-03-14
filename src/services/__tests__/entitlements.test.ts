@@ -156,16 +156,16 @@ describe('Section 3B — isPremiumRoute', () => {
     expect(isPremiumRoute('/prep/personal-statement')).toBe(true);
   });
 
-  it('returns true for /health/symptoms', () => {
-    expect(isPremiumRoute('/health/symptoms')).toBe(true);
+  it('returns false for /health/symptoms (now free)', () => {
+    expect(isPremiumRoute('/health/symptoms')).toBe(false);
   });
 
   it('returns true for /claims/vault', () => {
     expect(isPremiumRoute('/claims/vault')).toBe(true);
   });
 
-  it('returns true for /prep/exam', () => {
-    expect(isPremiumRoute('/prep/exam')).toBe(true);
+  it('returns false for /prep/exam (now free)', () => {
+    expect(isPremiumRoute('/prep/exam')).toBe(false);
   });
 
   it('returns true for /claims/body-map', () => {
@@ -196,16 +196,16 @@ describe('Section 3C — Preview Limits Enforcement', () => {
 
   // --- PREVIEW_LIMITS constants ---
 
-  it('PREVIEW_LIMITS.maxConditions is 3', () => {
-    expect(PREVIEW_LIMITS.maxConditions).toBe(3);
+  it('PREVIEW_LIMITS.maxConditions is 5', () => {
+    expect(PREVIEW_LIMITS.maxConditions).toBe(5);
   });
 
-  it('PREVIEW_LIMITS.maxHealthLogs is 25', () => {
-    expect(PREVIEW_LIMITS.maxHealthLogs).toBe(25);
+  it('PREVIEW_LIMITS.maxHealthLogs is 50', () => {
+    expect(PREVIEW_LIMITS.maxHealthLogs).toBe(50);
   });
 
-  it('PREVIEW_LIMITS.maxDocumentUploads is 1', () => {
-    expect(PREVIEW_LIMITS.maxDocumentUploads).toBe(1);
+  it('PREVIEW_LIMITS.maxDocumentUploads is 3', () => {
+    expect(PREVIEW_LIMITS.maxDocumentUploads).toBe(3);
   });
 
   it('PREVIEW_LIMITS.exportEnabled is false', () => {
@@ -216,8 +216,8 @@ describe('Section 3C — Preview Limits Enforcement', () => {
     expect(PREVIEW_LIMITS.cloudSyncEnabled).toBe(false);
   });
 
-  it('PREVIEW_LIMITS.formGuideDraftingEnabled is false', () => {
-    expect(PREVIEW_LIMITS.formGuideDraftingEnabled).toBe(false);
+  it('PREVIEW_LIMITS.formGuideDraftingEnabled is true', () => {
+    expect(PREVIEW_LIMITS.formGuideDraftingEnabled).toBe(true);
   });
 
   // --- canAddCondition ---
@@ -226,11 +226,11 @@ describe('Section 3C — Preview Limits Enforcement', () => {
     expect(canAddCondition(0)).toBe(true);
   });
 
-  it('canAddCondition blocks fourth condition for free user (count=3)', () => {
-    expect(canAddCondition(3)).toBe(false);
+  it('canAddCondition allows up to 4 conditions for free user (count=4)', () => {
+    expect(canAddCondition(4)).toBe(true);
   });
 
-  it('canAddCondition blocks higher counts for free user (count=5)', () => {
+  it('canAddCondition blocks sixth condition for free user (count=5)', () => {
     expect(canAddCondition(5)).toBe(false);
   });
 
@@ -251,18 +251,17 @@ describe('Section 3C — Preview Limits Enforcement', () => {
 
   // --- canAddHealthLog ---
 
-  it('canAddHealthLog allows up to 25 for free user', () => {
-    for (let i = 0; i < 25; i++) {
-      expect(canAddHealthLog(i)).toBe(true);
-    }
+  it('canAddHealthLog allows up to 49 for free user', () => {
+    expect(canAddHealthLog(0)).toBe(true);
+    expect(canAddHealthLog(49)).toBe(true);
   });
 
-  it('canAddHealthLog blocks at 25 for free user', () => {
-    expect(canAddHealthLog(25)).toBe(false);
+  it('canAddHealthLog blocks at 50 for free user', () => {
+    expect(canAddHealthLog(50)).toBe(false);
   });
 
-  it('canAddHealthLog blocks above 25 for free user', () => {
-    expect(canAddHealthLog(30)).toBe(false);
+  it('canAddHealthLog blocks above 50 for free user', () => {
+    expect(canAddHealthLog(60)).toBe(false);
     expect(canAddHealthLog(100)).toBe(false);
   });
 
@@ -290,8 +289,8 @@ describe('Section 3C — Preview Limits Enforcement', () => {
     expect(isFeatureAvailable('cloudSyncEnabled')).toBe(false);
   });
 
-  it('isFeatureAvailable returns false for formGuideDraftingEnabled on free user', () => {
-    expect(isFeatureAvailable('formGuideDraftingEnabled')).toBe(false);
+  it('isFeatureAvailable returns true for formGuideDraftingEnabled on free user', () => {
+    expect(isFeatureAvailable('formGuideDraftingEnabled')).toBe(true);
   });
 
   it('isFeatureAvailable returns true for numeric-limit features on free user', () => {
@@ -355,12 +354,12 @@ describe('Section 3D — Premium Feature Gating', () => {
       useProfileStore.setState({ entitlement: 'preview' });
     });
 
-    it('free users cannot add a fourth condition', () => {
-      expect(canAddCondition(3)).toBe(false);
+    it('free users cannot add a sixth condition', () => {
+      expect(canAddCondition(5)).toBe(false);
     });
 
     it('free users cannot exceed health log limit', () => {
-      expect(canAddHealthLog(25)).toBe(false);
+      expect(canAddHealthLog(50)).toBe(false);
     });
 
     it('free users cannot export', () => {
@@ -369,10 +368,6 @@ describe('Section 3D — Premium Feature Gating', () => {
 
     it('free users cannot use cloud sync', () => {
       expect(isFeatureAvailable('cloudSyncEnabled')).toBe(false);
-    });
-
-    it('free users cannot use form guide drafting', () => {
-      expect(isFeatureAvailable('formGuideDraftingEnabled')).toBe(false);
     });
 
     it('premium routes are gated from free users conceptually', () => {

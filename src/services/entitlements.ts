@@ -26,12 +26,12 @@ export type EntitlementStatus = 'preview' | 'premium' | 'lifetime';
 export type EntitlementSource = 'apple' | 'stripe' | 'lifetime';
 
 export const PREVIEW_LIMITS = {
-  maxConditions: 3,
-  maxHealthLogs: 25,
-  maxDocumentUploads: 1,
+  maxConditions: 5,
+  maxHealthLogs: 50,
+  maxDocumentUploads: 3,
   exportEnabled: false,
   cloudSyncEnabled: false,
-  formGuideDraftingEnabled: false,
+  formGuideDraftingEnabled: true,
 } as const;
 
 /** Routes that require premium or lifetime access. */
@@ -40,11 +40,13 @@ export const PREMIUM_ROUTES = [
   '/claims/strategy',
   '/claims/body-map',
   '/claims/bilateral',
-  '/claims/secondary-finder',
-  // Health
-  '/health/symptoms',
-  '/health/sleep',
-  '/health/migraines',
+  '/claims/rating-gaps',
+  '/claims/readiness',
+  // '/claims/secondary-finder' — free (AI gated by quota, competes with VeteranAI free tier)
+  // Health — symptom/sleep/migraine tracking free up to PREVIEW_LIMITS
+  // '/health/symptoms' — free (core feature, gated by maxHealthLogs)
+  // '/health/sleep' — free (gated by maxHealthLogs)
+  // '/health/migraines' — free (gated by maxHealthLogs)
   '/health/medications',
   '/health/visits',
   '/health/exposures',
@@ -55,9 +57,9 @@ export const PREMIUM_ROUTES = [
   '/prep/buddy-statement',
   '/prep/doctor-summary',
   '/prep/stressor',
-  '/prep/exam',
+  // '/prep/exam' — free (exam prep is a key differentiator)
   '/prep/dbq',
-  '/prep/back-pay',
+  // '/prep/back-pay' — free (calculator, no AI)
   '/prep/packet',
   '/prep/appeals',
   // Claims (continued)
@@ -76,7 +78,7 @@ export const PREMIUM_ROUTES = [
   '/prep/evidence-scanner',
   '/prep/interactive-dbq',
   '/prep/dbq-analyzer',
-  '/prep/state-benefits',
+  // '/prep/state-benefits' — free (reference data)
   '/prep/cfile-intel',
   '/prep/ask-intel',
   '/prep/medication-compliance',

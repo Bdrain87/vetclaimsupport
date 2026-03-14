@@ -16,10 +16,13 @@ import { formatContextForAI } from '@/utils/formatContextForAI';
 import { StreamingText } from '@/components/ui/StreamingText';
 import { MessageCircle, X, Send, Loader2, AlertTriangle, Maximize2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { AI_ANTI_HALLUCINATION, buildCriteriaBlockForConditions, buildSecondaryConnectionsBlock } from '@/lib/ai-prompts';
+import { AI_ANTI_HALLUCINATION, buildCriteriaBlockForConditions, buildSecondaryConnectionsBlock, buildCompensationRulesBlock, buildAppealProceduresBlock, buildM21Block, buildMedicalLiteratureBlock, buildOutcomesBlock, buildEvidenceRequirementsBlock, buildCPExamBlock } from '@/lib/ai-prompts';
+import { detectRelevantBlocks, shouldIncludeBlock } from '@/lib/contextRouter';
 import { cn } from '@/lib/utils';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { scanAIOutput, AI_OUTPUT_WARNING } from '@/utils/aiOutputGuard';
+import { useUserConditions } from '@/hooks/useUserConditions';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
 
 const SYSTEM_INSTRUCTION = `You are a VA disability claims preparation advisor built into the VetClaimSupport app. Your role:
 
@@ -43,13 +46,32 @@ interface Message {
   hasWarning?: boolean;
 }
 
+function getSuggestedQuestions(conditionNames: string[]): string[] {
+  if (conditionNames.length === 0) {
+    return ['What evidence do I need?', 'How do secondaries work?', 'Exam day tips'];
+  }
+  const first = conditionNames[0];
+  const questions = [`What evidence strengthens my ${first} claim?`];
+  if (conditionNames.length > 1) {
+    questions.push(`What secondaries link to ${first}?`);
+  } else {
+    questions.push('How do secondaries work?');
+  }
+  questions.push('What should I expect at my C&P exam?');
+  return questions;
+}
+
 export function AskIntelSheet() {
   const navigate = useNavigate();
+  const { conditions } = useUserConditions();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const { streamedText, isStreaming, error, startStream, cancel } = useAIStream();
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const conditionNames = conditions.map(c => getConditionDisplayName(c));
+  const suggestedQuestions = getSuggestedQuestions(conditionNames);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -69,14 +91,25 @@ export function AskIntelSheet() {
     const ctx = buildVeteranContext({ maskPII: true });
     const contextBlock = formatContextForAI(ctx, 'summary');
 
-    // Inject rating criteria and secondary connections
+    // Detect relevant context blocks based on query intent
+    const conditionNames = (ctx.conditions || []).map((c: { name: string }) => c.name);
+    const conditionIds = (ctx.conditions || []).map((c: { name: string; id?: string }) => c.id || c.name.toLowerCase().replace(/\s+/g, '-'));
+    const relevantBlocks = detectRelevantBlocks(trimmed, conditionNames);
+
+    // Inject only relevant context blocks
     const conditionsForCriteria = (ctx.conditions || []).map((c: { name: string; diagnosticCode?: string }) => ({
       name: c.name,
       diagnosticCode: c.diagnosticCode,
     }));
-    const criteriaBlock = buildCriteriaBlockForConditions(conditionsForCriteria);
-    const conditionNames = (ctx.conditions || []).map((c: { name: string }) => c.name);
-    const secondaryBlock = buildSecondaryConnectionsBlock(conditionNames);
+    const criteriaBlock = shouldIncludeBlock('criteria', relevantBlocks) ? buildCriteriaBlockForConditions(conditionsForCriteria) : '';
+    const secondaryBlock = shouldIncludeBlock('secondary', relevantBlocks) ? buildSecondaryConnectionsBlock(conditionNames) : '';
+    const compensationBlock = shouldIncludeBlock('compensation', relevantBlocks) ? buildCompensationRulesBlock() : '';
+    const appealBlock = shouldIncludeBlock('appeals', relevantBlocks) ? buildAppealProceduresBlock() : '';
+    const m21Block = shouldIncludeBlock('m21', relevantBlocks) ? buildM21Block() : '';
+    const medLitBlock = shouldIncludeBlock('medical', relevantBlocks) ? buildMedicalLiteratureBlock(conditionIds) : '';
+    const outcomesBlock = shouldIncludeBlock('outcomes', relevantBlocks) ? buildOutcomesBlock() : '';
+    const evidenceBlock = shouldIncludeBlock('evidence', relevantBlocks) ? buildEvidenceRequirementsBlock(conditionIds) : '';
+    const cpExamBlock = shouldIncludeBlock('cpExam', relevantBlocks) ? buildCPExamBlock(conditionIds) : '';
 
     // Build conversation history
     const history = [...messages, userMsg]
@@ -85,7 +118,7 @@ export function AskIntelSheet() {
 
     const { model, temperature } = getModelConfig('assistant');
 
-    const prompt = `${SYSTEM_INSTRUCTION}\n\n--- VETERAN DATA ---\n${contextBlock}${criteriaBlock ? `\n\n${criteriaBlock}\nUse ONLY the criteria above. For unlisted conditions, direct the veteran to the Rating Guidance tool.` : ''}${secondaryBlock ? `\n\n${secondaryBlock}\nWhen discussing secondary conditions, reference ONLY the connections listed above.` : ''}\n\n--- CONVERSATION ---\n${history}\n\nAdvisor:`;
+    const prompt = `${SYSTEM_INSTRUCTION}\n\n--- VETERAN DATA ---\n${contextBlock}${criteriaBlock ? `\n\n${criteriaBlock}\nUse ONLY the criteria above. For unlisted conditions, direct the veteran to the Rating Guidance tool.` : ''}${secondaryBlock ? `\n\n${secondaryBlock}\nWhen discussing secondary conditions, reference ONLY the connections listed above.` : ''}${compensationBlock ? `\n\n${compensationBlock}` : ''}${appealBlock ? `\n\n${appealBlock}` : ''}${m21Block ? `\n\n${m21Block}` : ''}${medLitBlock ? `\n\n${medLitBlock}` : ''}${outcomesBlock ? `\n\n${outcomesBlock}` : ''}${evidenceBlock ? `\n\n${evidenceBlock}` : ''}${cpExamBlock ? `\n\n${cpExamBlock}` : ''}\n\n--- CONVERSATION ---\n${history}\n\nAdvisor:`;
 
     try {
       const result = await startStream({
@@ -165,7 +198,7 @@ export function AskIntelSheet() {
                       Ask about your claim, rating criteria, evidence strategies, or exam preparation.
                     </p>
                     <div className="flex flex-wrap gap-1.5 justify-center mt-3">
-                      {['What evidence do I need?', 'How do secondaries work?', 'Exam day tips'].map((q) => (
+                      {suggestedQuestions.map((q) => (
                         <button
                           key={q}
                           onClick={() => { setInput(q); }}

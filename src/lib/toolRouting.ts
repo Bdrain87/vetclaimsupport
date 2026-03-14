@@ -62,6 +62,21 @@ export const TOOL_REGISTRY: ToolDefinition[] = [
   { id: 'va-speak', label: 'VA-Speak Translator', route: '/prep/va-speak', description: 'Translate symptoms to VA language', acceptsParams: [] },
   { id: 'state-benefits', label: 'State Benefits', route: '/prep/state-benefits', description: 'State veteran benefits lookup', acceptsParams: [] },
   { id: 'ask-intel', label: 'Ask Intel', route: '/prep/ask-intel', description: 'AI-powered claims preparation advisor', acceptsParams: ['condition'] },
+
+  // ── Analysis ─────────────────────────────────────────────
+  { id: 'rating-gaps', label: 'Rating Gap Analyzer', route: '/claims/rating-gaps', description: 'Find rating upgrade opportunities', acceptsParams: [] },
+  { id: 'readiness', label: 'Readiness Timeline', route: '/claims/readiness', description: 'Track claim preparation progress', acceptsParams: [] },
+  { id: 'post-filing', label: 'Post-Filing Tracker', route: '/claims/post-filing', description: 'Track submitted claims through VA processing', acceptsParams: [] },
+
+  // ── Reference ───────────────────────────────────────────
+  { id: 'glossary', label: 'Glossary', route: '/settings/glossary', description: 'VA claims terms and definitions', acceptsParams: [] },
+  { id: 'va-resources', label: 'VA Resources', route: '/settings/resources', description: 'Official VA links and guides', acceptsParams: [] },
+  { id: 'vso-locator', label: 'Find a VSO', route: '/prep/vso-locator', description: 'Find accredited VSO representatives', acceptsParams: [] },
+  { id: 'deployment-locations', label: 'Deployment Locations', route: '/reference/deployment-locations', description: 'Military deployment location lookup', acceptsParams: [] },
+  { id: 'mos-hazards', label: 'MOS Hazards', route: '/prep/mos-hazards', description: 'MOS-to-condition hazard mapping', acceptsParams: [] },
+  { id: 'pact-act', label: 'PACT Act', route: '/prep/pact-act', description: 'PACT Act presumptive conditions', acceptsParams: [] },
+  { id: 'bdd-guide', label: 'BDD Guide', route: '/prep/bdd-guide', description: 'Benefits Delivery at Discharge guide', acceptsParams: [] },
+  { id: 'dbq-analyzer', label: 'DBQ Document Upload', route: '/prep/dbq-analyzer', description: 'Upload and analyze DBQ documents', acceptsParams: [] },
 ];
 
 const toolMap = new Map(TOOL_REGISTRY.map((t) => [t.id, t]));

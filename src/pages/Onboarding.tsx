@@ -15,6 +15,8 @@ import { SuccessAnimation } from '@/components/ui/success-animation';
 import { PageContainer } from '@/components/PageContainer';
 import { useRecommendedTools } from '@/hooks/useRecommendedTools';
 import { ClaimIntelligence } from '@/services/claimIntelligence';
+import { combineRatings } from '@/utils/vaMath';
+import { conditionProfiles } from '@/data/secondaryConditions';
 
 const TOTAL_STEPS = 12;
 
@@ -1118,6 +1120,15 @@ export default function Onboarding() {
                             </button>
                           </div>
                         ))}
+                        {/* Combined rating display */}
+                        {existingRated.filter(r => r.rating > 0).length > 0 && (
+                          <div className="p-3 rounded-xl bg-gold/10 border border-gold/30 text-center">
+                            <p className="text-xs text-white/50">Current Combined Rating</p>
+                            <p className="text-2xl font-bold text-gold mt-0.5">
+                              {combineRatings(existingRated.filter(r => r.rating > 0).map(r => r.rating))}%
+                            </p>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -1156,6 +1167,57 @@ export default function Onboarding() {
                     })}
                   </div>
                 )}
+                {/* Secondary condition suggestions based on rated conditions */}
+                {existingRated.length > 0 && (() => {
+                  const alreadyAdded = new Set(addedConditions);
+                  // Also exclude conditions already rated
+                  for (const rated of existingRated) {
+                    const match = conditionProfiles.find(p =>
+                      rated.conditionName.toLowerCase().includes(p.id.replace(/-/g, ' ')) ||
+                      p.id.includes(rated.conditionName.toLowerCase().replace(/\s+/g, '-'))
+                    );
+                    if (match) alreadyAdded.add(match.id);
+                  }
+                  const suggestions: string[] = [];
+                  for (const rated of existingRated) {
+                    const profile = conditionProfiles.find(p =>
+                      rated.conditionName.toLowerCase().includes(p.id.replace(/-/g, ' ')) ||
+                      p.id.includes(rated.conditionName.toLowerCase().replace(/\s+/g, '-'))
+                    );
+                    if (profile) {
+                      for (const sec of profile.possibleSecondaries) {
+                        if (!alreadyAdded.has(sec) && !suggestions.includes(sec)) {
+                          suggestions.push(sec);
+                        }
+                      }
+                    }
+                  }
+                  if (suggestions.length === 0) return null;
+                  const top = suggestions.slice(0, 6);
+                  return (
+                    <div className="space-y-2">
+                      <p className="text-xs text-white/50">Commonly linked secondary conditions:</p>
+                      <div className="flex flex-wrap gap-2">
+                        {top.map(secId => {
+                          const c = getConditionById(secId);
+                          const label = c ? (c.abbreviation || c.name) : secId.replace(/-/g, ' ');
+                          return (
+                            <button
+                              key={secId}
+                              onClick={() => {
+                                if (c) handleAddCondition(c);
+                              }}
+                              disabled={!c}
+                              className="px-3 py-1.5 rounded-full bg-white/[0.07] border border-white/12 text-xs text-white/70 hover:bg-gold/10 hover:border-gold/30 hover:text-white transition-all"
+                            >
+                              + {label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
             )}
 

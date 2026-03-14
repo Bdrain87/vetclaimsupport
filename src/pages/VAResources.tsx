@@ -4,6 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ExternalLink, FileText, Shield, BookOpen } from 'lucide-react';
 import PACTActChecker from '@/components/tools/PACTActChecker';
 import { PageContainer } from '@/components/PageContainer';
+import { WhatNextCard } from '@/components/shared/WhatNextCard';
+import { getNextAction } from '@/utils/whatNext';
 
 interface VAResource {
   title: string;
@@ -360,6 +362,8 @@ export default function VAResources() {
           </div>
         </TabsContent>
       </Tabs>
+
+      <WhatNextCard actions={getNextAction('browse-va-resources')} className="mt-6" />
     </PageContainer>
   );
 }

@@ -42,7 +42,12 @@ type CompletedAction =
   | 'scan-evidence'
   | 'complete-onboarding'
   | 'quick-log-low'
-  | 'quick-log-normal';
+  | 'quick-log-normal'
+  | 'browse-vso-locator'
+  | 'browse-va-resources'
+  | 'browse-glossary'
+  | 'browse-form-guide'
+  | 'browse-state-benefits';
 
 /**
  * Get recommended next actions based on what was just completed.
@@ -337,6 +342,98 @@ export function getNextAction(
         description: 'See how you\'re doing over time.',
         route: buildToolLink('trends'),
         priority: 'low',
+      });
+      break;
+
+    case 'browse-vso-locator':
+      actions.push(
+        {
+          label: 'Build your claim strategy',
+          description: 'Organize your conditions and evidence before meeting your VSO.',
+          route: buildToolLink('strategy'),
+          priority: 'high',
+        },
+        {
+          label: 'Build your claim packet',
+          description: 'Prepare a packet to bring to your VSO appointment.',
+          route: buildToolLink('packet'),
+          priority: 'medium',
+        },
+      );
+      break;
+
+    case 'browse-va-resources':
+      actions.push(
+        {
+          label: 'Check your claim readiness',
+          description: 'See where your evidence stands for each condition.',
+          route: buildToolLink('conditions'),
+          priority: 'high',
+        },
+        {
+          label: 'Prepare for your C&P exam',
+          description: 'Review what to expect and practice your talking points.',
+          route: buildToolLink('exam-prep'),
+          priority: 'medium',
+        },
+      );
+      break;
+
+    case 'browse-glossary':
+      actions.push(
+        {
+          label: 'Ask Intel a question',
+          description: 'Get AI-powered answers about your specific claim.',
+          route: buildToolLink('ask-intel'),
+          priority: 'medium',
+        },
+        {
+          label: 'Start logging symptoms',
+          description: 'Daily symptom tracking is the foundation of a strong claim.',
+          route: buildToolLink('symptoms'),
+          priority: 'medium',
+        },
+      );
+      break;
+
+    case 'browse-form-guide':
+      actions.push(
+        {
+          label: 'Draft your personal statement',
+          description: 'Write the narrative that supports your claim.',
+          route: buildToolLink('personal-statement'),
+          priority: 'high',
+        },
+        {
+          label: 'Build your claim strategy',
+          description: 'Decide which conditions to file and in what order.',
+          route: buildToolLink('strategy'),
+          priority: 'medium',
+        },
+      );
+      break;
+
+    case 'browse-state-benefits':
+      if (conditions.length === 0) {
+        actions.push({
+          label: 'Add your conditions',
+          description: 'Track your claimed conditions to unlock personalized tools.',
+          route: buildToolLink('conditions'),
+          priority: 'high',
+        });
+      } else {
+        actions.push({
+          label: 'Check your combined rating',
+          description: 'See if your rating qualifies for additional state benefits.',
+          route: buildToolLink('calculator'),
+          priority: 'medium',
+        });
+      }
+      actions.push({
+        label: 'Explore TDIU eligibility',
+        description: 'See if your conditions qualify for individual unemployability.',
+        route: buildToolLink('tdiu'),
+        priority: 'medium',
       });
       break;
   }

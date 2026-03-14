@@ -10,6 +10,8 @@ import { useClaims } from '@/hooks/useClaims';
 import { useUserConditions } from '@/hooks/useUserConditions';
 import { getConditionById } from '@/data/vaConditions';
 import { PageContainer } from '@/components/PageContainer';
+import { WhatNextCard } from '@/components/shared/WhatNextCard';
+import { getNextAction } from '@/utils/whatNext';
 
 type FormPriority = 'urgent' | 'required' | 'recommended';
 
@@ -148,6 +150,8 @@ export default function FormGuide() {
           </div>
         )}
       </motion.div>
+
+      <WhatNextCard actions={getNextAction('browse-form-guide')} />
     </PageContainer>
   );
 }

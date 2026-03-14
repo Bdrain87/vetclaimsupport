@@ -3,6 +3,8 @@ import { BookOpen, Search } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { PageContainer } from '@/components/PageContainer';
+import { WhatNextCard } from '@/components/shared/WhatNextCard';
+import { getNextAction } from '@/utils/whatNext';
 
 interface GlossaryTerm {
   term: string;
@@ -282,6 +284,8 @@ export default function Glossary() {
           </CardContent>
         </Card>
       )}
+
+      <WhatNextCard actions={getNextAction('browse-glossary')} />
     </PageContainer>
   );
 }

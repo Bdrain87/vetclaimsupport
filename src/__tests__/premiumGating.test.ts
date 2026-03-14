@@ -80,35 +80,33 @@ describe('Premium Gating', () => {
       expect(isFeatureAvailable('cloudSyncEnabled')).toBe(false);
     });
 
-    it('free user cannot use form guide drafting', () => {
-      expect(isFeatureAvailable('formGuideDraftingEnabled')).toBe(false);
+    it('free user can use form guide drafting', () => {
+      expect(isFeatureAvailable('formGuideDraftingEnabled')).toBe(true);
     });
 
     it('free user can add 1 condition (at count=0)', () => {
       expect(canAddCondition(0)).toBe(true);
     });
 
-    it('free user can add conditions up to limit (at count=1,2)', () => {
+    it('free user can add conditions up to limit (at count=1,4)', () => {
       expect(canAddCondition(1)).toBe(true);
-      expect(canAddCondition(2)).toBe(true);
+      expect(canAddCondition(4)).toBe(true);
     });
 
-    it('free user cannot add beyond limit (at count=3,5)', () => {
-      expect(canAddCondition(3)).toBe(false);
+    it('free user cannot add beyond limit (at count=5,10)', () => {
       expect(canAddCondition(5)).toBe(false);
+      expect(canAddCondition(10)).toBe(false);
     });
 
     it('free user can add health logs up to limit', () => {
-      // Can add at counts 0 through 9
-      for (let i = 0; i < PREVIEW_LIMITS.maxHealthLogs; i++) {
-        expect(canAddHealthLog(i)).toBe(true);
-      }
+      expect(canAddHealthLog(0)).toBe(true);
+      expect(canAddHealthLog(49)).toBe(true);
       // Cannot add at limit
       expect(canAddHealthLog(PREVIEW_LIMITS.maxHealthLogs)).toBe(false);
     });
 
     it('free user cannot add health logs beyond limit', () => {
-      expect(canAddHealthLog(25)).toBe(false);
+      expect(canAddHealthLog(50)).toBe(false);
       expect(canAddHealthLog(100)).toBe(false);
     });
 
@@ -182,16 +180,16 @@ describe('Premium Gating', () => {
   // PREVIEW_LIMITS constants
   // -----------------------------------------------------------------------
   describe('PREVIEW_LIMITS', () => {
-    it('maxConditions is 3', () => {
-      expect(PREVIEW_LIMITS.maxConditions).toBe(3);
+    it('maxConditions is 5', () => {
+      expect(PREVIEW_LIMITS.maxConditions).toBe(5);
     });
 
-    it('maxHealthLogs is 25', () => {
-      expect(PREVIEW_LIMITS.maxHealthLogs).toBe(25);
+    it('maxHealthLogs is 50', () => {
+      expect(PREVIEW_LIMITS.maxHealthLogs).toBe(50);
     });
 
-    it('maxDocumentUploads is 1', () => {
-      expect(PREVIEW_LIMITS.maxDocumentUploads).toBe(1);
+    it('maxDocumentUploads is 3', () => {
+      expect(PREVIEW_LIMITS.maxDocumentUploads).toBe(3);
     });
 
     it('exportEnabled is false', () => {
@@ -202,8 +200,8 @@ describe('Premium Gating', () => {
       expect(PREVIEW_LIMITS.cloudSyncEnabled).toBe(false);
     });
 
-    it('formGuideDraftingEnabled is false', () => {
-      expect(PREVIEW_LIMITS.formGuideDraftingEnabled).toBe(false);
+    it('formGuideDraftingEnabled is true', () => {
+      expect(PREVIEW_LIMITS.formGuideDraftingEnabled).toBe(true);
     });
   });
 
@@ -214,7 +212,6 @@ describe('Premium Gating', () => {
     it('contains expected premium routes', () => {
       expect(PREMIUM_ROUTES).toContain('/claims/strategy');
       expect(PREMIUM_ROUTES).toContain('/claims/body-map');
-      expect(PREMIUM_ROUTES).toContain('/health/symptoms');
       expect(PREMIUM_ROUTES).toContain('/health/medications');
       expect(PREMIUM_ROUTES).toContain('/prep/personal-statement');
       expect(PREMIUM_ROUTES).toContain('/prep/buddy-statement');
@@ -223,11 +220,14 @@ describe('Premium Gating', () => {
 
     it('isPremiumRoute returns true for premium paths', () => {
       expect(isPremiumRoute('/claims/strategy')).toBe(true);
-      expect(isPremiumRoute('/health/symptoms')).toBe(true);
       expect(isPremiumRoute('/prep/personal-statement')).toBe(true);
       expect(isPremiumRoute('/claims/vault')).toBe(true);
-      expect(isPremiumRoute('/prep/exam')).toBe(true);
       expect(isPremiumRoute('/health/timeline')).toBe(true);
+    });
+
+    it('isPremiumRoute returns false for routes moved to free tier', () => {
+      expect(isPremiumRoute('/health/symptoms')).toBe(false);
+      expect(isPremiumRoute('/prep/exam')).toBe(false);
     });
 
     it('isPremiumRoute returns false for non-premium paths', () => {

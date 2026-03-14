@@ -30,6 +30,10 @@ const FEATURE_CONFIG: Record<string, { model: ModelId; temperature: number; time
   'decision-decoder-ai': { model: MODELS.FLASH, temperature: 0.2, timeout: 45_000 },
   'doctor-summary-enhanced': { model: MODELS.FLASH, temperature: 0.3, timeout: 45_000 },
   'ask-intel-full': { model: MODELS.FLASH, temperature: 0.5, timeout: 45_000 },
+  'secondary-finder': { model: MODELS.FLASH, temperature: 0.2, timeout: 30_000 },
+  'interactive-dbq': { model: MODELS.FLASH, temperature: 0.2, timeout: 60_000 },
+  'assistant': { model: MODELS.FLASH, temperature: 0.5, timeout: 30_000 },
+  'form-guide': { model: MODELS.FLASH, temperature: 0.3, timeout: 30_000 },
 };
 
 /**

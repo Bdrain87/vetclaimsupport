@@ -91,7 +91,7 @@ let configFetchedAt = 0;
 const CONFIG_TTL = 5 * 60 * 1000; // 5 minutes
 
 /** Monthly AI call limit for free/preview users. */
-const PREVIEW_AI_LIMIT = 3;
+const PREVIEW_AI_LIMIT = 10;
 
 async function fetchLimit(): Promise<number> {
   if (Date.now() - configFetchedAt < CONFIG_TTL) return cachedLimit;

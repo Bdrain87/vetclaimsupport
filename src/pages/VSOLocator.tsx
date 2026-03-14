@@ -2,6 +2,8 @@ import { ExternalLink, Users, Shield, HelpCircle } from 'lucide-react';
 import { PageContainer } from '@/components/PageContainer';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { WhatNextCard } from '@/components/shared/WhatNextCard';
+import { getNextAction } from '@/utils/whatNext';
 
 const VSO_RESOURCES = [
   {
@@ -118,6 +120,8 @@ export default function VSOLocator() {
           verify they are VA-accredited. You can check accreditation at VA.gov.
         </p>
       </div>
+
+      <WhatNextCard actions={getNextAction('browse-vso-locator')} />
     </PageContainer>
   );
 }

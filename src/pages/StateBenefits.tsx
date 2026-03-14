@@ -12,6 +12,8 @@ import { Clipboard } from '@capacitor/clipboard';
 import { toast } from '@/hooks/use-toast';
 import { AIDisclaimer } from '@/components/ui/AIDisclaimer';
 import { isGeminiConfigured, aiGenerateWithContext } from '@/lib/gemini';
+import { WhatNextCard } from '@/components/shared/WhatNextCard';
+import { getNextAction } from '@/utils/whatNext';
 import { useAICacheStore } from '@/store/useAICacheStore';
 import {
   CURATED_STATES,
@@ -294,6 +296,8 @@ End your response with: "These are AI-generated summaries. Verify all benefits, 
           Curated data not yet available for {selectedState}. AI features are not configured.
         </p>
       )}
+
+      <WhatNextCard actions={getNextAction('browse-state-benefits')} />
     </PageContainer>
   );
 }
