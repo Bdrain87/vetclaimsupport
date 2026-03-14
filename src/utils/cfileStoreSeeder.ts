@@ -123,6 +123,17 @@ function findExistingCondition(
     if (lower.includes(existingName) || existingName.includes(lower)) return c;
   }
 
+  // Resolve via VA condition database to catch abbreviation mismatches
+  // e.g. "Post-Traumatic Stress Disorder" -> conditionId that matches existing "PTSD"
+  const resolved = searchAllConditions(name, { limit: 1 });
+  if (resolved.length > 0) {
+    const resolvedId = resolved[0].id;
+    const byResolvedId = existingConditions.find(
+      (c) => c.conditionId === resolvedId,
+    );
+    if (byResolvedId) return byResolvedId;
+  }
+
   return null;
 }
 
@@ -223,6 +234,8 @@ export function applyCFileToStores(
   // ---- Medications ----
   if (options.sections.includes('medications') && data.medications.length > 0) {
     const existingMeds = appStore.medications;
+    // Read freshly-updated conditions (includes any just-seeded above)
+    const currentConditions = useAppStore.getState().userConditions;
 
     for (const med of data.medications) {
       // Deduplicate by name
@@ -230,6 +243,13 @@ export function applyCFileToStores(
         (m) => m.name.toLowerCase().trim() === med.name.toLowerCase().trim(),
       );
       if (exists) continue;
+
+      // Resolve prescribedFor name to UserCondition UUID for conditionTags
+      let resolvedTags: string[] | undefined;
+      if (med.prescribedFor) {
+        const match = findExistingCondition(currentConditions, med.prescribedFor);
+        resolvedTags = match ? [match.id] : undefined;
+      }
 
       appStore.addMedication({
         startDate: '',
@@ -240,9 +260,7 @@ export function applyCFileToStores(
         prescribedFor: med.prescribedFor ?? '',
         sideEffects: '',
         stillTaking: med.stillTaking ?? true,
-        conditionTags: med.prescribedFor
-          ? [med.prescribedFor]
-          : undefined,
+        conditionTags: resolvedTags,
       });
       result.medicationsAdded++;
     }

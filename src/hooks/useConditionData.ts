@@ -89,10 +89,13 @@ export function useConditionData(conditionName: string): ConditionData {
     const employmentImpact = allEmployment.filter(
       (e) => e.condition.toLowerCase().includes(conditionName.toLowerCase()),
     );
+    const lower = conditionName.toLowerCase();
     const medicalVisits = allVisits.filter(
       (v) =>
-        v.reason?.toLowerCase().includes(conditionName.toLowerCase()) ||
-        v.notes?.toLowerCase().includes(conditionName.toLowerCase()),
+        v.reason?.toLowerCase().includes(lower) ||
+        v.notes?.toLowerCase().includes(lower) ||
+        v.relatedCondition?.toLowerCase().includes(lower) ||
+        v.diagnosis?.toLowerCase().includes(lower),
     );
 
     const symptomSummary = buildSymptomSummary(symptoms);

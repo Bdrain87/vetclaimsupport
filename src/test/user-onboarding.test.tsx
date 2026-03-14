@@ -43,11 +43,11 @@ async function advanceToNameStep(user: ReturnType<typeof userEvent.setup>) {
   });
   await user.click(screen.getByText(/get started/i).closest('button')!);
 
-  // Step 1: C-File Fast Track - click Skip for now
+  // Step 1: C-File Fast Track - click Continue/Skip (free users see "Continue without C-File")
   await waitFor(() => {
-    expect(screen.getByText(/skip for now/i)).toBeInTheDocument();
+    expect(screen.getByText(/continue without c-file|skip for now/i)).toBeInTheDocument();
   });
-  await user.click(screen.getByText(/skip for now/i).closest('button')!);
+  await user.click(screen.getByText(/continue without c-file|skip for now/i).closest('button')!);
 
   // Step 2: Name
   await waitFor(() => {

@@ -1231,6 +1231,8 @@ function CFileIntelCard() {
   const navigate = useNavigate();
   const cfileData = useAppStore((s) => s.cfileExtractedData);
   const cfileFileName = useAppStore((s) => s.cfileFileName);
+  const entitlement = useProfileStore((s) => s.entitlement);
+  const isFree = entitlement === 'preview';
 
   if (!cfileData) return null;
 
@@ -1250,16 +1252,28 @@ function CFileIntelCard() {
       transition={vcsSpring}
     >
       <button
-        onClick={() => navigate('/prep/cfile-intel')}
+        onClick={() => navigate(isFree ? '/settings/subscription' : '/prep/cfile-intel')}
         className="w-full flex items-start gap-3 p-3 rounded-2xl border border-gold/20 bg-gold/5 hover:bg-gold/10 transition-colors text-left"
       >
-        <div className="h-9 w-9 rounded-xl bg-gold/10 flex items-center justify-center shrink-0">
+        <div className="h-9 w-9 rounded-xl bg-gold/10 flex items-center justify-center shrink-0 relative">
           <FileText className="h-4 w-4 text-gold" />
+          {isFree && (
+            <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-gold flex items-center justify-center">
+              <ShieldAlert className="h-2.5 w-2.5 text-black" />
+            </div>
+          )}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-foreground">
-            C-File Intel: {totalFindings} finding{totalFindings !== 1 ? 's' : ''} need attention
-          </p>
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-medium text-foreground">
+              C-File Intel: {totalFindings} finding{totalFindings !== 1 ? 's' : ''} need attention
+            </p>
+            {isFree && (
+              <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-gold/20 text-gold">
+                Premium
+              </span>
+            )}
+          </div>
           <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
             {analysis.missedConditions.length > 0 && `${analysis.missedConditions.length} potential missed conditions. `}
             {analysis.ratingDiscrepancies.length > 0 && `${analysis.ratingDiscrepancies.length} rating discrepancies. `}

@@ -679,7 +679,26 @@ export default function Onboarding() {
                   </p>
                 </div>
 
-                {cfileUploading ? (
+                {useProfileStore.getState().entitlement === 'preview' ? (
+                  <div className="space-y-4">
+                    <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+                      <Shield className="h-6 w-6 text-gold mx-auto" />
+                      <p className="text-white/70 text-sm">Premium members can upload their C-File and skip 80% of setup</p>
+                      <Link
+                        to="/settings/subscription"
+                        className="inline-block px-4 py-2 rounded-lg bg-gold/20 text-gold text-sm font-medium hover:bg-gold/30 transition-colors"
+                      >
+                        Upgrade to Premium
+                      </Link>
+                    </div>
+                    <button
+                      onClick={() => { setCFileSkipped(true); handleNext(); }}
+                      className="w-full text-center text-sm text-white/30 hover:text-white/50 transition-colors"
+                    >
+                      Continue without C-File
+                    </button>
+                  </div>
+                ) : cfileUploading ? (
                   <div className="space-y-4">
                     <Loader2 className="h-8 w-8 text-gold animate-spin mx-auto" />
                     <p className="text-white/60 text-sm">

@@ -18,6 +18,8 @@ import { EvidenceAttachment, EvidenceThumbnails } from '@/components/shared/Evid
 import { PageContainer } from '@/components/PageContainer';
 import { EmptyState } from '@/components/EmptyState';
 import { useToast } from '@/hooks/use-toast';
+import { useUserConditions } from '@/hooks/useUserConditions';
+import { getConditionDisplayName } from '@/utils/conditionResolver';
 import type { MedicalVisit } from '@/types/claims';
 
 const visitTypes = ['Sick Call', 'ER', 'Mental Health', 'PT', 'Dental', 'Specialist'] as const;
@@ -31,6 +33,7 @@ export default function MedicalVisits() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
+  const { conditions: userConditions } = useUserConditions();
   const importFileRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState<Omit<MedicalVisit, 'id'>>({
@@ -332,12 +335,31 @@ export default function MedicalVisits() {
 
               <div className="space-y-2">
                 <Label htmlFor="relatedCondition">Related Condition (Optional)</Label>
-                <Input 
-                  id="relatedCondition" 
-                  placeholder="e.g., Tinnitus, PTSD, Back Pain"
-                  value={formData.relatedCondition || ''}
-                  onChange={(e) => setFormData({ ...formData, relatedCondition: e.target.value })}
-                />
+                {userConditions.length > 0 ? (
+                  <Select
+                    value={formData.relatedCondition || '__none__'}
+                    onValueChange={(value) => setFormData({ ...formData, relatedCondition: value === '__none__' ? '' : value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a condition" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="__none__">None</SelectItem>
+                      {userConditions.map((uc) => (
+                        <SelectItem key={uc.id} value={getConditionDisplayName(uc)}>
+                          {getConditionDisplayName(uc)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Input
+                    id="relatedCondition"
+                    placeholder="e.g., Tinnitus, PTSD, Back Pain"
+                    value={formData.relatedCondition || ''}
+                    onChange={(e) => setFormData({ ...formData, relatedCondition: e.target.value })}
+                  />
+                )}
                 <p className="text-xs text-muted-foreground">
                   Link this visit to a condition you're claiming
                 </p>
