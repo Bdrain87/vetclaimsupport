@@ -46,8 +46,8 @@ export function Hero() {
         style={{
           y: bgY,
           background: `
-            radial-gradient(ellipse at 20% 50%, rgba(184,171,128,0.08) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 20%, rgba(184,171,128,0.05) 0%, transparent 50%),
+            radial-gradient(ellipse at 20% 50%, rgba(176,153,78,0.08) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 20%, rgba(176,153,78,0.05) 0%, transparent 50%),
             ${LANDING_BG}
           `,
         }}
@@ -56,7 +56,7 @@ export function Hero() {
       {/* Centered content */}
       <div
         className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 flex items-center justify-center"
-        style={{ minHeight: 'calc(100vh - 4rem)', maxHeight: '900px' }}
+        style={{ minHeight: 'calc(100vh - 4rem)', maxHeight: '900px', paddingTop: '5rem' }}
       >
         <motion.div
           className="flex flex-col items-center text-center"
