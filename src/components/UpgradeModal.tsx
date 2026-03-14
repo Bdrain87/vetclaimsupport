@@ -62,7 +62,7 @@ export function UpgradeModal({ featureName }: UpgradeModalProps) {
       particleCount: 100,
       spread: 70,
       origin: { y: 0.6 },
-      colors: ['#C5A55A', '#D9BE6C', '#A68B3C', '#B8A04E'],
+      colors: ['#B8AB80', '#D0C6A0', '#9E9370', '#ACA27C'],
     });
   };
 

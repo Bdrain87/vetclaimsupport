@@ -63,7 +63,7 @@ const JOURNEY_PHASE_LABELS = ['Research', 'Evidence', 'Filing', 'C&P Exam', 'Dec
 function ReadinessRing({ score }: { score: number }) {
   const circumference = 2 * Math.PI * 14;
   const offset = circumference - (score / 100) * circumference;
-  const color = score >= 70 ? '#22c55e' : score >= 40 ? '#C5A55A' : '#ef4444';
+  const color = score >= 70 ? '#22c55e' : score >= 40 ? '#B8AB80' : '#ef4444';
 
   return (
     <svg width="36" height="36" viewBox="0 0 36 36" className="shrink-0">
@@ -455,7 +455,7 @@ export default function Dashboard() {
                 <circle cx="18" cy="18" r="15" fill="none" stroke="currentColor" className="text-muted/30" strokeWidth="3" />
                 <motion.circle
                   cx="18" cy="18" r="15" fill="none"
-                  stroke="var(--gold-md, #C5A55A)" strokeWidth="3"
+                  stroke="var(--gold-md, #B8AB80)" strokeWidth="3"
                   strokeLinecap="round"
                   strokeDasharray={`${combinedRating}, 100`}
                   initial={{ strokeDasharray: '0, 100' }}

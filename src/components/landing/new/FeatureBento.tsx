@@ -439,7 +439,7 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
         style={{
           background: CARD_BG,
           border: '1px solid rgba(255, 255, 255, 0.2)',
-          boxShadow: '0 0 60px rgba(197,165,90,0.3)',
+          boxShadow: '0 0 60px rgba(184,171,128,0.3)',
         }}
         initial={{ scale: 0.9, y: 30, opacity: 0 }}
         animate={{ scale: 1, y: 0, opacity: 1 }}
@@ -457,7 +457,7 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
 
         <div
           className="w-14 h-14 rounded-xl flex items-center justify-center mb-5"
-          style={{ backgroundColor: 'rgba(197,165,90,0.15)', border: '1px solid rgba(197,165,90,0.3)' }}
+          style={{ backgroundColor: 'rgba(184,171,128,0.15)', border: '1px solid rgba(184,171,128,0.3)' }}
         >
           <Icon size={24} style={{ color: GOLD }} />
         </div>
@@ -491,7 +491,7 @@ function DetailModal({ card, onClose }: { card: CardData; onClose: () => void })
         <div
           className="inline-block rounded-full px-4 py-1.5 text-xs font-semibold"
           style={{
-            backgroundColor: 'rgba(197,165,90,0.15)',
+            backgroundColor: 'rgba(184,171,128,0.15)',
             color: GOLD,
           }}
         >
@@ -633,8 +633,8 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
                 className="rounded-2xl p-6 transition-all duration-300 hover:scale-[1.03]"
                 style={{
                   background: CARD_BG,
-                  border: isInteractive ? '1px solid rgba(197,165,90,0.25)' : CARD_BORDER,
-                  boxShadow: isInteractive ? `${CARD_SHADOW}, 0 0 15px rgba(197,165,90,0.08)` : CARD_SHADOW,
+                  border: isInteractive ? '1px solid rgba(184,171,128,0.25)' : CARD_BORDER,
+                  boxShadow: isInteractive ? `${CARD_SHADOW}, 0 0 15px rgba(184,171,128,0.08)` : CARD_SHADOW,
                   backdropFilter: 'blur(12px)',
                   minHeight: '360px',
                 }}
@@ -643,8 +643,8 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
                   <div
                     className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
                     style={{
-                      backgroundColor: 'rgba(197,165,90,0.12)',
-                      border: '1px solid rgba(197,165,90,0.25)',
+                      backgroundColor: 'rgba(184,171,128,0.12)',
+                      border: '1px solid rgba(184,171,128,0.25)',
                     }}
                   >
                     <Icon size={20} style={{ color: GOLD }} />
@@ -678,11 +678,11 @@ function DesktopCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => v
                     style={{
                       backgroundColor: card.plan.startsWith('Free')
                         ? 'rgba(34,197,94,0.12)'
-                        : 'rgba(197,165,90,0.12)',
+                        : 'rgba(184,171,128,0.12)',
                       ...(card.plan.startsWith('Free')
                         ? { color: '#22C55E' }
                         : {
-                            backgroundImage: 'linear-gradient(90deg, #C5A55A 0%, #D4AF37 25%, #E8CC6C 50%, #D4AF37 75%, #C5A55A 100%)',
+                            backgroundImage: 'linear-gradient(90deg, #B8AB80 0%, #C8BA8A 25%, #DDD3B2 50%, #C8BA8A 75%, #B8AB80 100%)',
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent',
                             backgroundClip: 'text',
@@ -758,7 +758,7 @@ function MobileCarousel({ onSelectCard }: { onSelectCard: (card: CardData) => vo
           >
             <div
               className="w-10 h-10 rounded-lg flex items-center justify-center mb-3"
-              style={{ backgroundColor: 'rgba(197,165,90,0.15)' }}
+              style={{ backgroundColor: 'rgba(184,171,128,0.15)' }}
             >
               <Icon size={18} style={{ color: GOLD }} />
             </div>

@@ -144,7 +144,7 @@ export const hoverLift = {
 
 export const hoverTap = { scale: 0.98 };
 
-export const hoverGlow = (color: string = 'rgba(197,165,90,0.3)') => ({
+export const hoverGlow = (color: string = 'rgba(184,171,128,0.3)') => ({
   y: -4,
   boxShadow: `0 0 30px ${color}, 0 0 60px ${color}`,
   transition: { duration: 0.3 },
@@ -166,12 +166,12 @@ export const TEXT_SLATE_DIM = '#CBD5E1';
 export const BORDER_DIM = '#374151';
 
 // --- LUXURY GOLD PALETTE ---
-// Dark: #C5A55A | Primary: #D4AF37 | Light: #E8CC6C
-// RGBA base: rgba(212, 175, 55, opacity)
-export const GOLD = '#D4AF37';
-export const GOLD_DARK = '#C5A55A';
-export const GOLD_LIGHT = '#E8CC6C';
-export const GOLD_GRADIENT = 'linear-gradient(90deg, #C5A55A 0%, #D4AF37 25%, #E8CC6C 50%, #D4AF37 75%, #C5A55A 100%)';
+// Dark: #B8AB80 | Primary: #C8BA8A | Light: #DDD3B2
+// RGBA base: rgba(200, 186, 138, opacity)
+export const GOLD = '#C8BA8A';
+export const GOLD_DARK = '#B8AB80';
+export const GOLD_LIGHT = '#DDD3B2';
+export const GOLD_GRADIENT = 'linear-gradient(90deg, #B8AB80 0%, #C8BA8A 25%, #DDD3B2 50%, #C8BA8A 75%, #B8AB80 100%)';
 export const GOLD_GRADIENT_TEXT = {
   background: GOLD_GRADIENT,
   WebkitBackgroundClip: 'text',
@@ -200,22 +200,22 @@ export const CARD_SHADOW = '0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.1
 
 export const CARD_STYLE_GOLD = {
   backgroundColor: '#111111',
-  border: '1px solid rgba(197, 165, 90, 0.12)',
+  border: '1px solid rgba(184, 171, 128, 0.12)',
   borderRadius: '24px',
 } as React.CSSProperties;
 
 // --- SECTION BACKGROUND OVERLAYS ---
 export const SECTION_TOP_GLOW = 'linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 30%)';
-export const SECTION_TOP_GLOW_GOLD = 'linear-gradient(180deg, rgba(197,165,90,0.04) 0%, transparent 30%)';
+export const SECTION_TOP_GLOW_GOLD = 'linear-gradient(180deg, rgba(184,171,128,0.04) 0%, transparent 30%)';
 
 // --- PILL LABEL STYLE ---
 export const PILL_STYLE = {
-  background: 'linear-gradient(90deg, #C5A55A 0%, #D4AF37 25%, #E8CC6C 50%, #D4AF37 75%, #C5A55A 100%)',
+  background: 'linear-gradient(90deg, #B8AB80 0%, #C8BA8A 25%, #DDD3B2 50%, #C8BA8A 75%, #B8AB80 100%)',
   WebkitBackgroundClip: 'text',
   WebkitTextFillColor: 'transparent',
   backgroundClip: 'text' as const,
   color: 'transparent' as const,
-  border: '1px solid rgba(197, 165, 90, 0.25)',
+  border: '1px solid rgba(184, 171, 128, 0.25)',
   borderRadius: '9999px',
   fontSize: '13px',
   fontWeight: 500,
@@ -272,8 +272,8 @@ export const MARQUEE_STYLES = `
   100% { background-position: 200% center; }
 }
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(197,165,90,0.1); }
-  50% { box-shadow: 0 0 40px rgba(197,165,90,0.25); }
+  0%, 100% { box-shadow: 0 0 20px rgba(184,171,128,0.1); }
+  50% { box-shadow: 0 0 40px rgba(184,171,128,0.25); }
 }
 
 /* Pause ticker on hover */
@@ -301,9 +301,9 @@ export const viewportOnceEager = { once: true, amount: 0.2 };
 export const NOISE_OVERLAY = `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E")`;
 
 // --- AMBIENT MESH GRADIENTS (depth pools behind key sections) ---
-export const MESH_GRADIENT_1 = 'radial-gradient(ellipse 80% 50% at 30% 50%, rgba(197,165,90,0.06) 0%, transparent 70%)';
+export const MESH_GRADIENT_1 = 'radial-gradient(ellipse 80% 50% at 30% 50%, rgba(184,171,128,0.06) 0%, transparent 70%)';
 export const MESH_GRADIENT_2 = 'radial-gradient(ellipse 60% 60% at 70% 40%, rgba(100,130,180,0.04) 0%, transparent 70%)';
-export const MESH_GRADIENT_3 = 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(197,165,90,0.05) 0%, transparent 60%)';
+export const MESH_GRADIENT_3 = 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(184,171,128,0.05) 0%, transparent 60%)';
 
 // --- CLIP-REVEAL ANIMATION (wipe-in from left) ---
 export const clipReveal: Variants = {

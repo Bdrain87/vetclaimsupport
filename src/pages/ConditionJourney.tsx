@@ -120,7 +120,7 @@ export default function ConditionJourney() {
                     <svg className="absolute inset-0 h-5 w-5 -rotate-90" viewBox="0 0 20 20">
                       <circle
                         cx="10" cy="10" r="8" fill="none"
-                        stroke="var(--gold-md, #C5A55A)" strokeWidth="2"
+                        stroke="var(--gold-md, #B8AB80)" strokeWidth="2"
                         strokeDasharray={`${(step.progress / 100) * 50.3} 50.3`}
                         strokeLinecap="round"
                       />

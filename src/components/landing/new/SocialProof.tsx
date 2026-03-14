@@ -29,7 +29,7 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
       <span
         className="block text-3xl md:text-4xl font-bold"
         style={{
-          background: 'linear-gradient(90deg, #C5A55A 0%, #D4AF37 25%, #E8CC6C 50%, #D4AF37 75%, #C5A55A 100%)',
+          background: 'linear-gradient(90deg, #B8AB80 0%, #C8BA8A 25%, #DDD3B2 50%, #C8BA8A 75%, #B8AB80 100%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',
@@ -51,7 +51,7 @@ const STATS = [
 
 export function SocialProof() {
   return (
-    <section className="py-4 md:py-6" style={{ backgroundColor: LANDING_BG_CARD, borderTop: '1px solid rgba(197,165,90,0.15)', borderBottom: '1px solid rgba(197,165,90,0.15)' }}>
+    <section className="py-4 md:py-6" style={{ backgroundColor: LANDING_BG_CARD, borderTop: '1px solid rgba(184,171,128,0.15)', borderBottom: '1px solid rgba(184,171,128,0.15)' }}>
       <motion.div
         className="mx-auto max-w-5xl px-4 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0"
         variants={staggerContainer}

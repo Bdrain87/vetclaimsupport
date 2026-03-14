@@ -135,7 +135,7 @@ export function ReadinessDrillDown({ onClose }: { onClose?: () => void }) {
                   className="h-full rounded-full transition-all duration-500"
                   style={{
                     width: `${pct}%`,
-                    backgroundColor: pct >= 100 ? '#22c55e' : pct >= 50 ? '#C5A55A' : '#ef4444',
+                    backgroundColor: pct >= 100 ? '#22c55e' : pct >= 50 ? '#B8AB80' : '#ef4444',
                   }}
                 />
               </div>

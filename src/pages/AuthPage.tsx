@@ -166,7 +166,7 @@ export default function AuthPage() {
   };
 
   const inputClass =
-    'w-full h-12 pl-11 pr-4 bg-white/[0.07] border border-white/12 rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-hidden focus:ring-2 focus:ring-[rgba(197,165,90,0.4)] focus:border-[rgba(197,165,90,0.5)] transition-all';
+    'w-full h-12 pl-11 pr-4 bg-white/[0.07] border border-white/12 rounded-xl text-white text-sm placeholder:text-white/30 focus:outline-hidden focus:ring-2 focus:ring-[rgba(184,171,128,0.4)] focus:border-[rgba(184,171,128,0.5)] transition-all';
 
   return (
     <PageContainer noPadding className="min-h-screen flex flex-col bg-black">
@@ -214,11 +214,11 @@ export default function AuthPage() {
                 { icon: Package, label: 'Export your complete claim packet' },
               ].map(({ icon: Icon, label }) => (
                 <div key={label} className="flex items-center gap-3">
-                  <Icon size={16} style={{ color: 'rgba(197,165,90,0.8)', flexShrink: 0 }} />
+                  <Icon size={16} style={{ color: 'rgba(184,171,128,0.8)', flexShrink: 0 }} />
                   <span className="text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>{label}</span>
                 </div>
               ))}
-              <p className="text-xs font-medium mt-3" style={{ color: 'rgba(197,165,90,0.9)', letterSpacing: '0.02em' }}>
+              <p className="text-xs font-medium mt-3" style={{ color: 'rgba(184,171,128,0.9)', letterSpacing: '0.02em' }}>
                 Starting at $14.99/mo — Cancel anytime
               </p>
             </div>

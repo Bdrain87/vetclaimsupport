@@ -741,7 +741,7 @@ function App() {
           <button
             onClick={() => window.location.reload()}
             className="px-8 py-3 rounded-xl font-semibold text-black"
-            style={{ background: 'linear-gradient(90deg,#A68B3C,#C5A55A,#D9BE6C,#C5A55A,#A68B3C)' }}
+            style={{ background: 'linear-gradient(90deg,#9E9370,#B8AB80,#D0C6A0,#B8AB80,#9E9370)' }}
           >
             Reload
           </button>

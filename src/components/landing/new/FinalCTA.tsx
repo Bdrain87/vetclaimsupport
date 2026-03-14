@@ -31,9 +31,9 @@ export function FinalCTA() {
         style={{
           scale: bgScale,
           background: `
-            radial-gradient(ellipse at 50% 50%, rgba(197,165,90,0.1) 0%, transparent 50%),
-            radial-gradient(ellipse at 20% 80%, rgba(197,165,90,0.04) 0%, transparent 40%),
-            radial-gradient(ellipse at 80% 20%, rgba(197,165,90,0.04) 0%, transparent 40%)
+            radial-gradient(ellipse at 50% 50%, rgba(184,171,128,0.1) 0%, transparent 50%),
+            radial-gradient(ellipse at 20% 80%, rgba(184,171,128,0.04) 0%, transparent 40%),
+            radial-gradient(ellipse at 80% 20%, rgba(184,171,128,0.04) 0%, transparent 40%)
           `,
         }}
       />
@@ -42,7 +42,7 @@ export function FinalCTA() {
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full pointer-events-none"
         style={{
           opacity: glowOpacity,
-          background: 'radial-gradient(circle, rgba(197,165,90,0.06) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(184,171,128,0.06) 0%, transparent 70%)',
           filter: 'blur(40px)',
         }}
       />

@@ -12,9 +12,9 @@ function GoldFlag() {
     >
       <defs>
         <linearGradient id="flag-stroke" x1="0" y1="0" x2="72" y2="48" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#D9BE6C" />
-          <stop offset="50%" stopColor="#C5A55A" />
-          <stop offset="100%" stopColor="#C5A55A" />
+          <stop offset="0%" stopColor="#D0C6A0" />
+          <stop offset="50%" stopColor="#B8AB80" />
+          <stop offset="100%" stopColor="#B8AB80" />
         </linearGradient>
       </defs>
       {/* Outer border */}
@@ -68,7 +68,7 @@ export function BuiltByVeteran() {
           className="relative pl-6 md:pl-8"
           style={{
             borderLeft: '3px solid transparent',
-            borderImage: 'linear-gradient(180deg, #E8CC6C, #D4AF37, #C5A55A, #D4AF37, #E8CC6C) 1',
+            borderImage: 'linear-gradient(180deg, #DDD3B2, #C8BA8A, #B8AB80, #C8BA8A, #DDD3B2) 1',
           }}
           initial={{ opacity: 0, x: -40 }}
           whileInView={{ opacity: 1, x: 0 }}

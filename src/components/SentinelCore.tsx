@@ -60,7 +60,7 @@ const AI_TOOLS: { title: string; tools: AITool[] }[] = [
 function ReadinessRing({ score, label }: { score: number; label: string }) {
   const circumference = 2 * Math.PI * 18;
   const offset = circumference - (score / 100) * circumference;
-  const color = score >= 70 ? '#22c55e' : score >= 40 ? '#C5A55A' : '#ef4444';
+  const color = score >= 70 ? '#22c55e' : score >= 40 ? '#B8AB80' : '#ef4444';
 
   return (
     <svg width="48" height="48" viewBox="0 0 48 48" className="shrink-0">
@@ -272,7 +272,7 @@ export function SentinelCore() {
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.3 }}
-          className="fixed right-4 z-50 w-14 h-14 rounded-full bg-gold/15 border border-gold/30 backdrop-blur-xl shadow-[0_4px_24px_rgba(197,165,90,0.2)] flex items-center justify-center"
+          className="fixed right-4 z-50 w-14 h-14 rounded-full bg-gold/15 border border-gold/30 backdrop-blur-xl shadow-[0_4px_24px_rgba(184,171,128,0.2)] flex items-center justify-center"
           style={{ bottom: 'calc(9rem + env(safe-area-inset-bottom, 0px))' }}
           aria-label="Open Intel AI"
         >

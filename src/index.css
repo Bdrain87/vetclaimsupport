@@ -718,9 +718,9 @@ layer(base);
 @utility gradient-card-primary {
   /* Primary gradient card - vivid gold gradient for info results */
   @apply relative overflow-hidden rounded-2xl p-6;
-  background: linear-gradient(90deg, #c5a55a 0%, #a68b3c 100%);
+  background: linear-gradient(90deg, #b8ab80 0%, #9e9370 100%);
   box-shadow:
-    0 8px 32px rgba(197, 165, 90, 0.35),
+    0 8px 32px rgba(184, 171, 128, 0.35),
     0 0 0 1px rgba(255, 255, 255, 0.1) inset;
 
   & * {
@@ -731,9 +731,9 @@ layer(base);
 @utility gradient-card-warning {
   /* Warning gradient card */
   @apply relative overflow-hidden rounded-2xl p-6;
-  background: linear-gradient(135deg, #c5a55a 0%, #a68b3c 100%);
+  background: linear-gradient(135deg, #b8ab80 0%, #9e9370 100%);
   box-shadow:
-    0 8px 32px rgba(197, 165, 90, 0.35),
+    0 8px 32px rgba(184, 171, 128, 0.35),
     0 0 0 1px rgba(255, 255, 255, 0.1) inset;
 
   & * {
@@ -823,8 +823,8 @@ layer(base);
 
 @utility gradient-stat-primary {
   @apply relative overflow-hidden rounded-2xl p-5;
-  background: linear-gradient(90deg, #c5a55a 0%, #a68b3c 100%);
-  box-shadow: 0 8px 32px rgba(197, 165, 90, 0.3);
+  background: linear-gradient(90deg, #b8ab80 0%, #9e9370 100%);
+  box-shadow: 0 8px 32px rgba(184, 171, 128, 0.3);
   color: white;
 
   & .stat-value {
@@ -836,8 +836,8 @@ layer(base);
 
 @utility gradient-stat-warning {
   @apply relative overflow-hidden rounded-2xl p-5;
-  background: linear-gradient(135deg, #c5a55a 0%, #a68b3c 100%);
-  box-shadow: 0 8px 32px rgba(197, 165, 90, 0.3);
+  background: linear-gradient(135deg, #b8ab80 0%, #9e9370 100%);
+  box-shadow: 0 8px 32px rgba(184, 171, 128, 0.3);
   color: white;
 
   & .stat-value {
@@ -908,8 +908,8 @@ layer(base);
 
 @utility premium-badge-primary {
   @apply premium-badge;
-  background: rgba(197, 165, 90, 0.15);
-  border: 1px solid rgba(197, 165, 90, 0.2);
+  background: rgba(184, 171, 128, 0.15);
+  border: 1px solid rgba(184, 171, 128, 0.2);
 
   & span {
     background-image: var(--gold-gradient);
@@ -1488,11 +1488,11 @@ layer(base);
     background: rgba(255, 255, 255, 0.02);
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(197, 165, 90, 0.25);
+    background: rgba(184, 171, 128, 0.25);
     border-radius: 10px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(197, 165, 90, 0.45);
+    background: rgba(184, 171, 128, 0.45);
   }
 
   /* Vet Claim Support - Premium Dark Mode Design System */
@@ -1780,7 +1780,7 @@ layer(base);
 
   /* Premium selection color — Gold accent */
   ::selection {
-    background: rgba(197, 165, 90, 0.25);
+    background: rgba(184, 171, 128, 0.25);
   }
 }
 
@@ -2020,7 +2020,7 @@ layer(base);
   from {
     box-shadow:
       0 0 0 2px hsl(var(--background)),
-      0 0 0 2px rgba(197, 165, 90, 0);
+      0 0 0 2px rgba(184, 171, 128, 0);
   }
   to {
     box-shadow:
